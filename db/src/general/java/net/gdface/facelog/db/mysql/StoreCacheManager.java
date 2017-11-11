@@ -76,6 +76,7 @@ public class StoreCacheManager extends StoreManager
     //////////////////////////////////////
 
     //1.1 override IStoreManager
+
     @Override 
     public StoreBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException
     {
@@ -111,6 +112,7 @@ public class StoreCacheManager extends StoreManager
         }
     }
     //1.4 override IStoreManager
+
     @Override 
     public boolean existsPrimaryKey(String md5){
         return null != loadByPrimaryKey(md5);
@@ -133,6 +135,7 @@ public class StoreCacheManager extends StoreManager
         }
     }
     //20-5
+
     @Override
     public int loadUsingTemplate(StoreBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<StoreBean> action){
         if(null == fieldList ){

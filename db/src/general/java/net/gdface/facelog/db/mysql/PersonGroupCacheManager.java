@@ -95,6 +95,7 @@ public class PersonGroupCacheManager extends PersonGroupManager
     //////////////////////////////////////
 
     //1.1 override IPersonGroupManager
+
     @Override 
     public PersonGroupBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
@@ -130,6 +131,7 @@ public class PersonGroupCacheManager extends PersonGroupManager
         }
     }
     //1.4 override IPersonGroupManager
+
     @Override 
     public boolean existsPrimaryKey(Integer id){
         return null != loadByPrimaryKey(id);
@@ -152,6 +154,7 @@ public class PersonGroupCacheManager extends PersonGroupManager
         }
     }
     //20-5
+
     @Override
     public int loadUsingTemplate(PersonGroupBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<PersonGroupBean> action){
         if(null == fieldList ){
@@ -180,6 +183,7 @@ public class PersonGroupCacheManager extends PersonGroupManager
     //_____________________________________________________________________
     //23 MANY TO MANY
     // override PersonGroupManager
+
     @Override 
     public java.util.List<PersonGroupBean> loadViaPermitAsList(DeviceGroupBean bean, int startRow, int numRows)
     {

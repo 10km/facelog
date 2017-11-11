@@ -108,6 +108,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
+    //1
     /**
      * Loads a {@link FlPermitBean} from the fl_permit using primary key fields.
      *
@@ -116,7 +117,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return a unique FlPermitBean or {@code null} if not found or have null argument
      * @throws DAOException
      */
-    //1
     public FlPermitBean loadByPrimaryKey(Integer deviceGroupId,Integer personGroupId) throws DAOException
     {
         try{
@@ -127,6 +127,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         }
     }
     
+    //1.1
     /**
      * Loads a {@link FlPermitBean} from the fl_permit using primary key fields.
      *
@@ -136,7 +137,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @throws ObjectRetrievalException if not found
      * @throws DAOException
      */
-    //1.1
     @SuppressWarnings("unused")
     public FlPermitBean loadByPrimaryKeyChecked(Integer deviceGroupId,Integer personGroupId) throws DAOException
     {
@@ -178,6 +178,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     }
 
     //1.2
+    
     @Override
     public FlPermitBean loadByPrimaryKey(FlPermitBean bean) throws DAOException
     {
@@ -185,6 +186,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     }
     
     //1.2.2
+    
     @Override
     public FlPermitBean loadByPrimaryKeyChecked(FlPermitBean bean) throws DAOException
     {
@@ -194,13 +196,13 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         return loadByPrimaryKeyChecked(bean.getDeviceGroupId(),bean.getPersonGroupId());
     }
     
+    //1.3
     /**
      * Loads a {@link FlPermitBean} from the fl_permit using primary key fields.
      * @param keys primary keys value:<br> 
      * @return a unique {@link FlPermitBean} or {@code null} if not found
      * @see {@link #loadByPrimaryKey(Integer deviceGroupId,Integer personGroupId)}
      */
-    //1.3
     @Override
     public FlPermitBean loadByPrimaryKey(Object ...keys) throws DAOException{
         if(null == keys){
@@ -219,6 +221,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         return loadByPrimaryKey((Integer)keys[0],(Integer)keys[1]);
     }
     //1.3.2
+
     @Override
     public FlPermitBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
         if(null == keys){
@@ -236,13 +239,13 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         }
         return loadByPrimaryKeyChecked((Integer)keys[0],(Integer)keys[1]);
     }
+    //1.4
     /**
      * Returns true if this fl_permit contains row with primary key fields.
      * @param deviceGroupId Integer - PK# 1
      * @param personGroupId Integer - PK# 2
      * @throws DAOException
      */
-    //1.4
     @SuppressWarnings("unused")
     public boolean existsPrimaryKey(Integer deviceGroupId,Integer personGroupId) throws DAOException
     {
@@ -268,6 +271,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
             this.freeConnection(c);
         }
     }
+    //1.6
     /**
      * Return true if this fl_permit contains row with primary key fields.
      * @param bean  
@@ -275,7 +279,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return false if primary kes has null
      * @see #countUsingTemplate(FlPermitBean)
      */
-    //1.6
     @Override
     public boolean existsByPrimaryKey(FlPermitBean bean) throws DAOException
     {
@@ -291,6 +294,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         }
     }
     //1.7
+
     @Override
     public FlPermitBean checkDuplicate(FlPermitBean bean) throws DAOException{
         if(!existsByPrimaryKey(bean)){
@@ -298,6 +302,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         }
         return bean;
     }
+    //2
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
@@ -308,7 +313,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @throws DAOException
      * @see {@link #delete(FlPermitBean)}
      */
-    //2
     public int deleteByPrimaryKey(Integer deviceGroupId,Integer personGroupId) throws DAOException
     {
         FlPermitBean bean=createBean();
@@ -317,6 +321,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         return this.delete(bean);
     }
 
+    //2.2
     /**
      * Delete row according to primary keys of bean.<br>
      * 
@@ -324,7 +329,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return the number of deleted rows,0 returned if bean is null
      * @throws DAOException
      */
-    //2
     @Override
     public int delete(FlPermitBean bean) throws DAOException
     {
@@ -335,7 +339,8 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         PreparedStatement ps = null;
         try
         {
-            this.listenerContainer.beforeDelete(bean); // listener callback
+            // listener callback
+            this.listenerContainer.beforeDelete(bean);
             c = this.getConnection();
             StringBuilder sql = new StringBuilder("DELETE FROM fl_permit WHERE device_group_id=? and person_group_id=?");
             // System.out.println("deleteByPrimaryKey: " + sql);
@@ -346,7 +351,8 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
             if (bean.getPersonGroupId() == null) { ps.setNull(2, Types.INTEGER); } else { Manager.setInteger(ps, 2, bean.getPersonGroupId()); }
             int rows=ps.executeUpdate();
             if(rows>0){
-                this.listenerContainer.afterDelete(bean); // listener callback
+                // listener callback
+                this.listenerContainer.afterDelete(bean);
             }
             return rows;
         }
@@ -361,6 +367,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         }
     }
 
+    //2.1
     /**
      * Delete row according to its primary keys.
      *
@@ -368,7 +375,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return the number of deleted rows
      * @see {@link #delete(FlPermitBean)}
      */   
-    //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DAOException{
         if(null == keys){
@@ -390,7 +396,8 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         return delete(bean);
     }
  
-     /**
+     //3.5 SYNC SAVE 
+    /**
      * Save the FlPermitBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlPermitBean} bean to be saved
@@ -399,7 +406,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
          * @return the inserted or updated {@link FlPermitBean} bean
      * @throws DAOException
      */
-    //3.5 SYNC SAVE 
     public FlPermitBean save(FlPermitBean bean
         , FlDeviceGroupBean refDevicegroupByDeviceGroupId , FlPersonGroupBean refPersongroupByPersonGroupId 
         ) throws DAOException
@@ -417,11 +423,11 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         return bean;
     } 
 
+    //3.6 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save
      * @see {@link #save(FlPermitBean , FlDeviceGroupBean , FlPersonGroupBean )}
      */
-    //3.6 SYNC SAVE AS TRANSACTION
     public FlPermitBean saveAsTransaction(final FlPermitBean bean
         ,final FlDeviceGroupBean refDevicegroupByDeviceGroupId ,final FlPersonGroupBean refPersongroupByPersonGroupId 
         ) throws DAOException
@@ -432,6 +438,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
                 return save(bean , refDevicegroupByDeviceGroupId , refPersongroupByPersonGroupId );
             }});
     }
+    //3.9 SYNC SAVE 
     /**
      * Save the FlPermitBean bean and referenced beans and imported beans (array) into the database.
      *
@@ -441,7 +448,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return the inserted or updated {@link FlPermitBean} bean
      * @throws DAOException
      */
-    //3.9 SYNC SAVE 
     @Override
     public FlPermitBean save(FlPermitBean bean,Object ...args) throws DAOException
     {
@@ -460,6 +466,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         return save(bean,(args.length < 1 || null == args[0])?null:(FlDeviceGroupBean)args[0],(args.length < 2 || null == args[1])?null:(FlPersonGroupBean)args[1]);
     } 
 
+    //3.10 SYNC SAVE 
     /**
      * Save the FlPermitBean bean and referenced beans and imported beans (collection) into the database.
      *
@@ -469,7 +476,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return the inserted or updated {@link FlPermitBean} bean
      * @throws DAOException
      */
-    //3.10 SYNC SAVE 
     @SuppressWarnings("unchecked")
     @Override
     public FlPermitBean saveCollection(FlPermitBean bean,Object ...args) throws DAOException
@@ -546,6 +552,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     //////////////////////////////////////
 
 
+    //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link FlDeviceGroupBean} object referenced by {@link FlPermitBean#getDeviceGroupId}() field.<br>
      * FK_NAME : fl_permit_ibfk_1
@@ -553,7 +560,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return the associated {@link FlDeviceGroupBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //5.1 GET REFERENCED VALUE
     public FlDeviceGroupBean getReferencedByDeviceGroupId(FlPermitBean bean) throws DAOException
     {
         if(null == bean){
@@ -563,6 +569,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         return bean.getReferencedByDeviceGroupId();
     }
 
+    //5.2 SET REFERENCED 
     /**
      * Associates the {@link FlPermitBean} object to the {@link FlDeviceGroupBean} object by {@link FlPermitBean#getDeviceGroupId}() field.
      *
@@ -571,7 +578,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return always beanToSet saved
      * @throws Exception
      */
-    //5.2 SET REFERENCED 
     public FlDeviceGroupBean setReferencedByDeviceGroupId(FlPermitBean bean, FlDeviceGroupBean beanToSet) throws DAOException
     {
         if(null != bean){
@@ -586,6 +592,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         return beanToSet;
     }
 
+    //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link FlPersonGroupBean} object referenced by {@link FlPermitBean#getPersonGroupId}() field.<br>
      * FK_NAME : fl_permit_ibfk_2
@@ -593,7 +600,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return the associated {@link FlPersonGroupBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //5.1 GET REFERENCED VALUE
     public FlPersonGroupBean getReferencedByPersonGroupId(FlPermitBean bean) throws DAOException
     {
         if(null == bean){
@@ -603,6 +609,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         return bean.getReferencedByPersonGroupId();
     }
 
+    //5.2 SET REFERENCED 
     /**
      * Associates the {@link FlPermitBean} object to the {@link FlPersonGroupBean} object by {@link FlPermitBean#getPersonGroupId}() field.
      *
@@ -611,7 +618,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return always beanToSet saved
      * @throws Exception
      */
-    //5.2 SET REFERENCED 
     public FlPersonGroupBean setReferencedByPersonGroupId(FlPermitBean bean, FlPersonGroupBean beanToSet) throws DAOException
     {
         if(null != bean){
@@ -629,6 +635,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     //////////////////////////////////////
     // SQL 'WHERE' METHOD
     //////////////////////////////////////
+    //11
     /**
      * Deletes rows from the fl_permit table using a 'where' clause.
      * It is up to you to pass the 'WHERE' in your where clauses.
@@ -638,7 +645,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return the number of deleted rows
      * @throws DAOException
      */
-    //11
     @Override
     public int deleteByWhere(String where) throws DAOException
     {
@@ -675,12 +681,13 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     //_____________________________________________________________________
 
     //13
+
     @Override
     public FlPermitBean insert(FlPermitBean bean) throws DAOException
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
-            return bean; // should not we log something ?
+            return bean; 
         }
         if (!bean.isNew()){
             return this.update(bean);
@@ -693,7 +700,8 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         try
         {
             c = this.getConnection();
-            this.listenerContainer.beforeInsert(bean); // listener callback
+            // listener callback
+            this.listenerContainer.beforeInsert(bean);
             int dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_permit (");
 
@@ -741,7 +749,8 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
 
             bean.isNew(false);
             bean.resetIsModified();
-            this.listenerContainer.afterInsert(bean); // listener callback
+            // listener callback
+            this.listenerContainer.afterInsert(bean);
             return bean;
         }
         catch(SQLException e)
@@ -757,12 +766,13 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     }
 
     //14
+
     @Override
     public FlPermitBean update(FlPermitBean bean) throws DAOException
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
-            return bean; // should not we log something ?
+            return bean;
         }
         if (bean.isNew()){
             return this.insert(bean);
@@ -776,7 +786,8 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         {
             c = this.getConnection();
 
-            this.listenerContainer.beforeUpdate(bean); // listener callback
+            // listener callback
+            this.listenerContainer.beforeUpdate(bean); 
             sql = new StringBuilder("UPDATE fl_permit SET ");
             boolean useComma=false;
 
@@ -824,7 +835,8 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
             if (bean.getPersonGroupId() == null) { ps.setNull(++dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++dirtyCount, bean.getPersonGroupId()); }
             ps.executeUpdate();
             bean.resetIsModified();
-            this.listenerContainer.afterUpdate(bean); // listener callback
+            // listener callback
+            this.listenerContainer.afterUpdate(bean); 
 
             return bean;
         }
@@ -845,6 +857,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     // USING TEMPLATE
     //_____________________________________________________________________
     //18
+
     @Override
     public FlPermitBean loadUniqueUsingTemplate(FlPermitBean bean) throws DAOException
     {
@@ -859,6 +872,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
          }
     }
     //18-1
+
     @Override
     public FlPermitBean loadUniqueUsingTemplateChecked(FlPermitBean bean) throws DAOException
     {
@@ -873,6 +887,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
          }
     }
     //20-5
+
     @Override
     public int loadUsingTemplate(FlPermitBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlPermitBean> action) throws DAOException
     {
@@ -899,6 +914,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     }
 
     //21
+
     @Override
     public int deleteUsingTemplate(FlPermitBean bean) throws DAOException
     {
@@ -956,6 +972,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     //_____________________________________________________________________
 
     //25
+
     @Override
     public int countWhere(String where) throws DAOException
     {
@@ -991,6 +1008,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         throw new DataAccessException("Error in countWhere where=[" + where + "]");
     }
 
+    //26
     /**
      * Retrieves the number of rows of the table fl_permit with a prepared statement.
      *
@@ -998,7 +1016,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return the number of rows returned
      * @throws DAOException
      */
-    //26
     private int countByPreparedStatement(PreparedStatement ps) throws DAOException
     {
         ResultSet rs =  null;
@@ -1024,6 +1041,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
        throw new DataAccessException("Error in countByPreparedStatement");
     }
 
+    //20
     /**
      * count the number of elements of a specific FlPermitBean bean given the search type
      *
@@ -1032,7 +1050,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return the number of rows returned
      * @throws DAOException
      */
-    //20
     @Override
     public int countUsingTemplate(FlPermitBean bean, int searchType) throws DAOException
     {
@@ -1166,6 +1183,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     // DECODE RESULT SET
     //_____________________________________________________________________
 
+    //28
     /**
      * decode a resultset in an array of FlPermitBean objects
      *
@@ -1176,12 +1194,12 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return the resulting FlPermitBean table
      * @throws DAOException
      */
-    //28
     public FlPermitBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new FlPermitBean[0]);
     }
 
+    //28-1
     /**
      * decode a resultset in a list of FlPermitBean objects
      *
@@ -1192,13 +1210,13 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return the resulting FlPermitBean table
      * @throws DAOException
      */
-    //28-1
     public List<FlPermitBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         ListAction action = new ListAction();
         actionOnResultSet(rs, fieldList, numRows, numRows, action);
         return action.getList();
     }
+    //28-2
     /** decode a resultset and call action
      * @param rs the resultset to decode
      * @param fieldList table of the field's associated constants
@@ -1209,7 +1227,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @throws DAOException
      * @throws IllegalArgumentException
      */
-    //28-2
     public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlPermitBean> action) throws DAOException{
         try{
             int count = 0;
@@ -1254,6 +1271,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         }
     }
 
+    //29
     /**
      * Transforms a ResultSet iterating on the fl_permit on a FlPermitBean bean.
      *
@@ -1261,7 +1279,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return bean resulting FlPermitBean bean
      * @throws DAOException
      */
-    //29
     public FlPermitBean decodeRow(ResultSet rs,FlPermitBean bean) throws DAOException
     {
         if(null==bean){
@@ -1283,6 +1300,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         return bean;
     }
 
+    //30
     /**
      * Transforms a ResultSet iterating on the fl_permit table on a FlPermitBean bean according to a list of fields.
      *
@@ -1291,7 +1309,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return bean resulting FlPermitBean bean
      * @throws DAOException
      */
-    //30
     public FlPermitBean decodeRow(ResultSet rs, int[] fieldList,FlPermitBean bean) throws DAOException
     {
         if(null==bean){
@@ -1331,6 +1348,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         return bean;
     }
 
+    //31
     /**
      * Transforms a ResultSet iterating on the fl_permit on a FlPermitBean bean using the names of the columns
      *
@@ -1338,7 +1356,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return bean resulting FlPermitBean bean
      * @throws DAOException
      */
-    //31
     public FlPermitBean metaDataDecodeRow(ResultSet rs) throws DAOException
     {
         FlPermitBean bean = this.createBean();
@@ -1363,6 +1380,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     // PREPARED STATEMENT LOADER
     //////////////////////////////////////
 
+    //32
     /**
      * Loads all the elements using a prepared statement.
      *
@@ -1370,12 +1388,12 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return an array of FlPermitBean
      * @throws DAOException
      */
-    //32
     public FlPermitBean[] loadByPreparedStatement(PreparedStatement ps) throws DAOException
     {
         return this.loadByPreparedStatement(ps, null);
     }
 
+    //32
     /**
      * Loads all the elements using a prepared statement.
      *
@@ -1383,12 +1401,12 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return an array of FlPermitBean
      * @throws DAOException
      */
-    //32
     public List<FlPermitBean> loadByPreparedStatementAsList(PreparedStatement ps) throws DAOException
     {
         return this.loadByPreparedStatementAsList(ps, null);
     }
 
+    //33
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved.
      *
@@ -1397,12 +1415,12 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return an array of FlPermitBean
      * @throws DAOException
      */
-    //33
     public FlPermitBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws DAOException
     {
         return this.loadByPreparedStatementAsList(ps, fieldList).toArray(new FlPermitBean[0]);
     }
 
+    //33
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved.
      *
@@ -1411,12 +1429,12 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return an array of FlPermitBean
      * @throws DAOException
      */
-    //33
     public List<FlPermitBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws DAOException
     { 
         return loadByPreparedStatementAsList(ps,fieldList,1,-1);
     }
 
+    //34
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved,
      * and specifying the start row and the number of rows.
@@ -1428,12 +1446,12 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return an array of FlPermitBean
      * @throws DAOException
      */
-    //34
     public FlPermitBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         return loadByPreparedStatementAsList(ps,fieldList,startRow,numRows).toArray(new FlPermitBean[0]);
     }
 
+    //34-1
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved,
      * and specifying the start row and the number of rows.
@@ -1445,13 +1463,13 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return an array of FlPermitBean
      * @throws DAOException
      */
-    //34-1
     public List<FlPermitBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         ListAction action = new ListAction();
         loadByPreparedStatement(ps,fieldList,startRow,numRows,action);
         return action.getList();
     }
+    //34-2
     /**
      * Loads each element using a prepared statement specifying a list of fields to be retrieved,
      * and specifying the start row and the number of rows 
@@ -1465,7 +1483,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @return the count dealt by action
      * @throws DAOException
      */     
-    //34-2
     public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlPermitBean> action) throws DAOException
     {
         ResultSet rs =  null;
@@ -1487,7 +1504,9 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     //_____________________________________________________________________
 
     private final TableListener.ListenerContainer<FlPermitBean> listenerContainer = new TableListener.ListenerContainer<FlPermitBean>();
+
     //35
+
     @Override
     public TableListener<FlPermitBean> registerListener(TableListener<FlPermitBean> listener)
     {
@@ -1495,10 +1514,10 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         return listener;
     }
 
+    //36
     /**
      * remove listener.
      */
-    //36
     @Override
     public void unregisterListener(TableListener<FlPermitBean> listener)
     {
@@ -1506,6 +1525,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     }
 
     //37
+
     @Override
     public void fire(TableListener.Event event, FlPermitBean bean) throws DAOException{
         if(null == event){
@@ -1515,6 +1535,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     }
     
     //37-1
+
     @Override
     public void fire(int event, FlPermitBean bean) throws DAOException{
         try{
@@ -1558,22 +1579,22 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
                     }
                 }};
 
+    //37-2
     /**
      * bind foreign key listener to foreign table: <br>
      * DELETE RULE : CASCADE {@code fl_permit(device_group_id)-> fl_device_group(id)} <br>
      * DELETE RULE : CASCADE {@code fl_permit(person_group_id)-> fl_person_group(id)} <br>
      */
-    //37-2
     public void bindForeignKeyListenerForDeleteRule(){
         instanceOfFlDeviceGroupManager().registerListener(foreignKeyListenerByDeviceGroupId);
         instanceOfFlPersonGroupManager().registerListener(foreignKeyListenerByPersonGroupId);
         
     }
+    //37-3
     /**
      * unbind foreign key listener from all of foreign tables <br>
      * @see #bindForeignKeyListenerForDeleteRule()
      */
-    //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
         instanceOfFlDeviceGroupManager().unregisterListener(foreignKeyListenerByDeviceGroupId);
         instanceOfFlPersonGroupManager().unregisterListener(foreignKeyListenerByPersonGroupId);
@@ -1584,32 +1605,33 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     // UTILS
     //_____________________________________________________________________
 
+    //40
     /**
      * Retrieves the manager object used to get connections.
      *
      * @return the manager used
      */
-    //40
     private Manager getManager()
     {
         return Manager.getInstance();
     }
 
+    //41
     /**
      * Frees the connection.
      *
      * @param c the connection to release
      */
-    //41
     private void freeConnection(Connection c)
     {
-        this.getManager().releaseConnection(c); // back to pool
+        // back to pool
+        this.getManager().releaseConnection(c);
     }
 
+    //42
     /**
      * Gets the connection.
      */
-    //42
     private Connection getConnection() throws DAOException
     {
         try
@@ -1623,6 +1645,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     }
 
     //43
+
     @Override
     public boolean isPrimaryKey(String column){
         for(String c:PRIMARYKEY_NAMES){
@@ -1656,6 +1679,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     }
     
     @Override    
+
     public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlPermitBean> action) throws DAOException{
         PreparedStatement ps = null;
         Connection connection = null;
@@ -1678,6 +1702,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     }
    
     @Override
+
     public <T>T runAsTransaction(Callable<T> fun) throws DAOException{
         return Manager.getInstance().runAsTransaction(fun);
     }

@@ -97,6 +97,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
+    //1
     /**
      * Loads a {@link FlStoreBean} from the fl_store using primary key fields.
      *
@@ -104,7 +105,6 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @return a unique FlStoreBean or {@code null} if not found or have null argument
      * @throws DAOException
      */
-    //1
     public FlStoreBean loadByPrimaryKey(String md5) throws DAOException
     {
         try{
@@ -115,6 +115,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         }
     }
     
+    //1.1
     /**
      * Loads a {@link FlStoreBean} from the fl_store using primary key fields.
      *
@@ -123,7 +124,6 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @throws ObjectRetrievalException if not found
      * @throws DAOException
      */
-    //1.1
     @SuppressWarnings("unused")
     public FlStoreBean loadByPrimaryKeyChecked(String md5) throws DAOException
     {
@@ -164,6 +164,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     }
 
     //1.2
+    
     @Override
     public FlStoreBean loadByPrimaryKey(FlStoreBean bean) throws DAOException
     {
@@ -171,6 +172,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     }
     
     //1.2.2
+    
     @Override
     public FlStoreBean loadByPrimaryKeyChecked(FlStoreBean bean) throws DAOException
     {
@@ -180,13 +182,13 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         return loadByPrimaryKeyChecked(bean.getMd5());
     }
     
+    //1.3
     /**
      * Loads a {@link FlStoreBean} from the fl_store using primary key fields.
      * @param keys primary keys value:<br> 
      * @return a unique {@link FlStoreBean} or {@code null} if not found
      * @see {@link #loadByPrimaryKey(String md5)}
      */
-    //1.3
     @Override
     public FlStoreBean loadByPrimaryKey(Object ...keys) throws DAOException{
         if(null == keys){
@@ -202,6 +204,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         return loadByPrimaryKey((String)keys[0]);
     }
     //1.3.2
+
     @Override
     public FlStoreBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
         if(null == keys){
@@ -216,12 +219,12 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         }
         return loadByPrimaryKeyChecked((String)keys[0]);
     }
+    //1.4
     /**
      * Returns true if this fl_store contains row with primary key fields.
      * @param md5 String - PK# 1
      * @throws DAOException
      */
-    //1.4
     @SuppressWarnings("unused")
     public boolean existsPrimaryKey(String md5) throws DAOException
     {
@@ -246,6 +249,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
             this.freeConnection(c);
         }
     }
+    //1.6
     /**
      * Return true if this fl_store contains row with primary key fields.
      * @param bean  
@@ -253,7 +257,6 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @return false if primary kes has null
      * @see #countUsingTemplate(FlStoreBean)
      */
-    //1.6
     @Override
     public boolean existsByPrimaryKey(FlStoreBean bean) throws DAOException
     {
@@ -269,6 +272,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         }
     }
     //1.7
+
     @Override
     public FlStoreBean checkDuplicate(FlStoreBean bean) throws DAOException{
         if(!existsByPrimaryKey(bean)){
@@ -276,13 +280,13 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         }
         return bean;
     }
+    //1.4.1
     /**
      * Check duplicated row by primary keys,if row exists throw {@link ObjectRetrievalException}
      * @param md5 String
      * @throws DAOException
      * @see #existsPrimaryKey(String md5)
      */
-    //1.4.1
     public String checkDuplicate(String md5) throws DAOException
     {
         if(existsPrimaryKey(md5)){
@@ -290,6 +294,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         }
         return md5;
     }    
+    //2
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
@@ -299,7 +304,6 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @throws DAOException
      * @see {@link #delete(FlStoreBean)}
      */
-    //2
     public int deleteByPrimaryKey(String md5) throws DAOException
     {
         FlStoreBean bean=createBean();
@@ -307,6 +311,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         return this.delete(bean);
     }
 
+    //2.2
     /**
      * Delete row according to primary keys of bean.<br>
      * 
@@ -314,7 +319,6 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @return the number of deleted rows,0 returned if bean is null
      * @throws DAOException
      */
-    //2
     @Override
     public int delete(FlStoreBean bean) throws DAOException
     {
@@ -325,7 +329,8 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         PreparedStatement ps = null;
         try
         {
-            this.listenerContainer.beforeDelete(bean); // listener callback
+            // listener callback
+            this.listenerContainer.beforeDelete(bean);
             c = this.getConnection();
             StringBuilder sql = new StringBuilder("DELETE FROM fl_store WHERE md5=?");
             // System.out.println("deleteByPrimaryKey: " + sql);
@@ -335,7 +340,8 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
             if (bean.getMd5() == null) { ps.setNull(1, Types.CHAR); } else { ps.setString(1, bean.getMd5()); }
             int rows=ps.executeUpdate();
             if(rows>0){
-                this.listenerContainer.afterDelete(bean); // listener callback
+                // listener callback
+                this.listenerContainer.afterDelete(bean);
             }
             return rows;
         }
@@ -350,6 +356,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         }
     }
 
+    //2.1
     /**
      * Delete row according to its primary keys.
      *
@@ -357,7 +364,6 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @return the number of deleted rows
      * @see {@link #delete(FlStoreBean)}
      */   
-    //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DAOException{
         if(null == keys){
@@ -380,6 +386,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     //////////////////////////////////////
     // SQL 'WHERE' METHOD
     //////////////////////////////////////
+    //11
     /**
      * Deletes rows from the fl_store table using a 'where' clause.
      * It is up to you to pass the 'WHERE' in your where clauses.
@@ -389,7 +396,6 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @return the number of deleted rows
      * @throws DAOException
      */
-    //11
     @Override
     public int deleteByWhere(String where) throws DAOException
     {
@@ -426,12 +432,13 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     //_____________________________________________________________________
 
     //13
+
     @Override
     public FlStoreBean insert(FlStoreBean bean) throws DAOException
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
-            return bean; // should not we log something ?
+            return bean; 
         }
         if (!bean.isNew()){
             return this.update(bean);
@@ -444,7 +451,8 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         try
         {
             c = this.getConnection();
-            this.listenerContainer.beforeInsert(bean); // listener callback
+            // listener callback
+            this.listenerContainer.beforeInsert(bean);
             int dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_store (");
 
@@ -492,7 +500,8 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
 
             bean.isNew(false);
             bean.resetIsModified();
-            this.listenerContainer.afterInsert(bean); // listener callback
+            // listener callback
+            this.listenerContainer.afterInsert(bean);
             return bean;
         }
         catch(SQLException e)
@@ -508,12 +517,13 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     }
 
     //14
+
     @Override
     public FlStoreBean update(FlStoreBean bean) throws DAOException
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
-            return bean; // should not we log something ?
+            return bean;
         }
         if (bean.isNew()){
             return this.insert(bean);
@@ -527,7 +537,8 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         {
             c = this.getConnection();
 
-            this.listenerContainer.beforeUpdate(bean); // listener callback
+            // listener callback
+            this.listenerContainer.beforeUpdate(bean); 
             sql = new StringBuilder("UPDATE fl_store SET ");
             boolean useComma=false;
 
@@ -574,7 +585,8 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
             if (bean.getMd5() == null) { ps.setNull(++dirtyCount, Types.CHAR); } else { ps.setString(++dirtyCount, bean.getMd5()); }
             ps.executeUpdate();
             bean.resetIsModified();
-            this.listenerContainer.afterUpdate(bean); // listener callback
+            // listener callback
+            this.listenerContainer.afterUpdate(bean); 
 
             return bean;
         }
@@ -595,6 +607,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     // USING TEMPLATE
     //_____________________________________________________________________
     //18
+
     @Override
     public FlStoreBean loadUniqueUsingTemplate(FlStoreBean bean) throws DAOException
     {
@@ -609,6 +622,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
          }
     }
     //18-1
+
     @Override
     public FlStoreBean loadUniqueUsingTemplateChecked(FlStoreBean bean) throws DAOException
     {
@@ -623,6 +637,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
          }
     }
     //20-5
+
     @Override
     public int loadUsingTemplate(FlStoreBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlStoreBean> action) throws DAOException
     {
@@ -649,6 +664,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     }
 
     //21
+
     @Override
     public int deleteUsingTemplate(FlStoreBean bean) throws DAOException
     {
@@ -706,6 +722,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     //_____________________________________________________________________
 
     //25
+
     @Override
     public int countWhere(String where) throws DAOException
     {
@@ -741,6 +758,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         throw new DataAccessException("Error in countWhere where=[" + where + "]");
     }
 
+    //26
     /**
      * Retrieves the number of rows of the table fl_store with a prepared statement.
      *
@@ -748,7 +766,6 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @return the number of rows returned
      * @throws DAOException
      */
-    //26
     private int countByPreparedStatement(PreparedStatement ps) throws DAOException
     {
         ResultSet rs =  null;
@@ -774,6 +791,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
        throw new DataAccessException("Error in countByPreparedStatement");
     }
 
+    //20
     /**
      * count the number of elements of a specific FlStoreBean bean given the search type
      *
@@ -782,7 +800,6 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @return the number of rows returned
      * @throws DAOException
      */
-    //20
     @Override
     public int countUsingTemplate(FlStoreBean bean, int searchType) throws DAOException
     {
@@ -952,6 +969,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     // DECODE RESULT SET
     //_____________________________________________________________________
 
+    //28
     /**
      * decode a resultset in an array of FlStoreBean objects
      *
@@ -962,12 +980,12 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @return the resulting FlStoreBean table
      * @throws DAOException
      */
-    //28
     public FlStoreBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new FlStoreBean[0]);
     }
 
+    //28-1
     /**
      * decode a resultset in a list of FlStoreBean objects
      *
@@ -978,13 +996,13 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @return the resulting FlStoreBean table
      * @throws DAOException
      */
-    //28-1
     public List<FlStoreBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         ListAction action = new ListAction();
         actionOnResultSet(rs, fieldList, numRows, numRows, action);
         return action.getList();
     }
+    //28-2
     /** decode a resultset and call action
      * @param rs the resultset to decode
      * @param fieldList table of the field's associated constants
@@ -995,7 +1013,6 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @throws DAOException
      * @throws IllegalArgumentException
      */
-    //28-2
     public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlStoreBean> action) throws DAOException{
         try{
             int count = 0;
@@ -1040,6 +1057,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         }
     }
 
+    //29
     /**
      * Transforms a ResultSet iterating on the fl_store on a FlStoreBean bean.
      *
@@ -1047,7 +1065,6 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @return bean resulting FlStoreBean bean
      * @throws DAOException
      */
-    //29
     public FlStoreBean decodeRow(ResultSet rs,FlStoreBean bean) throws DAOException
     {
         if(null==bean){
@@ -1069,6 +1086,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         return bean;
     }
 
+    //30
     /**
      * Transforms a ResultSet iterating on the fl_store table on a FlStoreBean bean according to a list of fields.
      *
@@ -1077,7 +1095,6 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @return bean resulting FlStoreBean bean
      * @throws DAOException
      */
-    //30
     public FlStoreBean decodeRow(ResultSet rs, int[] fieldList,FlStoreBean bean) throws DAOException
     {
         if(null==bean){
@@ -1117,6 +1134,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         return bean;
     }
 
+    //31
     /**
      * Transforms a ResultSet iterating on the fl_store on a FlStoreBean bean using the names of the columns
      *
@@ -1124,7 +1142,6 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @return bean resulting FlStoreBean bean
      * @throws DAOException
      */
-    //31
     public FlStoreBean metaDataDecodeRow(ResultSet rs) throws DAOException
     {
         FlStoreBean bean = this.createBean();
@@ -1149,6 +1166,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     // PREPARED STATEMENT LOADER
     //////////////////////////////////////
 
+    //32
     /**
      * Loads all the elements using a prepared statement.
      *
@@ -1156,12 +1174,12 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @return an array of FlStoreBean
      * @throws DAOException
      */
-    //32
     public FlStoreBean[] loadByPreparedStatement(PreparedStatement ps) throws DAOException
     {
         return this.loadByPreparedStatement(ps, null);
     }
 
+    //32
     /**
      * Loads all the elements using a prepared statement.
      *
@@ -1169,12 +1187,12 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @return an array of FlStoreBean
      * @throws DAOException
      */
-    //32
     public List<FlStoreBean> loadByPreparedStatementAsList(PreparedStatement ps) throws DAOException
     {
         return this.loadByPreparedStatementAsList(ps, null);
     }
 
+    //33
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved.
      *
@@ -1183,12 +1201,12 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @return an array of FlStoreBean
      * @throws DAOException
      */
-    //33
     public FlStoreBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws DAOException
     {
         return this.loadByPreparedStatementAsList(ps, fieldList).toArray(new FlStoreBean[0]);
     }
 
+    //33
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved.
      *
@@ -1197,12 +1215,12 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @return an array of FlStoreBean
      * @throws DAOException
      */
-    //33
     public List<FlStoreBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws DAOException
     { 
         return loadByPreparedStatementAsList(ps,fieldList,1,-1);
     }
 
+    //34
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved,
      * and specifying the start row and the number of rows.
@@ -1214,12 +1232,12 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @return an array of FlStoreBean
      * @throws DAOException
      */
-    //34
     public FlStoreBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         return loadByPreparedStatementAsList(ps,fieldList,startRow,numRows).toArray(new FlStoreBean[0]);
     }
 
+    //34-1
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved,
      * and specifying the start row and the number of rows.
@@ -1231,13 +1249,13 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @return an array of FlStoreBean
      * @throws DAOException
      */
-    //34-1
     public List<FlStoreBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         ListAction action = new ListAction();
         loadByPreparedStatement(ps,fieldList,startRow,numRows,action);
         return action.getList();
     }
+    //34-2
     /**
      * Loads each element using a prepared statement specifying a list of fields to be retrieved,
      * and specifying the start row and the number of rows 
@@ -1251,7 +1269,6 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @return the count dealt by action
      * @throws DAOException
      */     
-    //34-2
     public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlStoreBean> action) throws DAOException
     {
         ResultSet rs =  null;
@@ -1273,7 +1290,9 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     //_____________________________________________________________________
 
     private final TableListener.ListenerContainer<FlStoreBean> listenerContainer = new TableListener.ListenerContainer<FlStoreBean>();
+
     //35
+
     @Override
     public TableListener<FlStoreBean> registerListener(TableListener<FlStoreBean> listener)
     {
@@ -1281,10 +1300,10 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         return listener;
     }
 
+    //36
     /**
      * remove listener.
      */
-    //36
     @Override
     public void unregisterListener(TableListener<FlStoreBean> listener)
     {
@@ -1292,6 +1311,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     }
 
     //37
+
     @Override
     public void fire(TableListener.Event event, FlStoreBean bean) throws DAOException{
         if(null == event){
@@ -1301,6 +1321,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     }
     
     //37-1
+
     @Override
     public void fire(int event, FlStoreBean bean) throws DAOException{
         try{
@@ -1310,18 +1331,18 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         }
     }
 
+    //37-2
     /**
      * bind foreign key listener to foreign table: <br>
      */
-    //37-2
     public void bindForeignKeyListenerForDeleteRule(){
         
     }
+    //37-3
     /**
      * unbind foreign key listener from all of foreign tables <br>
      * @see #bindForeignKeyListenerForDeleteRule()
      */
-    //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
         
     }
@@ -1330,32 +1351,33 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     // UTILS
     //_____________________________________________________________________
 
+    //40
     /**
      * Retrieves the manager object used to get connections.
      *
      * @return the manager used
      */
-    //40
     private Manager getManager()
     {
         return Manager.getInstance();
     }
 
+    //41
     /**
      * Frees the connection.
      *
      * @param c the connection to release
      */
-    //41
     private void freeConnection(Connection c)
     {
-        this.getManager().releaseConnection(c); // back to pool
+        // back to pool
+        this.getManager().releaseConnection(c);
     }
 
+    //42
     /**
      * Gets the connection.
      */
-    //42
     private Connection getConnection() throws DAOException
     {
         try
@@ -1369,6 +1391,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     }
 
     //43
+
     @Override
     public boolean isPrimaryKey(String column){
         for(String c:PRIMARYKEY_NAMES){
@@ -1402,6 +1425,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     }
     
     @Override    
+
     public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlStoreBean> action) throws DAOException{
         PreparedStatement ps = null;
         Connection connection = null;
@@ -1424,6 +1448,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     }
    
     @Override
+
     public <T>T runAsTransaction(Callable<T> fun) throws DAOException{
         return Manager.getInstance().runAsTransaction(fun);
     }
@@ -1439,11 +1464,11 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
             return count.get();
         }
     }
+    //45
     /**
      * return a primary key list from {@link FlStoreBean} array
      * @param array
      */
-    //45
     public List<String> toPrimaryKeyList(FlStoreBean... array){        
         if(null == array){
             return new java.util.ArrayList<String>();
@@ -1454,11 +1479,11 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         }
         return list;
     }
+    //46
     /**
      * return a primary key list from {@link FlStoreBean} collection
      * @param array
      */
-    //46
     public List<String> toPrimaryKeyList(java.util.Collection<FlStoreBean> collection){        
         if(null == collection){
             return new java.util.ArrayList<String>();

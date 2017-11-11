@@ -20,15 +20,16 @@ public interface IImageManager extends TableManager<ImageBean>
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
+    //1
     /**
      * Loads a {@link ImageBean} from the fl_image using primary key fields.
      *
      * @param md5 String - PK# 1
      * @return a unique ImageBean or {@code null} if not found
      */
-    //1
     public ImageBean loadByPrimaryKey(String md5);
 
+    //1.1
     /**
      * Loads a {@link ImageBean} from the fl_image using primary key fields.
      *
@@ -36,38 +37,41 @@ public interface IImageManager extends TableManager<ImageBean>
      * @return a unique ImageBean
      * @throws ObjectRetrievalException if not found
      */
-    //1.1
     public ImageBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException;
     
+    //1.4
     /**
      * Returns true if this fl_image contains row with primary key fields.
      * @param md5 String - PK# 1
      * @see #loadByPrimaryKey($keys)
+     * @return
      */
-    //1.4
     public boolean existsPrimaryKey(String md5);
+    //1.4.1
     /**
      * Check duplicated row by primary keys,if row exists throw exception
      * @param md5 String
+     * @return 
+     * @throws ObjectRetrievalException
      */
-    //1.4.1
     public String checkDuplicate(String md5)throws ObjectRetrievalException;
+    //1.8
     /**
      * Loads {@link ImageBean} from the fl_image using primary key fields.
      *
      * @param keys primary keys array
      * @return list of ImageBean
      */
-    //1.8
     public java.util.List<ImageBean> loadByPrimaryKey(String... keys);
+    //1.9
     /**
      * Loads {@link ImageBean} from the fl_image using primary key fields.
      *
      * @param keys primary keys collection
      * @return list of ImageBean
      */
-    //1.9
     public java.util.List<ImageBean> loadByPrimaryKey(java.util.Collection<String> keys);
+    //2
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
@@ -75,87 +79,89 @@ public interface IImageManager extends TableManager<ImageBean>
      * @param md5 String - PK# 1
      * @return the number of deleted rows
      */
-    //2
     public int deleteByPrimaryKey(String md5);
+    //2.2
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys array
      * @return the number of deleted rows
      */
-    //2.2
     public int deleteByPrimaryKey(String... keys);
+    //2.3
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys collection
      * @return the number of deleted rows
      */
-    //2.3
     public int deleteByPrimaryKey(java.util.Collection<String> keys);
-    /**
-     * Delete beans.<br>
-     *
-     * @param beans ImageBean collection wille be deleted
-     * @return the number of deleted rows
-     */
     //2.4
-    public int delete(ImageBean... beans);
     /**
      * Delete beans.<br>
      *
      * @param beans ImageBean collection wille be deleted
      * @return the number of deleted rows
      */
+    public int delete(ImageBean... beans);
     //2.5
+    /**
+     * Delete beans.<br>
+     *
+     * @param beans ImageBean collection wille be deleted
+     * @return the number of deleted rows
+     */
     public int delete(java.util.Collection<ImageBean> beans);
  
 
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
+    //3.1 GET IMPORTED
     /**
      * Retrieves the {@link FaceBean} object from the fl_face.image_md5 field.<BR>
      * FK_NAME : fl_face_ibfk_1 
      * @param bean the {@link ImageBean}
      * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
      */
-    //3.1 GET IMPORTED
     public FaceBean[] getFaceBeansByImageMd5(ImageBean bean);
     
+    //3.1.2 GET IMPORTED
     /**
      * Retrieves the {@link FaceBean} object from the fl_face.image_md5 field.<BR>
      * FK_NAME : fl_face_ibfk_1 
-     * @param md5 String - PK# 1
+     * @param md5OfImage String - PK# 1
      * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1.2 GET IMPORTED
     public FaceBean[] getFaceBeansByImageMd5(String md5OfImage);
     
-    /**
-     * @see #getFaceBeansByImageMd5AsList(ImageBean,int,int)
-     */
     //3.2 GET IMPORTED
+    /**
+     * see also #getFaceBeansByImageMd5AsList(ImageBean,int,int)
+     * @param bean
+     * @return
+     */
     public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(ImageBean bean);
 
+    //3.2.2 GET IMPORTED
     /**
      * Retrieves the {@link FaceBean} object from fl_face.image_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_1
-     * @param md5 String - PK# 1
+     * @param md5OfImage String - PK# 1
      * @return the associated {@link FaceBean} beans 
      * @throws DAOException
      */
-    //3.2.2 GET IMPORTED
     public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(String md5OfImage);
+    //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link FaceBean} objects from fl_face.image_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_1
-     * @param md5 String - PK# 1
+     * @param md5OfImage String - PK# 1
      * @return the number of deleted rows
      */
-    //3.2.3 DELETE IMPORTED
     public int deleteFaceBeansByImageMd5(String md5OfImage);
+    //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link FaceBean} object from fl_face.image_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_1
@@ -164,8 +170,8 @@ public interface IImageManager extends TableManager<ImageBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link FaceBean} beans or empty list if {@code bean} is {@code null}
      */
-    //3.2.4 GET IMPORTED
     public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(ImageBean bean,int startRow,int numRows);    
+    //3.3 SET IMPORTED
     /**
      * set  the {@link FaceBean} object array associate to ImageBean by the fl_face.image_md5 field.<BR>
      * FK_NAME : fl_face_ibfk_1 
@@ -174,9 +180,9 @@ public interface IImageManager extends TableManager<ImageBean>
      * @return importedBeans always
      * @see {@link FaceManager#setReferencedByImageMd5(FaceBean, ImageBean)
      */
-    //3.3 SET IMPORTED
     public FaceBean[] setFaceBeansByImageMd5(ImageBean bean , FaceBean[] importedBeans);
 
+    //3.4 SET IMPORTED
     /**
      * set  the {@link FaceBean} object java.util.Collection associate to ImageBean by the fl_face.image_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_1
@@ -185,51 +191,53 @@ public interface IImageManager extends TableManager<ImageBean>
      * @return importedBeans always
      * @see {@link FaceManager#setReferencedByImageMd5(FaceBean, ImageBean)
      */
-    //3.4 SET IMPORTED
     public <C extends java.util.Collection<FaceBean>> C setFaceBeansByImageMd5(ImageBean bean , C importedBeans);
 
+    //3.1 GET IMPORTED
     /**
      * Retrieves the {@link PersonBean} object from the fl_person.image_md5 field.<BR>
      * FK_NAME : fl_person_ibfk_2 
      * @param bean the {@link ImageBean}
      * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
      */
-    //3.1 GET IMPORTED
     public PersonBean[] getPersonBeansByImageMd5(ImageBean bean);
     
+    //3.1.2 GET IMPORTED
     /**
      * Retrieves the {@link PersonBean} object from the fl_person.image_md5 field.<BR>
      * FK_NAME : fl_person_ibfk_2 
-     * @param md5 String - PK# 1
+     * @param md5OfImage String - PK# 1
      * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1.2 GET IMPORTED
     public PersonBean[] getPersonBeansByImageMd5(String md5OfImage);
     
-    /**
-     * @see #getPersonBeansByImageMd5AsList(ImageBean,int,int)
-     */
     //3.2 GET IMPORTED
+    /**
+     * see also #getPersonBeansByImageMd5AsList(ImageBean,int,int)
+     * @param bean
+     * @return
+     */
     public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(ImageBean bean);
 
+    //3.2.2 GET IMPORTED
     /**
      * Retrieves the {@link PersonBean} object from fl_person.image_md5 field.<BR>
      * FK_NAME:fl_person_ibfk_2
-     * @param md5 String - PK# 1
+     * @param md5OfImage String - PK# 1
      * @return the associated {@link PersonBean} beans 
      * @throws DAOException
      */
-    //3.2.2 GET IMPORTED
     public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(String md5OfImage);
+    //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link PersonBean} objects from fl_person.image_md5 field.<BR>
      * FK_NAME:fl_person_ibfk_2
-     * @param md5 String - PK# 1
+     * @param md5OfImage String - PK# 1
      * @return the number of deleted rows
      */
-    //3.2.3 DELETE IMPORTED
     public int deletePersonBeansByImageMd5(String md5OfImage);
+    //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link PersonBean} object from fl_person.image_md5 field.<BR>
      * FK_NAME:fl_person_ibfk_2
@@ -238,8 +246,8 @@ public interface IImageManager extends TableManager<ImageBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link PersonBean} beans or empty list if {@code bean} is {@code null}
      */
-    //3.2.4 GET IMPORTED
     public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(ImageBean bean,int startRow,int numRows);    
+    //3.3 SET IMPORTED
     /**
      * set  the {@link PersonBean} object array associate to ImageBean by the fl_person.image_md5 field.<BR>
      * FK_NAME : fl_person_ibfk_2 
@@ -248,9 +256,9 @@ public interface IImageManager extends TableManager<ImageBean>
      * @return importedBeans always
      * @see {@link PersonManager#setReferencedByImageMd5(PersonBean, ImageBean)
      */
-    //3.3 SET IMPORTED
     public PersonBean[] setPersonBeansByImageMd5(ImageBean bean , PersonBean[] importedBeans);
 
+    //3.4 SET IMPORTED
     /**
      * set  the {@link PersonBean} object java.util.Collection associate to ImageBean by the fl_person.image_md5 field.<BR>
      * FK_NAME:fl_person_ibfk_2
@@ -259,9 +267,9 @@ public interface IImageManager extends TableManager<ImageBean>
      * @return importedBeans always
      * @see {@link PersonManager#setReferencedByImageMd5(PersonBean, ImageBean)
      */
-    //3.4 SET IMPORTED
     public <C extends java.util.Collection<PersonBean>> C setPersonBeansByImageMd5(ImageBean bean , C importedBeans);
 
+    //3.5 SYNC SAVE 
     /**
      * Save the ImageBean bean and referenced beans and imported beans into the database.
      *
@@ -271,18 +279,23 @@ public interface IImageManager extends TableManager<ImageBean>
      * @param impPersonByImageMd5 the {@link PersonBean} bean refer to {@link ImageBean} 
      * @return the inserted or updated {@link ImageBean} bean
      */
-    //3.5 SYNC SAVE 
     public ImageBean save(ImageBean bean
         , DeviceBean refDeviceByDeviceId 
         , FaceBean[] impFaceByImageMd5 , PersonBean[] impPersonByImageMd5 );
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(ImageBean , DeviceBean , FaceBean[] , PersonBean[] )}
-     */
     //3.6 SYNC SAVE AS TRANSACTION
+    /**
+     * Transaction version for sync save<br>
+     * see also {@link #save(ImageBean , DeviceBean , FaceBean[] , PersonBean[] )}
+     * @param bean the {@link ImageBean} bean to be saved
+     * @param refDeviceByDeviceId the {@link DeviceBean} bean referenced by {@link ImageBean} 
+     * @param impFaceByImageMd5 the {@link FaceBean} bean refer to {@link ImageBean} 
+     * @param impPersonByImageMd5 the {@link PersonBean} bean refer to {@link ImageBean} 
+     * @return the inserted or updated {@link ImageBean} bean
+     */
     public ImageBean saveAsTransaction(final ImageBean bean
         ,final DeviceBean refDeviceByDeviceId 
         ,final FaceBean[] impFaceByImageMd5 ,final PersonBean[] impPersonByImageMd5 );
+    //3.7 SYNC SAVE 
     /**
      * Save the ImageBean bean and referenced beans and imported beans into the database.
      *
@@ -292,30 +305,35 @@ public interface IImageManager extends TableManager<ImageBean>
      * @param impPersonByImageMd5 the {@link PersonBean} bean refer to {@link ImageBean} 
      * @return the inserted or updated {@link ImageBean} bean
      */
-    //3.7 SYNC SAVE 
     public ImageBean save(ImageBean bean
         , DeviceBean refDeviceByDeviceId 
         , java.util.Collection<FaceBean> impFaceByImageMd5 , java.util.Collection<PersonBean> impPersonByImageMd5 );
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(ImageBean , DeviceBean , java.util.Collection , java.util.Collection )}
-     */
     //3.8 SYNC SAVE AS TRANSACTION
+    /**
+     * Transaction version for sync save<br>
+     * see also {@link #save(ImageBean , DeviceBean , java.util.Collection , java.util.Collection )}
+     * @param bean the {@link ImageBean} bean to be saved
+     * @param refDeviceByDeviceId the {@link DeviceBean} bean referenced by {@link ImageBean} 
+     * @param impFaceByImageMd5 the {@link FaceBean} bean refer to {@link ImageBean} 
+     * @param impPersonByImageMd5 the {@link PersonBean} bean refer to {@link ImageBean} 
+     * @return the inserted or updated {@link ImageBean} bean
+     */
     public ImageBean saveAsTransaction(final ImageBean bean
         ,final DeviceBean refDeviceByDeviceId 
         ,final  java.util.Collection<FaceBean> impFaceByImageMd5 ,final  java.util.Collection<PersonBean> impPersonByImageMd5 );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
+    //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link DeviceBean} object referenced by {@link ImageBean#getDeviceId}() field.<br>
      * FK_NAME : fl_image_ibfk_1
      * @param bean the {@link ImageBean}
      * @return the associated {@link DeviceBean} bean or {@code null} if {@code bean} is {@code null}
      */
-    //5.1 GET REFERENCED VALUE
     public DeviceBean getReferencedByDeviceId(ImageBean bean);
 
+    //5.2 SET REFERENCED 
     /**
      * Associates the {@link ImageBean} object to the {@link DeviceBean} object by {@link ImageBean#getDeviceId}() field.
      *
@@ -324,7 +342,6 @@ public interface IImageManager extends TableManager<ImageBean>
      * @return always beanToSet saved
      * @throws WrapDAOException
      */
-    //5.2 SET REFERENCED 
     public DeviceBean setReferencedByDeviceId(ImageBean bean, DeviceBean beanToSet);
     //_____________________________________________________________________
     //
@@ -357,17 +374,19 @@ public interface IImageManager extends TableManager<ImageBean>
     public int deleteByIndexDeviceId(Integer deviceId);
     
 
+    //45
     /**
      * return a primary key list from {@link ImageBean} array
-     * @param array
+     * @param beans
+     * @return
      */
-    //45
-    public java.util.List<String> toPrimaryKeyList(ImageBean... array);
+    public java.util.List<String> toPrimaryKeyList(ImageBean... beans);
+    //46
     /**
      * return a primary key list from {@link ImageBean} collection
-     * @param array
+     * @param beans
+     * @return
      */
-    //46
-    public java.util.List<String> toPrimaryKeyList(java.util.Collection<ImageBean> collection);
+    public java.util.List<String> toPrimaryKeyList(java.util.Collection<ImageBean> beans);
 
 }

@@ -91,6 +91,7 @@ public class FeatureCacheManager extends FeatureManager
     //////////////////////////////////////
 
     //1.1 override IFeatureManager
+
     @Override 
     public FeatureBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException
     {
@@ -126,6 +127,7 @@ public class FeatureCacheManager extends FeatureManager
         }
     }
     //1.4 override IFeatureManager
+
     @Override 
     public boolean existsPrimaryKey(String md5){
         return null != loadByPrimaryKey(md5);
@@ -148,6 +150,7 @@ public class FeatureCacheManager extends FeatureManager
         }
     }
     //20-5
+
     @Override
     public int loadUsingTemplate(FeatureBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FeatureBean> action){
         if(null == fieldList ){

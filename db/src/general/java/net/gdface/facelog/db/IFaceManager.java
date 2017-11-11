@@ -20,15 +20,16 @@ public interface IFaceManager extends TableManager<FaceBean>
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
+    //1
     /**
      * Loads a {@link FaceBean} from the fl_face using primary key fields.
      *
      * @param id Integer - PK# 1
      * @return a unique FaceBean or {@code null} if not found
      */
-    //1
     public FaceBean loadByPrimaryKey(Integer id);
 
+    //1.1
     /**
      * Loads a {@link FaceBean} from the fl_face using primary key fields.
      *
@@ -36,38 +37,41 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @return a unique FaceBean
      * @throws ObjectRetrievalException if not found
      */
-    //1.1
     public FaceBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException;
     
+    //1.4
     /**
      * Returns true if this fl_face contains row with primary key fields.
      * @param id Integer - PK# 1
      * @see #loadByPrimaryKey($keys)
+     * @return
      */
-    //1.4
     public boolean existsPrimaryKey(Integer id);
+    //1.4.1
     /**
      * Check duplicated row by primary keys,if row exists throw exception
      * @param id Integer
+     * @return 
+     * @throws ObjectRetrievalException
      */
-    //1.4.1
     public Integer checkDuplicate(Integer id)throws ObjectRetrievalException;
+    //1.8
     /**
      * Loads {@link FaceBean} from the fl_face using primary key fields.
      *
      * @param keys primary keys array
      * @return list of FaceBean
      */
-    //1.8
     public java.util.List<FaceBean> loadByPrimaryKey(int... keys);
+    //1.9
     /**
      * Loads {@link FaceBean} from the fl_face using primary key fields.
      *
      * @param keys primary keys collection
      * @return list of FaceBean
      */
-    //1.9
     public java.util.List<FaceBean> loadByPrimaryKey(java.util.Collection<Integer> keys);
+    //2
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
@@ -75,87 +79,89 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param id Integer - PK# 1
      * @return the number of deleted rows
      */
-    //2
     public int deleteByPrimaryKey(Integer id);
+    //2.2
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys array
      * @return the number of deleted rows
      */
-    //2.2
     public int deleteByPrimaryKey(int... keys);
+    //2.3
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys collection
      * @return the number of deleted rows
      */
-    //2.3
     public int deleteByPrimaryKey(java.util.Collection<Integer> keys);
-    /**
-     * Delete beans.<br>
-     *
-     * @param beans FaceBean collection wille be deleted
-     * @return the number of deleted rows
-     */
     //2.4
-    public int delete(FaceBean... beans);
     /**
      * Delete beans.<br>
      *
      * @param beans FaceBean collection wille be deleted
      * @return the number of deleted rows
      */
+    public int delete(FaceBean... beans);
     //2.5
+    /**
+     * Delete beans.<br>
+     *
+     * @param beans FaceBean collection wille be deleted
+     * @return the number of deleted rows
+     */
     public int delete(java.util.Collection<FaceBean> beans);
  
 
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
+    //3.1 GET IMPORTED
     /**
      * Retrieves the {@link LogBean} object from the fl_log.compare_face field.<BR>
      * FK_NAME : fl_log_ibfk_4 
      * @param bean the {@link FaceBean}
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      */
-    //3.1 GET IMPORTED
     public LogBean[] getLogBeansByCompareFace(FaceBean bean);
     
+    //3.1.2 GET IMPORTED
     /**
      * Retrieves the {@link LogBean} object from the fl_log.compare_face field.<BR>
      * FK_NAME : fl_log_ibfk_4 
-     * @param id Integer - PK# 1
+     * @param idOfFace Integer - PK# 1
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1.2 GET IMPORTED
     public LogBean[] getLogBeansByCompareFace(Integer idOfFace);
     
-    /**
-     * @see #getLogBeansByCompareFaceAsList(FaceBean,int,int)
-     */
     //3.2 GET IMPORTED
+    /**
+     * see also #getLogBeansByCompareFaceAsList(FaceBean,int,int)
+     * @param bean
+     * @return
+     */
     public java.util.List<LogBean> getLogBeansByCompareFaceAsList(FaceBean bean);
 
+    //3.2.2 GET IMPORTED
     /**
      * Retrieves the {@link LogBean} object from fl_log.compare_face field.<BR>
      * FK_NAME:fl_log_ibfk_4
-     * @param id Integer - PK# 1
+     * @param idOfFace Integer - PK# 1
      * @return the associated {@link LogBean} beans 
      * @throws DAOException
      */
-    //3.2.2 GET IMPORTED
     public java.util.List<LogBean> getLogBeansByCompareFaceAsList(Integer idOfFace);
+    //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link LogBean} objects from fl_log.compare_face field.<BR>
      * FK_NAME:fl_log_ibfk_4
-     * @param id Integer - PK# 1
+     * @param idOfFace Integer - PK# 1
      * @return the number of deleted rows
      */
-    //3.2.3 DELETE IMPORTED
     public int deleteLogBeansByCompareFace(Integer idOfFace);
+    //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link LogBean} object from fl_log.compare_face field.<BR>
      * FK_NAME:fl_log_ibfk_4
@@ -164,8 +170,8 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link LogBean} beans or empty list if {@code bean} is {@code null}
      */
-    //3.2.4 GET IMPORTED
     public java.util.List<LogBean> getLogBeansByCompareFaceAsList(FaceBean bean,int startRow,int numRows);    
+    //3.3 SET IMPORTED
     /**
      * set  the {@link LogBean} object array associate to FaceBean by the fl_log.compare_face field.<BR>
      * FK_NAME : fl_log_ibfk_4 
@@ -174,9 +180,9 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @return importedBeans always
      * @see {@link LogManager#setReferencedByCompareFace(LogBean, FaceBean)
      */
-    //3.3 SET IMPORTED
     public LogBean[] setLogBeansByCompareFace(FaceBean bean , LogBean[] importedBeans);
 
+    //3.4 SET IMPORTED
     /**
      * set  the {@link LogBean} object java.util.Collection associate to FaceBean by the fl_log.compare_face field.<BR>
      * FK_NAME:fl_log_ibfk_4
@@ -185,9 +191,9 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @return importedBeans always
      * @see {@link LogManager#setReferencedByCompareFace(LogBean, FaceBean)
      */
-    //3.4 SET IMPORTED
     public <C extends java.util.Collection<LogBean>> C setLogBeansByCompareFace(FaceBean bean , C importedBeans);
 
+    //3.5 SYNC SAVE 
     /**
      * Save the FaceBean bean and referenced beans and imported beans into the database.
      *
@@ -197,18 +203,23 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param impLogByCompareFace the {@link LogBean} bean refer to {@link FaceBean} 
      * @return the inserted or updated {@link FaceBean} bean
      */
-    //3.5 SYNC SAVE 
     public FaceBean save(FaceBean bean
         , FeatureBean refFeatureByFeatureMd5 , ImageBean refImageByImageMd5 
         , LogBean[] impLogByCompareFace );
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(FaceBean , FeatureBean , ImageBean , LogBean[] )}
-     */
     //3.6 SYNC SAVE AS TRANSACTION
+    /**
+     * Transaction version for sync save<br>
+     * see also {@link #save(FaceBean , FeatureBean , ImageBean , LogBean[] )}
+     * @param bean the {@link FaceBean} bean to be saved
+     * @param refFeatureByFeatureMd5 the {@link FeatureBean} bean referenced by {@link FaceBean} 
+     * @param refImageByImageMd5 the {@link ImageBean} bean referenced by {@link FaceBean} 
+     * @param impLogByCompareFace the {@link LogBean} bean refer to {@link FaceBean} 
+     * @return the inserted or updated {@link FaceBean} bean
+     */
     public FaceBean saveAsTransaction(final FaceBean bean
         ,final FeatureBean refFeatureByFeatureMd5 ,final ImageBean refImageByImageMd5 
         ,final LogBean[] impLogByCompareFace );
+    //3.7 SYNC SAVE 
     /**
      * Save the FaceBean bean and referenced beans and imported beans into the database.
      *
@@ -218,30 +229,35 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param impLogByCompareFace the {@link LogBean} bean refer to {@link FaceBean} 
      * @return the inserted or updated {@link FaceBean} bean
      */
-    //3.7 SYNC SAVE 
     public FaceBean save(FaceBean bean
         , FeatureBean refFeatureByFeatureMd5 , ImageBean refImageByImageMd5 
         , java.util.Collection<LogBean> impLogByCompareFace );
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(FaceBean , FeatureBean , ImageBean , java.util.Collection )}
-     */
     //3.8 SYNC SAVE AS TRANSACTION
+    /**
+     * Transaction version for sync save<br>
+     * see also {@link #save(FaceBean , FeatureBean , ImageBean , java.util.Collection )}
+     * @param bean the {@link FaceBean} bean to be saved
+     * @param refFeatureByFeatureMd5 the {@link FeatureBean} bean referenced by {@link FaceBean} 
+     * @param refImageByImageMd5 the {@link ImageBean} bean referenced by {@link FaceBean} 
+     * @param impLogByCompareFace the {@link LogBean} bean refer to {@link FaceBean} 
+     * @return the inserted or updated {@link FaceBean} bean
+     */
     public FaceBean saveAsTransaction(final FaceBean bean
         ,final FeatureBean refFeatureByFeatureMd5 ,final ImageBean refImageByImageMd5 
         ,final  java.util.Collection<LogBean> impLogByCompareFace );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
+    //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link FeatureBean} object referenced by {@link FaceBean#getFeatureMd5}() field.<br>
      * FK_NAME : fl_face_ibfk_2
      * @param bean the {@link FaceBean}
      * @return the associated {@link FeatureBean} bean or {@code null} if {@code bean} is {@code null}
      */
-    //5.1 GET REFERENCED VALUE
     public FeatureBean getReferencedByFeatureMd5(FaceBean bean);
 
+    //5.2 SET REFERENCED 
     /**
      * Associates the {@link FaceBean} object to the {@link FeatureBean} object by {@link FaceBean#getFeatureMd5}() field.
      *
@@ -250,17 +266,17 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @return always beanToSet saved
      * @throws WrapDAOException
      */
-    //5.2 SET REFERENCED 
     public FeatureBean setReferencedByFeatureMd5(FaceBean bean, FeatureBean beanToSet);
+    //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link ImageBean} object referenced by {@link FaceBean#getImageMd5}() field.<br>
      * FK_NAME : fl_face_ibfk_1
      * @param bean the {@link FaceBean}
      * @return the associated {@link ImageBean} bean or {@code null} if {@code bean} is {@code null}
      */
-    //5.1 GET REFERENCED VALUE
     public ImageBean getReferencedByImageMd5(FaceBean bean);
 
+    //5.2 SET REFERENCED 
     /**
      * Associates the {@link FaceBean} object to the {@link ImageBean} object by {@link FaceBean#getImageMd5}() field.
      *
@@ -269,7 +285,6 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @return always beanToSet saved
      * @throws WrapDAOException
      */
-    //5.2 SET REFERENCED 
     public ImageBean setReferencedByImageMd5(FaceBean bean, ImageBean beanToSet);
     //_____________________________________________________________________
     //
@@ -327,17 +342,19 @@ public interface IFaceManager extends TableManager<FaceBean>
     public int deleteByIndexImageMd5(String imageMd5);
     
 
+    //45
     /**
      * return a primary key list from {@link FaceBean} array
-     * @param array
+     * @param beans
+     * @return
      */
-    //45
-    public java.util.List<Integer> toPrimaryKeyList(FaceBean... array);
+    public java.util.List<Integer> toPrimaryKeyList(FaceBean... beans);
+    //46
     /**
      * return a primary key list from {@link FaceBean} collection
-     * @param array
+     * @param beans
+     * @return
      */
-    //46
-    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<FaceBean> collection);
+    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<FaceBean> beans);
 
 }

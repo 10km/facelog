@@ -118,6 +118,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
     //////////////////////////////////////
 
     //11
+
     @Override
     public int deleteByWhere(String where)
     {
@@ -136,6 +137,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
     //_____________________________________________________________________
 
     //13
+
     @Override
     protected LogLightBean insert(LogLightBean bean)
     {
@@ -150,6 +152,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
 
     //14
     @Override
+
     protected LogLightBean update(LogLightBean bean)
     {
         try{
@@ -167,6 +170,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
     //_____________________________________________________________________
     //18
     @Override
+
     public LogLightBean loadUniqueUsingTemplate(LogLightBean bean)
     {
         try{
@@ -179,6 +183,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
      }
     //18-1
     @Override
+
     public LogLightBean loadUniqueUsingTemplateChecked(LogLightBean bean) throws ObjectRetrievalException
     {
         try{
@@ -194,6 +199,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         }
      }
     //20-5
+
     @Override
     public int loadUsingTemplate(LogLightBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<LogLightBean> action)
     {
@@ -207,6 +213,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
     }
 
     //21
+
     @Override
     public int deleteUsingTemplate(LogLightBean bean)
     {
@@ -225,6 +232,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
     // COUNT
     //_____________________________________________________________________
     //25
+
     @Override
     public int countWhere(String where)
     {
@@ -238,6 +246,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
     }
 
     //20
+
     @Override
     public int countUsingTemplate(LogLightBean bean, int searchType)
     {
@@ -256,10 +265,10 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
     // LISTENER
     //_____________________________________________________________________
 
+    //35
     /**
      * @return {@link WrapListener} instance
      */
-    //35
     @Override
     public TableListener<LogLightBean> registerListener(TableListener<LogLightBean> listener)
     {
@@ -275,6 +284,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
     }
 
     //36
+
     @Override
     public void unregisterListener(TableListener<LogLightBean> listener)
     {
@@ -285,12 +295,14 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
     }
     
     //37
+
     @Override
     public void fire(TableListener.Event event, LogLightBean bean){
         fire(event.ordinal(), bean);
     }
     
     //37-1
+
     @Override
     public void fire(int event, LogLightBean bean){
         try{
@@ -301,25 +313,24 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
             throw new WrapDAOException(e);
         }
     }
+    //37-2
     /**
      * bind foreign key listener to foreign table for DELETE RULE
      */
-    //37-2
     void bindForeignKeyListenerForDeleteRule(){
         this.nativeManager.bindForeignKeyListenerForDeleteRule();
     }
+    //37-3
     /**
      * unbind foreign key listener from all of foreign tables <br>
      * @see #bindForeignKeyListenerForDeleteRule()
      */
-    //37-3
     void unbindForeignKeyListenerForDeleteRule(){
         this.nativeManager.unbindForeignKeyListenerForDeleteRule();
 
     }
     /**
      * wrap {@code TableListener<LogLightBean>} as native listener
-     *
      */
     public class WrapListener implements TableListener<LogLightBean>{
         private final TableListener<LogLightBean> listener;
@@ -399,6 +410,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
     //_____________________________________________________________________
 
     //43
+
     @Override
     public boolean isPrimaryKey(String column){
         return this.nativeManager.isPrimaryKey(column);

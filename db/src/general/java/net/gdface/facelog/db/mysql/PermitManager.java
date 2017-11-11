@@ -120,6 +120,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     //////////////////////////////////////
 
     //1 override IPermitManager
+
     @Override 
     public PermitBean loadByPrimaryKey(Integer deviceGroupId,Integer personGroupId)
     {
@@ -131,6 +132,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         }
     }
     //1.1 override IPermitManager
+
     @Override
     public PermitBean loadByPrimaryKeyChecked(Integer deviceGroupId,Integer personGroupId) throws ObjectRetrievalException
     {
@@ -143,6 +145,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         }
     }
     //1.2
+
     @Override
     public PermitBean loadByPrimaryKey(PermitBean bean)
     {
@@ -150,6 +153,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     }
 
     //1.2.2
+
     @Override
     public PermitBean loadByPrimaryKeyChecked(PermitBean bean) throws ObjectRetrievalException
     {
@@ -160,6 +164,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     }
     
     //1.3
+
     @Override
     public PermitBean loadByPrimaryKey(Object ...keys){
         try{
@@ -171,6 +176,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     }
     
     //1.3.2
+
     @Override
     public PermitBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
         if(null == keys){
@@ -190,6 +196,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     }
 
     //1.4 override IPermitManager
+
     @Override 
     public boolean existsPrimaryKey(Integer deviceGroupId,Integer personGroupId)
     {
@@ -202,12 +209,14 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         }
     }
     //1.6
+
     @Override
     public boolean existsByPrimaryKey(PermitBean bean)
     {
         return null == bean ? false : existsPrimaryKey(bean.getDeviceGroupId(),bean.getPersonGroupId());
     }
     //1.7
+
     @Override
     public PermitBean checkDuplicate(PermitBean bean)throws ObjectRetrievalException{
         try{
@@ -218,6 +227,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         return bean;   
     }
     //2 override IPermitManager
+
     @Override 
     public int deleteByPrimaryKey(Integer deviceGroupId,Integer personGroupId)
     {
@@ -231,6 +241,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         }
     }
     //2
+
     @Override
     public int delete(PermitBean bean){
         try
@@ -243,6 +254,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         }   
     }
     //2.1
+
     @Override
     public int deleteByPrimaryKey(Object ...keys){
         if(null == keys){
@@ -260,6 +272,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         return deleteByPrimaryKey((Integer)keys[0],(Integer)keys[1]);
     }
     //2.4 override IPermitManager
+
     @Override 
     public int delete(PermitBean... beans){
         int count = 0;
@@ -271,6 +284,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         return count;
     }
     //2.5 override IPermitManager
+
     @Override 
     public int delete(java.util.Collection<PermitBean> beans){
         int count = 0;
@@ -286,6 +300,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
 
 
     //3.5 SYNC SAVE override IPermitManager
+
     @Override  
     public PermitBean save(PermitBean bean
         , DeviceGroupBean refDevicegroupByDeviceGroupId , PersonGroupBean refPersongroupByPersonGroupId 
@@ -305,6 +320,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     } 
 
     //3.6 SYNC SAVE AS TRANSACTION override IPermitManager
+
     @Override 
     public PermitBean saveAsTransaction(final PermitBean bean
         ,final DeviceGroupBean refDevicegroupByDeviceGroupId ,final PersonGroupBean refPersongroupByPersonGroupId 
@@ -316,7 +332,8 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
                 return save(bean , refDevicegroupByDeviceGroupId , refPersongroupByPersonGroupId );
             }});
     }
-     /**
+     //3.9 SYNC SAVE 
+    /**
      * Save the {@link PermitBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link PermitBean} bean to be saved
@@ -324,7 +341,6 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
      *      see also {@link #save(PermitBean , DeviceGroupBean , PersonGroupBean )}
      * @return the inserted or updated {@link PermitBean} bean
      */
-    //3.9 SYNC SAVE 
     @Override
     public PermitBean save(PermitBean bean,Object ...args) 
     {
@@ -343,6 +359,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         return save(bean,(args.length < 1 || null == args[0])?null:(DeviceGroupBean)args[0],(args.length < 2 || null == args[1])?null:(PersonGroupBean)args[1]);
     } 
 
+    //3.10 SYNC SAVE 
     /**
      * Save the {@link PermitBean} bean and referenced beans and imported beans into the database.
      *
@@ -351,7 +368,6 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
      *      see also {@link #save(PermitBean , DeviceGroupBean , PersonGroupBean )}
      * @return the inserted or updated {@link PermitBean} bean
      */
-    //3.10 SYNC SAVE 
     @SuppressWarnings("unchecked")
     @Override
     public PermitBean saveCollection(PermitBean bean,Object ...inputs)
@@ -429,6 +445,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
 
 
     //5.1 GET REFERENCED VALUE override IPermitManager
+
     @Override 
     public DeviceGroupBean getReferencedByDeviceGroupId(PermitBean bean)
     {
@@ -440,6 +457,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     }
 
     //5.2 SET REFERENCED override IPermitManager
+
     @Override 
     public DeviceGroupBean setReferencedByDeviceGroupId(PermitBean bean, DeviceGroupBean beanToSet)
     {
@@ -459,6 +477,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     }
 
     //5.1 GET REFERENCED VALUE override IPermitManager
+
     @Override 
     public PersonGroupBean getReferencedByPersonGroupId(PermitBean bean)
     {
@@ -470,6 +489,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     }
 
     //5.2 SET REFERENCED override IPermitManager
+
     @Override 
     public PersonGroupBean setReferencedByPersonGroupId(PermitBean bean, PersonGroupBean beanToSet)
     {
@@ -493,6 +513,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     //////////////////////////////////////
 
     //11
+
     @Override
     public int deleteByWhere(String where)
     {
@@ -511,6 +532,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     //_____________________________________________________________________
 
     //13
+
     @Override
     protected PermitBean insert(PermitBean bean)
     {
@@ -525,6 +547,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
 
     //14
     @Override
+
     protected PermitBean update(PermitBean bean)
     {
         try{
@@ -542,6 +565,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     //_____________________________________________________________________
     //18
     @Override
+
     public PermitBean loadUniqueUsingTemplate(PermitBean bean)
     {
         try{
@@ -554,6 +578,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
      }
     //18-1
     @Override
+
     public PermitBean loadUniqueUsingTemplateChecked(PermitBean bean) throws ObjectRetrievalException
     {
         try{
@@ -569,6 +594,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         }
      }
     //20-5
+
     @Override
     public int loadUsingTemplate(PermitBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<PermitBean> action)
     {
@@ -582,6 +608,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     }
 
     //21
+
     @Override
     public int deleteUsingTemplate(PermitBean bean)
     {
@@ -600,6 +627,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     // COUNT
     //_____________________________________________________________________
     //25
+
     @Override
     public int countWhere(String where)
     {
@@ -613,6 +641,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     }
 
     //20
+
     @Override
     public int countUsingTemplate(PermitBean bean, int searchType)
     {
@@ -631,10 +660,10 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     // LISTENER
     //_____________________________________________________________________
 
+    //35
     /**
      * @return {@link WrapListener} instance
      */
-    //35
     @Override
     public TableListener<PermitBean> registerListener(TableListener<PermitBean> listener)
     {
@@ -650,6 +679,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     }
 
     //36
+
     @Override
     public void unregisterListener(TableListener<PermitBean> listener)
     {
@@ -660,12 +690,14 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     }
     
     //37
+
     @Override
     public void fire(TableListener.Event event, PermitBean bean){
         fire(event.ordinal(), bean);
     }
     
     //37-1
+
     @Override
     public void fire(int event, PermitBean bean){
         try{
@@ -676,25 +708,24 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
             throw new WrapDAOException(e);
         }
     }
+    //37-2
     /**
      * bind foreign key listener to foreign table for DELETE RULE
      */
-    //37-2
     void bindForeignKeyListenerForDeleteRule(){
         this.nativeManager.bindForeignKeyListenerForDeleteRule();
     }
+    //37-3
     /**
      * unbind foreign key listener from all of foreign tables <br>
      * @see #bindForeignKeyListenerForDeleteRule()
      */
-    //37-3
     void unbindForeignKeyListenerForDeleteRule(){
         this.nativeManager.unbindForeignKeyListenerForDeleteRule();
 
     }
     /**
      * wrap {@code TableListener<PermitBean>} as native listener
-     *
      */
     public class WrapListener implements TableListener<PermitBean>{
         private final TableListener<PermitBean> listener;
@@ -774,6 +805,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     //_____________________________________________________________________
 
     //43
+
     @Override
     public boolean isPrimaryKey(String column){
         return this.nativeManager.isPrimaryKey(column);

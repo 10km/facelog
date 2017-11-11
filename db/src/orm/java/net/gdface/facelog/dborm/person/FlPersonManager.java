@@ -115,6 +115,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
+    //1
     /**
      * Loads a {@link FlPersonBean} from the fl_person using primary key fields.
      *
@@ -122,7 +123,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return a unique FlPersonBean or {@code null} if not found or have null argument
      * @throws DAOException
      */
-    //1
     public FlPersonBean loadByPrimaryKey(Integer id) throws DAOException
     {
         try{
@@ -133,6 +133,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         }
     }
     
+    //1.1
     /**
      * Loads a {@link FlPersonBean} from the fl_person using primary key fields.
      *
@@ -141,7 +142,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @throws ObjectRetrievalException if not found
      * @throws DAOException
      */
-    //1.1
     @SuppressWarnings("unused")
     public FlPersonBean loadByPrimaryKeyChecked(Integer id) throws DAOException
     {
@@ -182,6 +182,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     }
 
     //1.2
+    
     @Override
     public FlPersonBean loadByPrimaryKey(FlPersonBean bean) throws DAOException
     {
@@ -189,6 +190,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     }
     
     //1.2.2
+    
     @Override
     public FlPersonBean loadByPrimaryKeyChecked(FlPersonBean bean) throws DAOException
     {
@@ -198,13 +200,13 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         return loadByPrimaryKeyChecked(bean.getId());
     }
     
+    //1.3
     /**
      * Loads a {@link FlPersonBean} from the fl_person using primary key fields.
      * @param keys primary keys value:<br> 
      * @return a unique {@link FlPersonBean} or {@code null} if not found
      * @see {@link #loadByPrimaryKey(Integer id)}
      */
-    //1.3
     @Override
     public FlPersonBean loadByPrimaryKey(Object ...keys) throws DAOException{
         if(null == keys){
@@ -220,6 +222,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         return loadByPrimaryKey((Integer)keys[0]);
     }
     //1.3.2
+
     @Override
     public FlPersonBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
         if(null == keys){
@@ -234,12 +237,12 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         }
         return loadByPrimaryKeyChecked((Integer)keys[0]);
     }
+    //1.4
     /**
      * Returns true if this fl_person contains row with primary key fields.
      * @param id Integer - PK# 1
      * @throws DAOException
      */
-    //1.4
     @SuppressWarnings("unused")
     public boolean existsPrimaryKey(Integer id) throws DAOException
     {
@@ -264,6 +267,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
             this.freeConnection(c);
         }
     }
+    //1.6
     /**
      * Return true if this fl_person contains row with primary key fields.
      * @param bean  
@@ -271,7 +275,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return false if primary kes has null
      * @see #countUsingTemplate(FlPersonBean)
      */
-    //1.6
     @Override
     public boolean existsByPrimaryKey(FlPersonBean bean) throws DAOException
     {
@@ -287,6 +290,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         }
     }
     //1.7
+
     @Override
     public FlPersonBean checkDuplicate(FlPersonBean bean) throws DAOException{
         if(!existsByPrimaryKey(bean)){
@@ -294,13 +298,13 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         }
         return bean;
     }
+    //1.4.1
     /**
      * Check duplicated row by primary keys,if row exists throw {@link ObjectRetrievalException}
      * @param id Integer
      * @throws DAOException
      * @see #existsPrimaryKey(Integer id)
      */
-    //1.4.1
     public Integer checkDuplicate(Integer id) throws DAOException
     {
         if(existsPrimaryKey(id)){
@@ -308,6 +312,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         }
         return id;
     }    
+    //2
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
@@ -317,7 +322,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @throws DAOException
      * @see {@link #delete(FlPersonBean)}
      */
-    //2
     public int deleteByPrimaryKey(Integer id) throws DAOException
     {
         FlPersonBean bean=createBean();
@@ -325,6 +329,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         return this.delete(bean);
     }
 
+    //2.2
     /**
      * Delete row according to primary keys of bean.<br>
      * 
@@ -332,7 +337,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the number of deleted rows,0 returned if bean is null
      * @throws DAOException
      */
-    //2
     @Override
     public int delete(FlPersonBean bean) throws DAOException
     {
@@ -343,7 +347,8 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         PreparedStatement ps = null;
         try
         {
-            this.listenerContainer.beforeDelete(bean); // listener callback
+            // listener callback
+            this.listenerContainer.beforeDelete(bean);
             c = this.getConnection();
             StringBuilder sql = new StringBuilder("DELETE FROM fl_person WHERE id=?");
             // System.out.println("deleteByPrimaryKey: " + sql);
@@ -353,7 +358,8 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
             if (bean.getId() == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, bean.getId()); }
             int rows=ps.executeUpdate();
             if(rows>0){
-                this.listenerContainer.afterDelete(bean); // listener callback
+                // listener callback
+                this.listenerContainer.afterDelete(bean);
             }
             return rows;
         }
@@ -368,6 +374,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         }
     }
 
+    //2.1
     /**
      * Delete row according to its primary keys.
      *
@@ -375,7 +382,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the number of deleted rows
      * @see {@link #delete(FlPersonBean)}
      */   
-    //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DAOException{
         if(null == keys){
@@ -480,6 +486,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
+    //3.1 GET IMPORTED
     /**
      * Retrieves the {@link FlFeatureBean} object from the fl_feature.person_id field.<BR>
      * FK_NAME : fl_feature_ibfk_1 
@@ -487,11 +494,11 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the associated {@link FlFeatureBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1 GET IMPORTED
     public FlFeatureBean[] getFeatureBeansByPersonId(FlPersonBean bean) throws DAOException
     {
         return getFeatureBeansByPersonIdAsList(bean).toArray(new FlFeatureBean[0]);
     }
+    //3.1.2 GET IMPORTED
     /**
      * Retrieves the {@link FlFeatureBean} object from the fl_feature.person_id field.<BR>
      * FK_NAME : fl_feature_ibfk_1 
@@ -499,13 +506,13 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the associated {@link FlFeatureBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1.2 GET IMPORTED
     public FlFeatureBean[] getFeatureBeansByPersonId(Integer idOfPerson) throws DAOException
     {
         FlPersonBean bean = createBean();
         bean.setId(idOfPerson);
         return getFeatureBeansByPersonId(bean);
     }
+    //3.2 GET IMPORTED
     /**
      * Retrieves the {@link FlFeatureBean} object from fl_feature.person_id field.<BR>
      * FK_NAME:fl_feature_ibfk_1
@@ -513,11 +520,11 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the associated {@link FlFeatureBean} beans 
      * @throws DAOException
      */
-    //3.2 GET IMPORTED
     public List<FlFeatureBean> getFeatureBeansByPersonIdAsList(FlPersonBean bean) throws DAOException
     {
         return getFeatureBeansByPersonIdAsList(bean,1,-1);
     }
+    //3.2.2 GET IMPORTED
     /**
      * Retrieves the {@link FlFeatureBean} object from fl_feature.person_id field.<BR>
      * FK_NAME:fl_feature_ibfk_1
@@ -525,13 +532,13 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the associated {@link FlFeatureBean} beans 
      * @throws DAOException
      */
-    //3.2.2 GET IMPORTED
     public List<FlFeatureBean> getFeatureBeansByPersonIdAsList(Integer idOfPerson) throws DAOException
     {
          FlPersonBean bean = createBean();
         bean.setId(idOfPerson);
         return getFeatureBeansByPersonIdAsList(bean);
     }
+    //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link FlFeatureBean} object from fl_feature.person_id field, 
      * given the start row and number of rows.<BR>
@@ -542,7 +549,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the associated {@link FlFeatureBean} beans 
      * @throws DAOException
      */
-    //3.2.4 GET IMPORTED
     public List<FlFeatureBean> getFeatureBeansByPersonIdAsList(FlPersonBean bean,int startRow, int numRows) throws DAOException
     {
         if(null == bean){
@@ -552,6 +558,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         other.setPersonId(bean.getId());
         return instanceOfFlFeatureManager().loadUsingTemplateAsList(other,startRow,numRows);
     }
+    //3.3 SET IMPORTED
     /**
      * set  the {@link FlFeatureBean} object array associate to FlPersonBean by the fl_feature.person_id field.<BR>
      * FK_NAME : fl_feature_ibfk_1 
@@ -561,7 +568,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @throws DAOException
      * @see {@link FlFeatureManager#setReferencedByPersonId(FlFeatureBean, FlPersonBean)
      */
-    //3.3 SET IMPORTED
     public FlFeatureBean[] setFeatureBeansByPersonId(FlPersonBean bean , FlFeatureBean[] importedBeans) throws DAOException
     {
         if(null != importedBeans){
@@ -572,6 +578,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         return importedBeans;
     }
 
+    //3.4 SET IMPORTED
     /**
      * set  the {@link FlFeatureBean} object collection associate to FlPersonBean by the fl_feature.person_id field.<BR>
      * FK_NAME:fl_feature_ibfk_1
@@ -581,7 +588,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @throws DAOException
      * @see {@link FlFeatureManager#setReferencedByPersonId(FlFeatureBean, FlPersonBean)
      */
-    //3.4 SET IMPORTED
     public <C extends java.util.Collection<FlFeatureBean>> C setFeatureBeansByPersonId(FlPersonBean bean , C importedBeans) throws DAOException
     {
         if(null != importedBeans){
@@ -592,6 +598,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         return importedBeans;
     }
 
+    //3.1 GET IMPORTED
     /**
      * Retrieves the {@link FlLogBean} object from the fl_log.person_id field.<BR>
      * FK_NAME : fl_log_ibfk_1 
@@ -599,11 +606,11 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1 GET IMPORTED
     public FlLogBean[] getLogBeansByPersonId(FlPersonBean bean) throws DAOException
     {
         return getLogBeansByPersonIdAsList(bean).toArray(new FlLogBean[0]);
     }
+    //3.1.2 GET IMPORTED
     /**
      * Retrieves the {@link FlLogBean} object from the fl_log.person_id field.<BR>
      * FK_NAME : fl_log_ibfk_1 
@@ -611,13 +618,13 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1.2 GET IMPORTED
     public FlLogBean[] getLogBeansByPersonId(Integer idOfPerson) throws DAOException
     {
         FlPersonBean bean = createBean();
         bean.setId(idOfPerson);
         return getLogBeansByPersonId(bean);
     }
+    //3.2 GET IMPORTED
     /**
      * Retrieves the {@link FlLogBean} object from fl_log.person_id field.<BR>
      * FK_NAME:fl_log_ibfk_1
@@ -625,11 +632,11 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the associated {@link FlLogBean} beans 
      * @throws DAOException
      */
-    //3.2 GET IMPORTED
     public List<FlLogBean> getLogBeansByPersonIdAsList(FlPersonBean bean) throws DAOException
     {
         return getLogBeansByPersonIdAsList(bean,1,-1);
     }
+    //3.2.2 GET IMPORTED
     /**
      * Retrieves the {@link FlLogBean} object from fl_log.person_id field.<BR>
      * FK_NAME:fl_log_ibfk_1
@@ -637,13 +644,13 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the associated {@link FlLogBean} beans 
      * @throws DAOException
      */
-    //3.2.2 GET IMPORTED
     public List<FlLogBean> getLogBeansByPersonIdAsList(Integer idOfPerson) throws DAOException
     {
          FlPersonBean bean = createBean();
         bean.setId(idOfPerson);
         return getLogBeansByPersonIdAsList(bean);
     }
+    //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link FlLogBean} object from fl_log.person_id field, 
      * given the start row and number of rows.<BR>
@@ -654,7 +661,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the associated {@link FlLogBean} beans 
      * @throws DAOException
      */
-    //3.2.4 GET IMPORTED
     public List<FlLogBean> getLogBeansByPersonIdAsList(FlPersonBean bean,int startRow, int numRows) throws DAOException
     {
         if(null == bean){
@@ -664,6 +670,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         other.setPersonId(bean.getId());
         return instanceOfFlLogManager().loadUsingTemplateAsList(other,startRow,numRows);
     }
+    //3.3 SET IMPORTED
     /**
      * set  the {@link FlLogBean} object array associate to FlPersonBean by the fl_log.person_id field.<BR>
      * FK_NAME : fl_log_ibfk_1 
@@ -673,7 +680,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @throws DAOException
      * @see {@link FlLogManager#setReferencedByPersonId(FlLogBean, FlPersonBean)
      */
-    //3.3 SET IMPORTED
     public FlLogBean[] setLogBeansByPersonId(FlPersonBean bean , FlLogBean[] importedBeans) throws DAOException
     {
         if(null != importedBeans){
@@ -684,6 +690,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         return importedBeans;
     }
 
+    //3.4 SET IMPORTED
     /**
      * set  the {@link FlLogBean} object collection associate to FlPersonBean by the fl_log.person_id field.<BR>
      * FK_NAME:fl_log_ibfk_1
@@ -693,7 +700,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @throws DAOException
      * @see {@link FlLogManager#setReferencedByPersonId(FlLogBean, FlPersonBean)
      */
-    //3.4 SET IMPORTED
     public <C extends java.util.Collection<FlLogBean>> C setLogBeansByPersonId(FlPersonBean bean , C importedBeans) throws DAOException
     {
         if(null != importedBeans){
@@ -704,6 +710,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         return importedBeans;
     }
 
+    //3.5 SYNC SAVE 
     /**
      * Save the FlPersonBean bean and referenced beans and imported beans into the database.
      *
@@ -715,7 +722,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the inserted or updated {@link FlPersonBean} bean
      * @throws DAOException
      */
-    //3.5 SYNC SAVE 
     public FlPersonBean save(FlPersonBean bean
         , FlImageBean refImageByImageMd5 , FlPersonGroupBean refPersongroupByGroupId 
         , FlFeatureBean[] impFeatureByPersonId , FlLogBean[] impLogByPersonId ) throws DAOException
@@ -737,11 +743,11 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         return bean;
     } 
 
+    //3.6 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save
      * @see {@link #save(FlPersonBean , FlImageBean , FlPersonGroupBean , FlFeatureBean[] , FlLogBean[] )}
      */
-    //3.6 SYNC SAVE AS TRANSACTION
     public FlPersonBean saveAsTransaction(final FlPersonBean bean
         ,final FlImageBean refImageByImageMd5 ,final FlPersonGroupBean refPersongroupByGroupId 
         ,final FlFeatureBean[] impFeatureByPersonId ,final FlLogBean[] impLogByPersonId ) throws DAOException
@@ -752,6 +758,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                 return save(bean , refImageByImageMd5 , refPersongroupByGroupId , impFeatureByPersonId , impLogByPersonId );
             }});
     }
+    //3.7 SYNC SAVE 
     /**
      * Save the FlPersonBean bean and referenced beans and imported beans into the database.
      *
@@ -763,7 +770,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the inserted or updated {@link FlPersonBean} bean
      * @throws DAOException
      */
-    //3.7 SYNC SAVE 
     public FlPersonBean save(FlPersonBean bean
         , FlImageBean refImageByImageMd5 , FlPersonGroupBean refPersongroupByGroupId 
         , java.util.Collection<FlFeatureBean> impFeatureByPersonId , java.util.Collection<FlLogBean> impLogByPersonId ) throws DAOException
@@ -781,11 +787,11 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         return bean;
     }
 
+    //3.8 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save
      * @see {@link #save(FlPersonBean , FlImageBean , FlPersonGroupBean , java.util.Collection , java.util.Collection )}
      */
-    //3.8 SYNC SAVE AS TRANSACTION
     public FlPersonBean saveAsTransaction(final FlPersonBean bean
         ,final FlImageBean refImageByImageMd5 ,final FlPersonGroupBean refPersongroupByGroupId 
         ,final  java.util.Collection<FlFeatureBean> impFeatureByPersonId ,final  java.util.Collection<FlLogBean> impLogByPersonId ) throws DAOException
@@ -796,6 +802,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                 return save(bean , refImageByImageMd5 , refPersongroupByGroupId , impFeatureByPersonId , impLogByPersonId );
             }});
     }
+    //3.9 SYNC SAVE 
     /**
      * Save the FlPersonBean bean and referenced beans and imported beans (array) into the database.
      *
@@ -805,7 +812,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the inserted or updated {@link FlPersonBean} bean
      * @throws DAOException
      */
-    //3.9 SYNC SAVE 
     @Override
     public FlPersonBean save(FlPersonBean bean,Object ...args) throws DAOException
     {
@@ -830,6 +836,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean)args[0],(args.length < 2 || null == args[1])?null:(FlPersonGroupBean)args[1],(args.length < 3 || null == args[2])?null:(FlFeatureBean[])args[2],(args.length < 4 || null == args[3])?null:(FlLogBean[])args[3]);
     } 
 
+    //3.10 SYNC SAVE 
     /**
      * Save the FlPersonBean bean and referenced beans and imported beans (collection) into the database.
      *
@@ -839,7 +846,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the inserted or updated {@link FlPersonBean} bean
      * @throws DAOException
      */
-    //3.10 SYNC SAVE 
     @SuppressWarnings("unchecked")
     @Override
     public FlPersonBean saveCollection(FlPersonBean bean,Object ...args) throws DAOException
@@ -922,6 +928,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     //////////////////////////////////////
 
 
+    //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link FlImageBean} object referenced by {@link FlPersonBean#getImageMd5}() field.<br>
      * FK_NAME : fl_person_ibfk_2
@@ -929,7 +936,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //5.1 GET REFERENCED VALUE
     public FlImageBean getReferencedByImageMd5(FlPersonBean bean) throws DAOException
     {
         if(null == bean){
@@ -939,6 +945,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         return bean.getReferencedByImageMd5();
     }
 
+    //5.2 SET REFERENCED 
     /**
      * Associates the {@link FlPersonBean} object to the {@link FlImageBean} object by {@link FlPersonBean#getImageMd5}() field.
      *
@@ -947,7 +954,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return always beanToSet saved
      * @throws Exception
      */
-    //5.2 SET REFERENCED 
     public FlImageBean setReferencedByImageMd5(FlPersonBean bean, FlImageBean beanToSet) throws DAOException
     {
         if(null != bean){
@@ -962,6 +968,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         return beanToSet;
     }
 
+    //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link FlPersonGroupBean} object referenced by {@link FlPersonBean#getGroupId}() field.<br>
      * FK_NAME : fl_person_ibfk_1
@@ -969,7 +976,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the associated {@link FlPersonGroupBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //5.1 GET REFERENCED VALUE
     public FlPersonGroupBean getReferencedByGroupId(FlPersonBean bean) throws DAOException
     {
         if(null == bean){
@@ -979,6 +985,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         return bean.getReferencedByGroupId();
     }
 
+    //5.2 SET REFERENCED 
     /**
      * Associates the {@link FlPersonBean} object to the {@link FlPersonGroupBean} object by {@link FlPersonBean#getGroupId}() field.
      *
@@ -987,7 +994,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return always beanToSet saved
      * @throws Exception
      */
-    //5.2 SET REFERENCED 
     public FlPersonGroupBean setReferencedByGroupId(FlPersonBean bean, FlPersonGroupBean beanToSet) throws DAOException
     {
         if(null != bean){
@@ -1005,6 +1011,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     //////////////////////////////////////
     // SQL 'WHERE' METHOD
     //////////////////////////////////////
+    //11
     /**
      * Deletes rows from the fl_person table using a 'where' clause.
      * It is up to you to pass the 'WHERE' in your where clauses.
@@ -1014,7 +1021,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the number of deleted rows
      * @throws DAOException
      */
-    //11
     @Override
     public int deleteByWhere(String where) throws DAOException
     {
@@ -1051,12 +1057,13 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     //_____________________________________________________________________
 
     //13
+
     @Override
     public FlPersonBean insert(FlPersonBean bean) throws DAOException
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
-            return bean; // should not we log something ?
+            return bean; 
         }
         if (!bean.isNew()){
             return this.update(bean);
@@ -1069,7 +1076,8 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         try
         {
             c = this.getConnection();
-            this.listenerContainer.beforeInsert(bean); // listener callback
+            // listener callback
+            this.listenerContainer.beforeInsert(bean);
             int dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_person (");
 
@@ -1198,7 +1206,8 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
 
             bean.isNew(false);
             bean.resetIsModified();
-            this.listenerContainer.afterInsert(bean); // listener callback
+            // listener callback
+            this.listenerContainer.afterInsert(bean);
             return bean;
         }
         catch(SQLException e)
@@ -1214,12 +1223,13 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     }
 
     //14
+
     @Override
     public FlPersonBean update(FlPersonBean bean) throws DAOException
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
-            return bean; // should not we log something ?
+            return bean;
         }
         if (bean.isNew()){
             return this.insert(bean);
@@ -1233,7 +1243,8 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         {
             c = this.getConnection();
 
-            this.listenerContainer.beforeUpdate(bean); // listener callback
+            // listener callback
+            this.listenerContainer.beforeUpdate(bean); 
             sql = new StringBuilder("UPDATE fl_person SET ");
             boolean useComma=false;
 
@@ -1352,7 +1363,8 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
             if (bean.getId() == null) { ps.setNull(++dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++dirtyCount, bean.getId()); }
             ps.executeUpdate();
             bean.resetIsModified();
-            this.listenerContainer.afterUpdate(bean); // listener callback
+            // listener callback
+            this.listenerContainer.afterUpdate(bean); 
 
             return bean;
         }
@@ -1373,6 +1385,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     // USING TEMPLATE
     //_____________________________________________________________________
     //18
+
     @Override
     public FlPersonBean loadUniqueUsingTemplate(FlPersonBean bean) throws DAOException
     {
@@ -1387,6 +1400,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
          }
     }
     //18-1
+
     @Override
     public FlPersonBean loadUniqueUsingTemplateChecked(FlPersonBean bean) throws DAOException
     {
@@ -1401,6 +1415,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
          }
     }
     //20-5
+
     @Override
     public int loadUsingTemplate(FlPersonBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlPersonBean> action) throws DAOException
     {
@@ -1427,6 +1442,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     }
 
     //21
+
     @Override
     public int deleteUsingTemplate(FlPersonBean bean) throws DAOException
     {
@@ -1950,6 +1966,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     //_____________________________________________________________________
 
     //25
+
     @Override
     public int countWhere(String where) throws DAOException
     {
@@ -1985,6 +2002,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         throw new DataAccessException("Error in countWhere where=[" + where + "]");
     }
 
+    //26
     /**
      * Retrieves the number of rows of the table fl_person with a prepared statement.
      *
@@ -1992,7 +2010,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the number of rows returned
      * @throws DAOException
      */
-    //26
     private int countByPreparedStatement(PreparedStatement ps) throws DAOException
     {
         ResultSet rs =  null;
@@ -2018,6 +2035,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
        throw new DataAccessException("Error in countByPreparedStatement");
     }
 
+    //20
     /**
      * count the number of elements of a specific FlPersonBean bean given the search type
      *
@@ -2026,7 +2044,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the number of rows returned
      * @throws DAOException
      */
-    //20
     @Override
     public int countUsingTemplate(FlPersonBean bean, int searchType) throws DAOException
     {
@@ -2310,6 +2327,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     // DECODE RESULT SET
     //_____________________________________________________________________
 
+    //28
     /**
      * decode a resultset in an array of FlPersonBean objects
      *
@@ -2320,12 +2338,12 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the resulting FlPersonBean table
      * @throws DAOException
      */
-    //28
     public FlPersonBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new FlPersonBean[0]);
     }
 
+    //28-1
     /**
      * decode a resultset in a list of FlPersonBean objects
      *
@@ -2336,13 +2354,13 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the resulting FlPersonBean table
      * @throws DAOException
      */
-    //28-1
     public List<FlPersonBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         ListAction action = new ListAction();
         actionOnResultSet(rs, fieldList, numRows, numRows, action);
         return action.getList();
     }
+    //28-2
     /** decode a resultset and call action
      * @param rs the resultset to decode
      * @param fieldList table of the field's associated constants
@@ -2353,7 +2371,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @throws DAOException
      * @throws IllegalArgumentException
      */
-    //28-2
     public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlPersonBean> action) throws DAOException{
         try{
             int count = 0;
@@ -2398,6 +2415,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         }
     }
 
+    //29
     /**
      * Transforms a ResultSet iterating on the fl_person on a FlPersonBean bean.
      *
@@ -2405,7 +2423,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return bean resulting FlPersonBean bean
      * @throws DAOException
      */
-    //29
     public FlPersonBean decodeRow(ResultSet rs,FlPersonBean bean) throws DAOException
     {
         if(null==bean){
@@ -2435,6 +2452,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         return bean;
     }
 
+    //30
     /**
      * Transforms a ResultSet iterating on the fl_person table on a FlPersonBean bean according to a list of fields.
      *
@@ -2443,7 +2461,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return bean resulting FlPersonBean bean
      * @throws DAOException
      */
-    //30
     public FlPersonBean decodeRow(ResultSet rs, int[] fieldList,FlPersonBean bean) throws DAOException
     {
         if(null==bean){
@@ -2515,6 +2532,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         return bean;
     }
 
+    //31
     /**
      * Transforms a ResultSet iterating on the fl_person on a FlPersonBean bean using the names of the columns
      *
@@ -2522,7 +2540,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return bean resulting FlPersonBean bean
      * @throws DAOException
      */
-    //31
     public FlPersonBean metaDataDecodeRow(ResultSet rs) throws DAOException
     {
         FlPersonBean bean = this.createBean();
@@ -2555,6 +2572,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     // PREPARED STATEMENT LOADER
     //////////////////////////////////////
 
+    //32
     /**
      * Loads all the elements using a prepared statement.
      *
@@ -2562,12 +2580,12 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return an array of FlPersonBean
      * @throws DAOException
      */
-    //32
     public FlPersonBean[] loadByPreparedStatement(PreparedStatement ps) throws DAOException
     {
         return this.loadByPreparedStatement(ps, null);
     }
 
+    //32
     /**
      * Loads all the elements using a prepared statement.
      *
@@ -2575,12 +2593,12 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return an array of FlPersonBean
      * @throws DAOException
      */
-    //32
     public List<FlPersonBean> loadByPreparedStatementAsList(PreparedStatement ps) throws DAOException
     {
         return this.loadByPreparedStatementAsList(ps, null);
     }
 
+    //33
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved.
      *
@@ -2589,12 +2607,12 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return an array of FlPersonBean
      * @throws DAOException
      */
-    //33
     public FlPersonBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws DAOException
     {
         return this.loadByPreparedStatementAsList(ps, fieldList).toArray(new FlPersonBean[0]);
     }
 
+    //33
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved.
      *
@@ -2603,12 +2621,12 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return an array of FlPersonBean
      * @throws DAOException
      */
-    //33
     public List<FlPersonBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws DAOException
     { 
         return loadByPreparedStatementAsList(ps,fieldList,1,-1);
     }
 
+    //34
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved,
      * and specifying the start row and the number of rows.
@@ -2620,12 +2638,12 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return an array of FlPersonBean
      * @throws DAOException
      */
-    //34
     public FlPersonBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         return loadByPreparedStatementAsList(ps,fieldList,startRow,numRows).toArray(new FlPersonBean[0]);
     }
 
+    //34-1
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved,
      * and specifying the start row and the number of rows.
@@ -2637,13 +2655,13 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return an array of FlPersonBean
      * @throws DAOException
      */
-    //34-1
     public List<FlPersonBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         ListAction action = new ListAction();
         loadByPreparedStatement(ps,fieldList,startRow,numRows,action);
         return action.getList();
     }
+    //34-2
     /**
      * Loads each element using a prepared statement specifying a list of fields to be retrieved,
      * and specifying the start row and the number of rows 
@@ -2657,7 +2675,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @return the count dealt by action
      * @throws DAOException
      */     
-    //34-2
     public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlPersonBean> action) throws DAOException
     {
         ResultSet rs =  null;
@@ -2679,7 +2696,9 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     //_____________________________________________________________________
 
     private final TableListener.ListenerContainer<FlPersonBean> listenerContainer = new TableListener.ListenerContainer<FlPersonBean>();
+
     //35
+
     @Override
     public TableListener<FlPersonBean> registerListener(TableListener<FlPersonBean> listener)
     {
@@ -2687,10 +2706,10 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         return listener;
     }
 
+    //36
     /**
      * remove listener.
      */
-    //36
     @Override
     public void unregisterListener(TableListener<FlPersonBean> listener)
     {
@@ -2698,6 +2717,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     }
 
     //37
+
     @Override
     public void fire(TableListener.Event event, FlPersonBean bean) throws DAOException{
         if(null == event){
@@ -2707,6 +2727,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     }
     
     //37-1
+
     @Override
     public void fire(int event, FlPersonBean bean) throws DAOException{
         try{
@@ -2752,22 +2773,22 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                     }
                 }};
 
+    //37-2
     /**
      * bind foreign key listener to foreign table: <br>
      * DELETE RULE : SET_NULL {@code fl_person(group_id)-> fl_person_group(id)} <br>
      * DELETE RULE : SET_NULL {@code fl_person(image_md5)-> fl_image(md5)} <br>
      */
-    //37-2
     public void bindForeignKeyListenerForDeleteRule(){
         instanceOfFlPersonGroupManager().registerListener(foreignKeyListenerByGroupId);
         instanceOfFlImageManager().registerListener(foreignKeyListenerByImageMd5);
         
     }
+    //37-3
     /**
      * unbind foreign key listener from all of foreign tables <br>
      * @see #bindForeignKeyListenerForDeleteRule()
      */
-    //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
         instanceOfFlPersonGroupManager().unregisterListener(foreignKeyListenerByGroupId);
         instanceOfFlImageManager().unregisterListener(foreignKeyListenerByImageMd5);
@@ -2778,32 +2799,33 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     // UTILS
     //_____________________________________________________________________
 
+    //40
     /**
      * Retrieves the manager object used to get connections.
      *
      * @return the manager used
      */
-    //40
     private Manager getManager()
     {
         return Manager.getInstance();
     }
 
+    //41
     /**
      * Frees the connection.
      *
      * @param c the connection to release
      */
-    //41
     private void freeConnection(Connection c)
     {
-        this.getManager().releaseConnection(c); // back to pool
+        // back to pool
+        this.getManager().releaseConnection(c);
     }
 
+    //42
     /**
      * Gets the connection.
      */
-    //42
     private Connection getConnection() throws DAOException
     {
         try
@@ -2817,6 +2839,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     }
 
     //43
+
     @Override
     public boolean isPrimaryKey(String column){
         for(String c:PRIMARYKEY_NAMES){
@@ -2850,6 +2873,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     }
     
     @Override    
+
     public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlPersonBean> action) throws DAOException{
         PreparedStatement ps = null;
         Connection connection = null;
@@ -2872,6 +2896,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     }
    
     @Override
+
     public <T>T runAsTransaction(Callable<T> fun) throws DAOException{
         return Manager.getInstance().runAsTransaction(fun);
     }
@@ -2887,11 +2912,11 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
             return count.get();
         }
     }
+    //45
     /**
      * return a primary key list from {@link FlPersonBean} array
      * @param array
      */
-    //45
     public List<Integer> toPrimaryKeyList(FlPersonBean... array){        
         if(null == array){
             return new java.util.ArrayList<Integer>();
@@ -2902,11 +2927,11 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         }
         return list;
     }
+    //46
     /**
      * return a primary key list from {@link FlPersonBean} collection
      * @param array
      */
-    //46
     public List<Integer> toPrimaryKeyList(java.util.Collection<FlPersonBean> collection){        
         if(null == collection){
             return new java.util.ArrayList<Integer>();

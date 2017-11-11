@@ -20,15 +20,16 @@ public interface IStoreManager extends TableManager<StoreBean>
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
+    //1
     /**
      * Loads a {@link StoreBean} from the fl_store using primary key fields.
      *
      * @param md5 String - PK# 1
      * @return a unique StoreBean or {@code null} if not found
      */
-    //1
     public StoreBean loadByPrimaryKey(String md5);
 
+    //1.1
     /**
      * Loads a {@link StoreBean} from the fl_store using primary key fields.
      *
@@ -36,38 +37,41 @@ public interface IStoreManager extends TableManager<StoreBean>
      * @return a unique StoreBean
      * @throws ObjectRetrievalException if not found
      */
-    //1.1
     public StoreBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException;
     
+    //1.4
     /**
      * Returns true if this fl_store contains row with primary key fields.
      * @param md5 String - PK# 1
      * @see #loadByPrimaryKey($keys)
+     * @return
      */
-    //1.4
     public boolean existsPrimaryKey(String md5);
+    //1.4.1
     /**
      * Check duplicated row by primary keys,if row exists throw exception
      * @param md5 String
+     * @return 
+     * @throws ObjectRetrievalException
      */
-    //1.4.1
     public String checkDuplicate(String md5)throws ObjectRetrievalException;
+    //1.8
     /**
      * Loads {@link StoreBean} from the fl_store using primary key fields.
      *
      * @param keys primary keys array
      * @return list of StoreBean
      */
-    //1.8
     public java.util.List<StoreBean> loadByPrimaryKey(String... keys);
+    //1.9
     /**
      * Loads {@link StoreBean} from the fl_store using primary key fields.
      *
      * @param keys primary keys collection
      * @return list of StoreBean
      */
-    //1.9
     public java.util.List<StoreBean> loadByPrimaryKey(java.util.Collection<String> keys);
+    //2
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
@@ -75,53 +79,54 @@ public interface IStoreManager extends TableManager<StoreBean>
      * @param md5 String - PK# 1
      * @return the number of deleted rows
      */
-    //2
     public int deleteByPrimaryKey(String md5);
+    //2.2
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys array
      * @return the number of deleted rows
      */
-    //2.2
     public int deleteByPrimaryKey(String... keys);
+    //2.3
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys collection
      * @return the number of deleted rows
      */
-    //2.3
     public int deleteByPrimaryKey(java.util.Collection<String> keys);
-    /**
-     * Delete beans.<br>
-     *
-     * @param beans StoreBean collection wille be deleted
-     * @return the number of deleted rows
-     */
     //2.4
-    public int delete(StoreBean... beans);
     /**
      * Delete beans.<br>
      *
      * @param beans StoreBean collection wille be deleted
      * @return the number of deleted rows
      */
+    public int delete(StoreBean... beans);
     //2.5
+    /**
+     * Delete beans.<br>
+     *
+     * @param beans StoreBean collection wille be deleted
+     * @return the number of deleted rows
+     */
     public int delete(java.util.Collection<StoreBean> beans);
  
  
+    //45
     /**
      * return a primary key list from {@link StoreBean} array
-     * @param array
+     * @param beans
+     * @return
      */
-    //45
-    public java.util.List<String> toPrimaryKeyList(StoreBean... array);
+    public java.util.List<String> toPrimaryKeyList(StoreBean... beans);
+    //46
     /**
      * return a primary key list from {@link StoreBean} collection
-     * @param array
+     * @param beans
+     * @return
      */
-    //46
-    public java.util.List<String> toPrimaryKeyList(java.util.Collection<StoreBean> collection);
+    public java.util.List<String> toPrimaryKeyList(java.util.Collection<StoreBean> beans);
 
 }

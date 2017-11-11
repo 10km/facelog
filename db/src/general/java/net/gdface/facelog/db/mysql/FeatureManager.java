@@ -124,6 +124,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     //////////////////////////////////////
 
     //1 override IFeatureManager
+
     @Override 
     public FeatureBean loadByPrimaryKey(String md5)
     {
@@ -135,6 +136,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         }
     }
     //1.1 override IFeatureManager
+
     @Override
     public FeatureBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException
     {
@@ -147,6 +149,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         }
     }
     //1.2
+
     @Override
     public FeatureBean loadByPrimaryKey(FeatureBean bean)
     {
@@ -154,6 +157,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     }
 
     //1.2.2
+
     @Override
     public FeatureBean loadByPrimaryKeyChecked(FeatureBean bean) throws ObjectRetrievalException
     {
@@ -164,6 +168,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     }
     
     //1.3
+
     @Override
     public FeatureBean loadByPrimaryKey(Object ...keys){
         try{
@@ -175,6 +180,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     }
     
     //1.3.2
+
     @Override
     public FeatureBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
         if(null == keys){
@@ -191,6 +197,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     }
 
     //1.4 override IFeatureManager
+
     @Override 
     public boolean existsPrimaryKey(String md5)
     {
@@ -203,12 +210,14 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         }
     }
     //1.6
+
     @Override
     public boolean existsByPrimaryKey(FeatureBean bean)
     {
         return null == bean ? false : existsPrimaryKey(bean.getMd5());
     }
     //1.7
+
     @Override
     public FeatureBean checkDuplicate(FeatureBean bean)throws ObjectRetrievalException{
         if(null != bean){
@@ -217,6 +226,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         return bean;   
     }
     //1.4.1 override IFeatureManager
+
     @Override 
     public String checkDuplicate(String md5)throws ObjectRetrievalException{
         try{
@@ -228,6 +238,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         }
     }
     //1.8 override IFeatureManager
+
     @Override 
     public java.util.List<FeatureBean> loadByPrimaryKey(String... keys){
         if(null == keys){
@@ -240,6 +251,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         return list;
     }
     //1.9 override IFeatureManager
+
     @Override 
     public java.util.List<FeatureBean> loadByPrimaryKey(java.util.Collection<String> keys){
         if(null == keys ){
@@ -261,6 +273,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         return list;
     }
     //2 override IFeatureManager
+
     @Override 
     public int deleteByPrimaryKey(String md5)
     {
@@ -274,6 +287,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         }
     }
     //2
+
     @Override
     public int delete(FeatureBean bean){
         try
@@ -286,6 +300,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         }   
     }
     //2.1
+
     @Override
     public int deleteByPrimaryKey(Object ...keys){
         if(null == keys){
@@ -300,6 +315,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         return deleteByPrimaryKey((String)keys[0]);
     }
     //2.2 override IFeatureManager
+
     @Override 
     public int deleteByPrimaryKey(String... keys){
         int count = 0;
@@ -311,6 +327,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         return count;
     }
     //2.3 override IFeatureManager
+
     @Override 
     public int deleteByPrimaryKey(java.util.Collection<String> keys){
         int count = 0;
@@ -322,6 +339,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         return count;
     }
     //2.4 override IFeatureManager
+
     @Override 
     public int delete(FeatureBean... beans){
         int count = 0;
@@ -333,6 +351,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         return count;
     }
     //2.5 override IFeatureManager
+
     @Override 
     public int delete(java.util.Collection<FeatureBean> beans){
         int count = 0;
@@ -437,12 +456,14 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
     //3.1 GET IMPORTED override IFeatureManager
+
     @Override 
     public FaceBean[] getFaceBeansByFeatureMd5(FeatureBean bean)
     {
         return this.getFaceBeansByFeatureMd5AsList(bean).toArray(new FaceBean[0]);
     }
     //3.1.2 GET IMPORTED override IFeatureManager
+
     @Override
     public FaceBean[] getFaceBeansByFeatureMd5(String md5OfFeature)
     {
@@ -451,12 +472,14 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         return getFaceBeansByFeatureMd5(bean);
     }
     //3.2 GET IMPORTED override IFeatureManager
+
     @Override 
     public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(FeatureBean bean)
     {
         return getFaceBeansByFeatureMd5AsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IFeatureManager
+
     @Override
     public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(String md5OfFeature)
     {
@@ -465,6 +488,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         return getFaceBeansByFeatureMd5AsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IFeatureManager
+
     @Override
     public int deleteFaceBeansByFeatureMd5(String md5OfFeature)
     {
@@ -472,6 +496,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         return instanceOfFaceManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IFeatureManager
+
     @Override 
     public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(FeatureBean bean,int startRow, int numRows)
     {
@@ -484,6 +509,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         }
     }
     //3.3 SET IMPORTED override IFeatureManager
+
     @Override 
     public FaceBean[] setFaceBeansByFeatureMd5(FeatureBean bean , FaceBean[] importedBeans)
     {
@@ -496,6 +522,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     }
 
     //3.4 SET IMPORTED override IFeatureManager
+
     @Override 
     public <C extends java.util.Collection<FaceBean>> C setFaceBeansByFeatureMd5(FeatureBean bean , C importedBeans)
     {
@@ -508,12 +535,14 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     }
 
     //3.1 GET IMPORTED override IFeatureManager
+
     @Override 
     public LogBean[] getLogBeansByVerifyFeature(FeatureBean bean)
     {
         return this.getLogBeansByVerifyFeatureAsList(bean).toArray(new LogBean[0]);
     }
     //3.1.2 GET IMPORTED override IFeatureManager
+
     @Override
     public LogBean[] getLogBeansByVerifyFeature(String md5OfFeature)
     {
@@ -522,12 +551,14 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         return getLogBeansByVerifyFeature(bean);
     }
     //3.2 GET IMPORTED override IFeatureManager
+
     @Override 
     public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(FeatureBean bean)
     {
         return getLogBeansByVerifyFeatureAsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IFeatureManager
+
     @Override
     public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(String md5OfFeature)
     {
@@ -536,6 +567,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         return getLogBeansByVerifyFeatureAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IFeatureManager
+
     @Override
     public int deleteLogBeansByVerifyFeature(String md5OfFeature)
     {
@@ -543,6 +575,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         return instanceOfLogManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IFeatureManager
+
     @Override 
     public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(FeatureBean bean,int startRow, int numRows)
     {
@@ -555,6 +588,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         }
     }
     //3.3 SET IMPORTED override IFeatureManager
+
     @Override 
     public LogBean[] setLogBeansByVerifyFeature(FeatureBean bean , LogBean[] importedBeans)
     {
@@ -567,6 +601,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     }
 
     //3.4 SET IMPORTED override IFeatureManager
+
     @Override 
     public <C extends java.util.Collection<LogBean>> C setLogBeansByVerifyFeature(FeatureBean bean , C importedBeans)
     {
@@ -581,6 +616,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
 
 
     //3.5 SYNC SAVE override IFeatureManager
+
     @Override  
     public FeatureBean save(FeatureBean bean
         , PersonBean refPersonByPersonId 
@@ -601,6 +637,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     } 
 
     //3.6 SYNC SAVE AS TRANSACTION override IFeatureManager
+
     @Override 
     public FeatureBean saveAsTransaction(final FeatureBean bean
         ,final PersonBean refPersonByPersonId 
@@ -613,6 +650,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
             }});
     }
     //3.7 SYNC SAVE override IFeatureManager
+
     @Override 
     public FeatureBean save(FeatureBean bean
         , PersonBean refPersonByPersonId 
@@ -631,6 +669,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     }   
 
     //3.8 SYNC SAVE AS TRANSACTION override IFeatureManager
+
     @Override 
     public FeatureBean saveAsTransaction(final FeatureBean bean
         ,final PersonBean refPersonByPersonId 
@@ -642,7 +681,8 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
                 return save(bean , refPersonByPersonId , impFaceByFeatureMd5 , impLogByVerifyFeature );
             }});
     }
-     /**
+     //3.9 SYNC SAVE 
+    /**
      * Save the {@link FeatureBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FeatureBean} bean to be saved
@@ -650,7 +690,6 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
      *      see also {@link #save(FeatureBean , PersonBean , FaceBean[] , LogBean[] )}
      * @return the inserted or updated {@link FeatureBean} bean
      */
-    //3.9 SYNC SAVE 
     @Override
     public FeatureBean save(FeatureBean bean,Object ...args) 
     {
@@ -672,6 +711,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         return save(bean,(args.length < 1 || null == args[0])?null:(PersonBean)args[0],(args.length < 2 || null == args[1])?null:(FaceBean[])args[1],(args.length < 3 || null == args[2])?null:(LogBean[])args[2]);
     } 
 
+    //3.10 SYNC SAVE 
     /**
      * Save the {@link FeatureBean} bean and referenced beans and imported beans into the database.
      *
@@ -680,7 +720,6 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
      *      see also {@link #save(FeatureBean , PersonBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link FeatureBean} bean
      */
-    //3.10 SYNC SAVE 
     @SuppressWarnings("unchecked")
     @Override
     public FeatureBean saveCollection(FeatureBean bean,Object ...inputs)
@@ -756,6 +795,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
 
 
     //5.1 GET REFERENCED VALUE override IFeatureManager
+
     @Override 
     public PersonBean getReferencedByPersonId(FeatureBean bean)
     {
@@ -767,6 +807,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     }
 
     //5.2 SET REFERENCED override IFeatureManager
+
     @Override 
     public PersonBean setReferencedByPersonId(FeatureBean bean, PersonBean beanToSet)
     {
@@ -790,6 +831,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     //////////////////////////////////////
 
     //11
+
     @Override
     public int deleteByWhere(String where)
     {
@@ -808,6 +850,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     //_____________________________________________________________________
 
     //13
+
     @Override
     protected FeatureBean insert(FeatureBean bean)
     {
@@ -822,6 +865,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
 
     //14
     @Override
+
     protected FeatureBean update(FeatureBean bean)
     {
         try{
@@ -839,6 +883,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     //_____________________________________________________________________
     //18
     @Override
+
     public FeatureBean loadUniqueUsingTemplate(FeatureBean bean)
     {
         try{
@@ -851,6 +896,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
      }
     //18-1
     @Override
+
     public FeatureBean loadUniqueUsingTemplateChecked(FeatureBean bean) throws ObjectRetrievalException
     {
         try{
@@ -866,6 +912,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         }
      }
     //20-5
+
     @Override
     public int loadUsingTemplate(FeatureBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FeatureBean> action)
     {
@@ -879,6 +926,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     }
 
     //21
+
     @Override
     public int deleteUsingTemplate(FeatureBean bean)
     {
@@ -898,6 +946,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     //_____________________________________________________________________
 
      // override IFeatureManager
+
     @Override 
     public FeatureBean[] loadByIndexPersonId(Integer personId)
     {
@@ -905,6 +954,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     }
     
     // override IFeatureManager
+
     @Override 
     public java.util.List<FeatureBean> loadByIndexPersonIdAsList(Integer personId)
     {
@@ -918,6 +968,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     }
 
     // override IFeatureManager
+
     @Override 
     public int deleteByIndexPersonId(Integer personId)
     {
@@ -970,6 +1021,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     // COUNT
     //_____________________________________________________________________
     //25
+
     @Override
     public int countWhere(String where)
     {
@@ -983,6 +1035,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     }
 
     //20
+
     @Override
     public int countUsingTemplate(FeatureBean bean, int searchType)
     {
@@ -1001,10 +1054,10 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     // LISTENER
     //_____________________________________________________________________
 
+    //35
     /**
      * @return {@link WrapListener} instance
      */
-    //35
     @Override
     public TableListener<FeatureBean> registerListener(TableListener<FeatureBean> listener)
     {
@@ -1020,6 +1073,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     }
 
     //36
+
     @Override
     public void unregisterListener(TableListener<FeatureBean> listener)
     {
@@ -1030,12 +1084,14 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     }
     
     //37
+
     @Override
     public void fire(TableListener.Event event, FeatureBean bean){
         fire(event.ordinal(), bean);
     }
     
     //37-1
+
     @Override
     public void fire(int event, FeatureBean bean){
         try{
@@ -1046,25 +1102,24 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
             throw new WrapDAOException(e);
         }
     }
+    //37-2
     /**
      * bind foreign key listener to foreign table for DELETE RULE
      */
-    //37-2
     void bindForeignKeyListenerForDeleteRule(){
         this.nativeManager.bindForeignKeyListenerForDeleteRule();
     }
+    //37-3
     /**
      * unbind foreign key listener from all of foreign tables <br>
      * @see #bindForeignKeyListenerForDeleteRule()
      */
-    //37-3
     void unbindForeignKeyListenerForDeleteRule(){
         this.nativeManager.unbindForeignKeyListenerForDeleteRule();
 
     }
     /**
      * wrap {@code TableListener<FeatureBean>} as native listener
-     *
      */
     public class WrapListener implements TableListener<FeatureBean>{
         private final TableListener<FeatureBean> listener;
@@ -1144,6 +1199,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     //_____________________________________________________________________
 
     //43
+
     @Override
     public boolean isPrimaryKey(String column){
         return this.nativeManager.isPrimaryKey(column);
@@ -1189,25 +1245,27 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     }
     
     //45 override IFeatureManager
+
     @Override 
-    public java.util.List<String> toPrimaryKeyList(FeatureBean... array){        
-        if(null == array){
+    public java.util.List<String> toPrimaryKeyList(FeatureBean... beans){        
+        if(null == beans){
             return new java.util.ArrayList<String>();
         }
-        java.util.ArrayList<String> list = new java.util.ArrayList<String>(array.length);
-        for(FeatureBean bean:array){
+        java.util.ArrayList<String> list = new java.util.ArrayList<String>(beans.length);
+        for(FeatureBean bean:beans){
             list.add(null == bean ? null : bean.getMd5());
         }
         return list;
     }
     //46 override IFeatureManager
+
     @Override 
-    public java.util.List<String> toPrimaryKeyList(java.util.Collection<FeatureBean> collection){        
-        if(null == collection){
+    public java.util.List<String> toPrimaryKeyList(java.util.Collection<FeatureBean> beans){        
+        if(null == beans){
             return new java.util.ArrayList<String>();
         }
-        java.util.ArrayList<String> list = new java.util.ArrayList<String>(collection.size());
-        for(FeatureBean bean:collection){
+        java.util.ArrayList<String> list = new java.util.ArrayList<String>(beans.size());
+        for(FeatureBean bean:beans){
             list.add(null == bean ? null : bean.getMd5());
         }
         return list;

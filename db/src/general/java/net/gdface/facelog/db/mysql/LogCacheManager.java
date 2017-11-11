@@ -96,6 +96,7 @@ public class LogCacheManager extends LogManager
     //////////////////////////////////////
 
     //1.1 override ILogManager
+
     @Override 
     public LogBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
@@ -131,6 +132,7 @@ public class LogCacheManager extends LogManager
         }
     }
     //1.4 override ILogManager
+
     @Override 
     public boolean existsPrimaryKey(Integer id){
         return null != loadByPrimaryKey(id);
@@ -153,6 +155,7 @@ public class LogCacheManager extends LogManager
         }
     }
     //20-5
+
     @Override
     public int loadUsingTemplate(LogBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<LogBean> action){
         if(null == fieldList ){

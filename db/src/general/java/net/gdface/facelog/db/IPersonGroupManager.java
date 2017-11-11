@@ -20,15 +20,16 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
+    //1
     /**
      * Loads a {@link PersonGroupBean} from the fl_person_group using primary key fields.
      *
      * @param id Integer - PK# 1
      * @return a unique PersonGroupBean or {@code null} if not found
      */
-    //1
     public PersonGroupBean loadByPrimaryKey(Integer id);
 
+    //1.1
     /**
      * Loads a {@link PersonGroupBean} from the fl_person_group using primary key fields.
      *
@@ -36,38 +37,41 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @return a unique PersonGroupBean
      * @throws ObjectRetrievalException if not found
      */
-    //1.1
     public PersonGroupBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException;
     
+    //1.4
     /**
      * Returns true if this fl_person_group contains row with primary key fields.
      * @param id Integer - PK# 1
      * @see #loadByPrimaryKey($keys)
+     * @return
      */
-    //1.4
     public boolean existsPrimaryKey(Integer id);
+    //1.4.1
     /**
      * Check duplicated row by primary keys,if row exists throw exception
      * @param id Integer
+     * @return 
+     * @throws ObjectRetrievalException
      */
-    //1.4.1
     public Integer checkDuplicate(Integer id)throws ObjectRetrievalException;
+    //1.8
     /**
      * Loads {@link PersonGroupBean} from the fl_person_group using primary key fields.
      *
      * @param keys primary keys array
      * @return list of PersonGroupBean
      */
-    //1.8
     public java.util.List<PersonGroupBean> loadByPrimaryKey(int... keys);
+    //1.9
     /**
      * Loads {@link PersonGroupBean} from the fl_person_group using primary key fields.
      *
      * @param keys primary keys collection
      * @return list of PersonGroupBean
      */
-    //1.9
     public java.util.List<PersonGroupBean> loadByPrimaryKey(java.util.Collection<Integer> keys);
+    //2
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
@@ -75,87 +79,89 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param id Integer - PK# 1
      * @return the number of deleted rows
      */
-    //2
     public int deleteByPrimaryKey(Integer id);
+    //2.2
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys array
      * @return the number of deleted rows
      */
-    //2.2
     public int deleteByPrimaryKey(int... keys);
+    //2.3
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys collection
      * @return the number of deleted rows
      */
-    //2.3
     public int deleteByPrimaryKey(java.util.Collection<Integer> keys);
-    /**
-     * Delete beans.<br>
-     *
-     * @param beans PersonGroupBean collection wille be deleted
-     * @return the number of deleted rows
-     */
     //2.4
-    public int delete(PersonGroupBean... beans);
     /**
      * Delete beans.<br>
      *
      * @param beans PersonGroupBean collection wille be deleted
      * @return the number of deleted rows
      */
+    public int delete(PersonGroupBean... beans);
     //2.5
+    /**
+     * Delete beans.<br>
+     *
+     * @param beans PersonGroupBean collection wille be deleted
+     * @return the number of deleted rows
+     */
     public int delete(java.util.Collection<PersonGroupBean> beans);
  
 
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
+    //3.1 GET IMPORTED
     /**
      * Retrieves the {@link PermitBean} object from the fl_permit.person_group_id field.<BR>
      * FK_NAME : fl_permit_ibfk_2 
      * @param bean the {@link PersonGroupBean}
      * @return the associated {@link PermitBean} beans or {@code null} if {@code bean} is {@code null}
      */
-    //3.1 GET IMPORTED
     public PermitBean[] getPermitBeansByPersonGroupId(PersonGroupBean bean);
     
+    //3.1.2 GET IMPORTED
     /**
      * Retrieves the {@link PermitBean} object from the fl_permit.person_group_id field.<BR>
      * FK_NAME : fl_permit_ibfk_2 
-     * @param id Integer - PK# 1
+     * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PermitBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1.2 GET IMPORTED
     public PermitBean[] getPermitBeansByPersonGroupId(Integer idOfPersonGroup);
     
-    /**
-     * @see #getPermitBeansByPersonGroupIdAsList(PersonGroupBean,int,int)
-     */
     //3.2 GET IMPORTED
+    /**
+     * see also #getPermitBeansByPersonGroupIdAsList(PersonGroupBean,int,int)
+     * @param bean
+     * @return
+     */
     public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(PersonGroupBean bean);
 
+    //3.2.2 GET IMPORTED
     /**
      * Retrieves the {@link PermitBean} object from fl_permit.person_group_id field.<BR>
      * FK_NAME:fl_permit_ibfk_2
-     * @param id Integer - PK# 1
+     * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PermitBean} beans 
      * @throws DAOException
      */
-    //3.2.2 GET IMPORTED
     public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(Integer idOfPersonGroup);
+    //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link PermitBean} objects from fl_permit.person_group_id field.<BR>
      * FK_NAME:fl_permit_ibfk_2
-     * @param id Integer - PK# 1
+     * @param idOfPersonGroup Integer - PK# 1
      * @return the number of deleted rows
      */
-    //3.2.3 DELETE IMPORTED
     public int deletePermitBeansByPersonGroupId(Integer idOfPersonGroup);
+    //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link PermitBean} object from fl_permit.person_group_id field.<BR>
      * FK_NAME:fl_permit_ibfk_2
@@ -164,8 +170,8 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link PermitBean} beans or empty list if {@code bean} is {@code null}
      */
-    //3.2.4 GET IMPORTED
     public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(PersonGroupBean bean,int startRow,int numRows);    
+    //3.3 SET IMPORTED
     /**
      * set  the {@link PermitBean} object array associate to PersonGroupBean by the fl_permit.person_group_id field.<BR>
      * FK_NAME : fl_permit_ibfk_2 
@@ -174,9 +180,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @return importedBeans always
      * @see {@link PermitManager#setReferencedByPersonGroupId(PermitBean, PersonGroupBean)
      */
-    //3.3 SET IMPORTED
     public PermitBean[] setPermitBeansByPersonGroupId(PersonGroupBean bean , PermitBean[] importedBeans);
 
+    //3.4 SET IMPORTED
     /**
      * set  the {@link PermitBean} object java.util.Collection associate to PersonGroupBean by the fl_permit.person_group_id field.<BR>
      * FK_NAME:fl_permit_ibfk_2
@@ -185,51 +191,53 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @return importedBeans always
      * @see {@link PermitManager#setReferencedByPersonGroupId(PermitBean, PersonGroupBean)
      */
-    //3.4 SET IMPORTED
     public <C extends java.util.Collection<PermitBean>> C setPermitBeansByPersonGroupId(PersonGroupBean bean , C importedBeans);
 
+    //3.1 GET IMPORTED
     /**
      * Retrieves the {@link PersonBean} object from the fl_person.group_id field.<BR>
      * FK_NAME : fl_person_ibfk_1 
      * @param bean the {@link PersonGroupBean}
      * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
      */
-    //3.1 GET IMPORTED
     public PersonBean[] getPersonBeansByGroupId(PersonGroupBean bean);
     
+    //3.1.2 GET IMPORTED
     /**
      * Retrieves the {@link PersonBean} object from the fl_person.group_id field.<BR>
      * FK_NAME : fl_person_ibfk_1 
-     * @param id Integer - PK# 1
+     * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1.2 GET IMPORTED
     public PersonBean[] getPersonBeansByGroupId(Integer idOfPersonGroup);
     
-    /**
-     * @see #getPersonBeansByGroupIdAsList(PersonGroupBean,int,int)
-     */
     //3.2 GET IMPORTED
+    /**
+     * see also #getPersonBeansByGroupIdAsList(PersonGroupBean,int,int)
+     * @param bean
+     * @return
+     */
     public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(PersonGroupBean bean);
 
+    //3.2.2 GET IMPORTED
     /**
      * Retrieves the {@link PersonBean} object from fl_person.group_id field.<BR>
      * FK_NAME:fl_person_ibfk_1
-     * @param id Integer - PK# 1
+     * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PersonBean} beans 
      * @throws DAOException
      */
-    //3.2.2 GET IMPORTED
     public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(Integer idOfPersonGroup);
+    //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link PersonBean} objects from fl_person.group_id field.<BR>
      * FK_NAME:fl_person_ibfk_1
-     * @param id Integer - PK# 1
+     * @param idOfPersonGroup Integer - PK# 1
      * @return the number of deleted rows
      */
-    //3.2.3 DELETE IMPORTED
     public int deletePersonBeansByGroupId(Integer idOfPersonGroup);
+    //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link PersonBean} object from fl_person.group_id field.<BR>
      * FK_NAME:fl_person_ibfk_1
@@ -238,8 +246,8 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link PersonBean} beans or empty list if {@code bean} is {@code null}
      */
-    //3.2.4 GET IMPORTED
     public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(PersonGroupBean bean,int startRow,int numRows);    
+    //3.3 SET IMPORTED
     /**
      * set  the {@link PersonBean} object array associate to PersonGroupBean by the fl_person.group_id field.<BR>
      * FK_NAME : fl_person_ibfk_1 
@@ -248,9 +256,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @return importedBeans always
      * @see {@link PersonManager#setReferencedByGroupId(PersonBean, PersonGroupBean)
      */
-    //3.3 SET IMPORTED
     public PersonBean[] setPersonBeansByGroupId(PersonGroupBean bean , PersonBean[] importedBeans);
 
+    //3.4 SET IMPORTED
     /**
      * set  the {@link PersonBean} object java.util.Collection associate to PersonGroupBean by the fl_person.group_id field.<BR>
      * FK_NAME:fl_person_ibfk_1
@@ -259,51 +267,53 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @return importedBeans always
      * @see {@link PersonManager#setReferencedByGroupId(PersonBean, PersonGroupBean)
      */
-    //3.4 SET IMPORTED
     public <C extends java.util.Collection<PersonBean>> C setPersonBeansByGroupId(PersonGroupBean bean , C importedBeans);
 
+    //3.1 GET IMPORTED
     /**
      * Retrieves the {@link PersonGroupBean} object from the fl_person_group.parent field.<BR>
      * FK_NAME : fl_person_group_ibfk_1 
      * @param bean the {@link PersonGroupBean}
      * @return the associated {@link PersonGroupBean} beans or {@code null} if {@code bean} is {@code null}
      */
-    //3.1 GET IMPORTED
     public PersonGroupBean[] getPersonGroupBeansByParent(PersonGroupBean bean);
     
+    //3.1.2 GET IMPORTED
     /**
      * Retrieves the {@link PersonGroupBean} object from the fl_person_group.parent field.<BR>
      * FK_NAME : fl_person_group_ibfk_1 
-     * @param id Integer - PK# 1
+     * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PersonGroupBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1.2 GET IMPORTED
     public PersonGroupBean[] getPersonGroupBeansByParent(Integer idOfPersonGroup);
     
-    /**
-     * @see #getPersonGroupBeansByParentAsList(PersonGroupBean,int,int)
-     */
     //3.2 GET IMPORTED
+    /**
+     * see also #getPersonGroupBeansByParentAsList(PersonGroupBean,int,int)
+     * @param bean
+     * @return
+     */
     public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(PersonGroupBean bean);
 
+    //3.2.2 GET IMPORTED
     /**
      * Retrieves the {@link PersonGroupBean} object from fl_person_group.parent field.<BR>
      * FK_NAME:fl_person_group_ibfk_1
-     * @param id Integer - PK# 1
+     * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PersonGroupBean} beans 
      * @throws DAOException
      */
-    //3.2.2 GET IMPORTED
     public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(Integer idOfPersonGroup);
+    //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link PersonGroupBean} objects from fl_person_group.parent field.<BR>
      * FK_NAME:fl_person_group_ibfk_1
-     * @param id Integer - PK# 1
+     * @param idOfPersonGroup Integer - PK# 1
      * @return the number of deleted rows
      */
-    //3.2.3 DELETE IMPORTED
     public int deletePersonGroupBeansByParent(Integer idOfPersonGroup);
+    //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link PersonGroupBean} object from fl_person_group.parent field.<BR>
      * FK_NAME:fl_person_group_ibfk_1
@@ -312,8 +322,8 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link PersonGroupBean} beans or empty list if {@code bean} is {@code null}
      */
-    //3.2.4 GET IMPORTED
     public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(PersonGroupBean bean,int startRow,int numRows);    
+    //3.3 SET IMPORTED
     /**
      * set  the {@link PersonGroupBean} object array associate to PersonGroupBean by the fl_person_group.parent field.<BR>
      * FK_NAME : fl_person_group_ibfk_1 
@@ -322,9 +332,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @return importedBeans always
      * @see {@link PersonGroupManager#setReferencedByParent(PersonGroupBean, PersonGroupBean)
      */
-    //3.3 SET IMPORTED
     public PersonGroupBean[] setPersonGroupBeansByParent(PersonGroupBean bean , PersonGroupBean[] importedBeans);
 
+    //3.4 SET IMPORTED
     /**
      * set  the {@link PersonGroupBean} object java.util.Collection associate to PersonGroupBean by the fl_person_group.parent field.<BR>
      * FK_NAME:fl_person_group_ibfk_1
@@ -333,9 +343,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @return importedBeans always
      * @see {@link PersonGroupManager#setReferencedByParent(PersonGroupBean, PersonGroupBean)
      */
-    //3.4 SET IMPORTED
     public <C extends java.util.Collection<PersonGroupBean>> C setPersonGroupBeansByParent(PersonGroupBean bean , C importedBeans);
 
+    //3.5 SYNC SAVE 
     /**
      * Save the PersonGroupBean bean and referenced beans and imported beans into the database.
      *
@@ -346,18 +356,24 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param impPersongroupByParent the {@link PersonGroupBean} bean refer to {@link PersonGroupBean} 
      * @return the inserted or updated {@link PersonGroupBean} bean
      */
-    //3.5 SYNC SAVE 
     public PersonGroupBean save(PersonGroupBean bean
         , PersonGroupBean refPersongroupByParent 
         , PermitBean[] impPermitByPersonGroupId , PersonBean[] impPersonByGroupId , PersonGroupBean[] impPersongroupByParent );
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(PersonGroupBean , PersonGroupBean , PermitBean[] , PersonBean[] , PersonGroupBean[] )}
-     */
     //3.6 SYNC SAVE AS TRANSACTION
+    /**
+     * Transaction version for sync save<br>
+     * see also {@link #save(PersonGroupBean , PersonGroupBean , PermitBean[] , PersonBean[] , PersonGroupBean[] )}
+     * @param bean the {@link PersonGroupBean} bean to be saved
+     * @param refPersongroupByParent the {@link PersonGroupBean} bean referenced by {@link PersonGroupBean} 
+     * @param impPermitByPersonGroupId the {@link PermitBean} bean refer to {@link PersonGroupBean} 
+     * @param impPersonByGroupId the {@link PersonBean} bean refer to {@link PersonGroupBean} 
+     * @param impPersongroupByParent the {@link PersonGroupBean} bean refer to {@link PersonGroupBean} 
+     * @return the inserted or updated {@link PersonGroupBean} bean
+     */
     public PersonGroupBean saveAsTransaction(final PersonGroupBean bean
         ,final PersonGroupBean refPersongroupByParent 
         ,final PermitBean[] impPermitByPersonGroupId ,final PersonBean[] impPersonByGroupId ,final PersonGroupBean[] impPersongroupByParent );
+    //3.7 SYNC SAVE 
     /**
      * Save the PersonGroupBean bean and referenced beans and imported beans into the database.
      *
@@ -368,30 +384,36 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param impPersongroupByParent the {@link PersonGroupBean} bean refer to {@link PersonGroupBean} 
      * @return the inserted or updated {@link PersonGroupBean} bean
      */
-    //3.7 SYNC SAVE 
     public PersonGroupBean save(PersonGroupBean bean
         , PersonGroupBean refPersongroupByParent 
         , java.util.Collection<PermitBean> impPermitByPersonGroupId , java.util.Collection<PersonBean> impPersonByGroupId , java.util.Collection<PersonGroupBean> impPersongroupByParent );
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(PersonGroupBean , PersonGroupBean , java.util.Collection , java.util.Collection , java.util.Collection )}
-     */
     //3.8 SYNC SAVE AS TRANSACTION
+    /**
+     * Transaction version for sync save<br>
+     * see also {@link #save(PersonGroupBean , PersonGroupBean , java.util.Collection , java.util.Collection , java.util.Collection )}
+     * @param bean the {@link PersonGroupBean} bean to be saved
+     * @param refPersongroupByParent the {@link PersonGroupBean} bean referenced by {@link PersonGroupBean} 
+     * @param impPermitByPersonGroupId the {@link PermitBean} bean refer to {@link PersonGroupBean} 
+     * @param impPersonByGroupId the {@link PersonBean} bean refer to {@link PersonGroupBean} 
+     * @param impPersongroupByParent the {@link PersonGroupBean} bean refer to {@link PersonGroupBean} 
+     * @return the inserted or updated {@link PersonGroupBean} bean
+     */
     public PersonGroupBean saveAsTransaction(final PersonGroupBean bean
         ,final PersonGroupBean refPersongroupByParent 
         ,final  java.util.Collection<PermitBean> impPermitByPersonGroupId ,final  java.util.Collection<PersonBean> impPersonByGroupId ,final  java.util.Collection<PersonGroupBean> impPersongroupByParent );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
+    //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link PersonGroupBean} object referenced by {@link PersonGroupBean#getParent}() field.<br>
      * FK_NAME : fl_person_group_ibfk_1
      * @param bean the {@link PersonGroupBean}
      * @return the associated {@link PersonGroupBean} bean or {@code null} if {@code bean} is {@code null}
      */
-    //5.1 GET REFERENCED VALUE
     public PersonGroupBean getReferencedByParent(PersonGroupBean bean);
 
+    //5.2 SET REFERENCED 
     /**
      * Associates the {@link PersonGroupBean} object to the {@link PersonGroupBean} object by {@link PersonGroupBean#getParent}() field.
      *
@@ -400,7 +422,6 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @return always beanToSet saved
      * @throws WrapDAOException
      */
-    //5.2 SET REFERENCED 
     public PersonGroupBean setReferencedByParent(PersonGroupBean bean, PersonGroupBean beanToSet);
     //_____________________________________________________________________
     //
@@ -433,29 +454,34 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
     public int deleteByIndexParent(Integer parent);
     
 
+    //45
     /**
      * return a primary key list from {@link PersonGroupBean} array
-     * @param array
+     * @param beans
+     * @return
      */
-    //45
-    public java.util.List<Integer> toPrimaryKeyList(PersonGroupBean... array);
+    public java.util.List<Integer> toPrimaryKeyList(PersonGroupBean... beans);
+    //46
     /**
      * return a primary key list from {@link PersonGroupBean} collection
-     * @param array
+     * @param beans
+     * @return
      */
-    //46
-    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<PersonGroupBean> collection);
+    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<PersonGroupBean> beans);
 
     //_____________________________________________________________________
     //
     // MANY TO MANY: LOAD OTHER BEAN VIA JUNCTION TABLE
     //_____________________________________________________________________
-    /**
-     * @see #loadViaPermitAsList(PersonGroupBean,int,int)
-     */
     //22 MANY TO MANY
+    /**
+     * see also #loadViaPermitAsList(PersonGroupBean,int,int)
+     * @param bean
+     * @return
+     */
     public java.util.List<PersonGroupBean> loadViaPermitAsList(DeviceGroupBean bean);
 
+    //23 MANY TO MANY
     /**
      * Retrieves an list of PersonGroupBean using the junction table Permit, given a DeviceGroupBean, 
      * specifying the start row and the number of rows.
@@ -465,39 +491,58 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return a list of PersonGroupBean
      */
-    //23 MANY TO MANY
     public java.util.List<PersonGroupBean> loadViaPermitAsList(DeviceGroupBean bean, int startRow, int numRows);
+    //23.2 MANY TO MANY
     /**
      * add junction between {@link PersonGroupBean} and {@link DeviceGroupBean} if junction not exists
      * @param bean
      * @param linked
      */
-    //23.2 MANY TO MANY
     public void addJunction(PersonGroupBean bean,DeviceGroupBean linked);
+    //23.3 MANY TO MANY
     /**
      * remove junction between {@link PersonGroupBean} and {@link DeviceGroupBean}
      * @param bean
      * @param linked
+     * @return deleted rows count
      */
-    //23.3 MANY TO MANY
     public int deleteJunction(PersonGroupBean bean,DeviceGroupBean linked);
-    /** @see #addJunction(PersonGroupBean,DeviceGroupBean) */
     //23.4 MANY TO MANY
+    /** 
+     * see also {@link #addJunction(PersonGroupBean,DeviceGroupBean)}
+     * @param bean
+     * @param linkedBeans
+     */
     public void addJunction(PersonGroupBean bean,DeviceGroupBean... linkedBeans);
-    /** @see #addJunction(PersonGroupBean,DeviceGroupBean) */
     //23.5 MANY TO MANY
+    /** 
+     * see also {@link #addJunction(PersonGroupBean,DeviceGroupBean)}
+     * @param bean
+     * @param linkedBeans
+     */
     public void addJunction(PersonGroupBean bean,java.util.Collection<DeviceGroupBean> linkedBeans);
-    /** @see #deleteJunction(PersonGroupBean,DeviceGroupBean) */
     //23.6 MANY TO MANY
+    /** 
+     * see also {@link #deleteJunction(PersonGroupBean,DeviceGroupBean)}
+     * @param bean
+     * @param linkedBeans
+     * @return
+     */
     public int deleteJunction(PersonGroupBean bean,DeviceGroupBean... linkedBeans);
-    /** @see #deleteJunction(PersonGroupBean,DeviceGroupBean) */
     //23.7 MANY TO MANY
+    /** 
+     * see also {@link #deleteJunction(PersonGroupBean,DeviceGroupBean)} 
+     * @param bean
+     * @param linkedBeans
+     * @return
+     */
     public int deleteJunction(PersonGroupBean bean,java.util.Collection<DeviceGroupBean> linkedBeans);
 
     //_____________________________________________________________________
     //
     // SELF-REFERENCE
     //_____________________________________________________________________
+    //47
     /**
      * return bean list ( include {@code bean}) by the self-reference field : {@code fl_person_group(parent) }<br>
      * first element is top bean
@@ -506,13 +551,15 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      *         first element equal last if self-reference field is cycle
      * @throws WrapDAOException
      */
-    //47
     public java.util.List<PersonGroupBean> listOfParent(Integer id);
+    //48
     /**
      * see also {@link #listOfParent(Integer)}
+     * @param bean
+     * @return
      */
-    //48
     public java.util.List<PersonGroupBean> listOfParent(PersonGroupBean bean);
+    //49
     /**
      * get level count on the self-reference field : {@code fl_person_group(parent) }
      * @param id PK# 1 
@@ -520,29 +567,33 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      *         -1 if self-reference field is cycle
      * @throws WrapDAOException
      */
-    //49
     public int levelOfParent(Integer id);
+    //50
     /**
      * see also {@link #levelOfParent(Integer)}
+     * @param bean
+     * @return 
      */
-    //50
     public int levelOfParent(PersonGroupBean bean);
+    //51
     /**
      * test whether the self-reference field is cycle : {@code fl_person_group(parent) }
      * @param id PK# 1 
      * @throws WrapDAOException
      * @see #levelOfParent(PersonGroupBean)
+     * @return
      */
-    //51
     public boolean isCycleOnParent(Integer id);
+    //52
     /**
      * test whether the self-reference field is cycle : {@code fl_person_group(parent) }
      * @param bean
+     * @return
      * @throws WrapDAOException
      * @see #levelOfParent(PersonGroupBean)
      */
-    //52
     public boolean isCycleOnParent(PersonGroupBean bean);
+    //53
     /**
      * return top bean that with {@code null} self-reference field  : {@code fl_person_group(parent) }
      * @param id PK# 1 
@@ -551,13 +602,15 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @throws IllegalStateException if self-reference field is cycle
      * @throws WrapDAOException
      */
-    //53
     public PersonGroupBean topOfParent(Integer id);
+    //54
     /**
      * see also {@link #topOfParent(Integer)}
+     * @param bean
+     * @return
      */
-    //54
     public PersonGroupBean topOfParent(PersonGroupBean bean);
+    //55
     /**
      * Ensures the self-reference field is not cycle : {@code fl_person_group(parent) }
      * @param id PK# 1
@@ -566,8 +619,8 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @throws WrapDAOException
      * @see #isCycleOnParent(Integer)
      */
-    //55
     public Integer checkCycleOfParent(Integer id);
+    //56
     /**
      * Ensures the self-reference field is not cycle : {@code fl_person_group(parent) }<br>
      * @param bean
@@ -576,6 +629,5 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @throws WrapDAOException
      * @see #isCycleOnParent(PersonGroupBean)
      */
-    //56
     public PersonGroupBean checkCycleOfParent(PersonGroupBean bean);
 }

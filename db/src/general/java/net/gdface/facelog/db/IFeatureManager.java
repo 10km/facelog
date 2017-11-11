@@ -20,15 +20,16 @@ public interface IFeatureManager extends TableManager<FeatureBean>
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
+    //1
     /**
      * Loads a {@link FeatureBean} from the fl_feature using primary key fields.
      *
      * @param md5 String - PK# 1
      * @return a unique FeatureBean or {@code null} if not found
      */
-    //1
     public FeatureBean loadByPrimaryKey(String md5);
 
+    //1.1
     /**
      * Loads a {@link FeatureBean} from the fl_feature using primary key fields.
      *
@@ -36,38 +37,41 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @return a unique FeatureBean
      * @throws ObjectRetrievalException if not found
      */
-    //1.1
     public FeatureBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException;
     
+    //1.4
     /**
      * Returns true if this fl_feature contains row with primary key fields.
      * @param md5 String - PK# 1
      * @see #loadByPrimaryKey($keys)
+     * @return
      */
-    //1.4
     public boolean existsPrimaryKey(String md5);
+    //1.4.1
     /**
      * Check duplicated row by primary keys,if row exists throw exception
      * @param md5 String
+     * @return 
+     * @throws ObjectRetrievalException
      */
-    //1.4.1
     public String checkDuplicate(String md5)throws ObjectRetrievalException;
+    //1.8
     /**
      * Loads {@link FeatureBean} from the fl_feature using primary key fields.
      *
      * @param keys primary keys array
      * @return list of FeatureBean
      */
-    //1.8
     public java.util.List<FeatureBean> loadByPrimaryKey(String... keys);
+    //1.9
     /**
      * Loads {@link FeatureBean} from the fl_feature using primary key fields.
      *
      * @param keys primary keys collection
      * @return list of FeatureBean
      */
-    //1.9
     public java.util.List<FeatureBean> loadByPrimaryKey(java.util.Collection<String> keys);
+    //2
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
@@ -75,87 +79,89 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param md5 String - PK# 1
      * @return the number of deleted rows
      */
-    //2
     public int deleteByPrimaryKey(String md5);
+    //2.2
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys array
      * @return the number of deleted rows
      */
-    //2.2
     public int deleteByPrimaryKey(String... keys);
+    //2.3
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys collection
      * @return the number of deleted rows
      */
-    //2.3
     public int deleteByPrimaryKey(java.util.Collection<String> keys);
-    /**
-     * Delete beans.<br>
-     *
-     * @param beans FeatureBean collection wille be deleted
-     * @return the number of deleted rows
-     */
     //2.4
-    public int delete(FeatureBean... beans);
     /**
      * Delete beans.<br>
      *
      * @param beans FeatureBean collection wille be deleted
      * @return the number of deleted rows
      */
+    public int delete(FeatureBean... beans);
     //2.5
+    /**
+     * Delete beans.<br>
+     *
+     * @param beans FeatureBean collection wille be deleted
+     * @return the number of deleted rows
+     */
     public int delete(java.util.Collection<FeatureBean> beans);
  
 
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
+    //3.1 GET IMPORTED
     /**
      * Retrieves the {@link FaceBean} object from the fl_face.feature_md5 field.<BR>
      * FK_NAME : fl_face_ibfk_2 
      * @param bean the {@link FeatureBean}
      * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
      */
-    //3.1 GET IMPORTED
     public FaceBean[] getFaceBeansByFeatureMd5(FeatureBean bean);
     
+    //3.1.2 GET IMPORTED
     /**
      * Retrieves the {@link FaceBean} object from the fl_face.feature_md5 field.<BR>
      * FK_NAME : fl_face_ibfk_2 
-     * @param md5 String - PK# 1
+     * @param md5OfFeature String - PK# 1
      * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1.2 GET IMPORTED
     public FaceBean[] getFaceBeansByFeatureMd5(String md5OfFeature);
     
-    /**
-     * @see #getFaceBeansByFeatureMd5AsList(FeatureBean,int,int)
-     */
     //3.2 GET IMPORTED
+    /**
+     * see also #getFaceBeansByFeatureMd5AsList(FeatureBean,int,int)
+     * @param bean
+     * @return
+     */
     public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(FeatureBean bean);
 
+    //3.2.2 GET IMPORTED
     /**
      * Retrieves the {@link FaceBean} object from fl_face.feature_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_2
-     * @param md5 String - PK# 1
+     * @param md5OfFeature String - PK# 1
      * @return the associated {@link FaceBean} beans 
      * @throws DAOException
      */
-    //3.2.2 GET IMPORTED
     public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(String md5OfFeature);
+    //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link FaceBean} objects from fl_face.feature_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_2
-     * @param md5 String - PK# 1
+     * @param md5OfFeature String - PK# 1
      * @return the number of deleted rows
      */
-    //3.2.3 DELETE IMPORTED
     public int deleteFaceBeansByFeatureMd5(String md5OfFeature);
+    //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link FaceBean} object from fl_face.feature_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_2
@@ -164,8 +170,8 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link FaceBean} beans or empty list if {@code bean} is {@code null}
      */
-    //3.2.4 GET IMPORTED
     public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(FeatureBean bean,int startRow,int numRows);    
+    //3.3 SET IMPORTED
     /**
      * set  the {@link FaceBean} object array associate to FeatureBean by the fl_face.feature_md5 field.<BR>
      * FK_NAME : fl_face_ibfk_2 
@@ -174,9 +180,9 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @return importedBeans always
      * @see {@link FaceManager#setReferencedByFeatureMd5(FaceBean, FeatureBean)
      */
-    //3.3 SET IMPORTED
     public FaceBean[] setFaceBeansByFeatureMd5(FeatureBean bean , FaceBean[] importedBeans);
 
+    //3.4 SET IMPORTED
     /**
      * set  the {@link FaceBean} object java.util.Collection associate to FeatureBean by the fl_face.feature_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_2
@@ -185,51 +191,53 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @return importedBeans always
      * @see {@link FaceManager#setReferencedByFeatureMd5(FaceBean, FeatureBean)
      */
-    //3.4 SET IMPORTED
     public <C extends java.util.Collection<FaceBean>> C setFaceBeansByFeatureMd5(FeatureBean bean , C importedBeans);
 
+    //3.1 GET IMPORTED
     /**
      * Retrieves the {@link LogBean} object from the fl_log.verify_feature field.<BR>
      * FK_NAME : fl_log_ibfk_3 
      * @param bean the {@link FeatureBean}
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      */
-    //3.1 GET IMPORTED
     public LogBean[] getLogBeansByVerifyFeature(FeatureBean bean);
     
+    //3.1.2 GET IMPORTED
     /**
      * Retrieves the {@link LogBean} object from the fl_log.verify_feature field.<BR>
      * FK_NAME : fl_log_ibfk_3 
-     * @param md5 String - PK# 1
+     * @param md5OfFeature String - PK# 1
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1.2 GET IMPORTED
     public LogBean[] getLogBeansByVerifyFeature(String md5OfFeature);
     
-    /**
-     * @see #getLogBeansByVerifyFeatureAsList(FeatureBean,int,int)
-     */
     //3.2 GET IMPORTED
+    /**
+     * see also #getLogBeansByVerifyFeatureAsList(FeatureBean,int,int)
+     * @param bean
+     * @return
+     */
     public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(FeatureBean bean);
 
+    //3.2.2 GET IMPORTED
     /**
      * Retrieves the {@link LogBean} object from fl_log.verify_feature field.<BR>
      * FK_NAME:fl_log_ibfk_3
-     * @param md5 String - PK# 1
+     * @param md5OfFeature String - PK# 1
      * @return the associated {@link LogBean} beans 
      * @throws DAOException
      */
-    //3.2.2 GET IMPORTED
     public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(String md5OfFeature);
+    //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link LogBean} objects from fl_log.verify_feature field.<BR>
      * FK_NAME:fl_log_ibfk_3
-     * @param md5 String - PK# 1
+     * @param md5OfFeature String - PK# 1
      * @return the number of deleted rows
      */
-    //3.2.3 DELETE IMPORTED
     public int deleteLogBeansByVerifyFeature(String md5OfFeature);
+    //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link LogBean} object from fl_log.verify_feature field.<BR>
      * FK_NAME:fl_log_ibfk_3
@@ -238,8 +246,8 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link LogBean} beans or empty list if {@code bean} is {@code null}
      */
-    //3.2.4 GET IMPORTED
     public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(FeatureBean bean,int startRow,int numRows);    
+    //3.3 SET IMPORTED
     /**
      * set  the {@link LogBean} object array associate to FeatureBean by the fl_log.verify_feature field.<BR>
      * FK_NAME : fl_log_ibfk_3 
@@ -248,9 +256,9 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @return importedBeans always
      * @see {@link LogManager#setReferencedByVerifyFeature(LogBean, FeatureBean)
      */
-    //3.3 SET IMPORTED
     public LogBean[] setLogBeansByVerifyFeature(FeatureBean bean , LogBean[] importedBeans);
 
+    //3.4 SET IMPORTED
     /**
      * set  the {@link LogBean} object java.util.Collection associate to FeatureBean by the fl_log.verify_feature field.<BR>
      * FK_NAME:fl_log_ibfk_3
@@ -259,9 +267,9 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @return importedBeans always
      * @see {@link LogManager#setReferencedByVerifyFeature(LogBean, FeatureBean)
      */
-    //3.4 SET IMPORTED
     public <C extends java.util.Collection<LogBean>> C setLogBeansByVerifyFeature(FeatureBean bean , C importedBeans);
 
+    //3.5 SYNC SAVE 
     /**
      * Save the FeatureBean bean and referenced beans and imported beans into the database.
      *
@@ -271,18 +279,23 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param impLogByVerifyFeature the {@link LogBean} bean refer to {@link FeatureBean} 
      * @return the inserted or updated {@link FeatureBean} bean
      */
-    //3.5 SYNC SAVE 
     public FeatureBean save(FeatureBean bean
         , PersonBean refPersonByPersonId 
         , FaceBean[] impFaceByFeatureMd5 , LogBean[] impLogByVerifyFeature );
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(FeatureBean , PersonBean , FaceBean[] , LogBean[] )}
-     */
     //3.6 SYNC SAVE AS TRANSACTION
+    /**
+     * Transaction version for sync save<br>
+     * see also {@link #save(FeatureBean , PersonBean , FaceBean[] , LogBean[] )}
+     * @param bean the {@link FeatureBean} bean to be saved
+     * @param refPersonByPersonId the {@link PersonBean} bean referenced by {@link FeatureBean} 
+     * @param impFaceByFeatureMd5 the {@link FaceBean} bean refer to {@link FeatureBean} 
+     * @param impLogByVerifyFeature the {@link LogBean} bean refer to {@link FeatureBean} 
+     * @return the inserted or updated {@link FeatureBean} bean
+     */
     public FeatureBean saveAsTransaction(final FeatureBean bean
         ,final PersonBean refPersonByPersonId 
         ,final FaceBean[] impFaceByFeatureMd5 ,final LogBean[] impLogByVerifyFeature );
+    //3.7 SYNC SAVE 
     /**
      * Save the FeatureBean bean and referenced beans and imported beans into the database.
      *
@@ -292,30 +305,35 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param impLogByVerifyFeature the {@link LogBean} bean refer to {@link FeatureBean} 
      * @return the inserted or updated {@link FeatureBean} bean
      */
-    //3.7 SYNC SAVE 
     public FeatureBean save(FeatureBean bean
         , PersonBean refPersonByPersonId 
         , java.util.Collection<FaceBean> impFaceByFeatureMd5 , java.util.Collection<LogBean> impLogByVerifyFeature );
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(FeatureBean , PersonBean , java.util.Collection , java.util.Collection )}
-     */
     //3.8 SYNC SAVE AS TRANSACTION
+    /**
+     * Transaction version for sync save<br>
+     * see also {@link #save(FeatureBean , PersonBean , java.util.Collection , java.util.Collection )}
+     * @param bean the {@link FeatureBean} bean to be saved
+     * @param refPersonByPersonId the {@link PersonBean} bean referenced by {@link FeatureBean} 
+     * @param impFaceByFeatureMd5 the {@link FaceBean} bean refer to {@link FeatureBean} 
+     * @param impLogByVerifyFeature the {@link LogBean} bean refer to {@link FeatureBean} 
+     * @return the inserted or updated {@link FeatureBean} bean
+     */
     public FeatureBean saveAsTransaction(final FeatureBean bean
         ,final PersonBean refPersonByPersonId 
         ,final  java.util.Collection<FaceBean> impFaceByFeatureMd5 ,final  java.util.Collection<LogBean> impLogByVerifyFeature );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
+    //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link PersonBean} object referenced by {@link FeatureBean#getPersonId}() field.<br>
      * FK_NAME : fl_feature_ibfk_1
      * @param bean the {@link FeatureBean}
      * @return the associated {@link PersonBean} bean or {@code null} if {@code bean} is {@code null}
      */
-    //5.1 GET REFERENCED VALUE
     public PersonBean getReferencedByPersonId(FeatureBean bean);
 
+    //5.2 SET REFERENCED 
     /**
      * Associates the {@link FeatureBean} object to the {@link PersonBean} object by {@link FeatureBean#getPersonId}() field.
      *
@@ -324,7 +342,6 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @return always beanToSet saved
      * @throws WrapDAOException
      */
-    //5.2 SET REFERENCED 
     public PersonBean setReferencedByPersonId(FeatureBean bean, PersonBean beanToSet);
     //_____________________________________________________________________
     //
@@ -357,17 +374,19 @@ public interface IFeatureManager extends TableManager<FeatureBean>
     public int deleteByIndexPersonId(Integer personId);
     
 
+    //45
     /**
      * return a primary key list from {@link FeatureBean} array
-     * @param array
+     * @param beans
+     * @return
      */
-    //45
-    public java.util.List<String> toPrimaryKeyList(FeatureBean... array);
+    public java.util.List<String> toPrimaryKeyList(FeatureBean... beans);
+    //46
     /**
      * return a primary key list from {@link FeatureBean} collection
-     * @param array
+     * @param beans
+     * @return
      */
-    //46
-    public java.util.List<String> toPrimaryKeyList(java.util.Collection<FeatureBean> collection);
+    public java.util.List<String> toPrimaryKeyList(java.util.Collection<FeatureBean> beans);
 
 }

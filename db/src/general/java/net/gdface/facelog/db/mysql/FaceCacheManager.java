@@ -91,6 +91,7 @@ public class FaceCacheManager extends FaceManager
     //////////////////////////////////////
 
     //1.1 override IFaceManager
+
     @Override 
     public FaceBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
@@ -126,6 +127,7 @@ public class FaceCacheManager extends FaceManager
         }
     }
     //1.4 override IFaceManager
+
     @Override 
     public boolean existsPrimaryKey(Integer id){
         return null != loadByPrimaryKey(id);
@@ -148,6 +150,7 @@ public class FaceCacheManager extends FaceManager
         }
     }
     //20-5
+
     @Override
     public int loadUsingTemplate(FaceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FaceBean> action){
         if(null == fieldList ){

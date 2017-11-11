@@ -124,6 +124,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     //////////////////////////////////////
 
     //1 override IFaceManager
+
     @Override 
     public FaceBean loadByPrimaryKey(Integer id)
     {
@@ -135,6 +136,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
     }
     //1.1 override IFaceManager
+
     @Override
     public FaceBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
@@ -147,6 +149,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
     }
     //1.2
+
     @Override
     public FaceBean loadByPrimaryKey(FaceBean bean)
     {
@@ -154,6 +157,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     }
 
     //1.2.2
+
     @Override
     public FaceBean loadByPrimaryKeyChecked(FaceBean bean) throws ObjectRetrievalException
     {
@@ -164,6 +168,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     }
     
     //1.3
+
     @Override
     public FaceBean loadByPrimaryKey(Object ...keys){
         try{
@@ -175,6 +180,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     }
     
     //1.3.2
+
     @Override
     public FaceBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
         if(null == keys){
@@ -191,6 +197,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     }
 
     //1.4 override IFaceManager
+
     @Override 
     public boolean existsPrimaryKey(Integer id)
     {
@@ -203,12 +210,14 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
     }
     //1.6
+
     @Override
     public boolean existsByPrimaryKey(FaceBean bean)
     {
         return null == bean ? false : existsPrimaryKey(bean.getId());
     }
     //1.7
+
     @Override
     public FaceBean checkDuplicate(FaceBean bean)throws ObjectRetrievalException{
         if(null != bean){
@@ -217,6 +226,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         return bean;   
     }
     //1.4.1 override IFaceManager
+
     @Override 
     public Integer checkDuplicate(Integer id)throws ObjectRetrievalException{
         try{
@@ -228,6 +238,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
     }
     //1.8 override IFaceManager
+
     @Override 
     public java.util.List<FaceBean> loadByPrimaryKey(int... keys){
         if(null == keys){
@@ -240,6 +251,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         return list;
     }
     //1.9 override IFaceManager
+
     @Override 
     public java.util.List<FaceBean> loadByPrimaryKey(java.util.Collection<Integer> keys){
         if(null == keys ){
@@ -261,6 +273,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         return list;
     }
     //2 override IFaceManager
+
     @Override 
     public int deleteByPrimaryKey(Integer id)
     {
@@ -274,6 +287,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
     }
     //2
+
     @Override
     public int delete(FaceBean bean){
         try
@@ -286,6 +300,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }   
     }
     //2.1
+
     @Override
     public int deleteByPrimaryKey(Object ...keys){
         if(null == keys){
@@ -300,6 +315,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         return deleteByPrimaryKey((Integer)keys[0]);
     }
     //2.2 override IFaceManager
+
     @Override 
     public int deleteByPrimaryKey(int... keys){
         int count = 0;
@@ -311,6 +327,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         return count;
     }
     //2.3 override IFaceManager
+
     @Override 
     public int deleteByPrimaryKey(java.util.Collection<Integer> keys){
         int count = 0;
@@ -322,6 +339,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         return count;
     }
     //2.4 override IFaceManager
+
     @Override 
     public int delete(FaceBean... beans){
         int count = 0;
@@ -333,6 +351,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         return count;
     }
     //2.5 override IFaceManager
+
     @Override 
     public int delete(java.util.Collection<FaceBean> beans){
         int count = 0;
@@ -428,12 +447,14 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
     //3.1 GET IMPORTED override IFaceManager
+
     @Override 
     public LogBean[] getLogBeansByCompareFace(FaceBean bean)
     {
         return this.getLogBeansByCompareFaceAsList(bean).toArray(new LogBean[0]);
     }
     //3.1.2 GET IMPORTED override IFaceManager
+
     @Override
     public LogBean[] getLogBeansByCompareFace(Integer idOfFace)
     {
@@ -442,12 +463,14 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         return getLogBeansByCompareFace(bean);
     }
     //3.2 GET IMPORTED override IFaceManager
+
     @Override 
     public java.util.List<LogBean> getLogBeansByCompareFaceAsList(FaceBean bean)
     {
         return getLogBeansByCompareFaceAsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IFaceManager
+
     @Override
     public java.util.List<LogBean> getLogBeansByCompareFaceAsList(Integer idOfFace)
     {
@@ -456,6 +479,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         return getLogBeansByCompareFaceAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IFaceManager
+
     @Override
     public int deleteLogBeansByCompareFace(Integer idOfFace)
     {
@@ -463,6 +487,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         return instanceOfLogManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IFaceManager
+
     @Override 
     public java.util.List<LogBean> getLogBeansByCompareFaceAsList(FaceBean bean,int startRow, int numRows)
     {
@@ -475,6 +500,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
     }
     //3.3 SET IMPORTED override IFaceManager
+
     @Override 
     public LogBean[] setLogBeansByCompareFace(FaceBean bean , LogBean[] importedBeans)
     {
@@ -487,6 +513,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     }
 
     //3.4 SET IMPORTED override IFaceManager
+
     @Override 
     public <C extends java.util.Collection<LogBean>> C setLogBeansByCompareFace(FaceBean bean , C importedBeans)
     {
@@ -501,6 +528,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
 
 
     //3.5 SYNC SAVE override IFaceManager
+
     @Override  
     public FaceBean save(FaceBean bean
         , FeatureBean refFeatureByFeatureMd5 , ImageBean refImageByImageMd5 
@@ -522,6 +550,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     } 
 
     //3.6 SYNC SAVE AS TRANSACTION override IFaceManager
+
     @Override 
     public FaceBean saveAsTransaction(final FaceBean bean
         ,final FeatureBean refFeatureByFeatureMd5 ,final ImageBean refImageByImageMd5 
@@ -534,6 +563,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
             }});
     }
     //3.7 SYNC SAVE override IFaceManager
+
     @Override 
     public FaceBean save(FaceBean bean
         , FeatureBean refFeatureByFeatureMd5 , ImageBean refImageByImageMd5 
@@ -551,6 +581,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     }   
 
     //3.8 SYNC SAVE AS TRANSACTION override IFaceManager
+
     @Override 
     public FaceBean saveAsTransaction(final FaceBean bean
         ,final FeatureBean refFeatureByFeatureMd5 ,final ImageBean refImageByImageMd5 
@@ -562,7 +593,8 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
                 return save(bean , refFeatureByFeatureMd5 , refImageByImageMd5 , impLogByCompareFace );
             }});
     }
-     /**
+     //3.9 SYNC SAVE 
+    /**
      * Save the {@link FaceBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FaceBean} bean to be saved
@@ -570,7 +602,6 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
      *      see also {@link #save(FaceBean , FeatureBean , ImageBean , LogBean[] )}
      * @return the inserted or updated {@link FaceBean} bean
      */
-    //3.9 SYNC SAVE 
     @Override
     public FaceBean save(FaceBean bean,Object ...args) 
     {
@@ -592,6 +623,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         return save(bean,(args.length < 1 || null == args[0])?null:(FeatureBean)args[0],(args.length < 2 || null == args[1])?null:(ImageBean)args[1],(args.length < 3 || null == args[2])?null:(LogBean[])args[2]);
     } 
 
+    //3.10 SYNC SAVE 
     /**
      * Save the {@link FaceBean} bean and referenced beans and imported beans into the database.
      *
@@ -600,7 +632,6 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
      *      see also {@link #save(FaceBean , FeatureBean , ImageBean , java.util.Collection )}
      * @return the inserted or updated {@link FaceBean} bean
      */
-    //3.10 SYNC SAVE 
     @SuppressWarnings("unchecked")
     @Override
     public FaceBean saveCollection(FaceBean bean,Object ...inputs)
@@ -681,6 +712,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
 
 
     //5.1 GET REFERENCED VALUE override IFaceManager
+
     @Override 
     public FeatureBean getReferencedByFeatureMd5(FaceBean bean)
     {
@@ -692,6 +724,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     }
 
     //5.2 SET REFERENCED override IFaceManager
+
     @Override 
     public FeatureBean setReferencedByFeatureMd5(FaceBean bean, FeatureBean beanToSet)
     {
@@ -711,6 +744,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     }
 
     //5.1 GET REFERENCED VALUE override IFaceManager
+
     @Override 
     public ImageBean getReferencedByImageMd5(FaceBean bean)
     {
@@ -722,6 +756,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     }
 
     //5.2 SET REFERENCED override IFaceManager
+
     @Override 
     public ImageBean setReferencedByImageMd5(FaceBean bean, ImageBean beanToSet)
     {
@@ -745,6 +780,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     //////////////////////////////////////
 
     //11
+
     @Override
     public int deleteByWhere(String where)
     {
@@ -763,6 +799,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     //_____________________________________________________________________
 
     //13
+
     @Override
     protected FaceBean insert(FaceBean bean)
     {
@@ -777,6 +814,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
 
     //14
     @Override
+
     protected FaceBean update(FaceBean bean)
     {
         try{
@@ -794,6 +832,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     //_____________________________________________________________________
     //18
     @Override
+
     public FaceBean loadUniqueUsingTemplate(FaceBean bean)
     {
         try{
@@ -806,6 +845,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
      }
     //18-1
     @Override
+
     public FaceBean loadUniqueUsingTemplateChecked(FaceBean bean) throws ObjectRetrievalException
     {
         try{
@@ -821,6 +861,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
      }
     //20-5
+
     @Override
     public int loadUsingTemplate(FaceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FaceBean> action)
     {
@@ -834,6 +875,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     }
 
     //21
+
     @Override
     public int deleteUsingTemplate(FaceBean bean)
     {
@@ -853,6 +895,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     //_____________________________________________________________________
 
      // override IFaceManager
+
     @Override 
     public FaceBean[] loadByIndexFeatureMd5(String featureMd5)
     {
@@ -860,6 +903,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     }
     
     // override IFaceManager
+
     @Override 
     public java.util.List<FaceBean> loadByIndexFeatureMd5AsList(String featureMd5)
     {
@@ -873,6 +917,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     }
 
     // override IFaceManager
+
     @Override 
     public int deleteByIndexFeatureMd5(String featureMd5)
     {
@@ -886,6 +931,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     }
     
      // override IFaceManager
+
     @Override 
     public FaceBean[] loadByIndexImageMd5(String imageMd5)
     {
@@ -893,6 +939,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     }
     
     // override IFaceManager
+
     @Override 
     public java.util.List<FaceBean> loadByIndexImageMd5AsList(String imageMd5)
     {
@@ -906,6 +953,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     }
 
     // override IFaceManager
+
     @Override 
     public int deleteByIndexImageMd5(String imageMd5)
     {
@@ -958,6 +1006,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     // COUNT
     //_____________________________________________________________________
     //25
+
     @Override
     public int countWhere(String where)
     {
@@ -971,6 +1020,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     }
 
     //20
+
     @Override
     public int countUsingTemplate(FaceBean bean, int searchType)
     {
@@ -989,10 +1039,10 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     // LISTENER
     //_____________________________________________________________________
 
+    //35
     /**
      * @return {@link WrapListener} instance
      */
-    //35
     @Override
     public TableListener<FaceBean> registerListener(TableListener<FaceBean> listener)
     {
@@ -1008,6 +1058,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     }
 
     //36
+
     @Override
     public void unregisterListener(TableListener<FaceBean> listener)
     {
@@ -1018,12 +1069,14 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     }
     
     //37
+
     @Override
     public void fire(TableListener.Event event, FaceBean bean){
         fire(event.ordinal(), bean);
     }
     
     //37-1
+
     @Override
     public void fire(int event, FaceBean bean){
         try{
@@ -1034,25 +1087,24 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
             throw new WrapDAOException(e);
         }
     }
+    //37-2
     /**
      * bind foreign key listener to foreign table for DELETE RULE
      */
-    //37-2
     void bindForeignKeyListenerForDeleteRule(){
         this.nativeManager.bindForeignKeyListenerForDeleteRule();
     }
+    //37-3
     /**
      * unbind foreign key listener from all of foreign tables <br>
      * @see #bindForeignKeyListenerForDeleteRule()
      */
-    //37-3
     void unbindForeignKeyListenerForDeleteRule(){
         this.nativeManager.unbindForeignKeyListenerForDeleteRule();
 
     }
     /**
      * wrap {@code TableListener<FaceBean>} as native listener
-     *
      */
     public class WrapListener implements TableListener<FaceBean>{
         private final TableListener<FaceBean> listener;
@@ -1132,6 +1184,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     //_____________________________________________________________________
 
     //43
+
     @Override
     public boolean isPrimaryKey(String column){
         return this.nativeManager.isPrimaryKey(column);
@@ -1177,25 +1230,27 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     }
     
     //45 override IFaceManager
+
     @Override 
-    public java.util.List<Integer> toPrimaryKeyList(FaceBean... array){        
-        if(null == array){
+    public java.util.List<Integer> toPrimaryKeyList(FaceBean... beans){        
+        if(null == beans){
             return new java.util.ArrayList<Integer>();
         }
-        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
-        for(FaceBean bean:array){
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(beans.length);
+        for(FaceBean bean:beans){
             list.add(null == bean ? null : bean.getId());
         }
         return list;
     }
     //46 override IFaceManager
+
     @Override 
-    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<FaceBean> collection){        
-        if(null == collection){
+    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<FaceBean> beans){        
+        if(null == beans){
             return new java.util.ArrayList<Integer>();
         }
-        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
-        for(FaceBean bean:collection){
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(beans.size());
+        for(FaceBean bean:beans){
             list.add(null == bean ? null : bean.getId());
         }
         return list;

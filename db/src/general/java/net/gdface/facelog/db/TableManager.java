@@ -39,21 +39,21 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
          * @return 
          */
         protected abstract Class<B> beanType();
+        //13
         /**
          * Insert the B bean into the database.
          * 
          * @param bean the B bean to be saved
          * @return the inserted bean
          */
-        //13
         protected abstract B insert(B bean);
+        //14
         /**
          * Update the B bean record in the database according to the changes.
          *
          * @param bean the B bean to be updated
          * @return the updated bean
          */
-        //14
         protected abstract B update(B bean);
         
         public class ListAction implements Action<B> {
@@ -300,8 +300,13 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
             return action.getList();
         }
         
-        @Override
-        public String createSelectSql(int[] fieldList, String where){
+        /**
+         * generate SQL query statement 
+         * @param fieldList
+         * @param where
+         * @return
+         */
+        protected String createSelectSql(int[] fieldList, String where){
             StringBuffer sql = new StringBuffer(128);
             String fullFields = this.getFullFields();
             if(null == fieldList || 0 == fieldList.length) {
@@ -463,36 +468,37 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      */   
     public String getFullFields();
     
+    //43
     /**
      * return true if @{code column}(case insensitive)is primary key,otherwise return false <br>
      * return false if @{code column} is null or empty 
      * @param column
      * @return
      */
-    //43
     public boolean isPrimaryKey(String column);
     
     //_____________________________________________________________________
     //
     // COUNT
     //_____________________________________________________________________
+    //24
     /**
      * Retrieves the number of rows of the table.
      *
      * @return the number of rows returned
      */
-    //24
     public int countAll();
     
+    //27
     /**
      * count the number of elements of a specific bean
      *
      * @param bean the bean to look for ant count
      * @return the number of rows returned
      */
-    //27
     public int countUsingTemplate( B bean);
   
+    //20
     /**
      * count the number of elements of a specific bean given the search type
      *
@@ -506,9 +512,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *                {@value Constant#SEARCH_ENDING_LIKE}   {@link Constant#SEARCH_ENDING_LIKE} <br>  
      * @return the number of rows returned
      */
-    //20
     public int countUsingTemplate(B bean, int searchType);
 
+    //25
     /**
      * Retrieves the number of rows of the table with a 'where' clause.
      * It is up to you to pass the 'WHERE' in your where clauses.
@@ -516,16 +522,16 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param where the restriction clause
      * @return the number of rows returned
      */
-    //25
     public int countWhere(String where);
 
+    //10
     /**
      * Deletes all rows from table.
      * @return the number of deleted rows.
      */
-    //10
     public int deleteAll();
 
+    //11
     /**
      * Deletes rows from the table using a 'where' clause.
      * It is up to you to pass the 'WHERE' in your where clauses.
@@ -534,18 +540,18 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param where the sql 'where' clause
      * @return the number of deleted rows
      */
-    //11
     public int deleteByWhere(String where);
 
+    //21
     /**
      * Deletes rows using a template.
      *
      * @param bean the template object(s) to be deleted
      * @return the number of deleted objects
      */
-    //21
     public int deleteUsingTemplate(B bean);
 
+    //2.1
     /**
      * Delete row according to its primary keys.
      *
@@ -573,16 +579,15 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @return the number of deleted rows
      * @see #delete(B)
      */   
-    //2.1
     public int deleteByPrimaryKey(Object ...keys);
 
+    //2.2
     /**
      * Delete row according to primary keys of bean.<br>
      * 
      * @param bean will be deleted ,all keys must not be null
      * @return the number of deleted rows,0 returned if bean is null
      */
-    //2.2
     public int delete(B bean);
 
 
@@ -590,22 +595,23 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
     // LOAD ALL
     //////////////////////////////////////
 
+    //5
     /**
      * Loads all the rows from table.
      *
      * @return an array of B bean
      */
-    //5
     public B[] loadAll();
 
+    //5-1    
     /**
      * Loads each row from table and dealt with action.
      * @param action  Action object for do something(not null)
      * @return the count dealt by action
      */
-    //5-1    
     public int loadAll(Action<B> action);
 
+    //6
     /**
      * Loads the given number of rows from table, given the start row.
      *
@@ -613,9 +619,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return an array of B bean
      */
-    //6
     public B[] loadAll(int startRow, int numRows);
 
+    //6-1    
     /**
      *  Loads the given number of rows from table, given the start row and dealt with action.
      * @param startRow the start row to be used (first row = 1, last row = -1)
@@ -623,17 +629,17 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param action  Action object for do something(not null)
      * @return the count dealt by action
      */
-    //6-1    
     public int loadAll(int startRow, int numRows,Action<B> action);
 
+    //5-2
     /**
      * Loads all the rows from table.
      *
      * @return a list of B bean
      */
-    //5-2
     public List<B> loadAllAsList();
 
+    //6-2
     /**
      * Loads the given number of rows from table, given the start row.
      *
@@ -641,24 +647,25 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return a list of B bean
      */
-    //6-2
     public List<B> loadAllAsList(int startRow, int numRows);
 
+    //1.2
     /**
      * Loads a B bean from the table using primary key fields of {@code bean}.
      * @param bean the B bean with primary key fields
      * @return a unique B or {@code null} if not found or bean is null
      */
-    //1.2
     public B loadByPrimaryKey(B bean);
     
+    //1.2.2
     /**
      * see also {@link loadByPrimaryKey(B)}
+     * @param bean
      * @return a unique B ,otherwise throw exception
      * @throws ObjectRetrievalException not found
      */
-    //1.2.2
     public B loadByPrimaryKeyChecked(B bean) throws ObjectRetrievalException;
+    //1.3
     /**
      * Loads a B bean from the table using primary key fields.
      * when you don't know which is primary key of table,you can use the method.
@@ -685,25 +692,27 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *          PK# 1 fl_store.md5 type String<br>
      * @return a unique B or {@code null} if not found
      */
-    //1.3
     public B loadByPrimaryKey(Object ...keys);
 
+    //1.3.2
     /**
      * see also {@link #loadByPrimaryKey(Object...)}
+     * @param keys
      * @return a unique B,otherwise throw exception
      * @throws ObjectRetrievalException not found
      */
-    //1.3.2
     public B loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException;
     
+    //1.5
     /**
      * Returns true if this table contains row with primary key fields.
-     * @param keys primary keys value:<br>
+     * @param keys primary keys value
      * @see #loadByPrimaryKey(Object...)
+     * @return 
      */
-    //1.5
     public boolean existsPrimaryKey(Object ...keys);
     
+    //1.6
     /**
      * Returns true if this table contains row specified by primary key fields of B.<br>
      * when you don't know which is primary key of table,you can use the method.
@@ -711,38 +720,39 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @return 
      * @see {@link #loadByPrimaryKey(B bean)}
      */
-    //1.6
     public boolean existsByPrimaryKey(B bean);
+    //1.7
     /**
      * Check duplicated row by primary keys,if row exists throw exception
      * @param bean the B bean with primary key fields
      * @return always bean
      * @see {@link #existsPrimaryKey(B bean)}
+     * @throws ObjectRetrievalException has duplicated record
      */
-    //1.7
     public B checkDuplicate(B bean) throws ObjectRetrievalException;
    
     //////////////////////////////////////
     // SQL 'WHERE' METHOD
     //////////////////////////////////////
+    //7 
     /**
      * Retrieves an array of B given a sql 'where' clause.
      *
      * @param where the sql 'where' clause
      * @return 
      */
-    //7 
     public B[] loadByWhere(String where);
     
+    //7-1
     /**
      * Retrieves each row of B bean given a sql 'where' clause and dealt with action.
      * @param where the sql 'where' clause
      * @param action  Action object for do something(not null)
      * @return the count dealt by action
      */
-    //7-1
     public int loadByWhere(String where,Action<B> action);
 
+    //8
     /**
      * Retrieves an array of B bean given a sql where clause, and a list of fields.
      * It is up to you to pass the 'WHERE' in your where clauses.
@@ -751,9 +761,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param fieldList array of field's ID
      * @return 
      */
-    //8
     public B[] loadByWhere(String where, int[] fieldList);
    
+    //8-1 
     /**
      * Retrieves each row of B bean given a sql where clause, and a list of fields,
      * and dealt with action.
@@ -763,9 +773,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param action Action object for do something(not null)
      * @return the count dealt by action
      */
-    //8-1 
     public int loadByWhere(String where, int[] fieldList,Action<B> action);
 
+    //9
     /**
      * Retrieves an array of B bean given a sql where clause and a list of fields, and startRow and numRows.
      * It is up to you to pass the 'WHERE' in your where clauses.
@@ -776,12 +786,12 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return 
      */
-    //9
     public B[] loadByWhere(String where, int[] fieldList, int startRow, int numRows);
 
+    //9-1    
     /**
      * Retrieves each row of B bean given a sql where clause and a list of fields, and startRow and numRows,
-     * and dealt wity action.
+     * and dealt with action.
      * It is up to you to pass the 'WHERE' in your where clauses.
      *
      * @param where the sql 'where' clause
@@ -791,17 +801,17 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param action Action object for do something(not null)
      * @return the count dealt by action
      */
-    //9-1    
     public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<B> action);
+    //7
     /**
      * Retrieves a list of B bean given a sql 'where' clause.
      *
      * @param where the sql 'where' clause
      * @return
      */
-    //7
     public List<B> loadByWhereAsList(String where);
 
+    //8
     /**
      * Retrieves a list of B bean given a sql where clause, and a list of fields.
      * It is up to you to pass the 'WHERE' in your where clauses.
@@ -810,9 +820,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param fieldList array of field's ID
      * @return
      */
-    //8
     public List<B> loadByWhereAsList(String where, int[] fieldList);
     
+    //9-2
     /**
      * Retrieves a list of B bean given a sql where clause and a list of fields, and startRow and numRows.
      * It is up to you to pass the 'WHERE' in your where clauses.
@@ -823,9 +833,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return
      */
-    //9-2
     public List<B> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows);
 
+    //9-3
     /**
      * Retrieves each row of B bean given a sql where clause and a list of fields, and startRow and numRows,
      * and dealt wity action
@@ -838,13 +848,13 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param action Action object for do something(not null)
      * @return the count dealt by action
      */
-    //9-3
     public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<B> action);
 
     //_____________________________________________________________________
     //
     // USING TEMPLATE
     //_____________________________________________________________________
+    //18   
     /**
      * Loads a unique B bean from a template one giving a c
      *
@@ -852,9 +862,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @return the bean matching the template,or {@code null} if not found or null input argument
      * @throws ObjectRetrievalException more than one row
      */
-    //18   
     public B loadUniqueUsingTemplate(B bean);
 
+    //18-1
     /**
      * Loads a unique B bean from a template one giving a c
      *
@@ -862,18 +872,18 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @return the bean matching the template
      * @throws ObjectRetrievalException not found or more than one row
      */
-    //18-1
     public B loadUniqueUsingTemplateChecked(B bean) throws ObjectRetrievalException;
 
+    //19
     /**
      * Loads an array of B from a template one.
      *
      * @param bean the B bean template to look for
      * @return all the B beans matching the template
      */
-    //19
     public B[] loadUsingTemplate(B bean);
     
+    //19-1
     /**
      * Loads each row from a template one and dealt with action.
      *
@@ -881,9 +891,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param action Action object for do something(not null)
      * @return the count dealt by action
      */
-    //19-1
     public int loadUsingTemplate(B bean,Action<B> action);
 
+    //20
     /**
      * Loads an array of B bean from a template one, given the start row and number of rows.
      *
@@ -892,9 +902,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return all the B matching the template
      */
-    //20
     public B[] loadUsingTemplate(B bean, int startRow, int numRows);
     
+    //20-1
     /**
      * Loads each row from a template one, given the start row and number of rows and dealt with action.
      *
@@ -904,9 +914,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param action Action object for do something(not null)
      * @return the count dealt by action
      */
-    //20-1
     public int loadUsingTemplate(B bean, int startRow, int numRows,Action<B> action);
 
+    //20-5
     /**
      * Loads each row from a template one, given the start row and number of rows and dealt with action.
      *
@@ -922,8 +932,8 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param action Action object for do something(not null)
      * @return the count dealt by action
      */
-    //20-5
     public int loadUsingTemplate(B bean, int[] fieldList, int startRow, int numRows,int searchType, Action<B> action);
+    //20-4
     /**
      * Loads a list of B bean from a template one, given the start row and number of rows.
      *
@@ -937,18 +947,18 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *                {@value Constant#SEARCH_ENDING_LIKE}   {@link Constant#SEARCH_ENDING_LIKE} <br>  
      * @return all the B bean matching the template
      */
-    //20-4
     public B[] loadUsingTemplate(B bean, int startRow, int numRows, int searchType);
 
+    //19-2
     /**
      * Loads a list of B bean from a template one.
      *
      * @param bean the B bean template to look for
      * @return all the B beans matching the template
      */
-    //19-2
     public List<B> loadUsingTemplateAsList(B bean);
 
+    //20-2
     /**
      * Loads a list of B bean from a template one, given the start row and number of rows.
      *
@@ -957,9 +967,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return all the B bean matching the template
      */
-    //20-2
     public List<B> loadUsingTemplateAsList(B bean, int startRow, int numRows);
 
+    //20-3
     /**
      * Loads an array of B bean from a template one, given the start row and number of rows.
      *
@@ -973,7 +983,6 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *                {@value Constant#SEARCH_ENDING_LIKE}   {@link Constant#SEARCH_ENDING_LIKE} <br>  
      * @return all the B beans matching the template
      */
-    //20-3
     public List<B> loadUsingTemplateAsList(B bean, int startRow, int numRows, int searchType);
 
     //_____________________________________________________________________
@@ -1025,62 +1034,70 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
     // LISTENER
     //_____________________________________________________________________
 
+    //35
     /**
      * Registers a unique {@link TableListener} listener.<br>
      * do nothing if {@code TableListener} instance exists
+     * @param listener
+     * @return 
      */
-    //35
     public TableListener<B> registerListener(TableListener<B> listener);
 
+    //36
     /**
      * remove listener.
+     * @param listener 
      */
-    //36
     public void unregisterListener(TableListener<B> listener);
 
-    /**
-     * @see {@link TableListener.Event#fire(TableListener.ListenerContainer, Object)}
-     */
     //37
+    /**
+     * see also {@link TableListener.Event#fire(TableListener.ListenerContainer, Object)}
+     * @param event
+     * @param bean
+     */
     public void fire(TableListener.Event event, B bean) ;
     
+    //37-1
     /**
-     * @see #fire(TableListener.Event, B)
+     * see also #fire(TableListener.Event, B)
+     * @param event 
+     * @param bean
      * @throws IllegalArgumentException invalid event id
      */
-    //37-1
     public void fire(int event, B bean) ;
     //_____________________________________________________________________
     //
     // SAVE
     //_____________________________________________________________________
+    //12
     /**
      * Saves the B bean into the database.
      *
      * @param bean the B bean to be saved
      * @return the inserted or updated bean,or null if bean is null
      */
-    //12
     public B save(B bean);
 
+    //15
     /**
      * Saves an array of B bean into the database.
      *
      * @param beans the array of  B bean to be saved
-     * @return alwarys beans saved
+     * @return always beans saved
      */
-    //15
     public B[] save(B[] beans);
     
+    //15-2
     /**
      * Saves a collection of B bean into the database.
      *
      * @param beans the B bean table to be saved
      * @return alwarys beans saved
      */
-    //15-2
     public <C extends Collection<B>> C saveAsTransaction(C beans);
     
+    //15-3
     /**
      * Saves an array of B bean into the database as transaction.
      *
@@ -1088,18 +1105,18 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @return alwarys beans saved
      * @see #save(B[])
      */
-    //15-3
     public B[] saveAsTransaction(B[] beans);
 
+    //15-4
     /**
      * Saves a collection of B bean into the database as transaction.
      *
      * @param beans the B bean table to be saved
      * @return alwarys beans saved
      */
-    //15-4
     public <C extends Collection<B>> C save(C beans);
 
+    //3.9 SYNC SAVE 
     /**
      * Save the B bean and referenced beans and imported beans (array) into the database.
      *
@@ -1125,9 +1142,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
                 {@code  PersonGroupBean PermitBean[] PersonBean[] PersonGroupBean[]}<br>
      * @return the inserted or updated B bean
       */
-    //3.9 SYNC SAVE 
     public B save(B bean,Object ...args);
     
+    //3.10 SYNC SAVE 
     /**
      * Save the B bean and referenced beans and imported beans (collection) into the database.
      *
@@ -1153,9 +1170,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
                 {@code  PersonGroupBean Collection<PermitBean> Collection<PersonBean> Collection<PersonGroupBean>}<br>
      * @return the inserted or updated B bean
      */
-    //3.10 SYNC SAVE 
     public B saveCollection(B bean,Object ...args);
     
+    //3.11 SYNC SAVE 
     /**
      *  Transaction version for sync save
      * @see #save(B ,Object ...)
@@ -1163,9 +1180,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param args referenced beans or imported beans<br>
      * @return the inserted or updated B bean
      */
-    //3.11 SYNC SAVE 
     public B saveAsTransaction(B bean,Object ...args);
     
+    //3.12 SYNC SAVE 
     /**
      *  Transaction version for sync save
      * @see #saveCollection(B ,Object ...)
@@ -1173,7 +1190,6 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param args referenced beans or imported beans<br>
      * @return the inserted or updated B bean
      */
-    //3.12 SYNC SAVE 
     public B saveCollectionAsTransaction(B bean,Object ...args);
         
     /**
@@ -1371,12 +1387,12 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
     public <T extends BaseBean<T>> List<T> getImportedBeansAsList(B bean,int ikIndex);
     
     /**
-     * Set the importedBeans associates to the bean by fkIndex<br>
+     * Set the importedBeans associates to the bean by {@code ikIndex}<br>
      * 
      * @param <T> see also {@link #getImportedBeans(B, int)}
      * @param bean the bean object to use
      * @param importedBeans the T object to associate to bean
-     * @param fkIndex foreign key name.see also {@link #getImportedBeans(B, int)}
+     * @param ikIndex foreign key name.see also {@link #getImportedBeans(B, int)}
      * @return importedBeans always
      */
     public <T extends BaseBean<T>> T[] setImportedBeans(B bean,T[] importedBeans,int ikIndex);
@@ -1387,10 +1403,8 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param <T> see also {@link #getImportedBeans(B, int)}
      * @param bean the bean object to use
      * @param importedBeans the T object to associate to bean
-     * @param fkIndex foreign key name. see also {@link #getImportedBeans(B, int)}
+     * @param ikIndex foreign key name. see also {@link #getImportedBeans(B, int)}
      * @return importedBeans always
      */
     public <T extends BaseBean<T>,C extends Collection<T>> C setImportedBeans(B bean,C importedBeans,int ikIndex);
-    
-    public String createSelectSql(int[] fieldList,String where);
 }

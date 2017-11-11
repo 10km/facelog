@@ -112,6 +112,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
     //////////////////////////////////////
 
     //1 override IStoreManager
+
     @Override 
     public StoreBean loadByPrimaryKey(String md5)
     {
@@ -123,6 +124,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         }
     }
     //1.1 override IStoreManager
+
     @Override
     public StoreBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException
     {
@@ -135,6 +137,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         }
     }
     //1.2
+
     @Override
     public StoreBean loadByPrimaryKey(StoreBean bean)
     {
@@ -142,6 +145,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
     }
 
     //1.2.2
+
     @Override
     public StoreBean loadByPrimaryKeyChecked(StoreBean bean) throws ObjectRetrievalException
     {
@@ -152,6 +156,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
     }
     
     //1.3
+
     @Override
     public StoreBean loadByPrimaryKey(Object ...keys){
         try{
@@ -163,6 +168,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
     }
     
     //1.3.2
+
     @Override
     public StoreBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
         if(null == keys){
@@ -179,6 +185,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
     }
 
     //1.4 override IStoreManager
+
     @Override 
     public boolean existsPrimaryKey(String md5)
     {
@@ -191,12 +198,14 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         }
     }
     //1.6
+
     @Override
     public boolean existsByPrimaryKey(StoreBean bean)
     {
         return null == bean ? false : existsPrimaryKey(bean.getMd5());
     }
     //1.7
+
     @Override
     public StoreBean checkDuplicate(StoreBean bean)throws ObjectRetrievalException{
         if(null != bean){
@@ -205,6 +214,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         return bean;   
     }
     //1.4.1 override IStoreManager
+
     @Override 
     public String checkDuplicate(String md5)throws ObjectRetrievalException{
         try{
@@ -216,6 +226,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         }
     }
     //1.8 override IStoreManager
+
     @Override 
     public java.util.List<StoreBean> loadByPrimaryKey(String... keys){
         if(null == keys){
@@ -228,6 +239,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         return list;
     }
     //1.9 override IStoreManager
+
     @Override 
     public java.util.List<StoreBean> loadByPrimaryKey(java.util.Collection<String> keys){
         if(null == keys ){
@@ -249,6 +261,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         return list;
     }
     //2 override IStoreManager
+
     @Override 
     public int deleteByPrimaryKey(String md5)
     {
@@ -262,6 +275,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         }
     }
     //2
+
     @Override
     public int delete(StoreBean bean){
         try
@@ -274,6 +288,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         }   
     }
     //2.1
+
     @Override
     public int deleteByPrimaryKey(Object ...keys){
         if(null == keys){
@@ -288,6 +303,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         return deleteByPrimaryKey((String)keys[0]);
     }
     //2.2 override IStoreManager
+
     @Override 
     public int deleteByPrimaryKey(String... keys){
         int count = 0;
@@ -299,6 +315,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         return count;
     }
     //2.3 override IStoreManager
+
     @Override 
     public int deleteByPrimaryKey(java.util.Collection<String> keys){
         int count = 0;
@@ -310,6 +327,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         return count;
     }
     //2.4 override IStoreManager
+
     @Override 
     public int delete(StoreBean... beans){
         int count = 0;
@@ -321,6 +339,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         return count;
     }
     //2.5 override IStoreManager
+
     @Override 
     public int delete(java.util.Collection<StoreBean> beans){
         int count = 0;
@@ -342,6 +361,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
     //////////////////////////////////////
 
     //11
+
     @Override
     public int deleteByWhere(String where)
     {
@@ -360,6 +380,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
     //_____________________________________________________________________
 
     //13
+
     @Override
     protected StoreBean insert(StoreBean bean)
     {
@@ -374,6 +395,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
 
     //14
     @Override
+
     protected StoreBean update(StoreBean bean)
     {
         try{
@@ -391,6 +413,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
     //_____________________________________________________________________
     //18
     @Override
+
     public StoreBean loadUniqueUsingTemplate(StoreBean bean)
     {
         try{
@@ -403,6 +426,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
      }
     //18-1
     @Override
+
     public StoreBean loadUniqueUsingTemplateChecked(StoreBean bean) throws ObjectRetrievalException
     {
         try{
@@ -418,6 +442,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         }
      }
     //20-5
+
     @Override
     public int loadUsingTemplate(StoreBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<StoreBean> action)
     {
@@ -431,6 +456,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
     }
 
     //21
+
     @Override
     public int deleteUsingTemplate(StoreBean bean)
     {
@@ -449,6 +475,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
     // COUNT
     //_____________________________________________________________________
     //25
+
     @Override
     public int countWhere(String where)
     {
@@ -462,6 +489,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
     }
 
     //20
+
     @Override
     public int countUsingTemplate(StoreBean bean, int searchType)
     {
@@ -480,10 +508,10 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
     // LISTENER
     //_____________________________________________________________________
 
+    //35
     /**
      * @return {@link WrapListener} instance
      */
-    //35
     @Override
     public TableListener<StoreBean> registerListener(TableListener<StoreBean> listener)
     {
@@ -499,6 +527,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
     }
 
     //36
+
     @Override
     public void unregisterListener(TableListener<StoreBean> listener)
     {
@@ -509,12 +538,14 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
     }
     
     //37
+
     @Override
     public void fire(TableListener.Event event, StoreBean bean){
         fire(event.ordinal(), bean);
     }
     
     //37-1
+
     @Override
     public void fire(int event, StoreBean bean){
         try{
@@ -525,25 +556,24 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
             throw new WrapDAOException(e);
         }
     }
+    //37-2
     /**
      * bind foreign key listener to foreign table for DELETE RULE
      */
-    //37-2
     void bindForeignKeyListenerForDeleteRule(){
         this.nativeManager.bindForeignKeyListenerForDeleteRule();
     }
+    //37-3
     /**
      * unbind foreign key listener from all of foreign tables <br>
      * @see #bindForeignKeyListenerForDeleteRule()
      */
-    //37-3
     void unbindForeignKeyListenerForDeleteRule(){
         this.nativeManager.unbindForeignKeyListenerForDeleteRule();
 
     }
     /**
      * wrap {@code TableListener<StoreBean>} as native listener
-     *
      */
     public class WrapListener implements TableListener<StoreBean>{
         private final TableListener<StoreBean> listener;
@@ -623,6 +653,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
     //_____________________________________________________________________
 
     //43
+
     @Override
     public boolean isPrimaryKey(String column){
         return this.nativeManager.isPrimaryKey(column);
@@ -668,25 +699,27 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
     }
     
     //45 override IStoreManager
+
     @Override 
-    public java.util.List<String> toPrimaryKeyList(StoreBean... array){        
-        if(null == array){
+    public java.util.List<String> toPrimaryKeyList(StoreBean... beans){        
+        if(null == beans){
             return new java.util.ArrayList<String>();
         }
-        java.util.ArrayList<String> list = new java.util.ArrayList<String>(array.length);
-        for(StoreBean bean:array){
+        java.util.ArrayList<String> list = new java.util.ArrayList<String>(beans.length);
+        for(StoreBean bean:beans){
             list.add(null == bean ? null : bean.getMd5());
         }
         return list;
     }
     //46 override IStoreManager
+
     @Override 
-    public java.util.List<String> toPrimaryKeyList(java.util.Collection<StoreBean> collection){        
-        if(null == collection){
+    public java.util.List<String> toPrimaryKeyList(java.util.Collection<StoreBean> beans){        
+        if(null == beans){
             return new java.util.ArrayList<String>();
         }
-        java.util.ArrayList<String> list = new java.util.ArrayList<String>(collection.size());
-        for(StoreBean bean:collection){
+        java.util.ArrayList<String> list = new java.util.ArrayList<String>(beans.size());
+        for(StoreBean bean:beans){
             list.add(null == bean ? null : bean.getMd5());
         }
         return list;

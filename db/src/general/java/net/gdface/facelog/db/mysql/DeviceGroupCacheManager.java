@@ -95,6 +95,7 @@ public class DeviceGroupCacheManager extends DeviceGroupManager
     //////////////////////////////////////
 
     //1.1 override IDeviceGroupManager
+
     @Override 
     public DeviceGroupBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
@@ -130,6 +131,7 @@ public class DeviceGroupCacheManager extends DeviceGroupManager
         }
     }
     //1.4 override IDeviceGroupManager
+
     @Override 
     public boolean existsPrimaryKey(Integer id){
         return null != loadByPrimaryKey(id);
@@ -152,6 +154,7 @@ public class DeviceGroupCacheManager extends DeviceGroupManager
         }
     }
     //20-5
+
     @Override
     public int loadUsingTemplate(DeviceGroupBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<DeviceGroupBean> action){
         if(null == fieldList ){
@@ -180,6 +183,7 @@ public class DeviceGroupCacheManager extends DeviceGroupManager
     //_____________________________________________________________________
     //23 MANY TO MANY
     // override DeviceGroupManager
+
     @Override 
     public java.util.List<DeviceGroupBean> loadViaPermitAsList(PersonGroupBean bean, int startRow, int numRows)
     {

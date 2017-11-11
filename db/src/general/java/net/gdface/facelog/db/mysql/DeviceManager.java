@@ -124,6 +124,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     //////////////////////////////////////
 
     //1 override IDeviceManager
+
     @Override 
     public DeviceBean loadByPrimaryKey(Integer id)
     {
@@ -135,6 +136,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
     }
     //1.1 override IDeviceManager
+
     @Override
     public DeviceBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
@@ -147,6 +149,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
     }
     //1.2
+
     @Override
     public DeviceBean loadByPrimaryKey(DeviceBean bean)
     {
@@ -154,6 +157,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }
 
     //1.2.2
+
     @Override
     public DeviceBean loadByPrimaryKeyChecked(DeviceBean bean) throws ObjectRetrievalException
     {
@@ -164,6 +168,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }
     
     //1.3
+
     @Override
     public DeviceBean loadByPrimaryKey(Object ...keys){
         try{
@@ -175,6 +180,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }
     
     //1.3.2
+
     @Override
     public DeviceBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
         if(null == keys){
@@ -191,6 +197,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }
 
     //1.4 override IDeviceManager
+
     @Override 
     public boolean existsPrimaryKey(Integer id)
     {
@@ -203,12 +210,14 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
     }
     //1.6
+
     @Override
     public boolean existsByPrimaryKey(DeviceBean bean)
     {
         return null == bean ? false : existsPrimaryKey(bean.getId());
     }
     //1.7
+
     @Override
     public DeviceBean checkDuplicate(DeviceBean bean)throws ObjectRetrievalException{
         if(null != bean){
@@ -217,6 +226,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return bean;   
     }
     //1.4.1 override IDeviceManager
+
     @Override 
     public Integer checkDuplicate(Integer id)throws ObjectRetrievalException{
         try{
@@ -228,6 +238,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
     }
     //1.8 override IDeviceManager
+
     @Override 
     public java.util.List<DeviceBean> loadByPrimaryKey(int... keys){
         if(null == keys){
@@ -240,6 +251,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return list;
     }
     //1.9 override IDeviceManager
+
     @Override 
     public java.util.List<DeviceBean> loadByPrimaryKey(java.util.Collection<Integer> keys){
         if(null == keys ){
@@ -261,6 +273,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return list;
     }
     //2 override IDeviceManager
+
     @Override 
     public int deleteByPrimaryKey(Integer id)
     {
@@ -274,6 +287,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
     }
     //2
+
     @Override
     public int delete(DeviceBean bean){
         try
@@ -286,6 +300,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }   
     }
     //2.1
+
     @Override
     public int deleteByPrimaryKey(Object ...keys){
         if(null == keys){
@@ -300,6 +315,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return deleteByPrimaryKey((Integer)keys[0]);
     }
     //2.2 override IDeviceManager
+
     @Override 
     public int deleteByPrimaryKey(int... keys){
         int count = 0;
@@ -311,6 +327,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return count;
     }
     //2.3 override IDeviceManager
+
     @Override 
     public int deleteByPrimaryKey(java.util.Collection<Integer> keys){
         int count = 0;
@@ -322,6 +339,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return count;
     }
     //2.4 override IDeviceManager
+
     @Override 
     public int delete(DeviceBean... beans){
         int count = 0;
@@ -333,6 +351,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return count;
     }
     //2.5 override IDeviceManager
+
     @Override 
     public int delete(java.util.Collection<DeviceBean> beans){
         int count = 0;
@@ -437,12 +456,14 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
     //3.1 GET IMPORTED override IDeviceManager
+
     @Override 
     public ImageBean[] getImageBeansByDeviceId(DeviceBean bean)
     {
         return this.getImageBeansByDeviceIdAsList(bean).toArray(new ImageBean[0]);
     }
     //3.1.2 GET IMPORTED override IDeviceManager
+
     @Override
     public ImageBean[] getImageBeansByDeviceId(Integer idOfDevice)
     {
@@ -451,12 +472,14 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return getImageBeansByDeviceId(bean);
     }
     //3.2 GET IMPORTED override IDeviceManager
+
     @Override 
     public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(DeviceBean bean)
     {
         return getImageBeansByDeviceIdAsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IDeviceManager
+
     @Override
     public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(Integer idOfDevice)
     {
@@ -465,6 +488,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return getImageBeansByDeviceIdAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IDeviceManager
+
     @Override
     public int deleteImageBeansByDeviceId(Integer idOfDevice)
     {
@@ -472,6 +496,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return instanceOfImageManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IDeviceManager
+
     @Override 
     public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(DeviceBean bean,int startRow, int numRows)
     {
@@ -484,6 +509,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
     }
     //3.3 SET IMPORTED override IDeviceManager
+
     @Override 
     public ImageBean[] setImageBeansByDeviceId(DeviceBean bean , ImageBean[] importedBeans)
     {
@@ -496,6 +522,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }
 
     //3.4 SET IMPORTED override IDeviceManager
+
     @Override 
     public <C extends java.util.Collection<ImageBean>> C setImageBeansByDeviceId(DeviceBean bean , C importedBeans)
     {
@@ -508,12 +535,14 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }
 
     //3.1 GET IMPORTED override IDeviceManager
+
     @Override 
     public LogBean[] getLogBeansByDeviceId(DeviceBean bean)
     {
         return this.getLogBeansByDeviceIdAsList(bean).toArray(new LogBean[0]);
     }
     //3.1.2 GET IMPORTED override IDeviceManager
+
     @Override
     public LogBean[] getLogBeansByDeviceId(Integer idOfDevice)
     {
@@ -522,12 +551,14 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return getLogBeansByDeviceId(bean);
     }
     //3.2 GET IMPORTED override IDeviceManager
+
     @Override 
     public java.util.List<LogBean> getLogBeansByDeviceIdAsList(DeviceBean bean)
     {
         return getLogBeansByDeviceIdAsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IDeviceManager
+
     @Override
     public java.util.List<LogBean> getLogBeansByDeviceIdAsList(Integer idOfDevice)
     {
@@ -536,6 +567,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return getLogBeansByDeviceIdAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IDeviceManager
+
     @Override
     public int deleteLogBeansByDeviceId(Integer idOfDevice)
     {
@@ -543,6 +575,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return instanceOfLogManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IDeviceManager
+
     @Override 
     public java.util.List<LogBean> getLogBeansByDeviceIdAsList(DeviceBean bean,int startRow, int numRows)
     {
@@ -555,6 +588,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
     }
     //3.3 SET IMPORTED override IDeviceManager
+
     @Override 
     public LogBean[] setLogBeansByDeviceId(DeviceBean bean , LogBean[] importedBeans)
     {
@@ -567,6 +601,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }
 
     //3.4 SET IMPORTED override IDeviceManager
+
     @Override 
     public <C extends java.util.Collection<LogBean>> C setLogBeansByDeviceId(DeviceBean bean , C importedBeans)
     {
@@ -581,6 +616,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
 
 
     //3.5 SYNC SAVE override IDeviceManager
+
     @Override  
     public DeviceBean save(DeviceBean bean
         , DeviceGroupBean refDevicegroupByGroupId 
@@ -601,6 +637,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     } 
 
     //3.6 SYNC SAVE AS TRANSACTION override IDeviceManager
+
     @Override 
     public DeviceBean saveAsTransaction(final DeviceBean bean
         ,final DeviceGroupBean refDevicegroupByGroupId 
@@ -613,6 +650,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
             }});
     }
     //3.7 SYNC SAVE override IDeviceManager
+
     @Override 
     public DeviceBean save(DeviceBean bean
         , DeviceGroupBean refDevicegroupByGroupId 
@@ -631,6 +669,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }   
 
     //3.8 SYNC SAVE AS TRANSACTION override IDeviceManager
+
     @Override 
     public DeviceBean saveAsTransaction(final DeviceBean bean
         ,final DeviceGroupBean refDevicegroupByGroupId 
@@ -642,7 +681,8 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
                 return save(bean , refDevicegroupByGroupId , impImageByDeviceId , impLogByDeviceId );
             }});
     }
-     /**
+     //3.9 SYNC SAVE 
+    /**
      * Save the {@link DeviceBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link DeviceBean} bean to be saved
@@ -650,7 +690,6 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
      *      see also {@link #save(DeviceBean , DeviceGroupBean , ImageBean[] , LogBean[] )}
      * @return the inserted or updated {@link DeviceBean} bean
      */
-    //3.9 SYNC SAVE 
     @Override
     public DeviceBean save(DeviceBean bean,Object ...args) 
     {
@@ -672,6 +711,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return save(bean,(args.length < 1 || null == args[0])?null:(DeviceGroupBean)args[0],(args.length < 2 || null == args[1])?null:(ImageBean[])args[1],(args.length < 3 || null == args[2])?null:(LogBean[])args[2]);
     } 
 
+    //3.10 SYNC SAVE 
     /**
      * Save the {@link DeviceBean} bean and referenced beans and imported beans into the database.
      *
@@ -680,7 +720,6 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
      *      see also {@link #save(DeviceBean , DeviceGroupBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link DeviceBean} bean
      */
-    //3.10 SYNC SAVE 
     @SuppressWarnings("unchecked")
     @Override
     public DeviceBean saveCollection(DeviceBean bean,Object ...inputs)
@@ -756,6 +795,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
 
 
     //5.1 GET REFERENCED VALUE override IDeviceManager
+
     @Override 
     public DeviceGroupBean getReferencedByGroupId(DeviceBean bean)
     {
@@ -767,6 +807,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }
 
     //5.2 SET REFERENCED override IDeviceManager
+
     @Override 
     public DeviceGroupBean setReferencedByGroupId(DeviceBean bean, DeviceGroupBean beanToSet)
     {
@@ -790,6 +831,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     //////////////////////////////////////
 
     //11
+
     @Override
     public int deleteByWhere(String where)
     {
@@ -808,6 +850,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     //_____________________________________________________________________
 
     //13
+
     @Override
     protected DeviceBean insert(DeviceBean bean)
     {
@@ -822,6 +865,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
 
     //14
     @Override
+
     protected DeviceBean update(DeviceBean bean)
     {
         try{
@@ -839,6 +883,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     //_____________________________________________________________________
     //18
     @Override
+
     public DeviceBean loadUniqueUsingTemplate(DeviceBean bean)
     {
         try{
@@ -851,6 +896,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
      }
     //18-1
     @Override
+
     public DeviceBean loadUniqueUsingTemplateChecked(DeviceBean bean) throws ObjectRetrievalException
     {
         try{
@@ -866,6 +912,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
      }
     //20-5
+
     @Override
     public int loadUsingTemplate(DeviceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<DeviceBean> action)
     {
@@ -879,6 +926,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }
 
     //21
+
     @Override
     public int deleteUsingTemplate(DeviceBean bean)
     {
@@ -898,6 +946,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     //_____________________________________________________________________
 
     // override IDeviceManager
+
     @Override 
     public DeviceBean loadByIndexMac(String mac){
         try{
@@ -907,6 +956,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
     }
     // override IDeviceManager
+
     @Override 
     public DeviceBean loadByIndexMacChecked(String mac)throws ObjectRetrievalException{
         if(null == mac){
@@ -919,6 +969,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return loadUniqueUsingTemplateChecked(bean);
     }
     // override IDeviceManager
+
     @Override 
     public java.util.List<DeviceBean> loadByIndexMac(String... indexs)
     {
@@ -932,6 +983,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return list;
     }
     // override IDeviceManager
+
     @Override 
     public java.util.List<DeviceBean> loadByIndexMac(java.util.Collection<String> indexs)
     {
@@ -954,6 +1006,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return list;
     }
     // override IDeviceManager
+
     @Override 
     public int deleteByIndexMac(String... indexs)
     {
@@ -966,6 +1019,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return count;
     }
     // override IDeviceManager
+
     @Override 
     public int deleteByIndexMac(java.util.Collection<String> indexs)
     {
@@ -979,6 +1033,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }
 
     // override IDeviceManager
+
     @Override 
     public int deleteByIndexMac(String mac)
     {
@@ -992,6 +1047,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }
     
     // override IDeviceManager
+
     @Override 
     public DeviceBean loadByIndexSerialNo(String serialNo){
         try{
@@ -1001,6 +1057,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
     }
     // override IDeviceManager
+
     @Override 
     public DeviceBean loadByIndexSerialNoChecked(String serialNo)throws ObjectRetrievalException{
         if(null == serialNo){
@@ -1013,6 +1070,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return loadUniqueUsingTemplateChecked(bean);
     }
     // override IDeviceManager
+
     @Override 
     public java.util.List<DeviceBean> loadByIndexSerialNo(String... indexs)
     {
@@ -1026,6 +1084,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return list;
     }
     // override IDeviceManager
+
     @Override 
     public java.util.List<DeviceBean> loadByIndexSerialNo(java.util.Collection<String> indexs)
     {
@@ -1048,6 +1107,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return list;
     }
     // override IDeviceManager
+
     @Override 
     public int deleteByIndexSerialNo(String... indexs)
     {
@@ -1060,6 +1120,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         return count;
     }
     // override IDeviceManager
+
     @Override 
     public int deleteByIndexSerialNo(java.util.Collection<String> indexs)
     {
@@ -1073,6 +1134,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }
 
     // override IDeviceManager
+
     @Override 
     public int deleteByIndexSerialNo(String serialNo)
     {
@@ -1086,6 +1148,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }
     
      // override IDeviceManager
+
     @Override 
     public DeviceBean[] loadByIndexGroupId(Integer groupId)
     {
@@ -1093,6 +1156,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }
     
     // override IDeviceManager
+
     @Override 
     public java.util.List<DeviceBean> loadByIndexGroupIdAsList(Integer groupId)
     {
@@ -1106,6 +1170,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }
 
     // override IDeviceManager
+
     @Override 
     public int deleteByIndexGroupId(Integer groupId)
     {
@@ -1158,6 +1223,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     // COUNT
     //_____________________________________________________________________
     //25
+
     @Override
     public int countWhere(String where)
     {
@@ -1171,6 +1237,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }
 
     //20
+
     @Override
     public int countUsingTemplate(DeviceBean bean, int searchType)
     {
@@ -1189,10 +1256,10 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     // LISTENER
     //_____________________________________________________________________
 
+    //35
     /**
      * @return {@link WrapListener} instance
      */
-    //35
     @Override
     public TableListener<DeviceBean> registerListener(TableListener<DeviceBean> listener)
     {
@@ -1208,6 +1275,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }
 
     //36
+
     @Override
     public void unregisterListener(TableListener<DeviceBean> listener)
     {
@@ -1218,12 +1286,14 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }
     
     //37
+
     @Override
     public void fire(TableListener.Event event, DeviceBean bean){
         fire(event.ordinal(), bean);
     }
     
     //37-1
+
     @Override
     public void fire(int event, DeviceBean bean){
         try{
@@ -1234,25 +1304,24 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
             throw new WrapDAOException(e);
         }
     }
+    //37-2
     /**
      * bind foreign key listener to foreign table for DELETE RULE
      */
-    //37-2
     void bindForeignKeyListenerForDeleteRule(){
         this.nativeManager.bindForeignKeyListenerForDeleteRule();
     }
+    //37-3
     /**
      * unbind foreign key listener from all of foreign tables <br>
      * @see #bindForeignKeyListenerForDeleteRule()
      */
-    //37-3
     void unbindForeignKeyListenerForDeleteRule(){
         this.nativeManager.unbindForeignKeyListenerForDeleteRule();
 
     }
     /**
      * wrap {@code TableListener<DeviceBean>} as native listener
-     *
      */
     public class WrapListener implements TableListener<DeviceBean>{
         private final TableListener<DeviceBean> listener;
@@ -1332,6 +1401,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     //_____________________________________________________________________
 
     //43
+
     @Override
     public boolean isPrimaryKey(String column){
         return this.nativeManager.isPrimaryKey(column);
@@ -1377,25 +1447,27 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     }
     
     //45 override IDeviceManager
+
     @Override 
-    public java.util.List<Integer> toPrimaryKeyList(DeviceBean... array){        
-        if(null == array){
+    public java.util.List<Integer> toPrimaryKeyList(DeviceBean... beans){        
+        if(null == beans){
             return new java.util.ArrayList<Integer>();
         }
-        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
-        for(DeviceBean bean:array){
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(beans.length);
+        for(DeviceBean bean:beans){
             list.add(null == bean ? null : bean.getId());
         }
         return list;
     }
     //46 override IDeviceManager
+
     @Override 
-    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<DeviceBean> collection){        
-        if(null == collection){
+    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<DeviceBean> beans){        
+        if(null == beans){
             return new java.util.ArrayList<Integer>();
         }
-        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
-        for(DeviceBean bean:collection){
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(beans.size());
+        for(DeviceBean bean:beans){
             list.add(null == bean ? null : bean.getId());
         }
         return list;

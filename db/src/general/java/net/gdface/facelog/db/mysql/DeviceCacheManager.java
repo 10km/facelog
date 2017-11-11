@@ -91,6 +91,7 @@ public class DeviceCacheManager extends DeviceManager
     //////////////////////////////////////
 
     //1.1 override IDeviceManager
+
     @Override 
     public DeviceBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
@@ -126,6 +127,7 @@ public class DeviceCacheManager extends DeviceManager
         }
     }
     //1.4 override IDeviceManager
+
     @Override 
     public boolean existsPrimaryKey(Integer id){
         return null != loadByPrimaryKey(id);
@@ -148,6 +150,7 @@ public class DeviceCacheManager extends DeviceManager
         }
     }
     //20-5
+
     @Override
     public int loadUsingTemplate(DeviceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<DeviceBean> action){
         if(null == fieldList ){
@@ -161,6 +164,7 @@ public class DeviceCacheManager extends DeviceManager
     // USING INDICES
     //_____________________________________________________________________
     // override DeviceManager
+
     @Override 
     public DeviceBean loadByIndexMacChecked(String mac) throws ObjectRetrievalException{
         if(null == mac){
@@ -195,6 +199,7 @@ public class DeviceCacheManager extends DeviceManager
         }
     }
     // override DeviceManager
+
     @Override 
     public DeviceBean loadByIndexSerialNoChecked(String serialNo) throws ObjectRetrievalException{
         if(null == serialNo){

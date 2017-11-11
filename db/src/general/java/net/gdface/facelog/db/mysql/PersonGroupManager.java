@@ -127,6 +127,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     //////////////////////////////////////
 
     //1 override IPersonGroupManager
+
     @Override 
     public PersonGroupBean loadByPrimaryKey(Integer id)
     {
@@ -138,6 +139,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
     }
     //1.1 override IPersonGroupManager
+
     @Override
     public PersonGroupBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
@@ -150,6 +152,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
     }
     //1.2
+
     @Override
     public PersonGroupBean loadByPrimaryKey(PersonGroupBean bean)
     {
@@ -157,6 +160,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     }
 
     //1.2.2
+
     @Override
     public PersonGroupBean loadByPrimaryKeyChecked(PersonGroupBean bean) throws ObjectRetrievalException
     {
@@ -167,6 +171,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     }
     
     //1.3
+
     @Override
     public PersonGroupBean loadByPrimaryKey(Object ...keys){
         try{
@@ -178,6 +183,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     }
     
     //1.3.2
+
     @Override
     public PersonGroupBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
         if(null == keys){
@@ -194,6 +200,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     }
 
     //1.4 override IPersonGroupManager
+
     @Override 
     public boolean existsPrimaryKey(Integer id)
     {
@@ -206,12 +213,14 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
     }
     //1.6
+
     @Override
     public boolean existsByPrimaryKey(PersonGroupBean bean)
     {
         return null == bean ? false : existsPrimaryKey(bean.getId());
     }
     //1.7
+
     @Override
     public PersonGroupBean checkDuplicate(PersonGroupBean bean)throws ObjectRetrievalException{
         if(null != bean){
@@ -220,6 +229,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return bean;   
     }
     //1.4.1 override IPersonGroupManager
+
     @Override 
     public Integer checkDuplicate(Integer id)throws ObjectRetrievalException{
         try{
@@ -231,6 +241,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
     }
     //1.8 override IPersonGroupManager
+
     @Override 
     public java.util.List<PersonGroupBean> loadByPrimaryKey(int... keys){
         if(null == keys){
@@ -243,6 +254,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return list;
     }
     //1.9 override IPersonGroupManager
+
     @Override 
     public java.util.List<PersonGroupBean> loadByPrimaryKey(java.util.Collection<Integer> keys){
         if(null == keys ){
@@ -264,6 +276,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return list;
     }
     //2 override IPersonGroupManager
+
     @Override 
     public int deleteByPrimaryKey(Integer id)
     {
@@ -277,6 +290,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
     }
     //2
+
     @Override
     public int delete(PersonGroupBean bean){
         try
@@ -289,6 +303,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }   
     }
     //2.1
+
     @Override
     public int deleteByPrimaryKey(Object ...keys){
         if(null == keys){
@@ -303,6 +318,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return deleteByPrimaryKey((Integer)keys[0]);
     }
     //2.2 override IPersonGroupManager
+
     @Override 
     public int deleteByPrimaryKey(int... keys){
         int count = 0;
@@ -314,6 +330,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return count;
     }
     //2.3 override IPersonGroupManager
+
     @Override 
     public int deleteByPrimaryKey(java.util.Collection<Integer> keys){
         int count = 0;
@@ -325,6 +342,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return count;
     }
     //2.4 override IPersonGroupManager
+
     @Override 
     public int delete(PersonGroupBean... beans){
         int count = 0;
@@ -336,6 +354,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return count;
     }
     //2.5 override IPersonGroupManager
+
     @Override 
     public int delete(java.util.Collection<PersonGroupBean> beans){
         int count = 0;
@@ -449,12 +468,14 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
     //3.1 GET IMPORTED override IPersonGroupManager
+
     @Override 
     public PermitBean[] getPermitBeansByPersonGroupId(PersonGroupBean bean)
     {
         return this.getPermitBeansByPersonGroupIdAsList(bean).toArray(new PermitBean[0]);
     }
     //3.1.2 GET IMPORTED override IPersonGroupManager
+
     @Override
     public PermitBean[] getPermitBeansByPersonGroupId(Integer idOfPersonGroup)
     {
@@ -463,12 +484,14 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return getPermitBeansByPersonGroupId(bean);
     }
     //3.2 GET IMPORTED override IPersonGroupManager
+
     @Override 
     public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(PersonGroupBean bean)
     {
         return getPermitBeansByPersonGroupIdAsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IPersonGroupManager
+
     @Override
     public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(Integer idOfPersonGroup)
     {
@@ -477,6 +500,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return getPermitBeansByPersonGroupIdAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IPersonGroupManager
+
     @Override
     public int deletePermitBeansByPersonGroupId(Integer idOfPersonGroup)
     {
@@ -484,6 +508,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return instanceOfPermitManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IPersonGroupManager
+
     @Override 
     public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(PersonGroupBean bean,int startRow, int numRows)
     {
@@ -496,6 +521,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
     }
     //3.3 SET IMPORTED override IPersonGroupManager
+
     @Override 
     public PermitBean[] setPermitBeansByPersonGroupId(PersonGroupBean bean , PermitBean[] importedBeans)
     {
@@ -508,6 +534,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     }
 
     //3.4 SET IMPORTED override IPersonGroupManager
+
     @Override 
     public <C extends java.util.Collection<PermitBean>> C setPermitBeansByPersonGroupId(PersonGroupBean bean , C importedBeans)
     {
@@ -520,12 +547,14 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     }
 
     //3.1 GET IMPORTED override IPersonGroupManager
+
     @Override 
     public PersonBean[] getPersonBeansByGroupId(PersonGroupBean bean)
     {
         return this.getPersonBeansByGroupIdAsList(bean).toArray(new PersonBean[0]);
     }
     //3.1.2 GET IMPORTED override IPersonGroupManager
+
     @Override
     public PersonBean[] getPersonBeansByGroupId(Integer idOfPersonGroup)
     {
@@ -534,12 +563,14 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return getPersonBeansByGroupId(bean);
     }
     //3.2 GET IMPORTED override IPersonGroupManager
+
     @Override 
     public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(PersonGroupBean bean)
     {
         return getPersonBeansByGroupIdAsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IPersonGroupManager
+
     @Override
     public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(Integer idOfPersonGroup)
     {
@@ -548,6 +579,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return getPersonBeansByGroupIdAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IPersonGroupManager
+
     @Override
     public int deletePersonBeansByGroupId(Integer idOfPersonGroup)
     {
@@ -555,6 +587,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return instanceOfPersonManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IPersonGroupManager
+
     @Override 
     public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(PersonGroupBean bean,int startRow, int numRows)
     {
@@ -567,6 +600,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
     }
     //3.3 SET IMPORTED override IPersonGroupManager
+
     @Override 
     public PersonBean[] setPersonBeansByGroupId(PersonGroupBean bean , PersonBean[] importedBeans)
     {
@@ -579,6 +613,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     }
 
     //3.4 SET IMPORTED override IPersonGroupManager
+
     @Override 
     public <C extends java.util.Collection<PersonBean>> C setPersonBeansByGroupId(PersonGroupBean bean , C importedBeans)
     {
@@ -591,12 +626,14 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     }
 
     //3.1 GET IMPORTED override IPersonGroupManager
+
     @Override 
     public PersonGroupBean[] getPersonGroupBeansByParent(PersonGroupBean bean)
     {
         return this.getPersonGroupBeansByParentAsList(bean).toArray(new PersonGroupBean[0]);
     }
     //3.1.2 GET IMPORTED override IPersonGroupManager
+
     @Override
     public PersonGroupBean[] getPersonGroupBeansByParent(Integer idOfPersonGroup)
     {
@@ -605,12 +642,14 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return getPersonGroupBeansByParent(bean);
     }
     //3.2 GET IMPORTED override IPersonGroupManager
+
     @Override 
     public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(PersonGroupBean bean)
     {
         return getPersonGroupBeansByParentAsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IPersonGroupManager
+
     @Override
     public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(Integer idOfPersonGroup)
     {
@@ -619,6 +658,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return getPersonGroupBeansByParentAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IPersonGroupManager
+
     @Override
     public int deletePersonGroupBeansByParent(Integer idOfPersonGroup)
     {
@@ -626,6 +666,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return instanceOfPersonGroupManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IPersonGroupManager
+
     @Override 
     public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(PersonGroupBean bean,int startRow, int numRows)
     {
@@ -638,6 +679,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
     }
     //3.3 SET IMPORTED override IPersonGroupManager
+
     @Override 
     public PersonGroupBean[] setPersonGroupBeansByParent(PersonGroupBean bean , PersonGroupBean[] importedBeans)
     {
@@ -650,6 +692,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     }
 
     //3.4 SET IMPORTED override IPersonGroupManager
+
     @Override 
     public <C extends java.util.Collection<PersonGroupBean>> C setPersonGroupBeansByParent(PersonGroupBean bean , C importedBeans)
     {
@@ -664,6 +707,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
 
 
     //3.5 SYNC SAVE override IPersonGroupManager
+
     @Override  
     public PersonGroupBean save(PersonGroupBean bean
         , PersonGroupBean refPersongroupByParent 
@@ -686,6 +730,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     } 
 
     //3.6 SYNC SAVE AS TRANSACTION override IPersonGroupManager
+
     @Override 
     public PersonGroupBean saveAsTransaction(final PersonGroupBean bean
         ,final PersonGroupBean refPersongroupByParent 
@@ -698,6 +743,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
             }});
     }
     //3.7 SYNC SAVE override IPersonGroupManager
+
     @Override 
     public PersonGroupBean save(PersonGroupBean bean
         , PersonGroupBean refPersongroupByParent 
@@ -718,6 +764,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     }   
 
     //3.8 SYNC SAVE AS TRANSACTION override IPersonGroupManager
+
     @Override 
     public PersonGroupBean saveAsTransaction(final PersonGroupBean bean
         ,final PersonGroupBean refPersongroupByParent 
@@ -729,7 +776,8 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
                 return save(bean , refPersongroupByParent , impPermitByPersonGroupId , impPersonByGroupId , impPersongroupByParent );
             }});
     }
-     /**
+     //3.9 SYNC SAVE 
+    /**
      * Save the {@link PersonGroupBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link PersonGroupBean} bean to be saved
@@ -737,7 +785,6 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
      *      see also {@link #save(PersonGroupBean , PersonGroupBean , PermitBean[] , PersonBean[] , PersonGroupBean[] )}
      * @return the inserted or updated {@link PersonGroupBean} bean
      */
-    //3.9 SYNC SAVE 
     @Override
     public PersonGroupBean save(PersonGroupBean bean,Object ...args) 
     {
@@ -762,6 +809,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return save(bean,(args.length < 1 || null == args[0])?null:(PersonGroupBean)args[0],(args.length < 2 || null == args[1])?null:(PermitBean[])args[1],(args.length < 3 || null == args[2])?null:(PersonBean[])args[2],(args.length < 4 || null == args[3])?null:(PersonGroupBean[])args[3]);
     } 
 
+    //3.10 SYNC SAVE 
     /**
      * Save the {@link PersonGroupBean} bean and referenced beans and imported beans into the database.
      *
@@ -770,7 +818,6 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
      *      see also {@link #save(PersonGroupBean , PersonGroupBean , java.util.Collection , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link PersonGroupBean} bean
      */
-    //3.10 SYNC SAVE 
     @SuppressWarnings("unchecked")
     @Override
     public PersonGroupBean saveCollection(PersonGroupBean bean,Object ...inputs)
@@ -849,6 +896,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
 
 
     //5.1 GET REFERENCED VALUE override IPersonGroupManager
+
     @Override 
     public PersonGroupBean getReferencedByParent(PersonGroupBean bean)
     {
@@ -860,6 +908,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     }
 
     //5.2 SET REFERENCED override IPersonGroupManager
+
     @Override 
     public PersonGroupBean setReferencedByParent(PersonGroupBean bean, PersonGroupBean beanToSet)
     {
@@ -883,6 +932,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     //////////////////////////////////////
 
     //11
+
     @Override
     public int deleteByWhere(String where)
     {
@@ -901,6 +951,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     //_____________________________________________________________________
 
     //13
+
     @Override
     protected PersonGroupBean insert(PersonGroupBean bean)
     {
@@ -915,6 +966,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
 
     //14
     @Override
+
     protected PersonGroupBean update(PersonGroupBean bean)
     {
         try{
@@ -932,6 +984,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     //_____________________________________________________________________
     //18
     @Override
+
     public PersonGroupBean loadUniqueUsingTemplate(PersonGroupBean bean)
     {
         try{
@@ -944,6 +997,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
      }
     //18-1
     @Override
+
     public PersonGroupBean loadUniqueUsingTemplateChecked(PersonGroupBean bean) throws ObjectRetrievalException
     {
         try{
@@ -959,6 +1013,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
      }
     //20-5
+
     @Override
     public int loadUsingTemplate(PersonGroupBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<PersonGroupBean> action)
     {
@@ -972,6 +1027,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     }
 
     //21
+
     @Override
     public int deleteUsingTemplate(PersonGroupBean bean)
     {
@@ -991,6 +1047,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     //_____________________________________________________________________
 
      // override IPersonGroupManager
+
     @Override 
     public PersonGroupBean[] loadByIndexParent(Integer parent)
     {
@@ -998,6 +1055,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     }
     
     // override IPersonGroupManager
+
     @Override 
     public java.util.List<PersonGroupBean> loadByIndexParentAsList(Integer parent)
     {
@@ -1011,6 +1069,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     }
 
     // override IPersonGroupManager
+
     @Override 
     public int deleteByIndexParent(Integer parent)
     {
@@ -1063,6 +1122,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     // MANY TO MANY: LOAD OTHER BEAN VIA JUNCTION TABLE
     //_____________________________________________________________________
     //22 MANY TO MANY override IPersonGroupManager
+
     @Override
     public java.util.List<PersonGroupBean> loadViaPermitAsList(DeviceGroupBean bean)
     {
@@ -1070,6 +1130,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     }
 
     //23 MANY TO MANY override IPersonGroupManager
+
     @Override
     public java.util.List<PersonGroupBean> loadViaPermitAsList(DeviceGroupBean bean, int startRow, int numRows)
     {
@@ -1084,6 +1145,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
     }
     //23.2 MANY TO MANY override IPersonGroupManager
+
     @Override
     public void addJunction(PersonGroupBean bean,DeviceGroupBean linked){
         if(null == bean || null == bean.getId()){
@@ -1100,6 +1162,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
     }
     //23.3 MANY TO MANY override IPersonGroupManager
+
     @Override
     public int deleteJunction(PersonGroupBean bean,DeviceGroupBean linked){
         if(null == bean || null == bean.getId()){
@@ -1111,6 +1174,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return instanceOfPermitManager().deleteByPrimaryKey(linked.getId(),bean.getId());
     }
     //23.4 MANY TO MANY override IPersonGroupManager
+
     @Override
     public void addJunction(PersonGroupBean bean,DeviceGroupBean... linkedBeans){
         if(null != linkedBeans){
@@ -1120,6 +1184,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
     }
     //23.5 MANY TO MANY override IPersonGroupManager
+
     @Override
     public void addJunction(PersonGroupBean bean,java.util.Collection<DeviceGroupBean> linkedBeans){
         if(null != linkedBeans){
@@ -1129,6 +1194,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
     }
     //23.6 MANY TO MANY override IPersonGroupManager
+
     @Override
     public int deleteJunction(PersonGroupBean bean,DeviceGroupBean... linkedBeans){
         int count = 0;
@@ -1140,6 +1206,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return count;
     }
     //23.7 MANY TO MANY override IPersonGroupManager
+
     @Override
     public int deleteJunction(PersonGroupBean bean,java.util.Collection<DeviceGroupBean> linkedBeans){
         int count = 0;
@@ -1155,6 +1222,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     // COUNT
     //_____________________________________________________________________
     //25
+
     @Override
     public int countWhere(String where)
     {
@@ -1168,6 +1236,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     }
 
     //20
+
     @Override
     public int countUsingTemplate(PersonGroupBean bean, int searchType)
     {
@@ -1186,10 +1255,10 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     // LISTENER
     //_____________________________________________________________________
 
+    //35
     /**
      * @return {@link WrapListener} instance
      */
-    //35
     @Override
     public TableListener<PersonGroupBean> registerListener(TableListener<PersonGroupBean> listener)
     {
@@ -1205,6 +1274,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     }
 
     //36
+
     @Override
     public void unregisterListener(TableListener<PersonGroupBean> listener)
     {
@@ -1215,12 +1285,14 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     }
     
     //37
+
     @Override
     public void fire(TableListener.Event event, PersonGroupBean bean){
         fire(event.ordinal(), bean);
     }
     
     //37-1
+
     @Override
     public void fire(int event, PersonGroupBean bean){
         try{
@@ -1231,25 +1303,24 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
             throw new WrapDAOException(e);
         }
     }
+    //37-2
     /**
      * bind foreign key listener to foreign table for DELETE RULE
      */
-    //37-2
     void bindForeignKeyListenerForDeleteRule(){
         this.nativeManager.bindForeignKeyListenerForDeleteRule();
     }
+    //37-3
     /**
      * unbind foreign key listener from all of foreign tables <br>
      * @see #bindForeignKeyListenerForDeleteRule()
      */
-    //37-3
     void unbindForeignKeyListenerForDeleteRule(){
         this.nativeManager.unbindForeignKeyListenerForDeleteRule();
 
     }
     /**
      * wrap {@code TableListener<PersonGroupBean>} as native listener
-     *
      */
     public class WrapListener implements TableListener<PersonGroupBean>{
         private final TableListener<PersonGroupBean> listener;
@@ -1329,6 +1400,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     //_____________________________________________________________________
 
     //43
+
     @Override
     public boolean isPrimaryKey(String column){
         return this.nativeManager.isPrimaryKey(column);
@@ -1374,25 +1446,27 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     }
     
     //45 override IPersonGroupManager
+
     @Override 
-    public java.util.List<Integer> toPrimaryKeyList(PersonGroupBean... array){        
-        if(null == array){
+    public java.util.List<Integer> toPrimaryKeyList(PersonGroupBean... beans){        
+        if(null == beans){
             return new java.util.ArrayList<Integer>();
         }
-        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
-        for(PersonGroupBean bean:array){
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(beans.length);
+        for(PersonGroupBean bean:beans){
             list.add(null == bean ? null : bean.getId());
         }
         return list;
     }
     //46 override IPersonGroupManager
+
     @Override 
-    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<PersonGroupBean> collection){        
-        if(null == collection){
+    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<PersonGroupBean> beans){        
+        if(null == beans){
             return new java.util.ArrayList<Integer>();
         }
-        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
-        for(PersonGroupBean bean:collection){
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(beans.size());
+        for(PersonGroupBean bean:beans){
             list.add(null == bean ? null : bean.getId());
         }
         return list;
@@ -1403,6 +1477,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     // SELF-REFERENCE
     //_____________________________________________________________________
     //47 IPersonGroupManager
+
     @Override
     public java.util.List<PersonGroupBean> listOfParent(Integer id){
         PersonGroupBean parent = (null == id)
@@ -1421,6 +1496,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return list;
     }
     //48 IPersonGroupManager
+
     @Override
     @SuppressWarnings("unchecked")
     public java.util.List<PersonGroupBean> listOfParent(PersonGroupBean bean){
@@ -1429,6 +1505,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
                 : listOfParent(bean.getId());
     }
     //49 IPersonGroupManager
+
     @Override
     public int levelOfParent(Integer id){
         PersonGroupBean parent = (null == id)
@@ -1444,6 +1521,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return count;
     }
     //50 IPersonGroupManager
+
     @Override
     public int levelOfParent(PersonGroupBean bean){
         return null == bean
@@ -1451,16 +1529,19 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
                 : levelOfParent(bean.getId());
     }
     //51 IPersonGroupManager
+
     @Override
     public boolean isCycleOnParent(Integer id){
         return levelOfParent(id) < 0;
     }
     //52 IPersonGroupManager
+
     @Override
     public boolean isCycleOnParent(PersonGroupBean bean){
         return levelOfParent(bean) < 0;
     }
     //53 IPersonGroupManager
+
     @Override
     public PersonGroupBean topOfParent(Integer id){
         if(null == id){
@@ -1476,6 +1557,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return parent;
     }
     //54 IPersonGroupManager
+
     @Override
     public PersonGroupBean topOfParent(PersonGroupBean bean){
         if(null == bean){
@@ -1484,6 +1566,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return topOfParent(bean.getId());
     }
     //55 IPersonGroupManager
+
     @Override
     public Integer checkCycleOfParent(Integer id){
         if(isCycleOnParent(id)){
@@ -1492,6 +1575,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         return id;
     }
     //56 IPersonGroupManager
+
     @Override
     public PersonGroupBean checkCycleOfParent(PersonGroupBean bean){
         if(isCycleOnParent(bean)){

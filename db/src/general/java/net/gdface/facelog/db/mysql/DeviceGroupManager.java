@@ -127,6 +127,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     //////////////////////////////////////
 
     //1 override IDeviceGroupManager
+
     @Override 
     public DeviceGroupBean loadByPrimaryKey(Integer id)
     {
@@ -138,6 +139,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         }
     }
     //1.1 override IDeviceGroupManager
+
     @Override
     public DeviceGroupBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
@@ -150,6 +152,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         }
     }
     //1.2
+
     @Override
     public DeviceGroupBean loadByPrimaryKey(DeviceGroupBean bean)
     {
@@ -157,6 +160,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     }
 
     //1.2.2
+
     @Override
     public DeviceGroupBean loadByPrimaryKeyChecked(DeviceGroupBean bean) throws ObjectRetrievalException
     {
@@ -167,6 +171,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     }
     
     //1.3
+
     @Override
     public DeviceGroupBean loadByPrimaryKey(Object ...keys){
         try{
@@ -178,6 +183,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     }
     
     //1.3.2
+
     @Override
     public DeviceGroupBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
         if(null == keys){
@@ -194,6 +200,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     }
 
     //1.4 override IDeviceGroupManager
+
     @Override 
     public boolean existsPrimaryKey(Integer id)
     {
@@ -206,12 +213,14 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         }
     }
     //1.6
+
     @Override
     public boolean existsByPrimaryKey(DeviceGroupBean bean)
     {
         return null == bean ? false : existsPrimaryKey(bean.getId());
     }
     //1.7
+
     @Override
     public DeviceGroupBean checkDuplicate(DeviceGroupBean bean)throws ObjectRetrievalException{
         if(null != bean){
@@ -220,6 +229,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return bean;   
     }
     //1.4.1 override IDeviceGroupManager
+
     @Override 
     public Integer checkDuplicate(Integer id)throws ObjectRetrievalException{
         try{
@@ -231,6 +241,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         }
     }
     //1.8 override IDeviceGroupManager
+
     @Override 
     public java.util.List<DeviceGroupBean> loadByPrimaryKey(int... keys){
         if(null == keys){
@@ -243,6 +254,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return list;
     }
     //1.9 override IDeviceGroupManager
+
     @Override 
     public java.util.List<DeviceGroupBean> loadByPrimaryKey(java.util.Collection<Integer> keys){
         if(null == keys ){
@@ -264,6 +276,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return list;
     }
     //2 override IDeviceGroupManager
+
     @Override 
     public int deleteByPrimaryKey(Integer id)
     {
@@ -277,6 +290,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         }
     }
     //2
+
     @Override
     public int delete(DeviceGroupBean bean){
         try
@@ -289,6 +303,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         }   
     }
     //2.1
+
     @Override
     public int deleteByPrimaryKey(Object ...keys){
         if(null == keys){
@@ -303,6 +318,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return deleteByPrimaryKey((Integer)keys[0]);
     }
     //2.2 override IDeviceGroupManager
+
     @Override 
     public int deleteByPrimaryKey(int... keys){
         int count = 0;
@@ -314,6 +330,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return count;
     }
     //2.3 override IDeviceGroupManager
+
     @Override 
     public int deleteByPrimaryKey(java.util.Collection<Integer> keys){
         int count = 0;
@@ -325,6 +342,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return count;
     }
     //2.4 override IDeviceGroupManager
+
     @Override 
     public int delete(DeviceGroupBean... beans){
         int count = 0;
@@ -336,6 +354,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return count;
     }
     //2.5 override IDeviceGroupManager
+
     @Override 
     public int delete(java.util.Collection<DeviceGroupBean> beans){
         int count = 0;
@@ -449,12 +468,14 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
     //3.1 GET IMPORTED override IDeviceGroupManager
+
     @Override 
     public DeviceBean[] getDeviceBeansByGroupId(DeviceGroupBean bean)
     {
         return this.getDeviceBeansByGroupIdAsList(bean).toArray(new DeviceBean[0]);
     }
     //3.1.2 GET IMPORTED override IDeviceGroupManager
+
     @Override
     public DeviceBean[] getDeviceBeansByGroupId(Integer idOfDeviceGroup)
     {
@@ -463,12 +484,14 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return getDeviceBeansByGroupId(bean);
     }
     //3.2 GET IMPORTED override IDeviceGroupManager
+
     @Override 
     public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(DeviceGroupBean bean)
     {
         return getDeviceBeansByGroupIdAsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IDeviceGroupManager
+
     @Override
     public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(Integer idOfDeviceGroup)
     {
@@ -477,6 +500,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return getDeviceBeansByGroupIdAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IDeviceGroupManager
+
     @Override
     public int deleteDeviceBeansByGroupId(Integer idOfDeviceGroup)
     {
@@ -484,6 +508,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return instanceOfDeviceManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IDeviceGroupManager
+
     @Override 
     public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(DeviceGroupBean bean,int startRow, int numRows)
     {
@@ -496,6 +521,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         }
     }
     //3.3 SET IMPORTED override IDeviceGroupManager
+
     @Override 
     public DeviceBean[] setDeviceBeansByGroupId(DeviceGroupBean bean , DeviceBean[] importedBeans)
     {
@@ -508,6 +534,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     }
 
     //3.4 SET IMPORTED override IDeviceGroupManager
+
     @Override 
     public <C extends java.util.Collection<DeviceBean>> C setDeviceBeansByGroupId(DeviceGroupBean bean , C importedBeans)
     {
@@ -520,12 +547,14 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     }
 
     //3.1 GET IMPORTED override IDeviceGroupManager
+
     @Override 
     public DeviceGroupBean[] getDeviceGroupBeansByParent(DeviceGroupBean bean)
     {
         return this.getDeviceGroupBeansByParentAsList(bean).toArray(new DeviceGroupBean[0]);
     }
     //3.1.2 GET IMPORTED override IDeviceGroupManager
+
     @Override
     public DeviceGroupBean[] getDeviceGroupBeansByParent(Integer idOfDeviceGroup)
     {
@@ -534,12 +563,14 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return getDeviceGroupBeansByParent(bean);
     }
     //3.2 GET IMPORTED override IDeviceGroupManager
+
     @Override 
     public java.util.List<DeviceGroupBean> getDeviceGroupBeansByParentAsList(DeviceGroupBean bean)
     {
         return getDeviceGroupBeansByParentAsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IDeviceGroupManager
+
     @Override
     public java.util.List<DeviceGroupBean> getDeviceGroupBeansByParentAsList(Integer idOfDeviceGroup)
     {
@@ -548,6 +579,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return getDeviceGroupBeansByParentAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IDeviceGroupManager
+
     @Override
     public int deleteDeviceGroupBeansByParent(Integer idOfDeviceGroup)
     {
@@ -555,6 +587,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return instanceOfDeviceGroupManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IDeviceGroupManager
+
     @Override 
     public java.util.List<DeviceGroupBean> getDeviceGroupBeansByParentAsList(DeviceGroupBean bean,int startRow, int numRows)
     {
@@ -567,6 +600,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         }
     }
     //3.3 SET IMPORTED override IDeviceGroupManager
+
     @Override 
     public DeviceGroupBean[] setDeviceGroupBeansByParent(DeviceGroupBean bean , DeviceGroupBean[] importedBeans)
     {
@@ -579,6 +613,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     }
 
     //3.4 SET IMPORTED override IDeviceGroupManager
+
     @Override 
     public <C extends java.util.Collection<DeviceGroupBean>> C setDeviceGroupBeansByParent(DeviceGroupBean bean , C importedBeans)
     {
@@ -591,12 +626,14 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     }
 
     //3.1 GET IMPORTED override IDeviceGroupManager
+
     @Override 
     public PermitBean[] getPermitBeansByDeviceGroupId(DeviceGroupBean bean)
     {
         return this.getPermitBeansByDeviceGroupIdAsList(bean).toArray(new PermitBean[0]);
     }
     //3.1.2 GET IMPORTED override IDeviceGroupManager
+
     @Override
     public PermitBean[] getPermitBeansByDeviceGroupId(Integer idOfDeviceGroup)
     {
@@ -605,12 +642,14 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return getPermitBeansByDeviceGroupId(bean);
     }
     //3.2 GET IMPORTED override IDeviceGroupManager
+
     @Override 
     public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(DeviceGroupBean bean)
     {
         return getPermitBeansByDeviceGroupIdAsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IDeviceGroupManager
+
     @Override
     public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(Integer idOfDeviceGroup)
     {
@@ -619,6 +658,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return getPermitBeansByDeviceGroupIdAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IDeviceGroupManager
+
     @Override
     public int deletePermitBeansByDeviceGroupId(Integer idOfDeviceGroup)
     {
@@ -626,6 +666,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return instanceOfPermitManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IDeviceGroupManager
+
     @Override 
     public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(DeviceGroupBean bean,int startRow, int numRows)
     {
@@ -638,6 +679,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         }
     }
     //3.3 SET IMPORTED override IDeviceGroupManager
+
     @Override 
     public PermitBean[] setPermitBeansByDeviceGroupId(DeviceGroupBean bean , PermitBean[] importedBeans)
     {
@@ -650,6 +692,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     }
 
     //3.4 SET IMPORTED override IDeviceGroupManager
+
     @Override 
     public <C extends java.util.Collection<PermitBean>> C setPermitBeansByDeviceGroupId(DeviceGroupBean bean , C importedBeans)
     {
@@ -664,6 +707,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
 
 
     //3.5 SYNC SAVE override IDeviceGroupManager
+
     @Override  
     public DeviceGroupBean save(DeviceGroupBean bean
         , DeviceGroupBean refDevicegroupByParent 
@@ -686,6 +730,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     } 
 
     //3.6 SYNC SAVE AS TRANSACTION override IDeviceGroupManager
+
     @Override 
     public DeviceGroupBean saveAsTransaction(final DeviceGroupBean bean
         ,final DeviceGroupBean refDevicegroupByParent 
@@ -698,6 +743,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
             }});
     }
     //3.7 SYNC SAVE override IDeviceGroupManager
+
     @Override 
     public DeviceGroupBean save(DeviceGroupBean bean
         , DeviceGroupBean refDevicegroupByParent 
@@ -718,6 +764,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     }   
 
     //3.8 SYNC SAVE AS TRANSACTION override IDeviceGroupManager
+
     @Override 
     public DeviceGroupBean saveAsTransaction(final DeviceGroupBean bean
         ,final DeviceGroupBean refDevicegroupByParent 
@@ -729,7 +776,8 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
                 return save(bean , refDevicegroupByParent , impDeviceByGroupId , impDevicegroupByParent , impPermitByDeviceGroupId );
             }});
     }
-     /**
+     //3.9 SYNC SAVE 
+    /**
      * Save the {@link DeviceGroupBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link DeviceGroupBean} bean to be saved
@@ -737,7 +785,6 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
      *      see also {@link #save(DeviceGroupBean , DeviceGroupBean , DeviceBean[] , DeviceGroupBean[] , PermitBean[] )}
      * @return the inserted or updated {@link DeviceGroupBean} bean
      */
-    //3.9 SYNC SAVE 
     @Override
     public DeviceGroupBean save(DeviceGroupBean bean,Object ...args) 
     {
@@ -762,6 +809,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return save(bean,(args.length < 1 || null == args[0])?null:(DeviceGroupBean)args[0],(args.length < 2 || null == args[1])?null:(DeviceBean[])args[1],(args.length < 3 || null == args[2])?null:(DeviceGroupBean[])args[2],(args.length < 4 || null == args[3])?null:(PermitBean[])args[3]);
     } 
 
+    //3.10 SYNC SAVE 
     /**
      * Save the {@link DeviceGroupBean} bean and referenced beans and imported beans into the database.
      *
@@ -770,7 +818,6 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
      *      see also {@link #save(DeviceGroupBean , DeviceGroupBean , java.util.Collection , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link DeviceGroupBean} bean
      */
-    //3.10 SYNC SAVE 
     @SuppressWarnings("unchecked")
     @Override
     public DeviceGroupBean saveCollection(DeviceGroupBean bean,Object ...inputs)
@@ -849,6 +896,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
 
 
     //5.1 GET REFERENCED VALUE override IDeviceGroupManager
+
     @Override 
     public DeviceGroupBean getReferencedByParent(DeviceGroupBean bean)
     {
@@ -860,6 +908,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     }
 
     //5.2 SET REFERENCED override IDeviceGroupManager
+
     @Override 
     public DeviceGroupBean setReferencedByParent(DeviceGroupBean bean, DeviceGroupBean beanToSet)
     {
@@ -883,6 +932,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     //////////////////////////////////////
 
     //11
+
     @Override
     public int deleteByWhere(String where)
     {
@@ -901,6 +951,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     //_____________________________________________________________________
 
     //13
+
     @Override
     protected DeviceGroupBean insert(DeviceGroupBean bean)
     {
@@ -915,6 +966,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
 
     //14
     @Override
+
     protected DeviceGroupBean update(DeviceGroupBean bean)
     {
         try{
@@ -932,6 +984,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     //_____________________________________________________________________
     //18
     @Override
+
     public DeviceGroupBean loadUniqueUsingTemplate(DeviceGroupBean bean)
     {
         try{
@@ -944,6 +997,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
      }
     //18-1
     @Override
+
     public DeviceGroupBean loadUniqueUsingTemplateChecked(DeviceGroupBean bean) throws ObjectRetrievalException
     {
         try{
@@ -959,6 +1013,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         }
      }
     //20-5
+
     @Override
     public int loadUsingTemplate(DeviceGroupBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<DeviceGroupBean> action)
     {
@@ -972,6 +1027,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     }
 
     //21
+
     @Override
     public int deleteUsingTemplate(DeviceGroupBean bean)
     {
@@ -991,6 +1047,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     //_____________________________________________________________________
 
      // override IDeviceGroupManager
+
     @Override 
     public DeviceGroupBean[] loadByIndexParent(Integer parent)
     {
@@ -998,6 +1055,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     }
     
     // override IDeviceGroupManager
+
     @Override 
     public java.util.List<DeviceGroupBean> loadByIndexParentAsList(Integer parent)
     {
@@ -1011,6 +1069,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     }
 
     // override IDeviceGroupManager
+
     @Override 
     public int deleteByIndexParent(Integer parent)
     {
@@ -1063,6 +1122,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     // MANY TO MANY: LOAD OTHER BEAN VIA JUNCTION TABLE
     //_____________________________________________________________________
     //22 MANY TO MANY override IDeviceGroupManager
+
     @Override
     public java.util.List<DeviceGroupBean> loadViaPermitAsList(PersonGroupBean bean)
     {
@@ -1070,6 +1130,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     }
 
     //23 MANY TO MANY override IDeviceGroupManager
+
     @Override
     public java.util.List<DeviceGroupBean> loadViaPermitAsList(PersonGroupBean bean, int startRow, int numRows)
     {
@@ -1084,6 +1145,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         }
     }
     //23.2 MANY TO MANY override IDeviceGroupManager
+
     @Override
     public void addJunction(DeviceGroupBean bean,PersonGroupBean linked){
         if(null == bean || null == bean.getId()){
@@ -1100,6 +1162,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         }
     }
     //23.3 MANY TO MANY override IDeviceGroupManager
+
     @Override
     public int deleteJunction(DeviceGroupBean bean,PersonGroupBean linked){
         if(null == bean || null == bean.getId()){
@@ -1111,6 +1174,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return instanceOfPermitManager().deleteByPrimaryKey(bean.getId(),linked.getId());
     }
     //23.4 MANY TO MANY override IDeviceGroupManager
+
     @Override
     public void addJunction(DeviceGroupBean bean,PersonGroupBean... linkedBeans){
         if(null != linkedBeans){
@@ -1120,6 +1184,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         }
     }
     //23.5 MANY TO MANY override IDeviceGroupManager
+
     @Override
     public void addJunction(DeviceGroupBean bean,java.util.Collection<PersonGroupBean> linkedBeans){
         if(null != linkedBeans){
@@ -1129,6 +1194,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         }
     }
     //23.6 MANY TO MANY override IDeviceGroupManager
+
     @Override
     public int deleteJunction(DeviceGroupBean bean,PersonGroupBean... linkedBeans){
         int count = 0;
@@ -1140,6 +1206,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return count;
     }
     //23.7 MANY TO MANY override IDeviceGroupManager
+
     @Override
     public int deleteJunction(DeviceGroupBean bean,java.util.Collection<PersonGroupBean> linkedBeans){
         int count = 0;
@@ -1155,6 +1222,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     // COUNT
     //_____________________________________________________________________
     //25
+
     @Override
     public int countWhere(String where)
     {
@@ -1168,6 +1236,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     }
 
     //20
+
     @Override
     public int countUsingTemplate(DeviceGroupBean bean, int searchType)
     {
@@ -1186,10 +1255,10 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     // LISTENER
     //_____________________________________________________________________
 
+    //35
     /**
      * @return {@link WrapListener} instance
      */
-    //35
     @Override
     public TableListener<DeviceGroupBean> registerListener(TableListener<DeviceGroupBean> listener)
     {
@@ -1205,6 +1274,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     }
 
     //36
+
     @Override
     public void unregisterListener(TableListener<DeviceGroupBean> listener)
     {
@@ -1215,12 +1285,14 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     }
     
     //37
+
     @Override
     public void fire(TableListener.Event event, DeviceGroupBean bean){
         fire(event.ordinal(), bean);
     }
     
     //37-1
+
     @Override
     public void fire(int event, DeviceGroupBean bean){
         try{
@@ -1231,25 +1303,24 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
             throw new WrapDAOException(e);
         }
     }
+    //37-2
     /**
      * bind foreign key listener to foreign table for DELETE RULE
      */
-    //37-2
     void bindForeignKeyListenerForDeleteRule(){
         this.nativeManager.bindForeignKeyListenerForDeleteRule();
     }
+    //37-3
     /**
      * unbind foreign key listener from all of foreign tables <br>
      * @see #bindForeignKeyListenerForDeleteRule()
      */
-    //37-3
     void unbindForeignKeyListenerForDeleteRule(){
         this.nativeManager.unbindForeignKeyListenerForDeleteRule();
 
     }
     /**
      * wrap {@code TableListener<DeviceGroupBean>} as native listener
-     *
      */
     public class WrapListener implements TableListener<DeviceGroupBean>{
         private final TableListener<DeviceGroupBean> listener;
@@ -1329,6 +1400,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     //_____________________________________________________________________
 
     //43
+
     @Override
     public boolean isPrimaryKey(String column){
         return this.nativeManager.isPrimaryKey(column);
@@ -1374,25 +1446,27 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     }
     
     //45 override IDeviceGroupManager
+
     @Override 
-    public java.util.List<Integer> toPrimaryKeyList(DeviceGroupBean... array){        
-        if(null == array){
+    public java.util.List<Integer> toPrimaryKeyList(DeviceGroupBean... beans){        
+        if(null == beans){
             return new java.util.ArrayList<Integer>();
         }
-        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
-        for(DeviceGroupBean bean:array){
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(beans.length);
+        for(DeviceGroupBean bean:beans){
             list.add(null == bean ? null : bean.getId());
         }
         return list;
     }
     //46 override IDeviceGroupManager
+
     @Override 
-    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<DeviceGroupBean> collection){        
-        if(null == collection){
+    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<DeviceGroupBean> beans){        
+        if(null == beans){
             return new java.util.ArrayList<Integer>();
         }
-        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
-        for(DeviceGroupBean bean:collection){
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(beans.size());
+        for(DeviceGroupBean bean:beans){
             list.add(null == bean ? null : bean.getId());
         }
         return list;
@@ -1403,6 +1477,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     // SELF-REFERENCE
     //_____________________________________________________________________
     //47 IDeviceGroupManager
+
     @Override
     public java.util.List<DeviceGroupBean> listOfParent(Integer id){
         DeviceGroupBean parent = (null == id)
@@ -1421,6 +1496,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return list;
     }
     //48 IDeviceGroupManager
+
     @Override
     @SuppressWarnings("unchecked")
     public java.util.List<DeviceGroupBean> listOfParent(DeviceGroupBean bean){
@@ -1429,6 +1505,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
                 : listOfParent(bean.getId());
     }
     //49 IDeviceGroupManager
+
     @Override
     public int levelOfParent(Integer id){
         DeviceGroupBean parent = (null == id)
@@ -1444,6 +1521,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return count;
     }
     //50 IDeviceGroupManager
+
     @Override
     public int levelOfParent(DeviceGroupBean bean){
         return null == bean
@@ -1451,16 +1529,19 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
                 : levelOfParent(bean.getId());
     }
     //51 IDeviceGroupManager
+
     @Override
     public boolean isCycleOnParent(Integer id){
         return levelOfParent(id) < 0;
     }
     //52 IDeviceGroupManager
+
     @Override
     public boolean isCycleOnParent(DeviceGroupBean bean){
         return levelOfParent(bean) < 0;
     }
     //53 IDeviceGroupManager
+
     @Override
     public DeviceGroupBean topOfParent(Integer id){
         if(null == id){
@@ -1476,6 +1557,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return parent;
     }
     //54 IDeviceGroupManager
+
     @Override
     public DeviceGroupBean topOfParent(DeviceGroupBean bean){
         if(null == bean){
@@ -1484,6 +1566,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return topOfParent(bean.getId());
     }
     //55 IDeviceGroupManager
+
     @Override
     public Integer checkCycleOfParent(Integer id){
         if(isCycleOnParent(id)){
@@ -1492,6 +1575,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         return id;
     }
     //56 IDeviceGroupManager
+
     @Override
     public DeviceGroupBean checkCycleOfParent(DeviceGroupBean bean){
         if(isCycleOnParent(bean)){

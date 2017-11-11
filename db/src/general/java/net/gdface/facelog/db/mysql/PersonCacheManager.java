@@ -96,6 +96,7 @@ public class PersonCacheManager extends PersonManager
     //////////////////////////////////////
 
     //1.1 override IPersonManager
+
     @Override 
     public PersonBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
@@ -131,6 +132,7 @@ public class PersonCacheManager extends PersonManager
         }
     }
     //1.4 override IPersonManager
+
     @Override 
     public boolean existsPrimaryKey(Integer id){
         return null != loadByPrimaryKey(id);
@@ -153,6 +155,7 @@ public class PersonCacheManager extends PersonManager
         }
     }
     //20-5
+
     @Override
     public int loadUsingTemplate(PersonBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<PersonBean> action){
         if(null == fieldList ){
@@ -166,6 +169,7 @@ public class PersonCacheManager extends PersonManager
     // USING INDICES
     //_____________________________________________________________________
     // override PersonManager
+
     @Override 
     public PersonBean loadByIndexImageMd5Checked(String imageMd5) throws ObjectRetrievalException{
         if(null == imageMd5){
@@ -200,6 +204,7 @@ public class PersonCacheManager extends PersonManager
         }
     }
     // override PersonManager
+
     @Override 
     public PersonBean loadByIndexPapersNumChecked(String papersNum) throws ObjectRetrievalException{
         if(null == papersNum){

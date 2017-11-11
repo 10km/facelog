@@ -20,15 +20,16 @@ public interface IDeviceManager extends TableManager<DeviceBean>
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
+    //1
     /**
      * Loads a {@link DeviceBean} from the fl_device using primary key fields.
      *
      * @param id Integer - PK# 1
      * @return a unique DeviceBean or {@code null} if not found
      */
-    //1
     public DeviceBean loadByPrimaryKey(Integer id);
 
+    //1.1
     /**
      * Loads a {@link DeviceBean} from the fl_device using primary key fields.
      *
@@ -36,38 +37,41 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @return a unique DeviceBean
      * @throws ObjectRetrievalException if not found
      */
-    //1.1
     public DeviceBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException;
     
+    //1.4
     /**
      * Returns true if this fl_device contains row with primary key fields.
      * @param id Integer - PK# 1
      * @see #loadByPrimaryKey($keys)
+     * @return
      */
-    //1.4
     public boolean existsPrimaryKey(Integer id);
+    //1.4.1
     /**
      * Check duplicated row by primary keys,if row exists throw exception
      * @param id Integer
+     * @return 
+     * @throws ObjectRetrievalException
      */
-    //1.4.1
     public Integer checkDuplicate(Integer id)throws ObjectRetrievalException;
+    //1.8
     /**
      * Loads {@link DeviceBean} from the fl_device using primary key fields.
      *
      * @param keys primary keys array
      * @return list of DeviceBean
      */
-    //1.8
     public java.util.List<DeviceBean> loadByPrimaryKey(int... keys);
+    //1.9
     /**
      * Loads {@link DeviceBean} from the fl_device using primary key fields.
      *
      * @param keys primary keys collection
      * @return list of DeviceBean
      */
-    //1.9
     public java.util.List<DeviceBean> loadByPrimaryKey(java.util.Collection<Integer> keys);
+    //2
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
@@ -75,87 +79,89 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param id Integer - PK# 1
      * @return the number of deleted rows
      */
-    //2
     public int deleteByPrimaryKey(Integer id);
+    //2.2
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys array
      * @return the number of deleted rows
      */
-    //2.2
     public int deleteByPrimaryKey(int... keys);
+    //2.3
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys collection
      * @return the number of deleted rows
      */
-    //2.3
     public int deleteByPrimaryKey(java.util.Collection<Integer> keys);
-    /**
-     * Delete beans.<br>
-     *
-     * @param beans DeviceBean collection wille be deleted
-     * @return the number of deleted rows
-     */
     //2.4
-    public int delete(DeviceBean... beans);
     /**
      * Delete beans.<br>
      *
      * @param beans DeviceBean collection wille be deleted
      * @return the number of deleted rows
      */
+    public int delete(DeviceBean... beans);
     //2.5
+    /**
+     * Delete beans.<br>
+     *
+     * @param beans DeviceBean collection wille be deleted
+     * @return the number of deleted rows
+     */
     public int delete(java.util.Collection<DeviceBean> beans);
  
 
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
+    //3.1 GET IMPORTED
     /**
      * Retrieves the {@link ImageBean} object from the fl_image.device_id field.<BR>
      * FK_NAME : fl_image_ibfk_1 
      * @param bean the {@link DeviceBean}
      * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
      */
-    //3.1 GET IMPORTED
     public ImageBean[] getImageBeansByDeviceId(DeviceBean bean);
     
+    //3.1.2 GET IMPORTED
     /**
      * Retrieves the {@link ImageBean} object from the fl_image.device_id field.<BR>
      * FK_NAME : fl_image_ibfk_1 
-     * @param id Integer - PK# 1
+     * @param idOfDevice Integer - PK# 1
      * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1.2 GET IMPORTED
     public ImageBean[] getImageBeansByDeviceId(Integer idOfDevice);
     
-    /**
-     * @see #getImageBeansByDeviceIdAsList(DeviceBean,int,int)
-     */
     //3.2 GET IMPORTED
+    /**
+     * see also #getImageBeansByDeviceIdAsList(DeviceBean,int,int)
+     * @param bean
+     * @return
+     */
     public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(DeviceBean bean);
 
+    //3.2.2 GET IMPORTED
     /**
      * Retrieves the {@link ImageBean} object from fl_image.device_id field.<BR>
      * FK_NAME:fl_image_ibfk_1
-     * @param id Integer - PK# 1
+     * @param idOfDevice Integer - PK# 1
      * @return the associated {@link ImageBean} beans 
      * @throws DAOException
      */
-    //3.2.2 GET IMPORTED
     public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(Integer idOfDevice);
+    //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link ImageBean} objects from fl_image.device_id field.<BR>
      * FK_NAME:fl_image_ibfk_1
-     * @param id Integer - PK# 1
+     * @param idOfDevice Integer - PK# 1
      * @return the number of deleted rows
      */
-    //3.2.3 DELETE IMPORTED
     public int deleteImageBeansByDeviceId(Integer idOfDevice);
+    //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link ImageBean} object from fl_image.device_id field.<BR>
      * FK_NAME:fl_image_ibfk_1
@@ -164,8 +170,8 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link ImageBean} beans or empty list if {@code bean} is {@code null}
      */
-    //3.2.4 GET IMPORTED
     public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(DeviceBean bean,int startRow,int numRows);    
+    //3.3 SET IMPORTED
     /**
      * set  the {@link ImageBean} object array associate to DeviceBean by the fl_image.device_id field.<BR>
      * FK_NAME : fl_image_ibfk_1 
@@ -174,9 +180,9 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @return importedBeans always
      * @see {@link ImageManager#setReferencedByDeviceId(ImageBean, DeviceBean)
      */
-    //3.3 SET IMPORTED
     public ImageBean[] setImageBeansByDeviceId(DeviceBean bean , ImageBean[] importedBeans);
 
+    //3.4 SET IMPORTED
     /**
      * set  the {@link ImageBean} object java.util.Collection associate to DeviceBean by the fl_image.device_id field.<BR>
      * FK_NAME:fl_image_ibfk_1
@@ -185,51 +191,53 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @return importedBeans always
      * @see {@link ImageManager#setReferencedByDeviceId(ImageBean, DeviceBean)
      */
-    //3.4 SET IMPORTED
     public <C extends java.util.Collection<ImageBean>> C setImageBeansByDeviceId(DeviceBean bean , C importedBeans);
 
+    //3.1 GET IMPORTED
     /**
      * Retrieves the {@link LogBean} object from the fl_log.device_id field.<BR>
      * FK_NAME : fl_log_ibfk_2 
      * @param bean the {@link DeviceBean}
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      */
-    //3.1 GET IMPORTED
     public LogBean[] getLogBeansByDeviceId(DeviceBean bean);
     
+    //3.1.2 GET IMPORTED
     /**
      * Retrieves the {@link LogBean} object from the fl_log.device_id field.<BR>
      * FK_NAME : fl_log_ibfk_2 
-     * @param id Integer - PK# 1
+     * @param idOfDevice Integer - PK# 1
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1.2 GET IMPORTED
     public LogBean[] getLogBeansByDeviceId(Integer idOfDevice);
     
-    /**
-     * @see #getLogBeansByDeviceIdAsList(DeviceBean,int,int)
-     */
     //3.2 GET IMPORTED
+    /**
+     * see also #getLogBeansByDeviceIdAsList(DeviceBean,int,int)
+     * @param bean
+     * @return
+     */
     public java.util.List<LogBean> getLogBeansByDeviceIdAsList(DeviceBean bean);
 
+    //3.2.2 GET IMPORTED
     /**
      * Retrieves the {@link LogBean} object from fl_log.device_id field.<BR>
      * FK_NAME:fl_log_ibfk_2
-     * @param id Integer - PK# 1
+     * @param idOfDevice Integer - PK# 1
      * @return the associated {@link LogBean} beans 
      * @throws DAOException
      */
-    //3.2.2 GET IMPORTED
     public java.util.List<LogBean> getLogBeansByDeviceIdAsList(Integer idOfDevice);
+    //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link LogBean} objects from fl_log.device_id field.<BR>
      * FK_NAME:fl_log_ibfk_2
-     * @param id Integer - PK# 1
+     * @param idOfDevice Integer - PK# 1
      * @return the number of deleted rows
      */
-    //3.2.3 DELETE IMPORTED
     public int deleteLogBeansByDeviceId(Integer idOfDevice);
+    //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link LogBean} object from fl_log.device_id field.<BR>
      * FK_NAME:fl_log_ibfk_2
@@ -238,8 +246,8 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link LogBean} beans or empty list if {@code bean} is {@code null}
      */
-    //3.2.4 GET IMPORTED
     public java.util.List<LogBean> getLogBeansByDeviceIdAsList(DeviceBean bean,int startRow,int numRows);    
+    //3.3 SET IMPORTED
     /**
      * set  the {@link LogBean} object array associate to DeviceBean by the fl_log.device_id field.<BR>
      * FK_NAME : fl_log_ibfk_2 
@@ -248,9 +256,9 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @return importedBeans always
      * @see {@link LogManager#setReferencedByDeviceId(LogBean, DeviceBean)
      */
-    //3.3 SET IMPORTED
     public LogBean[] setLogBeansByDeviceId(DeviceBean bean , LogBean[] importedBeans);
 
+    //3.4 SET IMPORTED
     /**
      * set  the {@link LogBean} object java.util.Collection associate to DeviceBean by the fl_log.device_id field.<BR>
      * FK_NAME:fl_log_ibfk_2
@@ -259,9 +267,9 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @return importedBeans always
      * @see {@link LogManager#setReferencedByDeviceId(LogBean, DeviceBean)
      */
-    //3.4 SET IMPORTED
     public <C extends java.util.Collection<LogBean>> C setLogBeansByDeviceId(DeviceBean bean , C importedBeans);
 
+    //3.5 SYNC SAVE 
     /**
      * Save the DeviceBean bean and referenced beans and imported beans into the database.
      *
@@ -271,18 +279,23 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param impLogByDeviceId the {@link LogBean} bean refer to {@link DeviceBean} 
      * @return the inserted or updated {@link DeviceBean} bean
      */
-    //3.5 SYNC SAVE 
     public DeviceBean save(DeviceBean bean
         , DeviceGroupBean refDevicegroupByGroupId 
         , ImageBean[] impImageByDeviceId , LogBean[] impLogByDeviceId );
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(DeviceBean , DeviceGroupBean , ImageBean[] , LogBean[] )}
-     */
     //3.6 SYNC SAVE AS TRANSACTION
+    /**
+     * Transaction version for sync save<br>
+     * see also {@link #save(DeviceBean , DeviceGroupBean , ImageBean[] , LogBean[] )}
+     * @param bean the {@link DeviceBean} bean to be saved
+     * @param refDevicegroupByGroupId the {@link DeviceGroupBean} bean referenced by {@link DeviceBean} 
+     * @param impImageByDeviceId the {@link ImageBean} bean refer to {@link DeviceBean} 
+     * @param impLogByDeviceId the {@link LogBean} bean refer to {@link DeviceBean} 
+     * @return the inserted or updated {@link DeviceBean} bean
+     */
     public DeviceBean saveAsTransaction(final DeviceBean bean
         ,final DeviceGroupBean refDevicegroupByGroupId 
         ,final ImageBean[] impImageByDeviceId ,final LogBean[] impLogByDeviceId );
+    //3.7 SYNC SAVE 
     /**
      * Save the DeviceBean bean and referenced beans and imported beans into the database.
      *
@@ -292,30 +305,35 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param impLogByDeviceId the {@link LogBean} bean refer to {@link DeviceBean} 
      * @return the inserted or updated {@link DeviceBean} bean
      */
-    //3.7 SYNC SAVE 
     public DeviceBean save(DeviceBean bean
         , DeviceGroupBean refDevicegroupByGroupId 
         , java.util.Collection<ImageBean> impImageByDeviceId , java.util.Collection<LogBean> impLogByDeviceId );
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(DeviceBean , DeviceGroupBean , java.util.Collection , java.util.Collection )}
-     */
     //3.8 SYNC SAVE AS TRANSACTION
+    /**
+     * Transaction version for sync save<br>
+     * see also {@link #save(DeviceBean , DeviceGroupBean , java.util.Collection , java.util.Collection )}
+     * @param bean the {@link DeviceBean} bean to be saved
+     * @param refDevicegroupByGroupId the {@link DeviceGroupBean} bean referenced by {@link DeviceBean} 
+     * @param impImageByDeviceId the {@link ImageBean} bean refer to {@link DeviceBean} 
+     * @param impLogByDeviceId the {@link LogBean} bean refer to {@link DeviceBean} 
+     * @return the inserted or updated {@link DeviceBean} bean
+     */
     public DeviceBean saveAsTransaction(final DeviceBean bean
         ,final DeviceGroupBean refDevicegroupByGroupId 
         ,final  java.util.Collection<ImageBean> impImageByDeviceId ,final  java.util.Collection<LogBean> impLogByDeviceId );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
+    //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link DeviceGroupBean} object referenced by {@link DeviceBean#getGroupId}() field.<br>
      * FK_NAME : fl_device_ibfk_1
      * @param bean the {@link DeviceBean}
      * @return the associated {@link DeviceGroupBean} bean or {@code null} if {@code bean} is {@code null}
      */
-    //5.1 GET REFERENCED VALUE
     public DeviceGroupBean getReferencedByGroupId(DeviceBean bean);
 
+    //5.2 SET REFERENCED 
     /**
      * Associates the {@link DeviceBean} object to the {@link DeviceGroupBean} object by {@link DeviceBean#getGroupId}() field.
      *
@@ -324,7 +342,6 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @return always beanToSet saved
      * @throws WrapDAOException
      */
-    //5.2 SET REFERENCED 
     public DeviceGroupBean setReferencedByGroupId(DeviceBean bean, DeviceGroupBean beanToSet);
     //_____________________________________________________________________
     //
@@ -469,17 +486,19 @@ public interface IDeviceManager extends TableManager<DeviceBean>
     public int deleteByIndexGroupId(Integer groupId);
     
 
+    //45
     /**
      * return a primary key list from {@link DeviceBean} array
-     * @param array
+     * @param beans
+     * @return
      */
-    //45
-    public java.util.List<Integer> toPrimaryKeyList(DeviceBean... array);
+    public java.util.List<Integer> toPrimaryKeyList(DeviceBean... beans);
+    //46
     /**
      * return a primary key list from {@link DeviceBean} collection
-     * @param array
+     * @param beans
+     * @return
      */
-    //46
-    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<DeviceBean> collection);
+    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<DeviceBean> beans);
 
 }

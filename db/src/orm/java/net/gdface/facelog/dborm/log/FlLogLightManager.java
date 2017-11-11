@@ -98,6 +98,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     //////////////////////////////////////
     // SQL 'WHERE' METHOD
     //////////////////////////////////////
+    //11
     /**
      * Deletes rows from the fl_log_light table using a 'where' clause.
      * It is up to you to pass the 'WHERE' in your where clauses.
@@ -107,7 +108,6 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @return the number of deleted rows
      * @throws DAOException
      */
-    //11
     @Override
     public int deleteByWhere(String where) throws DAOException
     {
@@ -144,12 +144,13 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     //_____________________________________________________________________
 
     //13
+
     @Override
     public FlLogLightBean insert(FlLogLightBean bean) throws DAOException
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
-            return bean; // should not we log something ?
+            return bean; 
         }
         if (!bean.isNew()){
             return this.update(bean);
@@ -162,7 +163,8 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
         try
         {
             c = this.getConnection();
-            this.listenerContainer.beforeInsert(bean); // listener callback
+            // listener callback
+            this.listenerContainer.beforeInsert(bean);
             int dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_log_light (");
 
@@ -234,7 +236,8 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
 
             bean.isNew(false);
             bean.resetIsModified();
-            this.listenerContainer.afterInsert(bean); // listener callback
+            // listener callback
+            this.listenerContainer.afterInsert(bean);
             return bean;
         }
         catch(SQLException e)
@@ -250,12 +253,13 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     }
 
     //14
+
     @Override
     public FlLogLightBean update(FlLogLightBean bean) throws DAOException
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
-            return bean; // should not we log something ?
+            return bean;
         }
         if (bean.isNew()){
             return this.insert(bean);
@@ -270,7 +274,8 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
             c = this.getConnection();
 
 
-            this.listenerContainer.beforeUpdate(bean); // listener callback
+            // listener callback
+            this.listenerContainer.beforeUpdate(bean); 
             sql = new StringBuilder("UPDATE fl_log_light SET ");
             boolean useComma=false;
 
@@ -342,7 +347,8 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
 
             ps.executeUpdate();
             bean.resetIsModified();
-            this.listenerContainer.afterUpdate(bean); // listener callback
+            // listener callback
+            this.listenerContainer.afterUpdate(bean); 
 
             return bean;
         }
@@ -363,6 +369,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     // USING TEMPLATE
     //_____________________________________________________________________
     //18
+
     @Override
     public FlLogLightBean loadUniqueUsingTemplate(FlLogLightBean bean) throws DAOException
     {
@@ -377,6 +384,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
          }
     }
     //18-1
+
     @Override
     public FlLogLightBean loadUniqueUsingTemplateChecked(FlLogLightBean bean) throws DAOException
     {
@@ -391,6 +399,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
          }
     }
     //20-5
+
     @Override
     public int loadUsingTemplate(FlLogLightBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlLogLightBean> action) throws DAOException
     {
@@ -417,6 +426,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     }
 
     //21
+
     @Override
     public int deleteUsingTemplate(FlLogLightBean bean) throws DAOException
     {
@@ -471,6 +481,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     //_____________________________________________________________________
 
     //25
+
     @Override
     public int countWhere(String where) throws DAOException
     {
@@ -506,6 +517,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
         throw new DataAccessException("Error in countWhere where=[" + where + "]");
     }
 
+    //26
     /**
      * Retrieves the number of rows of the table fl_log_light with a prepared statement.
      *
@@ -513,7 +525,6 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @return the number of rows returned
      * @throws DAOException
      */
-    //26
     private int countByPreparedStatement(PreparedStatement ps) throws DAOException
     {
         ResultSet rs =  null;
@@ -539,6 +550,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
        throw new DataAccessException("Error in countByPreparedStatement");
     }
 
+    //20
     /**
      * count the number of elements of a specific FlLogLightBean bean given the search type
      *
@@ -547,7 +559,6 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @return the number of rows returned
      * @throws DAOException
      */
-    //20
     @Override
     public int countUsingTemplate(FlLogLightBean bean, int searchType) throws DAOException
     {
@@ -753,6 +764,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     // DECODE RESULT SET
     //_____________________________________________________________________
 
+    //28
     /**
      * decode a resultset in an array of FlLogLightBean objects
      *
@@ -763,12 +775,12 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @return the resulting FlLogLightBean table
      * @throws DAOException
      */
-    //28
     public FlLogLightBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new FlLogLightBean[0]);
     }
 
+    //28-1
     /**
      * decode a resultset in a list of FlLogLightBean objects
      *
@@ -779,13 +791,13 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @return the resulting FlLogLightBean table
      * @throws DAOException
      */
-    //28-1
     public List<FlLogLightBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         ListAction action = new ListAction();
         actionOnResultSet(rs, fieldList, numRows, numRows, action);
         return action.getList();
     }
+    //28-2
     /** decode a resultset and call action
      * @param rs the resultset to decode
      * @param fieldList table of the field's associated constants
@@ -796,7 +808,6 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @throws DAOException
      * @throws IllegalArgumentException
      */
-    //28-2
     public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlLogLightBean> action) throws DAOException{
         try{
             int count = 0;
@@ -841,6 +852,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
         }
     }
 
+    //29
     /**
      * Transforms a ResultSet iterating on the fl_log_light on a FlLogLightBean bean.
      *
@@ -848,7 +860,6 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @return bean resulting FlLogLightBean bean
      * @throws DAOException
      */
-    //29
     public FlLogLightBean decodeRow(ResultSet rs,FlLogLightBean bean) throws DAOException
     {
         if(null==bean){
@@ -873,6 +884,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
         return bean;
     }
 
+    //30
     /**
      * Transforms a ResultSet iterating on the fl_log_light table on a FlLogLightBean bean according to a list of fields.
      *
@@ -881,7 +893,6 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @return bean resulting FlLogLightBean bean
      * @throws DAOException
      */
-    //30
     public FlLogLightBean decodeRow(ResultSet rs, int[] fieldList,FlLogLightBean bean) throws DAOException
     {
         if(null==bean){
@@ -933,6 +944,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
         return bean;
     }
 
+    //31
     /**
      * Transforms a ResultSet iterating on the fl_log_light on a FlLogLightBean bean using the names of the columns
      *
@@ -940,7 +952,6 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @return bean resulting FlLogLightBean bean
      * @throws DAOException
      */
-    //31
     public FlLogLightBean metaDataDecodeRow(ResultSet rs) throws DAOException
     {
         FlLogLightBean bean = this.createBean();
@@ -968,6 +979,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     // PREPARED STATEMENT LOADER
     //////////////////////////////////////
 
+    //32
     /**
      * Loads all the elements using a prepared statement.
      *
@@ -975,12 +987,12 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @return an array of FlLogLightBean
      * @throws DAOException
      */
-    //32
     public FlLogLightBean[] loadByPreparedStatement(PreparedStatement ps) throws DAOException
     {
         return this.loadByPreparedStatement(ps, null);
     }
 
+    //32
     /**
      * Loads all the elements using a prepared statement.
      *
@@ -988,12 +1000,12 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @return an array of FlLogLightBean
      * @throws DAOException
      */
-    //32
     public List<FlLogLightBean> loadByPreparedStatementAsList(PreparedStatement ps) throws DAOException
     {
         return this.loadByPreparedStatementAsList(ps, null);
     }
 
+    //33
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved.
      *
@@ -1002,12 +1014,12 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @return an array of FlLogLightBean
      * @throws DAOException
      */
-    //33
     public FlLogLightBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws DAOException
     {
         return this.loadByPreparedStatementAsList(ps, fieldList).toArray(new FlLogLightBean[0]);
     }
 
+    //33
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved.
      *
@@ -1016,12 +1028,12 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @return an array of FlLogLightBean
      * @throws DAOException
      */
-    //33
     public List<FlLogLightBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws DAOException
     { 
         return loadByPreparedStatementAsList(ps,fieldList,1,-1);
     }
 
+    //34
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved,
      * and specifying the start row and the number of rows.
@@ -1033,12 +1045,12 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @return an array of FlLogLightBean
      * @throws DAOException
      */
-    //34
     public FlLogLightBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         return loadByPreparedStatementAsList(ps,fieldList,startRow,numRows).toArray(new FlLogLightBean[0]);
     }
 
+    //34-1
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved,
      * and specifying the start row and the number of rows.
@@ -1050,13 +1062,13 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @return an array of FlLogLightBean
      * @throws DAOException
      */
-    //34-1
     public List<FlLogLightBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         ListAction action = new ListAction();
         loadByPreparedStatement(ps,fieldList,startRow,numRows,action);
         return action.getList();
     }
+    //34-2
     /**
      * Loads each element using a prepared statement specifying a list of fields to be retrieved,
      * and specifying the start row and the number of rows 
@@ -1070,7 +1082,6 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @return the count dealt by action
      * @throws DAOException
      */     
-    //34-2
     public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlLogLightBean> action) throws DAOException
     {
         ResultSet rs =  null;
@@ -1092,7 +1103,9 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     //_____________________________________________________________________
 
     private final TableListener.ListenerContainer<FlLogLightBean> listenerContainer = new TableListener.ListenerContainer<FlLogLightBean>();
+
     //35
+
     @Override
     public TableListener<FlLogLightBean> registerListener(TableListener<FlLogLightBean> listener)
     {
@@ -1100,10 +1113,10 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
         return listener;
     }
 
+    //36
     /**
      * remove listener.
      */
-    //36
     @Override
     public void unregisterListener(TableListener<FlLogLightBean> listener)
     {
@@ -1111,6 +1124,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     }
 
     //37
+
     @Override
     public void fire(TableListener.Event event, FlLogLightBean bean) throws DAOException{
         if(null == event){
@@ -1120,6 +1134,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     }
     
     //37-1
+
     @Override
     public void fire(int event, FlLogLightBean bean) throws DAOException{
         try{
@@ -1129,18 +1144,18 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
         }
     }
 
+    //37-2
     /**
      * bind foreign key listener to foreign table: <br>
      */
-    //37-2
     public void bindForeignKeyListenerForDeleteRule(){
         
     }
+    //37-3
     /**
      * unbind foreign key listener from all of foreign tables <br>
      * @see #bindForeignKeyListenerForDeleteRule()
      */
-    //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
         
     }
@@ -1149,32 +1164,33 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     // UTILS
     //_____________________________________________________________________
 
+    //40
     /**
      * Retrieves the manager object used to get connections.
      *
      * @return the manager used
      */
-    //40
     private Manager getManager()
     {
         return Manager.getInstance();
     }
 
+    //41
     /**
      * Frees the connection.
      *
      * @param c the connection to release
      */
-    //41
     private void freeConnection(Connection c)
     {
-        this.getManager().releaseConnection(c); // back to pool
+        // back to pool
+        this.getManager().releaseConnection(c);
     }
 
+    //42
     /**
      * Gets the connection.
      */
-    //42
     private Connection getConnection() throws DAOException
     {
         try
@@ -1188,6 +1204,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     }
 
     //43
+
     @Override
     public boolean isPrimaryKey(String column){
         for(String c:PRIMARYKEY_NAMES){
@@ -1221,6 +1238,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     }
     
     @Override    
+
     public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlLogLightBean> action) throws DAOException{
         PreparedStatement ps = null;
         Connection connection = null;
@@ -1243,6 +1261,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     }
    
     @Override
+
     public <T>T runAsTransaction(Callable<T> fun) throws DAOException{
         return Manager.getInstance().runAsTransaction(fun);
     }

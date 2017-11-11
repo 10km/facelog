@@ -128,6 +128,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     //////////////////////////////////////
 
     //1 override IPersonManager
+
     @Override 
     public PersonBean loadByPrimaryKey(Integer id)
     {
@@ -139,6 +140,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         }
     }
     //1.1 override IPersonManager
+
     @Override
     public PersonBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
@@ -151,6 +153,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         }
     }
     //1.2
+
     @Override
     public PersonBean loadByPrimaryKey(PersonBean bean)
     {
@@ -158,6 +161,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
 
     //1.2.2
+
     @Override
     public PersonBean loadByPrimaryKeyChecked(PersonBean bean) throws ObjectRetrievalException
     {
@@ -168,6 +172,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
     
     //1.3
+
     @Override
     public PersonBean loadByPrimaryKey(Object ...keys){
         try{
@@ -179,6 +184,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
     
     //1.3.2
+
     @Override
     public PersonBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
         if(null == keys){
@@ -195,6 +201,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
 
     //1.4 override IPersonManager
+
     @Override 
     public boolean existsPrimaryKey(Integer id)
     {
@@ -207,12 +214,14 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         }
     }
     //1.6
+
     @Override
     public boolean existsByPrimaryKey(PersonBean bean)
     {
         return null == bean ? false : existsPrimaryKey(bean.getId());
     }
     //1.7
+
     @Override
     public PersonBean checkDuplicate(PersonBean bean)throws ObjectRetrievalException{
         if(null != bean){
@@ -221,6 +230,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return bean;   
     }
     //1.4.1 override IPersonManager
+
     @Override 
     public Integer checkDuplicate(Integer id)throws ObjectRetrievalException{
         try{
@@ -232,6 +242,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         }
     }
     //1.8 override IPersonManager
+
     @Override 
     public java.util.List<PersonBean> loadByPrimaryKey(int... keys){
         if(null == keys){
@@ -244,6 +255,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return list;
     }
     //1.9 override IPersonManager
+
     @Override 
     public java.util.List<PersonBean> loadByPrimaryKey(java.util.Collection<Integer> keys){
         if(null == keys ){
@@ -265,6 +277,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return list;
     }
     //2 override IPersonManager
+
     @Override 
     public int deleteByPrimaryKey(Integer id)
     {
@@ -278,6 +291,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         }
     }
     //2
+
     @Override
     public int delete(PersonBean bean){
         try
@@ -290,6 +304,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         }   
     }
     //2.1
+
     @Override
     public int deleteByPrimaryKey(Object ...keys){
         if(null == keys){
@@ -304,6 +319,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return deleteByPrimaryKey((Integer)keys[0]);
     }
     //2.2 override IPersonManager
+
     @Override 
     public int deleteByPrimaryKey(int... keys){
         int count = 0;
@@ -315,6 +331,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return count;
     }
     //2.3 override IPersonManager
+
     @Override 
     public int deleteByPrimaryKey(java.util.Collection<Integer> keys){
         int count = 0;
@@ -326,6 +343,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return count;
     }
     //2.4 override IPersonManager
+
     @Override 
     public int delete(PersonBean... beans){
         int count = 0;
@@ -337,6 +355,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return count;
     }
     //2.5 override IPersonManager
+
     @Override 
     public int delete(java.util.Collection<PersonBean> beans){
         int count = 0;
@@ -441,12 +460,14 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
     //3.1 GET IMPORTED override IPersonManager
+
     @Override 
     public FeatureBean[] getFeatureBeansByPersonId(PersonBean bean)
     {
         return this.getFeatureBeansByPersonIdAsList(bean).toArray(new FeatureBean[0]);
     }
     //3.1.2 GET IMPORTED override IPersonManager
+
     @Override
     public FeatureBean[] getFeatureBeansByPersonId(Integer idOfPerson)
     {
@@ -455,12 +476,14 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return getFeatureBeansByPersonId(bean);
     }
     //3.2 GET IMPORTED override IPersonManager
+
     @Override 
     public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(PersonBean bean)
     {
         return getFeatureBeansByPersonIdAsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IPersonManager
+
     @Override
     public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(Integer idOfPerson)
     {
@@ -469,6 +492,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return getFeatureBeansByPersonIdAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IPersonManager
+
     @Override
     public int deleteFeatureBeansByPersonId(Integer idOfPerson)
     {
@@ -476,6 +500,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return instanceOfFeatureManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IPersonManager
+
     @Override 
     public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(PersonBean bean,int startRow, int numRows)
     {
@@ -488,6 +513,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         }
     }
     //3.3 SET IMPORTED override IPersonManager
+
     @Override 
     public FeatureBean[] setFeatureBeansByPersonId(PersonBean bean , FeatureBean[] importedBeans)
     {
@@ -500,6 +526,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
 
     //3.4 SET IMPORTED override IPersonManager
+
     @Override 
     public <C extends java.util.Collection<FeatureBean>> C setFeatureBeansByPersonId(PersonBean bean , C importedBeans)
     {
@@ -512,12 +539,14 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
 
     //3.1 GET IMPORTED override IPersonManager
+
     @Override 
     public LogBean[] getLogBeansByPersonId(PersonBean bean)
     {
         return this.getLogBeansByPersonIdAsList(bean).toArray(new LogBean[0]);
     }
     //3.1.2 GET IMPORTED override IPersonManager
+
     @Override
     public LogBean[] getLogBeansByPersonId(Integer idOfPerson)
     {
@@ -526,12 +555,14 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return getLogBeansByPersonId(bean);
     }
     //3.2 GET IMPORTED override IPersonManager
+
     @Override 
     public java.util.List<LogBean> getLogBeansByPersonIdAsList(PersonBean bean)
     {
         return getLogBeansByPersonIdAsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IPersonManager
+
     @Override
     public java.util.List<LogBean> getLogBeansByPersonIdAsList(Integer idOfPerson)
     {
@@ -540,6 +571,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return getLogBeansByPersonIdAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IPersonManager
+
     @Override
     public int deleteLogBeansByPersonId(Integer idOfPerson)
     {
@@ -547,6 +579,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return instanceOfLogManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IPersonManager
+
     @Override 
     public java.util.List<LogBean> getLogBeansByPersonIdAsList(PersonBean bean,int startRow, int numRows)
     {
@@ -559,6 +592,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         }
     }
     //3.3 SET IMPORTED override IPersonManager
+
     @Override 
     public LogBean[] setLogBeansByPersonId(PersonBean bean , LogBean[] importedBeans)
     {
@@ -571,6 +605,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
 
     //3.4 SET IMPORTED override IPersonManager
+
     @Override 
     public <C extends java.util.Collection<LogBean>> C setLogBeansByPersonId(PersonBean bean , C importedBeans)
     {
@@ -585,6 +620,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
 
 
     //3.5 SYNC SAVE override IPersonManager
+
     @Override  
     public PersonBean save(PersonBean bean
         , ImageBean refImageByImageMd5 , PersonGroupBean refPersongroupByGroupId 
@@ -608,6 +644,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     } 
 
     //3.6 SYNC SAVE AS TRANSACTION override IPersonManager
+
     @Override 
     public PersonBean saveAsTransaction(final PersonBean bean
         ,final ImageBean refImageByImageMd5 ,final PersonGroupBean refPersongroupByGroupId 
@@ -620,6 +657,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
             }});
     }
     //3.7 SYNC SAVE override IPersonManager
+
     @Override 
     public PersonBean save(PersonBean bean
         , ImageBean refImageByImageMd5 , PersonGroupBean refPersongroupByGroupId 
@@ -639,6 +677,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }   
 
     //3.8 SYNC SAVE AS TRANSACTION override IPersonManager
+
     @Override 
     public PersonBean saveAsTransaction(final PersonBean bean
         ,final ImageBean refImageByImageMd5 ,final PersonGroupBean refPersongroupByGroupId 
@@ -650,7 +689,8 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
                 return save(bean , refImageByImageMd5 , refPersongroupByGroupId , impFeatureByPersonId , impLogByPersonId );
             }});
     }
-     /**
+     //3.9 SYNC SAVE 
+    /**
      * Save the {@link PersonBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link PersonBean} bean to be saved
@@ -658,7 +698,6 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
      *      see also {@link #save(PersonBean , ImageBean , PersonGroupBean , FeatureBean[] , LogBean[] )}
      * @return the inserted or updated {@link PersonBean} bean
      */
-    //3.9 SYNC SAVE 
     @Override
     public PersonBean save(PersonBean bean,Object ...args) 
     {
@@ -683,6 +722,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return save(bean,(args.length < 1 || null == args[0])?null:(ImageBean)args[0],(args.length < 2 || null == args[1])?null:(PersonGroupBean)args[1],(args.length < 3 || null == args[2])?null:(FeatureBean[])args[2],(args.length < 4 || null == args[3])?null:(LogBean[])args[3]);
     } 
 
+    //3.10 SYNC SAVE 
     /**
      * Save the {@link PersonBean} bean and referenced beans and imported beans into the database.
      *
@@ -691,7 +731,6 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
      *      see also {@link #save(PersonBean , ImageBean , PersonGroupBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link PersonBean} bean
      */
-    //3.10 SYNC SAVE 
     @SuppressWarnings("unchecked")
     @Override
     public PersonBean saveCollection(PersonBean bean,Object ...inputs)
@@ -775,6 +814,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
 
 
     //5.1 GET REFERENCED VALUE override IPersonManager
+
     @Override 
     public ImageBean getReferencedByImageMd5(PersonBean bean)
     {
@@ -786,6 +826,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
 
     //5.2 SET REFERENCED override IPersonManager
+
     @Override 
     public ImageBean setReferencedByImageMd5(PersonBean bean, ImageBean beanToSet)
     {
@@ -805,6 +846,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
 
     //5.1 GET REFERENCED VALUE override IPersonManager
+
     @Override 
     public PersonGroupBean getReferencedByGroupId(PersonBean bean)
     {
@@ -816,6 +858,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
 
     //5.2 SET REFERENCED override IPersonManager
+
     @Override 
     public PersonGroupBean setReferencedByGroupId(PersonBean bean, PersonGroupBean beanToSet)
     {
@@ -839,6 +882,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     //////////////////////////////////////
 
     //11
+
     @Override
     public int deleteByWhere(String where)
     {
@@ -857,6 +901,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     //_____________________________________________________________________
 
     //13
+
     @Override
     protected PersonBean insert(PersonBean bean)
     {
@@ -871,6 +916,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
 
     //14
     @Override
+
     protected PersonBean update(PersonBean bean)
     {
         try{
@@ -888,6 +934,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     //_____________________________________________________________________
     //18
     @Override
+
     public PersonBean loadUniqueUsingTemplate(PersonBean bean)
     {
         try{
@@ -900,6 +947,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
      }
     //18-1
     @Override
+
     public PersonBean loadUniqueUsingTemplateChecked(PersonBean bean) throws ObjectRetrievalException
     {
         try{
@@ -915,6 +963,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         }
      }
     //20-5
+
     @Override
     public int loadUsingTemplate(PersonBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<PersonBean> action)
     {
@@ -928,6 +977,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
 
     //21
+
     @Override
     public int deleteUsingTemplate(PersonBean bean)
     {
@@ -947,6 +997,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     //_____________________________________________________________________
 
     // override IPersonManager
+
     @Override 
     public PersonBean loadByIndexImageMd5(String imageMd5){
         try{
@@ -956,6 +1007,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         }
     }
     // override IPersonManager
+
     @Override 
     public PersonBean loadByIndexImageMd5Checked(String imageMd5)throws ObjectRetrievalException{
         if(null == imageMd5){
@@ -968,6 +1020,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return loadUniqueUsingTemplateChecked(bean);
     }
     // override IPersonManager
+
     @Override 
     public java.util.List<PersonBean> loadByIndexImageMd5(String... indexs)
     {
@@ -981,6 +1034,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return list;
     }
     // override IPersonManager
+
     @Override 
     public java.util.List<PersonBean> loadByIndexImageMd5(java.util.Collection<String> indexs)
     {
@@ -1003,6 +1057,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return list;
     }
     // override IPersonManager
+
     @Override 
     public int deleteByIndexImageMd5(String... indexs)
     {
@@ -1015,6 +1070,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return count;
     }
     // override IPersonManager
+
     @Override 
     public int deleteByIndexImageMd5(java.util.Collection<String> indexs)
     {
@@ -1028,6 +1084,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
 
     // override IPersonManager
+
     @Override 
     public int deleteByIndexImageMd5(String imageMd5)
     {
@@ -1041,6 +1098,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
     
     // override IPersonManager
+
     @Override 
     public PersonBean loadByIndexPapersNum(String papersNum){
         try{
@@ -1050,6 +1108,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         }
     }
     // override IPersonManager
+
     @Override 
     public PersonBean loadByIndexPapersNumChecked(String papersNum)throws ObjectRetrievalException{
         if(null == papersNum){
@@ -1062,6 +1121,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return loadUniqueUsingTemplateChecked(bean);
     }
     // override IPersonManager
+
     @Override 
     public java.util.List<PersonBean> loadByIndexPapersNum(String... indexs)
     {
@@ -1075,6 +1135,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return list;
     }
     // override IPersonManager
+
     @Override 
     public java.util.List<PersonBean> loadByIndexPapersNum(java.util.Collection<String> indexs)
     {
@@ -1097,6 +1158,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return list;
     }
     // override IPersonManager
+
     @Override 
     public int deleteByIndexPapersNum(String... indexs)
     {
@@ -1109,6 +1171,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return count;
     }
     // override IPersonManager
+
     @Override 
     public int deleteByIndexPapersNum(java.util.Collection<String> indexs)
     {
@@ -1122,6 +1185,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
 
     // override IPersonManager
+
     @Override 
     public int deleteByIndexPapersNum(String papersNum)
     {
@@ -1135,6 +1199,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
     
      // override IPersonManager
+
     @Override 
     public PersonBean[] loadByIndexExpiryDate(java.util.Date expiryDate)
     {
@@ -1142,6 +1207,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
     
     // override IPersonManager
+
     @Override 
     public java.util.List<PersonBean> loadByIndexExpiryDateAsList(java.util.Date expiryDate)
     {
@@ -1155,6 +1221,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
 
     // override IPersonManager
+
     @Override 
     public int deleteByIndexExpiryDate(java.util.Date expiryDate)
     {
@@ -1168,6 +1235,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
     
      // override IPersonManager
+
     @Override 
     public PersonBean[] loadByIndexGroupId(Integer groupId)
     {
@@ -1175,6 +1243,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
     
     // override IPersonManager
+
     @Override 
     public java.util.List<PersonBean> loadByIndexGroupIdAsList(Integer groupId)
     {
@@ -1188,6 +1257,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
 
     // override IPersonManager
+
     @Override 
     public int deleteByIndexGroupId(Integer groupId)
     {
@@ -1240,6 +1310,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     // COUNT
     //_____________________________________________________________________
     //25
+
     @Override
     public int countWhere(String where)
     {
@@ -1253,6 +1324,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
 
     //20
+
     @Override
     public int countUsingTemplate(PersonBean bean, int searchType)
     {
@@ -1271,10 +1343,10 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     // LISTENER
     //_____________________________________________________________________
 
+    //35
     /**
      * @return {@link WrapListener} instance
      */
-    //35
     @Override
     public TableListener<PersonBean> registerListener(TableListener<PersonBean> listener)
     {
@@ -1290,6 +1362,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
 
     //36
+
     @Override
     public void unregisterListener(TableListener<PersonBean> listener)
     {
@@ -1300,12 +1373,14 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
     
     //37
+
     @Override
     public void fire(TableListener.Event event, PersonBean bean){
         fire(event.ordinal(), bean);
     }
     
     //37-1
+
     @Override
     public void fire(int event, PersonBean bean){
         try{
@@ -1316,25 +1391,24 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
             throw new WrapDAOException(e);
         }
     }
+    //37-2
     /**
      * bind foreign key listener to foreign table for DELETE RULE
      */
-    //37-2
     void bindForeignKeyListenerForDeleteRule(){
         this.nativeManager.bindForeignKeyListenerForDeleteRule();
     }
+    //37-3
     /**
      * unbind foreign key listener from all of foreign tables <br>
      * @see #bindForeignKeyListenerForDeleteRule()
      */
-    //37-3
     void unbindForeignKeyListenerForDeleteRule(){
         this.nativeManager.unbindForeignKeyListenerForDeleteRule();
 
     }
     /**
      * wrap {@code TableListener<PersonBean>} as native listener
-     *
      */
     public class WrapListener implements TableListener<PersonBean>{
         private final TableListener<PersonBean> listener;
@@ -1414,6 +1488,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     //_____________________________________________________________________
 
     //43
+
     @Override
     public boolean isPrimaryKey(String column){
         return this.nativeManager.isPrimaryKey(column);
@@ -1459,25 +1534,27 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     }
     
     //45 override IPersonManager
+
     @Override 
-    public java.util.List<Integer> toPrimaryKeyList(PersonBean... array){        
-        if(null == array){
+    public java.util.List<Integer> toPrimaryKeyList(PersonBean... beans){        
+        if(null == beans){
             return new java.util.ArrayList<Integer>();
         }
-        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
-        for(PersonBean bean:array){
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(beans.length);
+        for(PersonBean bean:beans){
             list.add(null == bean ? null : bean.getId());
         }
         return list;
     }
     //46 override IPersonManager
+
     @Override 
-    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<PersonBean> collection){        
-        if(null == collection){
+    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<PersonBean> beans){        
+        if(null == beans){
             return new java.util.ArrayList<Integer>();
         }
-        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
-        for(PersonBean bean:collection){
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(beans.size());
+        for(PersonBean bean:beans){
             list.add(null == bean ? null : bean.getId());
         }
         return list;

@@ -91,6 +91,7 @@ public class ImageCacheManager extends ImageManager
     //////////////////////////////////////
 
     //1.1 override IImageManager
+
     @Override 
     public ImageBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException
     {
@@ -126,6 +127,7 @@ public class ImageCacheManager extends ImageManager
         }
     }
     //1.4 override IImageManager
+
     @Override 
     public boolean existsPrimaryKey(String md5){
         return null != loadByPrimaryKey(md5);
@@ -148,6 +150,7 @@ public class ImageCacheManager extends ImageManager
         }
     }
     //20-5
+
     @Override
     public int loadUsingTemplate(ImageBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<ImageBean> action){
         if(null == fieldList ){

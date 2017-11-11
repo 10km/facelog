@@ -110,6 +110,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
+    //1
     /**
      * Loads a {@link FlFeatureBean} from the fl_feature using primary key fields.
      *
@@ -117,7 +118,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return a unique FlFeatureBean or {@code null} if not found or have null argument
      * @throws DAOException
      */
-    //1
     public FlFeatureBean loadByPrimaryKey(String md5) throws DAOException
     {
         try{
@@ -128,6 +128,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         }
     }
     
+    //1.1
     /**
      * Loads a {@link FlFeatureBean} from the fl_feature using primary key fields.
      *
@@ -136,7 +137,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @throws ObjectRetrievalException if not found
      * @throws DAOException
      */
-    //1.1
     @SuppressWarnings("unused")
     public FlFeatureBean loadByPrimaryKeyChecked(String md5) throws DAOException
     {
@@ -177,6 +177,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     }
 
     //1.2
+    
     @Override
     public FlFeatureBean loadByPrimaryKey(FlFeatureBean bean) throws DAOException
     {
@@ -184,6 +185,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     }
     
     //1.2.2
+    
     @Override
     public FlFeatureBean loadByPrimaryKeyChecked(FlFeatureBean bean) throws DAOException
     {
@@ -193,13 +195,13 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         return loadByPrimaryKeyChecked(bean.getMd5());
     }
     
+    //1.3
     /**
      * Loads a {@link FlFeatureBean} from the fl_feature using primary key fields.
      * @param keys primary keys value:<br> 
      * @return a unique {@link FlFeatureBean} or {@code null} if not found
      * @see {@link #loadByPrimaryKey(String md5)}
      */
-    //1.3
     @Override
     public FlFeatureBean loadByPrimaryKey(Object ...keys) throws DAOException{
         if(null == keys){
@@ -215,6 +217,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         return loadByPrimaryKey((String)keys[0]);
     }
     //1.3.2
+
     @Override
     public FlFeatureBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
         if(null == keys){
@@ -229,12 +232,12 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         }
         return loadByPrimaryKeyChecked((String)keys[0]);
     }
+    //1.4
     /**
      * Returns true if this fl_feature contains row with primary key fields.
      * @param md5 String - PK# 1
      * @throws DAOException
      */
-    //1.4
     @SuppressWarnings("unused")
     public boolean existsPrimaryKey(String md5) throws DAOException
     {
@@ -259,6 +262,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
             this.freeConnection(c);
         }
     }
+    //1.6
     /**
      * Return true if this fl_feature contains row with primary key fields.
      * @param bean  
@@ -266,7 +270,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return false if primary kes has null
      * @see #countUsingTemplate(FlFeatureBean)
      */
-    //1.6
     @Override
     public boolean existsByPrimaryKey(FlFeatureBean bean) throws DAOException
     {
@@ -282,6 +285,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         }
     }
     //1.7
+
     @Override
     public FlFeatureBean checkDuplicate(FlFeatureBean bean) throws DAOException{
         if(!existsByPrimaryKey(bean)){
@@ -289,13 +293,13 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         }
         return bean;
     }
+    //1.4.1
     /**
      * Check duplicated row by primary keys,if row exists throw {@link ObjectRetrievalException}
      * @param md5 String
      * @throws DAOException
      * @see #existsPrimaryKey(String md5)
      */
-    //1.4.1
     public String checkDuplicate(String md5) throws DAOException
     {
         if(existsPrimaryKey(md5)){
@@ -303,6 +307,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         }
         return md5;
     }    
+    //2
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
@@ -312,7 +317,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @throws DAOException
      * @see {@link #delete(FlFeatureBean)}
      */
-    //2
     public int deleteByPrimaryKey(String md5) throws DAOException
     {
         FlFeatureBean bean=createBean();
@@ -320,6 +324,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         return this.delete(bean);
     }
 
+    //2.2
     /**
      * Delete row according to primary keys of bean.<br>
      * 
@@ -327,7 +332,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the number of deleted rows,0 returned if bean is null
      * @throws DAOException
      */
-    //2
     @Override
     public int delete(FlFeatureBean bean) throws DAOException
     {
@@ -338,7 +342,8 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         PreparedStatement ps = null;
         try
         {
-            this.listenerContainer.beforeDelete(bean); // listener callback
+            // listener callback
+            this.listenerContainer.beforeDelete(bean);
             c = this.getConnection();
             StringBuilder sql = new StringBuilder("DELETE FROM fl_feature WHERE md5=?");
             // System.out.println("deleteByPrimaryKey: " + sql);
@@ -348,7 +353,8 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
             if (bean.getMd5() == null) { ps.setNull(1, Types.CHAR); } else { ps.setString(1, bean.getMd5()); }
             int rows=ps.executeUpdate();
             if(rows>0){
-                this.listenerContainer.afterDelete(bean); // listener callback
+                // listener callback
+                this.listenerContainer.afterDelete(bean);
             }
             return rows;
         }
@@ -363,6 +369,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         }
     }
 
+    //2.1
     /**
      * Delete row according to its primary keys.
      *
@@ -370,7 +377,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the number of deleted rows
      * @see {@link #delete(FlFeatureBean)}
      */   
-    //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DAOException{
         if(null == keys){
@@ -475,6 +481,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
+    //3.1 GET IMPORTED
     /**
      * Retrieves the {@link FlFaceBean} object from the fl_face.feature_md5 field.<BR>
      * FK_NAME : fl_face_ibfk_2 
@@ -482,11 +489,11 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the associated {@link FlFaceBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1 GET IMPORTED
     public FlFaceBean[] getFaceBeansByFeatureMd5(FlFeatureBean bean) throws DAOException
     {
         return getFaceBeansByFeatureMd5AsList(bean).toArray(new FlFaceBean[0]);
     }
+    //3.1.2 GET IMPORTED
     /**
      * Retrieves the {@link FlFaceBean} object from the fl_face.feature_md5 field.<BR>
      * FK_NAME : fl_face_ibfk_2 
@@ -494,13 +501,13 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the associated {@link FlFaceBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1.2 GET IMPORTED
     public FlFaceBean[] getFaceBeansByFeatureMd5(String md5OfFeature) throws DAOException
     {
         FlFeatureBean bean = createBean();
         bean.setMd5(md5OfFeature);
         return getFaceBeansByFeatureMd5(bean);
     }
+    //3.2 GET IMPORTED
     /**
      * Retrieves the {@link FlFaceBean} object from fl_face.feature_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_2
@@ -508,11 +515,11 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the associated {@link FlFaceBean} beans 
      * @throws DAOException
      */
-    //3.2 GET IMPORTED
     public List<FlFaceBean> getFaceBeansByFeatureMd5AsList(FlFeatureBean bean) throws DAOException
     {
         return getFaceBeansByFeatureMd5AsList(bean,1,-1);
     }
+    //3.2.2 GET IMPORTED
     /**
      * Retrieves the {@link FlFaceBean} object from fl_face.feature_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_2
@@ -520,13 +527,13 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the associated {@link FlFaceBean} beans 
      * @throws DAOException
      */
-    //3.2.2 GET IMPORTED
     public List<FlFaceBean> getFaceBeansByFeatureMd5AsList(String md5OfFeature) throws DAOException
     {
          FlFeatureBean bean = createBean();
         bean.setMd5(md5OfFeature);
         return getFaceBeansByFeatureMd5AsList(bean);
     }
+    //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link FlFaceBean} object from fl_face.feature_md5 field, 
      * given the start row and number of rows.<BR>
@@ -537,7 +544,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the associated {@link FlFaceBean} beans 
      * @throws DAOException
      */
-    //3.2.4 GET IMPORTED
     public List<FlFaceBean> getFaceBeansByFeatureMd5AsList(FlFeatureBean bean,int startRow, int numRows) throws DAOException
     {
         if(null == bean){
@@ -547,6 +553,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         other.setFeatureMd5(bean.getMd5());
         return instanceOfFlFaceManager().loadUsingTemplateAsList(other,startRow,numRows);
     }
+    //3.3 SET IMPORTED
     /**
      * set  the {@link FlFaceBean} object array associate to FlFeatureBean by the fl_face.feature_md5 field.<BR>
      * FK_NAME : fl_face_ibfk_2 
@@ -556,7 +563,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @throws DAOException
      * @see {@link FlFaceManager#setReferencedByFeatureMd5(FlFaceBean, FlFeatureBean)
      */
-    //3.3 SET IMPORTED
     public FlFaceBean[] setFaceBeansByFeatureMd5(FlFeatureBean bean , FlFaceBean[] importedBeans) throws DAOException
     {
         if(null != importedBeans){
@@ -567,6 +573,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         return importedBeans;
     }
 
+    //3.4 SET IMPORTED
     /**
      * set  the {@link FlFaceBean} object collection associate to FlFeatureBean by the fl_face.feature_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_2
@@ -576,7 +583,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @throws DAOException
      * @see {@link FlFaceManager#setReferencedByFeatureMd5(FlFaceBean, FlFeatureBean)
      */
-    //3.4 SET IMPORTED
     public <C extends java.util.Collection<FlFaceBean>> C setFaceBeansByFeatureMd5(FlFeatureBean bean , C importedBeans) throws DAOException
     {
         if(null != importedBeans){
@@ -587,6 +593,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         return importedBeans;
     }
 
+    //3.1 GET IMPORTED
     /**
      * Retrieves the {@link FlLogBean} object from the fl_log.verify_feature field.<BR>
      * FK_NAME : fl_log_ibfk_3 
@@ -594,11 +601,11 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1 GET IMPORTED
     public FlLogBean[] getLogBeansByVerifyFeature(FlFeatureBean bean) throws DAOException
     {
         return getLogBeansByVerifyFeatureAsList(bean).toArray(new FlLogBean[0]);
     }
+    //3.1.2 GET IMPORTED
     /**
      * Retrieves the {@link FlLogBean} object from the fl_log.verify_feature field.<BR>
      * FK_NAME : fl_log_ibfk_3 
@@ -606,13 +613,13 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1.2 GET IMPORTED
     public FlLogBean[] getLogBeansByVerifyFeature(String md5OfFeature) throws DAOException
     {
         FlFeatureBean bean = createBean();
         bean.setMd5(md5OfFeature);
         return getLogBeansByVerifyFeature(bean);
     }
+    //3.2 GET IMPORTED
     /**
      * Retrieves the {@link FlLogBean} object from fl_log.verify_feature field.<BR>
      * FK_NAME:fl_log_ibfk_3
@@ -620,11 +627,11 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the associated {@link FlLogBean} beans 
      * @throws DAOException
      */
-    //3.2 GET IMPORTED
     public List<FlLogBean> getLogBeansByVerifyFeatureAsList(FlFeatureBean bean) throws DAOException
     {
         return getLogBeansByVerifyFeatureAsList(bean,1,-1);
     }
+    //3.2.2 GET IMPORTED
     /**
      * Retrieves the {@link FlLogBean} object from fl_log.verify_feature field.<BR>
      * FK_NAME:fl_log_ibfk_3
@@ -632,13 +639,13 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the associated {@link FlLogBean} beans 
      * @throws DAOException
      */
-    //3.2.2 GET IMPORTED
     public List<FlLogBean> getLogBeansByVerifyFeatureAsList(String md5OfFeature) throws DAOException
     {
          FlFeatureBean bean = createBean();
         bean.setMd5(md5OfFeature);
         return getLogBeansByVerifyFeatureAsList(bean);
     }
+    //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link FlLogBean} object from fl_log.verify_feature field, 
      * given the start row and number of rows.<BR>
@@ -649,7 +656,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the associated {@link FlLogBean} beans 
      * @throws DAOException
      */
-    //3.2.4 GET IMPORTED
     public List<FlLogBean> getLogBeansByVerifyFeatureAsList(FlFeatureBean bean,int startRow, int numRows) throws DAOException
     {
         if(null == bean){
@@ -659,6 +665,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         other.setVerifyFeature(bean.getMd5());
         return instanceOfFlLogManager().loadUsingTemplateAsList(other,startRow,numRows);
     }
+    //3.3 SET IMPORTED
     /**
      * set  the {@link FlLogBean} object array associate to FlFeatureBean by the fl_log.verify_feature field.<BR>
      * FK_NAME : fl_log_ibfk_3 
@@ -668,7 +675,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @throws DAOException
      * @see {@link FlLogManager#setReferencedByVerifyFeature(FlLogBean, FlFeatureBean)
      */
-    //3.3 SET IMPORTED
     public FlLogBean[] setLogBeansByVerifyFeature(FlFeatureBean bean , FlLogBean[] importedBeans) throws DAOException
     {
         if(null != importedBeans){
@@ -679,6 +685,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         return importedBeans;
     }
 
+    //3.4 SET IMPORTED
     /**
      * set  the {@link FlLogBean} object collection associate to FlFeatureBean by the fl_log.verify_feature field.<BR>
      * FK_NAME:fl_log_ibfk_3
@@ -688,7 +695,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @throws DAOException
      * @see {@link FlLogManager#setReferencedByVerifyFeature(FlLogBean, FlFeatureBean)
      */
-    //3.4 SET IMPORTED
     public <C extends java.util.Collection<FlLogBean>> C setLogBeansByVerifyFeature(FlFeatureBean bean , C importedBeans) throws DAOException
     {
         if(null != importedBeans){
@@ -699,6 +705,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         return importedBeans;
     }
 
+    //3.5 SYNC SAVE 
     /**
      * Save the FlFeatureBean bean and referenced beans and imported beans into the database.
      *
@@ -709,7 +716,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the inserted or updated {@link FlFeatureBean} bean
      * @throws DAOException
      */
-    //3.5 SYNC SAVE 
     public FlFeatureBean save(FlFeatureBean bean
         , FlPersonBean refPersonByPersonId 
         , FlFaceBean[] impFaceByFeatureMd5 , FlLogBean[] impLogByVerifyFeature ) throws DAOException
@@ -728,11 +734,11 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         return bean;
     } 
 
+    //3.6 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save
      * @see {@link #save(FlFeatureBean , FlPersonBean , FlFaceBean[] , FlLogBean[] )}
      */
-    //3.6 SYNC SAVE AS TRANSACTION
     public FlFeatureBean saveAsTransaction(final FlFeatureBean bean
         ,final FlPersonBean refPersonByPersonId 
         ,final FlFaceBean[] impFaceByFeatureMd5 ,final FlLogBean[] impLogByVerifyFeature ) throws DAOException
@@ -743,6 +749,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
                 return save(bean , refPersonByPersonId , impFaceByFeatureMd5 , impLogByVerifyFeature );
             }});
     }
+    //3.7 SYNC SAVE 
     /**
      * Save the FlFeatureBean bean and referenced beans and imported beans into the database.
      *
@@ -753,7 +760,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the inserted or updated {@link FlFeatureBean} bean
      * @throws DAOException
      */
-    //3.7 SYNC SAVE 
     public FlFeatureBean save(FlFeatureBean bean
         , FlPersonBean refPersonByPersonId 
         , java.util.Collection<FlFaceBean> impFaceByFeatureMd5 , java.util.Collection<FlLogBean> impLogByVerifyFeature ) throws DAOException
@@ -770,11 +776,11 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         return bean;
     }
 
+    //3.8 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save
      * @see {@link #save(FlFeatureBean , FlPersonBean , java.util.Collection , java.util.Collection )}
      */
-    //3.8 SYNC SAVE AS TRANSACTION
     public FlFeatureBean saveAsTransaction(final FlFeatureBean bean
         ,final FlPersonBean refPersonByPersonId 
         ,final  java.util.Collection<FlFaceBean> impFaceByFeatureMd5 ,final  java.util.Collection<FlLogBean> impLogByVerifyFeature ) throws DAOException
@@ -785,6 +791,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
                 return save(bean , refPersonByPersonId , impFaceByFeatureMd5 , impLogByVerifyFeature );
             }});
     }
+    //3.9 SYNC SAVE 
     /**
      * Save the FlFeatureBean bean and referenced beans and imported beans (array) into the database.
      *
@@ -794,7 +801,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the inserted or updated {@link FlFeatureBean} bean
      * @throws DAOException
      */
-    //3.9 SYNC SAVE 
     @Override
     public FlFeatureBean save(FlFeatureBean bean,Object ...args) throws DAOException
     {
@@ -816,6 +822,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         return save(bean,(args.length < 1 || null == args[0])?null:(FlPersonBean)args[0],(args.length < 2 || null == args[1])?null:(FlFaceBean[])args[1],(args.length < 3 || null == args[2])?null:(FlLogBean[])args[2]);
     } 
 
+    //3.10 SYNC SAVE 
     /**
      * Save the FlFeatureBean bean and referenced beans and imported beans (collection) into the database.
      *
@@ -825,7 +832,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the inserted or updated {@link FlFeatureBean} bean
      * @throws DAOException
      */
-    //3.10 SYNC SAVE 
     @SuppressWarnings("unchecked")
     @Override
     public FlFeatureBean saveCollection(FlFeatureBean bean,Object ...args) throws DAOException
@@ -900,6 +906,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     //////////////////////////////////////
 
 
+    //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link FlPersonBean} object referenced by {@link FlFeatureBean#getPersonId}() field.<br>
      * FK_NAME : fl_feature_ibfk_1
@@ -907,7 +914,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the associated {@link FlPersonBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //5.1 GET REFERENCED VALUE
     public FlPersonBean getReferencedByPersonId(FlFeatureBean bean) throws DAOException
     {
         if(null == bean){
@@ -917,6 +923,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         return bean.getReferencedByPersonId();
     }
 
+    //5.2 SET REFERENCED 
     /**
      * Associates the {@link FlFeatureBean} object to the {@link FlPersonBean} object by {@link FlFeatureBean#getPersonId}() field.
      *
@@ -925,7 +932,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return always beanToSet saved
      * @throws Exception
      */
-    //5.2 SET REFERENCED 
     public FlPersonBean setReferencedByPersonId(FlFeatureBean bean, FlPersonBean beanToSet) throws DAOException
     {
         if(null != bean){
@@ -943,6 +949,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     //////////////////////////////////////
     // SQL 'WHERE' METHOD
     //////////////////////////////////////
+    //11
     /**
      * Deletes rows from the fl_feature table using a 'where' clause.
      * It is up to you to pass the 'WHERE' in your where clauses.
@@ -952,7 +959,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the number of deleted rows
      * @throws DAOException
      */
-    //11
     @Override
     public int deleteByWhere(String where) throws DAOException
     {
@@ -989,12 +995,13 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     //_____________________________________________________________________
 
     //13
+
     @Override
     public FlFeatureBean insert(FlFeatureBean bean) throws DAOException
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
-            return bean; // should not we log something ?
+            return bean; 
         }
         if (!bean.isNew()){
             return this.update(bean);
@@ -1007,7 +1014,8 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         try
         {
             c = this.getConnection();
-            this.listenerContainer.beforeInsert(bean); // listener callback
+            // listener callback
+            this.listenerContainer.beforeInsert(bean);
             int dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_feature (");
 
@@ -1063,7 +1071,8 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
 
             bean.isNew(false);
             bean.resetIsModified();
-            this.listenerContainer.afterInsert(bean); // listener callback
+            // listener callback
+            this.listenerContainer.afterInsert(bean);
             return bean;
         }
         catch(SQLException e)
@@ -1079,12 +1088,13 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     }
 
     //14
+
     @Override
     public FlFeatureBean update(FlFeatureBean bean) throws DAOException
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
-            return bean; // should not we log something ?
+            return bean;
         }
         if (bean.isNew()){
             return this.insert(bean);
@@ -1098,7 +1108,8 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         {
             c = this.getConnection();
 
-            this.listenerContainer.beforeUpdate(bean); // listener callback
+            // listener callback
+            this.listenerContainer.beforeUpdate(bean); 
             sql = new StringBuilder("UPDATE fl_feature SET ");
             boolean useComma=false;
 
@@ -1154,7 +1165,8 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
             if (bean.getMd5() == null) { ps.setNull(++dirtyCount, Types.CHAR); } else { ps.setString(++dirtyCount, bean.getMd5()); }
             ps.executeUpdate();
             bean.resetIsModified();
-            this.listenerContainer.afterUpdate(bean); // listener callback
+            // listener callback
+            this.listenerContainer.afterUpdate(bean); 
 
             return bean;
         }
@@ -1175,6 +1187,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     // USING TEMPLATE
     //_____________________________________________________________________
     //18
+
     @Override
     public FlFeatureBean loadUniqueUsingTemplate(FlFeatureBean bean) throws DAOException
     {
@@ -1189,6 +1202,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
          }
     }
     //18-1
+
     @Override
     public FlFeatureBean loadUniqueUsingTemplateChecked(FlFeatureBean bean) throws DAOException
     {
@@ -1203,6 +1217,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
          }
     }
     //20-5
+
     @Override
     public int loadUsingTemplate(FlFeatureBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlFeatureBean> action) throws DAOException
     {
@@ -1229,6 +1244,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     }
 
     //21
+
     @Override
     public int deleteUsingTemplate(FlFeatureBean bean) throws DAOException
     {
@@ -1392,6 +1408,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     //_____________________________________________________________________
 
     //25
+
     @Override
     public int countWhere(String where) throws DAOException
     {
@@ -1427,6 +1444,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         throw new DataAccessException("Error in countWhere where=[" + where + "]");
     }
 
+    //26
     /**
      * Retrieves the number of rows of the table fl_feature with a prepared statement.
      *
@@ -1434,7 +1452,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the number of rows returned
      * @throws DAOException
      */
-    //26
     private int countByPreparedStatement(PreparedStatement ps) throws DAOException
     {
         ResultSet rs =  null;
@@ -1460,6 +1477,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
        throw new DataAccessException("Error in countByPreparedStatement");
     }
 
+    //20
     /**
      * count the number of elements of a specific FlFeatureBean bean given the search type
      *
@@ -1468,7 +1486,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the number of rows returned
      * @throws DAOException
      */
-    //20
     @Override
     public int countUsingTemplate(FlFeatureBean bean, int searchType) throws DAOException
     {
@@ -1632,6 +1649,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     // DECODE RESULT SET
     //_____________________________________________________________________
 
+    //28
     /**
      * decode a resultset in an array of FlFeatureBean objects
      *
@@ -1642,12 +1660,12 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the resulting FlFeatureBean table
      * @throws DAOException
      */
-    //28
     public FlFeatureBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new FlFeatureBean[0]);
     }
 
+    //28-1
     /**
      * decode a resultset in a list of FlFeatureBean objects
      *
@@ -1658,13 +1676,13 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the resulting FlFeatureBean table
      * @throws DAOException
      */
-    //28-1
     public List<FlFeatureBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         ListAction action = new ListAction();
         actionOnResultSet(rs, fieldList, numRows, numRows, action);
         return action.getList();
     }
+    //28-2
     /** decode a resultset and call action
      * @param rs the resultset to decode
      * @param fieldList table of the field's associated constants
@@ -1675,7 +1693,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @throws DAOException
      * @throws IllegalArgumentException
      */
-    //28-2
     public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlFeatureBean> action) throws DAOException{
         try{
             int count = 0;
@@ -1720,6 +1737,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         }
     }
 
+    //29
     /**
      * Transforms a ResultSet iterating on the fl_feature on a FlFeatureBean bean.
      *
@@ -1727,7 +1745,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return bean resulting FlFeatureBean bean
      * @throws DAOException
      */
-    //29
     public FlFeatureBean decodeRow(ResultSet rs,FlFeatureBean bean) throws DAOException
     {
         if(null==bean){
@@ -1750,6 +1767,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         return bean;
     }
 
+    //30
     /**
      * Transforms a ResultSet iterating on the fl_feature table on a FlFeatureBean bean according to a list of fields.
      *
@@ -1758,7 +1776,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return bean resulting FlFeatureBean bean
      * @throws DAOException
      */
-    //30
     public FlFeatureBean decodeRow(ResultSet rs, int[] fieldList,FlFeatureBean bean) throws DAOException
     {
         if(null==bean){
@@ -1802,6 +1819,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         return bean;
     }
 
+    //31
     /**
      * Transforms a ResultSet iterating on the fl_feature on a FlFeatureBean bean using the names of the columns
      *
@@ -1809,7 +1827,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return bean resulting FlFeatureBean bean
      * @throws DAOException
      */
-    //31
     public FlFeatureBean metaDataDecodeRow(ResultSet rs) throws DAOException
     {
         FlFeatureBean bean = this.createBean();
@@ -1835,6 +1852,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     // PREPARED STATEMENT LOADER
     //////////////////////////////////////
 
+    //32
     /**
      * Loads all the elements using a prepared statement.
      *
@@ -1842,12 +1860,12 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return an array of FlFeatureBean
      * @throws DAOException
      */
-    //32
     public FlFeatureBean[] loadByPreparedStatement(PreparedStatement ps) throws DAOException
     {
         return this.loadByPreparedStatement(ps, null);
     }
 
+    //32
     /**
      * Loads all the elements using a prepared statement.
      *
@@ -1855,12 +1873,12 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return an array of FlFeatureBean
      * @throws DAOException
      */
-    //32
     public List<FlFeatureBean> loadByPreparedStatementAsList(PreparedStatement ps) throws DAOException
     {
         return this.loadByPreparedStatementAsList(ps, null);
     }
 
+    //33
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved.
      *
@@ -1869,12 +1887,12 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return an array of FlFeatureBean
      * @throws DAOException
      */
-    //33
     public FlFeatureBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws DAOException
     {
         return this.loadByPreparedStatementAsList(ps, fieldList).toArray(new FlFeatureBean[0]);
     }
 
+    //33
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved.
      *
@@ -1883,12 +1901,12 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return an array of FlFeatureBean
      * @throws DAOException
      */
-    //33
     public List<FlFeatureBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws DAOException
     { 
         return loadByPreparedStatementAsList(ps,fieldList,1,-1);
     }
 
+    //34
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved,
      * and specifying the start row and the number of rows.
@@ -1900,12 +1918,12 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return an array of FlFeatureBean
      * @throws DAOException
      */
-    //34
     public FlFeatureBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         return loadByPreparedStatementAsList(ps,fieldList,startRow,numRows).toArray(new FlFeatureBean[0]);
     }
 
+    //34-1
     /**
      * Loads all the elements using a prepared statement specifying a list of fields to be retrieved,
      * and specifying the start row and the number of rows.
@@ -1917,13 +1935,13 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return an array of FlFeatureBean
      * @throws DAOException
      */
-    //34-1
     public List<FlFeatureBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         ListAction action = new ListAction();
         loadByPreparedStatement(ps,fieldList,startRow,numRows,action);
         return action.getList();
     }
+    //34-2
     /**
      * Loads each element using a prepared statement specifying a list of fields to be retrieved,
      * and specifying the start row and the number of rows 
@@ -1937,7 +1955,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @return the count dealt by action
      * @throws DAOException
      */     
-    //34-2
     public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlFeatureBean> action) throws DAOException
     {
         ResultSet rs =  null;
@@ -1959,7 +1976,9 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     //_____________________________________________________________________
 
     private final TableListener.ListenerContainer<FlFeatureBean> listenerContainer = new TableListener.ListenerContainer<FlFeatureBean>();
+
     //35
+
     @Override
     public TableListener<FlFeatureBean> registerListener(TableListener<FlFeatureBean> listener)
     {
@@ -1967,10 +1986,10 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         return listener;
     }
 
+    //36
     /**
      * remove listener.
      */
-    //36
     @Override
     public void unregisterListener(TableListener<FlFeatureBean> listener)
     {
@@ -1978,6 +1997,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     }
 
     //37
+
     @Override
     public void fire(TableListener.Event event, FlFeatureBean bean) throws DAOException{
         if(null == event){
@@ -1987,6 +2007,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     }
     
     //37-1
+
     @Override
     public void fire(int event, FlFeatureBean bean) throws DAOException{
         try{
@@ -2013,20 +2034,20 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
                     }
                 }};
 
+    //37-2
     /**
      * bind foreign key listener to foreign table: <br>
      * DELETE RULE : CASCADE {@code fl_feature(person_id)-> fl_person(id)} <br>
      */
-    //37-2
     public void bindForeignKeyListenerForDeleteRule(){
         instanceOfFlPersonManager().registerListener(foreignKeyListenerByPersonId);
         
     }
+    //37-3
     /**
      * unbind foreign key listener from all of foreign tables <br>
      * @see #bindForeignKeyListenerForDeleteRule()
      */
-    //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
         instanceOfFlPersonManager().unregisterListener(foreignKeyListenerByPersonId);
         
@@ -2036,32 +2057,33 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     // UTILS
     //_____________________________________________________________________
 
+    //40
     /**
      * Retrieves the manager object used to get connections.
      *
      * @return the manager used
      */
-    //40
     private Manager getManager()
     {
         return Manager.getInstance();
     }
 
+    //41
     /**
      * Frees the connection.
      *
      * @param c the connection to release
      */
-    //41
     private void freeConnection(Connection c)
     {
-        this.getManager().releaseConnection(c); // back to pool
+        // back to pool
+        this.getManager().releaseConnection(c);
     }
 
+    //42
     /**
      * Gets the connection.
      */
-    //42
     private Connection getConnection() throws DAOException
     {
         try
@@ -2075,6 +2097,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     }
 
     //43
+
     @Override
     public boolean isPrimaryKey(String column){
         for(String c:PRIMARYKEY_NAMES){
@@ -2108,6 +2131,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     }
     
     @Override    
+
     public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlFeatureBean> action) throws DAOException{
         PreparedStatement ps = null;
         Connection connection = null;
@@ -2130,6 +2154,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     }
    
     @Override
+
     public <T>T runAsTransaction(Callable<T> fun) throws DAOException{
         return Manager.getInstance().runAsTransaction(fun);
     }
@@ -2145,11 +2170,11 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
             return count.get();
         }
     }
+    //45
     /**
      * return a primary key list from {@link FlFeatureBean} array
      * @param array
      */
-    //45
     public List<String> toPrimaryKeyList(FlFeatureBean... array){        
         if(null == array){
             return new java.util.ArrayList<String>();
@@ -2160,11 +2185,11 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         }
         return list;
     }
+    //46
     /**
      * return a primary key list from {@link FlFeatureBean} collection
      * @param array
      */
-    //46
     public List<String> toPrimaryKeyList(java.util.Collection<FlFeatureBean> collection){        
         if(null == collection){
             return new java.util.ArrayList<String>();

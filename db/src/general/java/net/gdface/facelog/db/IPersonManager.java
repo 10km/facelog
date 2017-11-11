@@ -20,15 +20,16 @@ public interface IPersonManager extends TableManager<PersonBean>
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
+    //1
     /**
      * Loads a {@link PersonBean} from the fl_person using primary key fields.
      *
      * @param id Integer - PK# 1
      * @return a unique PersonBean or {@code null} if not found
      */
-    //1
     public PersonBean loadByPrimaryKey(Integer id);
 
+    //1.1
     /**
      * Loads a {@link PersonBean} from the fl_person using primary key fields.
      *
@@ -36,38 +37,41 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return a unique PersonBean
      * @throws ObjectRetrievalException if not found
      */
-    //1.1
     public PersonBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException;
     
+    //1.4
     /**
      * Returns true if this fl_person contains row with primary key fields.
      * @param id Integer - PK# 1
      * @see #loadByPrimaryKey($keys)
+     * @return
      */
-    //1.4
     public boolean existsPrimaryKey(Integer id);
+    //1.4.1
     /**
      * Check duplicated row by primary keys,if row exists throw exception
      * @param id Integer
+     * @return 
+     * @throws ObjectRetrievalException
      */
-    //1.4.1
     public Integer checkDuplicate(Integer id)throws ObjectRetrievalException;
+    //1.8
     /**
      * Loads {@link PersonBean} from the fl_person using primary key fields.
      *
      * @param keys primary keys array
      * @return list of PersonBean
      */
-    //1.8
     public java.util.List<PersonBean> loadByPrimaryKey(int... keys);
+    //1.9
     /**
      * Loads {@link PersonBean} from the fl_person using primary key fields.
      *
      * @param keys primary keys collection
      * @return list of PersonBean
      */
-    //1.9
     public java.util.List<PersonBean> loadByPrimaryKey(java.util.Collection<Integer> keys);
+    //2
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
@@ -75,87 +79,89 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @param id Integer - PK# 1
      * @return the number of deleted rows
      */
-    //2
     public int deleteByPrimaryKey(Integer id);
+    //2.2
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys array
      * @return the number of deleted rows
      */
-    //2.2
     public int deleteByPrimaryKey(int... keys);
+    //2.3
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys collection
      * @return the number of deleted rows
      */
-    //2.3
     public int deleteByPrimaryKey(java.util.Collection<Integer> keys);
-    /**
-     * Delete beans.<br>
-     *
-     * @param beans PersonBean collection wille be deleted
-     * @return the number of deleted rows
-     */
     //2.4
-    public int delete(PersonBean... beans);
     /**
      * Delete beans.<br>
      *
      * @param beans PersonBean collection wille be deleted
      * @return the number of deleted rows
      */
+    public int delete(PersonBean... beans);
     //2.5
+    /**
+     * Delete beans.<br>
+     *
+     * @param beans PersonBean collection wille be deleted
+     * @return the number of deleted rows
+     */
     public int delete(java.util.Collection<PersonBean> beans);
  
 
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
+    //3.1 GET IMPORTED
     /**
      * Retrieves the {@link FeatureBean} object from the fl_feature.person_id field.<BR>
      * FK_NAME : fl_feature_ibfk_1 
      * @param bean the {@link PersonBean}
      * @return the associated {@link FeatureBean} beans or {@code null} if {@code bean} is {@code null}
      */
-    //3.1 GET IMPORTED
     public FeatureBean[] getFeatureBeansByPersonId(PersonBean bean);
     
+    //3.1.2 GET IMPORTED
     /**
      * Retrieves the {@link FeatureBean} object from the fl_feature.person_id field.<BR>
      * FK_NAME : fl_feature_ibfk_1 
-     * @param id Integer - PK# 1
+     * @param idOfPerson Integer - PK# 1
      * @return the associated {@link FeatureBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1.2 GET IMPORTED
     public FeatureBean[] getFeatureBeansByPersonId(Integer idOfPerson);
     
-    /**
-     * @see #getFeatureBeansByPersonIdAsList(PersonBean,int,int)
-     */
     //3.2 GET IMPORTED
+    /**
+     * see also #getFeatureBeansByPersonIdAsList(PersonBean,int,int)
+     * @param bean
+     * @return
+     */
     public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(PersonBean bean);
 
+    //3.2.2 GET IMPORTED
     /**
      * Retrieves the {@link FeatureBean} object from fl_feature.person_id field.<BR>
      * FK_NAME:fl_feature_ibfk_1
-     * @param id Integer - PK# 1
+     * @param idOfPerson Integer - PK# 1
      * @return the associated {@link FeatureBean} beans 
      * @throws DAOException
      */
-    //3.2.2 GET IMPORTED
     public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(Integer idOfPerson);
+    //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link FeatureBean} objects from fl_feature.person_id field.<BR>
      * FK_NAME:fl_feature_ibfk_1
-     * @param id Integer - PK# 1
+     * @param idOfPerson Integer - PK# 1
      * @return the number of deleted rows
      */
-    //3.2.3 DELETE IMPORTED
     public int deleteFeatureBeansByPersonId(Integer idOfPerson);
+    //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link FeatureBean} object from fl_feature.person_id field.<BR>
      * FK_NAME:fl_feature_ibfk_1
@@ -164,8 +170,8 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link FeatureBean} beans or empty list if {@code bean} is {@code null}
      */
-    //3.2.4 GET IMPORTED
     public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(PersonBean bean,int startRow,int numRows);    
+    //3.3 SET IMPORTED
     /**
      * set  the {@link FeatureBean} object array associate to PersonBean by the fl_feature.person_id field.<BR>
      * FK_NAME : fl_feature_ibfk_1 
@@ -174,9 +180,9 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return importedBeans always
      * @see {@link FeatureManager#setReferencedByPersonId(FeatureBean, PersonBean)
      */
-    //3.3 SET IMPORTED
     public FeatureBean[] setFeatureBeansByPersonId(PersonBean bean , FeatureBean[] importedBeans);
 
+    //3.4 SET IMPORTED
     /**
      * set  the {@link FeatureBean} object java.util.Collection associate to PersonBean by the fl_feature.person_id field.<BR>
      * FK_NAME:fl_feature_ibfk_1
@@ -185,51 +191,53 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return importedBeans always
      * @see {@link FeatureManager#setReferencedByPersonId(FeatureBean, PersonBean)
      */
-    //3.4 SET IMPORTED
     public <C extends java.util.Collection<FeatureBean>> C setFeatureBeansByPersonId(PersonBean bean , C importedBeans);
 
+    //3.1 GET IMPORTED
     /**
      * Retrieves the {@link LogBean} object from the fl_log.person_id field.<BR>
      * FK_NAME : fl_log_ibfk_1 
      * @param bean the {@link PersonBean}
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      */
-    //3.1 GET IMPORTED
     public LogBean[] getLogBeansByPersonId(PersonBean bean);
     
+    //3.1.2 GET IMPORTED
     /**
      * Retrieves the {@link LogBean} object from the fl_log.person_id field.<BR>
      * FK_NAME : fl_log_ibfk_1 
-     * @param id Integer - PK# 1
+     * @param idOfPerson Integer - PK# 1
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1.2 GET IMPORTED
     public LogBean[] getLogBeansByPersonId(Integer idOfPerson);
     
-    /**
-     * @see #getLogBeansByPersonIdAsList(PersonBean,int,int)
-     */
     //3.2 GET IMPORTED
+    /**
+     * see also #getLogBeansByPersonIdAsList(PersonBean,int,int)
+     * @param bean
+     * @return
+     */
     public java.util.List<LogBean> getLogBeansByPersonIdAsList(PersonBean bean);
 
+    //3.2.2 GET IMPORTED
     /**
      * Retrieves the {@link LogBean} object from fl_log.person_id field.<BR>
      * FK_NAME:fl_log_ibfk_1
-     * @param id Integer - PK# 1
+     * @param idOfPerson Integer - PK# 1
      * @return the associated {@link LogBean} beans 
      * @throws DAOException
      */
-    //3.2.2 GET IMPORTED
     public java.util.List<LogBean> getLogBeansByPersonIdAsList(Integer idOfPerson);
+    //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link LogBean} objects from fl_log.person_id field.<BR>
      * FK_NAME:fl_log_ibfk_1
-     * @param id Integer - PK# 1
+     * @param idOfPerson Integer - PK# 1
      * @return the number of deleted rows
      */
-    //3.2.3 DELETE IMPORTED
     public int deleteLogBeansByPersonId(Integer idOfPerson);
+    //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link LogBean} object from fl_log.person_id field.<BR>
      * FK_NAME:fl_log_ibfk_1
@@ -238,8 +246,8 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link LogBean} beans or empty list if {@code bean} is {@code null}
      */
-    //3.2.4 GET IMPORTED
     public java.util.List<LogBean> getLogBeansByPersonIdAsList(PersonBean bean,int startRow,int numRows);    
+    //3.3 SET IMPORTED
     /**
      * set  the {@link LogBean} object array associate to PersonBean by the fl_log.person_id field.<BR>
      * FK_NAME : fl_log_ibfk_1 
@@ -248,9 +256,9 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return importedBeans always
      * @see {@link LogManager#setReferencedByPersonId(LogBean, PersonBean)
      */
-    //3.3 SET IMPORTED
     public LogBean[] setLogBeansByPersonId(PersonBean bean , LogBean[] importedBeans);
 
+    //3.4 SET IMPORTED
     /**
      * set  the {@link LogBean} object java.util.Collection associate to PersonBean by the fl_log.person_id field.<BR>
      * FK_NAME:fl_log_ibfk_1
@@ -259,9 +267,9 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return importedBeans always
      * @see {@link LogManager#setReferencedByPersonId(LogBean, PersonBean)
      */
-    //3.4 SET IMPORTED
     public <C extends java.util.Collection<LogBean>> C setLogBeansByPersonId(PersonBean bean , C importedBeans);
 
+    //3.5 SYNC SAVE 
     /**
      * Save the PersonBean bean and referenced beans and imported beans into the database.
      *
@@ -272,18 +280,24 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @param impLogByPersonId the {@link LogBean} bean refer to {@link PersonBean} 
      * @return the inserted or updated {@link PersonBean} bean
      */
-    //3.5 SYNC SAVE 
     public PersonBean save(PersonBean bean
         , ImageBean refImageByImageMd5 , PersonGroupBean refPersongroupByGroupId 
         , FeatureBean[] impFeatureByPersonId , LogBean[] impLogByPersonId );
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(PersonBean , ImageBean , PersonGroupBean , FeatureBean[] , LogBean[] )}
-     */
     //3.6 SYNC SAVE AS TRANSACTION
+    /**
+     * Transaction version for sync save<br>
+     * see also {@link #save(PersonBean , ImageBean , PersonGroupBean , FeatureBean[] , LogBean[] )}
+     * @param bean the {@link PersonBean} bean to be saved
+     * @param refImageByImageMd5 the {@link ImageBean} bean referenced by {@link PersonBean} 
+     * @param refPersongroupByGroupId the {@link PersonGroupBean} bean referenced by {@link PersonBean} 
+     * @param impFeatureByPersonId the {@link FeatureBean} bean refer to {@link PersonBean} 
+     * @param impLogByPersonId the {@link LogBean} bean refer to {@link PersonBean} 
+     * @return the inserted or updated {@link PersonBean} bean
+     */
     public PersonBean saveAsTransaction(final PersonBean bean
         ,final ImageBean refImageByImageMd5 ,final PersonGroupBean refPersongroupByGroupId 
         ,final FeatureBean[] impFeatureByPersonId ,final LogBean[] impLogByPersonId );
+    //3.7 SYNC SAVE 
     /**
      * Save the PersonBean bean and referenced beans and imported beans into the database.
      *
@@ -294,30 +308,36 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @param impLogByPersonId the {@link LogBean} bean refer to {@link PersonBean} 
      * @return the inserted or updated {@link PersonBean} bean
      */
-    //3.7 SYNC SAVE 
     public PersonBean save(PersonBean bean
         , ImageBean refImageByImageMd5 , PersonGroupBean refPersongroupByGroupId 
         , java.util.Collection<FeatureBean> impFeatureByPersonId , java.util.Collection<LogBean> impLogByPersonId );
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(PersonBean , ImageBean , PersonGroupBean , java.util.Collection , java.util.Collection )}
-     */
     //3.8 SYNC SAVE AS TRANSACTION
+    /**
+     * Transaction version for sync save<br>
+     * see also {@link #save(PersonBean , ImageBean , PersonGroupBean , java.util.Collection , java.util.Collection )}
+     * @param bean the {@link PersonBean} bean to be saved
+     * @param refImageByImageMd5 the {@link ImageBean} bean referenced by {@link PersonBean} 
+     * @param refPersongroupByGroupId the {@link PersonGroupBean} bean referenced by {@link PersonBean} 
+     * @param impFeatureByPersonId the {@link FeatureBean} bean refer to {@link PersonBean} 
+     * @param impLogByPersonId the {@link LogBean} bean refer to {@link PersonBean} 
+     * @return the inserted or updated {@link PersonBean} bean
+     */
     public PersonBean saveAsTransaction(final PersonBean bean
         ,final ImageBean refImageByImageMd5 ,final PersonGroupBean refPersongroupByGroupId 
         ,final  java.util.Collection<FeatureBean> impFeatureByPersonId ,final  java.util.Collection<LogBean> impLogByPersonId );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
+    //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link ImageBean} object referenced by {@link PersonBean#getImageMd5}() field.<br>
      * FK_NAME : fl_person_ibfk_2
      * @param bean the {@link PersonBean}
      * @return the associated {@link ImageBean} bean or {@code null} if {@code bean} is {@code null}
      */
-    //5.1 GET REFERENCED VALUE
     public ImageBean getReferencedByImageMd5(PersonBean bean);
 
+    //5.2 SET REFERENCED 
     /**
      * Associates the {@link PersonBean} object to the {@link ImageBean} object by {@link PersonBean#getImageMd5}() field.
      *
@@ -326,17 +346,17 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return always beanToSet saved
      * @throws WrapDAOException
      */
-    //5.2 SET REFERENCED 
     public ImageBean setReferencedByImageMd5(PersonBean bean, ImageBean beanToSet);
+    //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link PersonGroupBean} object referenced by {@link PersonBean#getGroupId}() field.<br>
      * FK_NAME : fl_person_ibfk_1
      * @param bean the {@link PersonBean}
      * @return the associated {@link PersonGroupBean} bean or {@code null} if {@code bean} is {@code null}
      */
-    //5.1 GET REFERENCED VALUE
     public PersonGroupBean getReferencedByGroupId(PersonBean bean);
 
+    //5.2 SET REFERENCED 
     /**
      * Associates the {@link PersonBean} object to the {@link PersonGroupBean} object by {@link PersonBean#getGroupId}() field.
      *
@@ -345,7 +365,6 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return always beanToSet saved
      * @throws WrapDAOException
      */
-    //5.2 SET REFERENCED 
     public PersonGroupBean setReferencedByGroupId(PersonBean bean, PersonGroupBean beanToSet);
     //_____________________________________________________________________
     //
@@ -515,17 +534,19 @@ public interface IPersonManager extends TableManager<PersonBean>
     public int deleteByIndexGroupId(Integer groupId);
     
 
+    //45
     /**
      * return a primary key list from {@link PersonBean} array
-     * @param array
+     * @param beans
+     * @return
      */
-    //45
-    public java.util.List<Integer> toPrimaryKeyList(PersonBean... array);
+    public java.util.List<Integer> toPrimaryKeyList(PersonBean... beans);
+    //46
     /**
      * return a primary key list from {@link PersonBean} collection
-     * @param array
+     * @param beans
+     * @return
      */
-    //46
-    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<PersonBean> collection);
+    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<PersonBean> beans);
 
 }

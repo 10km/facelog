@@ -128,6 +128,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     //////////////////////////////////////
 
     //1 override ILogManager
+
     @Override 
     public LogBean loadByPrimaryKey(Integer id)
     {
@@ -139,6 +140,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
     }
     //1.1 override ILogManager
+
     @Override
     public LogBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
@@ -151,6 +153,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
     }
     //1.2
+
     @Override
     public LogBean loadByPrimaryKey(LogBean bean)
     {
@@ -158,6 +161,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
 
     //1.2.2
+
     @Override
     public LogBean loadByPrimaryKeyChecked(LogBean bean) throws ObjectRetrievalException
     {
@@ -168,6 +172,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
     
     //1.3
+
     @Override
     public LogBean loadByPrimaryKey(Object ...keys){
         try{
@@ -179,6 +184,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
     
     //1.3.2
+
     @Override
     public LogBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
         if(null == keys){
@@ -195,6 +201,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
 
     //1.4 override ILogManager
+
     @Override 
     public boolean existsPrimaryKey(Integer id)
     {
@@ -207,12 +214,14 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
     }
     //1.6
+
     @Override
     public boolean existsByPrimaryKey(LogBean bean)
     {
         return null == bean ? false : existsPrimaryKey(bean.getId());
     }
     //1.7
+
     @Override
     public LogBean checkDuplicate(LogBean bean)throws ObjectRetrievalException{
         if(null != bean){
@@ -221,6 +230,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         return bean;   
     }
     //1.4.1 override ILogManager
+
     @Override 
     public Integer checkDuplicate(Integer id)throws ObjectRetrievalException{
         try{
@@ -232,6 +242,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
     }
     //1.8 override ILogManager
+
     @Override 
     public java.util.List<LogBean> loadByPrimaryKey(int... keys){
         if(null == keys){
@@ -244,6 +255,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         return list;
     }
     //1.9 override ILogManager
+
     @Override 
     public java.util.List<LogBean> loadByPrimaryKey(java.util.Collection<Integer> keys){
         if(null == keys ){
@@ -265,6 +277,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         return list;
     }
     //2 override ILogManager
+
     @Override 
     public int deleteByPrimaryKey(Integer id)
     {
@@ -278,6 +291,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
     }
     //2
+
     @Override
     public int delete(LogBean bean){
         try
@@ -290,6 +304,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }   
     }
     //2.1
+
     @Override
     public int deleteByPrimaryKey(Object ...keys){
         if(null == keys){
@@ -304,6 +319,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         return deleteByPrimaryKey((Integer)keys[0]);
     }
     //2.2 override ILogManager
+
     @Override 
     public int deleteByPrimaryKey(int... keys){
         int count = 0;
@@ -315,6 +331,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         return count;
     }
     //2.3 override ILogManager
+
     @Override 
     public int deleteByPrimaryKey(java.util.Collection<Integer> keys){
         int count = 0;
@@ -326,6 +343,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         return count;
     }
     //2.4 override ILogManager
+
     @Override 
     public int delete(LogBean... beans){
         int count = 0;
@@ -337,6 +355,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         return count;
     }
     //2.5 override ILogManager
+
     @Override 
     public int delete(java.util.Collection<LogBean> beans){
         int count = 0;
@@ -352,6 +371,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
 
 
     //3.5 SYNC SAVE override ILogManager
+
     @Override  
     public LogBean save(LogBean bean
         , DeviceBean refDeviceByDeviceId , FaceBean refFaceByCompareFace , FeatureBean refFeatureByVerifyFeature , PersonBean refPersonByPersonId 
@@ -377,6 +397,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     } 
 
     //3.6 SYNC SAVE AS TRANSACTION override ILogManager
+
     @Override 
     public LogBean saveAsTransaction(final LogBean bean
         ,final DeviceBean refDeviceByDeviceId ,final FaceBean refFaceByCompareFace ,final FeatureBean refFeatureByVerifyFeature ,final PersonBean refPersonByPersonId 
@@ -388,7 +409,8 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
                 return save(bean , refDeviceByDeviceId , refFaceByCompareFace , refFeatureByVerifyFeature , refPersonByPersonId );
             }});
     }
-     /**
+     //3.9 SYNC SAVE 
+    /**
      * Save the {@link LogBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link LogBean} bean to be saved
@@ -396,7 +418,6 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
      *      see also {@link #save(LogBean , DeviceBean , FaceBean , FeatureBean , PersonBean )}
      * @return the inserted or updated {@link LogBean} bean
      */
-    //3.9 SYNC SAVE 
     @Override
     public LogBean save(LogBean bean,Object ...args) 
     {
@@ -421,6 +442,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         return save(bean,(args.length < 1 || null == args[0])?null:(DeviceBean)args[0],(args.length < 2 || null == args[1])?null:(FaceBean)args[1],(args.length < 3 || null == args[2])?null:(FeatureBean)args[2],(args.length < 4 || null == args[3])?null:(PersonBean)args[3]);
     } 
 
+    //3.10 SYNC SAVE 
     /**
      * Save the {@link LogBean} bean and referenced beans and imported beans into the database.
      *
@@ -429,7 +451,6 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
      *      see also {@link #save(LogBean , DeviceBean , FaceBean , FeatureBean , PersonBean )}
      * @return the inserted or updated {@link LogBean} bean
      */
-    //3.10 SYNC SAVE 
     @SuppressWarnings("unchecked")
     @Override
     public LogBean saveCollection(LogBean bean,Object ...inputs)
@@ -523,6 +544,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
 
 
     //5.1 GET REFERENCED VALUE override ILogManager
+
     @Override 
     public DeviceBean getReferencedByDeviceId(LogBean bean)
     {
@@ -534,6 +556,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
 
     //5.2 SET REFERENCED override ILogManager
+
     @Override 
     public DeviceBean setReferencedByDeviceId(LogBean bean, DeviceBean beanToSet)
     {
@@ -553,6 +576,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
 
     //5.1 GET REFERENCED VALUE override ILogManager
+
     @Override 
     public FaceBean getReferencedByCompareFace(LogBean bean)
     {
@@ -564,6 +588,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
 
     //5.2 SET REFERENCED override ILogManager
+
     @Override 
     public FaceBean setReferencedByCompareFace(LogBean bean, FaceBean beanToSet)
     {
@@ -583,6 +608,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
 
     //5.1 GET REFERENCED VALUE override ILogManager
+
     @Override 
     public FeatureBean getReferencedByVerifyFeature(LogBean bean)
     {
@@ -594,6 +620,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
 
     //5.2 SET REFERENCED override ILogManager
+
     @Override 
     public FeatureBean setReferencedByVerifyFeature(LogBean bean, FeatureBean beanToSet)
     {
@@ -613,6 +640,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
 
     //5.1 GET REFERENCED VALUE override ILogManager
+
     @Override 
     public PersonBean getReferencedByPersonId(LogBean bean)
     {
@@ -624,6 +652,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
 
     //5.2 SET REFERENCED override ILogManager
+
     @Override 
     public PersonBean setReferencedByPersonId(LogBean bean, PersonBean beanToSet)
     {
@@ -647,6 +676,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     //////////////////////////////////////
 
     //11
+
     @Override
     public int deleteByWhere(String where)
     {
@@ -665,6 +695,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     //_____________________________________________________________________
 
     //13
+
     @Override
     protected LogBean insert(LogBean bean)
     {
@@ -679,6 +710,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
 
     //14
     @Override
+
     protected LogBean update(LogBean bean)
     {
         try{
@@ -696,6 +728,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     //_____________________________________________________________________
     //18
     @Override
+
     public LogBean loadUniqueUsingTemplate(LogBean bean)
     {
         try{
@@ -708,6 +741,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
      }
     //18-1
     @Override
+
     public LogBean loadUniqueUsingTemplateChecked(LogBean bean) throws ObjectRetrievalException
     {
         try{
@@ -723,6 +757,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
      }
     //20-5
+
     @Override
     public int loadUsingTemplate(LogBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<LogBean> action)
     {
@@ -736,6 +771,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
 
     //21
+
     @Override
     public int deleteUsingTemplate(LogBean bean)
     {
@@ -755,6 +791,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     //_____________________________________________________________________
 
      // override ILogManager
+
     @Override 
     public LogBean[] loadByIndexCompareFace(Integer compareFace)
     {
@@ -762,6 +799,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
     
     // override ILogManager
+
     @Override 
     public java.util.List<LogBean> loadByIndexCompareFaceAsList(Integer compareFace)
     {
@@ -775,6 +813,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
 
     // override ILogManager
+
     @Override 
     public int deleteByIndexCompareFace(Integer compareFace)
     {
@@ -788,6 +827,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
     
      // override ILogManager
+
     @Override 
     public LogBean[] loadByIndexDeviceId(Integer deviceId)
     {
@@ -795,6 +835,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
     
     // override ILogManager
+
     @Override 
     public java.util.List<LogBean> loadByIndexDeviceIdAsList(Integer deviceId)
     {
@@ -808,6 +849,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
 
     // override ILogManager
+
     @Override 
     public int deleteByIndexDeviceId(Integer deviceId)
     {
@@ -821,6 +863,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
     
      // override ILogManager
+
     @Override 
     public LogBean[] loadByIndexPersonId(Integer personId)
     {
@@ -828,6 +871,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
     
     // override ILogManager
+
     @Override 
     public java.util.List<LogBean> loadByIndexPersonIdAsList(Integer personId)
     {
@@ -841,6 +885,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
 
     // override ILogManager
+
     @Override 
     public int deleteByIndexPersonId(Integer personId)
     {
@@ -854,6 +899,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
     
      // override ILogManager
+
     @Override 
     public LogBean[] loadByIndexVerifyFeature(String verifyFeature)
     {
@@ -861,6 +907,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
     
     // override ILogManager
+
     @Override 
     public java.util.List<LogBean> loadByIndexVerifyFeatureAsList(String verifyFeature)
     {
@@ -874,6 +921,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
 
     // override ILogManager
+
     @Override 
     public int deleteByIndexVerifyFeature(String verifyFeature)
     {
@@ -926,6 +974,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     // COUNT
     //_____________________________________________________________________
     //25
+
     @Override
     public int countWhere(String where)
     {
@@ -939,6 +988,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
 
     //20
+
     @Override
     public int countUsingTemplate(LogBean bean, int searchType)
     {
@@ -957,10 +1007,10 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     // LISTENER
     //_____________________________________________________________________
 
+    //35
     /**
      * @return {@link WrapListener} instance
      */
-    //35
     @Override
     public TableListener<LogBean> registerListener(TableListener<LogBean> listener)
     {
@@ -976,6 +1026,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
 
     //36
+
     @Override
     public void unregisterListener(TableListener<LogBean> listener)
     {
@@ -986,12 +1037,14 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
     
     //37
+
     @Override
     public void fire(TableListener.Event event, LogBean bean){
         fire(event.ordinal(), bean);
     }
     
     //37-1
+
     @Override
     public void fire(int event, LogBean bean){
         try{
@@ -1002,25 +1055,24 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
             throw new WrapDAOException(e);
         }
     }
+    //37-2
     /**
      * bind foreign key listener to foreign table for DELETE RULE
      */
-    //37-2
     void bindForeignKeyListenerForDeleteRule(){
         this.nativeManager.bindForeignKeyListenerForDeleteRule();
     }
+    //37-3
     /**
      * unbind foreign key listener from all of foreign tables <br>
      * @see #bindForeignKeyListenerForDeleteRule()
      */
-    //37-3
     void unbindForeignKeyListenerForDeleteRule(){
         this.nativeManager.unbindForeignKeyListenerForDeleteRule();
 
     }
     /**
      * wrap {@code TableListener<LogBean>} as native listener
-     *
      */
     public class WrapListener implements TableListener<LogBean>{
         private final TableListener<LogBean> listener;
@@ -1100,6 +1152,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     //_____________________________________________________________________
 
     //43
+
     @Override
     public boolean isPrimaryKey(String column){
         return this.nativeManager.isPrimaryKey(column);
@@ -1145,25 +1198,27 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     }
     
     //45 override ILogManager
+
     @Override 
-    public java.util.List<Integer> toPrimaryKeyList(LogBean... array){        
-        if(null == array){
+    public java.util.List<Integer> toPrimaryKeyList(LogBean... beans){        
+        if(null == beans){
             return new java.util.ArrayList<Integer>();
         }
-        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
-        for(LogBean bean:array){
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(beans.length);
+        for(LogBean bean:beans){
             list.add(null == bean ? null : bean.getId());
         }
         return list;
     }
     //46 override ILogManager
+
     @Override 
-    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<LogBean> collection){        
-        if(null == collection){
+    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<LogBean> beans){        
+        if(null == beans){
             return new java.util.ArrayList<Integer>();
         }
-        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
-        for(LogBean bean:collection){
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(beans.size());
+        for(LogBean bean:beans){
             list.add(null == bean ? null : bean.getId());
         }
         return list;

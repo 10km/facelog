@@ -86,6 +86,7 @@ public class PermitCacheManager extends PermitManager
     //////////////////////////////////////
 
     //1.1 override IPermitManager
+
     @Override 
     public PermitBean loadByPrimaryKeyChecked(Integer deviceGroupId,Integer personGroupId) throws ObjectRetrievalException
     {
@@ -121,6 +122,7 @@ public class PermitCacheManager extends PermitManager
         }
     }
     //1.4 override IPermitManager
+
     @Override 
     public boolean existsPrimaryKey(Integer deviceGroupId,Integer personGroupId){
         return null != loadByPrimaryKey(deviceGroupId,personGroupId);
@@ -143,6 +145,7 @@ public class PermitCacheManager extends PermitManager
         }
     }
     //20-5
+
     @Override
     public int loadUsingTemplate(PermitBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<PermitBean> action){
         if(null == fieldList ){

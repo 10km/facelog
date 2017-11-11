@@ -124,6 +124,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     //////////////////////////////////////
 
     //1 override IImageManager
+
     @Override 
     public ImageBean loadByPrimaryKey(String md5)
     {
@@ -135,6 +136,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         }
     }
     //1.1 override IImageManager
+
     @Override
     public ImageBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException
     {
@@ -147,6 +149,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         }
     }
     //1.2
+
     @Override
     public ImageBean loadByPrimaryKey(ImageBean bean)
     {
@@ -154,6 +157,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     }
 
     //1.2.2
+
     @Override
     public ImageBean loadByPrimaryKeyChecked(ImageBean bean) throws ObjectRetrievalException
     {
@@ -164,6 +168,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     }
     
     //1.3
+
     @Override
     public ImageBean loadByPrimaryKey(Object ...keys){
         try{
@@ -175,6 +180,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     }
     
     //1.3.2
+
     @Override
     public ImageBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
         if(null == keys){
@@ -191,6 +197,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     }
 
     //1.4 override IImageManager
+
     @Override 
     public boolean existsPrimaryKey(String md5)
     {
@@ -203,12 +210,14 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         }
     }
     //1.6
+
     @Override
     public boolean existsByPrimaryKey(ImageBean bean)
     {
         return null == bean ? false : existsPrimaryKey(bean.getMd5());
     }
     //1.7
+
     @Override
     public ImageBean checkDuplicate(ImageBean bean)throws ObjectRetrievalException{
         if(null != bean){
@@ -217,6 +226,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         return bean;   
     }
     //1.4.1 override IImageManager
+
     @Override 
     public String checkDuplicate(String md5)throws ObjectRetrievalException{
         try{
@@ -228,6 +238,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         }
     }
     //1.8 override IImageManager
+
     @Override 
     public java.util.List<ImageBean> loadByPrimaryKey(String... keys){
         if(null == keys){
@@ -240,6 +251,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         return list;
     }
     //1.9 override IImageManager
+
     @Override 
     public java.util.List<ImageBean> loadByPrimaryKey(java.util.Collection<String> keys){
         if(null == keys ){
@@ -261,6 +273,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         return list;
     }
     //2 override IImageManager
+
     @Override 
     public int deleteByPrimaryKey(String md5)
     {
@@ -274,6 +287,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         }
     }
     //2
+
     @Override
     public int delete(ImageBean bean){
         try
@@ -286,6 +300,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         }   
     }
     //2.1
+
     @Override
     public int deleteByPrimaryKey(Object ...keys){
         if(null == keys){
@@ -300,6 +315,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         return deleteByPrimaryKey((String)keys[0]);
     }
     //2.2 override IImageManager
+
     @Override 
     public int deleteByPrimaryKey(String... keys){
         int count = 0;
@@ -311,6 +327,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         return count;
     }
     //2.3 override IImageManager
+
     @Override 
     public int deleteByPrimaryKey(java.util.Collection<String> keys){
         int count = 0;
@@ -322,6 +339,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         return count;
     }
     //2.4 override IImageManager
+
     @Override 
     public int delete(ImageBean... beans){
         int count = 0;
@@ -333,6 +351,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         return count;
     }
     //2.5 override IImageManager
+
     @Override 
     public int delete(java.util.Collection<ImageBean> beans){
         int count = 0;
@@ -437,12 +456,14 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
     //3.1 GET IMPORTED override IImageManager
+
     @Override 
     public FaceBean[] getFaceBeansByImageMd5(ImageBean bean)
     {
         return this.getFaceBeansByImageMd5AsList(bean).toArray(new FaceBean[0]);
     }
     //3.1.2 GET IMPORTED override IImageManager
+
     @Override
     public FaceBean[] getFaceBeansByImageMd5(String md5OfImage)
     {
@@ -451,12 +472,14 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         return getFaceBeansByImageMd5(bean);
     }
     //3.2 GET IMPORTED override IImageManager
+
     @Override 
     public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(ImageBean bean)
     {
         return getFaceBeansByImageMd5AsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IImageManager
+
     @Override
     public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(String md5OfImage)
     {
@@ -465,6 +488,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         return getFaceBeansByImageMd5AsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IImageManager
+
     @Override
     public int deleteFaceBeansByImageMd5(String md5OfImage)
     {
@@ -472,6 +496,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         return instanceOfFaceManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IImageManager
+
     @Override 
     public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(ImageBean bean,int startRow, int numRows)
     {
@@ -484,6 +509,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         }
     }
     //3.3 SET IMPORTED override IImageManager
+
     @Override 
     public FaceBean[] setFaceBeansByImageMd5(ImageBean bean , FaceBean[] importedBeans)
     {
@@ -496,6 +522,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     }
 
     //3.4 SET IMPORTED override IImageManager
+
     @Override 
     public <C extends java.util.Collection<FaceBean>> C setFaceBeansByImageMd5(ImageBean bean , C importedBeans)
     {
@@ -508,12 +535,14 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     }
 
     //3.1 GET IMPORTED override IImageManager
+
     @Override 
     public PersonBean[] getPersonBeansByImageMd5(ImageBean bean)
     {
         return this.getPersonBeansByImageMd5AsList(bean).toArray(new PersonBean[0]);
     }
     //3.1.2 GET IMPORTED override IImageManager
+
     @Override
     public PersonBean[] getPersonBeansByImageMd5(String md5OfImage)
     {
@@ -522,12 +551,14 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         return getPersonBeansByImageMd5(bean);
     }
     //3.2 GET IMPORTED override IImageManager
+
     @Override 
     public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(ImageBean bean)
     {
         return getPersonBeansByImageMd5AsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IImageManager
+
     @Override
     public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(String md5OfImage)
     {
@@ -536,6 +567,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         return getPersonBeansByImageMd5AsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IImageManager
+
     @Override
     public int deletePersonBeansByImageMd5(String md5OfImage)
     {
@@ -543,6 +575,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         return instanceOfPersonManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IImageManager
+
     @Override 
     public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(ImageBean bean,int startRow, int numRows)
     {
@@ -555,6 +588,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         }
     }
     //3.3 SET IMPORTED override IImageManager
+
     @Override 
     public PersonBean[] setPersonBeansByImageMd5(ImageBean bean , PersonBean[] importedBeans)
     {
@@ -567,6 +601,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     }
 
     //3.4 SET IMPORTED override IImageManager
+
     @Override 
     public <C extends java.util.Collection<PersonBean>> C setPersonBeansByImageMd5(ImageBean bean , C importedBeans)
     {
@@ -581,6 +616,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
 
 
     //3.5 SYNC SAVE override IImageManager
+
     @Override  
     public ImageBean save(ImageBean bean
         , DeviceBean refDeviceByDeviceId 
@@ -601,6 +637,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     } 
 
     //3.6 SYNC SAVE AS TRANSACTION override IImageManager
+
     @Override 
     public ImageBean saveAsTransaction(final ImageBean bean
         ,final DeviceBean refDeviceByDeviceId 
@@ -613,6 +650,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
             }});
     }
     //3.7 SYNC SAVE override IImageManager
+
     @Override 
     public ImageBean save(ImageBean bean
         , DeviceBean refDeviceByDeviceId 
@@ -631,6 +669,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     }   
 
     //3.8 SYNC SAVE AS TRANSACTION override IImageManager
+
     @Override 
     public ImageBean saveAsTransaction(final ImageBean bean
         ,final DeviceBean refDeviceByDeviceId 
@@ -642,7 +681,8 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
                 return save(bean , refDeviceByDeviceId , impFaceByImageMd5 , impPersonByImageMd5 );
             }});
     }
-     /**
+     //3.9 SYNC SAVE 
+    /**
      * Save the {@link ImageBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link ImageBean} bean to be saved
@@ -650,7 +690,6 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
      *      see also {@link #save(ImageBean , DeviceBean , FaceBean[] , PersonBean[] )}
      * @return the inserted or updated {@link ImageBean} bean
      */
-    //3.9 SYNC SAVE 
     @Override
     public ImageBean save(ImageBean bean,Object ...args) 
     {
@@ -672,6 +711,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         return save(bean,(args.length < 1 || null == args[0])?null:(DeviceBean)args[0],(args.length < 2 || null == args[1])?null:(FaceBean[])args[1],(args.length < 3 || null == args[2])?null:(PersonBean[])args[2]);
     } 
 
+    //3.10 SYNC SAVE 
     /**
      * Save the {@link ImageBean} bean and referenced beans and imported beans into the database.
      *
@@ -680,7 +720,6 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
      *      see also {@link #save(ImageBean , DeviceBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link ImageBean} bean
      */
-    //3.10 SYNC SAVE 
     @SuppressWarnings("unchecked")
     @Override
     public ImageBean saveCollection(ImageBean bean,Object ...inputs)
@@ -756,6 +795,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
 
 
     //5.1 GET REFERENCED VALUE override IImageManager
+
     @Override 
     public DeviceBean getReferencedByDeviceId(ImageBean bean)
     {
@@ -767,6 +807,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     }
 
     //5.2 SET REFERENCED override IImageManager
+
     @Override 
     public DeviceBean setReferencedByDeviceId(ImageBean bean, DeviceBean beanToSet)
     {
@@ -790,6 +831,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     //////////////////////////////////////
 
     //11
+
     @Override
     public int deleteByWhere(String where)
     {
@@ -808,6 +850,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     //_____________________________________________________________________
 
     //13
+
     @Override
     protected ImageBean insert(ImageBean bean)
     {
@@ -822,6 +865,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
 
     //14
     @Override
+
     protected ImageBean update(ImageBean bean)
     {
         try{
@@ -839,6 +883,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     //_____________________________________________________________________
     //18
     @Override
+
     public ImageBean loadUniqueUsingTemplate(ImageBean bean)
     {
         try{
@@ -851,6 +896,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
      }
     //18-1
     @Override
+
     public ImageBean loadUniqueUsingTemplateChecked(ImageBean bean) throws ObjectRetrievalException
     {
         try{
@@ -866,6 +912,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         }
      }
     //20-5
+
     @Override
     public int loadUsingTemplate(ImageBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<ImageBean> action)
     {
@@ -879,6 +926,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     }
 
     //21
+
     @Override
     public int deleteUsingTemplate(ImageBean bean)
     {
@@ -898,6 +946,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     //_____________________________________________________________________
 
      // override IImageManager
+
     @Override 
     public ImageBean[] loadByIndexDeviceId(Integer deviceId)
     {
@@ -905,6 +954,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     }
     
     // override IImageManager
+
     @Override 
     public java.util.List<ImageBean> loadByIndexDeviceIdAsList(Integer deviceId)
     {
@@ -918,6 +968,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     }
 
     // override IImageManager
+
     @Override 
     public int deleteByIndexDeviceId(Integer deviceId)
     {
@@ -970,6 +1021,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     // COUNT
     //_____________________________________________________________________
     //25
+
     @Override
     public int countWhere(String where)
     {
@@ -983,6 +1035,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     }
 
     //20
+
     @Override
     public int countUsingTemplate(ImageBean bean, int searchType)
     {
@@ -1001,10 +1054,10 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     // LISTENER
     //_____________________________________________________________________
 
+    //35
     /**
      * @return {@link WrapListener} instance
      */
-    //35
     @Override
     public TableListener<ImageBean> registerListener(TableListener<ImageBean> listener)
     {
@@ -1020,6 +1073,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     }
 
     //36
+
     @Override
     public void unregisterListener(TableListener<ImageBean> listener)
     {
@@ -1030,12 +1084,14 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     }
     
     //37
+
     @Override
     public void fire(TableListener.Event event, ImageBean bean){
         fire(event.ordinal(), bean);
     }
     
     //37-1
+
     @Override
     public void fire(int event, ImageBean bean){
         try{
@@ -1046,25 +1102,24 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
             throw new WrapDAOException(e);
         }
     }
+    //37-2
     /**
      * bind foreign key listener to foreign table for DELETE RULE
      */
-    //37-2
     void bindForeignKeyListenerForDeleteRule(){
         this.nativeManager.bindForeignKeyListenerForDeleteRule();
     }
+    //37-3
     /**
      * unbind foreign key listener from all of foreign tables <br>
      * @see #bindForeignKeyListenerForDeleteRule()
      */
-    //37-3
     void unbindForeignKeyListenerForDeleteRule(){
         this.nativeManager.unbindForeignKeyListenerForDeleteRule();
 
     }
     /**
      * wrap {@code TableListener<ImageBean>} as native listener
-     *
      */
     public class WrapListener implements TableListener<ImageBean>{
         private final TableListener<ImageBean> listener;
@@ -1144,6 +1199,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     //_____________________________________________________________________
 
     //43
+
     @Override
     public boolean isPrimaryKey(String column){
         return this.nativeManager.isPrimaryKey(column);
@@ -1189,25 +1245,27 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     }
     
     //45 override IImageManager
+
     @Override 
-    public java.util.List<String> toPrimaryKeyList(ImageBean... array){        
-        if(null == array){
+    public java.util.List<String> toPrimaryKeyList(ImageBean... beans){        
+        if(null == beans){
             return new java.util.ArrayList<String>();
         }
-        java.util.ArrayList<String> list = new java.util.ArrayList<String>(array.length);
-        for(ImageBean bean:array){
+        java.util.ArrayList<String> list = new java.util.ArrayList<String>(beans.length);
+        for(ImageBean bean:beans){
             list.add(null == bean ? null : bean.getMd5());
         }
         return list;
     }
     //46 override IImageManager
+
     @Override 
-    public java.util.List<String> toPrimaryKeyList(java.util.Collection<ImageBean> collection){        
-        if(null == collection){
+    public java.util.List<String> toPrimaryKeyList(java.util.Collection<ImageBean> beans){        
+        if(null == beans){
             return new java.util.ArrayList<String>();
         }
-        java.util.ArrayList<String> list = new java.util.ArrayList<String>(collection.size());
-        for(ImageBean bean:collection){
+        java.util.ArrayList<String> list = new java.util.ArrayList<String>(beans.size());
+        for(ImageBean bean:beans){
             list.add(null == bean ? null : bean.getMd5());
         }
         return list;

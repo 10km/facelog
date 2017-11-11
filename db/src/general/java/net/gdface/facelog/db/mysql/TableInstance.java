@@ -22,8 +22,12 @@ import net.gdface.facelog.db.LogLightBean;
 import java.util.Map;
 import java.util.Hashtable;
 
+/**
+ * @author guyadong
+ *
+ */
 public class TableInstance{
-    private static final Map<Class<? extends BaseBean<?>>,TableManager<?>> instanceMap = new Hashtable<Class<? extends BaseBean<?>>,TableManager<?>>(){
+    private static final Map<Class<? extends BaseBean<?>>,TableManager<?>> INSTANCE_MAP = new Hashtable<Class<? extends BaseBean<?>>,TableManager<?>>(){
         private static final long serialVersionUID = 1L;
         {
         put(DeviceBean.class,DeviceManager.getInstance());
@@ -40,6 +44,6 @@ public class TableInstance{
     }};
     @SuppressWarnings("unchecked")
     public static final <T extends BaseBean<?>>TableManager<T> getInstance(Class<T> clazz){
-        return (TableManager<T>) instanceMap.get(clazz);
+        return (TableManager<T>) INSTANCE_MAP.get(clazz);
     }
 }

@@ -20,15 +20,16 @@ public interface ILogManager extends TableManager<LogBean>
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
+    //1
     /**
      * Loads a {@link LogBean} from the fl_log using primary key fields.
      *
      * @param id Integer - PK# 1
      * @return a unique LogBean or {@code null} if not found
      */
-    //1
     public LogBean loadByPrimaryKey(Integer id);
 
+    //1.1
     /**
      * Loads a {@link LogBean} from the fl_log using primary key fields.
      *
@@ -36,38 +37,41 @@ public interface ILogManager extends TableManager<LogBean>
      * @return a unique LogBean
      * @throws ObjectRetrievalException if not found
      */
-    //1.1
     public LogBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException;
     
+    //1.4
     /**
      * Returns true if this fl_log contains row with primary key fields.
      * @param id Integer - PK# 1
      * @see #loadByPrimaryKey($keys)
+     * @return
      */
-    //1.4
     public boolean existsPrimaryKey(Integer id);
+    //1.4.1
     /**
      * Check duplicated row by primary keys,if row exists throw exception
      * @param id Integer
+     * @return 
+     * @throws ObjectRetrievalException
      */
-    //1.4.1
     public Integer checkDuplicate(Integer id)throws ObjectRetrievalException;
+    //1.8
     /**
      * Loads {@link LogBean} from the fl_log using primary key fields.
      *
      * @param keys primary keys array
      * @return list of LogBean
      */
-    //1.8
     public java.util.List<LogBean> loadByPrimaryKey(int... keys);
+    //1.9
     /**
      * Loads {@link LogBean} from the fl_log using primary key fields.
      *
      * @param keys primary keys collection
      * @return list of LogBean
      */
-    //1.9
     public java.util.List<LogBean> loadByPrimaryKey(java.util.Collection<Integer> keys);
+    //2
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
@@ -75,41 +79,41 @@ public interface ILogManager extends TableManager<LogBean>
      * @param id Integer - PK# 1
      * @return the number of deleted rows
      */
-    //2
     public int deleteByPrimaryKey(Integer id);
+    //2.2
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys array
      * @return the number of deleted rows
      */
-    //2.2
     public int deleteByPrimaryKey(int... keys);
+    //2.3
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys collection
      * @return the number of deleted rows
      */
-    //2.3
     public int deleteByPrimaryKey(java.util.Collection<Integer> keys);
-    /**
-     * Delete beans.<br>
-     *
-     * @param beans LogBean collection wille be deleted
-     * @return the number of deleted rows
-     */
     //2.4
-    public int delete(LogBean... beans);
     /**
      * Delete beans.<br>
      *
      * @param beans LogBean collection wille be deleted
      * @return the number of deleted rows
      */
+    public int delete(LogBean... beans);
     //2.5
+    /**
+     * Delete beans.<br>
+     *
+     * @param beans LogBean collection wille be deleted
+     * @return the number of deleted rows
+     */
     public int delete(java.util.Collection<LogBean> beans);
  
+    //3.5 SYNC SAVE 
     /**
      * Save the LogBean bean and referenced beans and imported beans into the database.
      *
@@ -120,30 +124,36 @@ public interface ILogManager extends TableManager<LogBean>
      * @param refPersonByPersonId the {@link PersonBean} bean referenced by {@link LogBean} 
          * @return the inserted or updated {@link LogBean} bean
      */
-    //3.5 SYNC SAVE 
     public LogBean save(LogBean bean
         , DeviceBean refDeviceByDeviceId , FaceBean refFaceByCompareFace , FeatureBean refFeatureByVerifyFeature , PersonBean refPersonByPersonId 
         );
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(LogBean , DeviceBean , FaceBean , FeatureBean , PersonBean )}
-     */
     //3.6 SYNC SAVE AS TRANSACTION
+    /**
+     * Transaction version for sync save<br>
+     * see also {@link #save(LogBean , DeviceBean , FaceBean , FeatureBean , PersonBean )}
+     * @param bean the {@link LogBean} bean to be saved
+     * @param refDeviceByDeviceId the {@link DeviceBean} bean referenced by {@link LogBean} 
+     * @param refFaceByCompareFace the {@link FaceBean} bean referenced by {@link LogBean} 
+     * @param refFeatureByVerifyFeature the {@link FeatureBean} bean referenced by {@link LogBean} 
+     * @param refPersonByPersonId the {@link PersonBean} bean referenced by {@link LogBean} 
+         * @return the inserted or updated {@link LogBean} bean
+     */
     public LogBean saveAsTransaction(final LogBean bean
         ,final DeviceBean refDeviceByDeviceId ,final FaceBean refFaceByCompareFace ,final FeatureBean refFeatureByVerifyFeature ,final PersonBean refPersonByPersonId 
         );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
+    //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link DeviceBean} object referenced by {@link LogBean#getDeviceId}() field.<br>
      * FK_NAME : fl_log_ibfk_2
      * @param bean the {@link LogBean}
      * @return the associated {@link DeviceBean} bean or {@code null} if {@code bean} is {@code null}
      */
-    //5.1 GET REFERENCED VALUE
     public DeviceBean getReferencedByDeviceId(LogBean bean);
 
+    //5.2 SET REFERENCED 
     /**
      * Associates the {@link LogBean} object to the {@link DeviceBean} object by {@link LogBean#getDeviceId}() field.
      *
@@ -152,17 +162,17 @@ public interface ILogManager extends TableManager<LogBean>
      * @return always beanToSet saved
      * @throws WrapDAOException
      */
-    //5.2 SET REFERENCED 
     public DeviceBean setReferencedByDeviceId(LogBean bean, DeviceBean beanToSet);
+    //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link FaceBean} object referenced by {@link LogBean#getCompareFace}() field.<br>
      * FK_NAME : fl_log_ibfk_4
      * @param bean the {@link LogBean}
      * @return the associated {@link FaceBean} bean or {@code null} if {@code bean} is {@code null}
      */
-    //5.1 GET REFERENCED VALUE
     public FaceBean getReferencedByCompareFace(LogBean bean);
 
+    //5.2 SET REFERENCED 
     /**
      * Associates the {@link LogBean} object to the {@link FaceBean} object by {@link LogBean#getCompareFace}() field.
      *
@@ -171,17 +181,17 @@ public interface ILogManager extends TableManager<LogBean>
      * @return always beanToSet saved
      * @throws WrapDAOException
      */
-    //5.2 SET REFERENCED 
     public FaceBean setReferencedByCompareFace(LogBean bean, FaceBean beanToSet);
+    //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link FeatureBean} object referenced by {@link LogBean#getVerifyFeature}() field.<br>
      * FK_NAME : fl_log_ibfk_3
      * @param bean the {@link LogBean}
      * @return the associated {@link FeatureBean} bean or {@code null} if {@code bean} is {@code null}
      */
-    //5.1 GET REFERENCED VALUE
     public FeatureBean getReferencedByVerifyFeature(LogBean bean);
 
+    //5.2 SET REFERENCED 
     /**
      * Associates the {@link LogBean} object to the {@link FeatureBean} object by {@link LogBean#getVerifyFeature}() field.
      *
@@ -190,17 +200,17 @@ public interface ILogManager extends TableManager<LogBean>
      * @return always beanToSet saved
      * @throws WrapDAOException
      */
-    //5.2 SET REFERENCED 
     public FeatureBean setReferencedByVerifyFeature(LogBean bean, FeatureBean beanToSet);
+    //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link PersonBean} object referenced by {@link LogBean#getPersonId}() field.<br>
      * FK_NAME : fl_log_ibfk_1
      * @param bean the {@link LogBean}
      * @return the associated {@link PersonBean} bean or {@code null} if {@code bean} is {@code null}
      */
-    //5.1 GET REFERENCED VALUE
     public PersonBean getReferencedByPersonId(LogBean bean);
 
+    //5.2 SET REFERENCED 
     /**
      * Associates the {@link LogBean} object to the {@link PersonBean} object by {@link LogBean#getPersonId}() field.
      *
@@ -209,7 +219,6 @@ public interface ILogManager extends TableManager<LogBean>
      * @return always beanToSet saved
      * @throws WrapDAOException
      */
-    //5.2 SET REFERENCED 
     public PersonBean setReferencedByPersonId(LogBean bean, PersonBean beanToSet);
     //_____________________________________________________________________
     //
@@ -317,17 +326,19 @@ public interface ILogManager extends TableManager<LogBean>
     public int deleteByIndexVerifyFeature(String verifyFeature);
     
 
+    //45
     /**
      * return a primary key list from {@link LogBean} array
-     * @param array
+     * @param beans
+     * @return
      */
-    //45
-    public java.util.List<Integer> toPrimaryKeyList(LogBean... array);
+    public java.util.List<Integer> toPrimaryKeyList(LogBean... beans);
+    //46
     /**
      * return a primary key list from {@link LogBean} collection
-     * @param array
+     * @param beans
+     * @return
      */
-    //46
-    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<LogBean> collection);
+    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<LogBean> beans);
 
 }
