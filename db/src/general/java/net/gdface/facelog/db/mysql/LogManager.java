@@ -31,7 +31,7 @@ import net.gdface.facelog.dborm.exception.DAOException;
  * Remarks: 人脸验证日志,记录所有通过验证的人员<br>
  * @author guyadong
  */
-public class LogManager extends TableManager.Adapter<LogBean> implements ILogManager
+public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILogManager
 {
     private net.gdface.facelog.dborm.log.FlLogManager nativeManager = net.gdface.facelog.dborm.log.FlLogManager.getInstance();
     private IDbConverter<
@@ -63,26 +63,30 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
         return PersonManager.getInstance();
     }
     /**
-    * @return table name
-    */
+     * @return table name
+     */
+    @Override
     public String getTableName() {
         return this.nativeManager.getTableName();
     }
 
     /**
-    * @return field names of table
-    */
+     * @return field names of table
+     */
+    @Override
     public String getFields() {
         return this.nativeManager.getFields();
     }
-    
+
+    @Override
     public String getFullFields() {
         return this.nativeManager.getFullFields();
     }
     
     /**
-    * @return primarykeyNames
-    */
+     * @return primarykeyNames
+     */
+    @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
     }
@@ -98,7 +102,7 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     }
    
     @Override
-    protected Class<LogBean> _beanType(){
+    protected Class<LogBean> beanType(){
         return LogBean.class;
     }
     
@@ -113,8 +117,9 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public synchronized void setDbConverter(IDbConverter dbConverter) {
-        if( null == dbConverter)
+        if( null == dbConverter){
             throw new NullPointerException();
+        }
         this.dbConverter = dbConverter;
         this.beanConverter = this.dbConverter.getLogBeanConverter();
     }
@@ -156,8 +161,9 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     @Override
     public LogBean loadByPrimaryKeyChecked(LogBean bean) throws ObjectRetrievalException
     {
-        if(null == bean)
+        if(null == bean){
             throw new NullPointerException();
+        }
         return loadByPrimaryKeyChecked(bean.getId());
     }
     
@@ -175,13 +181,17 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     //1.3.2
     @Override
     public LogBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1)
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        if(! (keys[0] instanceof Integer))
+        }
+        
+        if(! (keys[0] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-          return loadByPrimaryKeyChecked((Integer)keys[0]);
+        }
+        return loadByPrimaryKeyChecked((Integer)keys[0]);
     }
 
     //1.4 override ILogManager
@@ -205,8 +215,9 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     //1.7
     @Override
     public LogBean checkDuplicate(LogBean bean)throws ObjectRetrievalException{
-        if(null != bean)
-            checkDuplicate(bean.getId());            
+        if(null != bean){
+            checkDuplicate(bean.getId());
+        }
         return bean;   
     }
     //1.4.1 override ILogManager
@@ -223,7 +234,9 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     //1.8 override ILogManager
     @Override 
     public java.util.List<LogBean> loadByPrimaryKey(int... keys){
-        if(null == keys)return new java.util.ArrayList<LogBean>();
+        if(null == keys){
+            return new java.util.ArrayList<LogBean>();
+        }
         java.util.ArrayList<LogBean> list = new java.util.ArrayList<LogBean>(keys.length);
         for(int i = 0 ;i< keys.length;++i){
             list.add(loadByPrimaryKey(keys[i]));
@@ -233,7 +246,9 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     //1.9 override ILogManager
     @Override 
     public java.util.List<LogBean> loadByPrimaryKey(java.util.Collection<Integer> keys){
-        if(null == keys )return new java.util.ArrayList<LogBean>();
+        if(null == keys ){
+            return new java.util.ArrayList<LogBean>();
+        }
         java.util.ArrayList<LogBean> list = new java.util.ArrayList<LogBean>(keys.size());
         if(keys instanceof java.util.List){
             for(Integer key: keys){
@@ -242,8 +257,9 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
         }else{
             LogBean bean;
             for(Integer key: keys){
-                if(null != (bean = loadByPrimaryKey(key)))
+                if(null != (bean = loadByPrimaryKey(key))){
                     list.add(bean);
+                }
             }
         }
         return list;
@@ -276,51 +292,58 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        if(! (keys[0] instanceof Integer))
+        }
+        if(! (keys[0] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+        }
         return deleteByPrimaryKey((Integer)keys[0]);
     }
     //2.2 override ILogManager
     @Override 
     public int deleteByPrimaryKey(int... keys){
-        if(null == keys)return 0;
         int count = 0;
-        for(int key:keys){
-            count += deleteByPrimaryKey(key);
+        if(null != keys){        
+            for(int key:keys){
+                count += deleteByPrimaryKey(key);
+            }
         }
         return count;
     }
     //2.3 override ILogManager
     @Override 
     public int deleteByPrimaryKey(java.util.Collection<Integer> keys){
-        if(null == keys)return 0;
         int count = 0;
-        for(Integer key :keys){
-            count += deleteByPrimaryKey(key);
+        if(null != keys){        
+            for(Integer key :keys){
+                count += deleteByPrimaryKey(key);
+            }
         }
         return count;
     }
     //2.4 override ILogManager
     @Override 
     public int delete(LogBean... beans){
-        if(null == beans)return 0;
         int count = 0;
-        for(LogBean bean :beans){
-            count += delete(bean);
+        if(null != beans){
+            for(LogBean bean :beans){
+                count += delete(bean);
+            }
         }
         return count;
     }
     //2.5 override ILogManager
     @Override 
     public int delete(java.util.Collection<LogBean> beans){
-        if(null == beans)return 0;
         int count = 0;
-        for(LogBean bean :beans){
-            count += delete(bean);
+        if(null != beans){
+            for(LogBean bean :beans){
+                count += delete(bean);
+            }
         }
         return count;
     }
@@ -334,15 +357,21 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
         , DeviceBean refDeviceByDeviceId , FaceBean refFaceByCompareFace , FeatureBean refFeatureByVerifyFeature , PersonBean refPersonByPersonId 
         )
     {
-        if(null == bean) return null;
-        if(null != refDeviceByDeviceId)
+        if(null == bean){
+            return null;
+        }
+        if(null != refDeviceByDeviceId){
             this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
-        if(null != refFaceByCompareFace)
+        }
+        if(null != refFaceByCompareFace){
             this.setReferencedByCompareFace(bean,refFaceByCompareFace);
-        if(null != refFeatureByVerifyFeature)
+        }
+        if(null != refFeatureByVerifyFeature){
             this.setReferencedByVerifyFeature(bean,refFeatureByVerifyFeature);
-        if(null != refPersonByPersonId)
+        }
+        if(null != refPersonByPersonId){
             this.setReferencedByPersonId(bean,refPersonByPersonId);
+        }
         bean = this.save( bean );
         return bean;
     } 
@@ -371,10 +400,12 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     @Override
     public LogBean save(LogBean bean,Object ...args) 
     {
-        if(null == args)
+        if(null == args){
             return save(bean);
-        if(args.length > 4)
+        }
+        if(args.length > 4){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceBean");
         }
@@ -403,10 +434,12 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     @Override
     public LogBean saveCollection(LogBean bean,Object ...inputs)
     {
-        if(null == inputs)
+        if(null == inputs){
             return save(bean);
-        if(inputs.length > 4)
+        }
+        if(inputs.length > 4){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        }
         Object[] args = new Object[4];
         System.arraycopy(inputs,0,args,0,4);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
@@ -454,8 +487,9 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
             return  (T)this.getReferencedByVerifyFeature(bean);
         case FL_LOG_FK_PERSON_ID:
             return  (T)this.getReferencedByPersonId(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     /**
      * Associates the {@link LogBean} object to the bean object by fkIndex field.<br>
@@ -478,8 +512,9 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
             return  (T)this.setReferencedByVerifyFeature(bean, (FeatureBean)beanToSet);
         case FL_LOG_FK_PERSON_ID:
             return  (T)this.setReferencedByPersonId(bean, (PersonBean)beanToSet);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     //////////////////////////////////////
@@ -491,7 +526,9 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     @Override 
     public DeviceBean getReferencedByDeviceId(LogBean bean)
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByDeviceId(instanceOfDeviceManager().loadByPrimaryKey(bean.getDeviceId())); 
         return bean.getReferencedByDeviceId();
     }
@@ -519,7 +556,9 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     @Override 
     public FaceBean getReferencedByCompareFace(LogBean bean)
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByCompareFace(instanceOfFaceManager().loadByPrimaryKey(bean.getCompareFace())); 
         return bean.getReferencedByCompareFace();
     }
@@ -547,7 +586,9 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     @Override 
     public FeatureBean getReferencedByVerifyFeature(LogBean bean)
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByVerifyFeature(instanceOfFeatureManager().loadByPrimaryKey(bean.getVerifyFeature())); 
         return bean.getReferencedByVerifyFeature();
     }
@@ -575,7 +616,9 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     @Override 
     public PersonBean getReferencedByPersonId(LogBean bean)
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByPersonId(instanceOfPersonManager().loadByPrimaryKey(bean.getPersonId())); 
         return bean.getReferencedByPersonId();
     }
@@ -936,9 +979,10 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     @Override
     public void unregisterListener(TableListener<LogBean> listener)
     {
-        if(listener instanceof WrapListener)
-            this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
-        throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
+        if(!(listener instanceof WrapListener)){
+            throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
+        }
+        this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
     }
     
     //37
@@ -976,15 +1020,15 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     }
     /**
      * wrap {@code TableListener<LogBean>} as native listener
-     * @author guyadong
      *
      */
     public class WrapListener implements TableListener<LogBean>{
         private final TableListener<LogBean> listener;
         private final net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.log.FlLogBean> nativeListener;
         private WrapListener(final TableListener<LogBean> listener) {
-            if(null == listener)
+            if(null == listener){
                 throw new NullPointerException();
+            }
             this.listener = listener;
             this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.log.FlLogBean> (){
 
@@ -1019,26 +1063,32 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
                 }};
         }
 
+        @Override
         public void beforeInsert(LogBean bean) {
             listener.beforeInsert(bean);
         }
 
+        @Override
         public void afterInsert(LogBean bean) {
             listener.afterInsert(bean);
         }
 
+        @Override
         public void beforeUpdate(LogBean bean) {
             listener.beforeUpdate(bean);
         }
 
+        @Override
         public void afterUpdate(LogBean bean) {
             listener.afterUpdate(bean);
         }
 
+        @Override
         public void beforeDelete(LogBean bean) {
             listener.beforeDelete(bean);
         }
 
+        @Override
         public void afterDelete(LogBean bean) {
             listener.afterDelete(bean);
         }        
@@ -1078,8 +1128,9 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     }
     
     private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.log.FlLogBean> toNative(final Action<LogBean> action){
-        if(null == action)
+        if(null == action){
             throw new NullPointerException();
+        }
         return new net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.log.FlLogBean>(){
 
             @Override
@@ -1096,7 +1147,9 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     //45 override ILogManager
     @Override 
     public java.util.List<Integer> toPrimaryKeyList(LogBean... array){        
-        if(null == array)return new java.util.ArrayList<Integer>();
+        if(null == array){
+            return new java.util.ArrayList<Integer>();
+        }
         java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
         for(LogBean bean:array){
             list.add(null == bean ? null : bean.getId());
@@ -1106,7 +1159,9 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     //46 override ILogManager
     @Override 
     public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<LogBean> collection){        
-        if(null == collection)return new java.util.ArrayList<Integer>();
+        if(null == collection){
+            return new java.util.ArrayList<Integer>();
+        }
         java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
         for(LogBean bean:collection){
             list.add(null == bean ? null : bean.getId());

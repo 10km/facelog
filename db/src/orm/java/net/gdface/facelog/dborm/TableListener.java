@@ -8,7 +8,6 @@
 package net.gdface.facelog.dborm;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 import net.gdface.facelog.dborm.exception.DAOException;
 
 /**
@@ -106,7 +105,9 @@ public interface TableListener<B>{
          * @throws DAOException
          */
         public <B> void fire(ListenerContainer<B> container,B bean) throws DAOException {
-            if(null == container || null == bean)return;
+            if(null == container || null == bean){
+                return;
+            }
             switch(this){
             case INSERT:
                 container.afterInsert(bean);
@@ -117,10 +118,14 @@ public interface TableListener<B>{
             case DELETE:
                 container.afterDelete(bean);
                 break;
+            default:
+                break;
             }
         }
         public <B extends BaseBean<B>> void fire(TableManager<B > manager,B bean) throws DAOException {
-            if(null == manager || null == bean)return;
+            if(null == manager || null == bean){
+                return;
+            }
             manager.fire(this, bean);
         }
     }
@@ -181,8 +186,9 @@ public interface TableListener<B>{
         }
     
         public synchronized boolean add(TableListener<B> e) {
-            if(null == e)
+            if(null == e){
                 throw new NullPointerException();
+            }
             return listeners.add(e);
         }
     

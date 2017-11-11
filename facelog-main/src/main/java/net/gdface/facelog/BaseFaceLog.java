@@ -31,7 +31,7 @@ import net.gdface.facelog.db.exception.WrapDAOException;
  * <ul>
  * <li>所有标明为图像数据的参数,是指具有特定图像格式的图像数据(如jpg,png...),而非无格式的原始点阵位图</li>
  * <li>在执行涉及数据库操作的方法时如果数据库发生异常，则会被封装到{@link WrapDAOException}抛出，
- * 所有非{@link RuntimeException}异常会被封装在{@link ServiceRuntime}抛出</li>
+ * 所有非{@link RuntimeException}异常会被封装在{@link ServiceRuntimeException}抛出</li>
  * <li>所有数据库对象(Java Bean,比如 {@link PersonBean}),在执行保存操作(save)时,
  * 如果为新增记录({@link PersonBean#isNew()}为true),则执行insert操作,否则执行update操作,
  * 如果数据库已经存在指定的记录而{@code isNew()}为{@code true},则那么执行insert操作数据库就会抛出异常，
@@ -40,16 +40,16 @@ import net.gdface.facelog.db.exception.WrapDAOException;
  * @author guyadong
  */
 @ThriftService("IFaceLog")
-public abstract class FaceLogDefinition extends Dao{
+public abstract class BaseFaceLog extends Dao{
 
 	/**
 	 * 返回personId指定的人员记录
 	 * @param personId
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public PersonBean getPerson(int personId) throws ServiceRuntime {
+	public PersonBean getPerson(int personId) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -57,10 +57,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 返回 list 指定的人员记录
 	 * @param idList 人员id列表
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<PersonBean> getPersons(List<Integer> idList) throws ServiceRuntime {
+	public List<PersonBean> getPersons(List<Integer> idList) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -68,10 +68,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 根据证件号码返回人员记录
 	 * @param papersNum
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public PersonBean getPersonByPapersNum(String papersNum) throws ServiceRuntime {
+	public PersonBean getPersonByPapersNum(String papersNum) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -79,10 +79,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 返回 persionId 关联的所有人脸特征记录
 	 * @param personId fl_person.id
 	 * @return 返回 fl_feature.md5  列表
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<String> getFeatureBeansByPersonId(int personId) throws ServiceRuntime {
+	public List<String> getFeatureBeansByPersonId(int personId) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -90,10 +90,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 删除personId指定的人员(person)记录及关联的所有记录
 	 * @param personId
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int deletePerson(int personId) throws ServiceRuntime {
+	public int deletePerson(int personId) throws ServiceRuntimeException {
 		return 0;
 	}
 
@@ -101,10 +101,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 删除personIdList指定的人员(person)记录及关联的所有记录
 	 * @param personIdList 人员id列表
 	 * @return 返回删除的 person 记录数量
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int deletePersons(List<Integer> personIdList) throws ServiceRuntime {
+	public int deletePersons(List<Integer> personIdList) throws ServiceRuntimeException {
 		return 0;
 	}
 
@@ -112,11 +112,11 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 删除papersNum指定的人员(person)记录及关联的所有记录
 	 * @param papersNum 证件号码
 	 * @return 返回删除的 person 记录数量
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 * @see {@link #deletePerson(int)}
 	 */
 	@ThriftMethod
-	public int deletePersonByPapersNum(String papersNum) throws ServiceRuntime {
+	public int deletePersonByPapersNum(String papersNum) throws ServiceRuntimeException {
 		return 0;
 	}
 
@@ -124,10 +124,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 删除papersNum指定的人员(person)记录及关联的所有记录
 	 * @param papersNumlist 证件号码列表
 	 * @return 返回删除的 person 记录数量
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int deletePersonsByPapersNum(List<String> papersNumlist) throws ServiceRuntime {
+	public int deletePersonsByPapersNum(List<String> papersNumlist) throws ServiceRuntimeException {
 		return 0;
 	}
 
@@ -135,10 +135,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 判断是否存在personId指定的人员记录
 	 * @param persionId
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public boolean existsPerson(int persionId) throws ServiceRuntime {
+	public boolean existsPerson(int persionId) throws ServiceRuntimeException {
 		return false;
 	}
 
@@ -146,70 +146,70 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 判断 personId 指定的人员记录是否过期
 	 * @param personId
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public boolean isDisable(int personId) throws ServiceRuntime {
+	public boolean isDisable(int personId) throws ServiceRuntimeException {
 		return false;
 	}
 
 	/**
 	 * 设置 personId 指定的人员为禁止状态
 	 * @param personId
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 * @see #setPersonExpiryDate(int, long)
 	 */
 	@ThriftMethod
-	public void disablePerson(int personId) throws ServiceRuntime {
+	public void disablePerson(int personId) throws ServiceRuntimeException {
 	}
 
 	/**
 	 * 修改 personId 指定的人员记录的有效期
 	 * @param personId
 	 * @param expiryDate 失效日期
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public void setPersonExpiryDate(int personId, @TargetType(java.util.Date.class)long expiryDate) throws ServiceRuntime {
+	public void setPersonExpiryDate(int personId, @TargetType(java.util.Date.class)long expiryDate) throws ServiceRuntimeException {
 	}
 
 	/**
 	 * 修改 personIdList 指定的人员记录的有效期
 	 * @param personIdList 人员id列表
 	 * @param expiryDate 失效日期 
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod("setPersonExpiryDateList")
-	public void setPersonExpiryDate(List<Integer> personIdList, @TargetType(java.util.Date.class)long expiryDate) throws ServiceRuntime {
+	public void setPersonExpiryDate(List<Integer> personIdList, @TargetType(java.util.Date.class)long expiryDate) throws ServiceRuntimeException {
 	}
 
 	/**
 	 * 设置 personIdList 指定的人员为禁止状态
 	 * @param personIdList 人员id列表
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod("disablePersonList")
-	public void disablePerson(List<Integer> personIdList) throws ServiceRuntime {
+	public void disablePerson(List<Integer> personIdList) throws ServiceRuntimeException {
 	}
 
 	/**
 	 * 返回 persionId 关联的所有日志记录
 	 * @param personId fl_person.id
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<LogBean> getLogBeansByPersonId(int personId) throws ServiceRuntime {
+	public List<LogBean> getLogBeansByPersonId(int personId) throws ServiceRuntimeException {
 		return null;
 	}
 
 	/**
 	 * 返回所有人员记录
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<Integer> loadAllPerson() throws ServiceRuntime {
+	public List<Integer> loadAllPerson() throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -217,10 +217,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 返回 where 指定的所有人员记录
 	 * @param where SQL条件语句
 	 * @return 返回 fl_person.id 列表
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<Integer> loadPersonIdByWhere(String where) throws ServiceRuntime {
+	public List<Integer> loadPersonIdByWhere(String where) throws ServiceRuntimeException {
 		return null;
 	}
 	/**
@@ -229,20 +229,20 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param startRow 记录起始行号 (first row = 1, last row = -1)
 	 * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<PersonBean> loadPersonByWhere(String where, int startRow, int numRows) throws ServiceRuntime {
+	public List<PersonBean> loadPersonByWhere(String where, int startRow, int numRows) throws ServiceRuntimeException {
 		return null;
 	}
 	/**
 	 * 返回满足{@code where}条件的日志记录(fl_person)数目
 	 * @param where 为{@code null}时返回所有记录
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int countPersonByWhere(String where)throws ServiceRuntime{
+	public int countPersonByWhere(String where)throws ServiceRuntimeException{
 		return 0;
 	}
 	
@@ -250,20 +250,20 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 保存人员(person)记录
 	 * @param bean
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public PersonBean savePerson(PersonBean bean) throws ServiceRuntime {
+	public PersonBean savePerson(PersonBean bean) throws ServiceRuntimeException {
 		return null;
 	}
 
 	/**
 	 * 保存人员(person)记录
 	 * @param beans 
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public void savePersons(List<PersonBean> beans) throws ServiceRuntime {
+	public void savePersons(List<PersonBean> beans) throws ServiceRuntimeException {
 	}
 
 	/**
@@ -271,10 +271,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param bean
 	 * @param idPhoto 标准照图像对象,可为null
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod("savePersonWithPhoto")
-	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto) throws ServiceRuntime {
+	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -282,10 +282,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 保存人员信息记录(包含标准照)
 	 * @param persons
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod("savePersonsWithPhoto")
-	public Integer savePerson(Map<ByteBuffer, PersonBean> persons) throws ServiceRuntime {
+	public Integer savePerson(Map<ByteBuffer, PersonBean> persons) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -295,10 +295,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param idPhotoMd5 标准照图像对象,可为null
 	 * @param featureMd5 用于验证的人脸特征数据对象,可为null
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod("savePersonWithPhotoAndFeatureSaved")
-	public PersonBean savePerson(PersonBean bean, String idPhotoMd5, String featureMd5) throws ServiceRuntime {
+	public PersonBean savePerson(PersonBean bean, String idPhotoMd5, String featureMd5) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -309,11 +309,11 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param featureBean 用于验证的人脸特征数据对象,可为null
 	 * @param deviceId 标准照图像来源设备id,可为null
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod("savePersonWithPhotoAndFeature")
 	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, FeatureBean featureBean, Integer deviceId)
-			throws ServiceRuntime {
+			throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -324,11 +324,11 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(ByteBuffer, Integer, List)}
 	 * @param faceBeans 参见 {@link #addFeature(ByteBuffer, Integer, List)}
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod("savePersonWithPhotoAndFeatureMultiFaces")
 	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature, List<FaceBean> faceBeans)
-			throws ServiceRuntime {
+			throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -340,11 +340,11 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
 	 * @param deviceId faceInfo 图像来源设备id,可为null 
 	 * @return bean 保存的{@link PersonBean}对象
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod("savePersonWithPhotoAndFeatureMultiImage")
 	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature, Map<ByteBuffer, FaceBean> faceInfo,
-			Integer deviceId) throws ServiceRuntime {
+			Integer deviceId) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -360,7 +360,7 @@ public abstract class FaceLogDefinition extends Dao{
 	 */
 	@ThriftMethod("savePersonFull")
 	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature, ByteBuffer featureImage,
-			FaceBean featureFaceBean, Integer deviceId) throws ServiceRuntime {
+			FaceBean featureFaceBean, Integer deviceId) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -369,10 +369,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param personId 人员记录id
 	 * @param featureMd5 人脸特征数据记录id (已经保存在数据库中)
 	 * @param deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public void replaceFeature(Integer personId, String featureMd5, boolean deleteOldFeatureImage) throws ServiceRuntime {
+	public void replaceFeature(Integer personId, String featureMd5, boolean deleteOldFeatureImage) throws ServiceRuntimeException {
 	}
 
 	/**
@@ -381,10 +381,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 同时包含fl_feature更新记录引用的fl_person记录
 	 * @param timestamp
 	 * @return 返回fl_person.id 列表
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<Integer> loadUpdatedPersons(@TargetType(java.util.Date.class)long timestamp) throws ServiceRuntime {
+	public List<Integer> loadUpdatedPersons(@TargetType(java.util.Date.class)long timestamp) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -393,10 +393,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 返回 fl_person.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_person记录
 	 * @param timestamp
 	 * @return 返回fl_person.id 列表
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<Integer> loadPersonIdByUpdateTime(@TargetType(java.util.Date.class)long timestamp) throws ServiceRuntime {
+	public List<Integer> loadPersonIdByUpdateTime(@TargetType(java.util.Date.class)long timestamp) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -405,37 +405,37 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 返回 fl_feature.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_feature记录
 	 * @param timestamp
 	 * @return 返回 fl_feature.md5 列表
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<String> loadFeatureMd5ByUpdate(@TargetType(java.util.Date.class)long timestamp) throws ServiceRuntime {
+	public List<String> loadFeatureMd5ByUpdate(@TargetType(java.util.Date.class)long timestamp) throws ServiceRuntimeException {
 		return null;
 	}
 
 	/**
 	 * 添加一条验证日志记录
 	 * @param bean
-	 * @throws ServiceRuntime
-	 * @throws DuplicateReord 数据库中存在相同记录
+	 * @throws ServiceRuntimeException
+	 * @throws DuplicateReordException 数据库中存在相同记录
 	 */
 	@ThriftMethod(exception = {
-            @ThriftException(type=ServiceRuntime.class, id=1),
-            @ThriftException(type=DuplicateReord.class, id=2)
+            @ThriftException(type=ServiceRuntimeException.class, id=1),
+            @ThriftException(type=DuplicateReordException.class, id=2)
 			})
-	public void addLog(LogBean bean) throws ServiceRuntime, DuplicateReord {
+	public void addLog(LogBean bean) throws ServiceRuntimeException, DuplicateReordException {
 	}
 
 	/**
 	 * 添加一组验证日志记录(事务存储)
 	 * @param beans
-	 * @throws ServiceRuntime
-	 * @throws DuplicateReord 数据库中存在相同记录
+	 * @throws ServiceRuntimeException
+	 * @throws DuplicateReordException 数据库中存在相同记录
 	 */
 	@ThriftMethod(exception = {
-            @ThriftException(type=ServiceRuntime.class, id=1),
-            @ThriftException(type=DuplicateReord.class, id=2)
+            @ThriftException(type=ServiceRuntimeException.class, id=1),
+            @ThriftException(type=DuplicateReordException.class, id=2)
 			})
-	public void addLogs(List<LogBean> beans) throws ServiceRuntime, DuplicateReord {
+	public void addLogs(List<LogBean> beans) throws ServiceRuntimeException, DuplicateReordException {
 	}
 	/**
 	 * 日志查询<br>
@@ -444,11 +444,11 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param startRow 记录起始行号 (first row = 1, last row = -1)
 	 * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
 	public List<LogBean> loadLogByWhere(String where, int startRow, int numRows)
-			throws ServiceRuntime {
+			throws ServiceRuntimeException {
 		return null;
 	}
 	
@@ -459,30 +459,30 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param startRow
 	 * @param numRows
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<LogLightBean> loadLogLightByWhere(String where, int startRow, int numRows) throws ServiceRuntime {
+	public List<LogLightBean> loadLogLightByWhere(String where, int startRow, int numRows) throws ServiceRuntimeException {
 		return null;
 	}
 	/**
 	 * 返回符合{@code where}条件的记录条数
 	 * @param where
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int countLogLightByWhere(String where) throws ServiceRuntime {
+	public int countLogLightByWhere(String where) throws ServiceRuntimeException {
 		return 0;
 	}
 	/**
 	 * 返回满足{@code where}条件的日志记录(fl_log)数目
 	 * @param where 为{@code null}时返回所有记录
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int countLogByWhere(String where) throws ServiceRuntime {
+	public int countLogByWhere(String where) throws ServiceRuntimeException {
 		return 0;
 	}
     /**
@@ -490,29 +490,29 @@ public abstract class FaceLogDefinition extends Dao{
      * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @see #loadLogLightByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
 	@ThriftMethod
-	public List<LogLightBean> loadLogLightByVerifyTime(@TargetType(java.util.Date.class)long timestamp,int startRow, int numRows)throws ServiceRuntime{
+	public List<LogLightBean> loadLogLightByVerifyTime(@TargetType(java.util.Date.class)long timestamp,int startRow, int numRows)throws ServiceRuntimeException{
 		return null;
 	}
     /**
      * 返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
      * @see #countLogLightByWhere(String)
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
 	@ThriftMethod
-	 public int countLogLightByVerifyTime(@TargetType(java.util.Date.class)long timestamp)throws ServiceRuntime{
+	 public int countLogLightByVerifyTime(@TargetType(java.util.Date.class)long timestamp)throws ServiceRuntimeException{
 		return 0;
 	 }
 	/**
 	 * 判断md5指定的图像记录是否存在
 	 * @param md5
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public boolean existsImage(String md5) throws ServiceRuntime {
+	public boolean existsImage(String md5) throws ServiceRuntimeException {
 		return false;
 	}
 
@@ -523,15 +523,15 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param faceBean 关联的人脸信息对象,可为null
 	 * @param personId 关联的人员id(fl_person.id),可为null
 	 * @return
-	 * @throws DuplicateReord 数据库中已经存在要保存的图像数据
-	 * @throws ServiceRuntime
+	 * @throws DuplicateReordException 数据库中已经存在要保存的图像数据
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod(exception = {
-            @ThriftException(type=ServiceRuntime.class, id=1),
-            @ThriftException(type=DuplicateReord.class, id=2)
+            @ThriftException(type=ServiceRuntimeException.class, id=1),
+            @ThriftException(type=DuplicateReordException.class, id=2)
 			})
 	public ImageBean addImage(ByteBuffer imageData, Integer deviceId, FaceBean faceBean, Integer personId)
-			throws ServiceRuntime, DuplicateReord {
+			throws ServiceRuntimeException, DuplicateReordException {
 		return null;
 	}
 
@@ -539,10 +539,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 判断md5指定的特征记录是否存在
 	 * @param md5
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public boolean existsFeature(String md5) throws ServiceRuntime {
+	public boolean existsFeature(String md5) throws ServiceRuntimeException {
 		return false;
 	}
 
@@ -552,16 +552,16 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param personId 关联的人员id(fl_person.id),可为null
 	 * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
 	 * @return 保存的人脸特征记录{@link FeatureBean}
-	 * @throws ServiceRuntime
-	 * @throws DuplicateReord 
+	 * @throws ServiceRuntimeException
+	 * @throws DuplicateReordException 
 	 */
 	@ThriftMethod(
 			exception = {
-            @ThriftException(type=ServiceRuntime.class, id=1),
-            @ThriftException(type=DuplicateReord.class, id=2)
+            @ThriftException(type=ServiceRuntimeException.class, id=1),
+            @ThriftException(type=DuplicateReordException.class, id=2)
 			}
 		)
-	public FeatureBean addFeature(ByteBuffer feature, Integer personId, List<FaceBean> faecBeans) throws ServiceRuntime, DuplicateReord {
+	public FeatureBean addFeature(ByteBuffer feature, Integer personId, List<FaceBean> faecBeans) throws ServiceRuntimeException, DuplicateReordException {
 		return null;
 	}
 
@@ -572,16 +572,16 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
 	 * @param deviceId 图像来源设备id,可为null
 	 * @return 保存的人脸特征记录{@link FeatureBean}
-	 * @throws ServiceRuntime
-	 * @throws DuplicateReord 
+	 * @throws ServiceRuntimeException
+	 * @throws DuplicateReordException 
 	 */
 	@ThriftMethod(value = "addFeatureMulti",
 			exception = {
-            @ThriftException(type=ServiceRuntime.class, id=1),
-            @ThriftException(type=DuplicateReord.class, id=2)
+            @ThriftException(type=ServiceRuntimeException.class, id=1),
+            @ThriftException(type=DuplicateReordException.class, id=2)
 			})
 	public FeatureBean addFeature(ByteBuffer feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo, Integer deviceId)
-			throws ServiceRuntime, DuplicateReord {
+			throws ServiceRuntimeException, DuplicateReordException {
 		return null;
 	}
 
@@ -591,10 +591,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param deleteImage 是否删除关联的 image记录
 	 * @return 返回删除的特征记录关联的图像(image)记录的MD5<br>
 	 *                {@code deleteImage}为{@code true}时返回空表
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<String> deleteFeature(String featureMd5, boolean deleteImage) throws ServiceRuntime {
+	public List<String> deleteFeature(String featureMd5, boolean deleteImage) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -604,10 +604,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param deleteImage 是否删除关联的 image记录
 	 * @return
 	 * @see #deleteFeature(String, boolean)
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int deleteAllFeaturesByPersonId(int personId, boolean deleteImage) throws ServiceRuntime {
+	public int deleteAllFeaturesByPersonId(int personId, boolean deleteImage) throws ServiceRuntimeException {
 		return 0;
 	}
 
@@ -615,10 +615,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 根据MD5校验码返回人脸特征数据记录
 	 * @param md5
 	 * @return 如果数据库中没有对应的数据则返回null
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public FeatureBean getFeature(String md5) throws ServiceRuntime {
+	public FeatureBean getFeature(String md5) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -626,30 +626,30 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 根据MD5校验码返回人脸特征数据记录
 	 * @param md5 md5列表
 	 * @return {@link FeatureBean}列表
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<FeatureBean> getFeatures(List<String> md5) throws ServiceRuntime {
+	public List<FeatureBean> getFeatures(List<String> md5) throws ServiceRuntimeException {
 		return null;
 	}
 	/**
 	 * 返回指定人员{@code personId}关联的所有特征<br>
 	 * @param personId
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<String> getFeaturesOfPerson(int personId)throws ServiceRuntime{
+	public List<String> getFeaturesOfPerson(int personId)throws ServiceRuntimeException{
 		return null;
 	}
 	/**
 	 * 根据MD5校验码返回人脸特征数据
 	 * @param md5
 	 * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public ByteBuffer getFeatureBytes(String md5) throws ServiceRuntime {
+	public ByteBuffer getFeatureBytes(String md5) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -657,11 +657,11 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 根据图像的MD5校验码返回图像数据
 	 * @param imageMD5
 	 * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 * @see {@link #getBinary(String)}
 	 */
 	@ThriftMethod
-	public ByteBuffer getImageBytes(String imageMD5) throws ServiceRuntime {
+	public ByteBuffer getImageBytes(String imageMD5) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -669,10 +669,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 根据图像的MD5校验码返回图像记录
 	 * @param imageMD5
 	 * @return {@link ImageBean} ,如果没有对应记录则返回null
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public ImageBean getImage(String imageMD5) throws ServiceRuntime {
+	public ImageBean getImage(String imageMD5) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -680,30 +680,30 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 返回featureMd5的人脸特征记录关联的所有图像记录id(MD5) 
 	 * @param featureMd5 人脸特征id(MD5)
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<String> getImagesAssociatedByFeature(String featureMd5) throws ServiceRuntime {
+	public List<String> getImagesAssociatedByFeature(String featureMd5) throws ServiceRuntimeException {
 		return null;
 	}
 	/**
 	 * 返回featureMd5的人脸特征记录关联的设备id<br>
 	 * @param featureMd5
 	 * @return 如果没有关联的设备则返回{@code null}
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public Integer getDeviceIdOfFeature(String featureMd5) throws ServiceRuntime{
+	public Integer getDeviceIdOfFeature(String featureMd5) throws ServiceRuntimeException{
 		return null;
 	}
 	/**
 	 * 删除imageMd5指定图像及其缩略图
 	 * @param imageMd5
 	 * @return 删除成功返回1,否则返回0
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int deleteImage(String imageMd5) throws ServiceRuntime {
+	public int deleteImage(String imageMd5) throws ServiceRuntimeException {
 		return 0;
 	}
 
@@ -711,40 +711,40 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 判断id指定的设备记录是否存在
 	 * @param id
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public boolean existsDevice(int id) throws ServiceRuntime {
+	public boolean existsDevice(int id) throws ServiceRuntimeException {
 		return false;
 	}
 	/**
 	 * 保存设备记录
 	 * @param deviceBean
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public DeviceBean saveDevice(DeviceBean deviceBean) throws ServiceRuntime {
+	public DeviceBean saveDevice(DeviceBean deviceBean) throws ServiceRuntimeException {
 		return null;
 	}
 	/**
 	 * 返回{@code deviceId}指定的设备记录
 	 * @param deviceId
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public DeviceBean getDevice(int deviceId) throws ServiceRuntime {
+	public DeviceBean getDevice(int deviceId) throws ServiceRuntimeException {
 		return null;
 	}
 	/**
 	 * 返回 {@code idList} 指定的设备记录
 	 * @param idList
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<DeviceBean> getDevices(List<Integer> idList) throws ServiceRuntime {
+	public List<DeviceBean> getDevices(List<Integer> idList) throws ServiceRuntimeException {
 		return null;
 	}
 	/**
@@ -753,30 +753,30 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param startRow 记录起始行号 (first row = 1, last row = -1)
 	 * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<DeviceBean> loadDeviceByWhere(String where,int startRow, int numRows)throws ServiceRuntime{
+	public List<DeviceBean> loadDeviceByWhere(String where,int startRow, int numRows)throws ServiceRuntimeException{
 		return null;
 	}
 	/**
 	 * 返回满足{@code where} SQL条件语句的fl_device记录总数
 	 * @param where
 	 * @return
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int countDeviceByWhere(String where)throws ServiceRuntime{
+	public int countDeviceByWhere(String where)throws ServiceRuntimeException{
 		return 0;
 	}
 	/**
 	 * 根据{@code where}指定的查询条件查询设备记录
 	 * @param where
 	 * @return 返回设备ID列表
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<Integer> loadDeviceIdByWhere(String where)throws ServiceRuntime{
+	public List<Integer> loadDeviceIdByWhere(String where)throws ServiceRuntimeException{
 		return null;
 		
 	}
@@ -786,10 +786,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param deviceGroupBean
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean)throws ServiceRuntime {
+	public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean)throws ServiceRuntimeException {
 		return null;
 	}
 	/**
@@ -797,10 +797,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param deviceGroupId
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public DeviceGroupBean getDeviceGroup(int deviceGroupId)throws ServiceRuntime {
+	public DeviceGroupBean getDeviceGroup(int deviceGroupId)throws ServiceRuntimeException {
 		return null;
 	}
 	/**
@@ -808,10 +808,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param groupIdList
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod()
-	public List<DeviceGroupBean> getDeviceGroups(List<Integer> groupIdList)throws ServiceRuntime {
+	public List<DeviceGroupBean> getDeviceGroups(List<Integer> groupIdList)throws ServiceRuntimeException {
 		return null;
 	}
 	/**
@@ -820,10 +820,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param deviceGroupId
 	 * @return  返回删除的记录条数
 	 * @throws WrapDAOException
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int deleteDeviceGroup(int deviceGroupId)throws ServiceRuntime {
+	public int deleteDeviceGroup(int deviceGroupId)throws ServiceRuntimeException {
 		return 0;
 	}
 	/**
@@ -832,10 +832,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param deviceGroupId
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId)throws ServiceRuntime {
+	public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId)throws ServiceRuntimeException {
 		return null;
 	}
 	/**
@@ -844,10 +844,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param deviceGroupId
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<DeviceBean> getDevicesOfGroup(int deviceGroupId)throws ServiceRuntime {
+	public List<DeviceBean> getDevicesOfGroup(int deviceGroupId)throws ServiceRuntimeException {
 		return null;
 	}
 	////////////////////////////////PersonGroupBean/////////////
@@ -856,10 +856,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param personGroupBean
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean)throws ServiceRuntime {
+	public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean)throws ServiceRuntimeException {
 		return personGroupBean;
 	}
 	/**
@@ -867,10 +867,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param personGroupId
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public PersonGroupBean getPersonGroup(int personGroupId)throws ServiceRuntime {
+	public PersonGroupBean getPersonGroup(int personGroupId)throws ServiceRuntimeException {
 		return null;
 	}
 	/**
@@ -878,10 +878,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param groupIdList
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<PersonGroupBean> getPersonGroups(Collection<Integer> groupIdList)throws ServiceRuntime {
+	public List<PersonGroupBean> getPersonGroups(Collection<Integer> groupIdList)throws ServiceRuntimeException {
 		return null;
 	}
 	/**
@@ -890,10 +890,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param personGroupId
 	 * @return 
 	 * @throws WrapDAOException
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int deletePersonGroup(int personGroupId)throws ServiceRuntime {
+	public int deletePersonGroup(int personGroupId)throws ServiceRuntimeException {
 		return personGroupId;
 	}
 	/**
@@ -902,10 +902,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param personGroupId
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<PersonGroupBean> getSubPersonGroup(int personGroupId)throws ServiceRuntime {
+	public List<PersonGroupBean> getSubPersonGroup(int personGroupId)throws ServiceRuntimeException {
 		return null;
 	}
 	/**
@@ -914,10 +914,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param deviceGroupId
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<PersonBean> getPersonsOfGroup(int personGroupId)throws ServiceRuntime {
+	public List<PersonBean> getPersonsOfGroup(int personGroupId)throws ServiceRuntimeException {
 		return null;
 	}
     /**
@@ -927,14 +927,14 @@ public abstract class FaceLogDefinition extends Dao{
      * @param numRows 返回记录条数(<0时返回所有记录)
      */
 	@ThriftMethod
-    public List<DeviceGroupBean> loadDeviceGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntime{
+    public List<DeviceGroupBean> loadDeviceGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntimeException{
 		return null;
     }
     /**
      * 返回满足{@code where} SQL条件语句的fl_device_group记录总数
      */
     @ThriftMethod
-    public int countDeviceGroupByWhere(String where)throws ServiceRuntime{
+    public int countDeviceGroupByWhere(String where)throws ServiceRuntimeException{
 		return 0;
     }
     /** 
@@ -943,7 +943,7 @@ public abstract class FaceLogDefinition extends Dao{
      * @see #loadDeviceGroupByWhere(String,int,int)
      */
     @ThriftMethod
-    public List<Integer> loadDeviceGroupIdByWhere(String where)throws ServiceRuntime{
+    public List<Integer> loadDeviceGroupIdByWhere(String where)throws ServiceRuntimeException{
 		return null;
     }
 	/////////////////////PERMIT/////
@@ -953,10 +953,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param deviceGroup
 	 * @param personGroup
 	 * @throws WrapDAOException
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {}
+	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntimeException {}
     /**
      * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
      * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
@@ -965,17 +965,17 @@ public abstract class FaceLogDefinition extends Dao{
      * @see #addPermit(DeviceGroupBean,PersonGroupBean)
      */
 	@ThriftMethod("addPermitById")
-	public void addPermit(int deviceGroupId,int personGroupId)throws ServiceRuntime{}
+	public void addPermit(int deviceGroupId,int personGroupId)throws ServiceRuntimeException{}
 	/**
 	 * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean)}
 	 * @param deviceGroup
 	 * @param personGroup
 	 * @return 删除成功返回1,否则返回0
 	 * @throws WrapDAOException
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {
+	public int deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntimeException {
 		return 0;
 	}
 	/**
@@ -985,10 +985,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param personGroupId
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public boolean getGroupPermit(int deviceId,int personGroupId)throws ServiceRuntime {
+	public boolean getGroupPermit(int deviceId,int personGroupId)throws ServiceRuntimeException {
 		return false;
 	}
 	/**
@@ -998,20 +998,20 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param personId
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public boolean getPersonPermit(int deviceId,int personId)throws ServiceRuntime {
+	public boolean getPersonPermit(int deviceId,int personId)throws ServiceRuntimeException {
 		return false;
 	}
 	/** 参见 {@link #getGroupPermit(Integer, Integer) } */
 	@ThriftMethod
-	public List<Boolean> getGroupPermits(int deviceId,List<Integer> personGroupIdList)throws ServiceRuntime {
+	public List<Boolean> getGroupPermits(int deviceId,List<Integer> personGroupIdList)throws ServiceRuntimeException {
 		return null;		
 	}
 	/** 参见 {@link #getPersonPermit(Integer, Integer) } */
 	@ThriftMethod
-	public List<Boolean> getPersonPermits(int deviceId,List<Integer> personIdList)throws ServiceRuntime {
+	public List<Boolean> getPersonPermits(int deviceId,List<Integer> personIdList)throws ServiceRuntimeException {
 		return null;
 	}
 	/**
@@ -1020,10 +1020,10 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param timestamp
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws ServiceRuntime
+	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<PermitBean> loadPermitByUpdate(@TargetType(java.util.Date.class)long timestamp)throws ServiceRuntime {
+	public List<PermitBean> loadPermitByUpdate(@TargetType(java.util.Date.class)long timestamp)throws ServiceRuntimeException {
 		return null;
 	}
     /**
@@ -1033,7 +1033,7 @@ public abstract class FaceLogDefinition extends Dao{
      * @param numRows 返回记录条数(<0时返回所有记录)
      */
 	@ThriftMethod
-    public List<PersonGroupBean> loadPersonGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntime{
+    public List<PersonGroupBean> loadPersonGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntimeException{
 		return null;    	
     }
     /**
@@ -1041,17 +1041,17 @@ public abstract class FaceLogDefinition extends Dao{
      * @see {@link IPersonGroupManager#Where(String)}
      */
 	@ThriftMethod
-    public int countPersonGroupByWhere(String where)throws ServiceRuntime{
+    public int countPersonGroupByWhere(String where)throws ServiceRuntimeException{
 		return 0;
     }
     /** 
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
      * @see #loadPersonGroupByWhere(String,int,int)
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
 	@ThriftMethod
-    public List<Integer> loadPersonGroupIdByWhere(String where)throws ServiceRuntime{
+    public List<Integer> loadPersonGroupIdByWhere(String where)throws ServiceRuntimeException{
 		return null;
     }
 }

@@ -67,20 +67,20 @@ public  class FaceBean
     private java.util.Date createTime;
 
     /** flag whether {@code this} can be modified */
-    private Boolean _immutable;
+    private Boolean immutable;
     /** columns modified flag */
     private long modified;
     /** columns initialized flag */
     private long initialized;
-    private boolean _isNew;        
+    private boolean isNew;        
     /** 
      * set {@code this} as immutable object
      * @return {@code this} 
      */
     public synchronized FaceBean immutable(Boolean immutable) {
-        if(this._immutable != immutable){
+        if(this.immutable != immutable){
             checkMutable();
-            this._immutable = immutable;
+            this.immutable = immutable;
         }
         return this;
     }
@@ -88,35 +88,29 @@ public  class FaceBean
      * @return {@code true} if {@code this} is a mutable object  
      */
     public boolean mutable(){
-        return Boolean.TRUE != this._immutable;
+        return Boolean.TRUE != this.immutable;
     }
     /**
      * @return {@code this}
      * @throws IllegalStateException if {@code this} is a immutable object 
      */
     private FaceBean checkMutable(){
-        if(Boolean.TRUE == this._immutable)
+        if(Boolean.TRUE == this.immutable){
             throw new IllegalStateException("this is a immutable object");
+        }
         return this;
     }
-    /**
-     * Determines if the current object is new.
-     *
-     * @return true if the current object is new, false if the object is not new
-     */
+    @Override
     public boolean isNew()
     {
-        return _isNew;
+        return this.isNew;
     }
 
-    /**
-     * Specifies to the object if it has been set as new.
-     *
-     * @param isNew the boolean value to be assigned to the isNew field
-     */
+
+    @Override
     public void isNew(boolean isNew)
     {
-        this._isNew = isNew;
+        this.isNew = isNew;
     }
     /**
      * Specifies to the object if it has been set as new.
@@ -125,7 +119,7 @@ public  class FaceBean
      */
     public void setNew(boolean isNew)
     {
-        this._isNew = isNew;
+        this.isNew = isNew;
     }
     /**
      * @return the modified status of columns
@@ -1464,24 +1458,13 @@ public  class FaceBean
         this.referencedByImageMd5 = reference;
     }
 
-    /**
-     * Determines if the object has been modified since the last time this method was called.
-     * <br>
-     * We can also determine if this object has ever been modified since its creation.
-     *
-     * @return true if the object has been modified, false if the object has not been modified
-     */
+    @Override
     public boolean isModified()
     {
         return 0 != modified;
     }
   
-    /**
-     * Determines if the {@code column} has been modified.
-     * @param columnID
-     * @return true if the field has been modified, false if the field has not been modified
-     * @author guyadong
-     */
+    @Override
     public boolean isModified(int columnID){
         switch ( columnID ){
         case FL_FACE_ID_ID:
@@ -1528,14 +1511,8 @@ public  class FaceBean
             return false;
         }        
     }
-    /**
-     * Determines if the {@code column} has been initialized.
-     * <br>
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     * @param columnID
-     * @return true if the field has been initialized, false otherwise
-     * @author guyadong
-     */
+
+    @Override
     public boolean isInitialized(int columnID){
         switch(columnID) {
         case FL_FACE_ID_ID:
@@ -1578,43 +1555,29 @@ public  class FaceBean
             return checkFeatureMd5Initialized();
         case FL_FACE_ID_CREATE_TIME:
             return checkCreateTimeInitialized();
+        default:
+            return false;
         }
-        return false;
     }
     
-    /**
-     * Determines if the {@code column} has been modified.
-     * @param column
-     * @return true if the field has been modified, false if the field has not been modified
-     * @author guyadong
-     */
+    @Override
     public boolean isModified(String column){        
         return isModified(columnIDOf(column));
     }
 
-    /**
-     * Determines if the {@code column} has been initialized.
-     * <br>
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     * @param column
-     * @return true if the field has been initialized, false otherwise
-     * @author guyadong
-     */
+    @Override
     public boolean isInitialized(String column){
         return isInitialized(columnIDOf(column));
     }
     
-    /**
-     * Resets the object modification status to 'not modified'.
-     */
+    @Override
     public void resetIsModified()
     {
         checkMutable();
         modified = 0L;
     }
-    /**
-     * Resets the primary keys ( {@link #id} ) modification status to 'not modified'.
-     */
+
+    @Override
     public void resetPrimaryKeysModified()
     {
         modified &= (~(FL_FACE_ID_ID_MASK));
@@ -1674,7 +1637,7 @@ public  class FaceBean
         this.extInfo = null;
         this.featureMd5 = null;
         this.createTime = null/* DEFAULT:'CURRENT_TIMESTAMP'*/;
-        this._isNew = true;
+        this.isNew = true;
         this.modified = 0L;
         this.initialized = 0L;
     }
@@ -1724,83 +1687,123 @@ public  class FaceBean
         StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
         int count = 0;        
         if(checkIdInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("id=").append(getId());
         }
         if(checkImageMd5Initialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("image_md5=").append(getImageMd5());
         }
         if(checkFaceLeftInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("face_left=").append(getFaceLeft());
         }
         if(checkFaceTopInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("face_top=").append(getFaceTop());
         }
         if(checkFaceWidthInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("face_width=").append(getFaceWidth());
         }
         if(checkFaceHeightInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("face_height=").append(getFaceHeight());
         }
         if(checkEyeLeftxInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("eye_leftx=").append(getEyeLeftx());
         }
         if(checkEyeLeftyInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("eye_lefty=").append(getEyeLefty());
         }
         if(checkEyeRightxInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("eye_rightx=").append(getEyeRightx());
         }
         if(checkEyeRightyInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("eye_righty=").append(getEyeRighty());
         }
         if(checkMouthXInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("mouth_x=").append(getMouthX());
         }
         if(checkMouthYInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("mouth_y=").append(getMouthY());
         }
         if(checkNoseXInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("nose_x=").append(getNoseX());
         }
         if(checkNoseYInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("nose_y=").append(getNoseY());
         }
         if(checkAngleYawInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("angle_yaw=").append(getAngleYaw());
         }
         if(checkAnglePitchInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("angle_pitch=").append(getAnglePitch());
         }
         if(checkAngleRollInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("angle_roll=").append(getAngleRoll());
         }
         if(checkExtInfoInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("ext_info=").append(getExtInfo().length).append(" bytes");
         }
         if(checkFeatureMd5Initialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("feature_md5=").append(getFeatureMd5());
         }
         if(checkCreateTimeInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("create_time=").append(getCreateTime());
         }
         builder.append("]");
@@ -1889,7 +1892,9 @@ public  class FaceBean
     public static final List<FaceBean> replaceNull(List<FaceBean> source){
         if(null != source){
             for(int i = 0,endIndex = source.size();i<endIndex;++i){
-                if(null == source.get(i))source.set(i, NULL);
+                if(null == source.get(i)){
+                    source.set(i, NULL);
+                }
             }
         }
         return source;
@@ -1901,69 +1906,57 @@ public  class FaceBean
     public static final List<FaceBean> replaceNullInstance(List<FaceBean> source){
         if(null != source){
             for(int i = 0,endIndex = source.size();i<endIndex;++i){
-                if(source.get(i).checkNULL())source.set(i, null);
+                if(source.get(i).checkNULL()){
+                    source.set(i, null);
+                }
             }
         }
         return source;
     }
-    /**
-     * Copies the passed bean into the current bean.
-     *
-     * @param bean the bean to copy into the current bean
-     * @return always {@code bean}
-     */
+    @Override
     public FaceBean copy(FaceBean bean)
     {
         return copy(bean,new int[]{});
     }
-    /**
-     * Copies the passed bean into the current bean.
-     *
-     * @param bean the bean to copy into the current bean
-     * @param fieldList the column id list to copy into the current bean
-     * @return always {@code bean}
-     */
+    @Override
     public FaceBean copy(FaceBean bean, int... fieldList)
     {
-        if (null == fieldList || 0 == fieldList.length)
+        if (null == fieldList || 0 == fieldList.length){
             for (int i = 0; i < 20; ++i) {
-                if( bean.isInitialized(i))
+                if( bean.isInitialized(i)){
                     setValue(i, bean.getValue(i));
+                }
             }
-        else
+        }
+        else{
             for (int i = 0; i < fieldList.length; ++i) {
-                if( bean.isInitialized(fieldList[i]))
+                if( bean.isInitialized(fieldList[i])){
                     setValue(fieldList[i], bean.getValue(fieldList[i]));
+                }
             }
+        }
         return this;
     }
         
-    /**
-     * Copies the passed bean into the current bean.
-     *
-     * @param bean the bean to copy into the current bean
-     * @param fieldList the column name list to copy into the current bean
-     * @return always {@code bean}
-     */
+    @Override
     public FaceBean copy(FaceBean bean, String... fieldList)
     {
-        if (null == fieldList || 0 == fieldList.length)
+        if (null == fieldList || 0 == fieldList.length){
             copy(bean,(int[])null);
-        else{
+        }else{
             int field;
             for (int i = 0; i < fieldList.length; i++) {
                 field = columnIDOf(fieldList[i].trim());
-                if(bean.isInitialized(field))
+                if(bean.isInitialized(field)){
                     setValue(field, bean.getValue(field));
+                }
             }
         }
         return this;
     }
 
-    /**
-     * return a object representation of the given column id
-     */
     @SuppressWarnings("unchecked")
+    @Override
     public <T>T getValue(int columnID)
     {
         switch( columnID ){
@@ -2007,81 +2000,100 @@ public  class FaceBean
             return (T)getFeatureMd5();        
         case FL_FACE_ID_CREATE_TIME: 
             return (T)getCreateTime();        
+        default:
+            return null;
         }
-        return null;
     }
 
-    /**
-     * set a value representation of the given column id
-     */
+    @Override
     public <T> void setValue(int columnID,T value)
     {
         switch( columnID ) {
-        case FL_FACE_ID_ID:        
+        case FL_FACE_ID_ID:
             setId((Integer)value);
-        case FL_FACE_ID_IMAGE_MD5:        
+            break;
+        case FL_FACE_ID_IMAGE_MD5:
             setImageMd5((String)value);
-        case FL_FACE_ID_FACE_LEFT:        
+            break;
+        case FL_FACE_ID_FACE_LEFT:
             setFaceLeft((Integer)value);
-        case FL_FACE_ID_FACE_TOP:        
+            break;
+        case FL_FACE_ID_FACE_TOP:
             setFaceTop((Integer)value);
-        case FL_FACE_ID_FACE_WIDTH:        
+            break;
+        case FL_FACE_ID_FACE_WIDTH:
             setFaceWidth((Integer)value);
-        case FL_FACE_ID_FACE_HEIGHT:        
+            break;
+        case FL_FACE_ID_FACE_HEIGHT:
             setFaceHeight((Integer)value);
-        case FL_FACE_ID_EYE_LEFTX:        
+            break;
+        case FL_FACE_ID_EYE_LEFTX:
             setEyeLeftx((Integer)value);
-        case FL_FACE_ID_EYE_LEFTY:        
+            break;
+        case FL_FACE_ID_EYE_LEFTY:
             setEyeLefty((Integer)value);
-        case FL_FACE_ID_EYE_RIGHTX:        
+            break;
+        case FL_FACE_ID_EYE_RIGHTX:
             setEyeRightx((Integer)value);
-        case FL_FACE_ID_EYE_RIGHTY:        
+            break;
+        case FL_FACE_ID_EYE_RIGHTY:
             setEyeRighty((Integer)value);
-        case FL_FACE_ID_MOUTH_X:        
+            break;
+        case FL_FACE_ID_MOUTH_X:
             setMouthX((Integer)value);
-        case FL_FACE_ID_MOUTH_Y:        
+            break;
+        case FL_FACE_ID_MOUTH_Y:
             setMouthY((Integer)value);
-        case FL_FACE_ID_NOSE_X:        
+            break;
+        case FL_FACE_ID_NOSE_X:
             setNoseX((Integer)value);
-        case FL_FACE_ID_NOSE_Y:        
+            break;
+        case FL_FACE_ID_NOSE_Y:
             setNoseY((Integer)value);
-        case FL_FACE_ID_ANGLE_YAW:        
+            break;
+        case FL_FACE_ID_ANGLE_YAW:
             setAngleYaw((Integer)value);
-        case FL_FACE_ID_ANGLE_PITCH:        
+            break;
+        case FL_FACE_ID_ANGLE_PITCH:
             setAnglePitch((Integer)value);
-        case FL_FACE_ID_ANGLE_ROLL:        
+            break;
+        case FL_FACE_ID_ANGLE_ROLL:
             setAngleRoll((Integer)value);
-        case FL_FACE_ID_EXT_INFO:        
+            break;
+        case FL_FACE_ID_EXT_INFO:
             setExtInfo((byte[])value);
-        case FL_FACE_ID_FEATURE_MD5:        
+            break;
+        case FL_FACE_ID_FEATURE_MD5:
             setFeatureMd5((String)value);
-        case FL_FACE_ID_CREATE_TIME:        
+            break;
+        case FL_FACE_ID_CREATE_TIME:
             setCreateTime((java.util.Date)value);
+            break;
+        default:
+            break;
         }
     }
     
-    /**
-     * return a object representation of the given field
-     */
-    public <T>T getValue(String column)
+    @Override
+    public <T> T getValue(String column)
     {
         return getValue(columnIDOf(column));
     }
 
-    /**
-     * set a value representation of the given field
-     */
-    public <T>void setValue(String column,T value)
+    @Override
+    public <T> void setValue(String column,T value)
     {
         setValue(columnIDOf(column),value);
     }
-
+    
+    /** return column id for the given field name or negative if {@code column} is invalid name */
     public static int columnIDOf(String column){
         int index = FL_FACE_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_FACE_JAVA_FIELDS_LIST.indexOf(column);
-        return index;    
+        return  index < 0 
+            ? FL_FACE_JAVA_FIELDS_LIST.indexOf(column)
+            : index;
     }
+    
     public static final Builder builder(){
         return new Builder();
     }
@@ -2115,8 +2127,9 @@ public  class FaceBean
         }
         /** set a bean as template,must not be {@code null} */
         public Builder template(FaceBean bean){
-            if(null == bean)
+            if(null == bean){
                 throw new NullPointerException();
+            }
             TEMPLATE.set(bean);
             return this;
         }
@@ -2331,7 +2344,7 @@ public  class FaceBean
      * @see {@link ThriftConverter#converterFaceBean}
      */
     public net.gdface.facelog.client.thrift.FaceBean toThrift(){
-        return ThriftConverter.converterFaceBean.toRight(this);
+        return ThriftConverter.CONVERTER_FACEBEAN.toRight(this);
     }
     /** 
      * copy all fields from {@link net.gdface.facelog.client.thrift.FaceBean},do nothing if {@code thriftBean} is null
@@ -2341,7 +2354,7 @@ public  class FaceBean
     public FaceBean fromThrift(net.gdface.facelog.client.thrift.FaceBean thriftBean){
         if(null != thriftBean){
             reset();
-            return ThriftConverter.converterFaceBean.fromRight(this,thriftBean);
+            return ThriftConverter.CONVERTER_FACEBEAN.fromRight(this,thriftBean);
         }
         return this;
     }
@@ -2351,9 +2364,10 @@ public  class FaceBean
      * @see {@link ThriftConverter#converterFaceBean}
      */
     public FaceBean(net.gdface.facelog.client.thrift.FaceBean thriftBean){
-        if(null != thriftBean)
+        if(null != thriftBean){
             throw new NullPointerException();
+        }
         reset();
-        ThriftConverter.converterFaceBean.fromRight(this,thriftBean);
+        ThriftConverter.CONVERTER_FACEBEAN.fromRight(this,thriftBean);
     }
 }

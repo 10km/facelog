@@ -30,7 +30,7 @@ import net.gdface.facelog.dborm.exception.DAOException;
  * Remarks: 前端设备基本信息<br>
  * @author guyadong
  */
-public class DeviceManager extends TableManager.Adapter<DeviceBean> implements IDeviceManager
+public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implements IDeviceManager
 {
     private net.gdface.facelog.dborm.device.FlDeviceManager nativeManager = net.gdface.facelog.dborm.device.FlDeviceManager.getInstance();
     private IDbConverter<
@@ -59,26 +59,30 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         return DeviceGroupManager.getInstance();
     }
     /**
-    * @return table name
-    */
+     * @return table name
+     */
+    @Override
     public String getTableName() {
         return this.nativeManager.getTableName();
     }
 
     /**
-    * @return field names of table
-    */
+     * @return field names of table
+     */
+    @Override
     public String getFields() {
         return this.nativeManager.getFields();
     }
-    
+
+    @Override
     public String getFullFields() {
         return this.nativeManager.getFullFields();
     }
     
     /**
-    * @return primarykeyNames
-    */
+     * @return primarykeyNames
+     */
+    @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
     }
@@ -94,7 +98,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     }
    
     @Override
-    protected Class<DeviceBean> _beanType(){
+    protected Class<DeviceBean> beanType(){
         return DeviceBean.class;
     }
     
@@ -109,8 +113,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public synchronized void setDbConverter(IDbConverter dbConverter) {
-        if( null == dbConverter)
+        if( null == dbConverter){
             throw new NullPointerException();
+        }
         this.dbConverter = dbConverter;
         this.beanConverter = this.dbConverter.getDeviceBeanConverter();
     }
@@ -152,8 +157,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override
     public DeviceBean loadByPrimaryKeyChecked(DeviceBean bean) throws ObjectRetrievalException
     {
-        if(null == bean)
+        if(null == bean){
             throw new NullPointerException();
+        }
         return loadByPrimaryKeyChecked(bean.getId());
     }
     
@@ -171,13 +177,17 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     //1.3.2
     @Override
     public DeviceBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1)
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        if(! (keys[0] instanceof Integer))
+        }
+        
+        if(! (keys[0] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-          return loadByPrimaryKeyChecked((Integer)keys[0]);
+        }
+        return loadByPrimaryKeyChecked((Integer)keys[0]);
     }
 
     //1.4 override IDeviceManager
@@ -201,8 +211,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     //1.7
     @Override
     public DeviceBean checkDuplicate(DeviceBean bean)throws ObjectRetrievalException{
-        if(null != bean)
-            checkDuplicate(bean.getId());            
+        if(null != bean){
+            checkDuplicate(bean.getId());
+        }
         return bean;   
     }
     //1.4.1 override IDeviceManager
@@ -219,7 +230,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     //1.8 override IDeviceManager
     @Override 
     public java.util.List<DeviceBean> loadByPrimaryKey(int... keys){
-        if(null == keys)return new java.util.ArrayList<DeviceBean>();
+        if(null == keys){
+            return new java.util.ArrayList<DeviceBean>();
+        }
         java.util.ArrayList<DeviceBean> list = new java.util.ArrayList<DeviceBean>(keys.length);
         for(int i = 0 ;i< keys.length;++i){
             list.add(loadByPrimaryKey(keys[i]));
@@ -229,7 +242,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     //1.9 override IDeviceManager
     @Override 
     public java.util.List<DeviceBean> loadByPrimaryKey(java.util.Collection<Integer> keys){
-        if(null == keys )return new java.util.ArrayList<DeviceBean>();
+        if(null == keys ){
+            return new java.util.ArrayList<DeviceBean>();
+        }
         java.util.ArrayList<DeviceBean> list = new java.util.ArrayList<DeviceBean>(keys.size());
         if(keys instanceof java.util.List){
             for(Integer key: keys){
@@ -238,8 +253,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         }else{
             DeviceBean bean;
             for(Integer key: keys){
-                if(null != (bean = loadByPrimaryKey(key)))
+                if(null != (bean = loadByPrimaryKey(key))){
                     list.add(bean);
+                }
             }
         }
         return list;
@@ -272,51 +288,58 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        if(! (keys[0] instanceof Integer))
+        }
+        if(! (keys[0] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+        }
         return deleteByPrimaryKey((Integer)keys[0]);
     }
     //2.2 override IDeviceManager
     @Override 
     public int deleteByPrimaryKey(int... keys){
-        if(null == keys)return 0;
         int count = 0;
-        for(int key:keys){
-            count += deleteByPrimaryKey(key);
+        if(null != keys){        
+            for(int key:keys){
+                count += deleteByPrimaryKey(key);
+            }
         }
         return count;
     }
     //2.3 override IDeviceManager
     @Override 
     public int deleteByPrimaryKey(java.util.Collection<Integer> keys){
-        if(null == keys)return 0;
         int count = 0;
-        for(Integer key :keys){
-            count += deleteByPrimaryKey(key);
+        if(null != keys){        
+            for(Integer key :keys){
+                count += deleteByPrimaryKey(key);
+            }
         }
         return count;
     }
     //2.4 override IDeviceManager
     @Override 
     public int delete(DeviceBean... beans){
-        if(null == beans)return 0;
         int count = 0;
-        for(DeviceBean bean :beans){
-            count += delete(bean);
+        if(null != beans){
+            for(DeviceBean bean :beans){
+                count += delete(bean);
+            }
         }
         return count;
     }
     //2.5 override IDeviceManager
     @Override 
     public int delete(java.util.Collection<DeviceBean> beans){
-        if(null == beans)return 0;
         int count = 0;
-        for(DeviceBean bean :beans){
-            count += delete(bean);
+        if(null != beans){
+            for(DeviceBean bean :beans){
+                count += delete(bean);
+            }
         }
         return count;
     }
@@ -325,7 +348,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
     
-    private static final Class<?>[] importedBeanTypes = new Class<?>[]{ImageBean.class,LogBean.class};
+    private static final Class<?>[] IMPORTED_BEAN_TYPES = new Class<?>[]{ImageBean.class,LogBean.class};
 
     /**
      * @see #getImportedBeansAsList(DeviceBean,int)
@@ -333,7 +356,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.db.BaseBean<T>> T[] getImportedBeans(DeviceBean bean, int ikIndex){
-        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
+        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(IMPORTED_BEAN_TYPES[ikIndex],0));
     }
     
     /**
@@ -355,8 +378,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
             return (java.util.List<T>)this.getImageBeansByDeviceIdAsList(bean);
         case FL_DEVICE_IK_FL_LOG_DEVICE_ID:
             return (java.util.List<T>)this.getLogBeansByDeviceIdAsList(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the T objects as imported beans of bean object by ikIndex.<br>
@@ -379,8 +403,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
             return (T[])setImageBeansByDeviceId(bean,(ImageBean[])importedBeans);
         case FL_DEVICE_IK_FL_LOG_DEVICE_ID:
             return (T[])setLogBeansByDeviceId(bean,(LogBean[])importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the importedBeans associates to the bean by ikIndex<br>
@@ -402,8 +427,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
             return (C)setImageBeansByDeviceId(bean,(java.util.Collection<ImageBean>)importedBeans);
         case FL_DEVICE_IK_FL_LOG_DEVICE_ID:
             return (C)setLogBeansByDeviceId(bean,(java.util.Collection<LogBean>)importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
 
@@ -560,9 +586,12 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         , DeviceGroupBean refDevicegroupByGroupId 
         , ImageBean[] impImageByDeviceId , LogBean[] impLogByDeviceId )
     {
-        if(null == bean) return null;
-        if(null != refDevicegroupByGroupId)
+        if(null == bean){
+            return null;
+        }
+        if(null != refDevicegroupByGroupId){
             this.setReferencedByGroupId(bean,refDevicegroupByGroupId);
+        }
         bean = this.save( bean );
         this.setImageBeansByDeviceId(bean,impImageByDeviceId);
         instanceOfImageManager().save( impImageByDeviceId );
@@ -589,7 +618,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         , DeviceGroupBean refDevicegroupByGroupId 
         , java.util.Collection<ImageBean> impImageByDeviceId , java.util.Collection<LogBean> impLogByDeviceId )
     {
-        if(null == bean) return null;
+        if(null == bean){
+            return null;
+        }
         this.setReferencedByGroupId(bean,refDevicegroupByGroupId);
         bean = this.save( bean );
         this.setImageBeansByDeviceId(bean,impImageByDeviceId);
@@ -623,10 +654,12 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override
     public DeviceBean save(DeviceBean bean,Object ...args) 
     {
-        if(null == args)
+        if(null == args){
             return save(bean);
-        if(args.length > 3)
+        }
+        if(args.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceGroupBean");
         }
@@ -652,10 +685,12 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override
     public DeviceBean saveCollection(DeviceBean bean,Object ...inputs)
     {
-        if(null == inputs)
+        if(null == inputs){
             return save(bean);
-        if(inputs.length > 3)
+        }
+        if(inputs.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        }
         Object[] args = new Object[3];
         System.arraycopy(inputs,0,args,0,3);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceGroupBean)){
@@ -691,8 +726,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         switch(fkIndex){
         case FL_DEVICE_FK_GROUP_ID:
             return  (T)this.getReferencedByGroupId(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     /**
      * Associates the {@link DeviceBean} object to the bean object by fkIndex field.<br>
@@ -709,8 +745,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         switch(fkIndex){
         case FL_DEVICE_FK_GROUP_ID:
             return  (T)this.setReferencedByGroupId(bean, (DeviceGroupBean)beanToSet);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     //////////////////////////////////////
@@ -722,7 +759,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override 
     public DeviceGroupBean getReferencedByGroupId(DeviceBean bean)
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByGroupId(instanceOfDeviceGroupManager().loadByPrimaryKey(bean.getGroupId())); 
         return bean.getReferencedByGroupId();
     }
@@ -870,9 +909,10 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     // override IDeviceManager
     @Override 
     public DeviceBean loadByIndexMacChecked(String mac)throws ObjectRetrievalException{
-        DeviceBean bean = new DeviceBean();
-        if(null == mac)
+        if(null == mac){
             throw new ObjectRetrievalException(new NullPointerException());
+        }
+        DeviceBean bean = new DeviceBean();
         
         bean.setMac(mac);
         
@@ -882,7 +922,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override 
     public java.util.List<DeviceBean> loadByIndexMac(String... indexs)
     {
-        if(null == indexs)return new java.util.ArrayList<DeviceBean>();
+        if(null == indexs){
+            return new java.util.ArrayList<DeviceBean>();
+        }
         java.util.ArrayList<DeviceBean> list = new java.util.ArrayList<DeviceBean>(indexs.length);
         for(int i = 0 ;i< indexs.length;++i){
             list.add(loadByIndexMac(indexs[i]));
@@ -893,7 +935,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override 
     public java.util.List<DeviceBean> loadByIndexMac(java.util.Collection<String> indexs)
     {
-        if(null == indexs )return new java.util.ArrayList<DeviceBean>();
+        if(null == indexs ){
+            return new java.util.ArrayList<DeviceBean>();
+        }
         java.util.ArrayList<DeviceBean> list = new java.util.ArrayList<DeviceBean>(indexs.size());
         if(indexs instanceof java.util.List){
             for(String key: indexs){
@@ -902,8 +946,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         }else{
             DeviceBean bean;
             for(String key: indexs){
-                if(null != (bean = loadByIndexMac(key)))
+                if(null != (bean = loadByIndexMac(key))){
                     list.add(bean);
+                }
             }
         }
         return list;
@@ -912,10 +957,11 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override 
     public int deleteByIndexMac(String... indexs)
     {
-        if(null == indexs)return 0;
         int count = 0;
-        for(String index : indexs){
-            count += deleteByIndexMac(index);
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexMac(index);
+            }
         }
         return count;
     }
@@ -923,10 +969,11 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override 
     public int deleteByIndexMac(java.util.Collection<String> indexs)
     {
-        if(null == indexs)return 0;
         int count = 0;
-        for(String index : indexs){
-            count += deleteByIndexMac(index);
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexMac(index);
+            }
         }
         return count;
     }
@@ -956,9 +1003,10 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     // override IDeviceManager
     @Override 
     public DeviceBean loadByIndexSerialNoChecked(String serialNo)throws ObjectRetrievalException{
-        DeviceBean bean = new DeviceBean();
-        if(null == serialNo)
+        if(null == serialNo){
             throw new ObjectRetrievalException(new NullPointerException());
+        }
+        DeviceBean bean = new DeviceBean();
         
         bean.setSerialNo(serialNo);
         
@@ -968,7 +1016,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override 
     public java.util.List<DeviceBean> loadByIndexSerialNo(String... indexs)
     {
-        if(null == indexs)return new java.util.ArrayList<DeviceBean>();
+        if(null == indexs){
+            return new java.util.ArrayList<DeviceBean>();
+        }
         java.util.ArrayList<DeviceBean> list = new java.util.ArrayList<DeviceBean>(indexs.length);
         for(int i = 0 ;i< indexs.length;++i){
             list.add(loadByIndexSerialNo(indexs[i]));
@@ -979,7 +1029,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override 
     public java.util.List<DeviceBean> loadByIndexSerialNo(java.util.Collection<String> indexs)
     {
-        if(null == indexs )return new java.util.ArrayList<DeviceBean>();
+        if(null == indexs ){
+            return new java.util.ArrayList<DeviceBean>();
+        }
         java.util.ArrayList<DeviceBean> list = new java.util.ArrayList<DeviceBean>(indexs.size());
         if(indexs instanceof java.util.List){
             for(String key: indexs){
@@ -988,8 +1040,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         }else{
             DeviceBean bean;
             for(String key: indexs){
-                if(null != (bean = loadByIndexSerialNo(key)))
+                if(null != (bean = loadByIndexSerialNo(key))){
                     list.add(bean);
+                }
             }
         }
         return list;
@@ -998,10 +1051,11 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override 
     public int deleteByIndexSerialNo(String... indexs)
     {
-        if(null == indexs)return 0;
         int count = 0;
-        for(String index : indexs){
-            count += deleteByIndexSerialNo(index);
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexSerialNo(index);
+            }
         }
         return count;
     }
@@ -1009,10 +1063,11 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override 
     public int deleteByIndexSerialNo(java.util.Collection<String> indexs)
     {
-        if(null == indexs)return 0;
         int count = 0;
-        for(String index : indexs){
-            count += deleteByIndexSerialNo(index);
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexSerialNo(index);
+            }
         }
         return count;
     }
@@ -1156,9 +1211,10 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override
     public void unregisterListener(TableListener<DeviceBean> listener)
     {
-        if(listener instanceof WrapListener)
-            this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
-        throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
+        if(!(listener instanceof WrapListener)){
+            throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
+        }
+        this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
     }
     
     //37
@@ -1196,15 +1252,15 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     }
     /**
      * wrap {@code TableListener<DeviceBean>} as native listener
-     * @author guyadong
      *
      */
     public class WrapListener implements TableListener<DeviceBean>{
         private final TableListener<DeviceBean> listener;
         private final net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.device.FlDeviceBean> nativeListener;
         private WrapListener(final TableListener<DeviceBean> listener) {
-            if(null == listener)
+            if(null == listener){
                 throw new NullPointerException();
+            }
             this.listener = listener;
             this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.device.FlDeviceBean> (){
 
@@ -1239,26 +1295,32 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
                 }};
         }
 
+        @Override
         public void beforeInsert(DeviceBean bean) {
             listener.beforeInsert(bean);
         }
 
+        @Override
         public void afterInsert(DeviceBean bean) {
             listener.afterInsert(bean);
         }
 
+        @Override
         public void beforeUpdate(DeviceBean bean) {
             listener.beforeUpdate(bean);
         }
 
+        @Override
         public void afterUpdate(DeviceBean bean) {
             listener.afterUpdate(bean);
         }
 
+        @Override
         public void beforeDelete(DeviceBean bean) {
             listener.beforeDelete(bean);
         }
 
+        @Override
         public void afterDelete(DeviceBean bean) {
             listener.afterDelete(bean);
         }        
@@ -1298,8 +1360,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     }
     
     private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.device.FlDeviceBean> toNative(final Action<DeviceBean> action){
-        if(null == action)
+        if(null == action){
             throw new NullPointerException();
+        }
         return new net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.device.FlDeviceBean>(){
 
             @Override
@@ -1316,7 +1379,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     //45 override IDeviceManager
     @Override 
     public java.util.List<Integer> toPrimaryKeyList(DeviceBean... array){        
-        if(null == array)return new java.util.ArrayList<Integer>();
+        if(null == array){
+            return new java.util.ArrayList<Integer>();
+        }
         java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
         for(DeviceBean bean:array){
             list.add(null == bean ? null : bean.getId());
@@ -1326,7 +1391,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     //46 override IDeviceManager
     @Override 
     public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<DeviceBean> collection){        
-        if(null == collection)return new java.util.ArrayList<Integer>();
+        if(null == collection){
+            return new java.util.ArrayList<Integer>();
+        }
         java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
         for(DeviceBean bean:collection){
             list.add(null == bean ? null : bean.getId());

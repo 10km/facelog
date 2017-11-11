@@ -3,7 +3,7 @@
 // modified by guyadong from
 // sql2java original version https://sourceforge.net/projects/sql2java/ 
 // JDBC driver used at code generation time: com.mysql.jdbc.Driver
-// template: impl.dbconverter.generic.java.vm
+// template: base.dbconverter.generic.java.vm
 // ______________________________________________________
 package net.gdface.facelog.db;
 import java.lang.reflect.ParameterizedType;
@@ -24,7 +24,7 @@ import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.LogLightBean;
 /**
  * generic type converter of {@link IDbConverter} implementation<br>
- * usage:<pre>new DbConverterGeneric&lt;Model1,Model2,Model3,Model4,Model5,Model6,Model7,Model8,Model9,Model10,Model11&gt;(){};</pre>
+ * usage:<pre>new BaseDbConverterGeneric&lt;Model1,Model2,Model3,Model4,Model5,Model6,Model7,Model8,Model9,Model10,Model11&gt;(){};</pre>
  * @author guyadong
  *
  * @param <R_DEVICE> native type for fl_device
@@ -40,7 +40,7 @@ import net.gdface.facelog.db.LogLightBean;
  * @param <R_LOGLIGHT> native type for fl_log_light
  *
  */
-public abstract class DbConverterGeneric<
+public abstract class BaseDbConverterGeneric<
                     R_DEVICE,
                     R_DEVICEGROUP,
                     R_FACE,
@@ -74,12 +74,12 @@ public abstract class DbConverterGeneric<
         }
     }
     /** 
-     * usage: <pre>new DbConverterGeneric&lt;Model...&gt;(javaFields...){};</pre>
+     * usage: <pre>new BaseDbConverterGeneric&lt;Model...&gt;(javaFields...){};</pre>
      * each 'javaFields' parameter is a comma splice string,including all field name of right type,<br>
      * if null or empty, use default string of each table
      */
     @SuppressWarnings("unchecked")
-    public DbConverterGeneric(String javaFieldsOfDevice,
+    public BaseDbConverterGeneric(String javaFieldsOfDevice,
                     String javaFieldsOfDeviceGroup,
                     String javaFieldsOfFace,
                     String javaFieldsOfFeature,
@@ -90,18 +90,40 @@ public abstract class DbConverterGeneric<
                     String javaFieldsOfPersonGroup,
                     String javaFieldsOfStore,
                     String javaFieldsOfLogLight){
-        if(null == javaFieldsOfDevice || javaFieldsOfDevice.isEmpty())javaFieldsOfDevice = FL_DEVICE_JAVA_FIELDS;
-        if(null == javaFieldsOfDeviceGroup || javaFieldsOfDeviceGroup.isEmpty())javaFieldsOfDeviceGroup = FL_DEVICE_GROUP_JAVA_FIELDS;
-        if(null == javaFieldsOfFace || javaFieldsOfFace.isEmpty())javaFieldsOfFace = FL_FACE_JAVA_FIELDS;
-        if(null == javaFieldsOfFeature || javaFieldsOfFeature.isEmpty())javaFieldsOfFeature = FL_FEATURE_JAVA_FIELDS;
-        if(null == javaFieldsOfImage || javaFieldsOfImage.isEmpty())javaFieldsOfImage = FL_IMAGE_JAVA_FIELDS;
-        if(null == javaFieldsOfLog || javaFieldsOfLog.isEmpty())javaFieldsOfLog = FL_LOG_JAVA_FIELDS;
-        if(null == javaFieldsOfPermit || javaFieldsOfPermit.isEmpty())javaFieldsOfPermit = FL_PERMIT_JAVA_FIELDS;
-        if(null == javaFieldsOfPerson || javaFieldsOfPerson.isEmpty())javaFieldsOfPerson = FL_PERSON_JAVA_FIELDS;
-        if(null == javaFieldsOfPersonGroup || javaFieldsOfPersonGroup.isEmpty())javaFieldsOfPersonGroup = FL_PERSON_GROUP_JAVA_FIELDS;
-        if(null == javaFieldsOfStore || javaFieldsOfStore.isEmpty())javaFieldsOfStore = FL_STORE_JAVA_FIELDS;
-        if(null == javaFieldsOfLogLight || javaFieldsOfLogLight.isEmpty())javaFieldsOfLogLight = FL_LOG_LIGHT_JAVA_FIELDS;
         
+        if(null == javaFieldsOfDevice || javaFieldsOfDevice.isEmpty()){
+            javaFieldsOfDevice = FL_DEVICE_JAVA_FIELDS;
+        }
+        if(null == javaFieldsOfDeviceGroup || javaFieldsOfDeviceGroup.isEmpty()){
+            javaFieldsOfDeviceGroup = FL_DEVICE_GROUP_JAVA_FIELDS;
+        }
+        if(null == javaFieldsOfFace || javaFieldsOfFace.isEmpty()){
+            javaFieldsOfFace = FL_FACE_JAVA_FIELDS;
+        }
+        if(null == javaFieldsOfFeature || javaFieldsOfFeature.isEmpty()){
+            javaFieldsOfFeature = FL_FEATURE_JAVA_FIELDS;
+        }
+        if(null == javaFieldsOfImage || javaFieldsOfImage.isEmpty()){
+            javaFieldsOfImage = FL_IMAGE_JAVA_FIELDS;
+        }
+        if(null == javaFieldsOfLog || javaFieldsOfLog.isEmpty()){
+            javaFieldsOfLog = FL_LOG_JAVA_FIELDS;
+        }
+        if(null == javaFieldsOfPermit || javaFieldsOfPermit.isEmpty()){
+            javaFieldsOfPermit = FL_PERMIT_JAVA_FIELDS;
+        }
+        if(null == javaFieldsOfPerson || javaFieldsOfPerson.isEmpty()){
+            javaFieldsOfPerson = FL_PERSON_JAVA_FIELDS;
+        }
+        if(null == javaFieldsOfPersonGroup || javaFieldsOfPersonGroup.isEmpty()){
+            javaFieldsOfPersonGroup = FL_PERSON_GROUP_JAVA_FIELDS;
+        }
+        if(null == javaFieldsOfStore || javaFieldsOfStore.isEmpty()){
+            javaFieldsOfStore = FL_STORE_JAVA_FIELDS;
+        }
+        if(null == javaFieldsOfLogLight || javaFieldsOfLogLight.isEmpty()){
+            javaFieldsOfLogLight = FL_LOG_LIGHT_JAVA_FIELDS;
+        }
         Type[] typeArguments = ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments();
         this.converterDeviceBean = new BeanConverterUtils.DeviceBeanConverter<R_DEVICE>(DeviceBean.class,
             (Class<R_DEVICE>)getRawClass(typeArguments[0]),javaFieldsOfDevice);            
@@ -126,7 +148,7 @@ public abstract class DbConverterGeneric<
         this.converterLogLightBean = new BeanConverterUtils.LogLightBeanConverter<R_LOGLIGHT>(LogLightBean.class,
             (Class<R_LOGLIGHT>)getRawClass(typeArguments[10]),javaFieldsOfLogLight);            
     }
-    public DbConverterGeneric(){
+    public BaseDbConverterGeneric(){
         this(null,null,null,null,null,null,null,null,null,null,null);
     }
     @Override

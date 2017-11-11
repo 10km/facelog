@@ -27,7 +27,7 @@ import net.gdface.facelog.dborm.exception.DAOException;
  * Remarks: 二进制数据存储表<br>
  * @author guyadong
  */
-public class StoreManager extends TableManager.Adapter<StoreBean> implements IStoreManager
+public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements IStoreManager
 {
     private net.gdface.facelog.dborm.image.FlStoreManager nativeManager = net.gdface.facelog.dborm.image.FlStoreManager.getInstance();
     private IDbConverter<
@@ -47,26 +47,30 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     protected StoreManager(){}
     
     /**
-    * @return table name
-    */
+     * @return table name
+     */
+    @Override
     public String getTableName() {
         return this.nativeManager.getTableName();
     }
 
     /**
-    * @return field names of table
-    */
+     * @return field names of table
+     */
+    @Override
     public String getFields() {
         return this.nativeManager.getFields();
     }
-    
+
+    @Override
     public String getFullFields() {
         return this.nativeManager.getFullFields();
     }
     
     /**
-    * @return primarykeyNames
-    */
+     * @return primarykeyNames
+     */
+    @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
     }
@@ -82,7 +86,7 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     }
    
     @Override
-    protected Class<StoreBean> _beanType(){
+    protected Class<StoreBean> beanType(){
         return StoreBean.class;
     }
     
@@ -97,8 +101,9 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public synchronized void setDbConverter(IDbConverter dbConverter) {
-        if( null == dbConverter)
+        if( null == dbConverter){
             throw new NullPointerException();
+        }
         this.dbConverter = dbConverter;
         this.beanConverter = this.dbConverter.getStoreBeanConverter();
     }
@@ -140,8 +145,9 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     @Override
     public StoreBean loadByPrimaryKeyChecked(StoreBean bean) throws ObjectRetrievalException
     {
-        if(null == bean)
+        if(null == bean){
             throw new NullPointerException();
+        }
         return loadByPrimaryKeyChecked(bean.getMd5());
     }
     
@@ -159,13 +165,17 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     //1.3.2
     @Override
     public StoreBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1)
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        if(! (keys[0] instanceof String))
+        }
+        
+        if(! (keys[0] instanceof String)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-          return loadByPrimaryKeyChecked((String)keys[0]);
+        }
+        return loadByPrimaryKeyChecked((String)keys[0]);
     }
 
     //1.4 override IStoreManager
@@ -189,8 +199,9 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     //1.7
     @Override
     public StoreBean checkDuplicate(StoreBean bean)throws ObjectRetrievalException{
-        if(null != bean)
-            checkDuplicate(bean.getMd5());            
+        if(null != bean){
+            checkDuplicate(bean.getMd5());
+        }
         return bean;   
     }
     //1.4.1 override IStoreManager
@@ -207,7 +218,9 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     //1.8 override IStoreManager
     @Override 
     public java.util.List<StoreBean> loadByPrimaryKey(String... keys){
-        if(null == keys)return new java.util.ArrayList<StoreBean>();
+        if(null == keys){
+            return new java.util.ArrayList<StoreBean>();
+        }
         java.util.ArrayList<StoreBean> list = new java.util.ArrayList<StoreBean>(keys.length);
         for(int i = 0 ;i< keys.length;++i){
             list.add(loadByPrimaryKey(keys[i]));
@@ -217,7 +230,9 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     //1.9 override IStoreManager
     @Override 
     public java.util.List<StoreBean> loadByPrimaryKey(java.util.Collection<String> keys){
-        if(null == keys )return new java.util.ArrayList<StoreBean>();
+        if(null == keys ){
+            return new java.util.ArrayList<StoreBean>();
+        }
         java.util.ArrayList<StoreBean> list = new java.util.ArrayList<StoreBean>(keys.size());
         if(keys instanceof java.util.List){
             for(String key: keys){
@@ -226,8 +241,9 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
         }else{
             StoreBean bean;
             for(String key: keys){
-                if(null != (bean = loadByPrimaryKey(key)))
+                if(null != (bean = loadByPrimaryKey(key))){
                     list.add(bean);
+                }
             }
         }
         return list;
@@ -260,51 +276,58 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        if(! (keys[0] instanceof String))
+        }
+        if(! (keys[0] instanceof String)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+        }
         return deleteByPrimaryKey((String)keys[0]);
     }
     //2.2 override IStoreManager
     @Override 
     public int deleteByPrimaryKey(String... keys){
-        if(null == keys)return 0;
         int count = 0;
-        for(String key:keys){
-            count += deleteByPrimaryKey(key);
+        if(null != keys){        
+            for(String key:keys){
+                count += deleteByPrimaryKey(key);
+            }
         }
         return count;
     }
     //2.3 override IStoreManager
     @Override 
     public int deleteByPrimaryKey(java.util.Collection<String> keys){
-        if(null == keys)return 0;
         int count = 0;
-        for(String key :keys){
-            count += deleteByPrimaryKey(key);
+        if(null != keys){        
+            for(String key :keys){
+                count += deleteByPrimaryKey(key);
+            }
         }
         return count;
     }
     //2.4 override IStoreManager
     @Override 
     public int delete(StoreBean... beans){
-        if(null == beans)return 0;
         int count = 0;
-        for(StoreBean bean :beans){
-            count += delete(bean);
+        if(null != beans){
+            for(StoreBean bean :beans){
+                count += delete(bean);
+            }
         }
         return count;
     }
     //2.5 override IStoreManager
     @Override 
     public int delete(java.util.Collection<StoreBean> beans){
-        if(null == beans)return 0;
         int count = 0;
-        for(StoreBean bean :beans){
-            count += delete(bean);
+        if(null != beans){
+            for(StoreBean bean :beans){
+                count += delete(bean);
+            }
         }
         return count;
     }
@@ -479,9 +502,10 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     @Override
     public void unregisterListener(TableListener<StoreBean> listener)
     {
-        if(listener instanceof WrapListener)
-            this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
-        throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
+        if(!(listener instanceof WrapListener)){
+            throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
+        }
+        this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
     }
     
     //37
@@ -519,15 +543,15 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     }
     /**
      * wrap {@code TableListener<StoreBean>} as native listener
-     * @author guyadong
      *
      */
     public class WrapListener implements TableListener<StoreBean>{
         private final TableListener<StoreBean> listener;
         private final net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.image.FlStoreBean> nativeListener;
         private WrapListener(final TableListener<StoreBean> listener) {
-            if(null == listener)
+            if(null == listener){
                 throw new NullPointerException();
+            }
             this.listener = listener;
             this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.image.FlStoreBean> (){
 
@@ -562,26 +586,32 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
                 }};
         }
 
+        @Override
         public void beforeInsert(StoreBean bean) {
             listener.beforeInsert(bean);
         }
 
+        @Override
         public void afterInsert(StoreBean bean) {
             listener.afterInsert(bean);
         }
 
+        @Override
         public void beforeUpdate(StoreBean bean) {
             listener.beforeUpdate(bean);
         }
 
+        @Override
         public void afterUpdate(StoreBean bean) {
             listener.afterUpdate(bean);
         }
 
+        @Override
         public void beforeDelete(StoreBean bean) {
             listener.beforeDelete(bean);
         }
 
+        @Override
         public void afterDelete(StoreBean bean) {
             listener.afterDelete(bean);
         }        
@@ -621,8 +651,9 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     }
     
     private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.image.FlStoreBean> toNative(final Action<StoreBean> action){
-        if(null == action)
+        if(null == action){
             throw new NullPointerException();
+        }
         return new net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.image.FlStoreBean>(){
 
             @Override
@@ -639,7 +670,9 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     //45 override IStoreManager
     @Override 
     public java.util.List<String> toPrimaryKeyList(StoreBean... array){        
-        if(null == array)return new java.util.ArrayList<String>();
+        if(null == array){
+            return new java.util.ArrayList<String>();
+        }
         java.util.ArrayList<String> list = new java.util.ArrayList<String>(array.length);
         for(StoreBean bean:array){
             list.add(null == bean ? null : bean.getMd5());
@@ -649,7 +682,9 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     //46 override IStoreManager
     @Override 
     public java.util.List<String> toPrimaryKeyList(java.util.Collection<StoreBean> collection){        
-        if(null == collection)return new java.util.ArrayList<String>();
+        if(null == collection){
+            return new java.util.ArrayList<String>();
+        }
         java.util.ArrayList<String> list = new java.util.ArrayList<String>(collection.size());
         for(StoreBean bean:collection){
             list.add(null == bean ? null : bean.getMd5());

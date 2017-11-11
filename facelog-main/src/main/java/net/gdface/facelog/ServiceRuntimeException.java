@@ -10,24 +10,24 @@ import com.google.common.base.Preconditions;
 
 /**
  * 服务调用产生的运行时异常<br>
- * 调用service端方法时产生的所有{@link RuntimeException}在抛出到客户端时被封装在{@link ServiceRuntime}中<br>
+ * 调用service端方法时产生的所有{@link RuntimeException}在抛出到客户端时被封装在{@link ServiceRuntimeException}中<br>
  * @author guyadong
  *
  */
 @ThriftStruct
-public final class ServiceRuntime extends Exception {
+public final class ServiceRuntimeException extends Exception {
 	private static final long serialVersionUID = 1L;
 	/**
 	 * 服务器端错误堆栈信息
 	 */
 	private String serverStackTraceMessage = null;
 
-	public ServiceRuntime() {
+	public ServiceRuntimeException() {
 	}
 	/**
 	 * @param cause
 	 */
-	public ServiceRuntime(Throwable cause) {
+	public ServiceRuntimeException(Throwable cause) {
 		super(stripRuntimeShell(Preconditions.checkNotNull(cause)));
 		fillStackTraceMessage(getCause());
 	}

@@ -12,7 +12,11 @@ import com.google.common.base.Preconditions;
 
 import net.gdface.facelog.client.thrift.IFaceLog;
 
-public class TestGetServiceMetadata {
+/**
+ * @author guyadong
+ *
+ */
+public class GetServiceMetadataTest {
 	public static ThriftServiceMetadata getServiceMetadata(Class<?>type){
 		Preconditions.checkNotNull(type, "type is null");
 		return  new ThriftServiceMetadata(type,new ThriftCatalog());

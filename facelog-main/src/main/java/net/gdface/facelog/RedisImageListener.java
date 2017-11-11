@@ -13,9 +13,6 @@ import net.gdface.facelog.db.TableListener;
 class RedisImageListener extends TableListener.Adapter<ImageBean> implements CommonConstant{
 	private final TableListener<PersonBean> personListener;
 	private final Dao dao;
-	public RedisImageListener() {
-		this(null, null);
-	}
 	public RedisImageListener(TableListener<PersonBean> personListener, Dao dao) {
 		this.personListener = Preconditions.checkNotNull(personListener);
 		this.dao = Preconditions.checkNotNull(dao);
@@ -27,9 +24,10 @@ class RedisImageListener extends TableListener.Adapter<ImageBean> implements Com
 	@Override
 	public void afterDelete(ImageBean bean) {
 		try{
-			PersonBean personBean = dao._getPersonByIndexImageMd5(bean.getMd5());
-			if(null != personBean)
+			PersonBean personBean = dao.daoGetPersonByIndexImageMd5(bean.getMd5());
+			if(null != personBean){
 				personListener.afterDelete(personBean);
+			}
 		}catch (Exception e){
 			logger.error(e.getMessage(),e);
 		}

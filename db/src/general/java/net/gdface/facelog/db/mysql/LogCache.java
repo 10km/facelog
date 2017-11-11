@@ -10,7 +10,7 @@ package net.gdface.facelog.db.mysql;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import net.gdface.facelog.db.TableLoadCaching;
+import net.gdface.facelog.db.BaseTableLoadCaching;
 import net.gdface.facelog.db.LogBean;
 
 /**
@@ -19,11 +19,11 @@ import net.gdface.facelog.db.LogBean;
  * @author guyadong
  *
  */
-public class LogCache extends TableLoadCaching<Integer, LogBean> {
+public class LogCache extends BaseTableLoadCaching<Integer, LogBean> {
     private final LogManager manager = LogManager.getInstance();
     
     /** constructor<br>
-     * @see {@link TableLoadCaching#TableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
      */
     public LogCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
         super(updateStragey,maximumSize, duration, unit);

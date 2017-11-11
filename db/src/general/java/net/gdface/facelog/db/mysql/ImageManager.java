@@ -30,7 +30,7 @@ import net.gdface.facelog.dborm.exception.DAOException;
  * Remarks: 图像信息存储表,用于存储系统中所有用到的图像数据,表中只包含图像基本信息,图像二进制源数据存在在fl_store中(md5对应)<br>
  * @author guyadong
  */
-public class ImageManager extends TableManager.Adapter<ImageBean> implements IImageManager
+public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements IImageManager
 {
     private net.gdface.facelog.dborm.image.FlImageManager nativeManager = net.gdface.facelog.dborm.image.FlImageManager.getInstance();
     private IDbConverter<
@@ -59,26 +59,30 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         return DeviceManager.getInstance();
     }
     /**
-    * @return table name
-    */
+     * @return table name
+     */
+    @Override
     public String getTableName() {
         return this.nativeManager.getTableName();
     }
 
     /**
-    * @return field names of table
-    */
+     * @return field names of table
+     */
+    @Override
     public String getFields() {
         return this.nativeManager.getFields();
     }
-    
+
+    @Override
     public String getFullFields() {
         return this.nativeManager.getFullFields();
     }
     
     /**
-    * @return primarykeyNames
-    */
+     * @return primarykeyNames
+     */
+    @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
     }
@@ -94,7 +98,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     }
    
     @Override
-    protected Class<ImageBean> _beanType(){
+    protected Class<ImageBean> beanType(){
         return ImageBean.class;
     }
     
@@ -109,8 +113,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public synchronized void setDbConverter(IDbConverter dbConverter) {
-        if( null == dbConverter)
+        if( null == dbConverter){
             throw new NullPointerException();
+        }
         this.dbConverter = dbConverter;
         this.beanConverter = this.dbConverter.getImageBeanConverter();
     }
@@ -152,8 +157,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     @Override
     public ImageBean loadByPrimaryKeyChecked(ImageBean bean) throws ObjectRetrievalException
     {
-        if(null == bean)
+        if(null == bean){
             throw new NullPointerException();
+        }
         return loadByPrimaryKeyChecked(bean.getMd5());
     }
     
@@ -171,13 +177,17 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     //1.3.2
     @Override
     public ImageBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1)
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        if(! (keys[0] instanceof String))
+        }
+        
+        if(! (keys[0] instanceof String)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-          return loadByPrimaryKeyChecked((String)keys[0]);
+        }
+        return loadByPrimaryKeyChecked((String)keys[0]);
     }
 
     //1.4 override IImageManager
@@ -201,8 +211,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     //1.7
     @Override
     public ImageBean checkDuplicate(ImageBean bean)throws ObjectRetrievalException{
-        if(null != bean)
-            checkDuplicate(bean.getMd5());            
+        if(null != bean){
+            checkDuplicate(bean.getMd5());
+        }
         return bean;   
     }
     //1.4.1 override IImageManager
@@ -219,7 +230,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     //1.8 override IImageManager
     @Override 
     public java.util.List<ImageBean> loadByPrimaryKey(String... keys){
-        if(null == keys)return new java.util.ArrayList<ImageBean>();
+        if(null == keys){
+            return new java.util.ArrayList<ImageBean>();
+        }
         java.util.ArrayList<ImageBean> list = new java.util.ArrayList<ImageBean>(keys.length);
         for(int i = 0 ;i< keys.length;++i){
             list.add(loadByPrimaryKey(keys[i]));
@@ -229,7 +242,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     //1.9 override IImageManager
     @Override 
     public java.util.List<ImageBean> loadByPrimaryKey(java.util.Collection<String> keys){
-        if(null == keys )return new java.util.ArrayList<ImageBean>();
+        if(null == keys ){
+            return new java.util.ArrayList<ImageBean>();
+        }
         java.util.ArrayList<ImageBean> list = new java.util.ArrayList<ImageBean>(keys.size());
         if(keys instanceof java.util.List){
             for(String key: keys){
@@ -238,8 +253,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         }else{
             ImageBean bean;
             for(String key: keys){
-                if(null != (bean = loadByPrimaryKey(key)))
+                if(null != (bean = loadByPrimaryKey(key))){
                     list.add(bean);
+                }
             }
         }
         return list;
@@ -272,51 +288,58 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        if(! (keys[0] instanceof String))
+        }
+        if(! (keys[0] instanceof String)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+        }
         return deleteByPrimaryKey((String)keys[0]);
     }
     //2.2 override IImageManager
     @Override 
     public int deleteByPrimaryKey(String... keys){
-        if(null == keys)return 0;
         int count = 0;
-        for(String key:keys){
-            count += deleteByPrimaryKey(key);
+        if(null != keys){        
+            for(String key:keys){
+                count += deleteByPrimaryKey(key);
+            }
         }
         return count;
     }
     //2.3 override IImageManager
     @Override 
     public int deleteByPrimaryKey(java.util.Collection<String> keys){
-        if(null == keys)return 0;
         int count = 0;
-        for(String key :keys){
-            count += deleteByPrimaryKey(key);
+        if(null != keys){        
+            for(String key :keys){
+                count += deleteByPrimaryKey(key);
+            }
         }
         return count;
     }
     //2.4 override IImageManager
     @Override 
     public int delete(ImageBean... beans){
-        if(null == beans)return 0;
         int count = 0;
-        for(ImageBean bean :beans){
-            count += delete(bean);
+        if(null != beans){
+            for(ImageBean bean :beans){
+                count += delete(bean);
+            }
         }
         return count;
     }
     //2.5 override IImageManager
     @Override 
     public int delete(java.util.Collection<ImageBean> beans){
-        if(null == beans)return 0;
         int count = 0;
-        for(ImageBean bean :beans){
-            count += delete(bean);
+        if(null != beans){
+            for(ImageBean bean :beans){
+                count += delete(bean);
+            }
         }
         return count;
     }
@@ -325,7 +348,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
     
-    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FaceBean.class,PersonBean.class};
+    private static final Class<?>[] IMPORTED_BEAN_TYPES = new Class<?>[]{FaceBean.class,PersonBean.class};
 
     /**
      * @see #getImportedBeansAsList(ImageBean,int)
@@ -333,7 +356,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.db.BaseBean<T>> T[] getImportedBeans(ImageBean bean, int ikIndex){
-        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
+        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(IMPORTED_BEAN_TYPES[ikIndex],0));
     }
     
     /**
@@ -355,8 +378,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
             return (java.util.List<T>)this.getFaceBeansByImageMd5AsList(bean);
         case FL_IMAGE_IK_FL_PERSON_IMAGE_MD5:
             return (java.util.List<T>)this.getPersonBeansByImageMd5AsList(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the T objects as imported beans of bean object by ikIndex.<br>
@@ -379,8 +403,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
             return (T[])setFaceBeansByImageMd5(bean,(FaceBean[])importedBeans);
         case FL_IMAGE_IK_FL_PERSON_IMAGE_MD5:
             return (T[])setPersonBeansByImageMd5(bean,(PersonBean[])importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the importedBeans associates to the bean by ikIndex<br>
@@ -402,8 +427,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
             return (C)setFaceBeansByImageMd5(bean,(java.util.Collection<FaceBean>)importedBeans);
         case FL_IMAGE_IK_FL_PERSON_IMAGE_MD5:
             return (C)setPersonBeansByImageMd5(bean,(java.util.Collection<PersonBean>)importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
 
@@ -560,9 +586,12 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         , DeviceBean refDeviceByDeviceId 
         , FaceBean[] impFaceByImageMd5 , PersonBean[] impPersonByImageMd5 )
     {
-        if(null == bean) return null;
-        if(null != refDeviceByDeviceId)
+        if(null == bean){
+            return null;
+        }
+        if(null != refDeviceByDeviceId){
             this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
+        }
         bean = this.save( bean );
         this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
         instanceOfFaceManager().save( impFaceByImageMd5 );
@@ -589,7 +618,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         , DeviceBean refDeviceByDeviceId 
         , java.util.Collection<FaceBean> impFaceByImageMd5 , java.util.Collection<PersonBean> impPersonByImageMd5 )
     {
-        if(null == bean) return null;
+        if(null == bean){
+            return null;
+        }
         this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
         bean = this.save( bean );
         this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
@@ -623,10 +654,12 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     @Override
     public ImageBean save(ImageBean bean,Object ...args) 
     {
-        if(null == args)
+        if(null == args){
             return save(bean);
-        if(args.length > 3)
+        }
+        if(args.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceBean");
         }
@@ -652,10 +685,12 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     @Override
     public ImageBean saveCollection(ImageBean bean,Object ...inputs)
     {
-        if(null == inputs)
+        if(null == inputs){
             return save(bean);
-        if(inputs.length > 3)
+        }
+        if(inputs.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        }
         Object[] args = new Object[3];
         System.arraycopy(inputs,0,args,0,3);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
@@ -691,8 +726,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         switch(fkIndex){
         case FL_IMAGE_FK_DEVICE_ID:
             return  (T)this.getReferencedByDeviceId(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     /**
      * Associates the {@link ImageBean} object to the bean object by fkIndex field.<br>
@@ -709,8 +745,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         switch(fkIndex){
         case FL_IMAGE_FK_DEVICE_ID:
             return  (T)this.setReferencedByDeviceId(bean, (DeviceBean)beanToSet);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     //////////////////////////////////////
@@ -722,7 +759,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     @Override 
     public DeviceBean getReferencedByDeviceId(ImageBean bean)
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByDeviceId(instanceOfDeviceManager().loadByPrimaryKey(bean.getDeviceId())); 
         return bean.getReferencedByDeviceId();
     }
@@ -984,9 +1023,10 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     @Override
     public void unregisterListener(TableListener<ImageBean> listener)
     {
-        if(listener instanceof WrapListener)
-            this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
-        throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
+        if(!(listener instanceof WrapListener)){
+            throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
+        }
+        this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
     }
     
     //37
@@ -1024,15 +1064,15 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     }
     /**
      * wrap {@code TableListener<ImageBean>} as native listener
-     * @author guyadong
      *
      */
     public class WrapListener implements TableListener<ImageBean>{
         private final TableListener<ImageBean> listener;
         private final net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.image.FlImageBean> nativeListener;
         private WrapListener(final TableListener<ImageBean> listener) {
-            if(null == listener)
+            if(null == listener){
                 throw new NullPointerException();
+            }
             this.listener = listener;
             this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.image.FlImageBean> (){
 
@@ -1067,26 +1107,32 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
                 }};
         }
 
+        @Override
         public void beforeInsert(ImageBean bean) {
             listener.beforeInsert(bean);
         }
 
+        @Override
         public void afterInsert(ImageBean bean) {
             listener.afterInsert(bean);
         }
 
+        @Override
         public void beforeUpdate(ImageBean bean) {
             listener.beforeUpdate(bean);
         }
 
+        @Override
         public void afterUpdate(ImageBean bean) {
             listener.afterUpdate(bean);
         }
 
+        @Override
         public void beforeDelete(ImageBean bean) {
             listener.beforeDelete(bean);
         }
 
+        @Override
         public void afterDelete(ImageBean bean) {
             listener.afterDelete(bean);
         }        
@@ -1126,8 +1172,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     }
     
     private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.image.FlImageBean> toNative(final Action<ImageBean> action){
-        if(null == action)
+        if(null == action){
             throw new NullPointerException();
+        }
         return new net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.image.FlImageBean>(){
 
             @Override
@@ -1144,7 +1191,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     //45 override IImageManager
     @Override 
     public java.util.List<String> toPrimaryKeyList(ImageBean... array){        
-        if(null == array)return new java.util.ArrayList<String>();
+        if(null == array){
+            return new java.util.ArrayList<String>();
+        }
         java.util.ArrayList<String> list = new java.util.ArrayList<String>(array.length);
         for(ImageBean bean:array){
             list.add(null == bean ? null : bean.getMd5());
@@ -1154,7 +1203,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     //46 override IImageManager
     @Override 
     public java.util.List<String> toPrimaryKeyList(java.util.Collection<ImageBean> collection){        
-        if(null == collection)return new java.util.ArrayList<String>();
+        if(null == collection){
+            return new java.util.ArrayList<String>();
+        }
         java.util.ArrayList<String> list = new java.util.ArrayList<String>(collection.size());
         for(ImageBean bean:collection){
             list.add(null == bean ? null : bean.getMd5());

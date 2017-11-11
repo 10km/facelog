@@ -10,7 +10,11 @@ import java.security.NoSuchAlgorithmException;
 import org.junit.Test;
 
 
-public class TestSerialVersionUID {
+/**
+ * @author guyadong
+ *
+ */
+public class SerialVersionUIDTest {
 	/**
 	 * 生成MD5校验码
 	 * 
@@ -18,8 +22,9 @@ public class TestSerialVersionUID {
 	 * @return
 	 */
 	static public byte[] getMD5(byte[] source) {
-		if (null==source)
+		if (null==source){
 			return null;
+		}
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			return md.digest(source);
@@ -35,8 +40,9 @@ public class TestSerialVersionUID {
 	 * @return
 	 */
 	static public String toHex(byte buffer[]) {
-		if (null==buffer)
+		if (null==buffer){
 			return null;
+		}
 		StringBuffer sb = new StringBuffer(buffer.length * 2);
 		for (int i = 0; i < buffer.length; i++) {
 			sb.append(Character.forDigit((buffer[i] & 240) >> 4, 16));
@@ -54,8 +60,9 @@ public class TestSerialVersionUID {
 	 * @return
 	 */
 	public static long longFrom8Bytes(byte[] input, int offset, boolean littleEndian){
-		if(offset <0 || offset+8>input.length)
+		if(offset <0 || offset+8>input.length){
 			throw new IllegalArgumentException(String.format("less than 8 bytes from index %d  is insufficient for long",offset));
+		}
 		long value=0;
 		for(int  count=0;count<8;++count){
 			int shift=(littleEndian?count:(7-count))<<3;
@@ -75,8 +82,9 @@ public class TestSerialVersionUID {
      * @return
      */
     public static long bytesToLong(byte[] input, int offset, boolean littleEndian) { 
-		if(offset <0 || offset+8>input.length)
+		if(offset <0 || offset+8>input.length){
 			throw new IllegalArgumentException(String.format("less than 8 bytes from index %d  is insufficient for long",offset));
+		}
     	ByteBuffer buffer = ByteBuffer.wrap(input,offset,8);
     	if(littleEndian){
         	// ByteBuffer.order(ByteOrder) 方法指定字节序,即大小端模式(BIG_ENDIAN/LITTLE_ENDIAN)

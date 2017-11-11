@@ -10,7 +10,7 @@ package net.gdface.facelog.db.mysql;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import net.gdface.facelog.db.TableLoadCaching;
+import net.gdface.facelog.db.BaseTableLoadCaching;
 import net.gdface.facelog.db.PersonBean;
 
 /**
@@ -19,19 +19,19 @@ import net.gdface.facelog.db.PersonBean;
  * @author guyadong
  *
  */
-public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
+public class PersonCache extends BaseTableLoadCaching<Integer, PersonBean> {
     private final PersonManager manager = PersonManager.getInstance();
     
-    private final TableLoadCaching<String, PersonBean> imageMd5Cacher;
-    private final TableLoadCaching<String, PersonBean> papersNumCacher;
+    private final BaseTableLoadCaching<String, PersonBean> imageMd5Cacher;
+    private final BaseTableLoadCaching<String, PersonBean> papersNumCacher;
     /** constructor<br>
-     * @see {@link TableLoadCaching#TableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
      */
     public PersonCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
         super(updateStragey,maximumSize, duration, unit);
         manager.bindForeignKeyListenerForDeleteRule();
 
-        imageMd5Cacher = new TableLoadCaching<String, PersonBean>(updateStragey, maximumSize, duration, unit){
+        imageMd5Cacher = new BaseTableLoadCaching<String, PersonBean>(updateStragey, maximumSize, duration, unit){
             @Override
             public void registerListener() {
                 manager.registerListener(this.tableListener);
@@ -49,7 +49,7 @@ public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
                 return manager.loadByIndexImageMd5Checked(key);
             }};
 
-        papersNumCacher = new TableLoadCaching<String, PersonBean>(updateStragey, maximumSize, duration, unit){
+        papersNumCacher = new BaseTableLoadCaching<String, PersonBean>(updateStragey, maximumSize, duration, unit){
             @Override
             public void registerListener() {
                 manager.registerListener(this.tableListener);

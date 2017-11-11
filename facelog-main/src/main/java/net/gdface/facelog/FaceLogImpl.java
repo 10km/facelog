@@ -42,7 +42,7 @@ import net.gdface.utils.Judge;
  * @author guyadong
  *
  */
-public class FaceLogImpl extends FaceLogDefinition  {
+public class FaceLogImpl extends BaseFaceLog  {
 	private final RedisPersonListener redisPersonListener = new RedisPersonListener();
 	private final RedisImageListener redisImageListener = new RedisImageListener(redisPersonListener,this);
 	private final RedisFeatureListener redisFeatureListener = new RedisFeatureListener();
@@ -58,7 +58,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		getFeatureManager().registerListener(redisFeatureListener);
 		getPermitManager().registerListener(redisPermitListener);
 	}
-	protected StoreBean _makeStoreBean(ByteBuffer imageBytes,String md5,String encodeing){
+	protected StoreBean daoMakeStoreBean(ByteBuffer imageBytes,String md5,String encodeing){
 		if(Judge.isEmpty(imageBytes)){
 			return null;
 		}
@@ -75,58 +75,60 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	}
 
 	/////////////////////PERMIT////////////////////
-	protected boolean _getGroupPermit(Integer deviceId,Integer personGroupId){
+	
+	protected boolean daoGetGroupPermit(Integer deviceId,Integer personGroupId){
 		PersonGroupBean personGroup;
 		DeviceBean device;
 		if(null == deviceId
 			|| null == personGroupId 
-			|| null ==(device = _getDevice(deviceId))
-			|| null == (personGroup = _getPersonGroup(personGroupId))){
+			|| null ==(device = daoGetDevice(deviceId))
+			|| null == (personGroup = daoGetPersonGroup(personGroupId))){
 			return false;
 		}
-		DeviceGroupBean deviceGroup = _getDeviceGroup(device.getGroupId());
-		List<PersonGroupBean> personGroupList = _listOfParentForPersonGroup(personGroup);
+		DeviceGroupBean deviceGroup = daoGetDeviceGroup(device.getGroupId());
+		List<PersonGroupBean> personGroupList = daoListOfParentForPersonGroup(personGroup);
 		
 		if(null == deviceGroup || personGroupList.isEmpty()){
 			return false;
 		}
 		// person group 及其parent,任何一个在permit表中就返回true
 		for(PersonGroupBean group:personGroupList){
-			if(_existsPermit(deviceGroup.getId(), group.getId())){
+			if(daoExistsPermit(deviceGroup.getId(), group.getId())){
 				return true;
 			}
 		}
 		return false;
 	}
-	protected boolean _getPersonPermit(Integer deviceId,Integer personId){
+	protected boolean daoGetPersonPermit(Integer deviceId,Integer personId){
 		PersonBean person;
-		if( null == personId || null == (person = _getPerson(personId))){
+		if( null == personId || null == (person = daoGetPerson(personId))){
 			return false;
 		}
-		return _getGroupPermit(deviceId,person.getGroupId());
+		return daoGetGroupPermit(deviceId,person.getGroupId());
 	}
-	protected List<Boolean> _getGroupPermit(final Integer deviceId,List<Integer> personGroupIdList){
+	protected List<Boolean> daoGetGroupPermit(final Integer deviceId,List<Integer> personGroupIdList){
 		if(null == deviceId || null == personGroupIdList){
 			return ImmutableList.<Boolean>of();
 		}
 		return Lists.newArrayList(Lists.transform(personGroupIdList, new Function<Integer,Boolean>(){
 			@Override
 			public Boolean apply(Integer input) {
-				return _getGroupPermit(deviceId,input);
+				return daoGetGroupPermit(deviceId,input);
 			}}));
 	}
-	protected List<Boolean> _getPermit(final Integer deviceId,List<Integer> personIdList){
+	protected List<Boolean> daoGetPermit(final Integer deviceId,List<Integer> personIdList){
 		if(null == deviceId || null == personIdList){
 			return ImmutableList.<Boolean>of();
 		}
 		return Lists.newArrayList(Lists.transform(personIdList, new Function<Integer,Boolean>(){
 			@Override
 			public Boolean apply(Integer input) {
-				return _getPersonPermit(deviceId,input);
+				return daoGetPersonPermit(deviceId,input);
 			}}));
 	}
 	////////////////////////////////////////////
-	protected Pair<ImageBean, StoreBean> _makeImageBean(ByteBuffer imageBytes,String md5) throws NotImage, UnsupportedFormat{
+	
+	protected Pair<ImageBean, StoreBean> daoMakeImageBean(ByteBuffer imageBytes,String md5) throws NotImage, UnsupportedFormat{
 		if(Judge.isEmpty(imageBytes)){return null;}
 		LazyImage image = LazyImage.create(imageBytes);
 		if(null == md5){
@@ -137,24 +139,24 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		imageBean.setWidth(image.getWidth());
 		imageBean.setHeight(image.getHeight());
 		imageBean.setFormat(image.getSuffix());
-		StoreBean storeBean = _makeStoreBean(imageBytes, md5, null);
+		StoreBean storeBean = daoMakeStoreBean(imageBytes, md5, null);
 		return Pair.with(imageBean, storeBean);
 	}
-	protected ImageBean _addImage(ByteBuffer imageBytes,DeviceBean refFlDevicebyDeviceId
-	        , Collection<FaceBean> impFlFacebyImgMd5 , Collection<PersonBean> impFlPersonbyImageMd5) throws DuplicateReord{
+	protected ImageBean daoAddImage(ByteBuffer imageBytes,DeviceBean refFlDevicebyDeviceId
+	        , Collection<FaceBean> impFlFacebyImgMd5 , Collection<PersonBean> impFlPersonbyImageMd5) throws DuplicateReordException{
 		if(Judge.isEmpty(imageBytes)){
 			return null;
 		}
 		String md5 = FaceUtilits.getMD5String(imageBytes);
-		_checkDuplicateImage(md5);
+		daoCheckDuplicateImage(md5);
 		Pair<ImageBean, StoreBean> pair;
 		try {
-			pair = _makeImageBean(imageBytes,md5);
+			pair = daoMakeImageBean(imageBytes,md5);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		_addStore(pair.getValue1());
-		return _addImage(pair.getValue0(), refFlDevicebyDeviceId, impFlFacebyImgMd5, impFlPersonbyImageMd5);
+		daoAddStore(pair.getValue1());
+		return daoAddImage(pair.getValue0(), refFlDevicebyDeviceId, impFlFacebyImgMd5, impFlPersonbyImageMd5);
 	}
 	/**
 	 * (递归)删除imageMd5指定图像及其缩略图
@@ -162,113 +164,114 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	 * @return
 	 */
 	@Override
-	protected int _deleteImage(String imageMd5){
+	protected int daoDeleteImage(String imageMd5){
 		if(Strings.isNullOrEmpty(imageMd5)){
 			return 0;
 		}
-		_deleteStore(imageMd5);
-		ImageBean imageBean = _getImage(imageMd5);
+		daoDeleteStore(imageMd5);
+		ImageBean imageBean = daoGetImage(imageMd5);
 		if(null == imageBean){return 0;}
 		String thumbMd5 = imageBean.getThumbMd5();
 		if( !Strings.isNullOrEmpty(thumbMd5)&& !imageBean.getMd5().equals(thumbMd5)){
-			_deleteImage(thumbMd5);
+			daoDeleteImage(thumbMd5);
 		}
-		return super._deleteImage(imageMd5);
+		return super.daoDeleteImage(imageMd5);
 	}
 
-	protected FeatureBean _makeFeature(ByteBuffer feature){
+	protected FeatureBean daoMakeFeature(ByteBuffer feature){
 		Assert.notEmpty(feature, "feature");
 		FeatureBean featureBean = new FeatureBean();		
 		featureBean.setMd5(FaceUtilits.getMD5String(feature));
 		featureBean.setFeature(feature);
 		return featureBean;
 	}
-	protected FeatureBean _addFeature(ByteBuffer feature,PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5) throws DuplicateReord{
-		return _addFeature(_makeFeature(feature), refPersonByPersonId, impFaceByFeatureMd5, null);
+	protected FeatureBean daoAddFeature(ByteBuffer feature,PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5) throws DuplicateReordException{
+		return daoAddFeature(daoMakeFeature(feature), refPersonByPersonId, impFaceByFeatureMd5, null);
 	}
-	protected FeatureBean _addFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean) throws DuplicateReord{
+	protected FeatureBean daoAddFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean) throws DuplicateReordException{
 		if(null != faceInfo){
 			for(Entry<ByteBuffer, FaceBean> entry:faceInfo.entrySet()){
 				ByteBuffer imageBytes = entry.getKey();
 				FaceBean faceBean = entry.getValue();
-				_addImage(imageBytes, deviceBean, Arrays.asList(faceBean), Arrays.asList(personBean));
+				daoAddImage(imageBytes, deviceBean, Arrays.asList(faceBean), Arrays.asList(personBean));
 			}
 		}
-		return _addFeature(feature, personBean, null == faceInfo?null:faceInfo.values());
+		return daoAddFeature(feature, personBean, null == faceInfo?null:faceInfo.values());
 	}
 
-	protected List<String> _deleteFeature(String featureMd5,boolean deleteImage){
-		List<String> imageKeys = _getImageKeysImportedByFeatureMd5(featureMd5);
+	protected List<String> daoDeleteFeature(String featureMd5,boolean deleteImage){
+		List<String> imageKeys = daoGetImageKeysImportedByFeatureMd5(featureMd5);
 		if(deleteImage){
 			for(Iterator<String> itor = imageKeys.iterator();itor.hasNext();){
 				String md5 = itor.next();
-				_deleteImage(md5);
+				daoDeleteImage(md5);
 				itor.remove();
 			}
 		}else{
-			_deleteFaceBeansByFeatureMd5OnFeature(featureMd5);
+			daoDeleteFaceBeansByFeatureMd5OnFeature(featureMd5);
 		}
-		_deleteFeature(featureMd5);
+		daoDeleteFeature(featureMd5);
 		return imageKeys;
 	}
-	protected int _deleteAllFeaturesByPersonId(Integer personId,boolean deleteImage){
+	protected int daoDeleteAllFeaturesByPersonId(Integer personId,boolean deleteImage){
 		int count = 0;
-		for(FeatureBean featureBean: _getFeatureBeansByPersonIdOnPerson(personId)){
-			_deleteFeature(featureBean.getMd5(),deleteImage);
+		for(FeatureBean featureBean: daoGetFeatureBeansByPersonIdOnPerson(personId)){
+			daoDeleteFeature(featureBean.getMd5(),deleteImage);
 			++count;
 		}
 		return count;
 	}
-	protected Integer _getDeviceIdOfFeature(String featureMd5){
-		for(String imageMd5: _getImageKeysImportedByFeatureMd5(featureMd5)){
-			ImageBean imageBean = _getImage(imageMd5);
+	protected Integer daoGetDeviceIdOfFeature(String featureMd5){
+		for(String imageMd5: daoGetImageKeysImportedByFeatureMd5(featureMd5)){
+			ImageBean imageBean = daoGetImage(imageMd5);
 			if(null !=imageBean){
 				return imageBean.getDeviceId();
 			}
 		}
 		return null;
 	}
-	protected PersonBean _setRefPersonOfFeature(String featureMd5,Integer personId){
-		PersonBean personBean = _getPerson(personId);
-		FeatureBean featureBean = _getFeature(featureMd5);
+	protected PersonBean daoSetRefPersonOfFeature(String featureMd5,Integer personId){
+		PersonBean personBean = daoGetPerson(personId);
+		FeatureBean featureBean = daoGetFeature(featureMd5);
 		return (null == personBean || null == featureBean)
 				? null
-				: _setReferencedByPersonIdOnFeature(featureBean, personBean);
+				: daoSetReferencedByPersonIdOnFeature(featureBean, personBean);
 	}
 
-	protected List<String> _getImageKeysImportedByFeatureMd5(String featureMd5){
-		return Lists.transform(_getFaceBeansByFeatureMd5OnFeature(featureMd5), this._castFaceToImageMd5);
+	protected List<String> daoGetImageKeysImportedByFeatureMd5(String featureMd5){
+		return Lists.transform(daoGetFaceBeansByFeatureMd5OnFeature(featureMd5), this.daoCastFaceToImageMd5);
 	}
-	protected PersonBean _replaceFeature(Integer personId,String featureMd5,boolean deleteImage){		
-		_deleteAllFeaturesByPersonId(personId, deleteImage);
-		return _setRefPersonOfFeature(featureMd5,personId);
+	protected PersonBean daoReplaceFeature(Integer personId,String featureMd5,boolean deleteImage){		
+		daoDeleteAllFeaturesByPersonId(personId, deleteImage);
+		return daoSetRefPersonOfFeature(featureMd5,personId);
 	}
 
-	protected int _savePerson(Map<ByteBuffer,PersonBean> persons) throws DuplicateReord {
+	protected int daoSavePerson(Map<ByteBuffer,PersonBean> persons) throws DuplicateReordException {
 		if(null == persons ){return 0;}
 		int count = 0;
 		PersonBean personBean ;
 		for(Entry<ByteBuffer, PersonBean> entry:persons.entrySet()){
-			personBean = _savePerson(entry.getValue(),_addImage(entry.getKey(),null,null,null),null);
+			personBean = daoSavePerson(entry.getValue(),daoAddImage(entry.getKey(),null,null,null),null);
 			if(null != personBean){++count;}
 		}
 		return count;
 	}
-	protected PersonBean _savePerson(PersonBean personBean, ImageBean idPhotoBean,
+	protected PersonBean daoSavePerson(PersonBean personBean, ImageBean idPhotoBean,
 			Collection<FeatureBean> featureBean) {
-		_deleteImage(_getReferencedByImageMd5OnPerson(personBean)); // delete old photo if exists
-		return _savePerson(personBean, idPhotoBean, null, featureBean, null);
+		// delete old photo if exists
+		daoDeleteImage(daoGetReferencedByImageMd5OnPerson(personBean)); 
+		return daoSavePerson(personBean, idPhotoBean, null, featureBean, null);
 	}
 
-	protected PersonBean _savePerson(PersonBean bean, ByteBuffer idPhoto, FeatureBean featureBean,
-			DeviceBean deviceBean) throws DuplicateReord {
-		ImageBean imageBean = _addImage(idPhoto, deviceBean, null, null);
-		return _savePerson(bean, imageBean, Arrays.asList(featureBean));
+	protected PersonBean daoSavePerson(PersonBean bean, ByteBuffer idPhoto, FeatureBean featureBean,
+			DeviceBean deviceBean) throws DuplicateReordException {
+		ImageBean imageBean = daoAddImage(idPhoto, deviceBean, null, null);
+		return daoSavePerson(bean, imageBean, Arrays.asList(featureBean));
 	}
 
-	protected PersonBean _savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature,
-			Map<ByteBuffer, FaceBean> faceInfo, DeviceBean deviceBean) throws DuplicateReord {
-		return _savePerson(bean, idPhoto, _addFeature(feature, bean, faceInfo, deviceBean), null);
+	protected PersonBean daoSavePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature,
+			Map<ByteBuffer, FaceBean> faceInfo, DeviceBean deviceBean) throws DuplicateReordException {
+		return daoSavePerson(bean, idPhoto, daoAddFeature(feature, bean, faceInfo, deviceBean), null);
 	}
 
 	/**
@@ -280,10 +283,10 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	 * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
 	 * @param deviceBean featureImage来源设备对象
 	 * @return
-	 * @throws DuplicateReord 
+	 * @throws DuplicateReordException 
 	 */
-	protected PersonBean _savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature,
-			ByteBuffer featureImage, FaceBean featureFaceBean, DeviceBean deviceBean) throws DuplicateReord {
+	protected PersonBean daoSavePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature,
+			ByteBuffer featureImage, FaceBean featureFaceBean, DeviceBean deviceBean) throws DuplicateReordException {
 		Map<ByteBuffer, FaceBean> faceInfo = null;
 		if (null != featureFaceBean) {
 			if (Judge.isEmpty(featureImage)){
@@ -294,7 +297,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 				faceInfo.put(featureImage, featureFaceBean);
 			}
 		}
-		return _savePerson(bean, idPhoto, _addFeature(feature, bean, faceInfo, deviceBean), null);
+		return daoSavePerson(bean, idPhoto, daoAddFeature(feature, bean, faceInfo, deviceBean), null);
 	}
 	/**
 	 * 删除personId指定的人员(person)记录及关联的所有记录
@@ -302,890 +305,890 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	 * @return 返回删除的记录数量
 	 */
 	@Override
-	protected int _deletePerson(Integer personId) {
-		PersonBean personBean = _getPerson(personId);
+	protected int daoDeletePerson(Integer personId) {
+		PersonBean personBean = daoGetPerson(personId);
 		if(null == personBean){
 			return 0;
 		}
 		// 删除标准照
-		_deleteImage(personBean.getImageMd5());
-		_deleteAllFeaturesByPersonId(personId,true);
-		return super._deletePerson(personId);
+		daoDeleteImage(personBean.getImageMd5());
+		daoDeleteAllFeaturesByPersonId(personId,true);
+		return super.daoDeletePerson(personId);
 	}
-	protected int _deletePersonByPapersNum(String papersNum) {
-		PersonBean personBean = _getPersonByIndexPapersNum(papersNum);
-		return null == personBean ? 0 : _deletePerson(personBean.getId());
+	protected int daoDeletePersonByPapersNum(String papersNum) {
+		PersonBean personBean = daoGetPersonByIndexPapersNum(papersNum);
+		return null == personBean ? 0 : daoDeletePerson(personBean.getId());
 	}
-	protected int _deletePersonByPapersNum(Collection<String> collection) {
+	protected int daoDeletePersonByPapersNum(Collection<String> collection) {
 		int count =0;
 		if(null != collection){
 			for(String papersNum:collection){
-				count += _deletePersonByPapersNum(papersNum);
+				count += daoDeletePersonByPapersNum(papersNum);
 			}
 		}
 		return count;
 	}
-	protected boolean _isDisable(int personId){
-		PersonBean personBean = _getPerson(personId);
+	protected boolean daoIsDisable(int personId){
+		PersonBean personBean = daoGetPerson(personId);
 		if(null == personBean){
 			return true;
 		}
 		Date expiryDate = personBean.getExpiryDate();
 		return null== expiryDate?false:expiryDate.before(new Date());
 	}
-	protected  void _setPersonExpiryDate(PersonBean personBean,Date expiryDate){
+	protected  void daoSetPersonExpiryDate(PersonBean personBean,Date expiryDate){
 		if(null != personBean){
 			personBean.setExpiryDate(expiryDate);
-			_savePerson(personBean);
+			daoSavePerson(personBean);
 		}
 	}
-	protected  void _setPersonExpiryDate(Collection<Integer> personIdList,Date expiryDate){
+	protected  void daoSetPersonExpiryDate(Collection<Integer> personIdList,Date expiryDate){
 		if(null != personIdList){
 			for(Integer personId : personIdList){
-				_setPersonExpiryDate(_getPerson(personId),expiryDate);
+				daoSetPersonExpiryDate(daoGetPerson(personId),expiryDate);
 			}
 		}
 	}
-	protected List<PersonBean> _loadUpdatedPersons(Date timestamp) {
-		List<PersonBean> persons =_loadPersonByUpdateTime(timestamp);		
-		Map<Integer,PersonBean>m = Maps.uniqueIndex(persons,this._castPersonToPk);
+	protected List<PersonBean> daoLoadUpdatedPersons(Date timestamp) {
+		List<PersonBean> persons =daoLoadPersonByUpdateTime(timestamp);		
+		Map<Integer,PersonBean>m = Maps.uniqueIndex(persons,this.daoCastPersonToPk);
 		Integer refPerson;
-		for(FeatureBean feature:_loadFeatureByUpdateTime(timestamp)){
+		for(FeatureBean feature:daoLoadFeatureByUpdateTime(timestamp)){
 			refPerson = feature.getPersonId();
 			if(null != refPerson && m.containsKey(refPerson)){
-				m.put(refPerson, _getPerson(refPerson));
+				m.put(refPerson, daoGetPerson(refPerson));
 			}
 		}
 		return new ArrayList<PersonBean>(m.values());
 	}
 	@Override
-	public PersonBean getPerson(int personId)throws ServiceRuntime {
+	public PersonBean getPerson(int personId)throws ServiceRuntimeException {
 		try{
-			return _getPerson(personId);
+			return daoGetPerson(personId);
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public List<PersonBean> getPersons(List<Integer> idList)throws ServiceRuntime {
+	public List<PersonBean> getPersons(List<Integer> idList)throws ServiceRuntimeException {
 		try{
-			return _getPersons(idList);
+			return daoGetPersons(idList);
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public PersonBean getPersonByPapersNum(String papersNum)throws ServiceRuntime  {
+	public PersonBean getPersonByPapersNum(String papersNum)throws ServiceRuntimeException  {
 		try{
-			return _getPersonByIndexPapersNum(papersNum);
+			return daoGetPersonByIndexPapersNum(papersNum);
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
 	@Override
-	public List<String> getFeatureBeansByPersonId(int personId)throws ServiceRuntime {
+	public List<String> getFeatureBeansByPersonId(int personId)throws ServiceRuntimeException {
 		try{
-			return _toPrimaryKeyListFromFeatures(_getFeatureBeansByPersonIdOnPerson(personId));
+			return daoToPrimaryKeyListFromFeatures(daoGetFeatureBeansByPersonIdOnPerson(personId));
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
 	@Override
-	public int deletePerson(final int personId)throws ServiceRuntime {
+	public int deletePerson(final int personId)throws ServiceRuntimeException {
 		try{
-			return _runAsTransaction(new Callable<Integer>(){
+			return daoRunAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
-					return _deletePerson(personId);
+					return daoDeletePerson(personId);
 				}});
 		}catch(RuntimeException e){
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public int deletePersons(final List<Integer> personIdList)throws ServiceRuntime {
+	public int deletePersons(final List<Integer> personIdList)throws ServiceRuntimeException {
 		try{
-			return _runAsTransaction(new Callable<Integer>(){
+			return daoRunAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
-					return _deletePersonsByPrimaryKey(personIdList);
+					return daoDeletePersonsByPrimaryKey(personIdList);
 				}});
 		}catch(RuntimeException e){
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public int deletePersonByPapersNum(final String papersNum)throws ServiceRuntime  {
+	public int deletePersonByPapersNum(final String papersNum)throws ServiceRuntimeException  {
 		try{	
-			return _runAsTransaction(new Callable<Integer>(){
+			return daoRunAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
-					return _deletePersonByPapersNum(papersNum);
+					return daoDeletePersonByPapersNum(papersNum);
 				}});
 		}catch(RuntimeException e){
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public  int deletePersonsByPapersNum(final List<String> papersNumlist)throws ServiceRuntime {
+	public  int deletePersonsByPapersNum(final List<String> papersNumlist)throws ServiceRuntimeException {
 		try{		
-			return _runAsTransaction(new Callable<Integer>(){
+			return daoRunAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
-					return _deletePersonByPapersNum(papersNumlist);
+					return daoDeletePersonByPapersNum(papersNumlist);
 				}});
 		}catch(RuntimeException e){
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public boolean existsPerson(int persionId)throws ServiceRuntime {
+	public boolean existsPerson(int persionId)throws ServiceRuntimeException {
 		try{
-			return _existsPerson(persionId);
+			return daoExistsPerson(persionId);
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
 	@Override
-	public boolean isDisable(int personId)throws ServiceRuntime{
+	public boolean isDisable(int personId)throws ServiceRuntimeException{
 		try{
-			return _isDisable(personId);
+			return daoIsDisable(personId);
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public void disablePerson(int personId)throws ServiceRuntime{
+	public void disablePerson(int personId)throws ServiceRuntimeException{
 		try{
-			_setPersonExpiryDate(_getPerson(personId),new Date());
+			daoSetPersonExpiryDate(daoGetPerson(personId),new Date());
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public void setPersonExpiryDate(int personId,long expiryDate)throws ServiceRuntime{
+	public void setPersonExpiryDate(int personId,long expiryDate)throws ServiceRuntimeException{
 		try{
-			_setPersonExpiryDate(_getPerson(personId),new Date(expiryDate));
+			daoSetPersonExpiryDate(daoGetPerson(personId),new Date(expiryDate));
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public  void setPersonExpiryDate(final List<Integer> personIdList,final long expiryDate)throws ServiceRuntime{
+	public  void setPersonExpiryDate(final List<Integer> personIdList,final long expiryDate)throws ServiceRuntimeException{
 		try{		
-			_runAsTransaction(new Runnable(){
+			daoRunAsTransaction(new Runnable(){
 				@Override
 				public void run() {
-					_setPersonExpiryDate(personIdList,new Date(expiryDate));
+					daoSetPersonExpiryDate(personIdList,new Date(expiryDate));
 				}});			
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public  void disablePerson(final List<Integer> personIdList)throws ServiceRuntime{
+	public  void disablePerson(final List<Integer> personIdList)throws ServiceRuntimeException{
 		setPersonExpiryDate(personIdList,System.currentTimeMillis());
 	}
 
 	@Override
-	public List<LogBean> getLogBeansByPersonId(int personId)throws ServiceRuntime {
+	public List<LogBean> getLogBeansByPersonId(int personId)throws ServiceRuntimeException {
 		try{
-			return _getLogBeansByPersonIdOnPerson(personId);
+			return daoGetLogBeansByPersonIdOnPerson(personId);
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
 	@Override
-	public List<Integer> loadAllPerson()throws ServiceRuntime {
+	public List<Integer> loadAllPerson()throws ServiceRuntimeException {
 		try{
-			return _loadPersonIdByWhere(null);
+			return daoLoadPersonIdByWhere(null);
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
 	@Override
-	public List<Integer> loadPersonIdByWhere(String where)throws ServiceRuntime {
+	public List<Integer> loadPersonIdByWhere(String where)throws ServiceRuntimeException {
 		try{
-			return _loadPersonIdByWhere(where);
+			return daoLoadPersonIdByWhere(where);
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 	@Override
-	public List<PersonBean> loadPersonByWhere(String where, int startRow, int numRows) throws ServiceRuntime {
+	public List<PersonBean> loadPersonByWhere(String where, int startRow, int numRows) throws ServiceRuntimeException {
 		try{
-			return _loadPersonByWhere(where, startRow, numRows);
+			return daoLoadPersonByWhere(where, startRow, numRows);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 	@Override
-	public int countPersonByWhere(String where)throws ServiceRuntime {
+	public int countPersonByWhere(String where)throws ServiceRuntimeException {
 		try{
-			return _countPersonByWhere(where);
+			return daoCountPersonByWhere(where);
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 	@Override
-	public PersonBean savePerson(PersonBean bean)throws ServiceRuntime {
+	public PersonBean savePerson(PersonBean bean)throws ServiceRuntimeException {
 		try{
-			return _savePerson(bean);
+			return daoSavePerson(bean);
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
 	@Override
-	public void savePersons(List<PersonBean> beans)throws ServiceRuntime  {
+	public void savePersons(List<PersonBean> beans)throws ServiceRuntimeException  {
 		try{
-			_savePersonsAsTransaction(beans);
+			daoSavePersonsAsTransaction(beans);
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
 	@Override
-	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto)throws ServiceRuntime {
+	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto)throws ServiceRuntimeException {
 		try{
-			return _runAsTransaction(new Callable<PersonBean>(){
+			return daoRunAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
-					return _savePerson(bean, idPhoto, null,null);
+					return daoSavePerson(bean, idPhoto, null,null);
 				}});
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
 	@Override
-	public Integer savePerson(final Map<ByteBuffer,PersonBean> persons)throws ServiceRuntime {
+	public Integer savePerson(final Map<ByteBuffer,PersonBean> persons)throws ServiceRuntimeException {
 		try{
-			return _runAsTransaction(new Callable<Integer>(){
+			return daoRunAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
-					return _savePerson(persons);
+					return daoSavePerson(persons);
 				}});
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
 	@Override
 	public PersonBean savePerson(final PersonBean bean, final String idPhotoMd5, final String featureMd5)
-			throws ServiceRuntime {
+			throws ServiceRuntimeException {
 		try {
-			return _runAsTransaction(new Callable<PersonBean>() {
+			return daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
-					return _savePerson(bean, _getImage(idPhotoMd5), Arrays.asList(_getFeature(featureMd5)));
+					return daoSavePerson(bean, daoGetImage(idPhotoMd5), Arrays.asList(daoGetFeature(featureMd5)));
 				}
 			});
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	
 	@Override
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final FeatureBean featureBean,
-			final Integer deviceId) throws ServiceRuntime {
+			final Integer deviceId) throws ServiceRuntimeException {
 		try {
-			return _runAsTransaction(new Callable<PersonBean>() {
+			return daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
-					return _savePerson(bean, idPhoto, featureBean, _getDevice(deviceId));
+					return daoSavePerson(bean, idPhoto, featureBean, daoGetDevice(deviceId));
 				}
 			});
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final ByteBuffer feature,
-			final List<FaceBean> faceBeans) throws ServiceRuntime {
+			final List<FaceBean> faceBeans) throws ServiceRuntimeException {
 		try {
-			return _runAsTransaction(new Callable<PersonBean>() {
+			return daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
-					return _savePerson(bean, idPhoto, _addFeature(feature, bean, faceBeans), null);
+					return daoSavePerson(bean, idPhoto, daoAddFeature(feature, bean, faceBeans), null);
 				}
 			});
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final ByteBuffer feature,
-			final Map<ByteBuffer, FaceBean> faceInfo, final Integer deviceId) throws ServiceRuntime {
+			final Map<ByteBuffer, FaceBean> faceInfo, final Integer deviceId) throws ServiceRuntimeException {
 		try {
-			return _runAsTransaction(new Callable<PersonBean>() {
+			return daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
-					return _savePerson(bean, idPhoto, feature, faceInfo, _getDevice(deviceId));
+					return daoSavePerson(bean, idPhoto, feature, faceInfo, daoGetDevice(deviceId));
 				}
 			});
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final ByteBuffer feature,
-			final ByteBuffer featureImage, final FaceBean featureFaceBean, final Integer deviceId)throws ServiceRuntime {
+			final ByteBuffer featureImage, final FaceBean featureFaceBean, final Integer deviceId)throws ServiceRuntimeException {
 		try{
-			return _runAsTransaction(new Callable<PersonBean>(){
+			return daoRunAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
-					return _savePerson(bean,idPhoto,feature,featureImage,featureFaceBean,_getDevice(deviceId));
+					return daoSavePerson(bean,idPhoto,feature,featureImage,featureFaceBean,daoGetDevice(deviceId));
 				}});
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
 	@Override
 	public void replaceFeature(final Integer personId, final String featureMd5, final boolean deleteOldFeatureImage)
-			throws ServiceRuntime {
+			throws ServiceRuntimeException {
 		try {
-			_runAsTransaction(new Runnable() {
+			daoRunAsTransaction(new Runnable() {
 				@Override
 				public void run() {
-					_replaceFeature(personId, featureMd5, deleteOldFeatureImage);
+					daoReplaceFeature(personId, featureMd5, deleteOldFeatureImage);
 				}
 			});
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public List<Integer> loadUpdatedPersons(long timestamp)throws ServiceRuntime {
+	public List<Integer> loadUpdatedPersons(long timestamp)throws ServiceRuntimeException {
 		try{
-			return _toPrimaryKeyListFromPersons(_loadUpdatedPersons(new Date(timestamp)));
+			return daoToPrimaryKeyListFromPersons(daoLoadUpdatedPersons(new Date(timestamp)));
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public List<Integer> loadPersonIdByUpdateTime(long timestamp)throws ServiceRuntime {
+	public List<Integer> loadPersonIdByUpdateTime(long timestamp)throws ServiceRuntimeException {
 		try{
-			return _loadPersonIdByUpdateTime(new Date(timestamp));
+			return daoLoadPersonIdByUpdateTime(new Date(timestamp));
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public List<String> loadFeatureMd5ByUpdate(long timestamp)throws ServiceRuntime {
+	public List<String> loadFeatureMd5ByUpdate(long timestamp)throws ServiceRuntimeException {
 		try{		
-			return _loadFeatureMd5ByUpdateTime(new Date(timestamp));
+			return daoLoadFeatureMd5ByUpdateTime(new Date(timestamp));
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public void addLog(LogBean bean)throws ServiceRuntime, DuplicateReord {
+	public void addLog(LogBean bean)throws ServiceRuntimeException, DuplicateReordException {
 		try{
-			_addLog(bean);
+			daoAddLog(bean);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public void addLogs(List<LogBean> beans)throws ServiceRuntime, DuplicateReord {
+	public void addLogs(List<LogBean> beans)throws ServiceRuntimeException, DuplicateReordException {
 		try{
-			_addLogsAsTransaction(beans);
+			daoAddLogsAsTransaction(beans);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public List<LogBean> loadLogByWhere(String where, int startRow, int numRows) throws ServiceRuntime {
+	public List<LogBean> loadLogByWhere(String where, int startRow, int numRows) throws ServiceRuntimeException {
 		try{
-			return _loadLogByWhere(where, startRow, numRows);
+			return daoLoadLogByWhere(where, startRow, numRows);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
 	@Override
-	public List<LogLightBean> loadLogLightByWhere(String where, int startRow, int numRows) throws ServiceRuntime {
+	public List<LogLightBean> loadLogLightByWhere(String where, int startRow, int numRows) throws ServiceRuntimeException {
 		try{
-			return _loadLogLightByWhere(where, startRow, numRows);
+			return daoLoadLogLightByWhere(where, startRow, numRows);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
 	@Override
-	public int countLogLightByWhere(String where) throws ServiceRuntime {
+	public int countLogLightByWhere(String where) throws ServiceRuntimeException {
 		try{         
-			return _countLogLightByWhere(where);
+			return daoCountLogLightByWhere(where);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
 	@Override
-	public int countLogByWhere(String where) throws ServiceRuntime {
+	public int countLogByWhere(String where) throws ServiceRuntimeException {
 		try{
-			return _countLogByWhere(where);
+			return daoCountLogByWhere(where);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 	@Override
-    public List<LogLightBean> loadLogLightByVerifyTime(long timestamp,int startRow, int numRows)throws ServiceRuntime{
+    public List<LogLightBean> loadLogLightByVerifyTime(long timestamp,int startRow, int numRows)throws ServiceRuntimeException{
 		try{
-			return _loadLogLightByVerifyTime(new Date(timestamp),startRow,numRows);
+			return daoLoadLogLightByVerifyTime(new Date(timestamp),startRow,numRows);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
     }
     @Override
-    public int countLogLightByVerifyTime(long timestamp)throws ServiceRuntime{
+    public int countLogLightByVerifyTime(long timestamp)throws ServiceRuntimeException{
 		try{
-			return _countLogLightByVerifyTime(new Date(timestamp));
+			return daoCountLogLightByVerifyTime(new Date(timestamp));
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
     }
     @Override
-	public boolean existsImage(String md5) throws ServiceRuntime {
+	public boolean existsImage(String md5) throws ServiceRuntimeException {
 		try{
-			return _existsImage(md5);
+			return daoExistsImage(md5);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
 	public ImageBean addImage(ByteBuffer imageData,Integer deviceId
-			, FaceBean faceBean , Integer personId) throws ServiceRuntime, DuplicateReord{
+			, FaceBean faceBean , Integer personId) throws ServiceRuntimeException, DuplicateReordException{
 		try{
-			return _addImage(imageData,_getDevice(deviceId),Arrays.asList(faceBean),Arrays.asList(_getPerson(personId)));		
+			return daoAddImage(imageData,daoGetDevice(deviceId),Arrays.asList(faceBean),Arrays.asList(daoGetPerson(personId)));		
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
     @Override
-	public boolean existsFeature(String md5) throws ServiceRuntime {
+	public boolean existsFeature(String md5) throws ServiceRuntimeException {
 		try{
-			return _existsFeature(md5);
+			return daoExistsFeature(md5);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public FeatureBean addFeature(ByteBuffer feature,Integer personId,List<FaceBean> faecBeans)throws ServiceRuntime, DuplicateReord{
+	public FeatureBean addFeature(ByteBuffer feature,Integer personId,List<FaceBean> faecBeans)throws ServiceRuntimeException, DuplicateReordException{
 		try{
-			return _addFeature(feature, _getPerson(personId), faecBeans);
+			return daoAddFeature(feature, daoGetPerson(personId), faecBeans);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
 	@Override
 	public FeatureBean addFeature(ByteBuffer feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo,
-			Integer deviceId) throws ServiceRuntime, DuplicateReord {
+			Integer deviceId) throws ServiceRuntimeException, DuplicateReordException {
 		try {
-			return _addFeature(feature, _getPerson(personId), faceInfo, _getDevice(deviceId));
+			return daoAddFeature(feature, daoGetPerson(personId), faceInfo, daoGetDevice(deviceId));
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
 	@Override
-	public List<String> deleteFeature(String featureMd5,boolean deleteImage)throws ServiceRuntime{
+	public List<String> deleteFeature(String featureMd5,boolean deleteImage)throws ServiceRuntimeException{
 		try{
-			return _deleteFeature(featureMd5,deleteImage);
+			return daoDeleteFeature(featureMd5,deleteImage);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
 	@Override
-	public int deleteAllFeaturesByPersonId(int personId,boolean deleteImage)throws ServiceRuntime{
+	public int deleteAllFeaturesByPersonId(int personId,boolean deleteImage)throws ServiceRuntimeException{
 		try{
-			return _deleteAllFeaturesByPersonId(personId,deleteImage);
+			return daoDeleteAllFeaturesByPersonId(personId,deleteImage);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
 	@Override
-	public FeatureBean getFeature(String md5)throws ServiceRuntime{
+	public FeatureBean getFeature(String md5)throws ServiceRuntimeException{
 		try{
-			return _getFeature(md5);
+			return daoGetFeature(md5);
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public List<FeatureBean> getFeatures(List<String> md5)throws ServiceRuntime{
+	public List<FeatureBean> getFeatures(List<String> md5)throws ServiceRuntimeException{
 		try{
-			return _getFeatures(md5);
+			return daoGetFeatures(md5);
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public List<String> getFeaturesOfPerson(int personId)throws ServiceRuntime{
+	public List<String> getFeaturesOfPerson(int personId)throws ServiceRuntimeException{
 		try{			
 			return Lists.transform(
-					_getFeatureBeansByPersonIdOnPerson(personId),
-					_castFeatureToPk); 
+					daoGetFeatureBeansByPersonIdOnPerson(personId),
+					daoCastFeatureToPk); 
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public ByteBuffer getFeatureBytes(String md5)throws ServiceRuntime{
+	public ByteBuffer getFeatureBytes(String md5)throws ServiceRuntimeException{
 		try{
-			FeatureBean featureBean = _getFeature(md5);
+			FeatureBean featureBean = daoGetFeature(md5);
 			return null ==featureBean?null:featureBean.getFeature();
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public ByteBuffer getImageBytes(String imageMD5)throws ServiceRuntime{
+	public ByteBuffer getImageBytes(String imageMD5)throws ServiceRuntimeException{
 		try{
-			StoreBean storeBean = _getStore(imageMD5);
+			StoreBean storeBean = daoGetStore(imageMD5);
 			return null ==storeBean?null:storeBean.getData();
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public ImageBean getImage(String imageMD5)throws ServiceRuntime{
+	public ImageBean getImage(String imageMD5)throws ServiceRuntimeException{
 		try{
-			return _getImage(imageMD5);
+			return daoGetImage(imageMD5);
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public List<String> getImagesAssociatedByFeature(String featureMd5)throws ServiceRuntime{
+	public List<String> getImagesAssociatedByFeature(String featureMd5)throws ServiceRuntimeException{
 		try{
-			return _getImageKeysImportedByFeatureMd5(featureMd5);
+			return daoGetImageKeysImportedByFeatureMd5(featureMd5);
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public Integer getDeviceIdOfFeature(String featureMd5) throws ServiceRuntime{
+	public Integer getDeviceIdOfFeature(String featureMd5) throws ServiceRuntimeException{
 		try{
-			return _getDeviceIdOfFeature(featureMd5);
+			return daoGetDeviceIdOfFeature(featureMd5);
 		}catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public int deleteImage(String imageMd5)throws ServiceRuntime{
+	public int deleteImage(String imageMd5)throws ServiceRuntimeException{
 		try{
-			return _deleteImage(imageMd5);
+			return daoDeleteImage(imageMd5);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
     @Override
-	public boolean existsDevice(int id) throws ServiceRuntime {
+	public boolean existsDevice(int id) throws ServiceRuntimeException {
 		try{
-			return _existsDevice(id);
+			return daoExistsDevice(id);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
     @Override
-    public DeviceBean saveDevice(DeviceBean deviceBean)throws ServiceRuntime{
+    public DeviceBean saveDevice(DeviceBean deviceBean)throws ServiceRuntimeException{
     	try{
-    		return _saveDevice(deviceBean);
+    		return daoSaveDevice(deviceBean);
     	} catch (RuntimeException e) {
-    		throw new ServiceRuntime(e);
+    		throw new ServiceRuntimeException(e);
     	} 
     }
 
 	@Override
-	public DeviceBean getDevice(int deviceId)throws ServiceRuntime{
+	public DeviceBean getDevice(int deviceId)throws ServiceRuntimeException{
     	try{
-    		return _getDevice(deviceId);
+    		return daoGetDevice(deviceId);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 
 	@Override
-	public List<DeviceBean> getDevices(List<Integer> idList)throws ServiceRuntime{
+	public List<DeviceBean> getDevices(List<Integer> idList)throws ServiceRuntimeException{
 		try{
-			return _getDevices(idList);
+			return daoGetDevices(idList);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		} 
 	}
 	@Override
-	public List<DeviceBean> loadDeviceByWhere(String where,int startRow, int numRows)throws ServiceRuntime{
+	public List<DeviceBean> loadDeviceByWhere(String where,int startRow, int numRows)throws ServiceRuntimeException{
 		try{
-			return this._loadDeviceByWhere(where, startRow, numRows);
+			return this.daoLoadDeviceByWhere(where, startRow, numRows);
 		}catch(RuntimeException e){
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public int countDeviceByWhere(String where)throws ServiceRuntime{
+	public int countDeviceByWhere(String where)throws ServiceRuntimeException{
 		try{
-			return this._countDeviceByWhere(where);
+			return this.daoCountDeviceByWhere(where);
 		}catch(RuntimeException e){
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public List<Integer> loadDeviceIdByWhere(String where)throws ServiceRuntime{
+	public List<Integer> loadDeviceIdByWhere(String where)throws ServiceRuntimeException{
 		try{
-			return this._loadDeviceIdByWhere(where);
+			return this.daoLoadDeviceIdByWhere(where);
 		}catch(RuntimeException e){
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	////////////////////////////////DeviceGroupBean/////////////
 	
 	@Override
-	public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean)throws ServiceRuntime {
+	public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean)throws ServiceRuntimeException {
 		try{
-			return _saveDeviceGroup(deviceGroupBean);
+			return daoSaveDeviceGroup(deviceGroupBean);
 		} catch(RuntimeException e){
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public DeviceGroupBean getDeviceGroup(int deviceGroupId)throws ServiceRuntime {
+	public DeviceGroupBean getDeviceGroup(int deviceGroupId)throws ServiceRuntimeException {
 		try{
-			return _getDeviceGroup(deviceGroupId);
+			return daoGetDeviceGroup(deviceGroupId);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public List<DeviceGroupBean> getDeviceGroups(List<Integer> groupIdList)throws ServiceRuntime {
+	public List<DeviceGroupBean> getDeviceGroups(List<Integer> groupIdList)throws ServiceRuntimeException {
 		try{
-			return _getDeviceGroups(groupIdList); 
+			return daoGetDeviceGroups(groupIdList); 
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public int deleteDeviceGroup(int deviceGroupId)throws ServiceRuntime {
+	public int deleteDeviceGroup(int deviceGroupId)throws ServiceRuntimeException {
 		try{
-			return _deleteDeviceGroup(deviceGroupId);
+			return daoDeleteDeviceGroup(deviceGroupId);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId)throws ServiceRuntime {
+	public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId)throws ServiceRuntimeException {
 		try{
-			return _getSubDeviceGroup(deviceGroupId);
+			return daoGetSubDeviceGroup(deviceGroupId);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public List<DeviceBean> getDevicesOfGroup(int deviceGroupId)throws ServiceRuntime {
+	public List<DeviceBean> getDevicesOfGroup(int deviceGroupId)throws ServiceRuntimeException {
 		try{
-			return _getDevicesOfGroup(deviceGroupId);
+			return daoGetDevicesOfGroup(deviceGroupId);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	////////////////////////////////PersonGroupBean/////////////
 	
 	@Override
-	public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean)throws ServiceRuntime {
+	public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean)throws ServiceRuntimeException {
 		try{
-			return _savePersonGroup(personGroupBean);
+			return daoSavePersonGroup(personGroupBean);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public PersonGroupBean getPersonGroup(int personGroupId)throws ServiceRuntime {
+	public PersonGroupBean getPersonGroup(int personGroupId)throws ServiceRuntimeException {
 		try{
-			return _getPersonGroup(personGroupId); 
+			return daoGetPersonGroup(personGroupId); 
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public List<PersonGroupBean> getPersonGroups(Collection<Integer> groupIdList)throws ServiceRuntime {
+	public List<PersonGroupBean> getPersonGroups(Collection<Integer> groupIdList)throws ServiceRuntimeException {
 		try{
-			return _getPersonGroups(groupIdList);
+			return daoGetPersonGroups(groupIdList);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public int deletePersonGroup(int personGroupId)throws ServiceRuntime {
+	public int deletePersonGroup(int personGroupId)throws ServiceRuntimeException {
 		try{
-			return _deletePersonGroup(personGroupId);
+			return daoDeletePersonGroup(personGroupId);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public List<PersonGroupBean> getSubPersonGroup(int personGroupId)throws ServiceRuntime {
+	public List<PersonGroupBean> getSubPersonGroup(int personGroupId)throws ServiceRuntimeException {
 		try{
-			return _getSubPersonGroup(personGroupId);
+			return daoGetSubPersonGroup(personGroupId);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public List<PersonBean> getPersonsOfGroup(int personGroupId)throws ServiceRuntime {
+	public List<PersonBean> getPersonsOfGroup(int personGroupId)throws ServiceRuntimeException {
 		try{
-			return _getPersonsOfGroup(personGroupId);
+			return daoGetPersonsOfGroup(personGroupId);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
     @Override
-    public List<DeviceGroupBean> loadDeviceGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntime{
+    public List<DeviceGroupBean> loadDeviceGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntimeException{
 		try{
-			return _loadDeviceGroupByWhere(where, startRow, numRows);
+			return daoLoadDeviceGroupByWhere(where, startRow, numRows);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
     }
     @Override
-    public int countDeviceGroupByWhere(String where)throws ServiceRuntime{
+    public int countDeviceGroupByWhere(String where)throws ServiceRuntimeException{
 		try{
-			return _countDeviceGroupByWhere(where);
+			return daoCountDeviceGroupByWhere(where);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
     }
     @Override
-    public List<Integer> loadDeviceGroupIdByWhere(String where)throws ServiceRuntime{
+    public List<Integer> loadDeviceGroupIdByWhere(String where)throws ServiceRuntimeException{
     	try{
-    		return _loadDeviceGroupIdByWhere(where);
+    		return daoLoadDeviceGroupIdByWhere(where);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
     }
 	/////////////////////PERMIT/////
     
 	@Override
-	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {
+	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntimeException {
 		try{
-			_addPermit(deviceGroup, personGroup);
+			daoAddPermit(deviceGroup, personGroup);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public void addPermit(int deviceGroupId,int personGroupId)throws ServiceRuntime{
+	public void addPermit(int deviceGroupId,int personGroupId)throws ServiceRuntimeException{
 		try{
-			_addPermit(deviceGroupId, personGroupId);
+			daoAddPermit(deviceGroupId, personGroupId);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public int deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {
+	public int deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntimeException {
 		try{
-			return _deletePermit(deviceGroup, personGroup);
+			return daoDeletePermit(deviceGroup, personGroup);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public boolean getGroupPermit(int deviceId,int personGroupId)throws ServiceRuntime {
+	public boolean getGroupPermit(int deviceId,int personGroupId)throws ServiceRuntimeException {
 		try{
-			return _getGroupPermit(deviceId,personGroupId);
+			return daoGetGroupPermit(deviceId,personGroupId);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public boolean getPersonPermit(int deviceId,int personId)throws ServiceRuntime {
+	public boolean getPersonPermit(int deviceId,int personId)throws ServiceRuntimeException {
 		try{
-			return _getPersonPermit(deviceId,personId);
+			return daoGetPersonPermit(deviceId,personId);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public List<Boolean> getGroupPermits(int deviceId,List<Integer> personGroupIdList)throws ServiceRuntime {
+	public List<Boolean> getGroupPermits(int deviceId,List<Integer> personGroupIdList)throws ServiceRuntimeException {
 		try{
-			return _getGroupPermit(deviceId, personGroupIdList);
+			return daoGetGroupPermit(deviceId, personGroupIdList);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public List<Boolean> getPersonPermits(int deviceId,List<Integer> personIdList)throws ServiceRuntime {
+	public List<Boolean> getPersonPermits(int deviceId,List<Integer> personIdList)throws ServiceRuntimeException {
 		try{
-			return _getPermit(deviceId, personIdList);
+			return daoGetPermit(deviceId, personIdList);
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
 	@Override
-	public List<PermitBean> loadPermitByUpdate(long timestamp)throws ServiceRuntime {
+	public List<PermitBean> loadPermitByUpdate(long timestamp)throws ServiceRuntimeException {
 		try{
-			return _loadPermitByCreateTime(new Date(timestamp));
+			return daoLoadPermitByCreateTime(new Date(timestamp));
 		} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
 	}
     @Override
-    public List<PersonGroupBean> loadPersonGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntime{
+    public List<PersonGroupBean> loadPersonGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntimeException{
     	try{
-    		return _loadPersonGroupByWhere(where, startRow, numRows);
+    		return daoLoadPersonGroupByWhere(where, startRow, numRows);
     	} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
     }
     @Override
-    public int countPersonGroupByWhere(String where)throws ServiceRuntime{
+    public int countPersonGroupByWhere(String where)throws ServiceRuntimeException{
     	try{
-    		return _countPersonGroupByWhere(where);
+    		return daoCountPersonGroupByWhere(where);
     	} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
     }
     @Override
-    public List<Integer> loadPersonGroupIdByWhere(String where)throws ServiceRuntime{
+    public List<Integer> loadPersonGroupIdByWhere(String where)throws ServiceRuntimeException{
     	try{
-    		return _loadPersonGroupIdByWhere(where);
+    		return daoLoadPersonGroupIdByWhere(where);
     	} catch (RuntimeException e) {
-			throw new ServiceRuntime(e);
+			throw new ServiceRuntimeException(e);
 		}
     }
 }

@@ -10,7 +10,7 @@ package net.gdface.facelog.db.mysql;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import net.gdface.facelog.db.TableLoadCaching;
+import net.gdface.facelog.db.BaseTableLoadCaching;
 import net.gdface.facelog.db.ImageBean;
 
 /**
@@ -19,11 +19,11 @@ import net.gdface.facelog.db.ImageBean;
  * @author guyadong
  *
  */
-public class ImageCache extends TableLoadCaching<String, ImageBean> {
+public class ImageCache extends BaseTableLoadCaching<String, ImageBean> {
     private final ImageManager manager = ImageManager.getInstance();
     
     /** constructor<br>
-     * @see {@link TableLoadCaching#TableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
      */
     public ImageCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
         super(updateStragey,maximumSize, duration, unit);

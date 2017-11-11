@@ -230,8 +230,9 @@ public final class Manager
      * @see #endTransaction(boolean)
      */
     public <T>T runAsTransaction(Callable<T> fun) throws DAOException{
-        if(null==fun) 
+        if(null==fun) {
             throw new NullPointerException();
+        }
         try {
             Manager.getInstance().beginTransaction();
             boolean commit = false;
@@ -261,8 +262,9 @@ public final class Manager
      * @see #runAsTransaction(Callable)
      */
     public void runAsTransaction(final Runnable fun) throws DAOException{
-        if(null==fun) 
+        if(null==fun) {
             throw new NullPointerException();
+        }
         runAsTransaction(new Callable<Object>(){
 
             @Override
@@ -968,8 +970,9 @@ public final class Manager
     public boolean runSql(String sql, Object[] argList) throws SQLException {
         PreparedStatement ps = null;
         Connection c = null;
-        if (sql == null)
+        if (sql == null){
             return false;
+        }
         // log("sql string:\n" + sql + "\n");
         try {
             c = getConnection();
@@ -977,10 +980,12 @@ public final class Manager
             fillPrepareStatement(ps, argList);
             return ps.execute();
         } finally {
-            if(null != ps)
+            if(null != ps){
                 close(ps);
-            if(null != c)
+            }
+            if(null != c){
                 releaseConnection(c);
+            }
         }
     }
     /**
@@ -996,8 +1001,9 @@ public final class Manager
             for (int i = 0; i < argList.length; i++) {
                 if (argList[i].getClass().equals(byte[].class)) {
                     ps.setBytes(i + 1, (byte[]) argList[i]);
-                } else
+                } else {
                     ps.setObject(i + 1, argList[i]);
+                }
             }
         }
     }

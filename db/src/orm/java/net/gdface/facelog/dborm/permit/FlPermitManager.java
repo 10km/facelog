@@ -34,7 +34,7 @@ import net.gdface.facelog.dborm.person.FlPersonGroupManager;
  * Remarks: 通行权限关联表<br>
  * @author sql2java
  */
-public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
+public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
 {
     /**
      * Tablename.
@@ -50,24 +50,22 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
         ,"person_group_id"
     };
 
-    /**
-    * @return tableName
-    */
+    @Override
     public String getTableName() {
         return TABLE_NAME;
     }
-
+    
+    @Override
     public String getFields() {
         return FL_PERMIT_FIELDS;
     }
     
+    @Override
     public String getFullFields() {
         return FL_PERMIT_FULL_FIELDS;
     }
-    
-    /**
-    * @return primarykeyNames
-    */
+
+    @Override
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
@@ -96,7 +94,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     }
     
     @Override
-    protected Class<FlPermitBean> _beanType(){
+    protected Class<FlPermitBean> beanType(){
         return FlPermitBean.class;
     }
     
@@ -142,8 +140,9 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     @SuppressWarnings("unused")
     public FlPermitBean loadByPrimaryKeyChecked(Integer deviceGroupId,Integer personGroupId) throws DAOException
     {
-        if(null == deviceGroupId || null == personGroupId)
+        if(null == deviceGroupId || null == personGroupId){
             throw new ObjectRetrievalException(new NullPointerException());
+        }
         Connection c = null;
         PreparedStatement ps = null;
         try
@@ -189,8 +188,9 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     @Override
     public FlPermitBean loadByPrimaryKeyChecked(FlPermitBean bean) throws DAOException
     {
-        if(null == bean)
+        if(null == bean){
             throw new NullPointerException();
+        }
         return loadByPrimaryKeyChecked(bean.getDeviceGroupId(),bean.getPersonGroupId());
     }
     
@@ -203,29 +203,37 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     //1.3
     @Override
     public FlPermitBean loadByPrimaryKey(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 2 )
+        }
+        if(keys.length != 2){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         
-        if(null == keys[0])return null;
-
-        if(null == keys[1])return null;
+        if(null == keys[0]){
+            return null;
+        }
+        if(null == keys[1]){
+            return null;
+        }
         return loadByPrimaryKey((Integer)keys[0],(Integer)keys[1]);
     }
     //1.3.2
     @Override
     public FlPermitBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 2 )
+        }
+        if(keys.length != 2){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         
-        if(! (keys[0] instanceof Integer))
+        if(! (keys[0] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-
-        if(! (keys[1] instanceof Integer))
+        }
+        if(! (keys[1] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:Integer");
+        }
         return loadByPrimaryKeyChecked((Integer)keys[0],(Integer)keys[1]);
     }
     /**
@@ -271,8 +279,9 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     @Override
     public boolean existsByPrimaryKey(FlPermitBean bean) throws DAOException
     {
-        if(null == bean  || null == bean.getDeviceGroupId() || null == bean.getPersonGroupId())
+        if(null == bean  || null == bean.getDeviceGroupId() || null == bean.getPersonGroupId()){
             return false;
+        }
         long modified = bean.getModified();
         try{
             bean.resetModifiedExceptPrimaryKeys();
@@ -284,8 +293,9 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     //1.7
     @Override
     public FlPermitBean checkDuplicate(FlPermitBean bean) throws DAOException{
-        if(!existsByPrimaryKey(bean))
+        if(!existsByPrimaryKey(bean)){
             throw new ObjectRetrievalException("Duplicate entry ("+ bean.getDeviceGroupId() + " " +bean.getPersonGroupId() +") for key 'PRIMARY'");
+        }
         return bean;
     }
     /**
@@ -334,10 +344,11 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
                                     ResultSet.CONCUR_READ_ONLY);
             if (bean.getDeviceGroupId() == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, bean.getDeviceGroupId()); }
             if (bean.getPersonGroupId() == null) { ps.setNull(2, Types.INTEGER); } else { Manager.setInteger(ps, 2, bean.getPersonGroupId()); }
-            int _rows=ps.executeUpdate();
-            if(_rows>0)
+            int rows=ps.executeUpdate();
+            if(rows>0){
                 this.listenerContainer.afterDelete(bean); // listener callback
-            return _rows;
+            }
+            return rows;
         }
         catch(SQLException e)
         {
@@ -360,17 +371,21 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 2 )
+        }
+        if(keys.length != 2){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         FlPermitBean bean = createBean();   
         
-        if(null != keys[0] && !(keys[0] instanceof Integer))
+        if(null != keys[0] && !(keys[0] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:$pk.getJavaType()");
+        }
         bean.setDeviceGroupId((Integer)keys[0]);
-        if(null != keys[1] && !(keys[1] instanceof Integer))
+        if(null != keys[1] && !(keys[1] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:$pk.getJavaType()");
+        }
         bean.setPersonGroupId((Integer)keys[1]);
         return delete(bean);
     }
@@ -389,11 +404,15 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
         , FlDeviceGroupBean refDevicegroupByDeviceGroupId , FlPersonGroupBean refPersongroupByPersonGroupId 
         ) throws DAOException
     {
-        if(null == bean) return null;
-        if(null != refDevicegroupByDeviceGroupId)
+        if(null == bean) {
+            return null;
+        }
+        if(null != refDevicegroupByDeviceGroupId){
             this.setReferencedByDeviceGroupId(bean,refDevicegroupByDeviceGroupId);
-        if(null != refPersongroupByPersonGroupId)
+        }
+        if(null != refPersongroupByPersonGroupId){
             this.setReferencedByPersonGroupId(bean,refPersongroupByPersonGroupId);
+        }
         bean = this.save( bean );
         return bean;
     } 
@@ -426,10 +445,12 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     @Override
     public FlPermitBean save(FlPermitBean bean,Object ...args) throws DAOException
     {
-        if(null == args)
+        if(null == args){
             save(bean);
-        if(args.length > 2)
+        }
+        if(args.length > 2){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
+        }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlDeviceGroupBean");
         }
@@ -453,10 +474,12 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     @Override
     public FlPermitBean saveCollection(FlPermitBean bean,Object ...args) throws DAOException
     {
-        if(null == args)
+        if(null == args){
             save(bean);
-        if(args.length > 2)
+        }
+        if(args.length > 2){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
+        }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlDeviceGroupBean");
         }
@@ -490,8 +513,9 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
             return  (T)this.getReferencedByDeviceGroupId(bean);
         case FL_PERMIT_FK_PERSON_GROUP_ID:
             return  (T)this.getReferencedByPersonGroupId(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     /**
@@ -512,8 +536,9 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
             return  (T)this.setReferencedByDeviceGroupId(bean, (FlDeviceGroupBean)beanToSet);
         case FL_PERMIT_FK_PERSON_GROUP_ID:
             return  (T)this.setReferencedByPersonGroupId(bean, (FlPersonGroupBean)beanToSet);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
      
     //////////////////////////////////////
@@ -531,7 +556,9 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     //5.1 GET REFERENCED VALUE
     public FlDeviceGroupBean getReferencedByDeviceGroupId(FlPermitBean bean) throws DAOException
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByDeviceGroupId(instanceOfFlDeviceGroupManager().loadByPrimaryKey(bean.getDeviceGroupId())); 
         return bean.getReferencedByDeviceGroupId();
     }
@@ -569,7 +596,9 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     //5.1 GET REFERENCED VALUE
     public FlPersonGroupBean getReferencedByPersonGroupId(FlPermitBean bean) throws DAOException
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByPersonGroupId(instanceOfFlPersonGroupManager().loadByPrimaryKey(bean.getPersonGroupId())); 
         return bean.getReferencedByPersonGroupId();
     }
@@ -665,37 +694,37 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
         {
             c = this.getConnection();
             this.listenerContainer.beforeInsert(bean); // listener callback
-            int _dirtyCount = 0;
+            int dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_permit (");
 
             if (bean.checkDeviceGroupIdModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("device_group_id");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkPersonGroupIdModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("person_group_id");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkCreateTimeModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("create_time");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             sql.append(") values (");
-            if(_dirtyCount > 0) {
+            if(dirtyCount > 0) {
                 sql.append("?");
-                for(int i = 1; i < _dirtyCount; i++) {
+                for(int i = 1; i < dirtyCount; i++) {
                     sql.append(",?");
                 }
             }
@@ -784,15 +813,15 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
 
-            int _dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
+            int dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
 
-            if (_dirtyCount == 0) {
+            if (dirtyCount == 0) {
                 // System.out.println("The bean to look is not initialized... do not update.");
                 return bean;
             }
 
-            if (bean.getDeviceGroupId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDeviceGroupId()); }
-            if (bean.getPersonGroupId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonGroupId()); }
+            if (bean.getDeviceGroupId() == null) { ps.setNull(++dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++dirtyCount, bean.getDeviceGroupId()); }
+            if (bean.getPersonGroupId() == null) { ps.setNull(++dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++dirtyCount, bean.getPersonGroupId()); }
             ps.executeUpdate();
             bean.resetIsModified();
             this.listenerContainer.afterUpdate(bean); // listener callback
@@ -904,8 +933,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
                                     ResultSet.CONCUR_READ_ONLY);
             this.fillPreparedStatement(ps, bean, SEARCH_EXACT, false);
 
-            int _rows = ps.executeUpdate();
-            return _rows;
+            return ps.executeUpdate();
         }
         catch(SQLException e)
         {
@@ -1005,6 +1033,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
      * @throws DAOException
      */
     //20
+    @Override
     public int countUsingTemplate(FlPermitBean bean, int searchType) throws DAOException
     {
         Connection c = null;
@@ -1059,12 +1088,12 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
         if (bean == null) {
             return 0;
         }
-        int _dirtyCount = 0;
+        int dirtyCount = 0;
         String sqlEqualsOperation = searchType == SEARCH_EXACT ? "=" : " like ";
         try
         {
             if (bean.checkDeviceGroupIdModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getDeviceGroupId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("device_group_id IS NULL");
                 } else {
@@ -1072,7 +1101,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
                 }
             }
             if (bean.checkPersonGroupIdModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getPersonGroupId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_group_id IS NULL");
                 } else {
@@ -1080,7 +1109,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
                 }
             }
             if (bean.checkCreateTimeModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getCreateTime() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
                 } else {
@@ -1092,7 +1121,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
         {
             sqlEqualsOperation = null;
         }
-        return _dirtyCount;
+        return dirtyCount;
     }
 
     /**
@@ -1108,27 +1137,27 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
         if (bean == null) {
             return 0;
         }
-        int _dirtyCount = 0;
+        int dirtyCount = 0;
         try
         {
             if (bean.checkDeviceGroupIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getDeviceGroupId() + "]");
-                if (bean.getDeviceGroupId() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDeviceGroupId()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getDeviceGroupId() + "]");
+                if (bean.getDeviceGroupId() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getDeviceGroupId()); }
             }
             if (bean.checkPersonGroupIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPersonGroupId() + "]");
-                if (bean.getPersonGroupId() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonGroupId()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getPersonGroupId() + "]");
+                if (bean.getPersonGroupId() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getPersonGroupId()); }
             }
             if (bean.checkCreateTimeModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
-                if (bean.getCreateTime() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getCreateTime() + "]");
+                if (bean.getCreateTime() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TIMESTAMP);} } else { ps.setTimestamp(++dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
             }
         }
         catch(SQLException e)
         {
             throw new DataAccessException(e);
         }
-        return _dirtyCount;
+        return dirtyCount;
     }
 
 
@@ -1185,25 +1214,36 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
         try{
             int count = 0;
             if(0!=numRows){
-                if( startRow<1 )
+                if( startRow<1 ){
                     throw new IllegalArgumentException("invalid argument:startRow (must >=1)");
-                if( null==action || null==rs )
-                    throw new IllegalArgumentException("invalid argument:action OR rs (must not be null)");                    
-                for(;startRow>1&&rs.next();--startRow);//skip to last of startRow
+                }
+                if( null==action || null==rs ){
+                    throw new IllegalArgumentException("invalid argument:action OR rs (must not be null)");
+                }
+                for(;startRow > 1 && rs.next();){
+                    --startRow;
+                    //skip to last of startRow
+                }
                 if (fieldList == null) {
-                    if(numRows<0)
-                        for(;rs.next();++count)
+                    if(numRows<0){
+                        for(;rs.next();++count){
                             action.call(decodeRow(rs, action.getBean()));
-                    else
-                        for(;rs.next() && count<numRows;++count)
+                        }
+                    }else{
+                        for(;rs.next() && count<numRows;++count){
                             action.call(decodeRow(rs, action.getBean()));
+                        }
+                    }
                 }else {
-                    if(numRows<0)
-                        for(;rs.next();++count)
+                    if(numRows<0){
+                        for(;rs.next();++count){
                             action.call(decodeRow(rs, fieldList,action.getBean()));
-                    else
-                        for(;rs.next() && count<numRows;++count)
+                        }
+                    }else{
+                        for(;rs.next() && count<numRows;++count){
                             action.call(decodeRow(rs, fieldList,action.getBean()));
+                        }
+                    }
                 }
             }
             return count;
@@ -1224,8 +1264,9 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     //29
     public FlPermitBean decodeRow(ResultSet rs,FlPermitBean bean) throws DAOException
     {
-        if(null==bean)
+        if(null==bean){
             bean = this.createBean();
+        }
         try
         {
             bean.setDeviceGroupId(Manager.getInteger(rs, 1));
@@ -1253,8 +1294,9 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     //30
     public FlPermitBean decodeRow(ResultSet rs, int[] fieldList,FlPermitBean bean) throws DAOException
     {
-        if(null==bean)
+        if(null==bean){
             bean = this.createBean();
+        }
         int pos = 0;
         try
         {
@@ -1466,8 +1508,9 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     //37
     @Override
     public void fire(TableListener.Event event, FlPermitBean bean) throws DAOException{
-        if(null == event)
+        if(null == event){
             throw new NullPointerException();
+        }
         event.fire(listenerContainer, bean);
     }
     
@@ -1582,7 +1625,11 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     //43
     @Override
     public boolean isPrimaryKey(String column){
-        for(String c:PRIMARYKEY_NAMES)if(c.equalsIgnoreCase(column))return true;
+        for(String c:PRIMARYKEY_NAMES){
+            if(c.equalsIgnoreCase(column)){
+                return true;
+            }
+        }
         return false;
     }
     
@@ -1598,8 +1645,9 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
                 for (int i = 0; i < argList.length; i++) {
                     if (argList[i].getClass().equals(byte[].class)) {
                         ps.setBytes(i + 1, (byte[]) argList[i]);
-                    } else
+                    } else {
                         ps.setObject(i + 1, argList[i]);
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -1634,7 +1682,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
         return Manager.getInstance().runAsTransaction(fun);
     }
     
-    class DeleteBeanAction extends Action.Adapter<FlPermitBean>{
+    class DeleteBeanAction extends Action.BaseAdapter<FlPermitBean>{
         private final AtomicInteger count=new AtomicInteger(0);
         @Override
         public void call(FlPermitBean bean) throws DAOException {

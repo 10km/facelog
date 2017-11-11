@@ -30,7 +30,7 @@ import net.gdface.facelog.dborm.exception.DAOException;
  * Remarks: 用于验证身份的人脸特征数据表<br>
  * @author guyadong
  */
-public class FeatureManager extends TableManager.Adapter<FeatureBean> implements IFeatureManager
+public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implements IFeatureManager
 {
     private net.gdface.facelog.dborm.face.FlFeatureManager nativeManager = net.gdface.facelog.dborm.face.FlFeatureManager.getInstance();
     private IDbConverter<
@@ -59,26 +59,30 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
         return PersonManager.getInstance();
     }
     /**
-    * @return table name
-    */
+     * @return table name
+     */
+    @Override
     public String getTableName() {
         return this.nativeManager.getTableName();
     }
 
     /**
-    * @return field names of table
-    */
+     * @return field names of table
+     */
+    @Override
     public String getFields() {
         return this.nativeManager.getFields();
     }
-    
+
+    @Override
     public String getFullFields() {
         return this.nativeManager.getFullFields();
     }
     
     /**
-    * @return primarykeyNames
-    */
+     * @return primarykeyNames
+     */
+    @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
     }
@@ -94,7 +98,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     }
    
     @Override
-    protected Class<FeatureBean> _beanType(){
+    protected Class<FeatureBean> beanType(){
         return FeatureBean.class;
     }
     
@@ -109,8 +113,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public synchronized void setDbConverter(IDbConverter dbConverter) {
-        if( null == dbConverter)
+        if( null == dbConverter){
             throw new NullPointerException();
+        }
         this.dbConverter = dbConverter;
         this.beanConverter = this.dbConverter.getFeatureBeanConverter();
     }
@@ -152,8 +157,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     @Override
     public FeatureBean loadByPrimaryKeyChecked(FeatureBean bean) throws ObjectRetrievalException
     {
-        if(null == bean)
+        if(null == bean){
             throw new NullPointerException();
+        }
         return loadByPrimaryKeyChecked(bean.getMd5());
     }
     
@@ -171,13 +177,17 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     //1.3.2
     @Override
     public FeatureBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1)
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        if(! (keys[0] instanceof String))
+        }
+        
+        if(! (keys[0] instanceof String)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-          return loadByPrimaryKeyChecked((String)keys[0]);
+        }
+        return loadByPrimaryKeyChecked((String)keys[0]);
     }
 
     //1.4 override IFeatureManager
@@ -201,8 +211,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     //1.7
     @Override
     public FeatureBean checkDuplicate(FeatureBean bean)throws ObjectRetrievalException{
-        if(null != bean)
-            checkDuplicate(bean.getMd5());            
+        if(null != bean){
+            checkDuplicate(bean.getMd5());
+        }
         return bean;   
     }
     //1.4.1 override IFeatureManager
@@ -219,7 +230,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     //1.8 override IFeatureManager
     @Override 
     public java.util.List<FeatureBean> loadByPrimaryKey(String... keys){
-        if(null == keys)return new java.util.ArrayList<FeatureBean>();
+        if(null == keys){
+            return new java.util.ArrayList<FeatureBean>();
+        }
         java.util.ArrayList<FeatureBean> list = new java.util.ArrayList<FeatureBean>(keys.length);
         for(int i = 0 ;i< keys.length;++i){
             list.add(loadByPrimaryKey(keys[i]));
@@ -229,7 +242,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     //1.9 override IFeatureManager
     @Override 
     public java.util.List<FeatureBean> loadByPrimaryKey(java.util.Collection<String> keys){
-        if(null == keys )return new java.util.ArrayList<FeatureBean>();
+        if(null == keys ){
+            return new java.util.ArrayList<FeatureBean>();
+        }
         java.util.ArrayList<FeatureBean> list = new java.util.ArrayList<FeatureBean>(keys.size());
         if(keys instanceof java.util.List){
             for(String key: keys){
@@ -238,8 +253,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
         }else{
             FeatureBean bean;
             for(String key: keys){
-                if(null != (bean = loadByPrimaryKey(key)))
+                if(null != (bean = loadByPrimaryKey(key))){
                     list.add(bean);
+                }
             }
         }
         return list;
@@ -272,51 +288,58 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        if(! (keys[0] instanceof String))
+        }
+        if(! (keys[0] instanceof String)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+        }
         return deleteByPrimaryKey((String)keys[0]);
     }
     //2.2 override IFeatureManager
     @Override 
     public int deleteByPrimaryKey(String... keys){
-        if(null == keys)return 0;
         int count = 0;
-        for(String key:keys){
-            count += deleteByPrimaryKey(key);
+        if(null != keys){        
+            for(String key:keys){
+                count += deleteByPrimaryKey(key);
+            }
         }
         return count;
     }
     //2.3 override IFeatureManager
     @Override 
     public int deleteByPrimaryKey(java.util.Collection<String> keys){
-        if(null == keys)return 0;
         int count = 0;
-        for(String key :keys){
-            count += deleteByPrimaryKey(key);
+        if(null != keys){        
+            for(String key :keys){
+                count += deleteByPrimaryKey(key);
+            }
         }
         return count;
     }
     //2.4 override IFeatureManager
     @Override 
     public int delete(FeatureBean... beans){
-        if(null == beans)return 0;
         int count = 0;
-        for(FeatureBean bean :beans){
-            count += delete(bean);
+        if(null != beans){
+            for(FeatureBean bean :beans){
+                count += delete(bean);
+            }
         }
         return count;
     }
     //2.5 override IFeatureManager
     @Override 
     public int delete(java.util.Collection<FeatureBean> beans){
-        if(null == beans)return 0;
         int count = 0;
-        for(FeatureBean bean :beans){
-            count += delete(bean);
+        if(null != beans){
+            for(FeatureBean bean :beans){
+                count += delete(bean);
+            }
         }
         return count;
     }
@@ -325,7 +348,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
     
-    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FaceBean.class,LogBean.class};
+    private static final Class<?>[] IMPORTED_BEAN_TYPES = new Class<?>[]{FaceBean.class,LogBean.class};
 
     /**
      * @see #getImportedBeansAsList(FeatureBean,int)
@@ -333,7 +356,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.db.BaseBean<T>> T[] getImportedBeans(FeatureBean bean, int ikIndex){
-        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
+        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(IMPORTED_BEAN_TYPES[ikIndex],0));
     }
     
     /**
@@ -355,8 +378,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
             return (java.util.List<T>)this.getFaceBeansByFeatureMd5AsList(bean);
         case FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE:
             return (java.util.List<T>)this.getLogBeansByVerifyFeatureAsList(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the T objects as imported beans of bean object by ikIndex.<br>
@@ -379,8 +403,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
             return (T[])setFaceBeansByFeatureMd5(bean,(FaceBean[])importedBeans);
         case FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE:
             return (T[])setLogBeansByVerifyFeature(bean,(LogBean[])importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the importedBeans associates to the bean by ikIndex<br>
@@ -402,8 +427,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
             return (C)setFaceBeansByFeatureMd5(bean,(java.util.Collection<FaceBean>)importedBeans);
         case FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE:
             return (C)setLogBeansByVerifyFeature(bean,(java.util.Collection<LogBean>)importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
 
@@ -560,9 +586,12 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
         , PersonBean refPersonByPersonId 
         , FaceBean[] impFaceByFeatureMd5 , LogBean[] impLogByVerifyFeature )
     {
-        if(null == bean) return null;
-        if(null != refPersonByPersonId)
+        if(null == bean){
+            return null;
+        }
+        if(null != refPersonByPersonId){
             this.setReferencedByPersonId(bean,refPersonByPersonId);
+        }
         bean = this.save( bean );
         this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
         instanceOfFaceManager().save( impFaceByFeatureMd5 );
@@ -589,7 +618,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
         , PersonBean refPersonByPersonId 
         , java.util.Collection<FaceBean> impFaceByFeatureMd5 , java.util.Collection<LogBean> impLogByVerifyFeature )
     {
-        if(null == bean) return null;
+        if(null == bean){
+            return null;
+        }
         this.setReferencedByPersonId(bean,refPersonByPersonId);
         bean = this.save( bean );
         this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
@@ -623,10 +654,12 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     @Override
     public FeatureBean save(FeatureBean bean,Object ...args) 
     {
-        if(null == args)
+        if(null == args){
             return save(bean);
-        if(args.length > 3)
+        }
+        if(args.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof PersonBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:PersonBean");
         }
@@ -652,10 +685,12 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     @Override
     public FeatureBean saveCollection(FeatureBean bean,Object ...inputs)
     {
-        if(null == inputs)
+        if(null == inputs){
             return save(bean);
-        if(inputs.length > 3)
+        }
+        if(inputs.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        }
         Object[] args = new Object[3];
         System.arraycopy(inputs,0,args,0,3);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof PersonBean)){
@@ -691,8 +726,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
         switch(fkIndex){
         case FL_FEATURE_FK_PERSON_ID:
             return  (T)this.getReferencedByPersonId(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     /**
      * Associates the {@link FeatureBean} object to the bean object by fkIndex field.<br>
@@ -709,8 +745,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
         switch(fkIndex){
         case FL_FEATURE_FK_PERSON_ID:
             return  (T)this.setReferencedByPersonId(bean, (PersonBean)beanToSet);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     //////////////////////////////////////
@@ -722,7 +759,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     @Override 
     public PersonBean getReferencedByPersonId(FeatureBean bean)
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByPersonId(instanceOfPersonManager().loadByPrimaryKey(bean.getPersonId())); 
         return bean.getReferencedByPersonId();
     }
@@ -984,9 +1023,10 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     @Override
     public void unregisterListener(TableListener<FeatureBean> listener)
     {
-        if(listener instanceof WrapListener)
-            this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
-        throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
+        if(!(listener instanceof WrapListener)){
+            throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
+        }
+        this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
     }
     
     //37
@@ -1024,15 +1064,15 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     }
     /**
      * wrap {@code TableListener<FeatureBean>} as native listener
-     * @author guyadong
      *
      */
     public class WrapListener implements TableListener<FeatureBean>{
         private final TableListener<FeatureBean> listener;
         private final net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.face.FlFeatureBean> nativeListener;
         private WrapListener(final TableListener<FeatureBean> listener) {
-            if(null == listener)
+            if(null == listener){
                 throw new NullPointerException();
+            }
             this.listener = listener;
             this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.face.FlFeatureBean> (){
 
@@ -1067,26 +1107,32 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
                 }};
         }
 
+        @Override
         public void beforeInsert(FeatureBean bean) {
             listener.beforeInsert(bean);
         }
 
+        @Override
         public void afterInsert(FeatureBean bean) {
             listener.afterInsert(bean);
         }
 
+        @Override
         public void beforeUpdate(FeatureBean bean) {
             listener.beforeUpdate(bean);
         }
 
+        @Override
         public void afterUpdate(FeatureBean bean) {
             listener.afterUpdate(bean);
         }
 
+        @Override
         public void beforeDelete(FeatureBean bean) {
             listener.beforeDelete(bean);
         }
 
+        @Override
         public void afterDelete(FeatureBean bean) {
             listener.afterDelete(bean);
         }        
@@ -1126,8 +1172,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     }
     
     private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.face.FlFeatureBean> toNative(final Action<FeatureBean> action){
-        if(null == action)
+        if(null == action){
             throw new NullPointerException();
+        }
         return new net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.face.FlFeatureBean>(){
 
             @Override
@@ -1144,7 +1191,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     //45 override IFeatureManager
     @Override 
     public java.util.List<String> toPrimaryKeyList(FeatureBean... array){        
-        if(null == array)return new java.util.ArrayList<String>();
+        if(null == array){
+            return new java.util.ArrayList<String>();
+        }
         java.util.ArrayList<String> list = new java.util.ArrayList<String>(array.length);
         for(FeatureBean bean:array){
             list.add(null == bean ? null : bean.getMd5());
@@ -1154,7 +1203,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     //46 override IFeatureManager
     @Override 
     public java.util.List<String> toPrimaryKeyList(java.util.Collection<FeatureBean> collection){        
-        if(null == collection)return new java.util.ArrayList<String>();
+        if(null == collection){
+            return new java.util.ArrayList<String>();
+        }
         java.util.ArrayList<String> list = new java.util.ArrayList<String>(collection.size());
         for(FeatureBean bean:collection){
             list.add(null == bean ? null : bean.getMd5());

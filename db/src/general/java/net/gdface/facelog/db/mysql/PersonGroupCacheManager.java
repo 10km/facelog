@@ -98,8 +98,9 @@ public class PersonGroupCacheManager extends PersonGroupManager
     @Override 
     public PersonGroupBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
-       if(null == id)
+        if(null == id){
            throw new ObjectRetrievalException(new NullPointerException());
+        }
         try{
             return cache.getBean(id);
         }catch(ExecutionException ee){
@@ -153,8 +154,9 @@ public class PersonGroupCacheManager extends PersonGroupManager
     //20-5
     @Override
     public int loadUsingTemplate(PersonGroupBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<PersonGroupBean> action){
-        if(null == fieldList )
+        if(null == fieldList ){
             action = new CacheAction(action);
+        }
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
     }
 

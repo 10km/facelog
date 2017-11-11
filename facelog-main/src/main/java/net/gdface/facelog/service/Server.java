@@ -2,8 +2,6 @@ package net.gdface.facelog.service;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -15,10 +13,11 @@ import com.facebook.swift.service.ThriftServer;
 import com.facebook.swift.service.ThriftServiceProcessor;
 import com.google.common.collect.ImmutableList;
 
+/**
+ * @author guyadong
+ *
+ */
 public class Server {
-	private static class Singleton{
-		static final ExecutorService executorService = Executors.newCachedThreadPool(); 
-	}
 	public static class Builder {
 	    private ExecutorService executor;
 	    private int serverPort=DEFAULT_PORT;
@@ -55,9 +54,10 @@ public class Server {
     private final int serverPort;
     private final ThriftServiceProcessor processor;
     public Server(List<?> services, int serverPort, ExecutorService executor) {
-		checkArgument(null != services && !services.isEmpty());	
+		checkArgument(null != services && !services.isEmpty());
+		checkNotNull(executor);
 		this.serverPort = serverPort>0? serverPort : DEFAULT_PORT;
-		this.executor = null == executor ? Singleton.executorService: executor;
+		this.executor = executor;
 		processor = new ThriftServiceProcessor(
     			new ThriftCodecManager(),
     			ImmutableList.<ThriftEventHandler>of(),
@@ -77,8 +77,6 @@ public class Server {
 
     public void stop() {
         server.close();
-        if(this.executor == Singleton.executorService)
-        	this.executor.shutdown();
     }
 	public ThriftServer getServer() {
     return server;

@@ -99,8 +99,9 @@ public class PersonCacheManager extends PersonManager
     @Override 
     public PersonBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
-       if(null == id)
+        if(null == id){
            throw new ObjectRetrievalException(new NullPointerException());
+        }
         try{
             return cache.getBean(id);
         }catch(ExecutionException ee){
@@ -154,8 +155,9 @@ public class PersonCacheManager extends PersonManager
     //20-5
     @Override
     public int loadUsingTemplate(PersonBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<PersonBean> action){
-        if(null == fieldList )
+        if(null == fieldList ){
             action = new CacheAction(action);
+        }
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
     }
 
@@ -166,8 +168,9 @@ public class PersonCacheManager extends PersonManager
     // override PersonManager
     @Override 
     public PersonBean loadByIndexImageMd5Checked(String imageMd5) throws ObjectRetrievalException{
-        if(null == imageMd5)
+        if(null == imageMd5){
             throw new ObjectRetrievalException(new NullPointerException());
+        }
         try{
             return cache.getBeanByImageMd5(imageMd5);
         }catch(ExecutionException ee){
@@ -199,8 +202,9 @@ public class PersonCacheManager extends PersonManager
     // override PersonManager
     @Override 
     public PersonBean loadByIndexPapersNumChecked(String papersNum) throws ObjectRetrievalException{
-        if(null == papersNum)
+        if(null == papersNum){
             throw new ObjectRetrievalException(new NullPointerException());
+        }
         try{
             return cache.getBeanByPapersNum(papersNum);
         }catch(ExecutionException ee){

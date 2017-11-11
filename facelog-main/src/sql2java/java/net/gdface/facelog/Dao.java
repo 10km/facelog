@@ -87,87 +87,94 @@ class Dao implements CommonConstant {
     /** 生成 SQL where 语句,example: {@code WHERE create_time >'2017-09-02 12:12:12'} */
     static private String makeWhere(Date timestamp,String field){
         checkNotNull(timestamp);
-        return String.format("WHERE %s > '%s'", field,timestampFormatter.format(timestamp));    
+        return String.format("WHERE %s > '%s'", field,TIMESTAMP_FORMATTER.format(timestamp));    
     }
     /** 事务执行 */
-    protected static <T> T _runAsTransaction(Callable<T> fun){
+    protected static <T> T daoRunAsTransaction(Callable<T> fun){
         return getPersonManager().runAsTransaction(checkNotNull(fun));
     }
     /** 事务执行 */
-    protected static void _runAsTransaction(Runnable fun){
+    protected static void daoRunAsTransaction(Runnable fun){
         getPersonManager().runAsTransaction(checkNotNull(fun));
     }
     //////////// FL_DEVICE /////////
+    //1
     /** 
      * 根据主键从数据库读取记录
      * 
      * @param id 设备id 
      * @see {@link IDeviceManager#loadByPrimaryKey(Integer)}
      */
-    //1
-    protected DeviceBean _getDevice(Integer id){
+    protected DeviceBean daoGetDevice(Integer id){
         return getDeviceManager().loadByPrimaryKey(id);
     }
+    //2    
     /** 
      * 根据主键从数据库读取记录
      * @return 返回与输入参数下标对应的 DeviceBean 列表,没有查到记录的返回{@link DeviceBean#NULL}
      * @see {@link IDeviceManager#loadByPrimaryKey(Collection)}
      * @see DeviceBean#replaceNull(List)
      */
-    //2    
-    protected List<DeviceBean> _getDevices(Collection<Integer> idCollection){
+    protected List<DeviceBean> daoGetDevices(Collection<Integer> idCollection){
         return DeviceBean.replaceNull((getDeviceManager().loadByPrimaryKey(idCollection)));
     }
+    //3  
     /** 
      * 删除主键列表({@code idCollection})指定的记录
      * @return 返回删除的记录条数
      * @see {@link IDeviceManager#deleteByPrimaryKey(Collection)}
      */
-    //3  
-    protected int _deleteDevicesByPrimaryKey(Collection<Integer> idCollection){
-        if(null == idCollection)return 0;
+    protected int daoDeleteDevicesByPrimaryKey(Collection<Integer> idCollection){
         int count =0;
-        for(Integer id:idCollection){
-            count += _deleteDevice(id);
+        if(null != idCollection){
+            for(Integer id:idCollection){
+                count += daoDeleteDevice(id);
+            }
         }
         return count;
     }
     //3-5
-    protected List<Integer> _toPrimaryKeyListFromDevices(Collection<DeviceBean> beans){
+    /**
+     * unwrap primary key from {@link DeviceBean}
+     * @param {@link DeviceBean} collection
+     * @return primary key list 
+     */
+    protected List<Integer> daoToPrimaryKeyListFromDevices(Collection<DeviceBean> beans){
         return getDeviceManager().toPrimaryKeyList(beans);
     }
-    /** tranformer : DeviceBean to fl_device.id */ 
     //3-7
-    protected final Function<DeviceBean,Integer> _castDeviceToPk = new Function<DeviceBean,Integer>(){
+    /** tranformer : DeviceBean to fl_device.id */ 
+    protected final Function<DeviceBean,Integer> daoCastDeviceToPk = new Function<DeviceBean,Integer>(){
             @Override
             public Integer apply(DeviceBean input) {
                 return null == input ? null : input.getId();
             }};
     //3-8
     /** tranformer : fl_device.id to DeviceBean */ 
-    protected final Function<Integer,DeviceBean> _castDeviceFromPk = new Function<Integer,DeviceBean>(){
+    protected final Function<Integer,DeviceBean> daoCastDeviceFromPk = new Function<Integer,DeviceBean>(){
             @Override
             public DeviceBean apply(Integer input) {
-                return _getDevice(input);
+                return daoGetDevice(input);
             }};
+    //4
     /** 
      *　判断主键指定的记录是否存在
      * 
      * @param id 设备id 
      * @see {@link IDeviceManager#existsPrimaryKey(Integer)}
      */
-    //4
-    protected boolean _existsDevice(Integer id){
+    protected boolean daoExistsDevice(Integer id){
         return getDeviceManager().existsPrimaryKey(id);
     }
+    //4-2
     /** 
      *　判断指定的记录是否存在
      * @see {@link IDeviceManager#existsPrimaryKey(DeviceBean)}
      */
-    //4-2
-    protected boolean _existsDevice(DeviceBean bean){
+    protected boolean daoExistsDevice(DeviceBean bean){
         return getDeviceManager().existsPrimaryKey(bean);
     }
+    //5
     /**
      * 删除主键指定的记录
      * 
@@ -175,111 +182,114 @@ class Dao implements CommonConstant {
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link IDeviceManager#deleteByPrimaryKey(Integer)}
      */
-    //5
-    protected int _deleteDevice(Integer id){
+    protected int daoDeleteDevice(Integer id){
         return getDeviceManager().deleteByPrimaryKey(id);
     }
+    //5-2
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
      * @return 返回删除的记录条数(1),如果记录不存在返回0
-     * @see #_deleteDevice(Integer)
+     * @see #daoDeleteDevice(Integer)
      */
-    //5-2
-    protected int _deleteDevice(DeviceBean bean){
-        return null == bean ? null : _deleteDevice(bean.getId());
+    protected int daoDeleteDevice(DeviceBean bean){
+        return null == bean ? null : daoDeleteDevice(bean.getId());
     }
+    //6
     /**
      * 删除{@code deviceBeanCollection}列表指定的记录
      * @return 返回删除的记录条数
-     * @see #_deleteDevice(Integer)
+     * @see #daoDeleteDevice(Integer)
      */
-    //6
-    protected int _deleteDevices(Collection<DeviceBean> beans){
-        if(null == beans)return 0;
+    protected int daoDeleteDevices(Collection<DeviceBean> beans){
         int count =0;
-        for(DeviceBean bean:beans){
-            if(null != bean)
-                count += _deleteDevice(bean.getId());
+        if(null != beans){        
+            for(DeviceBean bean:beans){
+                if(null != bean){
+                    count += daoDeleteDevice(bean.getId());
+                }
+            }
         }
         return count;
     }
+    //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IDeviceManager#checkDuplicate(DeviceBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      */
-    //7
-    protected DeviceBean _checkDuplicate(DeviceBean deviceBean)throws DuplicateReord{
+    protected DeviceBean daoCheckDuplicate(DeviceBean deviceBean)throws DuplicateReordException{
         try{
             return getDeviceManager().checkDuplicate(deviceBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReord();
+            throw new DuplicateReordException();
         }
     }
+    //7-3
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
      * @param idOfDevice 设备id 
      * @see {@link IDeviceManager#checkDuplicate(DeviceBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @return always {@code idOfDevice} 
      */
-    //7-3
-    protected Integer _checkDuplicateDevice(Integer idOfDevice)throws DuplicateReord{
-        if(getDeviceManager().existsPrimaryKey(idOfDevice))
-            throw new DuplicateReord();
+    protected Integer daoCheckDuplicateDevice(Integer idOfDevice)throws DuplicateReordException{
+        if(getDeviceManager().existsPrimaryKey(idOfDevice)){
+            throw new DuplicateReordException();
+        }
         return idOfDevice;
     }
+    //8
     /**
      * 返回外键(fl_image.device_id)引用指定记录(fl_device.id)的所有{@code fl_image}记录
      * 
      * @param idOfDevice 设备id 
      * @see {@link IDeviceManager#getImageBeansByDeviceIdAsList(Integer)}
      */
-    //8
-    protected List<ImageBean> _getImageBeansByDeviceIdOnDevice(Integer idOfDevice){
+    protected List<ImageBean> daoGetImageBeansByDeviceIdOnDevice(Integer idOfDevice){
         return getDeviceManager().getImageBeansByDeviceIdAsList(idOfDevice);
     }
+    //8-2
     /**
      * 删除外键(idOfDevice))引用指定记录(fl_device.id)的所有{@code fl_image}记录
      * 
      * @param idOfDevice 设备id 
      * @see {@link IDeviceManager#deleteImageBeansByDeviceId(Integer)}
      */
-    //8-2
-    protected int _deleteImageBeansByDeviceIdOnDevice(Integer idOfDevice){
+    protected int daoDeleteImageBeansByDeviceIdOnDevice(Integer idOfDevice){
         return getDeviceManager().deleteImageBeansByDeviceId(idOfDevice);
     }
+    //8
     /**
      * 返回外键(fl_log.device_id)引用指定记录(fl_device.id)的所有{@code fl_log}记录
      * 
      * @param idOfDevice 设备id 
      * @see {@link IDeviceManager#getLogBeansByDeviceIdAsList(Integer)}
      */
-    //8
-    protected List<LogBean> _getLogBeansByDeviceIdOnDevice(Integer idOfDevice){
+    protected List<LogBean> daoGetLogBeansByDeviceIdOnDevice(Integer idOfDevice){
         return getDeviceManager().getLogBeansByDeviceIdAsList(idOfDevice);
     }
+    //8-2
     /**
      * 删除外键(idOfDevice))引用指定记录(fl_device.id)的所有{@code fl_log}记录
      * 
      * @param idOfDevice 设备id 
      * @see {@link IDeviceManager#deleteLogBeansByDeviceId(Integer)}
      */
-    //8-2
-    protected int _deleteLogBeansByDeviceIdOnDevice(Integer idOfDevice){
+    protected int daoDeleteLogBeansByDeviceIdOnDevice(Integer idOfDevice){
         return getDeviceManager().deleteLogBeansByDeviceId(idOfDevice);
     }
+    //8-3
     /**
      * 返回外键(fl_device.group_id)引用的 fl_device_group 记录
      * @param bean
      * @see {@link IDeviceManager#getReferencedByGroupId(DeviceBean)}
      */
-    //8-3
-    protected DeviceGroupBean _getReferencedByGroupIdOnDevice(DeviceBean bean){
+    protected DeviceGroupBean daoGetReferencedByGroupIdOnDevice(DeviceBean bean){
         return getDeviceManager().getReferencedByGroupId(bean);
     }
+    //8-4
     /**
      * 设置外键fl_device(group_id)引用为{@code beanToSet}指定的记录,
      * 如果{@code beanToSet}没有保存则先save
@@ -287,62 +297,63 @@ class Dao implements CommonConstant {
      * @param beanToSet 被引用的记录
      * @see {@link IDeviceManager#setReferencedByGroupId(DeviceBean,DeviceGroupBean)}
      */
-    //8-4
-    protected DeviceGroupBean _setReferencedByGroupIdOnDevice(DeviceBean bean,DeviceGroupBean beanToSet){
+    protected DeviceGroupBean daoSetReferencedByGroupIdOnDevice(DeviceBean bean,DeviceGroupBean beanToSet){
         return getDeviceManager().setReferencedByGroupId(bean,beanToSet);
     }
-    /** tranformer : DeviceBean to fl_device.group_id */
     //8-6
-    protected final Function<DeviceBean,Integer> _castDeviceToGroupId = new Function<DeviceBean,Integer>(){
+    /** tranformer : DeviceBean to fl_device.group_id */
+    protected final Function<DeviceBean,Integer> daoCastDeviceToGroupId = new Function<DeviceBean,Integer>(){
             @Override
             public Integer apply(DeviceBean input) {
                 return null == input ? null : input.getGroupId();
             }};
+    //14
     /** 
      * 参见 {@link IDeviceManager#save(DeviceBean)}
      */
-    //14
-    protected DeviceBean _saveDevice(DeviceBean deviceBean){
-        _checkGroup(deviceBean);
+    protected DeviceBean daoSaveDevice(DeviceBean deviceBean){
+        daoCheckGroup(deviceBean);
         return getDeviceManager().save(deviceBean);
     }
-    /** 同步保存 */
     //15
-    protected DeviceBean _saveDevice(DeviceBean deviceBean
+    /** 同步保存 */
+    protected DeviceBean daoSaveDevice(DeviceBean deviceBean
         , DeviceGroupBean refDevicegroupByGroupId 
         , Collection<ImageBean> impImageByDeviceId 
         , Collection<LogBean> impLogByDeviceId ){
-        _checkGroup(deviceBean);
+        daoCheckGroup(deviceBean);
         return getDeviceManager().save(deviceBean
             , refDevicegroupByGroupId 
             , impImageByDeviceId 
             , impLogByDeviceId );
     }
+    //12-3-3
     /** 
      * 添加新记录<br>
      * @param beans 要添加的新记录集合
      * @return always {@code beans}
-     * @see #_saveDevice(DeviceBean)
+     * @see #daoSaveDevice(DeviceBean)
      */
-    //12-3-3
-    protected Collection<DeviceBean> _saveDevices(Collection<DeviceBean> beans){
+    protected Collection<DeviceBean> daoSaveDevices(Collection<DeviceBean> beans){
         if(null != beans){
-            for(DeviceBean bean : beans)
-                _saveDevice(bean);
+            for(DeviceBean bean : beans){
+                daoSaveDevice(bean);
+            }
         }
         return beans;
     }
-    /** 
-     * {@link #_saveDevice(Collection)}的事务化版本
-     */
     //12-3-5
-    protected Collection<DeviceBean> _saveDevicesAsTransaction(final Collection<DeviceBean> beans){
-        return _runAsTransaction(new Callable<Collection<DeviceBean>>(){      
+    /** 
+     * {@link #daoSaveDevice(Collection)}的事务化版本
+     */
+    protected Collection<DeviceBean> daoSaveDevicesAsTransaction(final Collection<DeviceBean> beans){
+        return daoRunAsTransaction(new Callable<Collection<DeviceBean>>(){      
             @Override
             public Collection<DeviceBean> call() throws Exception {
-                return _saveDevices(beans);
+                return daoSaveDevices(beans);
             }});
     }
+    //16
     /**
      * 查询{@code where} SQL条件语句指定的 fl_device 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
@@ -350,195 +361,201 @@ class Dao implements CommonConstant {
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IDeviceManager#loadByWhereAsList(String,int[],int,int)}
      */
-    //16
-    protected List<DeviceBean> _loadDeviceByWhere(String where,int startRow, int numRows){
+    protected List<DeviceBean> daoLoadDeviceByWhere(String where,int startRow, int numRows){
         return getDeviceManager().loadByWhereAsList(where,null,startRow,numRows);
     }
+    //17
     /**
      * 返回 fl_device 表的所有记录
      * @see {@link IDeviceManager#loadAllAsList()}
      */
-    //17
-    protected List<DeviceBean> _loadDeviceAll(){
+    protected List<DeviceBean> daoLoadDeviceAll(){
         return getDeviceManager().loadAllAsList();
     }
+    //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_device 记录总数
      * @see {@link IDeviceManager#Where(String)}
      */
-    //17-2
-    protected int _countDeviceByWhere(String where){
+    protected int daoCountDeviceByWhere(String where){
         return getDeviceManager().countWhere(where);
     }
+    //18
     /** 
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
-     * @see #_loadDeviceByWhere(String,int,int)
+     * @see #daoLoadDeviceByWhere(String,int,int)
      */
-    //18
-    protected List<Integer> _loadDeviceIdByWhere(String where){
-        return _toPrimaryKeyListFromDevices(_loadDeviceByWhere(where,1,-1));
+    protected List<Integer> daoLoadDeviceIdByWhere(String where){
+        return daoToPrimaryKeyListFromDevices(daoLoadDeviceByWhere(where,1,-1));
     }
+    //18-5
     /** 
      * 索引(fl_device.mac)查询<br>
      * 
      * @param mac 6字节MAC地址(HEX)
      * @see {@link IDeviceManager#loadByIndexMac(String)}
      */
-    //18-5
-    protected DeviceBean _getDeviceByIndexMac(String mac){
+    protected DeviceBean daoGetDeviceByIndexMac(String mac){
         return getDeviceManager().loadByIndexMac(mac);
     }
+    //18-5
     /** 
      * 索引(fl_device.serial_no)查询<br>
      * 
      * @param serialNo 设备序列号
      * @see {@link IDeviceManager#loadByIndexSerialNo(String)}
      */
-    //18-5
-    protected DeviceBean _getDeviceByIndexSerialNo(String serialNo){
+    protected DeviceBean daoGetDeviceByIndexSerialNo(String serialNo){
         return getDeviceManager().loadByIndexSerialNo(serialNo);
     }
+    //19
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_device.create_time 字段大于指定时间戳({@code timestamp})的所有记录
-     * @see #_loadDeviceByWhere(String,int,int)
+     * @see #daoLoadDeviceByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    //19
-    protected List<DeviceBean> _loadDeviceByCreateTime(Date timestamp,int startRow, int numRows){
-        return _loadDeviceByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
+    protected List<DeviceBean> daoLoadDeviceByCreateTime(Date timestamp,int startRow, int numRows){
+        return daoLoadDeviceByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
     }
-    /** 参见 {@link #_loadDeviceByCreateTime(Date,int,int)} */
     //20
-    protected List<DeviceBean> _loadDeviceByCreateTime(Date timestamp){
-        return _loadDeviceByCreateTime(timestamp,1,-1);
+    /** 参见 {@link #daoLoadDeviceByCreateTime(Date,int,int)} */
+    protected List<DeviceBean> daoLoadDeviceByCreateTime(Date timestamp){
+        return daoLoadDeviceByCreateTime(timestamp,1,-1);
     }
+    //20-5
     /**
      * 返回fl_device.create_time 字段大于指定时间戳({@code timestamp})的记录总数
-     * @see #_countDeviceByWhere(String)
+     * @see #daoCountDeviceByWhere(String)
      */
-    //20-5
-    protected int _countDeviceByCreateTime(Date timestamp){
-        return _countDeviceByWhere(makeWhere(timestamp,"create_time"));
+    protected int daoCountDeviceByCreateTime(Date timestamp){
+        return daoCountDeviceByWhere(makeWhere(timestamp,"create_time"));
     }
+    //21
     /** 
      * (主动更新机制实现)<br>
      * 返回 fl_device.create_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @return 返回查询结果记录的主键
-     * @see {@link #_loadDeviceIdByWhere(String)} 
+     * @see {@link #daoLoadDeviceIdByWhere(String)} 
      */
-    //21
-    protected List<Integer> _loadDeviceIdByCreateTime(Date timestamp){
-        return _loadDeviceIdByWhere(makeWhere(timestamp,"create_time"));
+    protected List<Integer> daoLoadDeviceIdByCreateTime(Date timestamp){
+        return daoLoadDeviceIdByWhere(makeWhere(timestamp,"create_time"));
     }
 
+    //19
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_device.update_time 字段大于指定时间戳({@code timestamp})的所有记录
-     * @see #_loadDeviceByWhere(String,int,int)
+     * @see #daoLoadDeviceByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    //19
-    protected List<DeviceBean> _loadDeviceByUpdateTime(Date timestamp,int startRow, int numRows){
-        return _loadDeviceByWhere(makeWhere(timestamp,"update_time"),startRow,numRows);
+    protected List<DeviceBean> daoLoadDeviceByUpdateTime(Date timestamp,int startRow, int numRows){
+        return daoLoadDeviceByWhere(makeWhere(timestamp,"update_time"),startRow,numRows);
     }
-    /** 参见 {@link #_loadDeviceByUpdateTime(Date,int,int)} */
     //20
-    protected List<DeviceBean> _loadDeviceByUpdateTime(Date timestamp){
-        return _loadDeviceByUpdateTime(timestamp,1,-1);
+    /** 参见 {@link #daoLoadDeviceByUpdateTime(Date,int,int)} */
+    protected List<DeviceBean> daoLoadDeviceByUpdateTime(Date timestamp){
+        return daoLoadDeviceByUpdateTime(timestamp,1,-1);
     }
+    //20-5
     /**
      * 返回fl_device.update_time 字段大于指定时间戳({@code timestamp})的记录总数
-     * @see #_countDeviceByWhere(String)
+     * @see #daoCountDeviceByWhere(String)
      */
-    //20-5
-    protected int _countDeviceByUpdateTime(Date timestamp){
-        return _countDeviceByWhere(makeWhere(timestamp,"update_time"));
+    protected int daoCountDeviceByUpdateTime(Date timestamp){
+        return daoCountDeviceByWhere(makeWhere(timestamp,"update_time"));
     }
+    //21
     /** 
      * (主动更新机制实现)<br>
      * 返回 fl_device.update_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @return 返回查询结果记录的主键
-     * @see {@link #_loadDeviceIdByWhere(String)} 
+     * @see {@link #daoLoadDeviceIdByWhere(String)} 
      */
-    //21
-    protected List<Integer> _loadDeviceIdByUpdateTime(Date timestamp){
-        return _loadDeviceIdByWhere(makeWhere(timestamp,"update_time"));
+    protected List<Integer> daoLoadDeviceIdByUpdateTime(Date timestamp){
+        return daoLoadDeviceIdByWhere(makeWhere(timestamp,"update_time"));
     }
 
 
     //////////// FL_DEVICE_GROUP /////////
+    //1
     /** 
      * 根据主键从数据库读取记录
      * 
      * @param id 设备组id 
      * @see {@link IDeviceGroupManager#loadByPrimaryKey(Integer)}
      */
-    //1
-    protected DeviceGroupBean _getDeviceGroup(Integer id){
+    protected DeviceGroupBean daoGetDeviceGroup(Integer id){
         return getDeviceGroupManager().loadByPrimaryKey(id);
     }
+    //2    
     /** 
      * 根据主键从数据库读取记录
      * @return 返回与输入参数下标对应的 DeviceGroupBean 列表,没有查到记录的返回{@link DeviceGroupBean#NULL}
      * @see {@link IDeviceGroupManager#loadByPrimaryKey(Collection)}
      * @see DeviceGroupBean#replaceNull(List)
      */
-    //2    
-    protected List<DeviceGroupBean> _getDeviceGroups(Collection<Integer> idCollection){
+    protected List<DeviceGroupBean> daoGetDeviceGroups(Collection<Integer> idCollection){
         return DeviceGroupBean.replaceNull((getDeviceGroupManager().loadByPrimaryKey(idCollection)));
     }
+    //3  
     /** 
      * 删除主键列表({@code idCollection})指定的记录
      * @return 返回删除的记录条数
      * @see {@link IDeviceGroupManager#deleteByPrimaryKey(Collection)}
      */
-    //3  
-    protected int _deleteDeviceGroupsByPrimaryKey(Collection<Integer> idCollection){
-        if(null == idCollection)return 0;
+    protected int daoDeleteDeviceGroupsByPrimaryKey(Collection<Integer> idCollection){
         int count =0;
-        for(Integer id:idCollection){
-            count += _deleteDeviceGroup(id);
+        if(null != idCollection){
+            for(Integer id:idCollection){
+                count += daoDeleteDeviceGroup(id);
+            }
         }
         return count;
     }
     //3-5
-    protected List<Integer> _toPrimaryKeyListFromDeviceGroups(Collection<DeviceGroupBean> beans){
+    /**
+     * unwrap primary key from {@link DeviceGroupBean}
+     * @param {@link DeviceGroupBean} collection
+     * @return primary key list 
+     */
+    protected List<Integer> daoToPrimaryKeyListFromDeviceGroups(Collection<DeviceGroupBean> beans){
         return getDeviceGroupManager().toPrimaryKeyList(beans);
     }
-    /** tranformer : DeviceGroupBean to fl_device_group.id */ 
     //3-7
-    protected final Function<DeviceGroupBean,Integer> _castDeviceGroupToPk = new Function<DeviceGroupBean,Integer>(){
+    /** tranformer : DeviceGroupBean to fl_device_group.id */ 
+    protected final Function<DeviceGroupBean,Integer> daoCastDeviceGroupToPk = new Function<DeviceGroupBean,Integer>(){
             @Override
             public Integer apply(DeviceGroupBean input) {
                 return null == input ? null : input.getId();
             }};
     //3-8
     /** tranformer : fl_device_group.id to DeviceGroupBean */ 
-    protected final Function<Integer,DeviceGroupBean> _castDeviceGroupFromPk = new Function<Integer,DeviceGroupBean>(){
+    protected final Function<Integer,DeviceGroupBean> daoCastDeviceGroupFromPk = new Function<Integer,DeviceGroupBean>(){
             @Override
             public DeviceGroupBean apply(Integer input) {
-                return _getDeviceGroup(input);
+                return daoGetDeviceGroup(input);
             }};
+    //4
     /** 
      *　判断主键指定的记录是否存在
      * 
      * @param id 设备组id 
      * @see {@link IDeviceGroupManager#existsPrimaryKey(Integer)}
      */
-    //4
-    protected boolean _existsDeviceGroup(Integer id){
+    protected boolean daoExistsDeviceGroup(Integer id){
         return getDeviceGroupManager().existsPrimaryKey(id);
     }
+    //4-2
     /** 
      *　判断指定的记录是否存在
      * @see {@link IDeviceGroupManager#existsPrimaryKey(DeviceGroupBean)}
      */
-    //4-2
-    protected boolean _existsDeviceGroup(DeviceGroupBean bean){
+    protected boolean daoExistsDeviceGroup(DeviceGroupBean bean){
         return getDeviceGroupManager().existsPrimaryKey(bean);
     }
+    //5
     /**
      * 删除主键指定的记录
      * 
@@ -546,131 +563,134 @@ class Dao implements CommonConstant {
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link IDeviceGroupManager#deleteByPrimaryKey(Integer)}
      */
-    //5
-    protected int _deleteDeviceGroup(Integer id){
+    protected int daoDeleteDeviceGroup(Integer id){
         return getDeviceGroupManager().deleteByPrimaryKey(id);
     }
+    //5-2
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
      * @return 返回删除的记录条数(1),如果记录不存在返回0
-     * @see #_deleteDeviceGroup(Integer)
+     * @see #daoDeleteDeviceGroup(Integer)
      */
-    //5-2
-    protected int _deleteDeviceGroup(DeviceGroupBean bean){
-        return null == bean ? null : _deleteDeviceGroup(bean.getId());
+    protected int daoDeleteDeviceGroup(DeviceGroupBean bean){
+        return null == bean ? null : daoDeleteDeviceGroup(bean.getId());
     }
+    //6
     /**
      * 删除{@code deviceGroupBeanCollection}列表指定的记录
      * @return 返回删除的记录条数
-     * @see #_deleteDeviceGroup(Integer)
+     * @see #daoDeleteDeviceGroup(Integer)
      */
-    //6
-    protected int _deleteDeviceGroups(Collection<DeviceGroupBean> beans){
-        if(null == beans)return 0;
+    protected int daoDeleteDeviceGroups(Collection<DeviceGroupBean> beans){
         int count =0;
-        for(DeviceGroupBean bean:beans){
-            if(null != bean)
-                count += _deleteDeviceGroup(bean.getId());
+        if(null != beans){        
+            for(DeviceGroupBean bean:beans){
+                if(null != bean){
+                    count += daoDeleteDeviceGroup(bean.getId());
+                }
+            }
         }
         return count;
     }
+    //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IDeviceGroupManager#checkDuplicate(DeviceGroupBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      */
-    //7
-    protected DeviceGroupBean _checkDuplicate(DeviceGroupBean deviceGroupBean)throws DuplicateReord{
+    protected DeviceGroupBean daoCheckDuplicate(DeviceGroupBean deviceGroupBean)throws DuplicateReordException{
         try{
             return getDeviceGroupManager().checkDuplicate(deviceGroupBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReord();
+            throw new DuplicateReordException();
         }
     }
+    //7-3
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
      * @param idOfDeviceGroup 设备组id 
      * @see {@link IDeviceGroupManager#checkDuplicate(DeviceGroupBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @return always {@code idOfDeviceGroup} 
      */
-    //7-3
-    protected Integer _checkDuplicateDeviceGroup(Integer idOfDeviceGroup)throws DuplicateReord{
-        if(getDeviceGroupManager().existsPrimaryKey(idOfDeviceGroup))
-            throw new DuplicateReord();
+    protected Integer daoCheckDuplicateDeviceGroup(Integer idOfDeviceGroup)throws DuplicateReordException{
+        if(getDeviceGroupManager().existsPrimaryKey(idOfDeviceGroup)){
+            throw new DuplicateReordException();
+        }
         return idOfDeviceGroup;
     }
+    //8
     /**
      * 返回属于{@code idOfDeviceGroup}指定组的所有{@code fl_device}记录
      * 
      * @param idOfDeviceGroup 设备组id 
      * @see {@link IDeviceGroupManager#getDeviceBeansByGroupIdAsList(Integer)}
      */
-    //8
-    protected List<DeviceBean> _getDevicesOfGroup(Integer idOfDeviceGroup){
+    protected List<DeviceBean> daoGetDevicesOfGroup(Integer idOfDeviceGroup){
         return getDeviceGroupManager().getDeviceBeansByGroupIdAsList(idOfDeviceGroup);
     }
+    //8-2
     /**
      * 删除外键(idOfDeviceGroup))引用指定记录(fl_device_group.id)的所有{@code fl_device}记录
      * 
      * @param idOfDeviceGroup 设备组id 
      * @see {@link IDeviceGroupManager#deleteDeviceBeansByGroupId(Integer)}
      */
-    //8-2
-    protected int _deleteDeviceBeansByGroupIdOnDeviceGroup(Integer idOfDeviceGroup){
+    protected int daoDeleteDeviceBeansByGroupIdOnDeviceGroup(Integer idOfDeviceGroup){
         return getDeviceGroupManager().deleteDeviceBeansByGroupId(idOfDeviceGroup);
     }
+    //8
     /**
      * 返回{@code idOfDeviceGroup)}指定的组下的所有子节点,如果没有子节点则返回空表
      * 
      * @param idOfDeviceGroup 设备组id 
      * @see {@link IDeviceGroupManager#getDeviceGroupBeansByParentAsList(Integer)}
      */
-    //8
-    protected List<DeviceGroupBean> _getSubDeviceGroup(Integer idOfDeviceGroup){
+    protected List<DeviceGroupBean> daoGetSubDeviceGroup(Integer idOfDeviceGroup){
         return getDeviceGroupManager().getDeviceGroupBeansByParentAsList(idOfDeviceGroup);
     }
+    //8-2
     /**
      * 删除外键(idOfDeviceGroup))引用指定记录(fl_device_group.id)的所有{@code fl_device_group}记录
      * 
      * @param idOfDeviceGroup 设备组id 
      * @see {@link IDeviceGroupManager#deleteDeviceGroupBeansByParent(Integer)}
      */
-    //8-2
-    protected int _deleteDeviceGroupBeansByParentOnDeviceGroup(Integer idOfDeviceGroup){
+    protected int daoDeleteDeviceGroupBeansByParentOnDeviceGroup(Integer idOfDeviceGroup){
         return getDeviceGroupManager().deleteDeviceGroupBeansByParent(idOfDeviceGroup);
     }
+    //8
     /**
      * 返回外键(fl_permit.device_group_id)引用指定记录(fl_device_group.id)的所有{@code fl_permit}记录
      * 
      * @param idOfDeviceGroup 设备组id 
      * @see {@link IDeviceGroupManager#getPermitBeansByDeviceGroupIdAsList(Integer)}
      */
-    //8
-    protected List<PermitBean> _getPermitBeansByDeviceGroupIdOnDeviceGroup(Integer idOfDeviceGroup){
+    protected List<PermitBean> daoGetPermitBeansByDeviceGroupIdOnDeviceGroup(Integer idOfDeviceGroup){
         return getDeviceGroupManager().getPermitBeansByDeviceGroupIdAsList(idOfDeviceGroup);
     }
+    //8-2
     /**
      * 删除外键(idOfDeviceGroup))引用指定记录(fl_device_group.id)的所有{@code fl_permit}记录
      * 
      * @param idOfDeviceGroup 设备组id 
      * @see {@link IDeviceGroupManager#deletePermitBeansByDeviceGroupId(Integer)}
      */
-    //8-2
-    protected int _deletePermitBeansByDeviceGroupIdOnDeviceGroup(Integer idOfDeviceGroup){
+    protected int daoDeletePermitBeansByDeviceGroupIdOnDeviceGroup(Integer idOfDeviceGroup){
         return getDeviceGroupManager().deletePermitBeansByDeviceGroupId(idOfDeviceGroup);
     }
+    //8-3
     /**
      * 返回外键(fl_device_group.parent)引用的 fl_device_group 记录
      * @param bean
      * @see {@link IDeviceGroupManager#getReferencedByParent(DeviceGroupBean)}
      */
-    //8-3
-    protected DeviceGroupBean _getReferencedByParentOnDeviceGroup(DeviceGroupBean bean){
+    protected DeviceGroupBean daoGetReferencedByParentOnDeviceGroup(DeviceGroupBean bean){
         return getDeviceGroupManager().getReferencedByParent(bean);
     }
+    //8-4
     /**
      * 设置外键fl_device_group(parent)引用为{@code beanToSet}指定的记录,
      * 如果{@code beanToSet}没有保存则先save
@@ -678,68 +698,68 @@ class Dao implements CommonConstant {
      * @param beanToSet 被引用的记录
      * @see {@link IDeviceGroupManager#setReferencedByParent(DeviceGroupBean,DeviceGroupBean)}
      */
-    //8-4
-    protected DeviceGroupBean _setReferencedByParentOnDeviceGroup(DeviceGroupBean bean,DeviceGroupBean beanToSet){
+    protected DeviceGroupBean daoSetReferencedByParentOnDeviceGroup(DeviceGroupBean bean,DeviceGroupBean beanToSet){
         return getDeviceGroupManager().setReferencedByParent(bean,beanToSet);
     }
+    //9
     /**
      * 返回(idOfDeviceGroup))指定的fl_device_group记录的所有的父节点(包括自己)<br>
      * 自引用字段:fl_device_group(parent)
      * @see IDeviceGroupManager#listOfParent(Integer)
      */
-    //9
-    protected java.util.List<DeviceGroupBean> _listOfParentForDeviceGroup(Integer idOfDeviceGroup){
+    protected java.util.List<DeviceGroupBean> daoListOfParentForDeviceGroup(Integer idOfDeviceGroup){
         return getDeviceGroupManager().listOfParent(idOfDeviceGroup);
     }
+    //9-2
     /**
      * 返回{@code deviceGroupBean}指定的fl_device_group记录的所有的父节点(包括自己)<br>
      * 自引用字段:fl_device_group(parent)
      * @see IDeviceGroupManager#listOfParent(DeviceGroupBean)
      */
-    //9-2
-    protected java.util.List<DeviceGroupBean> _listOfParentForDeviceGroup(DeviceGroupBean deviceGroupBean){
+    protected java.util.List<DeviceGroupBean> daoListOfParentForDeviceGroup(DeviceGroupBean deviceGroupBean){
         return getDeviceGroupManager().listOfParent(deviceGroupBean);
     }
+    //10
     /** 
      * 如果没有默认组则向 fl_device_group 表中增加默认组,失败则抛出异常 
      * 
      * @throws IllegalStateException 创建失败
      */
-    //10
-    protected void _saveDefaultDeviceGroupIfAbsent(){
-        if(!_existsDeviceGroup(DEFAULT_GROUP_ID)){
+    protected void daoSaveDefaultDeviceGroupIfAbsent(){
+        if(!daoExistsDeviceGroup(DEFAULT_GROUP_ID)){
             try{
                 DeviceGroupBean bean = new DeviceGroupBean(DEFAULT_GROUP_ID);
                 bean.setName(DEFAULT_GROUP_NAME);
-                _saveDeviceGroup(bean);
+                daoSaveDeviceGroup(bean);
             }catch(WrapDAOException e){}
-            if(!_existsDeviceGroup(DEFAULT_GROUP_ID))
+            if(!daoExistsDeviceGroup(DEFAULT_GROUP_ID)){
                 throw new IllegalStateException("can't create default group for device_group"); 
+            }
         }
     }
+    //11
     /**
      * 检查{@link DeviceBean}的'group_id'字段是否为默认组{@link CommonConstant#DEFAULT_GROUP_ID},
      * 如果是,且默认组记录不存在则创建默认组
      * @return {@code deviceBean}
-     * @see #_saveDefaultDeviceGroupIfAbsent()
+     * @see #daoSaveDefaultDeviceGroupIfAbsent()
      */
-    //11
-    protected DeviceBean _checkGroup(DeviceBean deviceBean){
+    protected DeviceBean daoCheckGroup(DeviceBean deviceBean){
         if(null != deviceBean && Objects.equal(deviceBean.getGroupId(), DEFAULT_GROUP_ID)){
-            _saveDefaultDeviceGroupIfAbsent();
+            daoSaveDefaultDeviceGroupIfAbsent();
         }
         return deviceBean;
     }
+    //14
     /** 
      * 参见 {@link IDeviceGroupManager#save(DeviceGroupBean)}
      */
-    //14
-    protected DeviceGroupBean _saveDeviceGroup(DeviceGroupBean deviceGroupBean){
+    protected DeviceGroupBean daoSaveDeviceGroup(DeviceGroupBean deviceGroupBean){
         return getDeviceGroupManager().save(deviceGroupBean);
     }
-    /** 同步保存 */
     //15
-    protected DeviceGroupBean _saveDeviceGroup(DeviceGroupBean deviceGroupBean
+    /** 同步保存 */
+    protected DeviceGroupBean daoSaveDeviceGroup(DeviceGroupBean deviceGroupBean
         , DeviceGroupBean refDevicegroupByParent 
         , Collection<DeviceBean> impDeviceByGroupId 
         , Collection<DeviceGroupBean> impDevicegroupByParent 
@@ -750,31 +770,33 @@ class Dao implements CommonConstant {
             , impDevicegroupByParent 
             , impPermitByDeviceGroupId );
     }
+    //12-3-3
     /** 
      * 添加新记录<br>
      * @param beans 要添加的新记录集合
      * @return always {@code beans}
-     * @see #_saveDeviceGroup(DeviceGroupBean)
+     * @see #daoSaveDeviceGroup(DeviceGroupBean)
      */
-    //12-3-3
-    protected Collection<DeviceGroupBean> _saveDeviceGroups(Collection<DeviceGroupBean> beans){
+    protected Collection<DeviceGroupBean> daoSaveDeviceGroups(Collection<DeviceGroupBean> beans){
         if(null != beans){
-            for(DeviceGroupBean bean : beans)
-                _saveDeviceGroup(bean);
+            for(DeviceGroupBean bean : beans){
+                daoSaveDeviceGroup(bean);
+            }
         }
         return beans;
     }
-    /** 
-     * {@link #_saveDeviceGroup(Collection)}的事务化版本
-     */
     //12-3-5
-    protected Collection<DeviceGroupBean> _saveDeviceGroupsAsTransaction(final Collection<DeviceGroupBean> beans){
-        return _runAsTransaction(new Callable<Collection<DeviceGroupBean>>(){      
+    /** 
+     * {@link #daoSaveDeviceGroup(Collection)}的事务化版本
+     */
+    protected Collection<DeviceGroupBean> daoSaveDeviceGroupsAsTransaction(final Collection<DeviceGroupBean> beans){
+        return daoRunAsTransaction(new Callable<Collection<DeviceGroupBean>>(){      
             @Override
             public Collection<DeviceGroupBean> call() throws Exception {
-                return _saveDeviceGroups(beans);
+                return daoSaveDeviceGroups(beans);
             }});
     }
+    //16
     /**
      * 查询{@code where} SQL条件语句指定的 fl_device_group 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
@@ -782,109 +804,115 @@ class Dao implements CommonConstant {
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IDeviceGroupManager#loadByWhereAsList(String,int[],int,int)}
      */
-    //16
-    protected List<DeviceGroupBean> _loadDeviceGroupByWhere(String where,int startRow, int numRows){
+    protected List<DeviceGroupBean> daoLoadDeviceGroupByWhere(String where,int startRow, int numRows){
         return getDeviceGroupManager().loadByWhereAsList(where,null,startRow,numRows);
     }
+    //17
     /**
      * 返回 fl_device_group 表的所有记录
      * @see {@link IDeviceGroupManager#loadAllAsList()}
      */
-    //17
-    protected List<DeviceGroupBean> _loadDeviceGroupAll(){
+    protected List<DeviceGroupBean> daoLoadDeviceGroupAll(){
         return getDeviceGroupManager().loadAllAsList();
     }
+    //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_device_group 记录总数
      * @see {@link IDeviceGroupManager#Where(String)}
      */
-    //17-2
-    protected int _countDeviceGroupByWhere(String where){
+    protected int daoCountDeviceGroupByWhere(String where){
         return getDeviceGroupManager().countWhere(where);
     }
+    //18
     /** 
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
-     * @see #_loadDeviceGroupByWhere(String,int,int)
+     * @see #daoLoadDeviceGroupByWhere(String,int,int)
      */
-    //18
-    protected List<Integer> _loadDeviceGroupIdByWhere(String where){
-        return _toPrimaryKeyListFromDeviceGroups(_loadDeviceGroupByWhere(where,1,-1));
+    protected List<Integer> daoLoadDeviceGroupIdByWhere(String where){
+        return daoToPrimaryKeyListFromDeviceGroups(daoLoadDeviceGroupByWhere(where,1,-1));
     }
 
 
 
     //////////// FL_PERSON /////////
+    //1
     /** 
      * 根据主键从数据库读取记录
      * 
      * @param id 用户id 
      * @see {@link IPersonManager#loadByPrimaryKey(Integer)}
      */
-    //1
-    protected PersonBean _getPerson(Integer id){
+    protected PersonBean daoGetPerson(Integer id){
         return getPersonManager().loadByPrimaryKey(id);
     }
+    //2    
     /** 
      * 根据主键从数据库读取记录
      * @return 返回与输入参数下标对应的 PersonBean 列表,没有查到记录的返回{@link PersonBean#NULL}
      * @see {@link IPersonManager#loadByPrimaryKey(Collection)}
      * @see PersonBean#replaceNull(List)
      */
-    //2    
-    protected List<PersonBean> _getPersons(Collection<Integer> idCollection){
+    protected List<PersonBean> daoGetPersons(Collection<Integer> idCollection){
         return PersonBean.replaceNull((getPersonManager().loadByPrimaryKey(idCollection)));
     }
+    //3  
     /** 
      * 删除主键列表({@code idCollection})指定的记录
      * @return 返回删除的记录条数
      * @see {@link IPersonManager#deleteByPrimaryKey(Collection)}
      */
-    //3  
-    protected int _deletePersonsByPrimaryKey(Collection<Integer> idCollection){
-        if(null == idCollection)return 0;
+    protected int daoDeletePersonsByPrimaryKey(Collection<Integer> idCollection){
         int count =0;
-        for(Integer id:idCollection){
-            count += _deletePerson(id);
+        if(null != idCollection){
+            for(Integer id:idCollection){
+                count += daoDeletePerson(id);
+            }
         }
         return count;
     }
     //3-5
-    protected List<Integer> _toPrimaryKeyListFromPersons(Collection<PersonBean> beans){
+    /**
+     * unwrap primary key from {@link PersonBean}
+     * @param {@link PersonBean} collection
+     * @return primary key list 
+     */
+    protected List<Integer> daoToPrimaryKeyListFromPersons(Collection<PersonBean> beans){
         return getPersonManager().toPrimaryKeyList(beans);
     }
-    /** tranformer : PersonBean to fl_person.id */ 
     //3-7
-    protected final Function<PersonBean,Integer> _castPersonToPk = new Function<PersonBean,Integer>(){
+    /** tranformer : PersonBean to fl_person.id */ 
+    protected final Function<PersonBean,Integer> daoCastPersonToPk = new Function<PersonBean,Integer>(){
             @Override
             public Integer apply(PersonBean input) {
                 return null == input ? null : input.getId();
             }};
     //3-8
     /** tranformer : fl_person.id to PersonBean */ 
-    protected final Function<Integer,PersonBean> _castPersonFromPk = new Function<Integer,PersonBean>(){
+    protected final Function<Integer,PersonBean> daoCastPersonFromPk = new Function<Integer,PersonBean>(){
             @Override
             public PersonBean apply(Integer input) {
-                return _getPerson(input);
+                return daoGetPerson(input);
             }};
+    //4
     /** 
      *　判断主键指定的记录是否存在
      * 
      * @param id 用户id 
      * @see {@link IPersonManager#existsPrimaryKey(Integer)}
      */
-    //4
-    protected boolean _existsPerson(Integer id){
+    protected boolean daoExistsPerson(Integer id){
         return getPersonManager().existsPrimaryKey(id);
     }
+    //4-2
     /** 
      *　判断指定的记录是否存在
      * @see {@link IPersonManager#existsPrimaryKey(PersonBean)}
      */
-    //4-2
-    protected boolean _existsPerson(PersonBean bean){
+    protected boolean daoExistsPerson(PersonBean bean){
         return getPersonManager().existsPrimaryKey(bean);
     }
+    //5
     /**
      * 删除主键指定的记录
      * 
@@ -892,111 +920,114 @@ class Dao implements CommonConstant {
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link IPersonManager#deleteByPrimaryKey(Integer)}
      */
-    //5
-    protected int _deletePerson(Integer id){
+    protected int daoDeletePerson(Integer id){
         return getPersonManager().deleteByPrimaryKey(id);
     }
+    //5-2
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
      * @return 返回删除的记录条数(1),如果记录不存在返回0
-     * @see #_deletePerson(Integer)
+     * @see #daoDeletePerson(Integer)
      */
-    //5-2
-    protected int _deletePerson(PersonBean bean){
-        return null == bean ? null : _deletePerson(bean.getId());
+    protected int daoDeletePerson(PersonBean bean){
+        return null == bean ? null : daoDeletePerson(bean.getId());
     }
+    //6
     /**
      * 删除{@code personBeanCollection}列表指定的记录
      * @return 返回删除的记录条数
-     * @see #_deletePerson(Integer)
+     * @see #daoDeletePerson(Integer)
      */
-    //6
-    protected int _deletePersons(Collection<PersonBean> beans){
-        if(null == beans)return 0;
+    protected int daoDeletePersons(Collection<PersonBean> beans){
         int count =0;
-        for(PersonBean bean:beans){
-            if(null != bean)
-                count += _deletePerson(bean.getId());
+        if(null != beans){        
+            for(PersonBean bean:beans){
+                if(null != bean){
+                    count += daoDeletePerson(bean.getId());
+                }
+            }
         }
         return count;
     }
+    //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IPersonManager#checkDuplicate(PersonBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      */
-    //7
-    protected PersonBean _checkDuplicate(PersonBean personBean)throws DuplicateReord{
+    protected PersonBean daoCheckDuplicate(PersonBean personBean)throws DuplicateReordException{
         try{
             return getPersonManager().checkDuplicate(personBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReord();
+            throw new DuplicateReordException();
         }
     }
+    //7-3
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
      * @param idOfPerson 用户id 
      * @see {@link IPersonManager#checkDuplicate(PersonBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @return always {@code idOfPerson} 
      */
-    //7-3
-    protected Integer _checkDuplicatePerson(Integer idOfPerson)throws DuplicateReord{
-        if(getPersonManager().existsPrimaryKey(idOfPerson))
-            throw new DuplicateReord();
+    protected Integer daoCheckDuplicatePerson(Integer idOfPerson)throws DuplicateReordException{
+        if(getPersonManager().existsPrimaryKey(idOfPerson)){
+            throw new DuplicateReordException();
+        }
         return idOfPerson;
     }
+    //8
     /**
      * 返回外键(fl_feature.person_id)引用指定记录(fl_person.id)的所有{@code fl_feature}记录
      * 
      * @param idOfPerson 用户id 
      * @see {@link IPersonManager#getFeatureBeansByPersonIdAsList(Integer)}
      */
-    //8
-    protected List<FeatureBean> _getFeatureBeansByPersonIdOnPerson(Integer idOfPerson){
+    protected List<FeatureBean> daoGetFeatureBeansByPersonIdOnPerson(Integer idOfPerson){
         return getPersonManager().getFeatureBeansByPersonIdAsList(idOfPerson);
     }
+    //8-2
     /**
      * 删除外键(idOfPerson))引用指定记录(fl_person.id)的所有{@code fl_feature}记录
      * 
      * @param idOfPerson 用户id 
      * @see {@link IPersonManager#deleteFeatureBeansByPersonId(Integer)}
      */
-    //8-2
-    protected int _deleteFeatureBeansByPersonIdOnPerson(Integer idOfPerson){
+    protected int daoDeleteFeatureBeansByPersonIdOnPerson(Integer idOfPerson){
         return getPersonManager().deleteFeatureBeansByPersonId(idOfPerson);
     }
+    //8
     /**
      * 返回外键(fl_log.person_id)引用指定记录(fl_person.id)的所有{@code fl_log}记录
      * 
      * @param idOfPerson 用户id 
      * @see {@link IPersonManager#getLogBeansByPersonIdAsList(Integer)}
      */
-    //8
-    protected List<LogBean> _getLogBeansByPersonIdOnPerson(Integer idOfPerson){
+    protected List<LogBean> daoGetLogBeansByPersonIdOnPerson(Integer idOfPerson){
         return getPersonManager().getLogBeansByPersonIdAsList(idOfPerson);
     }
+    //8-2
     /**
      * 删除外键(idOfPerson))引用指定记录(fl_person.id)的所有{@code fl_log}记录
      * 
      * @param idOfPerson 用户id 
      * @see {@link IPersonManager#deleteLogBeansByPersonId(Integer)}
      */
-    //8-2
-    protected int _deleteLogBeansByPersonIdOnPerson(Integer idOfPerson){
+    protected int daoDeleteLogBeansByPersonIdOnPerson(Integer idOfPerson){
         return getPersonManager().deleteLogBeansByPersonId(idOfPerson);
     }
+    //8-3
     /**
      * 返回外键(fl_person.image_md5)引用的 fl_image 记录
      * @param bean
      * @see {@link IPersonManager#getReferencedByImageMd5(PersonBean)}
      */
-    //8-3
-    protected ImageBean _getReferencedByImageMd5OnPerson(PersonBean bean){
+    protected ImageBean daoGetReferencedByImageMd5OnPerson(PersonBean bean){
         return getPersonManager().getReferencedByImageMd5(bean);
     }
+    //8-4
     /**
      * 设置外键fl_person(image_md5)引用为{@code beanToSet}指定的记录,
      * 如果{@code beanToSet}没有保存则先save
@@ -1004,26 +1035,26 @@ class Dao implements CommonConstant {
      * @param beanToSet 被引用的记录
      * @see {@link IPersonManager#setReferencedByImageMd5(PersonBean,ImageBean)}
      */
-    //8-4
-    protected ImageBean _setReferencedByImageMd5OnPerson(PersonBean bean,ImageBean beanToSet){
+    protected ImageBean daoSetReferencedByImageMd5OnPerson(PersonBean bean,ImageBean beanToSet){
         return getPersonManager().setReferencedByImageMd5(bean,beanToSet);
     }
-    /** tranformer : PersonBean to fl_person.image_md5 */
     //8-6
-    protected final Function<PersonBean,String> _castPersonToImageMd5 = new Function<PersonBean,String>(){
+    /** tranformer : PersonBean to fl_person.image_md5 */
+    protected final Function<PersonBean,String> daoCastPersonToImageMd5 = new Function<PersonBean,String>(){
             @Override
             public String apply(PersonBean input) {
                 return null == input ? null : input.getImageMd5();
             }};
+    //8-3
     /**
      * 返回外键(fl_person.group_id)引用的 fl_person_group 记录
      * @param bean
      * @see {@link IPersonManager#getReferencedByGroupId(PersonBean)}
      */
-    //8-3
-    protected PersonGroupBean _getReferencedByGroupIdOnPerson(PersonBean bean){
+    protected PersonGroupBean daoGetReferencedByGroupIdOnPerson(PersonBean bean){
         return getPersonManager().getReferencedByGroupId(bean);
     }
+    //8-4
     /**
      * 设置外键fl_person(group_id)引用为{@code beanToSet}指定的记录,
      * 如果{@code beanToSet}没有保存则先save
@@ -1031,64 +1062,65 @@ class Dao implements CommonConstant {
      * @param beanToSet 被引用的记录
      * @see {@link IPersonManager#setReferencedByGroupId(PersonBean,PersonGroupBean)}
      */
-    //8-4
-    protected PersonGroupBean _setReferencedByGroupIdOnPerson(PersonBean bean,PersonGroupBean beanToSet){
+    protected PersonGroupBean daoSetReferencedByGroupIdOnPerson(PersonBean bean,PersonGroupBean beanToSet){
         return getPersonManager().setReferencedByGroupId(bean,beanToSet);
     }
-    /** tranformer : PersonBean to fl_person.group_id */
     //8-6
-    protected final Function<PersonBean,Integer> _castPersonToGroupId = new Function<PersonBean,Integer>(){
+    /** tranformer : PersonBean to fl_person.group_id */
+    protected final Function<PersonBean,Integer> daoCastPersonToGroupId = new Function<PersonBean,Integer>(){
             @Override
             public Integer apply(PersonBean input) {
                 return null == input ? null : input.getGroupId();
             }};
+    //14
     /** 
      * 参见 {@link IPersonManager#save(PersonBean)}
      */
-    //14
-    protected PersonBean _savePerson(PersonBean personBean){
-        _checkGroup(personBean);
+    protected PersonBean daoSavePerson(PersonBean personBean){
+        daoCheckGroup(personBean);
         return getPersonManager().save(personBean);
     }
-    /** 同步保存 */
     //15
-    protected PersonBean _savePerson(PersonBean personBean
+    /** 同步保存 */
+    protected PersonBean daoSavePerson(PersonBean personBean
         , ImageBean refImageByImageMd5 
         , PersonGroupBean refPersongroupByGroupId 
         , Collection<FeatureBean> impFeatureByPersonId 
         , Collection<LogBean> impLogByPersonId ){
-        _checkGroup(personBean);
+        daoCheckGroup(personBean);
         return getPersonManager().save(personBean
             , refImageByImageMd5 
             , refPersongroupByGroupId 
             , impFeatureByPersonId 
             , impLogByPersonId );
     }
+    //12-3-3
     /** 
      * 添加新记录<br>
      * @param beans 要添加的新记录集合
      * @return always {@code beans}
-     * @see #_savePerson(PersonBean)
+     * @see #daoSavePerson(PersonBean)
      */
-    //12-3-3
-    protected Collection<PersonBean> _savePersons(Collection<PersonBean> beans){
+    protected Collection<PersonBean> daoSavePersons(Collection<PersonBean> beans){
         if(null != beans){
-            for(PersonBean bean : beans)
-                _savePerson(bean);
+            for(PersonBean bean : beans){
+                daoSavePerson(bean);
+            }
         }
         return beans;
     }
-    /** 
-     * {@link #_savePerson(Collection)}的事务化版本
-     */
     //12-3-5
-    protected Collection<PersonBean> _savePersonsAsTransaction(final Collection<PersonBean> beans){
-        return _runAsTransaction(new Callable<Collection<PersonBean>>(){      
+    /** 
+     * {@link #daoSavePerson(Collection)}的事务化版本
+     */
+    protected Collection<PersonBean> daoSavePersonsAsTransaction(final Collection<PersonBean> beans){
+        return daoRunAsTransaction(new Callable<Collection<PersonBean>>(){      
             @Override
             public Collection<PersonBean> call() throws Exception {
-                return _savePersons(beans);
+                return daoSavePersons(beans);
             }});
     }
+    //16
     /**
      * 查询{@code where} SQL条件语句指定的 fl_person 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
@@ -1096,195 +1128,201 @@ class Dao implements CommonConstant {
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IPersonManager#loadByWhereAsList(String,int[],int,int)}
      */
-    //16
-    protected List<PersonBean> _loadPersonByWhere(String where,int startRow, int numRows){
+    protected List<PersonBean> daoLoadPersonByWhere(String where,int startRow, int numRows){
         return getPersonManager().loadByWhereAsList(where,null,startRow,numRows);
     }
+    //17
     /**
      * 返回 fl_person 表的所有记录
      * @see {@link IPersonManager#loadAllAsList()}
      */
-    //17
-    protected List<PersonBean> _loadPersonAll(){
+    protected List<PersonBean> daoLoadPersonAll(){
         return getPersonManager().loadAllAsList();
     }
+    //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_person 记录总数
      * @see {@link IPersonManager#Where(String)}
      */
-    //17-2
-    protected int _countPersonByWhere(String where){
+    protected int daoCountPersonByWhere(String where){
         return getPersonManager().countWhere(where);
     }
+    //18
     /** 
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
-     * @see #_loadPersonByWhere(String,int,int)
+     * @see #daoLoadPersonByWhere(String,int,int)
      */
-    //18
-    protected List<Integer> _loadPersonIdByWhere(String where){
-        return _toPrimaryKeyListFromPersons(_loadPersonByWhere(where,1,-1));
+    protected List<Integer> daoLoadPersonIdByWhere(String where){
+        return daoToPrimaryKeyListFromPersons(daoLoadPersonByWhere(where,1,-1));
     }
+    //18-5
     /** 
      * 索引(fl_person.image_md5)查询<br>
      * 
      * @param imageMd5 用户默认照片(证件照,标准照)的md5校验码,外键
      * @see {@link IPersonManager#loadByIndexImageMd5(String)}
      */
-    //18-5
-    protected PersonBean _getPersonByIndexImageMd5(String imageMd5){
+    protected PersonBean daoGetPersonByIndexImageMd5(String imageMd5){
         return getPersonManager().loadByIndexImageMd5(imageMd5);
     }
+    //18-5
     /** 
      * 索引(fl_person.papers_num)查询<br>
      * 
      * @param papersNum 证件号码
      * @see {@link IPersonManager#loadByIndexPapersNum(String)}
      */
-    //18-5
-    protected PersonBean _getPersonByIndexPapersNum(String papersNum){
+    protected PersonBean daoGetPersonByIndexPapersNum(String papersNum){
         return getPersonManager().loadByIndexPapersNum(papersNum);
     }
+    //19
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_person.create_time 字段大于指定时间戳({@code timestamp})的所有记录
-     * @see #_loadPersonByWhere(String,int,int)
+     * @see #daoLoadPersonByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    //19
-    protected List<PersonBean> _loadPersonByCreateTime(Date timestamp,int startRow, int numRows){
-        return _loadPersonByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
+    protected List<PersonBean> daoLoadPersonByCreateTime(Date timestamp,int startRow, int numRows){
+        return daoLoadPersonByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
     }
-    /** 参见 {@link #_loadPersonByCreateTime(Date,int,int)} */
     //20
-    protected List<PersonBean> _loadPersonByCreateTime(Date timestamp){
-        return _loadPersonByCreateTime(timestamp,1,-1);
+    /** 参见 {@link #daoLoadPersonByCreateTime(Date,int,int)} */
+    protected List<PersonBean> daoLoadPersonByCreateTime(Date timestamp){
+        return daoLoadPersonByCreateTime(timestamp,1,-1);
     }
+    //20-5
     /**
      * 返回fl_person.create_time 字段大于指定时间戳({@code timestamp})的记录总数
-     * @see #_countPersonByWhere(String)
+     * @see #daoCountPersonByWhere(String)
      */
-    //20-5
-    protected int _countPersonByCreateTime(Date timestamp){
-        return _countPersonByWhere(makeWhere(timestamp,"create_time"));
+    protected int daoCountPersonByCreateTime(Date timestamp){
+        return daoCountPersonByWhere(makeWhere(timestamp,"create_time"));
     }
+    //21
     /** 
      * (主动更新机制实现)<br>
      * 返回 fl_person.create_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @return 返回查询结果记录的主键
-     * @see {@link #_loadPersonIdByWhere(String)} 
+     * @see {@link #daoLoadPersonIdByWhere(String)} 
      */
-    //21
-    protected List<Integer> _loadPersonIdByCreateTime(Date timestamp){
-        return _loadPersonIdByWhere(makeWhere(timestamp,"create_time"));
+    protected List<Integer> daoLoadPersonIdByCreateTime(Date timestamp){
+        return daoLoadPersonIdByWhere(makeWhere(timestamp,"create_time"));
     }
 
+    //19
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_person.update_time 字段大于指定时间戳({@code timestamp})的所有记录
-     * @see #_loadPersonByWhere(String,int,int)
+     * @see #daoLoadPersonByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    //19
-    protected List<PersonBean> _loadPersonByUpdateTime(Date timestamp,int startRow, int numRows){
-        return _loadPersonByWhere(makeWhere(timestamp,"update_time"),startRow,numRows);
+    protected List<PersonBean> daoLoadPersonByUpdateTime(Date timestamp,int startRow, int numRows){
+        return daoLoadPersonByWhere(makeWhere(timestamp,"update_time"),startRow,numRows);
     }
-    /** 参见 {@link #_loadPersonByUpdateTime(Date,int,int)} */
     //20
-    protected List<PersonBean> _loadPersonByUpdateTime(Date timestamp){
-        return _loadPersonByUpdateTime(timestamp,1,-1);
+    /** 参见 {@link #daoLoadPersonByUpdateTime(Date,int,int)} */
+    protected List<PersonBean> daoLoadPersonByUpdateTime(Date timestamp){
+        return daoLoadPersonByUpdateTime(timestamp,1,-1);
     }
+    //20-5
     /**
      * 返回fl_person.update_time 字段大于指定时间戳({@code timestamp})的记录总数
-     * @see #_countPersonByWhere(String)
+     * @see #daoCountPersonByWhere(String)
      */
-    //20-5
-    protected int _countPersonByUpdateTime(Date timestamp){
-        return _countPersonByWhere(makeWhere(timestamp,"update_time"));
+    protected int daoCountPersonByUpdateTime(Date timestamp){
+        return daoCountPersonByWhere(makeWhere(timestamp,"update_time"));
     }
+    //21
     /** 
      * (主动更新机制实现)<br>
      * 返回 fl_person.update_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @return 返回查询结果记录的主键
-     * @see {@link #_loadPersonIdByWhere(String)} 
+     * @see {@link #daoLoadPersonIdByWhere(String)} 
      */
-    //21
-    protected List<Integer> _loadPersonIdByUpdateTime(Date timestamp){
-        return _loadPersonIdByWhere(makeWhere(timestamp,"update_time"));
+    protected List<Integer> daoLoadPersonIdByUpdateTime(Date timestamp){
+        return daoLoadPersonIdByWhere(makeWhere(timestamp,"update_time"));
     }
 
 
     //////////// FL_PERSON_GROUP /////////
+    //1
     /** 
      * 根据主键从数据库读取记录
      * 
      * @param id 用户组id 
      * @see {@link IPersonGroupManager#loadByPrimaryKey(Integer)}
      */
-    //1
-    protected PersonGroupBean _getPersonGroup(Integer id){
+    protected PersonGroupBean daoGetPersonGroup(Integer id){
         return getPersonGroupManager().loadByPrimaryKey(id);
     }
+    //2    
     /** 
      * 根据主键从数据库读取记录
      * @return 返回与输入参数下标对应的 PersonGroupBean 列表,没有查到记录的返回{@link PersonGroupBean#NULL}
      * @see {@link IPersonGroupManager#loadByPrimaryKey(Collection)}
      * @see PersonGroupBean#replaceNull(List)
      */
-    //2    
-    protected List<PersonGroupBean> _getPersonGroups(Collection<Integer> idCollection){
+    protected List<PersonGroupBean> daoGetPersonGroups(Collection<Integer> idCollection){
         return PersonGroupBean.replaceNull((getPersonGroupManager().loadByPrimaryKey(idCollection)));
     }
+    //3  
     /** 
      * 删除主键列表({@code idCollection})指定的记录
      * @return 返回删除的记录条数
      * @see {@link IPersonGroupManager#deleteByPrimaryKey(Collection)}
      */
-    //3  
-    protected int _deletePersonGroupsByPrimaryKey(Collection<Integer> idCollection){
-        if(null == idCollection)return 0;
+    protected int daoDeletePersonGroupsByPrimaryKey(Collection<Integer> idCollection){
         int count =0;
-        for(Integer id:idCollection){
-            count += _deletePersonGroup(id);
+        if(null != idCollection){
+            for(Integer id:idCollection){
+                count += daoDeletePersonGroup(id);
+            }
         }
         return count;
     }
     //3-5
-    protected List<Integer> _toPrimaryKeyListFromPersonGroups(Collection<PersonGroupBean> beans){
+    /**
+     * unwrap primary key from {@link PersonGroupBean}
+     * @param {@link PersonGroupBean} collection
+     * @return primary key list 
+     */
+    protected List<Integer> daoToPrimaryKeyListFromPersonGroups(Collection<PersonGroupBean> beans){
         return getPersonGroupManager().toPrimaryKeyList(beans);
     }
-    /** tranformer : PersonGroupBean to fl_person_group.id */ 
     //3-7
-    protected final Function<PersonGroupBean,Integer> _castPersonGroupToPk = new Function<PersonGroupBean,Integer>(){
+    /** tranformer : PersonGroupBean to fl_person_group.id */ 
+    protected final Function<PersonGroupBean,Integer> daoCastPersonGroupToPk = new Function<PersonGroupBean,Integer>(){
             @Override
             public Integer apply(PersonGroupBean input) {
                 return null == input ? null : input.getId();
             }};
     //3-8
     /** tranformer : fl_person_group.id to PersonGroupBean */ 
-    protected final Function<Integer,PersonGroupBean> _castPersonGroupFromPk = new Function<Integer,PersonGroupBean>(){
+    protected final Function<Integer,PersonGroupBean> daoCastPersonGroupFromPk = new Function<Integer,PersonGroupBean>(){
             @Override
             public PersonGroupBean apply(Integer input) {
-                return _getPersonGroup(input);
+                return daoGetPersonGroup(input);
             }};
+    //4
     /** 
      *　判断主键指定的记录是否存在
      * 
      * @param id 用户组id 
      * @see {@link IPersonGroupManager#existsPrimaryKey(Integer)}
      */
-    //4
-    protected boolean _existsPersonGroup(Integer id){
+    protected boolean daoExistsPersonGroup(Integer id){
         return getPersonGroupManager().existsPrimaryKey(id);
     }
+    //4-2
     /** 
      *　判断指定的记录是否存在
      * @see {@link IPersonGroupManager#existsPrimaryKey(PersonGroupBean)}
      */
-    //4-2
-    protected boolean _existsPersonGroup(PersonGroupBean bean){
+    protected boolean daoExistsPersonGroup(PersonGroupBean bean){
         return getPersonGroupManager().existsPrimaryKey(bean);
     }
+    //5
     /**
      * 删除主键指定的记录
      * 
@@ -1292,131 +1330,134 @@ class Dao implements CommonConstant {
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link IPersonGroupManager#deleteByPrimaryKey(Integer)}
      */
-    //5
-    protected int _deletePersonGroup(Integer id){
+    protected int daoDeletePersonGroup(Integer id){
         return getPersonGroupManager().deleteByPrimaryKey(id);
     }
+    //5-2
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
      * @return 返回删除的记录条数(1),如果记录不存在返回0
-     * @see #_deletePersonGroup(Integer)
+     * @see #daoDeletePersonGroup(Integer)
      */
-    //5-2
-    protected int _deletePersonGroup(PersonGroupBean bean){
-        return null == bean ? null : _deletePersonGroup(bean.getId());
+    protected int daoDeletePersonGroup(PersonGroupBean bean){
+        return null == bean ? null : daoDeletePersonGroup(bean.getId());
     }
+    //6
     /**
      * 删除{@code personGroupBeanCollection}列表指定的记录
      * @return 返回删除的记录条数
-     * @see #_deletePersonGroup(Integer)
+     * @see #daoDeletePersonGroup(Integer)
      */
-    //6
-    protected int _deletePersonGroups(Collection<PersonGroupBean> beans){
-        if(null == beans)return 0;
+    protected int daoDeletePersonGroups(Collection<PersonGroupBean> beans){
         int count =0;
-        for(PersonGroupBean bean:beans){
-            if(null != bean)
-                count += _deletePersonGroup(bean.getId());
+        if(null != beans){        
+            for(PersonGroupBean bean:beans){
+                if(null != bean){
+                    count += daoDeletePersonGroup(bean.getId());
+                }
+            }
         }
         return count;
     }
+    //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IPersonGroupManager#checkDuplicate(PersonGroupBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      */
-    //7
-    protected PersonGroupBean _checkDuplicate(PersonGroupBean personGroupBean)throws DuplicateReord{
+    protected PersonGroupBean daoCheckDuplicate(PersonGroupBean personGroupBean)throws DuplicateReordException{
         try{
             return getPersonGroupManager().checkDuplicate(personGroupBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReord();
+            throw new DuplicateReordException();
         }
     }
+    //7-3
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
      * @param idOfPersonGroup 用户组id 
      * @see {@link IPersonGroupManager#checkDuplicate(PersonGroupBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @return always {@code idOfPersonGroup} 
      */
-    //7-3
-    protected Integer _checkDuplicatePersonGroup(Integer idOfPersonGroup)throws DuplicateReord{
-        if(getPersonGroupManager().existsPrimaryKey(idOfPersonGroup))
-            throw new DuplicateReord();
+    protected Integer daoCheckDuplicatePersonGroup(Integer idOfPersonGroup)throws DuplicateReordException{
+        if(getPersonGroupManager().existsPrimaryKey(idOfPersonGroup)){
+            throw new DuplicateReordException();
+        }
         return idOfPersonGroup;
     }
+    //8
     /**
      * 返回外键(fl_permit.person_group_id)引用指定记录(fl_person_group.id)的所有{@code fl_permit}记录
      * 
      * @param idOfPersonGroup 用户组id 
      * @see {@link IPersonGroupManager#getPermitBeansByPersonGroupIdAsList(Integer)}
      */
-    //8
-    protected List<PermitBean> _getPermitBeansByPersonGroupIdOnPersonGroup(Integer idOfPersonGroup){
+    protected List<PermitBean> daoGetPermitBeansByPersonGroupIdOnPersonGroup(Integer idOfPersonGroup){
         return getPersonGroupManager().getPermitBeansByPersonGroupIdAsList(idOfPersonGroup);
     }
+    //8-2
     /**
      * 删除外键(idOfPersonGroup))引用指定记录(fl_person_group.id)的所有{@code fl_permit}记录
      * 
      * @param idOfPersonGroup 用户组id 
      * @see {@link IPersonGroupManager#deletePermitBeansByPersonGroupId(Integer)}
      */
-    //8-2
-    protected int _deletePermitBeansByPersonGroupIdOnPersonGroup(Integer idOfPersonGroup){
+    protected int daoDeletePermitBeansByPersonGroupIdOnPersonGroup(Integer idOfPersonGroup){
         return getPersonGroupManager().deletePermitBeansByPersonGroupId(idOfPersonGroup);
     }
+    //8
     /**
      * 返回属于{@code idOfPersonGroup}指定组的所有{@code fl_person}记录
      * 
      * @param idOfPersonGroup 用户组id 
      * @see {@link IPersonGroupManager#getPersonBeansByGroupIdAsList(Integer)}
      */
-    //8
-    protected List<PersonBean> _getPersonsOfGroup(Integer idOfPersonGroup){
+    protected List<PersonBean> daoGetPersonsOfGroup(Integer idOfPersonGroup){
         return getPersonGroupManager().getPersonBeansByGroupIdAsList(idOfPersonGroup);
     }
+    //8-2
     /**
      * 删除外键(idOfPersonGroup))引用指定记录(fl_person_group.id)的所有{@code fl_person}记录
      * 
      * @param idOfPersonGroup 用户组id 
      * @see {@link IPersonGroupManager#deletePersonBeansByGroupId(Integer)}
      */
-    //8-2
-    protected int _deletePersonBeansByGroupIdOnPersonGroup(Integer idOfPersonGroup){
+    protected int daoDeletePersonBeansByGroupIdOnPersonGroup(Integer idOfPersonGroup){
         return getPersonGroupManager().deletePersonBeansByGroupId(idOfPersonGroup);
     }
+    //8
     /**
      * 返回{@code idOfPersonGroup)}指定的组下的所有子节点,如果没有子节点则返回空表
      * 
      * @param idOfPersonGroup 用户组id 
      * @see {@link IPersonGroupManager#getPersonGroupBeansByParentAsList(Integer)}
      */
-    //8
-    protected List<PersonGroupBean> _getSubPersonGroup(Integer idOfPersonGroup){
+    protected List<PersonGroupBean> daoGetSubPersonGroup(Integer idOfPersonGroup){
         return getPersonGroupManager().getPersonGroupBeansByParentAsList(idOfPersonGroup);
     }
+    //8-2
     /**
      * 删除外键(idOfPersonGroup))引用指定记录(fl_person_group.id)的所有{@code fl_person_group}记录
      * 
      * @param idOfPersonGroup 用户组id 
      * @see {@link IPersonGroupManager#deletePersonGroupBeansByParent(Integer)}
      */
-    //8-2
-    protected int _deletePersonGroupBeansByParentOnPersonGroup(Integer idOfPersonGroup){
+    protected int daoDeletePersonGroupBeansByParentOnPersonGroup(Integer idOfPersonGroup){
         return getPersonGroupManager().deletePersonGroupBeansByParent(idOfPersonGroup);
     }
+    //8-3
     /**
      * 返回外键(fl_person_group.parent)引用的 fl_person_group 记录
      * @param bean
      * @see {@link IPersonGroupManager#getReferencedByParent(PersonGroupBean)}
      */
-    //8-3
-    protected PersonGroupBean _getReferencedByParentOnPersonGroup(PersonGroupBean bean){
+    protected PersonGroupBean daoGetReferencedByParentOnPersonGroup(PersonGroupBean bean){
         return getPersonGroupManager().getReferencedByParent(bean);
     }
+    //8-4
     /**
      * 设置外键fl_person_group(parent)引用为{@code beanToSet}指定的记录,
      * 如果{@code beanToSet}没有保存则先save
@@ -1424,68 +1465,68 @@ class Dao implements CommonConstant {
      * @param beanToSet 被引用的记录
      * @see {@link IPersonGroupManager#setReferencedByParent(PersonGroupBean,PersonGroupBean)}
      */
-    //8-4
-    protected PersonGroupBean _setReferencedByParentOnPersonGroup(PersonGroupBean bean,PersonGroupBean beanToSet){
+    protected PersonGroupBean daoSetReferencedByParentOnPersonGroup(PersonGroupBean bean,PersonGroupBean beanToSet){
         return getPersonGroupManager().setReferencedByParent(bean,beanToSet);
     }
+    //9
     /**
      * 返回(idOfPersonGroup))指定的fl_person_group记录的所有的父节点(包括自己)<br>
      * 自引用字段:fl_person_group(parent)
      * @see IPersonGroupManager#listOfParent(Integer)
      */
-    //9
-    protected java.util.List<PersonGroupBean> _listOfParentForPersonGroup(Integer idOfPersonGroup){
+    protected java.util.List<PersonGroupBean> daoListOfParentForPersonGroup(Integer idOfPersonGroup){
         return getPersonGroupManager().listOfParent(idOfPersonGroup);
     }
+    //9-2
     /**
      * 返回{@code personGroupBean}指定的fl_person_group记录的所有的父节点(包括自己)<br>
      * 自引用字段:fl_person_group(parent)
      * @see IPersonGroupManager#listOfParent(PersonGroupBean)
      */
-    //9-2
-    protected java.util.List<PersonGroupBean> _listOfParentForPersonGroup(PersonGroupBean personGroupBean){
+    protected java.util.List<PersonGroupBean> daoListOfParentForPersonGroup(PersonGroupBean personGroupBean){
         return getPersonGroupManager().listOfParent(personGroupBean);
     }
+    //10
     /** 
      * 如果没有默认组则向 fl_person_group 表中增加默认组,失败则抛出异常 
      * 
      * @throws IllegalStateException 创建失败
      */
-    //10
-    protected void _saveDefaultPersonGroupIfAbsent(){
-        if(!_existsPersonGroup(DEFAULT_GROUP_ID)){
+    protected void daoSaveDefaultPersonGroupIfAbsent(){
+        if(!daoExistsPersonGroup(DEFAULT_GROUP_ID)){
             try{
                 PersonGroupBean bean = new PersonGroupBean(DEFAULT_GROUP_ID);
                 bean.setName(DEFAULT_GROUP_NAME);
-                _savePersonGroup(bean);
+                daoSavePersonGroup(bean);
             }catch(WrapDAOException e){}
-            if(!_existsPersonGroup(DEFAULT_GROUP_ID))
+            if(!daoExistsPersonGroup(DEFAULT_GROUP_ID)){
                 throw new IllegalStateException("can't create default group for person_group"); 
+            }
         }
     }
+    //11
     /**
      * 检查{@link PersonBean}的'group_id'字段是否为默认组{@link CommonConstant#DEFAULT_GROUP_ID},
      * 如果是,且默认组记录不存在则创建默认组
      * @return {@code personBean}
-     * @see #_saveDefaultPersonGroupIfAbsent()
+     * @see #daoSaveDefaultPersonGroupIfAbsent()
      */
-    //11
-    protected PersonBean _checkGroup(PersonBean personBean){
+    protected PersonBean daoCheckGroup(PersonBean personBean){
         if(null != personBean && Objects.equal(personBean.getGroupId(), DEFAULT_GROUP_ID)){
-            _saveDefaultPersonGroupIfAbsent();
+            daoSaveDefaultPersonGroupIfAbsent();
         }
         return personBean;
     }
+    //14
     /** 
      * 参见 {@link IPersonGroupManager#save(PersonGroupBean)}
      */
-    //14
-    protected PersonGroupBean _savePersonGroup(PersonGroupBean personGroupBean){
+    protected PersonGroupBean daoSavePersonGroup(PersonGroupBean personGroupBean){
         return getPersonGroupManager().save(personGroupBean);
     }
-    /** 同步保存 */
     //15
-    protected PersonGroupBean _savePersonGroup(PersonGroupBean personGroupBean
+    /** 同步保存 */
+    protected PersonGroupBean daoSavePersonGroup(PersonGroupBean personGroupBean
         , PersonGroupBean refPersongroupByParent 
         , Collection<PermitBean> impPermitByPersonGroupId 
         , Collection<PersonBean> impPersonByGroupId 
@@ -1496,31 +1537,33 @@ class Dao implements CommonConstant {
             , impPersonByGroupId 
             , impPersongroupByParent );
     }
+    //12-3-3
     /** 
      * 添加新记录<br>
      * @param beans 要添加的新记录集合
      * @return always {@code beans}
-     * @see #_savePersonGroup(PersonGroupBean)
+     * @see #daoSavePersonGroup(PersonGroupBean)
      */
-    //12-3-3
-    protected Collection<PersonGroupBean> _savePersonGroups(Collection<PersonGroupBean> beans){
+    protected Collection<PersonGroupBean> daoSavePersonGroups(Collection<PersonGroupBean> beans){
         if(null != beans){
-            for(PersonGroupBean bean : beans)
-                _savePersonGroup(bean);
+            for(PersonGroupBean bean : beans){
+                daoSavePersonGroup(bean);
+            }
         }
         return beans;
     }
-    /** 
-     * {@link #_savePersonGroup(Collection)}的事务化版本
-     */
     //12-3-5
-    protected Collection<PersonGroupBean> _savePersonGroupsAsTransaction(final Collection<PersonGroupBean> beans){
-        return _runAsTransaction(new Callable<Collection<PersonGroupBean>>(){      
+    /** 
+     * {@link #daoSavePersonGroup(Collection)}的事务化版本
+     */
+    protected Collection<PersonGroupBean> daoSavePersonGroupsAsTransaction(final Collection<PersonGroupBean> beans){
+        return daoRunAsTransaction(new Callable<Collection<PersonGroupBean>>(){      
             @Override
             public Collection<PersonGroupBean> call() throws Exception {
-                return _savePersonGroups(beans);
+                return daoSavePersonGroups(beans);
             }});
     }
+    //16
     /**
      * 查询{@code where} SQL条件语句指定的 fl_person_group 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
@@ -1528,109 +1571,115 @@ class Dao implements CommonConstant {
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IPersonGroupManager#loadByWhereAsList(String,int[],int,int)}
      */
-    //16
-    protected List<PersonGroupBean> _loadPersonGroupByWhere(String where,int startRow, int numRows){
+    protected List<PersonGroupBean> daoLoadPersonGroupByWhere(String where,int startRow, int numRows){
         return getPersonGroupManager().loadByWhereAsList(where,null,startRow,numRows);
     }
+    //17
     /**
      * 返回 fl_person_group 表的所有记录
      * @see {@link IPersonGroupManager#loadAllAsList()}
      */
-    //17
-    protected List<PersonGroupBean> _loadPersonGroupAll(){
+    protected List<PersonGroupBean> daoLoadPersonGroupAll(){
         return getPersonGroupManager().loadAllAsList();
     }
+    //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
      * @see {@link IPersonGroupManager#Where(String)}
      */
-    //17-2
-    protected int _countPersonGroupByWhere(String where){
+    protected int daoCountPersonGroupByWhere(String where){
         return getPersonGroupManager().countWhere(where);
     }
+    //18
     /** 
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
-     * @see #_loadPersonGroupByWhere(String,int,int)
+     * @see #daoLoadPersonGroupByWhere(String,int,int)
      */
-    //18
-    protected List<Integer> _loadPersonGroupIdByWhere(String where){
-        return _toPrimaryKeyListFromPersonGroups(_loadPersonGroupByWhere(where,1,-1));
+    protected List<Integer> daoLoadPersonGroupIdByWhere(String where){
+        return daoToPrimaryKeyListFromPersonGroups(daoLoadPersonGroupByWhere(where,1,-1));
     }
 
 
 
     //////////// FL_FACE /////////
+    //1
     /** 
      * 根据主键从数据库读取记录
      * 
      * @param id 主键 
      * @see {@link IFaceManager#loadByPrimaryKey(Integer)}
      */
-    //1
-    protected FaceBean _getFace(Integer id){
+    protected FaceBean daoGetFace(Integer id){
         return getFaceManager().loadByPrimaryKey(id);
     }
+    //2    
     /** 
      * 根据主键从数据库读取记录
      * @return 返回与输入参数下标对应的 FaceBean 列表,没有查到记录的返回{@link FaceBean#NULL}
      * @see {@link IFaceManager#loadByPrimaryKey(Collection)}
      * @see FaceBean#replaceNull(List)
      */
-    //2    
-    protected List<FaceBean> _getFaces(Collection<Integer> idCollection){
+    protected List<FaceBean> daoGetFaces(Collection<Integer> idCollection){
         return FaceBean.replaceNull((getFaceManager().loadByPrimaryKey(idCollection)));
     }
+    //3  
     /** 
      * 删除主键列表({@code idCollection})指定的记录
      * @return 返回删除的记录条数
      * @see {@link IFaceManager#deleteByPrimaryKey(Collection)}
      */
-    //3  
-    protected int _deleteFacesByPrimaryKey(Collection<Integer> idCollection){
-        if(null == idCollection)return 0;
+    protected int daoDeleteFacesByPrimaryKey(Collection<Integer> idCollection){
         int count =0;
-        for(Integer id:idCollection){
-            count += _deleteFace(id);
+        if(null != idCollection){
+            for(Integer id:idCollection){
+                count += daoDeleteFace(id);
+            }
         }
         return count;
     }
     //3-5
-    protected List<Integer> _toPrimaryKeyListFromFaces(Collection<FaceBean> beans){
+    /**
+     * unwrap primary key from {@link FaceBean}
+     * @param {@link FaceBean} collection
+     * @return primary key list 
+     */
+    protected List<Integer> daoToPrimaryKeyListFromFaces(Collection<FaceBean> beans){
         return getFaceManager().toPrimaryKeyList(beans);
     }
-    /** tranformer : FaceBean to fl_face.id */ 
     //3-7
-    protected final Function<FaceBean,Integer> _castFaceToPk = new Function<FaceBean,Integer>(){
+    /** tranformer : FaceBean to fl_face.id */ 
+    protected final Function<FaceBean,Integer> daoCastFaceToPk = new Function<FaceBean,Integer>(){
             @Override
             public Integer apply(FaceBean input) {
                 return null == input ? null : input.getId();
             }};
     //3-8
     /** tranformer : fl_face.id to FaceBean */ 
-    protected final Function<Integer,FaceBean> _castFaceFromPk = new Function<Integer,FaceBean>(){
+    protected final Function<Integer,FaceBean> daoCastFaceFromPk = new Function<Integer,FaceBean>(){
             @Override
             public FaceBean apply(Integer input) {
-                return _getFace(input);
+                return daoGetFace(input);
             }};
+    //4
     /** 
      *　判断主键指定的记录是否存在
      * 
      * @param id 主键 
      * @see {@link IFaceManager#existsPrimaryKey(Integer)}
      */
-    //4
-    protected boolean _existsFace(Integer id){
+    protected boolean daoExistsFace(Integer id){
         return getFaceManager().existsPrimaryKey(id);
     }
+    //4-2
     /** 
      *　判断指定的记录是否存在
      * @see {@link IFaceManager#existsPrimaryKey(FaceBean)}
      */
-    //4-2
-    protected boolean _existsFace(FaceBean bean){
+    protected boolean daoExistsFace(FaceBean bean){
         return getFaceManager().existsPrimaryKey(bean);
     }
+    //5
     /**
      * 删除主键指定的记录
      * 
@@ -1638,91 +1687,94 @@ class Dao implements CommonConstant {
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link IFaceManager#deleteByPrimaryKey(Integer)}
      */
-    //5
-    protected int _deleteFace(Integer id){
+    protected int daoDeleteFace(Integer id){
         return getFaceManager().deleteByPrimaryKey(id);
     }
+    //5-2
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
      * @return 返回删除的记录条数(1),如果记录不存在返回0
-     * @see #_deleteFace(Integer)
+     * @see #daoDeleteFace(Integer)
      */
-    //5-2
-    protected int _deleteFace(FaceBean bean){
-        return null == bean ? null : _deleteFace(bean.getId());
+    protected int daoDeleteFace(FaceBean bean){
+        return null == bean ? null : daoDeleteFace(bean.getId());
     }
+    //6
     /**
      * 删除{@code faceBeanCollection}列表指定的记录
      * @return 返回删除的记录条数
-     * @see #_deleteFace(Integer)
+     * @see #daoDeleteFace(Integer)
      */
-    //6
-    protected int _deleteFaces(Collection<FaceBean> beans){
-        if(null == beans)return 0;
+    protected int daoDeleteFaces(Collection<FaceBean> beans){
         int count =0;
-        for(FaceBean bean:beans){
-            if(null != bean)
-                count += _deleteFace(bean.getId());
+        if(null != beans){        
+            for(FaceBean bean:beans){
+                if(null != bean){
+                    count += daoDeleteFace(bean.getId());
+                }
+            }
         }
         return count;
     }
+    //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IFaceManager#checkDuplicate(FaceBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      */
-    //7
-    protected FaceBean _checkDuplicate(FaceBean faceBean)throws DuplicateReord{
+    protected FaceBean daoCheckDuplicate(FaceBean faceBean)throws DuplicateReordException{
         try{
             return getFaceManager().checkDuplicate(faceBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReord();
+            throw new DuplicateReordException();
         }
     }
+    //7-3
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
      * @param idOfFace 主键 
      * @see {@link IFaceManager#checkDuplicate(FaceBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @return always {@code idOfFace} 
      */
-    //7-3
-    protected Integer _checkDuplicateFace(Integer idOfFace)throws DuplicateReord{
-        if(getFaceManager().existsPrimaryKey(idOfFace))
-            throw new DuplicateReord();
+    protected Integer daoCheckDuplicateFace(Integer idOfFace)throws DuplicateReordException{
+        if(getFaceManager().existsPrimaryKey(idOfFace)){
+            throw new DuplicateReordException();
+        }
         return idOfFace;
     }
+    //8
     /**
      * 返回外键(fl_log.compare_face)引用指定记录(fl_face.id)的所有{@code fl_log}记录
      * 
      * @param idOfFace 主键 
      * @see {@link IFaceManager#getLogBeansByCompareFaceAsList(Integer)}
      */
-    //8
-    protected List<LogBean> _getLogBeansByCompareFaceOnFace(Integer idOfFace){
+    protected List<LogBean> daoGetLogBeansByCompareFaceOnFace(Integer idOfFace){
         return getFaceManager().getLogBeansByCompareFaceAsList(idOfFace);
     }
+    //8-2
     /**
      * 删除外键(idOfFace))引用指定记录(fl_face.id)的所有{@code fl_log}记录
      * 
      * @param idOfFace 主键 
      * @see {@link IFaceManager#deleteLogBeansByCompareFace(Integer)}
      */
-    //8-2
-    protected int _deleteLogBeansByCompareFaceOnFace(Integer idOfFace){
+    protected int daoDeleteLogBeansByCompareFaceOnFace(Integer idOfFace){
         return getFaceManager().deleteLogBeansByCompareFace(idOfFace);
     }
+    //8-3
     /**
      * 返回外键(fl_face.feature_md5)引用的 fl_feature 记录
      * @param bean
      * @see {@link IFaceManager#getReferencedByFeatureMd5(FaceBean)}
      */
-    //8-3
-    protected FeatureBean _getReferencedByFeatureMd5OnFace(FaceBean bean){
+    protected FeatureBean daoGetReferencedByFeatureMd5OnFace(FaceBean bean){
         return getFaceManager().getReferencedByFeatureMd5(bean);
     }
+    //8-4
     /**
      * 设置外键fl_face(feature_md5)引用为{@code beanToSet}指定的记录,
      * 如果{@code beanToSet}没有保存则先save
@@ -1730,26 +1782,26 @@ class Dao implements CommonConstant {
      * @param beanToSet 被引用的记录
      * @see {@link IFaceManager#setReferencedByFeatureMd5(FaceBean,FeatureBean)}
      */
-    //8-4
-    protected FeatureBean _setReferencedByFeatureMd5OnFace(FaceBean bean,FeatureBean beanToSet){
+    protected FeatureBean daoSetReferencedByFeatureMd5OnFace(FaceBean bean,FeatureBean beanToSet){
         return getFaceManager().setReferencedByFeatureMd5(bean,beanToSet);
     }
-    /** tranformer : FaceBean to fl_face.feature_md5 */
     //8-6
-    protected final Function<FaceBean,String> _castFaceToFeatureMd5 = new Function<FaceBean,String>(){
+    /** tranformer : FaceBean to fl_face.feature_md5 */
+    protected final Function<FaceBean,String> daoCastFaceToFeatureMd5 = new Function<FaceBean,String>(){
             @Override
             public String apply(FaceBean input) {
                 return null == input ? null : input.getFeatureMd5();
             }};
+    //8-3
     /**
      * 返回外键(fl_face.image_md5)引用的 fl_image 记录
      * @param bean
      * @see {@link IFaceManager#getReferencedByImageMd5(FaceBean)}
      */
-    //8-3
-    protected ImageBean _getReferencedByImageMd5OnFace(FaceBean bean){
+    protected ImageBean daoGetReferencedByImageMd5OnFace(FaceBean bean){
         return getFaceManager().getReferencedByImageMd5(bean);
     }
+    //8-4
     /**
      * 设置外键fl_face(image_md5)引用为{@code beanToSet}指定的记录,
      * 如果{@code beanToSet}没有保存则先save
@@ -1757,76 +1809,77 @@ class Dao implements CommonConstant {
      * @param beanToSet 被引用的记录
      * @see {@link IFaceManager#setReferencedByImageMd5(FaceBean,ImageBean)}
      */
-    //8-4
-    protected ImageBean _setReferencedByImageMd5OnFace(FaceBean bean,ImageBean beanToSet){
+    protected ImageBean daoSetReferencedByImageMd5OnFace(FaceBean bean,ImageBean beanToSet){
         return getFaceManager().setReferencedByImageMd5(bean,beanToSet);
     }
-    /** tranformer : FaceBean to fl_face.image_md5 */
     //8-6
-    protected final Function<FaceBean,String> _castFaceToImageMd5 = new Function<FaceBean,String>(){
+    /** tranformer : FaceBean to fl_face.image_md5 */
+    protected final Function<FaceBean,String> daoCastFaceToImageMd5 = new Function<FaceBean,String>(){
             @Override
             public String apply(FaceBean input) {
                 return null == input ? null : input.getImageMd5();
             }};
+    //12
     /** 
      * 添加新记录<br>
      * fl_face 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link FaceBean#isNew()}返回{@code false},则抛出异常
      * @param faceBean 要添加的新记录
      * @see {@link IFaceManager#save(FaceBean)}
      * @see {@link IFaceManager#checkDuplicate(FaceBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @throws IllegalArgumentException if {@code faceBean.isNew()} is {@code false}
      */
-    //12
-    protected FaceBean _addFace(FaceBean faceBean)throws DuplicateReord{
-        return getFaceManager().save(_checkDuplicate(faceBean));
+    protected FaceBean daoAddFace(FaceBean faceBean)throws DuplicateReordException{
+        return getFaceManager().save(daoCheckDuplicate(faceBean));
     }
+    //13
     /** 
      * 添加新记录(同步保存)<br>
      * fl_face 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link FaceBean#isNew()}返回{@code false},则抛出异常
      * @param faceBean 要添加的新记录
      * @see {@link IFaceManager#save(FaceBean , FeatureBean, ImageBean , Collection )}
      * @see {@link IFaceManager#checkDuplicate(FaceBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @throws IllegalArgumentException if {@code faceBean.isNew()} is {@code false}
      */
-    //13
-    protected FaceBean _addFace(FaceBean faceBean
+    protected FaceBean daoAddFace(FaceBean faceBean
         , FeatureBean refFeatureByFeatureMd5 
         , ImageBean refImageByImageMd5 
-        , Collection<LogBean> impLogByCompareFace )throws DuplicateReord{
+        , Collection<LogBean> impLogByCompareFace )throws DuplicateReordException{
         checkArgument(null == faceBean || faceBean.isNew(),"can be add,delete,but modify record for fl_face,so the _isNew field must be true");
-        _checkDuplicate(faceBean);
+        daoCheckDuplicate(faceBean);
         return getFaceManager().save(faceBean
             , refFeatureByFeatureMd5 
             , refImageByImageMd5 
             , impLogByCompareFace );
     }
+    //12-3-3
     /** 
      * 添加新记录<br>
      * @param beans 要添加的新记录集合
      * @return always {@code beans}
-     * @see #_addFace(FaceBean)
+     * @see #daoAddFace(FaceBean)
      */
-    //12-3-3
-    protected Collection<FaceBean> _addFaces(Collection<FaceBean> beans)throws DuplicateReord{
+    protected Collection<FaceBean> daoAddFaces(Collection<FaceBean> beans)throws DuplicateReordException{
         if(null != beans){
-            for(FaceBean bean : beans)
-                _addFace(bean);
+            for(FaceBean bean : beans){
+                daoAddFace(bean);
+            }
         }
         return beans;
     }
-    /** 
-     * {@link #_addFace(Collection)}的事务化版本
-     */
     //12-3-5
-    protected Collection<FaceBean> _addFacesAsTransaction(final Collection<FaceBean> beans)throws DuplicateReord{
-        return _runAsTransaction(new Callable<Collection<FaceBean>>(){      
+    /** 
+     * {@link #daoAddFace(Collection)}的事务化版本
+     */
+    protected Collection<FaceBean> daoAddFacesAsTransaction(final Collection<FaceBean> beans)throws DuplicateReordException{
+        return daoRunAsTransaction(new Callable<Collection<FaceBean>>(){      
             @Override
             public Collection<FaceBean> call() throws Exception {
-                return _addFaces(beans);
+                return daoAddFaces(beans);
             }});
     }
+    //16
     /**
      * 查询{@code where} SQL条件语句指定的 fl_face 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
@@ -1834,142 +1887,148 @@ class Dao implements CommonConstant {
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IFaceManager#loadByWhereAsList(String,int[],int,int)}
      */
-    //16
-    protected List<FaceBean> _loadFaceByWhere(String where,int startRow, int numRows){
+    protected List<FaceBean> daoLoadFaceByWhere(String where,int startRow, int numRows){
         return getFaceManager().loadByWhereAsList(where,null,startRow,numRows);
     }
+    //17
     /**
      * 返回 fl_face 表的所有记录
      * @see {@link IFaceManager#loadAllAsList()}
      */
-    //17
-    protected List<FaceBean> _loadFaceAll(){
+    protected List<FaceBean> daoLoadFaceAll(){
         return getFaceManager().loadAllAsList();
     }
+    //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_face 记录总数
      * @see {@link IFaceManager#Where(String)}
      */
-    //17-2
-    protected int _countFaceByWhere(String where){
+    protected int daoCountFaceByWhere(String where){
         return getFaceManager().countWhere(where);
     }
+    //18
     /** 
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
-     * @see #_loadFaceByWhere(String,int,int)
+     * @see #daoLoadFaceByWhere(String,int,int)
      */
-    //18
-    protected List<Integer> _loadFaceIdByWhere(String where){
-        return _toPrimaryKeyListFromFaces(_loadFaceByWhere(where,1,-1));
+    protected List<Integer> daoLoadFaceIdByWhere(String where){
+        return daoToPrimaryKeyListFromFaces(daoLoadFaceByWhere(where,1,-1));
     }
+    //19
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_face.create_time 字段大于指定时间戳({@code timestamp})的所有记录
-     * @see #_loadFaceByWhere(String,int,int)
+     * @see #daoLoadFaceByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    //19
-    protected List<FaceBean> _loadFaceByCreateTime(Date timestamp,int startRow, int numRows){
-        return _loadFaceByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
+    protected List<FaceBean> daoLoadFaceByCreateTime(Date timestamp,int startRow, int numRows){
+        return daoLoadFaceByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
     }
-    /** 参见 {@link #_loadFaceByCreateTime(Date,int,int)} */
     //20
-    protected List<FaceBean> _loadFaceByCreateTime(Date timestamp){
-        return _loadFaceByCreateTime(timestamp,1,-1);
+    /** 参见 {@link #daoLoadFaceByCreateTime(Date,int,int)} */
+    protected List<FaceBean> daoLoadFaceByCreateTime(Date timestamp){
+        return daoLoadFaceByCreateTime(timestamp,1,-1);
     }
+    //20-5
     /**
      * 返回fl_face.create_time 字段大于指定时间戳({@code timestamp})的记录总数
-     * @see #_countFaceByWhere(String)
+     * @see #daoCountFaceByWhere(String)
      */
-    //20-5
-    protected int _countFaceByCreateTime(Date timestamp){
-        return _countFaceByWhere(makeWhere(timestamp,"create_time"));
+    protected int daoCountFaceByCreateTime(Date timestamp){
+        return daoCountFaceByWhere(makeWhere(timestamp,"create_time"));
     }
+    //21
     /** 
      * (主动更新机制实现)<br>
      * 返回 fl_face.create_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @return 返回查询结果记录的主键
-     * @see {@link #_loadFaceIdByWhere(String)} 
+     * @see {@link #daoLoadFaceIdByWhere(String)} 
      */
-    //21
-    protected List<Integer> _loadFaceIdByCreateTime(Date timestamp){
-        return _loadFaceIdByWhere(makeWhere(timestamp,"create_time"));
+    protected List<Integer> daoLoadFaceIdByCreateTime(Date timestamp){
+        return daoLoadFaceIdByWhere(makeWhere(timestamp,"create_time"));
     }
 
 
 
     //////////// FL_FEATURE /////////
+    //1
     /** 
      * 根据主键从数据库读取记录
      * 
      * @param md5 主键,特征码md5校验码 
      * @see {@link IFeatureManager#loadByPrimaryKey(String)}
      */
-    //1
-    protected FeatureBean _getFeature(String md5){
+    protected FeatureBean daoGetFeature(String md5){
         return getFeatureManager().loadByPrimaryKey(md5);
     }
+    //2    
     /** 
      * 根据主键从数据库读取记录
      * @return 返回与输入参数下标对应的 FeatureBean 列表,没有查到记录的返回{@link FeatureBean#NULL}
      * @see {@link IFeatureManager#loadByPrimaryKey(Collection)}
      * @see FeatureBean#replaceNull(List)
      */
-    //2    
-    protected List<FeatureBean> _getFeatures(Collection<String> md5Collection){
+    protected List<FeatureBean> daoGetFeatures(Collection<String> md5Collection){
         return FeatureBean.replaceNull((getFeatureManager().loadByPrimaryKey(md5Collection)));
     }
+    //3  
     /** 
      * 删除主键列表({@code md5Collection})指定的记录
      * @return 返回删除的记录条数
      * @see {@link IFeatureManager#deleteByPrimaryKey(Collection)}
      */
-    //3  
-    protected int _deleteFeaturesByPrimaryKey(Collection<String> md5Collection){
-        if(null == md5Collection)return 0;
+    protected int daoDeleteFeaturesByPrimaryKey(Collection<String> md5Collection){
         int count =0;
-        for(String md5:md5Collection){
-            count += _deleteFeature(md5);
+        if(null != md5Collection){
+            for(String md5:md5Collection){
+                count += daoDeleteFeature(md5);
+            }
         }
         return count;
     }
     //3-5
-    protected List<String> _toPrimaryKeyListFromFeatures(Collection<FeatureBean> beans){
+    /**
+     * unwrap primary key from {@link FeatureBean}
+     * @param {@link FeatureBean} collection
+     * @return primary key list 
+     */
+    protected List<String> daoToPrimaryKeyListFromFeatures(Collection<FeatureBean> beans){
         return getFeatureManager().toPrimaryKeyList(beans);
     }
-    /** tranformer : FeatureBean to fl_feature.md5 */ 
     //3-7
-    protected final Function<FeatureBean,String> _castFeatureToPk = new Function<FeatureBean,String>(){
+    /** tranformer : FeatureBean to fl_feature.md5 */ 
+    protected final Function<FeatureBean,String> daoCastFeatureToPk = new Function<FeatureBean,String>(){
             @Override
             public String apply(FeatureBean input) {
                 return null == input ? null : input.getMd5();
             }};
     //3-8
     /** tranformer : fl_feature.md5 to FeatureBean */ 
-    protected final Function<String,FeatureBean> _castFeatureFromPk = new Function<String,FeatureBean>(){
+    protected final Function<String,FeatureBean> daoCastFeatureFromPk = new Function<String,FeatureBean>(){
             @Override
             public FeatureBean apply(String input) {
-                return _getFeature(input);
+                return daoGetFeature(input);
             }};
+    //4
     /** 
      *　判断主键指定的记录是否存在
      * 
      * @param md5 主键,特征码md5校验码 
      * @see {@link IFeatureManager#existsPrimaryKey(String)}
      */
-    //4
-    protected boolean _existsFeature(String md5){
+    protected boolean daoExistsFeature(String md5){
         return getFeatureManager().existsPrimaryKey(md5);
     }
+    //4-2
     /** 
      *　判断指定的记录是否存在
      * @see {@link IFeatureManager#existsPrimaryKey(FeatureBean)}
      */
-    //4-2
-    protected boolean _existsFeature(FeatureBean bean){
+    protected boolean daoExistsFeature(FeatureBean bean){
         return getFeatureManager().existsPrimaryKey(bean);
     }
+    //5
     /**
      * 删除主键指定的记录
      * 
@@ -1977,111 +2036,114 @@ class Dao implements CommonConstant {
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link IFeatureManager#deleteByPrimaryKey(String)}
      */
-    //5
-    protected int _deleteFeature(String md5){
+    protected int daoDeleteFeature(String md5){
         return getFeatureManager().deleteByPrimaryKey(md5);
     }
+    //5-2
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
      * @return 返回删除的记录条数(1),如果记录不存在返回0
-     * @see #_deleteFeature(String)
+     * @see #daoDeleteFeature(String)
      */
-    //5-2
-    protected int _deleteFeature(FeatureBean bean){
-        return null == bean ? null : _deleteFeature(bean.getMd5());
+    protected int daoDeleteFeature(FeatureBean bean){
+        return null == bean ? null : daoDeleteFeature(bean.getMd5());
     }
+    //6
     /**
      * 删除{@code featureBeanCollection}列表指定的记录
      * @return 返回删除的记录条数
-     * @see #_deleteFeature(String)
+     * @see #daoDeleteFeature(String)
      */
-    //6
-    protected int _deleteFeatures(Collection<FeatureBean> beans){
-        if(null == beans)return 0;
+    protected int daoDeleteFeatures(Collection<FeatureBean> beans){
         int count =0;
-        for(FeatureBean bean:beans){
-            if(null != bean)
-                count += _deleteFeature(bean.getMd5());
+        if(null != beans){        
+            for(FeatureBean bean:beans){
+                if(null != bean){
+                    count += daoDeleteFeature(bean.getMd5());
+                }
+            }
         }
         return count;
     }
+    //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IFeatureManager#checkDuplicate(FeatureBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      */
-    //7
-    protected FeatureBean _checkDuplicate(FeatureBean featureBean)throws DuplicateReord{
+    protected FeatureBean daoCheckDuplicate(FeatureBean featureBean)throws DuplicateReordException{
         try{
             return getFeatureManager().checkDuplicate(featureBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReord();
+            throw new DuplicateReordException();
         }
     }
+    //7-3
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
      * @param md5OfFeature 主键,特征码md5校验码 
      * @see {@link IFeatureManager#checkDuplicate(FeatureBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @return always {@code md5OfFeature} 
      */
-    //7-3
-    protected String _checkDuplicateFeature(String md5OfFeature)throws DuplicateReord{
-        if(getFeatureManager().existsPrimaryKey(md5OfFeature))
-            throw new DuplicateReord();
+    protected String daoCheckDuplicateFeature(String md5OfFeature)throws DuplicateReordException{
+        if(getFeatureManager().existsPrimaryKey(md5OfFeature)){
+            throw new DuplicateReordException();
+        }
         return md5OfFeature;
     }
+    //8
     /**
      * 返回外键(fl_face.feature_md5)引用指定记录(fl_feature.md5)的所有{@code fl_face}记录
      * 
      * @param md5OfFeature 主键,特征码md5校验码 
      * @see {@link IFeatureManager#getFaceBeansByFeatureMd5AsList(String)}
      */
-    //8
-    protected List<FaceBean> _getFaceBeansByFeatureMd5OnFeature(String md5OfFeature){
+    protected List<FaceBean> daoGetFaceBeansByFeatureMd5OnFeature(String md5OfFeature){
         return getFeatureManager().getFaceBeansByFeatureMd5AsList(md5OfFeature);
     }
+    //8-2
     /**
      * 删除外键(md5OfFeature))引用指定记录(fl_feature.md5)的所有{@code fl_face}记录
      * 
      * @param md5OfFeature 主键,特征码md5校验码 
      * @see {@link IFeatureManager#deleteFaceBeansByFeatureMd5(String)}
      */
-    //8-2
-    protected int _deleteFaceBeansByFeatureMd5OnFeature(String md5OfFeature){
+    protected int daoDeleteFaceBeansByFeatureMd5OnFeature(String md5OfFeature){
         return getFeatureManager().deleteFaceBeansByFeatureMd5(md5OfFeature);
     }
+    //8
     /**
      * 返回外键(fl_log.verify_feature)引用指定记录(fl_feature.md5)的所有{@code fl_log}记录
      * 
      * @param md5OfFeature 主键,特征码md5校验码 
      * @see {@link IFeatureManager#getLogBeansByVerifyFeatureAsList(String)}
      */
-    //8
-    protected List<LogBean> _getLogBeansByVerifyFeatureOnFeature(String md5OfFeature){
+    protected List<LogBean> daoGetLogBeansByVerifyFeatureOnFeature(String md5OfFeature){
         return getFeatureManager().getLogBeansByVerifyFeatureAsList(md5OfFeature);
     }
+    //8-2
     /**
      * 删除外键(md5OfFeature))引用指定记录(fl_feature.md5)的所有{@code fl_log}记录
      * 
      * @param md5OfFeature 主键,特征码md5校验码 
      * @see {@link IFeatureManager#deleteLogBeansByVerifyFeature(String)}
      */
-    //8-2
-    protected int _deleteLogBeansByVerifyFeatureOnFeature(String md5OfFeature){
+    protected int daoDeleteLogBeansByVerifyFeatureOnFeature(String md5OfFeature){
         return getFeatureManager().deleteLogBeansByVerifyFeature(md5OfFeature);
     }
+    //8-3
     /**
      * 返回外键(fl_feature.person_id)引用的 fl_person 记录
      * @param bean
      * @see {@link IFeatureManager#getReferencedByPersonId(FeatureBean)}
      */
-    //8-3
-    protected PersonBean _getReferencedByPersonIdOnFeature(FeatureBean bean){
+    protected PersonBean daoGetReferencedByPersonIdOnFeature(FeatureBean bean){
         return getFeatureManager().getReferencedByPersonId(bean);
     }
+    //8-4
     /**
      * 设置外键fl_feature(person_id)引用为{@code beanToSet}指定的记录,
      * 如果{@code beanToSet}没有保存则先save
@@ -2089,76 +2151,77 @@ class Dao implements CommonConstant {
      * @param beanToSet 被引用的记录
      * @see {@link IFeatureManager#setReferencedByPersonId(FeatureBean,PersonBean)}
      */
-    //8-4
-    protected PersonBean _setReferencedByPersonIdOnFeature(FeatureBean bean,PersonBean beanToSet){
+    protected PersonBean daoSetReferencedByPersonIdOnFeature(FeatureBean bean,PersonBean beanToSet){
         return getFeatureManager().setReferencedByPersonId(bean,beanToSet);
     }
-    /** tranformer : FeatureBean to fl_feature.person_id */
     //8-6
-    protected final Function<FeatureBean,Integer> _castFeatureToPersonId = new Function<FeatureBean,Integer>(){
+    /** tranformer : FeatureBean to fl_feature.person_id */
+    protected final Function<FeatureBean,Integer> daoCastFeatureToPersonId = new Function<FeatureBean,Integer>(){
             @Override
             public Integer apply(FeatureBean input) {
                 return null == input ? null : input.getPersonId();
             }};
+    //12
     /** 
      * 添加新记录<br>
      * fl_feature 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link FeatureBean#isNew()}返回{@code false},则抛出异常
      * @param featureBean 要添加的新记录
      * @see {@link IFeatureManager#save(FeatureBean)}
      * @see {@link IFeatureManager#checkDuplicate(FeatureBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @throws IllegalArgumentException if {@code featureBean.isNew()} is {@code false}
      */
-    //12
-    protected FeatureBean _addFeature(FeatureBean featureBean)throws DuplicateReord{
-        return getFeatureManager().save(_checkDuplicate(featureBean));
+    protected FeatureBean daoAddFeature(FeatureBean featureBean)throws DuplicateReordException{
+        return getFeatureManager().save(daoCheckDuplicate(featureBean));
     }
+    //13
     /** 
      * 添加新记录(同步保存)<br>
      * fl_feature 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link FeatureBean#isNew()}返回{@code false},则抛出异常
      * @param featureBean 要添加的新记录
      * @see {@link IFeatureManager#save(FeatureBean , PersonBean , Collection, Collection )}
      * @see {@link IFeatureManager#checkDuplicate(FeatureBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @throws IllegalArgumentException if {@code featureBean.isNew()} is {@code false}
      */
-    //13
-    protected FeatureBean _addFeature(FeatureBean featureBean
+    protected FeatureBean daoAddFeature(FeatureBean featureBean
         , PersonBean refPersonByPersonId 
         , Collection<FaceBean> impFaceByFeatureMd5 
-        , Collection<LogBean> impLogByVerifyFeature )throws DuplicateReord{
+        , Collection<LogBean> impLogByVerifyFeature )throws DuplicateReordException{
         checkArgument(null == featureBean || featureBean.isNew(),"can be add,delete,but modify record for fl_feature,so the _isNew field must be true");
-        _checkDuplicate(featureBean);
+        daoCheckDuplicate(featureBean);
         return getFeatureManager().save(featureBean
             , refPersonByPersonId 
             , impFaceByFeatureMd5 
             , impLogByVerifyFeature );
     }
+    //12-3-3
     /** 
      * 添加新记录<br>
      * @param beans 要添加的新记录集合
      * @return always {@code beans}
-     * @see #_addFeature(FeatureBean)
+     * @see #daoAddFeature(FeatureBean)
      */
-    //12-3-3
-    protected Collection<FeatureBean> _addFeatures(Collection<FeatureBean> beans)throws DuplicateReord{
+    protected Collection<FeatureBean> daoAddFeatures(Collection<FeatureBean> beans)throws DuplicateReordException{
         if(null != beans){
-            for(FeatureBean bean : beans)
-                _addFeature(bean);
+            for(FeatureBean bean : beans){
+                daoAddFeature(bean);
+            }
         }
         return beans;
     }
-    /** 
-     * {@link #_addFeature(Collection)}的事务化版本
-     */
     //12-3-5
-    protected Collection<FeatureBean> _addFeaturesAsTransaction(final Collection<FeatureBean> beans)throws DuplicateReord{
-        return _runAsTransaction(new Callable<Collection<FeatureBean>>(){      
+    /** 
+     * {@link #daoAddFeature(Collection)}的事务化版本
+     */
+    protected Collection<FeatureBean> daoAddFeaturesAsTransaction(final Collection<FeatureBean> beans)throws DuplicateReordException{
+        return daoRunAsTransaction(new Callable<Collection<FeatureBean>>(){      
             @Override
             public Collection<FeatureBean> call() throws Exception {
-                return _addFeatures(beans);
+                return daoAddFeatures(beans);
             }});
     }
+    //16
     /**
      * 查询{@code where} SQL条件语句指定的 fl_feature 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
@@ -2166,142 +2229,148 @@ class Dao implements CommonConstant {
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IFeatureManager#loadByWhereAsList(String,int[],int,int)}
      */
-    //16
-    protected List<FeatureBean> _loadFeatureByWhere(String where,int startRow, int numRows){
+    protected List<FeatureBean> daoLoadFeatureByWhere(String where,int startRow, int numRows){
         return getFeatureManager().loadByWhereAsList(where,null,startRow,numRows);
     }
+    //17
     /**
      * 返回 fl_feature 表的所有记录
      * @see {@link IFeatureManager#loadAllAsList()}
      */
-    //17
-    protected List<FeatureBean> _loadFeatureAll(){
+    protected List<FeatureBean> daoLoadFeatureAll(){
         return getFeatureManager().loadAllAsList();
     }
+    //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_feature 记录总数
      * @see {@link IFeatureManager#Where(String)}
      */
-    //17-2
-    protected int _countFeatureByWhere(String where){
+    protected int daoCountFeatureByWhere(String where){
         return getFeatureManager().countWhere(where);
     }
+    //18
     /** 
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
-     * @see #_loadFeatureByWhere(String,int,int)
+     * @see #daoLoadFeatureByWhere(String,int,int)
      */
-    //18
-    protected List<String> _loadFeatureMd5ByWhere(String where){
-        return _toPrimaryKeyListFromFeatures(_loadFeatureByWhere(where,1,-1));
+    protected List<String> daoLoadFeatureMd5ByWhere(String where){
+        return daoToPrimaryKeyListFromFeatures(daoLoadFeatureByWhere(where,1,-1));
     }
 
+    //19
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_feature.update_time 字段大于指定时间戳({@code timestamp})的所有记录
-     * @see #_loadFeatureByWhere(String,int,int)
+     * @see #daoLoadFeatureByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    //19
-    protected List<FeatureBean> _loadFeatureByUpdateTime(Date timestamp,int startRow, int numRows){
-        return _loadFeatureByWhere(makeWhere(timestamp,"update_time"),startRow,numRows);
+    protected List<FeatureBean> daoLoadFeatureByUpdateTime(Date timestamp,int startRow, int numRows){
+        return daoLoadFeatureByWhere(makeWhere(timestamp,"update_time"),startRow,numRows);
     }
-    /** 参见 {@link #_loadFeatureByUpdateTime(Date,int,int)} */
     //20
-    protected List<FeatureBean> _loadFeatureByUpdateTime(Date timestamp){
-        return _loadFeatureByUpdateTime(timestamp,1,-1);
+    /** 参见 {@link #daoLoadFeatureByUpdateTime(Date,int,int)} */
+    protected List<FeatureBean> daoLoadFeatureByUpdateTime(Date timestamp){
+        return daoLoadFeatureByUpdateTime(timestamp,1,-1);
     }
+    //20-5
     /**
      * 返回fl_feature.update_time 字段大于指定时间戳({@code timestamp})的记录总数
-     * @see #_countFeatureByWhere(String)
+     * @see #daoCountFeatureByWhere(String)
      */
-    //20-5
-    protected int _countFeatureByUpdateTime(Date timestamp){
-        return _countFeatureByWhere(makeWhere(timestamp,"update_time"));
+    protected int daoCountFeatureByUpdateTime(Date timestamp){
+        return daoCountFeatureByWhere(makeWhere(timestamp,"update_time"));
     }
+    //21
     /** 
      * (主动更新机制实现)<br>
      * 返回 fl_feature.update_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @return 返回查询结果记录的主键
-     * @see {@link #_loadFeatureMd5ByWhere(String)} 
+     * @see {@link #daoLoadFeatureMd5ByWhere(String)} 
      */
-    //21
-    protected List<String> _loadFeatureMd5ByUpdateTime(Date timestamp){
-        return _loadFeatureMd5ByWhere(makeWhere(timestamp,"update_time"));
+    protected List<String> daoLoadFeatureMd5ByUpdateTime(Date timestamp){
+        return daoLoadFeatureMd5ByWhere(makeWhere(timestamp,"update_time"));
     }
 
 
     //////////// FL_IMAGE /////////
+    //1
     /** 
      * 根据主键从数据库读取记录
      * 
      * @param md5 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
      * @see {@link IImageManager#loadByPrimaryKey(String)}
      */
-    //1
-    protected ImageBean _getImage(String md5){
+    protected ImageBean daoGetImage(String md5){
         return getImageManager().loadByPrimaryKey(md5);
     }
+    //2    
     /** 
      * 根据主键从数据库读取记录
      * @return 返回与输入参数下标对应的 ImageBean 列表,没有查到记录的返回{@link ImageBean#NULL}
      * @see {@link IImageManager#loadByPrimaryKey(Collection)}
      * @see ImageBean#replaceNull(List)
      */
-    //2    
-    protected List<ImageBean> _getImages(Collection<String> md5Collection){
+    protected List<ImageBean> daoGetImages(Collection<String> md5Collection){
         return ImageBean.replaceNull((getImageManager().loadByPrimaryKey(md5Collection)));
     }
+    //3  
     /** 
      * 删除主键列表({@code md5Collection})指定的记录
      * @return 返回删除的记录条数
      * @see {@link IImageManager#deleteByPrimaryKey(Collection)}
      */
-    //3  
-    protected int _deleteImagesByPrimaryKey(Collection<String> md5Collection){
-        if(null == md5Collection)return 0;
+    protected int daoDeleteImagesByPrimaryKey(Collection<String> md5Collection){
         int count =0;
-        for(String md5:md5Collection){
-            count += _deleteImage(md5);
+        if(null != md5Collection){
+            for(String md5:md5Collection){
+                count += daoDeleteImage(md5);
+            }
         }
         return count;
     }
     //3-5
-    protected List<String> _toPrimaryKeyListFromImages(Collection<ImageBean> beans){
+    /**
+     * unwrap primary key from {@link ImageBean}
+     * @param {@link ImageBean} collection
+     * @return primary key list 
+     */
+    protected List<String> daoToPrimaryKeyListFromImages(Collection<ImageBean> beans){
         return getImageManager().toPrimaryKeyList(beans);
     }
-    /** tranformer : ImageBean to fl_image.md5 */ 
     //3-7
-    protected final Function<ImageBean,String> _castImageToPk = new Function<ImageBean,String>(){
+    /** tranformer : ImageBean to fl_image.md5 */ 
+    protected final Function<ImageBean,String> daoCastImageToPk = new Function<ImageBean,String>(){
             @Override
             public String apply(ImageBean input) {
                 return null == input ? null : input.getMd5();
             }};
     //3-8
     /** tranformer : fl_image.md5 to ImageBean */ 
-    protected final Function<String,ImageBean> _castImageFromPk = new Function<String,ImageBean>(){
+    protected final Function<String,ImageBean> daoCastImageFromPk = new Function<String,ImageBean>(){
             @Override
             public ImageBean apply(String input) {
-                return _getImage(input);
+                return daoGetImage(input);
             }};
+    //4
     /** 
      *　判断主键指定的记录是否存在
      * 
      * @param md5 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
      * @see {@link IImageManager#existsPrimaryKey(String)}
      */
-    //4
-    protected boolean _existsImage(String md5){
+    protected boolean daoExistsImage(String md5){
         return getImageManager().existsPrimaryKey(md5);
     }
+    //4-2
     /** 
      *　判断指定的记录是否存在
      * @see {@link IImageManager#existsPrimaryKey(ImageBean)}
      */
-    //4-2
-    protected boolean _existsImage(ImageBean bean){
+    protected boolean daoExistsImage(ImageBean bean){
         return getImageManager().existsPrimaryKey(bean);
     }
+    //5
     /**
      * 删除主键指定的记录
      * 
@@ -2309,111 +2378,114 @@ class Dao implements CommonConstant {
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link IImageManager#deleteByPrimaryKey(String)}
      */
-    //5
-    protected int _deleteImage(String md5){
+    protected int daoDeleteImage(String md5){
         return getImageManager().deleteByPrimaryKey(md5);
     }
+    //5-2
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
      * @return 返回删除的记录条数(1),如果记录不存在返回0
-     * @see #_deleteImage(String)
+     * @see #daoDeleteImage(String)
      */
-    //5-2
-    protected int _deleteImage(ImageBean bean){
-        return null == bean ? null : _deleteImage(bean.getMd5());
+    protected int daoDeleteImage(ImageBean bean){
+        return null == bean ? null : daoDeleteImage(bean.getMd5());
     }
+    //6
     /**
      * 删除{@code imageBeanCollection}列表指定的记录
      * @return 返回删除的记录条数
-     * @see #_deleteImage(String)
+     * @see #daoDeleteImage(String)
      */
-    //6
-    protected int _deleteImages(Collection<ImageBean> beans){
-        if(null == beans)return 0;
+    protected int daoDeleteImages(Collection<ImageBean> beans){
         int count =0;
-        for(ImageBean bean:beans){
-            if(null != bean)
-                count += _deleteImage(bean.getMd5());
+        if(null != beans){        
+            for(ImageBean bean:beans){
+                if(null != bean){
+                    count += daoDeleteImage(bean.getMd5());
+                }
+            }
         }
         return count;
     }
+    //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IImageManager#checkDuplicate(ImageBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      */
-    //7
-    protected ImageBean _checkDuplicate(ImageBean imageBean)throws DuplicateReord{
+    protected ImageBean daoCheckDuplicate(ImageBean imageBean)throws DuplicateReordException{
         try{
             return getImageManager().checkDuplicate(imageBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReord();
+            throw new DuplicateReordException();
         }
     }
+    //7-3
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
      * @param md5OfImage 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
      * @see {@link IImageManager#checkDuplicate(ImageBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @return always {@code md5OfImage} 
      */
-    //7-3
-    protected String _checkDuplicateImage(String md5OfImage)throws DuplicateReord{
-        if(getImageManager().existsPrimaryKey(md5OfImage))
-            throw new DuplicateReord();
+    protected String daoCheckDuplicateImage(String md5OfImage)throws DuplicateReordException{
+        if(getImageManager().existsPrimaryKey(md5OfImage)){
+            throw new DuplicateReordException();
+        }
         return md5OfImage;
     }
+    //8
     /**
      * 返回外键(fl_face.image_md5)引用指定记录(fl_image.md5)的所有{@code fl_face}记录
      * 
      * @param md5OfImage 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
      * @see {@link IImageManager#getFaceBeansByImageMd5AsList(String)}
      */
-    //8
-    protected List<FaceBean> _getFaceBeansByImageMd5OnImage(String md5OfImage){
+    protected List<FaceBean> daoGetFaceBeansByImageMd5OnImage(String md5OfImage){
         return getImageManager().getFaceBeansByImageMd5AsList(md5OfImage);
     }
+    //8-2
     /**
      * 删除外键(md5OfImage))引用指定记录(fl_image.md5)的所有{@code fl_face}记录
      * 
      * @param md5OfImage 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
      * @see {@link IImageManager#deleteFaceBeansByImageMd5(String)}
      */
-    //8-2
-    protected int _deleteFaceBeansByImageMd5OnImage(String md5OfImage){
+    protected int daoDeleteFaceBeansByImageMd5OnImage(String md5OfImage){
         return getImageManager().deleteFaceBeansByImageMd5(md5OfImage);
     }
+    //8
     /**
      * 返回外键(fl_person.image_md5)引用指定记录(fl_image.md5)的所有{@code fl_person}记录
      * 
      * @param md5OfImage 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
      * @see {@link IImageManager#getPersonBeansByImageMd5AsList(String)}
      */
-    //8
-    protected List<PersonBean> _getPersonBeansByImageMd5OnImage(String md5OfImage){
+    protected List<PersonBean> daoGetPersonBeansByImageMd5OnImage(String md5OfImage){
         return getImageManager().getPersonBeansByImageMd5AsList(md5OfImage);
     }
+    //8-2
     /**
      * 删除外键(md5OfImage))引用指定记录(fl_image.md5)的所有{@code fl_person}记录
      * 
      * @param md5OfImage 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
      * @see {@link IImageManager#deletePersonBeansByImageMd5(String)}
      */
-    //8-2
-    protected int _deletePersonBeansByImageMd5OnImage(String md5OfImage){
+    protected int daoDeletePersonBeansByImageMd5OnImage(String md5OfImage){
         return getImageManager().deletePersonBeansByImageMd5(md5OfImage);
     }
+    //8-3
     /**
      * 返回外键(fl_image.device_id)引用的 fl_device 记录
      * @param bean
      * @see {@link IImageManager#getReferencedByDeviceId(ImageBean)}
      */
-    //8-3
-    protected DeviceBean _getReferencedByDeviceIdOnImage(ImageBean bean){
+    protected DeviceBean daoGetReferencedByDeviceIdOnImage(ImageBean bean){
         return getImageManager().getReferencedByDeviceId(bean);
     }
+    //8-4
     /**
      * 设置外键fl_image(device_id)引用为{@code beanToSet}指定的记录,
      * 如果{@code beanToSet}没有保存则先save
@@ -2421,76 +2493,77 @@ class Dao implements CommonConstant {
      * @param beanToSet 被引用的记录
      * @see {@link IImageManager#setReferencedByDeviceId(ImageBean,DeviceBean)}
      */
-    //8-4
-    protected DeviceBean _setReferencedByDeviceIdOnImage(ImageBean bean,DeviceBean beanToSet){
+    protected DeviceBean daoSetReferencedByDeviceIdOnImage(ImageBean bean,DeviceBean beanToSet){
         return getImageManager().setReferencedByDeviceId(bean,beanToSet);
     }
-    /** tranformer : ImageBean to fl_image.device_id */
     //8-6
-    protected final Function<ImageBean,Integer> _castImageToDeviceId = new Function<ImageBean,Integer>(){
+    /** tranformer : ImageBean to fl_image.device_id */
+    protected final Function<ImageBean,Integer> daoCastImageToDeviceId = new Function<ImageBean,Integer>(){
             @Override
             public Integer apply(ImageBean input) {
                 return null == input ? null : input.getDeviceId();
             }};
+    //12
     /** 
      * 添加新记录<br>
      * fl_image 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link ImageBean#isNew()}返回{@code false},则抛出异常
      * @param imageBean 要添加的新记录
      * @see {@link IImageManager#save(ImageBean)}
      * @see {@link IImageManager#checkDuplicate(ImageBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @throws IllegalArgumentException if {@code imageBean.isNew()} is {@code false}
      */
-    //12
-    protected ImageBean _addImage(ImageBean imageBean)throws DuplicateReord{
-        return getImageManager().save(_checkDuplicate(imageBean));
+    protected ImageBean daoAddImage(ImageBean imageBean)throws DuplicateReordException{
+        return getImageManager().save(daoCheckDuplicate(imageBean));
     }
+    //13
     /** 
      * 添加新记录(同步保存)<br>
      * fl_image 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link ImageBean#isNew()}返回{@code false},则抛出异常
      * @param imageBean 要添加的新记录
      * @see {@link IImageManager#save(ImageBean , DeviceBean , Collection, Collection )}
      * @see {@link IImageManager#checkDuplicate(ImageBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @throws IllegalArgumentException if {@code imageBean.isNew()} is {@code false}
      */
-    //13
-    protected ImageBean _addImage(ImageBean imageBean
+    protected ImageBean daoAddImage(ImageBean imageBean
         , DeviceBean refDeviceByDeviceId 
         , Collection<FaceBean> impFaceByImageMd5 
-        , Collection<PersonBean> impPersonByImageMd5 )throws DuplicateReord{
+        , Collection<PersonBean> impPersonByImageMd5 )throws DuplicateReordException{
         checkArgument(null == imageBean || imageBean.isNew(),"can be add,delete,but modify record for fl_image,so the _isNew field must be true");
-        _checkDuplicate(imageBean);
+        daoCheckDuplicate(imageBean);
         return getImageManager().save(imageBean
             , refDeviceByDeviceId 
             , impFaceByImageMd5 
             , impPersonByImageMd5 );
     }
+    //12-3-3
     /** 
      * 添加新记录<br>
      * @param beans 要添加的新记录集合
      * @return always {@code beans}
-     * @see #_addImage(ImageBean)
+     * @see #daoAddImage(ImageBean)
      */
-    //12-3-3
-    protected Collection<ImageBean> _addImages(Collection<ImageBean> beans)throws DuplicateReord{
+    protected Collection<ImageBean> daoAddImages(Collection<ImageBean> beans)throws DuplicateReordException{
         if(null != beans){
-            for(ImageBean bean : beans)
-                _addImage(bean);
+            for(ImageBean bean : beans){
+                daoAddImage(bean);
+            }
         }
         return beans;
     }
-    /** 
-     * {@link #_addImage(Collection)}的事务化版本
-     */
     //12-3-5
-    protected Collection<ImageBean> _addImagesAsTransaction(final Collection<ImageBean> beans)throws DuplicateReord{
-        return _runAsTransaction(new Callable<Collection<ImageBean>>(){      
+    /** 
+     * {@link #daoAddImage(Collection)}的事务化版本
+     */
+    protected Collection<ImageBean> daoAddImagesAsTransaction(final Collection<ImageBean> beans)throws DuplicateReordException{
+        return daoRunAsTransaction(new Callable<Collection<ImageBean>>(){      
             @Override
             public Collection<ImageBean> call() throws Exception {
-                return _addImages(beans);
+                return daoAddImages(beans);
             }});
     }
+    //16
     /**
      * 查询{@code where} SQL条件语句指定的 fl_image 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
@@ -2498,109 +2571,115 @@ class Dao implements CommonConstant {
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IImageManager#loadByWhereAsList(String,int[],int,int)}
      */
-    //16
-    protected List<ImageBean> _loadImageByWhere(String where,int startRow, int numRows){
+    protected List<ImageBean> daoLoadImageByWhere(String where,int startRow, int numRows){
         return getImageManager().loadByWhereAsList(where,null,startRow,numRows);
     }
+    //17
     /**
      * 返回 fl_image 表的所有记录
      * @see {@link IImageManager#loadAllAsList()}
      */
-    //17
-    protected List<ImageBean> _loadImageAll(){
+    protected List<ImageBean> daoLoadImageAll(){
         return getImageManager().loadAllAsList();
     }
+    //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_image 记录总数
      * @see {@link IImageManager#Where(String)}
      */
-    //17-2
-    protected int _countImageByWhere(String where){
+    protected int daoCountImageByWhere(String where){
         return getImageManager().countWhere(where);
     }
+    //18
     /** 
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
-     * @see #_loadImageByWhere(String,int,int)
+     * @see #daoLoadImageByWhere(String,int,int)
      */
-    //18
-    protected List<String> _loadImageMd5ByWhere(String where){
-        return _toPrimaryKeyListFromImages(_loadImageByWhere(where,1,-1));
+    protected List<String> daoLoadImageMd5ByWhere(String where){
+        return daoToPrimaryKeyListFromImages(daoLoadImageByWhere(where,1,-1));
     }
 
 
 
     //////////// FL_LOG /////////
+    //1
     /** 
      * 根据主键从数据库读取记录
      * 
      * @param id 日志id 
      * @see {@link ILogManager#loadByPrimaryKey(Integer)}
      */
-    //1
-    protected LogBean _getLog(Integer id){
+    protected LogBean daoGetLog(Integer id){
         return getLogManager().loadByPrimaryKey(id);
     }
+    //2    
     /** 
      * 根据主键从数据库读取记录
      * @return 返回与输入参数下标对应的 LogBean 列表,没有查到记录的返回{@link LogBean#NULL}
      * @see {@link ILogManager#loadByPrimaryKey(Collection)}
      * @see LogBean#replaceNull(List)
      */
-    //2    
-    protected List<LogBean> _getLogs(Collection<Integer> idCollection){
+    protected List<LogBean> daoGetLogs(Collection<Integer> idCollection){
         return LogBean.replaceNull((getLogManager().loadByPrimaryKey(idCollection)));
     }
+    //3  
     /** 
      * 删除主键列表({@code idCollection})指定的记录
      * @return 返回删除的记录条数
      * @see {@link ILogManager#deleteByPrimaryKey(Collection)}
      */
-    //3  
-    protected int _deleteLogsByPrimaryKey(Collection<Integer> idCollection){
-        if(null == idCollection)return 0;
+    protected int daoDeleteLogsByPrimaryKey(Collection<Integer> idCollection){
         int count =0;
-        for(Integer id:idCollection){
-            count += _deleteLog(id);
+        if(null != idCollection){
+            for(Integer id:idCollection){
+                count += daoDeleteLog(id);
+            }
         }
         return count;
     }
     //3-5
-    protected List<Integer> _toPrimaryKeyListFromLogs(Collection<LogBean> beans){
+    /**
+     * unwrap primary key from {@link LogBean}
+     * @param {@link LogBean} collection
+     * @return primary key list 
+     */
+    protected List<Integer> daoToPrimaryKeyListFromLogs(Collection<LogBean> beans){
         return getLogManager().toPrimaryKeyList(beans);
     }
-    /** tranformer : LogBean to fl_log.id */ 
     //3-7
-    protected final Function<LogBean,Integer> _castLogToPk = new Function<LogBean,Integer>(){
+    /** tranformer : LogBean to fl_log.id */ 
+    protected final Function<LogBean,Integer> daoCastLogToPk = new Function<LogBean,Integer>(){
             @Override
             public Integer apply(LogBean input) {
                 return null == input ? null : input.getId();
             }};
     //3-8
     /** tranformer : fl_log.id to LogBean */ 
-    protected final Function<Integer,LogBean> _castLogFromPk = new Function<Integer,LogBean>(){
+    protected final Function<Integer,LogBean> daoCastLogFromPk = new Function<Integer,LogBean>(){
             @Override
             public LogBean apply(Integer input) {
-                return _getLog(input);
+                return daoGetLog(input);
             }};
+    //4
     /** 
      *　判断主键指定的记录是否存在
      * 
      * @param id 日志id 
      * @see {@link ILogManager#existsPrimaryKey(Integer)}
      */
-    //4
-    protected boolean _existsLog(Integer id){
+    protected boolean daoExistsLog(Integer id){
         return getLogManager().existsPrimaryKey(id);
     }
+    //4-2
     /** 
      *　判断指定的记录是否存在
      * @see {@link ILogManager#existsPrimaryKey(LogBean)}
      */
-    //4-2
-    protected boolean _existsLog(LogBean bean){
+    protected boolean daoExistsLog(LogBean bean){
         return getLogManager().existsPrimaryKey(bean);
     }
+    //5
     /**
      * 删除主键指定的记录
      * 
@@ -2608,71 +2687,74 @@ class Dao implements CommonConstant {
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link ILogManager#deleteByPrimaryKey(Integer)}
      */
-    //5
-    protected int _deleteLog(Integer id){
+    protected int daoDeleteLog(Integer id){
         return getLogManager().deleteByPrimaryKey(id);
     }
+    //5-2
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
      * @return 返回删除的记录条数(1),如果记录不存在返回0
-     * @see #_deleteLog(Integer)
+     * @see #daoDeleteLog(Integer)
      */
-    //5-2
-    protected int _deleteLog(LogBean bean){
-        return null == bean ? null : _deleteLog(bean.getId());
+    protected int daoDeleteLog(LogBean bean){
+        return null == bean ? null : daoDeleteLog(bean.getId());
     }
+    //6
     /**
      * 删除{@code logBeanCollection}列表指定的记录
      * @return 返回删除的记录条数
-     * @see #_deleteLog(Integer)
+     * @see #daoDeleteLog(Integer)
      */
-    //6
-    protected int _deleteLogs(Collection<LogBean> beans){
-        if(null == beans)return 0;
+    protected int daoDeleteLogs(Collection<LogBean> beans){
         int count =0;
-        for(LogBean bean:beans){
-            if(null != bean)
-                count += _deleteLog(bean.getId());
+        if(null != beans){        
+            for(LogBean bean:beans){
+                if(null != bean){
+                    count += daoDeleteLog(bean.getId());
+                }
+            }
         }
         return count;
     }
+    //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link ILogManager#checkDuplicate(LogBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      */
-    //7
-    protected LogBean _checkDuplicate(LogBean logBean)throws DuplicateReord{
+    protected LogBean daoCheckDuplicate(LogBean logBean)throws DuplicateReordException{
         try{
             return getLogManager().checkDuplicate(logBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReord();
+            throw new DuplicateReordException();
         }
     }
+    //7-3
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
      * @param idOfLog 日志id 
      * @see {@link ILogManager#checkDuplicate(LogBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @return always {@code idOfLog} 
      */
-    //7-3
-    protected Integer _checkDuplicateLog(Integer idOfLog)throws DuplicateReord{
-        if(getLogManager().existsPrimaryKey(idOfLog))
-            throw new DuplicateReord();
+    protected Integer daoCheckDuplicateLog(Integer idOfLog)throws DuplicateReordException{
+        if(getLogManager().existsPrimaryKey(idOfLog)){
+            throw new DuplicateReordException();
+        }
         return idOfLog;
     }
+    //8-3
     /**
      * 返回外键(fl_log.device_id)引用的 fl_device 记录
      * @param bean
      * @see {@link ILogManager#getReferencedByDeviceId(LogBean)}
      */
-    //8-3
-    protected DeviceBean _getReferencedByDeviceIdOnLog(LogBean bean){
+    protected DeviceBean daoGetReferencedByDeviceIdOnLog(LogBean bean){
         return getLogManager().getReferencedByDeviceId(bean);
     }
+    //8-4
     /**
      * 设置外键fl_log(device_id)引用为{@code beanToSet}指定的记录,
      * 如果{@code beanToSet}没有保存则先save
@@ -2680,26 +2762,26 @@ class Dao implements CommonConstant {
      * @param beanToSet 被引用的记录
      * @see {@link ILogManager#setReferencedByDeviceId(LogBean,DeviceBean)}
      */
-    //8-4
-    protected DeviceBean _setReferencedByDeviceIdOnLog(LogBean bean,DeviceBean beanToSet){
+    protected DeviceBean daoSetReferencedByDeviceIdOnLog(LogBean bean,DeviceBean beanToSet){
         return getLogManager().setReferencedByDeviceId(bean,beanToSet);
     }
-    /** tranformer : LogBean to fl_log.device_id */
     //8-6
-    protected final Function<LogBean,Integer> _castLogToDeviceId = new Function<LogBean,Integer>(){
+    /** tranformer : LogBean to fl_log.device_id */
+    protected final Function<LogBean,Integer> daoCastLogToDeviceId = new Function<LogBean,Integer>(){
             @Override
             public Integer apply(LogBean input) {
                 return null == input ? null : input.getDeviceId();
             }};
+    //8-3
     /**
      * 返回外键(fl_log.compare_face)引用的 fl_face 记录
      * @param bean
      * @see {@link ILogManager#getReferencedByCompareFace(LogBean)}
      */
-    //8-3
-    protected FaceBean _getReferencedByCompareFaceOnLog(LogBean bean){
+    protected FaceBean daoGetReferencedByCompareFaceOnLog(LogBean bean){
         return getLogManager().getReferencedByCompareFace(bean);
     }
+    //8-4
     /**
      * 设置外键fl_log(compare_face)引用为{@code beanToSet}指定的记录,
      * 如果{@code beanToSet}没有保存则先save
@@ -2707,26 +2789,26 @@ class Dao implements CommonConstant {
      * @param beanToSet 被引用的记录
      * @see {@link ILogManager#setReferencedByCompareFace(LogBean,FaceBean)}
      */
-    //8-4
-    protected FaceBean _setReferencedByCompareFaceOnLog(LogBean bean,FaceBean beanToSet){
+    protected FaceBean daoSetReferencedByCompareFaceOnLog(LogBean bean,FaceBean beanToSet){
         return getLogManager().setReferencedByCompareFace(bean,beanToSet);
     }
-    /** tranformer : LogBean to fl_log.compare_face */
     //8-6
-    protected final Function<LogBean,Integer> _castLogToCompareFace = new Function<LogBean,Integer>(){
+    /** tranformer : LogBean to fl_log.compare_face */
+    protected final Function<LogBean,Integer> daoCastLogToCompareFace = new Function<LogBean,Integer>(){
             @Override
             public Integer apply(LogBean input) {
                 return null == input ? null : input.getCompareFace();
             }};
+    //8-3
     /**
      * 返回外键(fl_log.verify_feature)引用的 fl_feature 记录
      * @param bean
      * @see {@link ILogManager#getReferencedByVerifyFeature(LogBean)}
      */
-    //8-3
-    protected FeatureBean _getReferencedByVerifyFeatureOnLog(LogBean bean){
+    protected FeatureBean daoGetReferencedByVerifyFeatureOnLog(LogBean bean){
         return getLogManager().getReferencedByVerifyFeature(bean);
     }
+    //8-4
     /**
      * 设置外键fl_log(verify_feature)引用为{@code beanToSet}指定的记录,
      * 如果{@code beanToSet}没有保存则先save
@@ -2734,26 +2816,26 @@ class Dao implements CommonConstant {
      * @param beanToSet 被引用的记录
      * @see {@link ILogManager#setReferencedByVerifyFeature(LogBean,FeatureBean)}
      */
-    //8-4
-    protected FeatureBean _setReferencedByVerifyFeatureOnLog(LogBean bean,FeatureBean beanToSet){
+    protected FeatureBean daoSetReferencedByVerifyFeatureOnLog(LogBean bean,FeatureBean beanToSet){
         return getLogManager().setReferencedByVerifyFeature(bean,beanToSet);
     }
-    /** tranformer : LogBean to fl_log.verify_feature */
     //8-6
-    protected final Function<LogBean,String> _castLogToVerifyFeature = new Function<LogBean,String>(){
+    /** tranformer : LogBean to fl_log.verify_feature */
+    protected final Function<LogBean,String> daoCastLogToVerifyFeature = new Function<LogBean,String>(){
             @Override
             public String apply(LogBean input) {
                 return null == input ? null : input.getVerifyFeature();
             }};
+    //8-3
     /**
      * 返回外键(fl_log.person_id)引用的 fl_person 记录
      * @param bean
      * @see {@link ILogManager#getReferencedByPersonId(LogBean)}
      */
-    //8-3
-    protected PersonBean _getReferencedByPersonIdOnLog(LogBean bean){
+    protected PersonBean daoGetReferencedByPersonIdOnLog(LogBean bean){
         return getLogManager().getReferencedByPersonId(bean);
     }
+    //8-4
     /**
      * 设置外键fl_log(person_id)引用为{@code beanToSet}指定的记录,
      * 如果{@code beanToSet}没有保存则先save
@@ -2761,48 +2843,47 @@ class Dao implements CommonConstant {
      * @param beanToSet 被引用的记录
      * @see {@link ILogManager#setReferencedByPersonId(LogBean,PersonBean)}
      */
-    //8-4
-    protected PersonBean _setReferencedByPersonIdOnLog(LogBean bean,PersonBean beanToSet){
+    protected PersonBean daoSetReferencedByPersonIdOnLog(LogBean bean,PersonBean beanToSet){
         return getLogManager().setReferencedByPersonId(bean,beanToSet);
     }
-    /** tranformer : LogBean to fl_log.person_id */
     //8-6
-    protected final Function<LogBean,Integer> _castLogToPersonId = new Function<LogBean,Integer>(){
+    /** tranformer : LogBean to fl_log.person_id */
+    protected final Function<LogBean,Integer> daoCastLogToPersonId = new Function<LogBean,Integer>(){
             @Override
             public Integer apply(LogBean input) {
                 return null == input ? null : input.getPersonId();
             }};
+    //12
     /** 
      * 添加新记录<br>
      * fl_log 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link LogBean#isNew()}返回{@code false},则抛出异常
      * @param logBean 要添加的新记录
      * @see {@link ILogManager#save(LogBean)}
      * @see {@link ILogManager#checkDuplicate(LogBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @throws IllegalArgumentException if {@code logBean.isNew()} is {@code false}
      */
-    //12
-    protected LogBean _addLog(LogBean logBean)throws DuplicateReord{
-        return getLogManager().save(_checkDuplicate(logBean));
+    protected LogBean daoAddLog(LogBean logBean)throws DuplicateReordException{
+        return getLogManager().save(daoCheckDuplicate(logBean));
     }
+    //13
     /** 
      * 添加新记录(同步保存)<br>
      * fl_log 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link LogBean#isNew()}返回{@code false},则抛出异常
      * @param logBean 要添加的新记录
      * @see {@link ILogManager#save(LogBean , DeviceBean, FaceBean, FeatureBean, PersonBean  )}
      * @see {@link ILogManager#checkDuplicate(LogBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @throws IllegalArgumentException if {@code logBean.isNew()} is {@code false}
      */
-    //13
-    protected LogBean _addLog(LogBean logBean
+    protected LogBean daoAddLog(LogBean logBean
         , DeviceBean refDeviceByDeviceId 
         , FaceBean refFaceByCompareFace 
         , FeatureBean refFeatureByVerifyFeature 
         , PersonBean refPersonByPersonId 
-        )throws DuplicateReord{
+        )throws DuplicateReordException{
         checkArgument(null == logBean || logBean.isNew(),"can be add,delete,but modify record for fl_log,so the _isNew field must be true");
-        _checkDuplicate(logBean);
+        daoCheckDuplicate(logBean);
         return getLogManager().save(logBean
             , refDeviceByDeviceId 
             , refFaceByCompareFace 
@@ -2810,31 +2891,33 @@ class Dao implements CommonConstant {
             , refPersonByPersonId 
             );
     }
+    //12-3-3
     /** 
      * 添加新记录<br>
      * @param beans 要添加的新记录集合
      * @return always {@code beans}
-     * @see #_addLog(LogBean)
+     * @see #daoAddLog(LogBean)
      */
-    //12-3-3
-    protected Collection<LogBean> _addLogs(Collection<LogBean> beans)throws DuplicateReord{
+    protected Collection<LogBean> daoAddLogs(Collection<LogBean> beans)throws DuplicateReordException{
         if(null != beans){
-            for(LogBean bean : beans)
-                _addLog(bean);
+            for(LogBean bean : beans){
+                daoAddLog(bean);
+            }
         }
         return beans;
     }
-    /** 
-     * {@link #_addLog(Collection)}的事务化版本
-     */
     //12-3-5
-    protected Collection<LogBean> _addLogsAsTransaction(final Collection<LogBean> beans)throws DuplicateReord{
-        return _runAsTransaction(new Callable<Collection<LogBean>>(){      
+    /** 
+     * {@link #daoAddLog(Collection)}的事务化版本
+     */
+    protected Collection<LogBean> daoAddLogsAsTransaction(final Collection<LogBean> beans)throws DuplicateReordException{
+        return daoRunAsTransaction(new Callable<Collection<LogBean>>(){      
             @Override
             public Collection<LogBean> call() throws Exception {
-                return _addLogs(beans);
+                return daoAddLogs(beans);
             }});
     }
+    //16
     /**
      * 查询{@code where} SQL条件语句指定的 fl_log 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
@@ -2842,105 +2925,105 @@ class Dao implements CommonConstant {
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link ILogManager#loadByWhereAsList(String,int[],int,int)}
      */
-    //16
-    protected List<LogBean> _loadLogByWhere(String where,int startRow, int numRows){
+    protected List<LogBean> daoLoadLogByWhere(String where,int startRow, int numRows){
         return getLogManager().loadByWhereAsList(where,null,startRow,numRows);
     }
+    //17
     /**
      * 返回 fl_log 表的所有记录
      * @see {@link ILogManager#loadAllAsList()}
      */
-    //17
-    protected List<LogBean> _loadLogAll(){
+    protected List<LogBean> daoLoadLogAll(){
         return getLogManager().loadAllAsList();
     }
+    //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_log 记录总数
      * @see {@link ILogManager#Where(String)}
      */
-    //17-2
-    protected int _countLogByWhere(String where){
+    protected int daoCountLogByWhere(String where){
         return getLogManager().countWhere(where);
     }
+    //18
     /** 
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
-     * @see #_loadLogByWhere(String,int,int)
+     * @see #daoLoadLogByWhere(String,int,int)
      */
-    //18
-    protected List<Integer> _loadLogIdByWhere(String where){
-        return _toPrimaryKeyListFromLogs(_loadLogByWhere(where,1,-1));
+    protected List<Integer> daoLoadLogIdByWhere(String where){
+        return daoToPrimaryKeyListFromLogs(daoLoadLogByWhere(where,1,-1));
     }
+    //19
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_log.create_time 字段大于指定时间戳({@code timestamp})的所有记录
-     * @see #_loadLogByWhere(String,int,int)
+     * @see #daoLoadLogByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    //19
-    protected List<LogBean> _loadLogByCreateTime(Date timestamp,int startRow, int numRows){
-        return _loadLogByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
+    protected List<LogBean> daoLoadLogByCreateTime(Date timestamp,int startRow, int numRows){
+        return daoLoadLogByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
     }
-    /** 参见 {@link #_loadLogByCreateTime(Date,int,int)} */
     //20
-    protected List<LogBean> _loadLogByCreateTime(Date timestamp){
-        return _loadLogByCreateTime(timestamp,1,-1);
+    /** 参见 {@link #daoLoadLogByCreateTime(Date,int,int)} */
+    protected List<LogBean> daoLoadLogByCreateTime(Date timestamp){
+        return daoLoadLogByCreateTime(timestamp,1,-1);
     }
+    //20-5
     /**
      * 返回fl_log.create_time 字段大于指定时间戳({@code timestamp})的记录总数
-     * @see #_countLogByWhere(String)
+     * @see #daoCountLogByWhere(String)
      */
-    //20-5
-    protected int _countLogByCreateTime(Date timestamp){
-        return _countLogByWhere(makeWhere(timestamp,"create_time"));
+    protected int daoCountLogByCreateTime(Date timestamp){
+        return daoCountLogByWhere(makeWhere(timestamp,"create_time"));
     }
+    //21
     /** 
      * (主动更新机制实现)<br>
      * 返回 fl_log.create_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @return 返回查询结果记录的主键
-     * @see {@link #_loadLogIdByWhere(String)} 
+     * @see {@link #daoLoadLogIdByWhere(String)} 
      */
-    //21
-    protected List<Integer> _loadLogIdByCreateTime(Date timestamp){
-        return _loadLogIdByWhere(makeWhere(timestamp,"create_time"));
+    protected List<Integer> daoLoadLogIdByCreateTime(Date timestamp){
+        return daoLoadLogIdByWhere(makeWhere(timestamp,"create_time"));
     }
 
 
+    //19
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_log.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
-     * @see #_loadLogByWhere(String,int,int)
+     * @see #daoLoadLogByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    //19
-    protected List<LogBean> _loadLogByVerifyTime(Date timestamp,int startRow, int numRows){
-        return _loadLogByWhere(makeWhere(timestamp,"verify_time"),startRow,numRows);
+    protected List<LogBean> daoLoadLogByVerifyTime(Date timestamp,int startRow, int numRows){
+        return daoLoadLogByWhere(makeWhere(timestamp,"verify_time"),startRow,numRows);
     }
-    /** 参见 {@link #_loadLogByVerifyTime(Date,int,int)} */
     //20
-    protected List<LogBean> _loadLogByVerifyTime(Date timestamp){
-        return _loadLogByVerifyTime(timestamp,1,-1);
+    /** 参见 {@link #daoLoadLogByVerifyTime(Date,int,int)} */
+    protected List<LogBean> daoLoadLogByVerifyTime(Date timestamp){
+        return daoLoadLogByVerifyTime(timestamp,1,-1);
     }
+    //20-5
     /**
      * 返回fl_log.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
-     * @see #_countLogByWhere(String)
+     * @see #daoCountLogByWhere(String)
      */
-    //20-5
-    protected int _countLogByVerifyTime(Date timestamp){
-        return _countLogByWhere(makeWhere(timestamp,"verify_time"));
+    protected int daoCountLogByVerifyTime(Date timestamp){
+        return daoCountLogByWhere(makeWhere(timestamp,"verify_time"));
     }
+    //21
     /** 
      * (主动更新机制实现)<br>
      * 返回 fl_log.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @return 返回查询结果记录的主键
-     * @see {@link #_loadLogIdByWhere(String)} 
+     * @see {@link #daoLoadLogIdByWhere(String)} 
      */
-    //21
-    protected List<Integer> _loadLogIdByVerifyTime(Date timestamp){
-        return _loadLogIdByWhere(makeWhere(timestamp,"verify_time"));
+    protected List<Integer> daoLoadLogIdByVerifyTime(Date timestamp){
+        return daoLoadLogIdByWhere(makeWhere(timestamp,"verify_time"));
     }
 
     //////////// FL_PERMIT /////////
+    //1
     /** 
      * 根据主键从数据库读取记录
      * 
@@ -2948,10 +3031,10 @@ class Dao implements CommonConstant {
      * @param personGroupId 外键,人员组id 
      * @see {@link IPermitManager#loadByPrimaryKey(Integer,Integer)}
      */
-    //1
-    protected PermitBean _getPermit(Integer deviceGroupId,Integer personGroupId){
+    protected PermitBean daoGetPermit(Integer deviceGroupId,Integer personGroupId){
         return getPermitManager().loadByPrimaryKey(deviceGroupId,personGroupId);
     }
+    //4
     /** 
      *　判断主键指定的记录是否存在
      * 
@@ -2959,18 +3042,18 @@ class Dao implements CommonConstant {
      * @param personGroupId 外键,人员组id 
      * @see {@link IPermitManager#existsPrimaryKey(Integer,Integer)}
      */
-    //4
-    protected boolean _existsPermit(Integer deviceGroupId,Integer personGroupId){
+    protected boolean daoExistsPermit(Integer deviceGroupId,Integer personGroupId){
         return getPermitManager().existsPrimaryKey(deviceGroupId,personGroupId);
     }
+    //4-2
     /** 
      *　判断指定的记录是否存在
      * @see {@link IPermitManager#existsPrimaryKey(PermitBean)}
      */
-    //4-2
-    protected boolean _existsPermit(PermitBean bean){
+    protected boolean daoExistsPermit(PermitBean bean){
         return getPermitManager().existsPrimaryKey(bean);
     }
+    //5
     /**
      * 删除主键指定的记录
      * 
@@ -2979,71 +3062,74 @@ class Dao implements CommonConstant {
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link IPermitManager#deleteByPrimaryKey(Integer,Integer)}
      */
-    //5
-    protected int _deletePermit(Integer deviceGroupId,Integer personGroupId){
+    protected int daoDeletePermit(Integer deviceGroupId,Integer personGroupId){
         return getPermitManager().deleteByPrimaryKey(deviceGroupId,personGroupId);
     }
+    //5-2
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
      * @return 返回删除的记录条数(1),如果记录不存在返回0
-     * @see #_deletePermit(Integer,Integer)
+     * @see #daoDeletePermit(Integer,Integer)
      */
-    //5-2
-    protected int _deletePermit(PermitBean bean){
-        return null == bean ? null : _deletePermit(bean.getDeviceGroupId(),bean.getPersonGroupId());
+    protected int daoDeletePermit(PermitBean bean){
+        return null == bean ? null : daoDeletePermit(bean.getDeviceGroupId(),bean.getPersonGroupId());
     }
+    //6
     /**
      * 删除{@code permitBeanCollection}列表指定的记录
      * @return 返回删除的记录条数
-     * @see #_deletePermit(Integer,Integer)
+     * @see #daoDeletePermit(Integer,Integer)
      */
-    //6
-    protected int _deletePermits(Collection<PermitBean> beans){
-        if(null == beans)return 0;
+    protected int daoDeletePermits(Collection<PermitBean> beans){
         int count =0;
-        for(PermitBean bean:beans){
-            if(null != bean)
-                count += _deletePermit(bean.getDeviceGroupId(),bean.getPersonGroupId());
+        if(null != beans){        
+            for(PermitBean bean:beans){
+                if(null != bean){
+                    count += daoDeletePermit(bean.getDeviceGroupId(),bean.getPersonGroupId());
+                }
+            }
         }
         return count;
     }
+    //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IPermitManager#checkDuplicate(PermitBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      */
-    //7
-    protected PermitBean _checkDuplicate(PermitBean permitBean)throws DuplicateReord{
+    protected PermitBean daoCheckDuplicate(PermitBean permitBean)throws DuplicateReordException{
         try{
             return getPermitManager().checkDuplicate(permitBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReord();
+            throw new DuplicateReordException();
         }
     }
+    //7-3
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
      * @param deviceGroupIdOfPermit 外键,设备组id 
      * @param personGroupIdOfPermit 外键,人员组id 
      * @see {@link IPermitManager#checkDuplicate(PermitBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * 
      */
-    //7-3
-    protected void _checkDuplicatePermit(Integer deviceGroupIdOfPermit,Integer personGroupIdOfPermit)throws DuplicateReord{
-        if(getPermitManager().existsPrimaryKey(deviceGroupIdOfPermit,personGroupIdOfPermit))
-            throw new DuplicateReord();
+    protected void daoCheckDuplicatePermit(Integer deviceGroupIdOfPermit,Integer personGroupIdOfPermit)throws DuplicateReordException{
+        if(getPermitManager().existsPrimaryKey(deviceGroupIdOfPermit,personGroupIdOfPermit)){
+            throw new DuplicateReordException();
+        }
     }
+    //8-3
     /**
      * 返回外键(fl_permit.device_group_id)引用的 fl_device_group 记录
      * @param bean
      * @see {@link IPermitManager#getReferencedByDeviceGroupId(PermitBean)}
      */
-    //8-3
-    protected DeviceGroupBean _getReferencedByDeviceGroupIdOnPermit(PermitBean bean){
+    protected DeviceGroupBean daoGetReferencedByDeviceGroupIdOnPermit(PermitBean bean){
         return getPermitManager().getReferencedByDeviceGroupId(bean);
     }
+    //8-4
     /**
      * 设置外键fl_permit(device_group_id)引用为{@code beanToSet}指定的记录,
      * 如果{@code beanToSet}没有保存则先save
@@ -3051,26 +3137,26 @@ class Dao implements CommonConstant {
      * @param beanToSet 被引用的记录
      * @see {@link IPermitManager#setReferencedByDeviceGroupId(PermitBean,DeviceGroupBean)}
      */
-    //8-4
-    protected DeviceGroupBean _setReferencedByDeviceGroupIdOnPermit(PermitBean bean,DeviceGroupBean beanToSet){
+    protected DeviceGroupBean daoSetReferencedByDeviceGroupIdOnPermit(PermitBean bean,DeviceGroupBean beanToSet){
         return getPermitManager().setReferencedByDeviceGroupId(bean,beanToSet);
     }
-    /** tranformer : PermitBean to fl_permit.device_group_id */
     //8-6
-    protected final Function<PermitBean,Integer> _castPermitToDeviceGroupId = new Function<PermitBean,Integer>(){
+    /** tranformer : PermitBean to fl_permit.device_group_id */
+    protected final Function<PermitBean,Integer> daoCastPermitToDeviceGroupId = new Function<PermitBean,Integer>(){
             @Override
             public Integer apply(PermitBean input) {
                 return null == input ? null : input.getDeviceGroupId();
             }};
+    //8-3
     /**
      * 返回外键(fl_permit.person_group_id)引用的 fl_person_group 记录
      * @param bean
      * @see {@link IPermitManager#getReferencedByPersonGroupId(PermitBean)}
      */
-    //8-3
-    protected PersonGroupBean _getReferencedByPersonGroupIdOnPermit(PermitBean bean){
+    protected PersonGroupBean daoGetReferencedByPersonGroupIdOnPermit(PermitBean bean){
         return getPermitManager().getReferencedByPersonGroupId(bean);
     }
+    //8-4
     /**
      * 设置外键fl_permit(person_group_id)引用为{@code beanToSet}指定的记录,
      * 如果{@code beanToSet}没有保存则先save
@@ -3078,115 +3164,116 @@ class Dao implements CommonConstant {
      * @param beanToSet 被引用的记录
      * @see {@link IPermitManager#setReferencedByPersonGroupId(PermitBean,PersonGroupBean)}
      */
-    //8-4
-    protected PersonGroupBean _setReferencedByPersonGroupIdOnPermit(PermitBean bean,PersonGroupBean beanToSet){
+    protected PersonGroupBean daoSetReferencedByPersonGroupIdOnPermit(PermitBean bean,PersonGroupBean beanToSet){
         return getPermitManager().setReferencedByPersonGroupId(bean,beanToSet);
     }
-    /** tranformer : PermitBean to fl_permit.person_group_id */
     //8-6
-    protected final Function<PermitBean,Integer> _castPermitToPersonGroupId = new Function<PermitBean,Integer>(){
+    /** tranformer : PermitBean to fl_permit.person_group_id */
+    protected final Function<PermitBean,Integer> daoCastPermitToPersonGroupId = new Function<PermitBean,Integer>(){
             @Override
             public Integer apply(PermitBean input) {
                 return null == input ? null : input.getPersonGroupId();
             }};
+    //12
     /** 
      * 添加新记录<br>
      * fl_permit 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link PermitBean#isNew()}返回{@code false},则抛出异常
      * @param permitBean 要添加的新记录
      * @see {@link IPermitManager#save(PermitBean)}
      * @see {@link IPermitManager#checkDuplicate(PermitBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @throws IllegalArgumentException if {@code permitBean.isNew()} is {@code false}
      */
-    //12
-    protected PermitBean _addPermit(PermitBean permitBean)throws DuplicateReord{
-        return getPermitManager().save(_checkDuplicate(permitBean));
+    protected PermitBean daoAddPermit(PermitBean permitBean)throws DuplicateReordException{
+        return getPermitManager().save(daoCheckDuplicate(permitBean));
     }
+    //12-5
     /**
      * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
      * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
      * @param deviceGroupId 外键,设备组id
      * @param personGroupId 外键,人员组id
-     * @see #_addPermit(DeviceGroupBean,PersonGroupBean)
+     * @see #daoAddPermit(DeviceGroupBean,PersonGroupBean)
      */
-    //12-5
-    protected PermitBean _addPermit(Integer deviceGroupId,Integer personGroupId){
-        return _addPermit(
-                    _getDeviceGroup(deviceGroupId),
-                    _getPersonGroup(personGroupId));
+    protected PermitBean daoAddPermit(Integer deviceGroupId,Integer personGroupId){
+        return daoAddPermit(
+                    daoGetDeviceGroup(deviceGroupId),
+                    daoGetPersonGroup(personGroupId));
     }
+    //12-6
     /**
      * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
      * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
      */
-    //12-6
-    protected PermitBean _addPermit(DeviceGroupBean deviceGroupBean,PersonGroupBean personGroupBean){
-        if(_existsDeviceGroup(deviceGroupBean) && _existsPersonGroup(personGroupBean)){
+    protected PermitBean daoAddPermit(DeviceGroupBean deviceGroupBean,PersonGroupBean personGroupBean){
+        if(daoExistsDeviceGroup(deviceGroupBean) && daoExistsPersonGroup(personGroupBean)){
             PermitBean permitBean = new PermitBean(deviceGroupBean.getId(),personGroupBean.getId());
             try{
-                return _addPermit(permitBean,deviceGroupBean,personGroupBean);
-            }catch(DuplicateReord e){
-                return _getPermit(deviceGroupBean.getId(),personGroupBean.getId());
+                return daoAddPermit(permitBean,deviceGroupBean,personGroupBean);
+            }catch(DuplicateReordException e){
+                return daoGetPermit(deviceGroupBean.getId(),personGroupBean.getId());
             }
         }
         return null; 
     }
+    //12-7
     /**
      * 删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
      * @return 删除成功返回0,如果记录不存在或输入的参数为{@code null}则返回0
      */
-    //12-7
-    protected int _deletePermit(DeviceGroupBean deviceGroupBean,PersonGroupBean personGroupBean){
+    protected int daoDeletePermit(DeviceGroupBean deviceGroupBean,PersonGroupBean personGroupBean){
         return (null == deviceGroupBean || null == personGroupBean)
             ? 0
-            : _deletePermit(deviceGroupBean.getId(),personGroupBean.getId());
+            : daoDeletePermit(deviceGroupBean.getId(),personGroupBean.getId());
     }
+    //13
     /** 
      * 添加新记录(同步保存)<br>
      * fl_permit 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link PermitBean#isNew()}返回{@code false},则抛出异常
      * @param permitBean 要添加的新记录
      * @see {@link IPermitManager#save(PermitBean , DeviceGroupBean, PersonGroupBean  )}
      * @see {@link IPermitManager#checkDuplicate(PermitBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @throws IllegalArgumentException if {@code permitBean.isNew()} is {@code false}
      */
-    //13
-    protected PermitBean _addPermit(PermitBean permitBean
+    protected PermitBean daoAddPermit(PermitBean permitBean
         , DeviceGroupBean refDevicegroupByDeviceGroupId 
         , PersonGroupBean refPersongroupByPersonGroupId 
-        )throws DuplicateReord{
+        )throws DuplicateReordException{
         checkArgument(null == permitBean || permitBean.isNew(),"can be add,delete,but modify record for fl_permit,so the _isNew field must be true");
-        _checkDuplicate(permitBean);
+        daoCheckDuplicate(permitBean);
         return getPermitManager().save(permitBean
             , refDevicegroupByDeviceGroupId 
             , refPersongroupByPersonGroupId 
             );
     }
+    //12-3-3
     /** 
      * 添加新记录<br>
      * @param beans 要添加的新记录集合
      * @return always {@code beans}
-     * @see #_addPermit(PermitBean)
+     * @see #daoAddPermit(PermitBean)
      */
-    //12-3-3
-    protected Collection<PermitBean> _addPermits(Collection<PermitBean> beans)throws DuplicateReord{
+    protected Collection<PermitBean> daoAddPermits(Collection<PermitBean> beans)throws DuplicateReordException{
         if(null != beans){
-            for(PermitBean bean : beans)
-                _addPermit(bean);
+            for(PermitBean bean : beans){
+                daoAddPermit(bean);
+            }
         }
         return beans;
     }
-    /** 
-     * {@link #_addPermit(Collection)}的事务化版本
-     */
     //12-3-5
-    protected Collection<PermitBean> _addPermitsAsTransaction(final Collection<PermitBean> beans)throws DuplicateReord{
-        return _runAsTransaction(new Callable<Collection<PermitBean>>(){      
+    /** 
+     * {@link #daoAddPermit(Collection)}的事务化版本
+     */
+    protected Collection<PermitBean> daoAddPermitsAsTransaction(final Collection<PermitBean> beans)throws DuplicateReordException{
+        return daoRunAsTransaction(new Callable<Collection<PermitBean>>(){      
             @Override
             public Collection<PermitBean> call() throws Exception {
-                return _addPermits(beans);
+                return daoAddPermits(beans);
             }});
     }
+    //16
     /**
      * 查询{@code where} SQL条件语句指定的 fl_permit 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
@@ -3194,123 +3281,129 @@ class Dao implements CommonConstant {
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IPermitManager#loadByWhereAsList(String,int[],int,int)}
      */
-    //16
-    protected List<PermitBean> _loadPermitByWhere(String where,int startRow, int numRows){
+    protected List<PermitBean> daoLoadPermitByWhere(String where,int startRow, int numRows){
         return getPermitManager().loadByWhereAsList(where,null,startRow,numRows);
     }
+    //17
     /**
      * 返回 fl_permit 表的所有记录
      * @see {@link IPermitManager#loadAllAsList()}
      */
-    //17
-    protected List<PermitBean> _loadPermitAll(){
+    protected List<PermitBean> daoLoadPermitAll(){
         return getPermitManager().loadAllAsList();
     }
+    //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_permit 记录总数
      * @see {@link IPermitManager#Where(String)}
      */
-    //17-2
-    protected int _countPermitByWhere(String where){
+    protected int daoCountPermitByWhere(String where){
         return getPermitManager().countWhere(where);
     }
+    //19
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_permit.create_time 字段大于指定时间戳({@code timestamp})的所有记录
-     * @see #_loadPermitByWhere(String,int,int)
+     * @see #daoLoadPermitByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    //19
-    protected List<PermitBean> _loadPermitByCreateTime(Date timestamp,int startRow, int numRows){
-        return _loadPermitByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
+    protected List<PermitBean> daoLoadPermitByCreateTime(Date timestamp,int startRow, int numRows){
+        return daoLoadPermitByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
     }
-    /** 参见 {@link #_loadPermitByCreateTime(Date,int,int)} */
     //20
-    protected List<PermitBean> _loadPermitByCreateTime(Date timestamp){
-        return _loadPermitByCreateTime(timestamp,1,-1);
+    /** 参见 {@link #daoLoadPermitByCreateTime(Date,int,int)} */
+    protected List<PermitBean> daoLoadPermitByCreateTime(Date timestamp){
+        return daoLoadPermitByCreateTime(timestamp,1,-1);
     }
+    //20-5
     /**
      * 返回fl_permit.create_time 字段大于指定时间戳({@code timestamp})的记录总数
-     * @see #_countPermitByWhere(String)
+     * @see #daoCountPermitByWhere(String)
      */
-    //20-5
-    protected int _countPermitByCreateTime(Date timestamp){
-        return _countPermitByWhere(makeWhere(timestamp,"create_time"));
+    protected int daoCountPermitByCreateTime(Date timestamp){
+        return daoCountPermitByWhere(makeWhere(timestamp,"create_time"));
     }
 
 
 
     //////////// FL_STORE /////////
+    //1
     /** 
      * 根据主键从数据库读取记录
      * 
      * @param md5 主键,md5检验码 
      * @see {@link IStoreManager#loadByPrimaryKey(String)}
      */
-    //1
-    protected StoreBean _getStore(String md5){
+    protected StoreBean daoGetStore(String md5){
         return getStoreManager().loadByPrimaryKey(md5);
     }
+    //2    
     /** 
      * 根据主键从数据库读取记录
      * @return 返回与输入参数下标对应的 StoreBean 列表,没有查到记录的返回{@link StoreBean#NULL}
      * @see {@link IStoreManager#loadByPrimaryKey(Collection)}
      * @see StoreBean#replaceNull(List)
      */
-    //2    
-    protected List<StoreBean> _getStores(Collection<String> md5Collection){
+    protected List<StoreBean> daoGetStores(Collection<String> md5Collection){
         return StoreBean.replaceNull((getStoreManager().loadByPrimaryKey(md5Collection)));
     }
+    //3  
     /** 
      * 删除主键列表({@code md5Collection})指定的记录
      * @return 返回删除的记录条数
      * @see {@link IStoreManager#deleteByPrimaryKey(Collection)}
      */
-    //3  
-    protected int _deleteStoresByPrimaryKey(Collection<String> md5Collection){
-        if(null == md5Collection)return 0;
+    protected int daoDeleteStoresByPrimaryKey(Collection<String> md5Collection){
         int count =0;
-        for(String md5:md5Collection){
-            count += _deleteStore(md5);
+        if(null != md5Collection){
+            for(String md5:md5Collection){
+                count += daoDeleteStore(md5);
+            }
         }
         return count;
     }
     //3-5
-    protected List<String> _toPrimaryKeyListFromStores(Collection<StoreBean> beans){
+    /**
+     * unwrap primary key from {@link StoreBean}
+     * @param {@link StoreBean} collection
+     * @return primary key list 
+     */
+    protected List<String> daoToPrimaryKeyListFromStores(Collection<StoreBean> beans){
         return getStoreManager().toPrimaryKeyList(beans);
     }
-    /** tranformer : StoreBean to fl_store.md5 */ 
     //3-7
-    protected final Function<StoreBean,String> _castStoreToPk = new Function<StoreBean,String>(){
+    /** tranformer : StoreBean to fl_store.md5 */ 
+    protected final Function<StoreBean,String> daoCastStoreToPk = new Function<StoreBean,String>(){
             @Override
             public String apply(StoreBean input) {
                 return null == input ? null : input.getMd5();
             }};
     //3-8
     /** tranformer : fl_store.md5 to StoreBean */ 
-    protected final Function<String,StoreBean> _castStoreFromPk = new Function<String,StoreBean>(){
+    protected final Function<String,StoreBean> daoCastStoreFromPk = new Function<String,StoreBean>(){
             @Override
             public StoreBean apply(String input) {
-                return _getStore(input);
+                return daoGetStore(input);
             }};
+    //4
     /** 
      *　判断主键指定的记录是否存在
      * 
      * @param md5 主键,md5检验码 
      * @see {@link IStoreManager#existsPrimaryKey(String)}
      */
-    //4
-    protected boolean _existsStore(String md5){
+    protected boolean daoExistsStore(String md5){
         return getStoreManager().existsPrimaryKey(md5);
     }
+    //4-2
     /** 
      *　判断指定的记录是否存在
      * @see {@link IStoreManager#existsPrimaryKey(StoreBean)}
      */
-    //4-2
-    protected boolean _existsStore(StoreBean bean){
+    protected boolean daoExistsStore(StoreBean bean){
         return getStoreManager().existsPrimaryKey(bean);
     }
+    //5
     /**
      * 删除主键指定的记录
      * 
@@ -3318,100 +3411,104 @@ class Dao implements CommonConstant {
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link IStoreManager#deleteByPrimaryKey(String)}
      */
-    //5
-    protected int _deleteStore(String md5){
+    protected int daoDeleteStore(String md5){
         return getStoreManager().deleteByPrimaryKey(md5);
     }
+    //5-2
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
      * @return 返回删除的记录条数(1),如果记录不存在返回0
-     * @see #_deleteStore(String)
+     * @see #daoDeleteStore(String)
      */
-    //5-2
-    protected int _deleteStore(StoreBean bean){
-        return null == bean ? null : _deleteStore(bean.getMd5());
+    protected int daoDeleteStore(StoreBean bean){
+        return null == bean ? null : daoDeleteStore(bean.getMd5());
     }
+    //6
     /**
      * 删除{@code storeBeanCollection}列表指定的记录
      * @return 返回删除的记录条数
-     * @see #_deleteStore(String)
+     * @see #daoDeleteStore(String)
      */
-    //6
-    protected int _deleteStores(Collection<StoreBean> beans){
-        if(null == beans)return 0;
+    protected int daoDeleteStores(Collection<StoreBean> beans){
         int count =0;
-        for(StoreBean bean:beans){
-            if(null != bean)
-                count += _deleteStore(bean.getMd5());
+        if(null != beans){        
+            for(StoreBean bean:beans){
+                if(null != bean){
+                    count += daoDeleteStore(bean.getMd5());
+                }
+            }
         }
         return count;
     }
+    //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IStoreManager#checkDuplicate(StoreBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      */
-    //7
-    protected StoreBean _checkDuplicate(StoreBean storeBean)throws DuplicateReord{
+    protected StoreBean daoCheckDuplicate(StoreBean storeBean)throws DuplicateReordException{
         try{
             return getStoreManager().checkDuplicate(storeBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReord();
+            throw new DuplicateReordException();
         }
     }
+    //7-3
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
      * @param md5OfStore 主键,md5检验码 
      * @see {@link IStoreManager#checkDuplicate(StoreBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @return always {@code md5OfStore} 
      */
-    //7-3
-    protected String _checkDuplicateStore(String md5OfStore)throws DuplicateReord{
-        if(getStoreManager().existsPrimaryKey(md5OfStore))
-            throw new DuplicateReord();
+    protected String daoCheckDuplicateStore(String md5OfStore)throws DuplicateReordException{
+        if(getStoreManager().existsPrimaryKey(md5OfStore)){
+            throw new DuplicateReordException();
+        }
         return md5OfStore;
     }
+    //12
     /** 
      * 添加新记录<br>
      * fl_store 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link StoreBean#isNew()}返回{@code false},则抛出异常
      * @param storeBean 要添加的新记录
      * @see {@link IStoreManager#save(StoreBean)}
      * @see {@link IStoreManager#checkDuplicate(StoreBean)}
-     * @throws DuplicateReord if exists duplicated row
+     * @throws DuplicateReordException if exists duplicated row
      * @throws IllegalArgumentException if {@code storeBean.isNew()} is {@code false}
      */
-    //12
-    protected StoreBean _addStore(StoreBean storeBean)throws DuplicateReord{
-        return getStoreManager().save(_checkDuplicate(storeBean));
+    protected StoreBean daoAddStore(StoreBean storeBean)throws DuplicateReordException{
+        return getStoreManager().save(daoCheckDuplicate(storeBean));
     }
+    //12-3-3
     /** 
      * 添加新记录<br>
      * @param beans 要添加的新记录集合
      * @return always {@code beans}
-     * @see #_addStore(StoreBean)
+     * @see #daoAddStore(StoreBean)
      */
-    //12-3-3
-    protected Collection<StoreBean> _addStores(Collection<StoreBean> beans)throws DuplicateReord{
+    protected Collection<StoreBean> daoAddStores(Collection<StoreBean> beans)throws DuplicateReordException{
         if(null != beans){
-            for(StoreBean bean : beans)
-                _addStore(bean);
+            for(StoreBean bean : beans){
+                daoAddStore(bean);
+            }
         }
         return beans;
     }
-    /** 
-     * {@link #_addStore(Collection)}的事务化版本
-     */
     //12-3-5
-    protected Collection<StoreBean> _addStoresAsTransaction(final Collection<StoreBean> beans)throws DuplicateReord{
-        return _runAsTransaction(new Callable<Collection<StoreBean>>(){      
+    /** 
+     * {@link #daoAddStore(Collection)}的事务化版本
+     */
+    protected Collection<StoreBean> daoAddStoresAsTransaction(final Collection<StoreBean> beans)throws DuplicateReordException{
+        return daoRunAsTransaction(new Callable<Collection<StoreBean>>(){      
             @Override
             public Collection<StoreBean> call() throws Exception {
-                return _addStores(beans);
+                return daoAddStores(beans);
             }});
     }
+    //16
     /**
      * 查询{@code where} SQL条件语句指定的 fl_store 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
@@ -3419,39 +3516,39 @@ class Dao implements CommonConstant {
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IStoreManager#loadByWhereAsList(String,int[],int,int)}
      */
-    //16
-    protected List<StoreBean> _loadStoreByWhere(String where,int startRow, int numRows){
+    protected List<StoreBean> daoLoadStoreByWhere(String where,int startRow, int numRows){
         return getStoreManager().loadByWhereAsList(where,null,startRow,numRows);
     }
+    //17
     /**
      * 返回 fl_store 表的所有记录
      * @see {@link IStoreManager#loadAllAsList()}
      */
-    //17
-    protected List<StoreBean> _loadStoreAll(){
+    protected List<StoreBean> daoLoadStoreAll(){
         return getStoreManager().loadAllAsList();
     }
+    //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_store 记录总数
      * @see {@link IStoreManager#Where(String)}
      */
-    //17-2
-    protected int _countStoreByWhere(String where){
+    protected int daoCountStoreByWhere(String where){
         return getStoreManager().countWhere(where);
     }
+    //18
     /** 
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
-     * @see #_loadStoreByWhere(String,int,int)
+     * @see #daoLoadStoreByWhere(String,int,int)
      */
-    //18
-    protected List<String> _loadStoreMd5ByWhere(String where){
-        return _toPrimaryKeyListFromStores(_loadStoreByWhere(where,1,-1));
+    protected List<String> daoLoadStoreMd5ByWhere(String where){
+        return daoToPrimaryKeyListFromStores(daoLoadStoreByWhere(where,1,-1));
     }
 
 
 
     //////////// FL_LOG_LIGHT /////////
+    //16
     /**
      * 查询{@code where} SQL条件语句指定的 fl_log_light 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
@@ -3459,50 +3556,49 @@ class Dao implements CommonConstant {
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link ILogLightManager#loadByWhereAsList(String,int[],int,int)}
      */
-    //16
-    protected List<LogLightBean> _loadLogLightByWhere(String where,int startRow, int numRows){
+    protected List<LogLightBean> daoLoadLogLightByWhere(String where,int startRow, int numRows){
         return getLogLightManager().loadByWhereAsList(where,null,startRow,numRows);
     }
+    //17
     /**
      * 返回 fl_log_light 表的所有记录
      * @see {@link ILogLightManager#loadAllAsList()}
      */
-    //17
-    protected List<LogLightBean> _loadLogLightAll(){
+    protected List<LogLightBean> daoLoadLogLightAll(){
         return getLogLightManager().loadAllAsList();
     }
+    //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_log_light 记录总数
      * @see {@link ILogLightManager#Where(String)}
      */
-    //17-2
-    protected int _countLogLightByWhere(String where){
+    protected int daoCountLogLightByWhere(String where){
         return getLogLightManager().countWhere(where);
     }
 
 
+    //19
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
-     * @see #_loadLogLightByWhere(String,int,int)
+     * @see #daoLoadLogLightByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    //19
-    protected List<LogLightBean> _loadLogLightByVerifyTime(Date timestamp,int startRow, int numRows){
-        return _loadLogLightByWhere(makeWhere(timestamp,"verify_time"),startRow,numRows);
+    protected List<LogLightBean> daoLoadLogLightByVerifyTime(Date timestamp,int startRow, int numRows){
+        return daoLoadLogLightByWhere(makeWhere(timestamp,"verify_time"),startRow,numRows);
     }
-    /** 参见 {@link #_loadLogLightByVerifyTime(Date,int,int)} */
     //20
-    protected List<LogLightBean> _loadLogLightByVerifyTime(Date timestamp){
-        return _loadLogLightByVerifyTime(timestamp,1,-1);
+    /** 参见 {@link #daoLoadLogLightByVerifyTime(Date,int,int)} */
+    protected List<LogLightBean> daoLoadLogLightByVerifyTime(Date timestamp){
+        return daoLoadLogLightByVerifyTime(timestamp,1,-1);
     }
+    //20-5
     /**
      * 返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
-     * @see #_countLogLightByWhere(String)
+     * @see #daoCountLogLightByWhere(String)
      */
-    //20-5
-    protected int _countLogLightByVerifyTime(Date timestamp){
-        return _countLogLightByWhere(makeWhere(timestamp,"verify_time"));
+    protected int daoCountLogLightByVerifyTime(Date timestamp){
+        return daoCountLogLightByWhere(makeWhere(timestamp,"verify_time"));
     }
 
 }

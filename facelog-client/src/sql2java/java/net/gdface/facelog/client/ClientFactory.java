@@ -40,12 +40,12 @@ import io.airlift.units.Duration;
  */
 public class ClientFactory {
     private static class Singleton{
-        private static final ThriftClientManager clientManager = new ThriftClientManager();    
+        private static final ThriftClientManager CLIENT_MANAGER = new ThriftClientManager();    
         static{
             Runtime.getRuntime().addShutdownHook(new Thread(){
                 @Override
                 public void run() {
-                    clientManager.close();
+                    CLIENT_MANAGER.close();
                 }});
         }
     }    
@@ -96,7 +96,7 @@ public class ClientFactory {
             return sb.toString();
         }
     }
-    private static final Cache<HostPortClass, Object> clientCache = CacheBuilder.newBuilder().softValues().build();
+    private static final Cache<HostPortClass, Object> CLIENT_CACHE = CacheBuilder.newBuilder().softValues().build();
     private ThriftClientManager clientManager; 
     private ThriftClientConfig thriftClientConfig = new ThriftClientConfig();
     private HostAndPort hostAndPort;
@@ -188,8 +188,9 @@ public class ClientFactory {
         return this.connector;
     }
     private ThriftClientManager getClientManager(){
-        if(null == this.clientManager)
-            this.clientManager = Singleton.clientManager;
+        if(null == this.clientManager){
+            this.clientManager = Singleton.CLIENT_MANAGER;
+        }
         return this.clientManager;
     }
 
@@ -201,10 +202,10 @@ public class ClientFactory {
                 this.clientName).open(getConnector()).get();
     }
     @SuppressWarnings("unchecked")
-    protected<I,O> O  _build(Class<I> interfaceClass,final Class<O> destClass){
+    protected<I,O> O  build(Class<I> interfaceClass,final Class<O> destClass){
         try {
             final HostPortClass key = new HostPortClass(getHostAndPort(),interfaceClass);
-            return (O) clientCache.get(key, new Callable<Object>(){
+            return (O) CLIENT_CACHE.get(key, new Callable<Object>(){
                 @Override
                 public Object call() throws Exception {
                     return destClass.getDeclaredConstructor(key.clazz).newInstance(getThriftClient(key.clazz));
@@ -215,13 +216,13 @@ public class ClientFactory {
     }
     /** get asynchronous instance of IFaceLog */ 
     public IFaceLogClientAsync  buildAsync(){
-        return _build(
+        return build(
                 net.gdface.facelog.client.thrift.IFaceLog.Async.class,
                 IFaceLogClientAsync.class);
     }
     /** get synchronized instance of IFaceLog */ 
     public IFaceLogClient build(){
-        return _build(
+        return build(
                 net.gdface.facelog.client.thrift.IFaceLog.class,
                 IFaceLogClient.class);
     }

@@ -29,7 +29,7 @@ import net.gdface.facelog.dborm.exception.DAOException;
  * Remarks: 通行权限关联表<br>
  * @author guyadong
  */
-public class PermitManager extends TableManager.Adapter<PermitBean> implements IPermitManager
+public class PermitManager extends TableManager.BaseAdapter<PermitBean> implements IPermitManager
 {
     private net.gdface.facelog.dborm.permit.FlPermitManager nativeManager = net.gdface.facelog.dborm.permit.FlPermitManager.getInstance();
     private IDbConverter<
@@ -55,26 +55,30 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
         return PersonGroupManager.getInstance();
     }
     /**
-    * @return table name
-    */
+     * @return table name
+     */
+    @Override
     public String getTableName() {
         return this.nativeManager.getTableName();
     }
 
     /**
-    * @return field names of table
-    */
+     * @return field names of table
+     */
+    @Override
     public String getFields() {
         return this.nativeManager.getFields();
     }
-    
+
+    @Override
     public String getFullFields() {
         return this.nativeManager.getFullFields();
     }
     
     /**
-    * @return primarykeyNames
-    */
+     * @return primarykeyNames
+     */
+    @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
     }
@@ -90,7 +94,7 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
     }
    
     @Override
-    protected Class<PermitBean> _beanType(){
+    protected Class<PermitBean> beanType(){
         return PermitBean.class;
     }
     
@@ -105,8 +109,9 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public synchronized void setDbConverter(IDbConverter dbConverter) {
-        if( null == dbConverter)
+        if( null == dbConverter){
             throw new NullPointerException();
+        }
         this.dbConverter = dbConverter;
         this.beanConverter = this.dbConverter.getPermitBeanConverter();
     }
@@ -148,8 +153,9 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
     @Override
     public PermitBean loadByPrimaryKeyChecked(PermitBean bean) throws ObjectRetrievalException
     {
-        if(null == bean)
+        if(null == bean){
             throw new NullPointerException();
+        }
         return loadByPrimaryKeyChecked(bean.getDeviceGroupId(),bean.getPersonGroupId());
     }
     
@@ -167,15 +173,20 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
     //1.3.2
     @Override
     public PermitBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 2)
+        }
+        if(keys.length != 2){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        if(! (keys[0] instanceof Integer))
+        }
+        
+        if(! (keys[0] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-            if(! (keys[1] instanceof Integer))
+        }
+        if(! (keys[1] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:Integer");
-          return loadByPrimaryKeyChecked((Integer)keys[0],(Integer)keys[1]);
+        }
+        return loadByPrimaryKeyChecked((Integer)keys[0],(Integer)keys[1]);
     }
 
     //1.4 override IPermitManager
@@ -234,33 +245,39 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 2 )
+        }
+        if(keys.length != 2){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        if(! (keys[0] instanceof Integer))
+        }
+        if(! (keys[0] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-        if(! (keys[1] instanceof Integer))
+        }
+        if(! (keys[1] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:Integer");
+        }
         return deleteByPrimaryKey((Integer)keys[0],(Integer)keys[1]);
     }
     //2.4 override IPermitManager
     @Override 
     public int delete(PermitBean... beans){
-        if(null == beans)return 0;
         int count = 0;
-        for(PermitBean bean :beans){
-            count += delete(bean);
+        if(null != beans){
+            for(PermitBean bean :beans){
+                count += delete(bean);
+            }
         }
         return count;
     }
     //2.5 override IPermitManager
     @Override 
     public int delete(java.util.Collection<PermitBean> beans){
-        if(null == beans)return 0;
         int count = 0;
-        for(PermitBean bean :beans){
-            count += delete(bean);
+        if(null != beans){
+            for(PermitBean bean :beans){
+                count += delete(bean);
+            }
         }
         return count;
     }
@@ -274,11 +291,15 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
         , DeviceGroupBean refDevicegroupByDeviceGroupId , PersonGroupBean refPersongroupByPersonGroupId 
         )
     {
-        if(null == bean) return null;
-        if(null != refDevicegroupByDeviceGroupId)
+        if(null == bean){
+            return null;
+        }
+        if(null != refDevicegroupByDeviceGroupId){
             this.setReferencedByDeviceGroupId(bean,refDevicegroupByDeviceGroupId);
-        if(null != refPersongroupByPersonGroupId)
+        }
+        if(null != refPersongroupByPersonGroupId){
             this.setReferencedByPersonGroupId(bean,refPersongroupByPersonGroupId);
+        }
         bean = this.save( bean );
         return bean;
     } 
@@ -307,10 +328,12 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
     @Override
     public PermitBean save(PermitBean bean,Object ...args) 
     {
-        if(null == args)
+        if(null == args){
             return save(bean);
-        if(args.length > 2)
+        }
+        if(args.length > 2){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
+        }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceGroupBean");
         }
@@ -333,10 +356,12 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
     @Override
     public PermitBean saveCollection(PermitBean bean,Object ...inputs)
     {
-        if(null == inputs)
+        if(null == inputs){
             return save(bean);
-        if(inputs.length > 2)
+        }
+        if(inputs.length > 2){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
+        }
         Object[] args = new Object[2];
         System.arraycopy(inputs,0,args,0,2);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceGroupBean)){
@@ -372,8 +397,9 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
             return  (T)this.getReferencedByDeviceGroupId(bean);
         case FL_PERMIT_FK_PERSON_GROUP_ID:
             return  (T)this.getReferencedByPersonGroupId(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     /**
      * Associates the {@link PermitBean} object to the bean object by fkIndex field.<br>
@@ -392,8 +418,9 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
             return  (T)this.setReferencedByDeviceGroupId(bean, (DeviceGroupBean)beanToSet);
         case FL_PERMIT_FK_PERSON_GROUP_ID:
             return  (T)this.setReferencedByPersonGroupId(bean, (PersonGroupBean)beanToSet);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     //////////////////////////////////////
@@ -405,7 +432,9 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
     @Override 
     public DeviceGroupBean getReferencedByDeviceGroupId(PermitBean bean)
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByDeviceGroupId(instanceOfDeviceGroupManager().loadByPrimaryKey(bean.getDeviceGroupId())); 
         return bean.getReferencedByDeviceGroupId();
     }
@@ -433,7 +462,9 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
     @Override 
     public PersonGroupBean getReferencedByPersonGroupId(PermitBean bean)
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByPersonGroupId(instanceOfPersonGroupManager().loadByPrimaryKey(bean.getPersonGroupId())); 
         return bean.getReferencedByPersonGroupId();
     }
@@ -622,9 +653,10 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
     @Override
     public void unregisterListener(TableListener<PermitBean> listener)
     {
-        if(listener instanceof WrapListener)
-            this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
-        throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
+        if(!(listener instanceof WrapListener)){
+            throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
+        }
+        this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
     }
     
     //37
@@ -662,15 +694,15 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
     }
     /**
      * wrap {@code TableListener<PermitBean>} as native listener
-     * @author guyadong
      *
      */
     public class WrapListener implements TableListener<PermitBean>{
         private final TableListener<PermitBean> listener;
         private final net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.permit.FlPermitBean> nativeListener;
         private WrapListener(final TableListener<PermitBean> listener) {
-            if(null == listener)
+            if(null == listener){
                 throw new NullPointerException();
+            }
             this.listener = listener;
             this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.permit.FlPermitBean> (){
 
@@ -705,26 +737,32 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
                 }};
         }
 
+        @Override
         public void beforeInsert(PermitBean bean) {
             listener.beforeInsert(bean);
         }
 
+        @Override
         public void afterInsert(PermitBean bean) {
             listener.afterInsert(bean);
         }
 
+        @Override
         public void beforeUpdate(PermitBean bean) {
             listener.beforeUpdate(bean);
         }
 
+        @Override
         public void afterUpdate(PermitBean bean) {
             listener.afterUpdate(bean);
         }
 
+        @Override
         public void beforeDelete(PermitBean bean) {
             listener.beforeDelete(bean);
         }
 
+        @Override
         public void afterDelete(PermitBean bean) {
             listener.afterDelete(bean);
         }        
@@ -764,8 +802,9 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
     }
     
     private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.permit.FlPermitBean> toNative(final Action<PermitBean> action){
-        if(null == action)
+        if(null == action){
             throw new NullPointerException();
+        }
         return new net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.permit.FlPermitBean>(){
 
             @Override

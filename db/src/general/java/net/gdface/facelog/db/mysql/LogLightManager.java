@@ -27,7 +27,7 @@ import net.gdface.facelog.dborm.exception.DAOException;
  * Remarks: VIEW<br>
  * @author guyadong
  */
-public class LogLightManager extends TableManager.Adapter<LogLightBean> implements ILogLightManager
+public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> implements ILogLightManager
 {
     private net.gdface.facelog.dborm.log.FlLogLightManager nativeManager = net.gdface.facelog.dborm.log.FlLogLightManager.getInstance();
     private IDbConverter<
@@ -47,26 +47,30 @@ public class LogLightManager extends TableManager.Adapter<LogLightBean> implemen
     protected LogLightManager(){}
     
     /**
-    * @return table name
-    */
+     * @return table name
+     */
+    @Override
     public String getTableName() {
         return this.nativeManager.getTableName();
     }
 
     /**
-    * @return field names of table
-    */
+     * @return field names of table
+     */
+    @Override
     public String getFields() {
         return this.nativeManager.getFields();
     }
-    
+
+    @Override
     public String getFullFields() {
         return this.nativeManager.getFullFields();
     }
     
     /**
-    * @return primarykeyNames
-    */
+     * @return primarykeyNames
+     */
+    @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
     }
@@ -82,7 +86,7 @@ public class LogLightManager extends TableManager.Adapter<LogLightBean> implemen
     }
    
     @Override
-    protected Class<LogLightBean> _beanType(){
+    protected Class<LogLightBean> beanType(){
         return LogLightBean.class;
     }
     
@@ -97,8 +101,9 @@ public class LogLightManager extends TableManager.Adapter<LogLightBean> implemen
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public synchronized void setDbConverter(IDbConverter dbConverter) {
-        if( null == dbConverter)
+        if( null == dbConverter){
             throw new NullPointerException();
+        }
         this.dbConverter = dbConverter;
         this.beanConverter = this.dbConverter.getLogLightBeanConverter();
     }
@@ -273,9 +278,10 @@ public class LogLightManager extends TableManager.Adapter<LogLightBean> implemen
     @Override
     public void unregisterListener(TableListener<LogLightBean> listener)
     {
-        if(listener instanceof WrapListener)
-            this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
-        throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
+        if(!(listener instanceof WrapListener)){
+            throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
+        }
+        this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
     }
     
     //37
@@ -313,15 +319,15 @@ public class LogLightManager extends TableManager.Adapter<LogLightBean> implemen
     }
     /**
      * wrap {@code TableListener<LogLightBean>} as native listener
-     * @author guyadong
      *
      */
     public class WrapListener implements TableListener<LogLightBean>{
         private final TableListener<LogLightBean> listener;
         private final net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.log.FlLogLightBean> nativeListener;
         private WrapListener(final TableListener<LogLightBean> listener) {
-            if(null == listener)
+            if(null == listener){
                 throw new NullPointerException();
+            }
             this.listener = listener;
             this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.log.FlLogLightBean> (){
 
@@ -356,26 +362,32 @@ public class LogLightManager extends TableManager.Adapter<LogLightBean> implemen
                 }};
         }
 
+        @Override
         public void beforeInsert(LogLightBean bean) {
             listener.beforeInsert(bean);
         }
 
+        @Override
         public void afterInsert(LogLightBean bean) {
             listener.afterInsert(bean);
         }
 
+        @Override
         public void beforeUpdate(LogLightBean bean) {
             listener.beforeUpdate(bean);
         }
 
+        @Override
         public void afterUpdate(LogLightBean bean) {
             listener.afterUpdate(bean);
         }
 
+        @Override
         public void beforeDelete(LogLightBean bean) {
             listener.beforeDelete(bean);
         }
 
+        @Override
         public void afterDelete(LogLightBean bean) {
             listener.afterDelete(bean);
         }        
@@ -415,8 +427,9 @@ public class LogLightManager extends TableManager.Adapter<LogLightBean> implemen
     }
     
     private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.log.FlLogLightBean> toNative(final Action<LogLightBean> action){
-        if(null == action)
+        if(null == action){
             throw new NullPointerException();
+        }
         return new net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.log.FlLogLightBean>(){
 
             @Override

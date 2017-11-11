@@ -10,7 +10,7 @@ package net.gdface.facelog.db.mysql;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import net.gdface.facelog.db.TableLoadCaching;
+import net.gdface.facelog.db.BaseTableLoadCaching;
 import net.gdface.facelog.db.FeatureBean;
 
 /**
@@ -19,11 +19,11 @@ import net.gdface.facelog.db.FeatureBean;
  * @author guyadong
  *
  */
-public class FeatureCache extends TableLoadCaching<String, FeatureBean> {
+public class FeatureCache extends BaseTableLoadCaching<String, FeatureBean> {
     private final FeatureManager manager = FeatureManager.getInstance();
     
     /** constructor<br>
-     * @see {@link TableLoadCaching#TableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
      */
     public FeatureCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
         super(updateStragey,maximumSize, duration, unit);

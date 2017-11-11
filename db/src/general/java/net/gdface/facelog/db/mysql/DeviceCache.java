@@ -10,7 +10,7 @@ package net.gdface.facelog.db.mysql;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import net.gdface.facelog.db.TableLoadCaching;
+import net.gdface.facelog.db.BaseTableLoadCaching;
 import net.gdface.facelog.db.DeviceBean;
 
 /**
@@ -19,19 +19,19 @@ import net.gdface.facelog.db.DeviceBean;
  * @author guyadong
  *
  */
-public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
+public class DeviceCache extends BaseTableLoadCaching<Integer, DeviceBean> {
     private final DeviceManager manager = DeviceManager.getInstance();
     
-    private final TableLoadCaching<String, DeviceBean> macCacher;
-    private final TableLoadCaching<String, DeviceBean> serialNoCacher;
+    private final BaseTableLoadCaching<String, DeviceBean> macCacher;
+    private final BaseTableLoadCaching<String, DeviceBean> serialNoCacher;
     /** constructor<br>
-     * @see {@link TableLoadCaching#TableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
      */
     public DeviceCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
         super(updateStragey,maximumSize, duration, unit);
         manager.bindForeignKeyListenerForDeleteRule();
 
-        macCacher = new TableLoadCaching<String, DeviceBean>(updateStragey, maximumSize, duration, unit){
+        macCacher = new BaseTableLoadCaching<String, DeviceBean>(updateStragey, maximumSize, duration, unit){
             @Override
             public void registerListener() {
                 manager.registerListener(this.tableListener);
@@ -49,7 +49,7 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
                 return manager.loadByIndexMacChecked(key);
             }};
 
-        serialNoCacher = new TableLoadCaching<String, DeviceBean>(updateStragey, maximumSize, duration, unit){
+        serialNoCacher = new BaseTableLoadCaching<String, DeviceBean>(updateStragey, maximumSize, duration, unit){
             @Override
             public void registerListener() {
                 manager.registerListener(this.tableListener);

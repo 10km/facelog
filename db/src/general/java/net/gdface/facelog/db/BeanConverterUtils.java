@@ -75,8 +75,9 @@ public class BeanConverterUtils implements Constant {
         long[] dst = new long[list.size()];
         Long element;
         for (int i = 0; i < dst.length; i++) {
-            if(null == (element = list.get(i)))
+            if(null == (element = list.get(i))){
                 throw new IllegalArgumentException("can't cast List<Long> to long[] because of null element");
+            }
             dst[i] = element.longValue();
         }
         return dst;
@@ -90,8 +91,9 @@ public class BeanConverterUtils implements Constant {
     @SuppressWarnings({ "unchecked" })
     private static final <T> T cast(Class<T> type,Object source){
         try{
-            if(null ==source && type.isPrimitive())
+            if(null ==source && type.isPrimitive()){
                 throw new NullCastPrimitiveException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
+            }
             return (T) source;
         }catch(ClassCastException cce){
             // long[] -> List  
@@ -211,23 +213,26 @@ public class BeanConverterUtils implements Constant {
             String []rightFields = javaFields.split(",");
             for(int i = 0 ; i < rightFields.length; ++i){
                 String field = rightFields[i].trim();
-                if(!field.matches("\\w+"))
+                if(!field.matches("\\w+")){
                     throw new IllegalArgumentException("invalid 'javaFields':" + javaFields);
+                }
                 rightIndexs.put(field,i);
             }
             try{
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_INITIALIZED,long.class);
+                }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_MODIFIED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_MODIFIED,long.class);
+                }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
             }
@@ -250,7 +255,7 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow("setUpdateTime",java.util.Date.class,Long.class,long.class);  
         }
         @Override
-        protected void _fromRight(DeviceBean left, R_DEVICE right) {
+        protected void doFromRight(DeviceBean left, R_DEVICE right) {
             try{
                 Method getterMethod;
                 left.resetIsModified();
@@ -266,51 +271,51 @@ public class BeanConverterUtils implements Constant {
                 }
                 if( bitCheck("id",initialized) && (null != (getterMethod = methods.get("getId")))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("id",modified))
+                    if(bitCheck("id",modified)){
                         selfModified |= FL_DEVICE_ID_ID_MASK;
-
+                    }
                 }
                 if( bitCheck("groupId",initialized) && (null != (getterMethod = methods.get("getGroupId")))){
                     left.setGroupId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("groupId",modified))
+                    if(bitCheck("groupId",modified)){
                         selfModified |= FL_DEVICE_ID_GROUP_ID_MASK;
-
+                    }
                 }
                 if( bitCheck("name",initialized) && (null != (getterMethod = methods.get("getName")))){
                     left.setName(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("name",modified))
+                    if(bitCheck("name",modified)){
                         selfModified |= FL_DEVICE_ID_NAME_MASK;
-
+                    }
                 }
                 if( bitCheck("version",initialized) && (null != (getterMethod = methods.get("getVersion")))){
                     left.setVersion(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("version",modified))
+                    if(bitCheck("version",modified)){
                         selfModified |= FL_DEVICE_ID_VERSION_MASK;
-
+                    }
                 }
                 if( bitCheck("serialNo",initialized) && (null != (getterMethod = methods.get("getSerialNo")))){
                     left.setSerialNo(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("serialNo",modified))
+                    if(bitCheck("serialNo",modified)){
                         selfModified |= FL_DEVICE_ID_SERIAL_NO_MASK;
-
+                    }
                 }
                 if( bitCheck("mac",initialized) && (null != (getterMethod = methods.get("getMac")))){
                     left.setMac(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("mac",modified))
+                    if(bitCheck("mac",modified)){
                         selfModified |= FL_DEVICE_ID_MAC_MASK;
-
+                    }
                 }
                 if( bitCheck("createTime",initialized) && (null != (getterMethod = methods.get("getCreateTime")))){
                     left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("createTime",modified))
+                    if(bitCheck("createTime",modified)){
                         selfModified |= FL_DEVICE_ID_CREATE_TIME_MASK;
-
+                    }
                 }
                 if( bitCheck("updateTime",initialized) && (null != (getterMethod = methods.get("getUpdateTime")))){
                     left.setUpdateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("updateTime",modified))
+                    if(bitCheck("updateTime",modified)){
                         selfModified |= FL_DEVICE_ID_UPDATE_TIME_MASK;
-
+                    }
                 }
                 left.isNew((Boolean)methods.get(IS_NEW).invoke(right));
                 left.setModified(selfModified);
@@ -322,7 +327,7 @@ public class BeanConverterUtils implements Constant {
         }
 
         @Override
-        protected void _toRight(DeviceBean left, R_DEVICE right) {
+        protected void doToRight(DeviceBean left, R_DEVICE right) {
             try{
                 Method setterMethod;
                 long[] initialized = new long[(rightIndexs.size() + 63)>>6];
@@ -333,48 +338,54 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setId"),left.getId()));
                         bitOR("id",initialized);
-                        if(left.checkIdModified())
+                        if(left.checkIdModified()){
                             bitOR("id",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setGroupId")) && left.checkGroupIdInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setGroupId"),left.getGroupId()));
                         bitOR("groupId",initialized);
-                        if(left.checkGroupIdModified())
+                        if(left.checkGroupIdModified()){
                             bitOR("groupId",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setName")) && left.checkNameInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setName"),left.getName()));
                         bitOR("name",initialized);
-                        if(left.checkNameModified())
+                        if(left.checkNameModified()){
                             bitOR("name",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setVersion")) && left.checkVersionInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setVersion"),left.getVersion()));
                         bitOR("version",initialized);
-                        if(left.checkVersionModified())
+                        if(left.checkVersionModified()){
                             bitOR("version",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setSerialNo")) && left.checkSerialNoInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setSerialNo"),left.getSerialNo()));
                         bitOR("serialNo",initialized);
-                        if(left.checkSerialNoModified())
+                        if(left.checkSerialNoModified()){
                             bitOR("serialNo",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setMac")) && left.checkMacInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setMac"),left.getMac()));
                         bitOR("mac",initialized);
-                        if(left.checkMacModified())
+                        if(left.checkMacModified()){
                             bitOR("mac",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
 // IGNORE field fl_device.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
@@ -383,8 +394,9 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setCreateTime"),left.getCreateTime()));
                         bitOR("createTime",initialized);
-                        if(left.checkCreateTimeModified())
+                        if(left.checkCreateTimeModified()){
                             bitOR("createTime",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
 */
@@ -394,16 +406,18 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setUpdateTime"),left.getUpdateTime()));
                         bitOR("updateTime",initialized);
-                        if(left.checkUpdateTimeModified())
+                        if(left.checkUpdateTimeModified()){
                             bitOR("updateTime",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
 */
                 if(null != (setterMethod = methods.get(SET_MODIFIED))){
-                    if( initialized.length > 1)
+                    if( initialized.length > 1){
                         setterMethod.invoke(right,cast(setterParams.get(SET_MODIFIED),initialized));
-                    else
+                    }else{
                         setterMethod.invoke(right,initialized[0]);
+                    }
                 }
                 methods.get(SET_NEW).invoke(right,left.isNew());
                 if( initialized.length > 1){
@@ -495,23 +509,26 @@ public class BeanConverterUtils implements Constant {
             String []rightFields = javaFields.split(",");
             for(int i = 0 ; i < rightFields.length; ++i){
                 String field = rightFields[i].trim();
-                if(!field.matches("\\w+"))
+                if(!field.matches("\\w+")){
                     throw new IllegalArgumentException("invalid 'javaFields':" + javaFields);
+                }
                 rightIndexs.put(field,i);
             }
             try{
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_INITIALIZED,long.class);
+                }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_MODIFIED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_MODIFIED,long.class);
+                }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
             }
@@ -526,7 +543,7 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow("setParent",Integer.class,int.class);                    
         }
         @Override
-        protected void _fromRight(DeviceGroupBean left, R_DEVICEGROUP right) {
+        protected void doFromRight(DeviceGroupBean left, R_DEVICEGROUP right) {
             try{
                 Method getterMethod;
                 left.resetIsModified();
@@ -542,27 +559,27 @@ public class BeanConverterUtils implements Constant {
                 }
                 if( bitCheck("id",initialized) && (null != (getterMethod = methods.get("getId")))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("id",modified))
+                    if(bitCheck("id",modified)){
                         selfModified |= FL_DEVICE_GROUP_ID_ID_MASK;
-
+                    }
                 }
                 if( bitCheck("name",initialized) && (null != (getterMethod = methods.get("getName")))){
                     left.setName(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("name",modified))
+                    if(bitCheck("name",modified)){
                         selfModified |= FL_DEVICE_GROUP_ID_NAME_MASK;
-
+                    }
                 }
                 if( bitCheck("leaf",initialized) && (null != (getterMethod = methods.get("getLeaf")))){
                     left.setLeaf(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("leaf",modified))
+                    if(bitCheck("leaf",modified)){
                         selfModified |= FL_DEVICE_GROUP_ID_LEAF_MASK;
-
+                    }
                 }
                 if( bitCheck("parent",initialized) && (null != (getterMethod = methods.get("getParent")))){
                     left.setParent(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("parent",modified))
+                    if(bitCheck("parent",modified)){
                         selfModified |= FL_DEVICE_GROUP_ID_PARENT_MASK;
-
+                    }
                 }
                 left.isNew((Boolean)methods.get(IS_NEW).invoke(right));
                 left.setModified(selfModified);
@@ -574,7 +591,7 @@ public class BeanConverterUtils implements Constant {
         }
 
         @Override
-        protected void _toRight(DeviceGroupBean left, R_DEVICEGROUP right) {
+        protected void doToRight(DeviceGroupBean left, R_DEVICEGROUP right) {
             try{
                 Method setterMethod;
                 long[] initialized = new long[(rightIndexs.size() + 63)>>6];
@@ -585,39 +602,44 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setId"),left.getId()));
                         bitOR("id",initialized);
-                        if(left.checkIdModified())
+                        if(left.checkIdModified()){
                             bitOR("id",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setName")) && left.checkNameInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setName"),left.getName()));
                         bitOR("name",initialized);
-                        if(left.checkNameModified())
+                        if(left.checkNameModified()){
                             bitOR("name",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setLeaf")) && left.checkLeafInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setLeaf"),left.getLeaf()));
                         bitOR("leaf",initialized);
-                        if(left.checkLeafModified())
+                        if(left.checkLeafModified()){
                             bitOR("leaf",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setParent")) && left.checkParentInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setParent"),left.getParent()));
                         bitOR("parent",initialized);
-                        if(left.checkParentModified())
+                        if(left.checkParentModified()){
                             bitOR("parent",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get(SET_MODIFIED))){
-                    if( initialized.length > 1)
+                    if( initialized.length > 1){
                         setterMethod.invoke(right,cast(setterParams.get(SET_MODIFIED),initialized));
-                    else
+                    }else{
                         setterMethod.invoke(right,initialized[0]);
+                    }
                 }
                 methods.get(SET_NEW).invoke(right,left.isNew());
                 if( initialized.length > 1){
@@ -709,23 +731,26 @@ public class BeanConverterUtils implements Constant {
             String []rightFields = javaFields.split(",");
             for(int i = 0 ; i < rightFields.length; ++i){
                 String field = rightFields[i].trim();
-                if(!field.matches("\\w+"))
+                if(!field.matches("\\w+")){
                     throw new IllegalArgumentException("invalid 'javaFields':" + javaFields);
+                }
                 rightIndexs.put(field,i);
             }
             try{
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_INITIALIZED,long.class);
+                }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_MODIFIED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_MODIFIED,long.class);
+                }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
             }
@@ -772,7 +797,7 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow("setCreateTime",java.util.Date.class,Long.class,long.class);  
         }
         @Override
-        protected void _fromRight(FaceBean left, R_FACE right) {
+        protected void doFromRight(FaceBean left, R_FACE right) {
             try{
                 Method getterMethod;
                 left.resetIsModified();
@@ -788,123 +813,123 @@ public class BeanConverterUtils implements Constant {
                 }
                 if( bitCheck("id",initialized) && (null != (getterMethod = methods.get("getId")))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("id",modified))
+                    if(bitCheck("id",modified)){
                         selfModified |= FL_FACE_ID_ID_MASK;
-
+                    }
                 }
                 if( bitCheck("imageMd5",initialized) && (null != (getterMethod = methods.get("getImageMd5")))){
                     left.setImageMd5(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("imageMd5",modified))
+                    if(bitCheck("imageMd5",modified)){
                         selfModified |= FL_FACE_ID_IMAGE_MD5_MASK;
-
+                    }
                 }
                 if( bitCheck("faceLeft",initialized) && (null != (getterMethod = methods.get("getFaceLeft")))){
                     left.setFaceLeft(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("faceLeft",modified))
+                    if(bitCheck("faceLeft",modified)){
                         selfModified |= FL_FACE_ID_FACE_LEFT_MASK;
-
+                    }
                 }
                 if( bitCheck("faceTop",initialized) && (null != (getterMethod = methods.get("getFaceTop")))){
                     left.setFaceTop(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("faceTop",modified))
+                    if(bitCheck("faceTop",modified)){
                         selfModified |= FL_FACE_ID_FACE_TOP_MASK;
-
+                    }
                 }
                 if( bitCheck("faceWidth",initialized) && (null != (getterMethod = methods.get("getFaceWidth")))){
                     left.setFaceWidth(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("faceWidth",modified))
+                    if(bitCheck("faceWidth",modified)){
                         selfModified |= FL_FACE_ID_FACE_WIDTH_MASK;
-
+                    }
                 }
                 if( bitCheck("faceHeight",initialized) && (null != (getterMethod = methods.get("getFaceHeight")))){
                     left.setFaceHeight(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("faceHeight",modified))
+                    if(bitCheck("faceHeight",modified)){
                         selfModified |= FL_FACE_ID_FACE_HEIGHT_MASK;
-
+                    }
                 }
                 if( bitCheck("eyeLeftx",initialized) && (null != (getterMethod = methods.get("getEyeLeftx")))){
                     left.setEyeLeftx(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("eyeLeftx",modified))
+                    if(bitCheck("eyeLeftx",modified)){
                         selfModified |= FL_FACE_ID_EYE_LEFTX_MASK;
-
+                    }
                 }
                 if( bitCheck("eyeLefty",initialized) && (null != (getterMethod = methods.get("getEyeLefty")))){
                     left.setEyeLefty(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("eyeLefty",modified))
+                    if(bitCheck("eyeLefty",modified)){
                         selfModified |= FL_FACE_ID_EYE_LEFTY_MASK;
-
+                    }
                 }
                 if( bitCheck("eyeRightx",initialized) && (null != (getterMethod = methods.get("getEyeRightx")))){
                     left.setEyeRightx(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("eyeRightx",modified))
+                    if(bitCheck("eyeRightx",modified)){
                         selfModified |= FL_FACE_ID_EYE_RIGHTX_MASK;
-
+                    }
                 }
                 if( bitCheck("eyeRighty",initialized) && (null != (getterMethod = methods.get("getEyeRighty")))){
                     left.setEyeRighty(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("eyeRighty",modified))
+                    if(bitCheck("eyeRighty",modified)){
                         selfModified |= FL_FACE_ID_EYE_RIGHTY_MASK;
-
+                    }
                 }
                 if( bitCheck("mouthX",initialized) && (null != (getterMethod = methods.get("getMouthX")))){
                     left.setMouthX(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("mouthX",modified))
+                    if(bitCheck("mouthX",modified)){
                         selfModified |= FL_FACE_ID_MOUTH_X_MASK;
-
+                    }
                 }
                 if( bitCheck("mouthY",initialized) && (null != (getterMethod = methods.get("getMouthY")))){
                     left.setMouthY(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("mouthY",modified))
+                    if(bitCheck("mouthY",modified)){
                         selfModified |= FL_FACE_ID_MOUTH_Y_MASK;
-
+                    }
                 }
                 if( bitCheck("noseX",initialized) && (null != (getterMethod = methods.get("getNoseX")))){
                     left.setNoseX(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("noseX",modified))
+                    if(bitCheck("noseX",modified)){
                         selfModified |= FL_FACE_ID_NOSE_X_MASK;
-
+                    }
                 }
                 if( bitCheck("noseY",initialized) && (null != (getterMethod = methods.get("getNoseY")))){
                     left.setNoseY(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("noseY",modified))
+                    if(bitCheck("noseY",modified)){
                         selfModified |= FL_FACE_ID_NOSE_Y_MASK;
-
+                    }
                 }
                 if( bitCheck("angleYaw",initialized) && (null != (getterMethod = methods.get("getAngleYaw")))){
                     left.setAngleYaw(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("angleYaw",modified))
+                    if(bitCheck("angleYaw",modified)){
                         selfModified |= FL_FACE_ID_ANGLE_YAW_MASK;
-
+                    }
                 }
                 if( bitCheck("anglePitch",initialized) && (null != (getterMethod = methods.get("getAnglePitch")))){
                     left.setAnglePitch(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("anglePitch",modified))
+                    if(bitCheck("anglePitch",modified)){
                         selfModified |= FL_FACE_ID_ANGLE_PITCH_MASK;
-
+                    }
                 }
                 if( bitCheck("angleRoll",initialized) && (null != (getterMethod = methods.get("getAngleRoll")))){
                     left.setAngleRoll(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("angleRoll",modified))
+                    if(bitCheck("angleRoll",modified)){
                         selfModified |= FL_FACE_ID_ANGLE_ROLL_MASK;
-
+                    }
                 }
                 if( bitCheck("extInfo",initialized) && (null != (getterMethod = methods.get("getExtInfo")))){
                     left.setExtInfo(cast(java.nio.ByteBuffer.class,getterMethod.invoke(right)));
-                    if(bitCheck("extInfo",modified))
+                    if(bitCheck("extInfo",modified)){
                         selfModified |= FL_FACE_ID_EXT_INFO_MASK;
-
+                    }
                 }
                 if( bitCheck("featureMd5",initialized) && (null != (getterMethod = methods.get("getFeatureMd5")))){
                     left.setFeatureMd5(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("featureMd5",modified))
+                    if(bitCheck("featureMd5",modified)){
                         selfModified |= FL_FACE_ID_FEATURE_MD5_MASK;
-
+                    }
                 }
                 if( bitCheck("createTime",initialized) && (null != (getterMethod = methods.get("getCreateTime")))){
                     left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("createTime",modified))
+                    if(bitCheck("createTime",modified)){
                         selfModified |= FL_FACE_ID_CREATE_TIME_MASK;
-
+                    }
                 }
                 left.isNew((Boolean)methods.get(IS_NEW).invoke(right));
                 left.setModified(selfModified);
@@ -916,7 +941,7 @@ public class BeanConverterUtils implements Constant {
         }
 
         @Override
-        protected void _toRight(FaceBean left, R_FACE right) {
+        protected void doToRight(FaceBean left, R_FACE right) {
             try{
                 Method setterMethod;
                 long[] initialized = new long[(rightIndexs.size() + 63)>>6];
@@ -927,152 +952,171 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setId"),left.getId()));
                         bitOR("id",initialized);
-                        if(left.checkIdModified())
+                        if(left.checkIdModified()){
                             bitOR("id",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setImageMd5")) && left.checkImageMd5Initialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setImageMd5"),left.getImageMd5()));
                         bitOR("imageMd5",initialized);
-                        if(left.checkImageMd5Modified())
+                        if(left.checkImageMd5Modified()){
                             bitOR("imageMd5",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setFaceLeft")) && left.checkFaceLeftInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setFaceLeft"),left.getFaceLeft()));
                         bitOR("faceLeft",initialized);
-                        if(left.checkFaceLeftModified())
+                        if(left.checkFaceLeftModified()){
                             bitOR("faceLeft",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setFaceTop")) && left.checkFaceTopInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setFaceTop"),left.getFaceTop()));
                         bitOR("faceTop",initialized);
-                        if(left.checkFaceTopModified())
+                        if(left.checkFaceTopModified()){
                             bitOR("faceTop",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setFaceWidth")) && left.checkFaceWidthInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setFaceWidth"),left.getFaceWidth()));
                         bitOR("faceWidth",initialized);
-                        if(left.checkFaceWidthModified())
+                        if(left.checkFaceWidthModified()){
                             bitOR("faceWidth",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setFaceHeight")) && left.checkFaceHeightInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setFaceHeight"),left.getFaceHeight()));
                         bitOR("faceHeight",initialized);
-                        if(left.checkFaceHeightModified())
+                        if(left.checkFaceHeightModified()){
                             bitOR("faceHeight",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setEyeLeftx")) && left.checkEyeLeftxInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setEyeLeftx"),left.getEyeLeftx()));
                         bitOR("eyeLeftx",initialized);
-                        if(left.checkEyeLeftxModified())
+                        if(left.checkEyeLeftxModified()){
                             bitOR("eyeLeftx",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setEyeLefty")) && left.checkEyeLeftyInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setEyeLefty"),left.getEyeLefty()));
                         bitOR("eyeLefty",initialized);
-                        if(left.checkEyeLeftyModified())
+                        if(left.checkEyeLeftyModified()){
                             bitOR("eyeLefty",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setEyeRightx")) && left.checkEyeRightxInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setEyeRightx"),left.getEyeRightx()));
                         bitOR("eyeRightx",initialized);
-                        if(left.checkEyeRightxModified())
+                        if(left.checkEyeRightxModified()){
                             bitOR("eyeRightx",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setEyeRighty")) && left.checkEyeRightyInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setEyeRighty"),left.getEyeRighty()));
                         bitOR("eyeRighty",initialized);
-                        if(left.checkEyeRightyModified())
+                        if(left.checkEyeRightyModified()){
                             bitOR("eyeRighty",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setMouthX")) && left.checkMouthXInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setMouthX"),left.getMouthX()));
                         bitOR("mouthX",initialized);
-                        if(left.checkMouthXModified())
+                        if(left.checkMouthXModified()){
                             bitOR("mouthX",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setMouthY")) && left.checkMouthYInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setMouthY"),left.getMouthY()));
                         bitOR("mouthY",initialized);
-                        if(left.checkMouthYModified())
+                        if(left.checkMouthYModified()){
                             bitOR("mouthY",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setNoseX")) && left.checkNoseXInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setNoseX"),left.getNoseX()));
                         bitOR("noseX",initialized);
-                        if(left.checkNoseXModified())
+                        if(left.checkNoseXModified()){
                             bitOR("noseX",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setNoseY")) && left.checkNoseYInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setNoseY"),left.getNoseY()));
                         bitOR("noseY",initialized);
-                        if(left.checkNoseYModified())
+                        if(left.checkNoseYModified()){
                             bitOR("noseY",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setAngleYaw")) && left.checkAngleYawInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setAngleYaw"),left.getAngleYaw()));
                         bitOR("angleYaw",initialized);
-                        if(left.checkAngleYawModified())
+                        if(left.checkAngleYawModified()){
                             bitOR("angleYaw",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setAnglePitch")) && left.checkAnglePitchInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setAnglePitch"),left.getAnglePitch()));
                         bitOR("anglePitch",initialized);
-                        if(left.checkAnglePitchModified())
+                        if(left.checkAnglePitchModified()){
                             bitOR("anglePitch",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setAngleRoll")) && left.checkAngleRollInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setAngleRoll"),left.getAngleRoll()));
                         bitOR("angleRoll",initialized);
-                        if(left.checkAngleRollModified())
+                        if(left.checkAngleRollModified()){
                             bitOR("angleRoll",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setExtInfo")) && left.checkExtInfoInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setExtInfo"),left.getExtInfo()));
                         bitOR("extInfo",initialized);
-                        if(left.checkExtInfoModified())
+                        if(left.checkExtInfoModified()){
                             bitOR("extInfo",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setFeatureMd5")) && left.checkFeatureMd5Initialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setFeatureMd5"),left.getFeatureMd5()));
                         bitOR("featureMd5",initialized);
-                        if(left.checkFeatureMd5Modified())
+                        if(left.checkFeatureMd5Modified()){
                             bitOR("featureMd5",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
 // IGNORE field fl_face.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
@@ -1081,16 +1125,18 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setCreateTime"),left.getCreateTime()));
                         bitOR("createTime",initialized);
-                        if(left.checkCreateTimeModified())
+                        if(left.checkCreateTimeModified()){
                             bitOR("createTime",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
 */
                 if(null != (setterMethod = methods.get(SET_MODIFIED))){
-                    if( initialized.length > 1)
+                    if( initialized.length > 1){
                         setterMethod.invoke(right,cast(setterParams.get(SET_MODIFIED),initialized));
-                    else
+                    }else{
                         setterMethod.invoke(right,initialized[0]);
+                    }
                 }
                 methods.get(SET_NEW).invoke(right,left.isNew());
                 if( initialized.length > 1){
@@ -1182,23 +1228,26 @@ public class BeanConverterUtils implements Constant {
             String []rightFields = javaFields.split(",");
             for(int i = 0 ; i < rightFields.length; ++i){
                 String field = rightFields[i].trim();
-                if(!field.matches("\\w+"))
+                if(!field.matches("\\w+")){
                     throw new IllegalArgumentException("invalid 'javaFields':" + javaFields);
+                }
                 rightIndexs.put(field,i);
             }
             try{
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_INITIALIZED,long.class);
+                }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_MODIFIED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_MODIFIED,long.class);
+                }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
             }
@@ -1213,7 +1262,7 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow("setUpdateTime",java.util.Date.class,Long.class,long.class);  
         }
         @Override
-        protected void _fromRight(FeatureBean left, R_FEATURE right) {
+        protected void doFromRight(FeatureBean left, R_FEATURE right) {
             try{
                 Method getterMethod;
                 left.resetIsModified();
@@ -1229,27 +1278,27 @@ public class BeanConverterUtils implements Constant {
                 }
                 if( bitCheck("md5",initialized) && (null != (getterMethod = methods.get("getMd5")))){
                     left.setMd5(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("md5",modified))
+                    if(bitCheck("md5",modified)){
                         selfModified |= FL_FEATURE_ID_MD5_MASK;
-
+                    }
                 }
                 if( bitCheck("personId",initialized) && (null != (getterMethod = methods.get("getPersonId")))){
                     left.setPersonId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("personId",modified))
+                    if(bitCheck("personId",modified)){
                         selfModified |= FL_FEATURE_ID_PERSON_ID_MASK;
-
+                    }
                 }
                 if( bitCheck("feature",initialized) && (null != (getterMethod = methods.get("getFeature")))){
                     left.setFeature(cast(java.nio.ByteBuffer.class,getterMethod.invoke(right)));
-                    if(bitCheck("feature",modified))
+                    if(bitCheck("feature",modified)){
                         selfModified |= FL_FEATURE_ID_FEATURE_MASK;
-
+                    }
                 }
                 if( bitCheck("updateTime",initialized) && (null != (getterMethod = methods.get("getUpdateTime")))){
                     left.setUpdateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("updateTime",modified))
+                    if(bitCheck("updateTime",modified)){
                         selfModified |= FL_FEATURE_ID_UPDATE_TIME_MASK;
-
+                    }
                 }
                 left.isNew((Boolean)methods.get(IS_NEW).invoke(right));
                 left.setModified(selfModified);
@@ -1261,7 +1310,7 @@ public class BeanConverterUtils implements Constant {
         }
 
         @Override
-        protected void _toRight(FeatureBean left, R_FEATURE right) {
+        protected void doToRight(FeatureBean left, R_FEATURE right) {
             try{
                 Method setterMethod;
                 long[] initialized = new long[(rightIndexs.size() + 63)>>6];
@@ -1272,24 +1321,27 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setMd5"),left.getMd5()));
                         bitOR("md5",initialized);
-                        if(left.checkMd5Modified())
+                        if(left.checkMd5Modified()){
                             bitOR("md5",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setPersonId")) && left.checkPersonIdInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setPersonId"),left.getPersonId()));
                         bitOR("personId",initialized);
-                        if(left.checkPersonIdModified())
+                        if(left.checkPersonIdModified()){
                             bitOR("personId",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setFeature")) && left.checkFeatureInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setFeature"),left.getFeature()));
                         bitOR("feature",initialized);
-                        if(left.checkFeatureModified())
+                        if(left.checkFeatureModified()){
                             bitOR("feature",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
 // IGNORE field fl_feature.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
@@ -1298,16 +1350,18 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setUpdateTime"),left.getUpdateTime()));
                         bitOR("updateTime",initialized);
-                        if(left.checkUpdateTimeModified())
+                        if(left.checkUpdateTimeModified()){
                             bitOR("updateTime",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
 */
                 if(null != (setterMethod = methods.get(SET_MODIFIED))){
-                    if( initialized.length > 1)
+                    if( initialized.length > 1){
                         setterMethod.invoke(right,cast(setterParams.get(SET_MODIFIED),initialized));
-                    else
+                    }else{
                         setterMethod.invoke(right,initialized[0]);
+                    }
                 }
                 methods.get(SET_NEW).invoke(right,left.isNew());
                 if( initialized.length > 1){
@@ -1399,23 +1453,26 @@ public class BeanConverterUtils implements Constant {
             String []rightFields = javaFields.split(",");
             for(int i = 0 ; i < rightFields.length; ++i){
                 String field = rightFields[i].trim();
-                if(!field.matches("\\w+"))
+                if(!field.matches("\\w+")){
                     throw new IllegalArgumentException("invalid 'javaFields':" + javaFields);
+                }
                 rightIndexs.put(field,i);
             }
             try{
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_INITIALIZED,long.class);
+                }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_MODIFIED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_MODIFIED,long.class);
+                }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
             }
@@ -1438,7 +1495,7 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow("setDeviceId",Integer.class,int.class);                    
         }
         @Override
-        protected void _fromRight(ImageBean left, R_IMAGE right) {
+        protected void doFromRight(ImageBean left, R_IMAGE right) {
             try{
                 Method getterMethod;
                 left.resetIsModified();
@@ -1454,51 +1511,51 @@ public class BeanConverterUtils implements Constant {
                 }
                 if( bitCheck("md5",initialized) && (null != (getterMethod = methods.get("getMd5")))){
                     left.setMd5(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("md5",modified))
+                    if(bitCheck("md5",modified)){
                         selfModified |= FL_IMAGE_ID_MD5_MASK;
-
+                    }
                 }
                 if( bitCheck("format",initialized) && (null != (getterMethod = methods.get("getFormat")))){
                     left.setFormat(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("format",modified))
+                    if(bitCheck("format",modified)){
                         selfModified |= FL_IMAGE_ID_FORMAT_MASK;
-
+                    }
                 }
                 if( bitCheck("width",initialized) && (null != (getterMethod = methods.get("getWidth")))){
                     left.setWidth(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("width",modified))
+                    if(bitCheck("width",modified)){
                         selfModified |= FL_IMAGE_ID_WIDTH_MASK;
-
+                    }
                 }
                 if( bitCheck("height",initialized) && (null != (getterMethod = methods.get("getHeight")))){
                     left.setHeight(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("height",modified))
+                    if(bitCheck("height",modified)){
                         selfModified |= FL_IMAGE_ID_HEIGHT_MASK;
-
+                    }
                 }
                 if( bitCheck("depth",initialized) && (null != (getterMethod = methods.get("getDepth")))){
                     left.setDepth(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("depth",modified))
+                    if(bitCheck("depth",modified)){
                         selfModified |= FL_IMAGE_ID_DEPTH_MASK;
-
+                    }
                 }
                 if( bitCheck("faceNum",initialized) && (null != (getterMethod = methods.get("getFaceNum")))){
                     left.setFaceNum(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("faceNum",modified))
+                    if(bitCheck("faceNum",modified)){
                         selfModified |= FL_IMAGE_ID_FACE_NUM_MASK;
-
+                    }
                 }
                 if( bitCheck("thumbMd5",initialized) && (null != (getterMethod = methods.get("getThumbMd5")))){
                     left.setThumbMd5(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("thumbMd5",modified))
+                    if(bitCheck("thumbMd5",modified)){
                         selfModified |= FL_IMAGE_ID_THUMB_MD5_MASK;
-
+                    }
                 }
                 if( bitCheck("deviceId",initialized) && (null != (getterMethod = methods.get("getDeviceId")))){
                     left.setDeviceId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("deviceId",modified))
+                    if(bitCheck("deviceId",modified)){
                         selfModified |= FL_IMAGE_ID_DEVICE_ID_MASK;
-
+                    }
                 }
                 left.isNew((Boolean)methods.get(IS_NEW).invoke(right));
                 left.setModified(selfModified);
@@ -1510,7 +1567,7 @@ public class BeanConverterUtils implements Constant {
         }
 
         @Override
-        protected void _toRight(ImageBean left, R_IMAGE right) {
+        protected void doToRight(ImageBean left, R_IMAGE right) {
             try{
                 Method setterMethod;
                 long[] initialized = new long[(rightIndexs.size() + 63)>>6];
@@ -1521,71 +1578,80 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setMd5"),left.getMd5()));
                         bitOR("md5",initialized);
-                        if(left.checkMd5Modified())
+                        if(left.checkMd5Modified()){
                             bitOR("md5",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setFormat")) && left.checkFormatInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setFormat"),left.getFormat()));
                         bitOR("format",initialized);
-                        if(left.checkFormatModified())
+                        if(left.checkFormatModified()){
                             bitOR("format",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setWidth")) && left.checkWidthInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setWidth"),left.getWidth()));
                         bitOR("width",initialized);
-                        if(left.checkWidthModified())
+                        if(left.checkWidthModified()){
                             bitOR("width",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setHeight")) && left.checkHeightInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setHeight"),left.getHeight()));
                         bitOR("height",initialized);
-                        if(left.checkHeightModified())
+                        if(left.checkHeightModified()){
                             bitOR("height",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setDepth")) && left.checkDepthInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setDepth"),left.getDepth()));
                         bitOR("depth",initialized);
-                        if(left.checkDepthModified())
+                        if(left.checkDepthModified()){
                             bitOR("depth",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setFaceNum")) && left.checkFaceNumInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setFaceNum"),left.getFaceNum()));
                         bitOR("faceNum",initialized);
-                        if(left.checkFaceNumModified())
+                        if(left.checkFaceNumModified()){
                             bitOR("faceNum",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setThumbMd5")) && left.checkThumbMd5Initialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setThumbMd5"),left.getThumbMd5()));
                         bitOR("thumbMd5",initialized);
-                        if(left.checkThumbMd5Modified())
+                        if(left.checkThumbMd5Modified()){
                             bitOR("thumbMd5",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setDeviceId")) && left.checkDeviceIdInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setDeviceId"),left.getDeviceId()));
                         bitOR("deviceId",initialized);
-                        if(left.checkDeviceIdModified())
+                        if(left.checkDeviceIdModified()){
                             bitOR("deviceId",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get(SET_MODIFIED))){
-                    if( initialized.length > 1)
+                    if( initialized.length > 1){
                         setterMethod.invoke(right,cast(setterParams.get(SET_MODIFIED),initialized));
-                    else
+                    }else{
                         setterMethod.invoke(right,initialized[0]);
+                    }
                 }
                 methods.get(SET_NEW).invoke(right,left.isNew());
                 if( initialized.length > 1){
@@ -1677,23 +1743,26 @@ public class BeanConverterUtils implements Constant {
             String []rightFields = javaFields.split(",");
             for(int i = 0 ; i < rightFields.length; ++i){
                 String field = rightFields[i].trim();
-                if(!field.matches("\\w+"))
+                if(!field.matches("\\w+")){
                     throw new IllegalArgumentException("invalid 'javaFields':" + javaFields);
+                }
                 rightIndexs.put(field,i);
             }
             try{
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_INITIALIZED,long.class);
+                }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_MODIFIED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_MODIFIED,long.class);
+                }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
             }
@@ -1716,7 +1785,7 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow("setCreateTime",java.util.Date.class,Long.class,long.class);  
         }
         @Override
-        protected void _fromRight(LogBean left, R_LOG right) {
+        protected void doFromRight(LogBean left, R_LOG right) {
             try{
                 Method getterMethod;
                 left.resetIsModified();
@@ -1732,51 +1801,51 @@ public class BeanConverterUtils implements Constant {
                 }
                 if( bitCheck("id",initialized) && (null != (getterMethod = methods.get("getId")))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("id",modified))
+                    if(bitCheck("id",modified)){
                         selfModified |= FL_LOG_ID_ID_MASK;
-
+                    }
                 }
                 if( bitCheck("personId",initialized) && (null != (getterMethod = methods.get("getPersonId")))){
                     left.setPersonId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("personId",modified))
+                    if(bitCheck("personId",modified)){
                         selfModified |= FL_LOG_ID_PERSON_ID_MASK;
-
+                    }
                 }
                 if( bitCheck("deviceId",initialized) && (null != (getterMethod = methods.get("getDeviceId")))){
                     left.setDeviceId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("deviceId",modified))
+                    if(bitCheck("deviceId",modified)){
                         selfModified |= FL_LOG_ID_DEVICE_ID_MASK;
-
+                    }
                 }
                 if( bitCheck("verifyFeature",initialized) && (null != (getterMethod = methods.get("getVerifyFeature")))){
                     left.setVerifyFeature(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("verifyFeature",modified))
+                    if(bitCheck("verifyFeature",modified)){
                         selfModified |= FL_LOG_ID_VERIFY_FEATURE_MASK;
-
+                    }
                 }
                 if( bitCheck("compareFace",initialized) && (null != (getterMethod = methods.get("getCompareFace")))){
                     left.setCompareFace(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("compareFace",modified))
+                    if(bitCheck("compareFace",modified)){
                         selfModified |= FL_LOG_ID_COMPARE_FACE_MASK;
-
+                    }
                 }
                 if( bitCheck("similarty",initialized) && (null != (getterMethod = methods.get("getSimilarty")))){
                     left.setSimilarty(cast(Double.class,getterMethod.invoke(right)));
-                    if(bitCheck("similarty",modified))
+                    if(bitCheck("similarty",modified)){
                         selfModified |= FL_LOG_ID_SIMILARTY_MASK;
-
+                    }
                 }
                 if( bitCheck("verifyTime",initialized) && (null != (getterMethod = methods.get("getVerifyTime")))){
                     left.setVerifyTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("verifyTime",modified))
+                    if(bitCheck("verifyTime",modified)){
                         selfModified |= FL_LOG_ID_VERIFY_TIME_MASK;
-
+                    }
                 }
                 if( bitCheck("createTime",initialized) && (null != (getterMethod = methods.get("getCreateTime")))){
                     left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("createTime",modified))
+                    if(bitCheck("createTime",modified)){
                         selfModified |= FL_LOG_ID_CREATE_TIME_MASK;
-
+                    }
                 }
                 left.isNew((Boolean)methods.get(IS_NEW).invoke(right));
                 left.setModified(selfModified);
@@ -1788,7 +1857,7 @@ public class BeanConverterUtils implements Constant {
         }
 
         @Override
-        protected void _toRight(LogBean left, R_LOG right) {
+        protected void doToRight(LogBean left, R_LOG right) {
             try{
                 Method setterMethod;
                 long[] initialized = new long[(rightIndexs.size() + 63)>>6];
@@ -1799,56 +1868,63 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setId"),left.getId()));
                         bitOR("id",initialized);
-                        if(left.checkIdModified())
+                        if(left.checkIdModified()){
                             bitOR("id",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setPersonId")) && left.checkPersonIdInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setPersonId"),left.getPersonId()));
                         bitOR("personId",initialized);
-                        if(left.checkPersonIdModified())
+                        if(left.checkPersonIdModified()){
                             bitOR("personId",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setDeviceId")) && left.checkDeviceIdInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setDeviceId"),left.getDeviceId()));
                         bitOR("deviceId",initialized);
-                        if(left.checkDeviceIdModified())
+                        if(left.checkDeviceIdModified()){
                             bitOR("deviceId",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setVerifyFeature")) && left.checkVerifyFeatureInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setVerifyFeature"),left.getVerifyFeature()));
                         bitOR("verifyFeature",initialized);
-                        if(left.checkVerifyFeatureModified())
+                        if(left.checkVerifyFeatureModified()){
                             bitOR("verifyFeature",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setCompareFace")) && left.checkCompareFaceInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setCompareFace"),left.getCompareFace()));
                         bitOR("compareFace",initialized);
-                        if(left.checkCompareFaceModified())
+                        if(left.checkCompareFaceModified()){
                             bitOR("compareFace",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setSimilarty")) && left.checkSimilartyInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setSimilarty"),left.getSimilarty()));
                         bitOR("similarty",initialized);
-                        if(left.checkSimilartyModified())
+                        if(left.checkSimilartyModified()){
                             bitOR("similarty",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setVerifyTime")) && left.checkVerifyTimeInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setVerifyTime"),left.getVerifyTime()));
                         bitOR("verifyTime",initialized);
-                        if(left.checkVerifyTimeModified())
+                        if(left.checkVerifyTimeModified()){
                             bitOR("verifyTime",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
 // IGNORE field fl_log.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
@@ -1857,16 +1933,18 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setCreateTime"),left.getCreateTime()));
                         bitOR("createTime",initialized);
-                        if(left.checkCreateTimeModified())
+                        if(left.checkCreateTimeModified()){
                             bitOR("createTime",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
 */
                 if(null != (setterMethod = methods.get(SET_MODIFIED))){
-                    if( initialized.length > 1)
+                    if( initialized.length > 1){
                         setterMethod.invoke(right,cast(setterParams.get(SET_MODIFIED),initialized));
-                    else
+                    }else{
                         setterMethod.invoke(right,initialized[0]);
+                    }
                 }
                 methods.get(SET_NEW).invoke(right,left.isNew());
                 if( initialized.length > 1){
@@ -1958,23 +2036,26 @@ public class BeanConverterUtils implements Constant {
             String []rightFields = javaFields.split(",");
             for(int i = 0 ; i < rightFields.length; ++i){
                 String field = rightFields[i].trim();
-                if(!field.matches("\\w+"))
+                if(!field.matches("\\w+")){
                     throw new IllegalArgumentException("invalid 'javaFields':" + javaFields);
+                }
                 rightIndexs.put(field,i);
             }
             try{
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_INITIALIZED,long.class);
+                }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_MODIFIED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_MODIFIED,long.class);
+                }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
             }
@@ -1987,7 +2068,7 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow("setCreateTime",java.util.Date.class,Long.class,long.class);  
         }
         @Override
-        protected void _fromRight(PermitBean left, R_PERMIT right) {
+        protected void doFromRight(PermitBean left, R_PERMIT right) {
             try{
                 Method getterMethod;
                 left.resetIsModified();
@@ -2003,21 +2084,21 @@ public class BeanConverterUtils implements Constant {
                 }
                 if( bitCheck("deviceGroupId",initialized) && (null != (getterMethod = methods.get("getDeviceGroupId")))){
                     left.setDeviceGroupId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("deviceGroupId",modified))
+                    if(bitCheck("deviceGroupId",modified)){
                         selfModified |= FL_PERMIT_ID_DEVICE_GROUP_ID_MASK;
-
+                    }
                 }
                 if( bitCheck("personGroupId",initialized) && (null != (getterMethod = methods.get("getPersonGroupId")))){
                     left.setPersonGroupId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("personGroupId",modified))
+                    if(bitCheck("personGroupId",modified)){
                         selfModified |= FL_PERMIT_ID_PERSON_GROUP_ID_MASK;
-
+                    }
                 }
                 if( bitCheck("createTime",initialized) && (null != (getterMethod = methods.get("getCreateTime")))){
                     left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("createTime",modified))
+                    if(bitCheck("createTime",modified)){
                         selfModified |= FL_PERMIT_ID_CREATE_TIME_MASK;
-
+                    }
                 }
                 left.isNew((Boolean)methods.get(IS_NEW).invoke(right));
                 left.setModified(selfModified);
@@ -2029,7 +2110,7 @@ public class BeanConverterUtils implements Constant {
         }
 
         @Override
-        protected void _toRight(PermitBean left, R_PERMIT right) {
+        protected void doToRight(PermitBean left, R_PERMIT right) {
             try{
                 Method setterMethod;
                 long[] initialized = new long[(rightIndexs.size() + 63)>>6];
@@ -2040,16 +2121,18 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setDeviceGroupId"),left.getDeviceGroupId()));
                         bitOR("deviceGroupId",initialized);
-                        if(left.checkDeviceGroupIdModified())
+                        if(left.checkDeviceGroupIdModified()){
                             bitOR("deviceGroupId",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setPersonGroupId")) && left.checkPersonGroupIdInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setPersonGroupId"),left.getPersonGroupId()));
                         bitOR("personGroupId",initialized);
-                        if(left.checkPersonGroupIdModified())
+                        if(left.checkPersonGroupIdModified()){
                             bitOR("personGroupId",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
 // IGNORE field fl_permit.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
@@ -2058,16 +2141,18 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setCreateTime"),left.getCreateTime()));
                         bitOR("createTime",initialized);
-                        if(left.checkCreateTimeModified())
+                        if(left.checkCreateTimeModified()){
                             bitOR("createTime",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
 */
                 if(null != (setterMethod = methods.get(SET_MODIFIED))){
-                    if( initialized.length > 1)
+                    if( initialized.length > 1){
                         setterMethod.invoke(right,cast(setterParams.get(SET_MODIFIED),initialized));
-                    else
+                    }else{
                         setterMethod.invoke(right,initialized[0]);
+                    }
                 }
                 methods.get(SET_NEW).invoke(right,left.isNew());
                 if( initialized.length > 1){
@@ -2159,23 +2244,26 @@ public class BeanConverterUtils implements Constant {
             String []rightFields = javaFields.split(",");
             for(int i = 0 ; i < rightFields.length; ++i){
                 String field = rightFields[i].trim();
-                if(!field.matches("\\w+"))
+                if(!field.matches("\\w+")){
                     throw new IllegalArgumentException("invalid 'javaFields':" + javaFields);
+                }
                 rightIndexs.put(field,i);
             }
             try{
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_INITIALIZED,long.class);
+                }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_MODIFIED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_MODIFIED,long.class);
+                }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
             }
@@ -2204,7 +2292,7 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow("setUpdateTime",java.util.Date.class,Long.class,long.class);  
         }
         @Override
-        protected void _fromRight(PersonBean left, R_PERSON right) {
+        protected void doFromRight(PersonBean left, R_PERSON right) {
             try{
                 Method getterMethod;
                 left.resetIsModified();
@@ -2220,69 +2308,69 @@ public class BeanConverterUtils implements Constant {
                 }
                 if( bitCheck("id",initialized) && (null != (getterMethod = methods.get("getId")))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("id",modified))
+                    if(bitCheck("id",modified)){
                         selfModified |= FL_PERSON_ID_ID_MASK;
-
+                    }
                 }
                 if( bitCheck("groupId",initialized) && (null != (getterMethod = methods.get("getGroupId")))){
                     left.setGroupId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("groupId",modified))
+                    if(bitCheck("groupId",modified)){
                         selfModified |= FL_PERSON_ID_GROUP_ID_MASK;
-
+                    }
                 }
                 if( bitCheck("name",initialized) && (null != (getterMethod = methods.get("getName")))){
                     left.setName(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("name",modified))
+                    if(bitCheck("name",modified)){
                         selfModified |= FL_PERSON_ID_NAME_MASK;
-
+                    }
                 }
                 if( bitCheck("sex",initialized) && (null != (getterMethod = methods.get("getSex")))){
                     left.setSex(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("sex",modified))
+                    if(bitCheck("sex",modified)){
                         selfModified |= FL_PERSON_ID_SEX_MASK;
-
+                    }
                 }
                 if( bitCheck("birthdate",initialized) && (null != (getterMethod = methods.get("getBirthdate")))){
                     left.setBirthdate(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("birthdate",modified))
+                    if(bitCheck("birthdate",modified)){
                         selfModified |= FL_PERSON_ID_BIRTHDATE_MASK;
-
+                    }
                 }
                 if( bitCheck("papersType",initialized) && (null != (getterMethod = methods.get("getPapersType")))){
                     left.setPapersType(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("papersType",modified))
+                    if(bitCheck("papersType",modified)){
                         selfModified |= FL_PERSON_ID_PAPERS_TYPE_MASK;
-
+                    }
                 }
                 if( bitCheck("papersNum",initialized) && (null != (getterMethod = methods.get("getPapersNum")))){
                     left.setPapersNum(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("papersNum",modified))
+                    if(bitCheck("papersNum",modified)){
                         selfModified |= FL_PERSON_ID_PAPERS_NUM_MASK;
-
+                    }
                 }
                 if( bitCheck("imageMd5",initialized) && (null != (getterMethod = methods.get("getImageMd5")))){
                     left.setImageMd5(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("imageMd5",modified))
+                    if(bitCheck("imageMd5",modified)){
                         selfModified |= FL_PERSON_ID_IMAGE_MD5_MASK;
-
+                    }
                 }
                 if( bitCheck("expiryDate",initialized) && (null != (getterMethod = methods.get("getExpiryDate")))){
                     left.setExpiryDate(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("expiryDate",modified))
+                    if(bitCheck("expiryDate",modified)){
                         selfModified |= FL_PERSON_ID_EXPIRY_DATE_MASK;
-
+                    }
                 }
                 if( bitCheck("createTime",initialized) && (null != (getterMethod = methods.get("getCreateTime")))){
                     left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("createTime",modified))
+                    if(bitCheck("createTime",modified)){
                         selfModified |= FL_PERSON_ID_CREATE_TIME_MASK;
-
+                    }
                 }
                 if( bitCheck("updateTime",initialized) && (null != (getterMethod = methods.get("getUpdateTime")))){
                     left.setUpdateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("updateTime",modified))
+                    if(bitCheck("updateTime",modified)){
                         selfModified |= FL_PERSON_ID_UPDATE_TIME_MASK;
-
+                    }
                 }
                 left.isNew((Boolean)methods.get(IS_NEW).invoke(right));
                 left.setModified(selfModified);
@@ -2294,7 +2382,7 @@ public class BeanConverterUtils implements Constant {
         }
 
         @Override
-        protected void _toRight(PersonBean left, R_PERSON right) {
+        protected void doToRight(PersonBean left, R_PERSON right) {
             try{
                 Method setterMethod;
                 long[] initialized = new long[(rightIndexs.size() + 63)>>6];
@@ -2305,72 +2393,81 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setId"),left.getId()));
                         bitOR("id",initialized);
-                        if(left.checkIdModified())
+                        if(left.checkIdModified()){
                             bitOR("id",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setGroupId")) && left.checkGroupIdInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setGroupId"),left.getGroupId()));
                         bitOR("groupId",initialized);
-                        if(left.checkGroupIdModified())
+                        if(left.checkGroupIdModified()){
                             bitOR("groupId",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setName")) && left.checkNameInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setName"),left.getName()));
                         bitOR("name",initialized);
-                        if(left.checkNameModified())
+                        if(left.checkNameModified()){
                             bitOR("name",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setSex")) && left.checkSexInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setSex"),left.getSex()));
                         bitOR("sex",initialized);
-                        if(left.checkSexModified())
+                        if(left.checkSexModified()){
                             bitOR("sex",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setBirthdate")) && left.checkBirthdateInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setBirthdate"),left.getBirthdate()));
                         bitOR("birthdate",initialized);
-                        if(left.checkBirthdateModified())
+                        if(left.checkBirthdateModified()){
                             bitOR("birthdate",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setPapersType")) && left.checkPapersTypeInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setPapersType"),left.getPapersType()));
                         bitOR("papersType",initialized);
-                        if(left.checkPapersTypeModified())
+                        if(left.checkPapersTypeModified()){
                             bitOR("papersType",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setPapersNum")) && left.checkPapersNumInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setPapersNum"),left.getPapersNum()));
                         bitOR("papersNum",initialized);
-                        if(left.checkPapersNumModified())
+                        if(left.checkPapersNumModified()){
                             bitOR("papersNum",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setImageMd5")) && left.checkImageMd5Initialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setImageMd5"),left.getImageMd5()));
                         bitOR("imageMd5",initialized);
-                        if(left.checkImageMd5Modified())
+                        if(left.checkImageMd5Modified()){
                             bitOR("imageMd5",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setExpiryDate")) && left.checkExpiryDateInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setExpiryDate"),left.getExpiryDate()));
                         bitOR("expiryDate",initialized);
-                        if(left.checkExpiryDateModified())
+                        if(left.checkExpiryDateModified()){
                             bitOR("expiryDate",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
 // IGNORE field fl_person.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
@@ -2379,8 +2476,9 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setCreateTime"),left.getCreateTime()));
                         bitOR("createTime",initialized);
-                        if(left.checkCreateTimeModified())
+                        if(left.checkCreateTimeModified()){
                             bitOR("createTime",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
 */
@@ -2390,16 +2488,18 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setUpdateTime"),left.getUpdateTime()));
                         bitOR("updateTime",initialized);
-                        if(left.checkUpdateTimeModified())
+                        if(left.checkUpdateTimeModified()){
                             bitOR("updateTime",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
 */
                 if(null != (setterMethod = methods.get(SET_MODIFIED))){
-                    if( initialized.length > 1)
+                    if( initialized.length > 1){
                         setterMethod.invoke(right,cast(setterParams.get(SET_MODIFIED),initialized));
-                    else
+                    }else{
                         setterMethod.invoke(right,initialized[0]);
+                    }
                 }
                 methods.get(SET_NEW).invoke(right,left.isNew());
                 if( initialized.length > 1){
@@ -2491,23 +2591,26 @@ public class BeanConverterUtils implements Constant {
             String []rightFields = javaFields.split(",");
             for(int i = 0 ; i < rightFields.length; ++i){
                 String field = rightFields[i].trim();
-                if(!field.matches("\\w+"))
+                if(!field.matches("\\w+")){
                     throw new IllegalArgumentException("invalid 'javaFields':" + javaFields);
+                }
                 rightIndexs.put(field,i);
             }
             try{
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_INITIALIZED,long.class);
+                }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_MODIFIED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_MODIFIED,long.class);
+                }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
             }
@@ -2522,7 +2625,7 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow("setParent",Integer.class,int.class);                    
         }
         @Override
-        protected void _fromRight(PersonGroupBean left, R_PERSONGROUP right) {
+        protected void doFromRight(PersonGroupBean left, R_PERSONGROUP right) {
             try{
                 Method getterMethod;
                 left.resetIsModified();
@@ -2538,27 +2641,27 @@ public class BeanConverterUtils implements Constant {
                 }
                 if( bitCheck("id",initialized) && (null != (getterMethod = methods.get("getId")))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("id",modified))
+                    if(bitCheck("id",modified)){
                         selfModified |= FL_PERSON_GROUP_ID_ID_MASK;
-
+                    }
                 }
                 if( bitCheck("name",initialized) && (null != (getterMethod = methods.get("getName")))){
                     left.setName(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("name",modified))
+                    if(bitCheck("name",modified)){
                         selfModified |= FL_PERSON_GROUP_ID_NAME_MASK;
-
+                    }
                 }
                 if( bitCheck("leaf",initialized) && (null != (getterMethod = methods.get("getLeaf")))){
                     left.setLeaf(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("leaf",modified))
+                    if(bitCheck("leaf",modified)){
                         selfModified |= FL_PERSON_GROUP_ID_LEAF_MASK;
-
+                    }
                 }
                 if( bitCheck("parent",initialized) && (null != (getterMethod = methods.get("getParent")))){
                     left.setParent(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("parent",modified))
+                    if(bitCheck("parent",modified)){
                         selfModified |= FL_PERSON_GROUP_ID_PARENT_MASK;
-
+                    }
                 }
                 left.isNew((Boolean)methods.get(IS_NEW).invoke(right));
                 left.setModified(selfModified);
@@ -2570,7 +2673,7 @@ public class BeanConverterUtils implements Constant {
         }
 
         @Override
-        protected void _toRight(PersonGroupBean left, R_PERSONGROUP right) {
+        protected void doToRight(PersonGroupBean left, R_PERSONGROUP right) {
             try{
                 Method setterMethod;
                 long[] initialized = new long[(rightIndexs.size() + 63)>>6];
@@ -2581,39 +2684,44 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setId"),left.getId()));
                         bitOR("id",initialized);
-                        if(left.checkIdModified())
+                        if(left.checkIdModified()){
                             bitOR("id",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setName")) && left.checkNameInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setName"),left.getName()));
                         bitOR("name",initialized);
-                        if(left.checkNameModified())
+                        if(left.checkNameModified()){
                             bitOR("name",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setLeaf")) && left.checkLeafInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setLeaf"),left.getLeaf()));
                         bitOR("leaf",initialized);
-                        if(left.checkLeafModified())
+                        if(left.checkLeafModified()){
                             bitOR("leaf",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setParent")) && left.checkParentInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setParent"),left.getParent()));
                         bitOR("parent",initialized);
-                        if(left.checkParentModified())
+                        if(left.checkParentModified()){
                             bitOR("parent",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get(SET_MODIFIED))){
-                    if( initialized.length > 1)
+                    if( initialized.length > 1){
                         setterMethod.invoke(right,cast(setterParams.get(SET_MODIFIED),initialized));
-                    else
+                    }else{
                         setterMethod.invoke(right,initialized[0]);
+                    }
                 }
                 methods.get(SET_NEW).invoke(right,left.isNew());
                 if( initialized.length > 1){
@@ -2705,23 +2813,26 @@ public class BeanConverterUtils implements Constant {
             String []rightFields = javaFields.split(",");
             for(int i = 0 ; i < rightFields.length; ++i){
                 String field = rightFields[i].trim();
-                if(!field.matches("\\w+"))
+                if(!field.matches("\\w+")){
                     throw new IllegalArgumentException("invalid 'javaFields':" + javaFields);
+                }
                 rightIndexs.put(field,i);
             }
             try{
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_INITIALIZED,long.class);
+                }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_MODIFIED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_MODIFIED,long.class);
+                }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
             }
@@ -2734,7 +2845,7 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow("setData",java.nio.ByteBuffer.class,byte[].class);                    
         }
         @Override
-        protected void _fromRight(StoreBean left, R_STORE right) {
+        protected void doFromRight(StoreBean left, R_STORE right) {
             try{
                 Method getterMethod;
                 left.resetIsModified();
@@ -2750,21 +2861,21 @@ public class BeanConverterUtils implements Constant {
                 }
                 if( bitCheck("md5",initialized) && (null != (getterMethod = methods.get("getMd5")))){
                     left.setMd5(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("md5",modified))
+                    if(bitCheck("md5",modified)){
                         selfModified |= FL_STORE_ID_MD5_MASK;
-
+                    }
                 }
                 if( bitCheck("encoding",initialized) && (null != (getterMethod = methods.get("getEncoding")))){
                     left.setEncoding(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("encoding",modified))
+                    if(bitCheck("encoding",modified)){
                         selfModified |= FL_STORE_ID_ENCODING_MASK;
-
+                    }
                 }
                 if( bitCheck("data",initialized) && (null != (getterMethod = methods.get("getData")))){
                     left.setData(cast(java.nio.ByteBuffer.class,getterMethod.invoke(right)));
-                    if(bitCheck("data",modified))
+                    if(bitCheck("data",modified)){
                         selfModified |= FL_STORE_ID_DATA_MASK;
-
+                    }
                 }
                 left.isNew((Boolean)methods.get(IS_NEW).invoke(right));
                 left.setModified(selfModified);
@@ -2776,7 +2887,7 @@ public class BeanConverterUtils implements Constant {
         }
 
         @Override
-        protected void _toRight(StoreBean left, R_STORE right) {
+        protected void doToRight(StoreBean left, R_STORE right) {
             try{
                 Method setterMethod;
                 long[] initialized = new long[(rightIndexs.size() + 63)>>6];
@@ -2787,31 +2898,35 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setMd5"),left.getMd5()));
                         bitOR("md5",initialized);
-                        if(left.checkMd5Modified())
+                        if(left.checkMd5Modified()){
                             bitOR("md5",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setEncoding")) && left.checkEncodingInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setEncoding"),left.getEncoding()));
                         bitOR("encoding",initialized);
-                        if(left.checkEncodingModified())
+                        if(left.checkEncodingModified()){
                             bitOR("encoding",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setData")) && left.checkDataInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setData"),left.getData()));
                         bitOR("data",initialized);
-                        if(left.checkDataModified())
+                        if(left.checkDataModified()){
                             bitOR("data",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get(SET_MODIFIED))){
-                    if( initialized.length > 1)
+                    if( initialized.length > 1){
                         setterMethod.invoke(right,cast(setterParams.get(SET_MODIFIED),initialized));
-                    else
+                    }else{
                         setterMethod.invoke(right,initialized[0]);
+                    }
                 }
                 methods.get(SET_NEW).invoke(right,left.isNew());
                 if( initialized.length > 1){
@@ -2903,23 +3018,26 @@ public class BeanConverterUtils implements Constant {
             String []rightFields = javaFields.split(",");
             for(int i = 0 ; i < rightFields.length; ++i){
                 String field = rightFields[i].trim();
-                if(!field.matches("\\w+"))
+                if(!field.matches("\\w+")){
                     throw new IllegalArgumentException("invalid 'javaFields':" + javaFields);
+                }
                 rightIndexs.put(field,i);
             }
             try{
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_INITIALIZED,long.class);
+                }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64)
+                if(rightIndexs.size() > 64){
                     getSetter(SET_MODIFIED,long[].class,List.class);
-                else
+                }else{
                     getSetter(SET_MODIFIED,long.class);
+                }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
             }
@@ -2938,7 +3056,7 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow("setVerifyTime",java.util.Date.class,Long.class,long.class);  
         }
         @Override
-        protected void _fromRight(LogLightBean left, R_LOGLIGHT right) {
+        protected void doFromRight(LogLightBean left, R_LOGLIGHT right) {
             try{
                 Method getterMethod;
                 left.resetIsModified();
@@ -2954,39 +3072,39 @@ public class BeanConverterUtils implements Constant {
                 }
                 if( bitCheck("id",initialized) && (null != (getterMethod = methods.get("getId")))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("id",modified))
+                    if(bitCheck("id",modified)){
                         selfModified |= FL_LOG_LIGHT_ID_ID_MASK;
-
+                    }
                 }
                 if( bitCheck("personId",initialized) && (null != (getterMethod = methods.get("getPersonId")))){
                     left.setPersonId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("personId",modified))
+                    if(bitCheck("personId",modified)){
                         selfModified |= FL_LOG_LIGHT_ID_PERSON_ID_MASK;
-
+                    }
                 }
                 if( bitCheck("name",initialized) && (null != (getterMethod = methods.get("getName")))){
                     left.setName(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("name",modified))
+                    if(bitCheck("name",modified)){
                         selfModified |= FL_LOG_LIGHT_ID_NAME_MASK;
-
+                    }
                 }
                 if( bitCheck("papersType",initialized) && (null != (getterMethod = methods.get("getPapersType")))){
                     left.setPapersType(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("papersType",modified))
+                    if(bitCheck("papersType",modified)){
                         selfModified |= FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK;
-
+                    }
                 }
                 if( bitCheck("papersNum",initialized) && (null != (getterMethod = methods.get("getPapersNum")))){
                     left.setPapersNum(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("papersNum",modified))
+                    if(bitCheck("papersNum",modified)){
                         selfModified |= FL_LOG_LIGHT_ID_PAPERS_NUM_MASK;
-
+                    }
                 }
                 if( bitCheck("verifyTime",initialized) && (null != (getterMethod = methods.get("getVerifyTime")))){
                     left.setVerifyTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("verifyTime",modified))
+                    if(bitCheck("verifyTime",modified)){
                         selfModified |= FL_LOG_LIGHT_ID_VERIFY_TIME_MASK;
-
+                    }
                 }
                 left.isNew((Boolean)methods.get(IS_NEW).invoke(right));
                 left.setModified(selfModified);
@@ -2998,7 +3116,7 @@ public class BeanConverterUtils implements Constant {
         }
 
         @Override
-        protected void _toRight(LogLightBean left, R_LOGLIGHT right) {
+        protected void doToRight(LogLightBean left, R_LOGLIGHT right) {
             try{
                 Method setterMethod;
                 long[] initialized = new long[(rightIndexs.size() + 63)>>6];
@@ -3009,55 +3127,62 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setId"),left.getId()));
                         bitOR("id",initialized);
-                        if(left.checkIdModified())
+                        if(left.checkIdModified()){
                             bitOR("id",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setPersonId")) && left.checkPersonIdInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setPersonId"),left.getPersonId()));
                         bitOR("personId",initialized);
-                        if(left.checkPersonIdModified())
+                        if(left.checkPersonIdModified()){
                             bitOR("personId",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setName")) && left.checkNameInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setName"),left.getName()));
                         bitOR("name",initialized);
-                        if(left.checkNameModified())
+                        if(left.checkNameModified()){
                             bitOR("name",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setPapersType")) && left.checkPapersTypeInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setPapersType"),left.getPapersType()));
                         bitOR("papersType",initialized);
-                        if(left.checkPapersTypeModified())
+                        if(left.checkPapersTypeModified()){
                             bitOR("papersType",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setPapersNum")) && left.checkPapersNumInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setPapersNum"),left.getPapersNum()));
                         bitOR("papersNum",initialized);
-                        if(left.checkPapersNumModified())
+                        if(left.checkPapersNumModified()){
                             bitOR("papersNum",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setVerifyTime")) && left.checkVerifyTimeInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setVerifyTime"),left.getVerifyTime()));
                         bitOR("verifyTime",initialized);
-                        if(left.checkVerifyTimeModified())
+                        if(left.checkVerifyTimeModified()){
                             bitOR("verifyTime",modified);
+                        }
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get(SET_MODIFIED))){
-                    if( initialized.length > 1)
+                    if( initialized.length > 1){
                         setterMethod.invoke(right,cast(setterParams.get(SET_MODIFIED),initialized));
-                    else
+                    }else{
                         setterMethod.invoke(right,initialized[0]);
+                    }
                 }
                 methods.get(SET_NEW).invoke(right,left.isNew());
                 if( initialized.length > 1){

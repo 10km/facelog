@@ -89,8 +89,9 @@ public class PermitCacheManager extends PermitManager
     @Override 
     public PermitBean loadByPrimaryKeyChecked(Integer deviceGroupId,Integer personGroupId) throws ObjectRetrievalException
     {
-       if(null == deviceGroupId || null == personGroupId)
+        if(null == deviceGroupId || null == personGroupId){
            throw new ObjectRetrievalException(new NullPointerException());
+        }
         try{
             return cache.getBean(deviceGroupId,personGroupId);
         }catch(ExecutionException ee){
@@ -144,8 +145,9 @@ public class PermitCacheManager extends PermitManager
     //20-5
     @Override
     public int loadUsingTemplate(PermitBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<PermitBean> action){
-        if(null == fieldList )
+        if(null == fieldList ){
             action = new CacheAction(action);
+        }
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
     }
 

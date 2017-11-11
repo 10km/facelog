@@ -94,8 +94,9 @@ public class DeviceCacheManager extends DeviceManager
     @Override 
     public DeviceBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
-       if(null == id)
+        if(null == id){
            throw new ObjectRetrievalException(new NullPointerException());
+        }
         try{
             return cache.getBean(id);
         }catch(ExecutionException ee){
@@ -149,8 +150,9 @@ public class DeviceCacheManager extends DeviceManager
     //20-5
     @Override
     public int loadUsingTemplate(DeviceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<DeviceBean> action){
-        if(null == fieldList )
+        if(null == fieldList ){
             action = new CacheAction(action);
+        }
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
     }
 
@@ -161,8 +163,9 @@ public class DeviceCacheManager extends DeviceManager
     // override DeviceManager
     @Override 
     public DeviceBean loadByIndexMacChecked(String mac) throws ObjectRetrievalException{
-        if(null == mac)
+        if(null == mac){
             throw new ObjectRetrievalException(new NullPointerException());
+        }
         try{
             return cache.getBeanByMac(mac);
         }catch(ExecutionException ee){
@@ -194,8 +197,9 @@ public class DeviceCacheManager extends DeviceManager
     // override DeviceManager
     @Override 
     public DeviceBean loadByIndexSerialNoChecked(String serialNo) throws ObjectRetrievalException{
-        if(null == serialNo)
+        if(null == serialNo){
             throw new ObjectRetrievalException(new NullPointerException());
+        }
         try{
             return cache.getBeanBySerialNo(serialNo);
         }catch(ExecutionException ee){

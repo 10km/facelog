@@ -21,9 +21,9 @@ import gu.simplemq.Channel;
 public interface CommonConstant {
     public static final Logger logger = LoggerFactory.getLogger(CommonConstant.class);
     /** 整数型主键的{@code null} 替代值 */
-    public static final int NULL_ID_Integer = -1;
+    public static final int NULL_ID_INTEGER = -1;
     /** 字符串型主键的{@code null} 替代值 */
-    public static final String NULL_ID_String = "";
+    public static final String NULL_ID_STRING = "";
     /** 默认服务端口号 */
     public static final int DEFAULT_PORT = 26411;
     /** 设备心跳包表 */
@@ -52,6 +52,6 @@ public interface CommonConstant {
     public static final Channel<LogBean> QUEUE_LOG = new Channel<LogBean>("queueLog"){};
 
    
-    public static final SimpleDateFormat timestampFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static final SimpleDateFormat TIMESTAMP_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 }

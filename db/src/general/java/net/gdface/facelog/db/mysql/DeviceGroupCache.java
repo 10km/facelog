@@ -10,7 +10,7 @@ package net.gdface.facelog.db.mysql;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import net.gdface.facelog.db.TableLoadCaching;
+import net.gdface.facelog.db.BaseTableLoadCaching;
 import net.gdface.facelog.db.DeviceGroupBean;
 
 /**
@@ -19,11 +19,11 @@ import net.gdface.facelog.db.DeviceGroupBean;
  * @author guyadong
  *
  */
-public class DeviceGroupCache extends TableLoadCaching<Integer, DeviceGroupBean> {
+public class DeviceGroupCache extends BaseTableLoadCaching<Integer, DeviceGroupBean> {
     private final DeviceGroupManager manager = DeviceGroupManager.getInstance();
     
     /** constructor<br>
-     * @see {@link TableLoadCaching#TableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
      */
     public DeviceGroupCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
         super(updateStragey,maximumSize, duration, unit);

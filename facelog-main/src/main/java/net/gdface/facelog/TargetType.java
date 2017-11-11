@@ -12,5 +12,5 @@ import java.lang.annotation.Target;
 public @interface TargetType
 {
     Class<?> value();
-    public static final String authentication="gu";
+    public static final String AUTHENTICATION="gu";
 }

@@ -17,14 +17,14 @@ import java.util.*;
  * <ul>
  * <li>所有标明为图像数据的参数,是指具有特定图像格式的图像数据(如jpg,png...),而非无格式的原始点阵位图</li>
  * <li>在执行涉及数据库操作的方法时如果数据库发生异常，则会被封装到{@link WrapDAOException}抛出，
- * 所有非{@link RuntimeException}异常会被封装在{@link ServiceRuntime}抛出</li>
+ * 所有非{@link RuntimeException}异常会被封装在{@link ServiceRuntimeException}抛出</li>
  * <li>所有数据库对象(Java Bean,比如 {@link PersonBean}),在执行保存操作(save)时,
  * 如果为新增记录({@link PersonBean#isNew()}为true),则执行insert操作,否则执行update操作,
  * 如果数据库已经存在指定的记录而{@code isNew()}为{@code true},则那么执行insert操作数据库就会抛出异常，
  * 所以请在执行save时特别注意{@code isNew()}状态</li>
  * </ul>
  * remote implementation of the service IFaceLog<br>
- * all method comments be copied from {@code net.gdface.facelog.FaceLogDefinition.java}<br>
+ * all method comments be copied from {@code net.gdface.facelog.BaseFaceLog.java}<br>
  * <b>NOTE 1:</b>methods with 'Generic' suffix support generic type argument for {@code byte[]}.See also {@link GenericUtils#toBytes(Object)}<br>
  * <b>NOTE 2:</b>for each method,{@link List} type input argument must not have {@code null} element.<br>
  * @author guyadong
@@ -32,25 +32,25 @@ import java.util.*;
 class IFaceLogClient implements Constant{
     
     /** bean converter between {@link DeviceBean} and corresponding thrift bean */
-    private IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> converterDeviceBean = ThriftConverter.converterDeviceBean;
+    private IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> converterDeviceBean = ThriftConverter.CONVERTER_DEVICEBEAN;
     /** bean converter between {@link DeviceGroupBean} and corresponding thrift bean */
-    private IBeanConverter<DeviceGroupBean,net.gdface.facelog.client.thrift.DeviceGroupBean> converterDeviceGroupBean = ThriftConverter.converterDeviceGroupBean;
+    private IBeanConverter<DeviceGroupBean,net.gdface.facelog.client.thrift.DeviceGroupBean> converterDeviceGroupBean = ThriftConverter.CONVERTER_DEVICEGROUPBEAN;
     /** bean converter between {@link FaceBean} and corresponding thrift bean */
-    private IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> converterFaceBean = ThriftConverter.converterFaceBean;
+    private IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> converterFaceBean = ThriftConverter.CONVERTER_FACEBEAN;
     /** bean converter between {@link FeatureBean} and corresponding thrift bean */
-    private IBeanConverter<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> converterFeatureBean = ThriftConverter.converterFeatureBean;
+    private IBeanConverter<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> converterFeatureBean = ThriftConverter.CONVERTER_FEATUREBEAN;
     /** bean converter between {@link ImageBean} and corresponding thrift bean */
-    private IBeanConverter<ImageBean,net.gdface.facelog.client.thrift.ImageBean> converterImageBean = ThriftConverter.converterImageBean;
+    private IBeanConverter<ImageBean,net.gdface.facelog.client.thrift.ImageBean> converterImageBean = ThriftConverter.CONVERTER_IMAGEBEAN;
     /** bean converter between {@link LogBean} and corresponding thrift bean */
-    private IBeanConverter<LogBean,net.gdface.facelog.client.thrift.LogBean> converterLogBean = ThriftConverter.converterLogBean;
+    private IBeanConverter<LogBean,net.gdface.facelog.client.thrift.LogBean> converterLogBean = ThriftConverter.CONVERTER_LOGBEAN;
     /** bean converter between {@link PermitBean} and corresponding thrift bean */
-    private IBeanConverter<PermitBean,net.gdface.facelog.client.thrift.PermitBean> converterPermitBean = ThriftConverter.converterPermitBean;
+    private IBeanConverter<PermitBean,net.gdface.facelog.client.thrift.PermitBean> converterPermitBean = ThriftConverter.CONVERTER_PERMITBEAN;
     /** bean converter between {@link PersonBean} and corresponding thrift bean */
-    private IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> converterPersonBean = ThriftConverter.converterPersonBean;
+    private IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> converterPersonBean = ThriftConverter.CONVERTER_PERSONBEAN;
     /** bean converter between {@link PersonGroupBean} and corresponding thrift bean */
-    private IBeanConverter<PersonGroupBean,net.gdface.facelog.client.thrift.PersonGroupBean> converterPersonGroupBean = ThriftConverter.converterPersonGroupBean;
+    private IBeanConverter<PersonGroupBean,net.gdface.facelog.client.thrift.PersonGroupBean> converterPersonGroupBean = ThriftConverter.CONVERTER_PERSONGROUPBEAN;
     /** bean converter between {@link LogLightBean} and corresponding thrift bean */
-    private IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> converterLogLightBean = ThriftConverter.converterLogLightBean;
+    private IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> converterLogLightBean = ThriftConverter.CONVERTER_LOGLIGHTBEAN;
 
     private final net.gdface.facelog.client.thrift.IFaceLog service;
     /**
@@ -61,20 +61,20 @@ class IFaceLogClient implements Constant{
         checkNotNull(service,"service is null");
         this.service = service;
     }
+    // 1 SERIVCE PORT : addFeature
     /**
      * 增加一个人脸特征记录，如果记录已经存在则抛出异常
      * @param feature 特征数据
      * @param personId 关联的人员id(fl_person.id),可为null
      * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
      * @return 保存的人脸特征记录{@link FeatureBean}
-     * @throws ServiceRuntime
-     * @throws DuplicateReord
+     * @throws ServiceRuntimeException
+     * @throws DuplicateReordException
      */
-    // 1 SERIVCE PORT : addFeature
     public FeatureBean addFeature(
             byte[] feature,
             int personId,
-            List<FaceBean> faecBeans)throws net.gdface.facelog.client.thrift.DuplicateReord{
+            List<FaceBean> faecBeans)throws net.gdface.facelog.client.thrift.DuplicateReordException{
         try{
             return converterFeatureBean.fromRight(service.addFeature(
                     feature,
@@ -89,21 +89,21 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 1 GENERIC
     /** 
      * Generic version of {@link #addFeature(byte[],int,List)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 1 GENERIC
     public FeatureBean addFeatureGeneric(
             Object feature,
             int personId,
-            List<FaceBean> faecBeans)throws net.gdface.facelog.client.thrift.DuplicateReord{
+            List<FaceBean> faecBeans)throws net.gdface.facelog.client.thrift.DuplicateReordException{
         try{
             return converterFeatureBean.fromRight(service.addFeature(
                     GenericUtils.toBytes(feature),
@@ -118,10 +118,11 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 2 SERIVCE PORT : addFeatureMulti
     /**
      * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
      * @param feature 特征数据
@@ -129,15 +130,14 @@ class IFaceLogClient implements Constant{
      * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
      * @param deviceId 图像来源设备id,可为null
      * @return 保存的人脸特征记录{@link FeatureBean}
-     * @throws ServiceRuntime
-     * @throws DuplicateReord
+     * @throws ServiceRuntimeException
+     * @throws DuplicateReordException
      */
-    // 2 SERIVCE PORT : addFeatureMulti
     public FeatureBean addFeature(
             byte[] feature,
             int personId,
             Map<ByteBuffer, FaceBean> faceInfo,
-            int deviceId)throws net.gdface.facelog.client.thrift.DuplicateReord{
+            int deviceId)throws net.gdface.facelog.client.thrift.DuplicateReordException{
         try{
             return converterFeatureBean.fromRight(service.addFeatureMulti(
                     feature,
@@ -153,22 +153,22 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 2 GENERIC
     /** 
      * Generic version of {@link #addFeature(byte[],int,Map,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 2 GENERIC
     public FeatureBean addFeatureGeneric(
             Object feature,
             int personId,
             Map<ByteBuffer, FaceBean> faceInfo,
-            int deviceId)throws net.gdface.facelog.client.thrift.DuplicateReord{
+            int deviceId)throws net.gdface.facelog.client.thrift.DuplicateReordException{
         try{
             return converterFeatureBean.fromRight(service.addFeatureMulti(
                     GenericUtils.toBytes(feature),
@@ -184,10 +184,11 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 3 SERIVCE PORT : addImage
     /**
      * 保存图像数据,如果图像数据已经存在，则抛出异常
      * @param imageData 图像数据
@@ -195,15 +196,14 @@ class IFaceLogClient implements Constant{
      * @param faceBean 关联的人脸信息对象,可为null
      * @param personId 关联的人员id(fl_person.id),可为null
      * @return 
-     * @throws DuplicateReord 数据库中已经存在要保存的图像数据
-     * @throws ServiceRuntime
+     * @throws DuplicateReordException 数据库中已经存在要保存的图像数据
+     * @throws ServiceRuntimeException
      */
-    // 3 SERIVCE PORT : addImage
     public ImageBean addImage(
             byte[] imageData,
             int deviceId,
             FaceBean faceBean,
-            int personId)throws net.gdface.facelog.client.thrift.DuplicateReord{
+            int personId)throws net.gdface.facelog.client.thrift.DuplicateReordException{
         try{
             return converterImageBean.fromRight(service.addImage(
                     imageData,
@@ -219,22 +219,22 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 3 GENERIC
     /** 
      * Generic version of {@link #addImage(byte[],int,FaceBean,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 3 GENERIC
     public ImageBean addImageGeneric(
             Object imageData,
             int deviceId,
             FaceBean faceBean,
-            int personId)throws net.gdface.facelog.client.thrift.DuplicateReord{
+            int personId)throws net.gdface.facelog.client.thrift.DuplicateReordException{
         try{
             return converterImageBean.fromRight(service.addImage(
                     GenericUtils.toBytes(imageData),
@@ -250,49 +250,49 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 4 SERIVCE PORT : addLog
     /**
      * 添加一条验证日志记录
      * @param bean
-     * @throws ServiceRuntime
-     * @throws DuplicateReord 数据库中存在相同记录
+     * @throws ServiceRuntimeException
+     * @throws DuplicateReordException 数据库中存在相同记录
      */
-    // 4 SERIVCE PORT : addLog
-    public void addLog(LogBean bean)throws net.gdface.facelog.client.thrift.DuplicateReord{
+    public void addLog(LogBean bean)throws net.gdface.facelog.client.thrift.DuplicateReordException{
         try{
             service.addLog(converterLogBean.toRight(bean));
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 5 SERIVCE PORT : addLogs
     /**
      * 添加一组验证日志记录(事务存储)
      * @param beans
-     * @throws ServiceRuntime
-     * @throws DuplicateReord 数据库中存在相同记录
+     * @throws ServiceRuntimeException
+     * @throws DuplicateReordException 数据库中存在相同记录
      */
-    // 5 SERIVCE PORT : addLogs
-    public void addLogs(List<LogBean> beans)throws net.gdface.facelog.client.thrift.DuplicateReord{
+    public void addLogs(List<LogBean> beans)throws net.gdface.facelog.client.thrift.DuplicateReordException{
         try{
             service.addLogs(converterLogBean.toRight(CollectionUtils.checkNotNullElement(beans)));
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 6 SERIVCE PORT : addPermit
     /**
      * 添加一个(允许)通行关联记录:允许{@code personGroup}指定的人员组在
      * {@code deviceGroup}指定的设备组下属的所有设备通行
      * @param deviceGroup
      * @param personGroup
      * @throws WrapDAOException
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 6 SERIVCE PORT : addPermit
     public void addPermit(
             DeviceGroupBean deviceGroup,
             PersonGroupBean personGroup){
@@ -301,12 +301,12 @@ class IFaceLogClient implements Constant{
                     converterDeviceGroupBean.toRight(deviceGroup),
                     converterPersonGroupBean.toRight(personGroup));
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
-
     // 7 SERIVCE PORT : addPermitById
+
     public void addPermit(
             int deviceGroupId,
             int personGroupId){
@@ -315,118 +315,118 @@ class IFaceLogClient implements Constant{
                     deviceGroupId,
                     personGroupId);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 8 SERIVCE PORT : countDeviceByWhere
     /**
      * 返回满足{@code where} SQL条件语句的fl_device记录总数
      * @param where
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 8 SERIVCE PORT : countDeviceByWhere
     public int countDeviceByWhere(String where){
         try{
             return service.countDeviceByWhere(where);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 9 SERIVCE PORT : countDeviceGroupByWhere
     /**
      * 返回满足{@code where} SQL条件语句的fl_device_group记录总数
      */
-    // 9 SERIVCE PORT : countDeviceGroupByWhere
     public int countDeviceGroupByWhere(String where){
         try{
             return service.countDeviceGroupByWhere(where);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 10 SERIVCE PORT : countLogByWhere
     /**
      * 返回满足{@code where}条件的日志记录(fl_log)数目
      * @param where 为{@code null}时返回所有记录
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 10 SERIVCE PORT : countLogByWhere
     public int countLogByWhere(String where){
         try{
             return service.countLogByWhere(where);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 11 SERIVCE PORT : countLogLightByVerifyTime
     /**
      * 返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
      * @see #countLogLightByWhere(String)
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 11 SERIVCE PORT : countLogLightByVerifyTime
     public int countLogLightByVerifyTime(Date timestamp){
         try{
             return service.countLogLightByVerifyTime(GenericUtils.toLong(timestamp,Date.class));
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 12 SERIVCE PORT : countLogLightByWhere
     /**
      * 返回符合{@code where}条件的记录条数
      * @param where
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 12 SERIVCE PORT : countLogLightByWhere
     public int countLogLightByWhere(String where){
         try{
             return service.countLogLightByWhere(where);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 13 SERIVCE PORT : countPersonByWhere
     /**
      * 返回满足{@code where}条件的日志记录(fl_person)数目
      * @param where 为{@code null}时返回所有记录
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 13 SERIVCE PORT : countPersonByWhere
     public int countPersonByWhere(String where){
         try{
             return service.countPersonByWhere(where);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 14 SERIVCE PORT : countPersonGroupByWhere
     /**
      * 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
      * @see {@link IPersonGroupManager#Where(String)}
      */
-    // 14 SERIVCE PORT : countPersonGroupByWhere
     public int countPersonGroupByWhere(String where){
         try{
             return service.countPersonGroupByWhere(where);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 15 SERIVCE PORT : deleteAllFeaturesByPersonId
     /**
      * 删除 personId 关联的所有特征(feature)记录
      * @param personId
      * @param deleteImage 是否删除关联的 image记录
      * @return 
      * @see #deleteFeature(String, boolean)
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 15 SERIVCE PORT : deleteAllFeaturesByPersonId
     public int deleteAllFeaturesByPersonId(
             int personId,
             boolean deleteImage){
@@ -435,36 +435,36 @@ class IFaceLogClient implements Constant{
                     personId,
                     deleteImage);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 16 SERIVCE PORT : deleteDeviceGroup
     /**
      * 删除{@code deviceGroupId}指定的设备组<br>
      * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
      * @param deviceGroupId
      * @return 返回删除的记录条数
      * @throws WrapDAOException
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 16 SERIVCE PORT : deleteDeviceGroup
     public int deleteDeviceGroup(int deviceGroupId){
         try{
             return service.deleteDeviceGroup(deviceGroupId);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 17 SERIVCE PORT : deleteFeature
     /**
      * 删除featureMd5指定的特征记录及关联的face记录
      * @param featureMd5
      * @param deleteImage 是否删除关联的 image记录
      * @return 返回删除的特征记录关联的图像(image)记录的MD5<br>
      * {@code deleteImage}为{@code true}时返回空表
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 17 SERIVCE PORT : deleteFeature
     public List<String> deleteFeature(
             String featureMd5,
             boolean deleteImage){
@@ -481,34 +481,34 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 18 SERIVCE PORT : deleteImage
     /**
      * 删除imageMd5指定图像及其缩略图
      * @param imageMd5
      * @return 删除成功返回1,否则返回0
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 18 SERIVCE PORT : deleteImage
     public int deleteImage(String imageMd5){
         try{
             return service.deleteImage(imageMd5);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 19 SERIVCE PORT : deletePermit
     /**
      * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean)}
      * @param deviceGroup
      * @param personGroup
      * @return 删除成功返回1,否则返回0
      * @throws WrapDAOException
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 19 SERIVCE PORT : deletePermit
     public int deletePermit(
             DeviceGroupBean deviceGroup,
             PersonGroupBean personGroup){
@@ -517,184 +517,184 @@ class IFaceLogClient implements Constant{
                     converterDeviceGroupBean.toRight(deviceGroup),
                     converterPersonGroupBean.toRight(personGroup));
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 20 SERIVCE PORT : deletePerson
     /**
      * 删除personId指定的人员(person)记录及关联的所有记录
      * @param personId
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 20 SERIVCE PORT : deletePerson
     public int deletePerson(int personId){
         try{
             return service.deletePerson(personId);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 21 SERIVCE PORT : deletePersonByPapersNum
     /**
      * 删除papersNum指定的人员(person)记录及关联的所有记录
      * @param papersNum 证件号码
      * @return 返回删除的 person 记录数量
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      * @see {@link #deletePerson(int)}
      */
-    // 21 SERIVCE PORT : deletePersonByPapersNum
     public int deletePersonByPapersNum(String papersNum){
         try{
             return service.deletePersonByPapersNum(papersNum);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 22 SERIVCE PORT : deletePersonGroup
     /**
      * 删除{@code personGroupId}指定的人员组<br>
      * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
      * @param personGroupId
      * @return 
      * @throws WrapDAOException
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 22 SERIVCE PORT : deletePersonGroup
     public int deletePersonGroup(int personGroupId){
         try{
             return service.deletePersonGroup(personGroupId);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 23 SERIVCE PORT : deletePersons
     /**
      * 删除personIdList指定的人员(person)记录及关联的所有记录
      * @param personIdList 人员id列表
      * @return 返回删除的 person 记录数量
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 23 SERIVCE PORT : deletePersons
     public int deletePersons(List<Integer> personIdList){
         try{
             return service.deletePersons(CollectionUtils.checkNotNullElement(personIdList));
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 24 SERIVCE PORT : deletePersonsByPapersNum
     /**
      * 删除papersNum指定的人员(person)记录及关联的所有记录
      * @param papersNumlist 证件号码列表
      * @return 返回删除的 person 记录数量
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 24 SERIVCE PORT : deletePersonsByPapersNum
     public int deletePersonsByPapersNum(List<String> papersNumlist){
         try{
             return service.deletePersonsByPapersNum(CollectionUtils.checkNotNullElement(papersNumlist));
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 25 SERIVCE PORT : disablePerson
     /**
      * 设置 personId 指定的人员为禁止状态
      * @param personId
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      * @see #setPersonExpiryDate(int, long)
      */
-    // 25 SERIVCE PORT : disablePerson
     public void disablePerson(int personId){
         try{
             service.disablePerson(personId);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 26 SERIVCE PORT : disablePersonList
     /**
      * 设置 personIdList 指定的人员为禁止状态
      * @param personIdList 人员id列表
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 26 SERIVCE PORT : disablePersonList
     public void disablePerson(List<Integer> personIdList){
         try{
             service.disablePersonList(CollectionUtils.checkNotNullElement(personIdList));
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 27 SERIVCE PORT : existsDevice
     /**
      * 判断id指定的设备记录是否存在
      * @param id
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 27 SERIVCE PORT : existsDevice
     public boolean existsDevice(int id){
         try{
             return service.existsDevice(id);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 28 SERIVCE PORT : existsFeature
     /**
      * 判断md5指定的特征记录是否存在
      * @param md5
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 28 SERIVCE PORT : existsFeature
     public boolean existsFeature(String md5){
         try{
             return service.existsFeature(md5);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 29 SERIVCE PORT : existsImage
     /**
      * 判断md5指定的图像记录是否存在
      * @param md5
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 29 SERIVCE PORT : existsImage
     public boolean existsImage(String md5){
         try{
             return service.existsImage(md5);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 30 SERIVCE PORT : existsPerson
     /**
      * 判断是否存在personId指定的人员记录
      * @param persionId
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 30 SERIVCE PORT : existsPerson
     public boolean existsPerson(int persionId){
         try{
             return service.existsPerson(persionId);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 31 SERIVCE PORT : getDevice
     /**
      * 返回{@code deviceId}指定的设备记录
      * @param deviceId
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 31 SERIVCE PORT : getDevice
     public DeviceBean getDevice(int deviceId){
         try{
             return converterDeviceBean.fromRight(service.getDevice(deviceId));
@@ -707,18 +707,18 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 32 SERIVCE PORT : getDeviceGroup
     /**
      * 根据设备组id返回数据库记录
      * @param deviceGroupId
      * @return 
      * @throws WrapDAOException
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 32 SERIVCE PORT : getDeviceGroup
     public DeviceGroupBean getDeviceGroup(int deviceGroupId){
         try{
             return converterDeviceGroupBean.fromRight(service.getDeviceGroup(deviceGroupId));
@@ -731,18 +731,18 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 33 SERIVCE PORT : getDeviceGroups
     /**
      * 返回设备组id列表指定的数据库记录
      * @param groupIdList
      * @return 
      * @throws WrapDAOException
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 33 SERIVCE PORT : getDeviceGroups
     public List<DeviceGroupBean> getDeviceGroups(List<Integer> groupIdList){
         try{
             return DeviceGroupBean.replaceNullInstance(converterDeviceGroupBean.fromRight(service.getDeviceGroups(CollectionUtils.checkNotNullElement(groupIdList))));
@@ -755,17 +755,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 34 SERIVCE PORT : getDeviceIdOfFeature
     /**
      * 返回featureMd5的人脸特征记录关联的设备id<br>
      * @param featureMd5
      * @return 如果没有关联的设备则返回{@code null}
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 34 SERIVCE PORT : getDeviceIdOfFeature
     public Integer getDeviceIdOfFeature(String featureMd5){
         try{
             return service.getDeviceIdOfFeature(featureMd5);
@@ -778,17 +778,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 35 SERIVCE PORT : getDevices
     /**
      * 返回 {@code idList} 指定的设备记录
      * @param idList
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 35 SERIVCE PORT : getDevices
     public List<DeviceBean> getDevices(List<Integer> idList){
         try{
             return DeviceBean.replaceNullInstance(converterDeviceBean.fromRight(service.getDevices(CollectionUtils.checkNotNullElement(idList))));
@@ -801,19 +801,19 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 36 SERIVCE PORT : getDevicesOfGroup
     /**
      * 返回{@code deviceGroupId}指定的设备组下属的所有设备记录<br>
      * 如果没有下属设备记录则返回空表
      * @param deviceGroupId
      * @return 
      * @throws WrapDAOException
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 36 SERIVCE PORT : getDevicesOfGroup
     public List<DeviceBean> getDevicesOfGroup(int deviceGroupId){
         try{
             return DeviceBean.replaceNullInstance(converterDeviceBean.fromRight(service.getDevicesOfGroup(deviceGroupId)));
@@ -826,17 +826,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 37 SERIVCE PORT : getFeature
     /**
      * 根据MD5校验码返回人脸特征数据记录
      * @param md5
      * @return 如果数据库中没有对应的数据则返回null
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 37 SERIVCE PORT : getFeature
     public FeatureBean getFeature(String md5){
         try{
             return converterFeatureBean.fromRight(service.getFeature(md5));
@@ -849,17 +849,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 38 SERIVCE PORT : getFeatureBeansByPersonId
     /**
      * 返回 persionId 关联的所有人脸特征记录
      * @param personId fl_person.id
      * @return 返回 fl_feature.md5  列表
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 38 SERIVCE PORT : getFeatureBeansByPersonId
     public List<String> getFeatureBeansByPersonId(int personId){
         try{
             return service.getFeatureBeansByPersonId(personId);
@@ -872,17 +872,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 39 SERIVCE PORT : getFeatureBytes
     /**
      * 根据MD5校验码返回人脸特征数据
      * @param md5
      * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 39 SERIVCE PORT : getFeatureBytes
     public byte[] getFeatureBytes(String md5){
         try{
             return service.getFeatureBytes(md5);
@@ -895,17 +895,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 40 SERIVCE PORT : getFeatures
     /**
      * 根据MD5校验码返回人脸特征数据记录
      * @param md5 md5列表
      * @return {@link FeatureBean}列表
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 40 SERIVCE PORT : getFeatures
     public List<FeatureBean> getFeatures(List<String> md5){
         try{
             return FeatureBean.replaceNullInstance(converterFeatureBean.fromRight(service.getFeatures(CollectionUtils.checkNotNullElement(md5))));
@@ -918,17 +918,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 41 SERIVCE PORT : getFeaturesOfPerson
     /**
      * 返回指定人员{@code personId}关联的所有特征<br>
      * @param personId
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 41 SERIVCE PORT : getFeaturesOfPerson
     public List<String> getFeaturesOfPerson(int personId){
         try{
             return service.getFeaturesOfPerson(personId);
@@ -941,10 +941,11 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 42 SERIVCE PORT : getGroupPermit
     /**
      * 获取人员组通行权限<br>
      * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行
@@ -952,9 +953,8 @@ class IFaceLogClient implements Constant{
      * @param personGroupId
      * @return 
      * @throws WrapDAOException
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 42 SERIVCE PORT : getGroupPermit
     public boolean getGroupPermit(
             int deviceId,
             int personGroupId){
@@ -963,14 +963,14 @@ class IFaceLogClient implements Constant{
                     deviceId,
                     personGroupId);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 43 SERIVCE PORT : getGroupPermits
     /**
      * 参见 {@link #getGroupPermit(Integer, Integer) }
      */
-    // 43 SERIVCE PORT : getGroupPermits
     public List<Boolean> getGroupPermits(
             int deviceId,
             List<Integer> personGroupIdList){
@@ -987,17 +987,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 44 SERIVCE PORT : getImage
     /**
      * 根据图像的MD5校验码返回图像记录
      * @param imageMD5
      * @return {@link ImageBean} ,如果没有对应记录则返回null
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 44 SERIVCE PORT : getImage
     public ImageBean getImage(String imageMD5){
         try{
             return converterImageBean.fromRight(service.getImage(imageMD5));
@@ -1010,18 +1010,18 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 45 SERIVCE PORT : getImageBytes
     /**
      * 根据图像的MD5校验码返回图像数据
      * @param imageMD5
      * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      * @see {@link #getBinary(String)}
      */
-    // 45 SERIVCE PORT : getImageBytes
     public byte[] getImageBytes(String imageMD5){
         try{
             return service.getImageBytes(imageMD5);
@@ -1034,17 +1034,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 46 SERIVCE PORT : getImagesAssociatedByFeature
     /**
      * 返回featureMd5的人脸特征记录关联的所有图像记录id(MD5)
      * @param featureMd5 人脸特征id(MD5)
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 46 SERIVCE PORT : getImagesAssociatedByFeature
     public List<String> getImagesAssociatedByFeature(String featureMd5){
         try{
             return service.getImagesAssociatedByFeature(featureMd5);
@@ -1057,17 +1057,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 47 SERIVCE PORT : getLogBeansByPersonId
     /**
      * 返回 persionId 关联的所有日志记录
      * @param personId fl_person.id
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 47 SERIVCE PORT : getLogBeansByPersonId
     public List<LogBean> getLogBeansByPersonId(int personId){
         try{
             return LogBean.replaceNullInstance(converterLogBean.fromRight(service.getLogBeansByPersonId(personId)));
@@ -1080,17 +1080,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 48 SERIVCE PORT : getPerson
     /**
      * 返回personId指定的人员记录
      * @param personId
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 48 SERIVCE PORT : getPerson
     public PersonBean getPerson(int personId){
         try{
             return converterPersonBean.fromRight(service.getPerson(personId));
@@ -1103,17 +1103,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 49 SERIVCE PORT : getPersonByPapersNum
     /**
      * 根据证件号码返回人员记录
      * @param papersNum
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 49 SERIVCE PORT : getPersonByPapersNum
     public PersonBean getPersonByPapersNum(String papersNum){
         try{
             return converterPersonBean.fromRight(service.getPersonByPapersNum(papersNum));
@@ -1126,18 +1126,18 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 50 SERIVCE PORT : getPersonGroup
     /**
      * 根据人员组id返回数据库记录
      * @param personGroupId
      * @return 
      * @throws WrapDAOException
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 50 SERIVCE PORT : getPersonGroup
     public PersonGroupBean getPersonGroup(int personGroupId){
         try{
             return converterPersonGroupBean.fromRight(service.getPersonGroup(personGroupId));
@@ -1150,18 +1150,18 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 51 SERIVCE PORT : getPersonGroups
     /**
      * 返回人员组id列表指定的数据库记录
      * @param groupIdList
      * @return 
      * @throws WrapDAOException
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 51 SERIVCE PORT : getPersonGroups
     public List<PersonGroupBean> getPersonGroups(List<Integer> groupIdList){
         try{
             return PersonGroupBean.replaceNullInstance(converterPersonGroupBean.fromRight(service.getPersonGroups(CollectionUtils.checkNotNullElement(groupIdList))));
@@ -1174,10 +1174,11 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 52 SERIVCE PORT : getPersonPermit
     /**
      * 获取人员通行权限<br>
      * 返回{@code personId}指定的人员在{@code deviceId}设备上是否允许通行
@@ -1185,9 +1186,8 @@ class IFaceLogClient implements Constant{
      * @param personId
      * @return 
      * @throws WrapDAOException
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 52 SERIVCE PORT : getPersonPermit
     public boolean getPersonPermit(
             int deviceId,
             int personId){
@@ -1196,14 +1196,14 @@ class IFaceLogClient implements Constant{
                     deviceId,
                     personId);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 53 SERIVCE PORT : getPersonPermits
     /**
      * 参见 {@link #getPersonPermit(Integer, Integer) }
      */
-    // 53 SERIVCE PORT : getPersonPermits
     public List<Boolean> getPersonPermits(
             int deviceId,
             List<Integer> personIdList){
@@ -1220,17 +1220,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 54 SERIVCE PORT : getPersons
     /**
      * 返回 list 指定的人员记录
      * @param idList 人员id列表
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 54 SERIVCE PORT : getPersons
     public List<PersonBean> getPersons(List<Integer> idList){
         try{
             return PersonBean.replaceNullInstance(converterPersonBean.fromRight(service.getPersons(CollectionUtils.checkNotNullElement(idList))));
@@ -1243,19 +1243,19 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 55 SERIVCE PORT : getPersonsOfGroup
     /**
      * 返回{@code deviceGroupId}指定的人员组下属的所有人员记录<br>
      * 如果没有下属人员记录则返回空表
      * @param deviceGroupId
      * @return 
      * @throws WrapDAOException
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 55 SERIVCE PORT : getPersonsOfGroup
     public List<PersonBean> getPersonsOfGroup(int personGroupId){
         try{
             return PersonBean.replaceNullInstance(converterPersonBean.fromRight(service.getPersonsOfGroup(personGroupId)));
@@ -1268,19 +1268,19 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 56 SERIVCE PORT : getSubDeviceGroup
     /**
      * 返回{@code deviceGroupId}指定的设备组下的所有子节点<br>
      * 如果没有子节点则返回空表
      * @param deviceGroupId
      * @return 
      * @throws WrapDAOException
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 56 SERIVCE PORT : getSubDeviceGroup
     public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId){
         try{
             return DeviceGroupBean.replaceNullInstance(converterDeviceGroupBean.fromRight(service.getSubDeviceGroup(deviceGroupId)));
@@ -1293,19 +1293,19 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 57 SERIVCE PORT : getSubPersonGroup
     /**
      * 返回{@code personGroupId}指定的人员组下的所有子节点<br>
      * 如果没有子节点则返回空表
      * @param personGroupId
      * @return 
      * @throws WrapDAOException
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 57 SERIVCE PORT : getSubPersonGroup
     public List<PersonGroupBean> getSubPersonGroup(int personGroupId){
         try{
             return PersonGroupBean.replaceNullInstance(converterPersonGroupBean.fromRight(service.getSubPersonGroup(personGroupId)));
@@ -1318,31 +1318,31 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 58 SERIVCE PORT : isDisable
     /**
      * 判断 personId 指定的人员记录是否过期
      * @param personId
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 58 SERIVCE PORT : isDisable
     public boolean isDisable(int personId){
         try{
             return service.isDisable(personId);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 59 SERIVCE PORT : loadAllPerson
     /**
      * 返回所有人员记录
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 59 SERIVCE PORT : loadAllPerson
     public List<Integer> loadAllPerson(){
         try{
             return service.loadAllPerson();
@@ -1355,19 +1355,19 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 60 SERIVCE PORT : loadDeviceByWhere
     /**
      * 根据{@code where}指定的查询条件查询设备记录
      * @param where SQL 条件语句
      * @param startRow 记录起始行号 (first row = 1, last row = -1)
      * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 60 SERIVCE PORT : loadDeviceByWhere
     public List<DeviceBean> loadDeviceByWhere(
             String where,
             int startRow,
@@ -1386,17 +1386,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 61 SERIVCE PORT : loadDeviceGroupByWhere
     /**
      * 查询{@code where} SQL条件语句指定的记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
      */
-    // 61 SERIVCE PORT : loadDeviceGroupByWhere
     public List<DeviceGroupBean> loadDeviceGroupByWhere(
             String where,
             int startRow,
@@ -1415,16 +1415,16 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 62 SERIVCE PORT : loadDeviceGroupIdByWhere
     /**
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
      * @see #loadDeviceGroupByWhere(String,int,int)
      */
-    // 62 SERIVCE PORT : loadDeviceGroupIdByWhere
     public List<Integer> loadDeviceGroupIdByWhere(String where){
         try{
             return service.loadDeviceGroupIdByWhere(where);
@@ -1437,17 +1437,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 63 SERIVCE PORT : loadDeviceIdByWhere
     /**
      * 根据{@code where}指定的查询条件查询设备记录
      * @param where
      * @return 返回设备ID列表
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 63 SERIVCE PORT : loadDeviceIdByWhere
     public List<Integer> loadDeviceIdByWhere(String where){
         try{
             return service.loadDeviceIdByWhere(where);
@@ -1460,18 +1460,18 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 64 SERIVCE PORT : loadFeatureMd5ByUpdate
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_feature.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_feature记录
      * @param timestamp
      * @return 返回 fl_feature.md5 列表
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 64 SERIVCE PORT : loadFeatureMd5ByUpdate
     public List<String> loadFeatureMd5ByUpdate(Date timestamp){
         try{
             return service.loadFeatureMd5ByUpdate(GenericUtils.toLong(timestamp,Date.class));
@@ -1484,10 +1484,11 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 65 SERIVCE PORT : loadLogByWhere
     /**
      * 日志查询<br>
      * 根据{@code where}指定的查询条件查询日志记录
@@ -1495,9 +1496,8 @@ class IFaceLogClient implements Constant{
      * @param startRow 记录起始行号 (first row = 1, last row = -1)
      * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 65 SERIVCE PORT : loadLogByWhere
     public List<LogBean> loadLogByWhere(
             String where,
             int startRow,
@@ -1516,18 +1516,18 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 66 SERIVCE PORT : loadLogLightByVerifyTime
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @see #loadLogLightByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 66 SERIVCE PORT : loadLogLightByVerifyTime
     public List<LogLightBean> loadLogLightByVerifyTime(
             Date timestamp,
             int startRow,
@@ -1546,10 +1546,11 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 67 SERIVCE PORT : loadLogLightByWhere
     /**
      * 日志查询<br>
      * 根据{@code where}指定的查询条件查询日志记录{@link LogLightBean}
@@ -1557,9 +1558,8 @@ class IFaceLogClient implements Constant{
      * @param startRow
      * @param numRows
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 67 SERIVCE PORT : loadLogLightByWhere
     public List<LogLightBean> loadLogLightByWhere(
             String where,
             int startRow,
@@ -1578,19 +1578,19 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 68 SERIVCE PORT : loadPermitByUpdate
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录
      * @param timestamp
      * @return 
      * @throws WrapDAOException
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 68 SERIVCE PORT : loadPermitByUpdate
     public List<PermitBean> loadPermitByUpdate(Date timestamp){
         try{
             return PermitBean.replaceNullInstance(converterPermitBean.fromRight(service.loadPermitByUpdate(GenericUtils.toLong(timestamp,Date.class))));
@@ -1603,19 +1603,19 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 69 SERIVCE PORT : loadPersonByWhere
     /**
      * 返回 where 指定的所有人员记录
      * @param where SQL条件语句
      * @param startRow 记录起始行号 (first row = 1, last row = -1)
      * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 69 SERIVCE PORT : loadPersonByWhere
     public List<PersonBean> loadPersonByWhere(
             String where,
             int startRow,
@@ -1634,17 +1634,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 70 SERIVCE PORT : loadPersonGroupByWhere
     /**
      * 查询{@code where} SQL条件语句指定的记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
      */
-    // 70 SERIVCE PORT : loadPersonGroupByWhere
     public List<PersonGroupBean> loadPersonGroupByWhere(
             String where,
             int startRow,
@@ -1663,17 +1663,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 71 SERIVCE PORT : loadPersonGroupIdByWhere
     /**
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
      * @see #loadPersonGroupByWhere(String,int,int)
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 71 SERIVCE PORT : loadPersonGroupIdByWhere
     public List<Integer> loadPersonGroupIdByWhere(String where){
         try{
             return service.loadPersonGroupIdByWhere(where);
@@ -1686,18 +1686,18 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 72 SERIVCE PORT : loadPersonIdByUpdateTime
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_person.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_person记录
      * @param timestamp
      * @return 返回fl_person.id 列表
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 72 SERIVCE PORT : loadPersonIdByUpdateTime
     public List<Integer> loadPersonIdByUpdateTime(Date timestamp){
         try{
             return service.loadPersonIdByUpdateTime(GenericUtils.toLong(timestamp,Date.class));
@@ -1710,17 +1710,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 73 SERIVCE PORT : loadPersonIdByWhere
     /**
      * 返回 where 指定的所有人员记录
      * @param where SQL条件语句
      * @return 返回 fl_person.id 列表
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 73 SERIVCE PORT : loadPersonIdByWhere
     public List<Integer> loadPersonIdByWhere(String where){
         try{
             return service.loadPersonIdByWhere(where);
@@ -1733,19 +1733,19 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 74 SERIVCE PORT : loadUpdatedPersons
     /**
      * (主动更新机制实现)<br>
      * 返回fl_person.update_time字段大于指定时间戳( {@code timestamp} )的所有fl_person记录<br>
      * 同时包含fl_feature更新记录引用的fl_person记录
      * @param timestamp
      * @return 返回fl_person.id 列表
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 74 SERIVCE PORT : loadUpdatedPersons
     public List<Integer> loadUpdatedPersons(Date timestamp){
         try{
             return service.loadUpdatedPersons(GenericUtils.toLong(timestamp,Date.class));
@@ -1758,18 +1758,18 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 75 SERIVCE PORT : replaceFeature
     /**
      * 替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录
      * @param personId 人员记录id
      * @param featureMd5 人脸特征数据记录id (已经保存在数据库中)
      * @param deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 75 SERIVCE PORT : replaceFeature
     public void replaceFeature(
             int personId,
             String featureMd5,
@@ -1780,17 +1780,17 @@ class IFaceLogClient implements Constant{
                     featureMd5,
                     deleteOldFeatureImage);
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 76 SERIVCE PORT : saveDevice
     /**
      * 保存设备记录
      * @param deviceBean
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 76 SERIVCE PORT : saveDevice
     public DeviceBean saveDevice(DeviceBean deviceBean){
         try{
             return converterDeviceBean.fromRight(service.saveDevice(converterDeviceBean.toRight(deviceBean)));
@@ -1803,18 +1803,18 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 77 SERIVCE PORT : saveDeviceGroup
     /**
      * 保存设备组记录
      * @param deviceGroupBean
      * @return 
      * @throws WrapDAOException
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 77 SERIVCE PORT : saveDeviceGroup
     public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean){
         try{
             return converterDeviceGroupBean.fromRight(service.saveDeviceGroup(converterDeviceGroupBean.toRight(deviceGroupBean)));
@@ -1827,17 +1827,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 78 SERIVCE PORT : savePerson
     /**
      * 保存人员(person)记录
      * @param bean
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 78 SERIVCE PORT : savePerson
     public PersonBean savePerson(PersonBean bean){
         try{
             return converterPersonBean.fromRight(service.savePerson(converterPersonBean.toRight(bean)));
@@ -1850,10 +1850,11 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 79 SERIVCE PORT : savePersonFull
     /**
      * @param bean 人员信息对象
      * @param idPhoto 标准照图像
@@ -1863,7 +1864,6 @@ class IFaceLogClient implements Constant{
      * @param deviceBean featureImage来源设备对象
      * @return 
      */
-    // 79 SERIVCE PORT : savePersonFull
     public PersonBean savePerson(
             PersonBean bean,
             byte[] idPhoto,
@@ -1888,17 +1888,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 79 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],byte[],byte[],FaceBean,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 79 GENERIC
     public PersonBean savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
@@ -1923,18 +1923,18 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 80 SERIVCE PORT : savePersonGroup
     /**
      * 保存人员组记录
      * @param personGroupBean
      * @return 
      * @throws WrapDAOException
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 80 SERIVCE PORT : savePersonGroup
     public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean){
         try{
             return converterPersonGroupBean.fromRight(service.savePersonGroup(converterPersonGroupBean.toRight(personGroupBean)));
@@ -1947,31 +1947,31 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 81 SERIVCE PORT : savePersons
     /**
      * 保存人员(person)记录
      * @param beans
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 81 SERIVCE PORT : savePersons
     public void savePersons(List<PersonBean> beans){
         try{
             service.savePersons(converterPersonBean.toRight(CollectionUtils.checkNotNullElement(beans)));
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 82 SERIVCE PORT : savePersonsWithPhoto
     /**
      * 保存人员信息记录(包含标准照)
      * @param persons
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 82 SERIVCE PORT : savePersonsWithPhoto
     public Integer savePerson(Map<ByteBuffer, PersonBean> persons){
         try{
             return service.savePersonsWithPhoto(GenericUtils.toBytesKey(converterPersonBean.toRightValue(persons)));
@@ -1984,18 +1984,18 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 83 SERIVCE PORT : savePersonWithPhoto
     /**
      * 保存人员信息记录
      * @param bean
      * @param idPhoto 标准照图像对象,可为null
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 83 SERIVCE PORT : savePersonWithPhoto
     public PersonBean savePerson(
             PersonBean bean,
             byte[] idPhoto){
@@ -2012,17 +2012,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 83 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[])}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 83 GENERIC
     public PersonBean savePersonGeneric(
             PersonBean bean,
             Object idPhoto){
@@ -2039,10 +2039,11 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 84 SERIVCE PORT : savePersonWithPhotoAndFeature
     /**
      * 保存人员信息记录
      * @param bean
@@ -2050,9 +2051,8 @@ class IFaceLogClient implements Constant{
      * @param featureBean 用于验证的人脸特征数据对象,可为null
      * @param deviceId 标准照图像来源设备id,可为null
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 84 SERIVCE PORT : savePersonWithPhotoAndFeature
     public PersonBean savePerson(
             PersonBean bean,
             byte[] idPhoto,
@@ -2073,17 +2073,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 84 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],FeatureBean,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 84 GENERIC
     public PersonBean savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
@@ -2104,10 +2104,11 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 85 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
     /**
      * 保存人员信息记录
      * @param bean
@@ -2115,9 +2116,8 @@ class IFaceLogClient implements Constant{
      * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(ByteBuffer, Integer, List)}
      * @param faceBeans 参见 {@link #addFeature(ByteBuffer, Integer, List)}
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 85 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
     public PersonBean savePerson(
             PersonBean bean,
             byte[] idPhoto,
@@ -2138,17 +2138,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 85 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],byte[],List)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 85 GENERIC
     public PersonBean savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
@@ -2169,10 +2169,11 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 86 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
     /**
      * 保存人员信息记录
      * @param bean
@@ -2181,9 +2182,8 @@ class IFaceLogClient implements Constant{
      * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
      * @param deviceId faceInfo 图像来源设备id,可为null
      * @return bean 保存的{@link PersonBean}对象
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 86 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
     public PersonBean savePerson(
             PersonBean bean,
             byte[] idPhoto,
@@ -2206,17 +2206,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 86 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],byte[],Map,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 86 GENERIC
     public PersonBean savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
@@ -2239,19 +2239,19 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 87 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
     /**
      * 保存人员信息记录
      * @param bean
      * @param idPhotoMd5 标准照图像对象,可为null
      * @param featureMd5 用于验证的人脸特征数据对象,可为null
      * @return 
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 87 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
     public PersonBean savePerson(
             PersonBean bean,
             String idPhotoMd5,
@@ -2270,17 +2270,17 @@ class IFaceLogClient implements Constant{
             }
             throw e;
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 88 SERIVCE PORT : setPersonExpiryDate
     /**
      * 修改 personId 指定的人员记录的有效期
      * @param personId
      * @param expiryDate 失效日期
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 88 SERIVCE PORT : setPersonExpiryDate
     public void setPersonExpiryDate(
             int personId,
             Date expiryDate){
@@ -2289,17 +2289,17 @@ class IFaceLogClient implements Constant{
                     personId,
                     GenericUtils.toLong(expiryDate,Date.class));
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
+    // 89 SERIVCE PORT : setPersonExpiryDateList
     /**
      * 修改 personIdList 指定的人员记录的有效期
      * @param personIdList 人员id列表
      * @param expiryDate 失效日期
-     * @throws ServiceRuntime
+     * @throws ServiceRuntimeException
      */
-    // 89 SERIVCE PORT : setPersonExpiryDateList
     public void setPersonExpiryDate(
             List<Integer> personIdList,
             Date expiryDate){
@@ -2308,8 +2308,8 @@ class IFaceLogClient implements Constant{
                     CollectionUtils.checkNotNullElement(personIdList),
                     GenericUtils.toLong(expiryDate,Date.class));
         }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
-            throw new ServiceRuntime(e);
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
     }
 }

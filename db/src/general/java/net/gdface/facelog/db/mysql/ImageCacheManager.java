@@ -94,8 +94,9 @@ public class ImageCacheManager extends ImageManager
     @Override 
     public ImageBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException
     {
-       if(null == md5)
+        if(null == md5){
            throw new ObjectRetrievalException(new NullPointerException());
+        }
         try{
             return cache.getBean(md5);
         }catch(ExecutionException ee){
@@ -149,8 +150,9 @@ public class ImageCacheManager extends ImageManager
     //20-5
     @Override
     public int loadUsingTemplate(ImageBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<ImageBean> action){
-        if(null == fieldList )
+        if(null == fieldList ){
             action = new CacheAction(action);
+        }
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
     }
 

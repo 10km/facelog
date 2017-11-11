@@ -30,7 +30,7 @@ import net.gdface.facelog.dborm.exception.DAOException;
  * Remarks: 设备组信息<br>
  * @author guyadong
  */
-public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> implements IDeviceGroupManager
+public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean> implements IDeviceGroupManager
 {
     private net.gdface.facelog.dborm.device.FlDeviceGroupManager nativeManager = net.gdface.facelog.dborm.device.FlDeviceGroupManager.getInstance();
     private IDbConverter<
@@ -62,26 +62,30 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
         return this;
     }
     /**
-    * @return table name
-    */
+     * @return table name
+     */
+    @Override
     public String getTableName() {
         return this.nativeManager.getTableName();
     }
 
     /**
-    * @return field names of table
-    */
+     * @return field names of table
+     */
+    @Override
     public String getFields() {
         return this.nativeManager.getFields();
     }
-    
+
+    @Override
     public String getFullFields() {
         return this.nativeManager.getFullFields();
     }
     
     /**
-    * @return primarykeyNames
-    */
+     * @return primarykeyNames
+     */
+    @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
     }
@@ -97,7 +101,7 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     }
    
     @Override
-    protected Class<DeviceGroupBean> _beanType(){
+    protected Class<DeviceGroupBean> beanType(){
         return DeviceGroupBean.class;
     }
     
@@ -112,8 +116,9 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public synchronized void setDbConverter(IDbConverter dbConverter) {
-        if( null == dbConverter)
+        if( null == dbConverter){
             throw new NullPointerException();
+        }
         this.dbConverter = dbConverter;
         this.beanConverter = this.dbConverter.getDeviceGroupBeanConverter();
     }
@@ -155,8 +160,9 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     @Override
     public DeviceGroupBean loadByPrimaryKeyChecked(DeviceGroupBean bean) throws ObjectRetrievalException
     {
-        if(null == bean)
+        if(null == bean){
             throw new NullPointerException();
+        }
         return loadByPrimaryKeyChecked(bean.getId());
     }
     
@@ -174,13 +180,17 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     //1.3.2
     @Override
     public DeviceGroupBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1)
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        if(! (keys[0] instanceof Integer))
+        }
+        
+        if(! (keys[0] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-          return loadByPrimaryKeyChecked((Integer)keys[0]);
+        }
+        return loadByPrimaryKeyChecked((Integer)keys[0]);
     }
 
     //1.4 override IDeviceGroupManager
@@ -204,8 +214,9 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     //1.7
     @Override
     public DeviceGroupBean checkDuplicate(DeviceGroupBean bean)throws ObjectRetrievalException{
-        if(null != bean)
-            checkDuplicate(bean.getId());            
+        if(null != bean){
+            checkDuplicate(bean.getId());
+        }
         return bean;   
     }
     //1.4.1 override IDeviceGroupManager
@@ -222,7 +233,9 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     //1.8 override IDeviceGroupManager
     @Override 
     public java.util.List<DeviceGroupBean> loadByPrimaryKey(int... keys){
-        if(null == keys)return new java.util.ArrayList<DeviceGroupBean>();
+        if(null == keys){
+            return new java.util.ArrayList<DeviceGroupBean>();
+        }
         java.util.ArrayList<DeviceGroupBean> list = new java.util.ArrayList<DeviceGroupBean>(keys.length);
         for(int i = 0 ;i< keys.length;++i){
             list.add(loadByPrimaryKey(keys[i]));
@@ -232,7 +245,9 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     //1.9 override IDeviceGroupManager
     @Override 
     public java.util.List<DeviceGroupBean> loadByPrimaryKey(java.util.Collection<Integer> keys){
-        if(null == keys )return new java.util.ArrayList<DeviceGroupBean>();
+        if(null == keys ){
+            return new java.util.ArrayList<DeviceGroupBean>();
+        }
         java.util.ArrayList<DeviceGroupBean> list = new java.util.ArrayList<DeviceGroupBean>(keys.size());
         if(keys instanceof java.util.List){
             for(Integer key: keys){
@@ -241,8 +256,9 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
         }else{
             DeviceGroupBean bean;
             for(Integer key: keys){
-                if(null != (bean = loadByPrimaryKey(key)))
+                if(null != (bean = loadByPrimaryKey(key))){
                     list.add(bean);
+                }
             }
         }
         return list;
@@ -275,51 +291,58 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        if(! (keys[0] instanceof Integer))
+        }
+        if(! (keys[0] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+        }
         return deleteByPrimaryKey((Integer)keys[0]);
     }
     //2.2 override IDeviceGroupManager
     @Override 
     public int deleteByPrimaryKey(int... keys){
-        if(null == keys)return 0;
         int count = 0;
-        for(int key:keys){
-            count += deleteByPrimaryKey(key);
+        if(null != keys){        
+            for(int key:keys){
+                count += deleteByPrimaryKey(key);
+            }
         }
         return count;
     }
     //2.3 override IDeviceGroupManager
     @Override 
     public int deleteByPrimaryKey(java.util.Collection<Integer> keys){
-        if(null == keys)return 0;
         int count = 0;
-        for(Integer key :keys){
-            count += deleteByPrimaryKey(key);
+        if(null != keys){        
+            for(Integer key :keys){
+                count += deleteByPrimaryKey(key);
+            }
         }
         return count;
     }
     //2.4 override IDeviceGroupManager
     @Override 
     public int delete(DeviceGroupBean... beans){
-        if(null == beans)return 0;
         int count = 0;
-        for(DeviceGroupBean bean :beans){
-            count += delete(bean);
+        if(null != beans){
+            for(DeviceGroupBean bean :beans){
+                count += delete(bean);
+            }
         }
         return count;
     }
     //2.5 override IDeviceGroupManager
     @Override 
     public int delete(java.util.Collection<DeviceGroupBean> beans){
-        if(null == beans)return 0;
         int count = 0;
-        for(DeviceGroupBean bean :beans){
-            count += delete(bean);
+        if(null != beans){
+            for(DeviceGroupBean bean :beans){
+                count += delete(bean);
+            }
         }
         return count;
     }
@@ -328,7 +351,7 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
     
-    private static final Class<?>[] importedBeanTypes = new Class<?>[]{DeviceBean.class,DeviceGroupBean.class,PermitBean.class};
+    private static final Class<?>[] IMPORTED_BEAN_TYPES = new Class<?>[]{DeviceBean.class,DeviceGroupBean.class,PermitBean.class};
 
     /**
      * @see #getImportedBeansAsList(DeviceGroupBean,int)
@@ -336,7 +359,7 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.db.BaseBean<T>> T[] getImportedBeans(DeviceGroupBean bean, int ikIndex){
-        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
+        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(IMPORTED_BEAN_TYPES[ikIndex],0));
     }
     
     /**
@@ -361,8 +384,9 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
             return (java.util.List<T>)this.getDeviceGroupBeansByParentAsList(bean);
         case FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID:
             return (java.util.List<T>)this.getPermitBeansByDeviceGroupIdAsList(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the T objects as imported beans of bean object by ikIndex.<br>
@@ -388,8 +412,9 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
             return (T[])setDeviceGroupBeansByParent(bean,(DeviceGroupBean[])importedBeans);
         case FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID:
             return (T[])setPermitBeansByDeviceGroupId(bean,(PermitBean[])importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the importedBeans associates to the bean by ikIndex<br>
@@ -414,8 +439,9 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
             return (C)setDeviceGroupBeansByParent(bean,(java.util.Collection<DeviceGroupBean>)importedBeans);
         case FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID:
             return (C)setPermitBeansByDeviceGroupId(bean,(java.util.Collection<PermitBean>)importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
 
@@ -643,9 +669,12 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
         , DeviceGroupBean refDevicegroupByParent 
         , DeviceBean[] impDeviceByGroupId , DeviceGroupBean[] impDevicegroupByParent , PermitBean[] impPermitByDeviceGroupId )
     {
-        if(null == bean) return null;
-        if(null != refDevicegroupByParent)
+        if(null == bean){
+            return null;
+        }
+        if(null != refDevicegroupByParent){
             this.setReferencedByParent(bean,refDevicegroupByParent);
+        }
         bean = this.save( bean );
         this.setDeviceBeansByGroupId(bean,impDeviceByGroupId);
         instanceOfDeviceManager().save( impDeviceByGroupId );
@@ -674,7 +703,9 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
         , DeviceGroupBean refDevicegroupByParent 
         , java.util.Collection<DeviceBean> impDeviceByGroupId , java.util.Collection<DeviceGroupBean> impDevicegroupByParent , java.util.Collection<PermitBean> impPermitByDeviceGroupId )
     {
-        if(null == bean) return null;
+        if(null == bean){
+            return null;
+        }
         this.setReferencedByParent(bean,refDevicegroupByParent);
         bean = this.save( bean );
         this.setDeviceBeansByGroupId(bean,impDeviceByGroupId);
@@ -710,10 +741,12 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     @Override
     public DeviceGroupBean save(DeviceGroupBean bean,Object ...args) 
     {
-        if(null == args)
+        if(null == args){
             return save(bean);
-        if(args.length > 4)
+        }
+        if(args.length > 4){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceGroupBean");
         }
@@ -742,10 +775,12 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     @Override
     public DeviceGroupBean saveCollection(DeviceGroupBean bean,Object ...inputs)
     {
-        if(null == inputs)
+        if(null == inputs){
             return save(bean);
-        if(inputs.length > 4)
+        }
+        if(inputs.length > 4){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        }
         Object[] args = new Object[4];
         System.arraycopy(inputs,0,args,0,4);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceGroupBean)){
@@ -784,8 +819,9 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
         switch(fkIndex){
         case FL_DEVICE_GROUP_FK_PARENT:
             return  (T)this.getReferencedByParent(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     /**
      * Associates the {@link DeviceGroupBean} object to the bean object by fkIndex field.<br>
@@ -802,8 +838,9 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
         switch(fkIndex){
         case FL_DEVICE_GROUP_FK_PARENT:
             return  (T)this.setReferencedByParent(bean, (DeviceGroupBean)beanToSet);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     //////////////////////////////////////
@@ -815,7 +852,9 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     @Override 
     public DeviceGroupBean getReferencedByParent(DeviceGroupBean bean)
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByParent(instanceOfDeviceGroupManager().loadByPrimaryKey(bean.getParent())); 
         return bean.getReferencedByParent();
     }
@@ -1047,10 +1086,12 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     //23.2 MANY TO MANY override IDeviceGroupManager
     @Override
     public void addJunction(DeviceGroupBean bean,PersonGroupBean linked){
-        if(null == bean || null == bean.getId())
+        if(null == bean || null == bean.getId()){
             return ;
-        if(null == linked || null ==bean.getId())
+        }
+        if(null == linked || null ==bean.getId()){
             return ;
+        }
         if(!instanceOfPermitManager().existsPrimaryKey(bean.getId(),linked.getId())){
             PermitBean junction = new PermitBean();
             junction.setDeviceGroupId(bean.getId());
@@ -1061,45 +1102,51 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     //23.3 MANY TO MANY override IDeviceGroupManager
     @Override
     public int deleteJunction(DeviceGroupBean bean,PersonGroupBean linked){
-        if(null == bean || null == bean.getId())
+        if(null == bean || null == bean.getId()){
             return 0;
-        if(null == linked || null ==bean.getId())
+        }
+        if(null == linked || null ==bean.getId()){
             return 0;
+        }
         return instanceOfPermitManager().deleteByPrimaryKey(bean.getId(),linked.getId());
     }
     //23.4 MANY TO MANY override IDeviceGroupManager
     @Override
     public void addJunction(DeviceGroupBean bean,PersonGroupBean... linkedBeans){
-        if(null == linkedBeans)return;
-        for(PersonGroupBean linked:linkedBeans){
-            addJunction(bean,linked);
+        if(null != linkedBeans){
+            for(PersonGroupBean linked:linkedBeans){
+                addJunction(bean,linked);
+            }
         }
     }
     //23.5 MANY TO MANY override IDeviceGroupManager
     @Override
     public void addJunction(DeviceGroupBean bean,java.util.Collection<PersonGroupBean> linkedBeans){
-        if(null == linkedBeans)return;
-        for(PersonGroupBean linked:linkedBeans){
-            addJunction(bean,linked);
+        if(null != linkedBeans){
+            for(PersonGroupBean linked:linkedBeans){
+                addJunction(bean,linked);
+            }
         }
     }
     //23.6 MANY TO MANY override IDeviceGroupManager
     @Override
     public int deleteJunction(DeviceGroupBean bean,PersonGroupBean... linkedBeans){
-        if(null == linkedBeans)return 0;
         int count = 0;
-        for(PersonGroupBean linked:linkedBeans){
-            count += deleteJunction(bean,linked);
+        if(null != linkedBeans){
+            for(PersonGroupBean linked:linkedBeans){
+                count += deleteJunction(bean,linked);
+            }
         }
         return count;
     }
     //23.7 MANY TO MANY override IDeviceGroupManager
     @Override
     public int deleteJunction(DeviceGroupBean bean,java.util.Collection<PersonGroupBean> linkedBeans){
-        if(null == linkedBeans)return 0;
         int count = 0;
-        for(PersonGroupBean linked:linkedBeans){
-            count += deleteJunction(bean,linked);
+        if(null != linkedBeans){
+            for(PersonGroupBean linked:linkedBeans){
+                count += deleteJunction(bean,linked);
+            }
         }
         return count;
     }
@@ -1161,9 +1208,10 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     @Override
     public void unregisterListener(TableListener<DeviceGroupBean> listener)
     {
-        if(listener instanceof WrapListener)
-            this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
-        throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
+        if(!(listener instanceof WrapListener)){
+            throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
+        }
+        this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
     }
     
     //37
@@ -1201,15 +1249,15 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     }
     /**
      * wrap {@code TableListener<DeviceGroupBean>} as native listener
-     * @author guyadong
      *
      */
     public class WrapListener implements TableListener<DeviceGroupBean>{
         private final TableListener<DeviceGroupBean> listener;
         private final net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.device.FlDeviceGroupBean> nativeListener;
         private WrapListener(final TableListener<DeviceGroupBean> listener) {
-            if(null == listener)
+            if(null == listener){
                 throw new NullPointerException();
+            }
             this.listener = listener;
             this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.device.FlDeviceGroupBean> (){
 
@@ -1244,26 +1292,32 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
                 }};
         }
 
+        @Override
         public void beforeInsert(DeviceGroupBean bean) {
             listener.beforeInsert(bean);
         }
 
+        @Override
         public void afterInsert(DeviceGroupBean bean) {
             listener.afterInsert(bean);
         }
 
+        @Override
         public void beforeUpdate(DeviceGroupBean bean) {
             listener.beforeUpdate(bean);
         }
 
+        @Override
         public void afterUpdate(DeviceGroupBean bean) {
             listener.afterUpdate(bean);
         }
 
+        @Override
         public void beforeDelete(DeviceGroupBean bean) {
             listener.beforeDelete(bean);
         }
 
+        @Override
         public void afterDelete(DeviceGroupBean bean) {
             listener.afterDelete(bean);
         }        
@@ -1303,8 +1357,9 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     }
     
     private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.device.FlDeviceGroupBean> toNative(final Action<DeviceGroupBean> action){
-        if(null == action)
+        if(null == action){
             throw new NullPointerException();
+        }
         return new net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.device.FlDeviceGroupBean>(){
 
             @Override
@@ -1321,7 +1376,9 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     //45 override IDeviceGroupManager
     @Override 
     public java.util.List<Integer> toPrimaryKeyList(DeviceGroupBean... array){        
-        if(null == array)return new java.util.ArrayList<Integer>();
+        if(null == array){
+            return new java.util.ArrayList<Integer>();
+        }
         java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
         for(DeviceGroupBean bean:array){
             list.add(null == bean ? null : bean.getId());
@@ -1331,7 +1388,9 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     //46 override IDeviceGroupManager
     @Override 
     public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<DeviceGroupBean> collection){        
-        if(null == collection)return new java.util.ArrayList<Integer>();
+        if(null == collection){
+            return new java.util.ArrayList<Integer>();
+        }
         java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
         for(DeviceGroupBean bean:collection){
             list.add(null == bean ? null : bean.getId());
@@ -1404,8 +1463,9 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     //53 IDeviceGroupManager
     @Override
     public DeviceGroupBean topOfParent(Integer id){
-        if(null == id)
+        if(null == id){
             throw new NullPointerException();
+        }
         DeviceGroupBean parent = new DeviceGroupBean(id);
         for(;null != parent.getParent();){
             parent = loadByPrimaryKey(parent.getParent());
@@ -1418,22 +1478,25 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     //54 IDeviceGroupManager
     @Override
     public DeviceGroupBean topOfParent(DeviceGroupBean bean){
-        if(null == bean)
+        if(null == bean){
             throw new NullPointerException();
+        }
         return topOfParent(bean.getId());
     }
     //55 IDeviceGroupManager
     @Override
     public Integer checkCycleOfParent(Integer id){
-        if(isCycleOnParent(id))
+        if(isCycleOnParent(id)){
             throw new IllegalStateException("cycle on field: " + "parent");
+        }
         return id;
     }
     //56 IDeviceGroupManager
     @Override
     public DeviceGroupBean checkCycleOfParent(DeviceGroupBean bean){
-        if(isCycleOnParent(bean))
+        if(isCycleOnParent(bean)){
             throw new IllegalStateException("cycle on field: " + "parent");
+        }
         return bean;
     }
 }

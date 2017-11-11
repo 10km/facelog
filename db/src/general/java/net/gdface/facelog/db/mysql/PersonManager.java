@@ -31,7 +31,7 @@ import net.gdface.facelog.dborm.exception.DAOException;
  * Remarks: 人员基本描述信息<br>
  * @author guyadong
  */
-public class PersonManager extends TableManager.Adapter<PersonBean> implements IPersonManager
+public class PersonManager extends TableManager.BaseAdapter<PersonBean> implements IPersonManager
 {
     private net.gdface.facelog.dborm.person.FlPersonManager nativeManager = net.gdface.facelog.dborm.person.FlPersonManager.getInstance();
     private IDbConverter<
@@ -63,26 +63,30 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
         return PersonGroupManager.getInstance();
     }
     /**
-    * @return table name
-    */
+     * @return table name
+     */
+    @Override
     public String getTableName() {
         return this.nativeManager.getTableName();
     }
 
     /**
-    * @return field names of table
-    */
+     * @return field names of table
+     */
+    @Override
     public String getFields() {
         return this.nativeManager.getFields();
     }
-    
+
+    @Override
     public String getFullFields() {
         return this.nativeManager.getFullFields();
     }
     
     /**
-    * @return primarykeyNames
-    */
+     * @return primarykeyNames
+     */
+    @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
     }
@@ -98,7 +102,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     }
    
     @Override
-    protected Class<PersonBean> _beanType(){
+    protected Class<PersonBean> beanType(){
         return PersonBean.class;
     }
     
@@ -113,8 +117,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public synchronized void setDbConverter(IDbConverter dbConverter) {
-        if( null == dbConverter)
+        if( null == dbConverter){
             throw new NullPointerException();
+        }
         this.dbConverter = dbConverter;
         this.beanConverter = this.dbConverter.getPersonBeanConverter();
     }
@@ -156,8 +161,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override
     public PersonBean loadByPrimaryKeyChecked(PersonBean bean) throws ObjectRetrievalException
     {
-        if(null == bean)
+        if(null == bean){
             throw new NullPointerException();
+        }
         return loadByPrimaryKeyChecked(bean.getId());
     }
     
@@ -175,13 +181,17 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     //1.3.2
     @Override
     public PersonBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1)
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        if(! (keys[0] instanceof Integer))
+        }
+        
+        if(! (keys[0] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-          return loadByPrimaryKeyChecked((Integer)keys[0]);
+        }
+        return loadByPrimaryKeyChecked((Integer)keys[0]);
     }
 
     //1.4 override IPersonManager
@@ -205,8 +215,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     //1.7
     @Override
     public PersonBean checkDuplicate(PersonBean bean)throws ObjectRetrievalException{
-        if(null != bean)
-            checkDuplicate(bean.getId());            
+        if(null != bean){
+            checkDuplicate(bean.getId());
+        }
         return bean;   
     }
     //1.4.1 override IPersonManager
@@ -223,7 +234,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     //1.8 override IPersonManager
     @Override 
     public java.util.List<PersonBean> loadByPrimaryKey(int... keys){
-        if(null == keys)return new java.util.ArrayList<PersonBean>();
+        if(null == keys){
+            return new java.util.ArrayList<PersonBean>();
+        }
         java.util.ArrayList<PersonBean> list = new java.util.ArrayList<PersonBean>(keys.length);
         for(int i = 0 ;i< keys.length;++i){
             list.add(loadByPrimaryKey(keys[i]));
@@ -233,7 +246,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     //1.9 override IPersonManager
     @Override 
     public java.util.List<PersonBean> loadByPrimaryKey(java.util.Collection<Integer> keys){
-        if(null == keys )return new java.util.ArrayList<PersonBean>();
+        if(null == keys ){
+            return new java.util.ArrayList<PersonBean>();
+        }
         java.util.ArrayList<PersonBean> list = new java.util.ArrayList<PersonBean>(keys.size());
         if(keys instanceof java.util.List){
             for(Integer key: keys){
@@ -242,8 +257,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
         }else{
             PersonBean bean;
             for(Integer key: keys){
-                if(null != (bean = loadByPrimaryKey(key)))
+                if(null != (bean = loadByPrimaryKey(key))){
                     list.add(bean);
+                }
             }
         }
         return list;
@@ -276,51 +292,58 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        if(! (keys[0] instanceof Integer))
+        }
+        if(! (keys[0] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+        }
         return deleteByPrimaryKey((Integer)keys[0]);
     }
     //2.2 override IPersonManager
     @Override 
     public int deleteByPrimaryKey(int... keys){
-        if(null == keys)return 0;
         int count = 0;
-        for(int key:keys){
-            count += deleteByPrimaryKey(key);
+        if(null != keys){        
+            for(int key:keys){
+                count += deleteByPrimaryKey(key);
+            }
         }
         return count;
     }
     //2.3 override IPersonManager
     @Override 
     public int deleteByPrimaryKey(java.util.Collection<Integer> keys){
-        if(null == keys)return 0;
         int count = 0;
-        for(Integer key :keys){
-            count += deleteByPrimaryKey(key);
+        if(null != keys){        
+            for(Integer key :keys){
+                count += deleteByPrimaryKey(key);
+            }
         }
         return count;
     }
     //2.4 override IPersonManager
     @Override 
     public int delete(PersonBean... beans){
-        if(null == beans)return 0;
         int count = 0;
-        for(PersonBean bean :beans){
-            count += delete(bean);
+        if(null != beans){
+            for(PersonBean bean :beans){
+                count += delete(bean);
+            }
         }
         return count;
     }
     //2.5 override IPersonManager
     @Override 
     public int delete(java.util.Collection<PersonBean> beans){
-        if(null == beans)return 0;
         int count = 0;
-        for(PersonBean bean :beans){
-            count += delete(bean);
+        if(null != beans){
+            for(PersonBean bean :beans){
+                count += delete(bean);
+            }
         }
         return count;
     }
@@ -329,7 +352,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
     
-    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FeatureBean.class,LogBean.class};
+    private static final Class<?>[] IMPORTED_BEAN_TYPES = new Class<?>[]{FeatureBean.class,LogBean.class};
 
     /**
      * @see #getImportedBeansAsList(PersonBean,int)
@@ -337,7 +360,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.db.BaseBean<T>> T[] getImportedBeans(PersonBean bean, int ikIndex){
-        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
+        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(IMPORTED_BEAN_TYPES[ikIndex],0));
     }
     
     /**
@@ -359,8 +382,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
             return (java.util.List<T>)this.getFeatureBeansByPersonIdAsList(bean);
         case FL_PERSON_IK_FL_LOG_PERSON_ID:
             return (java.util.List<T>)this.getLogBeansByPersonIdAsList(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the T objects as imported beans of bean object by ikIndex.<br>
@@ -383,8 +407,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
             return (T[])setFeatureBeansByPersonId(bean,(FeatureBean[])importedBeans);
         case FL_PERSON_IK_FL_LOG_PERSON_ID:
             return (T[])setLogBeansByPersonId(bean,(LogBean[])importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the importedBeans associates to the bean by ikIndex<br>
@@ -406,8 +431,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
             return (C)setFeatureBeansByPersonId(bean,(java.util.Collection<FeatureBean>)importedBeans);
         case FL_PERSON_IK_FL_LOG_PERSON_ID:
             return (C)setLogBeansByPersonId(bean,(java.util.Collection<LogBean>)importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
 
@@ -564,11 +590,15 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
         , ImageBean refImageByImageMd5 , PersonGroupBean refPersongroupByGroupId 
         , FeatureBean[] impFeatureByPersonId , LogBean[] impLogByPersonId )
     {
-        if(null == bean) return null;
-        if(null != refImageByImageMd5)
+        if(null == bean){
+            return null;
+        }
+        if(null != refImageByImageMd5){
             this.setReferencedByImageMd5(bean,refImageByImageMd5);
-        if(null != refPersongroupByGroupId)
+        }
+        if(null != refPersongroupByGroupId){
             this.setReferencedByGroupId(bean,refPersongroupByGroupId);
+        }
         bean = this.save( bean );
         this.setFeatureBeansByPersonId(bean,impFeatureByPersonId);
         instanceOfFeatureManager().save( impFeatureByPersonId );
@@ -595,7 +625,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
         , ImageBean refImageByImageMd5 , PersonGroupBean refPersongroupByGroupId 
         , java.util.Collection<FeatureBean> impFeatureByPersonId , java.util.Collection<LogBean> impLogByPersonId )
     {
-        if(null == bean) return null;
+        if(null == bean){
+            return null;
+        }
         this.setReferencedByImageMd5(bean,refImageByImageMd5);
         this.setReferencedByGroupId(bean,refPersongroupByGroupId);
         bean = this.save( bean );
@@ -630,10 +662,12 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override
     public PersonBean save(PersonBean bean,Object ...args) 
     {
-        if(null == args)
+        if(null == args){
             return save(bean);
-        if(args.length > 4)
+        }
+        if(args.length > 4){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:ImageBean");
         }
@@ -662,10 +696,12 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override
     public PersonBean saveCollection(PersonBean bean,Object ...inputs)
     {
-        if(null == inputs)
+        if(null == inputs){
             return save(bean);
-        if(inputs.length > 4)
+        }
+        if(inputs.length > 4){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        }
         Object[] args = new Object[4];
         System.arraycopy(inputs,0,args,0,4);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
@@ -707,8 +743,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
             return  (T)this.getReferencedByImageMd5(bean);
         case FL_PERSON_FK_GROUP_ID:
             return  (T)this.getReferencedByGroupId(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     /**
      * Associates the {@link PersonBean} object to the bean object by fkIndex field.<br>
@@ -727,8 +764,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
             return  (T)this.setReferencedByImageMd5(bean, (ImageBean)beanToSet);
         case FL_PERSON_FK_GROUP_ID:
             return  (T)this.setReferencedByGroupId(bean, (PersonGroupBean)beanToSet);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     //////////////////////////////////////
@@ -740,7 +778,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override 
     public ImageBean getReferencedByImageMd5(PersonBean bean)
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByImageMd5(instanceOfImageManager().loadByPrimaryKey(bean.getImageMd5())); 
         return bean.getReferencedByImageMd5();
     }
@@ -768,7 +808,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override 
     public PersonGroupBean getReferencedByGroupId(PersonBean bean)
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByGroupId(instanceOfPersonGroupManager().loadByPrimaryKey(bean.getGroupId())); 
         return bean.getReferencedByGroupId();
     }
@@ -916,9 +958,10 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     // override IPersonManager
     @Override 
     public PersonBean loadByIndexImageMd5Checked(String imageMd5)throws ObjectRetrievalException{
-        PersonBean bean = new PersonBean();
-        if(null == imageMd5)
+        if(null == imageMd5){
             throw new ObjectRetrievalException(new NullPointerException());
+        }
+        PersonBean bean = new PersonBean();
         
         bean.setImageMd5(imageMd5);
         
@@ -928,7 +971,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override 
     public java.util.List<PersonBean> loadByIndexImageMd5(String... indexs)
     {
-        if(null == indexs)return new java.util.ArrayList<PersonBean>();
+        if(null == indexs){
+            return new java.util.ArrayList<PersonBean>();
+        }
         java.util.ArrayList<PersonBean> list = new java.util.ArrayList<PersonBean>(indexs.length);
         for(int i = 0 ;i< indexs.length;++i){
             list.add(loadByIndexImageMd5(indexs[i]));
@@ -939,7 +984,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override 
     public java.util.List<PersonBean> loadByIndexImageMd5(java.util.Collection<String> indexs)
     {
-        if(null == indexs )return new java.util.ArrayList<PersonBean>();
+        if(null == indexs ){
+            return new java.util.ArrayList<PersonBean>();
+        }
         java.util.ArrayList<PersonBean> list = new java.util.ArrayList<PersonBean>(indexs.size());
         if(indexs instanceof java.util.List){
             for(String key: indexs){
@@ -948,8 +995,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
         }else{
             PersonBean bean;
             for(String key: indexs){
-                if(null != (bean = loadByIndexImageMd5(key)))
+                if(null != (bean = loadByIndexImageMd5(key))){
                     list.add(bean);
+                }
             }
         }
         return list;
@@ -958,10 +1006,11 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override 
     public int deleteByIndexImageMd5(String... indexs)
     {
-        if(null == indexs)return 0;
         int count = 0;
-        for(String index : indexs){
-            count += deleteByIndexImageMd5(index);
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexImageMd5(index);
+            }
         }
         return count;
     }
@@ -969,10 +1018,11 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override 
     public int deleteByIndexImageMd5(java.util.Collection<String> indexs)
     {
-        if(null == indexs)return 0;
         int count = 0;
-        for(String index : indexs){
-            count += deleteByIndexImageMd5(index);
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexImageMd5(index);
+            }
         }
         return count;
     }
@@ -1002,9 +1052,10 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     // override IPersonManager
     @Override 
     public PersonBean loadByIndexPapersNumChecked(String papersNum)throws ObjectRetrievalException{
-        PersonBean bean = new PersonBean();
-        if(null == papersNum)
+        if(null == papersNum){
             throw new ObjectRetrievalException(new NullPointerException());
+        }
+        PersonBean bean = new PersonBean();
         
         bean.setPapersNum(papersNum);
         
@@ -1014,7 +1065,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override 
     public java.util.List<PersonBean> loadByIndexPapersNum(String... indexs)
     {
-        if(null == indexs)return new java.util.ArrayList<PersonBean>();
+        if(null == indexs){
+            return new java.util.ArrayList<PersonBean>();
+        }
         java.util.ArrayList<PersonBean> list = new java.util.ArrayList<PersonBean>(indexs.length);
         for(int i = 0 ;i< indexs.length;++i){
             list.add(loadByIndexPapersNum(indexs[i]));
@@ -1025,7 +1078,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override 
     public java.util.List<PersonBean> loadByIndexPapersNum(java.util.Collection<String> indexs)
     {
-        if(null == indexs )return new java.util.ArrayList<PersonBean>();
+        if(null == indexs ){
+            return new java.util.ArrayList<PersonBean>();
+        }
         java.util.ArrayList<PersonBean> list = new java.util.ArrayList<PersonBean>(indexs.size());
         if(indexs instanceof java.util.List){
             for(String key: indexs){
@@ -1034,8 +1089,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
         }else{
             PersonBean bean;
             for(String key: indexs){
-                if(null != (bean = loadByIndexPapersNum(key)))
+                if(null != (bean = loadByIndexPapersNum(key))){
                     list.add(bean);
+                }
             }
         }
         return list;
@@ -1044,10 +1100,11 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override 
     public int deleteByIndexPapersNum(String... indexs)
     {
-        if(null == indexs)return 0;
         int count = 0;
-        for(String index : indexs){
-            count += deleteByIndexPapersNum(index);
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexPapersNum(index);
+            }
         }
         return count;
     }
@@ -1055,10 +1112,11 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override 
     public int deleteByIndexPapersNum(java.util.Collection<String> indexs)
     {
-        if(null == indexs)return 0;
         int count = 0;
-        for(String index : indexs){
-            count += deleteByIndexPapersNum(index);
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexPapersNum(index);
+            }
         }
         return count;
     }
@@ -1235,9 +1293,10 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override
     public void unregisterListener(TableListener<PersonBean> listener)
     {
-        if(listener instanceof WrapListener)
-            this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
-        throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
+        if(!(listener instanceof WrapListener)){
+            throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
+        }
+        this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
     }
     
     //37
@@ -1275,15 +1334,15 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     }
     /**
      * wrap {@code TableListener<PersonBean>} as native listener
-     * @author guyadong
      *
      */
     public class WrapListener implements TableListener<PersonBean>{
         private final TableListener<PersonBean> listener;
         private final net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.person.FlPersonBean> nativeListener;
         private WrapListener(final TableListener<PersonBean> listener) {
-            if(null == listener)
+            if(null == listener){
                 throw new NullPointerException();
+            }
             this.listener = listener;
             this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.person.FlPersonBean> (){
 
@@ -1318,26 +1377,32 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
                 }};
         }
 
+        @Override
         public void beforeInsert(PersonBean bean) {
             listener.beforeInsert(bean);
         }
 
+        @Override
         public void afterInsert(PersonBean bean) {
             listener.afterInsert(bean);
         }
 
+        @Override
         public void beforeUpdate(PersonBean bean) {
             listener.beforeUpdate(bean);
         }
 
+        @Override
         public void afterUpdate(PersonBean bean) {
             listener.afterUpdate(bean);
         }
 
+        @Override
         public void beforeDelete(PersonBean bean) {
             listener.beforeDelete(bean);
         }
 
+        @Override
         public void afterDelete(PersonBean bean) {
             listener.afterDelete(bean);
         }        
@@ -1377,8 +1442,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     }
     
     private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.person.FlPersonBean> toNative(final Action<PersonBean> action){
-        if(null == action)
+        if(null == action){
             throw new NullPointerException();
+        }
         return new net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.person.FlPersonBean>(){
 
             @Override
@@ -1395,7 +1461,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     //45 override IPersonManager
     @Override 
     public java.util.List<Integer> toPrimaryKeyList(PersonBean... array){        
-        if(null == array)return new java.util.ArrayList<Integer>();
+        if(null == array){
+            return new java.util.ArrayList<Integer>();
+        }
         java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
         for(PersonBean bean:array){
             list.add(null == bean ? null : bean.getId());
@@ -1405,7 +1473,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     //46 override IPersonManager
     @Override 
     public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<PersonBean> collection){        
-        if(null == collection)return new java.util.ArrayList<Integer>();
+        if(null == collection){
+            return new java.util.ArrayList<Integer>();
+        }
         java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
         for(PersonBean bean:collection){
             list.add(null == bean ? null : bean.getId());

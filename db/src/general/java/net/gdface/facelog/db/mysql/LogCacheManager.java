@@ -99,8 +99,9 @@ public class LogCacheManager extends LogManager
     @Override 
     public LogBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
-       if(null == id)
+        if(null == id){
            throw new ObjectRetrievalException(new NullPointerException());
+        }
         try{
             return cache.getBean(id);
         }catch(ExecutionException ee){
@@ -154,8 +155,9 @@ public class LogCacheManager extends LogManager
     //20-5
     @Override
     public int loadUsingTemplate(LogBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<LogBean> action){
-        if(null == fieldList )
+        if(null == fieldList ){
             action = new CacheAction(action);
+        }
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
     }
 

@@ -34,7 +34,7 @@ import net.gdface.facelog.dborm.image.FlImageManager;
  * Remarks: 人脸检测信息数据表,用于保存检测到的人脸的所有信息(特征数据除外)<br>
  * @author sql2java
  */
-public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
+public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
 {
     /**
      * Tablename.
@@ -49,24 +49,22 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         "id"
     };
 
-    /**
-    * @return tableName
-    */
+    @Override
     public String getTableName() {
         return TABLE_NAME;
     }
-
+    
+    @Override
     public String getFields() {
         return FL_FACE_FIELDS;
     }
     
+    @Override
     public String getFullFields() {
         return FL_FACE_FULL_FIELDS;
     }
-    
-    /**
-    * @return primarykeyNames
-    */
+
+    @Override
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
@@ -95,7 +93,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     }
     
     @Override
-    protected Class<FlFaceBean> _beanType(){
+    protected Class<FlFaceBean> beanType(){
         return FlFaceBean.class;
     }
     
@@ -142,8 +140,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @SuppressWarnings("unused")
     public FlFaceBean loadByPrimaryKeyChecked(Integer id) throws DAOException
     {
-        if(null == id)
+        if(null == id){
             throw new ObjectRetrievalException(new NullPointerException());
+        }
         Connection c = null;
         PreparedStatement ps = null;
         try
@@ -188,8 +187,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public FlFaceBean loadByPrimaryKeyChecked(FlFaceBean bean) throws DAOException
     {
-        if(null == bean)
+        if(null == bean){
             throw new NullPointerException();
+        }
         return loadByPrimaryKeyChecked(bean.getId());
     }
     
@@ -202,24 +202,31 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //1.3
     @Override
     public FlFaceBean loadByPrimaryKey(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         
-        if(null == keys[0])return null;
+        if(null == keys[0]){
+            return null;
+        }
         return loadByPrimaryKey((Integer)keys[0]);
     }
     //1.3.2
     @Override
     public FlFaceBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         
-        if(! (keys[0] instanceof Integer))
+        if(! (keys[0] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+        }
         return loadByPrimaryKeyChecked((Integer)keys[0]);
     }
     /**
@@ -263,8 +270,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public boolean existsByPrimaryKey(FlFaceBean bean) throws DAOException
     {
-        if(null == bean  || null == bean.getId())
+        if(null == bean  || null == bean.getId()){
             return false;
+        }
         long modified = bean.getModified();
         try{
             bean.resetModifiedExceptPrimaryKeys();
@@ -276,8 +284,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //1.7
     @Override
     public FlFaceBean checkDuplicate(FlFaceBean bean) throws DAOException{
-        if(!existsByPrimaryKey(bean))
+        if(!existsByPrimaryKey(bean)){
             throw new ObjectRetrievalException("Duplicate entry ("+ bean.getId() +") for key 'PRIMARY'");
+        }
         return bean;
     }
     /**
@@ -289,8 +298,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //1.4.1
     public Integer checkDuplicate(Integer id) throws DAOException
     {
-        if(existsPrimaryKey(id))
+        if(existsPrimaryKey(id)){
             throw new ObjectRetrievalException("Duplicate entry '"+ id +"' for key 'PRIMARY'");
+        }
         return id;
     }    
     /**
@@ -336,10 +346,11 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
             if (bean.getId() == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, bean.getId()); }
-            int _rows=ps.executeUpdate();
-            if(_rows>0)
+            int rows=ps.executeUpdate();
+            if(rows>0){
                 this.listenerContainer.afterDelete(bean); // listener callback
-            return _rows;
+            }
+            return rows;
         }
         catch(SQLException e)
         {
@@ -362,14 +373,17 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         FlFaceBean bean = createBean();   
         
-        if(null != keys[0] && !(keys[0] instanceof Integer))
+        if(null != keys[0] && !(keys[0] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+        }
         bean.setId((Integer)keys[0]);
         return delete(bean);
     }
@@ -378,7 +392,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
     
-    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FlLogBean.class};
+    private static final Class<?>[] IMPORTED_BEAN_TYPES = new Class<?>[]{FlLogBean.class};
 
     /**
      * @see #getImportedBeansAsList(FlFaceBean,int)
@@ -386,7 +400,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] getImportedBeans(FlFaceBean bean, int ikIndex) throws DAOException {
-        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
+        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(IMPORTED_BEAN_TYPES[ikIndex],0));
     }
     
     /**
@@ -406,8 +420,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_COMPARE_FACE:
             return (List<T>)this.getLogBeansByCompareFaceAsList(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     
     /**
@@ -425,8 +440,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_COMPARE_FACE:
             return (T[])setLogBeansByCompareFace(bean,(FlLogBean[])importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the importedBeans associates to the bean by ikIndex<br>
@@ -444,8 +460,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_COMPARE_FACE:
             return (C)setLogBeansByCompareFace(bean,(java.util.Collection<FlLogBean>)importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
     //////////////////////////////////////
@@ -516,8 +533,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //3.2.4 GET IMPORTED
     public List<FlLogBean> getLogBeansByCompareFaceAsList(FlFaceBean bean,int startRow, int numRows) throws DAOException
     {
-        if(null == bean)
+        if(null == bean){
             return new java.util.ArrayList<FlLogBean>();
+        }
         FlLogBean other = new FlLogBean();
         other.setCompareFace(bean.getId());
         return instanceOfFlLogManager().loadUsingTemplateAsList(other,startRow,numRows);
@@ -577,11 +595,15 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         , FlFeatureBean refFeatureByFeatureMd5 , FlImageBean refImageByImageMd5 
         , FlLogBean[] impLogByCompareFace ) throws DAOException
     {
-        if(null == bean) return null;
-        if(null != refFeatureByFeatureMd5)
+        if(null == bean) {
+            return null;
+        }
+        if(null != refFeatureByFeatureMd5){
             this.setReferencedByFeatureMd5(bean,refFeatureByFeatureMd5);
-        if(null != refImageByImageMd5)
+        }
+        if(null != refImageByImageMd5){
             this.setReferencedByImageMd5(bean,refImageByImageMd5);
+        }
         bean = this.save( bean );
         this.setLogBeansByCompareFace(bean,impLogByCompareFace);
         instanceOfFlLogManager().save( impLogByCompareFace );
@@ -618,7 +640,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         , FlFeatureBean refFeatureByFeatureMd5 , FlImageBean refImageByImageMd5 
         , java.util.Collection<FlLogBean> impLogByCompareFace ) throws DAOException
     {
-        if(null == bean) return null;
+        if(null == bean) {
+            return null;
+        }
         this.setReferencedByFeatureMd5(bean,refFeatureByFeatureMd5);
         this.setReferencedByImageMd5(bean,refImageByImageMd5);
         bean = this.save( bean );
@@ -655,10 +679,12 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public FlFaceBean save(FlFaceBean bean,Object ...args) throws DAOException
     {
-        if(null == args)
+        if(null == args){
             save(bean);
-        if(args.length > 3)
+        }
+        if(args.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlFeatureBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlFeatureBean");
         }
@@ -685,10 +711,12 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public FlFaceBean saveCollection(FlFaceBean bean,Object ...args) throws DAOException
     {
-        if(null == args)
+        if(null == args){
             save(bean);
-        if(args.length > 3)
+        }
+        if(args.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlFeatureBean)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlFeatureBean");
         }
@@ -725,8 +753,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             return  (T)this.getReferencedByFeatureMd5(bean);
         case FL_FACE_FK_IMAGE_MD5:
             return  (T)this.getReferencedByImageMd5(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     /**
@@ -747,8 +776,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             return  (T)this.setReferencedByFeatureMd5(bean, (FlFeatureBean)beanToSet);
         case FL_FACE_FK_IMAGE_MD5:
             return  (T)this.setReferencedByImageMd5(bean, (FlImageBean)beanToSet);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
      
     //////////////////////////////////////
@@ -766,7 +796,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //5.1 GET REFERENCED VALUE
     public FlFeatureBean getReferencedByFeatureMd5(FlFaceBean bean) throws DAOException
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByFeatureMd5(instanceOfFlFeatureManager().loadByPrimaryKey(bean.getFeatureMd5())); 
         return bean.getReferencedByFeatureMd5();
     }
@@ -804,7 +836,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //5.1 GET REFERENCED VALUE
     public FlImageBean getReferencedByImageMd5(FlFaceBean bean) throws DAOException
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByImageMd5(instanceOfFlImageManager().loadByPrimaryKey(bean.getImageMd5())); 
         return bean.getReferencedByImageMd5();
     }
@@ -900,173 +934,173 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         {
             c = this.getConnection();
             this.listenerContainer.beforeInsert(bean); // listener callback
-            int _dirtyCount = 0;
+            int dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_face (");
 
             if (bean.checkIdModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("id");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkImageMd5Modified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("image_md5");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkFaceLeftModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("face_left");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkFaceTopModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("face_top");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkFaceWidthModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("face_width");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkFaceHeightModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("face_height");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkEyeLeftxModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("eye_leftx");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkEyeLeftyModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("eye_lefty");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkEyeRightxModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("eye_rightx");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkEyeRightyModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("eye_righty");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkMouthXModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("mouth_x");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkMouthYModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("mouth_y");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkNoseXModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("nose_x");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkNoseYModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("nose_y");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkAngleYawModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("angle_yaw");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkAnglePitchModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("angle_pitch");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkAngleRollModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("angle_roll");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkExtInfoModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("ext_info");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkFeatureMd5Modified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("feature_md5");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkCreateTimeModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("create_time");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             sql.append(") values (");
-            if(_dirtyCount > 0) {
+            if(dirtyCount > 0) {
                 sql.append("?");
-                for(int i = 1; i < _dirtyCount; i++) {
+                for(int i = 1; i < dirtyCount; i++) {
                     sql.append(",?");
                 }
             }
@@ -1325,14 +1359,14 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
 
-            int _dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
+            int dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
 
-            if (_dirtyCount == 0) {
+            if (dirtyCount == 0) {
                 // System.out.println("The bean to look is not initialized... do not update.");
                 return bean;
             }
 
-            if (bean.getId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
+            if (bean.getId() == null) { ps.setNull(++dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++dirtyCount, bean.getId()); }
             ps.executeUpdate();
             bean.resetIsModified();
             this.listenerContainer.afterUpdate(bean); // listener callback
@@ -1444,8 +1478,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                                     ResultSet.CONCUR_READ_ONLY);
             this.fillPreparedStatement(ps, bean, SEARCH_EXACT, false);
 
-            int _rows = ps.executeUpdate();
-            return _rows;
+            return ps.executeUpdate();
         }
         catch(SQLException e)
         {
@@ -1555,27 +1588,31 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * @return a list of FlFaceBean
      * @throws DAOException
      */
+    @Override
     public List<FlFaceBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException
     {
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
+        }
         switch(keyIndex){
         case FL_FACE_INDEX_FEATURE_MD5:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'feature_md5' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof String))
+            if(null != keys[0] && !(keys[0] instanceof String)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-
+            }
             return this.loadByIndexFeatureMd5AsList((String)keys[0]);        
         }
         case FL_FACE_INDEX_IMAGE_MD5:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'image_md5' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof String))
+            if(null != keys[0] && !(keys[0] instanceof String)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-
+            }
             return this.loadByIndexImageMd5AsList((String)keys[0]);        
         }
         default:
@@ -1591,25 +1628,31 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * @return the number of deleted objects
      * @throws DAOException
      */
+    @Override
     public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException
     {
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
+        }
         switch(keyIndex){
         case FL_FACE_INDEX_FEATURE_MD5:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'feature_md5' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof String))
+            if(null != keys[0] && !(keys[0] instanceof String)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            }
             return this.deleteByIndexFeatureMd5((String)keys[0]);
         }
         case FL_FACE_INDEX_IMAGE_MD5:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'image_md5' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof String))
+            if(null != keys[0] && !(keys[0] instanceof String)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            }
             return this.deleteByIndexImageMd5((String)keys[0]);
         }
         default:
@@ -1701,6 +1744,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * @throws DAOException
      */
     //20
+    @Override
     public int countUsingTemplate(FlFaceBean bean, int searchType) throws DAOException
     {
         Connection c = null;
@@ -1755,12 +1799,12 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         if (bean == null) {
             return 0;
         }
-        int _dirtyCount = 0;
+        int dirtyCount = 0;
         String sqlEqualsOperation = searchType == SEARCH_EXACT ? "=" : " like ";
         try
         {
             if (bean.checkIdModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("id IS NULL");
                 } else {
@@ -1768,7 +1812,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }
             }
             if (bean.checkImageMd5Modified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getImageMd5() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("image_md5 IS NULL");
                 } else {
@@ -1776,7 +1820,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }
             }
             if (bean.checkFaceLeftModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getFaceLeft() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_left IS NULL");
                 } else {
@@ -1784,7 +1828,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }
             }
             if (bean.checkFaceTopModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getFaceTop() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_top IS NULL");
                 } else {
@@ -1792,7 +1836,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }
             }
             if (bean.checkFaceWidthModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getFaceWidth() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_width IS NULL");
                 } else {
@@ -1800,7 +1844,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }
             }
             if (bean.checkFaceHeightModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getFaceHeight() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_height IS NULL");
                 } else {
@@ -1808,7 +1852,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }
             }
             if (bean.checkEyeLeftxModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getEyeLeftx() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_leftx IS NULL");
                 } else {
@@ -1816,7 +1860,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }
             }
             if (bean.checkEyeLeftyModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getEyeLefty() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_lefty IS NULL");
                 } else {
@@ -1824,7 +1868,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }
             }
             if (bean.checkEyeRightxModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getEyeRightx() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_rightx IS NULL");
                 } else {
@@ -1832,7 +1876,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }
             }
             if (bean.checkEyeRightyModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getEyeRighty() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_righty IS NULL");
                 } else {
@@ -1840,7 +1884,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }
             }
             if (bean.checkMouthXModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getMouthX() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mouth_x IS NULL");
                 } else {
@@ -1848,7 +1892,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }
             }
             if (bean.checkMouthYModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getMouthY() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mouth_y IS NULL");
                 } else {
@@ -1856,7 +1900,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }
             }
             if (bean.checkNoseXModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getNoseX() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("nose_x IS NULL");
                 } else {
@@ -1864,7 +1908,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }
             }
             if (bean.checkNoseYModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getNoseY() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("nose_y IS NULL");
                 } else {
@@ -1872,7 +1916,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }
             }
             if (bean.checkAngleYawModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getAngleYaw() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_yaw IS NULL");
                 } else {
@@ -1880,7 +1924,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }
             }
             if (bean.checkAnglePitchModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getAnglePitch() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_pitch IS NULL");
                 } else {
@@ -1888,7 +1932,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }
             }
             if (bean.checkAngleRollModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getAngleRoll() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_roll IS NULL");
                 } else {
@@ -1896,7 +1940,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }
             }
             if (bean.checkExtInfoModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getExtInfo() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_info IS NULL");
                 } else {
@@ -1904,7 +1948,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }
             }
             if (bean.checkFeatureMd5Modified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getFeatureMd5() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("feature_md5 IS NULL");
                 } else {
@@ -1912,7 +1956,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }
             }
             if (bean.checkCreateTimeModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getCreateTime() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
                 } else {
@@ -1924,7 +1968,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         {
             sqlEqualsOperation = null;
         }
-        return _dirtyCount;
+        return dirtyCount;
     }
 
     /**
@@ -1940,131 +1984,131 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         if (bean == null) {
             return 0;
         }
-        int _dirtyCount = 0;
+        int dirtyCount = 0;
         try
         {
             if (bean.checkIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getId() + "]");
-                if (bean.getId() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getId() + "]");
+                if (bean.getId() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getId()); }
             }
             if (bean.checkImageMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getImageMd5() + "]");
-                        if (bean.getImageMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getImageMd5()); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getImageMd5() + "]");
+                        if (bean.getImageMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getImageMd5()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getImageMd5() + "%]");
-                        if ( bean.getImageMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getImageMd5() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getImageMd5() + "%]");
+                        if ( bean.getImageMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getImageMd5() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getImageMd5() + "]");
-                        if ( bean.getImageMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getImageMd5()); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getImageMd5() + "]");
+                        if ( bean.getImageMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getImageMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getImageMd5() + "%]");
-                        if (bean.getImageMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getImageMd5() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getImageMd5() + "%]");
+                        if (bean.getImageMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getImageMd5() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
             if (bean.checkFaceLeftModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceLeft() + "]");
-                if (bean.getFaceLeft() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceLeft()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getFaceLeft() + "]");
+                if (bean.getFaceLeft() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getFaceLeft()); }
             }
             if (bean.checkFaceTopModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceTop() + "]");
-                if (bean.getFaceTop() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceTop()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getFaceTop() + "]");
+                if (bean.getFaceTop() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getFaceTop()); }
             }
             if (bean.checkFaceWidthModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceWidth() + "]");
-                if (bean.getFaceWidth() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceWidth()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getFaceWidth() + "]");
+                if (bean.getFaceWidth() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getFaceWidth()); }
             }
             if (bean.checkFaceHeightModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceHeight() + "]");
-                if (bean.getFaceHeight() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceHeight()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getFaceHeight() + "]");
+                if (bean.getFaceHeight() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getFaceHeight()); }
             }
             if (bean.checkEyeLeftxModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeLeftx() + "]");
-                if (bean.getEyeLeftx() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeLeftx()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getEyeLeftx() + "]");
+                if (bean.getEyeLeftx() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getEyeLeftx()); }
             }
             if (bean.checkEyeLeftyModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeLefty() + "]");
-                if (bean.getEyeLefty() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeLefty()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getEyeLefty() + "]");
+                if (bean.getEyeLefty() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getEyeLefty()); }
             }
             if (bean.checkEyeRightxModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeRightx() + "]");
-                if (bean.getEyeRightx() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeRightx()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getEyeRightx() + "]");
+                if (bean.getEyeRightx() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getEyeRightx()); }
             }
             if (bean.checkEyeRightyModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeRighty() + "]");
-                if (bean.getEyeRighty() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeRighty()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getEyeRighty() + "]");
+                if (bean.getEyeRighty() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getEyeRighty()); }
             }
             if (bean.checkMouthXModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMouthX() + "]");
-                if (bean.getMouthX() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getMouthX()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getMouthX() + "]");
+                if (bean.getMouthX() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getMouthX()); }
             }
             if (bean.checkMouthYModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMouthY() + "]");
-                if (bean.getMouthY() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getMouthY()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getMouthY() + "]");
+                if (bean.getMouthY() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getMouthY()); }
             }
             if (bean.checkNoseXModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getNoseX() + "]");
-                if (bean.getNoseX() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getNoseX()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getNoseX() + "]");
+                if (bean.getNoseX() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getNoseX()); }
             }
             if (bean.checkNoseYModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getNoseY() + "]");
-                if (bean.getNoseY() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getNoseY()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getNoseY() + "]");
+                if (bean.getNoseY() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getNoseY()); }
             }
             if (bean.checkAngleYawModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getAngleYaw() + "]");
-                if (bean.getAngleYaw() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAngleYaw()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getAngleYaw() + "]");
+                if (bean.getAngleYaw() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getAngleYaw()); }
             }
             if (bean.checkAnglePitchModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getAnglePitch() + "]");
-                if (bean.getAnglePitch() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAnglePitch()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getAnglePitch() + "]");
+                if (bean.getAnglePitch() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getAnglePitch()); }
             }
             if (bean.checkAngleRollModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getAngleRoll() + "]");
-                if (bean.getAngleRoll() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAngleRoll()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getAngleRoll() + "]");
+                if (bean.getAngleRoll() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getAngleRoll()); }
             }
             if (bean.checkExtInfoModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getExtInfo() + "]");
-                if (bean.getExtInfo() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { Manager.setBytes(Types.LONGVARBINARY,ps, ++_dirtyCount, bean.getExtInfo()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getExtInfo() + "]");
+                if (bean.getExtInfo() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.LONGVARBINARY);} } else { Manager.setBytes(Types.LONGVARBINARY,ps, ++dirtyCount, bean.getExtInfo()); }
             }
             if (bean.checkFeatureMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFeatureMd5() + "]");
-                        if (bean.getFeatureMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getFeatureMd5()); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getFeatureMd5() + "]");
+                        if (bean.getFeatureMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getFeatureMd5()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFeatureMd5() + "%]");
-                        if ( bean.getFeatureMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFeatureMd5() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getFeatureMd5() + "%]");
+                        if ( bean.getFeatureMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getFeatureMd5() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFeatureMd5() + "]");
-                        if ( bean.getFeatureMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFeatureMd5()); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getFeatureMd5() + "]");
+                        if ( bean.getFeatureMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getFeatureMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFeatureMd5() + "%]");
-                        if (bean.getFeatureMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getFeatureMd5() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getFeatureMd5() + "%]");
+                        if (bean.getFeatureMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getFeatureMd5() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
             if (bean.checkCreateTimeModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
-                if (bean.getCreateTime() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getCreateTime() + "]");
+                if (bean.getCreateTime() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TIMESTAMP);} } else { ps.setTimestamp(++dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
             }
         }
         catch(SQLException e)
         {
             throw new DataAccessException(e);
         }
-        return _dirtyCount;
+        return dirtyCount;
     }
 
 
@@ -2121,25 +2165,36 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         try{
             int count = 0;
             if(0!=numRows){
-                if( startRow<1 )
+                if( startRow<1 ){
                     throw new IllegalArgumentException("invalid argument:startRow (must >=1)");
-                if( null==action || null==rs )
-                    throw new IllegalArgumentException("invalid argument:action OR rs (must not be null)");                    
-                for(;startRow>1&&rs.next();--startRow);//skip to last of startRow
+                }
+                if( null==action || null==rs ){
+                    throw new IllegalArgumentException("invalid argument:action OR rs (must not be null)");
+                }
+                for(;startRow > 1 && rs.next();){
+                    --startRow;
+                    //skip to last of startRow
+                }
                 if (fieldList == null) {
-                    if(numRows<0)
-                        for(;rs.next();++count)
+                    if(numRows<0){
+                        for(;rs.next();++count){
                             action.call(decodeRow(rs, action.getBean()));
-                    else
-                        for(;rs.next() && count<numRows;++count)
+                        }
+                    }else{
+                        for(;rs.next() && count<numRows;++count){
                             action.call(decodeRow(rs, action.getBean()));
+                        }
+                    }
                 }else {
-                    if(numRows<0)
-                        for(;rs.next();++count)
+                    if(numRows<0){
+                        for(;rs.next();++count){
                             action.call(decodeRow(rs, fieldList,action.getBean()));
-                    else
-                        for(;rs.next() && count<numRows;++count)
+                        }
+                    }else{
+                        for(;rs.next() && count<numRows;++count){
                             action.call(decodeRow(rs, fieldList,action.getBean()));
+                        }
+                    }
                 }
             }
             return count;
@@ -2160,8 +2215,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //29
     public FlFaceBean decodeRow(ResultSet rs,FlFaceBean bean) throws DAOException
     {
-        if(null==bean)
+        if(null==bean){
             bean = this.createBean();
+        }
         try
         {
             bean.setId(Manager.getInteger(rs, 1));
@@ -2206,8 +2262,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //30
     public FlFaceBean decodeRow(ResultSet rs, int[] fieldList,FlFaceBean bean) throws DAOException
     {
-        if(null==bean)
+        if(null==bean){
             bean = this.createBean();
+        }
         int pos = 0;
         try
         {
@@ -2504,8 +2561,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //37
     @Override
     public void fire(TableListener.Event event, FlFaceBean bean) throws DAOException{
-        if(null == event)
+        if(null == event){
             throw new NullPointerException();
+        }
         event.fire(listenerContainer, bean);
     }
     
@@ -2621,7 +2679,11 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //43
     @Override
     public boolean isPrimaryKey(String column){
-        for(String c:PRIMARYKEY_NAMES)if(c.equalsIgnoreCase(column))return true;
+        for(String c:PRIMARYKEY_NAMES){
+            if(c.equalsIgnoreCase(column)){
+                return true;
+            }
+        }
         return false;
     }
     
@@ -2637,8 +2699,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 for (int i = 0; i < argList.length; i++) {
                     if (argList[i].getClass().equals(byte[].class)) {
                         ps.setBytes(i + 1, (byte[]) argList[i]);
-                    } else
+                    } else {
                         ps.setObject(i + 1, argList[i]);
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -2673,7 +2736,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         return Manager.getInstance().runAsTransaction(fun);
     }
     
-    class DeleteBeanAction extends Action.Adapter<FlFaceBean>{
+    class DeleteBeanAction extends Action.BaseAdapter<FlFaceBean>{
         private final AtomicInteger count=new AtomicInteger(0);
         @Override
         public void call(FlFaceBean bean) throws DAOException {
@@ -2690,7 +2753,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     //45
     public List<Integer> toPrimaryKeyList(FlFaceBean... array){        
-        if(null == array)return new java.util.ArrayList<Integer>();
+        if(null == array){
+            return new java.util.ArrayList<Integer>();
+        }
         java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
         for(FlFaceBean bean:array){
             list.add(null == bean ? null : bean.getId());
@@ -2703,7 +2768,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     //46
     public List<Integer> toPrimaryKeyList(java.util.Collection<FlFaceBean> collection){        
-        if(null == collection)return new java.util.ArrayList<Integer>();
+        if(null == collection){
+            return new java.util.ArrayList<Integer>();
+        }
         java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
         for(FlFaceBean bean:collection){
             list.add(null == bean ? null : bean.getId());

@@ -34,7 +34,7 @@ import net.gdface.facelog.dborm.log.FlLogManager;
  * Remarks: 前端设备基本信息<br>
  * @author sql2java
  */
-public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
+public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
 {
     /**
      * Tablename.
@@ -49,24 +49,22 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         "id"
     };
 
-    /**
-    * @return tableName
-    */
+    @Override
     public String getTableName() {
         return TABLE_NAME;
     }
-
+    
+    @Override
     public String getFields() {
         return FL_DEVICE_FIELDS;
     }
     
+    @Override
     public String getFullFields() {
         return FL_DEVICE_FULL_FIELDS;
     }
-    
-    /**
-    * @return primarykeyNames
-    */
+
+    @Override
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
@@ -95,7 +93,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     }
     
     @Override
-    protected Class<FlDeviceBean> _beanType(){
+    protected Class<FlDeviceBean> beanType(){
         return FlDeviceBean.class;
     }
     
@@ -142,8 +140,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     @SuppressWarnings("unused")
     public FlDeviceBean loadByPrimaryKeyChecked(Integer id) throws DAOException
     {
-        if(null == id)
+        if(null == id){
             throw new ObjectRetrievalException(new NullPointerException());
+        }
         Connection c = null;
         PreparedStatement ps = null;
         try
@@ -188,8 +187,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     @Override
     public FlDeviceBean loadByPrimaryKeyChecked(FlDeviceBean bean) throws DAOException
     {
-        if(null == bean)
+        if(null == bean){
             throw new NullPointerException();
+        }
         return loadByPrimaryKeyChecked(bean.getId());
     }
     
@@ -202,24 +202,31 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     //1.3
     @Override
     public FlDeviceBean loadByPrimaryKey(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         
-        if(null == keys[0])return null;
+        if(null == keys[0]){
+            return null;
+        }
         return loadByPrimaryKey((Integer)keys[0]);
     }
     //1.3.2
     @Override
     public FlDeviceBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         
-        if(! (keys[0] instanceof Integer))
+        if(! (keys[0] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+        }
         return loadByPrimaryKeyChecked((Integer)keys[0]);
     }
     /**
@@ -263,8 +270,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     @Override
     public boolean existsByPrimaryKey(FlDeviceBean bean) throws DAOException
     {
-        if(null == bean  || null == bean.getId())
+        if(null == bean  || null == bean.getId()){
             return false;
+        }
         long modified = bean.getModified();
         try{
             bean.resetModifiedExceptPrimaryKeys();
@@ -276,8 +284,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     //1.7
     @Override
     public FlDeviceBean checkDuplicate(FlDeviceBean bean) throws DAOException{
-        if(!existsByPrimaryKey(bean))
+        if(!existsByPrimaryKey(bean)){
             throw new ObjectRetrievalException("Duplicate entry ("+ bean.getId() +") for key 'PRIMARY'");
+        }
         return bean;
     }
     /**
@@ -289,8 +298,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     //1.4.1
     public Integer checkDuplicate(Integer id) throws DAOException
     {
-        if(existsPrimaryKey(id))
+        if(existsPrimaryKey(id)){
             throw new ObjectRetrievalException("Duplicate entry '"+ id +"' for key 'PRIMARY'");
+        }
         return id;
     }    
     /**
@@ -336,10 +346,11 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
             if (bean.getId() == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, bean.getId()); }
-            int _rows=ps.executeUpdate();
-            if(_rows>0)
+            int rows=ps.executeUpdate();
+            if(rows>0){
                 this.listenerContainer.afterDelete(bean); // listener callback
-            return _rows;
+            }
+            return rows;
         }
         catch(SQLException e)
         {
@@ -362,14 +373,17 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         FlDeviceBean bean = createBean();   
         
-        if(null != keys[0] && !(keys[0] instanceof Integer))
+        if(null != keys[0] && !(keys[0] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+        }
         bean.setId((Integer)keys[0]);
         return delete(bean);
     }
@@ -378,7 +392,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
     
-    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FlImageBean.class,FlLogBean.class};
+    private static final Class<?>[] IMPORTED_BEAN_TYPES = new Class<?>[]{FlImageBean.class,FlLogBean.class};
 
     /**
      * @see #getImportedBeansAsList(FlDeviceBean,int)
@@ -386,7 +400,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] getImportedBeans(FlDeviceBean bean, int ikIndex) throws DAOException {
-        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
+        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(IMPORTED_BEAN_TYPES[ikIndex],0));
     }
     
     /**
@@ -409,8 +423,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
             return (List<T>)this.getImageBeansByDeviceIdAsList(bean);
         case FL_DEVICE_IK_FL_LOG_DEVICE_ID:
             return (List<T>)this.getLogBeansByDeviceIdAsList(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     
     /**
@@ -430,8 +445,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
             return (T[])setImageBeansByDeviceId(bean,(FlImageBean[])importedBeans);
         case FL_DEVICE_IK_FL_LOG_DEVICE_ID:
             return (T[])setLogBeansByDeviceId(bean,(FlLogBean[])importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the importedBeans associates to the bean by ikIndex<br>
@@ -451,8 +467,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
             return (C)setImageBeansByDeviceId(bean,(java.util.Collection<FlImageBean>)importedBeans);
         case FL_DEVICE_IK_FL_LOG_DEVICE_ID:
             return (C)setLogBeansByDeviceId(bean,(java.util.Collection<FlLogBean>)importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
     //////////////////////////////////////
@@ -523,8 +540,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     //3.2.4 GET IMPORTED
     public List<FlImageBean> getImageBeansByDeviceIdAsList(FlDeviceBean bean,int startRow, int numRows) throws DAOException
     {
-        if(null == bean)
+        if(null == bean){
             return new java.util.ArrayList<FlImageBean>();
+        }
         FlImageBean other = new FlImageBean();
         other.setDeviceId(bean.getId());
         return instanceOfFlImageManager().loadUsingTemplateAsList(other,startRow,numRows);
@@ -634,8 +652,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     //3.2.4 GET IMPORTED
     public List<FlLogBean> getLogBeansByDeviceIdAsList(FlDeviceBean bean,int startRow, int numRows) throws DAOException
     {
-        if(null == bean)
+        if(null == bean){
             return new java.util.ArrayList<FlLogBean>();
+        }
         FlLogBean other = new FlLogBean();
         other.setDeviceId(bean.getId());
         return instanceOfFlLogManager().loadUsingTemplateAsList(other,startRow,numRows);
@@ -695,9 +714,12 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         , FlDeviceGroupBean refDevicegroupByGroupId 
         , FlImageBean[] impImageByDeviceId , FlLogBean[] impLogByDeviceId ) throws DAOException
     {
-        if(null == bean) return null;
-        if(null != refDevicegroupByGroupId)
+        if(null == bean) {
+            return null;
+        }
+        if(null != refDevicegroupByGroupId){
             this.setReferencedByGroupId(bean,refDevicegroupByGroupId);
+        }
         bean = this.save( bean );
         this.setImageBeansByDeviceId(bean,impImageByDeviceId);
         instanceOfFlImageManager().save( impImageByDeviceId );
@@ -736,7 +758,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         , FlDeviceGroupBean refDevicegroupByGroupId 
         , java.util.Collection<FlImageBean> impImageByDeviceId , java.util.Collection<FlLogBean> impLogByDeviceId ) throws DAOException
     {
-        if(null == bean) return null;
+        if(null == bean) {
+            return null;
+        }
         this.setReferencedByGroupId(bean,refDevicegroupByGroupId);
         bean = this.save( bean );
         this.setImageBeansByDeviceId(bean,impImageByDeviceId);
@@ -774,10 +798,12 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     @Override
     public FlDeviceBean save(FlDeviceBean bean,Object ...args) throws DAOException
     {
-        if(null == args)
+        if(null == args){
             save(bean);
-        if(args.length > 3)
+        }
+        if(args.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlDeviceGroupBean");
         }
@@ -804,10 +830,12 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     @Override
     public FlDeviceBean saveCollection(FlDeviceBean bean,Object ...args) throws DAOException
     {
-        if(null == args)
+        if(null == args){
             save(bean);
-        if(args.length > 3)
+        }
+        if(args.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlDeviceGroupBean");
         }
@@ -841,8 +869,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         switch(fkIndex){
         case FL_DEVICE_FK_GROUP_ID:
             return  (T)this.getReferencedByGroupId(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     /**
@@ -861,8 +890,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         switch(fkIndex){
         case FL_DEVICE_FK_GROUP_ID:
             return  (T)this.setReferencedByGroupId(bean, (FlDeviceGroupBean)beanToSet);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
      
     //////////////////////////////////////
@@ -880,7 +910,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     //5.1 GET REFERENCED VALUE
     public FlDeviceGroupBean getReferencedByGroupId(FlDeviceBean bean) throws DAOException
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByGroupId(instanceOfFlDeviceGroupManager().loadByPrimaryKey(bean.getGroupId())); 
         return bean.getReferencedByGroupId();
     }
@@ -976,77 +1008,77 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         {
             c = this.getConnection();
             this.listenerContainer.beforeInsert(bean); // listener callback
-            int _dirtyCount = 0;
+            int dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_device (");
 
             if (bean.checkIdModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("id");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkGroupIdModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("group_id");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkNameModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("name");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkVersionModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("version");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkSerialNoModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("serial_no");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkMacModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("mac");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkCreateTimeModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("create_time");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkUpdateTimeModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("update_time");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             sql.append(") values (");
-            if(_dirtyCount > 0) {
+            if(dirtyCount > 0) {
                 sql.append("?");
-                for(int i = 1; i < _dirtyCount; i++) {
+                for(int i = 1; i < dirtyCount; i++) {
                     sql.append(",?");
                 }
             }
@@ -1197,14 +1229,14 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
 
-            int _dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
+            int dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
 
-            if (_dirtyCount == 0) {
+            if (dirtyCount == 0) {
                 // System.out.println("The bean to look is not initialized... do not update.");
                 return bean;
             }
 
-            if (bean.getId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
+            if (bean.getId() == null) { ps.setNull(++dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++dirtyCount, bean.getId()); }
             ps.executeUpdate();
             bean.resetIsModified();
             this.listenerContainer.afterUpdate(bean); // listener callback
@@ -1316,8 +1348,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                                     ResultSet.CONCUR_READ_ONLY);
             this.fillPreparedStatement(ps, bean, SEARCH_EXACT, false);
 
-            int _rows = ps.executeUpdate();
-            return _rows;
+            return ps.executeUpdate();
         }
         catch(SQLException e)
         {
@@ -1366,8 +1397,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     public FlDeviceBean loadByIndexMacChecked(String mac) throws DAOException
     {
         FlDeviceBean bean = new FlDeviceBean();
-        if(null == mac)
+        if(null == mac){
             throw new ObjectRetrievalException(new NullPointerException());
+        }
         
         bean.setMac(mac);
         
@@ -1382,7 +1414,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     public java.util.List<FlDeviceBean> loadByIndexMac(String... indexs)throws DAOException
     {
-        if(null == indexs)return new java.util.ArrayList<FlDeviceBean>();
+        if(null == indexs){
+            return new java.util.ArrayList<FlDeviceBean>();
+        }
         java.util.ArrayList<FlDeviceBean> list = new java.util.ArrayList<FlDeviceBean>(indexs.length);
         for(int i = 0 ;i< indexs.length;++i){
             list.add(loadByIndexMac(indexs[i]));
@@ -1398,7 +1432,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     public java.util.List<FlDeviceBean> loadByIndexMac(java.util.Collection<String> indexs)throws DAOException
     {
-        if(null == indexs )return new java.util.ArrayList<FlDeviceBean>();
+        if(null == indexs ){
+            return new java.util.ArrayList<FlDeviceBean>();
+        }
         java.util.ArrayList<FlDeviceBean> list = new java.util.ArrayList<FlDeviceBean>(indexs.size());
         if(indexs instanceof java.util.List){
             for(String key: indexs){
@@ -1407,8 +1443,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         }else{
             FlDeviceBean bean;
             for(String key: indexs){
-                if(null != (bean = loadByIndexMac(key)))
+                if(null != (bean = loadByIndexMac(key))){
                     list.add(bean);
+                }
             }
         }
         return list;
@@ -1422,10 +1459,11 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     public int deleteByIndexMac(String... indexs)throws DAOException
     {
-        if(null == indexs)return 0;
         int count = 0;
-        for(String index : indexs){
-            count += deleteByIndexMac(index);
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexMac(index);
+            }
         }
         return count;
     }
@@ -1438,10 +1476,11 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     public int deleteByIndexMac(java.util.Collection<String> indexs)throws DAOException
     {
-        if(null == indexs)return 0;
         int count = 0;
-        for(String index : indexs){
-            count += deleteByIndexMac(index);
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexMac(index);
+            }
         }
         return count;
     }
@@ -1487,8 +1526,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     public FlDeviceBean loadByIndexSerialNoChecked(String serialNo) throws DAOException
     {
         FlDeviceBean bean = new FlDeviceBean();
-        if(null == serialNo)
+        if(null == serialNo){
             throw new ObjectRetrievalException(new NullPointerException());
+        }
         
         bean.setSerialNo(serialNo);
         
@@ -1503,7 +1543,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     public java.util.List<FlDeviceBean> loadByIndexSerialNo(String... indexs)throws DAOException
     {
-        if(null == indexs)return new java.util.ArrayList<FlDeviceBean>();
+        if(null == indexs){
+            return new java.util.ArrayList<FlDeviceBean>();
+        }
         java.util.ArrayList<FlDeviceBean> list = new java.util.ArrayList<FlDeviceBean>(indexs.length);
         for(int i = 0 ;i< indexs.length;++i){
             list.add(loadByIndexSerialNo(indexs[i]));
@@ -1519,7 +1561,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     public java.util.List<FlDeviceBean> loadByIndexSerialNo(java.util.Collection<String> indexs)throws DAOException
     {
-        if(null == indexs )return new java.util.ArrayList<FlDeviceBean>();
+        if(null == indexs ){
+            return new java.util.ArrayList<FlDeviceBean>();
+        }
         java.util.ArrayList<FlDeviceBean> list = new java.util.ArrayList<FlDeviceBean>(indexs.size());
         if(indexs instanceof java.util.List){
             for(String key: indexs){
@@ -1528,8 +1572,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         }else{
             FlDeviceBean bean;
             for(String key: indexs){
-                if(null != (bean = loadByIndexSerialNo(key)))
+                if(null != (bean = loadByIndexSerialNo(key))){
                     list.add(bean);
+                }
             }
         }
         return list;
@@ -1543,10 +1588,11 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     public int deleteByIndexSerialNo(String... indexs)throws DAOException
     {
-        if(null == indexs)return 0;
         int count = 0;
-        for(String index : indexs){
-            count += deleteByIndexSerialNo(index);
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexSerialNo(index);
+            }
         }
         return count;
     }
@@ -1559,10 +1605,11 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     public int deleteByIndexSerialNo(java.util.Collection<String> indexs)throws DAOException
     {
-        if(null == indexs)return 0;
         int count = 0;
-        for(String index : indexs){
-            count += deleteByIndexSerialNo(index);
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexSerialNo(index);
+            }
         }
         return count;
     }
@@ -1629,38 +1676,43 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      * @return a list of FlDeviceBean
      * @throws DAOException
      */
+    @Override
     public List<FlDeviceBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException
     {
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
+        }
         switch(keyIndex){
         case FL_DEVICE_INDEX_MAC:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'mac' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof String))
+            if(null != keys[0] && !(keys[0] instanceof String)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-
+            }
             FlDeviceBean bean= this.loadByIndexMac((String)keys[0]);
             return null == bean ? new java.util.ArrayList<FlDeviceBean>() : java.util.Arrays.asList(bean);
         }
         case FL_DEVICE_INDEX_SERIAL_NO:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'serial_no' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof String))
+            if(null != keys[0] && !(keys[0] instanceof String)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-
+            }
             FlDeviceBean bean= this.loadByIndexSerialNo((String)keys[0]);
             return null == bean ? new java.util.ArrayList<FlDeviceBean>() : java.util.Arrays.asList(bean);
         }
         case FL_DEVICE_INDEX_GROUP_ID:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'group_id' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof Integer))
+            if(null != keys[0] && !(keys[0] instanceof Integer)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-
+            }
             return this.loadByIndexGroupIdAsList((Integer)keys[0]);        
         }
         default:
@@ -1676,33 +1728,41 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      * @return the number of deleted objects
      * @throws DAOException
      */
+    @Override
     public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException
     {
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
+        }
         switch(keyIndex){
         case FL_DEVICE_INDEX_MAC:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'mac' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof String))
+            if(null != keys[0] && !(keys[0] instanceof String)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            }
             return this.deleteByIndexMac((String)keys[0]);
         }
         case FL_DEVICE_INDEX_SERIAL_NO:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'serial_no' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof String))
+            if(null != keys[0] && !(keys[0] instanceof String)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            }
             return this.deleteByIndexSerialNo((String)keys[0]);
         }
         case FL_DEVICE_INDEX_GROUP_ID:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'group_id' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof Integer))
+            if(null != keys[0] && !(keys[0] instanceof Integer)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+            }
             return this.deleteByIndexGroupId((Integer)keys[0]);
         }
         default:
@@ -1794,6 +1854,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      * @throws DAOException
      */
     //20
+    @Override
     public int countUsingTemplate(FlDeviceBean bean, int searchType) throws DAOException
     {
         Connection c = null;
@@ -1848,12 +1909,12 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         if (bean == null) {
             return 0;
         }
-        int _dirtyCount = 0;
+        int dirtyCount = 0;
         String sqlEqualsOperation = searchType == SEARCH_EXACT ? "=" : " like ";
         try
         {
             if (bean.checkIdModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("id IS NULL");
                 } else {
@@ -1861,7 +1922,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 }
             }
             if (bean.checkGroupIdModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getGroupId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("group_id IS NULL");
                 } else {
@@ -1869,7 +1930,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 }
             }
             if (bean.checkNameModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getName() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("name IS NULL");
                 } else {
@@ -1877,7 +1938,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 }
             }
             if (bean.checkVersionModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getVersion() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("version IS NULL");
                 } else {
@@ -1885,7 +1946,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 }
             }
             if (bean.checkSerialNoModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getSerialNo() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("serial_no IS NULL");
                 } else {
@@ -1893,7 +1954,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 }
             }
             if (bean.checkMacModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getMac() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mac IS NULL");
                 } else {
@@ -1901,7 +1962,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 }
             }
             if (bean.checkCreateTimeModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getCreateTime() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
                 } else {
@@ -1909,7 +1970,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 }
             }
             if (bean.checkUpdateTimeModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getUpdateTime() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("update_time IS NULL");
                 } else {
@@ -1921,7 +1982,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         {
             sqlEqualsOperation = null;
         }
-        return _dirtyCount;
+        return dirtyCount;
     }
 
     /**
@@ -1937,34 +1998,34 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         if (bean == null) {
             return 0;
         }
-        int _dirtyCount = 0;
+        int dirtyCount = 0;
         try
         {
             if (bean.checkIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getId() + "]");
-                if (bean.getId() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getId() + "]");
+                if (bean.getId() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getId()); }
             }
             if (bean.checkGroupIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getGroupId() + "]");
-                if (bean.getGroupId() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getGroupId()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getGroupId() + "]");
+                if (bean.getGroupId() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getGroupId()); }
             }
             if (bean.checkNameModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getName() + "]");
-                        if (bean.getName() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getName()); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getName() + "]");
+                        if (bean.getName() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getName()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getName() + "%]");
-                        if ( bean.getName()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getName() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getName() + "%]");
+                        if ( bean.getName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getName() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getName() + "]");
-                        if ( bean.getName() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getName()); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getName() + "]");
+                        if ( bean.getName() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getName()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getName() + "%]");
-                        if (bean.getName()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getName() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getName() + "%]");
+                        if (bean.getName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getName() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -1973,20 +2034,20 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
             if (bean.checkVersionModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getVersion() + "]");
-                        if (bean.getVersion() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getVersion()); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getVersion() + "]");
+                        if (bean.getVersion() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getVersion()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getVersion() + "%]");
-                        if ( bean.getVersion()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getVersion() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getVersion() + "%]");
+                        if ( bean.getVersion()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getVersion() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getVersion() + "]");
-                        if ( bean.getVersion() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getVersion()); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getVersion() + "]");
+                        if ( bean.getVersion() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getVersion()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getVersion() + "%]");
-                        if (bean.getVersion()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getVersion() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getVersion() + "%]");
+                        if (bean.getVersion()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getVersion() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -1995,20 +2056,20 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
             if (bean.checkSerialNoModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getSerialNo() + "]");
-                        if (bean.getSerialNo() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getSerialNo()); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getSerialNo() + "]");
+                        if (bean.getSerialNo() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getSerialNo()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getSerialNo() + "%]");
-                        if ( bean.getSerialNo()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getSerialNo() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getSerialNo() + "%]");
+                        if ( bean.getSerialNo()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getSerialNo() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getSerialNo() + "]");
-                        if ( bean.getSerialNo() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getSerialNo()); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getSerialNo() + "]");
+                        if ( bean.getSerialNo() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getSerialNo()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getSerialNo() + "%]");
-                        if (bean.getSerialNo()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getSerialNo() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getSerialNo() + "%]");
+                        if (bean.getSerialNo()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getSerialNo() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -2017,39 +2078,39 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
             if (bean.checkMacModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMac() + "]");
-                        if (bean.getMac() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMac()); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getMac() + "]");
+                        if (bean.getMac() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getMac()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMac() + "%]");
-                        if ( bean.getMac()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMac() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getMac() + "%]");
+                        if ( bean.getMac()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getMac() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMac() + "]");
-                        if ( bean.getMac() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMac()); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getMac() + "]");
+                        if ( bean.getMac() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getMac()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMac() + "%]");
-                        if (bean.getMac()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMac() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getMac() + "%]");
+                        if (bean.getMac()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getMac() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
             if (bean.checkCreateTimeModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
-                if (bean.getCreateTime() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getCreateTime() + "]");
+                if (bean.getCreateTime() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TIMESTAMP);} } else { ps.setTimestamp(++dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
             }
             if (bean.checkUpdateTimeModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getUpdateTime() + "]");
-                if (bean.getUpdateTime() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getUpdateTime().getTime())); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getUpdateTime() + "]");
+                if (bean.getUpdateTime() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TIMESTAMP);} } else { ps.setTimestamp(++dirtyCount, new java.sql.Timestamp(bean.getUpdateTime().getTime())); }
             }
         }
         catch(SQLException e)
         {
             throw new DataAccessException(e);
         }
-        return _dirtyCount;
+        return dirtyCount;
     }
 
 
@@ -2106,25 +2167,36 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         try{
             int count = 0;
             if(0!=numRows){
-                if( startRow<1 )
+                if( startRow<1 ){
                     throw new IllegalArgumentException("invalid argument:startRow (must >=1)");
-                if( null==action || null==rs )
-                    throw new IllegalArgumentException("invalid argument:action OR rs (must not be null)");                    
-                for(;startRow>1&&rs.next();--startRow);//skip to last of startRow
+                }
+                if( null==action || null==rs ){
+                    throw new IllegalArgumentException("invalid argument:action OR rs (must not be null)");
+                }
+                for(;startRow > 1 && rs.next();){
+                    --startRow;
+                    //skip to last of startRow
+                }
                 if (fieldList == null) {
-                    if(numRows<0)
-                        for(;rs.next();++count)
+                    if(numRows<0){
+                        for(;rs.next();++count){
                             action.call(decodeRow(rs, action.getBean()));
-                    else
-                        for(;rs.next() && count<numRows;++count)
+                        }
+                    }else{
+                        for(;rs.next() && count<numRows;++count){
                             action.call(decodeRow(rs, action.getBean()));
+                        }
+                    }
                 }else {
-                    if(numRows<0)
-                        for(;rs.next();++count)
+                    if(numRows<0){
+                        for(;rs.next();++count){
                             action.call(decodeRow(rs, fieldList,action.getBean()));
-                    else
-                        for(;rs.next() && count<numRows;++count)
+                        }
+                    }else{
+                        for(;rs.next() && count<numRows;++count){
                             action.call(decodeRow(rs, fieldList,action.getBean()));
+                        }
+                    }
                 }
             }
             return count;
@@ -2145,8 +2217,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     //29
     public FlDeviceBean decodeRow(ResultSet rs,FlDeviceBean bean) throws DAOException
     {
-        if(null==bean)
+        if(null==bean){
             bean = this.createBean();
+        }
         try
         {
             bean.setId(Manager.getInteger(rs, 1));
@@ -2179,8 +2252,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     //30
     public FlDeviceBean decodeRow(ResultSet rs, int[] fieldList,FlDeviceBean bean) throws DAOException
     {
-        if(null==bean)
+        if(null==bean){
             bean = this.createBean();
+        }
         int pos = 0;
         try
         {
@@ -2417,8 +2491,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     //37
     @Override
     public void fire(TableListener.Event event, FlDeviceBean bean) throws DAOException{
-        if(null == event)
+        if(null == event){
             throw new NullPointerException();
+        }
         event.fire(listenerContainer, bean);
     }
     
@@ -2514,7 +2589,11 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     //43
     @Override
     public boolean isPrimaryKey(String column){
-        for(String c:PRIMARYKEY_NAMES)if(c.equalsIgnoreCase(column))return true;
+        for(String c:PRIMARYKEY_NAMES){
+            if(c.equalsIgnoreCase(column)){
+                return true;
+            }
+        }
         return false;
     }
     
@@ -2530,8 +2609,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 for (int i = 0; i < argList.length; i++) {
                     if (argList[i].getClass().equals(byte[].class)) {
                         ps.setBytes(i + 1, (byte[]) argList[i]);
-                    } else
+                    } else {
                         ps.setObject(i + 1, argList[i]);
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -2566,7 +2646,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         return Manager.getInstance().runAsTransaction(fun);
     }
     
-    class DeleteBeanAction extends Action.Adapter<FlDeviceBean>{
+    class DeleteBeanAction extends Action.BaseAdapter<FlDeviceBean>{
         private final AtomicInteger count=new AtomicInteger(0);
         @Override
         public void call(FlDeviceBean bean) throws DAOException {
@@ -2583,7 +2663,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     //45
     public List<Integer> toPrimaryKeyList(FlDeviceBean... array){        
-        if(null == array)return new java.util.ArrayList<Integer>();
+        if(null == array){
+            return new java.util.ArrayList<Integer>();
+        }
         java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
         for(FlDeviceBean bean:array){
             list.add(null == bean ? null : bean.getId());
@@ -2596,7 +2678,9 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     //46
     public List<Integer> toPrimaryKeyList(java.util.Collection<FlDeviceBean> collection){        
-        if(null == collection)return new java.util.ArrayList<Integer>();
+        if(null == collection){
+            return new java.util.ArrayList<Integer>();
+        }
         java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
         for(FlDeviceBean bean:collection){
             list.add(null == bean ? null : bean.getId());

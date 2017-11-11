@@ -4,12 +4,12 @@ import com.facebook.swift.codec.*;
 import com.facebook.swift.codec.ThriftField.Requiredness;
 import java.util.*;
 
-@ThriftStruct("DuplicateReord")
-public final class DuplicateReord extends Exception
+@ThriftStruct("DuplicateReordException")
+public final class DuplicateReordException extends Exception
 {
     private static final long serialVersionUID = 1L;
 
-    public DuplicateReord() {
+    public DuplicateReordException() {
     }
 
 

@@ -34,7 +34,7 @@ import net.gdface.facelog.dborm.person.FlPersonManager;
  * Remarks: 用于验证身份的人脸特征数据表<br>
  * @author sql2java
  */
-public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
+public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
 {
     /**
      * Tablename.
@@ -49,24 +49,22 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         "md5"
     };
 
-    /**
-    * @return tableName
-    */
+    @Override
     public String getTableName() {
         return TABLE_NAME;
     }
-
+    
+    @Override
     public String getFields() {
         return FL_FEATURE_FIELDS;
     }
     
+    @Override
     public String getFullFields() {
         return FL_FEATURE_FULL_FIELDS;
     }
-    
-    /**
-    * @return primarykeyNames
-    */
+
+    @Override
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
@@ -95,7 +93,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     }
     
     @Override
-    protected Class<FlFeatureBean> _beanType(){
+    protected Class<FlFeatureBean> beanType(){
         return FlFeatureBean.class;
     }
     
@@ -142,8 +140,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     @SuppressWarnings("unused")
     public FlFeatureBean loadByPrimaryKeyChecked(String md5) throws DAOException
     {
-        if(null == md5)
+        if(null == md5){
             throw new ObjectRetrievalException(new NullPointerException());
+        }
         Connection c = null;
         PreparedStatement ps = null;
         try
@@ -188,8 +187,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     @Override
     public FlFeatureBean loadByPrimaryKeyChecked(FlFeatureBean bean) throws DAOException
     {
-        if(null == bean)
+        if(null == bean){
             throw new NullPointerException();
+        }
         return loadByPrimaryKeyChecked(bean.getMd5());
     }
     
@@ -202,24 +202,31 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     //1.3
     @Override
     public FlFeatureBean loadByPrimaryKey(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         
-        if(null == keys[0])return null;
+        if(null == keys[0]){
+            return null;
+        }
         return loadByPrimaryKey((String)keys[0]);
     }
     //1.3.2
     @Override
     public FlFeatureBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         
-        if(! (keys[0] instanceof String))
+        if(! (keys[0] instanceof String)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+        }
         return loadByPrimaryKeyChecked((String)keys[0]);
     }
     /**
@@ -263,8 +270,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     @Override
     public boolean existsByPrimaryKey(FlFeatureBean bean) throws DAOException
     {
-        if(null == bean  || null == bean.getMd5())
+        if(null == bean  || null == bean.getMd5()){
             return false;
+        }
         long modified = bean.getModified();
         try{
             bean.resetModifiedExceptPrimaryKeys();
@@ -276,8 +284,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     //1.7
     @Override
     public FlFeatureBean checkDuplicate(FlFeatureBean bean) throws DAOException{
-        if(!existsByPrimaryKey(bean))
+        if(!existsByPrimaryKey(bean)){
             throw new ObjectRetrievalException("Duplicate entry ("+ bean.getMd5() +") for key 'PRIMARY'");
+        }
         return bean;
     }
     /**
@@ -289,8 +298,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     //1.4.1
     public String checkDuplicate(String md5) throws DAOException
     {
-        if(existsPrimaryKey(md5))
+        if(existsPrimaryKey(md5)){
             throw new ObjectRetrievalException("Duplicate entry '"+ md5 +"' for key 'PRIMARY'");
+        }
         return md5;
     }    
     /**
@@ -336,10 +346,11 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
             if (bean.getMd5() == null) { ps.setNull(1, Types.CHAR); } else { ps.setString(1, bean.getMd5()); }
-            int _rows=ps.executeUpdate();
-            if(_rows>0)
+            int rows=ps.executeUpdate();
+            if(rows>0){
                 this.listenerContainer.afterDelete(bean); // listener callback
-            return _rows;
+            }
+            return rows;
         }
         catch(SQLException e)
         {
@@ -362,14 +373,17 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         FlFeatureBean bean = createBean();   
         
-        if(null != keys[0] && !(keys[0] instanceof String))
+        if(null != keys[0] && !(keys[0] instanceof String)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+        }
         bean.setMd5((String)keys[0]);
         return delete(bean);
     }
@@ -378,7 +392,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
     
-    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FlFaceBean.class,FlLogBean.class};
+    private static final Class<?>[] IMPORTED_BEAN_TYPES = new Class<?>[]{FlFaceBean.class,FlLogBean.class};
 
     /**
      * @see #getImportedBeansAsList(FlFeatureBean,int)
@@ -386,7 +400,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] getImportedBeans(FlFeatureBean bean, int ikIndex) throws DAOException {
-        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
+        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(IMPORTED_BEAN_TYPES[ikIndex],0));
     }
     
     /**
@@ -409,8 +423,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
             return (List<T>)this.getFaceBeansByFeatureMd5AsList(bean);
         case FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE:
             return (List<T>)this.getLogBeansByVerifyFeatureAsList(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     
     /**
@@ -430,8 +445,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
             return (T[])setFaceBeansByFeatureMd5(bean,(FlFaceBean[])importedBeans);
         case FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE:
             return (T[])setLogBeansByVerifyFeature(bean,(FlLogBean[])importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the importedBeans associates to the bean by ikIndex<br>
@@ -451,8 +467,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
             return (C)setFaceBeansByFeatureMd5(bean,(java.util.Collection<FlFaceBean>)importedBeans);
         case FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE:
             return (C)setLogBeansByVerifyFeature(bean,(java.util.Collection<FlLogBean>)importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
     //////////////////////////////////////
@@ -523,8 +540,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     //3.2.4 GET IMPORTED
     public List<FlFaceBean> getFaceBeansByFeatureMd5AsList(FlFeatureBean bean,int startRow, int numRows) throws DAOException
     {
-        if(null == bean)
+        if(null == bean){
             return new java.util.ArrayList<FlFaceBean>();
+        }
         FlFaceBean other = new FlFaceBean();
         other.setFeatureMd5(bean.getMd5());
         return instanceOfFlFaceManager().loadUsingTemplateAsList(other,startRow,numRows);
@@ -634,8 +652,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     //3.2.4 GET IMPORTED
     public List<FlLogBean> getLogBeansByVerifyFeatureAsList(FlFeatureBean bean,int startRow, int numRows) throws DAOException
     {
-        if(null == bean)
+        if(null == bean){
             return new java.util.ArrayList<FlLogBean>();
+        }
         FlLogBean other = new FlLogBean();
         other.setVerifyFeature(bean.getMd5());
         return instanceOfFlLogManager().loadUsingTemplateAsList(other,startRow,numRows);
@@ -695,9 +714,12 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         , FlPersonBean refPersonByPersonId 
         , FlFaceBean[] impFaceByFeatureMd5 , FlLogBean[] impLogByVerifyFeature ) throws DAOException
     {
-        if(null == bean) return null;
-        if(null != refPersonByPersonId)
+        if(null == bean) {
+            return null;
+        }
+        if(null != refPersonByPersonId){
             this.setReferencedByPersonId(bean,refPersonByPersonId);
+        }
         bean = this.save( bean );
         this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
         instanceOfFlFaceManager().save( impFaceByFeatureMd5 );
@@ -736,7 +758,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         , FlPersonBean refPersonByPersonId 
         , java.util.Collection<FlFaceBean> impFaceByFeatureMd5 , java.util.Collection<FlLogBean> impLogByVerifyFeature ) throws DAOException
     {
-        if(null == bean) return null;
+        if(null == bean) {
+            return null;
+        }
         this.setReferencedByPersonId(bean,refPersonByPersonId);
         bean = this.save( bean );
         this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
@@ -774,10 +798,12 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     @Override
     public FlFeatureBean save(FlFeatureBean bean,Object ...args) throws DAOException
     {
-        if(null == args)
+        if(null == args){
             save(bean);
-        if(args.length > 3)
+        }
+        if(args.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlPersonBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlPersonBean");
         }
@@ -804,10 +830,12 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     @Override
     public FlFeatureBean saveCollection(FlFeatureBean bean,Object ...args) throws DAOException
     {
-        if(null == args)
+        if(null == args){
             save(bean);
-        if(args.length > 3)
+        }
+        if(args.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlPersonBean)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlPersonBean");
         }
@@ -841,8 +869,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         switch(fkIndex){
         case FL_FEATURE_FK_PERSON_ID:
             return  (T)this.getReferencedByPersonId(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     /**
@@ -861,8 +890,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         switch(fkIndex){
         case FL_FEATURE_FK_PERSON_ID:
             return  (T)this.setReferencedByPersonId(bean, (FlPersonBean)beanToSet);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
      
     //////////////////////////////////////
@@ -880,7 +910,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     //5.1 GET REFERENCED VALUE
     public FlPersonBean getReferencedByPersonId(FlFeatureBean bean) throws DAOException
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByPersonId(instanceOfFlPersonManager().loadByPrimaryKey(bean.getPersonId())); 
         return bean.getReferencedByPersonId();
     }
@@ -976,45 +1008,45 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         {
             c = this.getConnection();
             this.listenerContainer.beforeInsert(bean); // listener callback
-            int _dirtyCount = 0;
+            int dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_feature (");
 
             if (bean.checkMd5Modified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("md5");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkPersonIdModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("person_id");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkFeatureModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("feature");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkUpdateTimeModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("update_time");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             sql.append(") values (");
-            if(_dirtyCount > 0) {
+            if(dirtyCount > 0) {
                 sql.append("?");
-                for(int i = 1; i < _dirtyCount; i++) {
+                for(int i = 1; i < dirtyCount; i++) {
                     sql.append(",?");
                 }
             }
@@ -1112,14 +1144,14 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
 
-            int _dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
+            int dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
 
-            if (_dirtyCount == 0) {
+            if (dirtyCount == 0) {
                 // System.out.println("The bean to look is not initialized... do not update.");
                 return bean;
             }
 
-            if (bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5()); }
+            if (bean.getMd5() == null) { ps.setNull(++dirtyCount, Types.CHAR); } else { ps.setString(++dirtyCount, bean.getMd5()); }
             ps.executeUpdate();
             bean.resetIsModified();
             this.listenerContainer.afterUpdate(bean); // listener callback
@@ -1231,8 +1263,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                                     ResultSet.CONCUR_READ_ONLY);
             this.fillPreparedStatement(ps, bean, SEARCH_EXACT, false);
 
-            int _rows = ps.executeUpdate();
-            return _rows;
+            return ps.executeUpdate();
         }
         catch(SQLException e)
         {
@@ -1302,18 +1333,21 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @return a list of FlFeatureBean
      * @throws DAOException
      */
+    @Override
     public List<FlFeatureBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException
     {
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
+        }
         switch(keyIndex){
         case FL_FEATURE_INDEX_PERSON_ID:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'person_id' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof Integer))
+            if(null != keys[0] && !(keys[0] instanceof Integer)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-
+            }
             return this.loadByIndexPersonIdAsList((Integer)keys[0]);        
         }
         default:
@@ -1329,17 +1363,21 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @return the number of deleted objects
      * @throws DAOException
      */
+    @Override
     public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException
     {
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
+        }
         switch(keyIndex){
         case FL_FEATURE_INDEX_PERSON_ID:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'person_id' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof Integer))
+            if(null != keys[0] && !(keys[0] instanceof Integer)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+            }
             return this.deleteByIndexPersonId((Integer)keys[0]);
         }
         default:
@@ -1431,6 +1469,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @throws DAOException
      */
     //20
+    @Override
     public int countUsingTemplate(FlFeatureBean bean, int searchType) throws DAOException
     {
         Connection c = null;
@@ -1485,12 +1524,12 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         if (bean == null) {
             return 0;
         }
-        int _dirtyCount = 0;
+        int dirtyCount = 0;
         String sqlEqualsOperation = searchType == SEARCH_EXACT ? "=" : " like ";
         try
         {
             if (bean.checkMd5Modified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getMd5() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 IS NULL");
                 } else {
@@ -1498,7 +1537,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                 }
             }
             if (bean.checkPersonIdModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getPersonId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_id IS NULL");
                 } else {
@@ -1506,7 +1545,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                 }
             }
             if (bean.checkFeatureModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getFeature() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("feature IS NULL");
                 } else {
@@ -1514,7 +1553,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                 }
             }
             if (bean.checkUpdateTimeModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getUpdateTime() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("update_time IS NULL");
                 } else {
@@ -1526,7 +1565,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         {
             sqlEqualsOperation = null;
         }
-        return _dirtyCount;
+        return dirtyCount;
     }
 
     /**
@@ -1542,49 +1581,49 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         if (bean == null) {
             return 0;
         }
-        int _dirtyCount = 0;
+        int dirtyCount = 0;
         try
         {
             if (bean.checkMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "]");
-                        if (bean.getMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5()); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getMd5() + "]");
+                        if (bean.getMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getMd5()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "%]");
-                        if ( bean.getMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getMd5() + "%]");
+                        if ( bean.getMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getMd5() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "]");
-                        if ( bean.getMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5()); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getMd5() + "]");
+                        if ( bean.getMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "%]");
-                        if (bean.getMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getMd5() + "%]");
+                        if (bean.getMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getMd5() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
             if (bean.checkPersonIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPersonId() + "]");
-                if (bean.getPersonId() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonId()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getPersonId() + "]");
+                if (bean.getPersonId() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getPersonId()); }
             }
             if (bean.checkFeatureModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFeature() + "]");
-                if (bean.getFeature() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { Manager.setBytes(Types.LONGVARBINARY,ps, ++_dirtyCount, bean.getFeature()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getFeature() + "]");
+                if (bean.getFeature() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.LONGVARBINARY);} } else { Manager.setBytes(Types.LONGVARBINARY,ps, ++dirtyCount, bean.getFeature()); }
             }
             if (bean.checkUpdateTimeModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getUpdateTime() + "]");
-                if (bean.getUpdateTime() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getUpdateTime().getTime())); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getUpdateTime() + "]");
+                if (bean.getUpdateTime() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TIMESTAMP);} } else { ps.setTimestamp(++dirtyCount, new java.sql.Timestamp(bean.getUpdateTime().getTime())); }
             }
         }
         catch(SQLException e)
         {
             throw new DataAccessException(e);
         }
-        return _dirtyCount;
+        return dirtyCount;
     }
 
 
@@ -1641,25 +1680,36 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         try{
             int count = 0;
             if(0!=numRows){
-                if( startRow<1 )
+                if( startRow<1 ){
                     throw new IllegalArgumentException("invalid argument:startRow (must >=1)");
-                if( null==action || null==rs )
-                    throw new IllegalArgumentException("invalid argument:action OR rs (must not be null)");                    
-                for(;startRow>1&&rs.next();--startRow);//skip to last of startRow
+                }
+                if( null==action || null==rs ){
+                    throw new IllegalArgumentException("invalid argument:action OR rs (must not be null)");
+                }
+                for(;startRow > 1 && rs.next();){
+                    --startRow;
+                    //skip to last of startRow
+                }
                 if (fieldList == null) {
-                    if(numRows<0)
-                        for(;rs.next();++count)
+                    if(numRows<0){
+                        for(;rs.next();++count){
                             action.call(decodeRow(rs, action.getBean()));
-                    else
-                        for(;rs.next() && count<numRows;++count)
+                        }
+                    }else{
+                        for(;rs.next() && count<numRows;++count){
                             action.call(decodeRow(rs, action.getBean()));
+                        }
+                    }
                 }else {
-                    if(numRows<0)
-                        for(;rs.next();++count)
+                    if(numRows<0){
+                        for(;rs.next();++count){
                             action.call(decodeRow(rs, fieldList,action.getBean()));
-                    else
-                        for(;rs.next() && count<numRows;++count)
+                        }
+                    }else{
+                        for(;rs.next() && count<numRows;++count){
                             action.call(decodeRow(rs, fieldList,action.getBean()));
+                        }
+                    }
                 }
             }
             return count;
@@ -1680,8 +1730,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     //29
     public FlFeatureBean decodeRow(ResultSet rs,FlFeatureBean bean) throws DAOException
     {
-        if(null==bean)
+        if(null==bean){
             bean = this.createBean();
+        }
         try
         {
             bean.setMd5(rs.getString(1));
@@ -1710,8 +1761,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     //30
     public FlFeatureBean decodeRow(ResultSet rs, int[] fieldList,FlFeatureBean bean) throws DAOException
     {
-        if(null==bean)
+        if(null==bean){
             bean = this.createBean();
+        }
         int pos = 0;
         try
         {
@@ -1928,8 +1980,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     //37
     @Override
     public void fire(TableListener.Event event, FlFeatureBean bean) throws DAOException{
-        if(null == event)
+        if(null == event){
             throw new NullPointerException();
+        }
         event.fire(listenerContainer, bean);
     }
     
@@ -2024,7 +2077,11 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     //43
     @Override
     public boolean isPrimaryKey(String column){
-        for(String c:PRIMARYKEY_NAMES)if(c.equalsIgnoreCase(column))return true;
+        for(String c:PRIMARYKEY_NAMES){
+            if(c.equalsIgnoreCase(column)){
+                return true;
+            }
+        }
         return false;
     }
     
@@ -2040,8 +2097,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                 for (int i = 0; i < argList.length; i++) {
                     if (argList[i].getClass().equals(byte[].class)) {
                         ps.setBytes(i + 1, (byte[]) argList[i]);
-                    } else
+                    } else {
                         ps.setObject(i + 1, argList[i]);
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -2076,7 +2134,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         return Manager.getInstance().runAsTransaction(fun);
     }
     
-    class DeleteBeanAction extends Action.Adapter<FlFeatureBean>{
+    class DeleteBeanAction extends Action.BaseAdapter<FlFeatureBean>{
         private final AtomicInteger count=new AtomicInteger(0);
         @Override
         public void call(FlFeatureBean bean) throws DAOException {
@@ -2093,7 +2151,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      */
     //45
     public List<String> toPrimaryKeyList(FlFeatureBean... array){        
-        if(null == array)return new java.util.ArrayList<String>();
+        if(null == array){
+            return new java.util.ArrayList<String>();
+        }
         java.util.ArrayList<String> list = new java.util.ArrayList<String>(array.length);
         for(FlFeatureBean bean:array){
             list.add(null == bean ? null : bean.getMd5());
@@ -2106,7 +2166,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      */
     //46
     public List<String> toPrimaryKeyList(java.util.Collection<FlFeatureBean> collection){        
-        if(null == collection)return new java.util.ArrayList<String>();
+        if(null == collection){
+            return new java.util.ArrayList<String>();
+        }
         java.util.ArrayList<String> list = new java.util.ArrayList<String>(collection.size());
         for(FlFeatureBean bean:collection){
             list.add(null == bean ? null : bean.getMd5());

@@ -46,20 +46,20 @@ public  class FlLogLightBean
     private java.util.Date verifyTime;
 
     /** flag whether {@code this} can be modified */
-    private Boolean _immutable;
+    private Boolean immutable;
     /** columns modified flag */
     private long modified;
     /** columns initialized flag */
     private long initialized;
-    private boolean _isNew;        
+    private boolean isNew;        
     /** 
      * set {@code this} as immutable object
      * @return {@code this} 
      */
     public synchronized FlLogLightBean immutable(Boolean immutable) {
-        if(this._immutable != immutable){
+        if(this.immutable != immutable){
             checkMutable();
-            this._immutable = immutable;
+            this.immutable = immutable;
         }
         return this;
     }
@@ -67,35 +67,29 @@ public  class FlLogLightBean
      * @return {@code true} if {@code this} is a mutable object  
      */
     public boolean mutable(){
-        return Boolean.TRUE != this._immutable;
+        return Boolean.TRUE != this.immutable;
     }
     /**
      * @return {@code this}
      * @throws IllegalStateException if {@code this} is a immutable object 
      */
     private FlLogLightBean checkMutable(){
-        if(Boolean.TRUE == this._immutable)
+        if(Boolean.TRUE == this.immutable){
             throw new IllegalStateException("this is a immutable object");
+        }
         return this;
     }
-    /**
-     * Determines if the current object is new.
-     *
-     * @return true if the current object is new, false if the object is not new
-     */
+    @Override
     public boolean isNew()
     {
-        return _isNew;
+        return this.isNew;
     }
 
-    /**
-     * Specifies to the object if it has been set as new.
-     *
-     * @param isNew the boolean value to be assigned to the isNew field
-     */
+
+    @Override
     public void isNew(boolean isNew)
     {
-        this._isNew = isNew;
+        this.isNew = isNew;
     }
     /**
      * Specifies to the object if it has been set as new.
@@ -104,7 +98,7 @@ public  class FlLogLightBean
      */
     public void setNew(boolean isNew)
     {
-        this._isNew = isNew;
+        this.isNew = isNew;
     }
     /**
      * @return the modified status of columns
@@ -520,24 +514,13 @@ public  class FlLogLightBean
         return 0L !=  (initialized & FL_LOG_LIGHT_ID_VERIFY_TIME_MASK);
     }
 
-    /**
-     * Determines if the object has been modified since the last time this method was called.
-     * <br>
-     * We can also determine if this object has ever been modified since its creation.
-     *
-     * @return true if the object has been modified, false if the object has not been modified
-     */
+    @Override
     public boolean isModified()
     {
         return 0 != modified;
     }
   
-    /**
-     * Determines if the {@code column} has been modified.
-     * @param columnID
-     * @return true if the field has been modified, false if the field has not been modified
-     * @author guyadong
-     */
+    @Override
     public boolean isModified(int columnID){
         switch ( columnID ){
         case FL_LOG_LIGHT_ID_ID:
@@ -556,14 +539,8 @@ public  class FlLogLightBean
             return false;
         }        
     }
-    /**
-     * Determines if the {@code column} has been initialized.
-     * <br>
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     * @param columnID
-     * @return true if the field has been initialized, false otherwise
-     * @author guyadong
-     */
+
+    @Override
     public boolean isInitialized(int columnID){
         switch(columnID) {
         case FL_LOG_LIGHT_ID_ID:
@@ -578,43 +555,29 @@ public  class FlLogLightBean
             return checkPapersNumInitialized();
         case FL_LOG_LIGHT_ID_VERIFY_TIME:
             return checkVerifyTimeInitialized();
+        default:
+            return false;
         }
-        return false;
     }
     
-    /**
-     * Determines if the {@code column} has been modified.
-     * @param column
-     * @return true if the field has been modified, false if the field has not been modified
-     * @author guyadong
-     */
+    @Override
     public boolean isModified(String column){        
         return isModified(columnIDOf(column));
     }
 
-    /**
-     * Determines if the {@code column} has been initialized.
-     * <br>
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     * @param column
-     * @return true if the field has been initialized, false otherwise
-     * @author guyadong
-     */
+    @Override
     public boolean isInitialized(String column){
         return isInitialized(columnIDOf(column));
     }
     
-    /**
-     * Resets the object modification status to 'not modified'.
-     */
+    @Override
     public void resetIsModified()
     {
         checkMutable();
         modified = 0L;
     }
-    /**
-     * Resets the primary keys (  ) modification status to 'not modified'.
-     */
+
+    @Override
     public void resetPrimaryKeysModified()
     {
         // columns is null or empty;
@@ -647,7 +610,7 @@ public  class FlLogLightBean
         this.papersType = null;
         this.papersNum = null;
         this.verifyTime = null/* DEFAULT:'0000-00-00 00:00:00'*/;
-        this._isNew = true;
+        this.isNew = true;
         this.modified = 0L;
         this.initialized = (FL_LOG_LIGHT_ID_ID_MASK | FL_LOG_LIGHT_ID_PERSON_ID_MASK);
     }
@@ -688,27 +651,39 @@ public  class FlLogLightBean
         StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
         int count = 0;        
         if(checkIdInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("id=").append(getId());
         }
         if(checkPersonIdInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("person_id=").append(getPersonId());
         }
         if(checkNameInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("name=").append(getName());
         }
         if(checkPapersTypeInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("papers_type=").append(getPapersType());
         }
         if(checkPapersNumInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("papers_num=").append(getPapersNum());
         }
         if(checkVerifyTimeInitialized()){
-            if(count++ >0)builder.append(",");
+            if(count++ >0){
+                builder.append(",");
+            }
             builder.append("verify_time=").append(getVerifyTime());
         }
         builder.append("]");
@@ -769,7 +744,9 @@ public  class FlLogLightBean
     public static final List<FlLogLightBean> replaceNull(List<FlLogLightBean> source){
         if(null != source){
             for(int i = 0,endIndex = source.size();i<endIndex;++i){
-                if(null == source.get(i))source.set(i, NULL);
+                if(null == source.get(i)){
+                    source.set(i, NULL);
+                }
             }
         }
         return source;
@@ -781,69 +758,57 @@ public  class FlLogLightBean
     public static final List<FlLogLightBean> replaceNullInstance(List<FlLogLightBean> source){
         if(null != source){
             for(int i = 0,endIndex = source.size();i<endIndex;++i){
-                if(source.get(i).checkNULL())source.set(i, null);
+                if(source.get(i).checkNULL()){
+                    source.set(i, null);
+                }
             }
         }
         return source;
     }
-    /**
-     * Copies the passed bean into the current bean.
-     *
-     * @param bean the bean to copy into the current bean
-     * @return always {@code bean}
-     */
+    @Override
     public FlLogLightBean copy(FlLogLightBean bean)
     {
         return copy(bean,new int[]{});
     }
-    /**
-     * Copies the passed bean into the current bean.
-     *
-     * @param bean the bean to copy into the current bean
-     * @param fieldList the column id list to copy into the current bean
-     * @return always {@code bean}
-     */
+    @Override
     public FlLogLightBean copy(FlLogLightBean bean, int... fieldList)
     {
-        if (null == fieldList || 0 == fieldList.length)
+        if (null == fieldList || 0 == fieldList.length){
             for (int i = 0; i < 6; ++i) {
-                if( bean.isInitialized(i))
+                if( bean.isInitialized(i)){
                     setValue(i, bean.getValue(i));
+                }
             }
-        else
+        }
+        else{
             for (int i = 0; i < fieldList.length; ++i) {
-                if( bean.isInitialized(fieldList[i]))
+                if( bean.isInitialized(fieldList[i])){
                     setValue(fieldList[i], bean.getValue(fieldList[i]));
+                }
             }
+        }
         return this;
     }
         
-    /**
-     * Copies the passed bean into the current bean.
-     *
-     * @param bean the bean to copy into the current bean
-     * @param fieldList the column name list to copy into the current bean
-     * @return always {@code bean}
-     */
+    @Override
     public FlLogLightBean copy(FlLogLightBean bean, String... fieldList)
     {
-        if (null == fieldList || 0 == fieldList.length)
+        if (null == fieldList || 0 == fieldList.length){
             copy(bean,(int[])null);
-        else{
+        }else{
             int field;
             for (int i = 0; i < fieldList.length; i++) {
                 field = columnIDOf(fieldList[i].trim());
-                if(bean.isInitialized(field))
+                if(bean.isInitialized(field)){
                     setValue(field, bean.getValue(field));
+                }
             }
         }
         return this;
     }
 
-    /**
-     * return a object representation of the given column id
-     */
     @SuppressWarnings("unchecked")
+    @Override
     public <T>T getValue(int columnID)
     {
         switch( columnID ){
@@ -859,53 +824,58 @@ public  class FlLogLightBean
             return (T)getPapersNum();        
         case FL_LOG_LIGHT_ID_VERIFY_TIME: 
             return (T)getVerifyTime();        
+        default:
+            return null;
         }
-        return null;
     }
 
-    /**
-     * set a value representation of the given column id
-     */
+    @Override
     public <T> void setValue(int columnID,T value)
     {
         switch( columnID ) {
-        case FL_LOG_LIGHT_ID_ID:        
+        case FL_LOG_LIGHT_ID_ID:
             setId((Integer)value);
-        case FL_LOG_LIGHT_ID_PERSON_ID:        
+            break;
+        case FL_LOG_LIGHT_ID_PERSON_ID:
             setPersonId((Integer)value);
-        case FL_LOG_LIGHT_ID_NAME:        
+            break;
+        case FL_LOG_LIGHT_ID_NAME:
             setName((String)value);
-        case FL_LOG_LIGHT_ID_PAPERS_TYPE:        
+            break;
+        case FL_LOG_LIGHT_ID_PAPERS_TYPE:
             setPapersType((Integer)value);
-        case FL_LOG_LIGHT_ID_PAPERS_NUM:        
+            break;
+        case FL_LOG_LIGHT_ID_PAPERS_NUM:
             setPapersNum((String)value);
-        case FL_LOG_LIGHT_ID_VERIFY_TIME:        
+            break;
+        case FL_LOG_LIGHT_ID_VERIFY_TIME:
             setVerifyTime((java.util.Date)value);
+            break;
+        default:
+            break;
         }
     }
     
-    /**
-     * return a object representation of the given field
-     */
-    public <T>T getValue(String column)
+    @Override
+    public <T> T getValue(String column)
     {
         return getValue(columnIDOf(column));
     }
 
-    /**
-     * set a value representation of the given field
-     */
-    public <T>void setValue(String column,T value)
+    @Override
+    public <T> void setValue(String column,T value)
     {
         setValue(columnIDOf(column),value);
     }
-
+    
+    /** return column id for the given field name or negative if {@code column} is invalid name */
     public static int columnIDOf(String column){
         int index = FL_LOG_LIGHT_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_LOG_LIGHT_JAVA_FIELDS_LIST.indexOf(column);
-        return index;    
+        return  index < 0 
+            ? FL_LOG_LIGHT_JAVA_FIELDS_LIST.indexOf(column)
+            : index;
     }
+    
     public static final Builder builder(){
         return new Builder();
     }
@@ -939,8 +909,9 @@ public  class FlLogLightBean
         }
         /** set a bean as template,must not be {@code null} */
         public Builder template(FlLogLightBean bean){
-            if(null == bean)
+            if(null == bean){
                 throw new NullPointerException();
+            }
             TEMPLATE.set(bean);
             return this;
         }

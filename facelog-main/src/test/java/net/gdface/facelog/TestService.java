@@ -17,7 +17,7 @@ public interface TestService {
     @ThriftMethod
     public void setBean(TestBean bean);
     @ThriftMethod
-    public TestBean getBean() throws ServiceRuntime;
+    public TestBean getBean() throws ServiceRuntimeException;
     @ThriftMethod
     public DeviceBean getBean3();
 }

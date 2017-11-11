@@ -63,8 +63,9 @@ public class Heartbeat extends Thread implements CommonConstant{
 	}
 
 	public Heartbeat setInterval(long time,TimeUnit timeUnit){
-		if(time > 0 )
+		if(time > 0 ){
 			this.intervalMills = TimeUnit.MILLISECONDS.convert(time, timeUnit);
+		}
 		return this;
 	}
 	
@@ -74,8 +75,9 @@ public class Heartbeat extends Thread implements CommonConstant{
 	 * @return
 	 */
 	public Heartbeat setExpire(long time){
-		if(time > 0)
+		if(time > 0){
 			this.table.setExpire(time, TimeUnit.SECONDS);
+		}
 		return this;
 	}
 }

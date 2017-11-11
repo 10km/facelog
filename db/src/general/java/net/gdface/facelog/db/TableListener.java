@@ -8,7 +8,6 @@
 package net.gdface.facelog.db;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 
 /**
  * Listener that is notified of table changes.
@@ -104,7 +103,9 @@ public interface TableListener<B>{
          * @param bean
          */
         public <B> void fire(ListenerContainer<B> container,B bean) {
-            if(null == container || null == bean)return;
+            if(null == container || null == bean){
+                return;
+            }
             switch(this){
             case INSERT:
                 container.afterInsert(bean);
@@ -115,10 +116,14 @@ public interface TableListener<B>{
             case DELETE:
                 container.afterDelete(bean);
                 break;
+            default:
+                break;
             }
         }
         public <B extends BaseBean<B>> void fire(TableManager<B > manager,B bean) {
-            if(null == manager || null == bean)return;
+            if(null == manager || null == bean){
+                return;
+            }
             manager.fire(this, bean);
         }
     }
@@ -179,8 +184,9 @@ public interface TableListener<B>{
         }
     
         public synchronized boolean add(TableListener<B> e) {
-            if(null == e)
+            if(null == e){
                 throw new NullPointerException();
+            }
             return listeners.add(e);
         }
     

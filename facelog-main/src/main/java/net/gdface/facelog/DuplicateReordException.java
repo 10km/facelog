@@ -8,21 +8,21 @@ import com.facebook.swift.codec.ThriftStruct;
  *
  */
 @ThriftStruct
-public final class DuplicateReord extends Exception {
+public final class DuplicateReordException extends Exception {
 	private static final long serialVersionUID = 5368342551644905292L;
 
-	public DuplicateReord() {
+	public DuplicateReordException() {
 	}
 
-	public DuplicateReord(String message) {
+	public DuplicateReordException(String message) {
 		super(message);
 	}
 
-	public DuplicateReord(Throwable cause) {
+	public DuplicateReordException(Throwable cause) {
 		super(cause);
 	}
 
-	public DuplicateReord(String message, Throwable cause) {
+	public DuplicateReordException(String message, Throwable cause) {
 		super(message, cause);
 	}
 }

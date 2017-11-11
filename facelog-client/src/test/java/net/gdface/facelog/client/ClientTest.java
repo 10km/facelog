@@ -6,7 +6,11 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class TestClient implements CommonConstant {
+/**
+ * @author guyadong
+ *
+ */
+public class ClientTest implements CommonConstant {
 
 	private static IFaceLogClient facelogClient;
 
@@ -28,7 +32,7 @@ public class TestClient implements CommonConstant {
 			logger.info("person = {}", newPerson.toString());
 			PersonBean person = facelogClient.getPerson(newPerson.getId());
 			logger.info("person = {}", person.toString());
-		} catch(ServiceRuntime e){
+		} catch(ServiceRuntimeException e){
 			e.printServerStackTrace();
 		}catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -43,7 +47,7 @@ public class TestClient implements CommonConstant {
 			for(Integer id:devices){
 				System.out.println(id);
 			}
-		}catch(ServiceRuntime e){
+		}catch(ServiceRuntimeException e){
 			e.printServerStackTrace();
 		}catch (Exception e) {
 			logger.error(e.getMessage(), e);

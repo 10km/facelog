@@ -13,41 +13,41 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import net.gdface.facelog.db.TableLoadCaching;
+import net.gdface.facelog.db.BaseTableLoadCaching;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 import net.gdface.facelog.db.ITableCache.UpdateStrategy;
-import net.gdface.facelog.db.JunctionTableCache;
+import net.gdface.facelog.db.BaseJunctionTableCache;
 
 
 import net.gdface.facelog.db.PermitBean;
 
 /**
- * cache manager for PermitBean base {@link JunctionTableCache}<br>
+ * cache manager for PermitBean base {@link BaseJunctionTableCache}<br>
  * primary key {@code(device_group_id ->K1,person_group_id -> K2)}
  * @author guyadong
  *
  */
-public class PermitCache extends JunctionTableCache<Integer,Integer, PermitBean> {
+public class PermitCache extends BaseJunctionTableCache<Integer,Integer, PermitBean> {
     private final PermitManager manager = PermitManager.getInstance();
     /** constructor<br>
-     * @see {@link TableLoadCaching#TableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
      */
     public PermitCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
         super(updateStragey,maximumSize, duration, unit);
         manager.bindForeignKeyListenerForDeleteRule();
     }
     public PermitCache(long maximumSize, long duration, TimeUnit unit) {
-        this(TableLoadCaching.DEFAULT_STRATEGY,maximumSize,duration,unit);
+        this(BaseTableLoadCaching.DEFAULT_STRATEGY,maximumSize,duration,unit);
     }
     public PermitCache(long maximumSize, long durationMinutes) {
-        this(maximumSize, durationMinutes, TableLoadCaching.DEFAULT_TIME_UNIT);
+        this(maximumSize, durationMinutes, BaseTableLoadCaching.DEFAULT_TIME_UNIT);
     }
 
     public PermitCache(long maximumSize) {
-        this(maximumSize,TableLoadCaching.DEFAULT_DURATION,TableLoadCaching.DEFAULT_TIME_UNIT);
+        this(maximumSize,BaseTableLoadCaching.DEFAULT_DURATION,BaseTableLoadCaching.DEFAULT_TIME_UNIT);
     }
     public PermitCache() {
-        this(TableLoadCaching.DEFAULT_CACHE_MAXIMUMSIZE,TableLoadCaching.DEFAULT_DURATION,TableLoadCaching.DEFAULT_TIME_UNIT);
+        this(BaseTableLoadCaching.DEFAULT_CACHE_MAXIMUMSIZE,BaseTableLoadCaching.DEFAULT_DURATION,BaseTableLoadCaching.DEFAULT_TIME_UNIT);
     }
     
     @Override
@@ -68,53 +68,56 @@ public class PermitCache extends JunctionTableCache<Integer,Integer, PermitBean>
     }
     @Override
     protected Object loadfromDatabase(Key key)throws Exception {
-        if(null != key.k1 && null != key.k2)
+        if(null != key.k1 && null != key.k2){
             return manager.loadByPrimaryKey(key.k1, key.k2);
+        }
         PermitBean bean = new PermitBean();
         if(null != key.k1){
             bean.setDeviceGroupId(key.k1);
         }else if(null != key.k2){
             bean.setPersonGroupId(key.k2);
-        }else
+        }else{
             throw new ObjectRetrievalException();
+        }
         List<PermitBean> list = manager.loadUsingTemplateAsList(bean);
-        if(list.isEmpty())
+        if(list.isEmpty()){
             throw new ObjectRetrievalException();
+        }
         return list;
     }
     /** 
      * return all matched beans on field fl_permit(device_group_id) with deviceGroupId 
-     * @see JunctionTableCache#getBeansByK1(Integer)
+     * @see BaseJunctionTableCache#getBeansByK1(Integer)
      */
     public Set<PermitBean> getBeanByDeviceGroupId(Integer deviceGroupId) throws ExecutionException{
         return getBeansByK1(deviceGroupId);
     }
     /** 
      * return all matched beans on field fl_permit(device_group_id) with deviceGroupId 
-     * @see JunctionTableCache#getBeansByK1Unchecked(Integer)
+     * @see BaseJunctionTableCache#getBeansByK1Unchecked(Integer)
      */
     public Set<PermitBean> getBeanByDeviceGroupIdUnchecked(Integer deviceGroupId){
         return getBeansByK1Unchecked(deviceGroupId);
     }
     /** 
      * return all matched beans on field fl_permit(person_group_id) with personGroupId 
-     * @see JunctionTableCache#getBeansByK2(Integer)
+     * @see BaseJunctionTableCache#getBeansByK2(Integer)
      */
     public Set<PermitBean> getBeanByPersonGroupId(Integer personGroupId) throws ExecutionException{
         return getBeansByK2(personGroupId);
     }
     /** 
      * return all matched beans on field fl_permit(person_group_id) with personGroupId 
-     * @see JunctionTableCache#getBeansByK2Unchecked(Integer)
+     * @see BaseJunctionTableCache#getBeansByK2Unchecked(Integer)
      */
     public Set<PermitBean> getBeanByPersonGroupIdUnchecked(Integer personGroupId){
         return getBeansByK2Unchecked(personGroupId);
     }
-    /** see also {@link JunctionTableCache#getBean(Integer,Integer)} */
+    /** see also {@link BaseJunctionTableCache#getBean(Integer,Integer)} */
     public PermitBean getBeanByPrimaryKey(Integer deviceGroupId,Integer personGroupId) throws ExecutionException{
         return getBean(deviceGroupId,personGroupId);
     }
-    /** see also {@link JunctionTableCache#getBeanUnchecked(Integer,Integer)} */
+    /** see also {@link BaseJunctionTableCache#getBeanUnchecked(Integer,Integer)} */
     public PermitBean getBeanByPrimaryKeyUnchecked(Integer deviceGroupId,Integer personGroupId){
         return getBeanUnchecked(deviceGroupId,personGroupId);
     }

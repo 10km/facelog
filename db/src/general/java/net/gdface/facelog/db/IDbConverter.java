@@ -24,19 +24,64 @@ public interface IDbConverter<
                             N_PERSONGROUP,
                             N_STORE,
                             N_LOGLIGHT> {
+    /**
+     * return a converter {@code DeviceBean -> N_DEVICE}
+     * @return
+     */
     public abstract IBeanConverter<DeviceBean, N_DEVICE> getDeviceBeanConverter();
+    /**
+     * return a converter {@code DeviceGroupBean -> N_DEVICEGROUP}
+     * @return
+     */
     public abstract IBeanConverter<DeviceGroupBean, N_DEVICEGROUP> getDeviceGroupBeanConverter();
+    /**
+     * return a converter {@code FaceBean -> N_FACE}
+     * @return
+     */
     public abstract IBeanConverter<FaceBean, N_FACE> getFaceBeanConverter();
+    /**
+     * return a converter {@code FeatureBean -> N_FEATURE}
+     * @return
+     */
     public abstract IBeanConverter<FeatureBean, N_FEATURE> getFeatureBeanConverter();
+    /**
+     * return a converter {@code ImageBean -> N_IMAGE}
+     * @return
+     */
     public abstract IBeanConverter<ImageBean, N_IMAGE> getImageBeanConverter();
+    /**
+     * return a converter {@code LogBean -> N_LOG}
+     * @return
+     */
     public abstract IBeanConverter<LogBean, N_LOG> getLogBeanConverter();
+    /**
+     * return a converter {@code PermitBean -> N_PERMIT}
+     * @return
+     */
     public abstract IBeanConverter<PermitBean, N_PERMIT> getPermitBeanConverter();
+    /**
+     * return a converter {@code PersonBean -> N_PERSON}
+     * @return
+     */
     public abstract IBeanConverter<PersonBean, N_PERSON> getPersonBeanConverter();
+    /**
+     * return a converter {@code PersonGroupBean -> N_PERSONGROUP}
+     * @return
+     */
     public abstract IBeanConverter<PersonGroupBean, N_PERSONGROUP> getPersonGroupBeanConverter();
+    /**
+     * return a converter {@code StoreBean -> N_STORE}
+     * @return
+     */
     public abstract IBeanConverter<StoreBean, N_STORE> getStoreBeanConverter();
+    /**
+     * return a converter {@code LogLightBean -> N_LOGLIGHT}
+     * @return
+     */
     public abstract IBeanConverter<LogLightBean, N_LOGLIGHT> getLogLightBeanConverter();
 
     /**
+     * return a converter {@code L - > R}
      * @param <L> general type
      * @param <R> native type
      * @param lClass
@@ -45,6 +90,7 @@ public interface IDbConverter<
      */
     public abstract<L, R> IBeanConverter<L,R> getBeanConverter(Class<L> lClass,Class<R> rClass);
     /**
+     * set converter 
      * @param <L> general type
      * @param <R> native type
      * @param lClass

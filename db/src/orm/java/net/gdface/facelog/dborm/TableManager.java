@@ -19,16 +19,29 @@ import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 public interface TableManager<B extends BaseBean<B>> extends Constant {
 
     public interface Action<B>{
-        public abstract class Adapter<B> implements Action<B>{
+        public abstract class BaseAdapter<B> implements Action<B>{
             @Override
             public B getBean() {return null;}            
         }
+        /**
+         * do action for {@code bean}
+         * @param bean input bean
+         * @throws DAOException
+         */
         void call(B bean)throws DAOException;
+        /**
+         * return a B instance
+         * @return B bean
+         */
         B getBean();
     }
-    public abstract static class Adapter<B extends BaseBean<B>> implements TableManager<B>{
-        protected abstract Class<B> _beanType();
-       /**
+    public abstract static class BaseAdapter<B extends BaseBean<B>> implements TableManager<B>{
+        /**
+         * return the B bean class
+         * @return 
+         */
+        protected abstract Class<B> beanType();
+        /**
          * Insert the B bean into the database.
          * 
          * @param bean the B bean to be saved
@@ -149,7 +162,7 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
         @SuppressWarnings("unchecked")
         @Override
         public B[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)throws DAOException{
-            return this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray((B[])java.lang.reflect.Array.newInstance(_beanType(),0));
+            return this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray((B[])java.lang.reflect.Array.newInstance(beanType(),0));
         }
 
         @Override
@@ -206,7 +219,7 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
         @SuppressWarnings("unchecked")
         @Override
         public B[] loadUsingTemplate(B bean, int startRow, int numRows, int searchType)throws DAOException{
-            return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray((B[])java.lang.reflect.Array.newInstance(_beanType(),0));
+            return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray((B[])java.lang.reflect.Array.newInstance(beanType(),0));
         }
 
         @Override
@@ -228,12 +241,14 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
         
         @Override
         public B save(B bean)throws DAOException{
-            if(null == bean)return null;
-            if (bean.isNew()) {
-                return this.insert(bean);
-            } else {
-                return this.update(bean);
+            if(null != bean){
+                if (bean.isNew()) {
+                    this.insert(bean);
+                } else {
+                    this.update(bean);
+                }
             }
+            return bean;
         }
         
         @Override
@@ -279,7 +294,7 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
         @SuppressWarnings("unchecked")
         @Override
         public B[] loadBySql(String sql, Object[] argList, int[] fieldList)throws DAOException{
-            return loadBySqlAsList(sql, argList, fieldList).toArray((B[])java.lang.reflect.Array.newInstance(_beanType(),0));
+            return loadBySqlAsList(sql, argList, fieldList).toArray((B[])java.lang.reflect.Array.newInstance(beanType(),0));
         }
 
         @Override
@@ -306,8 +321,9 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
                 }      
             }
             sql.append(" FROM " + this.getTableName() + " ");
-            if(null!=where)
+            if(null!=where){
                 sql.append(where);
+            }
             return sql.toString();
         }
 
@@ -371,7 +387,7 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
         @SuppressWarnings("unchecked")
         @Override
         public B[] loadByIndex(int keyIndex,Object ...keys)throws DAOException{
-            return this.loadByIndexAsList(keyIndex,keys).toArray((B[])java.lang.reflect.Array.newInstance(_beanType(),0));
+            return this.loadByIndexAsList(keyIndex,keys).toArray((B[])java.lang.reflect.Array.newInstance(beanType(),0));
         }
         
         @Override
@@ -426,13 +442,29 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
             return a == b || (a != null && a.equals(b));
         }
     }    
-    
+
+    /**
+     * return the all of filed names
+     * @return 
+     */     
     public String getFields();
     
+    /**
+     * return all of primary key names
+     * @return 
+     */     
     public String[] getPrimarykeyNames();
-    
+
+    /**
+     * return the table name
+     * @return 
+     */    
     public String getTableName();
         
+    /**
+     * return the all of full filed names
+     * @return 
+     */   
     public String getFullFields();
     
     /**

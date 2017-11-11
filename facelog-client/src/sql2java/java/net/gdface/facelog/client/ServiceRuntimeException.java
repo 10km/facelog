@@ -3,7 +3,7 @@
 // modified by guyadong from
 // sql2java original version https://sourceforge.net/projects/sql2java/ 
 // JDBC driver used at code generation time: com.mysql.jdbc.Driver
-// template: service.runtime.java.vm
+// template: service.runtime.exception.java.vm
 // ______________________________________________________
 package net.gdface.facelog.client;
 
@@ -14,14 +14,14 @@ import com.google.common.base.Preconditions;
 
 /**
  * 封装服务端调用产生的运行时异常<br>
- * 调用service端方法时产生的所有{@link RuntimeException}在抛出到客户端时被封装在{@link net.gdface.facelog.client.thrift.ServiceRuntime}中,
+ * 调用service端方法时产生的所有{@link RuntimeException}在抛出到客户端时被封装在{@link net.gdface.facelog.client.thrift.ServiceRuntimeException}中,
  * 捕获此异常可以获取服务端抛出的{@link RuntimeException}的详细信息<br>
  * 调用{@link #getServerStackTraceMessage()}可以获取服务器端的堆栈错误信息<br>
  * 调用{@link #printServerStackTrace()}控制台输出服务器端的堆栈错误信息<br>
  * @author guyadong
  *
  */
-public final class ServiceRuntime extends RuntimeException {
+public final class ServiceRuntimeException extends RuntimeException {
     private static final long serialVersionUID = 1L;
     /**
      * 服务器端错误堆栈信息
@@ -31,7 +31,7 @@ public final class ServiceRuntime extends RuntimeException {
     /**
      * @param cause
      */
-    ServiceRuntime(net.gdface.facelog.client.thrift.ServiceRuntime cause) {
+    ServiceRuntimeException(net.gdface.facelog.client.thrift.ServiceRuntimeException cause) {
         super(cause);
         serverStackTraceMessage = cause.getServerStackTraceMessage();
     }

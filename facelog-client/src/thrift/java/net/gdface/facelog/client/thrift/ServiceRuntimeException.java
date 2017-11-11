@@ -4,12 +4,12 @@ import com.facebook.swift.codec.*;
 import com.facebook.swift.codec.ThriftField.Requiredness;
 import java.util.*;
 
-@ThriftStruct("ServiceRuntime")
-public final class ServiceRuntime extends Exception
+@ThriftStruct("ServiceRuntimeException")
+public final class ServiceRuntimeException extends Exception
 {
     private static final long serialVersionUID = 1L;
 
-    public ServiceRuntime() {
+    public ServiceRuntimeException() {
     }
 
     private String serverStackTraceMessage;

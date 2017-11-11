@@ -30,7 +30,7 @@ import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
  * Remarks: 二进制数据存储表<br>
  * @author sql2java
  */
-public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
+public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
 {
     /**
      * Tablename.
@@ -45,24 +45,22 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         "md5"
     };
 
-    /**
-    * @return tableName
-    */
+    @Override
     public String getTableName() {
         return TABLE_NAME;
     }
-
+    
+    @Override
     public String getFields() {
         return FL_STORE_FIELDS;
     }
     
+    @Override
     public String getFullFields() {
         return FL_STORE_FULL_FIELDS;
     }
-    
-    /**
-    * @return primarykeyNames
-    */
+
+    @Override
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
@@ -91,7 +89,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     }
     
     @Override
-    protected Class<FlStoreBean> _beanType(){
+    protected Class<FlStoreBean> beanType(){
         return FlStoreBean.class;
     }
     
@@ -129,8 +127,9 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     @SuppressWarnings("unused")
     public FlStoreBean loadByPrimaryKeyChecked(String md5) throws DAOException
     {
-        if(null == md5)
+        if(null == md5){
             throw new ObjectRetrievalException(new NullPointerException());
+        }
         Connection c = null;
         PreparedStatement ps = null;
         try
@@ -175,8 +174,9 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     @Override
     public FlStoreBean loadByPrimaryKeyChecked(FlStoreBean bean) throws DAOException
     {
-        if(null == bean)
+        if(null == bean){
             throw new NullPointerException();
+        }
         return loadByPrimaryKeyChecked(bean.getMd5());
     }
     
@@ -189,24 +189,31 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     //1.3
     @Override
     public FlStoreBean loadByPrimaryKey(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         
-        if(null == keys[0])return null;
+        if(null == keys[0]){
+            return null;
+        }
         return loadByPrimaryKey((String)keys[0]);
     }
     //1.3.2
     @Override
     public FlStoreBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         
-        if(! (keys[0] instanceof String))
+        if(! (keys[0] instanceof String)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+        }
         return loadByPrimaryKeyChecked((String)keys[0]);
     }
     /**
@@ -250,8 +257,9 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     @Override
     public boolean existsByPrimaryKey(FlStoreBean bean) throws DAOException
     {
-        if(null == bean  || null == bean.getMd5())
+        if(null == bean  || null == bean.getMd5()){
             return false;
+        }
         long modified = bean.getModified();
         try{
             bean.resetModifiedExceptPrimaryKeys();
@@ -263,8 +271,9 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     //1.7
     @Override
     public FlStoreBean checkDuplicate(FlStoreBean bean) throws DAOException{
-        if(!existsByPrimaryKey(bean))
+        if(!existsByPrimaryKey(bean)){
             throw new ObjectRetrievalException("Duplicate entry ("+ bean.getMd5() +") for key 'PRIMARY'");
+        }
         return bean;
     }
     /**
@@ -276,8 +285,9 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     //1.4.1
     public String checkDuplicate(String md5) throws DAOException
     {
-        if(existsPrimaryKey(md5))
+        if(existsPrimaryKey(md5)){
             throw new ObjectRetrievalException("Duplicate entry '"+ md5 +"' for key 'PRIMARY'");
+        }
         return md5;
     }    
     /**
@@ -323,10 +333,11 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
             if (bean.getMd5() == null) { ps.setNull(1, Types.CHAR); } else { ps.setString(1, bean.getMd5()); }
-            int _rows=ps.executeUpdate();
-            if(_rows>0)
+            int rows=ps.executeUpdate();
+            if(rows>0){
                 this.listenerContainer.afterDelete(bean); // listener callback
-            return _rows;
+            }
+            return rows;
         }
         catch(SQLException e)
         {
@@ -349,14 +360,17 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         FlStoreBean bean = createBean();   
         
-        if(null != keys[0] && !(keys[0] instanceof String))
+        if(null != keys[0] && !(keys[0] instanceof String)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+        }
         bean.setMd5((String)keys[0]);
         return delete(bean);
     }
@@ -431,37 +445,37 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         {
             c = this.getConnection();
             this.listenerContainer.beforeInsert(bean); // listener callback
-            int _dirtyCount = 0;
+            int dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_store (");
 
             if (bean.checkMd5Modified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("md5");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkEncodingModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("encoding");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkDataModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("data");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             sql.append(") values (");
-            if(_dirtyCount > 0) {
+            if(dirtyCount > 0) {
                 sql.append("?");
-                for(int i = 1; i < _dirtyCount; i++) {
+                for(int i = 1; i < dirtyCount; i++) {
                     sql.append(",?");
                 }
             }
@@ -550,14 +564,14 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
 
-            int _dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
+            int dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
 
-            if (_dirtyCount == 0) {
+            if (dirtyCount == 0) {
                 // System.out.println("The bean to look is not initialized... do not update.");
                 return bean;
             }
 
-            if (bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5()); }
+            if (bean.getMd5() == null) { ps.setNull(++dirtyCount, Types.CHAR); } else { ps.setString(++dirtyCount, bean.getMd5()); }
             ps.executeUpdate();
             bean.resetIsModified();
             this.listenerContainer.afterUpdate(bean); // listener callback
@@ -669,8 +683,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
                                     ResultSet.CONCUR_READ_ONLY);
             this.fillPreparedStatement(ps, bean, SEARCH_EXACT, false);
 
-            int _rows = ps.executeUpdate();
-            return _rows;
+            return ps.executeUpdate();
         }
         catch(SQLException e)
         {
@@ -770,6 +783,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
      * @throws DAOException
      */
     //20
+    @Override
     public int countUsingTemplate(FlStoreBean bean, int searchType) throws DAOException
     {
         Connection c = null;
@@ -824,12 +838,12 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         if (bean == null) {
             return 0;
         }
-        int _dirtyCount = 0;
+        int dirtyCount = 0;
         String sqlEqualsOperation = searchType == SEARCH_EXACT ? "=" : " like ";
         try
         {
             if (bean.checkMd5Modified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getMd5() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 IS NULL");
                 } else {
@@ -837,7 +851,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
                 }
             }
             if (bean.checkEncodingModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getEncoding() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("encoding IS NULL");
                 } else {
@@ -845,7 +859,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
                 }
             }
             if (bean.checkDataModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getData() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("data IS NULL");
                 } else {
@@ -857,7 +871,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         {
             sqlEqualsOperation = null;
         }
-        return _dirtyCount;
+        return dirtyCount;
     }
 
     /**
@@ -873,26 +887,26 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         if (bean == null) {
             return 0;
         }
-        int _dirtyCount = 0;
+        int dirtyCount = 0;
         try
         {
             if (bean.checkMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "]");
-                        if (bean.getMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5()); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getMd5() + "]");
+                        if (bean.getMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getMd5()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "%]");
-                        if ( bean.getMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getMd5() + "%]");
+                        if ( bean.getMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getMd5() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "]");
-                        if ( bean.getMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5()); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getMd5() + "]");
+                        if ( bean.getMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "%]");
-                        if (bean.getMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getMd5() + "%]");
+                        if (bean.getMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getMd5() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -901,35 +915,35 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
             if (bean.checkEncodingModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEncoding() + "]");
-                        if (bean.getEncoding() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getEncoding()); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getEncoding() + "]");
+                        if (bean.getEncoding() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getEncoding()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getEncoding() + "%]");
-                        if ( bean.getEncoding()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getEncoding() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getEncoding() + "%]");
+                        if ( bean.getEncoding()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getEncoding() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getEncoding() + "]");
-                        if ( bean.getEncoding() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getEncoding()); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getEncoding() + "]");
+                        if ( bean.getEncoding() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getEncoding()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEncoding() + "%]");
-                        if (bean.getEncoding()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getEncoding() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getEncoding() + "%]");
+                        if (bean.getEncoding()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getEncoding() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
             if (bean.checkDataModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getData() + "]");
-                if (bean.getData() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { Manager.setBytes(Types.LONGVARBINARY,ps, ++_dirtyCount, bean.getData()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getData() + "]");
+                if (bean.getData() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.LONGVARBINARY);} } else { Manager.setBytes(Types.LONGVARBINARY,ps, ++dirtyCount, bean.getData()); }
             }
         }
         catch(SQLException e)
         {
             throw new DataAccessException(e);
         }
-        return _dirtyCount;
+        return dirtyCount;
     }
 
 
@@ -986,25 +1000,36 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         try{
             int count = 0;
             if(0!=numRows){
-                if( startRow<1 )
+                if( startRow<1 ){
                     throw new IllegalArgumentException("invalid argument:startRow (must >=1)");
-                if( null==action || null==rs )
-                    throw new IllegalArgumentException("invalid argument:action OR rs (must not be null)");                    
-                for(;startRow>1&&rs.next();--startRow);//skip to last of startRow
+                }
+                if( null==action || null==rs ){
+                    throw new IllegalArgumentException("invalid argument:action OR rs (must not be null)");
+                }
+                for(;startRow > 1 && rs.next();){
+                    --startRow;
+                    //skip to last of startRow
+                }
                 if (fieldList == null) {
-                    if(numRows<0)
-                        for(;rs.next();++count)
+                    if(numRows<0){
+                        for(;rs.next();++count){
                             action.call(decodeRow(rs, action.getBean()));
-                    else
-                        for(;rs.next() && count<numRows;++count)
+                        }
+                    }else{
+                        for(;rs.next() && count<numRows;++count){
                             action.call(decodeRow(rs, action.getBean()));
+                        }
+                    }
                 }else {
-                    if(numRows<0)
-                        for(;rs.next();++count)
+                    if(numRows<0){
+                        for(;rs.next();++count){
                             action.call(decodeRow(rs, fieldList,action.getBean()));
-                    else
-                        for(;rs.next() && count<numRows;++count)
+                        }
+                    }else{
+                        for(;rs.next() && count<numRows;++count){
                             action.call(decodeRow(rs, fieldList,action.getBean()));
+                        }
+                    }
                 }
             }
             return count;
@@ -1025,8 +1050,9 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     //29
     public FlStoreBean decodeRow(ResultSet rs,FlStoreBean bean) throws DAOException
     {
-        if(null==bean)
+        if(null==bean){
             bean = this.createBean();
+        }
         try
         {
             bean.setMd5(rs.getString(1));
@@ -1054,8 +1080,9 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     //30
     public FlStoreBean decodeRow(ResultSet rs, int[] fieldList,FlStoreBean bean) throws DAOException
     {
-        if(null==bean)
+        if(null==bean){
             bean = this.createBean();
+        }
         int pos = 0;
         try
         {
@@ -1267,8 +1294,9 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     //37
     @Override
     public void fire(TableListener.Event event, FlStoreBean bean) throws DAOException{
-        if(null == event)
+        if(null == event){
             throw new NullPointerException();
+        }
         event.fire(listenerContainer, bean);
     }
     
@@ -1343,7 +1371,11 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     //43
     @Override
     public boolean isPrimaryKey(String column){
-        for(String c:PRIMARYKEY_NAMES)if(c.equalsIgnoreCase(column))return true;
+        for(String c:PRIMARYKEY_NAMES){
+            if(c.equalsIgnoreCase(column)){
+                return true;
+            }
+        }
         return false;
     }
     
@@ -1359,8 +1391,9 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
                 for (int i = 0; i < argList.length; i++) {
                     if (argList[i].getClass().equals(byte[].class)) {
                         ps.setBytes(i + 1, (byte[]) argList[i]);
-                    } else
+                    } else {
                         ps.setObject(i + 1, argList[i]);
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -1395,7 +1428,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         return Manager.getInstance().runAsTransaction(fun);
     }
     
-    class DeleteBeanAction extends Action.Adapter<FlStoreBean>{
+    class DeleteBeanAction extends Action.BaseAdapter<FlStoreBean>{
         private final AtomicInteger count=new AtomicInteger(0);
         @Override
         public void call(FlStoreBean bean) throws DAOException {
@@ -1412,7 +1445,9 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
      */
     //45
     public List<String> toPrimaryKeyList(FlStoreBean... array){        
-        if(null == array)return new java.util.ArrayList<String>();
+        if(null == array){
+            return new java.util.ArrayList<String>();
+        }
         java.util.ArrayList<String> list = new java.util.ArrayList<String>(array.length);
         for(FlStoreBean bean:array){
             list.add(null == bean ? null : bean.getMd5());
@@ -1425,7 +1460,9 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
      */
     //46
     public List<String> toPrimaryKeyList(java.util.Collection<FlStoreBean> collection){        
-        if(null == collection)return new java.util.ArrayList<String>();
+        if(null == collection){
+            return new java.util.ArrayList<String>();
+        }
         java.util.ArrayList<String> list = new java.util.ArrayList<String>(collection.size());
         for(FlStoreBean bean:collection){
             list.add(null == bean ? null : bean.getMd5());

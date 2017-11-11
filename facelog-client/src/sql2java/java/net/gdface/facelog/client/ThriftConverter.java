@@ -7,35 +7,48 @@
 // ______________________________________________________
 package net.gdface.facelog.client;
 
+/**
+ * {@link IBeanConverter} implementation classes for thrift class 
+ * @author guyadong
+ *
+ */
 public class ThriftConverter implements Constant{
     /** {@link IBeanConverter} implementation for convert between {@link DeviceBean} and thrift beans {@link net.gdface.facelog.client.thrift.DeviceBean} */
-    public static final IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> converterDeviceBean
+    public static final IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> CONVERTER_DEVICEBEAN
             = new IBeanConverter.AbstractHandle<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean>(){
         @Override
-        protected void _fromRight(DeviceBean left, net.gdface.facelog.client.thrift.DeviceBean right) {
+        protected void doFromRight(DeviceBean left, net.gdface.facelog.client.thrift.DeviceBean right) {
             long initialized = right.getInitialized();
-            if(0L !=  (initialized & FL_DEVICE_ID_ID_MASK))
+            if(0L !=  (initialized & FL_DEVICE_ID_ID_MASK)){
                 left.setId(right.getId());
-            if(0L !=  (initialized & FL_DEVICE_ID_GROUP_ID_MASK))
+            }
+            if(0L !=  (initialized & FL_DEVICE_ID_GROUP_ID_MASK)){
                 left.setGroupId(right.getGroupId());
-            if(0L !=  (initialized & FL_DEVICE_ID_NAME_MASK))
+            }
+            if(0L !=  (initialized & FL_DEVICE_ID_NAME_MASK)){
                 left.setName(right.getName());
-            if(0L !=  (initialized & FL_DEVICE_ID_VERSION_MASK))
+            }
+            if(0L !=  (initialized & FL_DEVICE_ID_VERSION_MASK)){
                 left.setVersion(right.getVersion());
-            if(0L !=  (initialized & FL_DEVICE_ID_SERIAL_NO_MASK))
+            }
+            if(0L !=  (initialized & FL_DEVICE_ID_SERIAL_NO_MASK)){
                 left.setSerialNo(right.getSerialNo());
-            if(0L !=  (initialized & FL_DEVICE_ID_MAC_MASK))
+            }
+            if(0L !=  (initialized & FL_DEVICE_ID_MAC_MASK)){
                 left.setMac(right.getMac());
-            if(0L !=  (initialized & FL_DEVICE_ID_CREATE_TIME_MASK))
+            }
+            if(0L !=  (initialized & FL_DEVICE_ID_CREATE_TIME_MASK)){
                 left.setCreateTime(right.getCreateTime());
-            if(0L !=  (initialized & FL_DEVICE_ID_UPDATE_TIME_MASK))
+            }
+            if(0L !=  (initialized & FL_DEVICE_ID_UPDATE_TIME_MASK)){
                 left.setUpdateTime(right.getUpdateTime());
+            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
 
         @Override
-        protected void _toRight(DeviceBean left, net.gdface.facelog.client.thrift.DeviceBean right) {
+        protected void doToRight(DeviceBean left, net.gdface.facelog.client.thrift.DeviceBean right) {
             if(left.checkIdInitialized() ){
                 right.setId(left.getId());
             }
@@ -71,25 +84,29 @@ public class ThriftConverter implements Constant{
             right.setInitialized(left.getInitialized());
         }};
     /** {@link IBeanConverter} implementation for convert between {@link DeviceGroupBean} and thrift beans {@link net.gdface.facelog.client.thrift.DeviceGroupBean} */
-    public static final IBeanConverter<DeviceGroupBean,net.gdface.facelog.client.thrift.DeviceGroupBean> converterDeviceGroupBean
+    public static final IBeanConverter<DeviceGroupBean,net.gdface.facelog.client.thrift.DeviceGroupBean> CONVERTER_DEVICEGROUPBEAN
             = new IBeanConverter.AbstractHandle<DeviceGroupBean,net.gdface.facelog.client.thrift.DeviceGroupBean>(){
         @Override
-        protected void _fromRight(DeviceGroupBean left, net.gdface.facelog.client.thrift.DeviceGroupBean right) {
+        protected void doFromRight(DeviceGroupBean left, net.gdface.facelog.client.thrift.DeviceGroupBean right) {
             long initialized = right.getInitialized();
-            if(0L !=  (initialized & FL_DEVICE_GROUP_ID_ID_MASK))
+            if(0L !=  (initialized & FL_DEVICE_GROUP_ID_ID_MASK)){
                 left.setId(right.getId());
-            if(0L !=  (initialized & FL_DEVICE_GROUP_ID_NAME_MASK))
+            }
+            if(0L !=  (initialized & FL_DEVICE_GROUP_ID_NAME_MASK)){
                 left.setName(right.getName());
-            if(0L !=  (initialized & FL_DEVICE_GROUP_ID_LEAF_MASK))
+            }
+            if(0L !=  (initialized & FL_DEVICE_GROUP_ID_LEAF_MASK)){
                 left.setLeaf(right.getLeaf());
-            if(0L !=  (initialized & FL_DEVICE_GROUP_ID_PARENT_MASK))
+            }
+            if(0L !=  (initialized & FL_DEVICE_GROUP_ID_PARENT_MASK)){
                 left.setParent(right.getParent());
+            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
 
         @Override
-        protected void _toRight(DeviceGroupBean left, net.gdface.facelog.client.thrift.DeviceGroupBean right) {
+        protected void doToRight(DeviceGroupBean left, net.gdface.facelog.client.thrift.DeviceGroupBean right) {
             if(left.checkIdInitialized() ){
                 right.setId(left.getId());
             }
@@ -107,57 +124,77 @@ public class ThriftConverter implements Constant{
             right.setInitialized(left.getInitialized());
         }};
     /** {@link IBeanConverter} implementation for convert between {@link FaceBean} and thrift beans {@link net.gdface.facelog.client.thrift.FaceBean} */
-    public static final IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> converterFaceBean
+    public static final IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> CONVERTER_FACEBEAN
             = new IBeanConverter.AbstractHandle<FaceBean,net.gdface.facelog.client.thrift.FaceBean>(){
         @Override
-        protected void _fromRight(FaceBean left, net.gdface.facelog.client.thrift.FaceBean right) {
+        protected void doFromRight(FaceBean left, net.gdface.facelog.client.thrift.FaceBean right) {
             long initialized = right.getInitialized();
-            if(0L !=  (initialized & FL_FACE_ID_ID_MASK))
+            if(0L !=  (initialized & FL_FACE_ID_ID_MASK)){
                 left.setId(right.getId());
-            if(0L !=  (initialized & FL_FACE_ID_IMAGE_MD5_MASK))
+            }
+            if(0L !=  (initialized & FL_FACE_ID_IMAGE_MD5_MASK)){
                 left.setImageMd5(right.getImageMd5());
-            if(0L !=  (initialized & FL_FACE_ID_FACE_LEFT_MASK))
+            }
+            if(0L !=  (initialized & FL_FACE_ID_FACE_LEFT_MASK)){
                 left.setFaceLeft(right.getFaceLeft());
-            if(0L !=  (initialized & FL_FACE_ID_FACE_TOP_MASK))
+            }
+            if(0L !=  (initialized & FL_FACE_ID_FACE_TOP_MASK)){
                 left.setFaceTop(right.getFaceTop());
-            if(0L !=  (initialized & FL_FACE_ID_FACE_WIDTH_MASK))
+            }
+            if(0L !=  (initialized & FL_FACE_ID_FACE_WIDTH_MASK)){
                 left.setFaceWidth(right.getFaceWidth());
-            if(0L !=  (initialized & FL_FACE_ID_FACE_HEIGHT_MASK))
+            }
+            if(0L !=  (initialized & FL_FACE_ID_FACE_HEIGHT_MASK)){
                 left.setFaceHeight(right.getFaceHeight());
-            if(0L !=  (initialized & FL_FACE_ID_EYE_LEFTX_MASK))
+            }
+            if(0L !=  (initialized & FL_FACE_ID_EYE_LEFTX_MASK)){
                 left.setEyeLeftx(right.getEyeLeftx());
-            if(0L !=  (initialized & FL_FACE_ID_EYE_LEFTY_MASK))
+            }
+            if(0L !=  (initialized & FL_FACE_ID_EYE_LEFTY_MASK)){
                 left.setEyeLefty(right.getEyeLefty());
-            if(0L !=  (initialized & FL_FACE_ID_EYE_RIGHTX_MASK))
+            }
+            if(0L !=  (initialized & FL_FACE_ID_EYE_RIGHTX_MASK)){
                 left.setEyeRightx(right.getEyeRightx());
-            if(0L !=  (initialized & FL_FACE_ID_EYE_RIGHTY_MASK))
+            }
+            if(0L !=  (initialized & FL_FACE_ID_EYE_RIGHTY_MASK)){
                 left.setEyeRighty(right.getEyeRighty());
-            if(0L !=  (initialized & FL_FACE_ID_MOUTH_X_MASK))
+            }
+            if(0L !=  (initialized & FL_FACE_ID_MOUTH_X_MASK)){
                 left.setMouthX(right.getMouthX());
-            if(0L !=  (initialized & FL_FACE_ID_MOUTH_Y_MASK))
+            }
+            if(0L !=  (initialized & FL_FACE_ID_MOUTH_Y_MASK)){
                 left.setMouthY(right.getMouthY());
-            if(0L !=  (initialized & FL_FACE_ID_NOSE_X_MASK))
+            }
+            if(0L !=  (initialized & FL_FACE_ID_NOSE_X_MASK)){
                 left.setNoseX(right.getNoseX());
-            if(0L !=  (initialized & FL_FACE_ID_NOSE_Y_MASK))
+            }
+            if(0L !=  (initialized & FL_FACE_ID_NOSE_Y_MASK)){
                 left.setNoseY(right.getNoseY());
-            if(0L !=  (initialized & FL_FACE_ID_ANGLE_YAW_MASK))
+            }
+            if(0L !=  (initialized & FL_FACE_ID_ANGLE_YAW_MASK)){
                 left.setAngleYaw(right.getAngleYaw());
-            if(0L !=  (initialized & FL_FACE_ID_ANGLE_PITCH_MASK))
+            }
+            if(0L !=  (initialized & FL_FACE_ID_ANGLE_PITCH_MASK)){
                 left.setAnglePitch(right.getAnglePitch());
-            if(0L !=  (initialized & FL_FACE_ID_ANGLE_ROLL_MASK))
+            }
+            if(0L !=  (initialized & FL_FACE_ID_ANGLE_ROLL_MASK)){
                 left.setAngleRoll(right.getAngleRoll());
-            if(0L !=  (initialized & FL_FACE_ID_EXT_INFO_MASK))
+            }
+            if(0L !=  (initialized & FL_FACE_ID_EXT_INFO_MASK)){
                 left.setExtInfo(right.getExtInfo());
-            if(0L !=  (initialized & FL_FACE_ID_FEATURE_MD5_MASK))
+            }
+            if(0L !=  (initialized & FL_FACE_ID_FEATURE_MD5_MASK)){
                 left.setFeatureMd5(right.getFeatureMd5());
-            if(0L !=  (initialized & FL_FACE_ID_CREATE_TIME_MASK))
+            }
+            if(0L !=  (initialized & FL_FACE_ID_CREATE_TIME_MASK)){
                 left.setCreateTime(right.getCreateTime());
+            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
 
         @Override
-        protected void _toRight(FaceBean left, net.gdface.facelog.client.thrift.FaceBean right) {
+        protected void doToRight(FaceBean left, net.gdface.facelog.client.thrift.FaceBean right) {
             if(left.checkIdInitialized() ){
                 right.setId(left.getId());
             }
@@ -226,25 +263,29 @@ public class ThriftConverter implements Constant{
             right.setInitialized(left.getInitialized());
         }};
     /** {@link IBeanConverter} implementation for convert between {@link FeatureBean} and thrift beans {@link net.gdface.facelog.client.thrift.FeatureBean} */
-    public static final IBeanConverter<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> converterFeatureBean
+    public static final IBeanConverter<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> CONVERTER_FEATUREBEAN
             = new IBeanConverter.AbstractHandle<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean>(){
         @Override
-        protected void _fromRight(FeatureBean left, net.gdface.facelog.client.thrift.FeatureBean right) {
+        protected void doFromRight(FeatureBean left, net.gdface.facelog.client.thrift.FeatureBean right) {
             long initialized = right.getInitialized();
-            if(0L !=  (initialized & FL_FEATURE_ID_MD5_MASK))
+            if(0L !=  (initialized & FL_FEATURE_ID_MD5_MASK)){
                 left.setMd5(right.getMd5());
-            if(0L !=  (initialized & FL_FEATURE_ID_PERSON_ID_MASK))
+            }
+            if(0L !=  (initialized & FL_FEATURE_ID_PERSON_ID_MASK)){
                 left.setPersonId(right.getPersonId());
-            if(0L !=  (initialized & FL_FEATURE_ID_FEATURE_MASK))
+            }
+            if(0L !=  (initialized & FL_FEATURE_ID_FEATURE_MASK)){
                 left.setFeature(right.getFeature());
-            if(0L !=  (initialized & FL_FEATURE_ID_UPDATE_TIME_MASK))
+            }
+            if(0L !=  (initialized & FL_FEATURE_ID_UPDATE_TIME_MASK)){
                 left.setUpdateTime(right.getUpdateTime());
+            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
 
         @Override
-        protected void _toRight(FeatureBean left, net.gdface.facelog.client.thrift.FeatureBean right) {
+        protected void doToRight(FeatureBean left, net.gdface.facelog.client.thrift.FeatureBean right) {
             if(left.checkMd5Initialized() ){
                 right.setMd5(left.getMd5());
             }
@@ -265,33 +306,41 @@ public class ThriftConverter implements Constant{
             right.setInitialized(left.getInitialized());
         }};
     /** {@link IBeanConverter} implementation for convert between {@link ImageBean} and thrift beans {@link net.gdface.facelog.client.thrift.ImageBean} */
-    public static final IBeanConverter<ImageBean,net.gdface.facelog.client.thrift.ImageBean> converterImageBean
+    public static final IBeanConverter<ImageBean,net.gdface.facelog.client.thrift.ImageBean> CONVERTER_IMAGEBEAN
             = new IBeanConverter.AbstractHandle<ImageBean,net.gdface.facelog.client.thrift.ImageBean>(){
         @Override
-        protected void _fromRight(ImageBean left, net.gdface.facelog.client.thrift.ImageBean right) {
+        protected void doFromRight(ImageBean left, net.gdface.facelog.client.thrift.ImageBean right) {
             long initialized = right.getInitialized();
-            if(0L !=  (initialized & FL_IMAGE_ID_MD5_MASK))
+            if(0L !=  (initialized & FL_IMAGE_ID_MD5_MASK)){
                 left.setMd5(right.getMd5());
-            if(0L !=  (initialized & FL_IMAGE_ID_FORMAT_MASK))
+            }
+            if(0L !=  (initialized & FL_IMAGE_ID_FORMAT_MASK)){
                 left.setFormat(right.getFormat());
-            if(0L !=  (initialized & FL_IMAGE_ID_WIDTH_MASK))
+            }
+            if(0L !=  (initialized & FL_IMAGE_ID_WIDTH_MASK)){
                 left.setWidth(right.getWidth());
-            if(0L !=  (initialized & FL_IMAGE_ID_HEIGHT_MASK))
+            }
+            if(0L !=  (initialized & FL_IMAGE_ID_HEIGHT_MASK)){
                 left.setHeight(right.getHeight());
-            if(0L !=  (initialized & FL_IMAGE_ID_DEPTH_MASK))
+            }
+            if(0L !=  (initialized & FL_IMAGE_ID_DEPTH_MASK)){
                 left.setDepth(right.getDepth());
-            if(0L !=  (initialized & FL_IMAGE_ID_FACE_NUM_MASK))
+            }
+            if(0L !=  (initialized & FL_IMAGE_ID_FACE_NUM_MASK)){
                 left.setFaceNum(right.getFaceNum());
-            if(0L !=  (initialized & FL_IMAGE_ID_THUMB_MD5_MASK))
+            }
+            if(0L !=  (initialized & FL_IMAGE_ID_THUMB_MD5_MASK)){
                 left.setThumbMd5(right.getThumbMd5());
-            if(0L !=  (initialized & FL_IMAGE_ID_DEVICE_ID_MASK))
+            }
+            if(0L !=  (initialized & FL_IMAGE_ID_DEVICE_ID_MASK)){
                 left.setDeviceId(right.getDeviceId());
+            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
 
         @Override
-        protected void _toRight(ImageBean left, net.gdface.facelog.client.thrift.ImageBean right) {
+        protected void doToRight(ImageBean left, net.gdface.facelog.client.thrift.ImageBean right) {
             if(left.checkMd5Initialized() ){
                 right.setMd5(left.getMd5());
             }
@@ -321,33 +370,41 @@ public class ThriftConverter implements Constant{
             right.setInitialized(left.getInitialized());
         }};
     /** {@link IBeanConverter} implementation for convert between {@link LogBean} and thrift beans {@link net.gdface.facelog.client.thrift.LogBean} */
-    public static final IBeanConverter<LogBean,net.gdface.facelog.client.thrift.LogBean> converterLogBean
+    public static final IBeanConverter<LogBean,net.gdface.facelog.client.thrift.LogBean> CONVERTER_LOGBEAN
             = new IBeanConverter.AbstractHandle<LogBean,net.gdface.facelog.client.thrift.LogBean>(){
         @Override
-        protected void _fromRight(LogBean left, net.gdface.facelog.client.thrift.LogBean right) {
+        protected void doFromRight(LogBean left, net.gdface.facelog.client.thrift.LogBean right) {
             long initialized = right.getInitialized();
-            if(0L !=  (initialized & FL_LOG_ID_ID_MASK))
+            if(0L !=  (initialized & FL_LOG_ID_ID_MASK)){
                 left.setId(right.getId());
-            if(0L !=  (initialized & FL_LOG_ID_PERSON_ID_MASK))
+            }
+            if(0L !=  (initialized & FL_LOG_ID_PERSON_ID_MASK)){
                 left.setPersonId(right.getPersonId());
-            if(0L !=  (initialized & FL_LOG_ID_DEVICE_ID_MASK))
+            }
+            if(0L !=  (initialized & FL_LOG_ID_DEVICE_ID_MASK)){
                 left.setDeviceId(right.getDeviceId());
-            if(0L !=  (initialized & FL_LOG_ID_VERIFY_FEATURE_MASK))
+            }
+            if(0L !=  (initialized & FL_LOG_ID_VERIFY_FEATURE_MASK)){
                 left.setVerifyFeature(right.getVerifyFeature());
-            if(0L !=  (initialized & FL_LOG_ID_COMPARE_FACE_MASK))
+            }
+            if(0L !=  (initialized & FL_LOG_ID_COMPARE_FACE_MASK)){
                 left.setCompareFace(right.getCompareFace());
-            if(0L !=  (initialized & FL_LOG_ID_SIMILARTY_MASK))
+            }
+            if(0L !=  (initialized & FL_LOG_ID_SIMILARTY_MASK)){
                 left.setSimilarty(right.getSimilarty());
-            if(0L !=  (initialized & FL_LOG_ID_VERIFY_TIME_MASK))
+            }
+            if(0L !=  (initialized & FL_LOG_ID_VERIFY_TIME_MASK)){
                 left.setVerifyTime(right.getVerifyTime());
-            if(0L !=  (initialized & FL_LOG_ID_CREATE_TIME_MASK))
+            }
+            if(0L !=  (initialized & FL_LOG_ID_CREATE_TIME_MASK)){
                 left.setCreateTime(right.getCreateTime());
+            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
 
         @Override
-        protected void _toRight(LogBean left, net.gdface.facelog.client.thrift.LogBean right) {
+        protected void doToRight(LogBean left, net.gdface.facelog.client.thrift.LogBean right) {
             if(left.checkIdInitialized() ){
                 right.setId(left.getId());
             }
@@ -380,23 +437,26 @@ public class ThriftConverter implements Constant{
             right.setInitialized(left.getInitialized());
         }};
     /** {@link IBeanConverter} implementation for convert between {@link PermitBean} and thrift beans {@link net.gdface.facelog.client.thrift.PermitBean} */
-    public static final IBeanConverter<PermitBean,net.gdface.facelog.client.thrift.PermitBean> converterPermitBean
+    public static final IBeanConverter<PermitBean,net.gdface.facelog.client.thrift.PermitBean> CONVERTER_PERMITBEAN
             = new IBeanConverter.AbstractHandle<PermitBean,net.gdface.facelog.client.thrift.PermitBean>(){
         @Override
-        protected void _fromRight(PermitBean left, net.gdface.facelog.client.thrift.PermitBean right) {
+        protected void doFromRight(PermitBean left, net.gdface.facelog.client.thrift.PermitBean right) {
             long initialized = right.getInitialized();
-            if(0L !=  (initialized & FL_PERMIT_ID_DEVICE_GROUP_ID_MASK))
+            if(0L !=  (initialized & FL_PERMIT_ID_DEVICE_GROUP_ID_MASK)){
                 left.setDeviceGroupId(right.getDeviceGroupId());
-            if(0L !=  (initialized & FL_PERMIT_ID_PERSON_GROUP_ID_MASK))
+            }
+            if(0L !=  (initialized & FL_PERMIT_ID_PERSON_GROUP_ID_MASK)){
                 left.setPersonGroupId(right.getPersonGroupId());
-            if(0L !=  (initialized & FL_PERMIT_ID_CREATE_TIME_MASK))
+            }
+            if(0L !=  (initialized & FL_PERMIT_ID_CREATE_TIME_MASK)){
                 left.setCreateTime(right.getCreateTime());
+            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
 
         @Override
-        protected void _toRight(PermitBean left, net.gdface.facelog.client.thrift.PermitBean right) {
+        protected void doToRight(PermitBean left, net.gdface.facelog.client.thrift.PermitBean right) {
             if(left.checkDeviceGroupIdInitialized() ){
                 right.setDeviceGroupId(left.getDeviceGroupId());
             }
@@ -414,39 +474,50 @@ public class ThriftConverter implements Constant{
             right.setInitialized(left.getInitialized());
         }};
     /** {@link IBeanConverter} implementation for convert between {@link PersonBean} and thrift beans {@link net.gdface.facelog.client.thrift.PersonBean} */
-    public static final IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> converterPersonBean
+    public static final IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> CONVERTER_PERSONBEAN
             = new IBeanConverter.AbstractHandle<PersonBean,net.gdface.facelog.client.thrift.PersonBean>(){
         @Override
-        protected void _fromRight(PersonBean left, net.gdface.facelog.client.thrift.PersonBean right) {
+        protected void doFromRight(PersonBean left, net.gdface.facelog.client.thrift.PersonBean right) {
             long initialized = right.getInitialized();
-            if(0L !=  (initialized & FL_PERSON_ID_ID_MASK))
+            if(0L !=  (initialized & FL_PERSON_ID_ID_MASK)){
                 left.setId(right.getId());
-            if(0L !=  (initialized & FL_PERSON_ID_GROUP_ID_MASK))
+            }
+            if(0L !=  (initialized & FL_PERSON_ID_GROUP_ID_MASK)){
                 left.setGroupId(right.getGroupId());
-            if(0L !=  (initialized & FL_PERSON_ID_NAME_MASK))
+            }
+            if(0L !=  (initialized & FL_PERSON_ID_NAME_MASK)){
                 left.setName(right.getName());
-            if(0L !=  (initialized & FL_PERSON_ID_SEX_MASK))
+            }
+            if(0L !=  (initialized & FL_PERSON_ID_SEX_MASK)){
                 left.setSex(right.getSex());
-            if(0L !=  (initialized & FL_PERSON_ID_BIRTHDATE_MASK))
+            }
+            if(0L !=  (initialized & FL_PERSON_ID_BIRTHDATE_MASK)){
                 left.setBirthdate(right.getBirthdate());
-            if(0L !=  (initialized & FL_PERSON_ID_PAPERS_TYPE_MASK))
+            }
+            if(0L !=  (initialized & FL_PERSON_ID_PAPERS_TYPE_MASK)){
                 left.setPapersType(right.getPapersType());
-            if(0L !=  (initialized & FL_PERSON_ID_PAPERS_NUM_MASK))
+            }
+            if(0L !=  (initialized & FL_PERSON_ID_PAPERS_NUM_MASK)){
                 left.setPapersNum(right.getPapersNum());
-            if(0L !=  (initialized & FL_PERSON_ID_IMAGE_MD5_MASK))
+            }
+            if(0L !=  (initialized & FL_PERSON_ID_IMAGE_MD5_MASK)){
                 left.setImageMd5(right.getImageMd5());
-            if(0L !=  (initialized & FL_PERSON_ID_EXPIRY_DATE_MASK))
+            }
+            if(0L !=  (initialized & FL_PERSON_ID_EXPIRY_DATE_MASK)){
                 left.setExpiryDate(right.getExpiryDate());
-            if(0L !=  (initialized & FL_PERSON_ID_CREATE_TIME_MASK))
+            }
+            if(0L !=  (initialized & FL_PERSON_ID_CREATE_TIME_MASK)){
                 left.setCreateTime(right.getCreateTime());
-            if(0L !=  (initialized & FL_PERSON_ID_UPDATE_TIME_MASK))
+            }
+            if(0L !=  (initialized & FL_PERSON_ID_UPDATE_TIME_MASK)){
                 left.setUpdateTime(right.getUpdateTime());
+            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
 
         @Override
-        protected void _toRight(PersonBean left, net.gdface.facelog.client.thrift.PersonBean right) {
+        protected void doToRight(PersonBean left, net.gdface.facelog.client.thrift.PersonBean right) {
             if(left.checkIdInitialized() ){
                 right.setId(left.getId());
             }
@@ -491,25 +562,29 @@ public class ThriftConverter implements Constant{
             right.setInitialized(left.getInitialized());
         }};
     /** {@link IBeanConverter} implementation for convert between {@link PersonGroupBean} and thrift beans {@link net.gdface.facelog.client.thrift.PersonGroupBean} */
-    public static final IBeanConverter<PersonGroupBean,net.gdface.facelog.client.thrift.PersonGroupBean> converterPersonGroupBean
+    public static final IBeanConverter<PersonGroupBean,net.gdface.facelog.client.thrift.PersonGroupBean> CONVERTER_PERSONGROUPBEAN
             = new IBeanConverter.AbstractHandle<PersonGroupBean,net.gdface.facelog.client.thrift.PersonGroupBean>(){
         @Override
-        protected void _fromRight(PersonGroupBean left, net.gdface.facelog.client.thrift.PersonGroupBean right) {
+        protected void doFromRight(PersonGroupBean left, net.gdface.facelog.client.thrift.PersonGroupBean right) {
             long initialized = right.getInitialized();
-            if(0L !=  (initialized & FL_PERSON_GROUP_ID_ID_MASK))
+            if(0L !=  (initialized & FL_PERSON_GROUP_ID_ID_MASK)){
                 left.setId(right.getId());
-            if(0L !=  (initialized & FL_PERSON_GROUP_ID_NAME_MASK))
+            }
+            if(0L !=  (initialized & FL_PERSON_GROUP_ID_NAME_MASK)){
                 left.setName(right.getName());
-            if(0L !=  (initialized & FL_PERSON_GROUP_ID_LEAF_MASK))
+            }
+            if(0L !=  (initialized & FL_PERSON_GROUP_ID_LEAF_MASK)){
                 left.setLeaf(right.getLeaf());
-            if(0L !=  (initialized & FL_PERSON_GROUP_ID_PARENT_MASK))
+            }
+            if(0L !=  (initialized & FL_PERSON_GROUP_ID_PARENT_MASK)){
                 left.setParent(right.getParent());
+            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
 
         @Override
-        protected void _toRight(PersonGroupBean left, net.gdface.facelog.client.thrift.PersonGroupBean right) {
+        protected void doToRight(PersonGroupBean left, net.gdface.facelog.client.thrift.PersonGroupBean right) {
             if(left.checkIdInitialized() ){
                 right.setId(left.getId());
             }
@@ -527,29 +602,35 @@ public class ThriftConverter implements Constant{
             right.setInitialized(left.getInitialized());
         }};
     /** {@link IBeanConverter} implementation for convert between {@link LogLightBean} and thrift beans {@link net.gdface.facelog.client.thrift.LogLightBean} */
-    public static final IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> converterLogLightBean
+    public static final IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> CONVERTER_LOGLIGHTBEAN
             = new IBeanConverter.AbstractHandle<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean>(){
         @Override
-        protected void _fromRight(LogLightBean left, net.gdface.facelog.client.thrift.LogLightBean right) {
+        protected void doFromRight(LogLightBean left, net.gdface.facelog.client.thrift.LogLightBean right) {
             long initialized = right.getInitialized();
-            if(0L !=  (initialized & FL_LOG_LIGHT_ID_ID_MASK))
+            if(0L !=  (initialized & FL_LOG_LIGHT_ID_ID_MASK)){
                 left.setId(right.getId());
-            if(0L !=  (initialized & FL_LOG_LIGHT_ID_PERSON_ID_MASK))
+            }
+            if(0L !=  (initialized & FL_LOG_LIGHT_ID_PERSON_ID_MASK)){
                 left.setPersonId(right.getPersonId());
-            if(0L !=  (initialized & FL_LOG_LIGHT_ID_NAME_MASK))
+            }
+            if(0L !=  (initialized & FL_LOG_LIGHT_ID_NAME_MASK)){
                 left.setName(right.getName());
-            if(0L !=  (initialized & FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK))
+            }
+            if(0L !=  (initialized & FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK)){
                 left.setPapersType(right.getPapersType());
-            if(0L !=  (initialized & FL_LOG_LIGHT_ID_PAPERS_NUM_MASK))
+            }
+            if(0L !=  (initialized & FL_LOG_LIGHT_ID_PAPERS_NUM_MASK)){
                 left.setPapersNum(right.getPapersNum());
-            if(0L !=  (initialized & FL_LOG_LIGHT_ID_VERIFY_TIME_MASK))
+            }
+            if(0L !=  (initialized & FL_LOG_LIGHT_ID_VERIFY_TIME_MASK)){
                 left.setVerifyTime(right.getVerifyTime());
+            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
 
         @Override
-        protected void _toRight(LogLightBean left, net.gdface.facelog.client.thrift.LogLightBean right) {
+        protected void doToRight(LogLightBean left, net.gdface.facelog.client.thrift.LogLightBean right) {
             if(left.checkIdInitialized() ){
                 right.setId(left.getId());
             }

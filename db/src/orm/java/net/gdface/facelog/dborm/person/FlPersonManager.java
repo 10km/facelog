@@ -36,7 +36,7 @@ import net.gdface.facelog.dborm.image.FlImageManager;
  * Remarks: 人员基本描述信息<br>
  * @author sql2java
  */
-public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
+public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
 {
     /**
      * Tablename.
@@ -51,24 +51,22 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         "id"
     };
 
-    /**
-    * @return tableName
-    */
+    @Override
     public String getTableName() {
         return TABLE_NAME;
     }
-
+    
+    @Override
     public String getFields() {
         return FL_PERSON_FIELDS;
     }
     
+    @Override
     public String getFullFields() {
         return FL_PERSON_FULL_FIELDS;
     }
-    
-    /**
-    * @return primarykeyNames
-    */
+
+    @Override
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
@@ -97,7 +95,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     }
     
     @Override
-    protected Class<FlPersonBean> _beanType(){
+    protected Class<FlPersonBean> beanType(){
         return FlPersonBean.class;
     }
     
@@ -147,8 +145,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @SuppressWarnings("unused")
     public FlPersonBean loadByPrimaryKeyChecked(Integer id) throws DAOException
     {
-        if(null == id)
+        if(null == id){
             throw new ObjectRetrievalException(new NullPointerException());
+        }
         Connection c = null;
         PreparedStatement ps = null;
         try
@@ -193,8 +192,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @Override
     public FlPersonBean loadByPrimaryKeyChecked(FlPersonBean bean) throws DAOException
     {
-        if(null == bean)
+        if(null == bean){
             throw new NullPointerException();
+        }
         return loadByPrimaryKeyChecked(bean.getId());
     }
     
@@ -207,24 +207,31 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //1.3
     @Override
     public FlPersonBean loadByPrimaryKey(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         
-        if(null == keys[0])return null;
+        if(null == keys[0]){
+            return null;
+        }
         return loadByPrimaryKey((Integer)keys[0]);
     }
     //1.3.2
     @Override
     public FlPersonBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         
-        if(! (keys[0] instanceof Integer))
+        if(! (keys[0] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+        }
         return loadByPrimaryKeyChecked((Integer)keys[0]);
     }
     /**
@@ -268,8 +275,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @Override
     public boolean existsByPrimaryKey(FlPersonBean bean) throws DAOException
     {
-        if(null == bean  || null == bean.getId())
+        if(null == bean  || null == bean.getId()){
             return false;
+        }
         long modified = bean.getModified();
         try{
             bean.resetModifiedExceptPrimaryKeys();
@@ -281,8 +289,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //1.7
     @Override
     public FlPersonBean checkDuplicate(FlPersonBean bean) throws DAOException{
-        if(!existsByPrimaryKey(bean))
+        if(!existsByPrimaryKey(bean)){
             throw new ObjectRetrievalException("Duplicate entry ("+ bean.getId() +") for key 'PRIMARY'");
+        }
         return bean;
     }
     /**
@@ -294,8 +303,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //1.4.1
     public Integer checkDuplicate(Integer id) throws DAOException
     {
-        if(existsPrimaryKey(id))
+        if(existsPrimaryKey(id)){
             throw new ObjectRetrievalException("Duplicate entry '"+ id +"' for key 'PRIMARY'");
+        }
         return id;
     }    
     /**
@@ -341,10 +351,11 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
             if (bean.getId() == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, bean.getId()); }
-            int _rows=ps.executeUpdate();
-            if(_rows>0)
+            int rows=ps.executeUpdate();
+            if(rows>0){
                 this.listenerContainer.afterDelete(bean); // listener callback
-            return _rows;
+            }
+            return rows;
         }
         catch(SQLException e)
         {
@@ -367,14 +378,17 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         FlPersonBean bean = createBean();   
         
-        if(null != keys[0] && !(keys[0] instanceof Integer))
+        if(null != keys[0] && !(keys[0] instanceof Integer)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+        }
         bean.setId((Integer)keys[0]);
         return delete(bean);
     }
@@ -383,7 +397,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
     
-    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FlFeatureBean.class,FlLogBean.class};
+    private static final Class<?>[] IMPORTED_BEAN_TYPES = new Class<?>[]{FlFeatureBean.class,FlLogBean.class};
 
     /**
      * @see #getImportedBeansAsList(FlPersonBean,int)
@@ -391,7 +405,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] getImportedBeans(FlPersonBean bean, int ikIndex) throws DAOException {
-        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
+        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(IMPORTED_BEAN_TYPES[ikIndex],0));
     }
     
     /**
@@ -414,8 +428,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             return (List<T>)this.getFeatureBeansByPersonIdAsList(bean);
         case FL_PERSON_IK_FL_LOG_PERSON_ID:
             return (List<T>)this.getLogBeansByPersonIdAsList(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     
     /**
@@ -435,8 +450,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             return (T[])setFeatureBeansByPersonId(bean,(FlFeatureBean[])importedBeans);
         case FL_PERSON_IK_FL_LOG_PERSON_ID:
             return (T[])setLogBeansByPersonId(bean,(FlLogBean[])importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the importedBeans associates to the bean by ikIndex<br>
@@ -456,8 +472,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             return (C)setFeatureBeansByPersonId(bean,(java.util.Collection<FlFeatureBean>)importedBeans);
         case FL_PERSON_IK_FL_LOG_PERSON_ID:
             return (C)setLogBeansByPersonId(bean,(java.util.Collection<FlLogBean>)importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
     //////////////////////////////////////
@@ -528,8 +545,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //3.2.4 GET IMPORTED
     public List<FlFeatureBean> getFeatureBeansByPersonIdAsList(FlPersonBean bean,int startRow, int numRows) throws DAOException
     {
-        if(null == bean)
+        if(null == bean){
             return new java.util.ArrayList<FlFeatureBean>();
+        }
         FlFeatureBean other = new FlFeatureBean();
         other.setPersonId(bean.getId());
         return instanceOfFlFeatureManager().loadUsingTemplateAsList(other,startRow,numRows);
@@ -639,8 +657,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //3.2.4 GET IMPORTED
     public List<FlLogBean> getLogBeansByPersonIdAsList(FlPersonBean bean,int startRow, int numRows) throws DAOException
     {
-        if(null == bean)
+        if(null == bean){
             return new java.util.ArrayList<FlLogBean>();
+        }
         FlLogBean other = new FlLogBean();
         other.setPersonId(bean.getId());
         return instanceOfFlLogManager().loadUsingTemplateAsList(other,startRow,numRows);
@@ -701,11 +720,15 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         , FlImageBean refImageByImageMd5 , FlPersonGroupBean refPersongroupByGroupId 
         , FlFeatureBean[] impFeatureByPersonId , FlLogBean[] impLogByPersonId ) throws DAOException
     {
-        if(null == bean) return null;
-        if(null != refImageByImageMd5)
+        if(null == bean) {
+            return null;
+        }
+        if(null != refImageByImageMd5){
             this.setReferencedByImageMd5(bean,refImageByImageMd5);
-        if(null != refPersongroupByGroupId)
+        }
+        if(null != refPersongroupByGroupId){
             this.setReferencedByGroupId(bean,refPersongroupByGroupId);
+        }
         bean = this.save( bean );
         this.setFeatureBeansByPersonId(bean,impFeatureByPersonId);
         instanceOfFlFeatureManager().save( impFeatureByPersonId );
@@ -745,7 +768,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         , FlImageBean refImageByImageMd5 , FlPersonGroupBean refPersongroupByGroupId 
         , java.util.Collection<FlFeatureBean> impFeatureByPersonId , java.util.Collection<FlLogBean> impLogByPersonId ) throws DAOException
     {
-        if(null == bean) return null;
+        if(null == bean) {
+            return null;
+        }
         this.setReferencedByImageMd5(bean,refImageByImageMd5);
         this.setReferencedByGroupId(bean,refPersongroupByGroupId);
         bean = this.save( bean );
@@ -784,10 +809,12 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @Override
     public FlPersonBean save(FlPersonBean bean,Object ...args) throws DAOException
     {
-        if(null == args)
+        if(null == args){
             save(bean);
-        if(args.length > 4)
+        }
+        if(args.length > 4){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlImageBean");
         }
@@ -817,10 +844,12 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @Override
     public FlPersonBean saveCollection(FlPersonBean bean,Object ...args) throws DAOException
     {
-        if(null == args)
+        if(null == args){
             save(bean);
-        if(args.length > 4)
+        }
+        if(args.length > 4){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlImageBean");
         }
@@ -860,8 +889,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             return  (T)this.getReferencedByImageMd5(bean);
         case FL_PERSON_FK_GROUP_ID:
             return  (T)this.getReferencedByGroupId(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     /**
@@ -882,8 +912,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             return  (T)this.setReferencedByImageMd5(bean, (FlImageBean)beanToSet);
         case FL_PERSON_FK_GROUP_ID:
             return  (T)this.setReferencedByGroupId(bean, (FlPersonGroupBean)beanToSet);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
      
     //////////////////////////////////////
@@ -901,7 +932,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //5.1 GET REFERENCED VALUE
     public FlImageBean getReferencedByImageMd5(FlPersonBean bean) throws DAOException
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByImageMd5(instanceOfFlImageManager().loadByPrimaryKey(bean.getImageMd5())); 
         return bean.getReferencedByImageMd5();
     }
@@ -939,7 +972,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //5.1 GET REFERENCED VALUE
     public FlPersonGroupBean getReferencedByGroupId(FlPersonBean bean) throws DAOException
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByGroupId(instanceOfFlPersonGroupManager().loadByPrimaryKey(bean.getGroupId())); 
         return bean.getReferencedByGroupId();
     }
@@ -1035,101 +1070,101 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         {
             c = this.getConnection();
             this.listenerContainer.beforeInsert(bean); // listener callback
-            int _dirtyCount = 0;
+            int dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_person (");
 
             if (bean.checkIdModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("id");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkGroupIdModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("group_id");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkNameModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("name");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkSexModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("sex");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkBirthdateModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("birthdate");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkPapersTypeModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("papers_type");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkPapersNumModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("papers_num");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkImageMd5Modified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("image_md5");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkExpiryDateModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("expiry_date");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkCreateTimeModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("create_time");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkUpdateTimeModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("update_time");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             sql.append(") values (");
-            if(_dirtyCount > 0) {
+            if(dirtyCount > 0) {
                 sql.append("?");
-                for(int i = 1; i < _dirtyCount; i++) {
+                for(int i = 1; i < dirtyCount; i++) {
                     sql.append(",?");
                 }
             }
@@ -1307,14 +1342,14 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
 
-            int _dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
+            int dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
 
-            if (_dirtyCount == 0) {
+            if (dirtyCount == 0) {
                 // System.out.println("The bean to look is not initialized... do not update.");
                 return bean;
             }
 
-            if (bean.getId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
+            if (bean.getId() == null) { ps.setNull(++dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++dirtyCount, bean.getId()); }
             ps.executeUpdate();
             bean.resetIsModified();
             this.listenerContainer.afterUpdate(bean); // listener callback
@@ -1426,8 +1461,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                                     ResultSet.CONCUR_READ_ONLY);
             this.fillPreparedStatement(ps, bean, SEARCH_EXACT, false);
 
-            int _rows = ps.executeUpdate();
-            return _rows;
+            return ps.executeUpdate();
         }
         catch(SQLException e)
         {
@@ -1476,8 +1510,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     public FlPersonBean loadByIndexImageMd5Checked(String imageMd5) throws DAOException
     {
         FlPersonBean bean = new FlPersonBean();
-        if(null == imageMd5)
+        if(null == imageMd5){
             throw new ObjectRetrievalException(new NullPointerException());
+        }
         
         bean.setImageMd5(imageMd5);
         
@@ -1492,7 +1527,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     public java.util.List<FlPersonBean> loadByIndexImageMd5(String... indexs)throws DAOException
     {
-        if(null == indexs)return new java.util.ArrayList<FlPersonBean>();
+        if(null == indexs){
+            return new java.util.ArrayList<FlPersonBean>();
+        }
         java.util.ArrayList<FlPersonBean> list = new java.util.ArrayList<FlPersonBean>(indexs.length);
         for(int i = 0 ;i< indexs.length;++i){
             list.add(loadByIndexImageMd5(indexs[i]));
@@ -1508,7 +1545,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     public java.util.List<FlPersonBean> loadByIndexImageMd5(java.util.Collection<String> indexs)throws DAOException
     {
-        if(null == indexs )return new java.util.ArrayList<FlPersonBean>();
+        if(null == indexs ){
+            return new java.util.ArrayList<FlPersonBean>();
+        }
         java.util.ArrayList<FlPersonBean> list = new java.util.ArrayList<FlPersonBean>(indexs.size());
         if(indexs instanceof java.util.List){
             for(String key: indexs){
@@ -1517,8 +1556,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         }else{
             FlPersonBean bean;
             for(String key: indexs){
-                if(null != (bean = loadByIndexImageMd5(key)))
+                if(null != (bean = loadByIndexImageMd5(key))){
                     list.add(bean);
+                }
             }
         }
         return list;
@@ -1532,10 +1572,11 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     public int deleteByIndexImageMd5(String... indexs)throws DAOException
     {
-        if(null == indexs)return 0;
         int count = 0;
-        for(String index : indexs){
-            count += deleteByIndexImageMd5(index);
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexImageMd5(index);
+            }
         }
         return count;
     }
@@ -1548,10 +1589,11 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     public int deleteByIndexImageMd5(java.util.Collection<String> indexs)throws DAOException
     {
-        if(null == indexs)return 0;
         int count = 0;
-        for(String index : indexs){
-            count += deleteByIndexImageMd5(index);
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexImageMd5(index);
+            }
         }
         return count;
     }
@@ -1597,8 +1639,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     public FlPersonBean loadByIndexPapersNumChecked(String papersNum) throws DAOException
     {
         FlPersonBean bean = new FlPersonBean();
-        if(null == papersNum)
+        if(null == papersNum){
             throw new ObjectRetrievalException(new NullPointerException());
+        }
         
         bean.setPapersNum(papersNum);
         
@@ -1613,7 +1656,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     public java.util.List<FlPersonBean> loadByIndexPapersNum(String... indexs)throws DAOException
     {
-        if(null == indexs)return new java.util.ArrayList<FlPersonBean>();
+        if(null == indexs){
+            return new java.util.ArrayList<FlPersonBean>();
+        }
         java.util.ArrayList<FlPersonBean> list = new java.util.ArrayList<FlPersonBean>(indexs.length);
         for(int i = 0 ;i< indexs.length;++i){
             list.add(loadByIndexPapersNum(indexs[i]));
@@ -1629,7 +1674,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     public java.util.List<FlPersonBean> loadByIndexPapersNum(java.util.Collection<String> indexs)throws DAOException
     {
-        if(null == indexs )return new java.util.ArrayList<FlPersonBean>();
+        if(null == indexs ){
+            return new java.util.ArrayList<FlPersonBean>();
+        }
         java.util.ArrayList<FlPersonBean> list = new java.util.ArrayList<FlPersonBean>(indexs.size());
         if(indexs instanceof java.util.List){
             for(String key: indexs){
@@ -1638,8 +1685,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         }else{
             FlPersonBean bean;
             for(String key: indexs){
-                if(null != (bean = loadByIndexPapersNum(key)))
+                if(null != (bean = loadByIndexPapersNum(key))){
                     list.add(bean);
+                }
             }
         }
         return list;
@@ -1653,10 +1701,11 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     public int deleteByIndexPapersNum(String... indexs)throws DAOException
     {
-        if(null == indexs)return 0;
         int count = 0;
-        for(String index : indexs){
-            count += deleteByIndexPapersNum(index);
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexPapersNum(index);
+            }
         }
         return count;
     }
@@ -1669,10 +1718,11 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     public int deleteByIndexPapersNum(java.util.Collection<String> indexs)throws DAOException
     {
-        if(null == indexs)return 0;
         int count = 0;
-        for(String index : indexs){
-            count += deleteByIndexPapersNum(index);
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexPapersNum(index);
+            }
         }
         return count;
     }
@@ -1779,47 +1829,53 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @return a list of FlPersonBean
      * @throws DAOException
      */
+    @Override
     public List<FlPersonBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException
     {
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
+        }
         switch(keyIndex){
         case FL_PERSON_INDEX_IMAGE_MD5:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'image_md5' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof String))
+            if(null != keys[0] && !(keys[0] instanceof String)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-
+            }
             FlPersonBean bean= this.loadByIndexImageMd5((String)keys[0]);
             return null == bean ? new java.util.ArrayList<FlPersonBean>() : java.util.Arrays.asList(bean);
         }
         case FL_PERSON_INDEX_PAPERS_NUM:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'papers_num' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof String))
+            if(null != keys[0] && !(keys[0] instanceof String)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-
+            }
             FlPersonBean bean= this.loadByIndexPapersNum((String)keys[0]);
             return null == bean ? new java.util.ArrayList<FlPersonBean>() : java.util.Arrays.asList(bean);
         }
         case FL_PERSON_INDEX_EXPIRY_DATE:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'expiry_date' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof java.util.Date))
+            if(null != keys[0] && !(keys[0] instanceof java.util.Date)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Date");
-
+            }
             return this.loadByIndexExpiryDateAsList((java.util.Date)keys[0]);        
         }
         case FL_PERSON_INDEX_GROUP_ID:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'group_id' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof Integer))
+            if(null != keys[0] && !(keys[0] instanceof Integer)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-
+            }
             return this.loadByIndexGroupIdAsList((Integer)keys[0]);        
         }
         default:
@@ -1835,41 +1891,51 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @return the number of deleted objects
      * @throws DAOException
      */
+    @Override
     public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException
     {
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
+        }
         switch(keyIndex){
         case FL_PERSON_INDEX_IMAGE_MD5:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'image_md5' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof String))
+            if(null != keys[0] && !(keys[0] instanceof String)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            }
             return this.deleteByIndexImageMd5((String)keys[0]);
         }
         case FL_PERSON_INDEX_PAPERS_NUM:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'papers_num' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof String))
+            if(null != keys[0] && !(keys[0] instanceof String)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            }
             return this.deleteByIndexPapersNum((String)keys[0]);
         }
         case FL_PERSON_INDEX_EXPIRY_DATE:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'expiry_date' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof java.util.Date))
+            if(null != keys[0] && !(keys[0] instanceof java.util.Date)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Date");
+            }
             return this.deleteByIndexExpiryDate((java.util.Date)keys[0]);
         }
         case FL_PERSON_INDEX_GROUP_ID:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'group_id' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof Integer))
+            if(null != keys[0] && !(keys[0] instanceof Integer)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+            }
             return this.deleteByIndexGroupId((Integer)keys[0]);
         }
         default:
@@ -1961,6 +2027,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @throws DAOException
      */
     //20
+    @Override
     public int countUsingTemplate(FlPersonBean bean, int searchType) throws DAOException
     {
         Connection c = null;
@@ -2015,12 +2082,12 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         if (bean == null) {
             return 0;
         }
-        int _dirtyCount = 0;
+        int dirtyCount = 0;
         String sqlEqualsOperation = searchType == SEARCH_EXACT ? "=" : " like ";
         try
         {
             if (bean.checkIdModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("id IS NULL");
                 } else {
@@ -2028,7 +2095,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 }
             }
             if (bean.checkGroupIdModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getGroupId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("group_id IS NULL");
                 } else {
@@ -2036,7 +2103,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 }
             }
             if (bean.checkNameModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getName() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("name IS NULL");
                 } else {
@@ -2044,7 +2111,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 }
             }
             if (bean.checkSexModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getSex() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("sex IS NULL");
                 } else {
@@ -2052,7 +2119,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 }
             }
             if (bean.checkBirthdateModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getBirthdate() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("birthdate IS NULL");
                 } else {
@@ -2060,7 +2127,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 }
             }
             if (bean.checkPapersTypeModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getPapersType() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("papers_type IS NULL");
                 } else {
@@ -2068,7 +2135,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 }
             }
             if (bean.checkPapersNumModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getPapersNum() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("papers_num IS NULL");
                 } else {
@@ -2076,7 +2143,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 }
             }
             if (bean.checkImageMd5Modified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getImageMd5() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("image_md5 IS NULL");
                 } else {
@@ -2084,7 +2151,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 }
             }
             if (bean.checkExpiryDateModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getExpiryDate() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("expiry_date IS NULL");
                 } else {
@@ -2092,7 +2159,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 }
             }
             if (bean.checkCreateTimeModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getCreateTime() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
                 } else {
@@ -2100,7 +2167,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 }
             }
             if (bean.checkUpdateTimeModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getUpdateTime() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("update_time IS NULL");
                 } else {
@@ -2112,7 +2179,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         {
             sqlEqualsOperation = null;
         }
-        return _dirtyCount;
+        return dirtyCount;
     }
 
     /**
@@ -2128,68 +2195,68 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         if (bean == null) {
             return 0;
         }
-        int _dirtyCount = 0;
+        int dirtyCount = 0;
         try
         {
             if (bean.checkIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getId() + "]");
-                if (bean.getId() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getId() + "]");
+                if (bean.getId() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getId()); }
             }
             if (bean.checkGroupIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getGroupId() + "]");
-                if (bean.getGroupId() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getGroupId()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getGroupId() + "]");
+                if (bean.getGroupId() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getGroupId()); }
             }
             if (bean.checkNameModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getName() + "]");
-                        if (bean.getName() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getName()); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getName() + "]");
+                        if (bean.getName() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getName()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getName() + "%]");
-                        if ( bean.getName()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getName() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getName() + "%]");
+                        if ( bean.getName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getName() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getName() + "]");
-                        if ( bean.getName() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getName()); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getName() + "]");
+                        if ( bean.getName() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getName()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getName() + "%]");
-                        if (bean.getName()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getName() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getName() + "%]");
+                        if (bean.getName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getName() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
             if (bean.checkSexModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getSex() + "]");
-                if (bean.getSex() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.TINYINT); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getSex()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getSex() + "]");
+                if (bean.getSex() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TINYINT);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getSex()); }
             }
             if (bean.checkBirthdateModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getBirthdate() + "]");
-                if (bean.getBirthdate() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.DATE); } else { ps.setDate(++_dirtyCount, new java.sql.Date(bean.getBirthdate().getTime())); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getBirthdate() + "]");
+                if (bean.getBirthdate() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.DATE);} } else { ps.setDate(++dirtyCount, new java.sql.Date(bean.getBirthdate().getTime())); }
             }
             if (bean.checkPapersTypeModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPapersType() + "]");
-                if (bean.getPapersType() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.TINYINT); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPapersType()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getPapersType() + "]");
+                if (bean.getPapersType() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TINYINT);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getPapersType()); }
             }
             if (bean.checkPapersNumModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPapersNum() + "]");
-                        if (bean.getPapersNum() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getPapersNum()); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getPapersNum() + "]");
+                        if (bean.getPapersNum() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getPapersNum()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getPapersNum() + "%]");
-                        if ( bean.getPapersNum()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getPapersNum() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getPapersNum() + "%]");
+                        if ( bean.getPapersNum()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getPapersNum() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getPapersNum() + "]");
-                        if ( bean.getPapersNum() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getPapersNum()); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getPapersNum() + "]");
+                        if ( bean.getPapersNum() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getPapersNum()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPapersNum() + "%]");
-                        if (bean.getPapersNum()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getPapersNum() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getPapersNum() + "%]");
+                        if (bean.getPapersNum()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getPapersNum() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -2198,43 +2265,43 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             if (bean.checkImageMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getImageMd5() + "]");
-                        if (bean.getImageMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getImageMd5()); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getImageMd5() + "]");
+                        if (bean.getImageMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getImageMd5()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getImageMd5() + "%]");
-                        if ( bean.getImageMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getImageMd5() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getImageMd5() + "%]");
+                        if ( bean.getImageMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getImageMd5() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getImageMd5() + "]");
-                        if ( bean.getImageMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getImageMd5()); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getImageMd5() + "]");
+                        if ( bean.getImageMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getImageMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getImageMd5() + "%]");
-                        if (bean.getImageMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getImageMd5() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getImageMd5() + "%]");
+                        if (bean.getImageMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getImageMd5() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
             if (bean.checkExpiryDateModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getExpiryDate() + "]");
-                if (bean.getExpiryDate() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.DATE); } else { ps.setDate(++_dirtyCount, new java.sql.Date(bean.getExpiryDate().getTime())); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getExpiryDate() + "]");
+                if (bean.getExpiryDate() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.DATE);} } else { ps.setDate(++dirtyCount, new java.sql.Date(bean.getExpiryDate().getTime())); }
             }
             if (bean.checkCreateTimeModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
-                if (bean.getCreateTime() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getCreateTime() + "]");
+                if (bean.getCreateTime() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TIMESTAMP);} } else { ps.setTimestamp(++dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
             }
             if (bean.checkUpdateTimeModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getUpdateTime() + "]");
-                if (bean.getUpdateTime() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getUpdateTime().getTime())); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getUpdateTime() + "]");
+                if (bean.getUpdateTime() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TIMESTAMP);} } else { ps.setTimestamp(++dirtyCount, new java.sql.Timestamp(bean.getUpdateTime().getTime())); }
             }
         }
         catch(SQLException e)
         {
             throw new DataAccessException(e);
         }
-        return _dirtyCount;
+        return dirtyCount;
     }
 
 
@@ -2291,25 +2358,36 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         try{
             int count = 0;
             if(0!=numRows){
-                if( startRow<1 )
+                if( startRow<1 ){
                     throw new IllegalArgumentException("invalid argument:startRow (must >=1)");
-                if( null==action || null==rs )
-                    throw new IllegalArgumentException("invalid argument:action OR rs (must not be null)");                    
-                for(;startRow>1&&rs.next();--startRow);//skip to last of startRow
+                }
+                if( null==action || null==rs ){
+                    throw new IllegalArgumentException("invalid argument:action OR rs (must not be null)");
+                }
+                for(;startRow > 1 && rs.next();){
+                    --startRow;
+                    //skip to last of startRow
+                }
                 if (fieldList == null) {
-                    if(numRows<0)
-                        for(;rs.next();++count)
+                    if(numRows<0){
+                        for(;rs.next();++count){
                             action.call(decodeRow(rs, action.getBean()));
-                    else
-                        for(;rs.next() && count<numRows;++count)
+                        }
+                    }else{
+                        for(;rs.next() && count<numRows;++count){
                             action.call(decodeRow(rs, action.getBean()));
+                        }
+                    }
                 }else {
-                    if(numRows<0)
-                        for(;rs.next();++count)
+                    if(numRows<0){
+                        for(;rs.next();++count){
                             action.call(decodeRow(rs, fieldList,action.getBean()));
-                    else
-                        for(;rs.next() && count<numRows;++count)
+                        }
+                    }else{
+                        for(;rs.next() && count<numRows;++count){
                             action.call(decodeRow(rs, fieldList,action.getBean()));
+                        }
+                    }
                 }
             }
             return count;
@@ -2330,8 +2408,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //29
     public FlPersonBean decodeRow(ResultSet rs,FlPersonBean bean) throws DAOException
     {
-        if(null==bean)
+        if(null==bean){
             bean = this.createBean();
+        }
         try
         {
             bean.setId(Manager.getInteger(rs, 1));
@@ -2367,8 +2446,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //30
     public FlPersonBean decodeRow(ResultSet rs, int[] fieldList,FlPersonBean bean) throws DAOException
     {
-        if(null==bean)
+        if(null==bean){
             bean = this.createBean();
+        }
         int pos = 0;
         try
         {
@@ -2620,8 +2700,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //37
     @Override
     public void fire(TableListener.Event event, FlPersonBean bean) throws DAOException{
-        if(null == event)
+        if(null == event){
             throw new NullPointerException();
+        }
         event.fire(listenerContainer, bean);
     }
     
@@ -2738,7 +2819,11 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //43
     @Override
     public boolean isPrimaryKey(String column){
-        for(String c:PRIMARYKEY_NAMES)if(c.equalsIgnoreCase(column))return true;
+        for(String c:PRIMARYKEY_NAMES){
+            if(c.equalsIgnoreCase(column)){
+                return true;
+            }
+        }
         return false;
     }
     
@@ -2754,8 +2839,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 for (int i = 0; i < argList.length; i++) {
                     if (argList[i].getClass().equals(byte[].class)) {
                         ps.setBytes(i + 1, (byte[]) argList[i]);
-                    } else
+                    } else {
                         ps.setObject(i + 1, argList[i]);
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -2790,7 +2876,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         return Manager.getInstance().runAsTransaction(fun);
     }
     
-    class DeleteBeanAction extends Action.Adapter<FlPersonBean>{
+    class DeleteBeanAction extends Action.BaseAdapter<FlPersonBean>{
         private final AtomicInteger count=new AtomicInteger(0);
         @Override
         public void call(FlPersonBean bean) throws DAOException {
@@ -2807,7 +2893,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     //45
     public List<Integer> toPrimaryKeyList(FlPersonBean... array){        
-        if(null == array)return new java.util.ArrayList<Integer>();
+        if(null == array){
+            return new java.util.ArrayList<Integer>();
+        }
         java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
         for(FlPersonBean bean:array){
             list.add(null == bean ? null : bean.getId());
@@ -2820,7 +2908,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     //46
     public List<Integer> toPrimaryKeyList(java.util.Collection<FlPersonBean> collection){        
-        if(null == collection)return new java.util.ArrayList<Integer>();
+        if(null == collection){
+            return new java.util.ArrayList<Integer>();
+        }
         java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
         for(FlPersonBean bean:collection){
             list.add(null == bean ? null : bean.getId());

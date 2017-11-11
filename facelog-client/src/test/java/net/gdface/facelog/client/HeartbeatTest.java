@@ -7,7 +7,11 @@ import org.junit.Test;
 import gu.simplemq.redis.JedisPoolLazy;
 import net.gdface.facelog.device.Heartbeat;
 
-public class TestHeartbeat {
+/**
+ * @author guyadong
+ *
+ */
+public class HeartbeatTest {
 
 	@Test
 	public void test() {

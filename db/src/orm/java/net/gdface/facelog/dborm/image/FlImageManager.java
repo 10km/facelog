@@ -36,7 +36,7 @@ import net.gdface.facelog.dborm.device.FlDeviceManager;
  * Remarks: 图像信息存储表,用于存储系统中所有用到的图像数据,表中只包含图像基本信息,图像二进制源数据存在在fl_store中(md5对应)<br>
  * @author sql2java
  */
-public class FlImageManager extends TableManager.Adapter<FlImageBean>
+public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
 {
     /**
      * Tablename.
@@ -51,24 +51,22 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         "md5"
     };
 
-    /**
-    * @return tableName
-    */
+    @Override
     public String getTableName() {
         return TABLE_NAME;
     }
-
+    
+    @Override
     public String getFields() {
         return FL_IMAGE_FIELDS;
     }
     
+    @Override
     public String getFullFields() {
         return FL_IMAGE_FULL_FIELDS;
     }
-    
-    /**
-    * @return primarykeyNames
-    */
+
+    @Override
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
@@ -97,7 +95,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     }
     
     @Override
-    protected Class<FlImageBean> _beanType(){
+    protected Class<FlImageBean> beanType(){
         return FlImageBean.class;
     }
     
@@ -144,8 +142,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     @SuppressWarnings("unused")
     public FlImageBean loadByPrimaryKeyChecked(String md5) throws DAOException
     {
-        if(null == md5)
+        if(null == md5){
             throw new ObjectRetrievalException(new NullPointerException());
+        }
         Connection c = null;
         PreparedStatement ps = null;
         try
@@ -190,8 +189,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     @Override
     public FlImageBean loadByPrimaryKeyChecked(FlImageBean bean) throws DAOException
     {
-        if(null == bean)
+        if(null == bean){
             throw new NullPointerException();
+        }
         return loadByPrimaryKeyChecked(bean.getMd5());
     }
     
@@ -204,24 +204,31 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     //1.3
     @Override
     public FlImageBean loadByPrimaryKey(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         
-        if(null == keys[0])return null;
+        if(null == keys[0]){
+            return null;
+        }
         return loadByPrimaryKey((String)keys[0]);
     }
     //1.3.2
     @Override
     public FlImageBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         
-        if(! (keys[0] instanceof String))
+        if(! (keys[0] instanceof String)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+        }
         return loadByPrimaryKeyChecked((String)keys[0]);
     }
     /**
@@ -265,8 +272,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     @Override
     public boolean existsByPrimaryKey(FlImageBean bean) throws DAOException
     {
-        if(null == bean  || null == bean.getMd5())
+        if(null == bean  || null == bean.getMd5()){
             return false;
+        }
         long modified = bean.getModified();
         try{
             bean.resetModifiedExceptPrimaryKeys();
@@ -278,8 +286,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     //1.7
     @Override
     public FlImageBean checkDuplicate(FlImageBean bean) throws DAOException{
-        if(!existsByPrimaryKey(bean))
+        if(!existsByPrimaryKey(bean)){
             throw new ObjectRetrievalException("Duplicate entry ("+ bean.getMd5() +") for key 'PRIMARY'");
+        }
         return bean;
     }
     /**
@@ -291,8 +300,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     //1.4.1
     public String checkDuplicate(String md5) throws DAOException
     {
-        if(existsPrimaryKey(md5))
+        if(existsPrimaryKey(md5)){
             throw new ObjectRetrievalException("Duplicate entry '"+ md5 +"' for key 'PRIMARY'");
+        }
         return md5;
     }    
     /**
@@ -338,10 +348,11 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
             if (bean.getMd5() == null) { ps.setNull(1, Types.CHAR); } else { ps.setString(1, bean.getMd5()); }
-            int _rows=ps.executeUpdate();
-            if(_rows>0)
+            int rows=ps.executeUpdate();
+            if(rows>0){
                 this.listenerContainer.afterDelete(bean); // listener callback
-            return _rows;
+            }
+            return rows;
         }
         catch(SQLException e)
         {
@@ -364,14 +375,17 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DAOException{
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
-        if(keys.length != 1 )
+        }
+        if(keys.length != 1){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        }
         FlImageBean bean = createBean();   
         
-        if(null != keys[0] && !(keys[0] instanceof String))
+        if(null != keys[0] && !(keys[0] instanceof String)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+        }
         bean.setMd5((String)keys[0]);
         return delete(bean);
     }
@@ -380,7 +394,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
     
-    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FlFaceBean.class,FlPersonBean.class};
+    private static final Class<?>[] IMPORTED_BEAN_TYPES = new Class<?>[]{FlFaceBean.class,FlPersonBean.class};
 
     /**
      * @see #getImportedBeansAsList(FlImageBean,int)
@@ -388,7 +402,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] getImportedBeans(FlImageBean bean, int ikIndex) throws DAOException {
-        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
+        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(IMPORTED_BEAN_TYPES[ikIndex],0));
     }
     
     /**
@@ -411,8 +425,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             return (List<T>)this.getFaceBeansByImageMd5AsList(bean);
         case FL_IMAGE_IK_FL_PERSON_IMAGE_MD5:
             return (List<T>)this.getPersonBeansByImageMd5AsList(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     
     /**
@@ -432,8 +447,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             return (T[])setFaceBeansByImageMd5(bean,(FlFaceBean[])importedBeans);
         case FL_IMAGE_IK_FL_PERSON_IMAGE_MD5:
             return (T[])setPersonBeansByImageMd5(bean,(FlPersonBean[])importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the importedBeans associates to the bean by ikIndex<br>
@@ -453,8 +469,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             return (C)setFaceBeansByImageMd5(bean,(java.util.Collection<FlFaceBean>)importedBeans);
         case FL_IMAGE_IK_FL_PERSON_IMAGE_MD5:
             return (C)setPersonBeansByImageMd5(bean,(java.util.Collection<FlPersonBean>)importedBeans);
+        default:
+            throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
     //////////////////////////////////////
@@ -525,8 +542,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     //3.2.4 GET IMPORTED
     public List<FlFaceBean> getFaceBeansByImageMd5AsList(FlImageBean bean,int startRow, int numRows) throws DAOException
     {
-        if(null == bean)
+        if(null == bean){
             return new java.util.ArrayList<FlFaceBean>();
+        }
         FlFaceBean other = new FlFaceBean();
         other.setImageMd5(bean.getMd5());
         return instanceOfFlFaceManager().loadUsingTemplateAsList(other,startRow,numRows);
@@ -636,8 +654,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     //3.2.4 GET IMPORTED
     public List<FlPersonBean> getPersonBeansByImageMd5AsList(FlImageBean bean,int startRow, int numRows) throws DAOException
     {
-        if(null == bean)
+        if(null == bean){
             return new java.util.ArrayList<FlPersonBean>();
+        }
         FlPersonBean other = new FlPersonBean();
         other.setImageMd5(bean.getMd5());
         return instanceOfFlPersonManager().loadUsingTemplateAsList(other,startRow,numRows);
@@ -697,9 +716,12 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         , FlDeviceBean refDeviceByDeviceId 
         , FlFaceBean[] impFaceByImageMd5 , FlPersonBean[] impPersonByImageMd5 ) throws DAOException
     {
-        if(null == bean) return null;
-        if(null != refDeviceByDeviceId)
+        if(null == bean) {
+            return null;
+        }
+        if(null != refDeviceByDeviceId){
             this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
+        }
         bean = this.save( bean );
         this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
         instanceOfFlFaceManager().save( impFaceByImageMd5 );
@@ -738,7 +760,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         , FlDeviceBean refDeviceByDeviceId 
         , java.util.Collection<FlFaceBean> impFaceByImageMd5 , java.util.Collection<FlPersonBean> impPersonByImageMd5 ) throws DAOException
     {
-        if(null == bean) return null;
+        if(null == bean) {
+            return null;
+        }
         this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
         bean = this.save( bean );
         this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
@@ -776,10 +800,12 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     @Override
     public FlImageBean save(FlImageBean bean,Object ...args) throws DAOException
     {
-        if(null == args)
+        if(null == args){
             save(bean);
-        if(args.length > 3)
+        }
+        if(args.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlDeviceBean");
         }
@@ -806,10 +832,12 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     @Override
     public FlImageBean saveCollection(FlImageBean bean,Object ...args) throws DAOException
     {
-        if(null == args)
+        if(null == args){
             save(bean);
-        if(args.length > 3)
+        }
+        if(args.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlDeviceBean");
         }
@@ -843,8 +871,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         switch(fkIndex){
         case FL_IMAGE_FK_DEVICE_ID:
             return  (T)this.getReferencedByDeviceId(bean);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     /**
@@ -863,8 +892,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         switch(fkIndex){
         case FL_IMAGE_FK_DEVICE_ID:
             return  (T)this.setReferencedByDeviceId(bean, (FlDeviceBean)beanToSet);
+        default:
+            throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
         }
-        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
      
     //////////////////////////////////////
@@ -882,7 +912,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     //5.1 GET REFERENCED VALUE
     public FlDeviceBean getReferencedByDeviceId(FlImageBean bean) throws DAOException
     {
-        if(null == bean)return null;
+        if(null == bean){
+            return null;
+        }
         bean.setReferencedByDeviceId(instanceOfFlDeviceManager().loadByPrimaryKey(bean.getDeviceId())); 
         return bean.getReferencedByDeviceId();
     }
@@ -978,77 +1010,77 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         {
             c = this.getConnection();
             this.listenerContainer.beforeInsert(bean); // listener callback
-            int _dirtyCount = 0;
+            int dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_image (");
 
             if (bean.checkMd5Modified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("md5");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkFormatModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("format");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkWidthModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("width");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkHeightModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("height");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkDepthModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("depth");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkFaceNumModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("face_num");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkThumbMd5Modified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("thumb_md5");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             if (bean.checkDeviceIdModified()) {
-                if (_dirtyCount>0) {
+                if (dirtyCount>0) {
                     sql.append(",");
                 }
                 sql.append("device_id");
-                _dirtyCount++;
+                dirtyCount++;
             }
 
             sql.append(") values (");
-            if(_dirtyCount > 0) {
+            if(dirtyCount > 0) {
                 sql.append("?");
-                for(int i = 1; i < _dirtyCount; i++) {
+                for(int i = 1; i < dirtyCount; i++) {
                     sql.append(",?");
                 }
             }
@@ -1182,14 +1214,14 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
 
-            int _dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
+            int dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
 
-            if (_dirtyCount == 0) {
+            if (dirtyCount == 0) {
                 // System.out.println("The bean to look is not initialized... do not update.");
                 return bean;
             }
 
-            if (bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5()); }
+            if (bean.getMd5() == null) { ps.setNull(++dirtyCount, Types.CHAR); } else { ps.setString(++dirtyCount, bean.getMd5()); }
             ps.executeUpdate();
             bean.resetIsModified();
             this.listenerContainer.afterUpdate(bean); // listener callback
@@ -1301,8 +1333,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                                     ResultSet.CONCUR_READ_ONLY);
             this.fillPreparedStatement(ps, bean, SEARCH_EXACT, false);
 
-            int _rows = ps.executeUpdate();
-            return _rows;
+            return ps.executeUpdate();
         }
         catch(SQLException e)
         {
@@ -1372,18 +1403,21 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @return a list of FlImageBean
      * @throws DAOException
      */
+    @Override
     public List<FlImageBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException
     {
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
+        }
         switch(keyIndex){
         case FL_IMAGE_INDEX_DEVICE_ID:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'device_id' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof Integer))
+            if(null != keys[0] && !(keys[0] instanceof Integer)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-
+            }
             return this.loadByIndexDeviceIdAsList((Integer)keys[0]);        
         }
         default:
@@ -1399,17 +1433,21 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @return the number of deleted objects
      * @throws DAOException
      */
+    @Override
     public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException
     {
-        if(null == keys)
+        if(null == keys){
             throw new NullPointerException();
+        }
         switch(keyIndex){
         case FL_IMAGE_INDEX_DEVICE_ID:{
-            if(keys.length != 1)
+            if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'device_id' column number");
+            }
             
-            if(null != keys[0] && !(keys[0] instanceof Integer))
+            if(null != keys[0] && !(keys[0] instanceof Integer)){
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+            }
             return this.deleteByIndexDeviceId((Integer)keys[0]);
         }
         default:
@@ -1501,6 +1539,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @throws DAOException
      */
     //20
+    @Override
     public int countUsingTemplate(FlImageBean bean, int searchType) throws DAOException
     {
         Connection c = null;
@@ -1555,12 +1594,12 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         if (bean == null) {
             return 0;
         }
-        int _dirtyCount = 0;
+        int dirtyCount = 0;
         String sqlEqualsOperation = searchType == SEARCH_EXACT ? "=" : " like ";
         try
         {
             if (bean.checkMd5Modified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getMd5() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 IS NULL");
                 } else {
@@ -1568,7 +1607,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 }
             }
             if (bean.checkFormatModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getFormat() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("format IS NULL");
                 } else {
@@ -1576,7 +1615,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 }
             }
             if (bean.checkWidthModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getWidth() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("width IS NULL");
                 } else {
@@ -1584,7 +1623,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 }
             }
             if (bean.checkHeightModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getHeight() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("height IS NULL");
                 } else {
@@ -1592,7 +1631,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 }
             }
             if (bean.checkDepthModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getDepth() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("depth IS NULL");
                 } else {
@@ -1600,7 +1639,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 }
             }
             if (bean.checkFaceNumModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getFaceNum() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_num IS NULL");
                 } else {
@@ -1608,7 +1647,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 }
             }
             if (bean.checkThumbMd5Modified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getThumbMd5() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("thumb_md5 IS NULL");
                 } else {
@@ -1616,7 +1655,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 }
             }
             if (bean.checkDeviceIdModified()) {
-                _dirtyCount ++;
+                dirtyCount ++;
                 if (bean.getDeviceId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("device_id IS NULL");
                 } else {
@@ -1628,7 +1667,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         {
             sqlEqualsOperation = null;
         }
-        return _dirtyCount;
+        return dirtyCount;
     }
 
     /**
@@ -1644,26 +1683,26 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         if (bean == null) {
             return 0;
         }
-        int _dirtyCount = 0;
+        int dirtyCount = 0;
         try
         {
             if (bean.checkMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "]");
-                        if (bean.getMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5()); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getMd5() + "]");
+                        if (bean.getMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getMd5()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "%]");
-                        if ( bean.getMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getMd5() + "%]");
+                        if ( bean.getMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getMd5() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "]");
-                        if ( bean.getMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5()); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getMd5() + "]");
+                        if ( bean.getMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "%]");
-                        if (bean.getMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getMd5() + "%]");
+                        if (bean.getMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getMd5() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -1672,73 +1711,73 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             if (bean.checkFormatModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFormat() + "]");
-                        if (bean.getFormat() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getFormat()); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getFormat() + "]");
+                        if (bean.getFormat() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getFormat()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFormat() + "%]");
-                        if ( bean.getFormat()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFormat() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getFormat() + "%]");
+                        if ( bean.getFormat()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getFormat() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFormat() + "]");
-                        if ( bean.getFormat() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFormat()); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getFormat() + "]");
+                        if ( bean.getFormat() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getFormat()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFormat() + "%]");
-                        if (bean.getFormat()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getFormat() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getFormat() + "%]");
+                        if (bean.getFormat()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getFormat() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
             if (bean.checkWidthModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getWidth() + "]");
-                if (bean.getWidth() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getWidth()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getWidth() + "]");
+                if (bean.getWidth() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getWidth()); }
             }
             if (bean.checkHeightModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getHeight() + "]");
-                if (bean.getHeight() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getHeight()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getHeight() + "]");
+                if (bean.getHeight() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getHeight()); }
             }
             if (bean.checkDepthModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getDepth() + "]");
-                if (bean.getDepth() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDepth()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getDepth() + "]");
+                if (bean.getDepth() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getDepth()); }
             }
             if (bean.checkFaceNumModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceNum() + "]");
-                if (bean.getFaceNum() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceNum()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getFaceNum() + "]");
+                if (bean.getFaceNum() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getFaceNum()); }
             }
             if (bean.checkThumbMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getThumbMd5() + "]");
-                        if (bean.getThumbMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getThumbMd5()); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getThumbMd5() + "]");
+                        if (bean.getThumbMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getThumbMd5()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getThumbMd5() + "%]");
-                        if ( bean.getThumbMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getThumbMd5() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getThumbMd5() + "%]");
+                        if ( bean.getThumbMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getThumbMd5() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getThumbMd5() + "]");
-                        if ( bean.getThumbMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getThumbMd5()); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getThumbMd5() + "]");
+                        if ( bean.getThumbMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getThumbMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getThumbMd5() + "%]");
-                        if (bean.getThumbMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getThumbMd5() + "%"); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getThumbMd5() + "%]");
+                        if (bean.getThumbMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getThumbMd5() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
             if (bean.checkDeviceIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getDeviceId() + "]");
-                if (bean.getDeviceId() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDeviceId()); }
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getDeviceId() + "]");
+                if (bean.getDeviceId() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getDeviceId()); }
             }
         }
         catch(SQLException e)
         {
             throw new DataAccessException(e);
         }
-        return _dirtyCount;
+        return dirtyCount;
     }
 
 
@@ -1795,25 +1834,36 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         try{
             int count = 0;
             if(0!=numRows){
-                if( startRow<1 )
+                if( startRow<1 ){
                     throw new IllegalArgumentException("invalid argument:startRow (must >=1)");
-                if( null==action || null==rs )
-                    throw new IllegalArgumentException("invalid argument:action OR rs (must not be null)");                    
-                for(;startRow>1&&rs.next();--startRow);//skip to last of startRow
+                }
+                if( null==action || null==rs ){
+                    throw new IllegalArgumentException("invalid argument:action OR rs (must not be null)");
+                }
+                for(;startRow > 1 && rs.next();){
+                    --startRow;
+                    //skip to last of startRow
+                }
                 if (fieldList == null) {
-                    if(numRows<0)
-                        for(;rs.next();++count)
+                    if(numRows<0){
+                        for(;rs.next();++count){
                             action.call(decodeRow(rs, action.getBean()));
-                    else
-                        for(;rs.next() && count<numRows;++count)
+                        }
+                    }else{
+                        for(;rs.next() && count<numRows;++count){
                             action.call(decodeRow(rs, action.getBean()));
+                        }
+                    }
                 }else {
-                    if(numRows<0)
-                        for(;rs.next();++count)
+                    if(numRows<0){
+                        for(;rs.next();++count){
                             action.call(decodeRow(rs, fieldList,action.getBean()));
-                    else
-                        for(;rs.next() && count<numRows;++count)
+                        }
+                    }else{
+                        for(;rs.next() && count<numRows;++count){
                             action.call(decodeRow(rs, fieldList,action.getBean()));
+                        }
+                    }
                 }
             }
             return count;
@@ -1834,8 +1884,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     //29
     public FlImageBean decodeRow(ResultSet rs,FlImageBean bean) throws DAOException
     {
-        if(null==bean)
+        if(null==bean){
             bean = this.createBean();
+        }
         try
         {
             bean.setMd5(rs.getString(1));
@@ -1868,8 +1919,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     //30
     public FlImageBean decodeRow(ResultSet rs, int[] fieldList,FlImageBean bean) throws DAOException
     {
-        if(null==bean)
+        if(null==bean){
             bean = this.createBean();
+        }
         int pos = 0;
         try
         {
@@ -2106,8 +2158,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     //37
     @Override
     public void fire(TableListener.Event event, FlImageBean bean) throws DAOException{
-        if(null == event)
+        if(null == event){
             throw new NullPointerException();
+        }
         event.fire(listenerContainer, bean);
     }
     
@@ -2203,7 +2256,11 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     //43
     @Override
     public boolean isPrimaryKey(String column){
-        for(String c:PRIMARYKEY_NAMES)if(c.equalsIgnoreCase(column))return true;
+        for(String c:PRIMARYKEY_NAMES){
+            if(c.equalsIgnoreCase(column)){
+                return true;
+            }
+        }
         return false;
     }
     
@@ -2219,8 +2276,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 for (int i = 0; i < argList.length; i++) {
                     if (argList[i].getClass().equals(byte[].class)) {
                         ps.setBytes(i + 1, (byte[]) argList[i]);
-                    } else
+                    } else {
                         ps.setObject(i + 1, argList[i]);
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -2255,7 +2313,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         return Manager.getInstance().runAsTransaction(fun);
     }
     
-    class DeleteBeanAction extends Action.Adapter<FlImageBean>{
+    class DeleteBeanAction extends Action.BaseAdapter<FlImageBean>{
         private final AtomicInteger count=new AtomicInteger(0);
         @Override
         public void call(FlImageBean bean) throws DAOException {
@@ -2272,7 +2330,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      */
     //45
     public List<String> toPrimaryKeyList(FlImageBean... array){        
-        if(null == array)return new java.util.ArrayList<String>();
+        if(null == array){
+            return new java.util.ArrayList<String>();
+        }
         java.util.ArrayList<String> list = new java.util.ArrayList<String>(array.length);
         for(FlImageBean bean:array){
             list.add(null == bean ? null : bean.getMd5());
@@ -2285,7 +2345,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      */
     //46
     public List<String> toPrimaryKeyList(java.util.Collection<FlImageBean> collection){        
-        if(null == collection)return new java.util.ArrayList<String>();
+        if(null == collection){
+            return new java.util.ArrayList<String>();
+        }
         java.util.ArrayList<String> list = new java.util.ArrayList<String>(collection.size());
         for(FlImageBean bean:collection){
             list.add(null == bean ? null : bean.getMd5());

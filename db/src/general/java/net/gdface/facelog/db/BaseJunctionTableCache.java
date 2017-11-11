@@ -3,7 +3,7 @@
 // modified by guyadong from
 // sql2java original version https://sourceforge.net/projects/sql2java/ 
 // JDBC driver used at code generation time: com.mysql.jdbc.Driver
-// template: junction.table.cache.java.vm
+// template: base.junction.table.cache.java.vm
 // ______________________________________________________
 package net.gdface.facelog.db;
 
@@ -39,7 +39,7 @@ import net.gdface.facelog.db.exception.ObjectRetrievalException;
  * @param <K2> 外键2类型(Foreign Key)
  * @param <B> 数据库记录对象类型(Java Bean)
  */
-public abstract class JunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
+public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
     @SuppressWarnings("serial")
     private static class CollectionReturnExcetpoin extends Exception{}
     public final class Key{
@@ -59,10 +59,12 @@ public abstract class JunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
         }
         @Override
         public boolean equals(Object obj) {
-            if (this == obj)
+            if (this == obj){
                 return true;
-            if (obj == null || Key.class != obj.getClass())
+            }
+            if (obj == null || Key.class != obj.getClass()){
                 return false;
+            }
             @SuppressWarnings("unchecked")
             Key other = (Key) obj;
             return (Objects.equal(k1, other.k1) && Objects.equal(k2, other.k2));
@@ -114,20 +116,20 @@ public abstract class JunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
     public abstract void registerListener();
     /** 注销侦听器 */
     public abstract void unregisterListener();
-    public JunctionTableCache(){
+    public BaseJunctionTableCache(){
         this(ITableCache.DEFAULT_CACHE_MAXIMUMSIZE,
                 ITableCache.DEFAULT_DURATION,
                 ITableCache.DEFAULT_TIME_UNIT);
     }
-    public JunctionTableCache(long maximumSize){
+    public BaseJunctionTableCache(long maximumSize){
         this(maximumSize,
                 ITableCache.DEFAULT_DURATION,
                 ITableCache.DEFAULT_TIME_UNIT);
     }
-    public JunctionTableCache(long maximumSize,long durationMinutes){
+    public BaseJunctionTableCache(long maximumSize,long durationMinutes){
         this(maximumSize,durationMinutes,ITableCache.DEFAULT_TIME_UNIT);
     }
-    public JunctionTableCache(long maximumSize,long duration, TimeUnit unit) {
+    public BaseJunctionTableCache(long maximumSize,long duration, TimeUnit unit) {
         this(ITableCache.DEFAULT_STRATEGY,maximumSize,duration,unit);
     }
     /**
@@ -137,11 +139,19 @@ public abstract class JunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
      * @param duration 失效时间,参见 {@link CacheBuilder#expireAfterWrite(long, TimeUnit)}
      * @param unit {@code duration}的时间单位
      */
-    public JunctionTableCache(UpdateStrategy updateStragey,long maximumSize,long duration, TimeUnit unit) {        
-        if(null == updateStragey ) updateStragey = ITableCache.DEFAULT_STRATEGY;
-        if(0 >= maximumSize) maximumSize = ITableCache.DEFAULT_CACHE_MAXIMUMSIZE;
-        if(0 >= duration) maximumSize = ITableCache.DEFAULT_DURATION;
-        if(null == unit) unit = ITableCache.DEFAULT_TIME_UNIT;
+    public BaseJunctionTableCache(UpdateStrategy updateStragey,long maximumSize,long duration, TimeUnit unit) {        
+        if(null == updateStragey ){
+            updateStragey = ITableCache.DEFAULT_STRATEGY;
+        }
+        if(0 >= maximumSize){
+            maximumSize = ITableCache.DEFAULT_CACHE_MAXIMUMSIZE;
+        }
+        if(0 >= duration){
+            maximumSize = ITableCache.DEFAULT_DURATION;
+        }
+        if(null == unit){
+            unit = ITableCache.DEFAULT_TIME_UNIT;
+        }
         this.updateStragey = updateStragey;
         cache = CacheBuilder.newBuilder()
             .maximumSize(maximumSize)
