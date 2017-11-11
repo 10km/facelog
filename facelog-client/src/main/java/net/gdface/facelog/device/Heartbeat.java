@@ -58,7 +58,10 @@ public class Heartbeat extends Thread implements CommonConstant{
 				table.set(deivceID, new Date(), false);
 				table.expire(deivceID);
 				Thread.sleep(intervalMills);
-			} catch (Exception e) {}
+			} catch(InterruptedException e){	
+			} catch(RuntimeException e){
+				logger.warn(e.getMessage());
+			}
 		}
 	}
 
