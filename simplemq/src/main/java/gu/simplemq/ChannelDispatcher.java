@@ -50,8 +50,9 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 	
 	public HashSet<String> registedOnlyAsSet(String... channels) {
 		HashSet<String> chSet = new HashSet<String>(CommonUtils.cleanEmptyAsList(channels));
-		if (!chSet.isEmpty())
+		if (!chSet.isEmpty()){
 			chSet.retainAll(channelSubs.keySet());
+		}
 		return chSet;
 	}
 	@SuppressWarnings("rawtypes")
@@ -86,6 +87,7 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 	protected String check(String name) throws SmqTypeException{return name;}
 	
 	@SuppressWarnings({ "rawtypes" })
+	@Override
 	public Set<Channel> register(Channel... channels) {
 		synchronized (this) {
 			HashSet<Channel> chSet = new HashSet<Channel>(CommonUtils.cleanNullAsList(channels));
@@ -111,11 +113,13 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 	}
 
 	@SuppressWarnings("rawtypes")
+	@Override
 	public Set<String> unregister(Channel... channels) {
 		return unregister(getChannelNames(channels));
 	}
 
 	@SuppressWarnings("rawtypes")
+	@Override
 	public Channel getChannel(String channel) {
 		return channelSubs.get(channel);
 	}
@@ -132,8 +136,9 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 				unsubscribe(ch.name);
 				logger.info("unregister channel: {}",channel);
 			} 
-		}else
+		}else{
 			logger.warn("unregistered channel: '{}'",channel);
+		}
 	}
 	
 	@Override

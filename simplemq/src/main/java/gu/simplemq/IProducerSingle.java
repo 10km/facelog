@@ -85,15 +85,17 @@ public interface IProducerSingle<T> {
 
 	/**
 	 * 向队列添加一组对象
+	 * @param offerLast 为{@code true}向队列头部添加
 	 * @param array
 	 * @return 实际添加的对象数目
 	 */
 	int produce(boolean offerLast,@SuppressWarnings("unchecked") T... array);
 
 	/**
+	 * 参见 {@link #produce(boolean, Object...)}
+	 * @param offerLast
 	 * @param c
 	 * @return
-	 * @see #produce(boolean, Object...)
 	 */
 	int produce(boolean offerLast,Collection<T> c);
 
@@ -105,13 +107,13 @@ public interface IProducerSingle<T> {
 	int produce(@SuppressWarnings("unchecked") T... array);
 
 	/**
+	 * 参见 {@link #produce(Object...)}
 	 * @param c
 	 * @return
-	 * @see #produce(Object...)
 	 */
 	int produce(Collection<T> c);
 	/**
-	 * @see #offerLast
+	 * 参见 {@link #offerLast} 
 	 * @param offerLast  
 	 * @return
 	 */

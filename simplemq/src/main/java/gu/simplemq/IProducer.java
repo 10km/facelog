@@ -26,6 +26,7 @@ public interface IProducer {
 	<T> void produce(Channel<T> channel, T object);
 
 	/**
+	 * 生产数据
 	 * @param channel
 	 * @param offerLast
 	 * @param objects
@@ -34,6 +35,7 @@ public interface IProducer {
 	<T> void produce(Channel<T> channel, boolean offerLast, @SuppressWarnings("unchecked") T... objects);
 
 	/**
+	 * 生产数据
 	 * @param channel
 	 * @param offerLast
 	 * @param c
@@ -42,6 +44,7 @@ public interface IProducer {
 	<T> void produce(Channel<T> channel, boolean offerLast, Collection<T> c);
 
 	/**
+	 * 生产数据
 	 * @param channel
 	 * @param c
 	 * @see #produce(Channel, Object)
@@ -49,6 +52,7 @@ public interface IProducer {
 	<T> void produce(Channel<T> channel, Collection<T>c);
 
 	/**
+	 * 生产数据
 	 * @param channel
 	 * @param objects
 	 * @see #produce(Channel, Object) 

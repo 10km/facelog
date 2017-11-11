@@ -44,8 +44,9 @@ public class KeyExpire {
 		this.timestamp = timestamp;
 	}
 	public final void expire(String key,long timeMills,boolean timestamp){
-		if(timeMills>0)
+		if(timeMills>0){
 			_expire(key,timeMills,timestamp);
+		}
 	}
 	public final void expire(String key,long time,TimeUnit timeUnit){
 		expire(key,TimeUnit.MILLISECONDS.convert(time, timeUnit),false);

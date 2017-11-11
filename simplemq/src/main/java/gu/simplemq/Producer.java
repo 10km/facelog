@@ -37,20 +37,23 @@ public class Producer<T> extends IProducerSingle.AbstractHandler<T> implements I
 	@Override
 	public boolean produce(T t,boolean offerLast){
 		if(! offerLast ){
-			if(queue instanceof BlockingDeque)
+			if(queue instanceof BlockingDeque){
 				return ((BlockingDeque<T>)queue).offerFirst(t);
-			else
+			}else{
 				throw new UnsupportedOperationException(" queue must be instance of  BlockingDeque");
-		}else
+			}
+		}else{
 			return queue.offer(t);
+		}
 	}
 	
 	@Override
 	public boolean produce(T t){
-		if(this.offerLast)
+		if(this.offerLast){
 			return queue.offer(t);
-		else
+		}else{
 			return produce(t,offerLast);
+		}
 	}
 
 	@Override

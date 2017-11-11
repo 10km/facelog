@@ -80,7 +80,9 @@ public class Channel<T> implements IMessageAdapter<Object>, Cloneable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onSubscribe(Object t) throws SmqUnsubscribeException {
-		if(null == this.adapter || null == t)return;
+		if(null == this.adapter || null == t){
+			return;
+		}
 		try{
 			this.adapter.onSubscribe((T) t);
 		}catch(SmqUnsubscribeException e){
@@ -109,8 +111,12 @@ public class Channel<T> implements IMessageAdapter<Object>, Cloneable {
 		return equalsIgnoreAdapter(obj) && (adapter == ((Channel<?>)obj).adapter);
 	}
 	public boolean equalsIgnoreAdapter(Object obj) {
-		if(super.equals(obj))return true;
-		if(!(obj instanceof Channel))return false;
+		if(super.equals(obj)){
+			return true;
+		}
+		if(!(obj instanceof Channel)){
+			return false;
+		}
 		Channel<?> oth = (Channel<?>)obj;
 		return name.equals(oth.name) && type == oth.type;
 	}

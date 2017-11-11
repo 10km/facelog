@@ -28,10 +28,11 @@ public class ConsumerSingle<T> extends AbstractConsumer implements IQueueCompone
 				if(isFifo)
 					t = queue.poll(timeoutMills, TimeUnit.MILLISECONDS);
 				else{
-					if(queue instanceof BlockingDeque)
+					if(queue instanceof BlockingDeque){
 						t = ((BlockingDeque<T>)queue).pollLast(timeoutMills, TimeUnit.MILLISECONDS);
-					else
+					}else{
 						throw new UnsupportedOperationException(" queue must be instance of  BlockingDeque");
+					}
 				}
 				if(null != t){
 					try{

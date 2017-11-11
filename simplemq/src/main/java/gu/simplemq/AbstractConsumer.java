@@ -42,8 +42,9 @@ public abstract class AbstractConsumer implements AutoCloseable,Constant{
 			final Runnable customRun = getCustomRunnable();
 			while(isOpened()){
 				try{
-					if(null != customRun)
+					if(null != customRun){
 						customRun.run();	
+					}
 				}catch(Exception e){
 					e.printStackTrace();
 				}
@@ -62,7 +63,9 @@ public abstract class AbstractConsumer implements AutoCloseable,Constant{
 		// Double Checked Locking
 		// check 1
 		try{
-			if(state == State.OPENED)return;
+			if(state == State.OPENED){
+				return;
+			}
 			if(state == State.CLOSED){
 				synchronized(this){
 					while(state != State.INIT){
@@ -75,7 +78,9 @@ public abstract class AbstractConsumer implements AutoCloseable,Constant{
 			synchronized(this){
 				// check 2
 				while(state != State.INIT){
-					if(state == State.OPENED)return;
+					if(state == State.OPENED){
+						return;
+					}
 					if(state == State.CLOSED){
 						// 等待状态变为State.INIT 参见reset()方法
 						this.wait();
@@ -106,8 +111,9 @@ public abstract class AbstractConsumer implements AutoCloseable,Constant{
 	@Override
 	public void close(){
 		synchronized( this ){
-			if(state == State.OPENED)
+			if(state == State.OPENED){
 				state = State.CLOSED;
+			}
 		}
 	}
 
@@ -129,8 +135,9 @@ public abstract class AbstractConsumer implements AutoCloseable,Constant{
 	 * @see #timeoutMills
 	 */
 	public AbstractConsumer  setTimeoutMills(int timeoutMills) {
-		if(timeoutMills>0)
+		if(timeoutMills>0){
 			this.timeoutMills = timeoutMills;
+		}
 		return this;
 	}
 	

@@ -15,7 +15,17 @@ public interface IPublisher  {
 	 */
 	<T> void publish(Channel<T> channel,T obj);
 
+	/**
+	 * 参见 {@link #publish(Channel, Object)}
+	 * @param channel
+	 * @param objects
+	 */
 	<T> void publish(Channel<T> channel, Collection<T> objects);
 
+	/**
+	 * 参见 {@link #publish(Channel, Object)}
+	 * @param channel
+	 * @param objects
+	 */
 	<T> void publish(Channel<T> channel, @SuppressWarnings("unchecked") T... objects);
 }

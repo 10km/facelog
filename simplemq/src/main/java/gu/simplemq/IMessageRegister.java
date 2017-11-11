@@ -41,7 +41,8 @@ public interface IMessageRegister {
 	Set<String> unregister(String... channels);
 
 	/**
-	 * @param channels
+	 * 注销指定的频道
+	 * @param channels 频道名列表
 	 * @see #unregister(String...)
 	 * @return 返回实际注销的频道名列表
 	 */
@@ -57,7 +58,8 @@ public interface IMessageRegister {
 	Channel getChannel(String channel);
 
 	/**
-	 * @return 返回当前订阅的所有频道名
+	 * 返回当前订阅的所有频道名
+	 * @return 
 	 */
 	String[] getSubscribes();
 

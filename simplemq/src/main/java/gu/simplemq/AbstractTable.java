@@ -58,14 +58,16 @@ public abstract class AbstractTable<V>{
 	}
 	
 	private String keyHelper(V v){
-		if(null == this.keyHelper)
+		if(null == this.keyHelper){
 			throw new UnsupportedOperationException("because of null keyHelper");
+		}
 		return this.keyHelper.returnKey(v);
 	}
 
 	private void assertJavaBean(){
-		if(!isJavaBean)
+		if(!isJavaBean){
 			throw new UnsupportedOperationException("because of not javabean,");
+		}
 	}
 	protected abstract V _get(String key);
 
@@ -78,8 +80,9 @@ public abstract class AbstractTable<V>{
 		@SuppressWarnings("unchecked")
 		HashMap<String, V> m = (HashMap<String, V>) new HashMap<String,Object>();
 		for(String key:keys){
-			if(!Judge.isEmpty(key))
+			if(!Judge.isEmpty(key)){
 				m.put(key, _get(key));
+			}
 		}
 		return m;
 	}
@@ -89,18 +92,23 @@ public abstract class AbstractTable<V>{
 	public void set(String key, V value, boolean nx){
 		Assert.notEmpty(key,"key");
 		if(null == value ){
-			if(!nx)
+			if(!nx){
 				remove(key);
+			}
 		}else{
-			if(isJavaBean)
+			if(isJavaBean){
 				setFields(nx, key, value);
-			else
+			}
+			else{
 				_set(key,value,nx);
+			}
 		}
 	}
 	
 	public void set(V value,boolean nx){
-		if(null ==value)return;
+		if(null ==value){
+			return;
+		}
 		set(keyHelper(value),value,nx);
 	}
 	
@@ -117,23 +125,27 @@ public abstract class AbstractTable<V>{
 		assertJavaBean();
 		Assert.notEmpty(key,"key");
 		if(null == obj){
-			if(!nx)
+			if(!nx){
 				this.remove(key);
+			}
 			return ;
 		}
 		Map<String, String> json = this.encoder.toJsonMap(obj);
-		if(null == fields || 0== fields.length)
+		if(null == fields || 0== fields.length){
 			fields = json.keySet().toArray(new String[0]);
+		}
 		if(1 == fields.length){
 			Assert.notEmpty(fields[0],"fields[0]");
 			_setField(key,fields[0],json.get(fields[0]), nx);
 		}
 		else{
 			for (String field : fields) {
-				if (null == field || field.isEmpty())
+				if (null == field || field.isEmpty()){
 					continue;
-				if (!json.containsKey(field))
+				}
+				if (!json.containsKey(field)){
 					json.remove(field);
+				}
 			}
 			_setFields(key,json, nx);
 		}
@@ -144,7 +156,9 @@ public abstract class AbstractTable<V>{
 	public void setFields(String key, Map<String,Object>fieldsValues, boolean nx){
 		assertJavaBean();
 		Assert.notEmpty(key,"key");
-		if(null == fieldsValues || fieldsValues.isEmpty())return;
+		if(null == fieldsValues || fieldsValues.isEmpty()){
+			return;
+		}
 		HashMap<String, String> fields = new HashMap<String,String>();
 		for(Entry<String, Object> entry:fieldsValues.entrySet()){
 			Object value = entry.getValue();
@@ -168,7 +182,9 @@ public abstract class AbstractTable<V>{
 		if(null != fields){
 			// 去除为空或 null 的字段名
 			for(String field : fields){
-				if(null == field || 0 == field.length())continue;
+				if(null == field || 0 == field.length()){
+					continue;
+				}
 				types.put(field, null);
 			}
 		}
@@ -196,22 +212,28 @@ public abstract class AbstractTable<V>{
 	protected abstract int _remove(String... keys);
 	
 	public int remove(String... keys){
-		if(null == keys || 0 == keys.length)
+		if(null == keys || 0 == keys.length){
 			return 0;
+		}
 		ArrayList<String> list = new ArrayList<String>(keys.length);
 		for(String key:keys){
-			if(null == key || 0 == key.length())continue;
+			if(null == key || 0 == key.length()){
+				continue;
+			}
 			list.add(key);
 		}
 		return list.isEmpty()?0:_remove(list.toArray(new String[list.size()]));
 	}
 	
 	public int remove(@SuppressWarnings("unchecked") V... values){
-		if(null == values)
+		if(null == values){
 			return 0;
+		}
 		ArrayList<String> list = new ArrayList<String>(values.length);
 		for(V value:values){
-			if(null == value)continue;
+			if(null == value){
+				continue;
+			}
 			list.add(this.keyHelper(value));
 		}	
 		return remove(list.toArray(new String[list.size()]));
@@ -220,15 +242,18 @@ public abstract class AbstractTable<V>{
 	protected abstract Set<String> _keys(String pattern) ;
 	
 	public Set<String> keys(String pattern) {
-		if(null == pattern || pattern.isEmpty())
+		if(null == pattern || pattern.isEmpty()){
 			pattern="*";
+		}
 		return _keys(pattern);
 	}
 	
 	protected abstract void _set(Map<String, V> m, boolean nx) ;
 	
 	public void set(Map<String, V> m, boolean nx){
-		if(null == m || m.isEmpty()) return ;
+		if(null == m || m.isEmpty()) {
+			return ;
+		}
 		_set(m,nx);
 	}
 	
@@ -252,7 +277,9 @@ public abstract class AbstractTable<V>{
 	 * @return
 	 */
 	public boolean containsValue(final String pattern,final V v) {
-		if(null == v)return false;
+		if(null == v){
+			return false;
+		}
 		final AtomicBoolean b=new AtomicBoolean(false); 
 		foreach(pattern,new Filter<V>(){
 			@Override
@@ -285,8 +312,9 @@ public abstract class AbstractTable<V>{
 		try {
 			for (String key : keys(pattern)) {
 				V value = get(key);
-				if(null != value && filter.run(key, value))
+				if(null != value && filter.run(key, value)){
 					++count;
+				}
 			}
 		} catch (BreakException e) {}
 		return count;
@@ -306,9 +334,12 @@ public abstract class AbstractTable<V>{
 	}
 	
 	public void set(Collection<V> c, boolean nx){
-		if(null == c || c.isEmpty()) return ;
-		if(null == this.keyHelper)
+		if(null == c || c.isEmpty()) {
+			return ;
+		}
+		if(null == this.keyHelper){
 			throw new UnsupportedOperationException("because of null keyHelper");
+		}
 		HashMap<String, V> keysValues = new HashMap<String,V>();
 		for(V value:c)	{
 			keysValues.put(this.keyHelper(value), value);
@@ -317,7 +348,9 @@ public abstract class AbstractTable<V>{
 	}
 	
 	public void set(boolean nx,@SuppressWarnings("unchecked") V ...array){
-		if(null == array)return ;
+		if(null == array){
+			return ;
+		}
 		set(Arrays.asList(array), nx);
 	}
 	public JsonEncoder getEncoder() {
