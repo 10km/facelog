@@ -16,8 +16,7 @@ import com.google.common.base.Preconditions;
  */
 public class GetServiceMetadataTest {
 	public static ThriftServiceMetadata getServiceMetadata(Class<?>type){
-		Preconditions.checkNotNull(type, "type is null");
-		return  new ThriftServiceMetadata(type,new ThriftCatalog());		
+		return  new ThriftServiceMetadata(Preconditions.checkNotNull(type, "type is null"),new ThriftCatalog());		
 	}
 	@Test
 	public void test2() {
