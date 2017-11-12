@@ -2605,7 +2605,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
                 @Override
                 protected List<FlFaceBean> getImportedBeans(FlImageBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
-                            ? java.util.Collections.EMPTY_LIST
+                            ? java.util.Collections.<FlFaceBean>emptyList()
                             : instanceOfFlImageManager().getFaceBeansByImageMd5AsList(bean);
                 }
                 @Override
@@ -2622,7 +2622,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
                 @Override
                 protected List<FlFaceBean> getImportedBeans(FlFeatureBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
-                            ? java.util.Collections.EMPTY_LIST
+                            ? java.util.Collections.<FlFaceBean>emptyList()
                             : instanceOfFlFeatureManager().getFaceBeansByFeatureMd5AsList(bean);
                 }
                 @Override

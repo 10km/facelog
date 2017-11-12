@@ -2308,7 +2308,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                 @Override
                 protected List<FlDeviceGroupBean> getImportedBeans(FlDeviceGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
-                            ? java.util.Collections.EMPTY_LIST
+                            ? java.util.Collections.<FlDeviceGroupBean>emptyList()
                             : instanceOfFlDeviceGroupManager().getDeviceGroupBeansByParentAsList(bean);
                 }
                 @Override
@@ -2522,7 +2522,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     @SuppressWarnings("unchecked")
     public java.util.List<FlDeviceGroupBean> listOfParent(FlDeviceGroupBean bean) throws DAOException{
         return null == bean
-                ? java.util.Collections.EMPTY_LIST
+                ? java.util.Collections.<FlDeviceGroupBean>emptyList()
                 : listOfParent(bean.getId());
     }
     //49

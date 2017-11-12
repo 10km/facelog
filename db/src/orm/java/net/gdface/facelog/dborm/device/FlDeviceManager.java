@@ -2535,7 +2535,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                 @Override
                 protected List<FlDeviceBean> getImportedBeans(FlDeviceGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
-                            ? java.util.Collections.EMPTY_LIST
+                            ? java.util.Collections.<FlDeviceBean>emptyList()
                             : instanceOfFlDeviceGroupManager().getDeviceBeansByGroupIdAsList(bean);
                 }
                 @Override

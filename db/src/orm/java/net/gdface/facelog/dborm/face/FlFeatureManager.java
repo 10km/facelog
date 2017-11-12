@@ -2024,7 +2024,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
                 @Override
                 protected List<FlFeatureBean> getImportedBeans(FlPersonBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
-                            ? java.util.Collections.EMPTY_LIST
+                            ? java.util.Collections.<FlFeatureBean>emptyList()
                             : instanceOfFlPersonManager().getFeatureBeansByPersonIdAsList(bean);
                 }
                 @Override

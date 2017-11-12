@@ -1498,10 +1498,9 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     //48 IPersonGroupManager
 
     @Override
-    @SuppressWarnings("unchecked")
     public java.util.List<PersonGroupBean> listOfParent(PersonGroupBean bean){
         return null == bean
-                ? java.util.Collections.EMPTY_LIST
+                ? java.util.Collections.<PersonGroupBean>emptyList()
                 : listOfParent(bean.getId());
     }
     //49 IPersonGroupManager

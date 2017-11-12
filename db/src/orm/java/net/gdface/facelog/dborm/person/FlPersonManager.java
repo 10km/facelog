@@ -2744,7 +2744,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                 @Override
                 protected List<FlPersonBean> getImportedBeans(FlPersonGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
-                            ? java.util.Collections.EMPTY_LIST
+                            ? java.util.Collections.<FlPersonBean>emptyList()
                             : instanceOfFlPersonGroupManager().getPersonBeansByGroupIdAsList(bean);
                 }
                 @Override
@@ -2762,7 +2762,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                 @Override
                 protected List<FlPersonBean> getImportedBeans(FlImageBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
-                            ? java.util.Collections.EMPTY_LIST
+                            ? java.util.Collections.<FlPersonBean>emptyList()
                             : instanceOfFlImageManager().getPersonBeansByImageMd5AsList(bean);
                 }
                 @Override

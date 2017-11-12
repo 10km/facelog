@@ -1552,7 +1552,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
                 @Override
                 protected List<FlPermitBean> getImportedBeans(FlDeviceGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
-                            ? java.util.Collections.EMPTY_LIST
+                            ? java.util.Collections.<FlPermitBean>emptyList()
                             : instanceOfFlDeviceGroupManager().getPermitBeansByDeviceGroupIdAsList(bean);
                 }
                 @Override
@@ -1569,7 +1569,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
                 @Override
                 protected List<FlPermitBean> getImportedBeans(FlPersonGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
-                            ? java.util.Collections.EMPTY_LIST
+                            ? java.util.Collections.<FlPermitBean>emptyList()
                             : instanceOfFlPersonGroupManager().getPermitBeansByPersonGroupIdAsList(bean);
                 }
                 @Override

@@ -2202,7 +2202,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
                 @Override
                 protected List<FlImageBean> getImportedBeans(FlDeviceBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
-                            ? java.util.Collections.EMPTY_LIST
+                            ? java.util.Collections.<FlImageBean>emptyList()
                             : instanceOfFlDeviceManager().getImageBeansByDeviceIdAsList(bean);
                 }
                 @Override

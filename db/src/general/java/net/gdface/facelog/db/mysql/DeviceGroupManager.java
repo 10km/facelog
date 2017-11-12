@@ -1498,10 +1498,9 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     //48 IDeviceGroupManager
 
     @Override
-    @SuppressWarnings("unchecked")
     public java.util.List<DeviceGroupBean> listOfParent(DeviceGroupBean bean){
         return null == bean
-                ? java.util.Collections.EMPTY_LIST
+                ? java.util.Collections.<DeviceGroupBean>emptyList()
                 : listOfParent(bean.getId());
     }
     //49 IDeviceGroupManager

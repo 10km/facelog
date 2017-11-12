@@ -2308,7 +2308,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
                 @Override
                 protected List<FlPersonGroupBean> getImportedBeans(FlPersonGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
-                            ? java.util.Collections.EMPTY_LIST
+                            ? java.util.Collections.<FlPersonGroupBean>emptyList()
                             : instanceOfFlPersonGroupManager().getPersonGroupBeansByParentAsList(bean);
                 }
                 @Override
@@ -2522,7 +2522,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     @SuppressWarnings("unchecked")
     public java.util.List<FlPersonGroupBean> listOfParent(FlPersonGroupBean bean) throws DAOException{
         return null == bean
-                ? java.util.Collections.EMPTY_LIST
+                ? java.util.Collections.<FlPersonGroupBean>emptyList()
                 : listOfParent(bean.getId());
     }
     //49

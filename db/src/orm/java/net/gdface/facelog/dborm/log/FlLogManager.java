@@ -2162,7 +2162,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                 @Override
                 protected List<FlLogBean> getImportedBeans(FlPersonBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
-                            ? java.util.Collections.EMPTY_LIST
+                            ? java.util.Collections.<FlLogBean>emptyList()
                             : instanceOfFlPersonManager().getLogBeansByPersonIdAsList(bean);
                 }
                 @Override
@@ -2179,7 +2179,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                 @Override
                 protected List<FlLogBean> getImportedBeans(FlDeviceBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
-                            ? java.util.Collections.EMPTY_LIST
+                            ? java.util.Collections.<FlLogBean>emptyList()
                             : instanceOfFlDeviceManager().getLogBeansByDeviceIdAsList(bean);
                 }
                 @Override
@@ -2197,7 +2197,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                 @Override
                 protected List<FlLogBean> getImportedBeans(FlFeatureBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
-                            ? java.util.Collections.EMPTY_LIST
+                            ? java.util.Collections.<FlLogBean>emptyList()
                             : instanceOfFlFeatureManager().getLogBeansByVerifyFeatureAsList(bean);
                 }
                 @Override
@@ -2215,7 +2215,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                 @Override
                 protected List<FlLogBean> getImportedBeans(FlFaceBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
-                            ? java.util.Collections.EMPTY_LIST
+                            ? java.util.Collections.<FlLogBean>emptyList()
                             : instanceOfFlFaceManager().getLogBeansByCompareFaceAsList(bean);
                 }
                 @Override
