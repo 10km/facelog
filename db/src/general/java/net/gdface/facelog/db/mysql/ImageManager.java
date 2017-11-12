@@ -102,23 +102,6 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         return ImageBean.class;
     }
     
-    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.device.FlDeviceGroupBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.permit.FlPermitBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.person.FlPersonGroupBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
-        return dbConverter;
-    }
-
-    /**
-     * set  {@link IDbConverter} as converter used by manager.<br>
-     * throw {@link NullPointerException} if {@code dbConverter} is null
-     * @param dbConverter
-     */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public synchronized void setDbConverter(IDbConverter dbConverter) {
-        if( null == dbConverter){
-            throw new NullPointerException();
-        }
-        this.dbConverter = dbConverter;
-        this.beanConverter = this.dbConverter.getImageBeanConverter();
-    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////

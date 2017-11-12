@@ -2304,7 +2304,6 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     /** foreign key listener for DEELTE RULE : SET_NULL */
     private final net.gdface.facelog.dborm.ForeignKeyListener<FlPersonGroupBean,FlPersonGroupBean> foreignKeyListenerByParent = 
             new net.gdface.facelog.dborm.ForeignKeyListener<FlPersonGroupBean,FlPersonGroupBean>(){
-                @SuppressWarnings("unchecked")
                 @Override
                 protected List<FlPersonGroupBean> getImportedBeans(FlPersonGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
@@ -2519,7 +2518,6 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     /**
      * see also {@link #listOfParent(Integer)}
      */
-    @SuppressWarnings("unchecked")
     public java.util.List<FlPersonGroupBean> listOfParent(FlPersonGroupBean bean) throws DAOException{
         return null == bean
                 ? java.util.Collections.<FlPersonGroupBean>emptyList()

@@ -2158,7 +2158,6 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     /** foreign key listener for DEELTE RULE : CASCADE */
     private final net.gdface.facelog.dborm.ForeignKeyListener<FlPersonBean,FlLogBean> foreignKeyListenerByPersonId = 
             new net.gdface.facelog.dborm.ForeignKeyListener<FlPersonBean,FlLogBean>(){
-                @SuppressWarnings("unchecked")
                 @Override
                 protected List<FlLogBean> getImportedBeans(FlPersonBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
@@ -2175,7 +2174,6 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     /** foreign key listener for DEELTE RULE : SET_NULL */
     private final net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceBean,FlLogBean> foreignKeyListenerByDeviceId = 
             new net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceBean,FlLogBean>(){
-                @SuppressWarnings("unchecked")
                 @Override
                 protected List<FlLogBean> getImportedBeans(FlDeviceBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
@@ -2193,7 +2191,6 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     /** foreign key listener for DEELTE RULE : SET_NULL */
     private final net.gdface.facelog.dborm.ForeignKeyListener<FlFeatureBean,FlLogBean> foreignKeyListenerByVerifyFeature = 
             new net.gdface.facelog.dborm.ForeignKeyListener<FlFeatureBean,FlLogBean>(){
-                @SuppressWarnings("unchecked")
                 @Override
                 protected List<FlLogBean> getImportedBeans(FlFeatureBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
@@ -2211,7 +2208,6 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     /** foreign key listener for DEELTE RULE : SET_NULL */
     private final net.gdface.facelog.dborm.ForeignKeyListener<FlFaceBean,FlLogBean> foreignKeyListenerByCompareFace = 
             new net.gdface.facelog.dborm.ForeignKeyListener<FlFaceBean,FlLogBean>(){
-                @SuppressWarnings("unchecked")
                 @Override
                 protected List<FlLogBean> getImportedBeans(FlFaceBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 

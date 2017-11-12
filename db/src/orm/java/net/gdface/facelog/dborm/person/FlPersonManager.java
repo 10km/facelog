@@ -2740,7 +2740,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     /** foreign key listener for DEELTE RULE : SET_NULL */
     private final net.gdface.facelog.dborm.ForeignKeyListener<FlPersonGroupBean,FlPersonBean> foreignKeyListenerByGroupId = 
             new net.gdface.facelog.dborm.ForeignKeyListener<FlPersonGroupBean,FlPersonBean>(){
-                @SuppressWarnings("unchecked")
                 @Override
                 protected List<FlPersonBean> getImportedBeans(FlPersonGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
@@ -2758,7 +2757,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     /** foreign key listener for DEELTE RULE : SET_NULL */
     private final net.gdface.facelog.dborm.ForeignKeyListener<FlImageBean,FlPersonBean> foreignKeyListenerByImageMd5 = 
             new net.gdface.facelog.dborm.ForeignKeyListener<FlImageBean,FlPersonBean>(){
-                @SuppressWarnings("unchecked")
                 @Override
                 protected List<FlPersonBean> getImportedBeans(FlImageBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 

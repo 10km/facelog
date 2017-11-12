@@ -1548,7 +1548,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     /** foreign key listener for DEELTE RULE : CASCADE */
     private final net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceGroupBean,FlPermitBean> foreignKeyListenerByDeviceGroupId = 
             new net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceGroupBean,FlPermitBean>(){
-                @SuppressWarnings("unchecked")
                 @Override
                 protected List<FlPermitBean> getImportedBeans(FlDeviceGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
@@ -1565,7 +1564,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     /** foreign key listener for DEELTE RULE : CASCADE */
     private final net.gdface.facelog.dborm.ForeignKeyListener<FlPersonGroupBean,FlPermitBean> foreignKeyListenerByPersonGroupId = 
             new net.gdface.facelog.dborm.ForeignKeyListener<FlPersonGroupBean,FlPermitBean>(){
-                @SuppressWarnings("unchecked")
                 @Override
                 protected List<FlPermitBean> getImportedBeans(FlPersonGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 

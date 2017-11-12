@@ -2304,7 +2304,6 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     /** foreign key listener for DEELTE RULE : SET_NULL */
     private final net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceGroupBean,FlDeviceGroupBean> foreignKeyListenerByParent = 
             new net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceGroupBean,FlDeviceGroupBean>(){
-                @SuppressWarnings("unchecked")
                 @Override
                 protected List<FlDeviceGroupBean> getImportedBeans(FlDeviceGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
@@ -2519,7 +2518,6 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     /**
      * see also {@link #listOfParent(Integer)}
      */
-    @SuppressWarnings("unchecked")
     public java.util.List<FlDeviceGroupBean> listOfParent(FlDeviceGroupBean bean) throws DAOException{
         return null == bean
                 ? java.util.Collections.<FlDeviceGroupBean>emptyList()
