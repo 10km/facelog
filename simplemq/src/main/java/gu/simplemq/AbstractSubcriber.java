@@ -13,13 +13,13 @@ public abstract class AbstractSubcriber extends ChannelDispatcher implements Aut
 	 * 订阅频道具体实现
 	 * @param channels 频道名列表,不可为null或空
 	 */
-	protected abstract void _subscribe(String... channels);
+	protected abstract void doSubscribe(String... channels);
 	
 	/**
 	 * 取消订阅具体实现
 	 * @param channels 频道名列表,为null或空时订阅所有 {@link #channelSubs}中的频道
 	 */
-	protected abstract void _unsubscribe(String... channels);
+	protected abstract void doUnsubscribe(String... channels);
 	
 
 	@Override
@@ -27,7 +27,7 @@ public abstract class AbstractSubcriber extends ChannelDispatcher implements Aut
 		synchronized (this) {
 			channels = super.subscribe(channels);
 			if (0 < channels.length){
-				this._subscribe(channels);
+				this.doSubscribe(channels);
 			}
 			return channels;
 		}
@@ -37,7 +37,7 @@ public abstract class AbstractSubcriber extends ChannelDispatcher implements Aut
 	public String[] unsubscribe(String... channels){
 		synchronized (this) {
 			channels = super.unsubscribe(channels);
-			_unsubscribe(channels);
+			doUnsubscribe(channels);
 			return channels;
 		}
 	}

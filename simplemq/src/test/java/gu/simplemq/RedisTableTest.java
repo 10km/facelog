@@ -56,7 +56,7 @@ public class RedisTableTest {
 
 	    private Long       id;
 	    private String     name;
-	    private List<User> users = new ArrayList<User>();
+	    private List<User> users = new ArrayList<User>(16);
 	    public Date date=new Date();
 	    public java.sql.Date sqldate=new java.sql.Date(date.getTime());
 	    public byte[] array=new byte[]{22,33,3,2,3,1,5,-1};

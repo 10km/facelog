@@ -63,7 +63,7 @@ public class FastjsonTest {
 	    private Long       id;
 	    private String     name;
 	    private boolean isNew=false;
-	    private List<User> users = new ArrayList<User>();
+	    private List<User> users = new ArrayList<User>(16);
 	    public Date date=new Date();
 	    private java.sql.Date sqldate=new java.sql.Date(date.getTime());
 	    public byte[] array=new byte[]{22,33,3,2,3,1,5,-1};

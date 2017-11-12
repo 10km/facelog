@@ -38,7 +38,7 @@ public class RedisSubscriber extends AbstractSubcriber implements IRedisComponen
 	}
 
 	@Override
-	protected void _subscribe(String... channels) {
+	protected void doSubscribe(String... channels) {
 		try{
 			jedisPubSub.subscribe(channels);
 		}catch(JedisConnectionException e){
@@ -47,7 +47,7 @@ public class RedisSubscriber extends AbstractSubcriber implements IRedisComponen
 	}
 
 	@Override
-	protected void _unsubscribe(String... channels) {
+	protected void doUnsubscribe(String... channels) {
 		if(jedisPubSub.isSubscribed()) {
 			jedisPubSub.unsubscribe(channels);
 		}

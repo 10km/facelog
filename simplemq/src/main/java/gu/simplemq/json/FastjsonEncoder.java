@@ -34,7 +34,7 @@ class FastjsonEncoder extends BaseJsonEncoder {
 	
 	protected FastjsonEncoder() {}
 	
-	protected JSONObject _toJSONObject(Object bean){
+	protected JSONObject doToJSONObject(Object bean){
 		// 先序列化再解析成JSONObject对象
 		return (JSONObject) JSON.parse(this.toJsonString(bean));
 	}
@@ -54,7 +54,7 @@ class FastjsonEncoder extends BaseJsonEncoder {
 			throw new SmqNotBeanException("invalid type,not a java bean object");
 		}
 
-		JSONObject jsonObject =_toJSONObject(bean);
+		JSONObject jsonObject = doToJSONObject(bean);
 		Map<String, String> fields = new LinkedHashMap<String, String>();
 		for(Entry<String, Object> entry : jsonObject.entrySet()) {
 			Object value = entry.getValue();

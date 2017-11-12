@@ -29,7 +29,7 @@ import redis.clients.jedis.Transaction;
  */
 public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	private final JedisPoolLazy pool;
-	private static final String prefixEnd= ".";
+	private static final String PREFIX_END= ".";
 	private final TablenameChecker checker ;
 	private final RedisKeyExpire redisExpire;
 	/** 表名 */
@@ -79,7 +79,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	}
 
 	@Override
-	protected V _get(String key) {
+	protected V doGet(String key) {
 		key = wrapKey(key);
 		Jedis jedis = pool.apply();
 		try {
@@ -119,7 +119,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	}
 
 	@Override
-	protected void _set(String key, V value, boolean nx) {
+	protected void doSet(String key, V value, boolean nx) {
 		key = wrapKey(key);
 		Jedis jedis = pool.apply();
 		try {
@@ -134,7 +134,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	}
 	
 	@Override
-	protected void _setFields(String key, Map<String, String> fieldsValues, boolean nx) {
+	protected void doSetFields(String key, Map<String, String> fieldsValues, boolean nx) {
 		key = wrapKey(key);
 		if(null == fieldsValues || fieldsValues.isEmpty()){
 			return;
@@ -142,7 +142,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 		Jedis jedis = pool.apply();
 		try {
 			HashMap<String, String> hash = new HashMap<String,String>(16);
-			ArrayList<String> nullFields = new ArrayList<String>();
+			ArrayList<String> nullFields = new ArrayList<String>(16);
 			for(Entry<String, String> entry:fieldsValues.entrySet()){
 				String value = entry.getValue();
 				String field = entry.getKey();
@@ -177,7 +177,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	}	
 	
 	@Override
-	protected void _setField(String key, String field,Object value,boolean nx) {
+	protected void doSetField(String key, String field,Object value,boolean nx) {
 		key = wrapKey(key);
 		Jedis jedis = pool.apply();
 		try {
@@ -196,7 +196,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	}
 
 	@Override
-	protected int _remove(String... keys) {
+	protected int doRemove(String... keys) {
 		Jedis jedis = pool.apply();
 		try {
 			String[] wkeys = new String[keys.length]; 
@@ -210,7 +210,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	}
 
 	@Override
-	protected Set<String> _keys(String pattern) {
+	protected Set<String> doKeys(String pattern) {
 		Jedis jedis = pool.apply();
 		try {
 			Set<String> keys = jedis.keys( wrapKey(pattern));
@@ -224,11 +224,11 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 		}
 	}
 
-	protected void _setString(Map<String, V> m, boolean nx) {
+	protected void doSetString(Map<String, V> m, boolean nx) {
 		Jedis jedis = pool.apply();
 		try {
-			ArrayList<String> keysValues = new ArrayList<String>();
-			ArrayList<String> keysNull = new ArrayList<String>();
+			ArrayList<String> keysValues = new ArrayList<String>(16);
+			ArrayList<String> keysNull = new ArrayList<String>(16);
 			for(Entry<String, ? extends V> entry:m.entrySet())	{
 				V value = entry.getValue();
 				if(null != value){
@@ -258,11 +258,11 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 		}
 	}
 	
-	protected void _setHash(Map<String,? extends V> m, boolean nx) {
+	protected void doSetHash(Map<String,? extends V> m, boolean nx) {
 		Jedis jedis = pool.apply();
 		try {
 			Map<String, Map<String,String>> keysValues = new HashMap<String, Map<String,String>>(16);
-			ArrayList<String> keysNull = new ArrayList<String>();
+			ArrayList<String> keysNull = new ArrayList<String>(16);
 			for(Entry<String, ? extends V> entry:m.entrySet())	{
 				V value = entry.getValue();
 				if(null != value){
@@ -299,16 +299,16 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	}
 		
 	@Override
-	protected void _set(Map<String, V> m, boolean nx) {
+	protected void doSet(Map<String, V> m, boolean nx) {
 		if(isJavaBean){
-			_setHash(m,nx);
+			doSetHash(m,nx);
 		}else{
-			_setString(m,nx);
+			doSetString(m,nx);
 		}
 	}
 
 	@Override
-	protected Map<String, Object> _getFields(String key, Map<String, Type> types) {
+	protected Map<String, Object> doGetFields(String key, Map<String, Type> types) {
 		key = wrapKey(key);
 		Jedis jedis = pool.apply();
 		try {
@@ -343,7 +343,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	}
 
 	@Override
-	protected List<String> _getFieldNames(){
+	protected List<String> doGetFieldNames(){
 		List<FieldInfo> fieldList = com.alibaba.fastjson.util.TypeUtils.computeGetters(
 				com.alibaba.fastjson.util.TypeUtils.getRawClass(this.getType()), null);
 		ArrayList<String> fields = new ArrayList<String>(fieldList.size());
@@ -369,10 +369,10 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	}
 
 	private String wrapKey(String key) {
-		return new StringBuilder(this.prefix).append(prefixEnd).append(key).toString();
+		return new StringBuilder(this.prefix).append(PREFIX_END).append(key).toString();
 	}
 
 	private String unwrapKey(String key) {
-		return key.substring(this.prefix.length()+prefixEnd.length());
+		return key.substring(this.prefix.length()+PREFIX_END.length());
 	}
 }

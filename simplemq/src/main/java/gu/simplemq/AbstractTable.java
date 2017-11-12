@@ -71,11 +71,11 @@ public abstract class AbstractTable<V>{
 			throw new UnsupportedOperationException("because of not javabean,");
 		}
 	}
-	protected abstract V _get(String key);
+	protected abstract V doGet(String key);
 
 	public V get(String key){
 		checkArgument(!Strings.isNullOrEmpty(key),"key is null or empty");
-		return _get(key);
+		return doGet(key);
 	}
 	
 	public Map<String, V> get(String... keys){
@@ -83,13 +83,13 @@ public abstract class AbstractTable<V>{
 		HashMap<String, V> m = (HashMap<String, V>) new HashMap<String,Object>(16);
 		for(String key:keys){
 			if(!Strings.isNullOrEmpty(key)){
-				m.put(key, _get(key));
+				m.put(key, doGet(key));
 			}
 		}
 		return m;
 	}
 	
-	protected abstract void _set(String key, V value, boolean nx);
+	protected abstract void doSet(String key, V value, boolean nx);
 	
 	public void set(String key, V value, boolean nx){
 		checkArgument(!Strings.isNullOrEmpty(key),"key is null or empty");
@@ -102,7 +102,7 @@ public abstract class AbstractTable<V>{
 				setFields(nx, key, value);
 			}
 			else{
-				_set(key,value,nx);
+				doSet(key,value,nx);
 			}
 		}
 	}
@@ -114,13 +114,13 @@ public abstract class AbstractTable<V>{
 		set(keyHelper(value),value,nx);
 	}
 	
-	protected abstract void _setField(String key, String field, Object value, boolean nx);
+	protected abstract void doSetField(String key, String field, Object value, boolean nx);
 	
 	public  void setField(String key, String field, Object value, boolean nx){
 		assertJavaBean();
 		checkArgument(!Strings.isNullOrEmpty(key),"key is null or empty");
 		checkArgument(!Strings.isNullOrEmpty(field),"field is null or empty");
-		_setField(key,field,value, nx);
+		doSetField(key,field,value, nx);
 	}
 	
 	public void setFields(boolean nx,String key,V obj, String ...fields){
@@ -139,7 +139,7 @@ public abstract class AbstractTable<V>{
 		if(1 == fields.length){
 			checkArgument(!Strings.isNullOrEmpty(fields[0]),"fields[0] is null or empty");
 
-			_setField(key,fields[0],json.get(fields[0]), nx);
+			doSetField(key,fields[0],json.get(fields[0]), nx);
 		}
 		else{
 			for (String field : fields) {
@@ -150,11 +150,11 @@ public abstract class AbstractTable<V>{
 					json.remove(field);
 				}
 			}
-			_setFields(key,json, nx);
+			doSetFields(key,json, nx);
 		}
 	}
 	
-	protected abstract void _setFields(String key, Map<String, String> fieldsValues, boolean nx) ;
+	protected abstract void doSetFields(String key, Map<String, String> fieldsValues, boolean nx) ;
 	
 	public void setFields(String key, Map<String,Object>fieldsValues, boolean nx){
 		assertJavaBean();
@@ -167,15 +167,15 @@ public abstract class AbstractTable<V>{
 			Object value = entry.getValue();
 			fields.put(key, null == value ? null : this.encoder.toJsonString(value));
 		}
-		_setFields(key,fields,nx);
+		doSetFields(key,fields,nx);
 	}
 	
-	protected abstract  Map<String,Object> _getFields(String key,Map<String,Type> types);
+	protected abstract  Map<String,Object> doGetFields(String key,Map<String,Type> types);
 	
 	public Map<String,Object> getFields(String key,Map<String,Type> types){
 		assertJavaBean();
 		checkArgument(!Strings.isNullOrEmpty(key),"key is null or empty");
-		return _getFields(key,types);		
+		return doGetFields(key,types);		
 	}
 	
 	public Map<String, Object> getFields(String key,String ...fields){
@@ -191,7 +191,7 @@ public abstract class AbstractTable<V>{
 				types.put(field, null);
 			}
 		}
-		return _getFields(key,types);
+		return doGetFields(key,types);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -201,7 +201,7 @@ public abstract class AbstractTable<V>{
 		checkArgument(!Strings.isNullOrEmpty(field),"field is null or empty");
 		LinkedHashMap<String, Type> types = new LinkedHashMap<String,Type>();
 		types.put(field, type);
-		return (T) _getFields(key,types).get(field);
+		return (T) doGetFields(key,types).get(field);
 	}
 	
 	public <T>T getField(String key,String field,Class<T> clazz){
@@ -212,7 +212,7 @@ public abstract class AbstractTable<V>{
 		return getField(key,field,(Type)null);
 	}
 	
-	protected abstract int _remove(String... keys);
+	protected abstract int doRemove(String... keys);
 	
 	public int remove(String... keys){
 		if(null == keys || 0 == keys.length){
@@ -225,7 +225,7 @@ public abstract class AbstractTable<V>{
 			}
 			list.add(key);
 		}
-		return list.isEmpty()?0:_remove(list.toArray(new String[list.size()]));
+		return list.isEmpty()?0:doRemove(list.toArray(new String[list.size()]));
 	}
 	
 	public int remove(@SuppressWarnings("unchecked") V... values){
@@ -242,22 +242,22 @@ public abstract class AbstractTable<V>{
 		return remove(list.toArray(new String[list.size()]));
 	}
 	
-	protected abstract Set<String> _keys(String pattern) ;
+	protected abstract Set<String> doKeys(String pattern) ;
 	
 	public Set<String> keys(String pattern) {
 		if(null == pattern || pattern.isEmpty()){
 			pattern="*";
 		}
-		return _keys(pattern);
+		return doKeys(pattern);
 	}
 	
-	protected abstract void _set(Map<String, V> m, boolean nx) ;
+	protected abstract void doSet(Map<String, V> m, boolean nx) ;
 	
 	public void set(Map<String, V> m, boolean nx){
 		if(null == m || m.isEmpty()) {
 			return ;
 		}
-		_set(m,nx);
+		doSet(m,nx);
 	}
 	
 	public int size(String pattern) {
@@ -372,14 +372,14 @@ public abstract class AbstractTable<V>{
 		this.keyHelper = keyHelper;
 	}
 
-	protected abstract List<String> _getFieldNames() ;
+	protected abstract List<String> doGetFieldNames() ;
 	
 	public List<String> getFieldNames() {
 		this.assertJavaBean();
 		if(null == filedNames){
 			synchronized(this){
 				if(null == filedNames){
-					filedNames= _getFieldNames();		
+					filedNames= doGetFieldNames();		
 				}
 			}
 		}			

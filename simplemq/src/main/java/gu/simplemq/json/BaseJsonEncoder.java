@@ -67,7 +67,7 @@ public abstract class BaseJsonEncoder {
 		if(null == c){
 			return null;
 		}
-		ArrayList<Object> list = new ArrayList<Object>();
+		ArrayList<Object> list = new ArrayList<Object>(16);
 		for( Object element:c){
 			try{
 				list.add(this.toJsonMap(element));
