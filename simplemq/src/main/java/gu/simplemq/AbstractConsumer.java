@@ -18,7 +18,7 @@ public abstract class AbstractConsumer implements AutoCloseable,Constant{
 
 	public AbstractConsumer() {
 	}
-
+	/** 守护线程标志 */
 	private boolean daemon=false;
 	/** 获取队列的超时参数 */
 	protected int timeoutMills = DEFAULT_CONSUMER_CHECK_INTERVAL;
@@ -56,7 +56,7 @@ public abstract class AbstractConsumer implements AutoCloseable,Constant{
 	 * 创建消费线程,如果指定了{@link #executorService} ，则消费线程在线程池中执行,
 	 * 否则创建新线程(线程同步)<br>
 	 * 此方法保证在多线程环境下只创建一个消费线程<br>
-	 * {@link State#OPENED}是瞬态,所以当状态为{@link State#OPENED}时线程要等待状态切换为{@link State#INIT},
+	 * {@link State#CLOSED}是瞬态,所以当状态为{@link State#CLOSED}时线程要等待状态切换为{@link State#INIT},
 	 * 参见{@link #reset()}方法
 	 */
 	protected void open(){
@@ -89,7 +89,7 @@ public abstract class AbstractConsumer implements AutoCloseable,Constant{
 				state = State.OPENED;	
 				if(null != executorService){
 					try{
-						executorService.submit(customeLoop);
+						executorService.execute(customeLoop);
 						return ;
 					}catch(RejectedExecutionException e){
 						executorService = null;

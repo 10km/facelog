@@ -45,7 +45,7 @@ public class KeyExpire {
 	}
 	public final void expire(String key,long timeMills,boolean timestamp){
 		if(timeMills>0){
-			_expire(key,timeMills,timestamp);
+			doExpire(key,timeMills,timestamp);
 		}
 	}
 	public final void expire(String key,long time,TimeUnit timeUnit){
@@ -58,5 +58,5 @@ public class KeyExpire {
 		expire(key,timeMills,timestamp);
 	}
 	/** 子类实现 */
-	protected void _expire(String key,long timeMills,boolean timestamp){}
+	protected void doExpire(String key,long timeMills,boolean timestamp){}
 }

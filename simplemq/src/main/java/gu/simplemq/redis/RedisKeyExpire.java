@@ -32,7 +32,7 @@ class RedisKeyExpire extends KeyExpire {
 		expire(jedis,wrapKey(key),this.timeMills,this.timestamp);
 	}
 	@Override
-	protected final void _expire(String key, long timeMills, boolean timestamp) {
+	protected final void doExpire(String key, long timeMills, boolean timestamp) {
 		Jedis jedis = poolLazy.apply();
 		try{
 			expire(jedis,wrapKey(key),timeMills,timestamp);
