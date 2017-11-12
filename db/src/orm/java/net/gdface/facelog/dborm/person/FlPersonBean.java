@@ -1000,16 +1000,20 @@ public  class FlPersonBean
     public void reset(){
         checkMutable();
         this.id = null;
-        this.groupId = new Integer(1)/* DEFAULT:'1'*/;
+        /* DEFAULT:'1'*/
+        this.groupId = new Integer(1);
         this.name = null;
         this.sex = null;
         this.birthdate = null;
         this.papersType = null;
         this.papersNum = null;
         this.imageMd5 = null;
-        this.expiryDate = java.text.DateFormat.getDateInstance().parse("2050-12-31",new java.text.ParsePosition(0))/* DEFAULT:'2050-12-31'*/;
-        this.createTime = null/* DEFAULT:'CURRENT_TIMESTAMP'*/;
-        this.updateTime = null/* DEFAULT:'CURRENT_TIMESTAMP'*/;
+        /* DEFAULT:'2050-12-31'*/
+        this.expiryDate = java.text.DateFormat.getDateInstance().parse("2050-12-31",new java.text.ParsePosition(0));
+        /* DEFAULT:'CURRENT_TIMESTAMP'*/
+        this.createTime = null;
+        /* DEFAULT:'CURRENT_TIMESTAMP'*/
+        this.updateTime = null;
         this.isNew = true;
         this.modified = 0L;
         this.initialized = (FL_PERSON_ID_GROUP_ID_MASK | FL_PERSON_ID_EXPIRY_DATE_MASK);
@@ -1214,7 +1218,7 @@ public  class FlPersonBean
     public FlPersonBean copy(FlPersonBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length){
-            for (int i = 0; i < 11; ++i) {
+            for (int i = 0; i < FL_PERSON_COLUMN_COUNT; ++i) {
                 if( bean.isInitialized(i)){
                     setValue(i, bean.getValue(i));
                 }

@@ -3,7 +3,7 @@
 // modified by guyadong from
 // sql2java original version https://sourceforge.net/projects/sql2java/ 
 // JDBC driver used at code generation time: com.mysql.jdbc.Driver
-// template: foreign.key.listener.java.vm
+// template: base.foreign.key.listener.java.vm
 // ______________________________________________________
 package net.gdface.facelog.dborm;
 
@@ -17,9 +17,20 @@ import net.gdface.facelog.dborm.exception.DAOException;
  * @param <FB> bean for foreign table 
  * @param <B> bean for self table
  */
-public abstract class ForeignKeyListener<FB extends BaseBean<FB>,B extends BaseBean<B>> extends TableListener.Adapter<FB>{
-    protected ForeignKeyListener(){}
+public abstract class BaseForeignKeyListener<FB extends BaseBean<FB>,B extends BaseBean<B>> extends TableListener.Adapter<FB>{
+    protected BaseForeignKeyListener(){}
+    /**
+     * Retrieves the imported B beans that reference to FB bean <BR>
+     * @param fb foreign table bean
+     * @return
+     * @throws DAOException
+     */
     protected abstract List<B> getImportedBeans(FB fb) throws DAOException;
+    /**
+     * do something on foreign table row removed for effected imported beans {@code effectBeans}
+     * @param effectBeans effected imported beans
+     * @throws DAOException
+     */
     protected abstract void onRemove(List<B> effectBeans) throws DAOException;
     protected final InheritableThreadLocal<List<B>> importedBeans = new InheritableThreadLocal<List<B>>();
     @Override

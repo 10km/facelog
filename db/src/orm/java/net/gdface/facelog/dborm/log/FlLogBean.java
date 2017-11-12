@@ -835,8 +835,10 @@ public  class FlLogBean
         this.verifyFeature = null;
         this.compareFace = null;
         this.similarty = null;
-        this.verifyTime = null/* DEFAULT:'CURRENT_TIMESTAMP'*/;
-        this.createTime = null/* DEFAULT:'CURRENT_TIMESTAMP'*/;
+        /* DEFAULT:'CURRENT_TIMESTAMP'*/
+        this.verifyTime = null;
+        /* DEFAULT:'CURRENT_TIMESTAMP'*/
+        this.createTime = null;
         this.isNew = true;
         this.modified = 0L;
         this.initialized = 0L;
@@ -1014,7 +1016,7 @@ public  class FlLogBean
     public FlLogBean copy(FlLogBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length){
-            for (int i = 0; i < 8; ++i) {
+            for (int i = 0; i < FL_LOG_COLUMN_COUNT; ++i) {
                 if( bean.isInitialized(i)){
                     setValue(i, bean.getValue(i));
                 }

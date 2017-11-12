@@ -392,7 +392,8 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
                 return save(bean , refDeviceByDeviceId , refFaceByCompareFace , refFeatureByVerifyFeature , refPersonByPersonId );
             }});
     }
-     //3.9 SYNC SAVE 
+     private static final int SYNC_SAVE_ARG_LEN = 4;
+    //3.9 SYNC SAVE 
     /**
      * Save the {@link LogBean} bean and referenced beans and imported beans into the database.
      *
@@ -407,8 +408,8 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         if(null == args){
             return save(bean);
         }
-        if(args.length > 4){
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        if(args.length > SYNC_SAVE_ARG_LEN){
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: SYNC_SAVE_ARG_LEN");
         }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceBean");
@@ -441,11 +442,11 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         if(null == inputs){
             return save(bean);
         }
-        if(inputs.length > 4){
+        if(inputs.length > SYNC_SAVE_ARG_LEN){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         }
-        Object[] args = new Object[4];
-        System.arraycopy(inputs,0,args,0,4);
+        Object[] args = new Object[SYNC_SAVE_ARG_LEN];
+        System.arraycopy(inputs,0,args,0,SYNC_SAVE_ARG_LEN);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceBean");
         }

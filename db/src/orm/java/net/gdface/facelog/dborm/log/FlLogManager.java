@@ -2156,8 +2156,8 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     }
 
     /** foreign key listener for DEELTE RULE : CASCADE */
-    private final net.gdface.facelog.dborm.ForeignKeyListener<FlPersonBean,FlLogBean> foreignKeyListenerByPersonId = 
-            new net.gdface.facelog.dborm.ForeignKeyListener<FlPersonBean,FlLogBean>(){
+    private final net.gdface.facelog.dborm.BaseForeignKeyListener<FlPersonBean,FlLogBean> foreignKeyListenerByPersonId = 
+            new net.gdface.facelog.dborm.BaseForeignKeyListener<FlPersonBean,FlLogBean>(){
                 @Override
                 protected List<FlLogBean> getImportedBeans(FlPersonBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
@@ -2172,8 +2172,8 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                 }};
 
     /** foreign key listener for DEELTE RULE : SET_NULL */
-    private final net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceBean,FlLogBean> foreignKeyListenerByDeviceId = 
-            new net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceBean,FlLogBean>(){
+    private final net.gdface.facelog.dborm.BaseForeignKeyListener<FlDeviceBean,FlLogBean> foreignKeyListenerByDeviceId = 
+            new net.gdface.facelog.dborm.BaseForeignKeyListener<FlDeviceBean,FlLogBean>(){
                 @Override
                 protected List<FlLogBean> getImportedBeans(FlDeviceBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
@@ -2189,8 +2189,8 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                 }};
 
     /** foreign key listener for DEELTE RULE : SET_NULL */
-    private final net.gdface.facelog.dborm.ForeignKeyListener<FlFeatureBean,FlLogBean> foreignKeyListenerByVerifyFeature = 
-            new net.gdface.facelog.dborm.ForeignKeyListener<FlFeatureBean,FlLogBean>(){
+    private final net.gdface.facelog.dborm.BaseForeignKeyListener<FlFeatureBean,FlLogBean> foreignKeyListenerByVerifyFeature = 
+            new net.gdface.facelog.dborm.BaseForeignKeyListener<FlFeatureBean,FlLogBean>(){
                 @Override
                 protected List<FlLogBean> getImportedBeans(FlFeatureBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
@@ -2206,8 +2206,8 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                 }};
 
     /** foreign key listener for DEELTE RULE : SET_NULL */
-    private final net.gdface.facelog.dborm.ForeignKeyListener<FlFaceBean,FlLogBean> foreignKeyListenerByCompareFace = 
-            new net.gdface.facelog.dborm.ForeignKeyListener<FlFaceBean,FlLogBean>(){
+    private final net.gdface.facelog.dborm.BaseForeignKeyListener<FlFaceBean,FlLogBean> foreignKeyListenerByCompareFace = 
+            new net.gdface.facelog.dborm.BaseForeignKeyListener<FlFaceBean,FlLogBean>(){
                 @Override
                 protected List<FlLogBean> getImportedBeans(FlFaceBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 

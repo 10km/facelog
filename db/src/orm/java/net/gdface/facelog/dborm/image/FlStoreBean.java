@@ -512,7 +512,7 @@ public  class FlStoreBean
     public FlStoreBean copy(FlStoreBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length){
-            for (int i = 0; i < 3; ++i) {
+            for (int i = 0; i < FL_STORE_COLUMN_COUNT; ++i) {
                 if( bean.isInitialized(i)){
                     setValue(i, bean.getValue(i));
                 }

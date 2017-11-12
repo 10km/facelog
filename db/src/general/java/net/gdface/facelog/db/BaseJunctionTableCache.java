@@ -7,7 +7,6 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 
-import java.lang.ref.SoftReference;
 import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
@@ -70,18 +69,9 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
             return (Objects.equal(k1, other.k1) && Objects.equal(k2, other.k2));
         }
     }
-    private final ThreadLocal<SoftReference<Key>> tmpKey = new ThreadLocal<SoftReference<Key>>();
-    /** 返回一个用于查询的临时对象,不可将返回的对象加入cache */
+    /** 返回一个用于查询的临时对象 */
     private Key asTmpKey(K1 k1,K2 k2){
-        Key tmp = null == tmpKey.get() ? null : tmpKey.get().get();
-        if(null == tmp){
-            tmp = new Key(k1,k2);
-            tmpKey.set(new SoftReference<Key>(tmp));
-        }else{
-            tmp.k1 = k1;
-            tmp.k2 = k2;
-        }
-        return tmp;
+        return new Key(k1,k2);
     }
     private final LoadingCache<Key, B> cache;
     private final ConcurrentMap<Key, B> cacheMap;
@@ -98,9 +88,17 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
         public K2 apply(B input) {
             return returnK2(input);
         }};
-    /** 返回{@code bean}中外键K1值,{@code bean}为{@code null}时返回{@code null} */
+    /**
+     * 返回{@code bean}中外键K1值,{@code bean}为{@code null}时返回{@code null}
+     * @param bean
+     * @return
+     */
     protected abstract K1 returnK1(B bean);
-    /** 返回{@code bean}中外键K2值,{@code bean}为{@code null}时返回{@code null} */
+    /**
+     * 返回{@code bean}中外键K2值,{@code bean}为{@code null}时返回{@code null}
+     * @param bean
+     * @return
+     */
     protected abstract K2 returnK2(B bean);
     /**
      * 从数据库中加载外键指定的记录,没有找到指定的记录则抛出异常{@link ObjectRetrievalException}<br>
@@ -211,7 +209,8 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
     public Set<B> getBeansByK1(K1 k1)throws ExecutionException{
         try{
             cache.get(asTmpKey(k1,null));
-            return null; // dead code 不会执行到这里
+            // dead code 不会执行到这里
+            return null;
         }catch(ExecutionException e){
             if( e.getCause() instanceof CollectionReturnException){
                 return filter(k1,funReturnK1);
@@ -234,7 +233,8 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
     public Set<B> getBeansByK1Unchecked(K1 k1){
         try{
             cache.getUnchecked(asTmpKey(k1,null));
-            return null; // dead code 不会执行到这里
+            // dead code 不会执行到这里
+            return null;
         }catch(UncheckedExecutionException e){
             if( e.getCause() instanceof CollectionReturnException){
                 return filter(k1,funReturnK1);
@@ -246,7 +246,8 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
     public Set<B> getBeansByK2(K2 k2)throws ExecutionException{
         try{
             cache.get(asTmpKey(null,k2));
-            return null; // dead code 不会执行到这里
+            // dead code 不会执行到这里
+            return null;
         }catch(ExecutionException e){
             if( e.getCause() instanceof CollectionReturnException){
                 return filter(k2,funReturnK2);
@@ -262,7 +263,8 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
     public Set<B> getBeansByK2Unchecked(K2 k2){
         try{
             cache.getUnchecked(asTmpKey(null,k2));
-            return null; // dead code 不会执行到这里
+            // dead code 不会执行到这里
+            return null;
         }catch(UncheckedExecutionException e){
             if( e.getCause() instanceof CollectionReturnException){
                 return filter(k2,funReturnK2);
@@ -286,7 +288,7 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
      * @throws ExecutionException
      */
     public B getBeanIfPresent(K1 k1,K2 k2){
-        return null ==k1 || null == k2? null : cache.getIfPresent(asTmpKey(k1,k2));
+        return null ==k1 || null == k2 ? null : cache.getIfPresent(asTmpKey(k1,k2));
     }
     /** 
      * 返回数据库中与{@code k1,k2}匹配的记录<br>
@@ -296,7 +298,7 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
      */
     public B getBeanUnchecked(K1 k1,K2 k2){
         try{
-            return null ==k1 || null == k2? null : cache.getUnchecked(new Key(k1,k2));
+            return null ==k1 || null == k2 ? null : cache.getUnchecked(new Key(k1,k2));
         }catch(UncheckedExecutionException e){
             if(e.getCause() instanceof ObjectRetrievalException){
                 return null;

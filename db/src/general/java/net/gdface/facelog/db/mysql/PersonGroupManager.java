@@ -759,7 +759,8 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
                 return save(bean , refPersongroupByParent , impPermitByPersonGroupId , impPersonByGroupId , impPersongroupByParent );
             }});
     }
-     //3.9 SYNC SAVE 
+     private static final int SYNC_SAVE_ARG_LEN = 4;
+    //3.9 SYNC SAVE 
     /**
      * Save the {@link PersonGroupBean} bean and referenced beans and imported beans into the database.
      *
@@ -774,8 +775,8 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         if(null == args){
             return save(bean);
         }
-        if(args.length > 4){
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        if(args.length > SYNC_SAVE_ARG_LEN){
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: SYNC_SAVE_ARG_LEN");
         }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof PersonGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:PersonGroupBean");
@@ -808,11 +809,11 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         if(null == inputs){
             return save(bean);
         }
-        if(inputs.length > 4){
+        if(inputs.length > SYNC_SAVE_ARG_LEN){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         }
-        Object[] args = new Object[4];
-        System.arraycopy(inputs,0,args,0,4);
+        Object[] args = new Object[SYNC_SAVE_ARG_LEN];
+        System.arraycopy(inputs,0,args,0,SYNC_SAVE_ARG_LEN);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof PersonGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:PersonGroupBean");
         }
@@ -825,7 +826,10 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         if( args.length > 3 && null != args[3] && !(args[3] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:java.util.Collection<PersonGroupBean>");
         }
-        return save(bean,null == args[0]?null:(PersonGroupBean)args[0],null == args[1]?null:(java.util.Collection<PermitBean>)args[1],null == args[2]?null:(java.util.Collection<PersonBean>)args[2],null == args[3]?null:(java.util.Collection<PersonGroupBean>)args[3]);
+        return save(bean,null == args[0]?null:(PersonGroupBean)args[0],
+                    null == args[1]?null:(java.util.Collection<PermitBean>)args[1],
+                    null == args[2]?null:(java.util.Collection<PersonBean>)args[2],
+                    null == args[3]?null:(java.util.Collection<PersonGroupBean>)args[3]);
     }
 
      //////////////////////////////////////

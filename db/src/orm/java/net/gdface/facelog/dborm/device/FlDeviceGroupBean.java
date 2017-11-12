@@ -637,7 +637,7 @@ public  class FlDeviceGroupBean
     public FlDeviceGroupBean copy(FlDeviceGroupBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length){
-            for (int i = 0; i < 4; ++i) {
+            for (int i = 0; i < FL_DEVICE_GROUP_COLUMN_COUNT; ++i) {
                 if( bean.isInitialized(i)){
                     setValue(i, bean.getValue(i));
                 }

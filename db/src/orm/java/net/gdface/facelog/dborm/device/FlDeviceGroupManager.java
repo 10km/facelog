@@ -1645,8 +1645,8 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
         }
         return instanceOfFlPermitManager().deleteByPrimaryKey(bean.getId(),linked.getId());
     }
-    /** @see #addJunction(FlDeviceGroupBean,FlPersonGroupBean) */
     //23.4 MANY TO MANY
+    /** @see #addJunction(FlDeviceGroupBean,FlPersonGroupBean) */
     public void addJunction(FlDeviceGroupBean bean,FlPersonGroupBean... linkedBeans) throws DAOException{
         if(null != linkedBeans){
             for(FlPersonGroupBean linked:linkedBeans){
@@ -2302,8 +2302,8 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     }
 
     /** foreign key listener for DEELTE RULE : SET_NULL */
-    private final net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceGroupBean,FlDeviceGroupBean> foreignKeyListenerByParent = 
-            new net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceGroupBean,FlDeviceGroupBean>(){
+    private final net.gdface.facelog.dborm.BaseForeignKeyListener<FlDeviceGroupBean,FlDeviceGroupBean> foreignKeyListenerByParent = 
+            new net.gdface.facelog.dborm.BaseForeignKeyListener<FlDeviceGroupBean,FlDeviceGroupBean>(){
                 @Override
                 protected List<FlDeviceGroupBean> getImportedBeans(FlDeviceGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 

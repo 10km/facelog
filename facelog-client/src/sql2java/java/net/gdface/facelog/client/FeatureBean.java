@@ -474,7 +474,8 @@ public  class FeatureBean
         this.md5 = null;
         this.personId = null;
         this.feature = null;
-        this.updateTime = null/* DEFAULT:'CURRENT_TIMESTAMP'*/;
+        /* DEFAULT:'CURRENT_TIMESTAMP'*/
+        this.updateTime = null;
         this.isNew = true;
         this.modified = 0L;
         this.initialized = 0L;
@@ -616,7 +617,7 @@ public  class FeatureBean
     public FeatureBean copy(FeatureBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length){
-            for (int i = 0; i < 4; ++i) {
+            for (int i = 0; i < FL_FEATURE_COLUMN_COUNT; ++i) {
                 if( bean.isInitialized(i)){
                     setValue(i, bean.getValue(i));
                 }

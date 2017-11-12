@@ -864,8 +864,10 @@ public final class ImageBean
         this.format = null;
         this.width = null;
         this.height = null;
-        this.depth = new Integer(0)/* DEFAULT:'0'*/;
-        this.faceNum = new Integer(0)/* DEFAULT:'0'*/;
+        /* DEFAULT:'0'*/
+        this.depth = new Integer(0);
+        /* DEFAULT:'0'*/
+        this.faceNum = new Integer(0);
         this.thumbMd5 = null;
         this.deviceId = null;
         this.isNew = true;
@@ -1045,7 +1047,7 @@ public final class ImageBean
     public ImageBean copy(ImageBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length){
-            for (int i = 0; i < 8; ++i) {
+            for (int i = 0; i < FL_IMAGE_COLUMN_COUNT; ++i) {
                 if( bean.isInitialized(i)){
                     setValue(i, bean.getValue(i));
                 }

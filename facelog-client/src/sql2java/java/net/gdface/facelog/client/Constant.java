@@ -12,7 +12,8 @@ package net.gdface.facelog.client;
  * @author guyadong
  */
 public interface Constant {    
-
+    public static final int LONG_BIT_NUM = 64;
+    public static final String SQL_LIKE_WILDCARD = "%";
     /** set =QUERY for loadUsingTemplate */
     public static final int SEARCH_EXACT = 0;
     /** set %QUERY% for loadLikeTemplate */
@@ -21,8 +22,22 @@ public interface Constant {
     public static final int SEARCH_STARTING_LIKE = 2;
     /** set QUERY% for loadLikeTemplate */
     public static final int SEARCH_ENDING_LIKE = 3;
-    
+   
     //////////////////////////////////////
+    // COLUMN COLUMN CONSTANT
+    //////////////////////////////////////    
+    public static final Integer FL_DEVICE_COLUMN_COUNT = 8;
+    public static final Integer FL_DEVICE_GROUP_COLUMN_COUNT = 4;
+    public static final Integer FL_FACE_COLUMN_COUNT = 20;
+    public static final Integer FL_FEATURE_COLUMN_COUNT = 4;
+    public static final Integer FL_IMAGE_COLUMN_COUNT = 8;
+    public static final Integer FL_LOG_COLUMN_COUNT = 8;
+    public static final Integer FL_PERMIT_COLUMN_COUNT = 3;
+    public static final Integer FL_PERSON_COLUMN_COUNT = 11;
+    public static final Integer FL_PERSON_GROUP_COLUMN_COUNT = 4;
+    public static final Integer FL_STORE_COLUMN_COUNT = 3;
+    public static final Integer FL_LOG_LIGHT_COLUMN_COUNT = 6;
+        //////////////////////////////////////
     // FOREIGN KEY INDEX DECLARE
     //////////////////////////////////////    
     /** foreign key fl_device(group_id) -> fl_device_group */

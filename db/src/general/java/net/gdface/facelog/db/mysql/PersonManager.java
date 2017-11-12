@@ -672,7 +672,8 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
                 return save(bean , refImageByImageMd5 , refPersongroupByGroupId , impFeatureByPersonId , impLogByPersonId );
             }});
     }
-     //3.9 SYNC SAVE 
+     private static final int SYNC_SAVE_ARG_LEN = 4;
+    //3.9 SYNC SAVE 
     /**
      * Save the {@link PersonBean} bean and referenced beans and imported beans into the database.
      *
@@ -687,8 +688,8 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         if(null == args){
             return save(bean);
         }
-        if(args.length > 4){
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        if(args.length > SYNC_SAVE_ARG_LEN){
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: SYNC_SAVE_ARG_LEN");
         }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:ImageBean");
@@ -721,11 +722,11 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         if(null == inputs){
             return save(bean);
         }
-        if(inputs.length > 4){
+        if(inputs.length > SYNC_SAVE_ARG_LEN){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         }
-        Object[] args = new Object[4];
-        System.arraycopy(inputs,0,args,0,4);
+        Object[] args = new Object[SYNC_SAVE_ARG_LEN];
+        System.arraycopy(inputs,0,args,0,SYNC_SAVE_ARG_LEN);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:ImageBean");
         }
@@ -738,7 +739,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         if( args.length > 3 && null != args[3] && !(args[3] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:java.util.Collection<LogBean>");
         }
-        return save(bean,null == args[0]?null:(ImageBean)args[0],null == args[1]?null:(PersonGroupBean)args[1],null == args[2]?null:(java.util.Collection<FeatureBean>)args[2],null == args[3]?null:(java.util.Collection<LogBean>)args[3]);
+        return save(bean,null == args[0]?null:(ImageBean)args[0],null == args[1]?null:(PersonGroupBean)args[1],
+                    null == args[2]?null:(java.util.Collection<FeatureBean>)args[2],
+                    null == args[3]?null:(java.util.Collection<LogBean>)args[3]);
     }
 
      //////////////////////////////////////

@@ -96,6 +96,7 @@ public interface TableListener<B>{
      *
      */
     public static enum Event{
+        /** insert a bean */
         INSERT,UPDATE,DELETE;
         /**
          * fire current event by  {@link ListenerContainer}

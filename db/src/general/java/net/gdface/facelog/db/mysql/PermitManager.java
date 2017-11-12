@@ -315,7 +315,8 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
                 return save(bean , refDevicegroupByDeviceGroupId , refPersongroupByPersonGroupId );
             }});
     }
-     //3.9 SYNC SAVE 
+     private static final int SYNC_SAVE_ARG_LEN = 2;
+    //3.9 SYNC SAVE 
     /**
      * Save the {@link PermitBean} bean and referenced beans and imported beans into the database.
      *
@@ -330,8 +331,8 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         if(null == args){
             return save(bean);
         }
-        if(args.length > 2){
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
+        if(args.length > SYNC_SAVE_ARG_LEN){
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: SYNC_SAVE_ARG_LEN");
         }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceGroupBean");
@@ -358,11 +359,11 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         if(null == inputs){
             return save(bean);
         }
-        if(inputs.length > 2){
+        if(inputs.length > SYNC_SAVE_ARG_LEN){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         }
-        Object[] args = new Object[2];
-        System.arraycopy(inputs,0,args,0,2);
+        Object[] args = new Object[SYNC_SAVE_ARG_LEN];
+        System.arraycopy(inputs,0,args,0,SYNC_SAVE_ARG_LEN);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceGroupBean");
         }

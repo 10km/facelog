@@ -2018,8 +2018,8 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     }
 
     /** foreign key listener for DEELTE RULE : CASCADE */
-    private final net.gdface.facelog.dborm.ForeignKeyListener<FlPersonBean,FlFeatureBean> foreignKeyListenerByPersonId = 
-            new net.gdface.facelog.dborm.ForeignKeyListener<FlPersonBean,FlFeatureBean>(){
+    private final net.gdface.facelog.dborm.BaseForeignKeyListener<FlPersonBean,FlFeatureBean> foreignKeyListenerByPersonId = 
+            new net.gdface.facelog.dborm.BaseForeignKeyListener<FlPersonBean,FlFeatureBean>(){
                 @Override
                 protected List<FlFeatureBean> getImportedBeans(FlPersonBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 

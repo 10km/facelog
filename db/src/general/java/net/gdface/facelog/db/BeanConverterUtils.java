@@ -146,6 +146,23 @@ public class BeanConverterUtils implements Constant {
      *
      */
     public static class DeviceBeanConverter<R_DEVICE> extends IBeanConverter.AbstractHandle<DeviceBean,R_DEVICE>{
+        static enum Column{
+            /** column method info */
+            id("getId","setId"),
+            groupId("getGroupId","setGroupId"),
+            name("getName","setName"),
+            version("getVersion","setVersion"),
+            serialNo("getSerialNo","setSerialNo"),
+            mac("getMac","setMac"),
+            createTime("getCreateTime","setCreateTime"),
+            updateTime("getUpdateTime","setUpdateTime");
+            final String getter;
+            final String setter;
+            Column(String getter,String setter){
+                this.getter = setter;
+                this.setter = setter;
+            }
+        }
         private final Map<String,Method> methods = new Hashtable<String,Method>();
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
@@ -222,13 +239,13 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
                 }else{
                     getSetter(SET_INITIALIZED,long.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_MODIFIED,long[].class,List.class);
                 }else{
                     getSetter(SET_MODIFIED,long.class);
@@ -237,22 +254,22 @@ public class BeanConverterUtils implements Constant {
                 throw new RuntimeException(e);
             }
 
-            getGetter("setId");
-            getSetterNoThrow("setId",Integer.class,int.class);                    
-            getGetter("setGroupId");
-            getSetterNoThrow("setGroupId",Integer.class,int.class);                    
-            getGetter("setName");
-            getSetterNoThrow("setName",String.class); 
-            getGetter("setVersion");
-            getSetterNoThrow("setVersion",String.class); 
-            getGetter("setSerialNo");
-            getSetterNoThrow("setSerialNo",String.class); 
-            getGetter("setMac");
-            getSetterNoThrow("setMac",String.class); 
-            getGetter("setCreateTime");
-            getSetterNoThrow("setCreateTime",java.util.Date.class,Long.class,long.class);  
-            getGetter("setUpdateTime");
-            getSetterNoThrow("setUpdateTime",java.util.Date.class,Long.class,long.class);  
+            getGetter(Column.id.getter);
+            getSetterNoThrow(Column.id.setter,Integer.class,int.class);                    
+            getGetter(Column.groupId.getter);
+            getSetterNoThrow(Column.groupId.setter,Integer.class,int.class);                    
+            getGetter(Column.name.getter);
+            getSetterNoThrow(Column.name.setter,String.class); 
+            getGetter(Column.version.getter);
+            getSetterNoThrow(Column.version.setter,String.class); 
+            getGetter(Column.serialNo.getter);
+            getSetterNoThrow(Column.serialNo.setter,String.class); 
+            getGetter(Column.mac.getter);
+            getSetterNoThrow(Column.mac.setter,String.class); 
+            getGetter(Column.createTime.getter);
+            getSetterNoThrow(Column.createTime.setter,java.util.Date.class,Long.class,long.class);  
+            getGetter(Column.updateTime.getter);
+            getSetterNoThrow(Column.updateTime.setter,java.util.Date.class,Long.class,long.class);  
         }
         @Override
         protected void doFromRight(DeviceBean left, R_DEVICE right) {
@@ -262,58 +279,58 @@ public class BeanConverterUtils implements Constant {
                 long selfModified = 0L;
                 long[] initialized;
                 long[] modified;
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
                     modified = (long[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
                     initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
                     modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
                 }
-                if( bitCheck("id",initialized) && (null != (getterMethod = methods.get("getId")))){
+                if( bitCheck(Column.id.name(),initialized) && (null != (getterMethod = methods.get(Column.id.getter)))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("id",modified)){
+                    if(bitCheck(Column.id.name(),modified)){
                         selfModified |= FL_DEVICE_ID_ID_MASK;
                     }
                 }
-                if( bitCheck("groupId",initialized) && (null != (getterMethod = methods.get("getGroupId")))){
+                if( bitCheck(Column.groupId.name(),initialized) && (null != (getterMethod = methods.get(Column.groupId.getter)))){
                     left.setGroupId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("groupId",modified)){
+                    if(bitCheck(Column.groupId.name(),modified)){
                         selfModified |= FL_DEVICE_ID_GROUP_ID_MASK;
                     }
                 }
-                if( bitCheck("name",initialized) && (null != (getterMethod = methods.get("getName")))){
+                if( bitCheck(Column.name.name(),initialized) && (null != (getterMethod = methods.get(Column.name.getter)))){
                     left.setName(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("name",modified)){
+                    if(bitCheck(Column.name.name(),modified)){
                         selfModified |= FL_DEVICE_ID_NAME_MASK;
                     }
                 }
-                if( bitCheck("version",initialized) && (null != (getterMethod = methods.get("getVersion")))){
+                if( bitCheck(Column.version.name(),initialized) && (null != (getterMethod = methods.get(Column.version.getter)))){
                     left.setVersion(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("version",modified)){
+                    if(bitCheck(Column.version.name(),modified)){
                         selfModified |= FL_DEVICE_ID_VERSION_MASK;
                     }
                 }
-                if( bitCheck("serialNo",initialized) && (null != (getterMethod = methods.get("getSerialNo")))){
+                if( bitCheck(Column.serialNo.name(),initialized) && (null != (getterMethod = methods.get(Column.serialNo.getter)))){
                     left.setSerialNo(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("serialNo",modified)){
+                    if(bitCheck(Column.serialNo.name(),modified)){
                         selfModified |= FL_DEVICE_ID_SERIAL_NO_MASK;
                     }
                 }
-                if( bitCheck("mac",initialized) && (null != (getterMethod = methods.get("getMac")))){
+                if( bitCheck(Column.mac.name(),initialized) && (null != (getterMethod = methods.get(Column.mac.getter)))){
                     left.setMac(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("mac",modified)){
+                    if(bitCheck(Column.mac.name(),modified)){
                         selfModified |= FL_DEVICE_ID_MAC_MASK;
                     }
                 }
-                if( bitCheck("createTime",initialized) && (null != (getterMethod = methods.get("getCreateTime")))){
+                if( bitCheck(Column.createTime.name(),initialized) && (null != (getterMethod = methods.get(Column.createTime.getter)))){
                     left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("createTime",modified)){
+                    if(bitCheck(Column.createTime.name(),modified)){
                         selfModified |= FL_DEVICE_ID_CREATE_TIME_MASK;
                     }
                 }
-                if( bitCheck("updateTime",initialized) && (null != (getterMethod = methods.get("getUpdateTime")))){
+                if( bitCheck(Column.updateTime.name(),initialized) && (null != (getterMethod = methods.get(Column.updateTime.getter)))){
                     left.setUpdateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("updateTime",modified)){
+                    if(bitCheck(Column.updateTime.name(),modified)){
                         selfModified |= FL_DEVICE_ID_UPDATE_TIME_MASK;
                     }
                 }
@@ -330,84 +347,84 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(DeviceBean left, R_DEVICE right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + 63)>>6];
-                long[] modified = new long[(rightIndexs.size() + 63)>>6];
+                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
+                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
                 Arrays.fill(initialized, 0L);
                 Arrays.fill(modified, 0L);
-                if(null != (setterMethod = methods.get("setId")) && left.checkIdInitialized()){
+                if(null != (setterMethod = methods.get(Column.id.setter)) && left.checkIdInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setId"),left.getId()));
-                        bitOR("id",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.id.setter),left.getId()));
+                        bitOR(Column.id.name(),initialized);
                         if(left.checkIdModified()){
-                            bitOR("id",modified);
+                            bitOR(Column.id.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setGroupId")) && left.checkGroupIdInitialized()){
+                if(null != (setterMethod = methods.get(Column.groupId.setter)) && left.checkGroupIdInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setGroupId"),left.getGroupId()));
-                        bitOR("groupId",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.groupId.setter),left.getGroupId()));
+                        bitOR(Column.groupId.name(),initialized);
                         if(left.checkGroupIdModified()){
-                            bitOR("groupId",modified);
+                            bitOR(Column.groupId.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setName")) && left.checkNameInitialized()){
+                if(null != (setterMethod = methods.get(Column.name.setter)) && left.checkNameInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setName"),left.getName()));
-                        bitOR("name",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.name.setter),left.getName()));
+                        bitOR(Column.name.name(),initialized);
                         if(left.checkNameModified()){
-                            bitOR("name",modified);
+                            bitOR(Column.name.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setVersion")) && left.checkVersionInitialized()){
+                if(null != (setterMethod = methods.get(Column.version.setter)) && left.checkVersionInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setVersion"),left.getVersion()));
-                        bitOR("version",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.version.setter),left.getVersion()));
+                        bitOR(Column.version.name(),initialized);
                         if(left.checkVersionModified()){
-                            bitOR("version",modified);
+                            bitOR(Column.version.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setSerialNo")) && left.checkSerialNoInitialized()){
+                if(null != (setterMethod = methods.get(Column.serialNo.setter)) && left.checkSerialNoInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setSerialNo"),left.getSerialNo()));
-                        bitOR("serialNo",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.serialNo.setter),left.getSerialNo()));
+                        bitOR(Column.serialNo.name(),initialized);
                         if(left.checkSerialNoModified()){
-                            bitOR("serialNo",modified);
+                            bitOR(Column.serialNo.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setMac")) && left.checkMacInitialized()){
+                if(null != (setterMethod = methods.get(Column.mac.setter)) && left.checkMacInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setMac"),left.getMac()));
-                        bitOR("mac",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.mac.setter),left.getMac()));
+                        bitOR(Column.mac.name(),initialized);
                         if(left.checkMacModified()){
-                            bitOR("mac",modified);
+                            bitOR(Column.mac.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
 // IGNORE field fl_device.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
-                if(null != (setterMethod = methods.get("setCreateTime")) && left.checkCreateTimeInitialized()){
+                if(null != (setterMethod = methods.get(Column.createTime.setter)) && left.checkCreateTimeInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setCreateTime"),left.getCreateTime()));
-                        bitOR("createTime",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.createTime.setter),left.getCreateTime()));
+                        bitOR(Column.createTime.name(),initialized);
                         if(left.checkCreateTimeModified()){
-                            bitOR("createTime",modified);
+                            bitOR(Column.createTime.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
 */
 // IGNORE field fl_device.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
-                if(null != (setterMethod = methods.get("setUpdateTime")) && left.checkUpdateTimeInitialized()){
+                if(null != (setterMethod = methods.get(Column.updateTime.setter)) && left.checkUpdateTimeInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setUpdateTime"),left.getUpdateTime()));
-                        bitOR("updateTime",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.updateTime.setter),left.getUpdateTime()));
+                        bitOR(Column.updateTime.name(),initialized);
                         if(left.checkUpdateTimeModified()){
-                            bitOR("updateTime",modified);
+                            bitOR(Column.updateTime.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
@@ -442,6 +459,19 @@ public class BeanConverterUtils implements Constant {
      *
      */
     public static class DeviceGroupBeanConverter<R_DEVICEGROUP> extends IBeanConverter.AbstractHandle<DeviceGroupBean,R_DEVICEGROUP>{
+        static enum Column{
+            /** column method info */
+            id("getId","setId"),
+            name("getName","setName"),
+            leaf("getLeaf","setLeaf"),
+            parent("getParent","setParent");
+            final String getter;
+            final String setter;
+            Column(String getter,String setter){
+                this.getter = setter;
+                this.setter = setter;
+            }
+        }
         private final Map<String,Method> methods = new Hashtable<String,Method>();
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
@@ -518,13 +548,13 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
                 }else{
                     getSetter(SET_INITIALIZED,long.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_MODIFIED,long[].class,List.class);
                 }else{
                     getSetter(SET_MODIFIED,long.class);
@@ -533,14 +563,14 @@ public class BeanConverterUtils implements Constant {
                 throw new RuntimeException(e);
             }
 
-            getGetter("setId");
-            getSetterNoThrow("setId",Integer.class,int.class);                    
-            getGetter("setName");
-            getSetterNoThrow("setName",String.class); 
-            getGetter("setLeaf");
-            getSetterNoThrow("setLeaf",Integer.class,int.class);                    
-            getGetter("setParent");
-            getSetterNoThrow("setParent",Integer.class,int.class);                    
+            getGetter(Column.id.getter);
+            getSetterNoThrow(Column.id.setter,Integer.class,int.class);                    
+            getGetter(Column.name.getter);
+            getSetterNoThrow(Column.name.setter,String.class); 
+            getGetter(Column.leaf.getter);
+            getSetterNoThrow(Column.leaf.setter,Integer.class,int.class);                    
+            getGetter(Column.parent.getter);
+            getSetterNoThrow(Column.parent.setter,Integer.class,int.class);                    
         }
         @Override
         protected void doFromRight(DeviceGroupBean left, R_DEVICEGROUP right) {
@@ -550,34 +580,34 @@ public class BeanConverterUtils implements Constant {
                 long selfModified = 0L;
                 long[] initialized;
                 long[] modified;
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
                     modified = (long[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
                     initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
                     modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
                 }
-                if( bitCheck("id",initialized) && (null != (getterMethod = methods.get("getId")))){
+                if( bitCheck(Column.id.name(),initialized) && (null != (getterMethod = methods.get(Column.id.getter)))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("id",modified)){
+                    if(bitCheck(Column.id.name(),modified)){
                         selfModified |= FL_DEVICE_GROUP_ID_ID_MASK;
                     }
                 }
-                if( bitCheck("name",initialized) && (null != (getterMethod = methods.get("getName")))){
+                if( bitCheck(Column.name.name(),initialized) && (null != (getterMethod = methods.get(Column.name.getter)))){
                     left.setName(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("name",modified)){
+                    if(bitCheck(Column.name.name(),modified)){
                         selfModified |= FL_DEVICE_GROUP_ID_NAME_MASK;
                     }
                 }
-                if( bitCheck("leaf",initialized) && (null != (getterMethod = methods.get("getLeaf")))){
+                if( bitCheck(Column.leaf.name(),initialized) && (null != (getterMethod = methods.get(Column.leaf.getter)))){
                     left.setLeaf(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("leaf",modified)){
+                    if(bitCheck(Column.leaf.name(),modified)){
                         selfModified |= FL_DEVICE_GROUP_ID_LEAF_MASK;
                     }
                 }
-                if( bitCheck("parent",initialized) && (null != (getterMethod = methods.get("getParent")))){
+                if( bitCheck(Column.parent.name(),initialized) && (null != (getterMethod = methods.get(Column.parent.getter)))){
                     left.setParent(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("parent",modified)){
+                    if(bitCheck(Column.parent.name(),modified)){
                         selfModified |= FL_DEVICE_GROUP_ID_PARENT_MASK;
                     }
                 }
@@ -594,43 +624,43 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(DeviceGroupBean left, R_DEVICEGROUP right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + 63)>>6];
-                long[] modified = new long[(rightIndexs.size() + 63)>>6];
+                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
+                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
                 Arrays.fill(initialized, 0L);
                 Arrays.fill(modified, 0L);
-                if(null != (setterMethod = methods.get("setId")) && left.checkIdInitialized()){
+                if(null != (setterMethod = methods.get(Column.id.setter)) && left.checkIdInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setId"),left.getId()));
-                        bitOR("id",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.id.setter),left.getId()));
+                        bitOR(Column.id.name(),initialized);
                         if(left.checkIdModified()){
-                            bitOR("id",modified);
+                            bitOR(Column.id.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setName")) && left.checkNameInitialized()){
+                if(null != (setterMethod = methods.get(Column.name.setter)) && left.checkNameInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setName"),left.getName()));
-                        bitOR("name",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.name.setter),left.getName()));
+                        bitOR(Column.name.name(),initialized);
                         if(left.checkNameModified()){
-                            bitOR("name",modified);
+                            bitOR(Column.name.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setLeaf")) && left.checkLeafInitialized()){
+                if(null != (setterMethod = methods.get(Column.leaf.setter)) && left.checkLeafInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setLeaf"),left.getLeaf()));
-                        bitOR("leaf",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.leaf.setter),left.getLeaf()));
+                        bitOR(Column.leaf.name(),initialized);
                         if(left.checkLeafModified()){
-                            bitOR("leaf",modified);
+                            bitOR(Column.leaf.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setParent")) && left.checkParentInitialized()){
+                if(null != (setterMethod = methods.get(Column.parent.setter)) && left.checkParentInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setParent"),left.getParent()));
-                        bitOR("parent",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.parent.setter),left.getParent()));
+                        bitOR(Column.parent.name(),initialized);
                         if(left.checkParentModified()){
-                            bitOR("parent",modified);
+                            bitOR(Column.parent.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
@@ -664,6 +694,35 @@ public class BeanConverterUtils implements Constant {
      *
      */
     public static class FaceBeanConverter<R_FACE> extends IBeanConverter.AbstractHandle<FaceBean,R_FACE>{
+        static enum Column{
+            /** column method info */
+            id("getId","setId"),
+            imageMd5("getImageMd5","setImageMd5"),
+            faceLeft("getFaceLeft","setFaceLeft"),
+            faceTop("getFaceTop","setFaceTop"),
+            faceWidth("getFaceWidth","setFaceWidth"),
+            faceHeight("getFaceHeight","setFaceHeight"),
+            eyeLeftx("getEyeLeftx","setEyeLeftx"),
+            eyeLefty("getEyeLefty","setEyeLefty"),
+            eyeRightx("getEyeRightx","setEyeRightx"),
+            eyeRighty("getEyeRighty","setEyeRighty"),
+            mouthX("getMouthX","setMouthX"),
+            mouthY("getMouthY","setMouthY"),
+            noseX("getNoseX","setNoseX"),
+            noseY("getNoseY","setNoseY"),
+            angleYaw("getAngleYaw","setAngleYaw"),
+            anglePitch("getAnglePitch","setAnglePitch"),
+            angleRoll("getAngleRoll","setAngleRoll"),
+            extInfo("getExtInfo","setExtInfo"),
+            featureMd5("getFeatureMd5","setFeatureMd5"),
+            createTime("getCreateTime","setCreateTime");
+            final String getter;
+            final String setter;
+            Column(String getter,String setter){
+                this.getter = setter;
+                this.setter = setter;
+            }
+        }
         private final Map<String,Method> methods = new Hashtable<String,Method>();
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
@@ -740,13 +799,13 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
                 }else{
                     getSetter(SET_INITIALIZED,long.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_MODIFIED,long[].class,List.class);
                 }else{
                     getSetter(SET_MODIFIED,long.class);
@@ -755,46 +814,46 @@ public class BeanConverterUtils implements Constant {
                 throw new RuntimeException(e);
             }
 
-            getGetter("setId");
-            getSetterNoThrow("setId",Integer.class,int.class);                    
-            getGetter("setImageMd5");
-            getSetterNoThrow("setImageMd5",String.class); 
-            getGetter("setFaceLeft");
-            getSetterNoThrow("setFaceLeft",Integer.class,int.class);                    
-            getGetter("setFaceTop");
-            getSetterNoThrow("setFaceTop",Integer.class,int.class);                    
-            getGetter("setFaceWidth");
-            getSetterNoThrow("setFaceWidth",Integer.class,int.class);                    
-            getGetter("setFaceHeight");
-            getSetterNoThrow("setFaceHeight",Integer.class,int.class);                    
-            getGetter("setEyeLeftx");
-            getSetterNoThrow("setEyeLeftx",Integer.class,int.class);                    
-            getGetter("setEyeLefty");
-            getSetterNoThrow("setEyeLefty",Integer.class,int.class);                    
-            getGetter("setEyeRightx");
-            getSetterNoThrow("setEyeRightx",Integer.class,int.class);                    
-            getGetter("setEyeRighty");
-            getSetterNoThrow("setEyeRighty",Integer.class,int.class);                    
-            getGetter("setMouthX");
-            getSetterNoThrow("setMouthX",Integer.class,int.class);                    
-            getGetter("setMouthY");
-            getSetterNoThrow("setMouthY",Integer.class,int.class);                    
-            getGetter("setNoseX");
-            getSetterNoThrow("setNoseX",Integer.class,int.class);                    
-            getGetter("setNoseY");
-            getSetterNoThrow("setNoseY",Integer.class,int.class);                    
-            getGetter("setAngleYaw");
-            getSetterNoThrow("setAngleYaw",Integer.class,int.class);                    
-            getGetter("setAnglePitch");
-            getSetterNoThrow("setAnglePitch",Integer.class,int.class);                    
-            getGetter("setAngleRoll");
-            getSetterNoThrow("setAngleRoll",Integer.class,int.class);                    
-            getGetter("setExtInfo");
-            getSetterNoThrow("setExtInfo",java.nio.ByteBuffer.class,byte[].class);                    
-            getGetter("setFeatureMd5");
-            getSetterNoThrow("setFeatureMd5",String.class); 
-            getGetter("setCreateTime");
-            getSetterNoThrow("setCreateTime",java.util.Date.class,Long.class,long.class);  
+            getGetter(Column.id.getter);
+            getSetterNoThrow(Column.id.setter,Integer.class,int.class);                    
+            getGetter(Column.imageMd5.getter);
+            getSetterNoThrow(Column.imageMd5.setter,String.class); 
+            getGetter(Column.faceLeft.getter);
+            getSetterNoThrow(Column.faceLeft.setter,Integer.class,int.class);                    
+            getGetter(Column.faceTop.getter);
+            getSetterNoThrow(Column.faceTop.setter,Integer.class,int.class);                    
+            getGetter(Column.faceWidth.getter);
+            getSetterNoThrow(Column.faceWidth.setter,Integer.class,int.class);                    
+            getGetter(Column.faceHeight.getter);
+            getSetterNoThrow(Column.faceHeight.setter,Integer.class,int.class);                    
+            getGetter(Column.eyeLeftx.getter);
+            getSetterNoThrow(Column.eyeLeftx.setter,Integer.class,int.class);                    
+            getGetter(Column.eyeLefty.getter);
+            getSetterNoThrow(Column.eyeLefty.setter,Integer.class,int.class);                    
+            getGetter(Column.eyeRightx.getter);
+            getSetterNoThrow(Column.eyeRightx.setter,Integer.class,int.class);                    
+            getGetter(Column.eyeRighty.getter);
+            getSetterNoThrow(Column.eyeRighty.setter,Integer.class,int.class);                    
+            getGetter(Column.mouthX.getter);
+            getSetterNoThrow(Column.mouthX.setter,Integer.class,int.class);                    
+            getGetter(Column.mouthY.getter);
+            getSetterNoThrow(Column.mouthY.setter,Integer.class,int.class);                    
+            getGetter(Column.noseX.getter);
+            getSetterNoThrow(Column.noseX.setter,Integer.class,int.class);                    
+            getGetter(Column.noseY.getter);
+            getSetterNoThrow(Column.noseY.setter,Integer.class,int.class);                    
+            getGetter(Column.angleYaw.getter);
+            getSetterNoThrow(Column.angleYaw.setter,Integer.class,int.class);                    
+            getGetter(Column.anglePitch.getter);
+            getSetterNoThrow(Column.anglePitch.setter,Integer.class,int.class);                    
+            getGetter(Column.angleRoll.getter);
+            getSetterNoThrow(Column.angleRoll.setter,Integer.class,int.class);                    
+            getGetter(Column.extInfo.getter);
+            getSetterNoThrow(Column.extInfo.setter,java.nio.ByteBuffer.class,byte[].class);                    
+            getGetter(Column.featureMd5.getter);
+            getSetterNoThrow(Column.featureMd5.setter,String.class); 
+            getGetter(Column.createTime.getter);
+            getSetterNoThrow(Column.createTime.setter,java.util.Date.class,Long.class,long.class);  
         }
         @Override
         protected void doFromRight(FaceBean left, R_FACE right) {
@@ -804,130 +863,130 @@ public class BeanConverterUtils implements Constant {
                 long selfModified = 0L;
                 long[] initialized;
                 long[] modified;
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
                     modified = (long[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
                     initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
                     modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
                 }
-                if( bitCheck("id",initialized) && (null != (getterMethod = methods.get("getId")))){
+                if( bitCheck(Column.id.name(),initialized) && (null != (getterMethod = methods.get(Column.id.getter)))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("id",modified)){
+                    if(bitCheck(Column.id.name(),modified)){
                         selfModified |= FL_FACE_ID_ID_MASK;
                     }
                 }
-                if( bitCheck("imageMd5",initialized) && (null != (getterMethod = methods.get("getImageMd5")))){
+                if( bitCheck(Column.imageMd5.name(),initialized) && (null != (getterMethod = methods.get(Column.imageMd5.getter)))){
                     left.setImageMd5(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("imageMd5",modified)){
+                    if(bitCheck(Column.imageMd5.name(),modified)){
                         selfModified |= FL_FACE_ID_IMAGE_MD5_MASK;
                     }
                 }
-                if( bitCheck("faceLeft",initialized) && (null != (getterMethod = methods.get("getFaceLeft")))){
+                if( bitCheck(Column.faceLeft.name(),initialized) && (null != (getterMethod = methods.get(Column.faceLeft.getter)))){
                     left.setFaceLeft(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("faceLeft",modified)){
+                    if(bitCheck(Column.faceLeft.name(),modified)){
                         selfModified |= FL_FACE_ID_FACE_LEFT_MASK;
                     }
                 }
-                if( bitCheck("faceTop",initialized) && (null != (getterMethod = methods.get("getFaceTop")))){
+                if( bitCheck(Column.faceTop.name(),initialized) && (null != (getterMethod = methods.get(Column.faceTop.getter)))){
                     left.setFaceTop(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("faceTop",modified)){
+                    if(bitCheck(Column.faceTop.name(),modified)){
                         selfModified |= FL_FACE_ID_FACE_TOP_MASK;
                     }
                 }
-                if( bitCheck("faceWidth",initialized) && (null != (getterMethod = methods.get("getFaceWidth")))){
+                if( bitCheck(Column.faceWidth.name(),initialized) && (null != (getterMethod = methods.get(Column.faceWidth.getter)))){
                     left.setFaceWidth(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("faceWidth",modified)){
+                    if(bitCheck(Column.faceWidth.name(),modified)){
                         selfModified |= FL_FACE_ID_FACE_WIDTH_MASK;
                     }
                 }
-                if( bitCheck("faceHeight",initialized) && (null != (getterMethod = methods.get("getFaceHeight")))){
+                if( bitCheck(Column.faceHeight.name(),initialized) && (null != (getterMethod = methods.get(Column.faceHeight.getter)))){
                     left.setFaceHeight(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("faceHeight",modified)){
+                    if(bitCheck(Column.faceHeight.name(),modified)){
                         selfModified |= FL_FACE_ID_FACE_HEIGHT_MASK;
                     }
                 }
-                if( bitCheck("eyeLeftx",initialized) && (null != (getterMethod = methods.get("getEyeLeftx")))){
+                if( bitCheck(Column.eyeLeftx.name(),initialized) && (null != (getterMethod = methods.get(Column.eyeLeftx.getter)))){
                     left.setEyeLeftx(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("eyeLeftx",modified)){
+                    if(bitCheck(Column.eyeLeftx.name(),modified)){
                         selfModified |= FL_FACE_ID_EYE_LEFTX_MASK;
                     }
                 }
-                if( bitCheck("eyeLefty",initialized) && (null != (getterMethod = methods.get("getEyeLefty")))){
+                if( bitCheck(Column.eyeLefty.name(),initialized) && (null != (getterMethod = methods.get(Column.eyeLefty.getter)))){
                     left.setEyeLefty(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("eyeLefty",modified)){
+                    if(bitCheck(Column.eyeLefty.name(),modified)){
                         selfModified |= FL_FACE_ID_EYE_LEFTY_MASK;
                     }
                 }
-                if( bitCheck("eyeRightx",initialized) && (null != (getterMethod = methods.get("getEyeRightx")))){
+                if( bitCheck(Column.eyeRightx.name(),initialized) && (null != (getterMethod = methods.get(Column.eyeRightx.getter)))){
                     left.setEyeRightx(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("eyeRightx",modified)){
+                    if(bitCheck(Column.eyeRightx.name(),modified)){
                         selfModified |= FL_FACE_ID_EYE_RIGHTX_MASK;
                     }
                 }
-                if( bitCheck("eyeRighty",initialized) && (null != (getterMethod = methods.get("getEyeRighty")))){
+                if( bitCheck(Column.eyeRighty.name(),initialized) && (null != (getterMethod = methods.get(Column.eyeRighty.getter)))){
                     left.setEyeRighty(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("eyeRighty",modified)){
+                    if(bitCheck(Column.eyeRighty.name(),modified)){
                         selfModified |= FL_FACE_ID_EYE_RIGHTY_MASK;
                     }
                 }
-                if( bitCheck("mouthX",initialized) && (null != (getterMethod = methods.get("getMouthX")))){
+                if( bitCheck(Column.mouthX.name(),initialized) && (null != (getterMethod = methods.get(Column.mouthX.getter)))){
                     left.setMouthX(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("mouthX",modified)){
+                    if(bitCheck(Column.mouthX.name(),modified)){
                         selfModified |= FL_FACE_ID_MOUTH_X_MASK;
                     }
                 }
-                if( bitCheck("mouthY",initialized) && (null != (getterMethod = methods.get("getMouthY")))){
+                if( bitCheck(Column.mouthY.name(),initialized) && (null != (getterMethod = methods.get(Column.mouthY.getter)))){
                     left.setMouthY(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("mouthY",modified)){
+                    if(bitCheck(Column.mouthY.name(),modified)){
                         selfModified |= FL_FACE_ID_MOUTH_Y_MASK;
                     }
                 }
-                if( bitCheck("noseX",initialized) && (null != (getterMethod = methods.get("getNoseX")))){
+                if( bitCheck(Column.noseX.name(),initialized) && (null != (getterMethod = methods.get(Column.noseX.getter)))){
                     left.setNoseX(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("noseX",modified)){
+                    if(bitCheck(Column.noseX.name(),modified)){
                         selfModified |= FL_FACE_ID_NOSE_X_MASK;
                     }
                 }
-                if( bitCheck("noseY",initialized) && (null != (getterMethod = methods.get("getNoseY")))){
+                if( bitCheck(Column.noseY.name(),initialized) && (null != (getterMethod = methods.get(Column.noseY.getter)))){
                     left.setNoseY(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("noseY",modified)){
+                    if(bitCheck(Column.noseY.name(),modified)){
                         selfModified |= FL_FACE_ID_NOSE_Y_MASK;
                     }
                 }
-                if( bitCheck("angleYaw",initialized) && (null != (getterMethod = methods.get("getAngleYaw")))){
+                if( bitCheck(Column.angleYaw.name(),initialized) && (null != (getterMethod = methods.get(Column.angleYaw.getter)))){
                     left.setAngleYaw(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("angleYaw",modified)){
+                    if(bitCheck(Column.angleYaw.name(),modified)){
                         selfModified |= FL_FACE_ID_ANGLE_YAW_MASK;
                     }
                 }
-                if( bitCheck("anglePitch",initialized) && (null != (getterMethod = methods.get("getAnglePitch")))){
+                if( bitCheck(Column.anglePitch.name(),initialized) && (null != (getterMethod = methods.get(Column.anglePitch.getter)))){
                     left.setAnglePitch(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("anglePitch",modified)){
+                    if(bitCheck(Column.anglePitch.name(),modified)){
                         selfModified |= FL_FACE_ID_ANGLE_PITCH_MASK;
                     }
                 }
-                if( bitCheck("angleRoll",initialized) && (null != (getterMethod = methods.get("getAngleRoll")))){
+                if( bitCheck(Column.angleRoll.name(),initialized) && (null != (getterMethod = methods.get(Column.angleRoll.getter)))){
                     left.setAngleRoll(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("angleRoll",modified)){
+                    if(bitCheck(Column.angleRoll.name(),modified)){
                         selfModified |= FL_FACE_ID_ANGLE_ROLL_MASK;
                     }
                 }
-                if( bitCheck("extInfo",initialized) && (null != (getterMethod = methods.get("getExtInfo")))){
+                if( bitCheck(Column.extInfo.name(),initialized) && (null != (getterMethod = methods.get(Column.extInfo.getter)))){
                     left.setExtInfo(cast(java.nio.ByteBuffer.class,getterMethod.invoke(right)));
-                    if(bitCheck("extInfo",modified)){
+                    if(bitCheck(Column.extInfo.name(),modified)){
                         selfModified |= FL_FACE_ID_EXT_INFO_MASK;
                     }
                 }
-                if( bitCheck("featureMd5",initialized) && (null != (getterMethod = methods.get("getFeatureMd5")))){
+                if( bitCheck(Column.featureMd5.name(),initialized) && (null != (getterMethod = methods.get(Column.featureMd5.getter)))){
                     left.setFeatureMd5(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("featureMd5",modified)){
+                    if(bitCheck(Column.featureMd5.name(),modified)){
                         selfModified |= FL_FACE_ID_FEATURE_MD5_MASK;
                     }
                 }
-                if( bitCheck("createTime",initialized) && (null != (getterMethod = methods.get("getCreateTime")))){
+                if( bitCheck(Column.createTime.name(),initialized) && (null != (getterMethod = methods.get(Column.createTime.getter)))){
                     left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("createTime",modified)){
+                    if(bitCheck(Column.createTime.name(),modified)){
                         selfModified |= FL_FACE_ID_CREATE_TIME_MASK;
                     }
                 }
@@ -944,189 +1003,189 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(FaceBean left, R_FACE right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + 63)>>6];
-                long[] modified = new long[(rightIndexs.size() + 63)>>6];
+                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
+                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
                 Arrays.fill(initialized, 0L);
                 Arrays.fill(modified, 0L);
-                if(null != (setterMethod = methods.get("setId")) && left.checkIdInitialized()){
+                if(null != (setterMethod = methods.get(Column.id.setter)) && left.checkIdInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setId"),left.getId()));
-                        bitOR("id",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.id.setter),left.getId()));
+                        bitOR(Column.id.name(),initialized);
                         if(left.checkIdModified()){
-                            bitOR("id",modified);
+                            bitOR(Column.id.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setImageMd5")) && left.checkImageMd5Initialized()){
+                if(null != (setterMethod = methods.get(Column.imageMd5.setter)) && left.checkImageMd5Initialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setImageMd5"),left.getImageMd5()));
-                        bitOR("imageMd5",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.imageMd5.setter),left.getImageMd5()));
+                        bitOR(Column.imageMd5.name(),initialized);
                         if(left.checkImageMd5Modified()){
-                            bitOR("imageMd5",modified);
+                            bitOR(Column.imageMd5.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setFaceLeft")) && left.checkFaceLeftInitialized()){
+                if(null != (setterMethod = methods.get(Column.faceLeft.setter)) && left.checkFaceLeftInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setFaceLeft"),left.getFaceLeft()));
-                        bitOR("faceLeft",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.faceLeft.setter),left.getFaceLeft()));
+                        bitOR(Column.faceLeft.name(),initialized);
                         if(left.checkFaceLeftModified()){
-                            bitOR("faceLeft",modified);
+                            bitOR(Column.faceLeft.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setFaceTop")) && left.checkFaceTopInitialized()){
+                if(null != (setterMethod = methods.get(Column.faceTop.setter)) && left.checkFaceTopInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setFaceTop"),left.getFaceTop()));
-                        bitOR("faceTop",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.faceTop.setter),left.getFaceTop()));
+                        bitOR(Column.faceTop.name(),initialized);
                         if(left.checkFaceTopModified()){
-                            bitOR("faceTop",modified);
+                            bitOR(Column.faceTop.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setFaceWidth")) && left.checkFaceWidthInitialized()){
+                if(null != (setterMethod = methods.get(Column.faceWidth.setter)) && left.checkFaceWidthInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setFaceWidth"),left.getFaceWidth()));
-                        bitOR("faceWidth",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.faceWidth.setter),left.getFaceWidth()));
+                        bitOR(Column.faceWidth.name(),initialized);
                         if(left.checkFaceWidthModified()){
-                            bitOR("faceWidth",modified);
+                            bitOR(Column.faceWidth.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setFaceHeight")) && left.checkFaceHeightInitialized()){
+                if(null != (setterMethod = methods.get(Column.faceHeight.setter)) && left.checkFaceHeightInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setFaceHeight"),left.getFaceHeight()));
-                        bitOR("faceHeight",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.faceHeight.setter),left.getFaceHeight()));
+                        bitOR(Column.faceHeight.name(),initialized);
                         if(left.checkFaceHeightModified()){
-                            bitOR("faceHeight",modified);
+                            bitOR(Column.faceHeight.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setEyeLeftx")) && left.checkEyeLeftxInitialized()){
+                if(null != (setterMethod = methods.get(Column.eyeLeftx.setter)) && left.checkEyeLeftxInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setEyeLeftx"),left.getEyeLeftx()));
-                        bitOR("eyeLeftx",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.eyeLeftx.setter),left.getEyeLeftx()));
+                        bitOR(Column.eyeLeftx.name(),initialized);
                         if(left.checkEyeLeftxModified()){
-                            bitOR("eyeLeftx",modified);
+                            bitOR(Column.eyeLeftx.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setEyeLefty")) && left.checkEyeLeftyInitialized()){
+                if(null != (setterMethod = methods.get(Column.eyeLefty.setter)) && left.checkEyeLeftyInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setEyeLefty"),left.getEyeLefty()));
-                        bitOR("eyeLefty",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.eyeLefty.setter),left.getEyeLefty()));
+                        bitOR(Column.eyeLefty.name(),initialized);
                         if(left.checkEyeLeftyModified()){
-                            bitOR("eyeLefty",modified);
+                            bitOR(Column.eyeLefty.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setEyeRightx")) && left.checkEyeRightxInitialized()){
+                if(null != (setterMethod = methods.get(Column.eyeRightx.setter)) && left.checkEyeRightxInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setEyeRightx"),left.getEyeRightx()));
-                        bitOR("eyeRightx",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.eyeRightx.setter),left.getEyeRightx()));
+                        bitOR(Column.eyeRightx.name(),initialized);
                         if(left.checkEyeRightxModified()){
-                            bitOR("eyeRightx",modified);
+                            bitOR(Column.eyeRightx.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setEyeRighty")) && left.checkEyeRightyInitialized()){
+                if(null != (setterMethod = methods.get(Column.eyeRighty.setter)) && left.checkEyeRightyInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setEyeRighty"),left.getEyeRighty()));
-                        bitOR("eyeRighty",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.eyeRighty.setter),left.getEyeRighty()));
+                        bitOR(Column.eyeRighty.name(),initialized);
                         if(left.checkEyeRightyModified()){
-                            bitOR("eyeRighty",modified);
+                            bitOR(Column.eyeRighty.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setMouthX")) && left.checkMouthXInitialized()){
+                if(null != (setterMethod = methods.get(Column.mouthX.setter)) && left.checkMouthXInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setMouthX"),left.getMouthX()));
-                        bitOR("mouthX",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.mouthX.setter),left.getMouthX()));
+                        bitOR(Column.mouthX.name(),initialized);
                         if(left.checkMouthXModified()){
-                            bitOR("mouthX",modified);
+                            bitOR(Column.mouthX.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setMouthY")) && left.checkMouthYInitialized()){
+                if(null != (setterMethod = methods.get(Column.mouthY.setter)) && left.checkMouthYInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setMouthY"),left.getMouthY()));
-                        bitOR("mouthY",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.mouthY.setter),left.getMouthY()));
+                        bitOR(Column.mouthY.name(),initialized);
                         if(left.checkMouthYModified()){
-                            bitOR("mouthY",modified);
+                            bitOR(Column.mouthY.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setNoseX")) && left.checkNoseXInitialized()){
+                if(null != (setterMethod = methods.get(Column.noseX.setter)) && left.checkNoseXInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setNoseX"),left.getNoseX()));
-                        bitOR("noseX",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.noseX.setter),left.getNoseX()));
+                        bitOR(Column.noseX.name(),initialized);
                         if(left.checkNoseXModified()){
-                            bitOR("noseX",modified);
+                            bitOR(Column.noseX.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setNoseY")) && left.checkNoseYInitialized()){
+                if(null != (setterMethod = methods.get(Column.noseY.setter)) && left.checkNoseYInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setNoseY"),left.getNoseY()));
-                        bitOR("noseY",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.noseY.setter),left.getNoseY()));
+                        bitOR(Column.noseY.name(),initialized);
                         if(left.checkNoseYModified()){
-                            bitOR("noseY",modified);
+                            bitOR(Column.noseY.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setAngleYaw")) && left.checkAngleYawInitialized()){
+                if(null != (setterMethod = methods.get(Column.angleYaw.setter)) && left.checkAngleYawInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setAngleYaw"),left.getAngleYaw()));
-                        bitOR("angleYaw",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.angleYaw.setter),left.getAngleYaw()));
+                        bitOR(Column.angleYaw.name(),initialized);
                         if(left.checkAngleYawModified()){
-                            bitOR("angleYaw",modified);
+                            bitOR(Column.angleYaw.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setAnglePitch")) && left.checkAnglePitchInitialized()){
+                if(null != (setterMethod = methods.get(Column.anglePitch.setter)) && left.checkAnglePitchInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setAnglePitch"),left.getAnglePitch()));
-                        bitOR("anglePitch",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.anglePitch.setter),left.getAnglePitch()));
+                        bitOR(Column.anglePitch.name(),initialized);
                         if(left.checkAnglePitchModified()){
-                            bitOR("anglePitch",modified);
+                            bitOR(Column.anglePitch.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setAngleRoll")) && left.checkAngleRollInitialized()){
+                if(null != (setterMethod = methods.get(Column.angleRoll.setter)) && left.checkAngleRollInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setAngleRoll"),left.getAngleRoll()));
-                        bitOR("angleRoll",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.angleRoll.setter),left.getAngleRoll()));
+                        bitOR(Column.angleRoll.name(),initialized);
                         if(left.checkAngleRollModified()){
-                            bitOR("angleRoll",modified);
+                            bitOR(Column.angleRoll.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setExtInfo")) && left.checkExtInfoInitialized()){
+                if(null != (setterMethod = methods.get(Column.extInfo.setter)) && left.checkExtInfoInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setExtInfo"),left.getExtInfo()));
-                        bitOR("extInfo",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.extInfo.setter),left.getExtInfo()));
+                        bitOR(Column.extInfo.name(),initialized);
                         if(left.checkExtInfoModified()){
-                            bitOR("extInfo",modified);
+                            bitOR(Column.extInfo.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setFeatureMd5")) && left.checkFeatureMd5Initialized()){
+                if(null != (setterMethod = methods.get(Column.featureMd5.setter)) && left.checkFeatureMd5Initialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setFeatureMd5"),left.getFeatureMd5()));
-                        bitOR("featureMd5",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.featureMd5.setter),left.getFeatureMd5()));
+                        bitOR(Column.featureMd5.name(),initialized);
                         if(left.checkFeatureMd5Modified()){
-                            bitOR("featureMd5",modified);
+                            bitOR(Column.featureMd5.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
 // IGNORE field fl_face.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
-                if(null != (setterMethod = methods.get("setCreateTime")) && left.checkCreateTimeInitialized()){
+                if(null != (setterMethod = methods.get(Column.createTime.setter)) && left.checkCreateTimeInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setCreateTime"),left.getCreateTime()));
-                        bitOR("createTime",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.createTime.setter),left.getCreateTime()));
+                        bitOR(Column.createTime.name(),initialized);
                         if(left.checkCreateTimeModified()){
-                            bitOR("createTime",modified);
+                            bitOR(Column.createTime.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
@@ -1161,6 +1220,19 @@ public class BeanConverterUtils implements Constant {
      *
      */
     public static class FeatureBeanConverter<R_FEATURE> extends IBeanConverter.AbstractHandle<FeatureBean,R_FEATURE>{
+        static enum Column{
+            /** column method info */
+            md5("getMd5","setMd5"),
+            personId("getPersonId","setPersonId"),
+            feature("getFeature","setFeature"),
+            updateTime("getUpdateTime","setUpdateTime");
+            final String getter;
+            final String setter;
+            Column(String getter,String setter){
+                this.getter = setter;
+                this.setter = setter;
+            }
+        }
         private final Map<String,Method> methods = new Hashtable<String,Method>();
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
@@ -1237,13 +1309,13 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
                 }else{
                     getSetter(SET_INITIALIZED,long.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_MODIFIED,long[].class,List.class);
                 }else{
                     getSetter(SET_MODIFIED,long.class);
@@ -1252,14 +1324,14 @@ public class BeanConverterUtils implements Constant {
                 throw new RuntimeException(e);
             }
 
-            getGetter("setMd5");
-            getSetterNoThrow("setMd5",String.class); 
-            getGetter("setPersonId");
-            getSetterNoThrow("setPersonId",Integer.class,int.class);                    
-            getGetter("setFeature");
-            getSetterNoThrow("setFeature",java.nio.ByteBuffer.class,byte[].class);                    
-            getGetter("setUpdateTime");
-            getSetterNoThrow("setUpdateTime",java.util.Date.class,Long.class,long.class);  
+            getGetter(Column.md5.getter);
+            getSetterNoThrow(Column.md5.setter,String.class); 
+            getGetter(Column.personId.getter);
+            getSetterNoThrow(Column.personId.setter,Integer.class,int.class);                    
+            getGetter(Column.feature.getter);
+            getSetterNoThrow(Column.feature.setter,java.nio.ByteBuffer.class,byte[].class);                    
+            getGetter(Column.updateTime.getter);
+            getSetterNoThrow(Column.updateTime.setter,java.util.Date.class,Long.class,long.class);  
         }
         @Override
         protected void doFromRight(FeatureBean left, R_FEATURE right) {
@@ -1269,34 +1341,34 @@ public class BeanConverterUtils implements Constant {
                 long selfModified = 0L;
                 long[] initialized;
                 long[] modified;
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
                     modified = (long[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
                     initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
                     modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
                 }
-                if( bitCheck("md5",initialized) && (null != (getterMethod = methods.get("getMd5")))){
+                if( bitCheck(Column.md5.name(),initialized) && (null != (getterMethod = methods.get(Column.md5.getter)))){
                     left.setMd5(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("md5",modified)){
+                    if(bitCheck(Column.md5.name(),modified)){
                         selfModified |= FL_FEATURE_ID_MD5_MASK;
                     }
                 }
-                if( bitCheck("personId",initialized) && (null != (getterMethod = methods.get("getPersonId")))){
+                if( bitCheck(Column.personId.name(),initialized) && (null != (getterMethod = methods.get(Column.personId.getter)))){
                     left.setPersonId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("personId",modified)){
+                    if(bitCheck(Column.personId.name(),modified)){
                         selfModified |= FL_FEATURE_ID_PERSON_ID_MASK;
                     }
                 }
-                if( bitCheck("feature",initialized) && (null != (getterMethod = methods.get("getFeature")))){
+                if( bitCheck(Column.feature.name(),initialized) && (null != (getterMethod = methods.get(Column.feature.getter)))){
                     left.setFeature(cast(java.nio.ByteBuffer.class,getterMethod.invoke(right)));
-                    if(bitCheck("feature",modified)){
+                    if(bitCheck(Column.feature.name(),modified)){
                         selfModified |= FL_FEATURE_ID_FEATURE_MASK;
                     }
                 }
-                if( bitCheck("updateTime",initialized) && (null != (getterMethod = methods.get("getUpdateTime")))){
+                if( bitCheck(Column.updateTime.name(),initialized) && (null != (getterMethod = methods.get(Column.updateTime.getter)))){
                     left.setUpdateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("updateTime",modified)){
+                    if(bitCheck(Column.updateTime.name(),modified)){
                         selfModified |= FL_FEATURE_ID_UPDATE_TIME_MASK;
                     }
                 }
@@ -1313,45 +1385,45 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(FeatureBean left, R_FEATURE right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + 63)>>6];
-                long[] modified = new long[(rightIndexs.size() + 63)>>6];
+                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
+                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
                 Arrays.fill(initialized, 0L);
                 Arrays.fill(modified, 0L);
-                if(null != (setterMethod = methods.get("setMd5")) && left.checkMd5Initialized()){
+                if(null != (setterMethod = methods.get(Column.md5.setter)) && left.checkMd5Initialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setMd5"),left.getMd5()));
-                        bitOR("md5",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.md5.setter),left.getMd5()));
+                        bitOR(Column.md5.name(),initialized);
                         if(left.checkMd5Modified()){
-                            bitOR("md5",modified);
+                            bitOR(Column.md5.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setPersonId")) && left.checkPersonIdInitialized()){
+                if(null != (setterMethod = methods.get(Column.personId.setter)) && left.checkPersonIdInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setPersonId"),left.getPersonId()));
-                        bitOR("personId",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.personId.setter),left.getPersonId()));
+                        bitOR(Column.personId.name(),initialized);
                         if(left.checkPersonIdModified()){
-                            bitOR("personId",modified);
+                            bitOR(Column.personId.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setFeature")) && left.checkFeatureInitialized()){
+                if(null != (setterMethod = methods.get(Column.feature.setter)) && left.checkFeatureInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setFeature"),left.getFeature()));
-                        bitOR("feature",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.feature.setter),left.getFeature()));
+                        bitOR(Column.feature.name(),initialized);
                         if(left.checkFeatureModified()){
-                            bitOR("feature",modified);
+                            bitOR(Column.feature.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
 // IGNORE field fl_feature.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
-                if(null != (setterMethod = methods.get("setUpdateTime")) && left.checkUpdateTimeInitialized()){
+                if(null != (setterMethod = methods.get(Column.updateTime.setter)) && left.checkUpdateTimeInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setUpdateTime"),left.getUpdateTime()));
-                        bitOR("updateTime",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.updateTime.setter),left.getUpdateTime()));
+                        bitOR(Column.updateTime.name(),initialized);
                         if(left.checkUpdateTimeModified()){
-                            bitOR("updateTime",modified);
+                            bitOR(Column.updateTime.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
@@ -1386,6 +1458,23 @@ public class BeanConverterUtils implements Constant {
      *
      */
     public static class ImageBeanConverter<R_IMAGE> extends IBeanConverter.AbstractHandle<ImageBean,R_IMAGE>{
+        static enum Column{
+            /** column method info */
+            md5("getMd5","setMd5"),
+            format("getFormat","setFormat"),
+            width("getWidth","setWidth"),
+            height("getHeight","setHeight"),
+            depth("getDepth","setDepth"),
+            faceNum("getFaceNum","setFaceNum"),
+            thumbMd5("getThumbMd5","setThumbMd5"),
+            deviceId("getDeviceId","setDeviceId");
+            final String getter;
+            final String setter;
+            Column(String getter,String setter){
+                this.getter = setter;
+                this.setter = setter;
+            }
+        }
         private final Map<String,Method> methods = new Hashtable<String,Method>();
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
@@ -1462,13 +1551,13 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
                 }else{
                     getSetter(SET_INITIALIZED,long.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_MODIFIED,long[].class,List.class);
                 }else{
                     getSetter(SET_MODIFIED,long.class);
@@ -1477,22 +1566,22 @@ public class BeanConverterUtils implements Constant {
                 throw new RuntimeException(e);
             }
 
-            getGetter("setMd5");
-            getSetterNoThrow("setMd5",String.class); 
-            getGetter("setFormat");
-            getSetterNoThrow("setFormat",String.class); 
-            getGetter("setWidth");
-            getSetterNoThrow("setWidth",Integer.class,int.class);                    
-            getGetter("setHeight");
-            getSetterNoThrow("setHeight",Integer.class,int.class);                    
-            getGetter("setDepth");
-            getSetterNoThrow("setDepth",Integer.class,int.class);                    
-            getGetter("setFaceNum");
-            getSetterNoThrow("setFaceNum",Integer.class,int.class);                    
-            getGetter("setThumbMd5");
-            getSetterNoThrow("setThumbMd5",String.class); 
-            getGetter("setDeviceId");
-            getSetterNoThrow("setDeviceId",Integer.class,int.class);                    
+            getGetter(Column.md5.getter);
+            getSetterNoThrow(Column.md5.setter,String.class); 
+            getGetter(Column.format.getter);
+            getSetterNoThrow(Column.format.setter,String.class); 
+            getGetter(Column.width.getter);
+            getSetterNoThrow(Column.width.setter,Integer.class,int.class);                    
+            getGetter(Column.height.getter);
+            getSetterNoThrow(Column.height.setter,Integer.class,int.class);                    
+            getGetter(Column.depth.getter);
+            getSetterNoThrow(Column.depth.setter,Integer.class,int.class);                    
+            getGetter(Column.faceNum.getter);
+            getSetterNoThrow(Column.faceNum.setter,Integer.class,int.class);                    
+            getGetter(Column.thumbMd5.getter);
+            getSetterNoThrow(Column.thumbMd5.setter,String.class); 
+            getGetter(Column.deviceId.getter);
+            getSetterNoThrow(Column.deviceId.setter,Integer.class,int.class);                    
         }
         @Override
         protected void doFromRight(ImageBean left, R_IMAGE right) {
@@ -1502,58 +1591,58 @@ public class BeanConverterUtils implements Constant {
                 long selfModified = 0L;
                 long[] initialized;
                 long[] modified;
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
                     modified = (long[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
                     initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
                     modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
                 }
-                if( bitCheck("md5",initialized) && (null != (getterMethod = methods.get("getMd5")))){
+                if( bitCheck(Column.md5.name(),initialized) && (null != (getterMethod = methods.get(Column.md5.getter)))){
                     left.setMd5(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("md5",modified)){
+                    if(bitCheck(Column.md5.name(),modified)){
                         selfModified |= FL_IMAGE_ID_MD5_MASK;
                     }
                 }
-                if( bitCheck("format",initialized) && (null != (getterMethod = methods.get("getFormat")))){
+                if( bitCheck(Column.format.name(),initialized) && (null != (getterMethod = methods.get(Column.format.getter)))){
                     left.setFormat(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("format",modified)){
+                    if(bitCheck(Column.format.name(),modified)){
                         selfModified |= FL_IMAGE_ID_FORMAT_MASK;
                     }
                 }
-                if( bitCheck("width",initialized) && (null != (getterMethod = methods.get("getWidth")))){
+                if( bitCheck(Column.width.name(),initialized) && (null != (getterMethod = methods.get(Column.width.getter)))){
                     left.setWidth(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("width",modified)){
+                    if(bitCheck(Column.width.name(),modified)){
                         selfModified |= FL_IMAGE_ID_WIDTH_MASK;
                     }
                 }
-                if( bitCheck("height",initialized) && (null != (getterMethod = methods.get("getHeight")))){
+                if( bitCheck(Column.height.name(),initialized) && (null != (getterMethod = methods.get(Column.height.getter)))){
                     left.setHeight(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("height",modified)){
+                    if(bitCheck(Column.height.name(),modified)){
                         selfModified |= FL_IMAGE_ID_HEIGHT_MASK;
                     }
                 }
-                if( bitCheck("depth",initialized) && (null != (getterMethod = methods.get("getDepth")))){
+                if( bitCheck(Column.depth.name(),initialized) && (null != (getterMethod = methods.get(Column.depth.getter)))){
                     left.setDepth(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("depth",modified)){
+                    if(bitCheck(Column.depth.name(),modified)){
                         selfModified |= FL_IMAGE_ID_DEPTH_MASK;
                     }
                 }
-                if( bitCheck("faceNum",initialized) && (null != (getterMethod = methods.get("getFaceNum")))){
+                if( bitCheck(Column.faceNum.name(),initialized) && (null != (getterMethod = methods.get(Column.faceNum.getter)))){
                     left.setFaceNum(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("faceNum",modified)){
+                    if(bitCheck(Column.faceNum.name(),modified)){
                         selfModified |= FL_IMAGE_ID_FACE_NUM_MASK;
                     }
                 }
-                if( bitCheck("thumbMd5",initialized) && (null != (getterMethod = methods.get("getThumbMd5")))){
+                if( bitCheck(Column.thumbMd5.name(),initialized) && (null != (getterMethod = methods.get(Column.thumbMd5.getter)))){
                     left.setThumbMd5(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("thumbMd5",modified)){
+                    if(bitCheck(Column.thumbMd5.name(),modified)){
                         selfModified |= FL_IMAGE_ID_THUMB_MD5_MASK;
                     }
                 }
-                if( bitCheck("deviceId",initialized) && (null != (getterMethod = methods.get("getDeviceId")))){
+                if( bitCheck(Column.deviceId.name(),initialized) && (null != (getterMethod = methods.get(Column.deviceId.getter)))){
                     left.setDeviceId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("deviceId",modified)){
+                    if(bitCheck(Column.deviceId.name(),modified)){
                         selfModified |= FL_IMAGE_ID_DEVICE_ID_MASK;
                     }
                 }
@@ -1570,79 +1659,79 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(ImageBean left, R_IMAGE right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + 63)>>6];
-                long[] modified = new long[(rightIndexs.size() + 63)>>6];
+                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
+                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
                 Arrays.fill(initialized, 0L);
                 Arrays.fill(modified, 0L);
-                if(null != (setterMethod = methods.get("setMd5")) && left.checkMd5Initialized()){
+                if(null != (setterMethod = methods.get(Column.md5.setter)) && left.checkMd5Initialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setMd5"),left.getMd5()));
-                        bitOR("md5",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.md5.setter),left.getMd5()));
+                        bitOR(Column.md5.name(),initialized);
                         if(left.checkMd5Modified()){
-                            bitOR("md5",modified);
+                            bitOR(Column.md5.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setFormat")) && left.checkFormatInitialized()){
+                if(null != (setterMethod = methods.get(Column.format.setter)) && left.checkFormatInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setFormat"),left.getFormat()));
-                        bitOR("format",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.format.setter),left.getFormat()));
+                        bitOR(Column.format.name(),initialized);
                         if(left.checkFormatModified()){
-                            bitOR("format",modified);
+                            bitOR(Column.format.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setWidth")) && left.checkWidthInitialized()){
+                if(null != (setterMethod = methods.get(Column.width.setter)) && left.checkWidthInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setWidth"),left.getWidth()));
-                        bitOR("width",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.width.setter),left.getWidth()));
+                        bitOR(Column.width.name(),initialized);
                         if(left.checkWidthModified()){
-                            bitOR("width",modified);
+                            bitOR(Column.width.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setHeight")) && left.checkHeightInitialized()){
+                if(null != (setterMethod = methods.get(Column.height.setter)) && left.checkHeightInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setHeight"),left.getHeight()));
-                        bitOR("height",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.height.setter),left.getHeight()));
+                        bitOR(Column.height.name(),initialized);
                         if(left.checkHeightModified()){
-                            bitOR("height",modified);
+                            bitOR(Column.height.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setDepth")) && left.checkDepthInitialized()){
+                if(null != (setterMethod = methods.get(Column.depth.setter)) && left.checkDepthInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setDepth"),left.getDepth()));
-                        bitOR("depth",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.depth.setter),left.getDepth()));
+                        bitOR(Column.depth.name(),initialized);
                         if(left.checkDepthModified()){
-                            bitOR("depth",modified);
+                            bitOR(Column.depth.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setFaceNum")) && left.checkFaceNumInitialized()){
+                if(null != (setterMethod = methods.get(Column.faceNum.setter)) && left.checkFaceNumInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setFaceNum"),left.getFaceNum()));
-                        bitOR("faceNum",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.faceNum.setter),left.getFaceNum()));
+                        bitOR(Column.faceNum.name(),initialized);
                         if(left.checkFaceNumModified()){
-                            bitOR("faceNum",modified);
+                            bitOR(Column.faceNum.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setThumbMd5")) && left.checkThumbMd5Initialized()){
+                if(null != (setterMethod = methods.get(Column.thumbMd5.setter)) && left.checkThumbMd5Initialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setThumbMd5"),left.getThumbMd5()));
-                        bitOR("thumbMd5",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.thumbMd5.setter),left.getThumbMd5()));
+                        bitOR(Column.thumbMd5.name(),initialized);
                         if(left.checkThumbMd5Modified()){
-                            bitOR("thumbMd5",modified);
+                            bitOR(Column.thumbMd5.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setDeviceId")) && left.checkDeviceIdInitialized()){
+                if(null != (setterMethod = methods.get(Column.deviceId.setter)) && left.checkDeviceIdInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setDeviceId"),left.getDeviceId()));
-                        bitOR("deviceId",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.deviceId.setter),left.getDeviceId()));
+                        bitOR(Column.deviceId.name(),initialized);
                         if(left.checkDeviceIdModified()){
-                            bitOR("deviceId",modified);
+                            bitOR(Column.deviceId.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
@@ -1676,6 +1765,23 @@ public class BeanConverterUtils implements Constant {
      *
      */
     public static class LogBeanConverter<R_LOG> extends IBeanConverter.AbstractHandle<LogBean,R_LOG>{
+        static enum Column{
+            /** column method info */
+            id("getId","setId"),
+            personId("getPersonId","setPersonId"),
+            deviceId("getDeviceId","setDeviceId"),
+            verifyFeature("getVerifyFeature","setVerifyFeature"),
+            compareFace("getCompareFace","setCompareFace"),
+            similarty("getSimilarty","setSimilarty"),
+            verifyTime("getVerifyTime","setVerifyTime"),
+            createTime("getCreateTime","setCreateTime");
+            final String getter;
+            final String setter;
+            Column(String getter,String setter){
+                this.getter = setter;
+                this.setter = setter;
+            }
+        }
         private final Map<String,Method> methods = new Hashtable<String,Method>();
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
@@ -1752,13 +1858,13 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
                 }else{
                     getSetter(SET_INITIALIZED,long.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_MODIFIED,long[].class,List.class);
                 }else{
                     getSetter(SET_MODIFIED,long.class);
@@ -1767,22 +1873,22 @@ public class BeanConverterUtils implements Constant {
                 throw new RuntimeException(e);
             }
 
-            getGetter("setId");
-            getSetterNoThrow("setId",Integer.class,int.class);                    
-            getGetter("setPersonId");
-            getSetterNoThrow("setPersonId",Integer.class,int.class);                    
-            getGetter("setDeviceId");
-            getSetterNoThrow("setDeviceId",Integer.class,int.class);                    
-            getGetter("setVerifyFeature");
-            getSetterNoThrow("setVerifyFeature",String.class); 
-            getGetter("setCompareFace");
-            getSetterNoThrow("setCompareFace",Integer.class,int.class);                    
-            getGetter("setSimilarty");
-            getSetterNoThrow("setSimilarty",Double.class,double.class);                    
-            getGetter("setVerifyTime");
-            getSetterNoThrow("setVerifyTime",java.util.Date.class,Long.class,long.class);  
-            getGetter("setCreateTime");
-            getSetterNoThrow("setCreateTime",java.util.Date.class,Long.class,long.class);  
+            getGetter(Column.id.getter);
+            getSetterNoThrow(Column.id.setter,Integer.class,int.class);                    
+            getGetter(Column.personId.getter);
+            getSetterNoThrow(Column.personId.setter,Integer.class,int.class);                    
+            getGetter(Column.deviceId.getter);
+            getSetterNoThrow(Column.deviceId.setter,Integer.class,int.class);                    
+            getGetter(Column.verifyFeature.getter);
+            getSetterNoThrow(Column.verifyFeature.setter,String.class); 
+            getGetter(Column.compareFace.getter);
+            getSetterNoThrow(Column.compareFace.setter,Integer.class,int.class);                    
+            getGetter(Column.similarty.getter);
+            getSetterNoThrow(Column.similarty.setter,Double.class,double.class);                    
+            getGetter(Column.verifyTime.getter);
+            getSetterNoThrow(Column.verifyTime.setter,java.util.Date.class,Long.class,long.class);  
+            getGetter(Column.createTime.getter);
+            getSetterNoThrow(Column.createTime.setter,java.util.Date.class,Long.class,long.class);  
         }
         @Override
         protected void doFromRight(LogBean left, R_LOG right) {
@@ -1792,58 +1898,58 @@ public class BeanConverterUtils implements Constant {
                 long selfModified = 0L;
                 long[] initialized;
                 long[] modified;
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
                     modified = (long[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
                     initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
                     modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
                 }
-                if( bitCheck("id",initialized) && (null != (getterMethod = methods.get("getId")))){
+                if( bitCheck(Column.id.name(),initialized) && (null != (getterMethod = methods.get(Column.id.getter)))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("id",modified)){
+                    if(bitCheck(Column.id.name(),modified)){
                         selfModified |= FL_LOG_ID_ID_MASK;
                     }
                 }
-                if( bitCheck("personId",initialized) && (null != (getterMethod = methods.get("getPersonId")))){
+                if( bitCheck(Column.personId.name(),initialized) && (null != (getterMethod = methods.get(Column.personId.getter)))){
                     left.setPersonId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("personId",modified)){
+                    if(bitCheck(Column.personId.name(),modified)){
                         selfModified |= FL_LOG_ID_PERSON_ID_MASK;
                     }
                 }
-                if( bitCheck("deviceId",initialized) && (null != (getterMethod = methods.get("getDeviceId")))){
+                if( bitCheck(Column.deviceId.name(),initialized) && (null != (getterMethod = methods.get(Column.deviceId.getter)))){
                     left.setDeviceId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("deviceId",modified)){
+                    if(bitCheck(Column.deviceId.name(),modified)){
                         selfModified |= FL_LOG_ID_DEVICE_ID_MASK;
                     }
                 }
-                if( bitCheck("verifyFeature",initialized) && (null != (getterMethod = methods.get("getVerifyFeature")))){
+                if( bitCheck(Column.verifyFeature.name(),initialized) && (null != (getterMethod = methods.get(Column.verifyFeature.getter)))){
                     left.setVerifyFeature(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("verifyFeature",modified)){
+                    if(bitCheck(Column.verifyFeature.name(),modified)){
                         selfModified |= FL_LOG_ID_VERIFY_FEATURE_MASK;
                     }
                 }
-                if( bitCheck("compareFace",initialized) && (null != (getterMethod = methods.get("getCompareFace")))){
+                if( bitCheck(Column.compareFace.name(),initialized) && (null != (getterMethod = methods.get(Column.compareFace.getter)))){
                     left.setCompareFace(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("compareFace",modified)){
+                    if(bitCheck(Column.compareFace.name(),modified)){
                         selfModified |= FL_LOG_ID_COMPARE_FACE_MASK;
                     }
                 }
-                if( bitCheck("similarty",initialized) && (null != (getterMethod = methods.get("getSimilarty")))){
+                if( bitCheck(Column.similarty.name(),initialized) && (null != (getterMethod = methods.get(Column.similarty.getter)))){
                     left.setSimilarty(cast(Double.class,getterMethod.invoke(right)));
-                    if(bitCheck("similarty",modified)){
+                    if(bitCheck(Column.similarty.name(),modified)){
                         selfModified |= FL_LOG_ID_SIMILARTY_MASK;
                     }
                 }
-                if( bitCheck("verifyTime",initialized) && (null != (getterMethod = methods.get("getVerifyTime")))){
+                if( bitCheck(Column.verifyTime.name(),initialized) && (null != (getterMethod = methods.get(Column.verifyTime.getter)))){
                     left.setVerifyTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("verifyTime",modified)){
+                    if(bitCheck(Column.verifyTime.name(),modified)){
                         selfModified |= FL_LOG_ID_VERIFY_TIME_MASK;
                     }
                 }
-                if( bitCheck("createTime",initialized) && (null != (getterMethod = methods.get("getCreateTime")))){
+                if( bitCheck(Column.createTime.name(),initialized) && (null != (getterMethod = methods.get(Column.createTime.getter)))){
                     left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("createTime",modified)){
+                    if(bitCheck(Column.createTime.name(),modified)){
                         selfModified |= FL_LOG_ID_CREATE_TIME_MASK;
                     }
                 }
@@ -1860,81 +1966,81 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(LogBean left, R_LOG right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + 63)>>6];
-                long[] modified = new long[(rightIndexs.size() + 63)>>6];
+                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
+                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
                 Arrays.fill(initialized, 0L);
                 Arrays.fill(modified, 0L);
-                if(null != (setterMethod = methods.get("setId")) && left.checkIdInitialized()){
+                if(null != (setterMethod = methods.get(Column.id.setter)) && left.checkIdInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setId"),left.getId()));
-                        bitOR("id",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.id.setter),left.getId()));
+                        bitOR(Column.id.name(),initialized);
                         if(left.checkIdModified()){
-                            bitOR("id",modified);
+                            bitOR(Column.id.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setPersonId")) && left.checkPersonIdInitialized()){
+                if(null != (setterMethod = methods.get(Column.personId.setter)) && left.checkPersonIdInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setPersonId"),left.getPersonId()));
-                        bitOR("personId",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.personId.setter),left.getPersonId()));
+                        bitOR(Column.personId.name(),initialized);
                         if(left.checkPersonIdModified()){
-                            bitOR("personId",modified);
+                            bitOR(Column.personId.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setDeviceId")) && left.checkDeviceIdInitialized()){
+                if(null != (setterMethod = methods.get(Column.deviceId.setter)) && left.checkDeviceIdInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setDeviceId"),left.getDeviceId()));
-                        bitOR("deviceId",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.deviceId.setter),left.getDeviceId()));
+                        bitOR(Column.deviceId.name(),initialized);
                         if(left.checkDeviceIdModified()){
-                            bitOR("deviceId",modified);
+                            bitOR(Column.deviceId.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setVerifyFeature")) && left.checkVerifyFeatureInitialized()){
+                if(null != (setterMethod = methods.get(Column.verifyFeature.setter)) && left.checkVerifyFeatureInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setVerifyFeature"),left.getVerifyFeature()));
-                        bitOR("verifyFeature",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.verifyFeature.setter),left.getVerifyFeature()));
+                        bitOR(Column.verifyFeature.name(),initialized);
                         if(left.checkVerifyFeatureModified()){
-                            bitOR("verifyFeature",modified);
+                            bitOR(Column.verifyFeature.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setCompareFace")) && left.checkCompareFaceInitialized()){
+                if(null != (setterMethod = methods.get(Column.compareFace.setter)) && left.checkCompareFaceInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setCompareFace"),left.getCompareFace()));
-                        bitOR("compareFace",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.compareFace.setter),left.getCompareFace()));
+                        bitOR(Column.compareFace.name(),initialized);
                         if(left.checkCompareFaceModified()){
-                            bitOR("compareFace",modified);
+                            bitOR(Column.compareFace.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setSimilarty")) && left.checkSimilartyInitialized()){
+                if(null != (setterMethod = methods.get(Column.similarty.setter)) && left.checkSimilartyInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setSimilarty"),left.getSimilarty()));
-                        bitOR("similarty",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.similarty.setter),left.getSimilarty()));
+                        bitOR(Column.similarty.name(),initialized);
                         if(left.checkSimilartyModified()){
-                            bitOR("similarty",modified);
+                            bitOR(Column.similarty.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setVerifyTime")) && left.checkVerifyTimeInitialized()){
+                if(null != (setterMethod = methods.get(Column.verifyTime.setter)) && left.checkVerifyTimeInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setVerifyTime"),left.getVerifyTime()));
-                        bitOR("verifyTime",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.verifyTime.setter),left.getVerifyTime()));
+                        bitOR(Column.verifyTime.name(),initialized);
                         if(left.checkVerifyTimeModified()){
-                            bitOR("verifyTime",modified);
+                            bitOR(Column.verifyTime.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
 // IGNORE field fl_log.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
-                if(null != (setterMethod = methods.get("setCreateTime")) && left.checkCreateTimeInitialized()){
+                if(null != (setterMethod = methods.get(Column.createTime.setter)) && left.checkCreateTimeInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setCreateTime"),left.getCreateTime()));
-                        bitOR("createTime",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.createTime.setter),left.getCreateTime()));
+                        bitOR(Column.createTime.name(),initialized);
                         if(left.checkCreateTimeModified()){
-                            bitOR("createTime",modified);
+                            bitOR(Column.createTime.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
@@ -1969,6 +2075,18 @@ public class BeanConverterUtils implements Constant {
      *
      */
     public static class PermitBeanConverter<R_PERMIT> extends IBeanConverter.AbstractHandle<PermitBean,R_PERMIT>{
+        static enum Column{
+            /** column method info */
+            deviceGroupId("getDeviceGroupId","setDeviceGroupId"),
+            personGroupId("getPersonGroupId","setPersonGroupId"),
+            createTime("getCreateTime","setCreateTime");
+            final String getter;
+            final String setter;
+            Column(String getter,String setter){
+                this.getter = setter;
+                this.setter = setter;
+            }
+        }
         private final Map<String,Method> methods = new Hashtable<String,Method>();
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
@@ -2045,13 +2163,13 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
                 }else{
                     getSetter(SET_INITIALIZED,long.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_MODIFIED,long[].class,List.class);
                 }else{
                     getSetter(SET_MODIFIED,long.class);
@@ -2060,12 +2178,12 @@ public class BeanConverterUtils implements Constant {
                 throw new RuntimeException(e);
             }
 
-            getGetter("setDeviceGroupId");
-            getSetterNoThrow("setDeviceGroupId",Integer.class,int.class);                    
-            getGetter("setPersonGroupId");
-            getSetterNoThrow("setPersonGroupId",Integer.class,int.class);                    
-            getGetter("setCreateTime");
-            getSetterNoThrow("setCreateTime",java.util.Date.class,Long.class,long.class);  
+            getGetter(Column.deviceGroupId.getter);
+            getSetterNoThrow(Column.deviceGroupId.setter,Integer.class,int.class);                    
+            getGetter(Column.personGroupId.getter);
+            getSetterNoThrow(Column.personGroupId.setter,Integer.class,int.class);                    
+            getGetter(Column.createTime.getter);
+            getSetterNoThrow(Column.createTime.setter,java.util.Date.class,Long.class,long.class);  
         }
         @Override
         protected void doFromRight(PermitBean left, R_PERMIT right) {
@@ -2075,28 +2193,28 @@ public class BeanConverterUtils implements Constant {
                 long selfModified = 0L;
                 long[] initialized;
                 long[] modified;
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
                     modified = (long[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
                     initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
                     modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
                 }
-                if( bitCheck("deviceGroupId",initialized) && (null != (getterMethod = methods.get("getDeviceGroupId")))){
+                if( bitCheck(Column.deviceGroupId.name(),initialized) && (null != (getterMethod = methods.get(Column.deviceGroupId.getter)))){
                     left.setDeviceGroupId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("deviceGroupId",modified)){
+                    if(bitCheck(Column.deviceGroupId.name(),modified)){
                         selfModified |= FL_PERMIT_ID_DEVICE_GROUP_ID_MASK;
                     }
                 }
-                if( bitCheck("personGroupId",initialized) && (null != (getterMethod = methods.get("getPersonGroupId")))){
+                if( bitCheck(Column.personGroupId.name(),initialized) && (null != (getterMethod = methods.get(Column.personGroupId.getter)))){
                     left.setPersonGroupId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("personGroupId",modified)){
+                    if(bitCheck(Column.personGroupId.name(),modified)){
                         selfModified |= FL_PERMIT_ID_PERSON_GROUP_ID_MASK;
                     }
                 }
-                if( bitCheck("createTime",initialized) && (null != (getterMethod = methods.get("getCreateTime")))){
+                if( bitCheck(Column.createTime.name(),initialized) && (null != (getterMethod = methods.get(Column.createTime.getter)))){
                     left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("createTime",modified)){
+                    if(bitCheck(Column.createTime.name(),modified)){
                         selfModified |= FL_PERMIT_ID_CREATE_TIME_MASK;
                     }
                 }
@@ -2113,36 +2231,36 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(PermitBean left, R_PERMIT right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + 63)>>6];
-                long[] modified = new long[(rightIndexs.size() + 63)>>6];
+                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
+                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
                 Arrays.fill(initialized, 0L);
                 Arrays.fill(modified, 0L);
-                if(null != (setterMethod = methods.get("setDeviceGroupId")) && left.checkDeviceGroupIdInitialized()){
+                if(null != (setterMethod = methods.get(Column.deviceGroupId.setter)) && left.checkDeviceGroupIdInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setDeviceGroupId"),left.getDeviceGroupId()));
-                        bitOR("deviceGroupId",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.deviceGroupId.setter),left.getDeviceGroupId()));
+                        bitOR(Column.deviceGroupId.name(),initialized);
                         if(left.checkDeviceGroupIdModified()){
-                            bitOR("deviceGroupId",modified);
+                            bitOR(Column.deviceGroupId.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setPersonGroupId")) && left.checkPersonGroupIdInitialized()){
+                if(null != (setterMethod = methods.get(Column.personGroupId.setter)) && left.checkPersonGroupIdInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setPersonGroupId"),left.getPersonGroupId()));
-                        bitOR("personGroupId",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.personGroupId.setter),left.getPersonGroupId()));
+                        bitOR(Column.personGroupId.name(),initialized);
                         if(left.checkPersonGroupIdModified()){
-                            bitOR("personGroupId",modified);
+                            bitOR(Column.personGroupId.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
 // IGNORE field fl_permit.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
-                if(null != (setterMethod = methods.get("setCreateTime")) && left.checkCreateTimeInitialized()){
+                if(null != (setterMethod = methods.get(Column.createTime.setter)) && left.checkCreateTimeInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setCreateTime"),left.getCreateTime()));
-                        bitOR("createTime",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.createTime.setter),left.getCreateTime()));
+                        bitOR(Column.createTime.name(),initialized);
                         if(left.checkCreateTimeModified()){
-                            bitOR("createTime",modified);
+                            bitOR(Column.createTime.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
@@ -2177,6 +2295,26 @@ public class BeanConverterUtils implements Constant {
      *
      */
     public static class PersonBeanConverter<R_PERSON> extends IBeanConverter.AbstractHandle<PersonBean,R_PERSON>{
+        static enum Column{
+            /** column method info */
+            id("getId","setId"),
+            groupId("getGroupId","setGroupId"),
+            name("getName","setName"),
+            sex("getSex","setSex"),
+            birthdate("getBirthdate","setBirthdate"),
+            papersType("getPapersType","setPapersType"),
+            papersNum("getPapersNum","setPapersNum"),
+            imageMd5("getImageMd5","setImageMd5"),
+            expiryDate("getExpiryDate","setExpiryDate"),
+            createTime("getCreateTime","setCreateTime"),
+            updateTime("getUpdateTime","setUpdateTime");
+            final String getter;
+            final String setter;
+            Column(String getter,String setter){
+                this.getter = setter;
+                this.setter = setter;
+            }
+        }
         private final Map<String,Method> methods = new Hashtable<String,Method>();
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
@@ -2253,13 +2391,13 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
                 }else{
                     getSetter(SET_INITIALIZED,long.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_MODIFIED,long[].class,List.class);
                 }else{
                     getSetter(SET_MODIFIED,long.class);
@@ -2268,28 +2406,28 @@ public class BeanConverterUtils implements Constant {
                 throw new RuntimeException(e);
             }
 
-            getGetter("setId");
-            getSetterNoThrow("setId",Integer.class,int.class);                    
-            getGetter("setGroupId");
-            getSetterNoThrow("setGroupId",Integer.class,int.class);                    
-            getGetter("setName");
-            getSetterNoThrow("setName",String.class); 
-            getGetter("setSex");
-            getSetterNoThrow("setSex",Integer.class,int.class);                    
-            getGetter("setBirthdate");
-            getSetterNoThrow("setBirthdate",java.util.Date.class,Long.class,long.class);  
-            getGetter("setPapersType");
-            getSetterNoThrow("setPapersType",Integer.class,int.class);                    
-            getGetter("setPapersNum");
-            getSetterNoThrow("setPapersNum",String.class); 
-            getGetter("setImageMd5");
-            getSetterNoThrow("setImageMd5",String.class); 
-            getGetter("setExpiryDate");
-            getSetterNoThrow("setExpiryDate",java.util.Date.class,Long.class,long.class);  
-            getGetter("setCreateTime");
-            getSetterNoThrow("setCreateTime",java.util.Date.class,Long.class,long.class);  
-            getGetter("setUpdateTime");
-            getSetterNoThrow("setUpdateTime",java.util.Date.class,Long.class,long.class);  
+            getGetter(Column.id.getter);
+            getSetterNoThrow(Column.id.setter,Integer.class,int.class);                    
+            getGetter(Column.groupId.getter);
+            getSetterNoThrow(Column.groupId.setter,Integer.class,int.class);                    
+            getGetter(Column.name.getter);
+            getSetterNoThrow(Column.name.setter,String.class); 
+            getGetter(Column.sex.getter);
+            getSetterNoThrow(Column.sex.setter,Integer.class,int.class);                    
+            getGetter(Column.birthdate.getter);
+            getSetterNoThrow(Column.birthdate.setter,java.util.Date.class,Long.class,long.class);  
+            getGetter(Column.papersType.getter);
+            getSetterNoThrow(Column.papersType.setter,Integer.class,int.class);                    
+            getGetter(Column.papersNum.getter);
+            getSetterNoThrow(Column.papersNum.setter,String.class); 
+            getGetter(Column.imageMd5.getter);
+            getSetterNoThrow(Column.imageMd5.setter,String.class); 
+            getGetter(Column.expiryDate.getter);
+            getSetterNoThrow(Column.expiryDate.setter,java.util.Date.class,Long.class,long.class);  
+            getGetter(Column.createTime.getter);
+            getSetterNoThrow(Column.createTime.setter,java.util.Date.class,Long.class,long.class);  
+            getGetter(Column.updateTime.getter);
+            getSetterNoThrow(Column.updateTime.setter,java.util.Date.class,Long.class,long.class);  
         }
         @Override
         protected void doFromRight(PersonBean left, R_PERSON right) {
@@ -2299,76 +2437,76 @@ public class BeanConverterUtils implements Constant {
                 long selfModified = 0L;
                 long[] initialized;
                 long[] modified;
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
                     modified = (long[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
                     initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
                     modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
                 }
-                if( bitCheck("id",initialized) && (null != (getterMethod = methods.get("getId")))){
+                if( bitCheck(Column.id.name(),initialized) && (null != (getterMethod = methods.get(Column.id.getter)))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("id",modified)){
+                    if(bitCheck(Column.id.name(),modified)){
                         selfModified |= FL_PERSON_ID_ID_MASK;
                     }
                 }
-                if( bitCheck("groupId",initialized) && (null != (getterMethod = methods.get("getGroupId")))){
+                if( bitCheck(Column.groupId.name(),initialized) && (null != (getterMethod = methods.get(Column.groupId.getter)))){
                     left.setGroupId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("groupId",modified)){
+                    if(bitCheck(Column.groupId.name(),modified)){
                         selfModified |= FL_PERSON_ID_GROUP_ID_MASK;
                     }
                 }
-                if( bitCheck("name",initialized) && (null != (getterMethod = methods.get("getName")))){
+                if( bitCheck(Column.name.name(),initialized) && (null != (getterMethod = methods.get(Column.name.getter)))){
                     left.setName(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("name",modified)){
+                    if(bitCheck(Column.name.name(),modified)){
                         selfModified |= FL_PERSON_ID_NAME_MASK;
                     }
                 }
-                if( bitCheck("sex",initialized) && (null != (getterMethod = methods.get("getSex")))){
+                if( bitCheck(Column.sex.name(),initialized) && (null != (getterMethod = methods.get(Column.sex.getter)))){
                     left.setSex(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("sex",modified)){
+                    if(bitCheck(Column.sex.name(),modified)){
                         selfModified |= FL_PERSON_ID_SEX_MASK;
                     }
                 }
-                if( bitCheck("birthdate",initialized) && (null != (getterMethod = methods.get("getBirthdate")))){
+                if( bitCheck(Column.birthdate.name(),initialized) && (null != (getterMethod = methods.get(Column.birthdate.getter)))){
                     left.setBirthdate(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("birthdate",modified)){
+                    if(bitCheck(Column.birthdate.name(),modified)){
                         selfModified |= FL_PERSON_ID_BIRTHDATE_MASK;
                     }
                 }
-                if( bitCheck("papersType",initialized) && (null != (getterMethod = methods.get("getPapersType")))){
+                if( bitCheck(Column.papersType.name(),initialized) && (null != (getterMethod = methods.get(Column.papersType.getter)))){
                     left.setPapersType(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("papersType",modified)){
+                    if(bitCheck(Column.papersType.name(),modified)){
                         selfModified |= FL_PERSON_ID_PAPERS_TYPE_MASK;
                     }
                 }
-                if( bitCheck("papersNum",initialized) && (null != (getterMethod = methods.get("getPapersNum")))){
+                if( bitCheck(Column.papersNum.name(),initialized) && (null != (getterMethod = methods.get(Column.papersNum.getter)))){
                     left.setPapersNum(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("papersNum",modified)){
+                    if(bitCheck(Column.papersNum.name(),modified)){
                         selfModified |= FL_PERSON_ID_PAPERS_NUM_MASK;
                     }
                 }
-                if( bitCheck("imageMd5",initialized) && (null != (getterMethod = methods.get("getImageMd5")))){
+                if( bitCheck(Column.imageMd5.name(),initialized) && (null != (getterMethod = methods.get(Column.imageMd5.getter)))){
                     left.setImageMd5(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("imageMd5",modified)){
+                    if(bitCheck(Column.imageMd5.name(),modified)){
                         selfModified |= FL_PERSON_ID_IMAGE_MD5_MASK;
                     }
                 }
-                if( bitCheck("expiryDate",initialized) && (null != (getterMethod = methods.get("getExpiryDate")))){
+                if( bitCheck(Column.expiryDate.name(),initialized) && (null != (getterMethod = methods.get(Column.expiryDate.getter)))){
                     left.setExpiryDate(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("expiryDate",modified)){
+                    if(bitCheck(Column.expiryDate.name(),modified)){
                         selfModified |= FL_PERSON_ID_EXPIRY_DATE_MASK;
                     }
                 }
-                if( bitCheck("createTime",initialized) && (null != (getterMethod = methods.get("getCreateTime")))){
+                if( bitCheck(Column.createTime.name(),initialized) && (null != (getterMethod = methods.get(Column.createTime.getter)))){
                     left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("createTime",modified)){
+                    if(bitCheck(Column.createTime.name(),modified)){
                         selfModified |= FL_PERSON_ID_CREATE_TIME_MASK;
                     }
                 }
-                if( bitCheck("updateTime",initialized) && (null != (getterMethod = methods.get("getUpdateTime")))){
+                if( bitCheck(Column.updateTime.name(),initialized) && (null != (getterMethod = methods.get(Column.updateTime.getter)))){
                     left.setUpdateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("updateTime",modified)){
+                    if(bitCheck(Column.updateTime.name(),modified)){
                         selfModified |= FL_PERSON_ID_UPDATE_TIME_MASK;
                     }
                 }
@@ -2385,111 +2523,111 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(PersonBean left, R_PERSON right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + 63)>>6];
-                long[] modified = new long[(rightIndexs.size() + 63)>>6];
+                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
+                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
                 Arrays.fill(initialized, 0L);
                 Arrays.fill(modified, 0L);
-                if(null != (setterMethod = methods.get("setId")) && left.checkIdInitialized()){
+                if(null != (setterMethod = methods.get(Column.id.setter)) && left.checkIdInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setId"),left.getId()));
-                        bitOR("id",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.id.setter),left.getId()));
+                        bitOR(Column.id.name(),initialized);
                         if(left.checkIdModified()){
-                            bitOR("id",modified);
+                            bitOR(Column.id.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setGroupId")) && left.checkGroupIdInitialized()){
+                if(null != (setterMethod = methods.get(Column.groupId.setter)) && left.checkGroupIdInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setGroupId"),left.getGroupId()));
-                        bitOR("groupId",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.groupId.setter),left.getGroupId()));
+                        bitOR(Column.groupId.name(),initialized);
                         if(left.checkGroupIdModified()){
-                            bitOR("groupId",modified);
+                            bitOR(Column.groupId.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setName")) && left.checkNameInitialized()){
+                if(null != (setterMethod = methods.get(Column.name.setter)) && left.checkNameInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setName"),left.getName()));
-                        bitOR("name",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.name.setter),left.getName()));
+                        bitOR(Column.name.name(),initialized);
                         if(left.checkNameModified()){
-                            bitOR("name",modified);
+                            bitOR(Column.name.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setSex")) && left.checkSexInitialized()){
+                if(null != (setterMethod = methods.get(Column.sex.setter)) && left.checkSexInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setSex"),left.getSex()));
-                        bitOR("sex",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.sex.setter),left.getSex()));
+                        bitOR(Column.sex.name(),initialized);
                         if(left.checkSexModified()){
-                            bitOR("sex",modified);
+                            bitOR(Column.sex.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setBirthdate")) && left.checkBirthdateInitialized()){
+                if(null != (setterMethod = methods.get(Column.birthdate.setter)) && left.checkBirthdateInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setBirthdate"),left.getBirthdate()));
-                        bitOR("birthdate",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.birthdate.setter),left.getBirthdate()));
+                        bitOR(Column.birthdate.name(),initialized);
                         if(left.checkBirthdateModified()){
-                            bitOR("birthdate",modified);
+                            bitOR(Column.birthdate.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setPapersType")) && left.checkPapersTypeInitialized()){
+                if(null != (setterMethod = methods.get(Column.papersType.setter)) && left.checkPapersTypeInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setPapersType"),left.getPapersType()));
-                        bitOR("papersType",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.papersType.setter),left.getPapersType()));
+                        bitOR(Column.papersType.name(),initialized);
                         if(left.checkPapersTypeModified()){
-                            bitOR("papersType",modified);
+                            bitOR(Column.papersType.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setPapersNum")) && left.checkPapersNumInitialized()){
+                if(null != (setterMethod = methods.get(Column.papersNum.setter)) && left.checkPapersNumInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setPapersNum"),left.getPapersNum()));
-                        bitOR("papersNum",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.papersNum.setter),left.getPapersNum()));
+                        bitOR(Column.papersNum.name(),initialized);
                         if(left.checkPapersNumModified()){
-                            bitOR("papersNum",modified);
+                            bitOR(Column.papersNum.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setImageMd5")) && left.checkImageMd5Initialized()){
+                if(null != (setterMethod = methods.get(Column.imageMd5.setter)) && left.checkImageMd5Initialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setImageMd5"),left.getImageMd5()));
-                        bitOR("imageMd5",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.imageMd5.setter),left.getImageMd5()));
+                        bitOR(Column.imageMd5.name(),initialized);
                         if(left.checkImageMd5Modified()){
-                            bitOR("imageMd5",modified);
+                            bitOR(Column.imageMd5.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setExpiryDate")) && left.checkExpiryDateInitialized()){
+                if(null != (setterMethod = methods.get(Column.expiryDate.setter)) && left.checkExpiryDateInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setExpiryDate"),left.getExpiryDate()));
-                        bitOR("expiryDate",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.expiryDate.setter),left.getExpiryDate()));
+                        bitOR(Column.expiryDate.name(),initialized);
                         if(left.checkExpiryDateModified()){
-                            bitOR("expiryDate",modified);
+                            bitOR(Column.expiryDate.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
 // IGNORE field fl_person.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
-                if(null != (setterMethod = methods.get("setCreateTime")) && left.checkCreateTimeInitialized()){
+                if(null != (setterMethod = methods.get(Column.createTime.setter)) && left.checkCreateTimeInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setCreateTime"),left.getCreateTime()));
-                        bitOR("createTime",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.createTime.setter),left.getCreateTime()));
+                        bitOR(Column.createTime.name(),initialized);
                         if(left.checkCreateTimeModified()){
-                            bitOR("createTime",modified);
+                            bitOR(Column.createTime.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
 */
 // IGNORE field fl_person.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
-                if(null != (setterMethod = methods.get("setUpdateTime")) && left.checkUpdateTimeInitialized()){
+                if(null != (setterMethod = methods.get(Column.updateTime.setter)) && left.checkUpdateTimeInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setUpdateTime"),left.getUpdateTime()));
-                        bitOR("updateTime",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.updateTime.setter),left.getUpdateTime()));
+                        bitOR(Column.updateTime.name(),initialized);
                         if(left.checkUpdateTimeModified()){
-                            bitOR("updateTime",modified);
+                            bitOR(Column.updateTime.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
@@ -2524,6 +2662,19 @@ public class BeanConverterUtils implements Constant {
      *
      */
     public static class PersonGroupBeanConverter<R_PERSONGROUP> extends IBeanConverter.AbstractHandle<PersonGroupBean,R_PERSONGROUP>{
+        static enum Column{
+            /** column method info */
+            id("getId","setId"),
+            name("getName","setName"),
+            leaf("getLeaf","setLeaf"),
+            parent("getParent","setParent");
+            final String getter;
+            final String setter;
+            Column(String getter,String setter){
+                this.getter = setter;
+                this.setter = setter;
+            }
+        }
         private final Map<String,Method> methods = new Hashtable<String,Method>();
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
@@ -2600,13 +2751,13 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
                 }else{
                     getSetter(SET_INITIALIZED,long.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_MODIFIED,long[].class,List.class);
                 }else{
                     getSetter(SET_MODIFIED,long.class);
@@ -2615,14 +2766,14 @@ public class BeanConverterUtils implements Constant {
                 throw new RuntimeException(e);
             }
 
-            getGetter("setId");
-            getSetterNoThrow("setId",Integer.class,int.class);                    
-            getGetter("setName");
-            getSetterNoThrow("setName",String.class); 
-            getGetter("setLeaf");
-            getSetterNoThrow("setLeaf",Integer.class,int.class);                    
-            getGetter("setParent");
-            getSetterNoThrow("setParent",Integer.class,int.class);                    
+            getGetter(Column.id.getter);
+            getSetterNoThrow(Column.id.setter,Integer.class,int.class);                    
+            getGetter(Column.name.getter);
+            getSetterNoThrow(Column.name.setter,String.class); 
+            getGetter(Column.leaf.getter);
+            getSetterNoThrow(Column.leaf.setter,Integer.class,int.class);                    
+            getGetter(Column.parent.getter);
+            getSetterNoThrow(Column.parent.setter,Integer.class,int.class);                    
         }
         @Override
         protected void doFromRight(PersonGroupBean left, R_PERSONGROUP right) {
@@ -2632,34 +2783,34 @@ public class BeanConverterUtils implements Constant {
                 long selfModified = 0L;
                 long[] initialized;
                 long[] modified;
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
                     modified = (long[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
                     initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
                     modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
                 }
-                if( bitCheck("id",initialized) && (null != (getterMethod = methods.get("getId")))){
+                if( bitCheck(Column.id.name(),initialized) && (null != (getterMethod = methods.get(Column.id.getter)))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("id",modified)){
+                    if(bitCheck(Column.id.name(),modified)){
                         selfModified |= FL_PERSON_GROUP_ID_ID_MASK;
                     }
                 }
-                if( bitCheck("name",initialized) && (null != (getterMethod = methods.get("getName")))){
+                if( bitCheck(Column.name.name(),initialized) && (null != (getterMethod = methods.get(Column.name.getter)))){
                     left.setName(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("name",modified)){
+                    if(bitCheck(Column.name.name(),modified)){
                         selfModified |= FL_PERSON_GROUP_ID_NAME_MASK;
                     }
                 }
-                if( bitCheck("leaf",initialized) && (null != (getterMethod = methods.get("getLeaf")))){
+                if( bitCheck(Column.leaf.name(),initialized) && (null != (getterMethod = methods.get(Column.leaf.getter)))){
                     left.setLeaf(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("leaf",modified)){
+                    if(bitCheck(Column.leaf.name(),modified)){
                         selfModified |= FL_PERSON_GROUP_ID_LEAF_MASK;
                     }
                 }
-                if( bitCheck("parent",initialized) && (null != (getterMethod = methods.get("getParent")))){
+                if( bitCheck(Column.parent.name(),initialized) && (null != (getterMethod = methods.get(Column.parent.getter)))){
                     left.setParent(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("parent",modified)){
+                    if(bitCheck(Column.parent.name(),modified)){
                         selfModified |= FL_PERSON_GROUP_ID_PARENT_MASK;
                     }
                 }
@@ -2676,43 +2827,43 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(PersonGroupBean left, R_PERSONGROUP right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + 63)>>6];
-                long[] modified = new long[(rightIndexs.size() + 63)>>6];
+                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
+                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
                 Arrays.fill(initialized, 0L);
                 Arrays.fill(modified, 0L);
-                if(null != (setterMethod = methods.get("setId")) && left.checkIdInitialized()){
+                if(null != (setterMethod = methods.get(Column.id.setter)) && left.checkIdInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setId"),left.getId()));
-                        bitOR("id",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.id.setter),left.getId()));
+                        bitOR(Column.id.name(),initialized);
                         if(left.checkIdModified()){
-                            bitOR("id",modified);
+                            bitOR(Column.id.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setName")) && left.checkNameInitialized()){
+                if(null != (setterMethod = methods.get(Column.name.setter)) && left.checkNameInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setName"),left.getName()));
-                        bitOR("name",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.name.setter),left.getName()));
+                        bitOR(Column.name.name(),initialized);
                         if(left.checkNameModified()){
-                            bitOR("name",modified);
+                            bitOR(Column.name.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setLeaf")) && left.checkLeafInitialized()){
+                if(null != (setterMethod = methods.get(Column.leaf.setter)) && left.checkLeafInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setLeaf"),left.getLeaf()));
-                        bitOR("leaf",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.leaf.setter),left.getLeaf()));
+                        bitOR(Column.leaf.name(),initialized);
                         if(left.checkLeafModified()){
-                            bitOR("leaf",modified);
+                            bitOR(Column.leaf.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setParent")) && left.checkParentInitialized()){
+                if(null != (setterMethod = methods.get(Column.parent.setter)) && left.checkParentInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setParent"),left.getParent()));
-                        bitOR("parent",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.parent.setter),left.getParent()));
+                        bitOR(Column.parent.name(),initialized);
                         if(left.checkParentModified()){
-                            bitOR("parent",modified);
+                            bitOR(Column.parent.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
@@ -2746,6 +2897,18 @@ public class BeanConverterUtils implements Constant {
      *
      */
     public static class StoreBeanConverter<R_STORE> extends IBeanConverter.AbstractHandle<StoreBean,R_STORE>{
+        static enum Column{
+            /** column method info */
+            md5("getMd5","setMd5"),
+            encoding("getEncoding","setEncoding"),
+            data("getData","setData");
+            final String getter;
+            final String setter;
+            Column(String getter,String setter){
+                this.getter = setter;
+                this.setter = setter;
+            }
+        }
         private final Map<String,Method> methods = new Hashtable<String,Method>();
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
@@ -2822,13 +2985,13 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
                 }else{
                     getSetter(SET_INITIALIZED,long.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_MODIFIED,long[].class,List.class);
                 }else{
                     getSetter(SET_MODIFIED,long.class);
@@ -2837,12 +3000,12 @@ public class BeanConverterUtils implements Constant {
                 throw new RuntimeException(e);
             }
 
-            getGetter("setMd5");
-            getSetterNoThrow("setMd5",String.class); 
-            getGetter("setEncoding");
-            getSetterNoThrow("setEncoding",String.class); 
-            getGetter("setData");
-            getSetterNoThrow("setData",java.nio.ByteBuffer.class,byte[].class);                    
+            getGetter(Column.md5.getter);
+            getSetterNoThrow(Column.md5.setter,String.class); 
+            getGetter(Column.encoding.getter);
+            getSetterNoThrow(Column.encoding.setter,String.class); 
+            getGetter(Column.data.getter);
+            getSetterNoThrow(Column.data.setter,java.nio.ByteBuffer.class,byte[].class);                    
         }
         @Override
         protected void doFromRight(StoreBean left, R_STORE right) {
@@ -2852,28 +3015,28 @@ public class BeanConverterUtils implements Constant {
                 long selfModified = 0L;
                 long[] initialized;
                 long[] modified;
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
                     modified = (long[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
                     initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
                     modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
                 }
-                if( bitCheck("md5",initialized) && (null != (getterMethod = methods.get("getMd5")))){
+                if( bitCheck(Column.md5.name(),initialized) && (null != (getterMethod = methods.get(Column.md5.getter)))){
                     left.setMd5(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("md5",modified)){
+                    if(bitCheck(Column.md5.name(),modified)){
                         selfModified |= FL_STORE_ID_MD5_MASK;
                     }
                 }
-                if( bitCheck("encoding",initialized) && (null != (getterMethod = methods.get("getEncoding")))){
+                if( bitCheck(Column.encoding.name(),initialized) && (null != (getterMethod = methods.get(Column.encoding.getter)))){
                     left.setEncoding(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("encoding",modified)){
+                    if(bitCheck(Column.encoding.name(),modified)){
                         selfModified |= FL_STORE_ID_ENCODING_MASK;
                     }
                 }
-                if( bitCheck("data",initialized) && (null != (getterMethod = methods.get("getData")))){
+                if( bitCheck(Column.data.name(),initialized) && (null != (getterMethod = methods.get(Column.data.getter)))){
                     left.setData(cast(java.nio.ByteBuffer.class,getterMethod.invoke(right)));
-                    if(bitCheck("data",modified)){
+                    if(bitCheck(Column.data.name(),modified)){
                         selfModified |= FL_STORE_ID_DATA_MASK;
                     }
                 }
@@ -2890,34 +3053,34 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(StoreBean left, R_STORE right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + 63)>>6];
-                long[] modified = new long[(rightIndexs.size() + 63)>>6];
+                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
+                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
                 Arrays.fill(initialized, 0L);
                 Arrays.fill(modified, 0L);
-                if(null != (setterMethod = methods.get("setMd5")) && left.checkMd5Initialized()){
+                if(null != (setterMethod = methods.get(Column.md5.setter)) && left.checkMd5Initialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setMd5"),left.getMd5()));
-                        bitOR("md5",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.md5.setter),left.getMd5()));
+                        bitOR(Column.md5.name(),initialized);
                         if(left.checkMd5Modified()){
-                            bitOR("md5",modified);
+                            bitOR(Column.md5.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setEncoding")) && left.checkEncodingInitialized()){
+                if(null != (setterMethod = methods.get(Column.encoding.setter)) && left.checkEncodingInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setEncoding"),left.getEncoding()));
-                        bitOR("encoding",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.encoding.setter),left.getEncoding()));
+                        bitOR(Column.encoding.name(),initialized);
                         if(left.checkEncodingModified()){
-                            bitOR("encoding",modified);
+                            bitOR(Column.encoding.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setData")) && left.checkDataInitialized()){
+                if(null != (setterMethod = methods.get(Column.data.setter)) && left.checkDataInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setData"),left.getData()));
-                        bitOR("data",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.data.setter),left.getData()));
+                        bitOR(Column.data.name(),initialized);
                         if(left.checkDataModified()){
-                            bitOR("data",modified);
+                            bitOR(Column.data.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
@@ -2951,6 +3114,21 @@ public class BeanConverterUtils implements Constant {
      *
      */
     public static class LogLightBeanConverter<R_LOGLIGHT> extends IBeanConverter.AbstractHandle<LogLightBean,R_LOGLIGHT>{
+        static enum Column{
+            /** column method info */
+            id("getId","setId"),
+            personId("getPersonId","setPersonId"),
+            name("getName","setName"),
+            papersType("getPapersType","setPapersType"),
+            papersNum("getPapersNum","setPapersNum"),
+            verifyTime("getVerifyTime","setVerifyTime");
+            final String getter;
+            final String setter;
+            Column(String getter,String setter){
+                this.getter = setter;
+                this.setter = setter;
+            }
+        }
         private final Map<String,Method> methods = new Hashtable<String,Method>();
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
@@ -3027,13 +3205,13 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_INITIALIZED,long[].class,List.class);
                 }else{
                     getSetter(SET_INITIALIZED,long.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     getSetter(SET_MODIFIED,long[].class,List.class);
                 }else{
                     getSetter(SET_MODIFIED,long.class);
@@ -3042,18 +3220,18 @@ public class BeanConverterUtils implements Constant {
                 throw new RuntimeException(e);
             }
 
-            getGetter("setId");
-            getSetterNoThrow("setId",Integer.class,int.class);                    
-            getGetter("setPersonId");
-            getSetterNoThrow("setPersonId",Integer.class,int.class);                    
-            getGetter("setName");
-            getSetterNoThrow("setName",String.class); 
-            getGetter("setPapersType");
-            getSetterNoThrow("setPapersType",Integer.class,int.class);                    
-            getGetter("setPapersNum");
-            getSetterNoThrow("setPapersNum",String.class); 
-            getGetter("setVerifyTime");
-            getSetterNoThrow("setVerifyTime",java.util.Date.class,Long.class,long.class);  
+            getGetter(Column.id.getter);
+            getSetterNoThrow(Column.id.setter,Integer.class,int.class);                    
+            getGetter(Column.personId.getter);
+            getSetterNoThrow(Column.personId.setter,Integer.class,int.class);                    
+            getGetter(Column.name.getter);
+            getSetterNoThrow(Column.name.setter,String.class); 
+            getGetter(Column.papersType.getter);
+            getSetterNoThrow(Column.papersType.setter,Integer.class,int.class);                    
+            getGetter(Column.papersNum.getter);
+            getSetterNoThrow(Column.papersNum.setter,String.class); 
+            getGetter(Column.verifyTime.getter);
+            getSetterNoThrow(Column.verifyTime.setter,java.util.Date.class,Long.class,long.class);  
         }
         @Override
         protected void doFromRight(LogLightBean left, R_LOGLIGHT right) {
@@ -3063,46 +3241,46 @@ public class BeanConverterUtils implements Constant {
                 long selfModified = 0L;
                 long[] initialized;
                 long[] modified;
-                if(rightIndexs.size() > 64){
+                if(rightIndexs.size() > LONG_BIT_NUM){
                     initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
                     modified = (long[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
                     initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
                     modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
                 }
-                if( bitCheck("id",initialized) && (null != (getterMethod = methods.get("getId")))){
+                if( bitCheck(Column.id.name(),initialized) && (null != (getterMethod = methods.get(Column.id.getter)))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("id",modified)){
+                    if(bitCheck(Column.id.name(),modified)){
                         selfModified |= FL_LOG_LIGHT_ID_ID_MASK;
                     }
                 }
-                if( bitCheck("personId",initialized) && (null != (getterMethod = methods.get("getPersonId")))){
+                if( bitCheck(Column.personId.name(),initialized) && (null != (getterMethod = methods.get(Column.personId.getter)))){
                     left.setPersonId(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("personId",modified)){
+                    if(bitCheck(Column.personId.name(),modified)){
                         selfModified |= FL_LOG_LIGHT_ID_PERSON_ID_MASK;
                     }
                 }
-                if( bitCheck("name",initialized) && (null != (getterMethod = methods.get("getName")))){
+                if( bitCheck(Column.name.name(),initialized) && (null != (getterMethod = methods.get(Column.name.getter)))){
                     left.setName(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("name",modified)){
+                    if(bitCheck(Column.name.name(),modified)){
                         selfModified |= FL_LOG_LIGHT_ID_NAME_MASK;
                     }
                 }
-                if( bitCheck("papersType",initialized) && (null != (getterMethod = methods.get("getPapersType")))){
+                if( bitCheck(Column.papersType.name(),initialized) && (null != (getterMethod = methods.get(Column.papersType.getter)))){
                     left.setPapersType(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck("papersType",modified)){
+                    if(bitCheck(Column.papersType.name(),modified)){
                         selfModified |= FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK;
                     }
                 }
-                if( bitCheck("papersNum",initialized) && (null != (getterMethod = methods.get("getPapersNum")))){
+                if( bitCheck(Column.papersNum.name(),initialized) && (null != (getterMethod = methods.get(Column.papersNum.getter)))){
                     left.setPapersNum(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck("papersNum",modified)){
+                    if(bitCheck(Column.papersNum.name(),modified)){
                         selfModified |= FL_LOG_LIGHT_ID_PAPERS_NUM_MASK;
                     }
                 }
-                if( bitCheck("verifyTime",initialized) && (null != (getterMethod = methods.get("getVerifyTime")))){
+                if( bitCheck(Column.verifyTime.name(),initialized) && (null != (getterMethod = methods.get(Column.verifyTime.getter)))){
                     left.setVerifyTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck("verifyTime",modified)){
+                    if(bitCheck(Column.verifyTime.name(),modified)){
                         selfModified |= FL_LOG_LIGHT_ID_VERIFY_TIME_MASK;
                     }
                 }
@@ -3119,61 +3297,61 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(LogLightBean left, R_LOGLIGHT right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + 63)>>6];
-                long[] modified = new long[(rightIndexs.size() + 63)>>6];
+                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
+                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
                 Arrays.fill(initialized, 0L);
                 Arrays.fill(modified, 0L);
-                if(null != (setterMethod = methods.get("setId")) && left.checkIdInitialized()){
+                if(null != (setterMethod = methods.get(Column.id.setter)) && left.checkIdInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setId"),left.getId()));
-                        bitOR("id",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.id.setter),left.getId()));
+                        bitOR(Column.id.name(),initialized);
                         if(left.checkIdModified()){
-                            bitOR("id",modified);
+                            bitOR(Column.id.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setPersonId")) && left.checkPersonIdInitialized()){
+                if(null != (setterMethod = methods.get(Column.personId.setter)) && left.checkPersonIdInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setPersonId"),left.getPersonId()));
-                        bitOR("personId",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.personId.setter),left.getPersonId()));
+                        bitOR(Column.personId.name(),initialized);
                         if(left.checkPersonIdModified()){
-                            bitOR("personId",modified);
+                            bitOR(Column.personId.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setName")) && left.checkNameInitialized()){
+                if(null != (setterMethod = methods.get(Column.name.setter)) && left.checkNameInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setName"),left.getName()));
-                        bitOR("name",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.name.setter),left.getName()));
+                        bitOR(Column.name.name(),initialized);
                         if(left.checkNameModified()){
-                            bitOR("name",modified);
+                            bitOR(Column.name.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setPapersType")) && left.checkPapersTypeInitialized()){
+                if(null != (setterMethod = methods.get(Column.papersType.setter)) && left.checkPapersTypeInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setPapersType"),left.getPapersType()));
-                        bitOR("papersType",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.papersType.setter),left.getPapersType()));
+                        bitOR(Column.papersType.name(),initialized);
                         if(left.checkPapersTypeModified()){
-                            bitOR("papersType",modified);
+                            bitOR(Column.papersType.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setPapersNum")) && left.checkPapersNumInitialized()){
+                if(null != (setterMethod = methods.get(Column.papersNum.setter)) && left.checkPapersNumInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setPapersNum"),left.getPapersNum()));
-                        bitOR("papersNum",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.papersNum.setter),left.getPapersNum()));
+                        bitOR(Column.papersNum.name(),initialized);
                         if(left.checkPapersNumModified()){
-                            bitOR("papersNum",modified);
+                            bitOR(Column.papersNum.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get("setVerifyTime")) && left.checkVerifyTimeInitialized()){
+                if(null != (setterMethod = methods.get(Column.verifyTime.setter)) && left.checkVerifyTimeInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get("setVerifyTime"),left.getVerifyTime()));
-                        bitOR("verifyTime",initialized);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.verifyTime.setter),left.getVerifyTime()));
+                        bitOR(Column.verifyTime.name(),initialized);
                         if(left.checkVerifyTimeModified()){
-                            bitOR("verifyTime",modified);
+                            bitOR(Column.verifyTime.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }

@@ -861,13 +861,16 @@ public final class DeviceBean
     public void reset(){
         checkMutable();
         this.id = null;
-        this.groupId = new Integer(1)/* DEFAULT:'1'*/;
+        /* DEFAULT:'1'*/
+        this.groupId = new Integer(1);
         this.name = null;
         this.version = null;
         this.serialNo = null;
         this.mac = null;
-        this.createTime = null/* DEFAULT:'CURRENT_TIMESTAMP'*/;
-        this.updateTime = null/* DEFAULT:'CURRENT_TIMESTAMP'*/;
+        /* DEFAULT:'CURRENT_TIMESTAMP'*/
+        this.createTime = null;
+        /* DEFAULT:'CURRENT_TIMESTAMP'*/
+        this.updateTime = null;
         this.isNew = true;
         this.modified = 0L;
         this.initialized = (FL_DEVICE_ID_GROUP_ID_MASK);
@@ -1045,7 +1048,7 @@ public final class DeviceBean
     public DeviceBean copy(DeviceBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length){
-            for (int i = 0; i < 8; ++i) {
+            for (int i = 0; i < FL_DEVICE_COLUMN_COUNT; ++i) {
                 if( bean.isInitialized(i)){
                     setValue(i, bean.getValue(i));
                 }

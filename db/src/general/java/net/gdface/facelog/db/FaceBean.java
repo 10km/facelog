@@ -1877,7 +1877,8 @@ public final class FaceBean
         this.angleRoll = null;
         this.extInfo = null;
         this.featureMd5 = null;
-        this.createTime = null/* DEFAULT:'CURRENT_TIMESTAMP'*/;
+        /* DEFAULT:'CURRENT_TIMESTAMP'*/
+        this.createTime = null;
         this.isNew = true;
         this.modified = 0L;
         this.initialized = 0L;
@@ -2163,7 +2164,7 @@ public final class FaceBean
     public FaceBean copy(FaceBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length){
-            for (int i = 0; i < 20; ++i) {
+            for (int i = 0; i < FL_FACE_COLUMN_COUNT; ++i) {
                 if( bean.isInitialized(i)){
                     setValue(i, bean.getValue(i));
                 }

@@ -599,12 +599,15 @@ public  class LogLightBean
     /** reset all fields to initial value, equal to a new bean */
     public void reset(){
         checkMutable();
-        this.id = new Integer(0)/* DEFAULT:'0'*/;
-        this.personId = new Integer(0)/* DEFAULT:'0'*/;
+        /* DEFAULT:'0'*/
+        this.id = new Integer(0);
+        /* DEFAULT:'0'*/
+        this.personId = new Integer(0);
         this.name = null;
         this.papersType = null;
         this.papersNum = null;
-        this.verifyTime = null/* DEFAULT:'0000-00-00 00:00:00'*/;
+        /* DEFAULT:'0000-00-00 00:00:00'*/
+        this.verifyTime = null;
         this.isNew = true;
         this.modified = 0L;
         this.initialized = (FL_LOG_LIGHT_ID_ID_MASK | FL_LOG_LIGHT_ID_PERSON_ID_MASK);
@@ -769,7 +772,7 @@ public  class LogLightBean
     public LogLightBean copy(LogLightBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length){
-            for (int i = 0; i < 6; ++i) {
+            for (int i = 0; i < FL_LOG_LIGHT_COLUMN_COUNT; ++i) {
                 if( bean.isInitialized(i)){
                     setValue(i, bean.getValue(i));
                 }
