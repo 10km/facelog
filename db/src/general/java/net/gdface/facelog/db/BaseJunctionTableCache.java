@@ -41,7 +41,7 @@ import net.gdface.facelog.db.exception.ObjectRetrievalException;
  */
 public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
     @SuppressWarnings("serial")
-    private static class CollectionReturnExcetpoin extends Exception{}
+    private static class CollectionReturnException extends Exception{}
     public final class Key{
         public K1 k1;
         public K2 k2;
@@ -169,7 +169,7 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
                                 for(B bean:(Collection<B>)obj){
                                     update(bean);
                                 }
-                                throw new CollectionReturnExcetpoin();
+                                throw new CollectionReturnException();
                             }
                             throw e;
                         }
@@ -213,7 +213,7 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
             cache.get(asTmpKey(k1,null));
             return null; // dead code 不会执行到这里
         }catch(ExecutionException e){
-            if( e.getCause() instanceof CollectionReturnExcetpoin){
+            if( e.getCause() instanceof CollectionReturnException){
                 return filter(k1,funReturnK1);
             }
             throw e;
@@ -236,7 +236,7 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
             cache.getUnchecked(asTmpKey(k1,null));
             return null; // dead code 不会执行到这里
         }catch(UncheckedExecutionException e){
-            if( e.getCause() instanceof CollectionReturnExcetpoin){
+            if( e.getCause() instanceof CollectionReturnException){
                 return filter(k1,funReturnK1);
             }
             throw e;
@@ -248,7 +248,7 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
             cache.get(asTmpKey(null,k2));
             return null; // dead code 不会执行到这里
         }catch(ExecutionException e){
-            if( e.getCause() instanceof CollectionReturnExcetpoin){
+            if( e.getCause() instanceof CollectionReturnException){
                 return filter(k2,funReturnK2);
             }
             throw e;
@@ -264,7 +264,7 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
             cache.getUnchecked(asTmpKey(null,k2));
             return null; // dead code 不会执行到这里
         }catch(UncheckedExecutionException e){
-            if( e.getCause() instanceof CollectionReturnExcetpoin){
+            if( e.getCause() instanceof CollectionReturnException){
                 return filter(k2,funReturnK2);
             }
             throw e;
