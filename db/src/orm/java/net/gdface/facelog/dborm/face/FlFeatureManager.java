@@ -805,7 +805,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     public FlFeatureBean save(FlFeatureBean bean,Object ...args) throws DAOException
     {
         if(null == args){
-            save(bean);
+            return save(bean);
         }
         if(args.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
@@ -837,7 +837,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     public FlFeatureBean saveCollection(FlFeatureBean bean,Object ...args) throws DAOException
     {
         if(null == args){
-            save(bean);
+            return save(bean);
         }
         if(args.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");

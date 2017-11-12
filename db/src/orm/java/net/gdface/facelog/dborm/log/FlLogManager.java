@@ -465,7 +465,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     public FlLogBean save(FlLogBean bean,Object ...args) throws DAOException
     {
         if(null == args){
-            save(bean);
+            return save(bean);
         }
         if(args.length > 4){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
@@ -500,7 +500,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     public FlLogBean saveCollection(FlLogBean bean,Object ...args) throws DAOException
     {
         if(null == args){
-            save(bean);
+            return save(bean);
         }
         if(args.length > 4){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");

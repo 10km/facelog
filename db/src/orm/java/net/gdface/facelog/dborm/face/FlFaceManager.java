@@ -686,7 +686,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
     public FlFaceBean save(FlFaceBean bean,Object ...args) throws DAOException
     {
         if(null == args){
-            save(bean);
+            return save(bean);
         }
         if(args.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
@@ -718,7 +718,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
     public FlFaceBean saveCollection(FlFaceBean bean,Object ...args) throws DAOException
     {
         if(null == args){
-            save(bean);
+            return save(bean);
         }
         if(args.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");

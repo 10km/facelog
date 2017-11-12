@@ -933,7 +933,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     public FlPersonGroupBean save(FlPersonGroupBean bean,Object ...args) throws DAOException
     {
         if(null == args){
-            save(bean);
+            return save(bean);
         }
         if(args.length > 4){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
@@ -968,7 +968,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     public FlPersonGroupBean saveCollection(FlPersonGroupBean bean,Object ...args) throws DAOException
     {
         if(null == args){
-            save(bean);
+            return save(bean);
         }
         if(args.length > 4){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");

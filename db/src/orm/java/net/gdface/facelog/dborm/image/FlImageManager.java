@@ -807,7 +807,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     public FlImageBean save(FlImageBean bean,Object ...args) throws DAOException
     {
         if(null == args){
-            save(bean);
+            return save(bean);
         }
         if(args.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
@@ -839,7 +839,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     public FlImageBean saveCollection(FlImageBean bean,Object ...args) throws DAOException
     {
         if(null == args){
-            save(bean);
+            return save(bean);
         }
         if(args.length > 3){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");

@@ -452,7 +452,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     public FlPermitBean save(FlPermitBean bean,Object ...args) throws DAOException
     {
         if(null == args){
-            save(bean);
+            return save(bean);
         }
         if(args.length > 2){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
@@ -481,7 +481,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     public FlPermitBean saveCollection(FlPermitBean bean,Object ...args) throws DAOException
     {
         if(null == args){
-            save(bean);
+            return save(bean);
         }
         if(args.length > 2){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
