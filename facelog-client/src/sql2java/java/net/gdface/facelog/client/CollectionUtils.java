@@ -14,6 +14,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author guyadong
+ *
+ */
 public class CollectionUtils {
     private CollectionUtils() {}
     public static interface Function<F, T> {
@@ -273,7 +277,7 @@ public class CollectionUtils {
 
         @Override
         public Set<Entry<K2, V>> entrySet() {
-            return new EntrySet<K2,V>(){
+            return new AbstractEntrySet<K2,V>(){
 
                 @Override
                 Map<K2, V> map() {
@@ -290,7 +294,7 @@ public class CollectionUtils {
                         }});
                 }};
         }
-        abstract static class EntrySet<K, V> extends AbstractSet<Entry<K, V>> {
+        abstract static class AbstractEntrySet<K, V> extends AbstractSet<Entry<K, V>> {
             abstract Map<K, V> map();
 
             @Override 
