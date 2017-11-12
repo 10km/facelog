@@ -17,7 +17,7 @@ public class RedisFactory {
 
 	private RedisFactory() {}
 	@SuppressWarnings("rawtypes")
-	private static final ConcurrentMap<JedisPoolLazy,RedisTable> tables = new ConcurrentHashMap<JedisPoolLazy,RedisTable>();
+	private static final ConcurrentMap<JedisPoolLazy,RedisTable> TABLES = new ConcurrentHashMap<JedisPoolLazy,RedisTable>();
 
 	public static<V> RedisTable<V> getTable(Class<V> clazz){
 		return getTable((Type)clazz,JedisPoolLazy.getDefaultInstance(),null);
@@ -29,8 +29,8 @@ public class RedisFactory {
 		return getTable(channel.type,pool,channel.name);
 	}	
 	/**
-	 * 返回 {@link JedisPoolLazy}对应的{@link RedisTable}实例,如果{@link #tables}没有找到，
-	 * 就创建一个新实例并加入{@link #tables}
+	 * 返回 {@link JedisPoolLazy}对应的{@link RedisTable}实例,如果{@link #TABLES}没有找到，
+	 * 就创建一个新实例并加入{@link #TABLES}
 	 * @param type
 	 * @param pool
 	 * @param tablename
@@ -39,10 +39,10 @@ public class RedisFactory {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static<V> RedisTable<V> getTable(Type type,JedisPoolLazy pool, String tablename){
 		// Double Checked Locking
-		RedisTable table = tables.get(pool);
+		RedisTable table = TABLES.get(pool);
 		if(null ==table ){
-			tables.putIfAbsent(pool, new RedisTable(type,pool,tablename));
-			table = tables.get(pool);
+			TABLES.putIfAbsent(pool, new RedisTable(type,pool,tablename));
+			table = TABLES.get(pool);
 		}
 		if( !table.getType().equals(type)){
 			throw new IllegalStateException("mismatch type " + type + " vs " + table.getType());
@@ -70,13 +70,11 @@ public class RedisFactory {
 		}
 		void beforeDelete(R r){}
 		/** 删除{@link #instances}中所有实例 */
-		void clearInstances(){
-			synchronized(instances){
+		synchronized void  clearInstances(){
 				for(R r:instances.values()){
 					beforeDelete(r);
 				}
 				instances.clear();
-			}
 		}
 		/**
 		 * 返回 {@link #instances}中 jedisPoolLazy 对应的R实例, 如果没有找到就创建一个新实例加入。
@@ -98,24 +96,24 @@ public class RedisFactory {
 			return r;			
 		}
 	}
-	private static  final RedisInstance<RedisConsumer> consumers = new RedisInstance<RedisConsumer>(RedisConsumer.class){
+	private static  final RedisInstance<RedisConsumer> CONSUMERS = new RedisInstance<RedisConsumer>(RedisConsumer.class){
 		@Override
 		void beforeDelete(RedisConsumer r) {
 			r.subscribe();
 	}};
-	private static final RedisInstance<RedisSubscriber> subscribers = new RedisInstance<RedisSubscriber>(RedisSubscriber.class){
+	private static final RedisInstance<RedisSubscriber> SUBSCRIBERS = new RedisInstance<RedisSubscriber>(RedisSubscriber.class){
 	@Override
 	protected void beforeDelete(RedisSubscriber r) {
 		r.subscribe();
 	}};
-	private static final RedisInstance<RedisProducer> producers = new RedisInstance<RedisProducer>(RedisProducer.class);
-	private static final RedisInstance<RedisPublisher> publishers = new RedisInstance<RedisPublisher>(RedisPublisher.class);
+	private static final RedisInstance<RedisProducer> PRODUCERS = new RedisInstance<RedisProducer>(RedisProducer.class);
+	private static final RedisInstance<RedisPublisher> PUBLISHERS = new RedisInstance<RedisPublisher>(RedisPublisher.class);
 	/**
 	 * 删除所有{@link RedisConsumer}对象
 	 * @see gu.simplemq.redis.RedisFactory.RedisInstance#clearInstances()
 	 */
 	public static  void clearConsumers() {
-		consumers.clearInstances();
+		CONSUMERS.clearInstances();
 	}
 	/**
 	 * 返回 {@link JedisPoolLazy}对应的{@link RedisConsumer}实例
@@ -124,7 +122,7 @@ public class RedisFactory {
 	 * @see gu.simplemq.redis.RedisFactory.RedisInstance#getInstance(gu.simplemq.redis.JedisPoolLazy)
 	 */
 	public static RedisConsumer getConsumer(JedisPoolLazy jedisPoolLazy) {
-		return consumers.getInstance(jedisPoolLazy);
+		return CONSUMERS.getInstance(jedisPoolLazy);
 	}
 	
 	/** 
@@ -132,14 +130,14 @@ public class RedisFactory {
 	 * @see  {@link JedisPoolLazy#getDefaultInstance()}
 	 */
 	public static RedisConsumer getConsumer() {
-		return consumers.getInstance(JedisPoolLazy.getDefaultInstance());
+		return CONSUMERS.getInstance(JedisPoolLazy.getDefaultInstance());
 	}
 	/**
 	 * 删除所有{@link RedisSubscriber}对象
 	 * @see gu.simplemq.redis.RedisFactory.RedisInstance#clearInstances()
 	 */
 	public static void clearSubscribers() {
-		subscribers.clearInstances();
+		SUBSCRIBERS.clearInstances();
 	}
 	/**
 	 * 返回 {@link JedisPoolLazy}对应的{@link RedisSubscriber}实例
@@ -148,14 +146,14 @@ public class RedisFactory {
 	 * @see gu.simplemq.redis.RedisFactory.RedisInstance#getInstance(gu.simplemq.redis.JedisPoolLazy)
 	 */
 	public static RedisSubscriber getSubscriber(JedisPoolLazy jedisPoolLazy) {
-		return subscribers.getInstance(jedisPoolLazy);
+		return SUBSCRIBERS.getInstance(jedisPoolLazy);
 	}
 	/** 
 	 * 返回{@link JedisPoolLazy}默认实例对应的{@link RedisSubscriber}实例
 	 * @see  {@link JedisPoolLazy#getDefaultInstance()}
 	 */
 	public static RedisSubscriber getSubscriber() {
-		return subscribers.getInstance(JedisPoolLazy.getDefaultInstance());
+		return SUBSCRIBERS.getInstance(JedisPoolLazy.getDefaultInstance());
 	}
 	/**
 	 * 返回 {@link JedisPoolLazy}对应的{@link RedisProducer}实例
@@ -164,14 +162,14 @@ public class RedisFactory {
 	 * @see gu.simplemq.redis.RedisFactory.RedisInstance#getInstance(gu.simplemq.redis.JedisPoolLazy)
 	 */
 	public static RedisProducer getProducer(JedisPoolLazy jedisPoolLazy) {
-		return producers.getInstance(jedisPoolLazy);
+		return PRODUCERS.getInstance(jedisPoolLazy);
 	}
 	/** 
 	 * 返回{@link JedisPoolLazy}默认实例对应的{@link RedisProducer}实例
 	 * @see  {@link JedisPoolLazy#getDefaultInstance()}
 	 */
 	public static RedisProducer getProducer() {
-		return producers.getInstance(JedisPoolLazy.getDefaultInstance());
+		return PRODUCERS.getInstance(JedisPoolLazy.getDefaultInstance());
 	}
 	/**
 	 * 返回 {@link JedisPoolLazy}对应的{@link RedisPublisher}实例
@@ -180,13 +178,13 @@ public class RedisFactory {
 	 * @see gu.simplemq.redis.RedisFactory.RedisInstance#getInstance(gu.simplemq.redis.JedisPoolLazy)
 	 */
 	public static RedisPublisher getPublisher(JedisPoolLazy jedisPoolLazy) {
-		return publishers.getInstance(jedisPoolLazy);
+		return PUBLISHERS.getInstance(jedisPoolLazy);
 	}
 	/** 
 	 * 返回{@link JedisPoolLazy}默认实例对应的{@link RedisPublisher}实例
 	 * @see  {@link JedisPoolLazy#getDefaultInstance()}
 	 */
 	public static RedisPublisher getPublisher() {
-		return publishers.getInstance(JedisPoolLazy.getDefaultInstance());
+		return PUBLISHERS.getInstance(JedisPoolLazy.getDefaultInstance());
 	}
 }

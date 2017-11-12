@@ -16,8 +16,8 @@ import gu.simplemq.exceptions.SmqNotBeanException;
  * @author guyadong
  *
  */
-public abstract class JsonEncoder {
-	public JsonEncoder() {
+public abstract class BaseJsonEncoder {
+	public BaseJsonEncoder() {
 	
 	}
 	/**
@@ -48,7 +48,9 @@ public abstract class JsonEncoder {
 	}
 	
 	public Map<String,Object> fromJson(Map<String,String> fieldHash,Map<String,Type> types){
-		if(null == fieldHash) return null;
+		if(null == fieldHash) {
+			return null;
+		}
 		LinkedHashMap<String, Object> fields = new LinkedHashMap<String,Object>();
 		for(Entry<String, String> entry:fieldHash.entrySet()){
 			String field = entry.getKey();
@@ -58,12 +60,13 @@ public abstract class JsonEncoder {
 	}
 	
 	public <T>List<Object> toJsonArray(@SuppressWarnings("unchecked") T...array){
-		if(null == array)return null;
-		return toJsonArray(Arrays.asList(array));
+		return null == array ? null : toJsonArray(Arrays.asList(array));
 	}
 	
 	public List<Object> toJsonArray(Collection<?> c){
-		if(null == c)return null;
+		if(null == c){
+			return null;
+		}
 		ArrayList<Object> list = new ArrayList<Object>();
 		for( Object element:c){
 			try{
@@ -75,7 +78,7 @@ public abstract class JsonEncoder {
 		return list;
 	}
 	
-	public static final JsonEncoder getEncoder(){
+	public static final BaseJsonEncoder getEncoder(){
 		return FastjsonEncoder.getInstance(); 
 	}
 }

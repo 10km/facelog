@@ -9,7 +9,11 @@ import org.junit.Test;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisProducerSingle;
 
-public class TestRedisProducer {
+/**
+ * @author guyadong
+ *
+ */
+public class RedisProducerTest {
 
 	@Test
 	public void test() throws InterruptedException {

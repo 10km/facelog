@@ -18,9 +18,13 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import gu.simplemq.IKeyHelper;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisTable;
+/**
+ * @author guyadong
+ *
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestRedisTable {
-	private static final Logger logger = LoggerFactory.getLogger(TestRedisTable.class);
+public class RedisTableTest {
+	private static final Logger logger = LoggerFactory.getLogger(RedisTableTest.class);
 
 	public interface Person<T>{
 		

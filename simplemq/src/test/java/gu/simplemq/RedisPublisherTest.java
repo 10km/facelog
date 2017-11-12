@@ -13,8 +13,12 @@ import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisPublisher;
 
-public class TestRedisPublisher {
-	private static final Logger logger = LoggerFactory.getLogger(TestRedisPublisher.class);
+/**
+ * @author guyadong
+ *
+ */
+public class RedisPublisherTest {
+	private static final Logger logger = LoggerFactory.getLogger(RedisPublisherTest.class);
 
 	@Test
 	public void test() throws InterruptedException {

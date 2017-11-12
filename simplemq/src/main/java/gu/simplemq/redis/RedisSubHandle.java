@@ -3,8 +3,9 @@ package gu.simplemq.redis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
+
 import gu.simplemq.IMessageDispatcher;
-import gu.simplemq.utils.Judge;
 import redis.clients.jedis.JedisPubSub;
 
 class RedisSubHandle extends JedisPubSub {
@@ -20,10 +21,13 @@ class RedisSubHandle extends JedisPubSub {
 
 	@Override
 	public void onMessage(String channel, String message) {
-		if(Judge.isEmpty(channel) || Judge.isEmpty(message))return;
+		if(Strings.isNullOrEmpty(channel) || Strings.isNullOrEmpty(message)){
+			return;
+		}
 		try {
-			if (null != dispatcher)
+			if (null != dispatcher){
 				dispatcher.dispatch(channel, message);
+			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}

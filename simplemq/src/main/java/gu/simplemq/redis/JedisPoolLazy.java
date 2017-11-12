@@ -28,13 +28,13 @@ import redis.clients.jedis.Protocol;
  */
 public class JedisPoolLazy {
 	private static final Logger logger = LoggerFactory.getLogger(JedisPoolLazy.class);
-	private static final Set<JedisPoolLazy> poolSet = Collections.synchronizedSet(new LinkedHashSet<JedisPoolLazy>());
+	private static final Set<JedisPoolLazy> POOL_SET = Collections.synchronizedSet(new LinkedHashSet<JedisPoolLazy>());
 	static {
 		// 程序退出时自动销毁连接池对象
 		Runtime.getRuntime().addShutdownHook(new Thread(){
 			@Override
 			public void run() {
-				for(Iterator<JedisPoolLazy> itor = poolSet.iterator();itor.hasNext();){
+				for(Iterator<JedisPoolLazy> itor = POOL_SET.iterator();itor.hasNext();){
 					JedisPoolLazy p = itor.next();
 					itor.remove();
 					if(null != p.pool){
@@ -44,6 +44,7 @@ public class JedisPoolLazy {
 				}
 			}});
 	}
+	/** {@link JedisPoolLazy} 初始化参数名 */
 	public static enum PropName{
 		jedisPoolConfig,host,port,password,database,timeout,uri
 	}
@@ -88,8 +89,9 @@ public class JedisPoolLazy {
 	public static synchronized final JedisPoolLazy createDefaultInstance(Map<PropName,Object> props){
 		if(null == defaultInstance){
 			defaultInstance = createInstance(props);
-		}else
+		}else{
 			logger.warn("default instance was initialized already before this invocation");
+		}
 		return defaultInstance;
 	}
 	
@@ -104,7 +106,9 @@ public class JedisPoolLazy {
 			for(Iterator<Entry<PropName, Object>> itor = props.entrySet().iterator();itor.hasNext();){
 				Entry<PropName, Object> entry = itor.next();
 				// 删除所有为null的参数，避免将缺省参数覆盖为null
-				if(null == entry.getValue())itor.remove();
+				if(null == entry.getValue()){
+					itor.remove();
+				}
 			}
 			// 缺省参数与输入参数合并
 			params.putAll(props);
@@ -119,7 +123,7 @@ public class JedisPoolLazy {
 		URI canonicalURI = JedisUtils.getCanonicalURI(params);
 		if(fullMatch){
 			// 全匹配
-			for (JedisPoolLazy pool : poolSet) {
+			for (JedisPoolLazy pool : POOL_SET) {
 				if (pool.getCanonicalURI().equals(canonicalURI)
 						&& params.get(PropName.jedisPoolConfig).equals(pool.parameters.get(PropName.jedisPoolConfig))
 						&& params.get(PropName.timeout).equals(pool.parameters.get(PropName.timeout))) {
@@ -129,10 +133,12 @@ public class JedisPoolLazy {
 		}else{
 			// 只匹配 host port 相同就算找到
 			HostAndPort hp1 = new HostAndPort(canonicalURI.getHost(),canonicalURI.getPort());
-			for (JedisPoolLazy pool : poolSet) {
+			for (JedisPoolLazy pool : POOL_SET) {
 				URI uri2 = pool.getCanonicalURI();
 				HostAndPort hp2 = new HostAndPort(uri2.getHost(),uri2.getPort());
-				if(hp1.equals(hp2))return pool;
+				if(hp1.equals(hp2)){
+					return pool;
+				}
 			}
 		}
 		return createInstance(params);
@@ -141,24 +147,30 @@ public class JedisPoolLazy {
 	private static JedisPoolLazy getInstance( JedisPoolConfig jedisPoolConfig, String host, int port, final String password,
 			int database, int timeout, URI uri){
 		HashMap<PropName,Object> param = new HashMap<PropName,Object>(DEFAULT_PARAMETERS);
-		if(null != jedisPoolConfig)
+		if(null != jedisPoolConfig){
 			param.put(PropName.jedisPoolConfig, jedisPoolConfig);
-		if(null != host && !host.isEmpty())
+		}
+		if(null != host && !host.isEmpty()){
 			param.put(PropName.host, host);
-		if(0 < port)
+		}
+		if(0 < port){
 			param.put(PropName.port, port);
+		}
 		param.put(PropName.password, password);
-		if(0 <= database)
+		if(0 <= database){
 			param.put(PropName.database, database);
-		if( 0 < timeout )
+		}
+		if( 0 < timeout ){
 			param.put(PropName.timeout, timeout);
+		}
 		param.put(PropName.uri, uri);
 		return getInstance(param, true);
 	}
 	
 	public static JedisPoolLazy getInstance(JedisPoolConfig jedisPoolConfig, URI uri, int timeout) {
-		if(null == uri)
+		if(null == uri){
 			throw new NullPointerException(" the 'uri' must not be null");
+		}
 		return getInstance(jedisPoolConfig,null,0,null,-1,timeout,uri);
 	}
 	
@@ -192,7 +204,7 @@ public class JedisPoolLazy {
 	private JedisPool pool;
 
 	protected JedisPoolLazy (Map<PropName,Object> props) {
-		poolSet.add(this);
+		POOL_SET.add(this);
 		this.parameters=initParameters(props);
 	}
 	
@@ -225,7 +237,7 @@ public class JedisPoolLazy {
             jedis.close();
         }
     }
-
+    /** apply/free 嵌套计数 */
 	private final ThreadLocal<AtomicInteger> tlNestCount  = new ThreadLocal<AtomicInteger>(){
 		@Override
 		protected AtomicInteger initialValue() {
@@ -235,23 +247,26 @@ public class JedisPoolLazy {
 	
 	private final ThreadLocal<Jedis> tlJedis = new ThreadLocal<Jedis>(); 
 	
+	/** 申请当前线程使用的{@link Jedis }对象,不可跨线程使用 */
 	public Jedis apply(){
-		Jedis jedis = this.tlJedis.get();
+		Jedis jedis = tlJedis.get();
 		if(null == jedis){
-			jedis = this.getJedis();
+			jedis = getJedis();
 			this.tlJedis.set(jedis);
 		}
 		tlNestCount.get().incrementAndGet();
 		return jedis;
 	}
-	
+	/** 释放当前线程使用的{@link Jedis }资源 */
 	public void free(){
-		Jedis jedis =this.tlJedis.get();
-		if(null == jedis)
+		Jedis jedis =tlJedis.get();
+		if(null == jedis){
 			throw new IllegalStateException("apply/free mismatch");
+		}
 		if(0 == tlNestCount.get().decrementAndGet()){
 			releaseJedis(jedis);
-			this.tlJedis.set(null);
+			tlJedis.remove();
+			tlNestCount.remove();
 		}
 	}
 	
@@ -266,5 +281,35 @@ public class JedisPoolLazy {
 	@Override
 	public String toString() {
 		return getCanonicalURI().toString();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((pool == null) ? 0 : pool.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof JedisPoolLazy)) {
+			return false;
+		}
+		JedisPoolLazy other = (JedisPoolLazy) obj;
+		if (pool == null) {
+			if (other.pool != null) {
+				return false;
+			}
+		} else if (!pool.equals(other.pool)) {
+			return false;
+		}
+		return true;
 	}
 }

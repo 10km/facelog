@@ -16,7 +16,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.parser.ParserConfig;
-import com.alibaba.fastjson.serializer.SerializeBeanInfo;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.util.FieldInfo;
@@ -24,7 +23,11 @@ import com.alibaba.fastjson.util.FieldInfo;
 import gu.simplemq.json.ByteBufferCodec;
 import gu.simplemq.utils.TypeUtils;
 
-public class TestFastjson {
+/**
+ * @author guyadong
+ *
+ */
+public class FastjsonTest {
 	static{
 		ParserConfig.global.putDeserializer(ByteBuffer.class, ByteBufferCodec.instance);
 		SerializeConfig.globalInstance.put(ByteBuffer.wrap(new byte[]{}).getClass(), ByteBufferCodec.instance);
@@ -231,19 +234,21 @@ public class TestFastjson {
 
 	public<T> void testTypeRef(){
     	Type type = new TypeReference<GenBean<T>>(Date.class) {}.getType();
-    	if(type instanceof ParameterizedType)
+    	if(type instanceof ParameterizedType){
     		System.out.println(((ParameterizedType)type).getActualTypeArguments()[0]);
-    	else
+    	}else{
     		System.out.println(type);
+    	}
 	}
 	@Test
 	public void testTypeReference(){
     	//System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
     	Type type = new TypeReference<GenBean<String>>() {}.getType();
-    	if(type instanceof ParameterizedType)
+    	if(type instanceof ParameterizedType){
     		System.out.println(((ParameterizedType)type).getActualTypeArguments()[0]);
-    	else
+    	}else{
     		System.out.println(type);
+    	}
     	this.<Date>testTypeRef();
 	}
 	@Test
@@ -275,7 +280,9 @@ public class TestFastjson {
 		}
 	}
 	public Class<?> getDeclaredClass(Type type){		
-		if(type instanceof Class<?>)return (Class<?>)type;
+		if(type instanceof Class<?>){
+			return (Class<?>)type;
+		}
 		else if ( type instanceof ParameterizedType){
 			return getDeclaredClass(((ParameterizedType)type).getRawType());
 		}

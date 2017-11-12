@@ -11,8 +11,12 @@ import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisSubscriber;
 
-public class TestRedisSubscriber {
-	private static final Logger logger = LoggerFactory.getLogger(TestRedisSubscriber.class);
+/**
+ * @author guyadong
+ *
+ */
+public class RedisSubscriberTest {
+	private static final Logger logger = LoggerFactory.getLogger(RedisSubscriberTest.class);
 
 	@Test
 	public void test() {

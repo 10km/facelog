@@ -17,8 +17,12 @@ import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.Transaction;
 import redis.clients.util.JedisURIHelper;
+/**
+ * @author guyadong
+ *
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestRedis {
+public class RedisTest {
 	private JedisPool pool;
 	/**
 	 * 初始化连接池
@@ -59,8 +63,9 @@ public class TestRedis {
             Set<String> keys = jedis.keys("*");
             // 获取存储的数据并输出
             int count=0;
-            for(String key:keys)
+            for(String key:keys){
             	System.out.println(++count + ":"+ key);
+            }
     	}
     }
     

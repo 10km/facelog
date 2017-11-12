@@ -17,19 +17,19 @@ import gu.simplemq.utils.TypeUtils;
 
 /**
  * 
- * 基于fastjson实现{@link JsonEncoder}
+ * 基于fastjson实现{@link BaseJsonEncoder}
  * @author guyadong
  *
  */
-class FastjsonEncoder extends JsonEncoder {
-	private static final FastjsonEncoder instance = new FastjsonEncoder();
+class FastjsonEncoder extends BaseJsonEncoder {
+	private static final FastjsonEncoder INSTANCE = new FastjsonEncoder();
 	static {
 		// 增加对 ByteBuffer 序列化支持
 		ParserConfig.global.putDeserializer(ByteBuffer.class, ByteBufferCodec.instance);
 		SerializeConfig.globalInstance.put(ByteBuffer.wrap(new byte[]{}).getClass(), ByteBufferCodec.instance);
 	}
 	public static FastjsonEncoder getInstance(){
-		return instance;
+		return INSTANCE;
 	}
 	
 	protected FastjsonEncoder() {}

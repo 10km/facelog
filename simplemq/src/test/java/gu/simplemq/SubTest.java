@@ -11,8 +11,12 @@ import org.junit.runners.MethodSorters;
 import gu.simplemq.redis.JedisPoolLazy;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
+/**
+ * @author guyadong
+ *
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestSub {
+public class SubTest {
 
 	private JedisPoolLazy pool;
 	private JedisPubSub jedisPubSub=new JedisPubSub(){

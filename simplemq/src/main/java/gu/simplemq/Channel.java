@@ -6,8 +6,12 @@ import java.lang.reflect.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Objects;
+import com.google.common.base.Strings;
+
+import static com.google.common.base.Preconditions.checkArgument;
+
 import gu.simplemq.exceptions.SmqUnsubscribeException;
-import gu.simplemq.utils.Assert;
 
 /**
  * (消息)频道对象定义<br>
@@ -43,7 +47,7 @@ public class Channel<T> implements IMessageAdapter<Object>, Cloneable {
      * @param name
      */
     public Channel(String name){
-    	Assert.notEmpty(name, "name");
+    	checkArgument(!Strings.isNullOrEmpty(name), "name is null or empty");
         this.name = name;
         Type superClass = getClass().getGenericSuperclass();
         this.type = getRawClass(((ParameterizedType) superClass).getActualTypeArguments()[0]);
@@ -57,7 +61,7 @@ public class Channel<T> implements IMessageAdapter<Object>, Cloneable {
     }
 	public Channel(String name, Type type) {
 		super();
-		Assert.notEmpty(name, "name");
+		checkArgument(!Strings.isNullOrEmpty(name), "name is null or empty");
 		this.name = name;
 		if( null !=null && !(type instanceof ParameterizedType) &&! (type instanceof Class<?>) ){
 			throw new IllegalArgumentException("invalid type of 'type'");
@@ -107,20 +111,30 @@ public class Channel<T> implements IMessageAdapter<Object>, Cloneable {
 	}
 	
 	@Override
-	public boolean equals(Object obj) {
-		return equalsIgnoreAdapter(obj) && (adapter == ((Channel<?>)obj).adapter);
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
 	}
-	public boolean equalsIgnoreAdapter(Object obj) {
+	
+	@Override
+	public boolean equals(Object obj) {
 		if(super.equals(obj)){
 			return true;
 		}
 		if(!(obj instanceof Channel)){
 			return false;
 		}
-		Channel<?> oth = (Channel<?>)obj;
-		return name.equals(oth.name) && type == oth.type;
+		Channel<?> other = (Channel<?>)obj;
+		return Objects.equal(name, other.name) 
+				&& Objects.equal(type, other.type);
 	}
 	
+	public boolean equalsFull(Object obj) {
+		return equals(obj) && (adapter == ((Channel<?>)obj).adapter);
+	}
 	@SuppressWarnings("unchecked")
 	@Override
 	public Channel<T> clone() {
@@ -130,4 +144,5 @@ public class Channel<T> implements IMessageAdapter<Object>, Cloneable {
 			throw new RuntimeException(e);
 		}
 	}
+
 }

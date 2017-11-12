@@ -11,9 +11,10 @@ import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import gu.simplemq.json.JsonEncoder;
+import com.google.common.base.Strings;
+
+import gu.simplemq.json.BaseJsonEncoder;
 import gu.simplemq.utils.CommonUtils;
-import gu.simplemq.utils.Judge;
 import redis.clients.jedis.Jedis;
 
 /**
@@ -26,7 +27,7 @@ import redis.clients.jedis.Jedis;
  */
 public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 	private final Type type;
-	private JsonEncoder encoder = JsonEncoder.getEncoder();
+	private BaseJsonEncoder encoder = BaseJsonEncoder.getEncoder();
 	/** 队列名(key) */
 	private String queueName;
 	private final JedisPoolLazy poolLazy;
@@ -41,8 +42,9 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 	}
 
 	public RedisQueue<E> setQueueName(String queueName) {
-		if( ! Judge.isEmpty(queueName))
+		if( ! Strings.isNullOrEmpty(queueName)){
 			this.queueName = RedisComponentType.Queue.check(poolLazy,queueName);
+		}
 		return this;
 	}
 
@@ -111,14 +113,18 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 	@Override
 	public E removeFirst() {
         E x = pollFirst();
-        if (x == null) throw new NoSuchElementException();
+        if (x == null) {
+        	throw new NoSuchElementException();
+        }
         return x;
 	}
 
 	@Override
 	public E removeLast() {
         E x = pollLast();
-        if (x == null) throw new NoSuchElementException();
+        if (x == null) {
+        	throw new NoSuchElementException();
+        }
         return x;
 	}
 
@@ -145,14 +151,18 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 	@Override
 	public E getFirst() {
         E x = peekFirst();
-        if (x == null) throw new NoSuchElementException();
+        if (x == null) {
+        	throw new NoSuchElementException();
+        }
         return x;
 	}
 
 	@Override
 	public E getLast() {
         E x = peekLast();
-        if (x == null) throw new NoSuchElementException();
+        if (x == null) {
+        	throw new NoSuchElementException();
+        }
         return x;
 	}
 
@@ -161,9 +171,11 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 		Jedis jedis = poolLazy.apply();
 		try{
 			List<String> list = jedis.lrange(this.queueName,0,0);
-			if(list.size()>0)
+			if(list.size()>0){
 				return this.encoder.fromJson(list.get(0),this.getType());
-			else return null;
+			}else {
+				return null;
+			}
 		}finally{
 			poolLazy.free();
 		}
@@ -174,9 +186,11 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 		Jedis jedis = poolLazy.apply();
 		try{
 			List<String> list = jedis.lrange(this.queueName,-1,-1);
-			if(list.size()>0)
+			if(list.size()>0){
 				return this.encoder.fromJson(list.get(0),this.getType());
-			else return null;
+			}else {
+				return null;
+			}
 		}finally{
 			poolLazy.free();
 		}
@@ -205,7 +219,9 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 
 	@Override
 	public boolean offerFirst(E e) {
-		if (e == null) throw new NullPointerException();
+		if (e == null) {
+			throw new NullPointerException();
+		}
 		Jedis jedis = poolLazy.apply();
 		try{
 			jedis.lpush(this.queueName, this.encoder.toJsonString(e));
@@ -217,7 +233,9 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 	
 	@Override
 	public boolean offerLast(E e) {
-		if (e == null) throw new NullPointerException();
+		if (e == null) {
+			throw new NullPointerException();
+		}
 		Jedis jedis = poolLazy.apply();
 		try{
 			jedis.rpush(this.queueName, this.encoder.toJsonString(e));
@@ -235,17 +253,20 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 	 */
 	public int offer(boolean offerLast,@SuppressWarnings("unchecked") E... array) {
 		List<E> list = CommonUtils.cleanNullAsList(array);
-		if(list.isEmpty())return 0;
+		if(list.isEmpty()){
+			return 0;
+		}
 		String[] strings = new String[list.size()];
 		for(int i =0;i<strings.length;++i){
 			strings[i] = this.encoder.toJsonString(list.get(i));
 		}
 		Jedis jedis = poolLazy.apply();
 		try{
-			if(offerLast)
+			if(offerLast){
 				return jedis.rpush(this.queueName, strings).intValue();
-			else
+			}else{
 				return jedis.lpush(this.queueName, strings).intValue();
+			}
 		}finally{
 			poolLazy.free();
 		}
@@ -306,7 +327,9 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 		Jedis jedis = poolLazy.apply();
 		try{			
 			List<String> list = jedis.blpop((int)TimeUnit.SECONDS.convert(timeout, unit), this.queueName);
-			if(list.isEmpty())return null;
+			if(list.isEmpty()){
+				return null;
+			}
 			return this.encoder.fromJson(list.get(1),getType());
 		}finally{
 			poolLazy.free();
@@ -318,7 +341,9 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 		Jedis jedis = poolLazy.apply();
 		try{			
 			List<String> list = jedis.brpop((int)TimeUnit.SECONDS.convert(timeout, unit), this.queueName);
-			if(list.isEmpty())return null;
+			if(list.isEmpty()){
+				return null;
+			}
 			return this.encoder.fromJson(list.get(1),getType());
 		}finally{
 			poolLazy.free();

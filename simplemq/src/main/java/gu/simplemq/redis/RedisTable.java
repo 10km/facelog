@@ -9,11 +9,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import com.alibaba.fastjson.util.FieldInfo;
+import com.google.common.base.Strings;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkArgument;
 
 import gu.simplemq.AbstractTable;
 import gu.simplemq.Channel;
 import gu.simplemq.exceptions.SmqTableException;
-import gu.simplemq.utils.Assert;
 import gu.simplemq.utils.CommonUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
@@ -55,16 +58,16 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	 */
 	public RedisTable(Type type,JedisPoolLazy pool, String tablename){
 		super(type);
-		Assert.notNull(pool, "pool");
-		this.pool = pool;
+		this.pool = checkNotNull(pool, "pool is null");
 		this.checker = TablenameChecker.getNameChecker(pool);
 		try{
 			tablename = format(tablename);
 		}catch(Exception e){
-			if(type instanceof Class)
+			if(type instanceof Class){
 				tablename = format(((Class<?>)type).getSimpleName());
-			else
+			}else{
 				tablename = format(type.toString());
+			}
 		}
 		this.prefix = tablename;
 		this.redisExpire = new RedisKeyExpire(this.pool){
@@ -82,8 +85,9 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 		try {
 			if(isJavaBean){
 				return this.encoder.fromJson(jedis.hgetAll(key), this.getType());
-			}else			
+			}else{
 				return this.encoder.fromJson(jedis.get(key), this.getType());
+			}
 			
 		} finally {
 			pool.free();
@@ -97,13 +101,16 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 			return super.get(keys);
 		else{
 			String[] wkeys = CommonUtils.cleanEmpty(keys);
-			for(int i =0 ;i<keys.length;++i)wkeys[i] = wrapKey(wkeys[i]);
+			for(int i =0 ;i<keys.length;++i){
+				wkeys[i] = wrapKey(wkeys[i]);
+			}
 			Jedis jedis = pool.apply();
 			try {				
 				List<String> values = jedis.mget(wkeys);
-				Map<String, Object> m = new HashMap<String,Object>();
-				for(int i=0;i<wkeys.length;++i)
+				Map<String, Object> m = new HashMap<String,Object>(16);
+				for(int i=0;i<wkeys.length;++i){
 					m.put(wkeys[i], this.encoder.fromJson(values.get(i), this.getType()));
+				}
 				return (Map<String, V>) m;
 			} finally {
 				pool.free();
@@ -116,10 +123,11 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 		key = wrapKey(key);
 		Jedis jedis = pool.apply();
 		try {
-			if(nx)
+			if(nx){
 				jedis.setnx(key, this.encoder.toJsonString(value));
-			else
+			}else{
 				jedis.set(key, this.encoder.toJsonString(value));
+			}
 		} finally {
 			pool.free();
 		}
@@ -128,18 +136,21 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	@Override
 	protected void _setFields(String key, Map<String, String> fieldsValues, boolean nx) {
 		key = wrapKey(key);
-		if(null == fieldsValues || fieldsValues.isEmpty())return;
+		if(null == fieldsValues || fieldsValues.isEmpty()){
+			return;
+		}
 		Jedis jedis = pool.apply();
 		try {
-			HashMap<String, String> hash = new HashMap<String,String>();
+			HashMap<String, String> hash = new HashMap<String,String>(16);
 			ArrayList<String> nullFields = new ArrayList<String>();
 			for(Entry<String, String> entry:fieldsValues.entrySet()){
 				String value = entry.getValue();
 				String field = entry.getKey();
-				if(null == value)
+				if(null == value){
 					nullFields.add(field);
-				else
+				}else{
 					hash.put(field, value);
+				}
 			}
 			Transaction ctx = jedis.multi();
 			if(!hash.isEmpty()){
@@ -148,15 +159,18 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 						ctx.hsetnx(key, entry.getKey(), entry.getValue());
 					}
 				}					
-				else
+				else{
 					ctx.hmset(key, hash);
+				}
 			}
 				
-			if(!nullFields.isEmpty() && !nx)
+			if(!nullFields.isEmpty() && !nx){
 				ctx.hdel(key, nullFields.toArray(new String[0]));
+			}
 			List<Object> response = ctx.exec();
-			if(response.isEmpty())
+			if(response.isEmpty()){
 				throw new SmqTableException("Transaction error");
+			}
 		} finally {
 			pool.free();
 		}
@@ -168,12 +182,14 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 		Jedis jedis = pool.apply();
 		try {
 			if(null != value){
-				if(nx)
+				if(nx){
 					jedis.hsetnx(key, field, this.encoder.toJsonString(value));
-				else
+				}else{
 					jedis.hset(key, field, this.encoder.toJsonString(value));
-			}else if(!nx)
+				}
+			}else if(!nx){
 				jedis.hdel(key, field);
+			}
 		} finally {
 			pool.free();
 		}
@@ -184,7 +200,9 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 		Jedis jedis = pool.apply();
 		try {
 			String[] wkeys = new String[keys.length]; 
-			for(int i =0 ;i<keys.length;++i)wkeys[i] = wrapKey(keys[i]);
+			for(int i =0 ;i<keys.length;++i){
+				wkeys[i] = wrapKey(keys[i]);
+			}
 			return jedis.del(wkeys).intValue(); 
 		} finally {
 			pool.free();
@@ -216,21 +234,25 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 				if(null != value){
 					keysValues.add(wrapKey(entry.getKey()));
 					keysValues.add(this.encoder.toJsonString(value));
-				}else
+				}else{
 					keysNull.add(wrapKey(entry.getKey()));
+				}
 			}
 			Transaction ctx = jedis.multi();
 			if(!keysValues.isEmpty()){
-				if(nx)
+				if(nx){
 					ctx.msetnx(keysValues.toArray(new String[0]));
-				else
+				}else{
 					ctx.mset(keysValues.toArray(new String[0]));
+				}
 			}				
-			if(!keysNull.isEmpty() && !nx)
+			if(!keysNull.isEmpty() && !nx){
 				jedis.del(keysNull.toArray(new String[0]));
+			}
 			List<Object> response = ctx.exec();
-			if(response.isEmpty())
+			if(response.isEmpty()){
 				throw new SmqTableException("Transaction error");
+			}
 		} finally {
 			pool.free();
 		}
@@ -239,14 +261,15 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	protected void _setHash(Map<String,? extends V> m, boolean nx) {
 		Jedis jedis = pool.apply();
 		try {
-			Map<String, Map<String,String>> keysValues = new HashMap<String, Map<String,String>>();
+			Map<String, Map<String,String>> keysValues = new HashMap<String, Map<String,String>>(16);
 			ArrayList<String> keysNull = new ArrayList<String>();
 			for(Entry<String, ? extends V> entry:m.entrySet())	{
 				V value = entry.getValue();
 				if(null != value){
 					keysValues.put(wrapKey(entry.getKey()), this.encoder.toJsonMap(value));
-				}else
+				}else{
 					keysNull.add(wrapKey(entry.getKey()));
+				}
 			}
 			Transaction ctx = jedis.multi();
 			if(!keysValues.isEmpty()){
@@ -263,11 +286,13 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 					}
 				}					
 			}				
-			if(!keysNull.isEmpty() && !nx)
+			if(!keysNull.isEmpty() && !nx){
 				jedis.del(keysNull.toArray(new String[0]));
+			}
 			List<Object> response = ctx.exec();
-			if(response.isEmpty())
+			if(response.isEmpty()){
 				throw new SmqTableException("Transaction error");
+			}
 		} finally {
 			pool.free();
 		}
@@ -275,10 +300,11 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 		
 	@Override
 	protected void _set(Map<String, V> m, boolean nx) {
-		if(isJavaBean)
+		if(isJavaBean){
 			_setHash(m,nx);
-		else
+		}else{
 			_setString(m,nx);
+		}
 	}
 
 	@Override
@@ -306,7 +332,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	
 	@Override
 	public boolean containsKey(String key) {
-		Assert.notEmpty(key,"key");
+		checkArgument(!Strings.isNullOrEmpty(key),"key is null or empty");
 		key = wrapKey(key);
 		Jedis jedis = pool.apply();
 		try {
@@ -338,7 +364,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	 * @see {@link RedisComponentType#check(JedisPoolLazy, String)}
 	 */
 	private String format(String prefix) {
-		Assert.notEmpty(prefix, "prefix");
+		checkArgument(!Strings.isNullOrEmpty(prefix), "prefix is null or empty");
 		return checker.check(prefix.replaceAll("[\\s\\W]+", "_"), RedisComponentType.Table, this.getType());
 	}
 

@@ -14,10 +14,12 @@ class RedisKeyExpire extends KeyExpire {
 	}
 	
 	public static void expire(Jedis jedis,String key,long timeMills,boolean timestamp){
-		if(timestamp)
+		if(timestamp){
 			jedis.pexpireAt(key, timeMills);
-		else
+		}
+		else{
 			jedis.pexpire(key, timeMills);
+		}
 	}
 	public static void expire(Jedis jedis,String key,long time,TimeUnit timeUnit){
 		expire(jedis,key,TimeUnit.MILLISECONDS.convert(time, timeUnit),true);

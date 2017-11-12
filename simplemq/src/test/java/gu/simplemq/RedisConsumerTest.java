@@ -13,8 +13,12 @@ import gu.simplemq.redis.RedisConsumer;
 import gu.simplemq.redis.RedisConsumerSingle;
 import gu.simplemq.redis.RedisFactory;
 
-public class TestRedisConsumer {
-	private static final Logger logger = LoggerFactory.getLogger(TestRedisConsumer.class);
+/**
+ * @author guyadong
+ *
+ */
+public class RedisConsumerTest {
+	private static final Logger logger = LoggerFactory.getLogger(RedisConsumerTest.class);
 
 	@Test
 	public void testRedisConsumerSingle() {

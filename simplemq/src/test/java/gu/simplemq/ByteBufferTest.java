@@ -6,7 +6,11 @@ import java.nio.ByteBuffer;
 
 import org.junit.Test;
 
-public class TestByteBuffer {
+/**
+ * @author guyadong
+ *
+ */
+public class ByteBufferTest {
     public byte[] array=new byte[]{22,33,3,2,3,1,5,-1};
     public ByteBuffer byteBuffer =ByteBuffer.wrap(array);
 	/**

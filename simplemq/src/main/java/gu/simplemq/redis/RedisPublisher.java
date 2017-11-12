@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import gu.simplemq.Channel;
 import gu.simplemq.IPublisher;
-import gu.simplemq.json.JsonEncoder;
+import gu.simplemq.json.BaseJsonEncoder;
 import gu.simplemq.utils.CommonUtils;
 import redis.clients.jedis.Jedis;
 
@@ -15,7 +15,7 @@ import redis.clients.jedis.Jedis;
  *
  */
 public class RedisPublisher implements IPublisher,IRedisComponent{
-	private JsonEncoder encoder = JsonEncoder.getEncoder();
+	private BaseJsonEncoder encoder = BaseJsonEncoder.getEncoder();
 	private final JedisPoolLazy poolLazy;
 
 	@Override
@@ -30,7 +30,9 @@ public class RedisPublisher implements IPublisher,IRedisComponent{
 	
 	@Override
 	public <T>void publish(Channel<T> channel, T obj) {
-		if(null == obj)return;
+		if(null == obj){
+			return;
+		}
 		if(null != channel.type){
 			// 检查发布的对象类型与频道数据类型是否匹配
 			if(channel.type instanceof Class<?> && !((Class<?>)channel.type).isInstance(obj)){
@@ -55,10 +57,7 @@ public class RedisPublisher implements IPublisher,IRedisComponent{
 
 	@Override
 	public <T> void publish(Channel<T> channel, @SuppressWarnings("unchecked") T... objects) {
-		objects = CommonUtils.cleanNull(objects);
-		for(T obj:objects){
-			publish(channel,obj);
-		}		
+		publish(channel,CommonUtils.cleanNullAsList(objects));
 	}
 
 }

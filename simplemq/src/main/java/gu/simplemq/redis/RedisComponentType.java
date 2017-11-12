@@ -1,22 +1,34 @@
 package gu.simplemq.redis;
 
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
+
 import gu.simplemq.exceptions.SmqTypeException;
 import redis.clients.jedis.Jedis;
 
 enum RedisComponentType{
 	Table,Queue, Channel;
-	enum RedisKeyType{string,list,set,zset,none,hash}
+	private enum RedisKeyType{string,list,set,zset,none,hash}
+	/**
+	 * 检查对于指定的{@link JedisPoolLazy},{@code name}名字是否可用创建对象
+	 * @param poolLazy
+	 * @param name
+	 * @return {@code name}
+	 * @throws SmqTypeException {@code name}不可用
+	 */
 	public String check(JedisPoolLazy poolLazy,String name) throws SmqTypeException{
-		if(null == name || 0 == name.length())
-			throw new IllegalArgumentException("name must not be null or empty"); 
+		Preconditions.checkArgument(!Strings.isNullOrEmpty(name),"name must not be null or empty");
 		Jedis jedis = poolLazy.apply();
-		if(!jedis.exists(name))return name;
+		if(!jedis.exists(name)){
+			return name;
+		}
 		try{
 			switch(this){
 			case Table:break;
 			case Queue:{
-				if( RedisKeyType.valueOf(jedis.type(name)) == RedisKeyType.list)
+				if( RedisKeyType.valueOf(jedis.type(name)) == RedisKeyType.list){
 					return name;
+				}
 			}
 			case Channel:
 			default:
@@ -24,6 +36,6 @@ enum RedisComponentType{
 			throw new SmqTypeException(String.format("the '%s' can't be used for %s",name,this.name()));
 		}finally{
 			poolLazy.free();
-		}			
+		}
 	}
 }

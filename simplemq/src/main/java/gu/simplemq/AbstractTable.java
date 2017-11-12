@@ -15,9 +15,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import gu.simplemq.json.JsonEncoder;
-import gu.simplemq.utils.Assert;
-import gu.simplemq.utils.Judge;
+import com.google.common.base.Strings;
+
+import static com.google.common.base.Preconditions.checkArgument;
+
+import gu.simplemq.json.BaseJsonEncoder;
 import gu.simplemq.utils.TypeUtils;
 
 /**
@@ -40,7 +42,7 @@ public abstract class AbstractTable<V>{
 		}};
 	private final Type type;
 	protected final boolean isJavaBean ;
-	protected JsonEncoder encoder = JsonEncoder.getEncoder();
+	protected BaseJsonEncoder encoder = BaseJsonEncoder.getEncoder();
 	private IKeyHelper<V> keyHelper;
 	private List<String>filedNames = null;
 	protected KeyExpire keyExpire =new KeyExpire();
@@ -72,15 +74,15 @@ public abstract class AbstractTable<V>{
 	protected abstract V _get(String key);
 
 	public V get(String key){
-		Assert.notEmpty(key,"key");
+		checkArgument(!Strings.isNullOrEmpty(key),"key is null or empty");
 		return _get(key);
 	}
 	
 	public Map<String, V> get(String... keys){
 		@SuppressWarnings("unchecked")
-		HashMap<String, V> m = (HashMap<String, V>) new HashMap<String,Object>();
+		HashMap<String, V> m = (HashMap<String, V>) new HashMap<String,Object>(16);
 		for(String key:keys){
-			if(!Judge.isEmpty(key)){
+			if(!Strings.isNullOrEmpty(key)){
 				m.put(key, _get(key));
 			}
 		}
@@ -90,7 +92,7 @@ public abstract class AbstractTable<V>{
 	protected abstract void _set(String key, V value, boolean nx);
 	
 	public void set(String key, V value, boolean nx){
-		Assert.notEmpty(key,"key");
+		checkArgument(!Strings.isNullOrEmpty(key),"key is null or empty");
 		if(null == value ){
 			if(!nx){
 				remove(key);
@@ -116,14 +118,14 @@ public abstract class AbstractTable<V>{
 	
 	public  void setField(String key, String field, Object value, boolean nx){
 		assertJavaBean();
-		Assert.notEmpty(key,"key");
-		Assert.notEmpty(field,"field");
+		checkArgument(!Strings.isNullOrEmpty(key),"key is null or empty");
+		checkArgument(!Strings.isNullOrEmpty(field),"field is null or empty");
 		_setField(key,field,value, nx);
 	}
 	
 	public void setFields(boolean nx,String key,V obj, String ...fields){
 		assertJavaBean();
-		Assert.notEmpty(key,"key");
+		checkArgument(!Strings.isNullOrEmpty(key),"key is null or empty");
 		if(null == obj){
 			if(!nx){
 				this.remove(key);
@@ -135,7 +137,8 @@ public abstract class AbstractTable<V>{
 			fields = json.keySet().toArray(new String[0]);
 		}
 		if(1 == fields.length){
-			Assert.notEmpty(fields[0],"fields[0]");
+			checkArgument(!Strings.isNullOrEmpty(fields[0]),"fields[0] is null or empty");
+
 			_setField(key,fields[0],json.get(fields[0]), nx);
 		}
 		else{
@@ -155,7 +158,7 @@ public abstract class AbstractTable<V>{
 	
 	public void setFields(String key, Map<String,Object>fieldsValues, boolean nx){
 		assertJavaBean();
-		Assert.notEmpty(key,"key");
+		checkArgument(!Strings.isNullOrEmpty(key),"key is null or empty");
 		if(null == fieldsValues || fieldsValues.isEmpty()){
 			return;
 		}
@@ -171,13 +174,13 @@ public abstract class AbstractTable<V>{
 	
 	public Map<String,Object> getFields(String key,Map<String,Type> types){
 		assertJavaBean();
-		Assert.notEmpty(key,"key");
+		checkArgument(!Strings.isNullOrEmpty(key),"key is null or empty");
 		return _getFields(key,types);		
 	}
 	
 	public Map<String, Object> getFields(String key,String ...fields){
 		assertJavaBean();
-		Assert.notEmpty(key,"key");
+		checkArgument(!Strings.isNullOrEmpty(key),"key is null or empty");
 		LinkedHashMap<String, Type> types = new LinkedHashMap<String,Type>();
 		if(null != fields){
 			// 去除为空或 null 的字段名
@@ -194,8 +197,8 @@ public abstract class AbstractTable<V>{
 	@SuppressWarnings("unchecked")
 	public <T>T getField(String key,String field,Type type){
 		assertJavaBean();
-		Assert.notEmpty(key,"key");
-		Assert.notEmpty(field,"field");
+		checkArgument(!Strings.isNullOrEmpty(key),"key is null or empty");
+		checkArgument(!Strings.isNullOrEmpty(field),"field is null or empty");
 		LinkedHashMap<String, Type> types = new LinkedHashMap<String,Type>();
 		types.put(field, type);
 		return (T) _getFields(key,types).get(field);
@@ -353,11 +356,11 @@ public abstract class AbstractTable<V>{
 		}
 		set(Arrays.asList(array), nx);
 	}
-	public JsonEncoder getEncoder() {
+	public BaseJsonEncoder getEncoder() {
 		return encoder;
 	}
 
-	public void setEncoder(JsonEncoder encoder) {
+	public void setEncoder(BaseJsonEncoder encoder) {
 		this.encoder = encoder;
 	}
 

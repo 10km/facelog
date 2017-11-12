@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import gu.simplemq.exceptions.SmqTypeException;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
-import gu.simplemq.json.JsonEncoder;
+import gu.simplemq.json.BaseJsonEncoder;
 import gu.simplemq.utils.CommonUtils;
 
 /**
@@ -26,7 +26,7 @@ import gu.simplemq.utils.CommonUtils;
 public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 	protected static final Logger logger = LoggerFactory.getLogger(ChannelDispatcher.class);
 
-	private JsonEncoder encoder = JsonEncoder.getEncoder();
+	private BaseJsonEncoder encoder = BaseJsonEncoder.getEncoder();
 
 	/** 注册的频道对象 */
 	@SuppressWarnings("rawtypes")

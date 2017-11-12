@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 class FastjsonEncoder2 extends FastjsonEncoder {
-	private static final FastjsonEncoder2 instance = new FastjsonEncoder2();
+	private static final FastjsonEncoder2 INSTANCE = new FastjsonEncoder2();
 	public static FastjsonEncoder2 getInstance(){
-		return instance;		
+		return INSTANCE;		
 	}
 	private FastjsonEncoder2() {
 	}

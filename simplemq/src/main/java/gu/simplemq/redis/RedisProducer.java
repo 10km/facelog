@@ -2,10 +2,11 @@ package gu.simplemq.redis;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
+import java.util.List;
 
 import gu.simplemq.Channel;
 import gu.simplemq.IProducer;
-import gu.simplemq.json.JsonEncoder;
+import gu.simplemq.json.BaseJsonEncoder;
 import gu.simplemq.utils.CommonUtils;
 import gu.simplemq.utils.TypeUtils;
 import redis.clients.jedis.Jedis;
@@ -18,7 +19,7 @@ import redis.clients.jedis.Jedis;
 public class RedisProducer implements IRedisComponent, IProducer{
     /** 是否向队列末尾添加 */
 	protected boolean offerLast = true;
-	private JsonEncoder encoder = JsonEncoder.getEncoder();
+	private BaseJsonEncoder encoder = BaseJsonEncoder.getEncoder();
 	private final JedisPoolLazy poolLazy;
 	@Override
 	public JedisPoolLazy getPoolLazy() {
@@ -32,13 +33,16 @@ public class RedisProducer implements IRedisComponent, IProducer{
 	
 	@Override
 	public <T> void produce(Channel<T> channel, T object, boolean offerLast) {
-		if(null == object)return;
+		if(null == object){
+			return;
+		}
 		Jedis jedis = this.poolLazy.apply();
 		try{
-			if(offerLast)
+			if(offerLast){
 				jedis.rpush(channel.name, this.encoder.toJsonString(object));
-			else
+			}else{
 				jedis.lpush(channel.name, this.encoder.toJsonString(object));
+			}
 		}finally{
 			this.poolLazy.free();
 		}		
@@ -51,8 +55,10 @@ public class RedisProducer implements IRedisComponent, IProducer{
 
 	@Override
 	public <T> void produce(Channel<T> channel, boolean offerLast, @SuppressWarnings("unchecked") T... objects) {
-		objects = CommonUtils.cleanNull(objects);
-		if(0 == objects.length)return;
+		List<T> list = CommonUtils.cleanNullAsList(objects);
+		if(list.isEmpty()){
+			return;
+		}
 		if(null != channel.type){
 			// 检查发布的对象类型与频道数据类型是否匹配
 			if(channel.type instanceof Class<?> && 
@@ -60,15 +66,17 @@ public class RedisProducer implements IRedisComponent, IProducer{
 				throw new IllegalArgumentException("invalid component type of 'objects'");
 			}
 		}
-		String[] strings = new String[objects.length];
-		for(int i=0;i<strings.length;++i)
-			strings[i] = this.encoder.toJsonString(objects[i]);
+		String[] strings = new String[list.size()];
+		for(int i=0;i<strings.length;++i){
+			strings[i] = this.encoder.toJsonString(list.get(i));
+		}
 		Jedis jedis = this.poolLazy.apply();
 		try{
-			if(offerLast)
+			if(offerLast){
 				jedis.rpush(channel.name, strings);
-			else
+			}else{
 				jedis.lpush(channel.name, strings);
+			}
 		}finally{
 			this.poolLazy.free();
 		}
@@ -82,8 +90,9 @@ public class RedisProducer implements IRedisComponent, IProducer{
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> void produce(Channel<T> channel, boolean offerLast, Collection<T>c) {
-		if(null == c ) return;
-		produce(channel,offerLast, c.toArray((T[]) Array.newInstance(TypeUtils.getRawClass(channel.type), 0)));
+		if(null != c ) {
+			produce(channel,offerLast, c.toArray((T[]) Array.newInstance(TypeUtils.getRawClass(channel.type), 0)));
+		}
 	}
 	@Override
 	public <T> void produce(Channel<T> channel, Collection<T>c) {

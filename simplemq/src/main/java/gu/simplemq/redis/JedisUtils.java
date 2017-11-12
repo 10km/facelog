@@ -7,6 +7,10 @@ import java.util.Map;
 import redis.clients.jedis.Protocol;
 import redis.clients.util.JedisURIHelper;
 
+/**
+ * @author guyadong
+ *
+ */
 public class JedisUtils {
 	private JedisUtils() {}
 
@@ -51,8 +55,12 @@ public class JedisUtils {
 	}
 	
 	private static String convertHost(String host) {
-		if (host.equals("127.0.0.1")) return Protocol.DEFAULT_HOST;
-		else if (host.equals("::1")) return Protocol.DEFAULT_HOST;
+		if ("127.0.0.1".equals(host)) {
+			return Protocol.DEFAULT_HOST;
+		}
+		else if ("::1".equals(host)) {
+			return Protocol.DEFAULT_HOST;
+		}
 		
 		return host;
 	}
