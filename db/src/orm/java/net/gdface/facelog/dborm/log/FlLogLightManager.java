@@ -706,15 +706,15 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getName() + "%]");
-                        if ( bean.getName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getName() + "%"); }
+                        if ( bean.getName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getName() + SQL_LIKE_WILDCARD); }
                         break;
                     case SEARCH_STARTING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getName() + "]");
-                        if ( bean.getName() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getName()); }
+                        if ( bean.getName() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getName()); }
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [" + bean.getName() + "%]");
-                        if (bean.getName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getName() + "%"); }
+                        if (bean.getName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getName() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -732,15 +732,15 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getPapersNum() + "%]");
-                        if ( bean.getPapersNum()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getPapersNum() + "%"); }
+                        if ( bean.getPapersNum()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getPapersNum() + SQL_LIKE_WILDCARD); }
                         break;
                     case SEARCH_STARTING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getPapersNum() + "]");
-                        if ( bean.getPapersNum() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getPapersNum()); }
+                        if ( bean.getPapersNum() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getPapersNum()); }
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [" + bean.getPapersNum() + "%]");
-                        if (bean.getPapersNum()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getPapersNum() + "%"); }
+                        if (bean.getPapersNum()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getPapersNum() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);

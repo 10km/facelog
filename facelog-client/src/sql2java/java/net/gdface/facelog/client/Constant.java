@@ -26,18 +26,29 @@ public interface Constant {
     //////////////////////////////////////
     // COLUMN COLUMN CONSTANT
     //////////////////////////////////////    
-    public static final Integer FL_DEVICE_COLUMN_COUNT = 8;
-    public static final Integer FL_DEVICE_GROUP_COLUMN_COUNT = 4;
-    public static final Integer FL_FACE_COLUMN_COUNT = 20;
-    public static final Integer FL_FEATURE_COLUMN_COUNT = 4;
-    public static final Integer FL_IMAGE_COLUMN_COUNT = 8;
-    public static final Integer FL_LOG_COLUMN_COUNT = 8;
-    public static final Integer FL_PERMIT_COLUMN_COUNT = 3;
-    public static final Integer FL_PERSON_COLUMN_COUNT = 11;
-    public static final Integer FL_PERSON_GROUP_COLUMN_COUNT = 4;
-    public static final Integer FL_STORE_COLUMN_COUNT = 3;
-    public static final Integer FL_LOG_LIGHT_COLUMN_COUNT = 6;
-        //////////////////////////////////////
+    
+    public static final int FL_DEVICE_COLUMN_COUNT = 8;
+    public static final int FL_DEVICE_PK_COUNT = 1;
+    public static final int FL_DEVICE_GROUP_COLUMN_COUNT = 4;
+    public static final int FL_DEVICE_GROUP_PK_COUNT = 1;
+    public static final int FL_FACE_COLUMN_COUNT = 20;
+    public static final int FL_FACE_PK_COUNT = 1;
+    public static final int FL_FEATURE_COLUMN_COUNT = 4;
+    public static final int FL_FEATURE_PK_COUNT = 1;
+    public static final int FL_IMAGE_COLUMN_COUNT = 8;
+    public static final int FL_IMAGE_PK_COUNT = 1;
+    public static final int FL_LOG_COLUMN_COUNT = 8;
+    public static final int FL_LOG_PK_COUNT = 1;
+    public static final int FL_PERMIT_COLUMN_COUNT = 3;
+    public static final int FL_PERMIT_PK_COUNT = 2;
+    public static final int FL_PERSON_COLUMN_COUNT = 11;
+    public static final int FL_PERSON_PK_COUNT = 1;
+    public static final int FL_PERSON_GROUP_COLUMN_COUNT = 4;
+    public static final int FL_PERSON_GROUP_PK_COUNT = 1;
+    public static final int FL_STORE_COLUMN_COUNT = 3;
+    public static final int FL_STORE_PK_COUNT = 1;
+    public static final int FL_LOG_LIGHT_COLUMN_COUNT = 6;
+    public static final int FL_LOG_LIGHT_PK_COUNT = 0;    //////////////////////////////////////
     // FOREIGN KEY INDEX DECLARE
     //////////////////////////////////////    
     /** foreign key fl_device(group_id) -> fl_device_group */

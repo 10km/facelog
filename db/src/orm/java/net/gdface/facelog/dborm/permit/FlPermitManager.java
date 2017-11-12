@@ -153,8 +153,8 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            if (deviceGroupId == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, deviceGroupId); }
-            if (personGroupId == null) { ps.setNull(2, Types.INTEGER); } else { Manager.setInteger(ps, 2, personGroupId); }
+            if (deviceGroupId == null) { ps.setNull(FL_PERMIT_ID_DEVICE_GROUP_ID + 1, Types.INTEGER); } else { Manager.setInteger(ps, FL_PERMIT_ID_DEVICE_GROUP_ID + 1, deviceGroupId); }
+            if (personGroupId == null) { ps.setNull(FL_PERMIT_ID_PERSON_GROUP_ID + 1, Types.INTEGER); } else { Manager.setInteger(ps, FL_PERMIT_ID_PERSON_GROUP_ID + 1, personGroupId); }
             List<FlPermitBean> pReturn = this.loadByPreparedStatementAsList(ps);
             if (1 == pReturn.size()) {
                 return pReturn.get(0);
@@ -208,7 +208,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 2){
+        if(keys.length != FL_PERMIT_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         
@@ -227,7 +227,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 2){
+        if(keys.length != FL_PERMIT_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         
@@ -261,8 +261,8 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            if (deviceGroupId == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, deviceGroupId); }
-            if (personGroupId == null) { ps.setNull(2, Types.INTEGER); } else { Manager.setInteger(ps, 2, personGroupId); }
+            if (deviceGroupId == null) { ps.setNull(FL_PERMIT_ID_DEVICE_GROUP_ID + 1, Types.INTEGER); } else { Manager.setInteger(ps, FL_PERMIT_ID_DEVICE_GROUP_ID + 1, deviceGroupId); }
+            if (personGroupId == null) { ps.setNull(FL_PERMIT_ID_PERSON_GROUP_ID + 1, Types.INTEGER); } else { Manager.setInteger(ps, FL_PERMIT_ID_PERSON_GROUP_ID + 1, personGroupId); }
             return 1 == this.countByPreparedStatement(ps);
         }catch(SQLException e){
             throw new ObjectRetrievalException(e);
@@ -347,8 +347,8 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            if (bean.getDeviceGroupId() == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, bean.getDeviceGroupId()); }
-            if (bean.getPersonGroupId() == null) { ps.setNull(2, Types.INTEGER); } else { Manager.setInteger(ps, 2, bean.getPersonGroupId()); }
+            if (bean.getDeviceGroupId() == null) { ps.setNull(FL_PERMIT_ID_DEVICE_GROUP_ID + 1, Types.INTEGER); } else { Manager.setInteger(ps, FL_PERMIT_ID_DEVICE_GROUP_ID + 1, bean.getDeviceGroupId()); }
+            if (bean.getPersonGroupId() == null) { ps.setNull(FL_PERMIT_ID_PERSON_GROUP_ID + 1, Types.INTEGER); } else { Manager.setInteger(ps, FL_PERMIT_ID_PERSON_GROUP_ID + 1, bean.getPersonGroupId()); }
             int rows=ps.executeUpdate();
             if(rows>0){
                 // listener callback
@@ -380,7 +380,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 2){
+        if(keys.length != FL_PERMIT_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         FlPermitBean bean = createBean();   
@@ -438,6 +438,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
                 return save(bean , refDevicegroupByDeviceGroupId , refPersongroupByPersonGroupId );
             }});
     }
+    private static final int SYNC_SAVE_ARG_LEN = 2;
     //3.9 SYNC SAVE 
     /**
      * Save the FlPermitBean bean and referenced beans and imported beans (array) into the database.
@@ -454,7 +455,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         if(null == args){
             return save(bean);
         }
-        if(args.length > 2){
+        if(args.length > SYNC_SAVE_ARG_LEN){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceGroupBean)){
@@ -483,7 +484,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         if(null == args){
             return save(bean);
         }
-        if(args.length > 2){
+        if(args.length > SYNC_SAVE_ARG_LEN){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceGroupBean)){

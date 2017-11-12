@@ -681,7 +681,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
             return save(bean);
         }
         if(args.length > SYNC_SAVE_ARG_LEN){
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: SYNC_SAVE_ARG_LEN");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceGroupBean");

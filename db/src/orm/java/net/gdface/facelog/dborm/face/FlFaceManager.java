@@ -153,7 +153,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            if (id == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, id); }
+            if (id == null) { ps.setNull(FL_FACE_ID_ID + 1, Types.INTEGER); } else { Manager.setInteger(ps, FL_FACE_ID_ID + 1, id); }
             List<FlFaceBean> pReturn = this.loadByPreparedStatementAsList(ps);
             if (1 == pReturn.size()) {
                 return pReturn.get(0);
@@ -207,7 +207,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 1){
+        if(keys.length != FL_FACE_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         
@@ -223,7 +223,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 1){
+        if(keys.length != FL_FACE_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         
@@ -253,7 +253,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            if (id == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, id); }
+            if (id == null) { ps.setNull(FL_FACE_ID_ID + 1, Types.INTEGER); } else { Manager.setInteger(ps, FL_FACE_ID_ID + 1, id); }
             return 1 == this.countByPreparedStatement(ps);
         }catch(SQLException e){
             throw new ObjectRetrievalException(e);
@@ -350,7 +350,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            if (bean.getId() == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, bean.getId()); }
+            if (bean.getId() == null) { ps.setNull(FL_FACE_ID_ID + 1, Types.INTEGER); } else { Manager.setInteger(ps, FL_FACE_ID_ID + 1, bean.getId()); }
             int rows=ps.executeUpdate();
             if(rows>0){
                 // listener callback
@@ -382,7 +382,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 1){
+        if(keys.length != FL_FACE_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         FlFaceBean bean = createBean();   
@@ -672,6 +672,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
                 return save(bean , refFeatureByFeatureMd5 , refImageByImageMd5 , impLogByCompareFace );
             }});
     }
+    private static final int SYNC_SAVE_ARG_LEN = 3;
     //3.9 SYNC SAVE 
     /**
      * Save the FlFaceBean bean and referenced beans and imported beans (array) into the database.
@@ -688,7 +689,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
         if(null == args){
             return save(bean);
         }
-        if(args.length > 3){
+        if(args.length > SYNC_SAVE_ARG_LEN){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlFeatureBean)){
@@ -720,7 +721,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
         if(null == args){
             return save(bean);
         }
-        if(args.length > 3){
+        if(args.length > SYNC_SAVE_ARG_LEN){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlFeatureBean)){
@@ -2016,15 +2017,15 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getImageMd5() + "%]");
-                        if ( bean.getImageMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getImageMd5() + "%"); }
+                        if ( bean.getImageMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getImageMd5() + SQL_LIKE_WILDCARD); }
                         break;
                     case SEARCH_STARTING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getImageMd5() + "]");
-                        if ( bean.getImageMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getImageMd5()); }
+                        if ( bean.getImageMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getImageMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [" + bean.getImageMd5() + "%]");
-                        if (bean.getImageMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getImageMd5() + "%"); }
+                        if (bean.getImageMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getImageMd5() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -2102,15 +2103,15 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getFeatureMd5() + "%]");
-                        if ( bean.getFeatureMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getFeatureMd5() + "%"); }
+                        if ( bean.getFeatureMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getFeatureMd5() + SQL_LIKE_WILDCARD); }
                         break;
                     case SEARCH_STARTING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getFeatureMd5() + "]");
-                        if ( bean.getFeatureMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getFeatureMd5()); }
+                        if ( bean.getFeatureMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getFeatureMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [" + bean.getFeatureMd5() + "%]");
-                        if (bean.getFeatureMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getFeatureMd5() + "%"); }
+                        if (bean.getFeatureMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getFeatureMd5() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);

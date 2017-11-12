@@ -158,7 +158,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            if (id == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, id); }
+            if (id == null) { ps.setNull(FL_PERSON_ID_ID + 1, Types.INTEGER); } else { Manager.setInteger(ps, FL_PERSON_ID_ID + 1, id); }
             List<FlPersonBean> pReturn = this.loadByPreparedStatementAsList(ps);
             if (1 == pReturn.size()) {
                 return pReturn.get(0);
@@ -212,7 +212,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 1){
+        if(keys.length != FL_PERSON_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         
@@ -228,7 +228,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 1){
+        if(keys.length != FL_PERSON_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         
@@ -258,7 +258,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            if (id == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, id); }
+            if (id == null) { ps.setNull(FL_PERSON_ID_ID + 1, Types.INTEGER); } else { Manager.setInteger(ps, FL_PERSON_ID_ID + 1, id); }
             return 1 == this.countByPreparedStatement(ps);
         }catch(SQLException e){
             throw new ObjectRetrievalException(e);
@@ -355,7 +355,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            if (bean.getId() == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, bean.getId()); }
+            if (bean.getId() == null) { ps.setNull(FL_PERSON_ID_ID + 1, Types.INTEGER); } else { Manager.setInteger(ps, FL_PERSON_ID_ID + 1, bean.getId()); }
             int rows=ps.executeUpdate();
             if(rows>0){
                 // listener callback
@@ -387,7 +387,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 1){
+        if(keys.length != FL_PERSON_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         FlPersonBean bean = createBean();   
@@ -802,6 +802,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                 return save(bean , refImageByImageMd5 , refPersongroupByGroupId , impFeatureByPersonId , impLogByPersonId );
             }});
     }
+    private static final int SYNC_SAVE_ARG_LEN = 4;
     //3.9 SYNC SAVE 
     /**
      * Save the FlPersonBean bean and referenced beans and imported beans (array) into the database.
@@ -818,7 +819,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         if(null == args){
             return save(bean);
         }
-        if(args.length > 4){
+        if(args.length > SYNC_SAVE_ARG_LEN){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
@@ -853,7 +854,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         if(null == args){
             return save(bean);
         }
-        if(args.length > 4){
+        if(args.length > SYNC_SAVE_ARG_LEN){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
@@ -2231,15 +2232,15 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getName() + "%]");
-                        if ( bean.getName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getName() + "%"); }
+                        if ( bean.getName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getName() + SQL_LIKE_WILDCARD); }
                         break;
                     case SEARCH_STARTING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getName() + "]");
-                        if ( bean.getName() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getName()); }
+                        if ( bean.getName() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getName()); }
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [" + bean.getName() + "%]");
-                        if (bean.getName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getName() + "%"); }
+                        if (bean.getName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getName() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -2265,15 +2266,15 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getPapersNum() + "%]");
-                        if ( bean.getPapersNum()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getPapersNum() + "%"); }
+                        if ( bean.getPapersNum()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getPapersNum() + SQL_LIKE_WILDCARD); }
                         break;
                     case SEARCH_STARTING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getPapersNum() + "]");
-                        if ( bean.getPapersNum() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getPapersNum()); }
+                        if ( bean.getPapersNum() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getPapersNum()); }
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [" + bean.getPapersNum() + "%]");
-                        if (bean.getPapersNum()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getPapersNum() + "%"); }
+                        if (bean.getPapersNum()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getPapersNum() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -2287,15 +2288,15 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getImageMd5() + "%]");
-                        if ( bean.getImageMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getImageMd5() + "%"); }
+                        if ( bean.getImageMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getImageMd5() + SQL_LIKE_WILDCARD); }
                         break;
                     case SEARCH_STARTING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getImageMd5() + "]");
-                        if ( bean.getImageMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getImageMd5()); }
+                        if ( bean.getImageMd5() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getImageMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [" + bean.getImageMd5() + "%]");
-                        if (bean.getImageMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getImageMd5() + "%"); }
+                        if (bean.getImageMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getImageMd5() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);

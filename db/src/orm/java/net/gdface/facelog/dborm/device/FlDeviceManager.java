@@ -153,7 +153,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            if (id == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, id); }
+            if (id == null) { ps.setNull(FL_DEVICE_ID_ID + 1, Types.INTEGER); } else { Manager.setInteger(ps, FL_DEVICE_ID_ID + 1, id); }
             List<FlDeviceBean> pReturn = this.loadByPreparedStatementAsList(ps);
             if (1 == pReturn.size()) {
                 return pReturn.get(0);
@@ -207,7 +207,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 1){
+        if(keys.length != FL_DEVICE_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         
@@ -223,7 +223,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 1){
+        if(keys.length != FL_DEVICE_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         
@@ -253,7 +253,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            if (id == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, id); }
+            if (id == null) { ps.setNull(FL_DEVICE_ID_ID + 1, Types.INTEGER); } else { Manager.setInteger(ps, FL_DEVICE_ID_ID + 1, id); }
             return 1 == this.countByPreparedStatement(ps);
         }catch(SQLException e){
             throw new ObjectRetrievalException(e);
@@ -350,7 +350,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            if (bean.getId() == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, bean.getId()); }
+            if (bean.getId() == null) { ps.setNull(FL_DEVICE_ID_ID + 1, Types.INTEGER); } else { Manager.setInteger(ps, FL_DEVICE_ID_ID + 1, bean.getId()); }
             int rows=ps.executeUpdate();
             if(rows>0){
                 // listener callback
@@ -382,7 +382,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 1){
+        if(keys.length != FL_DEVICE_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         FlDeviceBean bean = createBean();   
@@ -791,6 +791,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                 return save(bean , refDevicegroupByGroupId , impImageByDeviceId , impLogByDeviceId );
             }});
     }
+    private static final int SYNC_SAVE_ARG_LEN = 3;
     //3.9 SYNC SAVE 
     /**
      * Save the FlDeviceBean bean and referenced beans and imported beans (array) into the database.
@@ -807,7 +808,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
         if(null == args){
             return save(bean);
         }
-        if(args.length > 3){
+        if(args.length > SYNC_SAVE_ARG_LEN){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceGroupBean)){
@@ -839,7 +840,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
         if(null == args){
             return save(bean);
         }
-        if(args.length > 3){
+        if(args.length > SYNC_SAVE_ARG_LEN){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         }
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceGroupBean)){
@@ -2034,15 +2035,15 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getName() + "%]");
-                        if ( bean.getName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getName() + "%"); }
+                        if ( bean.getName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getName() + SQL_LIKE_WILDCARD); }
                         break;
                     case SEARCH_STARTING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getName() + "]");
-                        if ( bean.getName() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getName()); }
+                        if ( bean.getName() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getName()); }
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [" + bean.getName() + "%]");
-                        if (bean.getName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getName() + "%"); }
+                        if (bean.getName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getName() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -2056,15 +2057,15 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getVersion() + "%]");
-                        if ( bean.getVersion()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getVersion() + "%"); }
+                        if ( bean.getVersion()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getVersion() + SQL_LIKE_WILDCARD); }
                         break;
                     case SEARCH_STARTING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getVersion() + "]");
-                        if ( bean.getVersion() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getVersion()); }
+                        if ( bean.getVersion() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getVersion()); }
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [" + bean.getVersion() + "%]");
-                        if (bean.getVersion()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getVersion() + "%"); }
+                        if (bean.getVersion()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getVersion() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -2078,15 +2079,15 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getSerialNo() + "%]");
-                        if ( bean.getSerialNo()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getSerialNo() + "%"); }
+                        if ( bean.getSerialNo()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getSerialNo() + SQL_LIKE_WILDCARD); }
                         break;
                     case SEARCH_STARTING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getSerialNo() + "]");
-                        if ( bean.getSerialNo() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getSerialNo()); }
+                        if ( bean.getSerialNo() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getSerialNo()); }
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [" + bean.getSerialNo() + "%]");
-                        if (bean.getSerialNo()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getSerialNo() + "%"); }
+                        if (bean.getSerialNo()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getSerialNo() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -2100,15 +2101,15 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getMac() + "%]");
-                        if ( bean.getMac()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getMac() + "%"); }
+                        if ( bean.getMac()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getMac() + SQL_LIKE_WILDCARD); }
                         break;
                     case SEARCH_STARTING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [%" + bean.getMac() + "]");
-                        if ( bean.getMac() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, "%" + bean.getMac()); }
+                        if ( bean.getMac() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getMac()); }
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + dirtyCount + " [" + bean.getMac() + "%]");
-                        if (bean.getMac()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getMac() + "%"); }
+                        if (bean.getMac()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getMac() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
