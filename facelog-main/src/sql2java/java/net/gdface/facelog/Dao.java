@@ -52,37 +52,37 @@ import net.gdface.facelog.db.exception.WrapDAOException;
 class Dao implements CommonConstant {
     
     static final IDeviceManager getDeviceManager(){
-        return TableManagerInitializer.instance.deviceManager;
+        return TableManagerInitializer.INSTANCE.deviceManager;
     }
     static final IDeviceGroupManager getDeviceGroupManager(){
-        return TableManagerInitializer.instance.deviceGroupManager;
+        return TableManagerInitializer.INSTANCE.deviceGroupManager;
     }
     static final IFaceManager getFaceManager(){
-        return TableManagerInitializer.instance.faceManager;
+        return TableManagerInitializer.INSTANCE.faceManager;
     }
     static final IFeatureManager getFeatureManager(){
-        return TableManagerInitializer.instance.featureManager;
+        return TableManagerInitializer.INSTANCE.featureManager;
     }
     static final IImageManager getImageManager(){
-        return TableManagerInitializer.instance.imageManager;
+        return TableManagerInitializer.INSTANCE.imageManager;
     }
     static final ILogManager getLogManager(){
-        return TableManagerInitializer.instance.logManager;
+        return TableManagerInitializer.INSTANCE.logManager;
     }
     static final IPermitManager getPermitManager(){
-        return TableManagerInitializer.instance.permitManager;
+        return TableManagerInitializer.INSTANCE.permitManager;
     }
     static final IPersonManager getPersonManager(){
-        return TableManagerInitializer.instance.personManager;
+        return TableManagerInitializer.INSTANCE.personManager;
     }
     static final IPersonGroupManager getPersonGroupManager(){
-        return TableManagerInitializer.instance.personGroupManager;
+        return TableManagerInitializer.INSTANCE.personGroupManager;
     }
     static final IStoreManager getStoreManager(){
-        return TableManagerInitializer.instance.storeManager;
+        return TableManagerInitializer.INSTANCE.storeManager;
     }
     static final ILogLightManager getLogLightManager(){
-        return TableManagerInitializer.instance.logLightManager;
+        return TableManagerInitializer.INSTANCE.logLightManager;
     }
     /** 生成 SQL where 语句,example: {@code WHERE create_time >'2017-09-02 12:12:12'} */
     static private String makeWhere(Date timestamp,String field){

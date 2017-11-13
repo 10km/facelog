@@ -13,7 +13,7 @@ import net.gdface.facelog.db.mysql.DeviceManager;
  *
  */
 public class DbTest {
-	private static IDeviceManager deviceManager = TableManagerInitializer.instance.deviceManager;
+	private static IDeviceManager deviceManager = TableManagerInitializer.INSTANCE.deviceManager;
 	private DeviceBean makeDeviceBean(Integer id,String name){
 		
 		DeviceBean deviceBean = new DeviceBean();

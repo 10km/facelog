@@ -9,6 +9,10 @@ import java.util.Date;
 
 import org.junit.Test;
 
+/**
+ * @author guyadong
+ *
+ */
 public class TestClone {
 	public static class A implements Cloneable{
 		final String string;
@@ -25,10 +29,6 @@ public class TestClone {
 				throw new RuntimeException(e);
 			}
 		}
-/*		@Override
-		protected Object clone()  {
-			return new A(string);
-		} */
 	}
 	@Test
 	public void test() throws ParseException  {

@@ -6,6 +6,10 @@ import java.nio.ByteBuffer;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftStruct;
 
+/**
+ * @author guyadong
+ *
+ */
 @ThriftStruct
 public final class TestBean implements Cloneable,Serializable{
 	/**

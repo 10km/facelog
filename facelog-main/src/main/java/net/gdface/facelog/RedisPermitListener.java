@@ -31,15 +31,6 @@ class RedisPermitListener extends TableListener.Adapter<PermitBean> implements C
 		}
 	}
 
-/*	@Override
-	public void afterUpdate(PermitBean bean) {
-		try{
-			publisher.publish(PUBSUB_PERMIT_UPDATE, bean);
-		}catch (Exception e){
-			logger.error(e.getMessage(),e);
-		}
-	}*/
-
 	@Override
 	public void afterDelete(PermitBean bean) {
 		try{

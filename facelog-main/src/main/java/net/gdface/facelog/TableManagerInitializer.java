@@ -46,7 +46,7 @@ public class TableManagerInitializer {
 	public final IFeatureManager featureManager ;
 	public final IPermitManager permitManager;
 	
-	public static final TableManagerInitializer instance = new TableManagerInitializer();
+	public static final TableManagerInitializer INSTANCE = new TableManagerInitializer();
 	private TableManagerInitializer() {
 		// 配置cache参数
 		// log,log_light 表因为不会被修改，也不会被设备频繁读取，不需要使用cache对象

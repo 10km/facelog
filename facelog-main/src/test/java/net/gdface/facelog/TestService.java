@@ -8,6 +8,10 @@ import com.facebook.swift.service.ThriftService;
 
 import net.gdface.facelog.db.DeviceBean;
 
+/**
+ * @author guyadong
+ *
+ */
 @ThriftService
 public interface TestService {
 	@ThriftMethod
