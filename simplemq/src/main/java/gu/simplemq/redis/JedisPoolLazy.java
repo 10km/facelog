@@ -202,7 +202,7 @@ public class JedisPoolLazy {
 		return new HashMap<PropName,Object>(parameters);
 	}
 
-	private JedisPool pool;
+	private volatile JedisPool pool;
 
 	protected JedisPoolLazy (Map<PropName,Object> props) {
 		POOL_SET.add(this);
