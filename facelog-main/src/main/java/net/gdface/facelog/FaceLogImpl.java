@@ -575,7 +575,7 @@ public class FaceLogImpl extends BaseFaceLog  {
 	}
 
 	@Override
-	public Integer savePerson(final Map<ByteBuffer,PersonBean> persons)throws ServiceRuntimeException {
+	public int savePerson(final Map<ByteBuffer,PersonBean> persons)throws ServiceRuntimeException {
 		try{
 			return daoRunAsTransaction(new Callable<Integer>(){
 				@Override

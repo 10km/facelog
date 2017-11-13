@@ -1972,17 +1972,9 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntimeException
      */
-    public Integer savePerson(Map<ByteBuffer, PersonBean> persons){
+    public int savePerson(Map<ByteBuffer, PersonBean> persons){
         try{
             return service.savePersonsWithPhoto(GenericUtils.toBytesKey(converterPersonBean.toRightValue(persons)));
-        }
-        catch(RuntimeTApplicationException e){
-            Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  
-                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
-                return null;
-            }
-            throw e;
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);

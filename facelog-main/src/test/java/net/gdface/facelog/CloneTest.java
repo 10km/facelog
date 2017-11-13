@@ -33,7 +33,7 @@ public class CloneTest {
 	@Test
 	public void test() throws ParseException  {
 		
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		//SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		//Date date = format.parse("2050-12-31");
 		//Date date = DateFormat.getDateTimeInstance().parse("2050-12-31 12:12:1.2");
 		//Date date = java.text.DateFormat.getDateInstance().parse("2050-12-31",new java.text.ParsePosition(0));

@@ -55,9 +55,8 @@ public class Server {
     private final ThriftServiceProcessor processor;
     public Server(List<?> services, int serverPort, ExecutorService executor) {
 		checkArgument(null != services && !services.isEmpty());
-		checkNotNull(executor);
 		this.serverPort = serverPort>0? serverPort : DEFAULT_PORT;
-		this.executor = executor;
+		this.executor = checkNotNull(executor);
 		processor = new ThriftServiceProcessor(
     			new ThriftCodecManager(),
     			ImmutableList.<ThriftEventHandler>of(),

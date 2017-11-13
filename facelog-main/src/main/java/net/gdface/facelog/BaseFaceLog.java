@@ -285,8 +285,8 @@ public abstract class BaseFaceLog extends Dao{
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod("savePersonsWithPhoto")
-	public Integer savePerson(Map<ByteBuffer, PersonBean> persons) throws ServiceRuntimeException {
-		return null;
+	public int savePerson(Map<ByteBuffer, PersonBean> persons) throws ServiceRuntimeException {
+		return 0;
 	}
 
 	/**
