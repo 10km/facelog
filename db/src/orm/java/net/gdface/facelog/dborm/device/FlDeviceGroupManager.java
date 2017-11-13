@@ -20,7 +20,7 @@ import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.Manager;
 import net.gdface.facelog.dborm.TableListener;
 import net.gdface.facelog.dborm.TableManager;
-import net.gdface.facelog.dborm.exception.Dao3Exception;
+import net.gdface.facelog.dborm.exception.DaoException;
 import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.DataRetrievalException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
@@ -119,9 +119,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      *
      * @param id Integer - PK# 1
      * @return a unique FlDeviceGroupBean or {@code null} if not found or have null argument
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlDeviceGroupBean loadByPrimaryKey(Integer id) throws Dao3Exception
+    public FlDeviceGroupBean loadByPrimaryKey(Integer id) throws DaoException
     {
         try{
             return loadByPrimaryKeyChecked(id);
@@ -138,10 +138,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param id Integer - PK# 1
      * @return a unique FlDeviceGroupBean
      * @throws ObjectRetrievalException if not found
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unused")
-    public FlDeviceGroupBean loadByPrimaryKeyChecked(Integer id) throws Dao3Exception
+    public FlDeviceGroupBean loadByPrimaryKeyChecked(Integer id) throws DaoException
     {
         if(null == id){
             throw new ObjectRetrievalException(new NullPointerException());
@@ -182,7 +182,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     //1.2
     
     @Override
-    public FlDeviceGroupBean loadByPrimaryKey(FlDeviceGroupBean bean) throws Dao3Exception
+    public FlDeviceGroupBean loadByPrimaryKey(FlDeviceGroupBean bean) throws DaoException
     {
         return bean==null?null:loadByPrimaryKey(bean.getId());
     }
@@ -190,7 +190,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     //1.2.2
     
     @Override
-    public FlDeviceGroupBean loadByPrimaryKeyChecked(FlDeviceGroupBean bean) throws Dao3Exception
+    public FlDeviceGroupBean loadByPrimaryKeyChecked(FlDeviceGroupBean bean) throws DaoException
     {
         if(null == bean){
             throw new NullPointerException();
@@ -206,7 +206,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @see {@link #loadByPrimaryKey(Integer id)}
      */
     @Override
-    public FlDeviceGroupBean loadByPrimaryKey(Object ...keys) throws Dao3Exception{
+    public FlDeviceGroupBean loadByPrimaryKey(Object ...keys) throws DaoException{
         if(null == keys){
             throw new NullPointerException();
         }
@@ -222,7 +222,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     //1.3.2
 
     @Override
-    public FlDeviceGroupBean loadByPrimaryKeyChecked(Object ...keys) throws Dao3Exception{
+    public FlDeviceGroupBean loadByPrimaryKeyChecked(Object ...keys) throws DaoException{
         if(null == keys){
             throw new NullPointerException();
         }
@@ -239,10 +239,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     /**
      * Returns true if this fl_device_group contains row with primary key fields.
      * @param id Integer - PK# 1
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unused")
-    public boolean existsPrimaryKey(Integer id) throws Dao3Exception
+    public boolean existsPrimaryKey(Integer id) throws DaoException
     {
         if(null == id){
             return false;
@@ -269,12 +269,12 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     /**
      * Return true if this fl_device_group contains row with primary key fields.
      * @param bean  
-     * @throws Dao3Exception
+     * @throws DaoException
      * @return false if primary kes has null
      * @see #countUsingTemplate(FlDeviceGroupBean)
      */
     @Override
-    public boolean existsByPrimaryKey(FlDeviceGroupBean bean) throws Dao3Exception
+    public boolean existsByPrimaryKey(FlDeviceGroupBean bean) throws DaoException
     {
         if(null == bean  || null == bean.getId()){
             return false;
@@ -290,7 +290,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     //1.7
 
     @Override
-    public FlDeviceGroupBean checkDuplicate(FlDeviceGroupBean bean) throws Dao3Exception{
+    public FlDeviceGroupBean checkDuplicate(FlDeviceGroupBean bean) throws DaoException{
         if(!existsByPrimaryKey(bean)){
             throw new ObjectRetrievalException("Duplicate entry ("+ bean.getId() +") for key 'PRIMARY'");
         }
@@ -300,10 +300,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     /**
      * Check duplicated row by primary keys,if row exists throw {@link ObjectRetrievalException}
      * @param id Integer
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see #existsPrimaryKey(Integer id)
      */
-    public Integer checkDuplicate(Integer id) throws Dao3Exception
+    public Integer checkDuplicate(Integer id) throws DaoException
     {
         if(existsPrimaryKey(id)){
             throw new ObjectRetrievalException("Duplicate entry '"+ id +"' for key 'PRIMARY'");
@@ -317,10 +317,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * 
      * @param id Integer - PK# 1
      * @return the number of deleted rows
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see {@link #delete(FlDeviceGroupBean)}
      */
-    public int deleteByPrimaryKey(Integer id) throws Dao3Exception
+    public int deleteByPrimaryKey(Integer id) throws DaoException
     {
         FlDeviceGroupBean bean=createBean();
         bean.setId(id);
@@ -333,10 +333,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * 
      * @param bean will be deleted ,all keys must not be null
      * @return the number of deleted rows,0 returned if bean is null
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @Override
-    public int delete(FlDeviceGroupBean bean) throws Dao3Exception
+    public int delete(FlDeviceGroupBean bean) throws DaoException
     {
         if(null == bean  || null == bean.getId()){
             return 0;
@@ -381,7 +381,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @see {@link #delete(FlDeviceGroupBean)}
      */   
     @Override
-    public int deleteByPrimaryKey(Object ...keys) throws Dao3Exception{
+    public int deleteByPrimaryKey(Object ...keys) throws DaoException{
         if(null == keys){
             throw new NullPointerException();
         }
@@ -408,7 +408,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] getImportedBeans(FlDeviceGroupBean bean, int ikIndex) throws Dao3Exception {
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] getImportedBeans(FlDeviceGroupBean bean, int ikIndex) throws DaoException {
         return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(IMPORTED_BEAN_TYPES[ikIndex],0));
     }
     
@@ -423,11 +423,11 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param bean the {@link FlDeviceGroupBean} object to use
      * @param ikIndex valid values: {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID},{@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT},{@link Constant#FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>> List<T> getImportedBeansAsList(FlDeviceGroupBean bean,int ikIndex)throws Dao3Exception{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> List<T> getImportedBeansAsList(FlDeviceGroupBean bean,int ikIndex)throws DaoException{
         switch(ikIndex){
         case FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID:
             return (List<T>)this.getDeviceBeansByGroupIdAsList(bean);
@@ -447,11 +447,11 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param importedBeans the FlPermitBean array to associate to the {@link FlDeviceGroupBean}
      * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlDeviceGroupBean,int)}
      * @return importedBeans always
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] setImportedBeans(FlDeviceGroupBean bean,T[] importedBeans,int ikIndex)throws Dao3Exception{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] setImportedBeans(FlDeviceGroupBean bean,T[] importedBeans,int ikIndex)throws DaoException{
         switch(ikIndex){
         case FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID:
             return (T[])setDeviceBeansByGroupId(bean,(FlDeviceBean[])importedBeans);
@@ -471,11 +471,11 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlDeviceGroupBean,int)}
 
      * @return importedBeans always
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>,C extends java.util.Collection<T>> C setImportedBeans(FlDeviceGroupBean bean,C importedBeans,int ikIndex)throws Dao3Exception{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>,C extends java.util.Collection<T>> C setImportedBeans(FlDeviceGroupBean bean,C importedBeans,int ikIndex)throws DaoException{
         switch(ikIndex){
         case FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID:
             return (C)setDeviceBeansByGroupId(bean,(java.util.Collection<FlDeviceBean>)importedBeans);
@@ -497,9 +497,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * FK_NAME : fl_device_ibfk_1 
      * @param bean the {@link FlDeviceGroupBean}
      * @return the associated {@link FlDeviceBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlDeviceBean[] getDeviceBeansByGroupId(FlDeviceGroupBean bean) throws Dao3Exception
+    public FlDeviceBean[] getDeviceBeansByGroupId(FlDeviceGroupBean bean) throws DaoException
     {
         return getDeviceBeansByGroupIdAsList(bean).toArray(new FlDeviceBean[0]);
     }
@@ -509,9 +509,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * FK_NAME : fl_device_ibfk_1 
      * @param id Integer - PK# 1
      * @return the associated {@link FlDeviceBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlDeviceBean[] getDeviceBeansByGroupId(Integer idOfDeviceGroup) throws Dao3Exception
+    public FlDeviceBean[] getDeviceBeansByGroupId(Integer idOfDeviceGroup) throws DaoException
     {
         FlDeviceGroupBean bean = createBean();
         bean.setId(idOfDeviceGroup);
@@ -523,9 +523,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * FK_NAME:fl_device_ibfk_1
      * @param bean the {@link FlDeviceGroupBean}
      * @return the associated {@link FlDeviceBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlDeviceBean> getDeviceBeansByGroupIdAsList(FlDeviceGroupBean bean) throws Dao3Exception
+    public List<FlDeviceBean> getDeviceBeansByGroupIdAsList(FlDeviceGroupBean bean) throws DaoException
     {
         return getDeviceBeansByGroupIdAsList(bean,1,-1);
     }
@@ -535,9 +535,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * FK_NAME:fl_device_ibfk_1
      * @param id Integer - PK# 1
      * @return the associated {@link FlDeviceBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlDeviceBean> getDeviceBeansByGroupIdAsList(Integer idOfDeviceGroup) throws Dao3Exception
+    public List<FlDeviceBean> getDeviceBeansByGroupIdAsList(Integer idOfDeviceGroup) throws DaoException
     {
          FlDeviceGroupBean bean = createBean();
         bean.setId(idOfDeviceGroup);
@@ -552,9 +552,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link FlDeviceBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlDeviceBean> getDeviceBeansByGroupIdAsList(FlDeviceGroupBean bean,int startRow, int numRows) throws Dao3Exception
+    public List<FlDeviceBean> getDeviceBeansByGroupIdAsList(FlDeviceGroupBean bean,int startRow, int numRows) throws DaoException
     {
         if(null == bean){
             return new java.util.ArrayList<FlDeviceBean>();
@@ -570,10 +570,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param bean the referenced {@link FlDeviceGroupBean}
      * @param importedBeans imported beans from fl_device
      * @return importedBeans always
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see {@link FlDeviceManager#setReferencedByGroupId(FlDeviceBean, FlDeviceGroupBean)
      */
-    public FlDeviceBean[] setDeviceBeansByGroupId(FlDeviceGroupBean bean , FlDeviceBean[] importedBeans) throws Dao3Exception
+    public FlDeviceBean[] setDeviceBeansByGroupId(FlDeviceGroupBean bean , FlDeviceBean[] importedBeans) throws DaoException
     {
         if(null != importedBeans){
             for( FlDeviceBean importBean : importedBeans ){
@@ -590,10 +590,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param bean the referenced {@link FlDeviceGroupBean} 
      * @param importedBeans imported beans from fl_device 
      * @return importedBeans always
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see {@link FlDeviceManager#setReferencedByGroupId(FlDeviceBean, FlDeviceGroupBean)
      */
-    public <C extends java.util.Collection<FlDeviceBean>> C setDeviceBeansByGroupId(FlDeviceGroupBean bean , C importedBeans) throws Dao3Exception
+    public <C extends java.util.Collection<FlDeviceBean>> C setDeviceBeansByGroupId(FlDeviceGroupBean bean , C importedBeans) throws DaoException
     {
         if(null != importedBeans){
             for( FlDeviceBean importBean : importedBeans ){
@@ -609,9 +609,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * FK_NAME : fl_device_group_ibfk_1 
      * @param bean the {@link FlDeviceGroupBean}
      * @return the associated {@link FlDeviceGroupBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlDeviceGroupBean[] getDeviceGroupBeansByParent(FlDeviceGroupBean bean) throws Dao3Exception
+    public FlDeviceGroupBean[] getDeviceGroupBeansByParent(FlDeviceGroupBean bean) throws DaoException
     {
         return getDeviceGroupBeansByParentAsList(bean).toArray(new FlDeviceGroupBean[0]);
     }
@@ -621,9 +621,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * FK_NAME : fl_device_group_ibfk_1 
      * @param id Integer - PK# 1
      * @return the associated {@link FlDeviceGroupBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlDeviceGroupBean[] getDeviceGroupBeansByParent(Integer idOfDeviceGroup) throws Dao3Exception
+    public FlDeviceGroupBean[] getDeviceGroupBeansByParent(Integer idOfDeviceGroup) throws DaoException
     {
         FlDeviceGroupBean bean = createBean();
         bean.setId(idOfDeviceGroup);
@@ -635,9 +635,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * FK_NAME:fl_device_group_ibfk_1
      * @param bean the {@link FlDeviceGroupBean}
      * @return the associated {@link FlDeviceGroupBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlDeviceGroupBean> getDeviceGroupBeansByParentAsList(FlDeviceGroupBean bean) throws Dao3Exception
+    public List<FlDeviceGroupBean> getDeviceGroupBeansByParentAsList(FlDeviceGroupBean bean) throws DaoException
     {
         return getDeviceGroupBeansByParentAsList(bean,1,-1);
     }
@@ -647,9 +647,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * FK_NAME:fl_device_group_ibfk_1
      * @param id Integer - PK# 1
      * @return the associated {@link FlDeviceGroupBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlDeviceGroupBean> getDeviceGroupBeansByParentAsList(Integer idOfDeviceGroup) throws Dao3Exception
+    public List<FlDeviceGroupBean> getDeviceGroupBeansByParentAsList(Integer idOfDeviceGroup) throws DaoException
     {
          FlDeviceGroupBean bean = createBean();
         bean.setId(idOfDeviceGroup);
@@ -664,9 +664,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link FlDeviceGroupBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlDeviceGroupBean> getDeviceGroupBeansByParentAsList(FlDeviceGroupBean bean,int startRow, int numRows) throws Dao3Exception
+    public List<FlDeviceGroupBean> getDeviceGroupBeansByParentAsList(FlDeviceGroupBean bean,int startRow, int numRows) throws DaoException
     {
         if(null == bean){
             return new java.util.ArrayList<FlDeviceGroupBean>();
@@ -682,10 +682,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param bean the referenced {@link FlDeviceGroupBean}
      * @param importedBeans imported beans from fl_device_group
      * @return importedBeans always
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see {@link FlDeviceGroupManager#setReferencedByParent(FlDeviceGroupBean, FlDeviceGroupBean)
      */
-    public FlDeviceGroupBean[] setDeviceGroupBeansByParent(FlDeviceGroupBean bean , FlDeviceGroupBean[] importedBeans) throws Dao3Exception
+    public FlDeviceGroupBean[] setDeviceGroupBeansByParent(FlDeviceGroupBean bean , FlDeviceGroupBean[] importedBeans) throws DaoException
     {
         if(null != importedBeans){
             for( FlDeviceGroupBean importBean : importedBeans ){
@@ -702,10 +702,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param bean the referenced {@link FlDeviceGroupBean} 
      * @param importedBeans imported beans from fl_device_group 
      * @return importedBeans always
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see {@link FlDeviceGroupManager#setReferencedByParent(FlDeviceGroupBean, FlDeviceGroupBean)
      */
-    public <C extends java.util.Collection<FlDeviceGroupBean>> C setDeviceGroupBeansByParent(FlDeviceGroupBean bean , C importedBeans) throws Dao3Exception
+    public <C extends java.util.Collection<FlDeviceGroupBean>> C setDeviceGroupBeansByParent(FlDeviceGroupBean bean , C importedBeans) throws DaoException
     {
         if(null != importedBeans){
             for( FlDeviceGroupBean importBean : importedBeans ){
@@ -721,9 +721,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * FK_NAME : fl_permit_ibfk_1 
      * @param bean the {@link FlDeviceGroupBean}
      * @return the associated {@link FlPermitBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPermitBean[] getPermitBeansByDeviceGroupId(FlDeviceGroupBean bean) throws Dao3Exception
+    public FlPermitBean[] getPermitBeansByDeviceGroupId(FlDeviceGroupBean bean) throws DaoException
     {
         return getPermitBeansByDeviceGroupIdAsList(bean).toArray(new FlPermitBean[0]);
     }
@@ -733,9 +733,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * FK_NAME : fl_permit_ibfk_1 
      * @param id Integer - PK# 1
      * @return the associated {@link FlPermitBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPermitBean[] getPermitBeansByDeviceGroupId(Integer idOfDeviceGroup) throws Dao3Exception
+    public FlPermitBean[] getPermitBeansByDeviceGroupId(Integer idOfDeviceGroup) throws DaoException
     {
         FlDeviceGroupBean bean = createBean();
         bean.setId(idOfDeviceGroup);
@@ -747,9 +747,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * FK_NAME:fl_permit_ibfk_1
      * @param bean the {@link FlDeviceGroupBean}
      * @return the associated {@link FlPermitBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlPermitBean> getPermitBeansByDeviceGroupIdAsList(FlDeviceGroupBean bean) throws Dao3Exception
+    public List<FlPermitBean> getPermitBeansByDeviceGroupIdAsList(FlDeviceGroupBean bean) throws DaoException
     {
         return getPermitBeansByDeviceGroupIdAsList(bean,1,-1);
     }
@@ -759,9 +759,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * FK_NAME:fl_permit_ibfk_1
      * @param id Integer - PK# 1
      * @return the associated {@link FlPermitBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlPermitBean> getPermitBeansByDeviceGroupIdAsList(Integer idOfDeviceGroup) throws Dao3Exception
+    public List<FlPermitBean> getPermitBeansByDeviceGroupIdAsList(Integer idOfDeviceGroup) throws DaoException
     {
          FlDeviceGroupBean bean = createBean();
         bean.setId(idOfDeviceGroup);
@@ -776,9 +776,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link FlPermitBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlPermitBean> getPermitBeansByDeviceGroupIdAsList(FlDeviceGroupBean bean,int startRow, int numRows) throws Dao3Exception
+    public List<FlPermitBean> getPermitBeansByDeviceGroupIdAsList(FlDeviceGroupBean bean,int startRow, int numRows) throws DaoException
     {
         if(null == bean){
             return new java.util.ArrayList<FlPermitBean>();
@@ -794,10 +794,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param bean the referenced {@link FlDeviceGroupBean}
      * @param importedBeans imported beans from fl_permit
      * @return importedBeans always
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see {@link FlPermitManager#setReferencedByDeviceGroupId(FlPermitBean, FlDeviceGroupBean)
      */
-    public FlPermitBean[] setPermitBeansByDeviceGroupId(FlDeviceGroupBean bean , FlPermitBean[] importedBeans) throws Dao3Exception
+    public FlPermitBean[] setPermitBeansByDeviceGroupId(FlDeviceGroupBean bean , FlPermitBean[] importedBeans) throws DaoException
     {
         if(null != importedBeans){
             for( FlPermitBean importBean : importedBeans ){
@@ -814,10 +814,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param bean the referenced {@link FlDeviceGroupBean} 
      * @param importedBeans imported beans from fl_permit 
      * @return importedBeans always
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see {@link FlPermitManager#setReferencedByDeviceGroupId(FlPermitBean, FlDeviceGroupBean)
      */
-    public <C extends java.util.Collection<FlPermitBean>> C setPermitBeansByDeviceGroupId(FlDeviceGroupBean bean , C importedBeans) throws Dao3Exception
+    public <C extends java.util.Collection<FlPermitBean>> C setPermitBeansByDeviceGroupId(FlDeviceGroupBean bean , C importedBeans) throws DaoException
     {
         if(null != importedBeans){
             for( FlPermitBean importBean : importedBeans ){
@@ -837,11 +837,11 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param impDevicegroupByParent the {@link FlDeviceGroupBean} beans refer to {@link FlDeviceGroupBean} 
      * @param impPermitByDeviceGroupId the {@link FlPermitBean} beans refer to {@link FlDeviceGroupBean} 
      * @return the inserted or updated {@link FlDeviceGroupBean} bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public FlDeviceGroupBean save(FlDeviceGroupBean bean
         , FlDeviceGroupBean refDevicegroupByParent 
-        , FlDeviceBean[] impDeviceByGroupId , FlDeviceGroupBean[] impDevicegroupByParent , FlPermitBean[] impPermitByDeviceGroupId ) throws Dao3Exception
+        , FlDeviceBean[] impDeviceByGroupId , FlDeviceGroupBean[] impDevicegroupByParent , FlPermitBean[] impPermitByDeviceGroupId ) throws DaoException
     {
         if(null == bean) {
             return null;
@@ -866,7 +866,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      */
     public FlDeviceGroupBean saveAsTransaction(final FlDeviceGroupBean bean
         ,final FlDeviceGroupBean refDevicegroupByParent 
-        ,final FlDeviceBean[] impDeviceByGroupId ,final FlDeviceGroupBean[] impDevicegroupByParent ,final FlPermitBean[] impPermitByDeviceGroupId ) throws Dao3Exception
+        ,final FlDeviceBean[] impDeviceByGroupId ,final FlDeviceGroupBean[] impDevicegroupByParent ,final FlPermitBean[] impPermitByDeviceGroupId ) throws DaoException
     {
         return this.runAsTransaction(new Callable<FlDeviceGroupBean>(){
             @Override
@@ -884,11 +884,11 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param impDevicegroupByParent the {@link FlDeviceGroupBean} bean refer to {@link FlDeviceGroupBean} 
      * @param impPermitByDeviceGroupId the {@link FlPermitBean} bean refer to {@link FlDeviceGroupBean} 
      * @return the inserted or updated {@link FlDeviceGroupBean} bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public FlDeviceGroupBean save(FlDeviceGroupBean bean
         , FlDeviceGroupBean refDevicegroupByParent 
-        , java.util.Collection<FlDeviceBean> impDeviceByGroupId , java.util.Collection<FlDeviceGroupBean> impDevicegroupByParent , java.util.Collection<FlPermitBean> impPermitByDeviceGroupId ) throws Dao3Exception
+        , java.util.Collection<FlDeviceBean> impDeviceByGroupId , java.util.Collection<FlDeviceGroupBean> impDevicegroupByParent , java.util.Collection<FlPermitBean> impPermitByDeviceGroupId ) throws DaoException
     {
         if(null == bean) {
             return null;
@@ -911,7 +911,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      */
     public FlDeviceGroupBean saveAsTransaction(final FlDeviceGroupBean bean
         ,final FlDeviceGroupBean refDevicegroupByParent 
-        ,final  java.util.Collection<FlDeviceBean> impDeviceByGroupId ,final  java.util.Collection<FlDeviceGroupBean> impDevicegroupByParent ,final  java.util.Collection<FlPermitBean> impPermitByDeviceGroupId ) throws Dao3Exception
+        ,final  java.util.Collection<FlDeviceBean> impDeviceByGroupId ,final  java.util.Collection<FlDeviceGroupBean> impDevicegroupByParent ,final  java.util.Collection<FlPermitBean> impPermitByDeviceGroupId ) throws DaoException
     {
         return this.runAsTransaction(new Callable<FlDeviceGroupBean>(){
             @Override
@@ -933,10 +933,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param args referenced beans or imported beans<br>
      *      see also {@link #save(FlDeviceGroupBean , FlDeviceGroupBean , FlDeviceBean[] , FlDeviceGroupBean[] , FlPermitBean[] )}
      * @return the inserted or updated {@link FlDeviceGroupBean} bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @Override
-    public FlDeviceGroupBean save(FlDeviceGroupBean bean,Object ...inputs) throws Dao3Exception
+    public FlDeviceGroupBean save(FlDeviceGroupBean bean,Object ...inputs) throws DaoException
     {
         if(null == inputs){
             return save(bean);
@@ -973,11 +973,11 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param args referenced beans or imported beans<br>
      *      see also {@link #save(FlDeviceGroupBean , FlDeviceGroupBean , java.util.Collection , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link FlDeviceGroupBean} bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public FlDeviceGroupBean saveCollection(FlDeviceGroupBean bean,Object ...inputs) throws Dao3Exception
+    public FlDeviceGroupBean saveCollection(FlDeviceGroupBean bean,Object ...inputs) throws DaoException
     {
         if(null == inputs){
             return save(bean);
@@ -1019,11 +1019,11 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_DEVICE_GROUP_FK_PARENT}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T getReferencedBean(FlDeviceGroupBean bean,int fkIndex)throws Dao3Exception{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T getReferencedBean(FlDeviceGroupBean bean,int fkIndex)throws DaoException{
         switch(fkIndex){
         case FL_DEVICE_GROUP_FK_PARENT:
             return  (T)this.getReferencedByParent(bean);
@@ -1040,11 +1040,11 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param beanToSet the <T> object to associate to the {@link FlDeviceGroupBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(FlDeviceGroupBean,int)}
      * @return always beanToSet saved
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T setReferencedBean(FlDeviceGroupBean bean,T beanToSet,int fkIndex)throws Dao3Exception{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T setReferencedBean(FlDeviceGroupBean bean,T beanToSet,int fkIndex)throws DaoException{
         switch(fkIndex){
         case FL_DEVICE_GROUP_FK_PARENT:
             return  (T)this.setReferencedByParent(bean, (FlDeviceGroupBean)beanToSet);
@@ -1064,9 +1064,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * FK_NAME : fl_device_group_ibfk_1
      * @param bean the {@link FlDeviceGroupBean}
      * @return the associated {@link FlDeviceGroupBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlDeviceGroupBean getReferencedByParent(FlDeviceGroupBean bean) throws Dao3Exception
+    public FlDeviceGroupBean getReferencedByParent(FlDeviceGroupBean bean) throws DaoException
     {
         if(null == bean){
             return null;
@@ -1084,7 +1084,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @return always beanToSet saved
      * @throws Exception
      */
-    public FlDeviceGroupBean setReferencedByParent(FlDeviceGroupBean bean, FlDeviceGroupBean beanToSet) throws Dao3Exception
+    public FlDeviceGroupBean setReferencedByParent(FlDeviceGroupBean bean, FlDeviceGroupBean beanToSet) throws DaoException
     {
         if(null != bean){
             instanceOfFlDeviceGroupManager().save(beanToSet);
@@ -1109,10 +1109,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      *
      * @param where the sql 'where' clause
      * @return the number of deleted rows
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @Override
-    public int deleteByWhere(String where) throws Dao3Exception
+    public int deleteByWhere(String where) throws DaoException
     {
         if( !this.listenerContainer.isEmpty()){
             final DeleteBeanAction action = new DeleteBeanAction(); 
@@ -1149,7 +1149,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     //13
 
     @Override
-    public FlDeviceGroupBean insert(FlDeviceGroupBean bean) throws Dao3Exception
+    public FlDeviceGroupBean insert(FlDeviceGroupBean bean) throws DaoException
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
@@ -1259,7 +1259,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     //14
 
     @Override
-    public FlDeviceGroupBean update(FlDeviceGroupBean bean) throws Dao3Exception
+    public FlDeviceGroupBean update(FlDeviceGroupBean bean) throws DaoException
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
@@ -1358,7 +1358,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     //18
 
     @Override
-    public FlDeviceGroupBean loadUniqueUsingTemplate(FlDeviceGroupBean bean) throws Dao3Exception
+    public FlDeviceGroupBean loadUniqueUsingTemplate(FlDeviceGroupBean bean) throws DaoException
     {
          List<FlDeviceGroupBean> beans = this.loadUsingTemplateAsList(bean);
          switch(beans.size()){
@@ -1373,7 +1373,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     //18-1
 
     @Override
-    public FlDeviceGroupBean loadUniqueUsingTemplateChecked(FlDeviceGroupBean bean) throws Dao3Exception
+    public FlDeviceGroupBean loadUniqueUsingTemplateChecked(FlDeviceGroupBean bean) throws DaoException
     {
          List<FlDeviceGroupBean> beans = this.loadUsingTemplateAsList(bean);
          switch(beans.size()){
@@ -1388,7 +1388,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     //20-5
 
     @Override
-    public int loadUsingTemplate(FlDeviceGroupBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlDeviceGroupBean> action) throws Dao3Exception
+    public int loadUsingTemplate(FlDeviceGroupBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlDeviceGroupBean> action) throws DaoException
     {
         // System.out.println("loadUsingTemplate startRow:" + startRow + ", numRows:" + numRows + ", searchType:" + searchType);
         StringBuilder sqlWhere = new StringBuilder("");
@@ -1402,7 +1402,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                     ResultSet.CONCUR_READ_ONLY);
             this.fillPreparedStatement(ps, bean, searchType,false);
             return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
-        } catch (Dao3Exception e) {
+        } catch (DaoException e) {
             throw e;
         }catch (SQLException e) {
             throw new DataAccessException(e);
@@ -1415,7 +1415,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     //21
 
     @Override
-    public int deleteUsingTemplate(FlDeviceGroupBean bean) throws Dao3Exception
+    public int deleteUsingTemplate(FlDeviceGroupBean bean) throws DaoException
     {
         if(bean.checkIdInitialized() && null != bean.getId()){
             return this.deleteByPrimaryKey(bean.getId());
@@ -1475,9 +1475,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      *
      * @param parent the parent column's value filter.
      * @return an array of FlDeviceGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlDeviceGroupBean[] loadByIndexParent(Integer parent) throws Dao3Exception
+    public FlDeviceGroupBean[] loadByIndexParent(Integer parent) throws DaoException
     {
         return (FlDeviceGroupBean[])this.loadByIndexParentAsList(parent).toArray(new FlDeviceGroupBean[0]);
     }
@@ -1487,9 +1487,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      *
      * @param parent the parent column's value filter.
      * @return a list of FlDeviceGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlDeviceGroupBean> loadByIndexParentAsList(Integer parent) throws Dao3Exception
+    public List<FlDeviceGroupBean> loadByIndexParentAsList(Integer parent) throws DaoException
     {
         FlDeviceGroupBean bean = this.createBean();
         bean.setParent(parent);
@@ -1500,9 +1500,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      *
      * @param parent the parent column's value filter.
      * @return the number of deleted objects
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public int deleteByIndexParent(Integer parent) throws Dao3Exception
+    public int deleteByIndexParent(Integer parent) throws DaoException
     {
         FlDeviceGroupBean bean = this.createBean();
         bean.setParent(parent);
@@ -1516,10 +1516,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      *        {@link Constant#FL_DEVICE_GROUP_INDEX_PARENT}
      * @param keys key values of index
      * @return a list of FlDeviceGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @Override
-    public List<FlDeviceGroupBean> loadByIndexAsList(int keyIndex,Object ...keys)throws Dao3Exception
+    public List<FlDeviceGroupBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DaoException
     {
         if(null == keys){
             throw new NullPointerException();
@@ -1546,10 +1546,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      *        {@link Constant#FL_DEVICE_GROUP_INDEX_PARENT}
      * @param keys key values of index
      * @return the number of deleted objects
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @Override
-    public int deleteByIndex(int keyIndex,Object ...keys)throws Dao3Exception
+    public int deleteByIndex(int keyIndex,Object ...keys)throws DaoException
     {
         if(null == keys){
             throw new NullPointerException();
@@ -1578,7 +1578,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     /**
      * @see #loadViaPermitAsList(FlDeviceGroupBean,int,int)
      */
-    public List<FlDeviceGroupBean> loadViaPermitAsList(FlPersonGroupBean bean) throws Dao3Exception
+    public List<FlDeviceGroupBean> loadViaPermitAsList(FlPersonGroupBean bean) throws DaoException
     {
          return this.loadViaPermitAsList(bean, 1, -1);
     }
@@ -1592,9 +1592,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return a list of FlDeviceGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlDeviceGroupBean> loadViaPermitAsList(FlPersonGroupBean bean, int startRow, int numRows) throws Dao3Exception
+    public List<FlDeviceGroupBean> loadViaPermitAsList(FlPersonGroupBean bean, int startRow, int numRows) throws DaoException
     {
         if(null == bean || null == bean.getId()){
             return java.util.Arrays.<FlDeviceGroupBean>asList();
@@ -1617,7 +1617,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
         }
         catch (SQLException e)
         {
-            throw new Dao3Exception(e.getMessage(), e);
+            throw new DaoException(e.getMessage(), e);
         }
         finally
         {
@@ -1631,9 +1631,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * add junction between {@link FlDeviceGroupBean} and {@link FlPersonGroupBean} if junction not exists
      * @param bean
      * @param linked
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public void addJunction(FlDeviceGroupBean bean,FlPersonGroupBean linked) throws Dao3Exception{
+    public void addJunction(FlDeviceGroupBean bean,FlPersonGroupBean linked) throws DaoException{
         if(null == bean || null == bean.getId()){
             return ;
         }
@@ -1652,9 +1652,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * remove junction between {@link FlDeviceGroupBean} and {@link FlPersonGroupBean}
      * @param bean
      * @param linked
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public int deleteJunction(FlDeviceGroupBean bean,FlPersonGroupBean linked) throws Dao3Exception{
+    public int deleteJunction(FlDeviceGroupBean bean,FlPersonGroupBean linked) throws DaoException{
         if(null == bean || null == bean.getId()){
             return 0;
         }
@@ -1665,7 +1665,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     }
     //23.4 MANY TO MANY
     /** @see #addJunction(FlDeviceGroupBean,FlPersonGroupBean) */
-    public void addJunction(FlDeviceGroupBean bean,FlPersonGroupBean... linkedBeans) throws Dao3Exception{
+    public void addJunction(FlDeviceGroupBean bean,FlPersonGroupBean... linkedBeans) throws DaoException{
         if(null != linkedBeans){
             for(FlPersonGroupBean linked:linkedBeans){
                 addJunction(bean,linked);
@@ -1674,7 +1674,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     }
     //23.5 MANY TO MANY
     /** @see #addJunction(FlDeviceGroupBean,FlPersonGroupBean) */
-    public void addJunction(FlDeviceGroupBean bean,java.util.Collection<FlPersonGroupBean> linkedBeans) throws Dao3Exception{
+    public void addJunction(FlDeviceGroupBean bean,java.util.Collection<FlPersonGroupBean> linkedBeans) throws DaoException{
         if(null != linkedBeans){
             for(FlPersonGroupBean linked:linkedBeans){
                 addJunction(bean,linked);
@@ -1683,7 +1683,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     }
     //23.6 MANY TO MANY
     /** @see #deleteJunction(FlDeviceGroupBean,FlPersonGroupBean) */
-    public int deleteJunction(FlDeviceGroupBean bean,FlPersonGroupBean... linkedBeans) throws Dao3Exception{
+    public int deleteJunction(FlDeviceGroupBean bean,FlPersonGroupBean... linkedBeans) throws DaoException{
         int count = 0;
         if(null != linkedBeans){
             for(FlPersonGroupBean linked:linkedBeans){
@@ -1694,7 +1694,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     }
     //23.7 MANY TO MANY
     /** @see #deleteJunction(FlDeviceGroupBean,FlPersonGroupBean) */
-    public int deleteJunction(FlDeviceGroupBean bean,java.util.Collection<FlPersonGroupBean> linkedBeans) throws Dao3Exception{
+    public int deleteJunction(FlDeviceGroupBean bean,java.util.Collection<FlPersonGroupBean> linkedBeans) throws DaoException{
         int count = 0;
         if(null != linkedBeans){
             for(FlPersonGroupBean linked:linkedBeans){
@@ -1712,7 +1712,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     //25
 
     @Override
-    public int countWhere(String where) throws Dao3Exception
+    public int countWhere(String where) throws DaoException
     {
         String sql = "SELECT COUNT(*) AS MCOUNT FROM fl_device_group " + where;
         // System.out.println("countWhere: " + sql);
@@ -1752,9 +1752,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      *
      * @param ps the PreparedStatement to be used
      * @return the number of rows returned
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    private int countByPreparedStatement(PreparedStatement ps) throws Dao3Exception
+    private int countByPreparedStatement(PreparedStatement ps) throws DaoException
     {
         ResultSet rs =  null;
         try
@@ -1786,10 +1786,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param bean the FlDeviceGroupBean template to look for
      * @param searchType exact ?  like ? starting like ?
      * @return the number of rows returned
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @Override
-    public int countUsingTemplate(FlDeviceGroupBean bean, int searchType) throws Dao3Exception
+    public int countUsingTemplate(FlDeviceGroupBean bean, int searchType) throws DaoException
     {
         Connection c = null;
         PreparedStatement ps = null;
@@ -1893,9 +1893,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
      * @return the number of clauses returned
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    protected int fillPreparedStatement(PreparedStatement ps, FlDeviceGroupBean bean, int searchType,boolean fillNull) throws Dao3Exception
+    protected int fillPreparedStatement(PreparedStatement ps, FlDeviceGroupBean bean, int searchType,boolean fillNull) throws DaoException
     {
         if (bean == null) {
             return 0;
@@ -1926,7 +1926,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                         if (bean.getName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getName() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
-                        throw new Dao3Exception("Unknown search type " + searchType);
+                        throw new DaoException("Unknown search type " + searchType);
                 }
             }
             if (bean.checkLeafModified()) {
@@ -1960,9 +1960,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the resulting FlDeviceGroupBean table
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlDeviceGroupBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws Dao3Exception
+    public FlDeviceGroupBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DaoException
     {
         return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new FlDeviceGroupBean[0]);
     }
@@ -1976,9 +1976,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the resulting FlDeviceGroupBean table
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlDeviceGroupBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws Dao3Exception
+    public List<FlDeviceGroupBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DaoException
     {
         ListAction action = new ListAction();
         actionOnResultSet(rs, fieldList, numRows, numRows, action);
@@ -1992,10 +1992,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param action interface obj for do something
      * @return the count dealt by action  
-     * @throws Dao3Exception
+     * @throws DaoException
      * @throws IllegalArgumentException
      */
-    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlDeviceGroupBean> action) throws Dao3Exception{
+    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlDeviceGroupBean> action) throws DaoException{
         try{
             int count = 0;
             if(0!=numRows){
@@ -2032,7 +2032,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                 }
             }
             return count;
-        }catch(Dao3Exception e){
+        }catch(DaoException e){
             throw e;
         }catch(SQLException e){
             throw new DataAccessException(e);
@@ -2045,9 +2045,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      *
      * @param rs the ResultSet to be transformed
      * @return bean resulting FlDeviceGroupBean bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlDeviceGroupBean decodeRow(ResultSet rs,FlDeviceGroupBean bean) throws Dao3Exception
+    public FlDeviceGroupBean decodeRow(ResultSet rs,FlDeviceGroupBean bean) throws DaoException
     {
         if(null==bean){
             bean = this.createBean();
@@ -2076,9 +2076,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param rs the ResultSet to be transformed
      * @param fieldList table of the field's associated constants
      * @return bean resulting FlDeviceGroupBean bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlDeviceGroupBean decodeRow(ResultSet rs, int[] fieldList,FlDeviceGroupBean bean) throws Dao3Exception
+    public FlDeviceGroupBean decodeRow(ResultSet rs, int[] fieldList,FlDeviceGroupBean bean) throws DaoException
     {
         if(null==bean){
             bean = this.createBean();
@@ -2107,7 +2107,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                         bean.setParent(Manager.getInteger(rs, pos));
                         break;
                     default:
-                        throw new Dao3Exception("Unknown field id " + fieldList[i]);
+                        throw new DaoException("Unknown field id " + fieldList[i]);
                 }
             }
         }
@@ -2127,9 +2127,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      *
      * @param rs the ResultSet to be transformed
      * @return bean resulting FlDeviceGroupBean bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlDeviceGroupBean metaDataDecodeRow(ResultSet rs) throws Dao3Exception
+    public FlDeviceGroupBean metaDataDecodeRow(ResultSet rs) throws DaoException
     {
         FlDeviceGroupBean bean = this.createBean();
         try
@@ -2160,9 +2160,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      *
      * @param ps the PreparedStatement to be used
      * @return an array of FlDeviceGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlDeviceGroupBean[] loadByPreparedStatement(PreparedStatement ps) throws Dao3Exception
+    public FlDeviceGroupBean[] loadByPreparedStatement(PreparedStatement ps) throws DaoException
     {
         return this.loadByPreparedStatement(ps, null);
     }
@@ -2173,9 +2173,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      *
      * @param ps the PreparedStatement to be used
      * @return an array of FlDeviceGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlDeviceGroupBean> loadByPreparedStatementAsList(PreparedStatement ps) throws Dao3Exception
+    public List<FlDeviceGroupBean> loadByPreparedStatementAsList(PreparedStatement ps) throws DaoException
     {
         return this.loadByPreparedStatementAsList(ps, null);
     }
@@ -2187,9 +2187,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param ps the PreparedStatement to be used
      * @param fieldList table of the field's associated constants
      * @return an array of FlDeviceGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlDeviceGroupBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws Dao3Exception
+    public FlDeviceGroupBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws DaoException
     {
         return this.loadByPreparedStatementAsList(ps, fieldList).toArray(new FlDeviceGroupBean[0]);
     }
@@ -2201,9 +2201,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param ps the PreparedStatement to be used
      * @param fieldList table of the field's associated constants
      * @return an array of FlDeviceGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlDeviceGroupBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws Dao3Exception
+    public List<FlDeviceGroupBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws DaoException
     { 
         return loadByPreparedStatementAsList(ps,fieldList,1,-1);
     }
@@ -2218,9 +2218,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param fieldList table of the field's associated constants
      * @return an array of FlDeviceGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlDeviceGroupBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws Dao3Exception
+    public FlDeviceGroupBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DaoException
     {
         return loadByPreparedStatementAsList(ps,fieldList,startRow,numRows).toArray(new FlDeviceGroupBean[0]);
     }
@@ -2235,9 +2235,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param fieldList table of the field's associated constants
      * @return an array of FlDeviceGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlDeviceGroupBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws Dao3Exception
+    public List<FlDeviceGroupBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DaoException
     {
         ListAction action = new ListAction();
         loadByPreparedStatement(ps,fieldList,startRow,numRows,action);
@@ -2255,16 +2255,16 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param fieldList table of the field's associated constants
      * @param action Action object for do something(not null)
      * @return the count dealt by action
-     * @throws Dao3Exception
+     * @throws DaoException
      */     
-    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlDeviceGroupBean> action) throws Dao3Exception
+    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlDeviceGroupBean> action) throws DaoException
     {
         ResultSet rs =  null;
         try {
             ps.setFetchSize(100);
             rs = ps.executeQuery();
             return this.actionOnResultSet(rs, fieldList, startRow, numRows, action);
-        } catch (Dao3Exception e) {
+        } catch (DaoException e) {
             throw e;
         } catch (SQLException e) {
             throw new DataAccessException(e);
@@ -2301,7 +2301,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     //37
 
     @Override
-    public void fire(TableListener.Event event, FlDeviceGroupBean bean) throws Dao3Exception{
+    public void fire(TableListener.Event event, FlDeviceGroupBean bean) throws DaoException{
         if(null == event){
             throw new NullPointerException();
         }
@@ -2311,7 +2311,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     //37-1
 
     @Override
-    public void fire(int event, FlDeviceGroupBean bean) throws Dao3Exception{
+    public void fire(int event, FlDeviceGroupBean bean) throws DaoException{
         try{
             fire(TableListener.Event.values()[event],bean);
         }catch(ArrayIndexOutOfBoundsException e){
@@ -2323,13 +2323,13 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     private final net.gdface.facelog.dborm.BaseForeignKeyListener<FlDeviceGroupBean,FlDeviceGroupBean> foreignKeyListenerByParent = 
             new net.gdface.facelog.dborm.BaseForeignKeyListener<FlDeviceGroupBean,FlDeviceGroupBean>(){
                 @Override
-                protected List<FlDeviceGroupBean> getImportedBeans(FlDeviceGroupBean bean) throws Dao3Exception {
+                protected List<FlDeviceGroupBean> getImportedBeans(FlDeviceGroupBean bean) throws DaoException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.<FlDeviceGroupBean>emptyList()
                             : instanceOfFlDeviceGroupManager().getDeviceGroupBeansByParentAsList(bean);
                 }
                 @Override
-                protected void onRemove(List<FlDeviceGroupBean> effectBeans) throws Dao3Exception {
+                protected void onRemove(List<FlDeviceGroupBean> effectBeans) throws DaoException {
                     for(FlDeviceGroupBean bean:effectBeans){
                         bean.setParent(null);
                         Event.UPDATE.fire(listenerContainer, bean);
@@ -2386,7 +2386,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     /**
      * Gets the connection.
      */
-    private Connection getConnection() throws Dao3Exception
+    private Connection getConnection() throws DaoException
     {
         try
         {
@@ -2414,9 +2414,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * Fill the given prepared statement with the values in argList
      * @param ps the PreparedStatement that will be filled
      * @param argList the arguments to use fill given prepared statement
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    private void fillPrepareStatement(PreparedStatement ps, Object[] argList) throws Dao3Exception{
+    private void fillPrepareStatement(PreparedStatement ps, Object[] argList) throws DaoException{
         try {
             if (!(argList == null || ps == null)) {
                 for (int i = 0; i < argList.length; i++) {
@@ -2428,13 +2428,13 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                 }
             }
         } catch (SQLException e) {
-            throw new Dao3Exception(e);
+            throw new DaoException(e);
         }
     }
     
     @Override    
 
-    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlDeviceGroupBean> action) throws Dao3Exception{
+    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlDeviceGroupBean> action) throws DaoException{
         PreparedStatement ps = null;
         Connection connection = null;
         // logger.debug("sql string:\n" + sql + "\n");
@@ -2445,7 +2445,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                     ResultSet.CONCUR_READ_ONLY);
             fillPrepareStatement(ps, argList);
             return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
-        } catch (Dao3Exception e) {
+        } catch (DaoException e) {
             throw e;
         }catch (SQLException e) {
             throw new DataAccessException(e);
@@ -2457,14 +2457,14 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
    
     @Override
 
-    public <T>T runAsTransaction(Callable<T> fun) throws Dao3Exception{
+    public <T>T runAsTransaction(Callable<T> fun) throws DaoException{
         return Manager.getInstance().runAsTransaction(fun);
     }
     
     class DeleteBeanAction extends Action.BaseAdapter<FlDeviceGroupBean>{
         private final AtomicInteger count=new AtomicInteger(0);
         @Override
-        public void call(FlDeviceGroupBean bean) throws Dao3Exception {
+        public void call(FlDeviceGroupBean bean) throws DaoException {
                 FlDeviceGroupManager.this.delete(bean);
                 count.incrementAndGet();
         }
@@ -2514,9 +2514,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param id PK# 1 
      * @return  empty list if input primary key is {@code null}<br>
      *         first element equal last if self-reference field is cycle
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public java.util.List<FlDeviceGroupBean> listOfParent(Integer id) throws Dao3Exception{
+    public java.util.List<FlDeviceGroupBean> listOfParent(Integer id) throws DaoException{
         FlDeviceGroupBean parent = (null == id)
             ? null
             : new FlDeviceGroupBean(id);
@@ -2536,7 +2536,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     /**
      * see also {@link #listOfParent(Integer)}
      */
-    public java.util.List<FlDeviceGroupBean> listOfParent(FlDeviceGroupBean bean) throws Dao3Exception{
+    public java.util.List<FlDeviceGroupBean> listOfParent(FlDeviceGroupBean bean) throws DaoException{
         return null == bean
                 ? java.util.Collections.<FlDeviceGroupBean>emptyList()
                 : listOfParent(bean.getId());
@@ -2547,9 +2547,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param id PK# 1 
      * @return  0 if input primary key is {@code null}<br>
      *         -1 if self-reference field is cycle
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public int levelOfParent(Integer id) throws Dao3Exception{
+    public int levelOfParent(Integer id) throws DaoException{
         FlDeviceGroupBean parent = (null == id)
             ? null
             : new FlDeviceGroupBean(id);
@@ -2566,7 +2566,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     /**
      * see also {@link #levelOfParent(Integer)}
      */
-    public int levelOfParent(FlDeviceGroupBean bean) throws Dao3Exception{
+    public int levelOfParent(FlDeviceGroupBean bean) throws DaoException{
         return null == bean
                 ? 0
                 : levelOfParent(bean.getId());
@@ -2575,20 +2575,20 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     /**
      * test whether the self-reference field is cycle : {@code fl_device_group(parent) }
      * @param id PK# 1 
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see #levelOfParent(FlDeviceGroupBean)
      */
-    public boolean isCycleOnParent(Integer id) throws Dao3Exception{
+    public boolean isCycleOnParent(Integer id) throws DaoException{
         return levelOfParent(id) < 0;
     }
     //52
     /**
      * test whether the self-reference field is cycle : {@code fl_device_group(parent) }
      * @param bean
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see #levelOfParent(FlDeviceGroupBean)
      */
-    public boolean isCycleOnParent(FlDeviceGroupBean bean) throws Dao3Exception{
+    public boolean isCycleOnParent(FlDeviceGroupBean bean) throws DaoException{
         return levelOfParent(bean) < 0;
     }
     //53
@@ -2598,9 +2598,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @return top bean
      * @throws NullPointerException if input primary key is {@code null}
      * @throws IllegalStateException if self-reference field is cycle
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlDeviceGroupBean topOfParent(Integer id) throws Dao3Exception{
+    public FlDeviceGroupBean topOfParent(Integer id) throws DaoException{
         if(null == id){
             throw new NullPointerException();
         }
@@ -2617,7 +2617,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     /**
      * see also {@link #topOfParent(Integer)}
      */
-    public FlDeviceGroupBean topOfParent(FlDeviceGroupBean bean) throws Dao3Exception{
+    public FlDeviceGroupBean topOfParent(FlDeviceGroupBean bean) throws DaoException{
         if(null == bean){
             throw new NullPointerException();
         }
@@ -2629,10 +2629,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param id PK# 1
      * @return always {@code id}
      * @throws IllegalStateException if self-reference field is cycle 
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see #isCycleOnParent(Integer)
      */
-    public Integer checkCycleOfParent(Integer id) throws Dao3Exception{
+    public Integer checkCycleOfParent(Integer id) throws DaoException{
         if(isCycleOnParent(id)){
             throw new IllegalStateException("cycle on field: " + "parent");
         }
@@ -2644,10 +2644,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @param bean
      * @return always {@code bean}
      * @throws IllegalStateException if self-reference field is cycle
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see #isCycleOnParent(FlDeviceGroupBean)
      */
-    public FlDeviceGroupBean checkCycleOfParent(FlDeviceGroupBean bean) throws Dao3Exception{
+    public FlDeviceGroupBean checkCycleOfParent(FlDeviceGroupBean bean) throws DaoException{
         if(isCycleOnParent(bean)){
             throw new IllegalStateException("cycle on field: " + "parent");
         }

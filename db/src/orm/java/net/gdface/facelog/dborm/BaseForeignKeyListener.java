@@ -8,7 +8,7 @@
 package net.gdface.facelog.dborm;
 
 import java.util.List;
-import net.gdface.facelog.dborm.exception.Dao3Exception;
+import net.gdface.facelog.dborm.exception.DaoException;
 
 /**
  * abstract implementation of foreign key listener for DEELTE RULE
@@ -23,23 +23,23 @@ public abstract class BaseForeignKeyListener<FB extends BaseBean<FB>,B extends B
      * Retrieves the imported B beans that reference to FB bean <BR>
      * @param fb foreign table bean
      * @return
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    protected abstract List<B> getImportedBeans(FB fb) throws Dao3Exception;
+    protected abstract List<B> getImportedBeans(FB fb) throws DaoException;
     /**
      * do something on foreign table row removed for effected imported beans {@code effectBeans}
      * @param effectBeans effected imported beans
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    protected abstract void onRemove(List<B> effectBeans) throws Dao3Exception;
+    protected abstract void onRemove(List<B> effectBeans) throws DaoException;
     protected final InheritableThreadLocal<List<B>> importedBeans = new InheritableThreadLocal<List<B>>();
     @Override
-    public void beforeDelete(FB bean) throws Dao3Exception{
+    public void beforeDelete(FB bean) throws DaoException{
         this.importedBeans.set(getImportedBeans(bean));
     }
 
     @Override
-    public void afterDelete(FB bean) throws Dao3Exception{
+    public void afterDelete(FB bean) throws DaoException{
         try{
             List<B> beans = this.importedBeans.get();
             if(null != beans){

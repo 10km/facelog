@@ -8,18 +8,18 @@
 package net.gdface.facelog.db.exception;
 
 /**
- * wrap all DAOException threw by native code
+ * wrap all DaoException threw by native code
  *
  * @author guyadong
  */
-public class WrapDAO1Exception extends RuntimeException
+public class WrapDaoException extends RuntimeException
 {
     private static final long serialVersionUID = 2448402307057993837L;
 
     /**
      * contructor
      */
-    public WrapDAO1Exception(Throwable cause)
+    public WrapDaoException(Throwable cause)
     {
         super(cause);
     }

@@ -7,7 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
-import net.gdface.facelog.db.exception.WrapDAO1Exception;
+import net.gdface.facelog.db.exception.WrapDaoException;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_image table.<br>
@@ -132,7 +132,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * FK_NAME : fl_face_ibfk_1 
      * @param md5OfImage String - PK# 1
      * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public FaceBean[] getFaceBeansByImageMd5(String md5OfImage);
     
@@ -150,7 +150,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * FK_NAME:fl_face_ibfk_1
      * @param md5OfImage String - PK# 1
      * @return the associated {@link FaceBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(String md5OfImage);
     //3.2.3 DELETE IMPORTED
@@ -208,7 +208,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * FK_NAME : fl_person_ibfk_2 
      * @param md5OfImage String - PK# 1
      * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public PersonBean[] getPersonBeansByImageMd5(String md5OfImage);
     
@@ -226,7 +226,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * FK_NAME:fl_person_ibfk_2
      * @param md5OfImage String - PK# 1
      * @return the associated {@link PersonBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(String md5OfImage);
     //3.2.3 DELETE IMPORTED
@@ -340,7 +340,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @param bean the {@link ImageBean} object to use
      * @param beanToSet the {@link DeviceBean} object to associate to the {@link ImageBean}
      * @return always beanToSet saved
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      */
     public DeviceBean setReferencedByDeviceId(ImageBean bean, DeviceBean beanToSet);
     //_____________________________________________________________________

@@ -7,7 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
-import net.gdface.facelog.db.exception.WrapDAO1Exception;
+import net.gdface.facelog.db.exception.WrapDaoException;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_person table.<br>
@@ -132,7 +132,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * FK_NAME : fl_feature_ibfk_1 
      * @param idOfPerson Integer - PK# 1
      * @return the associated {@link FeatureBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public FeatureBean[] getFeatureBeansByPersonId(Integer idOfPerson);
     
@@ -150,7 +150,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * FK_NAME:fl_feature_ibfk_1
      * @param idOfPerson Integer - PK# 1
      * @return the associated {@link FeatureBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(Integer idOfPerson);
     //3.2.3 DELETE IMPORTED
@@ -208,7 +208,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * FK_NAME : fl_log_ibfk_1 
      * @param idOfPerson Integer - PK# 1
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public LogBean[] getLogBeansByPersonId(Integer idOfPerson);
     
@@ -226,7 +226,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * FK_NAME:fl_log_ibfk_1
      * @param idOfPerson Integer - PK# 1
      * @return the associated {@link LogBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public java.util.List<LogBean> getLogBeansByPersonIdAsList(Integer idOfPerson);
     //3.2.3 DELETE IMPORTED
@@ -344,7 +344,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @param bean the {@link PersonBean} object to use
      * @param beanToSet the {@link ImageBean} object to associate to the {@link PersonBean}
      * @return always beanToSet saved
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      */
     public ImageBean setReferencedByImageMd5(PersonBean bean, ImageBean beanToSet);
     //5.1 GET REFERENCED VALUE
@@ -363,7 +363,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @param bean the {@link PersonBean} object to use
      * @param beanToSet the {@link PersonGroupBean} object to associate to the {@link PersonBean}
      * @return always beanToSet saved
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      */
     public PersonGroupBean setReferencedByGroupId(PersonBean bean, PersonGroupBean beanToSet);
     //_____________________________________________________________________
@@ -377,7 +377,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * 
      * @param imageMd5 the image_md5 column's value filter
      * @return an PersonBean,otherwise null if not found or exists null in input arguments
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      */
     public PersonBean loadByIndexImageMd5(String imageMd5);
     /**
@@ -387,7 +387,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return an PersonBean
      * @throws NullPointerException exists null in input arguments
      * @throws ObjectRetrievalException if not found
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      */
     public PersonBean loadByIndexImageMd5Checked(String imageMd5)throws ObjectRetrievalException;
     /**
@@ -433,7 +433,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * 
      * @param papersNum the papers_num column's value filter
      * @return an PersonBean,otherwise null if not found or exists null in input arguments
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      */
     public PersonBean loadByIndexPapersNum(String papersNum);
     /**
@@ -443,7 +443,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return an PersonBean
      * @throws NullPointerException exists null in input arguments
      * @throws ObjectRetrievalException if not found
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      */
     public PersonBean loadByIndexPapersNumChecked(String papersNum)throws ObjectRetrievalException;
     /**

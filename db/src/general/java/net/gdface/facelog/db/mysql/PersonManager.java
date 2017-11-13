@@ -20,14 +20,14 @@ import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.exception.WrapDAO1Exception;
+import net.gdface.facelog.db.exception.WrapDaoException;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
-import net.gdface.facelog.dborm.exception.Dao3Exception;
+import net.gdface.facelog.dborm.exception.DaoException;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_person table.<br>
- * all {@link Dao3Exception} be wrapped as {@link WrapDAO1Exception} to throw.<br>
+ * all {@link DaoException} be wrapped as {@link WrapDaoException} to throw.<br>
  * Remarks: 人员基本描述信息<br>
  * @author guyadong
  */
@@ -131,8 +131,8 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
             return this.beanConverter.fromRight(nativeManager.loadByPrimaryKeyChecked(id));
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
             throw new ObjectRetrievalException();
-        }catch(Dao3Exception e){
-            throw new WrapDAO1Exception(e);
+        }catch(DaoException e){
+            throw new WrapDaoException(e);
         }
     }
     //1.2
@@ -191,9 +191,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try{
             return nativeManager.existsPrimaryKey(id);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     //1.6
@@ -220,8 +220,8 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
             return this.nativeManager.checkDuplicate(id);
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
         	throw new ObjectRetrievalException(e);
-        }catch(Dao3Exception e){
-            throw new WrapDAO1Exception(e);
+        }catch(DaoException e){
+            throw new WrapDaoException(e);
         }
     }
     //1.8 override IPersonManager
@@ -268,9 +268,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         {
             return nativeManager.deleteByPrimaryKey(id);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     //2
@@ -281,9 +281,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         {
             return nativeManager.delete(this.beanConverter.toRight(bean));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }   
     }
     //2.1
@@ -490,9 +490,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try {
             return this.dbConverter.getFeatureBeanConverter().fromRight(nativeManager.getFeatureBeansByPersonIdAsList( this.beanConverter.toRight(bean),startRow,numRows));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     //3.3 SET IMPORTED override IPersonManager
@@ -569,9 +569,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try {
             return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getLogBeansByPersonIdAsList( this.beanConverter.toRight(bean),startRow,numRows));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     //3.3 SET IMPORTED override IPersonManager
@@ -838,9 +838,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
             foreignConverter.fromRight(beanToSet,foreignNativeBean);
             return beanToSet;
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -870,9 +870,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
             foreignConverter.fromRight(beanToSet,foreignNativeBean);
             return beanToSet;
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -888,9 +888,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try{
             return this.nativeManager.deleteByWhere(where);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -907,9 +907,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.insert(this.beanConverter.toRight(bean)));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -921,9 +921,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.update(this.beanConverter.toRight(bean)));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -939,9 +939,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
      }
     //18-1
@@ -956,9 +956,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         {
             throw new ObjectRetrievalException();
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
      }
     //20-5
@@ -969,9 +969,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try {
             return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -983,9 +983,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try{
             return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(bean));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -1090,9 +1090,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try{
             return this.nativeManager.deleteByIndexImageMd5(imageMd5);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     
@@ -1191,9 +1191,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try{
             return this.nativeManager.deleteByIndexPapersNum(papersNum);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     
@@ -1213,9 +1213,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadByIndexExpiryDateAsList(expiryDate));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -1227,9 +1227,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try{
             return this.nativeManager.deleteByIndexExpiryDate(expiryDate);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     
@@ -1249,9 +1249,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadByIndexGroupIdAsList(groupId));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -1263,9 +1263,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try{
             return this.nativeManager.deleteByIndexGroupId(groupId);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     
@@ -1282,8 +1282,8 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     {
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadByIndexAsList(keyIndex,keys));
-        }catch(Dao3Exception e){
-            throw new WrapDAO1Exception(e);
+        }catch(DaoException e){
+            throw new WrapDaoException(e);
         }
     }
     
@@ -1299,8 +1299,8 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     {
         try{
             return this.nativeManager.deleteByIndex(keyIndex,keys);
-        }catch(Dao3Exception e){
-            throw new WrapDAO1Exception(e);
+        }catch(DaoException e){
+            throw new WrapDaoException(e);
         }
     }
 
@@ -1316,9 +1316,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try{
             return this.nativeManager.countWhere(where);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -1330,9 +1330,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try{
             return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),searchType);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -1385,9 +1385,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try{
             this.nativeManager.fire(event, this.beanConverter.toRight(bean));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     //37-2
@@ -1420,32 +1420,32 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
             this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.person.FlPersonBean> (){
 
                 @Override
-                public void beforeInsert(net.gdface.facelog.dborm.person.FlPersonBean bean) throws Dao3Exception {
+                public void beforeInsert(net.gdface.facelog.dborm.person.FlPersonBean bean) throws DaoException {
                     listener.beforeInsert(PersonManager.this.beanConverter.fromRight(bean));                
                 }
 
                 @Override
-                public void afterInsert(net.gdface.facelog.dborm.person.FlPersonBean bean) throws Dao3Exception {
+                public void afterInsert(net.gdface.facelog.dborm.person.FlPersonBean bean) throws DaoException {
                     listener.afterInsert(PersonManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeUpdate(net.gdface.facelog.dborm.person.FlPersonBean bean) throws Dao3Exception {
+                public void beforeUpdate(net.gdface.facelog.dborm.person.FlPersonBean bean) throws DaoException {
                     listener.beforeUpdate(PersonManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterUpdate(net.gdface.facelog.dborm.person.FlPersonBean bean) throws Dao3Exception {
+                public void afterUpdate(net.gdface.facelog.dborm.person.FlPersonBean bean) throws DaoException {
                     listener.afterUpdate(PersonManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeDelete(net.gdface.facelog.dborm.person.FlPersonBean bean) throws Dao3Exception {
+                public void beforeDelete(net.gdface.facelog.dborm.person.FlPersonBean bean) throws DaoException {
                     listener.beforeDelete(PersonManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterDelete(net.gdface.facelog.dborm.person.FlPersonBean bean) throws Dao3Exception {
+                public void afterDelete(net.gdface.facelog.dborm.person.FlPersonBean bean) throws DaoException {
                     listener.afterDelete(PersonManager.this.beanConverter.fromRight(bean));
                 }};
         }
@@ -1498,9 +1498,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try{
             return this.nativeManager.loadBySqlForAction(sql,argList,fieldList,startRow,numRows,this.toNative(action));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     
@@ -1509,9 +1509,9 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         try{
             return this.nativeManager.runAsTransaction(fun);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     

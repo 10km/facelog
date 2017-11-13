@@ -7,7 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
-import net.gdface.facelog.db.exception.WrapDAO1Exception;
+import net.gdface.facelog.db.exception.WrapDaoException;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_feature table.<br>
@@ -132,7 +132,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * FK_NAME : fl_face_ibfk_2 
      * @param md5OfFeature String - PK# 1
      * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public FaceBean[] getFaceBeansByFeatureMd5(String md5OfFeature);
     
@@ -150,7 +150,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * FK_NAME:fl_face_ibfk_2
      * @param md5OfFeature String - PK# 1
      * @return the associated {@link FaceBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(String md5OfFeature);
     //3.2.3 DELETE IMPORTED
@@ -208,7 +208,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * FK_NAME : fl_log_ibfk_3 
      * @param md5OfFeature String - PK# 1
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public LogBean[] getLogBeansByVerifyFeature(String md5OfFeature);
     
@@ -226,7 +226,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * FK_NAME:fl_log_ibfk_3
      * @param md5OfFeature String - PK# 1
      * @return the associated {@link LogBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(String md5OfFeature);
     //3.2.3 DELETE IMPORTED
@@ -340,7 +340,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param bean the {@link FeatureBean} object to use
      * @param beanToSet the {@link PersonBean} object to associate to the {@link FeatureBean}
      * @return always beanToSet saved
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      */
     public PersonBean setReferencedByPersonId(FeatureBean bean, PersonBean beanToSet);
     //_____________________________________________________________________

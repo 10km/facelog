@@ -10,7 +10,7 @@ package net.gdface.facelog.dborm.exception;
 /**
  * @author sql2java
  */
-public class DataAccessException extends Dao3Exception
+public class DataAccessException extends DaoException
 {
     private static final long serialVersionUID = 5584785072347143333L;
 

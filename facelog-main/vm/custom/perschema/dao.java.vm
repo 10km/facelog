@@ -22,7 +22,7 @@ import ${schemaPkg}.${e.asManagerInterfaceNSP()};
 import ${schemaPkg}.${e.asBeanClassNSP()};' '')
 
 import ${schemaPkg}.exception.ObjectRetrievalException;
-import ${schemaPkg}.exception.WrapDAOException;
+import ${schemaPkg}.exception.WrapDaoException;
 
 /**
  * 数据库访问基础方法
@@ -32,7 +32,7 @@ import ${schemaPkg}.exception.WrapDAOException;
 class Dao implements CommonConstant {
     #join($tables '
     static final $e.asManagerInterfaceNSP() $e.getGetManagerMethod()(){
-        return TableManagerInitializer.instance.${e.asVarManager()};
+        return TableManagerInitializer.INSTANCE.${e.asVarManager()};
     }' '')
 
 #macro(defineMethod $table $onlyAdd)
@@ -328,7 +328,7 @@ class Dao implements CommonConstant {
                 $beanClass bean = new $beanClass(DEFAULT_GROUP_ID);
                 bean.setName(DEFAULT_GROUP_NAME);
                 daoSave${coreClass}(bean);
-            }catch(WrapDAOException e){}
+            }catch(WrapDaoException e){}
             if(!daoExists${coreClass}(DEFAULT_GROUP_ID)){
                 throw new IllegalStateException("can't create default group for ${table.getBasename(true)}"); 
             }

@@ -20,7 +20,7 @@ import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.Manager;
 import net.gdface.facelog.dborm.TableListener;
 import net.gdface.facelog.dborm.TableManager;
-import net.gdface.facelog.dborm.exception.Dao3Exception;
+import net.gdface.facelog.dborm.exception.DaoException;
 import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.DataRetrievalException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
@@ -119,9 +119,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      *
      * @param id Integer - PK# 1
      * @return a unique FlPersonGroupBean or {@code null} if not found or have null argument
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPersonGroupBean loadByPrimaryKey(Integer id) throws Dao3Exception
+    public FlPersonGroupBean loadByPrimaryKey(Integer id) throws DaoException
     {
         try{
             return loadByPrimaryKeyChecked(id);
@@ -138,10 +138,10 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param id Integer - PK# 1
      * @return a unique FlPersonGroupBean
      * @throws ObjectRetrievalException if not found
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unused")
-    public FlPersonGroupBean loadByPrimaryKeyChecked(Integer id) throws Dao3Exception
+    public FlPersonGroupBean loadByPrimaryKeyChecked(Integer id) throws DaoException
     {
         if(null == id){
             throw new ObjectRetrievalException(new NullPointerException());
@@ -182,7 +182,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     //1.2
     
     @Override
-    public FlPersonGroupBean loadByPrimaryKey(FlPersonGroupBean bean) throws Dao3Exception
+    public FlPersonGroupBean loadByPrimaryKey(FlPersonGroupBean bean) throws DaoException
     {
         return bean==null?null:loadByPrimaryKey(bean.getId());
     }
@@ -190,7 +190,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     //1.2.2
     
     @Override
-    public FlPersonGroupBean loadByPrimaryKeyChecked(FlPersonGroupBean bean) throws Dao3Exception
+    public FlPersonGroupBean loadByPrimaryKeyChecked(FlPersonGroupBean bean) throws DaoException
     {
         if(null == bean){
             throw new NullPointerException();
@@ -206,7 +206,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @see {@link #loadByPrimaryKey(Integer id)}
      */
     @Override
-    public FlPersonGroupBean loadByPrimaryKey(Object ...keys) throws Dao3Exception{
+    public FlPersonGroupBean loadByPrimaryKey(Object ...keys) throws DaoException{
         if(null == keys){
             throw new NullPointerException();
         }
@@ -222,7 +222,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     //1.3.2
 
     @Override
-    public FlPersonGroupBean loadByPrimaryKeyChecked(Object ...keys) throws Dao3Exception{
+    public FlPersonGroupBean loadByPrimaryKeyChecked(Object ...keys) throws DaoException{
         if(null == keys){
             throw new NullPointerException();
         }
@@ -239,10 +239,10 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     /**
      * Returns true if this fl_person_group contains row with primary key fields.
      * @param id Integer - PK# 1
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unused")
-    public boolean existsPrimaryKey(Integer id) throws Dao3Exception
+    public boolean existsPrimaryKey(Integer id) throws DaoException
     {
         if(null == id){
             return false;
@@ -269,12 +269,12 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     /**
      * Return true if this fl_person_group contains row with primary key fields.
      * @param bean  
-     * @throws Dao3Exception
+     * @throws DaoException
      * @return false if primary kes has null
      * @see #countUsingTemplate(FlPersonGroupBean)
      */
     @Override
-    public boolean existsByPrimaryKey(FlPersonGroupBean bean) throws Dao3Exception
+    public boolean existsByPrimaryKey(FlPersonGroupBean bean) throws DaoException
     {
         if(null == bean  || null == bean.getId()){
             return false;
@@ -290,7 +290,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     //1.7
 
     @Override
-    public FlPersonGroupBean checkDuplicate(FlPersonGroupBean bean) throws Dao3Exception{
+    public FlPersonGroupBean checkDuplicate(FlPersonGroupBean bean) throws DaoException{
         if(!existsByPrimaryKey(bean)){
             throw new ObjectRetrievalException("Duplicate entry ("+ bean.getId() +") for key 'PRIMARY'");
         }
@@ -300,10 +300,10 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     /**
      * Check duplicated row by primary keys,if row exists throw {@link ObjectRetrievalException}
      * @param id Integer
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see #existsPrimaryKey(Integer id)
      */
-    public Integer checkDuplicate(Integer id) throws Dao3Exception
+    public Integer checkDuplicate(Integer id) throws DaoException
     {
         if(existsPrimaryKey(id)){
             throw new ObjectRetrievalException("Duplicate entry '"+ id +"' for key 'PRIMARY'");
@@ -317,10 +317,10 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * 
      * @param id Integer - PK# 1
      * @return the number of deleted rows
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see {@link #delete(FlPersonGroupBean)}
      */
-    public int deleteByPrimaryKey(Integer id) throws Dao3Exception
+    public int deleteByPrimaryKey(Integer id) throws DaoException
     {
         FlPersonGroupBean bean=createBean();
         bean.setId(id);
@@ -333,10 +333,10 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * 
      * @param bean will be deleted ,all keys must not be null
      * @return the number of deleted rows,0 returned if bean is null
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @Override
-    public int delete(FlPersonGroupBean bean) throws Dao3Exception
+    public int delete(FlPersonGroupBean bean) throws DaoException
     {
         if(null == bean  || null == bean.getId()){
             return 0;
@@ -381,7 +381,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @see {@link #delete(FlPersonGroupBean)}
      */   
     @Override
-    public int deleteByPrimaryKey(Object ...keys) throws Dao3Exception{
+    public int deleteByPrimaryKey(Object ...keys) throws DaoException{
         if(null == keys){
             throw new NullPointerException();
         }
@@ -408,7 +408,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] getImportedBeans(FlPersonGroupBean bean, int ikIndex) throws Dao3Exception {
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] getImportedBeans(FlPersonGroupBean bean, int ikIndex) throws DaoException {
         return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(IMPORTED_BEAN_TYPES[ikIndex],0));
     }
     
@@ -423,11 +423,11 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param bean the {@link FlPersonGroupBean} object to use
      * @param ikIndex valid values: {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID},{@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID},{@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>> List<T> getImportedBeansAsList(FlPersonGroupBean bean,int ikIndex)throws Dao3Exception{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> List<T> getImportedBeansAsList(FlPersonGroupBean bean,int ikIndex)throws DaoException{
         switch(ikIndex){
         case FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID:
             return (List<T>)this.getPermitBeansByPersonGroupIdAsList(bean);
@@ -447,11 +447,11 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param importedBeans the FlPersonGroupBean array to associate to the {@link FlPersonGroupBean}
      * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlPersonGroupBean,int)}
      * @return importedBeans always
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] setImportedBeans(FlPersonGroupBean bean,T[] importedBeans,int ikIndex)throws Dao3Exception{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] setImportedBeans(FlPersonGroupBean bean,T[] importedBeans,int ikIndex)throws DaoException{
         switch(ikIndex){
         case FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID:
             return (T[])setPermitBeansByPersonGroupId(bean,(FlPermitBean[])importedBeans);
@@ -471,11 +471,11 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlPersonGroupBean,int)}
 
      * @return importedBeans always
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>,C extends java.util.Collection<T>> C setImportedBeans(FlPersonGroupBean bean,C importedBeans,int ikIndex)throws Dao3Exception{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>,C extends java.util.Collection<T>> C setImportedBeans(FlPersonGroupBean bean,C importedBeans,int ikIndex)throws DaoException{
         switch(ikIndex){
         case FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID:
             return (C)setPermitBeansByPersonGroupId(bean,(java.util.Collection<FlPermitBean>)importedBeans);
@@ -497,9 +497,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * FK_NAME : fl_permit_ibfk_2 
      * @param bean the {@link FlPersonGroupBean}
      * @return the associated {@link FlPermitBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPermitBean[] getPermitBeansByPersonGroupId(FlPersonGroupBean bean) throws Dao3Exception
+    public FlPermitBean[] getPermitBeansByPersonGroupId(FlPersonGroupBean bean) throws DaoException
     {
         return getPermitBeansByPersonGroupIdAsList(bean).toArray(new FlPermitBean[0]);
     }
@@ -509,9 +509,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * FK_NAME : fl_permit_ibfk_2 
      * @param id Integer - PK# 1
      * @return the associated {@link FlPermitBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPermitBean[] getPermitBeansByPersonGroupId(Integer idOfPersonGroup) throws Dao3Exception
+    public FlPermitBean[] getPermitBeansByPersonGroupId(Integer idOfPersonGroup) throws DaoException
     {
         FlPersonGroupBean bean = createBean();
         bean.setId(idOfPersonGroup);
@@ -523,9 +523,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * FK_NAME:fl_permit_ibfk_2
      * @param bean the {@link FlPersonGroupBean}
      * @return the associated {@link FlPermitBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlPermitBean> getPermitBeansByPersonGroupIdAsList(FlPersonGroupBean bean) throws Dao3Exception
+    public List<FlPermitBean> getPermitBeansByPersonGroupIdAsList(FlPersonGroupBean bean) throws DaoException
     {
         return getPermitBeansByPersonGroupIdAsList(bean,1,-1);
     }
@@ -535,9 +535,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * FK_NAME:fl_permit_ibfk_2
      * @param id Integer - PK# 1
      * @return the associated {@link FlPermitBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlPermitBean> getPermitBeansByPersonGroupIdAsList(Integer idOfPersonGroup) throws Dao3Exception
+    public List<FlPermitBean> getPermitBeansByPersonGroupIdAsList(Integer idOfPersonGroup) throws DaoException
     {
          FlPersonGroupBean bean = createBean();
         bean.setId(idOfPersonGroup);
@@ -552,9 +552,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link FlPermitBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlPermitBean> getPermitBeansByPersonGroupIdAsList(FlPersonGroupBean bean,int startRow, int numRows) throws Dao3Exception
+    public List<FlPermitBean> getPermitBeansByPersonGroupIdAsList(FlPersonGroupBean bean,int startRow, int numRows) throws DaoException
     {
         if(null == bean){
             return new java.util.ArrayList<FlPermitBean>();
@@ -570,10 +570,10 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param bean the referenced {@link FlPersonGroupBean}
      * @param importedBeans imported beans from fl_permit
      * @return importedBeans always
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see {@link FlPermitManager#setReferencedByPersonGroupId(FlPermitBean, FlPersonGroupBean)
      */
-    public FlPermitBean[] setPermitBeansByPersonGroupId(FlPersonGroupBean bean , FlPermitBean[] importedBeans) throws Dao3Exception
+    public FlPermitBean[] setPermitBeansByPersonGroupId(FlPersonGroupBean bean , FlPermitBean[] importedBeans) throws DaoException
     {
         if(null != importedBeans){
             for( FlPermitBean importBean : importedBeans ){
@@ -590,10 +590,10 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param bean the referenced {@link FlPersonGroupBean} 
      * @param importedBeans imported beans from fl_permit 
      * @return importedBeans always
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see {@link FlPermitManager#setReferencedByPersonGroupId(FlPermitBean, FlPersonGroupBean)
      */
-    public <C extends java.util.Collection<FlPermitBean>> C setPermitBeansByPersonGroupId(FlPersonGroupBean bean , C importedBeans) throws Dao3Exception
+    public <C extends java.util.Collection<FlPermitBean>> C setPermitBeansByPersonGroupId(FlPersonGroupBean bean , C importedBeans) throws DaoException
     {
         if(null != importedBeans){
             for( FlPermitBean importBean : importedBeans ){
@@ -609,9 +609,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * FK_NAME : fl_person_ibfk_1 
      * @param bean the {@link FlPersonGroupBean}
      * @return the associated {@link FlPersonBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPersonBean[] getPersonBeansByGroupId(FlPersonGroupBean bean) throws Dao3Exception
+    public FlPersonBean[] getPersonBeansByGroupId(FlPersonGroupBean bean) throws DaoException
     {
         return getPersonBeansByGroupIdAsList(bean).toArray(new FlPersonBean[0]);
     }
@@ -621,9 +621,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * FK_NAME : fl_person_ibfk_1 
      * @param id Integer - PK# 1
      * @return the associated {@link FlPersonBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPersonBean[] getPersonBeansByGroupId(Integer idOfPersonGroup) throws Dao3Exception
+    public FlPersonBean[] getPersonBeansByGroupId(Integer idOfPersonGroup) throws DaoException
     {
         FlPersonGroupBean bean = createBean();
         bean.setId(idOfPersonGroup);
@@ -635,9 +635,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * FK_NAME:fl_person_ibfk_1
      * @param bean the {@link FlPersonGroupBean}
      * @return the associated {@link FlPersonBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlPersonBean> getPersonBeansByGroupIdAsList(FlPersonGroupBean bean) throws Dao3Exception
+    public List<FlPersonBean> getPersonBeansByGroupIdAsList(FlPersonGroupBean bean) throws DaoException
     {
         return getPersonBeansByGroupIdAsList(bean,1,-1);
     }
@@ -647,9 +647,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * FK_NAME:fl_person_ibfk_1
      * @param id Integer - PK# 1
      * @return the associated {@link FlPersonBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlPersonBean> getPersonBeansByGroupIdAsList(Integer idOfPersonGroup) throws Dao3Exception
+    public List<FlPersonBean> getPersonBeansByGroupIdAsList(Integer idOfPersonGroup) throws DaoException
     {
          FlPersonGroupBean bean = createBean();
         bean.setId(idOfPersonGroup);
@@ -664,9 +664,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link FlPersonBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlPersonBean> getPersonBeansByGroupIdAsList(FlPersonGroupBean bean,int startRow, int numRows) throws Dao3Exception
+    public List<FlPersonBean> getPersonBeansByGroupIdAsList(FlPersonGroupBean bean,int startRow, int numRows) throws DaoException
     {
         if(null == bean){
             return new java.util.ArrayList<FlPersonBean>();
@@ -682,10 +682,10 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param bean the referenced {@link FlPersonGroupBean}
      * @param importedBeans imported beans from fl_person
      * @return importedBeans always
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see {@link FlPersonManager#setReferencedByGroupId(FlPersonBean, FlPersonGroupBean)
      */
-    public FlPersonBean[] setPersonBeansByGroupId(FlPersonGroupBean bean , FlPersonBean[] importedBeans) throws Dao3Exception
+    public FlPersonBean[] setPersonBeansByGroupId(FlPersonGroupBean bean , FlPersonBean[] importedBeans) throws DaoException
     {
         if(null != importedBeans){
             for( FlPersonBean importBean : importedBeans ){
@@ -702,10 +702,10 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param bean the referenced {@link FlPersonGroupBean} 
      * @param importedBeans imported beans from fl_person 
      * @return importedBeans always
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see {@link FlPersonManager#setReferencedByGroupId(FlPersonBean, FlPersonGroupBean)
      */
-    public <C extends java.util.Collection<FlPersonBean>> C setPersonBeansByGroupId(FlPersonGroupBean bean , C importedBeans) throws Dao3Exception
+    public <C extends java.util.Collection<FlPersonBean>> C setPersonBeansByGroupId(FlPersonGroupBean bean , C importedBeans) throws DaoException
     {
         if(null != importedBeans){
             for( FlPersonBean importBean : importedBeans ){
@@ -721,9 +721,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * FK_NAME : fl_person_group_ibfk_1 
      * @param bean the {@link FlPersonGroupBean}
      * @return the associated {@link FlPersonGroupBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPersonGroupBean[] getPersonGroupBeansByParent(FlPersonGroupBean bean) throws Dao3Exception
+    public FlPersonGroupBean[] getPersonGroupBeansByParent(FlPersonGroupBean bean) throws DaoException
     {
         return getPersonGroupBeansByParentAsList(bean).toArray(new FlPersonGroupBean[0]);
     }
@@ -733,9 +733,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * FK_NAME : fl_person_group_ibfk_1 
      * @param id Integer - PK# 1
      * @return the associated {@link FlPersonGroupBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPersonGroupBean[] getPersonGroupBeansByParent(Integer idOfPersonGroup) throws Dao3Exception
+    public FlPersonGroupBean[] getPersonGroupBeansByParent(Integer idOfPersonGroup) throws DaoException
     {
         FlPersonGroupBean bean = createBean();
         bean.setId(idOfPersonGroup);
@@ -747,9 +747,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * FK_NAME:fl_person_group_ibfk_1
      * @param bean the {@link FlPersonGroupBean}
      * @return the associated {@link FlPersonGroupBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlPersonGroupBean> getPersonGroupBeansByParentAsList(FlPersonGroupBean bean) throws Dao3Exception
+    public List<FlPersonGroupBean> getPersonGroupBeansByParentAsList(FlPersonGroupBean bean) throws DaoException
     {
         return getPersonGroupBeansByParentAsList(bean,1,-1);
     }
@@ -759,9 +759,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * FK_NAME:fl_person_group_ibfk_1
      * @param id Integer - PK# 1
      * @return the associated {@link FlPersonGroupBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlPersonGroupBean> getPersonGroupBeansByParentAsList(Integer idOfPersonGroup) throws Dao3Exception
+    public List<FlPersonGroupBean> getPersonGroupBeansByParentAsList(Integer idOfPersonGroup) throws DaoException
     {
          FlPersonGroupBean bean = createBean();
         bean.setId(idOfPersonGroup);
@@ -776,9 +776,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link FlPersonGroupBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlPersonGroupBean> getPersonGroupBeansByParentAsList(FlPersonGroupBean bean,int startRow, int numRows) throws Dao3Exception
+    public List<FlPersonGroupBean> getPersonGroupBeansByParentAsList(FlPersonGroupBean bean,int startRow, int numRows) throws DaoException
     {
         if(null == bean){
             return new java.util.ArrayList<FlPersonGroupBean>();
@@ -794,10 +794,10 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param bean the referenced {@link FlPersonGroupBean}
      * @param importedBeans imported beans from fl_person_group
      * @return importedBeans always
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see {@link FlPersonGroupManager#setReferencedByParent(FlPersonGroupBean, FlPersonGroupBean)
      */
-    public FlPersonGroupBean[] setPersonGroupBeansByParent(FlPersonGroupBean bean , FlPersonGroupBean[] importedBeans) throws Dao3Exception
+    public FlPersonGroupBean[] setPersonGroupBeansByParent(FlPersonGroupBean bean , FlPersonGroupBean[] importedBeans) throws DaoException
     {
         if(null != importedBeans){
             for( FlPersonGroupBean importBean : importedBeans ){
@@ -814,10 +814,10 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param bean the referenced {@link FlPersonGroupBean} 
      * @param importedBeans imported beans from fl_person_group 
      * @return importedBeans always
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see {@link FlPersonGroupManager#setReferencedByParent(FlPersonGroupBean, FlPersonGroupBean)
      */
-    public <C extends java.util.Collection<FlPersonGroupBean>> C setPersonGroupBeansByParent(FlPersonGroupBean bean , C importedBeans) throws Dao3Exception
+    public <C extends java.util.Collection<FlPersonGroupBean>> C setPersonGroupBeansByParent(FlPersonGroupBean bean , C importedBeans) throws DaoException
     {
         if(null != importedBeans){
             for( FlPersonGroupBean importBean : importedBeans ){
@@ -837,11 +837,11 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param impPersonByGroupId the {@link FlPersonBean} beans refer to {@link FlPersonGroupBean} 
      * @param impPersongroupByParent the {@link FlPersonGroupBean} beans refer to {@link FlPersonGroupBean} 
      * @return the inserted or updated {@link FlPersonGroupBean} bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public FlPersonGroupBean save(FlPersonGroupBean bean
         , FlPersonGroupBean refPersongroupByParent 
-        , FlPermitBean[] impPermitByPersonGroupId , FlPersonBean[] impPersonByGroupId , FlPersonGroupBean[] impPersongroupByParent ) throws Dao3Exception
+        , FlPermitBean[] impPermitByPersonGroupId , FlPersonBean[] impPersonByGroupId , FlPersonGroupBean[] impPersongroupByParent ) throws DaoException
     {
         if(null == bean) {
             return null;
@@ -866,7 +866,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      */
     public FlPersonGroupBean saveAsTransaction(final FlPersonGroupBean bean
         ,final FlPersonGroupBean refPersongroupByParent 
-        ,final FlPermitBean[] impPermitByPersonGroupId ,final FlPersonBean[] impPersonByGroupId ,final FlPersonGroupBean[] impPersongroupByParent ) throws Dao3Exception
+        ,final FlPermitBean[] impPermitByPersonGroupId ,final FlPersonBean[] impPersonByGroupId ,final FlPersonGroupBean[] impPersongroupByParent ) throws DaoException
     {
         return this.runAsTransaction(new Callable<FlPersonGroupBean>(){
             @Override
@@ -884,11 +884,11 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param impPersonByGroupId the {@link FlPersonBean} bean refer to {@link FlPersonGroupBean} 
      * @param impPersongroupByParent the {@link FlPersonGroupBean} bean refer to {@link FlPersonGroupBean} 
      * @return the inserted or updated {@link FlPersonGroupBean} bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public FlPersonGroupBean save(FlPersonGroupBean bean
         , FlPersonGroupBean refPersongroupByParent 
-        , java.util.Collection<FlPermitBean> impPermitByPersonGroupId , java.util.Collection<FlPersonBean> impPersonByGroupId , java.util.Collection<FlPersonGroupBean> impPersongroupByParent ) throws Dao3Exception
+        , java.util.Collection<FlPermitBean> impPermitByPersonGroupId , java.util.Collection<FlPersonBean> impPersonByGroupId , java.util.Collection<FlPersonGroupBean> impPersongroupByParent ) throws DaoException
     {
         if(null == bean) {
             return null;
@@ -911,7 +911,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      */
     public FlPersonGroupBean saveAsTransaction(final FlPersonGroupBean bean
         ,final FlPersonGroupBean refPersongroupByParent 
-        ,final  java.util.Collection<FlPermitBean> impPermitByPersonGroupId ,final  java.util.Collection<FlPersonBean> impPersonByGroupId ,final  java.util.Collection<FlPersonGroupBean> impPersongroupByParent ) throws Dao3Exception
+        ,final  java.util.Collection<FlPermitBean> impPermitByPersonGroupId ,final  java.util.Collection<FlPersonBean> impPersonByGroupId ,final  java.util.Collection<FlPersonGroupBean> impPersongroupByParent ) throws DaoException
     {
         return this.runAsTransaction(new Callable<FlPersonGroupBean>(){
             @Override
@@ -933,10 +933,10 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param args referenced beans or imported beans<br>
      *      see also {@link #save(FlPersonGroupBean , FlPersonGroupBean , FlPermitBean[] , FlPersonBean[] , FlPersonGroupBean[] )}
      * @return the inserted or updated {@link FlPersonGroupBean} bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @Override
-    public FlPersonGroupBean save(FlPersonGroupBean bean,Object ...inputs) throws Dao3Exception
+    public FlPersonGroupBean save(FlPersonGroupBean bean,Object ...inputs) throws DaoException
     {
         if(null == inputs){
             return save(bean);
@@ -973,11 +973,11 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param args referenced beans or imported beans<br>
      *      see also {@link #save(FlPersonGroupBean , FlPersonGroupBean , java.util.Collection , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link FlPersonGroupBean} bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public FlPersonGroupBean saveCollection(FlPersonGroupBean bean,Object ...inputs) throws Dao3Exception
+    public FlPersonGroupBean saveCollection(FlPersonGroupBean bean,Object ...inputs) throws DaoException
     {
         if(null == inputs){
             return save(bean);
@@ -1019,11 +1019,11 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_PERSON_GROUP_FK_PARENT}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T getReferencedBean(FlPersonGroupBean bean,int fkIndex)throws Dao3Exception{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T getReferencedBean(FlPersonGroupBean bean,int fkIndex)throws DaoException{
         switch(fkIndex){
         case FL_PERSON_GROUP_FK_PARENT:
             return  (T)this.getReferencedByParent(bean);
@@ -1040,11 +1040,11 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param beanToSet the <T> object to associate to the {@link FlPersonGroupBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(FlPersonGroupBean,int)}
      * @return always beanToSet saved
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T setReferencedBean(FlPersonGroupBean bean,T beanToSet,int fkIndex)throws Dao3Exception{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T setReferencedBean(FlPersonGroupBean bean,T beanToSet,int fkIndex)throws DaoException{
         switch(fkIndex){
         case FL_PERSON_GROUP_FK_PARENT:
             return  (T)this.setReferencedByParent(bean, (FlPersonGroupBean)beanToSet);
@@ -1064,9 +1064,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * FK_NAME : fl_person_group_ibfk_1
      * @param bean the {@link FlPersonGroupBean}
      * @return the associated {@link FlPersonGroupBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPersonGroupBean getReferencedByParent(FlPersonGroupBean bean) throws Dao3Exception
+    public FlPersonGroupBean getReferencedByParent(FlPersonGroupBean bean) throws DaoException
     {
         if(null == bean){
             return null;
@@ -1084,7 +1084,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @return always beanToSet saved
      * @throws Exception
      */
-    public FlPersonGroupBean setReferencedByParent(FlPersonGroupBean bean, FlPersonGroupBean beanToSet) throws Dao3Exception
+    public FlPersonGroupBean setReferencedByParent(FlPersonGroupBean bean, FlPersonGroupBean beanToSet) throws DaoException
     {
         if(null != bean){
             instanceOfFlPersonGroupManager().save(beanToSet);
@@ -1109,10 +1109,10 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      *
      * @param where the sql 'where' clause
      * @return the number of deleted rows
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @Override
-    public int deleteByWhere(String where) throws Dao3Exception
+    public int deleteByWhere(String where) throws DaoException
     {
         if( !this.listenerContainer.isEmpty()){
             final DeleteBeanAction action = new DeleteBeanAction(); 
@@ -1149,7 +1149,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     //13
 
     @Override
-    public FlPersonGroupBean insert(FlPersonGroupBean bean) throws Dao3Exception
+    public FlPersonGroupBean insert(FlPersonGroupBean bean) throws DaoException
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
@@ -1259,7 +1259,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     //14
 
     @Override
-    public FlPersonGroupBean update(FlPersonGroupBean bean) throws Dao3Exception
+    public FlPersonGroupBean update(FlPersonGroupBean bean) throws DaoException
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
@@ -1358,7 +1358,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     //18
 
     @Override
-    public FlPersonGroupBean loadUniqueUsingTemplate(FlPersonGroupBean bean) throws Dao3Exception
+    public FlPersonGroupBean loadUniqueUsingTemplate(FlPersonGroupBean bean) throws DaoException
     {
          List<FlPersonGroupBean> beans = this.loadUsingTemplateAsList(bean);
          switch(beans.size()){
@@ -1373,7 +1373,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     //18-1
 
     @Override
-    public FlPersonGroupBean loadUniqueUsingTemplateChecked(FlPersonGroupBean bean) throws Dao3Exception
+    public FlPersonGroupBean loadUniqueUsingTemplateChecked(FlPersonGroupBean bean) throws DaoException
     {
          List<FlPersonGroupBean> beans = this.loadUsingTemplateAsList(bean);
          switch(beans.size()){
@@ -1388,7 +1388,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     //20-5
 
     @Override
-    public int loadUsingTemplate(FlPersonGroupBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlPersonGroupBean> action) throws Dao3Exception
+    public int loadUsingTemplate(FlPersonGroupBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlPersonGroupBean> action) throws DaoException
     {
         // System.out.println("loadUsingTemplate startRow:" + startRow + ", numRows:" + numRows + ", searchType:" + searchType);
         StringBuilder sqlWhere = new StringBuilder("");
@@ -1402,7 +1402,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
                     ResultSet.CONCUR_READ_ONLY);
             this.fillPreparedStatement(ps, bean, searchType,false);
             return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
-        } catch (Dao3Exception e) {
+        } catch (DaoException e) {
             throw e;
         }catch (SQLException e) {
             throw new DataAccessException(e);
@@ -1415,7 +1415,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     //21
 
     @Override
-    public int deleteUsingTemplate(FlPersonGroupBean bean) throws Dao3Exception
+    public int deleteUsingTemplate(FlPersonGroupBean bean) throws DaoException
     {
         if(bean.checkIdInitialized() && null != bean.getId()){
             return this.deleteByPrimaryKey(bean.getId());
@@ -1475,9 +1475,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      *
      * @param parent the parent column's value filter.
      * @return an array of FlPersonGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPersonGroupBean[] loadByIndexParent(Integer parent) throws Dao3Exception
+    public FlPersonGroupBean[] loadByIndexParent(Integer parent) throws DaoException
     {
         return (FlPersonGroupBean[])this.loadByIndexParentAsList(parent).toArray(new FlPersonGroupBean[0]);
     }
@@ -1487,9 +1487,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      *
      * @param parent the parent column's value filter.
      * @return a list of FlPersonGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlPersonGroupBean> loadByIndexParentAsList(Integer parent) throws Dao3Exception
+    public List<FlPersonGroupBean> loadByIndexParentAsList(Integer parent) throws DaoException
     {
         FlPersonGroupBean bean = this.createBean();
         bean.setParent(parent);
@@ -1500,9 +1500,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      *
      * @param parent the parent column's value filter.
      * @return the number of deleted objects
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public int deleteByIndexParent(Integer parent) throws Dao3Exception
+    public int deleteByIndexParent(Integer parent) throws DaoException
     {
         FlPersonGroupBean bean = this.createBean();
         bean.setParent(parent);
@@ -1516,10 +1516,10 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      *        {@link Constant#FL_PERSON_GROUP_INDEX_PARENT}
      * @param keys key values of index
      * @return a list of FlPersonGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @Override
-    public List<FlPersonGroupBean> loadByIndexAsList(int keyIndex,Object ...keys)throws Dao3Exception
+    public List<FlPersonGroupBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DaoException
     {
         if(null == keys){
             throw new NullPointerException();
@@ -1546,10 +1546,10 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      *        {@link Constant#FL_PERSON_GROUP_INDEX_PARENT}
      * @param keys key values of index
      * @return the number of deleted objects
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @Override
-    public int deleteByIndex(int keyIndex,Object ...keys)throws Dao3Exception
+    public int deleteByIndex(int keyIndex,Object ...keys)throws DaoException
     {
         if(null == keys){
             throw new NullPointerException();
@@ -1578,7 +1578,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     /**
      * @see #loadViaPermitAsList(FlPersonGroupBean,int,int)
      */
-    public List<FlPersonGroupBean> loadViaPermitAsList(FlDeviceGroupBean bean) throws Dao3Exception
+    public List<FlPersonGroupBean> loadViaPermitAsList(FlDeviceGroupBean bean) throws DaoException
     {
          return this.loadViaPermitAsList(bean, 1, -1);
     }
@@ -1592,9 +1592,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return a list of FlPersonGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlPersonGroupBean> loadViaPermitAsList(FlDeviceGroupBean bean, int startRow, int numRows) throws Dao3Exception
+    public List<FlPersonGroupBean> loadViaPermitAsList(FlDeviceGroupBean bean, int startRow, int numRows) throws DaoException
     {
         if(null == bean || null == bean.getId()){
             return java.util.Arrays.<FlPersonGroupBean>asList();
@@ -1617,7 +1617,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
         }
         catch (SQLException e)
         {
-            throw new Dao3Exception(e.getMessage(), e);
+            throw new DaoException(e.getMessage(), e);
         }
         finally
         {
@@ -1631,9 +1631,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * add junction between {@link FlPersonGroupBean} and {@link FlDeviceGroupBean} if junction not exists
      * @param bean
      * @param linked
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public void addJunction(FlPersonGroupBean bean,FlDeviceGroupBean linked) throws Dao3Exception{
+    public void addJunction(FlPersonGroupBean bean,FlDeviceGroupBean linked) throws DaoException{
         if(null == bean || null == bean.getId()){
             return ;
         }
@@ -1652,9 +1652,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * remove junction between {@link FlPersonGroupBean} and {@link FlDeviceGroupBean}
      * @param bean
      * @param linked
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public int deleteJunction(FlPersonGroupBean bean,FlDeviceGroupBean linked) throws Dao3Exception{
+    public int deleteJunction(FlPersonGroupBean bean,FlDeviceGroupBean linked) throws DaoException{
         if(null == bean || null == bean.getId()){
             return 0;
         }
@@ -1665,7 +1665,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     }
     //23.4 MANY TO MANY
     /** @see #addJunction(FlPersonGroupBean,FlDeviceGroupBean) */
-    public void addJunction(FlPersonGroupBean bean,FlDeviceGroupBean... linkedBeans) throws Dao3Exception{
+    public void addJunction(FlPersonGroupBean bean,FlDeviceGroupBean... linkedBeans) throws DaoException{
         if(null != linkedBeans){
             for(FlDeviceGroupBean linked:linkedBeans){
                 addJunction(bean,linked);
@@ -1674,7 +1674,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     }
     //23.5 MANY TO MANY
     /** @see #addJunction(FlPersonGroupBean,FlDeviceGroupBean) */
-    public void addJunction(FlPersonGroupBean bean,java.util.Collection<FlDeviceGroupBean> linkedBeans) throws Dao3Exception{
+    public void addJunction(FlPersonGroupBean bean,java.util.Collection<FlDeviceGroupBean> linkedBeans) throws DaoException{
         if(null != linkedBeans){
             for(FlDeviceGroupBean linked:linkedBeans){
                 addJunction(bean,linked);
@@ -1683,7 +1683,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     }
     //23.6 MANY TO MANY
     /** @see #deleteJunction(FlPersonGroupBean,FlDeviceGroupBean) */
-    public int deleteJunction(FlPersonGroupBean bean,FlDeviceGroupBean... linkedBeans) throws Dao3Exception{
+    public int deleteJunction(FlPersonGroupBean bean,FlDeviceGroupBean... linkedBeans) throws DaoException{
         int count = 0;
         if(null != linkedBeans){
             for(FlDeviceGroupBean linked:linkedBeans){
@@ -1694,7 +1694,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     }
     //23.7 MANY TO MANY
     /** @see #deleteJunction(FlPersonGroupBean,FlDeviceGroupBean) */
-    public int deleteJunction(FlPersonGroupBean bean,java.util.Collection<FlDeviceGroupBean> linkedBeans) throws Dao3Exception{
+    public int deleteJunction(FlPersonGroupBean bean,java.util.Collection<FlDeviceGroupBean> linkedBeans) throws DaoException{
         int count = 0;
         if(null != linkedBeans){
             for(FlDeviceGroupBean linked:linkedBeans){
@@ -1712,7 +1712,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     //25
 
     @Override
-    public int countWhere(String where) throws Dao3Exception
+    public int countWhere(String where) throws DaoException
     {
         String sql = "SELECT COUNT(*) AS MCOUNT FROM fl_person_group " + where;
         // System.out.println("countWhere: " + sql);
@@ -1752,9 +1752,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      *
      * @param ps the PreparedStatement to be used
      * @return the number of rows returned
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    private int countByPreparedStatement(PreparedStatement ps) throws Dao3Exception
+    private int countByPreparedStatement(PreparedStatement ps) throws DaoException
     {
         ResultSet rs =  null;
         try
@@ -1786,10 +1786,10 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param bean the FlPersonGroupBean template to look for
      * @param searchType exact ?  like ? starting like ?
      * @return the number of rows returned
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @Override
-    public int countUsingTemplate(FlPersonGroupBean bean, int searchType) throws Dao3Exception
+    public int countUsingTemplate(FlPersonGroupBean bean, int searchType) throws DaoException
     {
         Connection c = null;
         PreparedStatement ps = null;
@@ -1893,9 +1893,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
      * @return the number of clauses returned
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    protected int fillPreparedStatement(PreparedStatement ps, FlPersonGroupBean bean, int searchType,boolean fillNull) throws Dao3Exception
+    protected int fillPreparedStatement(PreparedStatement ps, FlPersonGroupBean bean, int searchType,boolean fillNull) throws DaoException
     {
         if (bean == null) {
             return 0;
@@ -1926,7 +1926,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
                         if (bean.getName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getName() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
-                        throw new Dao3Exception("Unknown search type " + searchType);
+                        throw new DaoException("Unknown search type " + searchType);
                 }
             }
             if (bean.checkLeafModified()) {
@@ -1960,9 +1960,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the resulting FlPersonGroupBean table
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPersonGroupBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws Dao3Exception
+    public FlPersonGroupBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DaoException
     {
         return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new FlPersonGroupBean[0]);
     }
@@ -1976,9 +1976,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the resulting FlPersonGroupBean table
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlPersonGroupBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws Dao3Exception
+    public List<FlPersonGroupBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DaoException
     {
         ListAction action = new ListAction();
         actionOnResultSet(rs, fieldList, numRows, numRows, action);
@@ -1992,10 +1992,10 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param action interface obj for do something
      * @return the count dealt by action  
-     * @throws Dao3Exception
+     * @throws DaoException
      * @throws IllegalArgumentException
      */
-    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlPersonGroupBean> action) throws Dao3Exception{
+    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlPersonGroupBean> action) throws DaoException{
         try{
             int count = 0;
             if(0!=numRows){
@@ -2032,7 +2032,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
                 }
             }
             return count;
-        }catch(Dao3Exception e){
+        }catch(DaoException e){
             throw e;
         }catch(SQLException e){
             throw new DataAccessException(e);
@@ -2045,9 +2045,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      *
      * @param rs the ResultSet to be transformed
      * @return bean resulting FlPersonGroupBean bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPersonGroupBean decodeRow(ResultSet rs,FlPersonGroupBean bean) throws Dao3Exception
+    public FlPersonGroupBean decodeRow(ResultSet rs,FlPersonGroupBean bean) throws DaoException
     {
         if(null==bean){
             bean = this.createBean();
@@ -2076,9 +2076,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param rs the ResultSet to be transformed
      * @param fieldList table of the field's associated constants
      * @return bean resulting FlPersonGroupBean bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPersonGroupBean decodeRow(ResultSet rs, int[] fieldList,FlPersonGroupBean bean) throws Dao3Exception
+    public FlPersonGroupBean decodeRow(ResultSet rs, int[] fieldList,FlPersonGroupBean bean) throws DaoException
     {
         if(null==bean){
             bean = this.createBean();
@@ -2107,7 +2107,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
                         bean.setParent(Manager.getInteger(rs, pos));
                         break;
                     default:
-                        throw new Dao3Exception("Unknown field id " + fieldList[i]);
+                        throw new DaoException("Unknown field id " + fieldList[i]);
                 }
             }
         }
@@ -2127,9 +2127,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      *
      * @param rs the ResultSet to be transformed
      * @return bean resulting FlPersonGroupBean bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPersonGroupBean metaDataDecodeRow(ResultSet rs) throws Dao3Exception
+    public FlPersonGroupBean metaDataDecodeRow(ResultSet rs) throws DaoException
     {
         FlPersonGroupBean bean = this.createBean();
         try
@@ -2160,9 +2160,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      *
      * @param ps the PreparedStatement to be used
      * @return an array of FlPersonGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPersonGroupBean[] loadByPreparedStatement(PreparedStatement ps) throws Dao3Exception
+    public FlPersonGroupBean[] loadByPreparedStatement(PreparedStatement ps) throws DaoException
     {
         return this.loadByPreparedStatement(ps, null);
     }
@@ -2173,9 +2173,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      *
      * @param ps the PreparedStatement to be used
      * @return an array of FlPersonGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlPersonGroupBean> loadByPreparedStatementAsList(PreparedStatement ps) throws Dao3Exception
+    public List<FlPersonGroupBean> loadByPreparedStatementAsList(PreparedStatement ps) throws DaoException
     {
         return this.loadByPreparedStatementAsList(ps, null);
     }
@@ -2187,9 +2187,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param ps the PreparedStatement to be used
      * @param fieldList table of the field's associated constants
      * @return an array of FlPersonGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPersonGroupBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws Dao3Exception
+    public FlPersonGroupBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws DaoException
     {
         return this.loadByPreparedStatementAsList(ps, fieldList).toArray(new FlPersonGroupBean[0]);
     }
@@ -2201,9 +2201,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param ps the PreparedStatement to be used
      * @param fieldList table of the field's associated constants
      * @return an array of FlPersonGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlPersonGroupBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws Dao3Exception
+    public List<FlPersonGroupBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws DaoException
     { 
         return loadByPreparedStatementAsList(ps,fieldList,1,-1);
     }
@@ -2218,9 +2218,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param fieldList table of the field's associated constants
      * @return an array of FlPersonGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPersonGroupBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws Dao3Exception
+    public FlPersonGroupBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DaoException
     {
         return loadByPreparedStatementAsList(ps,fieldList,startRow,numRows).toArray(new FlPersonGroupBean[0]);
     }
@@ -2235,9 +2235,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param fieldList table of the field's associated constants
      * @return an array of FlPersonGroupBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlPersonGroupBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws Dao3Exception
+    public List<FlPersonGroupBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DaoException
     {
         ListAction action = new ListAction();
         loadByPreparedStatement(ps,fieldList,startRow,numRows,action);
@@ -2255,16 +2255,16 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param fieldList table of the field's associated constants
      * @param action Action object for do something(not null)
      * @return the count dealt by action
-     * @throws Dao3Exception
+     * @throws DaoException
      */     
-    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlPersonGroupBean> action) throws Dao3Exception
+    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlPersonGroupBean> action) throws DaoException
     {
         ResultSet rs =  null;
         try {
             ps.setFetchSize(100);
             rs = ps.executeQuery();
             return this.actionOnResultSet(rs, fieldList, startRow, numRows, action);
-        } catch (Dao3Exception e) {
+        } catch (DaoException e) {
             throw e;
         } catch (SQLException e) {
             throw new DataAccessException(e);
@@ -2301,7 +2301,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     //37
 
     @Override
-    public void fire(TableListener.Event event, FlPersonGroupBean bean) throws Dao3Exception{
+    public void fire(TableListener.Event event, FlPersonGroupBean bean) throws DaoException{
         if(null == event){
             throw new NullPointerException();
         }
@@ -2311,7 +2311,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     //37-1
 
     @Override
-    public void fire(int event, FlPersonGroupBean bean) throws Dao3Exception{
+    public void fire(int event, FlPersonGroupBean bean) throws DaoException{
         try{
             fire(TableListener.Event.values()[event],bean);
         }catch(ArrayIndexOutOfBoundsException e){
@@ -2323,13 +2323,13 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     private final net.gdface.facelog.dborm.BaseForeignKeyListener<FlPersonGroupBean,FlPersonGroupBean> foreignKeyListenerByParent = 
             new net.gdface.facelog.dborm.BaseForeignKeyListener<FlPersonGroupBean,FlPersonGroupBean>(){
                 @Override
-                protected List<FlPersonGroupBean> getImportedBeans(FlPersonGroupBean bean) throws Dao3Exception {
+                protected List<FlPersonGroupBean> getImportedBeans(FlPersonGroupBean bean) throws DaoException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.<FlPersonGroupBean>emptyList()
                             : instanceOfFlPersonGroupManager().getPersonGroupBeansByParentAsList(bean);
                 }
                 @Override
-                protected void onRemove(List<FlPersonGroupBean> effectBeans) throws Dao3Exception {
+                protected void onRemove(List<FlPersonGroupBean> effectBeans) throws DaoException {
                     for(FlPersonGroupBean bean:effectBeans){
                         bean.setParent(null);
                         Event.UPDATE.fire(listenerContainer, bean);
@@ -2386,7 +2386,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     /**
      * Gets the connection.
      */
-    private Connection getConnection() throws Dao3Exception
+    private Connection getConnection() throws DaoException
     {
         try
         {
@@ -2414,9 +2414,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * Fill the given prepared statement with the values in argList
      * @param ps the PreparedStatement that will be filled
      * @param argList the arguments to use fill given prepared statement
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    private void fillPrepareStatement(PreparedStatement ps, Object[] argList) throws Dao3Exception{
+    private void fillPrepareStatement(PreparedStatement ps, Object[] argList) throws DaoException{
         try {
             if (!(argList == null || ps == null)) {
                 for (int i = 0; i < argList.length; i++) {
@@ -2428,13 +2428,13 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
                 }
             }
         } catch (SQLException e) {
-            throw new Dao3Exception(e);
+            throw new DaoException(e);
         }
     }
     
     @Override    
 
-    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlPersonGroupBean> action) throws Dao3Exception{
+    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlPersonGroupBean> action) throws DaoException{
         PreparedStatement ps = null;
         Connection connection = null;
         // logger.debug("sql string:\n" + sql + "\n");
@@ -2445,7 +2445,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
                     ResultSet.CONCUR_READ_ONLY);
             fillPrepareStatement(ps, argList);
             return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
-        } catch (Dao3Exception e) {
+        } catch (DaoException e) {
             throw e;
         }catch (SQLException e) {
             throw new DataAccessException(e);
@@ -2457,14 +2457,14 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
    
     @Override
 
-    public <T>T runAsTransaction(Callable<T> fun) throws Dao3Exception{
+    public <T>T runAsTransaction(Callable<T> fun) throws DaoException{
         return Manager.getInstance().runAsTransaction(fun);
     }
     
     class DeleteBeanAction extends Action.BaseAdapter<FlPersonGroupBean>{
         private final AtomicInteger count=new AtomicInteger(0);
         @Override
-        public void call(FlPersonGroupBean bean) throws Dao3Exception {
+        public void call(FlPersonGroupBean bean) throws DaoException {
                 FlPersonGroupManager.this.delete(bean);
                 count.incrementAndGet();
         }
@@ -2514,9 +2514,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param id PK# 1 
      * @return  empty list if input primary key is {@code null}<br>
      *         first element equal last if self-reference field is cycle
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public java.util.List<FlPersonGroupBean> listOfParent(Integer id) throws Dao3Exception{
+    public java.util.List<FlPersonGroupBean> listOfParent(Integer id) throws DaoException{
         FlPersonGroupBean parent = (null == id)
             ? null
             : new FlPersonGroupBean(id);
@@ -2536,7 +2536,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     /**
      * see also {@link #listOfParent(Integer)}
      */
-    public java.util.List<FlPersonGroupBean> listOfParent(FlPersonGroupBean bean) throws Dao3Exception{
+    public java.util.List<FlPersonGroupBean> listOfParent(FlPersonGroupBean bean) throws DaoException{
         return null == bean
                 ? java.util.Collections.<FlPersonGroupBean>emptyList()
                 : listOfParent(bean.getId());
@@ -2547,9 +2547,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param id PK# 1 
      * @return  0 if input primary key is {@code null}<br>
      *         -1 if self-reference field is cycle
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public int levelOfParent(Integer id) throws Dao3Exception{
+    public int levelOfParent(Integer id) throws DaoException{
         FlPersonGroupBean parent = (null == id)
             ? null
             : new FlPersonGroupBean(id);
@@ -2566,7 +2566,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     /**
      * see also {@link #levelOfParent(Integer)}
      */
-    public int levelOfParent(FlPersonGroupBean bean) throws Dao3Exception{
+    public int levelOfParent(FlPersonGroupBean bean) throws DaoException{
         return null == bean
                 ? 0
                 : levelOfParent(bean.getId());
@@ -2575,20 +2575,20 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     /**
      * test whether the self-reference field is cycle : {@code fl_person_group(parent) }
      * @param id PK# 1 
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see #levelOfParent(FlPersonGroupBean)
      */
-    public boolean isCycleOnParent(Integer id) throws Dao3Exception{
+    public boolean isCycleOnParent(Integer id) throws DaoException{
         return levelOfParent(id) < 0;
     }
     //52
     /**
      * test whether the self-reference field is cycle : {@code fl_person_group(parent) }
      * @param bean
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see #levelOfParent(FlPersonGroupBean)
      */
-    public boolean isCycleOnParent(FlPersonGroupBean bean) throws Dao3Exception{
+    public boolean isCycleOnParent(FlPersonGroupBean bean) throws DaoException{
         return levelOfParent(bean) < 0;
     }
     //53
@@ -2598,9 +2598,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @return top bean
      * @throws NullPointerException if input primary key is {@code null}
      * @throws IllegalStateException if self-reference field is cycle
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPersonGroupBean topOfParent(Integer id) throws Dao3Exception{
+    public FlPersonGroupBean topOfParent(Integer id) throws DaoException{
         if(null == id){
             throw new NullPointerException();
         }
@@ -2617,7 +2617,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     /**
      * see also {@link #topOfParent(Integer)}
      */
-    public FlPersonGroupBean topOfParent(FlPersonGroupBean bean) throws Dao3Exception{
+    public FlPersonGroupBean topOfParent(FlPersonGroupBean bean) throws DaoException{
         if(null == bean){
             throw new NullPointerException();
         }
@@ -2629,10 +2629,10 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param id PK# 1
      * @return always {@code id}
      * @throws IllegalStateException if self-reference field is cycle 
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see #isCycleOnParent(Integer)
      */
-    public Integer checkCycleOfParent(Integer id) throws Dao3Exception{
+    public Integer checkCycleOfParent(Integer id) throws DaoException{
         if(isCycleOnParent(id)){
             throw new IllegalStateException("cycle on field: " + "parent");
         }
@@ -2644,10 +2644,10 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param bean
      * @return always {@code bean}
      * @throws IllegalStateException if self-reference field is cycle
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see #isCycleOnParent(FlPersonGroupBean)
      */
-    public FlPersonGroupBean checkCycleOfParent(FlPersonGroupBean bean) throws Dao3Exception{
+    public FlPersonGroupBean checkCycleOfParent(FlPersonGroupBean bean) throws DaoException{
         if(isCycleOnParent(bean)){
             throw new IllegalStateException("cycle on field: " + "parent");
         }

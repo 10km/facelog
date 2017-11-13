@@ -15,7 +15,7 @@ import com.google.common.util.concurrent.UncheckedExecutionException;
 import net.gdface.facelog.db.ITableCache;
 import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
-import net.gdface.facelog.db.exception.WrapDAO1Exception;
+import net.gdface.facelog.db.exception.WrapDaoException;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.mysql.PermitManager;
@@ -100,7 +100,7 @@ public class PermitCacheManager extends PermitManager
                 throw ee.getCause();
             }catch(ObjectRetrievalException oe){
                 throw oe;
-            } catch (WrapDAO1Exception we) {
+            } catch (WrapDaoException we) {
                 throw we;
             } catch (RuntimeException re) {
                 throw re;
@@ -112,7 +112,7 @@ public class PermitCacheManager extends PermitManager
                 throw ue.getCause();
             }catch(ObjectRetrievalException oe){
                 throw oe;
-            } catch (WrapDAO1Exception we) {
+            } catch (WrapDaoException we) {
                 throw we;
             } catch (RuntimeException re) {
                 throw re;

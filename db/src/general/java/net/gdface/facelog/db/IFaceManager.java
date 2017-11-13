@@ -7,7 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
-import net.gdface.facelog.db.exception.WrapDAO1Exception;
+import net.gdface.facelog.db.exception.WrapDaoException;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_face table.<br>
@@ -132,7 +132,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      * FK_NAME : fl_log_ibfk_4 
      * @param idOfFace Integer - PK# 1
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public LogBean[] getLogBeansByCompareFace(Integer idOfFace);
     
@@ -150,7 +150,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      * FK_NAME:fl_log_ibfk_4
      * @param idOfFace Integer - PK# 1
      * @return the associated {@link LogBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public java.util.List<LogBean> getLogBeansByCompareFaceAsList(Integer idOfFace);
     //3.2.3 DELETE IMPORTED
@@ -264,7 +264,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param bean the {@link FaceBean} object to use
      * @param beanToSet the {@link FeatureBean} object to associate to the {@link FaceBean}
      * @return always beanToSet saved
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      */
     public FeatureBean setReferencedByFeatureMd5(FaceBean bean, FeatureBean beanToSet);
     //5.1 GET REFERENCED VALUE
@@ -283,7 +283,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param bean the {@link FaceBean} object to use
      * @param beanToSet the {@link ImageBean} object to associate to the {@link FaceBean}
      * @return always beanToSet saved
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      */
     public ImageBean setReferencedByImageMd5(FaceBean bean, ImageBean beanToSet);
     //_____________________________________________________________________

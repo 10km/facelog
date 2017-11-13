@@ -7,7 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
-import net.gdface.facelog.db.exception.WrapDAO1Exception;
+import net.gdface.facelog.db.exception.WrapDaoException;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_person_group table.<br>
@@ -132,7 +132,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME : fl_permit_ibfk_2 
      * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PermitBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public PermitBean[] getPermitBeansByPersonGroupId(Integer idOfPersonGroup);
     
@@ -150,7 +150,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME:fl_permit_ibfk_2
      * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PermitBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(Integer idOfPersonGroup);
     //3.2.3 DELETE IMPORTED
@@ -208,7 +208,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME : fl_person_ibfk_1 
      * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public PersonBean[] getPersonBeansByGroupId(Integer idOfPersonGroup);
     
@@ -226,7 +226,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME:fl_person_ibfk_1
      * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PersonBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(Integer idOfPersonGroup);
     //3.2.3 DELETE IMPORTED
@@ -284,7 +284,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME : fl_person_group_ibfk_1 
      * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PersonGroupBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public PersonGroupBean[] getPersonGroupBeansByParent(Integer idOfPersonGroup);
     
@@ -302,7 +302,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME:fl_person_group_ibfk_1
      * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PersonGroupBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(Integer idOfPersonGroup);
     //3.2.3 DELETE IMPORTED
@@ -420,7 +420,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param bean the {@link PersonGroupBean} object to use
      * @param beanToSet the {@link PersonGroupBean} object to associate to the {@link PersonGroupBean}
      * @return always beanToSet saved
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      */
     public PersonGroupBean setReferencedByParent(PersonGroupBean bean, PersonGroupBean beanToSet);
     //_____________________________________________________________________
@@ -549,7 +549,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param id PK# 1 
      * @return  empty list if input primary key is {@code null}<br>
      *         first element equal last if self-reference field is cycle
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      */
     public java.util.List<PersonGroupBean> listOfParent(Integer id);
     //48
@@ -565,7 +565,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param id PK# 1 
      * @return  0 if input primary key is {@code null}<br>
      *         -1 if self-reference field is cycle
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      */
     public int levelOfParent(Integer id);
     //50
@@ -579,7 +579,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
     /**
      * test whether the self-reference field is cycle : {@code fl_person_group(parent) }
      * @param id PK# 1 
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      * @see #levelOfParent(PersonGroupBean)
      * @return
      */
@@ -589,7 +589,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * test whether the self-reference field is cycle : {@code fl_person_group(parent) }
      * @param bean
      * @return
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      * @see #levelOfParent(PersonGroupBean)
      */
     public boolean isCycleOnParent(PersonGroupBean bean);
@@ -600,7 +600,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @return top bean
      * @throws NullPointerException if input primary key is {@code null}
      * @throws IllegalStateException if self-reference field is cycle
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      */
     public PersonGroupBean topOfParent(Integer id);
     //54
@@ -616,7 +616,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param id PK# 1
      * @return always {@code id}
      * @throws IllegalStateException if self-reference field is cycle 
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      * @see #isCycleOnParent(Integer)
      */
     public Integer checkCycleOfParent(Integer id);
@@ -626,7 +626,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param bean
      * @return always {@code bean}
      * @throws IllegalStateException if self-reference field is cycle
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      * @see #isCycleOnParent(PersonGroupBean)
      */
     public PersonGroupBean checkCycleOfParent(PersonGroupBean bean);

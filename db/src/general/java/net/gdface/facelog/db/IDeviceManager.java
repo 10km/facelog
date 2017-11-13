@@ -7,7 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
-import net.gdface.facelog.db.exception.WrapDAO1Exception;
+import net.gdface.facelog.db.exception.WrapDaoException;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_device table.<br>
@@ -132,7 +132,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * FK_NAME : fl_image_ibfk_1 
      * @param idOfDevice Integer - PK# 1
      * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public ImageBean[] getImageBeansByDeviceId(Integer idOfDevice);
     
@@ -150,7 +150,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * FK_NAME:fl_image_ibfk_1
      * @param idOfDevice Integer - PK# 1
      * @return the associated {@link ImageBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(Integer idOfDevice);
     //3.2.3 DELETE IMPORTED
@@ -208,7 +208,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * FK_NAME : fl_log_ibfk_2 
      * @param idOfDevice Integer - PK# 1
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public LogBean[] getLogBeansByDeviceId(Integer idOfDevice);
     
@@ -226,7 +226,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * FK_NAME:fl_log_ibfk_2
      * @param idOfDevice Integer - PK# 1
      * @return the associated {@link LogBean} beans 
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public java.util.List<LogBean> getLogBeansByDeviceIdAsList(Integer idOfDevice);
     //3.2.3 DELETE IMPORTED
@@ -340,7 +340,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param bean the {@link DeviceBean} object to use
      * @param beanToSet the {@link DeviceGroupBean} object to associate to the {@link DeviceBean}
      * @return always beanToSet saved
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      */
     public DeviceGroupBean setReferencedByGroupId(DeviceBean bean, DeviceGroupBean beanToSet);
     //_____________________________________________________________________
@@ -354,7 +354,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * 
      * @param mac the mac column's value filter
      * @return an DeviceBean,otherwise null if not found or exists null in input arguments
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      */
     public DeviceBean loadByIndexMac(String mac);
     /**
@@ -364,7 +364,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @return an DeviceBean
      * @throws NullPointerException exists null in input arguments
      * @throws ObjectRetrievalException if not found
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      */
     public DeviceBean loadByIndexMacChecked(String mac)throws ObjectRetrievalException;
     /**
@@ -410,7 +410,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * 
      * @param serialNo the serial_no column's value filter
      * @return an DeviceBean,otherwise null if not found or exists null in input arguments
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      */
     public DeviceBean loadByIndexSerialNo(String serialNo);
     /**
@@ -420,7 +420,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @return an DeviceBean
      * @throws NullPointerException exists null in input arguments
      * @throws ObjectRetrievalException if not found
-     * @throws WrapDAO1Exception
+     * @throws WrapDaoException
      */
     public DeviceBean loadByIndexSerialNoChecked(String serialNo)throws ObjectRetrievalException;
     /**

@@ -16,14 +16,14 @@ import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.IStoreManager;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.exception.WrapDAO1Exception;
+import net.gdface.facelog.db.exception.WrapDaoException;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
-import net.gdface.facelog.dborm.exception.Dao3Exception;
+import net.gdface.facelog.dborm.exception.DaoException;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_store table.<br>
- * all {@link Dao3Exception} be wrapped as {@link WrapDAO1Exception} to throw.<br>
+ * all {@link DaoException} be wrapped as {@link WrapDaoException} to throw.<br>
  * Remarks: 二进制数据存储表<br>
  * @author guyadong
  */
@@ -115,8 +115,8 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
             return this.beanConverter.fromRight(nativeManager.loadByPrimaryKeyChecked(md5));
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
             throw new ObjectRetrievalException();
-        }catch(Dao3Exception e){
-            throw new WrapDAO1Exception(e);
+        }catch(DaoException e){
+            throw new WrapDaoException(e);
         }
     }
     //1.2
@@ -175,9 +175,9 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         try{
             return nativeManager.existsPrimaryKey(md5);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     //1.6
@@ -204,8 +204,8 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
             return this.nativeManager.checkDuplicate(md5);
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
         	throw new ObjectRetrievalException(e);
-        }catch(Dao3Exception e){
-            throw new WrapDAO1Exception(e);
+        }catch(DaoException e){
+            throw new WrapDaoException(e);
         }
     }
     //1.8 override IStoreManager
@@ -252,9 +252,9 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         {
             return nativeManager.deleteByPrimaryKey(md5);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     //2
@@ -265,9 +265,9 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         {
             return nativeManager.delete(this.beanConverter.toRight(bean));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }   
     }
     //2.1
@@ -351,9 +351,9 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         try{
             return this.nativeManager.deleteByWhere(where);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -370,9 +370,9 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.insert(this.beanConverter.toRight(bean)));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -384,9 +384,9 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.update(this.beanConverter.toRight(bean)));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -402,9 +402,9 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
      }
     //18-1
@@ -419,9 +419,9 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         {
             throw new ObjectRetrievalException();
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
      }
     //20-5
@@ -432,9 +432,9 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         try {
             return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -446,9 +446,9 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         try{
             return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(bean));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -465,9 +465,9 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         try{
             return this.nativeManager.countWhere(where);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -479,9 +479,9 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         try{
             return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),searchType);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -534,9 +534,9 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         try{
             this.nativeManager.fire(event, this.beanConverter.toRight(bean));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     //37-2
@@ -569,32 +569,32 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
             this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.image.FlStoreBean> (){
 
                 @Override
-                public void beforeInsert(net.gdface.facelog.dborm.image.FlStoreBean bean) throws Dao3Exception {
+                public void beforeInsert(net.gdface.facelog.dborm.image.FlStoreBean bean) throws DaoException {
                     listener.beforeInsert(StoreManager.this.beanConverter.fromRight(bean));                
                 }
 
                 @Override
-                public void afterInsert(net.gdface.facelog.dborm.image.FlStoreBean bean) throws Dao3Exception {
+                public void afterInsert(net.gdface.facelog.dborm.image.FlStoreBean bean) throws DaoException {
                     listener.afterInsert(StoreManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeUpdate(net.gdface.facelog.dborm.image.FlStoreBean bean) throws Dao3Exception {
+                public void beforeUpdate(net.gdface.facelog.dborm.image.FlStoreBean bean) throws DaoException {
                     listener.beforeUpdate(StoreManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterUpdate(net.gdface.facelog.dborm.image.FlStoreBean bean) throws Dao3Exception {
+                public void afterUpdate(net.gdface.facelog.dborm.image.FlStoreBean bean) throws DaoException {
                     listener.afterUpdate(StoreManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeDelete(net.gdface.facelog.dborm.image.FlStoreBean bean) throws Dao3Exception {
+                public void beforeDelete(net.gdface.facelog.dborm.image.FlStoreBean bean) throws DaoException {
                     listener.beforeDelete(StoreManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterDelete(net.gdface.facelog.dborm.image.FlStoreBean bean) throws Dao3Exception {
+                public void afterDelete(net.gdface.facelog.dborm.image.FlStoreBean bean) throws DaoException {
                     listener.afterDelete(StoreManager.this.beanConverter.fromRight(bean));
                 }};
         }
@@ -647,9 +647,9 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         try{
             return this.nativeManager.loadBySqlForAction(sql,argList,fieldList,startRow,numRows,this.toNative(action));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     
@@ -658,9 +658,9 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         try{
             return this.nativeManager.runAsTransaction(fun);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     

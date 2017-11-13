@@ -20,7 +20,7 @@ import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.Manager;
 import net.gdface.facelog.dborm.TableListener;
 import net.gdface.facelog.dborm.TableManager;
-import net.gdface.facelog.dborm.exception.Dao3Exception;
+import net.gdface.facelog.dborm.exception.DaoException;
 import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.DataRetrievalException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
@@ -123,9 +123,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param id Integer - PK# 1
      * @return a unique FlLogBean or {@code null} if not found or have null argument
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlLogBean loadByPrimaryKey(Integer id) throws Dao3Exception
+    public FlLogBean loadByPrimaryKey(Integer id) throws DaoException
     {
         try{
             return loadByPrimaryKeyChecked(id);
@@ -142,10 +142,10 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param id Integer - PK# 1
      * @return a unique FlLogBean
      * @throws ObjectRetrievalException if not found
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unused")
-    public FlLogBean loadByPrimaryKeyChecked(Integer id) throws Dao3Exception
+    public FlLogBean loadByPrimaryKeyChecked(Integer id) throws DaoException
     {
         if(null == id){
             throw new ObjectRetrievalException(new NullPointerException());
@@ -186,7 +186,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     //1.2
     
     @Override
-    public FlLogBean loadByPrimaryKey(FlLogBean bean) throws Dao3Exception
+    public FlLogBean loadByPrimaryKey(FlLogBean bean) throws DaoException
     {
         return bean==null?null:loadByPrimaryKey(bean.getId());
     }
@@ -194,7 +194,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     //1.2.2
     
     @Override
-    public FlLogBean loadByPrimaryKeyChecked(FlLogBean bean) throws Dao3Exception
+    public FlLogBean loadByPrimaryKeyChecked(FlLogBean bean) throws DaoException
     {
         if(null == bean){
             throw new NullPointerException();
@@ -210,7 +210,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @see {@link #loadByPrimaryKey(Integer id)}
      */
     @Override
-    public FlLogBean loadByPrimaryKey(Object ...keys) throws Dao3Exception{
+    public FlLogBean loadByPrimaryKey(Object ...keys) throws DaoException{
         if(null == keys){
             throw new NullPointerException();
         }
@@ -226,7 +226,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     //1.3.2
 
     @Override
-    public FlLogBean loadByPrimaryKeyChecked(Object ...keys) throws Dao3Exception{
+    public FlLogBean loadByPrimaryKeyChecked(Object ...keys) throws DaoException{
         if(null == keys){
             throw new NullPointerException();
         }
@@ -243,10 +243,10 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     /**
      * Returns true if this fl_log contains row with primary key fields.
      * @param id Integer - PK# 1
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unused")
-    public boolean existsPrimaryKey(Integer id) throws Dao3Exception
+    public boolean existsPrimaryKey(Integer id) throws DaoException
     {
         if(null == id){
             return false;
@@ -273,12 +273,12 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     /**
      * Return true if this fl_log contains row with primary key fields.
      * @param bean  
-     * @throws Dao3Exception
+     * @throws DaoException
      * @return false if primary kes has null
      * @see #countUsingTemplate(FlLogBean)
      */
     @Override
-    public boolean existsByPrimaryKey(FlLogBean bean) throws Dao3Exception
+    public boolean existsByPrimaryKey(FlLogBean bean) throws DaoException
     {
         if(null == bean  || null == bean.getId()){
             return false;
@@ -294,7 +294,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     //1.7
 
     @Override
-    public FlLogBean checkDuplicate(FlLogBean bean) throws Dao3Exception{
+    public FlLogBean checkDuplicate(FlLogBean bean) throws DaoException{
         if(!existsByPrimaryKey(bean)){
             throw new ObjectRetrievalException("Duplicate entry ("+ bean.getId() +") for key 'PRIMARY'");
         }
@@ -304,10 +304,10 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     /**
      * Check duplicated row by primary keys,if row exists throw {@link ObjectRetrievalException}
      * @param id Integer
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see #existsPrimaryKey(Integer id)
      */
-    public Integer checkDuplicate(Integer id) throws Dao3Exception
+    public Integer checkDuplicate(Integer id) throws DaoException
     {
         if(existsPrimaryKey(id)){
             throw new ObjectRetrievalException("Duplicate entry '"+ id +"' for key 'PRIMARY'");
@@ -321,10 +321,10 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * 
      * @param id Integer - PK# 1
      * @return the number of deleted rows
-     * @throws Dao3Exception
+     * @throws DaoException
      * @see {@link #delete(FlLogBean)}
      */
-    public int deleteByPrimaryKey(Integer id) throws Dao3Exception
+    public int deleteByPrimaryKey(Integer id) throws DaoException
     {
         FlLogBean bean=createBean();
         bean.setId(id);
@@ -337,10 +337,10 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * 
      * @param bean will be deleted ,all keys must not be null
      * @return the number of deleted rows,0 returned if bean is null
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @Override
-    public int delete(FlLogBean bean) throws Dao3Exception
+    public int delete(FlLogBean bean) throws DaoException
     {
         if(null == bean  || null == bean.getId()){
             return 0;
@@ -385,7 +385,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @see {@link #delete(FlLogBean)}
      */   
     @Override
-    public int deleteByPrimaryKey(Object ...keys) throws Dao3Exception{
+    public int deleteByPrimaryKey(Object ...keys) throws DaoException{
         if(null == keys){
             throw new NullPointerException();
         }
@@ -411,11 +411,11 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param refFeatureByVerifyFeature the {@link FlFeatureBean} bean referenced by {@link FlLogBean} 
      * @param refPersonByPersonId the {@link FlPersonBean} bean referenced by {@link FlLogBean} 
          * @return the inserted or updated {@link FlLogBean} bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     public FlLogBean save(FlLogBean bean
         , FlDeviceBean refDeviceByDeviceId , FlFaceBean refFaceByCompareFace , FlFeatureBean refFeatureByVerifyFeature , FlPersonBean refPersonByPersonId 
-        ) throws Dao3Exception
+        ) throws DaoException
     {
         if(null == bean) {
             return null;
@@ -443,7 +443,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      */
     public FlLogBean saveAsTransaction(final FlLogBean bean
         ,final FlDeviceBean refDeviceByDeviceId ,final FlFaceBean refFaceByCompareFace ,final FlFeatureBean refFeatureByVerifyFeature ,final FlPersonBean refPersonByPersonId 
-        ) throws Dao3Exception
+        ) throws DaoException
     {
         return this.runAsTransaction(new Callable<FlLogBean>(){
             @Override
@@ -465,10 +465,10 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param args referenced beans or imported beans<br>
      *      see also {@link #save(FlLogBean , FlDeviceBean , FlFaceBean , FlFeatureBean , FlPersonBean )}
      * @return the inserted or updated {@link FlLogBean} bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @Override
-    public FlLogBean save(FlLogBean bean,Object ...inputs) throws Dao3Exception
+    public FlLogBean save(FlLogBean bean,Object ...inputs) throws DaoException
     {
         if(null == inputs){
             return save(bean);
@@ -505,11 +505,11 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param args referenced beans or imported beans<br>
      *      see also {@link #save(FlLogBean , FlDeviceBean , FlFaceBean , FlFeatureBean , FlPersonBean )}
      * @return the inserted or updated {@link FlLogBean} bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public FlLogBean saveCollection(FlLogBean bean,Object ...inputs) throws Dao3Exception
+    public FlLogBean saveCollection(FlLogBean bean,Object ...inputs) throws DaoException
     {
         if(null == inputs){
             return save(bean);
@@ -554,11 +554,11 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_LOG_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_COMPARE_FACE},{@link Constant#FL_LOG_FK_VERIFY_FEATURE},{@link Constant#FL_LOG_FK_PERSON_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T getReferencedBean(FlLogBean bean,int fkIndex)throws Dao3Exception{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T getReferencedBean(FlLogBean bean,int fkIndex)throws DaoException{
         switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.getReferencedByDeviceId(bean);
@@ -581,11 +581,11 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param beanToSet the <T> object to associate to the {@link FlLogBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(FlLogBean,int)}
      * @return always beanToSet saved
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T setReferencedBean(FlLogBean bean,T beanToSet,int fkIndex)throws Dao3Exception{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T setReferencedBean(FlLogBean bean,T beanToSet,int fkIndex)throws DaoException{
         switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.setReferencedByDeviceId(bean, (FlDeviceBean)beanToSet);
@@ -611,9 +611,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * FK_NAME : fl_log_ibfk_2
      * @param bean the {@link FlLogBean}
      * @return the associated {@link FlDeviceBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlDeviceBean getReferencedByDeviceId(FlLogBean bean) throws Dao3Exception
+    public FlDeviceBean getReferencedByDeviceId(FlLogBean bean) throws DaoException
     {
         if(null == bean){
             return null;
@@ -631,7 +631,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @return always beanToSet saved
      * @throws Exception
      */
-    public FlDeviceBean setReferencedByDeviceId(FlLogBean bean, FlDeviceBean beanToSet) throws Dao3Exception
+    public FlDeviceBean setReferencedByDeviceId(FlLogBean bean, FlDeviceBean beanToSet) throws DaoException
     {
         if(null != bean){
             instanceOfFlDeviceManager().save(beanToSet);
@@ -651,9 +651,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * FK_NAME : fl_log_ibfk_4
      * @param bean the {@link FlLogBean}
      * @return the associated {@link FlFaceBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlFaceBean getReferencedByCompareFace(FlLogBean bean) throws Dao3Exception
+    public FlFaceBean getReferencedByCompareFace(FlLogBean bean) throws DaoException
     {
         if(null == bean){
             return null;
@@ -671,7 +671,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @return always beanToSet saved
      * @throws Exception
      */
-    public FlFaceBean setReferencedByCompareFace(FlLogBean bean, FlFaceBean beanToSet) throws Dao3Exception
+    public FlFaceBean setReferencedByCompareFace(FlLogBean bean, FlFaceBean beanToSet) throws DaoException
     {
         if(null != bean){
             instanceOfFlFaceManager().save(beanToSet);
@@ -691,9 +691,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * FK_NAME : fl_log_ibfk_3
      * @param bean the {@link FlLogBean}
      * @return the associated {@link FlFeatureBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlFeatureBean getReferencedByVerifyFeature(FlLogBean bean) throws Dao3Exception
+    public FlFeatureBean getReferencedByVerifyFeature(FlLogBean bean) throws DaoException
     {
         if(null == bean){
             return null;
@@ -711,7 +711,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @return always beanToSet saved
      * @throws Exception
      */
-    public FlFeatureBean setReferencedByVerifyFeature(FlLogBean bean, FlFeatureBean beanToSet) throws Dao3Exception
+    public FlFeatureBean setReferencedByVerifyFeature(FlLogBean bean, FlFeatureBean beanToSet) throws DaoException
     {
         if(null != bean){
             instanceOfFlFeatureManager().save(beanToSet);
@@ -731,9 +731,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * FK_NAME : fl_log_ibfk_1
      * @param bean the {@link FlLogBean}
      * @return the associated {@link FlPersonBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlPersonBean getReferencedByPersonId(FlLogBean bean) throws Dao3Exception
+    public FlPersonBean getReferencedByPersonId(FlLogBean bean) throws DaoException
     {
         if(null == bean){
             return null;
@@ -751,7 +751,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @return always beanToSet saved
      * @throws Exception
      */
-    public FlPersonBean setReferencedByPersonId(FlLogBean bean, FlPersonBean beanToSet) throws Dao3Exception
+    public FlPersonBean setReferencedByPersonId(FlLogBean bean, FlPersonBean beanToSet) throws DaoException
     {
         if(null != bean){
             instanceOfFlPersonManager().save(beanToSet);
@@ -776,10 +776,10 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param where the sql 'where' clause
      * @return the number of deleted rows
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @Override
-    public int deleteByWhere(String where) throws Dao3Exception
+    public int deleteByWhere(String where) throws DaoException
     {
         if( !this.listenerContainer.isEmpty()){
             final DeleteBeanAction action = new DeleteBeanAction(); 
@@ -816,7 +816,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     //13
 
     @Override
-    public FlLogBean insert(FlLogBean bean) throws Dao3Exception
+    public FlLogBean insert(FlLogBean bean) throws DaoException
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
@@ -958,7 +958,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     //14
 
     @Override
-    public FlLogBean update(FlLogBean bean) throws Dao3Exception
+    public FlLogBean update(FlLogBean bean) throws DaoException
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
@@ -1093,7 +1093,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     //18
 
     @Override
-    public FlLogBean loadUniqueUsingTemplate(FlLogBean bean) throws Dao3Exception
+    public FlLogBean loadUniqueUsingTemplate(FlLogBean bean) throws DaoException
     {
          List<FlLogBean> beans = this.loadUsingTemplateAsList(bean);
          switch(beans.size()){
@@ -1108,7 +1108,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     //18-1
 
     @Override
-    public FlLogBean loadUniqueUsingTemplateChecked(FlLogBean bean) throws Dao3Exception
+    public FlLogBean loadUniqueUsingTemplateChecked(FlLogBean bean) throws DaoException
     {
          List<FlLogBean> beans = this.loadUsingTemplateAsList(bean);
          switch(beans.size()){
@@ -1123,7 +1123,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     //20-5
 
     @Override
-    public int loadUsingTemplate(FlLogBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlLogBean> action) throws Dao3Exception
+    public int loadUsingTemplate(FlLogBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlLogBean> action) throws DaoException
     {
         // System.out.println("loadUsingTemplate startRow:" + startRow + ", numRows:" + numRows + ", searchType:" + searchType);
         StringBuilder sqlWhere = new StringBuilder("");
@@ -1137,7 +1137,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                     ResultSet.CONCUR_READ_ONLY);
             this.fillPreparedStatement(ps, bean, searchType,false);
             return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
-        } catch (Dao3Exception e) {
+        } catch (DaoException e) {
             throw e;
         }catch (SQLException e) {
             throw new DataAccessException(e);
@@ -1150,7 +1150,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     //21
 
     @Override
-    public int deleteUsingTemplate(FlLogBean bean) throws Dao3Exception
+    public int deleteUsingTemplate(FlLogBean bean) throws DaoException
     {
         if(bean.checkIdInitialized() && null != bean.getId()){
             return this.deleteByPrimaryKey(bean.getId());
@@ -1210,9 +1210,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param compareFace the compare_face column's value filter.
      * @return an array of FlLogBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlLogBean[] loadByIndexCompareFace(Integer compareFace) throws Dao3Exception
+    public FlLogBean[] loadByIndexCompareFace(Integer compareFace) throws DaoException
     {
         return (FlLogBean[])this.loadByIndexCompareFaceAsList(compareFace).toArray(new FlLogBean[0]);
     }
@@ -1222,9 +1222,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param compareFace the compare_face column's value filter.
      * @return a list of FlLogBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlLogBean> loadByIndexCompareFaceAsList(Integer compareFace) throws Dao3Exception
+    public List<FlLogBean> loadByIndexCompareFaceAsList(Integer compareFace) throws DaoException
     {
         FlLogBean bean = this.createBean();
         bean.setCompareFace(compareFace);
@@ -1235,9 +1235,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param compareFace the compare_face column's value filter.
      * @return the number of deleted objects
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public int deleteByIndexCompareFace(Integer compareFace) throws Dao3Exception
+    public int deleteByIndexCompareFace(Integer compareFace) throws DaoException
     {
         FlLogBean bean = this.createBean();
         bean.setCompareFace(compareFace);
@@ -1250,9 +1250,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param deviceId the device_id column's value filter.
      * @return an array of FlLogBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlLogBean[] loadByIndexDeviceId(Integer deviceId) throws Dao3Exception
+    public FlLogBean[] loadByIndexDeviceId(Integer deviceId) throws DaoException
     {
         return (FlLogBean[])this.loadByIndexDeviceIdAsList(deviceId).toArray(new FlLogBean[0]);
     }
@@ -1262,9 +1262,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param deviceId the device_id column's value filter.
      * @return a list of FlLogBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlLogBean> loadByIndexDeviceIdAsList(Integer deviceId) throws Dao3Exception
+    public List<FlLogBean> loadByIndexDeviceIdAsList(Integer deviceId) throws DaoException
     {
         FlLogBean bean = this.createBean();
         bean.setDeviceId(deviceId);
@@ -1275,9 +1275,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param deviceId the device_id column's value filter.
      * @return the number of deleted objects
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public int deleteByIndexDeviceId(Integer deviceId) throws Dao3Exception
+    public int deleteByIndexDeviceId(Integer deviceId) throws DaoException
     {
         FlLogBean bean = this.createBean();
         bean.setDeviceId(deviceId);
@@ -1290,9 +1290,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param personId the person_id column's value filter.
      * @return an array of FlLogBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlLogBean[] loadByIndexPersonId(Integer personId) throws Dao3Exception
+    public FlLogBean[] loadByIndexPersonId(Integer personId) throws DaoException
     {
         return (FlLogBean[])this.loadByIndexPersonIdAsList(personId).toArray(new FlLogBean[0]);
     }
@@ -1302,9 +1302,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param personId the person_id column's value filter.
      * @return a list of FlLogBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlLogBean> loadByIndexPersonIdAsList(Integer personId) throws Dao3Exception
+    public List<FlLogBean> loadByIndexPersonIdAsList(Integer personId) throws DaoException
     {
         FlLogBean bean = this.createBean();
         bean.setPersonId(personId);
@@ -1315,9 +1315,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param personId the person_id column's value filter.
      * @return the number of deleted objects
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public int deleteByIndexPersonId(Integer personId) throws Dao3Exception
+    public int deleteByIndexPersonId(Integer personId) throws DaoException
     {
         FlLogBean bean = this.createBean();
         bean.setPersonId(personId);
@@ -1330,9 +1330,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param verifyFeature the verify_feature column's value filter.
      * @return an array of FlLogBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlLogBean[] loadByIndexVerifyFeature(String verifyFeature) throws Dao3Exception
+    public FlLogBean[] loadByIndexVerifyFeature(String verifyFeature) throws DaoException
     {
         return (FlLogBean[])this.loadByIndexVerifyFeatureAsList(verifyFeature).toArray(new FlLogBean[0]);
     }
@@ -1342,9 +1342,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param verifyFeature the verify_feature column's value filter.
      * @return a list of FlLogBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlLogBean> loadByIndexVerifyFeatureAsList(String verifyFeature) throws Dao3Exception
+    public List<FlLogBean> loadByIndexVerifyFeatureAsList(String verifyFeature) throws DaoException
     {
         FlLogBean bean = this.createBean();
         bean.setVerifyFeature(verifyFeature);
@@ -1355,9 +1355,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param verifyFeature the verify_feature column's value filter.
      * @return the number of deleted objects
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public int deleteByIndexVerifyFeature(String verifyFeature) throws Dao3Exception
+    public int deleteByIndexVerifyFeature(String verifyFeature) throws DaoException
     {
         FlLogBean bean = this.createBean();
         bean.setVerifyFeature(verifyFeature);
@@ -1371,10 +1371,10 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *        {@link Constant#FL_LOG_INDEX_COMPARE_FACE},{@link Constant#FL_LOG_INDEX_DEVICE_ID},{@link Constant#FL_LOG_INDEX_PERSON_ID},{@link Constant#FL_LOG_INDEX_VERIFY_FEATURE}
      * @param keys key values of index
      * @return a list of FlLogBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @Override
-    public List<FlLogBean> loadByIndexAsList(int keyIndex,Object ...keys)throws Dao3Exception
+    public List<FlLogBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DaoException
     {
         if(null == keys){
             throw new NullPointerException();
@@ -1431,10 +1431,10 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *        {@link Constant#FL_LOG_INDEX_COMPARE_FACE},{@link Constant#FL_LOG_INDEX_DEVICE_ID},{@link Constant#FL_LOG_INDEX_PERSON_ID},{@link Constant#FL_LOG_INDEX_VERIFY_FEATURE}
      * @param keys key values of index
      * @return the number of deleted objects
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @Override
-    public int deleteByIndex(int keyIndex,Object ...keys)throws Dao3Exception
+    public int deleteByIndex(int keyIndex,Object ...keys)throws DaoException
     {
         if(null == keys){
             throw new NullPointerException();
@@ -1494,7 +1494,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     //25
 
     @Override
-    public int countWhere(String where) throws Dao3Exception
+    public int countWhere(String where) throws DaoException
     {
         String sql = "SELECT COUNT(*) AS MCOUNT FROM fl_log " + where;
         // System.out.println("countWhere: " + sql);
@@ -1534,9 +1534,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param ps the PreparedStatement to be used
      * @return the number of rows returned
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    private int countByPreparedStatement(PreparedStatement ps) throws Dao3Exception
+    private int countByPreparedStatement(PreparedStatement ps) throws DaoException
     {
         ResultSet rs =  null;
         try
@@ -1568,10 +1568,10 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param bean the FlLogBean template to look for
      * @param searchType exact ?  like ? starting like ?
      * @return the number of rows returned
-     * @throws Dao3Exception
+     * @throws DaoException
      */
     @Override
-    public int countUsingTemplate(FlLogBean bean, int searchType) throws Dao3Exception
+    public int countUsingTemplate(FlLogBean bean, int searchType) throws DaoException
     {
         Connection c = null;
         PreparedStatement ps = null;
@@ -1707,9 +1707,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
      * @return the number of clauses returned
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    protected int fillPreparedStatement(PreparedStatement ps, FlLogBean bean, int searchType,boolean fillNull) throws Dao3Exception
+    protected int fillPreparedStatement(PreparedStatement ps, FlLogBean bean, int searchType,boolean fillNull) throws DaoException
     {
         if (bean == null) {
             return 0;
@@ -1748,7 +1748,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                         if (bean.getVerifyFeature()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getVerifyFeature() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
-                        throw new Dao3Exception("Unknown search type " + searchType);
+                        throw new DaoException("Unknown search type " + searchType);
                 }
             }
             if (bean.checkCompareFaceModified()) {
@@ -1790,9 +1790,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the resulting FlLogBean table
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlLogBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws Dao3Exception
+    public FlLogBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DaoException
     {
         return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new FlLogBean[0]);
     }
@@ -1806,9 +1806,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the resulting FlLogBean table
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlLogBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws Dao3Exception
+    public List<FlLogBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DaoException
     {
         ListAction action = new ListAction();
         actionOnResultSet(rs, fieldList, numRows, numRows, action);
@@ -1822,10 +1822,10 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param action interface obj for do something
      * @return the count dealt by action  
-     * @throws Dao3Exception
+     * @throws DaoException
      * @throws IllegalArgumentException
      */
-    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlLogBean> action) throws Dao3Exception{
+    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlLogBean> action) throws DaoException{
         try{
             int count = 0;
             if(0!=numRows){
@@ -1862,7 +1862,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                 }
             }
             return count;
-        }catch(Dao3Exception e){
+        }catch(DaoException e){
             throw e;
         }catch(SQLException e){
             throw new DataAccessException(e);
@@ -1875,9 +1875,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param rs the ResultSet to be transformed
      * @return bean resulting FlLogBean bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlLogBean decodeRow(ResultSet rs,FlLogBean bean) throws Dao3Exception
+    public FlLogBean decodeRow(ResultSet rs,FlLogBean bean) throws DaoException
     {
         if(null==bean){
             bean = this.createBean();
@@ -1910,9 +1910,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param rs the ResultSet to be transformed
      * @param fieldList table of the field's associated constants
      * @return bean resulting FlLogBean bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlLogBean decodeRow(ResultSet rs, int[] fieldList,FlLogBean bean) throws Dao3Exception
+    public FlLogBean decodeRow(ResultSet rs, int[] fieldList,FlLogBean bean) throws DaoException
     {
         if(null==bean){
             bean = this.createBean();
@@ -1957,7 +1957,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                         bean.setCreateTime(rs.getTimestamp(pos));
                         break;
                     default:
-                        throw new Dao3Exception("Unknown field id " + fieldList[i]);
+                        throw new DaoException("Unknown field id " + fieldList[i]);
                 }
             }
         }
@@ -1977,9 +1977,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param rs the ResultSet to be transformed
      * @return bean resulting FlLogBean bean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlLogBean metaDataDecodeRow(ResultSet rs) throws Dao3Exception
+    public FlLogBean metaDataDecodeRow(ResultSet rs) throws DaoException
     {
         FlLogBean bean = this.createBean();
         try
@@ -2014,9 +2014,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param ps the PreparedStatement to be used
      * @return an array of FlLogBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlLogBean[] loadByPreparedStatement(PreparedStatement ps) throws Dao3Exception
+    public FlLogBean[] loadByPreparedStatement(PreparedStatement ps) throws DaoException
     {
         return this.loadByPreparedStatement(ps, null);
     }
@@ -2027,9 +2027,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param ps the PreparedStatement to be used
      * @return an array of FlLogBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlLogBean> loadByPreparedStatementAsList(PreparedStatement ps) throws Dao3Exception
+    public List<FlLogBean> loadByPreparedStatementAsList(PreparedStatement ps) throws DaoException
     {
         return this.loadByPreparedStatementAsList(ps, null);
     }
@@ -2041,9 +2041,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param ps the PreparedStatement to be used
      * @param fieldList table of the field's associated constants
      * @return an array of FlLogBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlLogBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws Dao3Exception
+    public FlLogBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws DaoException
     {
         return this.loadByPreparedStatementAsList(ps, fieldList).toArray(new FlLogBean[0]);
     }
@@ -2055,9 +2055,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param ps the PreparedStatement to be used
      * @param fieldList table of the field's associated constants
      * @return an array of FlLogBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlLogBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws Dao3Exception
+    public List<FlLogBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws DaoException
     { 
         return loadByPreparedStatementAsList(ps,fieldList,1,-1);
     }
@@ -2072,9 +2072,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param fieldList table of the field's associated constants
      * @return an array of FlLogBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public FlLogBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws Dao3Exception
+    public FlLogBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DaoException
     {
         return loadByPreparedStatementAsList(ps,fieldList,startRow,numRows).toArray(new FlLogBean[0]);
     }
@@ -2089,9 +2089,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param fieldList table of the field's associated constants
      * @return an array of FlLogBean
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    public List<FlLogBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws Dao3Exception
+    public List<FlLogBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DaoException
     {
         ListAction action = new ListAction();
         loadByPreparedStatement(ps,fieldList,startRow,numRows,action);
@@ -2109,16 +2109,16 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param fieldList table of the field's associated constants
      * @param action Action object for do something(not null)
      * @return the count dealt by action
-     * @throws Dao3Exception
+     * @throws DaoException
      */     
-    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlLogBean> action) throws Dao3Exception
+    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlLogBean> action) throws DaoException
     {
         ResultSet rs =  null;
         try {
             ps.setFetchSize(100);
             rs = ps.executeQuery();
             return this.actionOnResultSet(rs, fieldList, startRow, numRows, action);
-        } catch (Dao3Exception e) {
+        } catch (DaoException e) {
             throw e;
         } catch (SQLException e) {
             throw new DataAccessException(e);
@@ -2155,7 +2155,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     //37
 
     @Override
-    public void fire(TableListener.Event event, FlLogBean bean) throws Dao3Exception{
+    public void fire(TableListener.Event event, FlLogBean bean) throws DaoException{
         if(null == event){
             throw new NullPointerException();
         }
@@ -2165,7 +2165,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     //37-1
 
     @Override
-    public void fire(int event, FlLogBean bean) throws Dao3Exception{
+    public void fire(int event, FlLogBean bean) throws DaoException{
         try{
             fire(TableListener.Event.values()[event],bean);
         }catch(ArrayIndexOutOfBoundsException e){
@@ -2177,13 +2177,13 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     private final net.gdface.facelog.dborm.BaseForeignKeyListener<FlPersonBean,FlLogBean> foreignKeyListenerByPersonId = 
             new net.gdface.facelog.dborm.BaseForeignKeyListener<FlPersonBean,FlLogBean>(){
                 @Override
-                protected List<FlLogBean> getImportedBeans(FlPersonBean bean) throws Dao3Exception {
+                protected List<FlLogBean> getImportedBeans(FlPersonBean bean) throws DaoException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.<FlLogBean>emptyList()
                             : instanceOfFlPersonManager().getLogBeansByPersonIdAsList(bean);
                 }
                 @Override
-                protected void onRemove(List<FlLogBean> effectBeans) throws Dao3Exception {
+                protected void onRemove(List<FlLogBean> effectBeans) throws DaoException {
                     for(FlLogBean bean:effectBeans){
                         Event.DELETE.fire(listenerContainer, bean);
                     }
@@ -2193,13 +2193,13 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     private final net.gdface.facelog.dborm.BaseForeignKeyListener<FlDeviceBean,FlLogBean> foreignKeyListenerByDeviceId = 
             new net.gdface.facelog.dborm.BaseForeignKeyListener<FlDeviceBean,FlLogBean>(){
                 @Override
-                protected List<FlLogBean> getImportedBeans(FlDeviceBean bean) throws Dao3Exception {
+                protected List<FlLogBean> getImportedBeans(FlDeviceBean bean) throws DaoException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.<FlLogBean>emptyList()
                             : instanceOfFlDeviceManager().getLogBeansByDeviceIdAsList(bean);
                 }
                 @Override
-                protected void onRemove(List<FlLogBean> effectBeans) throws Dao3Exception {
+                protected void onRemove(List<FlLogBean> effectBeans) throws DaoException {
                     for(FlLogBean bean:effectBeans){
                         bean.setDeviceId(null);
                         Event.UPDATE.fire(listenerContainer, bean);
@@ -2210,13 +2210,13 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     private final net.gdface.facelog.dborm.BaseForeignKeyListener<FlFeatureBean,FlLogBean> foreignKeyListenerByVerifyFeature = 
             new net.gdface.facelog.dborm.BaseForeignKeyListener<FlFeatureBean,FlLogBean>(){
                 @Override
-                protected List<FlLogBean> getImportedBeans(FlFeatureBean bean) throws Dao3Exception {
+                protected List<FlLogBean> getImportedBeans(FlFeatureBean bean) throws DaoException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.<FlLogBean>emptyList()
                             : instanceOfFlFeatureManager().getLogBeansByVerifyFeatureAsList(bean);
                 }
                 @Override
-                protected void onRemove(List<FlLogBean> effectBeans) throws Dao3Exception {
+                protected void onRemove(List<FlLogBean> effectBeans) throws DaoException {
                     for(FlLogBean bean:effectBeans){
                         bean.setVerifyFeature(null);
                         Event.UPDATE.fire(listenerContainer, bean);
@@ -2227,13 +2227,13 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     private final net.gdface.facelog.dborm.BaseForeignKeyListener<FlFaceBean,FlLogBean> foreignKeyListenerByCompareFace = 
             new net.gdface.facelog.dborm.BaseForeignKeyListener<FlFaceBean,FlLogBean>(){
                 @Override
-                protected List<FlLogBean> getImportedBeans(FlFaceBean bean) throws Dao3Exception {
+                protected List<FlLogBean> getImportedBeans(FlFaceBean bean) throws DaoException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.<FlLogBean>emptyList()
                             : instanceOfFlFaceManager().getLogBeansByCompareFaceAsList(bean);
                 }
                 @Override
-                protected void onRemove(List<FlLogBean> effectBeans) throws Dao3Exception {
+                protected void onRemove(List<FlLogBean> effectBeans) throws DaoException {
                     for(FlLogBean bean:effectBeans){
                         bean.setCompareFace(null);
                         Event.UPDATE.fire(listenerContainer, bean);
@@ -2299,7 +2299,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     /**
      * Gets the connection.
      */
-    private Connection getConnection() throws Dao3Exception
+    private Connection getConnection() throws DaoException
     {
         try
         {
@@ -2327,9 +2327,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * Fill the given prepared statement with the values in argList
      * @param ps the PreparedStatement that will be filled
      * @param argList the arguments to use fill given prepared statement
-     * @throws Dao3Exception
+     * @throws DaoException
      */
-    private void fillPrepareStatement(PreparedStatement ps, Object[] argList) throws Dao3Exception{
+    private void fillPrepareStatement(PreparedStatement ps, Object[] argList) throws DaoException{
         try {
             if (!(argList == null || ps == null)) {
                 for (int i = 0; i < argList.length; i++) {
@@ -2341,13 +2341,13 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                 }
             }
         } catch (SQLException e) {
-            throw new Dao3Exception(e);
+            throw new DaoException(e);
         }
     }
     
     @Override    
 
-    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlLogBean> action) throws Dao3Exception{
+    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlLogBean> action) throws DaoException{
         PreparedStatement ps = null;
         Connection connection = null;
         // logger.debug("sql string:\n" + sql + "\n");
@@ -2358,7 +2358,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                     ResultSet.CONCUR_READ_ONLY);
             fillPrepareStatement(ps, argList);
             return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
-        } catch (Dao3Exception e) {
+        } catch (DaoException e) {
             throw e;
         }catch (SQLException e) {
             throw new DataAccessException(e);
@@ -2370,14 +2370,14 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
    
     @Override
 
-    public <T>T runAsTransaction(Callable<T> fun) throws Dao3Exception{
+    public <T>T runAsTransaction(Callable<T> fun) throws DaoException{
         return Manager.getInstance().runAsTransaction(fun);
     }
     
     class DeleteBeanAction extends Action.BaseAdapter<FlLogBean>{
         private final AtomicInteger count=new AtomicInteger(0);
         @Override
-        public void call(FlLogBean bean) throws Dao3Exception {
+        public void call(FlLogBean bean) throws DaoException {
                 FlLogManager.this.delete(bean);
                 count.incrementAndGet();
         }

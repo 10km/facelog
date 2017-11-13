@@ -13,18 +13,18 @@ import org.junit.Test;
  * @author guyadong
  *
  */
-public class TestClone {
-	public static class A implements Cloneable{
+public class CloneTest {
+	public static class ClassA implements Cloneable{
 		final String string;
 
-		public A(String string) {
+		public ClassA(String string) {
 			super();
 			this.string = string;
 		}
 		@Override
-		public A clone(){
+		public ClassA clone(){
 			try {
-				return (A) super.clone();
+				return (ClassA) super.clone();
 			} catch (CloneNotSupportedException e) {
 				throw new RuntimeException(e);
 			}
@@ -40,8 +40,8 @@ public class TestClone {
 		//java.text.DateFormat.getDateTimeInstance().parse("2017-12-31 12:12:12.0",new java.text.ParsePosition(0));
 		Date date = java.sql.Timestamp.valueOf("2017-12-31 12:12:12.0");
 		System.out.println(date);
-		A a = new A("hello");
-		A cloneA= a.clone();
+		ClassA a = new ClassA("hello");
+		ClassA cloneA= a.clone();
 		System.out.println(cloneA.string);
 	}
 

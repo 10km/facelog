@@ -16,14 +16,14 @@ import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.ILogLightManager;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.exception.WrapDAO1Exception;
+import net.gdface.facelog.db.exception.WrapDaoException;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
-import net.gdface.facelog.dborm.exception.Dao3Exception;
+import net.gdface.facelog.dborm.exception.DaoException;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_log_light table.<br>
- * all {@link Dao3Exception} be wrapped as {@link WrapDAO1Exception} to throw.<br>
+ * all {@link DaoException} be wrapped as {@link WrapDaoException} to throw.<br>
  * Remarks: VIEW<br>
  * @author guyadong
  */
@@ -108,9 +108,9 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         try{
             return this.nativeManager.deleteByWhere(where);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -127,9 +127,9 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.insert(this.beanConverter.toRight(bean)));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -141,9 +141,9 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.update(this.beanConverter.toRight(bean)));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -159,9 +159,9 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
      }
     //18-1
@@ -176,9 +176,9 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         {
             throw new ObjectRetrievalException();
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
      }
     //20-5
@@ -189,9 +189,9 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         try {
             return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -203,9 +203,9 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         try{
             return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(bean));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -222,9 +222,9 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         try{
             return this.nativeManager.countWhere(where);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -236,9 +236,9 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         try{
             return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),searchType);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -291,9 +291,9 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         try{
             this.nativeManager.fire(event, this.beanConverter.toRight(bean));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     //37-2
@@ -326,32 +326,32 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
             this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.log.FlLogLightBean> (){
 
                 @Override
-                public void beforeInsert(net.gdface.facelog.dborm.log.FlLogLightBean bean) throws Dao3Exception {
+                public void beforeInsert(net.gdface.facelog.dborm.log.FlLogLightBean bean) throws DaoException {
                     listener.beforeInsert(LogLightManager.this.beanConverter.fromRight(bean));                
                 }
 
                 @Override
-                public void afterInsert(net.gdface.facelog.dborm.log.FlLogLightBean bean) throws Dao3Exception {
+                public void afterInsert(net.gdface.facelog.dborm.log.FlLogLightBean bean) throws DaoException {
                     listener.afterInsert(LogLightManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeUpdate(net.gdface.facelog.dborm.log.FlLogLightBean bean) throws Dao3Exception {
+                public void beforeUpdate(net.gdface.facelog.dborm.log.FlLogLightBean bean) throws DaoException {
                     listener.beforeUpdate(LogLightManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterUpdate(net.gdface.facelog.dborm.log.FlLogLightBean bean) throws Dao3Exception {
+                public void afterUpdate(net.gdface.facelog.dborm.log.FlLogLightBean bean) throws DaoException {
                     listener.afterUpdate(LogLightManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeDelete(net.gdface.facelog.dborm.log.FlLogLightBean bean) throws Dao3Exception {
+                public void beforeDelete(net.gdface.facelog.dborm.log.FlLogLightBean bean) throws DaoException {
                     listener.beforeDelete(LogLightManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterDelete(net.gdface.facelog.dborm.log.FlLogLightBean bean) throws Dao3Exception {
+                public void afterDelete(net.gdface.facelog.dborm.log.FlLogLightBean bean) throws DaoException {
                     listener.afterDelete(LogLightManager.this.beanConverter.fromRight(bean));
                 }};
         }
@@ -404,9 +404,9 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         try{
             return this.nativeManager.loadBySqlForAction(sql,argList,fieldList,startRow,numRows,this.toNative(action));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     
@@ -415,9 +415,9 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         try{
             return this.nativeManager.runAsTransaction(fun);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     

@@ -19,14 +19,14 @@ import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.exception.WrapDAO1Exception;
+import net.gdface.facelog.db.exception.WrapDaoException;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
-import net.gdface.facelog.dborm.exception.Dao3Exception;
+import net.gdface.facelog.dborm.exception.DaoException;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_image table.<br>
- * all {@link Dao3Exception} be wrapped as {@link WrapDAO1Exception} to throw.<br>
+ * all {@link DaoException} be wrapped as {@link WrapDaoException} to throw.<br>
  * Remarks: 图像信息存储表,用于存储系统中所有用到的图像数据,表中只包含图像基本信息,图像二进制源数据存在在fl_store中(md5对应)<br>
  * @author guyadong
  */
@@ -127,8 +127,8 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
             return this.beanConverter.fromRight(nativeManager.loadByPrimaryKeyChecked(md5));
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
             throw new ObjectRetrievalException();
-        }catch(Dao3Exception e){
-            throw new WrapDAO1Exception(e);
+        }catch(DaoException e){
+            throw new WrapDaoException(e);
         }
     }
     //1.2
@@ -187,9 +187,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         try{
             return nativeManager.existsPrimaryKey(md5);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     //1.6
@@ -216,8 +216,8 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
             return this.nativeManager.checkDuplicate(md5);
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
         	throw new ObjectRetrievalException(e);
-        }catch(Dao3Exception e){
-            throw new WrapDAO1Exception(e);
+        }catch(DaoException e){
+            throw new WrapDaoException(e);
         }
     }
     //1.8 override IImageManager
@@ -264,9 +264,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         {
             return nativeManager.deleteByPrimaryKey(md5);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     //2
@@ -277,9 +277,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         {
             return nativeManager.delete(this.beanConverter.toRight(bean));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }   
     }
     //2.1
@@ -486,9 +486,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         try {
             return this.dbConverter.getFaceBeanConverter().fromRight(nativeManager.getFaceBeansByImageMd5AsList( this.beanConverter.toRight(bean),startRow,numRows));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     //3.3 SET IMPORTED override IImageManager
@@ -565,9 +565,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         try {
             return this.dbConverter.getPersonBeanConverter().fromRight(nativeManager.getPersonBeansByImageMd5AsList( this.beanConverter.toRight(bean),startRow,numRows));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     //3.3 SET IMPORTED override IImageManager
@@ -816,9 +816,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
             foreignConverter.fromRight(beanToSet,foreignNativeBean);
             return beanToSet;
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -834,9 +834,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         try{
             return this.nativeManager.deleteByWhere(where);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -853,9 +853,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.insert(this.beanConverter.toRight(bean)));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -867,9 +867,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.update(this.beanConverter.toRight(bean)));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -885,9 +885,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
      }
     //18-1
@@ -902,9 +902,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         {
             throw new ObjectRetrievalException();
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
      }
     //20-5
@@ -915,9 +915,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         try {
             return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -929,9 +929,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         try{
             return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(bean));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -957,9 +957,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadByIndexDeviceIdAsList(deviceId));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -971,9 +971,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         try{
             return this.nativeManager.deleteByIndexDeviceId(deviceId);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     
@@ -990,8 +990,8 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     {
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadByIndexAsList(keyIndex,keys));
-        }catch(Dao3Exception e){
-            throw new WrapDAO1Exception(e);
+        }catch(DaoException e){
+            throw new WrapDaoException(e);
         }
     }
     
@@ -1007,8 +1007,8 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     {
         try{
             return this.nativeManager.deleteByIndex(keyIndex,keys);
-        }catch(Dao3Exception e){
-            throw new WrapDAO1Exception(e);
+        }catch(DaoException e){
+            throw new WrapDaoException(e);
         }
     }
 
@@ -1024,9 +1024,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         try{
             return this.nativeManager.countWhere(where);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -1038,9 +1038,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         try{
             return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),searchType);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
 
@@ -1093,9 +1093,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         try{
             this.nativeManager.fire(event, this.beanConverter.toRight(bean));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     //37-2
@@ -1128,32 +1128,32 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
             this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.image.FlImageBean> (){
 
                 @Override
-                public void beforeInsert(net.gdface.facelog.dborm.image.FlImageBean bean) throws Dao3Exception {
+                public void beforeInsert(net.gdface.facelog.dborm.image.FlImageBean bean) throws DaoException {
                     listener.beforeInsert(ImageManager.this.beanConverter.fromRight(bean));                
                 }
 
                 @Override
-                public void afterInsert(net.gdface.facelog.dborm.image.FlImageBean bean) throws Dao3Exception {
+                public void afterInsert(net.gdface.facelog.dborm.image.FlImageBean bean) throws DaoException {
                     listener.afterInsert(ImageManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeUpdate(net.gdface.facelog.dborm.image.FlImageBean bean) throws Dao3Exception {
+                public void beforeUpdate(net.gdface.facelog.dborm.image.FlImageBean bean) throws DaoException {
                     listener.beforeUpdate(ImageManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterUpdate(net.gdface.facelog.dborm.image.FlImageBean bean) throws Dao3Exception {
+                public void afterUpdate(net.gdface.facelog.dborm.image.FlImageBean bean) throws DaoException {
                     listener.afterUpdate(ImageManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeDelete(net.gdface.facelog.dborm.image.FlImageBean bean) throws Dao3Exception {
+                public void beforeDelete(net.gdface.facelog.dborm.image.FlImageBean bean) throws DaoException {
                     listener.beforeDelete(ImageManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterDelete(net.gdface.facelog.dborm.image.FlImageBean bean) throws Dao3Exception {
+                public void afterDelete(net.gdface.facelog.dborm.image.FlImageBean bean) throws DaoException {
                     listener.afterDelete(ImageManager.this.beanConverter.fromRight(bean));
                 }};
         }
@@ -1206,9 +1206,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         try{
             return this.nativeManager.loadBySqlForAction(sql,argList,fieldList,startRow,numRows,this.toNative(action));
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     
@@ -1217,9 +1217,9 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         try{
             return this.nativeManager.runAsTransaction(fun);
         }
-        catch(Dao3Exception e)
+        catch(DaoException e)
         {
-            throw new WrapDAO1Exception(e);
+            throw new WrapDaoException(e);
         }
     }
     
