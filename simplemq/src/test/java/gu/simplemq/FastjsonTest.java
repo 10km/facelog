@@ -98,7 +98,7 @@ public class FastjsonTest {
 	    	users.add(user);
 	    }
 	    
-	    public boolean _getModified(){
+	    public boolean getModified(){
 	    	return false;
 	    }
 
@@ -177,7 +177,7 @@ public class FastjsonTest {
 				entry.setValue(JSON.toJSONString(entry.getValue()));
 			}
 
-			Map<String, Object> deJsonObj = new HashMap<String, Object>();
+			Map<String, Object> deJsonObj = new HashMap<String, Object>(16);
 			for (Entry<String, Object> entry : jsonObj.entrySet()) {
 				String json = (String) entry.getValue();
 				String key = entry.getKey();
@@ -192,7 +192,7 @@ public class FastjsonTest {
 		}
 		{
 			JSONObject jsonObject = (JSONObject) JSON.toJSON(group);
-			Map<String, String> jsonObj = new HashMap<String, String>();
+			Map<String, String> jsonObj = new HashMap<String, String>(16);
 			for (Entry<String, Object> entry : jsonObject.entrySet()) {
 				Object value = entry.getValue();
 //				System.out.println(
@@ -204,7 +204,7 @@ public class FastjsonTest {
 				}
 			}
 
-			Map<String, Object> deJsonMap = new HashMap<String, Object>();
+			Map<String, Object> deJsonMap = new HashMap<String, Object>(16);
 			for (Entry<String, String> entry : jsonObj.entrySet()) {
 				String json = (String) entry.getValue();
 				String key = entry.getKey();
@@ -265,8 +265,8 @@ public class FastjsonTest {
 		Date date=new Date();
 		Object jsonDate = JSON.toJSON(date);
 		System.out.println(jsonDate.getClass().getName());
-		int _int= 32;
-		Object jsonInt = JSON.toJSON(_int);
+		int intVar= 32;
+		Object jsonInt = JSON.toJSON(intVar);
 		System.out.println(jsonInt.getClass().getName());
 	}
 	@Test

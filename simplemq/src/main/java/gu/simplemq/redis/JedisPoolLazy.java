@@ -46,6 +46,7 @@ public class JedisPoolLazy {
 	}
 	/** {@link JedisPoolLazy} 初始化参数名 */
 	public static enum PropName{
+		/** 线程配置参数对象 */
 		jedisPoolConfig,host,port,password,database,timeout,uri
 	}
 	

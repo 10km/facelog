@@ -22,7 +22,9 @@ public abstract class AbstractConsumer implements AutoCloseable,Constant{
 	private boolean daemon=false;
 	/** 获取队列的超时参数 */
 	protected int timeoutMills = DEFAULT_CONSUMER_CHECK_INTERVAL;
-	private enum State{INIT,OPENED,CLOSED}
+	private enum State{
+		/** 初始状态*/
+		INIT,OPENED,CLOSED}
 	/** 消费线程状态 */
 	private State state = State.INIT;
 	/** 是否为先进先出队列 */

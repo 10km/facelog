@@ -20,6 +20,8 @@ import com.google.common.base.Strings;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import gu.simplemq.json.BaseJsonEncoder;
+import gu.simplemq.utils.BaseVolatile;
+import gu.simplemq.utils.ILazyInitVariable;
 import gu.simplemq.utils.TypeUtils;
 
 /**
@@ -44,7 +46,11 @@ public abstract class AbstractTable<V>{
 	protected final boolean isJavaBean ;
 	protected BaseJsonEncoder encoder = BaseJsonEncoder.getEncoder();
 	private IKeyHelper<V> keyHelper;
-	private List<String>filedNames = null;
+	private final ILazyInitVariable<List<String>>filedNames = new BaseVolatile<List<String>>(){
+		@Override
+		protected List<String> doGet() {
+			return doGetFieldNames();
+		}};
 	protected KeyExpire keyExpire =new KeyExpire();
 	public AbstractTable(Type type) {
 		super();
@@ -162,7 +168,7 @@ public abstract class AbstractTable<V>{
 		if(null == fieldsValues || fieldsValues.isEmpty()){
 			return;
 		}
-		HashMap<String, String> fields = new HashMap<String,String>();
+		HashMap<String, String> fields = new HashMap<String,String>(16);
 		for(Entry<String, Object> entry:fieldsValues.entrySet()){
 			Object value = entry.getValue();
 			fields.put(key, null == value ? null : this.encoder.toJsonString(value));
@@ -297,7 +303,7 @@ public abstract class AbstractTable<V>{
 	}
 	
 	public Map<String, V> values(final String pattern, Filter<V> filter) {
-			final HashMap<String, V> map = new HashMap<String,V>(); 
+			final HashMap<String, V> map = new HashMap<String,V>(16); 
 			final Filter<V> f = null == filter ?alwaysTrue : filter;
 			foreach(pattern,new Filter<V>(){
 				@Override
@@ -343,7 +349,7 @@ public abstract class AbstractTable<V>{
 		if(null == this.keyHelper){
 			throw new UnsupportedOperationException("because of null keyHelper");
 		}
-		HashMap<String, V> keysValues = new HashMap<String,V>();
+		HashMap<String, V> keysValues = new HashMap<String,V>(16);
 		for(V value:c)	{
 			keysValues.put(this.keyHelper(value), value);
 		}
@@ -374,16 +380,13 @@ public abstract class AbstractTable<V>{
 
 	protected abstract List<String> doGetFieldNames() ;
 	
+	/**
+	 * 返回所有字段名列表
+	 * @return
+	 */
 	public List<String> getFieldNames() {
-		this.assertJavaBean();
-		if(null == filedNames){
-			synchronized(this){
-				if(null == filedNames){
-					filedNames= doGetFieldNames();		
-				}
-			}
-		}			
-		return filedNames;
+		this.assertJavaBean();		
+		return filedNames.get();
 	}
 
 	public void setExpire(long time, TimeUnit timeUnit) {
