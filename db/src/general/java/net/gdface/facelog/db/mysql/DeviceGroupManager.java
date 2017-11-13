@@ -172,7 +172,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 1){
+        if(keys.length != FL_DEVICE_GROUP_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         
@@ -292,7 +292,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 1){
+        if(keys.length != FL_DEVICE_GROUP_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         if(! (keys[0] instanceof Integer)){
@@ -759,7 +759,12 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
                 return save(bean , refDevicegroupByParent , impDeviceByGroupId , impDevicegroupByParent , impPermitByDeviceGroupId );
             }});
     }
-     private static final int SYNC_SAVE_ARG_LEN = 4;
+ 
+    private static final int SYNC_SAVE_ARG_LEN = 4;
+    private static final int SYNC_SAVE_ARG_0 = 0;
+    private static final int SYNC_SAVE_ARG_1 = 1;
+    private static final int SYNC_SAVE_ARG_2 = 2;
+    private static final int SYNC_SAVE_ARG_3 = 3;
     //3.9 SYNC SAVE 
     /**
      * Save the {@link DeviceGroupBean} bean and referenced beans and imported beans into the database.
@@ -770,27 +775,33 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
      * @return the inserted or updated {@link DeviceGroupBean} bean
      */
     @Override
-    public DeviceGroupBean save(DeviceGroupBean bean,Object ...args) 
+    public DeviceGroupBean save(DeviceGroupBean bean,Object ...inputs) 
     {
-        if(null == args){
+        if(null == inputs){
             return save(bean);
         }
-        if(args.length > SYNC_SAVE_ARG_LEN){
+        if(inputs.length > SYNC_SAVE_ARG_LEN){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         }
-        if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceGroupBean)){
+        Object[] args = new Object[SYNC_SAVE_ARG_LEN];
+        System.arraycopy(inputs, 0, args, 0, inputs.length);
+        if( null != args[SYNC_SAVE_ARG_0] && !(args[SYNC_SAVE_ARG_0] instanceof DeviceGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceGroupBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof DeviceBean[])){
+        if( null != args[SYNC_SAVE_ARG_1] && !(args[SYNC_SAVE_ARG_1] instanceof DeviceBean[])){
             throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:DeviceBean[]");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof DeviceGroupBean[])){
+        if( null != args[SYNC_SAVE_ARG_2] && !(args[SYNC_SAVE_ARG_2] instanceof DeviceGroupBean[])){
             throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:DeviceGroupBean[]");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof PermitBean[])){
+        if( null != args[SYNC_SAVE_ARG_3] && !(args[SYNC_SAVE_ARG_3] instanceof PermitBean[])){
             throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:PermitBean[]");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(DeviceGroupBean)args[0],(args.length < 2 || null == args[1])?null:(DeviceBean[])args[1],(args.length < 3 || null == args[2])?null:(DeviceGroupBean[])args[2],(args.length < 4 || null == args[3])?null:(PermitBean[])args[3]);
+        return save(bean,
+                    (DeviceGroupBean)args[SYNC_SAVE_ARG_0],
+                    (DeviceBean[])args[SYNC_SAVE_ARG_1],
+                    (DeviceGroupBean[])args[SYNC_SAVE_ARG_2],
+                    (PermitBean[])args[SYNC_SAVE_ARG_3]);
     } 
 
     //3.10 SYNC SAVE 
@@ -813,23 +824,24 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         }
         Object[] args = new Object[SYNC_SAVE_ARG_LEN];
-        System.arraycopy(inputs,0,args,0,SYNC_SAVE_ARG_LEN);
-        if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceGroupBean)){
+        System.arraycopy(inputs, 0, args, 0, inputs.length);
+        if( null != args[SYNC_SAVE_ARG_0] && !(args[SYNC_SAVE_ARG_0] instanceof DeviceGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceGroupBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof java.util.Collection)){
+        if( null != args[SYNC_SAVE_ARG_1] && !(args[SYNC_SAVE_ARG_1] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<DeviceBean>");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
+        if( null != args[SYNC_SAVE_ARG_2] && !(args[SYNC_SAVE_ARG_2] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<DeviceGroupBean>");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof java.util.Collection)){
+        if( null != args[SYNC_SAVE_ARG_3] && !(args[SYNC_SAVE_ARG_3] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:java.util.Collection<PermitBean>");
         }
-        return save(bean,null == args[0]?null:(DeviceGroupBean)args[0],
-                    null == args[1]?null:(java.util.Collection<DeviceBean>)args[1],
-                    null == args[2]?null:(java.util.Collection<DeviceGroupBean>)args[2],
-                    null == args[3]?null:(java.util.Collection<PermitBean>)args[3]);
+        return save(bean,
+                    (DeviceGroupBean)args[SYNC_SAVE_ARG_0],
+                    (java.util.Collection<DeviceBean>)args[SYNC_SAVE_ARG_1],
+                    (java.util.Collection<DeviceGroupBean>)args[SYNC_SAVE_ARG_2],
+                    (java.util.Collection<PermitBean>)args[SYNC_SAVE_ARG_3]);
     }
 
      //////////////////////////////////////

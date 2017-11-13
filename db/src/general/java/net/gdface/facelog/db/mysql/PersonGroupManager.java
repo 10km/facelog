@@ -172,7 +172,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 1){
+        if(keys.length != FL_PERSON_GROUP_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         
@@ -292,7 +292,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 1){
+        if(keys.length != FL_PERSON_GROUP_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         if(! (keys[0] instanceof Integer)){
@@ -759,7 +759,12 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
                 return save(bean , refPersongroupByParent , impPermitByPersonGroupId , impPersonByGroupId , impPersongroupByParent );
             }});
     }
-     private static final int SYNC_SAVE_ARG_LEN = 4;
+ 
+    private static final int SYNC_SAVE_ARG_LEN = 4;
+    private static final int SYNC_SAVE_ARG_0 = 0;
+    private static final int SYNC_SAVE_ARG_1 = 1;
+    private static final int SYNC_SAVE_ARG_2 = 2;
+    private static final int SYNC_SAVE_ARG_3 = 3;
     //3.9 SYNC SAVE 
     /**
      * Save the {@link PersonGroupBean} bean and referenced beans and imported beans into the database.
@@ -770,27 +775,33 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
      * @return the inserted or updated {@link PersonGroupBean} bean
      */
     @Override
-    public PersonGroupBean save(PersonGroupBean bean,Object ...args) 
+    public PersonGroupBean save(PersonGroupBean bean,Object ...inputs) 
     {
-        if(null == args){
+        if(null == inputs){
             return save(bean);
         }
-        if(args.length > SYNC_SAVE_ARG_LEN){
+        if(inputs.length > SYNC_SAVE_ARG_LEN){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         }
-        if( args.length > 0 && null != args[0] && !(args[0] instanceof PersonGroupBean)){
+        Object[] args = new Object[SYNC_SAVE_ARG_LEN];
+        System.arraycopy(inputs, 0, args, 0, inputs.length);
+        if( null != args[SYNC_SAVE_ARG_0] && !(args[SYNC_SAVE_ARG_0] instanceof PersonGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:PersonGroupBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof PermitBean[])){
+        if( null != args[SYNC_SAVE_ARG_1] && !(args[SYNC_SAVE_ARG_1] instanceof PermitBean[])){
             throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:PermitBean[]");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof PersonBean[])){
+        if( null != args[SYNC_SAVE_ARG_2] && !(args[SYNC_SAVE_ARG_2] instanceof PersonBean[])){
             throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:PersonBean[]");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof PersonGroupBean[])){
+        if( null != args[SYNC_SAVE_ARG_3] && !(args[SYNC_SAVE_ARG_3] instanceof PersonGroupBean[])){
             throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:PersonGroupBean[]");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(PersonGroupBean)args[0],(args.length < 2 || null == args[1])?null:(PermitBean[])args[1],(args.length < 3 || null == args[2])?null:(PersonBean[])args[2],(args.length < 4 || null == args[3])?null:(PersonGroupBean[])args[3]);
+        return save(bean,
+                    (PersonGroupBean)args[SYNC_SAVE_ARG_0],
+                    (PermitBean[])args[SYNC_SAVE_ARG_1],
+                    (PersonBean[])args[SYNC_SAVE_ARG_2],
+                    (PersonGroupBean[])args[SYNC_SAVE_ARG_3]);
     } 
 
     //3.10 SYNC SAVE 
@@ -813,23 +824,24 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         }
         Object[] args = new Object[SYNC_SAVE_ARG_LEN];
-        System.arraycopy(inputs,0,args,0,SYNC_SAVE_ARG_LEN);
-        if( args.length > 0 && null != args[0] && !(args[0] instanceof PersonGroupBean)){
+        System.arraycopy(inputs, 0, args, 0, inputs.length);
+        if( null != args[SYNC_SAVE_ARG_0] && !(args[SYNC_SAVE_ARG_0] instanceof PersonGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:PersonGroupBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof java.util.Collection)){
+        if( null != args[SYNC_SAVE_ARG_1] && !(args[SYNC_SAVE_ARG_1] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<PermitBean>");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
+        if( null != args[SYNC_SAVE_ARG_2] && !(args[SYNC_SAVE_ARG_2] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<PersonBean>");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof java.util.Collection)){
+        if( null != args[SYNC_SAVE_ARG_3] && !(args[SYNC_SAVE_ARG_3] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:java.util.Collection<PersonGroupBean>");
         }
-        return save(bean,null == args[0]?null:(PersonGroupBean)args[0],
-                    null == args[1]?null:(java.util.Collection<PermitBean>)args[1],
-                    null == args[2]?null:(java.util.Collection<PersonBean>)args[2],
-                    null == args[3]?null:(java.util.Collection<PersonGroupBean>)args[3]);
+        return save(bean,
+                    (PersonGroupBean)args[SYNC_SAVE_ARG_0],
+                    (java.util.Collection<PermitBean>)args[SYNC_SAVE_ARG_1],
+                    (java.util.Collection<PersonBean>)args[SYNC_SAVE_ARG_2],
+                    (java.util.Collection<PersonGroupBean>)args[SYNC_SAVE_ARG_3]);
     }
 
      //////////////////////////////////////

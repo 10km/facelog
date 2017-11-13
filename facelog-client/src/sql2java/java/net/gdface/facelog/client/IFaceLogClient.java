@@ -16,7 +16,7 @@ import java.util.*;
  * 定义 FaceLog 服务接口<br>
  * <ul>
  * <li>所有标明为图像数据的参数,是指具有特定图像格式的图像数据(如jpg,png...),而非无格式的原始点阵位图</li>
- * <li>在执行涉及数据库操作的方法时如果数据库发生异常，则会被封装到{@link WrapDAOException}抛出，
+ * <li>在执行涉及数据库操作的方法时如果数据库发生异常，则会被封装到{@link Wrap2DaoException}抛出，
  * 所有非{@link RuntimeException}异常会被封装在{@link ServiceRuntimeException}抛出</li>
  * <li>所有数据库对象(Java Bean,比如 {@link PersonBean}),在执行保存操作(save)时,
  * 如果为新增记录({@link PersonBean#isNew()}为true),则执行insert操作,否则执行update操作,
@@ -290,7 +290,7 @@ class IFaceLogClient implements Constant{
      * {@code deviceGroup}指定的设备组下属的所有设备通行
      * @param deviceGroup
      * @param personGroup
-     * @throws WrapDAOException
+     * @throws Wrap2DaoException
      * @throws ServiceRuntimeException
      */
     public void addPermit(
@@ -445,7 +445,7 @@ class IFaceLogClient implements Constant{
      * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
      * @param deviceGroupId
      * @return 返回删除的记录条数
-     * @throws WrapDAOException
+     * @throws Wrap2DaoException
      * @throws ServiceRuntimeException
      */
     public int deleteDeviceGroup(int deviceGroupId){
@@ -506,7 +506,7 @@ class IFaceLogClient implements Constant{
      * @param deviceGroup
      * @param personGroup
      * @return 删除成功返回1,否则返回0
-     * @throws WrapDAOException
+     * @throws Wrap2DaoException
      * @throws ServiceRuntimeException
      */
     public int deletePermit(
@@ -558,7 +558,7 @@ class IFaceLogClient implements Constant{
      * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
      * @param personGroupId
      * @return 
-     * @throws WrapDAOException
+     * @throws Wrap2DaoException
      * @throws ServiceRuntimeException
      */
     public int deletePersonGroup(int personGroupId){
@@ -716,7 +716,7 @@ class IFaceLogClient implements Constant{
      * 根据设备组id返回数据库记录
      * @param deviceGroupId
      * @return 
-     * @throws WrapDAOException
+     * @throws Wrap2DaoException
      * @throws ServiceRuntimeException
      */
     public DeviceGroupBean getDeviceGroup(int deviceGroupId){
@@ -740,7 +740,7 @@ class IFaceLogClient implements Constant{
      * 返回设备组id列表指定的数据库记录
      * @param groupIdList
      * @return 
-     * @throws WrapDAOException
+     * @throws Wrap2DaoException
      * @throws ServiceRuntimeException
      */
     public List<DeviceGroupBean> getDeviceGroups(List<Integer> groupIdList){
@@ -811,7 +811,7 @@ class IFaceLogClient implements Constant{
      * 如果没有下属设备记录则返回空表
      * @param deviceGroupId
      * @return 
-     * @throws WrapDAOException
+     * @throws Wrap2DaoException
      * @throws ServiceRuntimeException
      */
     public List<DeviceBean> getDevicesOfGroup(int deviceGroupId){
@@ -952,7 +952,7 @@ class IFaceLogClient implements Constant{
      * @param deviceId
      * @param personGroupId
      * @return 
-     * @throws WrapDAOException
+     * @throws Wrap2DaoException
      * @throws ServiceRuntimeException
      */
     public boolean getGroupPermit(
@@ -1135,7 +1135,7 @@ class IFaceLogClient implements Constant{
      * 根据人员组id返回数据库记录
      * @param personGroupId
      * @return 
-     * @throws WrapDAOException
+     * @throws Wrap2DaoException
      * @throws ServiceRuntimeException
      */
     public PersonGroupBean getPersonGroup(int personGroupId){
@@ -1159,7 +1159,7 @@ class IFaceLogClient implements Constant{
      * 返回人员组id列表指定的数据库记录
      * @param groupIdList
      * @return 
-     * @throws WrapDAOException
+     * @throws Wrap2DaoException
      * @throws ServiceRuntimeException
      */
     public List<PersonGroupBean> getPersonGroups(List<Integer> groupIdList){
@@ -1185,7 +1185,7 @@ class IFaceLogClient implements Constant{
      * @param deviceId
      * @param personId
      * @return 
-     * @throws WrapDAOException
+     * @throws Wrap2DaoException
      * @throws ServiceRuntimeException
      */
     public boolean getPersonPermit(
@@ -1253,7 +1253,7 @@ class IFaceLogClient implements Constant{
      * 如果没有下属人员记录则返回空表
      * @param deviceGroupId
      * @return 
-     * @throws WrapDAOException
+     * @throws Wrap2DaoException
      * @throws ServiceRuntimeException
      */
     public List<PersonBean> getPersonsOfGroup(int personGroupId){
@@ -1278,7 +1278,7 @@ class IFaceLogClient implements Constant{
      * 如果没有子节点则返回空表
      * @param deviceGroupId
      * @return 
-     * @throws WrapDAOException
+     * @throws Wrap2DaoException
      * @throws ServiceRuntimeException
      */
     public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId){
@@ -1303,7 +1303,7 @@ class IFaceLogClient implements Constant{
      * 如果没有子节点则返回空表
      * @param personGroupId
      * @return 
-     * @throws WrapDAOException
+     * @throws Wrap2DaoException
      * @throws ServiceRuntimeException
      */
     public List<PersonGroupBean> getSubPersonGroup(int personGroupId){
@@ -1588,7 +1588,7 @@ class IFaceLogClient implements Constant{
      * 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录
      * @param timestamp
      * @return 
-     * @throws WrapDAOException
+     * @throws Wrap2DaoException
      * @throws ServiceRuntimeException
      */
     public List<PermitBean> loadPermitByUpdate(Date timestamp){
@@ -1812,7 +1812,7 @@ class IFaceLogClient implements Constant{
      * 保存设备组记录
      * @param deviceGroupBean
      * @return 
-     * @throws WrapDAOException
+     * @throws Wrap2DaoException
      * @throws ServiceRuntimeException
      */
     public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean){
@@ -1932,7 +1932,7 @@ class IFaceLogClient implements Constant{
      * 保存人员组记录
      * @param personGroupBean
      * @return 
-     * @throws WrapDAOException
+     * @throws Wrap2DaoException
      * @throws ServiceRuntimeException
      */
     public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean){

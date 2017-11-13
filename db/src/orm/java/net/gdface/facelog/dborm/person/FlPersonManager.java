@@ -802,7 +802,12 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                 return save(bean , refImageByImageMd5 , refPersongroupByGroupId , impFeatureByPersonId , impLogByPersonId );
             }});
     }
+
     private static final int SYNC_SAVE_ARG_LEN = 4;
+    private static final int SYNC_SAVE_ARG_0 = 0;
+    private static final int SYNC_SAVE_ARG_1 = 1;
+    private static final int SYNC_SAVE_ARG_2 = 2;
+    private static final int SYNC_SAVE_ARG_3 = 3;
     //3.9 SYNC SAVE 
     /**
      * Save the FlPersonBean bean and referenced beans and imported beans (array) into the database.
@@ -814,27 +819,33 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @throws DAOException
      */
     @Override
-    public FlPersonBean save(FlPersonBean bean,Object ...args) throws DAOException
+    public FlPersonBean save(FlPersonBean bean,Object ...inputs) throws DAOException
     {
-        if(null == args){
+        if(null == inputs){
             return save(bean);
         }
-        if(args.length > SYNC_SAVE_ARG_LEN){
+        if(inputs.length > SYNC_SAVE_ARG_LEN){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         }
-        if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
+        Object[] args = new Object[SYNC_SAVE_ARG_LEN];
+        System.arraycopy(inputs, 0, args, 0, inputs.length);
+        if( null != args[SYNC_SAVE_ARG_0] && !(args[SYNC_SAVE_ARG_0] instanceof FlImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlImageBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlPersonGroupBean)){
+        if( null != args[SYNC_SAVE_ARG_1] && !(args[SYNC_SAVE_ARG_1] instanceof FlPersonGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlPersonGroupBean");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlFeatureBean[])){
+        if( null != args[SYNC_SAVE_ARG_2] && !(args[SYNC_SAVE_ARG_2] instanceof FlFeatureBean[])){
             throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FlFeatureBean[]");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof FlLogBean[])){
+        if( null != args[SYNC_SAVE_ARG_3] && !(args[SYNC_SAVE_ARG_3] instanceof FlLogBean[])){
             throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:FlLogBean[]");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean)args[0],(args.length < 2 || null == args[1])?null:(FlPersonGroupBean)args[1],(args.length < 3 || null == args[2])?null:(FlFeatureBean[])args[2],(args.length < 4 || null == args[3])?null:(FlLogBean[])args[3]);
+        return save(bean,
+                    (FlImageBean)args[SYNC_SAVE_ARG_0],
+                    (FlPersonGroupBean)args[SYNC_SAVE_ARG_1],
+                    (FlFeatureBean[])args[SYNC_SAVE_ARG_2],
+                    (FlLogBean[])args[SYNC_SAVE_ARG_3]);
     } 
 
     //3.10 SYNC SAVE 
@@ -849,27 +860,33 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public FlPersonBean saveCollection(FlPersonBean bean,Object ...args) throws DAOException
+    public FlPersonBean saveCollection(FlPersonBean bean,Object ...inputs) throws DAOException
     {
-        if(null == args){
+        if(null == inputs){
             return save(bean);
         }
-        if(args.length > SYNC_SAVE_ARG_LEN){
+        if(inputs.length > SYNC_SAVE_ARG_LEN){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         }
-        if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
+        Object[] args = new Object[SYNC_SAVE_ARG_LEN];
+        System.arraycopy(inputs, 0, args, 0, inputs.length);
+        if( null != args[SYNC_SAVE_ARG_0] && !(args[SYNC_SAVE_ARG_0] instanceof FlImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlImageBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlPersonGroupBean)){
+        if( null != args[SYNC_SAVE_ARG_1] && !(args[SYNC_SAVE_ARG_1] instanceof FlPersonGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlPersonGroupBean");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
+        if( null != args[SYNC_SAVE_ARG_2] && !(args[SYNC_SAVE_ARG_2] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<FlFeatureBean>");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof java.util.Collection)){
+        if( null != args[SYNC_SAVE_ARG_3] && !(args[SYNC_SAVE_ARG_3] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:java.util.Collection<FlLogBean>");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean)args[0],(args.length < 2 || null == args[1])?null:(FlPersonGroupBean)args[1],(args.length < 3 || null == args[2])?null:(java.util.Collection<FlFeatureBean>)args[2],(args.length < 4 || null == args[3])?null:(java.util.Collection<FlLogBean>)args[3]);
+        return save(bean,
+                    (FlImageBean)args[SYNC_SAVE_ARG_0],
+                    (FlPersonGroupBean)args[SYNC_SAVE_ARG_1],
+                    (java.util.Collection<FlFeatureBean>)args[SYNC_SAVE_ARG_2],
+                    (java.util.Collection<FlLogBean>)args[SYNC_SAVE_ARG_3]);
     } 
     //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD

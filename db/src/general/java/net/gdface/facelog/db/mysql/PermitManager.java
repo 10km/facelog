@@ -165,7 +165,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 2){
+        if(keys.length != FL_PERMIT_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         
@@ -243,7 +243,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 2){
+        if(keys.length != FL_PERMIT_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         if(! (keys[0] instanceof Integer)){
@@ -315,7 +315,10 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
                 return save(bean , refDevicegroupByDeviceGroupId , refPersongroupByPersonGroupId );
             }});
     }
-     private static final int SYNC_SAVE_ARG_LEN = 2;
+ 
+    private static final int SYNC_SAVE_ARG_LEN = 2;
+    private static final int SYNC_SAVE_ARG_0 = 0;
+    private static final int SYNC_SAVE_ARG_1 = 1;
     //3.9 SYNC SAVE 
     /**
      * Save the {@link PermitBean} bean and referenced beans and imported beans into the database.
@@ -326,21 +329,25 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
      * @return the inserted or updated {@link PermitBean} bean
      */
     @Override
-    public PermitBean save(PermitBean bean,Object ...args) 
+    public PermitBean save(PermitBean bean,Object ...inputs) 
     {
-        if(null == args){
+        if(null == inputs){
             return save(bean);
         }
-        if(args.length > SYNC_SAVE_ARG_LEN){
+        if(inputs.length > SYNC_SAVE_ARG_LEN){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         }
-        if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceGroupBean)){
+        Object[] args = new Object[SYNC_SAVE_ARG_LEN];
+        System.arraycopy(inputs, 0, args, 0, inputs.length);
+        if( null != args[SYNC_SAVE_ARG_0] && !(args[SYNC_SAVE_ARG_0] instanceof DeviceGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceGroupBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof PersonGroupBean)){
+        if( null != args[SYNC_SAVE_ARG_1] && !(args[SYNC_SAVE_ARG_1] instanceof PersonGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:PersonGroupBean");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(DeviceGroupBean)args[0],(args.length < 2 || null == args[1])?null:(PersonGroupBean)args[1]);
+        return save(bean,
+                    (DeviceGroupBean)args[SYNC_SAVE_ARG_0],
+                    (PersonGroupBean)args[SYNC_SAVE_ARG_1]);
     } 
 
     //3.10 SYNC SAVE 
@@ -363,14 +370,16 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         }
         Object[] args = new Object[SYNC_SAVE_ARG_LEN];
-        System.arraycopy(inputs,0,args,0,SYNC_SAVE_ARG_LEN);
-        if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceGroupBean)){
+        System.arraycopy(inputs, 0, args, 0, inputs.length);
+        if( null != args[SYNC_SAVE_ARG_0] && !(args[SYNC_SAVE_ARG_0] instanceof DeviceGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceGroupBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof PersonGroupBean)){
+        if( null != args[SYNC_SAVE_ARG_1] && !(args[SYNC_SAVE_ARG_1] instanceof PersonGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:PersonGroupBean");
         }
-        return save(bean,null == args[0]?null:(DeviceGroupBean)args[0],null == args[1]?null:(PersonGroupBean)args[1]);
+        return save(bean,
+                    (DeviceGroupBean)args[SYNC_SAVE_ARG_0],
+                    (PersonGroupBean)args[SYNC_SAVE_ARG_1]);
     }
 
      //////////////////////////////////////

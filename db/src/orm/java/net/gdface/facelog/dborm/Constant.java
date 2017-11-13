@@ -47,7 +47,8 @@ public interface Constant {
     public static final int FL_STORE_COLUMN_COUNT = 3;
     public static final int FL_STORE_PK_COUNT = 1;
     public static final int FL_LOG_LIGHT_COLUMN_COUNT = 6;
-    public static final int FL_LOG_LIGHT_PK_COUNT = 0;    //////////////////////////////////////
+    public static final int FL_LOG_LIGHT_PK_COUNT = 0;
+    //////////////////////////////////////
     // FOREIGN KEY INDEX DECLARE
     //////////////////////////////////////    
     /** foreign key fl_device(group_id) -> fl_device_group */

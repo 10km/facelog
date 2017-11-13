@@ -157,7 +157,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 1){
+        if(keys.length != FL_STORE_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         
@@ -277,7 +277,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 1){
+        if(keys.length != FL_STORE_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         if(! (keys[0] instanceof String)){

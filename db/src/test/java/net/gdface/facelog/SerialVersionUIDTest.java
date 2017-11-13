@@ -116,5 +116,4 @@ public class SerialVersionUIDTest {
 		System.out.println(ll1  ^ ll2);
 		System.out.println(getSerialVersionUID(input));
 	}
-
 }

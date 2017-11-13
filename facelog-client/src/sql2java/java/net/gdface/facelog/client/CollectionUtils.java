@@ -21,6 +21,11 @@ import java.util.Set;
 public class CollectionUtils {
     private CollectionUtils() {}
     public static interface Function<F, T> {
+        /** 
+         * function interface
+         * @param input
+         * @return
+         */
         T apply( F input);
     }
     /**
@@ -33,7 +38,17 @@ public class CollectionUtils {
      * @param <R> right type
      */
     public static interface DualTransformer<L,R>{
+        /**
+         * cast L to R
+         * @param input
+         * @return
+         */
         R toRight(L input);
+        /**
+         * cast R to L
+         * @param input
+         * @return
+         */
         L fromRight(R input);
     }
     public static final <L,R> DualTransformer<L,R> asDualTransformer(final Function<L,R> t1,final Function<R,L>t2){
@@ -295,6 +310,10 @@ public class CollectionUtils {
                 }};
         }
         abstract static class AbstractEntrySet<K, V> extends AbstractSet<Entry<K, V>> {
+            /**
+             * return  map instance
+             * @return
+             */
             abstract Map<K, V> map();
 
             @Override 

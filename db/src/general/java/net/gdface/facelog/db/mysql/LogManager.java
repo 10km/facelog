@@ -173,7 +173,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 1){
+        if(keys.length != FL_LOG_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         
@@ -293,7 +293,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         if(null == keys){
             throw new NullPointerException();
         }
-        if(keys.length != 1){
+        if(keys.length != FL_LOG_PK_COUNT){
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         }
         if(! (keys[0] instanceof Integer)){
@@ -392,7 +392,12 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
                 return save(bean , refDeviceByDeviceId , refFaceByCompareFace , refFeatureByVerifyFeature , refPersonByPersonId );
             }});
     }
-     private static final int SYNC_SAVE_ARG_LEN = 4;
+ 
+    private static final int SYNC_SAVE_ARG_LEN = 4;
+    private static final int SYNC_SAVE_ARG_0 = 0;
+    private static final int SYNC_SAVE_ARG_1 = 1;
+    private static final int SYNC_SAVE_ARG_2 = 2;
+    private static final int SYNC_SAVE_ARG_3 = 3;
     //3.9 SYNC SAVE 
     /**
      * Save the {@link LogBean} bean and referenced beans and imported beans into the database.
@@ -403,27 +408,33 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
      * @return the inserted or updated {@link LogBean} bean
      */
     @Override
-    public LogBean save(LogBean bean,Object ...args) 
+    public LogBean save(LogBean bean,Object ...inputs) 
     {
-        if(null == args){
+        if(null == inputs){
             return save(bean);
         }
-        if(args.length > SYNC_SAVE_ARG_LEN){
+        if(inputs.length > SYNC_SAVE_ARG_LEN){
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         }
-        if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
+        Object[] args = new Object[SYNC_SAVE_ARG_LEN];
+        System.arraycopy(inputs, 0, args, 0, inputs.length);
+        if( null != args[SYNC_SAVE_ARG_0] && !(args[SYNC_SAVE_ARG_0] instanceof DeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof FaceBean)){
+        if( null != args[SYNC_SAVE_ARG_1] && !(args[SYNC_SAVE_ARG_1] instanceof FaceBean)){
             throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FaceBean");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof FeatureBean)){
+        if( null != args[SYNC_SAVE_ARG_2] && !(args[SYNC_SAVE_ARG_2] instanceof FeatureBean)){
             throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FeatureBean");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof PersonBean)){
+        if( null != args[SYNC_SAVE_ARG_3] && !(args[SYNC_SAVE_ARG_3] instanceof PersonBean)){
             throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:PersonBean");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(DeviceBean)args[0],(args.length < 2 || null == args[1])?null:(FaceBean)args[1],(args.length < 3 || null == args[2])?null:(FeatureBean)args[2],(args.length < 4 || null == args[3])?null:(PersonBean)args[3]);
+        return save(bean,
+                    (DeviceBean)args[SYNC_SAVE_ARG_0],
+                    (FaceBean)args[SYNC_SAVE_ARG_1],
+                    (FeatureBean)args[SYNC_SAVE_ARG_2],
+                    (PersonBean)args[SYNC_SAVE_ARG_3]);
     } 
 
     //3.10 SYNC SAVE 
@@ -446,20 +457,24 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         }
         Object[] args = new Object[SYNC_SAVE_ARG_LEN];
-        System.arraycopy(inputs,0,args,0,SYNC_SAVE_ARG_LEN);
-        if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
+        System.arraycopy(inputs, 0, args, 0, inputs.length);
+        if( null != args[SYNC_SAVE_ARG_0] && !(args[SYNC_SAVE_ARG_0] instanceof DeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof FaceBean)){
+        if( null != args[SYNC_SAVE_ARG_1] && !(args[SYNC_SAVE_ARG_1] instanceof FaceBean)){
             throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FaceBean");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof FeatureBean)){
+        if( null != args[SYNC_SAVE_ARG_2] && !(args[SYNC_SAVE_ARG_2] instanceof FeatureBean)){
             throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FeatureBean");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof PersonBean)){
+        if( null != args[SYNC_SAVE_ARG_3] && !(args[SYNC_SAVE_ARG_3] instanceof PersonBean)){
             throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:PersonBean");
         }
-        return save(bean,null == args[0]?null:(DeviceBean)args[0],null == args[1]?null:(FaceBean)args[1],null == args[2]?null:(FeatureBean)args[2],null == args[3]?null:(PersonBean)args[3]);
+        return save(bean,
+                    (DeviceBean)args[SYNC_SAVE_ARG_0],
+                    (FaceBean)args[SYNC_SAVE_ARG_1],
+                    (FeatureBean)args[SYNC_SAVE_ARG_2],
+                    (PersonBean)args[SYNC_SAVE_ARG_3]);
     }
 
      //////////////////////////////////////
