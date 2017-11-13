@@ -22,11 +22,11 @@ import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
-import net.gdface.facelog.dborm.exception.DAOException;
+import net.gdface.facelog.dborm.exception.Dao3Exception;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_face table.<br>
- * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.<br>
+ * all {@link Dao3Exception} be wrapped as {@link WrapDAOException} to throw.<br>
  * Remarks: 人脸检测信息数据表,用于保存检测到的人脸的所有信息(特征数据除外)<br>
  * @author guyadong
  */
@@ -127,7 +127,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
             return this.beanConverter.fromRight(nativeManager.loadByPrimaryKeyChecked(id));
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
             throw new ObjectRetrievalException();
-        }catch(DAOException e){
+        }catch(Dao3Exception e){
             throw new WrapDAOException(e);
         }
     }
@@ -187,7 +187,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try{
             return nativeManager.existsPrimaryKey(id);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -216,7 +216,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
             return this.nativeManager.checkDuplicate(id);
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
         	throw new ObjectRetrievalException(e);
-        }catch(DAOException e){
+        }catch(Dao3Exception e){
             throw new WrapDAOException(e);
         }
     }
@@ -264,7 +264,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         {
             return nativeManager.deleteByPrimaryKey(id);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -277,7 +277,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         {
             return nativeManager.delete(this.beanConverter.toRight(bean));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }   
@@ -477,7 +477,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try {
             return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getLogBeansByCompareFaceAsList( this.beanConverter.toRight(bean),startRow,numRows));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -733,7 +733,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
             foreignConverter.fromRight(beanToSet,foreignNativeBean);
             return beanToSet;
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -765,7 +765,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
             foreignConverter.fromRight(beanToSet,foreignNativeBean);
             return beanToSet;
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -783,7 +783,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try{
             return this.nativeManager.deleteByWhere(where);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -802,7 +802,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.insert(this.beanConverter.toRight(bean)));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -816,7 +816,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.update(this.beanConverter.toRight(bean)));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -834,7 +834,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -851,7 +851,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         {
             throw new ObjectRetrievalException();
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -864,7 +864,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try {
             return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -878,7 +878,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try{
             return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(bean));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -906,7 +906,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadByIndexFeatureMd5AsList(featureMd5));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -920,7 +920,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try{
             return this.nativeManager.deleteByIndexFeatureMd5(featureMd5);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -942,7 +942,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadByIndexImageMd5AsList(imageMd5));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -956,7 +956,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try{
             return this.nativeManager.deleteByIndexImageMd5(imageMd5);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -975,7 +975,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     {
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadByIndexAsList(keyIndex,keys));
-        }catch(DAOException e){
+        }catch(Dao3Exception e){
             throw new WrapDAOException(e);
         }
     }
@@ -992,7 +992,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     {
         try{
             return this.nativeManager.deleteByIndex(keyIndex,keys);
-        }catch(DAOException e){
+        }catch(Dao3Exception e){
             throw new WrapDAOException(e);
         }
     }
@@ -1009,7 +1009,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try{
             return this.nativeManager.countWhere(where);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -1023,7 +1023,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try{
             return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),searchType);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -1078,7 +1078,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try{
             this.nativeManager.fire(event, this.beanConverter.toRight(bean));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -1113,32 +1113,32 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
             this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.face.FlFaceBean> (){
 
                 @Override
-                public void beforeInsert(net.gdface.facelog.dborm.face.FlFaceBean bean) throws DAOException {
+                public void beforeInsert(net.gdface.facelog.dborm.face.FlFaceBean bean) throws Dao3Exception {
                     listener.beforeInsert(FaceManager.this.beanConverter.fromRight(bean));                
                 }
 
                 @Override
-                public void afterInsert(net.gdface.facelog.dborm.face.FlFaceBean bean) throws DAOException {
+                public void afterInsert(net.gdface.facelog.dborm.face.FlFaceBean bean) throws Dao3Exception {
                     listener.afterInsert(FaceManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeUpdate(net.gdface.facelog.dborm.face.FlFaceBean bean) throws DAOException {
+                public void beforeUpdate(net.gdface.facelog.dborm.face.FlFaceBean bean) throws Dao3Exception {
                     listener.beforeUpdate(FaceManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterUpdate(net.gdface.facelog.dborm.face.FlFaceBean bean) throws DAOException {
+                public void afterUpdate(net.gdface.facelog.dborm.face.FlFaceBean bean) throws Dao3Exception {
                     listener.afterUpdate(FaceManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeDelete(net.gdface.facelog.dborm.face.FlFaceBean bean) throws DAOException {
+                public void beforeDelete(net.gdface.facelog.dborm.face.FlFaceBean bean) throws Dao3Exception {
                     listener.beforeDelete(FaceManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterDelete(net.gdface.facelog.dborm.face.FlFaceBean bean) throws DAOException {
+                public void afterDelete(net.gdface.facelog.dborm.face.FlFaceBean bean) throws Dao3Exception {
                     listener.afterDelete(FaceManager.this.beanConverter.fromRight(bean));
                 }};
         }
@@ -1191,7 +1191,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try{
             return this.nativeManager.loadBySqlForAction(sql,argList,fieldList,startRow,numRows,this.toNative(action));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -1202,7 +1202,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try{
             return this.nativeManager.runAsTransaction(fun);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }

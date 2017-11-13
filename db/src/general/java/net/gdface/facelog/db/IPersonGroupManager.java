@@ -132,7 +132,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME : fl_permit_ibfk_2 
      * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PermitBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public PermitBean[] getPermitBeansByPersonGroupId(Integer idOfPersonGroup);
     
@@ -150,7 +150,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME:fl_permit_ibfk_2
      * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PermitBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(Integer idOfPersonGroup);
     //3.2.3 DELETE IMPORTED
@@ -208,7 +208,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME : fl_person_ibfk_1 
      * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public PersonBean[] getPersonBeansByGroupId(Integer idOfPersonGroup);
     
@@ -226,7 +226,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME:fl_person_ibfk_1
      * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PersonBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(Integer idOfPersonGroup);
     //3.2.3 DELETE IMPORTED
@@ -284,7 +284,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME : fl_person_group_ibfk_1 
      * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PersonGroupBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public PersonGroupBean[] getPersonGroupBeansByParent(Integer idOfPersonGroup);
     
@@ -302,7 +302,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME:fl_person_group_ibfk_1
      * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PersonGroupBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(Integer idOfPersonGroup);
     //3.2.3 DELETE IMPORTED

@@ -132,7 +132,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * FK_NAME : fl_device_ibfk_1 
      * @param idOfDeviceGroup Integer - PK# 1
      * @return the associated {@link DeviceBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public DeviceBean[] getDeviceBeansByGroupId(Integer idOfDeviceGroup);
     
@@ -150,7 +150,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * FK_NAME:fl_device_ibfk_1
      * @param idOfDeviceGroup Integer - PK# 1
      * @return the associated {@link DeviceBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(Integer idOfDeviceGroup);
     //3.2.3 DELETE IMPORTED
@@ -208,7 +208,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * FK_NAME : fl_device_group_ibfk_1 
      * @param idOfDeviceGroup Integer - PK# 1
      * @return the associated {@link DeviceGroupBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public DeviceGroupBean[] getDeviceGroupBeansByParent(Integer idOfDeviceGroup);
     
@@ -226,7 +226,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * FK_NAME:fl_device_group_ibfk_1
      * @param idOfDeviceGroup Integer - PK# 1
      * @return the associated {@link DeviceGroupBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public java.util.List<DeviceGroupBean> getDeviceGroupBeansByParentAsList(Integer idOfDeviceGroup);
     //3.2.3 DELETE IMPORTED
@@ -284,7 +284,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * FK_NAME : fl_permit_ibfk_1 
      * @param idOfDeviceGroup Integer - PK# 1
      * @return the associated {@link PermitBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public PermitBean[] getPermitBeansByDeviceGroupId(Integer idOfDeviceGroup);
     
@@ -302,7 +302,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * FK_NAME:fl_permit_ibfk_1
      * @param idOfDeviceGroup Integer - PK# 1
      * @return the associated {@link PermitBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(Integer idOfDeviceGroup);
     //3.2.3 DELETE IMPORTED

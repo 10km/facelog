@@ -132,7 +132,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      * FK_NAME : fl_log_ibfk_4 
      * @param idOfFace Integer - PK# 1
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public LogBean[] getLogBeansByCompareFace(Integer idOfFace);
     
@@ -150,7 +150,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      * FK_NAME:fl_log_ibfk_4
      * @param idOfFace Integer - PK# 1
      * @return the associated {@link LogBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public java.util.List<LogBean> getLogBeansByCompareFaceAsList(Integer idOfFace);
     //3.2.3 DELETE IMPORTED

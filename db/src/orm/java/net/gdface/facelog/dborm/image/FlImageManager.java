@@ -20,7 +20,7 @@ import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.Manager;
 import net.gdface.facelog.dborm.TableListener;
 import net.gdface.facelog.dborm.TableManager;
-import net.gdface.facelog.dborm.exception.DAOException;
+import net.gdface.facelog.dborm.exception.Dao3Exception;
 import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.DataRetrievalException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
@@ -118,9 +118,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      *
      * @param md5 String - PK# 1
      * @return a unique FlImageBean or {@code null} if not found or have null argument
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlImageBean loadByPrimaryKey(String md5) throws DAOException
+    public FlImageBean loadByPrimaryKey(String md5) throws Dao3Exception
     {
         try{
             return loadByPrimaryKeyChecked(md5);
@@ -137,10 +137,10 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param md5 String - PK# 1
      * @return a unique FlImageBean
      * @throws ObjectRetrievalException if not found
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     @SuppressWarnings("unused")
-    public FlImageBean loadByPrimaryKeyChecked(String md5) throws DAOException
+    public FlImageBean loadByPrimaryKeyChecked(String md5) throws Dao3Exception
     {
         if(null == md5){
             throw new ObjectRetrievalException(new NullPointerException());
@@ -181,7 +181,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     //1.2
     
     @Override
-    public FlImageBean loadByPrimaryKey(FlImageBean bean) throws DAOException
+    public FlImageBean loadByPrimaryKey(FlImageBean bean) throws Dao3Exception
     {
         return bean==null?null:loadByPrimaryKey(bean.getMd5());
     }
@@ -189,7 +189,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     //1.2.2
     
     @Override
-    public FlImageBean loadByPrimaryKeyChecked(FlImageBean bean) throws DAOException
+    public FlImageBean loadByPrimaryKeyChecked(FlImageBean bean) throws Dao3Exception
     {
         if(null == bean){
             throw new NullPointerException();
@@ -205,7 +205,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @see {@link #loadByPrimaryKey(String md5)}
      */
     @Override
-    public FlImageBean loadByPrimaryKey(Object ...keys) throws DAOException{
+    public FlImageBean loadByPrimaryKey(Object ...keys) throws Dao3Exception{
         if(null == keys){
             throw new NullPointerException();
         }
@@ -221,7 +221,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     //1.3.2
 
     @Override
-    public FlImageBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
+    public FlImageBean loadByPrimaryKeyChecked(Object ...keys) throws Dao3Exception{
         if(null == keys){
             throw new NullPointerException();
         }
@@ -238,10 +238,10 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     /**
      * Returns true if this fl_image contains row with primary key fields.
      * @param md5 String - PK# 1
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     @SuppressWarnings("unused")
-    public boolean existsPrimaryKey(String md5) throws DAOException
+    public boolean existsPrimaryKey(String md5) throws Dao3Exception
     {
         if(null == md5){
             return false;
@@ -268,12 +268,12 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     /**
      * Return true if this fl_image contains row with primary key fields.
      * @param bean  
-     * @throws DAOException
+     * @throws Dao3Exception
      * @return false if primary kes has null
      * @see #countUsingTemplate(FlImageBean)
      */
     @Override
-    public boolean existsByPrimaryKey(FlImageBean bean) throws DAOException
+    public boolean existsByPrimaryKey(FlImageBean bean) throws Dao3Exception
     {
         if(null == bean  || null == bean.getMd5()){
             return false;
@@ -289,7 +289,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     //1.7
 
     @Override
-    public FlImageBean checkDuplicate(FlImageBean bean) throws DAOException{
+    public FlImageBean checkDuplicate(FlImageBean bean) throws Dao3Exception{
         if(!existsByPrimaryKey(bean)){
             throw new ObjectRetrievalException("Duplicate entry ("+ bean.getMd5() +") for key 'PRIMARY'");
         }
@@ -299,10 +299,10 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     /**
      * Check duplicated row by primary keys,if row exists throw {@link ObjectRetrievalException}
      * @param md5 String
-     * @throws DAOException
+     * @throws Dao3Exception
      * @see #existsPrimaryKey(String md5)
      */
-    public String checkDuplicate(String md5) throws DAOException
+    public String checkDuplicate(String md5) throws Dao3Exception
     {
         if(existsPrimaryKey(md5)){
             throw new ObjectRetrievalException("Duplicate entry '"+ md5 +"' for key 'PRIMARY'");
@@ -316,10 +316,10 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * 
      * @param md5 String - PK# 1
      * @return the number of deleted rows
-     * @throws DAOException
+     * @throws Dao3Exception
      * @see {@link #delete(FlImageBean)}
      */
-    public int deleteByPrimaryKey(String md5) throws DAOException
+    public int deleteByPrimaryKey(String md5) throws Dao3Exception
     {
         FlImageBean bean=createBean();
         bean.setMd5(md5);
@@ -332,10 +332,10 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * 
      * @param bean will be deleted ,all keys must not be null
      * @return the number of deleted rows,0 returned if bean is null
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     @Override
-    public int delete(FlImageBean bean) throws DAOException
+    public int delete(FlImageBean bean) throws Dao3Exception
     {
         if(null == bean  || null == bean.getMd5()){
             return 0;
@@ -380,7 +380,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @see {@link #delete(FlImageBean)}
      */   
     @Override
-    public int deleteByPrimaryKey(Object ...keys) throws DAOException{
+    public int deleteByPrimaryKey(Object ...keys) throws Dao3Exception{
         if(null == keys){
             throw new NullPointerException();
         }
@@ -407,7 +407,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] getImportedBeans(FlImageBean bean, int ikIndex) throws DAOException {
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] getImportedBeans(FlImageBean bean, int ikIndex) throws Dao3Exception {
         return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(IMPORTED_BEAN_TYPES[ikIndex],0));
     }
     
@@ -421,11 +421,11 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param bean the {@link FlImageBean} object to use
      * @param ikIndex valid values: {@link Constant#FL_IMAGE_IK_FL_FACE_IMAGE_MD5},{@link Constant#FL_IMAGE_IK_FL_PERSON_IMAGE_MD5}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>> List<T> getImportedBeansAsList(FlImageBean bean,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> List<T> getImportedBeansAsList(FlImageBean bean,int ikIndex)throws Dao3Exception{
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMAGE_MD5:
             return (List<T>)this.getFaceBeansByImageMd5AsList(bean);
@@ -443,11 +443,11 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param importedBeans the FlPersonBean array to associate to the {@link FlImageBean}
      * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlImageBean,int)}
      * @return importedBeans always
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] setImportedBeans(FlImageBean bean,T[] importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] setImportedBeans(FlImageBean bean,T[] importedBeans,int ikIndex)throws Dao3Exception{
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMAGE_MD5:
             return (T[])setFaceBeansByImageMd5(bean,(FlFaceBean[])importedBeans);
@@ -465,11 +465,11 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlImageBean,int)}
 
      * @return importedBeans always
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>,C extends java.util.Collection<T>> C setImportedBeans(FlImageBean bean,C importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>,C extends java.util.Collection<T>> C setImportedBeans(FlImageBean bean,C importedBeans,int ikIndex)throws Dao3Exception{
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMAGE_MD5:
             return (C)setFaceBeansByImageMd5(bean,(java.util.Collection<FlFaceBean>)importedBeans);
@@ -489,9 +489,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * FK_NAME : fl_face_ibfk_1 
      * @param bean the {@link FlImageBean}
      * @return the associated {@link FlFaceBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlFaceBean[] getFaceBeansByImageMd5(FlImageBean bean) throws DAOException
+    public FlFaceBean[] getFaceBeansByImageMd5(FlImageBean bean) throws Dao3Exception
     {
         return getFaceBeansByImageMd5AsList(bean).toArray(new FlFaceBean[0]);
     }
@@ -501,9 +501,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * FK_NAME : fl_face_ibfk_1 
      * @param md5 String - PK# 1
      * @return the associated {@link FlFaceBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlFaceBean[] getFaceBeansByImageMd5(String md5OfImage) throws DAOException
+    public FlFaceBean[] getFaceBeansByImageMd5(String md5OfImage) throws Dao3Exception
     {
         FlImageBean bean = createBean();
         bean.setMd5(md5OfImage);
@@ -515,9 +515,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * FK_NAME:fl_face_ibfk_1
      * @param bean the {@link FlImageBean}
      * @return the associated {@link FlFaceBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public List<FlFaceBean> getFaceBeansByImageMd5AsList(FlImageBean bean) throws DAOException
+    public List<FlFaceBean> getFaceBeansByImageMd5AsList(FlImageBean bean) throws Dao3Exception
     {
         return getFaceBeansByImageMd5AsList(bean,1,-1);
     }
@@ -527,9 +527,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * FK_NAME:fl_face_ibfk_1
      * @param md5 String - PK# 1
      * @return the associated {@link FlFaceBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public List<FlFaceBean> getFaceBeansByImageMd5AsList(String md5OfImage) throws DAOException
+    public List<FlFaceBean> getFaceBeansByImageMd5AsList(String md5OfImage) throws Dao3Exception
     {
          FlImageBean bean = createBean();
         bean.setMd5(md5OfImage);
@@ -544,9 +544,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link FlFaceBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public List<FlFaceBean> getFaceBeansByImageMd5AsList(FlImageBean bean,int startRow, int numRows) throws DAOException
+    public List<FlFaceBean> getFaceBeansByImageMd5AsList(FlImageBean bean,int startRow, int numRows) throws Dao3Exception
     {
         if(null == bean){
             return new java.util.ArrayList<FlFaceBean>();
@@ -562,10 +562,10 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param bean the referenced {@link FlImageBean}
      * @param importedBeans imported beans from fl_face
      * @return importedBeans always
-     * @throws DAOException
+     * @throws Dao3Exception
      * @see {@link FlFaceManager#setReferencedByImageMd5(FlFaceBean, FlImageBean)
      */
-    public FlFaceBean[] setFaceBeansByImageMd5(FlImageBean bean , FlFaceBean[] importedBeans) throws DAOException
+    public FlFaceBean[] setFaceBeansByImageMd5(FlImageBean bean , FlFaceBean[] importedBeans) throws Dao3Exception
     {
         if(null != importedBeans){
             for( FlFaceBean importBean : importedBeans ){
@@ -582,10 +582,10 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param bean the referenced {@link FlImageBean} 
      * @param importedBeans imported beans from fl_face 
      * @return importedBeans always
-     * @throws DAOException
+     * @throws Dao3Exception
      * @see {@link FlFaceManager#setReferencedByImageMd5(FlFaceBean, FlImageBean)
      */
-    public <C extends java.util.Collection<FlFaceBean>> C setFaceBeansByImageMd5(FlImageBean bean , C importedBeans) throws DAOException
+    public <C extends java.util.Collection<FlFaceBean>> C setFaceBeansByImageMd5(FlImageBean bean , C importedBeans) throws Dao3Exception
     {
         if(null != importedBeans){
             for( FlFaceBean importBean : importedBeans ){
@@ -601,9 +601,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * FK_NAME : fl_person_ibfk_2 
      * @param bean the {@link FlImageBean}
      * @return the associated {@link FlPersonBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlPersonBean[] getPersonBeansByImageMd5(FlImageBean bean) throws DAOException
+    public FlPersonBean[] getPersonBeansByImageMd5(FlImageBean bean) throws Dao3Exception
     {
         return getPersonBeansByImageMd5AsList(bean).toArray(new FlPersonBean[0]);
     }
@@ -613,9 +613,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * FK_NAME : fl_person_ibfk_2 
      * @param md5 String - PK# 1
      * @return the associated {@link FlPersonBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlPersonBean[] getPersonBeansByImageMd5(String md5OfImage) throws DAOException
+    public FlPersonBean[] getPersonBeansByImageMd5(String md5OfImage) throws Dao3Exception
     {
         FlImageBean bean = createBean();
         bean.setMd5(md5OfImage);
@@ -627,9 +627,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * FK_NAME:fl_person_ibfk_2
      * @param bean the {@link FlImageBean}
      * @return the associated {@link FlPersonBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public List<FlPersonBean> getPersonBeansByImageMd5AsList(FlImageBean bean) throws DAOException
+    public List<FlPersonBean> getPersonBeansByImageMd5AsList(FlImageBean bean) throws Dao3Exception
     {
         return getPersonBeansByImageMd5AsList(bean,1,-1);
     }
@@ -639,9 +639,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * FK_NAME:fl_person_ibfk_2
      * @param md5 String - PK# 1
      * @return the associated {@link FlPersonBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public List<FlPersonBean> getPersonBeansByImageMd5AsList(String md5OfImage) throws DAOException
+    public List<FlPersonBean> getPersonBeansByImageMd5AsList(String md5OfImage) throws Dao3Exception
     {
          FlImageBean bean = createBean();
         bean.setMd5(md5OfImage);
@@ -656,9 +656,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link FlPersonBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public List<FlPersonBean> getPersonBeansByImageMd5AsList(FlImageBean bean,int startRow, int numRows) throws DAOException
+    public List<FlPersonBean> getPersonBeansByImageMd5AsList(FlImageBean bean,int startRow, int numRows) throws Dao3Exception
     {
         if(null == bean){
             return new java.util.ArrayList<FlPersonBean>();
@@ -674,10 +674,10 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param bean the referenced {@link FlImageBean}
      * @param importedBeans imported beans from fl_person
      * @return importedBeans always
-     * @throws DAOException
+     * @throws Dao3Exception
      * @see {@link FlPersonManager#setReferencedByImageMd5(FlPersonBean, FlImageBean)
      */
-    public FlPersonBean[] setPersonBeansByImageMd5(FlImageBean bean , FlPersonBean[] importedBeans) throws DAOException
+    public FlPersonBean[] setPersonBeansByImageMd5(FlImageBean bean , FlPersonBean[] importedBeans) throws Dao3Exception
     {
         if(null != importedBeans){
             for( FlPersonBean importBean : importedBeans ){
@@ -694,10 +694,10 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param bean the referenced {@link FlImageBean} 
      * @param importedBeans imported beans from fl_person 
      * @return importedBeans always
-     * @throws DAOException
+     * @throws Dao3Exception
      * @see {@link FlPersonManager#setReferencedByImageMd5(FlPersonBean, FlImageBean)
      */
-    public <C extends java.util.Collection<FlPersonBean>> C setPersonBeansByImageMd5(FlImageBean bean , C importedBeans) throws DAOException
+    public <C extends java.util.Collection<FlPersonBean>> C setPersonBeansByImageMd5(FlImageBean bean , C importedBeans) throws Dao3Exception
     {
         if(null != importedBeans){
             for( FlPersonBean importBean : importedBeans ){
@@ -716,11 +716,11 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param impFaceByImageMd5 the {@link FlFaceBean} beans refer to {@link FlImageBean} 
      * @param impPersonByImageMd5 the {@link FlPersonBean} beans refer to {@link FlImageBean} 
      * @return the inserted or updated {@link FlImageBean} bean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public FlImageBean save(FlImageBean bean
         , FlDeviceBean refDeviceByDeviceId 
-        , FlFaceBean[] impFaceByImageMd5 , FlPersonBean[] impPersonByImageMd5 ) throws DAOException
+        , FlFaceBean[] impFaceByImageMd5 , FlPersonBean[] impPersonByImageMd5 ) throws Dao3Exception
     {
         if(null == bean) {
             return null;
@@ -743,7 +743,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      */
     public FlImageBean saveAsTransaction(final FlImageBean bean
         ,final FlDeviceBean refDeviceByDeviceId 
-        ,final FlFaceBean[] impFaceByImageMd5 ,final FlPersonBean[] impPersonByImageMd5 ) throws DAOException
+        ,final FlFaceBean[] impFaceByImageMd5 ,final FlPersonBean[] impPersonByImageMd5 ) throws Dao3Exception
     {
         return this.runAsTransaction(new Callable<FlImageBean>(){
             @Override
@@ -760,11 +760,11 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param impFaceByImageMd5 the {@link FlFaceBean} bean refer to {@link FlImageBean} 
      * @param impPersonByImageMd5 the {@link FlPersonBean} bean refer to {@link FlImageBean} 
      * @return the inserted or updated {@link FlImageBean} bean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public FlImageBean save(FlImageBean bean
         , FlDeviceBean refDeviceByDeviceId 
-        , java.util.Collection<FlFaceBean> impFaceByImageMd5 , java.util.Collection<FlPersonBean> impPersonByImageMd5 ) throws DAOException
+        , java.util.Collection<FlFaceBean> impFaceByImageMd5 , java.util.Collection<FlPersonBean> impPersonByImageMd5 ) throws Dao3Exception
     {
         if(null == bean) {
             return null;
@@ -785,7 +785,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      */
     public FlImageBean saveAsTransaction(final FlImageBean bean
         ,final FlDeviceBean refDeviceByDeviceId 
-        ,final  java.util.Collection<FlFaceBean> impFaceByImageMd5 ,final  java.util.Collection<FlPersonBean> impPersonByImageMd5 ) throws DAOException
+        ,final  java.util.Collection<FlFaceBean> impFaceByImageMd5 ,final  java.util.Collection<FlPersonBean> impPersonByImageMd5 ) throws Dao3Exception
     {
         return this.runAsTransaction(new Callable<FlImageBean>(){
             @Override
@@ -806,10 +806,10 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param args referenced beans or imported beans<br>
      *      see also {@link #save(FlImageBean , FlDeviceBean , FlFaceBean[] , FlPersonBean[] )}
      * @return the inserted or updated {@link FlImageBean} bean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     @Override
-    public FlImageBean save(FlImageBean bean,Object ...inputs) throws DAOException
+    public FlImageBean save(FlImageBean bean,Object ...inputs) throws Dao3Exception
     {
         if(null == inputs){
             return save(bean);
@@ -842,11 +842,11 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param args referenced beans or imported beans<br>
      *      see also {@link #save(FlImageBean , FlDeviceBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link FlImageBean} bean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     @SuppressWarnings("unchecked")
     @Override
-    public FlImageBean saveCollection(FlImageBean bean,Object ...inputs) throws DAOException
+    public FlImageBean saveCollection(FlImageBean bean,Object ...inputs) throws Dao3Exception
     {
         if(null == inputs){
             return save(bean);
@@ -884,11 +884,11 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_IMAGE_FK_DEVICE_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T getReferencedBean(FlImageBean bean,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T getReferencedBean(FlImageBean bean,int fkIndex)throws Dao3Exception{
         switch(fkIndex){
         case FL_IMAGE_FK_DEVICE_ID:
             return  (T)this.getReferencedByDeviceId(bean);
@@ -905,11 +905,11 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param beanToSet the <T> object to associate to the {@link FlImageBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(FlImageBean,int)}
      * @return always beanToSet saved
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T setReferencedBean(FlImageBean bean,T beanToSet,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T setReferencedBean(FlImageBean bean,T beanToSet,int fkIndex)throws Dao3Exception{
         switch(fkIndex){
         case FL_IMAGE_FK_DEVICE_ID:
             return  (T)this.setReferencedByDeviceId(bean, (FlDeviceBean)beanToSet);
@@ -929,9 +929,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * FK_NAME : fl_image_ibfk_1
      * @param bean the {@link FlImageBean}
      * @return the associated {@link FlDeviceBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlDeviceBean getReferencedByDeviceId(FlImageBean bean) throws DAOException
+    public FlDeviceBean getReferencedByDeviceId(FlImageBean bean) throws Dao3Exception
     {
         if(null == bean){
             return null;
@@ -949,7 +949,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @return always beanToSet saved
      * @throws Exception
      */
-    public FlDeviceBean setReferencedByDeviceId(FlImageBean bean, FlDeviceBean beanToSet) throws DAOException
+    public FlDeviceBean setReferencedByDeviceId(FlImageBean bean, FlDeviceBean beanToSet) throws Dao3Exception
     {
         if(null != bean){
             instanceOfFlDeviceManager().save(beanToSet);
@@ -974,10 +974,10 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      *
      * @param where the sql 'where' clause
      * @return the number of deleted rows
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     @Override
-    public int deleteByWhere(String where) throws DAOException
+    public int deleteByWhere(String where) throws Dao3Exception
     {
         if( !this.listenerContainer.isEmpty()){
             final DeleteBeanAction action = new DeleteBeanAction(); 
@@ -1014,7 +1014,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     //13
 
     @Override
-    public FlImageBean insert(FlImageBean bean) throws DAOException
+    public FlImageBean insert(FlImageBean bean) throws Dao3Exception
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
@@ -1139,7 +1139,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     //14
 
     @Override
-    public FlImageBean update(FlImageBean bean) throws DAOException
+    public FlImageBean update(FlImageBean bean) throws Dao3Exception
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
@@ -1274,7 +1274,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     //18
 
     @Override
-    public FlImageBean loadUniqueUsingTemplate(FlImageBean bean) throws DAOException
+    public FlImageBean loadUniqueUsingTemplate(FlImageBean bean) throws Dao3Exception
     {
          List<FlImageBean> beans = this.loadUsingTemplateAsList(bean);
          switch(beans.size()){
@@ -1289,7 +1289,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     //18-1
 
     @Override
-    public FlImageBean loadUniqueUsingTemplateChecked(FlImageBean bean) throws DAOException
+    public FlImageBean loadUniqueUsingTemplateChecked(FlImageBean bean) throws Dao3Exception
     {
          List<FlImageBean> beans = this.loadUsingTemplateAsList(bean);
          switch(beans.size()){
@@ -1304,7 +1304,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     //20-5
 
     @Override
-    public int loadUsingTemplate(FlImageBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlImageBean> action) throws DAOException
+    public int loadUsingTemplate(FlImageBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlImageBean> action) throws Dao3Exception
     {
         // System.out.println("loadUsingTemplate startRow:" + startRow + ", numRows:" + numRows + ", searchType:" + searchType);
         StringBuilder sqlWhere = new StringBuilder("");
@@ -1318,7 +1318,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
                     ResultSet.CONCUR_READ_ONLY);
             this.fillPreparedStatement(ps, bean, searchType,false);
             return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
-        } catch (DAOException e) {
+        } catch (Dao3Exception e) {
             throw e;
         }catch (SQLException e) {
             throw new DataAccessException(e);
@@ -1331,7 +1331,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     //21
 
     @Override
-    public int deleteUsingTemplate(FlImageBean bean) throws DAOException
+    public int deleteUsingTemplate(FlImageBean bean) throws Dao3Exception
     {
         if(bean.checkMd5Initialized() && null != bean.getMd5()){
             return this.deleteByPrimaryKey(bean.getMd5());
@@ -1391,9 +1391,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      *
      * @param deviceId the device_id column's value filter.
      * @return an array of FlImageBean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlImageBean[] loadByIndexDeviceId(Integer deviceId) throws DAOException
+    public FlImageBean[] loadByIndexDeviceId(Integer deviceId) throws Dao3Exception
     {
         return (FlImageBean[])this.loadByIndexDeviceIdAsList(deviceId).toArray(new FlImageBean[0]);
     }
@@ -1403,9 +1403,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      *
      * @param deviceId the device_id column's value filter.
      * @return a list of FlImageBean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public List<FlImageBean> loadByIndexDeviceIdAsList(Integer deviceId) throws DAOException
+    public List<FlImageBean> loadByIndexDeviceIdAsList(Integer deviceId) throws Dao3Exception
     {
         FlImageBean bean = this.createBean();
         bean.setDeviceId(deviceId);
@@ -1416,9 +1416,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      *
      * @param deviceId the device_id column's value filter.
      * @return the number of deleted objects
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public int deleteByIndexDeviceId(Integer deviceId) throws DAOException
+    public int deleteByIndexDeviceId(Integer deviceId) throws Dao3Exception
     {
         FlImageBean bean = this.createBean();
         bean.setDeviceId(deviceId);
@@ -1432,10 +1432,10 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      *        {@link Constant#FL_IMAGE_INDEX_DEVICE_ID}
      * @param keys key values of index
      * @return a list of FlImageBean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     @Override
-    public List<FlImageBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException
+    public List<FlImageBean> loadByIndexAsList(int keyIndex,Object ...keys)throws Dao3Exception
     {
         if(null == keys){
             throw new NullPointerException();
@@ -1462,10 +1462,10 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      *        {@link Constant#FL_IMAGE_INDEX_DEVICE_ID}
      * @param keys key values of index
      * @return the number of deleted objects
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     @Override
-    public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException
+    public int deleteByIndex(int keyIndex,Object ...keys)throws Dao3Exception
     {
         if(null == keys){
             throw new NullPointerException();
@@ -1495,7 +1495,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     //25
 
     @Override
-    public int countWhere(String where) throws DAOException
+    public int countWhere(String where) throws Dao3Exception
     {
         String sql = "SELECT COUNT(*) AS MCOUNT FROM fl_image " + where;
         // System.out.println("countWhere: " + sql);
@@ -1535,9 +1535,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      *
      * @param ps the PreparedStatement to be used
      * @return the number of rows returned
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    private int countByPreparedStatement(PreparedStatement ps) throws DAOException
+    private int countByPreparedStatement(PreparedStatement ps) throws Dao3Exception
     {
         ResultSet rs =  null;
         try
@@ -1569,10 +1569,10 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param bean the FlImageBean template to look for
      * @param searchType exact ?  like ? starting like ?
      * @return the number of rows returned
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     @Override
-    public int countUsingTemplate(FlImageBean bean, int searchType) throws DAOException
+    public int countUsingTemplate(FlImageBean bean, int searchType) throws Dao3Exception
     {
         Connection c = null;
         PreparedStatement ps = null;
@@ -1708,9 +1708,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
      * @return the number of clauses returned
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    protected int fillPreparedStatement(PreparedStatement ps, FlImageBean bean, int searchType,boolean fillNull) throws DAOException
+    protected int fillPreparedStatement(PreparedStatement ps, FlImageBean bean, int searchType,boolean fillNull) throws Dao3Exception
     {
         if (bean == null) {
             return 0;
@@ -1737,7 +1737,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
                         if (bean.getMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getMd5() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
-                        throw new DAOException("Unknown search type " + searchType);
+                        throw new Dao3Exception("Unknown search type " + searchType);
                 }
             }
             if (bean.checkFormatModified()) {
@@ -1759,7 +1759,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
                         if (bean.getFormat()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getFormat() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
-                        throw new DAOException("Unknown search type " + searchType);
+                        throw new Dao3Exception("Unknown search type " + searchType);
                 }
             }
             if (bean.checkWidthModified()) {
@@ -1797,7 +1797,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
                         if (bean.getThumbMd5()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getThumbMd5() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
-                        throw new DAOException("Unknown search type " + searchType);
+                        throw new Dao3Exception("Unknown search type " + searchType);
                 }
             }
             if (bean.checkDeviceIdModified()) {
@@ -1827,9 +1827,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the resulting FlImageBean table
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlImageBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
+    public FlImageBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws Dao3Exception
     {
         return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new FlImageBean[0]);
     }
@@ -1843,9 +1843,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the resulting FlImageBean table
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public List<FlImageBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
+    public List<FlImageBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws Dao3Exception
     {
         ListAction action = new ListAction();
         actionOnResultSet(rs, fieldList, numRows, numRows, action);
@@ -1859,10 +1859,10 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param action interface obj for do something
      * @return the count dealt by action  
-     * @throws DAOException
+     * @throws Dao3Exception
      * @throws IllegalArgumentException
      */
-    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlImageBean> action) throws DAOException{
+    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlImageBean> action) throws Dao3Exception{
         try{
             int count = 0;
             if(0!=numRows){
@@ -1899,7 +1899,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
                 }
             }
             return count;
-        }catch(DAOException e){
+        }catch(Dao3Exception e){
             throw e;
         }catch(SQLException e){
             throw new DataAccessException(e);
@@ -1912,9 +1912,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      *
      * @param rs the ResultSet to be transformed
      * @return bean resulting FlImageBean bean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlImageBean decodeRow(ResultSet rs,FlImageBean bean) throws DAOException
+    public FlImageBean decodeRow(ResultSet rs,FlImageBean bean) throws Dao3Exception
     {
         if(null==bean){
             bean = this.createBean();
@@ -1947,9 +1947,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param rs the ResultSet to be transformed
      * @param fieldList table of the field's associated constants
      * @return bean resulting FlImageBean bean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlImageBean decodeRow(ResultSet rs, int[] fieldList,FlImageBean bean) throws DAOException
+    public FlImageBean decodeRow(ResultSet rs, int[] fieldList,FlImageBean bean) throws Dao3Exception
     {
         if(null==bean){
             bean = this.createBean();
@@ -1994,7 +1994,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
                         bean.setDeviceId(Manager.getInteger(rs, pos));
                         break;
                     default:
-                        throw new DAOException("Unknown field id " + fieldList[i]);
+                        throw new Dao3Exception("Unknown field id " + fieldList[i]);
                 }
             }
         }
@@ -2014,9 +2014,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      *
      * @param rs the ResultSet to be transformed
      * @return bean resulting FlImageBean bean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlImageBean metaDataDecodeRow(ResultSet rs) throws DAOException
+    public FlImageBean metaDataDecodeRow(ResultSet rs) throws Dao3Exception
     {
         FlImageBean bean = this.createBean();
         try
@@ -2051,9 +2051,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      *
      * @param ps the PreparedStatement to be used
      * @return an array of FlImageBean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlImageBean[] loadByPreparedStatement(PreparedStatement ps) throws DAOException
+    public FlImageBean[] loadByPreparedStatement(PreparedStatement ps) throws Dao3Exception
     {
         return this.loadByPreparedStatement(ps, null);
     }
@@ -2064,9 +2064,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      *
      * @param ps the PreparedStatement to be used
      * @return an array of FlImageBean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public List<FlImageBean> loadByPreparedStatementAsList(PreparedStatement ps) throws DAOException
+    public List<FlImageBean> loadByPreparedStatementAsList(PreparedStatement ps) throws Dao3Exception
     {
         return this.loadByPreparedStatementAsList(ps, null);
     }
@@ -2078,9 +2078,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param ps the PreparedStatement to be used
      * @param fieldList table of the field's associated constants
      * @return an array of FlImageBean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlImageBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws DAOException
+    public FlImageBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws Dao3Exception
     {
         return this.loadByPreparedStatementAsList(ps, fieldList).toArray(new FlImageBean[0]);
     }
@@ -2092,9 +2092,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param ps the PreparedStatement to be used
      * @param fieldList table of the field's associated constants
      * @return an array of FlImageBean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public List<FlImageBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws DAOException
+    public List<FlImageBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws Dao3Exception
     { 
         return loadByPreparedStatementAsList(ps,fieldList,1,-1);
     }
@@ -2109,9 +2109,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param fieldList table of the field's associated constants
      * @return an array of FlImageBean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlImageBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
+    public FlImageBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws Dao3Exception
     {
         return loadByPreparedStatementAsList(ps,fieldList,startRow,numRows).toArray(new FlImageBean[0]);
     }
@@ -2126,9 +2126,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param fieldList table of the field's associated constants
      * @return an array of FlImageBean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public List<FlImageBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
+    public List<FlImageBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws Dao3Exception
     {
         ListAction action = new ListAction();
         loadByPreparedStatement(ps,fieldList,startRow,numRows,action);
@@ -2146,16 +2146,16 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param fieldList table of the field's associated constants
      * @param action Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
+     * @throws Dao3Exception
      */     
-    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlImageBean> action) throws DAOException
+    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlImageBean> action) throws Dao3Exception
     {
         ResultSet rs =  null;
         try {
             ps.setFetchSize(100);
             rs = ps.executeQuery();
             return this.actionOnResultSet(rs, fieldList, startRow, numRows, action);
-        } catch (DAOException e) {
+        } catch (Dao3Exception e) {
             throw e;
         } catch (SQLException e) {
             throw new DataAccessException(e);
@@ -2192,7 +2192,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     //37
 
     @Override
-    public void fire(TableListener.Event event, FlImageBean bean) throws DAOException{
+    public void fire(TableListener.Event event, FlImageBean bean) throws Dao3Exception{
         if(null == event){
             throw new NullPointerException();
         }
@@ -2202,7 +2202,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     //37-1
 
     @Override
-    public void fire(int event, FlImageBean bean) throws DAOException{
+    public void fire(int event, FlImageBean bean) throws Dao3Exception{
         try{
             fire(TableListener.Event.values()[event],bean);
         }catch(ArrayIndexOutOfBoundsException e){
@@ -2214,13 +2214,13 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     private final net.gdface.facelog.dborm.BaseForeignKeyListener<FlDeviceBean,FlImageBean> foreignKeyListenerByDeviceId = 
             new net.gdface.facelog.dborm.BaseForeignKeyListener<FlDeviceBean,FlImageBean>(){
                 @Override
-                protected List<FlImageBean> getImportedBeans(FlDeviceBean bean) throws DAOException {
+                protected List<FlImageBean> getImportedBeans(FlDeviceBean bean) throws Dao3Exception {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.<FlImageBean>emptyList()
                             : instanceOfFlDeviceManager().getImageBeansByDeviceIdAsList(bean);
                 }
                 @Override
-                protected void onRemove(List<FlImageBean> effectBeans) throws DAOException {
+                protected void onRemove(List<FlImageBean> effectBeans) throws Dao3Exception {
                     for(FlImageBean bean:effectBeans){
                         bean.setDeviceId(null);
                         Event.UPDATE.fire(listenerContainer, bean);
@@ -2277,7 +2277,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     /**
      * Gets the connection.
      */
-    private Connection getConnection() throws DAOException
+    private Connection getConnection() throws Dao3Exception
     {
         try
         {
@@ -2305,9 +2305,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * Fill the given prepared statement with the values in argList
      * @param ps the PreparedStatement that will be filled
      * @param argList the arguments to use fill given prepared statement
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    private void fillPrepareStatement(PreparedStatement ps, Object[] argList) throws DAOException{
+    private void fillPrepareStatement(PreparedStatement ps, Object[] argList) throws Dao3Exception{
         try {
             if (!(argList == null || ps == null)) {
                 for (int i = 0; i < argList.length; i++) {
@@ -2319,13 +2319,13 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
                 }
             }
         } catch (SQLException e) {
-            throw new DAOException(e);
+            throw new Dao3Exception(e);
         }
     }
     
     @Override    
 
-    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlImageBean> action) throws DAOException{
+    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlImageBean> action) throws Dao3Exception{
         PreparedStatement ps = null;
         Connection connection = null;
         // logger.debug("sql string:\n" + sql + "\n");
@@ -2336,7 +2336,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
                     ResultSet.CONCUR_READ_ONLY);
             fillPrepareStatement(ps, argList);
             return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
-        } catch (DAOException e) {
+        } catch (Dao3Exception e) {
             throw e;
         }catch (SQLException e) {
             throw new DataAccessException(e);
@@ -2348,14 +2348,14 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
    
     @Override
 
-    public <T>T runAsTransaction(Callable<T> fun) throws DAOException{
+    public <T>T runAsTransaction(Callable<T> fun) throws Dao3Exception{
         return Manager.getInstance().runAsTransaction(fun);
     }
     
     class DeleteBeanAction extends Action.BaseAdapter<FlImageBean>{
         private final AtomicInteger count=new AtomicInteger(0);
         @Override
-        public void call(FlImageBean bean) throws DAOException {
+        public void call(FlImageBean bean) throws Dao3Exception {
                 FlImageManager.this.delete(bean);
                 count.incrementAndGet();
         }

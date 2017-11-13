@@ -132,7 +132,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * FK_NAME : fl_face_ibfk_2 
      * @param md5OfFeature String - PK# 1
      * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public FaceBean[] getFaceBeansByFeatureMd5(String md5OfFeature);
     
@@ -150,7 +150,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * FK_NAME:fl_face_ibfk_2
      * @param md5OfFeature String - PK# 1
      * @return the associated {@link FaceBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(String md5OfFeature);
     //3.2.3 DELETE IMPORTED
@@ -208,7 +208,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * FK_NAME : fl_log_ibfk_3 
      * @param md5OfFeature String - PK# 1
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public LogBean[] getLogBeansByVerifyFeature(String md5OfFeature);
     
@@ -226,7 +226,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * FK_NAME:fl_log_ibfk_3
      * @param md5OfFeature String - PK# 1
      * @return the associated {@link LogBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(String md5OfFeature);
     //3.2.3 DELETE IMPORTED

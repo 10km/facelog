@@ -24,7 +24,7 @@ import javax.sql.DataSource;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.mchange.v2.c3p0.DataSources;
 
-import net.gdface.facelog.dborm.exception.DAOException;
+import net.gdface.facelog.dborm.exception.Dao3Exception;
 
 /**
  * The Manager provides connections and manages transactions transparently.
@@ -225,11 +225,11 @@ public final class Manager
      * @param <T>  type of return result
      * @param fun
      * @return
-     * @throws DAOException
+     * @throws Dao3Exception
      * @see #beginTransaction()
      * @see #endTransaction(boolean)
      */
-    public <T>T runAsTransaction(Callable<T> fun) throws DAOException{
+    public <T>T runAsTransaction(Callable<T> fun) throws Dao3Exception{
         if(null==fun) {
             throw new NullPointerException();
         }
@@ -249,19 +249,19 @@ public final class Manager
             }finally {
                 Manager.getInstance().endTransaction(commit);
             }
-        } catch (DAOException e) {
+        } catch (Dao3Exception e) {
             throw e;
         }catch (SQLException e) {
-            throw new DAOException(e);
+            throw new Dao3Exception(e);
         }
     }
     /**
      * Run {@code Runnable} as a transaction.no return
      * @param fun
-     * @throws DAOException
+     * @throws Dao3Exception
      * @see #runAsTransaction(Callable)
      */
-    public void runAsTransaction(final Runnable fun) throws DAOException{
+    public void runAsTransaction(final Runnable fun) throws Dao3Exception{
         if(null==fun) {
             throw new NullPointerException();
         }

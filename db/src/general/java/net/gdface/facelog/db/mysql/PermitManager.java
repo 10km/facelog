@@ -21,11 +21,11 @@ import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
-import net.gdface.facelog.dborm.exception.DAOException;
+import net.gdface.facelog.dborm.exception.Dao3Exception;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_permit table.<br>
- * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.<br>
+ * all {@link Dao3Exception} be wrapped as {@link WrapDAOException} to throw.<br>
  * Remarks: 通行权限关联表<br>
  * @author guyadong
  */
@@ -123,7 +123,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
             return this.beanConverter.fromRight(nativeManager.loadByPrimaryKeyChecked(deviceGroupId,personGroupId));
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
             throw new ObjectRetrievalException();
-        }catch(DAOException e){
+        }catch(Dao3Exception e){
             throw new WrapDAOException(e);
         }
     }
@@ -186,7 +186,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         try{
             return nativeManager.existsPrimaryKey(deviceGroupId,personGroupId);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -204,7 +204,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     public PermitBean checkDuplicate(PermitBean bean)throws ObjectRetrievalException{
         try{
             nativeManager.checkDuplicate(this.beanConverter.toRight(bean));            
-        }catch(DAOException e){
+        }catch(Dao3Exception e){
             throw new WrapDAOException(e);
         }
         return bean;   
@@ -218,7 +218,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         {
             return nativeManager.deleteByPrimaryKey(deviceGroupId,personGroupId);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -231,7 +231,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         {
             return nativeManager.delete(this.beanConverter.toRight(bean));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }   
@@ -463,7 +463,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
             foreignConverter.fromRight(beanToSet,foreignNativeBean);
             return beanToSet;
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -495,7 +495,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
             foreignConverter.fromRight(beanToSet,foreignNativeBean);
             return beanToSet;
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -513,7 +513,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         try{
             return this.nativeManager.deleteByWhere(where);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -532,7 +532,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.insert(this.beanConverter.toRight(bean)));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -546,7 +546,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.update(this.beanConverter.toRight(bean)));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -564,7 +564,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -581,7 +581,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         {
             throw new ObjectRetrievalException();
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -594,7 +594,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         try {
             return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -608,7 +608,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         try{
             return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(bean));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -627,7 +627,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         try{
             return this.nativeManager.countWhere(where);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -641,7 +641,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         try{
             return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),searchType);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -696,7 +696,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         try{
             this.nativeManager.fire(event, this.beanConverter.toRight(bean));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -731,32 +731,32 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
             this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.permit.FlPermitBean> (){
 
                 @Override
-                public void beforeInsert(net.gdface.facelog.dborm.permit.FlPermitBean bean) throws DAOException {
+                public void beforeInsert(net.gdface.facelog.dborm.permit.FlPermitBean bean) throws Dao3Exception {
                     listener.beforeInsert(PermitManager.this.beanConverter.fromRight(bean));                
                 }
 
                 @Override
-                public void afterInsert(net.gdface.facelog.dborm.permit.FlPermitBean bean) throws DAOException {
+                public void afterInsert(net.gdface.facelog.dborm.permit.FlPermitBean bean) throws Dao3Exception {
                     listener.afterInsert(PermitManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeUpdate(net.gdface.facelog.dborm.permit.FlPermitBean bean) throws DAOException {
+                public void beforeUpdate(net.gdface.facelog.dborm.permit.FlPermitBean bean) throws Dao3Exception {
                     listener.beforeUpdate(PermitManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterUpdate(net.gdface.facelog.dborm.permit.FlPermitBean bean) throws DAOException {
+                public void afterUpdate(net.gdface.facelog.dborm.permit.FlPermitBean bean) throws Dao3Exception {
                     listener.afterUpdate(PermitManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeDelete(net.gdface.facelog.dborm.permit.FlPermitBean bean) throws DAOException {
+                public void beforeDelete(net.gdface.facelog.dborm.permit.FlPermitBean bean) throws Dao3Exception {
                     listener.beforeDelete(PermitManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterDelete(net.gdface.facelog.dborm.permit.FlPermitBean bean) throws DAOException {
+                public void afterDelete(net.gdface.facelog.dborm.permit.FlPermitBean bean) throws Dao3Exception {
                     listener.afterDelete(PermitManager.this.beanConverter.fromRight(bean));
                 }};
         }
@@ -809,7 +809,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         try{
             return this.nativeManager.loadBySqlForAction(sql,argList,fieldList,startRow,numRows,this.toNative(action));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -820,7 +820,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         try{
             return this.nativeManager.runAsTransaction(fun);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }

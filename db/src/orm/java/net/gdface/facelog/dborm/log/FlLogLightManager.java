@@ -20,7 +20,7 @@ import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.Manager;
 import net.gdface.facelog.dborm.TableListener;
 import net.gdface.facelog.dborm.TableManager;
-import net.gdface.facelog.dborm.exception.DAOException;
+import net.gdface.facelog.dborm.exception.Dao3Exception;
 import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.DataRetrievalException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
@@ -106,10 +106,10 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      *
      * @param where the sql 'where' clause
      * @return the number of deleted rows
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     @Override
-    public int deleteByWhere(String where) throws DAOException
+    public int deleteByWhere(String where) throws Dao3Exception
     {
         if( !this.listenerContainer.isEmpty()){
             final DeleteBeanAction action = new DeleteBeanAction(); 
@@ -146,7 +146,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     //13
 
     @Override
-    public FlLogLightBean insert(FlLogLightBean bean) throws DAOException
+    public FlLogLightBean insert(FlLogLightBean bean) throws Dao3Exception
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
@@ -255,7 +255,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     //14
 
     @Override
-    public FlLogLightBean update(FlLogLightBean bean) throws DAOException
+    public FlLogLightBean update(FlLogLightBean bean) throws Dao3Exception
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
@@ -371,7 +371,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     //18
 
     @Override
-    public FlLogLightBean loadUniqueUsingTemplate(FlLogLightBean bean) throws DAOException
+    public FlLogLightBean loadUniqueUsingTemplate(FlLogLightBean bean) throws Dao3Exception
     {
          List<FlLogLightBean> beans = this.loadUsingTemplateAsList(bean);
          switch(beans.size()){
@@ -386,7 +386,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     //18-1
 
     @Override
-    public FlLogLightBean loadUniqueUsingTemplateChecked(FlLogLightBean bean) throws DAOException
+    public FlLogLightBean loadUniqueUsingTemplateChecked(FlLogLightBean bean) throws Dao3Exception
     {
          List<FlLogLightBean> beans = this.loadUsingTemplateAsList(bean);
          switch(beans.size()){
@@ -401,7 +401,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     //20-5
 
     @Override
-    public int loadUsingTemplate(FlLogLightBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlLogLightBean> action) throws DAOException
+    public int loadUsingTemplate(FlLogLightBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlLogLightBean> action) throws Dao3Exception
     {
         // System.out.println("loadUsingTemplate startRow:" + startRow + ", numRows:" + numRows + ", searchType:" + searchType);
         StringBuilder sqlWhere = new StringBuilder("");
@@ -415,7 +415,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
                     ResultSet.CONCUR_READ_ONLY);
             this.fillPreparedStatement(ps, bean, searchType,false);
             return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
-        } catch (DAOException e) {
+        } catch (Dao3Exception e) {
             throw e;
         }catch (SQLException e) {
             throw new DataAccessException(e);
@@ -428,7 +428,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     //21
 
     @Override
-    public int deleteUsingTemplate(FlLogLightBean bean) throws DAOException
+    public int deleteUsingTemplate(FlLogLightBean bean) throws Dao3Exception
     {
         if( !this.listenerContainer.isEmpty()){
             final DeleteBeanAction action=new DeleteBeanAction(); 
@@ -483,7 +483,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     //25
 
     @Override
-    public int countWhere(String where) throws DAOException
+    public int countWhere(String where) throws Dao3Exception
     {
         String sql = "SELECT COUNT(*) AS MCOUNT FROM fl_log_light " + where;
         // System.out.println("countWhere: " + sql);
@@ -523,9 +523,9 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      *
      * @param ps the PreparedStatement to be used
      * @return the number of rows returned
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    private int countByPreparedStatement(PreparedStatement ps) throws DAOException
+    private int countByPreparedStatement(PreparedStatement ps) throws Dao3Exception
     {
         ResultSet rs =  null;
         try
@@ -557,10 +557,10 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @param bean the FlLogLightBean template to look for
      * @param searchType exact ?  like ? starting like ?
      * @return the number of rows returned
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     @Override
-    public int countUsingTemplate(FlLogLightBean bean, int searchType) throws DAOException
+    public int countUsingTemplate(FlLogLightBean bean, int searchType) throws Dao3Exception
     {
         Connection c = null;
         PreparedStatement ps = null;
@@ -680,9 +680,9 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
      * @return the number of clauses returned
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    protected int fillPreparedStatement(PreparedStatement ps, FlLogLightBean bean, int searchType,boolean fillNull) throws DAOException
+    protected int fillPreparedStatement(PreparedStatement ps, FlLogLightBean bean, int searchType,boolean fillNull) throws Dao3Exception
     {
         if (bean == null) {
             return 0;
@@ -717,7 +717,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
                         if (bean.getName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getName() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
-                        throw new DAOException("Unknown search type " + searchType);
+                        throw new Dao3Exception("Unknown search type " + searchType);
                 }
             }
             if (bean.checkPapersTypeModified()) {
@@ -743,7 +743,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
                         if (bean.getPapersNum()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getPapersNum() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
-                        throw new DAOException("Unknown search type " + searchType);
+                        throw new Dao3Exception("Unknown search type " + searchType);
                 }
             }
             if (bean.checkVerifyTimeModified()) {
@@ -773,9 +773,9 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the resulting FlLogLightBean table
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlLogLightBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
+    public FlLogLightBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws Dao3Exception
     {
         return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new FlLogLightBean[0]);
     }
@@ -789,9 +789,9 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the resulting FlLogLightBean table
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public List<FlLogLightBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
+    public List<FlLogLightBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws Dao3Exception
     {
         ListAction action = new ListAction();
         actionOnResultSet(rs, fieldList, numRows, numRows, action);
@@ -805,10 +805,10 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param action interface obj for do something
      * @return the count dealt by action  
-     * @throws DAOException
+     * @throws Dao3Exception
      * @throws IllegalArgumentException
      */
-    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlLogLightBean> action) throws DAOException{
+    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlLogLightBean> action) throws Dao3Exception{
         try{
             int count = 0;
             if(0!=numRows){
@@ -845,7 +845,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
                 }
             }
             return count;
-        }catch(DAOException e){
+        }catch(Dao3Exception e){
             throw e;
         }catch(SQLException e){
             throw new DataAccessException(e);
@@ -858,9 +858,9 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      *
      * @param rs the ResultSet to be transformed
      * @return bean resulting FlLogLightBean bean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlLogLightBean decodeRow(ResultSet rs,FlLogLightBean bean) throws DAOException
+    public FlLogLightBean decodeRow(ResultSet rs,FlLogLightBean bean) throws Dao3Exception
     {
         if(null==bean){
             bean = this.createBean();
@@ -891,9 +891,9 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @param rs the ResultSet to be transformed
      * @param fieldList table of the field's associated constants
      * @return bean resulting FlLogLightBean bean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlLogLightBean decodeRow(ResultSet rs, int[] fieldList,FlLogLightBean bean) throws DAOException
+    public FlLogLightBean decodeRow(ResultSet rs, int[] fieldList,FlLogLightBean bean) throws Dao3Exception
     {
         if(null==bean){
             bean = this.createBean();
@@ -930,7 +930,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
                         bean.setVerifyTime(rs.getTimestamp(pos));
                         break;
                     default:
-                        throw new DAOException("Unknown field id " + fieldList[i]);
+                        throw new Dao3Exception("Unknown field id " + fieldList[i]);
                 }
             }
         }
@@ -950,9 +950,9 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      *
      * @param rs the ResultSet to be transformed
      * @return bean resulting FlLogLightBean bean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlLogLightBean metaDataDecodeRow(ResultSet rs) throws DAOException
+    public FlLogLightBean metaDataDecodeRow(ResultSet rs) throws Dao3Exception
     {
         FlLogLightBean bean = this.createBean();
         try
@@ -985,9 +985,9 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      *
      * @param ps the PreparedStatement to be used
      * @return an array of FlLogLightBean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlLogLightBean[] loadByPreparedStatement(PreparedStatement ps) throws DAOException
+    public FlLogLightBean[] loadByPreparedStatement(PreparedStatement ps) throws Dao3Exception
     {
         return this.loadByPreparedStatement(ps, null);
     }
@@ -998,9 +998,9 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      *
      * @param ps the PreparedStatement to be used
      * @return an array of FlLogLightBean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public List<FlLogLightBean> loadByPreparedStatementAsList(PreparedStatement ps) throws DAOException
+    public List<FlLogLightBean> loadByPreparedStatementAsList(PreparedStatement ps) throws Dao3Exception
     {
         return this.loadByPreparedStatementAsList(ps, null);
     }
@@ -1012,9 +1012,9 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @param ps the PreparedStatement to be used
      * @param fieldList table of the field's associated constants
      * @return an array of FlLogLightBean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlLogLightBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws DAOException
+    public FlLogLightBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws Dao3Exception
     {
         return this.loadByPreparedStatementAsList(ps, fieldList).toArray(new FlLogLightBean[0]);
     }
@@ -1026,9 +1026,9 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @param ps the PreparedStatement to be used
      * @param fieldList table of the field's associated constants
      * @return an array of FlLogLightBean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public List<FlLogLightBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws DAOException
+    public List<FlLogLightBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws Dao3Exception
     { 
         return loadByPreparedStatementAsList(ps,fieldList,1,-1);
     }
@@ -1043,9 +1043,9 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param fieldList table of the field's associated constants
      * @return an array of FlLogLightBean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public FlLogLightBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
+    public FlLogLightBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws Dao3Exception
     {
         return loadByPreparedStatementAsList(ps,fieldList,startRow,numRows).toArray(new FlLogLightBean[0]);
     }
@@ -1060,9 +1060,9 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param fieldList table of the field's associated constants
      * @return an array of FlLogLightBean
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    public List<FlLogLightBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
+    public List<FlLogLightBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws Dao3Exception
     {
         ListAction action = new ListAction();
         loadByPreparedStatement(ps,fieldList,startRow,numRows,action);
@@ -1080,16 +1080,16 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @param fieldList table of the field's associated constants
      * @param action Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
+     * @throws Dao3Exception
      */     
-    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlLogLightBean> action) throws DAOException
+    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlLogLightBean> action) throws Dao3Exception
     {
         ResultSet rs =  null;
         try {
             ps.setFetchSize(100);
             rs = ps.executeQuery();
             return this.actionOnResultSet(rs, fieldList, startRow, numRows, action);
-        } catch (DAOException e) {
+        } catch (Dao3Exception e) {
             throw e;
         } catch (SQLException e) {
             throw new DataAccessException(e);
@@ -1126,7 +1126,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     //37
 
     @Override
-    public void fire(TableListener.Event event, FlLogLightBean bean) throws DAOException{
+    public void fire(TableListener.Event event, FlLogLightBean bean) throws Dao3Exception{
         if(null == event){
             throw new NullPointerException();
         }
@@ -1136,7 +1136,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     //37-1
 
     @Override
-    public void fire(int event, FlLogLightBean bean) throws DAOException{
+    public void fire(int event, FlLogLightBean bean) throws Dao3Exception{
         try{
             fire(TableListener.Event.values()[event],bean);
         }catch(ArrayIndexOutOfBoundsException e){
@@ -1191,7 +1191,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     /**
      * Gets the connection.
      */
-    private Connection getConnection() throws DAOException
+    private Connection getConnection() throws Dao3Exception
     {
         try
         {
@@ -1219,9 +1219,9 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * Fill the given prepared statement with the values in argList
      * @param ps the PreparedStatement that will be filled
      * @param argList the arguments to use fill given prepared statement
-     * @throws DAOException
+     * @throws Dao3Exception
      */
-    private void fillPrepareStatement(PreparedStatement ps, Object[] argList) throws DAOException{
+    private void fillPrepareStatement(PreparedStatement ps, Object[] argList) throws Dao3Exception{
         try {
             if (!(argList == null || ps == null)) {
                 for (int i = 0; i < argList.length; i++) {
@@ -1233,13 +1233,13 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
                 }
             }
         } catch (SQLException e) {
-            throw new DAOException(e);
+            throw new Dao3Exception(e);
         }
     }
     
     @Override    
 
-    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlLogLightBean> action) throws DAOException{
+    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlLogLightBean> action) throws Dao3Exception{
         PreparedStatement ps = null;
         Connection connection = null;
         // logger.debug("sql string:\n" + sql + "\n");
@@ -1250,7 +1250,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
                     ResultSet.CONCUR_READ_ONLY);
             fillPrepareStatement(ps, argList);
             return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
-        } catch (DAOException e) {
+        } catch (Dao3Exception e) {
             throw e;
         }catch (SQLException e) {
             throw new DataAccessException(e);
@@ -1262,14 +1262,14 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
    
     @Override
 
-    public <T>T runAsTransaction(Callable<T> fun) throws DAOException{
+    public <T>T runAsTransaction(Callable<T> fun) throws Dao3Exception{
         return Manager.getInstance().runAsTransaction(fun);
     }
     
     class DeleteBeanAction extends Action.BaseAdapter<FlLogLightBean>{
         private final AtomicInteger count=new AtomicInteger(0);
         @Override
-        public void call(FlLogLightBean bean) throws DAOException {
+        public void call(FlLogLightBean bean) throws Dao3Exception {
                 FlLogLightManager.this.delete(bean);
                 count.incrementAndGet();
         }

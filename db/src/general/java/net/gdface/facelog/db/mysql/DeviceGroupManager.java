@@ -22,11 +22,11 @@ import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
-import net.gdface.facelog.dborm.exception.DAOException;
+import net.gdface.facelog.dborm.exception.Dao3Exception;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_device_group table.<br>
- * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.<br>
+ * all {@link Dao3Exception} be wrapped as {@link WrapDAOException} to throw.<br>
  * Remarks: 设备组信息<br>
  * @author guyadong
  */
@@ -130,7 +130,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
             return this.beanConverter.fromRight(nativeManager.loadByPrimaryKeyChecked(id));
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
             throw new ObjectRetrievalException();
-        }catch(DAOException e){
+        }catch(Dao3Exception e){
             throw new WrapDAOException(e);
         }
     }
@@ -190,7 +190,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         try{
             return nativeManager.existsPrimaryKey(id);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -219,7 +219,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
             return this.nativeManager.checkDuplicate(id);
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
         	throw new ObjectRetrievalException(e);
-        }catch(DAOException e){
+        }catch(Dao3Exception e){
             throw new WrapDAOException(e);
         }
     }
@@ -267,7 +267,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         {
             return nativeManager.deleteByPrimaryKey(id);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -280,7 +280,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         {
             return nativeManager.delete(this.beanConverter.toRight(bean));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }   
@@ -498,7 +498,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         try {
             return this.dbConverter.getDeviceBeanConverter().fromRight(nativeManager.getDeviceBeansByGroupIdAsList( this.beanConverter.toRight(bean),startRow,numRows));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -577,7 +577,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         try {
             return this.dbConverter.getDeviceGroupBeanConverter().fromRight(nativeManager.getDeviceGroupBeansByParentAsList( this.beanConverter.toRight(bean),startRow,numRows));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -656,7 +656,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         try {
             return this.dbConverter.getPermitBeanConverter().fromRight(nativeManager.getPermitBeansByDeviceGroupIdAsList( this.beanConverter.toRight(bean),startRow,numRows));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -920,7 +920,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
             foreignConverter.fromRight(beanToSet,foreignNativeBean);
             return beanToSet;
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -938,7 +938,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         try{
             return this.nativeManager.deleteByWhere(where);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -957,7 +957,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.insert(this.beanConverter.toRight(bean)));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -971,7 +971,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.update(this.beanConverter.toRight(bean)));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -989,7 +989,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -1006,7 +1006,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         {
             throw new ObjectRetrievalException();
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -1019,7 +1019,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         try {
             return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -1033,7 +1033,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         try{
             return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(bean));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -1061,7 +1061,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadByIndexParentAsList(parent));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -1075,7 +1075,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         try{
             return this.nativeManager.deleteByIndexParent(parent);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -1094,7 +1094,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     {
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadByIndexAsList(keyIndex,keys));
-        }catch(DAOException e){
+        }catch(Dao3Exception e){
             throw new WrapDAOException(e);
         }
     }
@@ -1111,7 +1111,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     {
         try{
             return this.nativeManager.deleteByIndex(keyIndex,keys);
-        }catch(DAOException e){
+        }catch(Dao3Exception e){
             throw new WrapDAOException(e);
         }
     }
@@ -1139,7 +1139,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
                     this.dbConverter.getPersonGroupBeanConverter().toRight(bean),
                     startRow,
                     numRows));
-        }catch(DAOException e){
+        }catch(Dao3Exception e){
             throw new WrapDAOException(e);
         }
     }
@@ -1228,7 +1228,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         try{
             return this.nativeManager.countWhere(where);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -1242,7 +1242,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         try{
             return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),searchType);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -1297,7 +1297,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         try{
             this.nativeManager.fire(event, this.beanConverter.toRight(bean));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -1332,32 +1332,32 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
             this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.device.FlDeviceGroupBean> (){
 
                 @Override
-                public void beforeInsert(net.gdface.facelog.dborm.device.FlDeviceGroupBean bean) throws DAOException {
+                public void beforeInsert(net.gdface.facelog.dborm.device.FlDeviceGroupBean bean) throws Dao3Exception {
                     listener.beforeInsert(DeviceGroupManager.this.beanConverter.fromRight(bean));                
                 }
 
                 @Override
-                public void afterInsert(net.gdface.facelog.dborm.device.FlDeviceGroupBean bean) throws DAOException {
+                public void afterInsert(net.gdface.facelog.dborm.device.FlDeviceGroupBean bean) throws Dao3Exception {
                     listener.afterInsert(DeviceGroupManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeUpdate(net.gdface.facelog.dborm.device.FlDeviceGroupBean bean) throws DAOException {
+                public void beforeUpdate(net.gdface.facelog.dborm.device.FlDeviceGroupBean bean) throws Dao3Exception {
                     listener.beforeUpdate(DeviceGroupManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterUpdate(net.gdface.facelog.dborm.device.FlDeviceGroupBean bean) throws DAOException {
+                public void afterUpdate(net.gdface.facelog.dborm.device.FlDeviceGroupBean bean) throws Dao3Exception {
                     listener.afterUpdate(DeviceGroupManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeDelete(net.gdface.facelog.dborm.device.FlDeviceGroupBean bean) throws DAOException {
+                public void beforeDelete(net.gdface.facelog.dborm.device.FlDeviceGroupBean bean) throws Dao3Exception {
                     listener.beforeDelete(DeviceGroupManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterDelete(net.gdface.facelog.dborm.device.FlDeviceGroupBean bean) throws DAOException {
+                public void afterDelete(net.gdface.facelog.dborm.device.FlDeviceGroupBean bean) throws Dao3Exception {
                     listener.afterDelete(DeviceGroupManager.this.beanConverter.fromRight(bean));
                 }};
         }
@@ -1410,7 +1410,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         try{
             return this.nativeManager.loadBySqlForAction(sql,argList,fieldList,startRow,numRows,this.toNative(action));
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }
@@ -1421,7 +1421,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         try{
             return this.nativeManager.runAsTransaction(fun);
         }
-        catch(DAOException e)
+        catch(Dao3Exception e)
         {
             throw new WrapDAOException(e);
         }

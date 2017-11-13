@@ -132,7 +132,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * FK_NAME : fl_feature_ibfk_1 
      * @param idOfPerson Integer - PK# 1
      * @return the associated {@link FeatureBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public FeatureBean[] getFeatureBeansByPersonId(Integer idOfPerson);
     
@@ -150,7 +150,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * FK_NAME:fl_feature_ibfk_1
      * @param idOfPerson Integer - PK# 1
      * @return the associated {@link FeatureBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(Integer idOfPerson);
     //3.2.3 DELETE IMPORTED
@@ -208,7 +208,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * FK_NAME : fl_log_ibfk_1 
      * @param idOfPerson Integer - PK# 1
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public LogBean[] getLogBeansByPersonId(Integer idOfPerson);
     
@@ -226,7 +226,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * FK_NAME:fl_log_ibfk_1
      * @param idOfPerson Integer - PK# 1
      * @return the associated {@link LogBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public java.util.List<LogBean> getLogBeansByPersonIdAsList(Integer idOfPerson);
     //3.2.3 DELETE IMPORTED

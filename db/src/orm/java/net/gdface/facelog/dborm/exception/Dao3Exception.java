@@ -12,14 +12,14 @@ import java.sql.SQLException;
 /**
  * @author sql2java
  */
-public class DAOException extends SQLException
+public class Dao3Exception extends SQLException
 {
     private static final long serialVersionUID = 5165438223391151142L;
 
     /**
      * contructor
      */
-    public DAOException()
+    public Dao3Exception()
     {
         super();
     }
@@ -27,7 +27,7 @@ public class DAOException extends SQLException
     /**
      * contructor
      */
-    public DAOException(String message)
+    public Dao3Exception(String message)
     {
         super(message);
     }
@@ -35,7 +35,7 @@ public class DAOException extends SQLException
     /**
      * contructor
      */
-    public DAOException(Throwable cause)
+    public Dao3Exception(Throwable cause)
     {
         super(cause);
     }
@@ -43,7 +43,7 @@ public class DAOException extends SQLException
     /**
      * contructor
      */
-    public DAOException(String message, Throwable cause)
+    public Dao3Exception(String message, Throwable cause)
     {
         super(message, cause);
     }

@@ -132,7 +132,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * FK_NAME : fl_face_ibfk_1 
      * @param md5OfImage String - PK# 1
      * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public FaceBean[] getFaceBeansByImageMd5(String md5OfImage);
     
@@ -150,7 +150,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * FK_NAME:fl_face_ibfk_1
      * @param md5OfImage String - PK# 1
      * @return the associated {@link FaceBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(String md5OfImage);
     //3.2.3 DELETE IMPORTED
@@ -208,7 +208,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * FK_NAME : fl_person_ibfk_2 
      * @param md5OfImage String - PK# 1
      * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public PersonBean[] getPersonBeansByImageMd5(String md5OfImage);
     
@@ -226,7 +226,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * FK_NAME:fl_person_ibfk_2
      * @param md5OfImage String - PK# 1
      * @return the associated {@link PersonBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(String md5OfImage);
     //3.2.3 DELETE IMPORTED

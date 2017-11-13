@@ -132,7 +132,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * FK_NAME : fl_image_ibfk_1 
      * @param idOfDevice Integer - PK# 1
      * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public ImageBean[] getImageBeansByDeviceId(Integer idOfDevice);
     
@@ -150,7 +150,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * FK_NAME:fl_image_ibfk_1
      * @param idOfDevice Integer - PK# 1
      * @return the associated {@link ImageBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(Integer idOfDevice);
     //3.2.3 DELETE IMPORTED
@@ -208,7 +208,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * FK_NAME : fl_log_ibfk_2 
      * @param idOfDevice Integer - PK# 1
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public LogBean[] getLogBeansByDeviceId(Integer idOfDevice);
     
@@ -226,7 +226,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * FK_NAME:fl_log_ibfk_2
      * @param idOfDevice Integer - PK# 1
      * @return the associated {@link LogBean} beans 
-     * @throws DAOException
+     * @throws Dao3Exception
      */
     public java.util.List<LogBean> getLogBeansByDeviceIdAsList(Integer idOfDevice);
     //3.2.3 DELETE IMPORTED
