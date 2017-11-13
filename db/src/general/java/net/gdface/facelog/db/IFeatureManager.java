@@ -7,7 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
-import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.exception.WrapDAO1Exception;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_feature table.<br>
@@ -340,7 +340,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param bean the {@link FeatureBean} object to use
      * @param beanToSet the {@link PersonBean} object to associate to the {@link FeatureBean}
      * @return always beanToSet saved
-     * @throws WrapDAOException
+     * @throws WrapDAO1Exception
      */
     public PersonBean setReferencedByPersonId(FeatureBean bean, PersonBean beanToSet);
     //_____________________________________________________________________

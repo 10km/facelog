@@ -19,14 +19,14 @@ import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.exception.WrapDAO1Exception;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
 import net.gdface.facelog.dborm.exception.Dao3Exception;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_device table.<br>
- * all {@link Dao3Exception} be wrapped as {@link WrapDAOException} to throw.<br>
+ * all {@link Dao3Exception} be wrapped as {@link WrapDAO1Exception} to throw.<br>
  * Remarks: 前端设备基本信息<br>
  * @author guyadong
  */
@@ -128,7 +128,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
             throw new ObjectRetrievalException();
         }catch(Dao3Exception e){
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //1.2
@@ -189,7 +189,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //1.6
@@ -217,7 +217,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
         	throw new ObjectRetrievalException(e);
         }catch(Dao3Exception e){
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //1.8 override IDeviceManager
@@ -266,7 +266,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //2
@@ -279,7 +279,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }   
     }
     //2.1
@@ -488,7 +488,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //3.3 SET IMPORTED override IDeviceManager
@@ -567,7 +567,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //3.3 SET IMPORTED override IDeviceManager
@@ -818,7 +818,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -836,7 +836,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -855,7 +855,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -869,7 +869,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -887,7 +887,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
      }
     //18-1
@@ -904,7 +904,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
      }
     //20-5
@@ -917,7 +917,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -931,7 +931,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -1038,7 +1038,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     
@@ -1139,7 +1139,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     
@@ -1161,7 +1161,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -1175,7 +1175,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     
@@ -1193,7 +1193,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadByIndexAsList(keyIndex,keys));
         }catch(Dao3Exception e){
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     
@@ -1210,7 +1210,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         try{
             return this.nativeManager.deleteByIndex(keyIndex,keys);
         }catch(Dao3Exception e){
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -1228,7 +1228,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -1242,7 +1242,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -1297,7 +1297,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //37-2
@@ -1410,7 +1410,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     
@@ -1421,7 +1421,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     

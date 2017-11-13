@@ -7,7 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
-import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.exception.WrapDAO1Exception;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_permit table.<br>
@@ -120,7 +120,7 @@ public interface IPermitManager extends TableManager<PermitBean>
      * @param bean the {@link PermitBean} object to use
      * @param beanToSet the {@link DeviceGroupBean} object to associate to the {@link PermitBean}
      * @return always beanToSet saved
-     * @throws WrapDAOException
+     * @throws WrapDAO1Exception
      */
     public DeviceGroupBean setReferencedByDeviceGroupId(PermitBean bean, DeviceGroupBean beanToSet);
     //5.1 GET REFERENCED VALUE
@@ -139,7 +139,7 @@ public interface IPermitManager extends TableManager<PermitBean>
      * @param bean the {@link PermitBean} object to use
      * @param beanToSet the {@link PersonGroupBean} object to associate to the {@link PermitBean}
      * @return always beanToSet saved
-     * @throws WrapDAOException
+     * @throws WrapDAO1Exception
      */
     public PersonGroupBean setReferencedByPersonGroupId(PermitBean bean, PersonGroupBean beanToSet);
 

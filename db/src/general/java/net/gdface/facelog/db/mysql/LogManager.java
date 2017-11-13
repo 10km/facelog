@@ -20,14 +20,14 @@ import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.exception.WrapDAO1Exception;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
 import net.gdface.facelog.dborm.exception.Dao3Exception;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_log table.<br>
- * all {@link Dao3Exception} be wrapped as {@link WrapDAOException} to throw.<br>
+ * all {@link Dao3Exception} be wrapped as {@link WrapDAO1Exception} to throw.<br>
  * Remarks: 人脸验证日志,记录所有通过验证的人员<br>
  * @author guyadong
  */
@@ -132,7 +132,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
             throw new ObjectRetrievalException();
         }catch(Dao3Exception e){
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //1.2
@@ -193,7 +193,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //1.6
@@ -221,7 +221,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
         	throw new ObjectRetrievalException(e);
         }catch(Dao3Exception e){
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //1.8 override ILogManager
@@ -270,7 +270,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //2
@@ -283,7 +283,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }   
     }
     //2.1
@@ -570,7 +570,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -602,7 +602,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -634,7 +634,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -666,7 +666,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -684,7 +684,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -703,7 +703,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -717,7 +717,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -735,7 +735,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
      }
     //18-1
@@ -752,7 +752,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
      }
     //20-5
@@ -765,7 +765,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -779,7 +779,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -807,7 +807,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -821,7 +821,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     
@@ -843,7 +843,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -857,7 +857,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     
@@ -879,7 +879,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -893,7 +893,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     
@@ -915,7 +915,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -929,7 +929,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     
@@ -947,7 +947,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadByIndexAsList(keyIndex,keys));
         }catch(Dao3Exception e){
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     
@@ -964,7 +964,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         try{
             return this.nativeManager.deleteByIndex(keyIndex,keys);
         }catch(Dao3Exception e){
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -982,7 +982,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -996,7 +996,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -1051,7 +1051,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //37-2
@@ -1164,7 +1164,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     
@@ -1175,7 +1175,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     

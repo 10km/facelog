@@ -7,7 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
-import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.exception.WrapDAO1Exception;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_device table.<br>
@@ -340,7 +340,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param bean the {@link DeviceBean} object to use
      * @param beanToSet the {@link DeviceGroupBean} object to associate to the {@link DeviceBean}
      * @return always beanToSet saved
-     * @throws WrapDAOException
+     * @throws WrapDAO1Exception
      */
     public DeviceGroupBean setReferencedByGroupId(DeviceBean bean, DeviceGroupBean beanToSet);
     //_____________________________________________________________________
@@ -354,7 +354,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * 
      * @param mac the mac column's value filter
      * @return an DeviceBean,otherwise null if not found or exists null in input arguments
-     * @throws WrapDAOException
+     * @throws WrapDAO1Exception
      */
     public DeviceBean loadByIndexMac(String mac);
     /**
@@ -364,7 +364,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @return an DeviceBean
      * @throws NullPointerException exists null in input arguments
      * @throws ObjectRetrievalException if not found
-     * @throws WrapDAOException
+     * @throws WrapDAO1Exception
      */
     public DeviceBean loadByIndexMacChecked(String mac)throws ObjectRetrievalException;
     /**
@@ -410,7 +410,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * 
      * @param serialNo the serial_no column's value filter
      * @return an DeviceBean,otherwise null if not found or exists null in input arguments
-     * @throws WrapDAOException
+     * @throws WrapDAO1Exception
      */
     public DeviceBean loadByIndexSerialNo(String serialNo);
     /**
@@ -420,7 +420,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @return an DeviceBean
      * @throws NullPointerException exists null in input arguments
      * @throws ObjectRetrievalException if not found
-     * @throws WrapDAOException
+     * @throws WrapDAO1Exception
      */
     public DeviceBean loadByIndexSerialNoChecked(String serialNo)throws ObjectRetrievalException;
     /**

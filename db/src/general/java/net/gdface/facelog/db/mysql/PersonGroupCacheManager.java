@@ -15,7 +15,7 @@ import com.google.common.util.concurrent.UncheckedExecutionException;
 import net.gdface.facelog.db.ITableCache;
 import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
-import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.exception.WrapDAO1Exception;
 import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.DeviceGroupBean;
@@ -109,7 +109,7 @@ public class PersonGroupCacheManager extends PersonGroupManager
                 throw ee.getCause();
             }catch(ObjectRetrievalException oe){
                 throw oe;
-            } catch (WrapDAOException we) {
+            } catch (WrapDAO1Exception we) {
                 throw we;
             } catch (RuntimeException re) {
                 throw re;
@@ -121,7 +121,7 @@ public class PersonGroupCacheManager extends PersonGroupManager
                 throw ue.getCause();
             }catch(ObjectRetrievalException oe){
                 throw oe;
-            } catch (WrapDAOException we) {
+            } catch (WrapDAO1Exception we) {
                 throw we;
             } catch (RuntimeException re) {
                 throw re;

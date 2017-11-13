@@ -19,14 +19,14 @@ import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.exception.WrapDAO1Exception;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
 import net.gdface.facelog.dborm.exception.Dao3Exception;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_person_group table.<br>
- * all {@link Dao3Exception} be wrapped as {@link WrapDAOException} to throw.<br>
+ * all {@link Dao3Exception} be wrapped as {@link WrapDAO1Exception} to throw.<br>
  * Remarks: 用户组信息<br>
  * @author guyadong
  */
@@ -131,7 +131,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
             throw new ObjectRetrievalException();
         }catch(Dao3Exception e){
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //1.2
@@ -192,7 +192,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //1.6
@@ -220,7 +220,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
         	throw new ObjectRetrievalException(e);
         }catch(Dao3Exception e){
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //1.8 override IPersonGroupManager
@@ -269,7 +269,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //2
@@ -282,7 +282,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }   
     }
     //2.1
@@ -500,7 +500,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //3.3 SET IMPORTED override IPersonGroupManager
@@ -579,7 +579,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //3.3 SET IMPORTED override IPersonGroupManager
@@ -658,7 +658,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //3.3 SET IMPORTED override IPersonGroupManager
@@ -922,7 +922,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -940,7 +940,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -959,7 +959,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -973,7 +973,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -991,7 +991,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
      }
     //18-1
@@ -1008,7 +1008,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
      }
     //20-5
@@ -1021,7 +1021,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -1035,7 +1035,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -1063,7 +1063,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -1077,7 +1077,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     
@@ -1095,7 +1095,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadByIndexAsList(keyIndex,keys));
         }catch(Dao3Exception e){
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     
@@ -1112,7 +1112,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         try{
             return this.nativeManager.deleteByIndex(keyIndex,keys);
         }catch(Dao3Exception e){
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -1140,7 +1140,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
                     startRow,
                     numRows));
         }catch(Dao3Exception e){
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //23.2 MANY TO MANY override IPersonGroupManager
@@ -1230,7 +1230,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -1244,7 +1244,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
 
@@ -1299,7 +1299,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     //37-2
@@ -1412,7 +1412,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     
@@ -1423,7 +1423,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(Dao3Exception e)
         {
-            throw new WrapDAOException(e);
+            throw new WrapDAO1Exception(e);
         }
     }
     

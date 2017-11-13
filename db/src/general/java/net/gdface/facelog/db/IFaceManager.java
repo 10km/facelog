@@ -7,7 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
-import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.exception.WrapDAO1Exception;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_face table.<br>
@@ -264,7 +264,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param bean the {@link FaceBean} object to use
      * @param beanToSet the {@link FeatureBean} object to associate to the {@link FaceBean}
      * @return always beanToSet saved
-     * @throws WrapDAOException
+     * @throws WrapDAO1Exception
      */
     public FeatureBean setReferencedByFeatureMd5(FaceBean bean, FeatureBean beanToSet);
     //5.1 GET REFERENCED VALUE
@@ -283,7 +283,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param bean the {@link FaceBean} object to use
      * @param beanToSet the {@link ImageBean} object to associate to the {@link FaceBean}
      * @return always beanToSet saved
-     * @throws WrapDAOException
+     * @throws WrapDAO1Exception
      */
     public ImageBean setReferencedByImageMd5(FaceBean bean, ImageBean beanToSet);
     //_____________________________________________________________________

@@ -7,7 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
-import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.exception.WrapDAO1Exception;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_log table.<br>
@@ -160,7 +160,7 @@ public interface ILogManager extends TableManager<LogBean>
      * @param bean the {@link LogBean} object to use
      * @param beanToSet the {@link DeviceBean} object to associate to the {@link LogBean}
      * @return always beanToSet saved
-     * @throws WrapDAOException
+     * @throws WrapDAO1Exception
      */
     public DeviceBean setReferencedByDeviceId(LogBean bean, DeviceBean beanToSet);
     //5.1 GET REFERENCED VALUE
@@ -179,7 +179,7 @@ public interface ILogManager extends TableManager<LogBean>
      * @param bean the {@link LogBean} object to use
      * @param beanToSet the {@link FaceBean} object to associate to the {@link LogBean}
      * @return always beanToSet saved
-     * @throws WrapDAOException
+     * @throws WrapDAO1Exception
      */
     public FaceBean setReferencedByCompareFace(LogBean bean, FaceBean beanToSet);
     //5.1 GET REFERENCED VALUE
@@ -198,7 +198,7 @@ public interface ILogManager extends TableManager<LogBean>
      * @param bean the {@link LogBean} object to use
      * @param beanToSet the {@link FeatureBean} object to associate to the {@link LogBean}
      * @return always beanToSet saved
-     * @throws WrapDAOException
+     * @throws WrapDAO1Exception
      */
     public FeatureBean setReferencedByVerifyFeature(LogBean bean, FeatureBean beanToSet);
     //5.1 GET REFERENCED VALUE
@@ -217,7 +217,7 @@ public interface ILogManager extends TableManager<LogBean>
      * @param bean the {@link LogBean} object to use
      * @param beanToSet the {@link PersonBean} object to associate to the {@link LogBean}
      * @return always beanToSet saved
-     * @throws WrapDAOException
+     * @throws WrapDAO1Exception
      */
     public PersonBean setReferencedByPersonId(LogBean bean, PersonBean beanToSet);
     //_____________________________________________________________________

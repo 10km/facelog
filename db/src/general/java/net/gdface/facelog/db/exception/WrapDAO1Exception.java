@@ -12,14 +12,14 @@ package net.gdface.facelog.db.exception;
  *
  * @author guyadong
  */
-public class WrapDAOException extends RuntimeException
+public class WrapDAO1Exception extends RuntimeException
 {
     private static final long serialVersionUID = 2448402307057993837L;
 
     /**
      * contructor
      */
-    public WrapDAOException(Throwable cause)
+    public WrapDAO1Exception(Throwable cause)
     {
         super(cause);
     }
