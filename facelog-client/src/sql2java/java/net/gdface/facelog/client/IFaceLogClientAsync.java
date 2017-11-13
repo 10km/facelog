@@ -16,7 +16,7 @@ import java.util.*;
  * 定义 FaceLog 服务接口<br>
  * <ul>
  * <li>所有标明为图像数据的参数,是指具有特定图像格式的图像数据(如jpg,png...),而非无格式的原始点阵位图</li>
- * <li>在执行涉及数据库操作的方法时如果数据库发生异常，则会被封装到{@link Wrap2DaoException}抛出，
+ * <li>在执行涉及数据库操作的方法时如果数据库发生异常，则会被封装到{@link WrapDAOException}抛出，
  * 所有非{@link RuntimeException}异常会被封装在{@link ServiceRuntimeException}抛出</li>
  * <li>所有数据库对象(Java Bean,比如 {@link PersonBean}),在执行保存操作(save)时,
  * 如果为新增记录({@link PersonBean#isNew()}为true),则执行insert操作,否则执行update操作,
