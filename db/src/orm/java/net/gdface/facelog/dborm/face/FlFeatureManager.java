@@ -41,8 +41,8 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      */
     public static final String TABLE_NAME="fl_feature";
 
-   /**
-     * Contains all the primarykey fields of the fl_feature table.
+    /**
+     * Contains all the primary key fields of the fl_feature table.
      */
     public static final String[] PRIMARYKEY_NAMES =
     {

@@ -41,8 +41,8 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      */
     public static final String TABLE_NAME="fl_person_group";
 
-   /**
-     * Contains all the primarykey fields of the fl_person_group table.
+    /**
+     * Contains all the primary key fields of the fl_person_group table.
      */
     public static final String[] PRIMARYKEY_NAMES =
     {

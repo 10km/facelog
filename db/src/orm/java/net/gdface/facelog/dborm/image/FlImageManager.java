@@ -43,8 +43,8 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      */
     public static final String TABLE_NAME="fl_image";
 
-   /**
-     * Contains all the primarykey fields of the fl_image table.
+    /**
+     * Contains all the primary key fields of the fl_image table.
      */
     public static final String[] PRIMARYKEY_NAMES =
     {

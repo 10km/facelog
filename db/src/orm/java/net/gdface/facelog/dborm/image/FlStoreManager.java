@@ -37,8 +37,8 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      */
     public static final String TABLE_NAME="fl_store";
 
-   /**
-     * Contains all the primarykey fields of the fl_store table.
+    /**
+     * Contains all the primary key fields of the fl_store table.
      */
     public static final String[] PRIMARYKEY_NAMES =
     {

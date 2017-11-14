@@ -43,8 +43,8 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      */
     public static final String TABLE_NAME="fl_person";
 
-   /**
-     * Contains all the primarykey fields of the fl_person table.
+    /**
+     * Contains all the primary key fields of the fl_person table.
      */
     public static final String[] PRIMARYKEY_NAMES =
     {

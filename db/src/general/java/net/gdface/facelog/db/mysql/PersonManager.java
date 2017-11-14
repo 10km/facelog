@@ -62,17 +62,12 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     protected PersonGroupManager instanceOfPersonGroupManager(){
         return PersonGroupManager.getInstance();
     }
-    /**
-     * @return table name
-     */
+
     @Override
     public String getTableName() {
         return this.nativeManager.getTableName();
     }
 
-    /**
-     * @return field names of table
-     */
     @Override
     public String getFields() {
         return this.nativeManager.getFields();
@@ -83,9 +78,6 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         return this.nativeManager.getFullFields();
     }
     
-    /**
-     * @return primarykeyNames
-     */
     @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();

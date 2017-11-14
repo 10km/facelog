@@ -37,8 +37,8 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      */
     public static final String TABLE_NAME="fl_log_light";
 
-   /**
-     * Contains all the primarykey fields of the fl_log_light table.
+    /**
+     * Contains all the primary key fields of the fl_log_light table.
      */
     public static final String[] PRIMARYKEY_NAMES =
     {

@@ -41,8 +41,8 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
      */
     public static final String TABLE_NAME="fl_face";
 
-   /**
-     * Contains all the primarykey fields of the fl_face table.
+    /**
+     * Contains all the primary key fields of the fl_face table.
      */
     public static final String[] PRIMARYKEY_NAMES =
     {

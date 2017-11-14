@@ -41,8 +41,8 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      */
     public static final String TABLE_NAME="fl_permit";
 
-   /**
-     * Contains all the primarykey fields of the fl_permit table.
+    /**
+     * Contains all the primary key fields of the fl_permit table.
      */
     public static final String[] PRIMARYKEY_NAMES =
     {

@@ -21,15 +21,41 @@ public interface DaoConstant {
     public static final int SEARCH_STARTING_LIKE = 2;
     /** set QUERY% for loadLikeTemplate */
     public static final int SEARCH_ENDING_LIKE = 3;
-
-    /**
-     * Constant definition for fl_device
-     * @author guyadong
-     */
+    /** meta data of table's column */
+    public static class ColumnMeta{            
+        final String table;
+        final String field;
+        final String fullName;
+        final int index;
+        final int ordinal;
+        final long mask;
+        final String getter;
+        final String setter;
+        private ColumnMeta(String table,String field,int ordinal,String getter,String setter){
+            this.table = table;
+            this.field = field;
+            this.fullName = this.table + field;
+            this.ordinal = ordinal;
+            this.index = ordinal -1;
+            this.mask = (1L << index);
+            this.getter = setter;
+            this.setter = setter;
+        }
+    }
+    /** Constant definition for fl_device */
     public static interface DeviceConst{
+        public static final String TABLENAME = "fl_device";
+        /** column count for fl_device table */
         public static final int COLUMN_COUNT = 8;
+        /** primary keys count for fl_device table */
         public static final int PRIMARY_KEY_COUNT = 1;
-        /** Contains all the full fields of the $t.name table.*/
+        /** foreign keys count for fl_device table */
+        public static final int FOREIGN_KEY_COUNT = 1;
+        /** imported keys count for fl_device table */
+        public static final int IMPORTED_KEY_COUNT = 2;
+        /** Contains all the primary key fields of the fl_device table. */
+        public static final String[] PRIMARYKEY_NAMES = {"id"};
+        /** Contains all the full fields of the fl_device table.*/
         public static final String FULL_FIELDS ="fl_device.id"
                             + ",fl_device.group_id"
                             + ",fl_device.name"
@@ -38,7 +64,6 @@ public interface DaoConstant {
                             + ",fl_device.mac"
                             + ",fl_device.create_time"
                             + ",fl_device.update_time";
-
         /** Field that contains the comma separated fields of the fl_device table. */
         public static final String FIELDS = "id"
                             + ",group_id"
@@ -48,9 +73,8 @@ public interface DaoConstant {
                             + ",mac"
                             + ",create_time"
                             + ",update_time";
-                            
-        public static final java.util.List<String> FIELDS_LIST = java.util.Arrays.asList(FIELDS.split(","));
-
+        /** immutable list of {@link #FIELDS} */
+        public static final java.util.List<String> FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(FIELDS.split(",")));
         /** Field that contains the comma separated java fields of the fl_device table. */
         public static final String JAVA_FIELDS = "id"
                             + ",groupId"
@@ -60,148 +84,117 @@ public interface DaoConstant {
                             + ",mac"
                             + ",createTime"
                             + ",updateTime";
-                            
-        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Arrays.asList(JAVA_FIELDS.split(","));
+        /** immutable list of {@link #JAVA_FIELDS} */
+        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
-            /** foreign key fl_device(group_id) -> fl_device_group */
-            groupId
+            /** foreign key fl_device(group_id) -> fl_device_group */groupId
         }
         public static enum Ik{
-            /** imported key fl_image(device_id) -> fl_device */
-            deviceIdOfImage,
-            /** imported key fl_log(device_id) -> fl_device */
-            deviceIdOfLog
+            /** imported key fl_image(device_id) -> fl_device */deviceIdOfImage,
+            /** imported key fl_log(device_id) -> fl_device */deviceIdOfLog
         }
         public static enum Index{
-            /** fl_device index (mac) */
-            indexMac,
-            /** fl_device index (serial_no) */
-            indexSerialNo,
-            /** fl_device index (group_id) */
-            indexGroupId
+            /** fl_device index (mac) */indexMac,
+            /** fl_device index (serial_no) */indexSerialNo,
+            /** fl_device index (group_id) */indexGroupId
         }
-        /**
-         * Column Constant definition for fl_device
-         * @author guyadong
-         */
+        /** Column Constant definition for fl_device */
         public static enum Column{            
             /** constant for fl_device.id  */
-            id("id",1,"getId","setId"),
+            id("fl_device","id",1,"getId","setId"),
             /** constant for fl_device.group_id  */
-            groupId("group_id",2,"getGroupId","setGroupId"),
+            groupId("fl_device","group_id",2,"getGroupId","setGroupId"),
             /** constant for fl_device.name  */
-            name("name",3,"getName","setName"),
+            name("fl_device","name",3,"getName","setName"),
             /** constant for fl_device.version  */
-            version("version",4,"getVersion","setVersion"),
+            version("fl_device","version",4,"getVersion","setVersion"),
             /** constant for fl_device.serial_no  */
-            serialNo("serial_no",5,"getSerialNo","setSerialNo"),
+            serialNo("fl_device","serial_no",5,"getSerialNo","setSerialNo"),
             /** constant for fl_device.mac  */
-            mac("mac",6,"getMac","setMac"),
+            mac("fl_device","mac",6,"getMac","setMac"),
             /** constant for fl_device.create_time  */
-            createTime("create_time",7,"getCreateTime","setCreateTime"),
+            createTime("fl_device","create_time",7,"getCreateTime","setCreateTime"),
             /** constant for fl_device.update_time  */
-            updateTime("update_time",8,"getUpdateTime","setUpdateTime");
-            final String field;
-            final String fullName;
-            final int index;
-            final int ordinal;
-            final long mask;
-            final String getter;
-            final String setter;
-            private Column(String field,int ordinal,String getter,String setter){
-                this.field = field;
-                this.fullName = "fl_device." + field;
-                this.ordinal = ordinal;
-                this.index = ordinal -1;
-                this.mask = 1L << index;
-                this.getter = setter;
-                this.setter = setter;
+            updateTime("fl_device","update_time",8,"getUpdateTime","setUpdateTime");
+            final ColumnMeta meta;
+            private Column(String table,String field,int ordinal,String getter,String setter){
+                meta = new ColumnMeta(table,field,ordinal,getter,setter);
             }
         }
     }
-    /**
-     * Constant definition for fl_device_group
-     * @author guyadong
-     */
+    /** Constant definition for fl_device_group */
     public static interface DeviceGroupConst{
+        public static final String TABLENAME = "fl_device_group";
+        /** column count for fl_device_group table */
         public static final int COLUMN_COUNT = 4;
+        /** primary keys count for fl_device_group table */
         public static final int PRIMARY_KEY_COUNT = 1;
-        /** Contains all the full fields of the $t.name table.*/
+        /** foreign keys count for fl_device_group table */
+        public static final int FOREIGN_KEY_COUNT = 1;
+        /** imported keys count for fl_device_group table */
+        public static final int IMPORTED_KEY_COUNT = 3;
+        /** Contains all the primary key fields of the fl_device_group table. */
+        public static final String[] PRIMARYKEY_NAMES = {"id"};
+        /** Contains all the full fields of the fl_device_group table.*/
         public static final String FULL_FIELDS ="fl_device_group.id"
                             + ",fl_device_group.name"
                             + ",fl_device_group.leaf"
                             + ",fl_device_group.parent";
-
         /** Field that contains the comma separated fields of the fl_device_group table. */
         public static final String FIELDS = "id"
                             + ",name"
                             + ",leaf"
                             + ",parent";
-                            
-        public static final java.util.List<String> FIELDS_LIST = java.util.Arrays.asList(FIELDS.split(","));
-
+        /** immutable list of {@link #FIELDS} */
+        public static final java.util.List<String> FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(FIELDS.split(",")));
         /** Field that contains the comma separated java fields of the fl_device_group table. */
         public static final String JAVA_FIELDS = "id"
                             + ",name"
                             + ",leaf"
                             + ",parent";
-                            
-        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Arrays.asList(JAVA_FIELDS.split(","));
+        /** immutable list of {@link #JAVA_FIELDS} */
+        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
-            /** foreign key fl_device_group(parent) -> fl_device_group */
-            parent
+            /** foreign key fl_device_group(parent) -> fl_device_group */parent
         }
         public static enum Ik{
-            /** imported key fl_device(group_id) -> fl_device_group */
-            groupIdOfDevice,
-            /** imported key fl_device_group(parent) -> fl_device_group */
-            parentOfDeviceGroup,
-            /** imported key fl_permit(device_group_id) -> fl_device_group */
-            deviceGroupIdOfPermit
+            /** imported key fl_device(group_id) -> fl_device_group */groupIdOfDevice,
+            /** imported key fl_device_group(parent) -> fl_device_group */parentOfDeviceGroup,
+            /** imported key fl_permit(device_group_id) -> fl_device_group */deviceGroupIdOfPermit
         }
         public static enum Index{
-            /** fl_device_group index (parent) */
-            indexParent
+            /** fl_device_group index (parent) */indexParent
         }
-        /**
-         * Column Constant definition for fl_device_group
-         * @author guyadong
-         */
+        /** Column Constant definition for fl_device_group */
         public static enum Column{            
             /** constant for fl_device_group.id  */
-            id("id",1,"getId","setId"),
+            id("fl_device_group","id",1,"getId","setId"),
             /** constant for fl_device_group.name  */
-            name("name",2,"getName","setName"),
+            name("fl_device_group","name",2,"getName","setName"),
             /** constant for fl_device_group.leaf  */
-            leaf("leaf",3,"getLeaf","setLeaf"),
+            leaf("fl_device_group","leaf",3,"getLeaf","setLeaf"),
             /** constant for fl_device_group.parent  */
-            parent("parent",4,"getParent","setParent");
-            final String field;
-            final String fullName;
-            final int index;
-            final int ordinal;
-            final long mask;
-            final String getter;
-            final String setter;
-            private Column(String field,int ordinal,String getter,String setter){
-                this.field = field;
-                this.fullName = "fl_device_group." + field;
-                this.ordinal = ordinal;
-                this.index = ordinal -1;
-                this.mask = 1L << index;
-                this.getter = setter;
-                this.setter = setter;
+            parent("fl_device_group","parent",4,"getParent","setParent");
+            final ColumnMeta meta;
+            private Column(String table,String field,int ordinal,String getter,String setter){
+                meta = new ColumnMeta(table,field,ordinal,getter,setter);
             }
         }
     }
-    /**
-     * Constant definition for fl_face
-     * @author guyadong
-     */
+    /** Constant definition for fl_face */
     public static interface FaceConst{
+        public static final String TABLENAME = "fl_face";
+        /** column count for fl_face table */
         public static final int COLUMN_COUNT = 20;
+        /** primary keys count for fl_face table */
         public static final int PRIMARY_KEY_COUNT = 1;
-        /** Contains all the full fields of the $t.name table.*/
+        /** foreign keys count for fl_face table */
+        public static final int FOREIGN_KEY_COUNT = 2;
+        /** imported keys count for fl_face table */
+        public static final int IMPORTED_KEY_COUNT = 1;
+        /** Contains all the primary key fields of the fl_face table. */
+        public static final String[] PRIMARYKEY_NAMES = {"id"};
+        /** Contains all the full fields of the fl_face table.*/
         public static final String FULL_FIELDS ="fl_face.id"
                             + ",fl_face.image_md5"
                             + ",fl_face.face_left"
@@ -222,7 +215,6 @@ public interface DaoConstant {
                             + ",fl_face.ext_info"
                             + ",fl_face.feature_md5"
                             + ",fl_face.create_time";
-
         /** Field that contains the comma separated fields of the fl_face table. */
         public static final String FIELDS = "id"
                             + ",image_md5"
@@ -244,9 +236,8 @@ public interface DaoConstant {
                             + ",ext_info"
                             + ",feature_md5"
                             + ",create_time";
-                            
-        public static final java.util.List<String> FIELDS_LIST = java.util.Arrays.asList(FIELDS.split(","));
-
+        /** immutable list of {@link #FIELDS} */
+        public static final java.util.List<String> FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(FIELDS.split(",")));
         /** Field that contains the comma separated java fields of the fl_face table. */
         public static final String JAVA_FIELDS = "id"
                             + ",imageMd5"
@@ -268,168 +259,139 @@ public interface DaoConstant {
                             + ",extInfo"
                             + ",featureMd5"
                             + ",createTime";
-                            
-        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Arrays.asList(JAVA_FIELDS.split(","));
+        /** immutable list of {@link #JAVA_FIELDS} */
+        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
-            /** foreign key fl_face(feature_md5) -> fl_feature */
-            featureMd5,
-            /** foreign key fl_face(image_md5) -> fl_image */
-            imageMd5
+            /** foreign key fl_face(feature_md5) -> fl_feature */featureMd5,
+            /** foreign key fl_face(image_md5) -> fl_image */imageMd5
         }
         public static enum Ik{
-            /** imported key fl_log(compare_face) -> fl_face */
-            compareFaceOfLog
+            /** imported key fl_log(compare_face) -> fl_face */compareFaceOfLog
         }
         public static enum Index{
-            /** fl_face index (feature_md5) */
-            indexFeatureMd5,
-            /** fl_face index (image_md5) */
-            indexImageMd5
+            /** fl_face index (feature_md5) */indexFeatureMd5,
+            /** fl_face index (image_md5) */indexImageMd5
         }
-        /**
-         * Column Constant definition for fl_face
-         * @author guyadong
-         */
+        /** Column Constant definition for fl_face */
         public static enum Column{            
             /** constant for fl_face.id  */
-            id("id",1,"getId","setId"),
+            id("fl_face","id",1,"getId","setId"),
             /** constant for fl_face.image_md5  */
-            imageMd5("image_md5",2,"getImageMd5","setImageMd5"),
+            imageMd5("fl_face","image_md5",2,"getImageMd5","setImageMd5"),
             /** constant for fl_face.face_left  */
-            faceLeft("face_left",3,"getFaceLeft","setFaceLeft"),
+            faceLeft("fl_face","face_left",3,"getFaceLeft","setFaceLeft"),
             /** constant for fl_face.face_top  */
-            faceTop("face_top",4,"getFaceTop","setFaceTop"),
+            faceTop("fl_face","face_top",4,"getFaceTop","setFaceTop"),
             /** constant for fl_face.face_width  */
-            faceWidth("face_width",5,"getFaceWidth","setFaceWidth"),
+            faceWidth("fl_face","face_width",5,"getFaceWidth","setFaceWidth"),
             /** constant for fl_face.face_height  */
-            faceHeight("face_height",6,"getFaceHeight","setFaceHeight"),
+            faceHeight("fl_face","face_height",6,"getFaceHeight","setFaceHeight"),
             /** constant for fl_face.eye_leftx  */
-            eyeLeftx("eye_leftx",7,"getEyeLeftx","setEyeLeftx"),
+            eyeLeftx("fl_face","eye_leftx",7,"getEyeLeftx","setEyeLeftx"),
             /** constant for fl_face.eye_lefty  */
-            eyeLefty("eye_lefty",8,"getEyeLefty","setEyeLefty"),
+            eyeLefty("fl_face","eye_lefty",8,"getEyeLefty","setEyeLefty"),
             /** constant for fl_face.eye_rightx  */
-            eyeRightx("eye_rightx",9,"getEyeRightx","setEyeRightx"),
+            eyeRightx("fl_face","eye_rightx",9,"getEyeRightx","setEyeRightx"),
             /** constant for fl_face.eye_righty  */
-            eyeRighty("eye_righty",10,"getEyeRighty","setEyeRighty"),
+            eyeRighty("fl_face","eye_righty",10,"getEyeRighty","setEyeRighty"),
             /** constant for fl_face.mouth_x  */
-            mouthX("mouth_x",11,"getMouthX","setMouthX"),
+            mouthX("fl_face","mouth_x",11,"getMouthX","setMouthX"),
             /** constant for fl_face.mouth_y  */
-            mouthY("mouth_y",12,"getMouthY","setMouthY"),
+            mouthY("fl_face","mouth_y",12,"getMouthY","setMouthY"),
             /** constant for fl_face.nose_x  */
-            noseX("nose_x",13,"getNoseX","setNoseX"),
+            noseX("fl_face","nose_x",13,"getNoseX","setNoseX"),
             /** constant for fl_face.nose_y  */
-            noseY("nose_y",14,"getNoseY","setNoseY"),
+            noseY("fl_face","nose_y",14,"getNoseY","setNoseY"),
             /** constant for fl_face.angle_yaw  */
-            angleYaw("angle_yaw",15,"getAngleYaw","setAngleYaw"),
+            angleYaw("fl_face","angle_yaw",15,"getAngleYaw","setAngleYaw"),
             /** constant for fl_face.angle_pitch  */
-            anglePitch("angle_pitch",16,"getAnglePitch","setAnglePitch"),
+            anglePitch("fl_face","angle_pitch",16,"getAnglePitch","setAnglePitch"),
             /** constant for fl_face.angle_roll  */
-            angleRoll("angle_roll",17,"getAngleRoll","setAngleRoll"),
+            angleRoll("fl_face","angle_roll",17,"getAngleRoll","setAngleRoll"),
             /** constant for fl_face.ext_info  */
-            extInfo("ext_info",18,"getExtInfo","setExtInfo"),
+            extInfo("fl_face","ext_info",18,"getExtInfo","setExtInfo"),
             /** constant for fl_face.feature_md5  */
-            featureMd5("feature_md5",19,"getFeatureMd5","setFeatureMd5"),
+            featureMd5("fl_face","feature_md5",19,"getFeatureMd5","setFeatureMd5"),
             /** constant for fl_face.create_time  */
-            createTime("create_time",20,"getCreateTime","setCreateTime");
-            final String field;
-            final String fullName;
-            final int index;
-            final int ordinal;
-            final long mask;
-            final String getter;
-            final String setter;
-            private Column(String field,int ordinal,String getter,String setter){
-                this.field = field;
-                this.fullName = "fl_face." + field;
-                this.ordinal = ordinal;
-                this.index = ordinal -1;
-                this.mask = 1L << index;
-                this.getter = setter;
-                this.setter = setter;
+            createTime("fl_face","create_time",20,"getCreateTime","setCreateTime");
+            final ColumnMeta meta;
+            private Column(String table,String field,int ordinal,String getter,String setter){
+                meta = new ColumnMeta(table,field,ordinal,getter,setter);
             }
         }
     }
-    /**
-     * Constant definition for fl_feature
-     * @author guyadong
-     */
+    /** Constant definition for fl_feature */
     public static interface FeatureConst{
+        public static final String TABLENAME = "fl_feature";
+        /** column count for fl_feature table */
         public static final int COLUMN_COUNT = 4;
+        /** primary keys count for fl_feature table */
         public static final int PRIMARY_KEY_COUNT = 1;
-        /** Contains all the full fields of the $t.name table.*/
+        /** foreign keys count for fl_feature table */
+        public static final int FOREIGN_KEY_COUNT = 1;
+        /** imported keys count for fl_feature table */
+        public static final int IMPORTED_KEY_COUNT = 2;
+        /** Contains all the primary key fields of the fl_feature table. */
+        public static final String[] PRIMARYKEY_NAMES = {"md5"};
+        /** Contains all the full fields of the fl_feature table.*/
         public static final String FULL_FIELDS ="fl_feature.md5"
                             + ",fl_feature.person_id"
                             + ",fl_feature.feature"
                             + ",fl_feature.update_time";
-
         /** Field that contains the comma separated fields of the fl_feature table. */
         public static final String FIELDS = "md5"
                             + ",person_id"
                             + ",feature"
                             + ",update_time";
-                            
-        public static final java.util.List<String> FIELDS_LIST = java.util.Arrays.asList(FIELDS.split(","));
-
+        /** immutable list of {@link #FIELDS} */
+        public static final java.util.List<String> FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(FIELDS.split(",")));
         /** Field that contains the comma separated java fields of the fl_feature table. */
         public static final String JAVA_FIELDS = "md5"
                             + ",personId"
                             + ",feature"
                             + ",updateTime";
-                            
-        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Arrays.asList(JAVA_FIELDS.split(","));
+        /** immutable list of {@link #JAVA_FIELDS} */
+        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
-            /** foreign key fl_feature(person_id) -> fl_person */
-            personId
+            /** foreign key fl_feature(person_id) -> fl_person */personId
         }
         public static enum Ik{
-            /** imported key fl_face(feature_md5) -> fl_feature */
-            featureMd5OfFace,
-            /** imported key fl_log(verify_feature) -> fl_feature */
-            verifyFeatureOfLog
+            /** imported key fl_face(feature_md5) -> fl_feature */featureMd5OfFace,
+            /** imported key fl_log(verify_feature) -> fl_feature */verifyFeatureOfLog
         }
         public static enum Index{
-            /** fl_feature index (person_id) */
-            indexPersonId
+            /** fl_feature index (person_id) */indexPersonId
         }
-        /**
-         * Column Constant definition for fl_feature
-         * @author guyadong
-         */
+        /** Column Constant definition for fl_feature */
         public static enum Column{            
             /** constant for fl_feature.md5  */
-            md5("md5",1,"getMd5","setMd5"),
+            md5("fl_feature","md5",1,"getMd5","setMd5"),
             /** constant for fl_feature.person_id  */
-            personId("person_id",2,"getPersonId","setPersonId"),
+            personId("fl_feature","person_id",2,"getPersonId","setPersonId"),
             /** constant for fl_feature.feature  */
-            feature("feature",3,"getFeature","setFeature"),
+            feature("fl_feature","feature",3,"getFeature","setFeature"),
             /** constant for fl_feature.update_time  */
-            updateTime("update_time",4,"getUpdateTime","setUpdateTime");
-            final String field;
-            final String fullName;
-            final int index;
-            final int ordinal;
-            final long mask;
-            final String getter;
-            final String setter;
-            private Column(String field,int ordinal,String getter,String setter){
-                this.field = field;
-                this.fullName = "fl_feature." + field;
-                this.ordinal = ordinal;
-                this.index = ordinal -1;
-                this.mask = 1L << index;
-                this.getter = setter;
-                this.setter = setter;
+            updateTime("fl_feature","update_time",4,"getUpdateTime","setUpdateTime");
+            final ColumnMeta meta;
+            private Column(String table,String field,int ordinal,String getter,String setter){
+                meta = new ColumnMeta(table,field,ordinal,getter,setter);
             }
         }
     }
-    /**
-     * Constant definition for fl_image
-     * @author guyadong
-     */
+    /** Constant definition for fl_image */
     public static interface ImageConst{
+        public static final String TABLENAME = "fl_image";
+        /** column count for fl_image table */
         public static final int COLUMN_COUNT = 8;
+        /** primary keys count for fl_image table */
         public static final int PRIMARY_KEY_COUNT = 1;
-        /** Contains all the full fields of the $t.name table.*/
+        /** foreign keys count for fl_image table */
+        public static final int FOREIGN_KEY_COUNT = 1;
+        /** imported keys count for fl_image table */
+        public static final int IMPORTED_KEY_COUNT = 2;
+        /** Contains all the primary key fields of the fl_image table. */
+        public static final String[] PRIMARYKEY_NAMES = {"md5"};
+        /** Contains all the full fields of the fl_image table.*/
         public static final String FULL_FIELDS ="fl_image.md5"
                             + ",fl_image.format"
                             + ",fl_image.width"
@@ -438,7 +400,6 @@ public interface DaoConstant {
                             + ",fl_image.face_num"
                             + ",fl_image.thumb_md5"
                             + ",fl_image.device_id";
-
         /** Field that contains the comma separated fields of the fl_image table. */
         public static final String FIELDS = "md5"
                             + ",format"
@@ -448,9 +409,8 @@ public interface DaoConstant {
                             + ",face_num"
                             + ",thumb_md5"
                             + ",device_id";
-                            
-        public static final java.util.List<String> FIELDS_LIST = java.util.Arrays.asList(FIELDS.split(","));
-
+        /** immutable list of {@link #FIELDS} */
+        public static final java.util.List<String> FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(FIELDS.split(",")));
         /** Field that contains the comma separated java fields of the fl_image table. */
         public static final String JAVA_FIELDS = "md5"
                             + ",format"
@@ -460,69 +420,56 @@ public interface DaoConstant {
                             + ",faceNum"
                             + ",thumbMd5"
                             + ",deviceId";
-                            
-        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Arrays.asList(JAVA_FIELDS.split(","));
+        /** immutable list of {@link #JAVA_FIELDS} */
+        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
-            /** foreign key fl_image(device_id) -> fl_device */
-            deviceId
+            /** foreign key fl_image(device_id) -> fl_device */deviceId
         }
         public static enum Ik{
-            /** imported key fl_face(image_md5) -> fl_image */
-            imageMd5OfFace,
-            /** imported key fl_person(image_md5) -> fl_image */
-            imageMd5OfPerson
+            /** imported key fl_face(image_md5) -> fl_image */imageMd5OfFace,
+            /** imported key fl_person(image_md5) -> fl_image */imageMd5OfPerson
         }
         public static enum Index{
-            /** fl_image index (device_id) */
-            indexDeviceId
+            /** fl_image index (device_id) */indexDeviceId
         }
-        /**
-         * Column Constant definition for fl_image
-         * @author guyadong
-         */
+        /** Column Constant definition for fl_image */
         public static enum Column{            
             /** constant for fl_image.md5  */
-            md5("md5",1,"getMd5","setMd5"),
+            md5("fl_image","md5",1,"getMd5","setMd5"),
             /** constant for fl_image.format  */
-            format("format",2,"getFormat","setFormat"),
+            format("fl_image","format",2,"getFormat","setFormat"),
             /** constant for fl_image.width  */
-            width("width",3,"getWidth","setWidth"),
+            width("fl_image","width",3,"getWidth","setWidth"),
             /** constant for fl_image.height  */
-            height("height",4,"getHeight","setHeight"),
+            height("fl_image","height",4,"getHeight","setHeight"),
             /** constant for fl_image.depth  */
-            depth("depth",5,"getDepth","setDepth"),
+            depth("fl_image","depth",5,"getDepth","setDepth"),
             /** constant for fl_image.face_num  */
-            faceNum("face_num",6,"getFaceNum","setFaceNum"),
+            faceNum("fl_image","face_num",6,"getFaceNum","setFaceNum"),
             /** constant for fl_image.thumb_md5  */
-            thumbMd5("thumb_md5",7,"getThumbMd5","setThumbMd5"),
+            thumbMd5("fl_image","thumb_md5",7,"getThumbMd5","setThumbMd5"),
             /** constant for fl_image.device_id  */
-            deviceId("device_id",8,"getDeviceId","setDeviceId");
-            final String field;
-            final String fullName;
-            final int index;
-            final int ordinal;
-            final long mask;
-            final String getter;
-            final String setter;
-            private Column(String field,int ordinal,String getter,String setter){
-                this.field = field;
-                this.fullName = "fl_image." + field;
-                this.ordinal = ordinal;
-                this.index = ordinal -1;
-                this.mask = 1L << index;
-                this.getter = setter;
-                this.setter = setter;
+            deviceId("fl_image","device_id",8,"getDeviceId","setDeviceId");
+            final ColumnMeta meta;
+            private Column(String table,String field,int ordinal,String getter,String setter){
+                meta = new ColumnMeta(table,field,ordinal,getter,setter);
             }
         }
     }
-    /**
-     * Constant definition for fl_log
-     * @author guyadong
-     */
+    /** Constant definition for fl_log */
     public static interface LogConst{
+        public static final String TABLENAME = "fl_log";
+        /** column count for fl_log table */
         public static final int COLUMN_COUNT = 8;
+        /** primary keys count for fl_log table */
         public static final int PRIMARY_KEY_COUNT = 1;
-        /** Contains all the full fields of the $t.name table.*/
+        /** foreign keys count for fl_log table */
+        public static final int FOREIGN_KEY_COUNT = 4;
+        /** imported keys count for fl_log table */
+        public static final int IMPORTED_KEY_COUNT = 0;
+        /** Contains all the primary key fields of the fl_log table. */
+        public static final String[] PRIMARYKEY_NAMES = {"id"};
+        /** Contains all the full fields of the fl_log table.*/
         public static final String FULL_FIELDS ="fl_log.id"
                             + ",fl_log.person_id"
                             + ",fl_log.device_id"
@@ -531,7 +478,6 @@ public interface DaoConstant {
                             + ",fl_log.similarty"
                             + ",fl_log.verify_time"
                             + ",fl_log.create_time";
-
         /** Field that contains the comma separated fields of the fl_log table. */
         public static final String FIELDS = "id"
                             + ",person_id"
@@ -541,9 +487,8 @@ public interface DaoConstant {
                             + ",similarty"
                             + ",verify_time"
                             + ",create_time";
-                            
-        public static final java.util.List<String> FIELDS_LIST = java.util.Arrays.asList(FIELDS.split(","));
-
+        /** immutable list of {@link #FIELDS} */
+        public static final java.util.List<String> FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(FIELDS.split(",")));
         /** Field that contains the comma separated java fields of the fl_log table. */
         public static final String JAVA_FIELDS = "id"
                             + ",personId"
@@ -553,100 +498,79 @@ public interface DaoConstant {
                             + ",similarty"
                             + ",verifyTime"
                             + ",createTime";
-                            
-        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Arrays.asList(JAVA_FIELDS.split(","));
+        /** immutable list of {@link #JAVA_FIELDS} */
+        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
-            /** foreign key fl_log(device_id) -> fl_device */
-            deviceId,
-            /** foreign key fl_log(compare_face) -> fl_face */
-            compareFace,
-            /** foreign key fl_log(verify_feature) -> fl_feature */
-            verifyFeature,
-            /** foreign key fl_log(person_id) -> fl_person */
-            personId
+            /** foreign key fl_log(device_id) -> fl_device */deviceId,
+            /** foreign key fl_log(compare_face) -> fl_face */compareFace,
+            /** foreign key fl_log(verify_feature) -> fl_feature */verifyFeature,
+            /** foreign key fl_log(person_id) -> fl_person */personId
         }
         public static enum Ik{
 
         }
         public static enum Index{
-            /** fl_log index (compare_face) */
-            indexCompareFace,
-            /** fl_log index (device_id) */
-            indexDeviceId,
-            /** fl_log index (person_id) */
-            indexPersonId,
-            /** fl_log index (verify_feature) */
-            indexVerifyFeature
+            /** fl_log index (compare_face) */indexCompareFace,
+            /** fl_log index (device_id) */indexDeviceId,
+            /** fl_log index (person_id) */indexPersonId,
+            /** fl_log index (verify_feature) */indexVerifyFeature
         }
-        /**
-         * Column Constant definition for fl_log
-         * @author guyadong
-         */
+        /** Column Constant definition for fl_log */
         public static enum Column{            
             /** constant for fl_log.id  */
-            id("id",1,"getId","setId"),
+            id("fl_log","id",1,"getId","setId"),
             /** constant for fl_log.person_id  */
-            personId("person_id",2,"getPersonId","setPersonId"),
+            personId("fl_log","person_id",2,"getPersonId","setPersonId"),
             /** constant for fl_log.device_id  */
-            deviceId("device_id",3,"getDeviceId","setDeviceId"),
+            deviceId("fl_log","device_id",3,"getDeviceId","setDeviceId"),
             /** constant for fl_log.verify_feature  */
-            verifyFeature("verify_feature",4,"getVerifyFeature","setVerifyFeature"),
+            verifyFeature("fl_log","verify_feature",4,"getVerifyFeature","setVerifyFeature"),
             /** constant for fl_log.compare_face  */
-            compareFace("compare_face",5,"getCompareFace","setCompareFace"),
+            compareFace("fl_log","compare_face",5,"getCompareFace","setCompareFace"),
             /** constant for fl_log.similarty  */
-            similarty("similarty",6,"getSimilarty","setSimilarty"),
+            similarty("fl_log","similarty",6,"getSimilarty","setSimilarty"),
             /** constant for fl_log.verify_time  */
-            verifyTime("verify_time",7,"getVerifyTime","setVerifyTime"),
+            verifyTime("fl_log","verify_time",7,"getVerifyTime","setVerifyTime"),
             /** constant for fl_log.create_time  */
-            createTime("create_time",8,"getCreateTime","setCreateTime");
-            final String field;
-            final String fullName;
-            final int index;
-            final int ordinal;
-            final long mask;
-            final String getter;
-            final String setter;
-            private Column(String field,int ordinal,String getter,String setter){
-                this.field = field;
-                this.fullName = "fl_log." + field;
-                this.ordinal = ordinal;
-                this.index = ordinal -1;
-                this.mask = 1L << index;
-                this.getter = setter;
-                this.setter = setter;
+            createTime("fl_log","create_time",8,"getCreateTime","setCreateTime");
+            final ColumnMeta meta;
+            private Column(String table,String field,int ordinal,String getter,String setter){
+                meta = new ColumnMeta(table,field,ordinal,getter,setter);
             }
         }
     }
-    /**
-     * Constant definition for fl_permit
-     * @author guyadong
-     */
+    /** Constant definition for fl_permit */
     public static interface PermitConst{
+        public static final String TABLENAME = "fl_permit";
+        /** column count for fl_permit table */
         public static final int COLUMN_COUNT = 3;
+        /** primary keys count for fl_permit table */
         public static final int PRIMARY_KEY_COUNT = 2;
-        /** Contains all the full fields of the $t.name table.*/
+        /** foreign keys count for fl_permit table */
+        public static final int FOREIGN_KEY_COUNT = 2;
+        /** imported keys count for fl_permit table */
+        public static final int IMPORTED_KEY_COUNT = 0;
+        /** Contains all the primary key fields of the fl_permit table. */
+        public static final String[] PRIMARYKEY_NAMES = {"device_group_id","person_group_id"};
+        /** Contains all the full fields of the fl_permit table.*/
         public static final String FULL_FIELDS ="fl_permit.device_group_id"
                             + ",fl_permit.person_group_id"
                             + ",fl_permit.create_time";
-
         /** Field that contains the comma separated fields of the fl_permit table. */
         public static final String FIELDS = "device_group_id"
                             + ",person_group_id"
                             + ",create_time";
-                            
-        public static final java.util.List<String> FIELDS_LIST = java.util.Arrays.asList(FIELDS.split(","));
-
+        /** immutable list of {@link #FIELDS} */
+        public static final java.util.List<String> FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(FIELDS.split(",")));
         /** Field that contains the comma separated java fields of the fl_permit table. */
         public static final String JAVA_FIELDS = "deviceGroupId"
                             + ",personGroupId"
                             + ",createTime";
-                            
-        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Arrays.asList(JAVA_FIELDS.split(","));
+        /** immutable list of {@link #JAVA_FIELDS} */
+        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
-            /** foreign key fl_permit(device_group_id) -> fl_device_group */
-            deviceGroupId,
-            /** foreign key fl_permit(person_group_id) -> fl_person_group */
-            personGroupId
+            /** foreign key fl_permit(device_group_id) -> fl_device_group */deviceGroupId,
+            /** foreign key fl_permit(person_group_id) -> fl_person_group */personGroupId
         }
         public static enum Ik{
 
@@ -654,43 +578,34 @@ public interface DaoConstant {
         public static enum Index{
 
         }
-        /**
-         * Column Constant definition for fl_permit
-         * @author guyadong
-         */
+        /** Column Constant definition for fl_permit */
         public static enum Column{            
             /** constant for fl_permit.device_group_id  */
-            deviceGroupId("device_group_id",1,"getDeviceGroupId","setDeviceGroupId"),
+            deviceGroupId("fl_permit","device_group_id",1,"getDeviceGroupId","setDeviceGroupId"),
             /** constant for fl_permit.person_group_id  */
-            personGroupId("person_group_id",2,"getPersonGroupId","setPersonGroupId"),
+            personGroupId("fl_permit","person_group_id",2,"getPersonGroupId","setPersonGroupId"),
             /** constant for fl_permit.create_time  */
-            createTime("create_time",3,"getCreateTime","setCreateTime");
-            final String field;
-            final String fullName;
-            final int index;
-            final int ordinal;
-            final long mask;
-            final String getter;
-            final String setter;
-            private Column(String field,int ordinal,String getter,String setter){
-                this.field = field;
-                this.fullName = "fl_permit." + field;
-                this.ordinal = ordinal;
-                this.index = ordinal -1;
-                this.mask = 1L << index;
-                this.getter = setter;
-                this.setter = setter;
+            createTime("fl_permit","create_time",3,"getCreateTime","setCreateTime");
+            final ColumnMeta meta;
+            private Column(String table,String field,int ordinal,String getter,String setter){
+                meta = new ColumnMeta(table,field,ordinal,getter,setter);
             }
         }
     }
-    /**
-     * Constant definition for fl_person
-     * @author guyadong
-     */
+    /** Constant definition for fl_person */
     public static interface PersonConst{
+        public static final String TABLENAME = "fl_person";
+        /** column count for fl_person table */
         public static final int COLUMN_COUNT = 11;
+        /** primary keys count for fl_person table */
         public static final int PRIMARY_KEY_COUNT = 1;
-        /** Contains all the full fields of the $t.name table.*/
+        /** foreign keys count for fl_person table */
+        public static final int FOREIGN_KEY_COUNT = 2;
+        /** imported keys count for fl_person table */
+        public static final int IMPORTED_KEY_COUNT = 2;
+        /** Contains all the primary key fields of the fl_person table. */
+        public static final String[] PRIMARYKEY_NAMES = {"id"};
+        /** Contains all the full fields of the fl_person table.*/
         public static final String FULL_FIELDS ="fl_person.id"
                             + ",fl_person.group_id"
                             + ",fl_person.name"
@@ -702,7 +617,6 @@ public interface DaoConstant {
                             + ",fl_person.expiry_date"
                             + ",fl_person.create_time"
                             + ",fl_person.update_time";
-
         /** Field that contains the comma separated fields of the fl_person table. */
         public static final String FIELDS = "id"
                             + ",group_id"
@@ -715,9 +629,8 @@ public interface DaoConstant {
                             + ",expiry_date"
                             + ",create_time"
                             + ",update_time";
-                            
-        public static final java.util.List<String> FIELDS_LIST = java.util.Arrays.asList(FIELDS.split(","));
-
+        /** immutable list of {@link #FIELDS} */
+        public static final java.util.List<String> FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(FIELDS.split(",")));
         /** Field that contains the comma separated java fields of the fl_person table. */
         public static final String JAVA_FIELDS = "id"
                             + ",groupId"
@@ -730,175 +643,140 @@ public interface DaoConstant {
                             + ",expiryDate"
                             + ",createTime"
                             + ",updateTime";
-                            
-        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Arrays.asList(JAVA_FIELDS.split(","));
+        /** immutable list of {@link #JAVA_FIELDS} */
+        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
-            /** foreign key fl_person(image_md5) -> fl_image */
-            imageMd5,
-            /** foreign key fl_person(group_id) -> fl_person_group */
-            groupId
+            /** foreign key fl_person(image_md5) -> fl_image */imageMd5,
+            /** foreign key fl_person(group_id) -> fl_person_group */groupId
         }
         public static enum Ik{
-            /** imported key fl_feature(person_id) -> fl_person */
-            personIdOfFeature,
-            /** imported key fl_log(person_id) -> fl_person */
-            personIdOfLog
+            /** imported key fl_feature(person_id) -> fl_person */personIdOfFeature,
+            /** imported key fl_log(person_id) -> fl_person */personIdOfLog
         }
         public static enum Index{
-            /** fl_person index (image_md5) */
-            indexImageMd5,
-            /** fl_person index (papers_num) */
-            indexPapersNum,
-            /** fl_person index (expiry_date) */
-            indexExpiryDate,
-            /** fl_person index (group_id) */
-            indexGroupId
+            /** fl_person index (image_md5) */indexImageMd5,
+            /** fl_person index (papers_num) */indexPapersNum,
+            /** fl_person index (expiry_date) */indexExpiryDate,
+            /** fl_person index (group_id) */indexGroupId
         }
-        /**
-         * Column Constant definition for fl_person
-         * @author guyadong
-         */
+        /** Column Constant definition for fl_person */
         public static enum Column{            
             /** constant for fl_person.id  */
-            id("id",1,"getId","setId"),
+            id("fl_person","id",1,"getId","setId"),
             /** constant for fl_person.group_id  */
-            groupId("group_id",2,"getGroupId","setGroupId"),
+            groupId("fl_person","group_id",2,"getGroupId","setGroupId"),
             /** constant for fl_person.name  */
-            name("name",3,"getName","setName"),
+            name("fl_person","name",3,"getName","setName"),
             /** constant for fl_person.sex  */
-            sex("sex",4,"getSex","setSex"),
+            sex("fl_person","sex",4,"getSex","setSex"),
             /** constant for fl_person.birthdate  */
-            birthdate("birthdate",5,"getBirthdate","setBirthdate"),
+            birthdate("fl_person","birthdate",5,"getBirthdate","setBirthdate"),
             /** constant for fl_person.papers_type  */
-            papersType("papers_type",6,"getPapersType","setPapersType"),
+            papersType("fl_person","papers_type",6,"getPapersType","setPapersType"),
             /** constant for fl_person.papers_num  */
-            papersNum("papers_num",7,"getPapersNum","setPapersNum"),
+            papersNum("fl_person","papers_num",7,"getPapersNum","setPapersNum"),
             /** constant for fl_person.image_md5  */
-            imageMd5("image_md5",8,"getImageMd5","setImageMd5"),
+            imageMd5("fl_person","image_md5",8,"getImageMd5","setImageMd5"),
             /** constant for fl_person.expiry_date  */
-            expiryDate("expiry_date",9,"getExpiryDate","setExpiryDate"),
+            expiryDate("fl_person","expiry_date",9,"getExpiryDate","setExpiryDate"),
             /** constant for fl_person.create_time  */
-            createTime("create_time",10,"getCreateTime","setCreateTime"),
+            createTime("fl_person","create_time",10,"getCreateTime","setCreateTime"),
             /** constant for fl_person.update_time  */
-            updateTime("update_time",11,"getUpdateTime","setUpdateTime");
-            final String field;
-            final String fullName;
-            final int index;
-            final int ordinal;
-            final long mask;
-            final String getter;
-            final String setter;
-            private Column(String field,int ordinal,String getter,String setter){
-                this.field = field;
-                this.fullName = "fl_person." + field;
-                this.ordinal = ordinal;
-                this.index = ordinal -1;
-                this.mask = 1L << index;
-                this.getter = setter;
-                this.setter = setter;
+            updateTime("fl_person","update_time",11,"getUpdateTime","setUpdateTime");
+            final ColumnMeta meta;
+            private Column(String table,String field,int ordinal,String getter,String setter){
+                meta = new ColumnMeta(table,field,ordinal,getter,setter);
             }
         }
     }
-    /**
-     * Constant definition for fl_person_group
-     * @author guyadong
-     */
+    /** Constant definition for fl_person_group */
     public static interface PersonGroupConst{
+        public static final String TABLENAME = "fl_person_group";
+        /** column count for fl_person_group table */
         public static final int COLUMN_COUNT = 4;
+        /** primary keys count for fl_person_group table */
         public static final int PRIMARY_KEY_COUNT = 1;
-        /** Contains all the full fields of the $t.name table.*/
+        /** foreign keys count for fl_person_group table */
+        public static final int FOREIGN_KEY_COUNT = 1;
+        /** imported keys count for fl_person_group table */
+        public static final int IMPORTED_KEY_COUNT = 3;
+        /** Contains all the primary key fields of the fl_person_group table. */
+        public static final String[] PRIMARYKEY_NAMES = {"id"};
+        /** Contains all the full fields of the fl_person_group table.*/
         public static final String FULL_FIELDS ="fl_person_group.id"
                             + ",fl_person_group.name"
                             + ",fl_person_group.leaf"
                             + ",fl_person_group.parent";
-
         /** Field that contains the comma separated fields of the fl_person_group table. */
         public static final String FIELDS = "id"
                             + ",name"
                             + ",leaf"
                             + ",parent";
-                            
-        public static final java.util.List<String> FIELDS_LIST = java.util.Arrays.asList(FIELDS.split(","));
-
+        /** immutable list of {@link #FIELDS} */
+        public static final java.util.List<String> FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(FIELDS.split(",")));
         /** Field that contains the comma separated java fields of the fl_person_group table. */
         public static final String JAVA_FIELDS = "id"
                             + ",name"
                             + ",leaf"
                             + ",parent";
-                            
-        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Arrays.asList(JAVA_FIELDS.split(","));
+        /** immutable list of {@link #JAVA_FIELDS} */
+        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
-            /** foreign key fl_person_group(parent) -> fl_person_group */
-            parent
+            /** foreign key fl_person_group(parent) -> fl_person_group */parent
         }
         public static enum Ik{
-            /** imported key fl_permit(person_group_id) -> fl_person_group */
-            personGroupIdOfPermit,
-            /** imported key fl_person(group_id) -> fl_person_group */
-            groupIdOfPerson,
-            /** imported key fl_person_group(parent) -> fl_person_group */
-            parentOfPersonGroup
+            /** imported key fl_permit(person_group_id) -> fl_person_group */personGroupIdOfPermit,
+            /** imported key fl_person(group_id) -> fl_person_group */groupIdOfPerson,
+            /** imported key fl_person_group(parent) -> fl_person_group */parentOfPersonGroup
         }
         public static enum Index{
-            /** fl_person_group index (parent) */
-            indexParent
+            /** fl_person_group index (parent) */indexParent
         }
-        /**
-         * Column Constant definition for fl_person_group
-         * @author guyadong
-         */
+        /** Column Constant definition for fl_person_group */
         public static enum Column{            
             /** constant for fl_person_group.id  */
-            id("id",1,"getId","setId"),
+            id("fl_person_group","id",1,"getId","setId"),
             /** constant for fl_person_group.name  */
-            name("name",2,"getName","setName"),
+            name("fl_person_group","name",2,"getName","setName"),
             /** constant for fl_person_group.leaf  */
-            leaf("leaf",3,"getLeaf","setLeaf"),
+            leaf("fl_person_group","leaf",3,"getLeaf","setLeaf"),
             /** constant for fl_person_group.parent  */
-            parent("parent",4,"getParent","setParent");
-            final String field;
-            final String fullName;
-            final int index;
-            final int ordinal;
-            final long mask;
-            final String getter;
-            final String setter;
-            private Column(String field,int ordinal,String getter,String setter){
-                this.field = field;
-                this.fullName = "fl_person_group." + field;
-                this.ordinal = ordinal;
-                this.index = ordinal -1;
-                this.mask = 1L << index;
-                this.getter = setter;
-                this.setter = setter;
+            parent("fl_person_group","parent",4,"getParent","setParent");
+            final ColumnMeta meta;
+            private Column(String table,String field,int ordinal,String getter,String setter){
+                meta = new ColumnMeta(table,field,ordinal,getter,setter);
             }
         }
     }
-    /**
-     * Constant definition for fl_store
-     * @author guyadong
-     */
+    /** Constant definition for fl_store */
     public static interface StoreConst{
+        public static final String TABLENAME = "fl_store";
+        /** column count for fl_store table */
         public static final int COLUMN_COUNT = 3;
+        /** primary keys count for fl_store table */
         public static final int PRIMARY_KEY_COUNT = 1;
-        /** Contains all the full fields of the $t.name table.*/
+        /** foreign keys count for fl_store table */
+        public static final int FOREIGN_KEY_COUNT = 0;
+        /** imported keys count for fl_store table */
+        public static final int IMPORTED_KEY_COUNT = 0;
+        /** Contains all the primary key fields of the fl_store table. */
+        public static final String[] PRIMARYKEY_NAMES = {"md5"};
+        /** Contains all the full fields of the fl_store table.*/
         public static final String FULL_FIELDS ="fl_store.md5"
                             + ",fl_store.encoding"
                             + ",fl_store.data";
-
         /** Field that contains the comma separated fields of the fl_store table. */
         public static final String FIELDS = "md5"
                             + ",encoding"
                             + ",data";
-                            
-        public static final java.util.List<String> FIELDS_LIST = java.util.Arrays.asList(FIELDS.split(","));
-
+        /** immutable list of {@link #FIELDS} */
+        public static final java.util.List<String> FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(FIELDS.split(",")));
         /** Field that contains the comma separated java fields of the fl_store table. */
         public static final String JAVA_FIELDS = "md5"
                             + ",encoding"
                             + ",data";
-                            
-        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Arrays.asList(JAVA_FIELDS.split(","));
+        /** immutable list of {@link #JAVA_FIELDS} */
+        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
 
         }
@@ -908,50 +786,40 @@ public interface DaoConstant {
         public static enum Index{
 
         }
-        /**
-         * Column Constant definition for fl_store
-         * @author guyadong
-         */
+        /** Column Constant definition for fl_store */
         public static enum Column{            
             /** constant for fl_store.md5  */
-            md5("md5",1,"getMd5","setMd5"),
+            md5("fl_store","md5",1,"getMd5","setMd5"),
             /** constant for fl_store.encoding  */
-            encoding("encoding",2,"getEncoding","setEncoding"),
+            encoding("fl_store","encoding",2,"getEncoding","setEncoding"),
             /** constant for fl_store.data  */
-            data("data",3,"getData","setData");
-            final String field;
-            final String fullName;
-            final int index;
-            final int ordinal;
-            final long mask;
-            final String getter;
-            final String setter;
-            private Column(String field,int ordinal,String getter,String setter){
-                this.field = field;
-                this.fullName = "fl_store." + field;
-                this.ordinal = ordinal;
-                this.index = ordinal -1;
-                this.mask = 1L << index;
-                this.getter = setter;
-                this.setter = setter;
+            data("fl_store","data",3,"getData","setData");
+            final ColumnMeta meta;
+            private Column(String table,String field,int ordinal,String getter,String setter){
+                meta = new ColumnMeta(table,field,ordinal,getter,setter);
             }
         }
     }
-    /**
-     * Constant definition for fl_log_light
-     * @author guyadong
-     */
+    /** Constant definition for fl_log_light */
     public static interface LogLightConst{
+        public static final String TABLENAME = "fl_log_light";
+        /** column count for fl_log_light table */
         public static final int COLUMN_COUNT = 6;
+        /** primary keys count for fl_log_light table */
         public static final int PRIMARY_KEY_COUNT = 0;
-        /** Contains all the full fields of the $t.name table.*/
+        /** foreign keys count for fl_log_light table */
+        public static final int FOREIGN_KEY_COUNT = 0;
+        /** imported keys count for fl_log_light table */
+        public static final int IMPORTED_KEY_COUNT = 0;
+        /** Contains all the primary key fields of the fl_log_light table. */
+        public static final String[] PRIMARYKEY_NAMES = {};
+        /** Contains all the full fields of the fl_log_light table.*/
         public static final String FULL_FIELDS ="fl_log_light.id"
                             + ",fl_log_light.person_id"
                             + ",fl_log_light.name"
                             + ",fl_log_light.papers_type"
                             + ",fl_log_light.papers_num"
                             + ",fl_log_light.verify_time";
-
         /** Field that contains the comma separated fields of the fl_log_light table. */
         public static final String FIELDS = "id"
                             + ",person_id"
@@ -959,9 +827,8 @@ public interface DaoConstant {
                             + ",papers_type"
                             + ",papers_num"
                             + ",verify_time";
-                            
-        public static final java.util.List<String> FIELDS_LIST = java.util.Arrays.asList(FIELDS.split(","));
-
+        /** immutable list of {@link #FIELDS} */
+        public static final java.util.List<String> FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(FIELDS.split(",")));
         /** Field that contains the comma separated java fields of the fl_log_light table. */
         public static final String JAVA_FIELDS = "id"
                             + ",personId"
@@ -969,8 +836,8 @@ public interface DaoConstant {
                             + ",papersType"
                             + ",papersNum"
                             + ",verifyTime";
-                            
-        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Arrays.asList(JAVA_FIELDS.split(","));
+        /** immutable list of {@link #JAVA_FIELDS} */
+        public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
 
         }
@@ -980,38 +847,23 @@ public interface DaoConstant {
         public static enum Index{
 
         }
-        /**
-         * Column Constant definition for fl_log_light
-         * @author guyadong
-         */
+        /** Column Constant definition for fl_log_light */
         public static enum Column{            
             /** constant for fl_log_light.id  */
-            id("id",1,"getId","setId"),
+            id("fl_log_light","id",1,"getId","setId"),
             /** constant for fl_log_light.person_id  */
-            personId("person_id",2,"getPersonId","setPersonId"),
+            personId("fl_log_light","person_id",2,"getPersonId","setPersonId"),
             /** constant for fl_log_light.name  */
-            name("name",3,"getName","setName"),
+            name("fl_log_light","name",3,"getName","setName"),
             /** constant for fl_log_light.papers_type  */
-            papersType("papers_type",4,"getPapersType","setPapersType"),
+            papersType("fl_log_light","papers_type",4,"getPapersType","setPapersType"),
             /** constant for fl_log_light.papers_num  */
-            papersNum("papers_num",5,"getPapersNum","setPapersNum"),
+            papersNum("fl_log_light","papers_num",5,"getPapersNum","setPapersNum"),
             /** constant for fl_log_light.verify_time  */
-            verifyTime("verify_time",6,"getVerifyTime","setVerifyTime");
-            final String field;
-            final String fullName;
-            final int index;
-            final int ordinal;
-            final long mask;
-            final String getter;
-            final String setter;
-            private Column(String field,int ordinal,String getter,String setter){
-                this.field = field;
-                this.fullName = "fl_log_light." + field;
-                this.ordinal = ordinal;
-                this.index = ordinal -1;
-                this.mask = 1L << index;
-                this.getter = setter;
-                this.setter = setter;
+            verifyTime("fl_log_light","verify_time",6,"getVerifyTime","setVerifyTime");
+            final ColumnMeta meta;
+            private Column(String table,String field,int ordinal,String getter,String setter){
+                meta = new ColumnMeta(table,field,ordinal,getter,setter);
             }
         }
     }

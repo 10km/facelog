@@ -41,8 +41,8 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
      */
     public static final String TABLE_NAME="fl_device";
 
-   /**
-     * Contains all the primarykey fields of the fl_device table.
+    /**
+     * Contains all the primary key fields of the fl_device table.
      */
     public static final String[] PRIMARYKEY_NAMES =
     {

@@ -58,17 +58,12 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     protected ImageManager instanceOfImageManager(){
         return ImageManager.getInstance();
     }
-    /**
-     * @return table name
-     */
+
     @Override
     public String getTableName() {
         return this.nativeManager.getTableName();
     }
 
-    /**
-     * @return field names of table
-     */
     @Override
     public String getFields() {
         return this.nativeManager.getFields();
@@ -79,9 +74,6 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         return this.nativeManager.getFullFields();
     }
     
-    /**
-     * @return primarykeyNames
-     */
     @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();

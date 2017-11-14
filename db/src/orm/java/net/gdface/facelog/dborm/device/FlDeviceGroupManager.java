@@ -41,8 +41,8 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      */
     public static final String TABLE_NAME="fl_device_group";
 
-   /**
-     * Contains all the primarykey fields of the fl_device_group table.
+    /**
+     * Contains all the primary key fields of the fl_device_group table.
      */
     public static final String[] PRIMARYKEY_NAMES =
     {

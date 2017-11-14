@@ -58,17 +58,12 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     protected PersonManager instanceOfPersonManager(){
         return PersonManager.getInstance();
     }
-    /**
-     * @return table name
-     */
+
     @Override
     public String getTableName() {
         return this.nativeManager.getTableName();
     }
 
-    /**
-     * @return field names of table
-     */
     @Override
     public String getFields() {
         return this.nativeManager.getFields();
@@ -79,9 +74,6 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         return this.nativeManager.getFullFields();
     }
     
-    /**
-     * @return primarykeyNames
-     */
     @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();

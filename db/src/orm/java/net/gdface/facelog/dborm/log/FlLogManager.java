@@ -45,8 +45,8 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      */
     public static final String TABLE_NAME="fl_log";
 
-   /**
-     * Contains all the primarykey fields of the fl_log table.
+    /**
+     * Contains all the primary key fields of the fl_log table.
      */
     public static final String[] PRIMARYKEY_NAMES =
     {

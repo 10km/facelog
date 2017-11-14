@@ -46,17 +46,12 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
     private static StoreManager singleton = new StoreManager();
     protected StoreManager(){}
     
-    /**
-     * @return table name
-     */
+
     @Override
     public String getTableName() {
         return this.nativeManager.getTableName();
     }
 
-    /**
-     * @return field names of table
-     */
     @Override
     public String getFields() {
         return this.nativeManager.getFields();
@@ -67,9 +62,6 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         return this.nativeManager.getFullFields();
     }
     
-    /**
-     * @return primarykeyNames
-     */
     @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
