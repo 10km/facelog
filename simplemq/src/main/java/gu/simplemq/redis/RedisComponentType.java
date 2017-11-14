@@ -7,11 +7,17 @@ import gu.simplemq.exceptions.SmqTypeException;
 import redis.clients.jedis.Jedis;
 
 enum RedisComponentType{
-	/** table 类型*/
-	Table,Queue, Channel;
+	/** table 类型*/Table,
+	/** queue 类型*/Queue, 
+	/** channel 类型*/Channel;
 	private enum RedisKeyType{
-		/** string 类型*/
-		string,list,set,zset,none,hash}
+		/** string 类型*/string,
+		/** list 类型*/list,
+		/** set 类型*/set,
+		/** zset 类型*/zset,
+		/** none 类型*/none,
+		/** hash 类型*/hash
+	}
 	/**
 	 * 检查对于指定的{@link JedisPoolLazy},{@code name}名字是否可用创建对象
 	 * @param poolLazy

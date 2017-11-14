@@ -27,16 +27,29 @@ public abstract class BaseJsonEncoder {
 	 */
 	public abstract String toJsonString(Object obj);
 	
+	/**
+	 * 按字段(field)序列化为Map对象
+	 * @param obj
+	 * @return
+	 * @throws SmqNotBeanException
+	 */
 	public abstract Map<String,String> toJsonMap(Object obj)throws SmqNotBeanException;
 
 	/**
-	 * deserializes json into T
+	 * deserialize json into T
 	 * @param json
 	 * @param type
 	 * @return
 	 */
 	public abstract <T> T fromJson(String json, Type type);
 	
+	/**
+	 * deserialize json field map  into T
+	 * @param fieldHash
+	 * @param type
+	 * @return
+	 * @throws SmqNotBeanException
+	 */
 	public abstract <T> T fromJson(Map<String,String> fieldHash, Type type)throws SmqNotBeanException ;
 	
 	public <T>T fromJson(String json, Class<T> clazz) {		

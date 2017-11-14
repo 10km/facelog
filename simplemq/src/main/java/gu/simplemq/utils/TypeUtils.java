@@ -7,6 +7,11 @@ import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.parser.deserializer.JavaBeanDeserializer;
 
+/**
+ * @author guyadong
+ *
+ * @param <T>
+ */
 public class TypeUtils<T>extends TypeReference<T> {
 
 	public  boolean isJavaBean(){

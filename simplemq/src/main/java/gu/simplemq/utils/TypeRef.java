@@ -5,7 +5,7 @@ import java.lang.reflect.Type;
 
 /** 
  * 用于通过创建一个子类在运行获取泛型类型的{@link Type}<br>
- *
+ * @author guyadong
  */
 public class TypeRef<T> {
     protected final Type type;
