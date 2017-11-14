@@ -26,7 +26,7 @@ public interface DaoConstant {
      * Constant definition for fl_device
      * @author guyadong
      */
-    public static interface Device{
+    public static interface DeviceConst{
         public static final int COLUMN_COUNT = 8;
         public static final int PRIMARY_KEY_COUNT = 1;
         /** Contains all the full fields of the $t.name table.*/
@@ -123,7 +123,7 @@ public interface DaoConstant {
      * Constant definition for fl_device_group
      * @author guyadong
      */
-    public static interface DeviceGroup{
+    public static interface DeviceGroupConst{
         public static final int COLUMN_COUNT = 4;
         public static final int PRIMARY_KEY_COUNT = 1;
         /** Contains all the full fields of the $t.name table.*/
@@ -198,7 +198,7 @@ public interface DaoConstant {
      * Constant definition for fl_face
      * @author guyadong
      */
-    public static interface Face{
+    public static interface FaceConst{
         public static final int COLUMN_COUNT = 20;
         public static final int PRIMARY_KEY_COUNT = 1;
         /** Contains all the full fields of the $t.name table.*/
@@ -353,7 +353,7 @@ public interface DaoConstant {
      * Constant definition for fl_feature
      * @author guyadong
      */
-    public static interface Feature{
+    public static interface FeatureConst{
         public static final int COLUMN_COUNT = 4;
         public static final int PRIMARY_KEY_COUNT = 1;
         /** Contains all the full fields of the $t.name table.*/
@@ -426,7 +426,7 @@ public interface DaoConstant {
      * Constant definition for fl_image
      * @author guyadong
      */
-    public static interface Image{
+    public static interface ImageConst{
         public static final int COLUMN_COUNT = 8;
         public static final int PRIMARY_KEY_COUNT = 1;
         /** Contains all the full fields of the $t.name table.*/
@@ -519,7 +519,7 @@ public interface DaoConstant {
      * Constant definition for fl_log
      * @author guyadong
      */
-    public static interface Log{
+    public static interface LogConst{
         public static final int COLUMN_COUNT = 8;
         public static final int PRIMARY_KEY_COUNT = 1;
         /** Contains all the full fields of the $t.name table.*/
@@ -621,7 +621,7 @@ public interface DaoConstant {
      * Constant definition for fl_permit
      * @author guyadong
      */
-    public static interface Permit{
+    public static interface PermitConst{
         public static final int COLUMN_COUNT = 3;
         public static final int PRIMARY_KEY_COUNT = 2;
         /** Contains all the full fields of the $t.name table.*/
@@ -687,7 +687,7 @@ public interface DaoConstant {
      * Constant definition for fl_person
      * @author guyadong
      */
-    public static interface Person{
+    public static interface PersonConst{
         public static final int COLUMN_COUNT = 11;
         public static final int PRIMARY_KEY_COUNT = 1;
         /** Contains all the full fields of the $t.name table.*/
@@ -803,7 +803,7 @@ public interface DaoConstant {
      * Constant definition for fl_person_group
      * @author guyadong
      */
-    public static interface PersonGroup{
+    public static interface PersonGroupConst{
         public static final int COLUMN_COUNT = 4;
         public static final int PRIMARY_KEY_COUNT = 1;
         /** Contains all the full fields of the $t.name table.*/
@@ -878,7 +878,7 @@ public interface DaoConstant {
      * Constant definition for fl_store
      * @author guyadong
      */
-    public static interface Store{
+    public static interface StoreConst{
         public static final int COLUMN_COUNT = 3;
         public static final int PRIMARY_KEY_COUNT = 1;
         /** Contains all the full fields of the $t.name table.*/
@@ -941,7 +941,7 @@ public interface DaoConstant {
      * Constant definition for fl_log_light
      * @author guyadong
      */
-    public static interface LogLight{
+    public static interface LogLightConst{
         public static final int COLUMN_COUNT = 6;
         public static final int PRIMARY_KEY_COUNT = 0;
         /** Contains all the full fields of the $t.name table.*/
