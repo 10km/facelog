@@ -27,13 +27,15 @@ public final class ServiceRuntimeException extends RuntimeException {
      * 服务器端错误堆栈信息
      */
     private final String serverStackTraceMessage;
-
+    /** 异常类型 */
+    private final int type;
     /**
      * @param cause
      */
     ServiceRuntimeException(net.gdface.facelog.client.thrift.ServiceRuntimeException cause) {
         super(cause);
         serverStackTraceMessage = cause.getServerStackTraceMessage();
+        type = cause.getType();
     }
 
     @Override
@@ -75,5 +77,9 @@ public final class ServiceRuntimeException extends RuntimeException {
     /** 返回服务器端异常的堆栈信息 */
     public String getServerStackTraceMessage() {
         return serverStackTraceMessage;
+    }
+    /** 返回异常类型 */
+    public int getType() {
+        return type;
     }
 }

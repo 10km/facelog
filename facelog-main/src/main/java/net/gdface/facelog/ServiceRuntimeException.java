@@ -15,13 +15,14 @@ import com.google.common.base.Preconditions;
  *
  */
 @ThriftStruct
-public final class ServiceRuntimeException extends Exception {
+public final class ServiceRuntimeException extends Exception implements CommonConstant{
 	private static final long serialVersionUID = 1L;
+	/** 异常类型 */
+	private int type = ExceptionType.UNKNOWN.ordinal();
 	/**
 	 * 服务器端错误堆栈信息
 	 */
 	private String serverStackTraceMessage = null;
-
 	public ServiceRuntimeException() {
 	}
 	/**
@@ -30,6 +31,13 @@ public final class ServiceRuntimeException extends Exception {
 	public ServiceRuntimeException(Throwable cause) {
 		super(stripRuntimeShell(Preconditions.checkNotNull(cause)));
 		fillStackTraceMessage(getCause());
+	}
+	/**
+	 * @param cause
+	 */
+	public ServiceRuntimeException(ExceptionType type,Throwable cause) {
+		this(cause);
+		this.type = type.ordinal();
 	}
 	/**
 	 * 以递归方式返回被{@link RuntimeException}多层封装的异常<br>
@@ -61,11 +69,20 @@ public final class ServiceRuntimeException extends Exception {
 	public String getMessage() {
 		return getServerStackTraceMessage();
 	}
+	/** 返回异常类型 */
+	@ThriftField(1)
+	public int getType() {
+		return type;
+	}
+	@ThriftField
+	public void setType(int type) {
+		this.type = type;
+	}
 	/**
 	 * 返回服务器端异常的堆栈信息
 	 * @return serverStackTraceMessage
 	 */
-	@ThriftField(1)
+	@ThriftField(2)
 	public String getServerStackTraceMessage() {
 		return serverStackTraceMessage;
 	}

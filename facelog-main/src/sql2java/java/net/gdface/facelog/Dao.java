@@ -735,7 +735,9 @@ class Dao implements CommonConstant {
                 DeviceGroupBean bean = new DeviceGroupBean(DEFAULT_GROUP_ID);
                 bean.setName(DEFAULT_GROUP_NAME);
                 daoSaveDeviceGroup(bean);
-            }catch(RuntimeDaoException e){}
+            }catch(RuntimeDaoException e){
+                // do nothing
+            }
             if(!daoExistsDeviceGroup(DEFAULT_GROUP_ID)){
                 throw new IllegalStateException("can't create default group for device_group"); 
             }
@@ -1506,7 +1508,9 @@ class Dao implements CommonConstant {
                 PersonGroupBean bean = new PersonGroupBean(DEFAULT_GROUP_ID);
                 bean.setName(DEFAULT_GROUP_NAME);
                 daoSavePersonGroup(bean);
-            }catch(RuntimeDaoException e){}
+            }catch(RuntimeDaoException e){
+                // do nothing
+            }
             if(!daoExistsPersonGroup(DEFAULT_GROUP_ID)){
                 throw new IllegalStateException("can't create default group for person_group"); 
             }

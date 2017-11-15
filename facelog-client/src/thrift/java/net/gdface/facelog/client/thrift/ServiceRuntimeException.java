@@ -12,9 +12,17 @@ public final class ServiceRuntimeException extends Exception
     public ServiceRuntimeException() {
     }
 
+    private int type;
+
+    @ThriftField(value=1, name="type", requiredness=Requiredness.NONE)
+    public int getType() { return type; }
+
+    @ThriftField
+    public void setType(final int type) { this.type = type; }
+
     private String serverStackTraceMessage;
 
-    @ThriftField(value=1, name="serverStackTraceMessage", requiredness=Requiredness.NONE)
+    @ThriftField(value=2, name="serverStackTraceMessage", requiredness=Requiredness.NONE)
     public String getServerStackTraceMessage() { return serverStackTraceMessage; }
 
     @ThriftField

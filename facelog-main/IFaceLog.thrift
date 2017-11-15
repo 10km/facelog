@@ -32,7 +32,8 @@ struct FaceBean {
 }
 
 exception ServiceRuntimeException {
-  1:  string serverStackTraceMessage;
+  1:  i32 type;
+  2:  string serverStackTraceMessage;
 }
 
 exception DuplicateReordException {

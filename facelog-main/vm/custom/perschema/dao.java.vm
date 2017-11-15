@@ -328,7 +328,9 @@ class Dao implements CommonConstant {
                 $beanClass bean = new $beanClass(DEFAULT_GROUP_ID);
                 bean.setName(DEFAULT_GROUP_NAME);
                 daoSave${coreClass}(bean);
-            }catch(RuntimeDaoException e){}
+            }catch(RuntimeDaoException e){
+                // do nothing
+            }
             if(!daoExists${coreClass}(DEFAULT_GROUP_ID)){
                 throw new IllegalStateException("can't create default group for ${table.getBasename(true)}"); 
             }
