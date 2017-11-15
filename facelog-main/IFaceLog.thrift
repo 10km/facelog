@@ -4,6 +4,9 @@ namespace java com.gdface
 namespace cpp gdface
 
 
+enum ExceptionType {
+  UNKNOWN, DAO
+}
 
 struct FaceBean {
   1: required bool _new;
@@ -29,11 +32,6 @@ struct FaceBean {
   21:  binary extInfo;
   22:  string featureMd5;
   23:  i64 createTime;
-}
-
-exception ServiceRuntimeException {
-  1:  i32 type;
-  2:  string serverStackTraceMessage;
 }
 
 exception DuplicateReordException {
@@ -147,6 +145,11 @@ struct PermitBean {
   4:  i32 deviceGroupId;
   5:  i32 personGroupId;
   6:  i64 createTime;
+}
+
+exception ServiceRuntimeException {
+  1:  ExceptionType type;
+  2:  string serverStackTraceMessage;
 }
 
 service IFaceLog {

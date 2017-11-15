@@ -15,10 +15,19 @@ import com.google.common.base.Preconditions;
  *
  */
 @ThriftStruct
-public final class ServiceRuntimeException extends Exception implements CommonConstant{
+public final class ServiceRuntimeException extends Exception{
+	/**
+	 * 服务异常类型定义
+	 */
+	public static enum ExceptionType{
+		/** unknown type*/
+		UNKNOWN,
+		/** database access exception type*/
+		DAO
+	}
 	private static final long serialVersionUID = 1L;
 	/** 异常类型 */
-	private int type = ExceptionType.UNKNOWN.ordinal();
+	private ExceptionType type = ExceptionType.UNKNOWN;
 	/**
 	 * 服务器端错误堆栈信息
 	 */
@@ -37,7 +46,7 @@ public final class ServiceRuntimeException extends Exception implements CommonCo
 	 */
 	public ServiceRuntimeException(ExceptionType type,Throwable cause) {
 		this(cause);
-		this.type = type.ordinal();
+		this.type = type;
 	}
 	/**
 	 * 以递归方式返回被{@link RuntimeException}多层封装的异常<br>
@@ -71,11 +80,11 @@ public final class ServiceRuntimeException extends Exception implements CommonCo
 	}
 	/** 返回异常类型 */
 	@ThriftField(1)
-	public int getType() {
+	public ExceptionType getType() {
 		return type;
 	}
 	@ThriftField
-	public void setType(int type) {
+	public void setType(ExceptionType type) {
 		this.type = type;
 	}
 	/**

@@ -12,6 +12,8 @@ import java.io.PrintWriter;
 
 import com.google.common.base.Preconditions;
 
+import net.gdface.facelog.client.thrift.ExceptionType;
+
 /**
  * 封装服务端调用产生的运行时异常<br>
  * 调用service端方法时产生的所有{@link RuntimeException}在抛出到客户端时被封装在{@link net.gdface.facelog.client.thrift.ServiceRuntimeException}中,
@@ -28,7 +30,7 @@ public final class ServiceRuntimeException extends RuntimeException {
      */
     private final String serverStackTraceMessage;
     /** 异常类型 */
-    private final int type;
+    private final ExceptionType type;
     /**
      * @param cause
      */
@@ -79,7 +81,7 @@ public final class ServiceRuntimeException extends RuntimeException {
         return serverStackTraceMessage;
     }
     /** 返回异常类型 */
-    public int getType() {
+    public ExceptionType getType() {
         return type;
     }
 }
