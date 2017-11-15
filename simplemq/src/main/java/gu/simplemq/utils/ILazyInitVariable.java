@@ -48,8 +48,6 @@ public interface ILazyInitVariable<T> {
 		 * "Double-Checked Locking is Broken" Declaration》</a><br>
 		 * 要求 JDK5 以上版本
 		 * 
-		 * @author guyadong
-		 *
 		 * @param <T> variable type
 		 */
 		private static class VolatileImpl<T> implements ILazyInitVariable<T> {
@@ -77,7 +75,6 @@ public interface ILazyInitVariable<T> {
 		/**
 		 * 基于Thread Local Storage的双重检查锁定实现{@link ILazyInitVariable}接口<br>
 		 * 原理说明参见<a href="http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html">《The "Double-Checked Locking is Broken" Declaration》</a><br>
-		 * @author guyadong
 		 *
 		 * @param <T> variable type
 		 */
