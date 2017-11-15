@@ -16,11 +16,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.common.base.Strings;
+import com.google.common.base.Supplier;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
 import gu.simplemq.json.BaseJsonEncoder;
-import gu.simplemq.utils.BaseVolatile;
 import gu.simplemq.utils.ILazyInitVariable;
 import gu.simplemq.utils.TypeUtils;
 
@@ -46,11 +46,11 @@ public abstract class AbstractTable<V>{
 	protected final boolean isJavaBean ;
 	protected BaseJsonEncoder encoder = BaseJsonEncoder.getEncoder();
 	private IKeyHelper<V> keyHelper;
-	private final ILazyInitVariable<List<String>>filedNames = new BaseVolatile<List<String>>(){
+	private final ILazyInitVariable<List<String>>filedNames = ILazyInitVariable.Factory.makeInstance(new Supplier<List<String>>(){
 		@Override
-		protected List<String> doGet() {
+		public List<String> get() {
 			return doGetFieldNames();
-		}};
+		}});
 	protected KeyExpire keyExpire =new KeyExpire();
 	public AbstractTable(Type type) {
 		super();
