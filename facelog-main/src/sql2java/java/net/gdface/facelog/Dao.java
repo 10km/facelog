@@ -145,14 +145,14 @@ class Dao implements CommonConstant {
         return getDeviceManager().toPrimaryKeyList(beans);
     }
     //3-7
-    /** tranformer : DeviceBean to fl_device.id */ 
+    /** transformer : DeviceBean to fl_device.id */ 
     protected final Function<DeviceBean,Integer> daoCastDeviceToPk = new Function<DeviceBean,Integer>(){
             @Override
             public Integer apply(DeviceBean input) {
                 return null == input ? null : input.getId();
             }};
     //3-8
-    /** tranformer : fl_device.id to DeviceBean */ 
+    /** transformer : fl_device.id to DeviceBean */ 
     protected final Function<Integer,DeviceBean> daoCastDeviceFromPk = new Function<Integer,DeviceBean>(){
             @Override
             public DeviceBean apply(Integer input) {
@@ -528,14 +528,14 @@ class Dao implements CommonConstant {
         return getDeviceGroupManager().toPrimaryKeyList(beans);
     }
     //3-7
-    /** tranformer : DeviceGroupBean to fl_device_group.id */ 
+    /** transformer : DeviceGroupBean to fl_device_group.id */ 
     protected final Function<DeviceGroupBean,Integer> daoCastDeviceGroupToPk = new Function<DeviceGroupBean,Integer>(){
             @Override
             public Integer apply(DeviceGroupBean input) {
                 return null == input ? null : input.getId();
             }};
     //3-8
-    /** tranformer : fl_device_group.id to DeviceGroupBean */ 
+    /** transformer : fl_device_group.id to DeviceGroupBean */ 
     protected final Function<Integer,DeviceGroupBean> daoCastDeviceGroupFromPk = new Function<Integer,DeviceGroupBean>(){
             @Override
             public DeviceGroupBean apply(Integer input) {
@@ -887,14 +887,14 @@ class Dao implements CommonConstant {
         return getPersonManager().toPrimaryKeyList(beans);
     }
     //3-7
-    /** tranformer : PersonBean to fl_person.id */ 
+    /** transformer : PersonBean to fl_person.id */ 
     protected final Function<PersonBean,Integer> daoCastPersonToPk = new Function<PersonBean,Integer>(){
             @Override
             public Integer apply(PersonBean input) {
                 return null == input ? null : input.getId();
             }};
     //3-8
-    /** tranformer : fl_person.id to PersonBean */ 
+    /** transformer : fl_person.id to PersonBean */ 
     protected final Function<Integer,PersonBean> daoCastPersonFromPk = new Function<Integer,PersonBean>(){
             @Override
             public PersonBean apply(Integer input) {
@@ -1299,14 +1299,14 @@ class Dao implements CommonConstant {
         return getPersonGroupManager().toPrimaryKeyList(beans);
     }
     //3-7
-    /** tranformer : PersonGroupBean to fl_person_group.id */ 
+    /** transformer : PersonGroupBean to fl_person_group.id */ 
     protected final Function<PersonGroupBean,Integer> daoCastPersonGroupToPk = new Function<PersonGroupBean,Integer>(){
             @Override
             public Integer apply(PersonGroupBean input) {
                 return null == input ? null : input.getId();
             }};
     //3-8
-    /** tranformer : fl_person_group.id to PersonGroupBean */ 
+    /** transformer : fl_person_group.id to PersonGroupBean */ 
     protected final Function<Integer,PersonGroupBean> daoCastPersonGroupFromPk = new Function<Integer,PersonGroupBean>(){
             @Override
             public PersonGroupBean apply(Integer input) {
@@ -1658,14 +1658,14 @@ class Dao implements CommonConstant {
         return getFaceManager().toPrimaryKeyList(beans);
     }
     //3-7
-    /** tranformer : FaceBean to fl_face.id */ 
+    /** transformer : FaceBean to fl_face.id */ 
     protected final Function<FaceBean,Integer> daoCastFaceToPk = new Function<FaceBean,Integer>(){
             @Override
             public Integer apply(FaceBean input) {
                 return null == input ? null : input.getId();
             }};
     //3-8
-    /** tranformer : fl_face.id to FaceBean */ 
+    /** transformer : fl_face.id to FaceBean */ 
     protected final Function<Integer,FaceBean> daoCastFaceFromPk = new Function<Integer,FaceBean>(){
             @Override
             public FaceBean apply(Integer input) {
@@ -2006,14 +2006,14 @@ class Dao implements CommonConstant {
         return getFeatureManager().toPrimaryKeyList(beans);
     }
     //3-7
-    /** tranformer : FeatureBean to fl_feature.md5 */ 
+    /** transformer : FeatureBean to fl_feature.md5 */ 
     protected final Function<FeatureBean,String> daoCastFeatureToPk = new Function<FeatureBean,String>(){
             @Override
             public String apply(FeatureBean input) {
                 return null == input ? null : input.getMd5();
             }};
     //3-8
-    /** tranformer : fl_feature.md5 to FeatureBean */ 
+    /** transformer : fl_feature.md5 to FeatureBean */ 
     protected final Function<String,FeatureBean> daoCastFeatureFromPk = new Function<String,FeatureBean>(){
             @Override
             public FeatureBean apply(String input) {
@@ -2347,14 +2347,14 @@ class Dao implements CommonConstant {
         return getImageManager().toPrimaryKeyList(beans);
     }
     //3-7
-    /** tranformer : ImageBean to fl_image.md5 */ 
+    /** transformer : ImageBean to fl_image.md5 */ 
     protected final Function<ImageBean,String> daoCastImageToPk = new Function<ImageBean,String>(){
             @Override
             public String apply(ImageBean input) {
                 return null == input ? null : input.getMd5();
             }};
     //3-8
-    /** tranformer : fl_image.md5 to ImageBean */ 
+    /** transformer : fl_image.md5 to ImageBean */ 
     protected final Function<String,ImageBean> daoCastImageFromPk = new Function<String,ImageBean>(){
             @Override
             public ImageBean apply(String input) {
@@ -2655,14 +2655,14 @@ class Dao implements CommonConstant {
         return getLogManager().toPrimaryKeyList(beans);
     }
     //3-7
-    /** tranformer : LogBean to fl_log.id */ 
+    /** transformer : LogBean to fl_log.id */ 
     protected final Function<LogBean,Integer> daoCastLogToPk = new Function<LogBean,Integer>(){
             @Override
             public Integer apply(LogBean input) {
                 return null == input ? null : input.getId();
             }};
     //3-8
-    /** tranformer : fl_log.id to LogBean */ 
+    /** transformer : fl_log.id to LogBean */ 
     protected final Function<Integer,LogBean> daoCastLogFromPk = new Function<Integer,LogBean>(){
             @Override
             public LogBean apply(Integer input) {
@@ -3377,14 +3377,14 @@ class Dao implements CommonConstant {
         return getStoreManager().toPrimaryKeyList(beans);
     }
     //3-7
-    /** tranformer : StoreBean to fl_store.md5 */ 
+    /** transformer : StoreBean to fl_store.md5 */ 
     protected final Function<StoreBean,String> daoCastStoreToPk = new Function<StoreBean,String>(){
             @Override
             public String apply(StoreBean input) {
                 return null == input ? null : input.getMd5();
             }};
     //3-8
-    /** tranformer : fl_store.md5 to StoreBean */ 
+    /** transformer : fl_store.md5 to StoreBean */ 
     protected final Function<String,StoreBean> daoCastStoreFromPk = new Function<String,StoreBean>(){
             @Override
             public StoreBean apply(String input) {

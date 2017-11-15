@@ -103,14 +103,14 @@ class Dao implements CommonConstant {
     }
 ###### CONVERTER BETWEEN BEAN AND PRIMARY KEY########
     //3-7
-    /** tranformer : $beanClass to $primaryKey.fullName */ 
+    /** transformer : $beanClass to $primaryKey.fullName */ 
     $!{modifier}final Function<$beanClass,$primaryKey.javaType> daoCast${coreClass}ToPk = new Function<$beanClass,$primaryKey.javaType>(){
             @Override
             public $primaryKey.javaType apply($beanClass input) {
                 return null == input ? null : input.$primaryKey.getGetMethod()();
             }};
     //3-8
-    /** tranformer : $primaryKey.fullName to $beanClass */ 
+    /** transformer : $primaryKey.fullName to $beanClass */ 
     $!{modifier}final Function<$primaryKey.javaType,$beanClass> daoCast${coreClass}FromPk = new Function<$primaryKey.javaType,$beanClass>(){
             @Override
             public $beanClass apply($primaryKey.javaType input) {
