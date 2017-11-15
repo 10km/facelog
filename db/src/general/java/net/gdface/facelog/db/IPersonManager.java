@@ -7,7 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
-import net.gdface.facelog.db.exception.WrapDaoException;
+import net.gdface.facelog.db.exception.RuntimeDaoException;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_person table.<br>
@@ -344,7 +344,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @param bean the {@link PersonBean} object to use
      * @param beanToSet the {@link ImageBean} object to associate to the {@link PersonBean}
      * @return always beanToSet saved
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      */
     public ImageBean setReferencedByImageMd5(PersonBean bean, ImageBean beanToSet);
     //5.1 GET REFERENCED VALUE
@@ -363,7 +363,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @param bean the {@link PersonBean} object to use
      * @param beanToSet the {@link PersonGroupBean} object to associate to the {@link PersonBean}
      * @return always beanToSet saved
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      */
     public PersonGroupBean setReferencedByGroupId(PersonBean bean, PersonGroupBean beanToSet);
     //_____________________________________________________________________
@@ -377,7 +377,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * 
      * @param imageMd5 the image_md5 column's value filter
      * @return an PersonBean,otherwise null if not found or exists null in input arguments
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      */
     public PersonBean loadByIndexImageMd5(String imageMd5);
     /**
@@ -387,7 +387,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return an PersonBean
      * @throws NullPointerException exists null in input arguments
      * @throws ObjectRetrievalException if not found
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      */
     public PersonBean loadByIndexImageMd5Checked(String imageMd5)throws ObjectRetrievalException;
     /**
@@ -433,7 +433,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * 
      * @param papersNum the papers_num column's value filter
      * @return an PersonBean,otherwise null if not found or exists null in input arguments
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      */
     public PersonBean loadByIndexPapersNum(String papersNum);
     /**
@@ -443,7 +443,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return an PersonBean
      * @throws NullPointerException exists null in input arguments
      * @throws ObjectRetrievalException if not found
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      */
     public PersonBean loadByIndexPapersNumChecked(String papersNum)throws ObjectRetrievalException;
     /**

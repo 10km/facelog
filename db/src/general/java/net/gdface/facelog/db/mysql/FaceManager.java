@@ -19,14 +19,14 @@ import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.exception.WrapDaoException;
+import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
 import net.gdface.facelog.dborm.exception.DaoException;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_face table.<br>
- * all {@link DaoException} be wrapped as {@link WrapDaoException} to throw.<br>
+ * all {@link DaoException} be wrapped as {@link RuntimeDaoException} to throw.<br>
  * Remarks: 人脸检测信息数据表,用于保存检测到的人脸的所有信息(特征数据除外)<br>
  * @author guyadong
  */
@@ -120,7 +120,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
             throw new ObjectRetrievalException();
         }catch(DaoException e){
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     //1.2
@@ -181,7 +181,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     //1.6
@@ -209,7 +209,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
         	throw new ObjectRetrievalException(e);
         }catch(DaoException e){
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     //1.8 override IFaceManager
@@ -258,7 +258,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     //2
@@ -271,7 +271,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }   
     }
     //2.1
@@ -471,7 +471,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     //3.3 SET IMPORTED override IFaceManager
@@ -727,7 +727,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -759,7 +759,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -777,7 +777,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -796,7 +796,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -810,7 +810,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -828,7 +828,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
      }
     //18-1
@@ -845,7 +845,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
      }
     //20-5
@@ -858,7 +858,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -872,7 +872,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -900,7 +900,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -914,7 +914,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     
@@ -936,7 +936,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -950,7 +950,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     
@@ -968,7 +968,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadByIndexAsList(keyIndex,keys));
         }catch(DaoException e){
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     
@@ -985,7 +985,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try{
             return this.nativeManager.deleteByIndex(keyIndex,keys);
         }catch(DaoException e){
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -1003,7 +1003,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -1017,7 +1017,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -1072,7 +1072,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     //37-2
@@ -1185,7 +1185,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     
@@ -1196,7 +1196,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     

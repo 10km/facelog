@@ -15,7 +15,7 @@ import com.google.common.util.concurrent.UncheckedExecutionException;
 import net.gdface.facelog.db.ITableCache;
 import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
-import net.gdface.facelog.db.exception.WrapDaoException;
+import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
@@ -110,7 +110,7 @@ public class LogCacheManager extends LogManager
                 throw ee.getCause();
             }catch(ObjectRetrievalException oe){
                 throw oe;
-            } catch (WrapDaoException we) {
+            } catch (RuntimeDaoException we) {
                 throw we;
             } catch (RuntimeException re) {
                 throw re;
@@ -122,7 +122,7 @@ public class LogCacheManager extends LogManager
                 throw ue.getCause();
             }catch(ObjectRetrievalException oe){
                 throw oe;
-            } catch (WrapDaoException we) {
+            } catch (RuntimeDaoException we) {
                 throw we;
             } catch (RuntimeException re) {
                 throw re;

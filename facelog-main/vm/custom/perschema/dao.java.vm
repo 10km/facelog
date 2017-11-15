@@ -22,7 +22,7 @@ import ${schemaPkg}.${e.asManagerInterfaceNSP()};
 import ${schemaPkg}.${e.asBeanClassNSP()};' '')
 
 import ${schemaPkg}.exception.ObjectRetrievalException;
-import ${schemaPkg}.exception.WrapDaoException;
+import ${schemaPkg}.exception.RuntimeDaoException;
 
 /**
  * 数据库访问基础方法
@@ -328,7 +328,7 @@ class Dao implements CommonConstant {
                 $beanClass bean = new $beanClass(DEFAULT_GROUP_ID);
                 bean.setName(DEFAULT_GROUP_NAME);
                 daoSave${coreClass}(bean);
-            }catch(WrapDaoException e){}
+            }catch(RuntimeDaoException e){}
             if(!daoExists${coreClass}(DEFAULT_GROUP_ID)){
                 throw new IllegalStateException("can't create default group for ${table.getBasename(true)}"); 
             }

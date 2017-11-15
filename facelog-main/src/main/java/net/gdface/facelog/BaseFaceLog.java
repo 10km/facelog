@@ -20,7 +20,7 @@ import net.gdface.facelog.db.LogLightBean;
 import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
-import net.gdface.facelog.db.exception.WrapDaoException;
+import net.gdface.facelog.db.exception.RuntimeDaoException;
 
 // 由于Java语言的限制,导致swift无法从interface中获取参数名信息，所以采用interface定义生成的thrift IDL文件中service中的方法
 // 无法生成正确的参数名称(只能是无意义的arg0,arg1...)<br>
@@ -30,7 +30,7 @@ import net.gdface.facelog.db.exception.WrapDaoException;
  * 定义 FaceLog 服务接口<br>
  * <ul>
  * <li>所有标明为图像数据的参数,是指具有特定图像格式的图像数据(如jpg,png...),而非无格式的原始点阵位图</li>
- * <li>在执行涉及数据库操作的方法时如果数据库发生异常，则会被封装到{@link WrapDaoException}抛出，
+ * <li>在执行涉及数据库操作的方法时如果数据库发生异常，则会被封装到{@link RuntimeDaoException}抛出，
  * 所有非{@link RuntimeException}异常会被封装在{@link ServiceRuntimeException}抛出</li>
  * <li>所有数据库对象(Java Bean,比如 {@link PersonBean}),在执行保存操作(save)时,
  * 如果为新增记录({@link PersonBean#isNew()}为true),则执行insert操作,否则执行update操作,
@@ -785,7 +785,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * 保存设备组记录
 	 * @param deviceGroupBean
 	 * @return
-	 * @throws WrapDaoException
+	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
@@ -796,7 +796,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * 根据设备组id返回数据库记录
 	 * @param deviceGroupId
 	 * @return
-	 * @throws WrapDaoException
+	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
@@ -807,7 +807,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * 返回设备组id列表指定的数据库记录
 	 * @param groupIdList
 	 * @return
-	 * @throws WrapDaoException
+	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod()
@@ -819,7 +819,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
 	 * @param deviceGroupId
 	 * @return  返回删除的记录条数
-	 * @throws WrapDaoException
+	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
@@ -831,7 +831,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * 如果没有子节点则返回空表
 	 * @param deviceGroupId
 	 * @return
-	 * @throws WrapDaoException
+	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
@@ -843,7 +843,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * 如果没有下属设备记录则返回空表
 	 * @param deviceGroupId
 	 * @return
-	 * @throws WrapDaoException
+	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
@@ -855,7 +855,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * 保存人员组记录
 	 * @param personGroupBean
 	 * @return
-	 * @throws WrapDaoException
+	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
@@ -866,7 +866,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * 根据人员组id返回数据库记录
 	 * @param personGroupId
 	 * @return
-	 * @throws WrapDaoException
+	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
@@ -877,7 +877,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * 返回人员组id列表指定的数据库记录
 	 * @param groupIdList
 	 * @return
-	 * @throws WrapDaoException
+	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
@@ -889,7 +889,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
 	 * @param personGroupId
 	 * @return 
-	 * @throws WrapDaoException
+	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
@@ -901,7 +901,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * 如果没有子节点则返回空表
 	 * @param personGroupId
 	 * @return
-	 * @throws WrapDaoException
+	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
@@ -913,7 +913,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * 如果没有下属人员记录则返回空表
 	 * @param deviceGroupId
 	 * @return
-	 * @throws WrapDaoException
+	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
@@ -952,7 +952,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * {@code deviceGroup}指定的设备组下属的所有设备通行
 	 * @param deviceGroup
 	 * @param personGroup
-	 * @throws WrapDaoException
+	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
@@ -971,7 +971,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param deviceGroup
 	 * @param personGroup
 	 * @return 删除成功返回1,否则返回0
-	 * @throws WrapDaoException
+	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
@@ -984,7 +984,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param deviceId
 	 * @param personGroupId
 	 * @return
-	 * @throws WrapDaoException
+	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
@@ -997,7 +997,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param deviceId
 	 * @param personId
 	 * @return
-	 * @throws WrapDaoException
+	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
@@ -1019,7 +1019,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录
 	 * @param timestamp
 	 * @return
-	 * @throws WrapDaoException
+	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod

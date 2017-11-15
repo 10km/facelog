@@ -19,14 +19,14 @@ import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.exception.WrapDaoException;
+import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
 import net.gdface.facelog.dborm.exception.DaoException;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_person_group table.<br>
- * all {@link DaoException} be wrapped as {@link WrapDaoException} to throw.<br>
+ * all {@link DaoException} be wrapped as {@link RuntimeDaoException} to throw.<br>
  * Remarks: 用户组信息<br>
  * @author guyadong
  */
@@ -123,7 +123,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
             throw new ObjectRetrievalException();
         }catch(DaoException e){
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     //1.2
@@ -184,7 +184,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     //1.6
@@ -212,7 +212,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
         	throw new ObjectRetrievalException(e);
         }catch(DaoException e){
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     //1.8 override IPersonGroupManager
@@ -261,7 +261,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     //2
@@ -274,7 +274,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }   
     }
     //2.1
@@ -492,7 +492,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     //3.3 SET IMPORTED override IPersonGroupManager
@@ -571,7 +571,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     //3.3 SET IMPORTED override IPersonGroupManager
@@ -650,7 +650,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     //3.3 SET IMPORTED override IPersonGroupManager
@@ -914,7 +914,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -932,7 +932,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -951,7 +951,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -965,7 +965,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -983,7 +983,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
      }
     //18-1
@@ -1000,7 +1000,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
      }
     //20-5
@@ -1013,7 +1013,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -1027,7 +1027,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -1055,7 +1055,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -1069,7 +1069,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     
@@ -1087,7 +1087,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadByIndexAsList(keyIndex,keys));
         }catch(DaoException e){
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     
@@ -1104,7 +1104,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         try{
             return this.nativeManager.deleteByIndex(keyIndex,keys);
         }catch(DaoException e){
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -1132,7 +1132,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
                     startRow,
                     numRows));
         }catch(DaoException e){
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     //23.2 MANY TO MANY override IPersonGroupManager
@@ -1222,7 +1222,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -1236,7 +1236,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -1291,7 +1291,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     //37-2
@@ -1404,7 +1404,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     
@@ -1415,7 +1415,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     

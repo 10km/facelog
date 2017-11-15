@@ -42,7 +42,7 @@ import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.ILogLightManager;
 import net.gdface.facelog.db.LogLightBean;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
-import net.gdface.facelog.db.exception.WrapDaoException;
+import net.gdface.facelog.db.exception.RuntimeDaoException;
 
 /**
  * 数据库访问基础方法
@@ -735,7 +735,7 @@ class Dao implements CommonConstant {
                 DeviceGroupBean bean = new DeviceGroupBean(DEFAULT_GROUP_ID);
                 bean.setName(DEFAULT_GROUP_NAME);
                 daoSaveDeviceGroup(bean);
-            }catch(WrapDaoException e){}
+            }catch(RuntimeDaoException e){}
             if(!daoExistsDeviceGroup(DEFAULT_GROUP_ID)){
                 throw new IllegalStateException("can't create default group for device_group"); 
             }
@@ -1506,7 +1506,7 @@ class Dao implements CommonConstant {
                 PersonGroupBean bean = new PersonGroupBean(DEFAULT_GROUP_ID);
                 bean.setName(DEFAULT_GROUP_NAME);
                 daoSavePersonGroup(bean);
-            }catch(WrapDaoException e){}
+            }catch(RuntimeDaoException e){}
             if(!daoExistsPersonGroup(DEFAULT_GROUP_ID)){
                 throw new IllegalStateException("can't create default group for person_group"); 
             }

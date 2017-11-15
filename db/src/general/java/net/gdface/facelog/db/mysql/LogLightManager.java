@@ -16,14 +16,14 @@ import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.ILogLightManager;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.exception.WrapDaoException;
+import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
 import net.gdface.facelog.dborm.exception.DaoException;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_log_light table.<br>
- * all {@link DaoException} be wrapped as {@link WrapDaoException} to throw.<br>
+ * all {@link DaoException} be wrapped as {@link RuntimeDaoException} to throw.<br>
  * Remarks: VIEW<br>
  * @author guyadong
  */
@@ -102,7 +102,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -121,7 +121,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -135,7 +135,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -153,7 +153,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
      }
     //18-1
@@ -170,7 +170,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
      }
     //20-5
@@ -183,7 +183,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -197,7 +197,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -216,7 +216,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -230,7 +230,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
 
@@ -285,7 +285,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     //37-2
@@ -398,7 +398,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     
@@ -409,7 +409,7 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         }
         catch(DaoException e)
         {
-            throw new WrapDaoException(e);
+            throw new RuntimeDaoException(e);
         }
     }
     

@@ -7,7 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
-import net.gdface.facelog.db.exception.WrapDaoException;
+import net.gdface.facelog.db.exception.RuntimeDaoException;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_image table.<br>
@@ -340,7 +340,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @param bean the {@link ImageBean} object to use
      * @param beanToSet the {@link DeviceBean} object to associate to the {@link ImageBean}
      * @return always beanToSet saved
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      */
     public DeviceBean setReferencedByDeviceId(ImageBean bean, DeviceBean beanToSet);
     //_____________________________________________________________________

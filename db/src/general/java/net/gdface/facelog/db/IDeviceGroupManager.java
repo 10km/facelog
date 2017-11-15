@@ -7,7 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
-import net.gdface.facelog.db.exception.WrapDaoException;
+import net.gdface.facelog.db.exception.RuntimeDaoException;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_device_group table.<br>
@@ -420,7 +420,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param bean the {@link DeviceGroupBean} object to use
      * @param beanToSet the {@link DeviceGroupBean} object to associate to the {@link DeviceGroupBean}
      * @return always beanToSet saved
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      */
     public DeviceGroupBean setReferencedByParent(DeviceGroupBean bean, DeviceGroupBean beanToSet);
     //_____________________________________________________________________
@@ -549,7 +549,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param id PK# 1 
      * @return  empty list if input primary key is {@code null}<br>
      *         first element equal last if self-reference field is cycle
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      */
     public java.util.List<DeviceGroupBean> listOfParent(Integer id);
     //48
@@ -565,7 +565,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param id PK# 1 
      * @return  0 if input primary key is {@code null}<br>
      *         -1 if self-reference field is cycle
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      */
     public int levelOfParent(Integer id);
     //50
@@ -579,7 +579,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
     /**
      * test whether the self-reference field is cycle : {@code fl_device_group(parent) }
      * @param id PK# 1 
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      * @see #levelOfParent(DeviceGroupBean)
      * @return
      */
@@ -589,7 +589,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * test whether the self-reference field is cycle : {@code fl_device_group(parent) }
      * @param bean
      * @return
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      * @see #levelOfParent(DeviceGroupBean)
      */
     public boolean isCycleOnParent(DeviceGroupBean bean);
@@ -600,7 +600,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @return top bean
      * @throws NullPointerException if input primary key is {@code null}
      * @throws IllegalStateException if self-reference field is cycle
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      */
     public DeviceGroupBean topOfParent(Integer id);
     //54
@@ -616,7 +616,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param id PK# 1
      * @return always {@code id}
      * @throws IllegalStateException if self-reference field is cycle 
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      * @see #isCycleOnParent(Integer)
      */
     public Integer checkCycleOfParent(Integer id);
@@ -626,7 +626,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param bean
      * @return always {@code bean}
      * @throws IllegalStateException if self-reference field is cycle
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      * @see #isCycleOnParent(DeviceGroupBean)
      */
     public DeviceGroupBean checkCycleOfParent(DeviceGroupBean bean);

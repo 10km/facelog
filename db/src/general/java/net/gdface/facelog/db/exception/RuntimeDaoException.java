@@ -3,7 +3,7 @@
 // modified by guyadong from
 // sql2java original version https://sourceforge.net/projects/sql2java/ 
 // JDBC driver used at code generation time: com.mysql.jdbc.Driver
-// template: wrap.dao.exception.java.vm
+// template: runtime.dao.exception.java.vm
 // ______________________________________________________
 package net.gdface.facelog.db.exception;
 
@@ -12,14 +12,14 @@ package net.gdface.facelog.db.exception;
  *
  * @author guyadong
  */
-public class WrapDaoException extends RuntimeException
+public class RuntimeDaoException extends RuntimeException
 {
     private static final long serialVersionUID = 2448402307057993837L;
 
     /**
      * contructor
      */
-    public WrapDaoException(Throwable cause)
+    public RuntimeDaoException(Throwable cause)
     {
         super(cause);
     }

@@ -7,7 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
-import net.gdface.facelog.db.exception.WrapDaoException;
+import net.gdface.facelog.db.exception.RuntimeDaoException;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_person_group table.<br>
@@ -420,7 +420,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param bean the {@link PersonGroupBean} object to use
      * @param beanToSet the {@link PersonGroupBean} object to associate to the {@link PersonGroupBean}
      * @return always beanToSet saved
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      */
     public PersonGroupBean setReferencedByParent(PersonGroupBean bean, PersonGroupBean beanToSet);
     //_____________________________________________________________________
@@ -549,7 +549,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param id PK# 1 
      * @return  empty list if input primary key is {@code null}<br>
      *         first element equal last if self-reference field is cycle
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      */
     public java.util.List<PersonGroupBean> listOfParent(Integer id);
     //48
@@ -565,7 +565,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param id PK# 1 
      * @return  0 if input primary key is {@code null}<br>
      *         -1 if self-reference field is cycle
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      */
     public int levelOfParent(Integer id);
     //50
@@ -579,7 +579,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
     /**
      * test whether the self-reference field is cycle : {@code fl_person_group(parent) }
      * @param id PK# 1 
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      * @see #levelOfParent(PersonGroupBean)
      * @return
      */
@@ -589,7 +589,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * test whether the self-reference field is cycle : {@code fl_person_group(parent) }
      * @param bean
      * @return
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      * @see #levelOfParent(PersonGroupBean)
      */
     public boolean isCycleOnParent(PersonGroupBean bean);
@@ -600,7 +600,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @return top bean
      * @throws NullPointerException if input primary key is {@code null}
      * @throws IllegalStateException if self-reference field is cycle
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      */
     public PersonGroupBean topOfParent(Integer id);
     //54
@@ -616,7 +616,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param id PK# 1
      * @return always {@code id}
      * @throws IllegalStateException if self-reference field is cycle 
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      * @see #isCycleOnParent(Integer)
      */
     public Integer checkCycleOfParent(Integer id);
@@ -626,7 +626,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param bean
      * @return always {@code bean}
      * @throws IllegalStateException if self-reference field is cycle
-     * @throws WrapDaoException
+     * @throws RuntimeDaoException
      * @see #isCycleOnParent(PersonGroupBean)
      */
     public PersonGroupBean checkCycleOfParent(PersonGroupBean bean);
