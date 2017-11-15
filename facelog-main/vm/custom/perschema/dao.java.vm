@@ -282,7 +282,7 @@ class Dao implements CommonConstant {
 #if(!$table.isSelfRef($fkObj) && $fkObj.columns.size() == 1)
 #set ($fkCol = $fkObj.columns[0])
     //8-6
-    /** tranformer : $beanClass to $fkCol.fullName */
+    /** transformer : $beanClass to $fkCol.fullName */
     $!{modifier}final Function<$beanClass,$fkCol.javaType> daoCast${coreClass}To${strUtil.convertName($fkCol.name,false)} = new Function<$beanClass,$fkCol.javaType>(){
             @Override
             public $fkCol.javaType apply($beanClass input) {
@@ -425,8 +425,7 @@ class Dao implements CommonConstant {
     /** 
      * 添加新记录(同步保存)<br>
      * $table.name 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link $beanClass${esc.hash}isNew()}返回{@code false},则抛出异常
-     * @param $table.asVarBean() 要添加的新记录
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}save($beanClass #foreachForeignTables('native' $table  ", $m_foreignClass" '' '') #foreachImportedTables('native' $table  ", Collection" '' '') )}
+     * see also {@link $table.asManagerInterfaceNSP()${esc.hash}save($beanClass #foreachForeignTables('native' $table  ", $m_foreignClass" '' '') #foreachImportedTables('native' $table  ", Collection" '' '') )}<br>
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)}
      * @throws DuplicateReordException if exists duplicated row
      * @throws IllegalArgumentException if {@code ${table.asVarBean()}.isNew()} is {@code false}
@@ -460,7 +459,9 @@ class Dao implements CommonConstant {
     }
 #if( $table.hasForeignTables() || $table.hasImportedTables() )
     //15
-    /** 同步保存 */
+    /** 同步保存<br> 
+     * see also {@link $table.asManagerInterfaceNSP()${esc.hash}save($beanClass #foreachForeignTables('native' $table  ", $m_foreignClass" '' '') #foreachImportedTables('native' $table  ", Collection" '' '') )}
+     */
     $!{modifier}$beanClass daoSave${coreClass}($beanClass $table.asVarBean()
         #foreachForeignTables('native' $table  ", $m_foreignClass $table.asRefArg($m_fkName) " '
         ' '')

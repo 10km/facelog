@@ -58,7 +58,7 @@ public class FaceLogImpl extends BaseFaceLog  {
 		getFeatureManager().registerListener(redisFeatureListener);
 		getPermitManager().registerListener(redisPermitListener);
 	}
-	protected StoreBean daoMakeStoreBean(ByteBuffer imageBytes,String md5,String encodeing){
+	protected static StoreBean makeStoreBean(ByteBuffer imageBytes,String md5,String encodeing){
 		if(Judge.isEmpty(imageBytes)){
 			return null;
 		}
@@ -128,8 +128,18 @@ public class FaceLogImpl extends BaseFaceLog  {
 	}
 	////////////////////////////////////////////
 	
-	protected Pair<ImageBean, StoreBean> daoMakeImageBean(ByteBuffer imageBytes,String md5) throws NotImage, UnsupportedFormat{
-		if(Judge.isEmpty(imageBytes)){return null;}
+	/**
+	 * 创建{@link ImageBean}对象,填充图像基本信息,同时创建对应的{@link StoreBean}对象
+	 * @param imageBytes
+	 * @param md5
+	 * @return 返回 {@link ImageBean}和{@link StoreBean}对象
+	 * @throws NotImage
+	 * @throws UnsupportedFormat
+	 */
+	protected static Pair<ImageBean, StoreBean> makeImageBean(ByteBuffer imageBytes,String md5) throws NotImage, UnsupportedFormat{
+		if(Judge.isEmpty(imageBytes)){
+			return null;
+		}
 		LazyImage image = LazyImage.create(imageBytes);
 		if(null == md5){
 			md5 = FaceUtilits.getMD5String(imageBytes);
@@ -139,7 +149,7 @@ public class FaceLogImpl extends BaseFaceLog  {
 		imageBean.setWidth(image.getWidth());
 		imageBean.setHeight(image.getHeight());
 		imageBean.setFormat(image.getSuffix());
-		StoreBean storeBean = daoMakeStoreBean(imageBytes, md5, null);
+		StoreBean storeBean = makeStoreBean(imageBytes, md5, null);
 		return Pair.with(imageBean, storeBean);
 	}
 	protected ImageBean daoAddImage(ByteBuffer imageBytes,DeviceBean refFlDevicebyDeviceId
@@ -151,7 +161,7 @@ public class FaceLogImpl extends BaseFaceLog  {
 		daoCheckDuplicateImage(md5);
 		Pair<ImageBean, StoreBean> pair;
 		try {
-			pair = daoMakeImageBean(imageBytes,md5);
+			pair = makeImageBean(imageBytes,md5);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

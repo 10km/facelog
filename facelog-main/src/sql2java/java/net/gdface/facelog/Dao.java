@@ -303,7 +303,7 @@ class Dao implements CommonConstant {
         return getDeviceManager().setReferencedByGroupId(bean,beanToSet);
     }
     //8-6
-    /** tranformer : DeviceBean to fl_device.group_id */
+    /** transformer : DeviceBean to fl_device.group_id */
     protected final Function<DeviceBean,Integer> daoCastDeviceToGroupId = new Function<DeviceBean,Integer>(){
             @Override
             public Integer apply(DeviceBean input) {
@@ -318,7 +318,9 @@ class Dao implements CommonConstant {
         return getDeviceManager().save(deviceBean);
     }
     //15
-    /** 同步保存 */
+    /** 同步保存<br> 
+     * see also {@link IDeviceManager#save(DeviceBean , DeviceGroupBean , Collection, Collection )}
+     */
     protected DeviceBean daoSaveDevice(DeviceBean deviceBean
         , DeviceGroupBean refDevicegroupByGroupId 
         , Collection<ImageBean> impImageByDeviceId 
@@ -760,7 +762,9 @@ class Dao implements CommonConstant {
         return getDeviceGroupManager().save(deviceGroupBean);
     }
     //15
-    /** 同步保存 */
+    /** 同步保存<br> 
+     * see also {@link IDeviceGroupManager#save(DeviceGroupBean , DeviceGroupBean , Collection, Collection, Collection )}
+     */
     protected DeviceGroupBean daoSaveDeviceGroup(DeviceGroupBean deviceGroupBean
         , DeviceGroupBean refDevicegroupByParent 
         , Collection<DeviceBean> impDeviceByGroupId 
@@ -1041,7 +1045,7 @@ class Dao implements CommonConstant {
         return getPersonManager().setReferencedByImageMd5(bean,beanToSet);
     }
     //8-6
-    /** tranformer : PersonBean to fl_person.image_md5 */
+    /** transformer : PersonBean to fl_person.image_md5 */
     protected final Function<PersonBean,String> daoCastPersonToImageMd5 = new Function<PersonBean,String>(){
             @Override
             public String apply(PersonBean input) {
@@ -1068,7 +1072,7 @@ class Dao implements CommonConstant {
         return getPersonManager().setReferencedByGroupId(bean,beanToSet);
     }
     //8-6
-    /** tranformer : PersonBean to fl_person.group_id */
+    /** transformer : PersonBean to fl_person.group_id */
     protected final Function<PersonBean,Integer> daoCastPersonToGroupId = new Function<PersonBean,Integer>(){
             @Override
             public Integer apply(PersonBean input) {
@@ -1083,7 +1087,9 @@ class Dao implements CommonConstant {
         return getPersonManager().save(personBean);
     }
     //15
-    /** 同步保存 */
+    /** 同步保存<br> 
+     * see also {@link IPersonManager#save(PersonBean , ImageBean, PersonGroupBean , Collection, Collection )}
+     */
     protected PersonBean daoSavePerson(PersonBean personBean
         , ImageBean refImageByImageMd5 
         , PersonGroupBean refPersongroupByGroupId 
@@ -1527,7 +1533,9 @@ class Dao implements CommonConstant {
         return getPersonGroupManager().save(personGroupBean);
     }
     //15
-    /** 同步保存 */
+    /** 同步保存<br> 
+     * see also {@link IPersonGroupManager#save(PersonGroupBean , PersonGroupBean , Collection, Collection, Collection )}
+     */
     protected PersonGroupBean daoSavePersonGroup(PersonGroupBean personGroupBean
         , PersonGroupBean refPersongroupByParent 
         , Collection<PermitBean> impPermitByPersonGroupId 
@@ -1788,7 +1796,7 @@ class Dao implements CommonConstant {
         return getFaceManager().setReferencedByFeatureMd5(bean,beanToSet);
     }
     //8-6
-    /** tranformer : FaceBean to fl_face.feature_md5 */
+    /** transformer : FaceBean to fl_face.feature_md5 */
     protected final Function<FaceBean,String> daoCastFaceToFeatureMd5 = new Function<FaceBean,String>(){
             @Override
             public String apply(FaceBean input) {
@@ -1815,7 +1823,7 @@ class Dao implements CommonConstant {
         return getFaceManager().setReferencedByImageMd5(bean,beanToSet);
     }
     //8-6
-    /** tranformer : FaceBean to fl_face.image_md5 */
+    /** transformer : FaceBean to fl_face.image_md5 */
     protected final Function<FaceBean,String> daoCastFaceToImageMd5 = new Function<FaceBean,String>(){
             @Override
             public String apply(FaceBean input) {
@@ -1838,8 +1846,7 @@ class Dao implements CommonConstant {
     /** 
      * 添加新记录(同步保存)<br>
      * fl_face 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link FaceBean#isNew()}返回{@code false},则抛出异常
-     * @param faceBean 要添加的新记录
-     * @see {@link IFaceManager#save(FaceBean , FeatureBean, ImageBean , Collection )}
+     * see also {@link IFaceManager#save(FaceBean , FeatureBean, ImageBean , Collection )}<br>
      * @see {@link IFaceManager#checkDuplicate(FaceBean)}
      * @throws DuplicateReordException if exists duplicated row
      * @throws IllegalArgumentException if {@code faceBean.isNew()} is {@code false}
@@ -2157,7 +2164,7 @@ class Dao implements CommonConstant {
         return getFeatureManager().setReferencedByPersonId(bean,beanToSet);
     }
     //8-6
-    /** tranformer : FeatureBean to fl_feature.person_id */
+    /** transformer : FeatureBean to fl_feature.person_id */
     protected final Function<FeatureBean,Integer> daoCastFeatureToPersonId = new Function<FeatureBean,Integer>(){
             @Override
             public Integer apply(FeatureBean input) {
@@ -2180,8 +2187,7 @@ class Dao implements CommonConstant {
     /** 
      * 添加新记录(同步保存)<br>
      * fl_feature 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link FeatureBean#isNew()}返回{@code false},则抛出异常
-     * @param featureBean 要添加的新记录
-     * @see {@link IFeatureManager#save(FeatureBean , PersonBean , Collection, Collection )}
+     * see also {@link IFeatureManager#save(FeatureBean , PersonBean , Collection, Collection )}<br>
      * @see {@link IFeatureManager#checkDuplicate(FeatureBean)}
      * @throws DuplicateReordException if exists duplicated row
      * @throws IllegalArgumentException if {@code featureBean.isNew()} is {@code false}
@@ -2499,7 +2505,7 @@ class Dao implements CommonConstant {
         return getImageManager().setReferencedByDeviceId(bean,beanToSet);
     }
     //8-6
-    /** tranformer : ImageBean to fl_image.device_id */
+    /** transformer : ImageBean to fl_image.device_id */
     protected final Function<ImageBean,Integer> daoCastImageToDeviceId = new Function<ImageBean,Integer>(){
             @Override
             public Integer apply(ImageBean input) {
@@ -2522,8 +2528,7 @@ class Dao implements CommonConstant {
     /** 
      * 添加新记录(同步保存)<br>
      * fl_image 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link ImageBean#isNew()}返回{@code false},则抛出异常
-     * @param imageBean 要添加的新记录
-     * @see {@link IImageManager#save(ImageBean , DeviceBean , Collection, Collection )}
+     * see also {@link IImageManager#save(ImageBean , DeviceBean , Collection, Collection )}<br>
      * @see {@link IImageManager#checkDuplicate(ImageBean)}
      * @throws DuplicateReordException if exists duplicated row
      * @throws IllegalArgumentException if {@code imageBean.isNew()} is {@code false}
@@ -2768,7 +2773,7 @@ class Dao implements CommonConstant {
         return getLogManager().setReferencedByDeviceId(bean,beanToSet);
     }
     //8-6
-    /** tranformer : LogBean to fl_log.device_id */
+    /** transformer : LogBean to fl_log.device_id */
     protected final Function<LogBean,Integer> daoCastLogToDeviceId = new Function<LogBean,Integer>(){
             @Override
             public Integer apply(LogBean input) {
@@ -2795,7 +2800,7 @@ class Dao implements CommonConstant {
         return getLogManager().setReferencedByCompareFace(bean,beanToSet);
     }
     //8-6
-    /** tranformer : LogBean to fl_log.compare_face */
+    /** transformer : LogBean to fl_log.compare_face */
     protected final Function<LogBean,Integer> daoCastLogToCompareFace = new Function<LogBean,Integer>(){
             @Override
             public Integer apply(LogBean input) {
@@ -2822,7 +2827,7 @@ class Dao implements CommonConstant {
         return getLogManager().setReferencedByVerifyFeature(bean,beanToSet);
     }
     //8-6
-    /** tranformer : LogBean to fl_log.verify_feature */
+    /** transformer : LogBean to fl_log.verify_feature */
     protected final Function<LogBean,String> daoCastLogToVerifyFeature = new Function<LogBean,String>(){
             @Override
             public String apply(LogBean input) {
@@ -2849,7 +2854,7 @@ class Dao implements CommonConstant {
         return getLogManager().setReferencedByPersonId(bean,beanToSet);
     }
     //8-6
-    /** tranformer : LogBean to fl_log.person_id */
+    /** transformer : LogBean to fl_log.person_id */
     protected final Function<LogBean,Integer> daoCastLogToPersonId = new Function<LogBean,Integer>(){
             @Override
             public Integer apply(LogBean input) {
@@ -2872,8 +2877,7 @@ class Dao implements CommonConstant {
     /** 
      * 添加新记录(同步保存)<br>
      * fl_log 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link LogBean#isNew()}返回{@code false},则抛出异常
-     * @param logBean 要添加的新记录
-     * @see {@link ILogManager#save(LogBean , DeviceBean, FaceBean, FeatureBean, PersonBean  )}
+     * see also {@link ILogManager#save(LogBean , DeviceBean, FaceBean, FeatureBean, PersonBean  )}<br>
      * @see {@link ILogManager#checkDuplicate(LogBean)}
      * @throws DuplicateReordException if exists duplicated row
      * @throws IllegalArgumentException if {@code logBean.isNew()} is {@code false}
@@ -3143,7 +3147,7 @@ class Dao implements CommonConstant {
         return getPermitManager().setReferencedByDeviceGroupId(bean,beanToSet);
     }
     //8-6
-    /** tranformer : PermitBean to fl_permit.device_group_id */
+    /** transformer : PermitBean to fl_permit.device_group_id */
     protected final Function<PermitBean,Integer> daoCastPermitToDeviceGroupId = new Function<PermitBean,Integer>(){
             @Override
             public Integer apply(PermitBean input) {
@@ -3170,7 +3174,7 @@ class Dao implements CommonConstant {
         return getPermitManager().setReferencedByPersonGroupId(bean,beanToSet);
     }
     //8-6
-    /** tranformer : PermitBean to fl_permit.person_group_id */
+    /** transformer : PermitBean to fl_permit.person_group_id */
     protected final Function<PermitBean,Integer> daoCastPermitToPersonGroupId = new Function<PermitBean,Integer>(){
             @Override
             public Integer apply(PermitBean input) {
@@ -3232,8 +3236,7 @@ class Dao implements CommonConstant {
     /** 
      * 添加新记录(同步保存)<br>
      * fl_permit 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link PermitBean#isNew()}返回{@code false},则抛出异常
-     * @param permitBean 要添加的新记录
-     * @see {@link IPermitManager#save(PermitBean , DeviceGroupBean, PersonGroupBean  )}
+     * see also {@link IPermitManager#save(PermitBean , DeviceGroupBean, PersonGroupBean  )}<br>
      * @see {@link IPermitManager#checkDuplicate(PermitBean)}
      * @throws DuplicateReordException if exists duplicated row
      * @throws IllegalArgumentException if {@code permitBean.isNew()} is {@code false}
