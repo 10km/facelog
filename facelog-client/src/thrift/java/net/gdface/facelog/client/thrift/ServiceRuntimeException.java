@@ -12,17 +12,9 @@ public final class ServiceRuntimeException extends Exception
     public ServiceRuntimeException() {
     }
 
-    private int type;
-
-    @ThriftField(value=1, name="type", requiredness=Requiredness.NONE)
-    public int getType() { return type; }
-
-    @ThriftField
-    public void setType(final int type) { this.type = type; }
-
     private String serviceMessage;
 
-    @ThriftField(value=2, name="serviceMessage", requiredness=Requiredness.NONE)
+    @ThriftField(value=1, name="serviceMessage", requiredness=Requiredness.NONE)
     public String getServiceMessage() { return serviceMessage; }
 
     @ThriftField
@@ -30,7 +22,7 @@ public final class ServiceRuntimeException extends Exception
 
     private String causeClass;
 
-    @ThriftField(value=3, name="causeClass", requiredness=Requiredness.NONE)
+    @ThriftField(value=2, name="causeClass", requiredness=Requiredness.NONE)
     public String getCauseClass() { return causeClass; }
 
     @ThriftField
@@ -38,9 +30,17 @@ public final class ServiceRuntimeException extends Exception
 
     private String serviceStackTraceMessage;
 
-    @ThriftField(value=4, name="serviceStackTraceMessage", requiredness=Requiredness.NONE)
+    @ThriftField(value=3, name="serviceStackTraceMessage", requiredness=Requiredness.NONE)
     public String getServiceStackTraceMessage() { return serviceStackTraceMessage; }
 
     @ThriftField
     public void setServiceStackTraceMessage(final String serviceStackTraceMessage) { this.serviceStackTraceMessage = serviceStackTraceMessage; }
+
+    private int type;
+
+    @ThriftField(value=4, name="type", requiredness=Requiredness.NONE)
+    public int getType() { return type; }
+
+    @ThriftField
+    public void setType(final int type) { this.type = type; }
 }
