@@ -30,6 +30,7 @@ import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.StoreBean;
+import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.service.DuplicateReordException;
 import net.gdface.facelog.service.ServiceRuntimeException;
 import net.gdface.image.LazyImage;
@@ -816,6 +817,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public FeatureBean addFeature(ByteBuffer feature,Integer personId,List<FaceBean> faecBeans)throws ServiceRuntimeException, DuplicateReordException{
 		try{
 			return daoAddFeature(feature, daoGetPerson(personId), faecBeans);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		} 
@@ -826,6 +829,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 			Integer deviceId) throws ServiceRuntimeException, DuplicateReordException {
 		try {
 			return daoAddFeature(feature, daoGetPerson(personId), faceInfo, daoGetDevice(deviceId));
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		} 
@@ -835,6 +840,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public List<String> deleteFeature(String featureMd5,boolean deleteImage)throws ServiceRuntimeException{
 		try{
 			return daoDeleteFeature(featureMd5,deleteImage);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		} 
@@ -844,6 +851,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public int deleteAllFeaturesByPersonId(int personId,boolean deleteImage)throws ServiceRuntimeException{
 		try{
 			return daoDeleteAllFeaturesByPersonId(personId,deleteImage);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		} 
@@ -853,7 +862,9 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public FeatureBean getFeature(String md5)throws ServiceRuntimeException{
 		try{
 			return daoGetFeature(md5);
-		}catch (RuntimeException e) {
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
 	}
@@ -862,7 +873,9 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public List<FeatureBean> getFeatures(List<String> md5)throws ServiceRuntimeException{
 		try{
 			return daoGetFeatures(md5);
-		}catch (RuntimeException e) {
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
 	}
@@ -872,7 +885,9 @@ public class FaceLogImpl extends BaseFaceLog  {
 			return Lists.transform(
 					daoGetFeatureBeansByPersonIdOnPerson(personId),
 					daoCastFeatureToPk); 
-		}catch (RuntimeException e) {
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
 	}
@@ -881,7 +896,9 @@ public class FaceLogImpl extends BaseFaceLog  {
 		try{
 			FeatureBean featureBean = daoGetFeature(md5);
 			return null ==featureBean?null:featureBean.getFeature();
-		}catch (RuntimeException e) {
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
 	}
@@ -891,7 +908,9 @@ public class FaceLogImpl extends BaseFaceLog  {
 		try{
 			StoreBean storeBean = daoGetStore(imageMD5);
 			return null ==storeBean?null:storeBean.getData();
-		}catch (RuntimeException e) {
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
 	}
@@ -900,7 +919,9 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public ImageBean getImage(String imageMD5)throws ServiceRuntimeException{
 		try{
 			return daoGetImage(imageMD5);
-		}catch (RuntimeException e) {
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
 	}
@@ -909,7 +930,9 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public List<String> getImagesAssociatedByFeature(String featureMd5)throws ServiceRuntimeException{
 		try{
 			return daoGetImageKeysImportedByFeatureMd5(featureMd5);
-		}catch (RuntimeException e) {
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
 	}
@@ -917,7 +940,9 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public Integer getDeviceIdOfFeature(String featureMd5) throws ServiceRuntimeException{
 		try{
 			return daoGetDeviceIdOfFeature(featureMd5);
-		}catch (RuntimeException e) {
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
 	}
@@ -925,6 +950,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public int deleteImage(String imageMd5)throws ServiceRuntimeException{
 		try{
 			return daoDeleteImage(imageMd5);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		} 
@@ -934,6 +961,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public boolean existsDevice(int id) throws ServiceRuntimeException {
 		try{
 			return daoExistsDevice(id);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		} 
@@ -943,7 +972,9 @@ public class FaceLogImpl extends BaseFaceLog  {
     public DeviceBean saveDevice(DeviceBean deviceBean)throws ServiceRuntimeException{
     	try{
     		return daoSaveDevice(deviceBean);
-    	} catch (RuntimeException e) {
+    	} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
     		throw new ServiceRuntimeException(e);
     	} 
     }
@@ -952,6 +983,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public DeviceBean getDevice(int deviceId)throws ServiceRuntimeException{
     	try{
     		return daoGetDevice(deviceId);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		} 
@@ -961,6 +994,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public List<DeviceBean> getDevices(List<Integer> idList)throws ServiceRuntimeException{
 		try{
 			return daoGetDevices(idList);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		} 
@@ -969,7 +1004,9 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public List<DeviceBean> loadDeviceByWhere(String where,int startRow, int numRows)throws ServiceRuntimeException{
 		try{
 			return this.daoLoadDeviceByWhere(where, startRow, numRows);
-		}catch(RuntimeException e){
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch(RuntimeException e){
 			throw new ServiceRuntimeException(e);
 		}
 	}
@@ -977,7 +1014,9 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public int countDeviceByWhere(String where)throws ServiceRuntimeException{
 		try{
 			return this.daoCountDeviceByWhere(where);
-		}catch(RuntimeException e){
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch(RuntimeException e){
 			throw new ServiceRuntimeException(e);
 		}
 	}
@@ -985,7 +1024,9 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public List<Integer> loadDeviceIdByWhere(String where)throws ServiceRuntimeException{
 		try{
 			return this.daoLoadDeviceIdByWhere(where);
-		}catch(RuntimeException e){
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch(RuntimeException e){
 			throw new ServiceRuntimeException(e);
 		}
 	}
@@ -995,6 +1036,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean)throws ServiceRuntimeException {
 		try{
 			return daoSaveDeviceGroup(deviceGroupBean);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch(RuntimeException e){
 			throw new ServiceRuntimeException(e);
 		}
@@ -1003,6 +1046,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public DeviceGroupBean getDeviceGroup(int deviceGroupId)throws ServiceRuntimeException {
 		try{
 			return daoGetDeviceGroup(deviceGroupId);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1011,6 +1056,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public List<DeviceGroupBean> getDeviceGroups(List<Integer> groupIdList)throws ServiceRuntimeException {
 		try{
 			return daoGetDeviceGroups(groupIdList); 
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1019,6 +1066,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public int deleteDeviceGroup(int deviceGroupId)throws ServiceRuntimeException {
 		try{
 			return daoDeleteDeviceGroup(deviceGroupId);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1027,6 +1076,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId)throws ServiceRuntimeException {
 		try{
 			return daoGetSubDeviceGroup(deviceGroupId);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1035,6 +1086,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public List<DeviceBean> getDevicesOfGroup(int deviceGroupId)throws ServiceRuntimeException {
 		try{
 			return daoGetDevicesOfGroup(deviceGroupId);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1045,6 +1098,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean)throws ServiceRuntimeException {
 		try{
 			return daoSavePersonGroup(personGroupBean);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1053,6 +1108,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public PersonGroupBean getPersonGroup(int personGroupId)throws ServiceRuntimeException {
 		try{
 			return daoGetPersonGroup(personGroupId); 
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1061,6 +1118,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public List<PersonGroupBean> getPersonGroups(Collection<Integer> groupIdList)throws ServiceRuntimeException {
 		try{
 			return daoGetPersonGroups(groupIdList);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1069,6 +1128,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public int deletePersonGroup(int personGroupId)throws ServiceRuntimeException {
 		try{
 			return daoDeletePersonGroup(personGroupId);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1077,6 +1138,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public List<PersonGroupBean> getSubPersonGroup(int personGroupId)throws ServiceRuntimeException {
 		try{
 			return daoGetSubPersonGroup(personGroupId);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1085,6 +1148,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public List<PersonBean> getPersonsOfGroup(int personGroupId)throws ServiceRuntimeException {
 		try{
 			return daoGetPersonsOfGroup(personGroupId);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1093,6 +1158,8 @@ public class FaceLogImpl extends BaseFaceLog  {
     public List<DeviceGroupBean> loadDeviceGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntimeException{
 		try{
 			return daoLoadDeviceGroupByWhere(where, startRow, numRows);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1101,6 +1168,8 @@ public class FaceLogImpl extends BaseFaceLog  {
     public int countDeviceGroupByWhere(String where)throws ServiceRuntimeException{
 		try{
 			return daoCountDeviceGroupByWhere(where);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1109,6 +1178,8 @@ public class FaceLogImpl extends BaseFaceLog  {
     public List<Integer> loadDeviceGroupIdByWhere(String where)throws ServiceRuntimeException{
     	try{
     		return daoLoadDeviceGroupIdByWhere(where);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1119,6 +1190,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntimeException {
 		try{
 			daoAddPermit(deviceGroup, personGroup);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1127,6 +1200,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public void addPermit(int deviceGroupId,int personGroupId)throws ServiceRuntimeException{
 		try{
 			daoAddPermit(deviceGroupId, personGroupId);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1135,6 +1210,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public int deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntimeException {
 		try{
 			return daoDeletePermit(deviceGroup, personGroup);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1143,6 +1220,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public boolean getGroupPermit(int deviceId,int personGroupId)throws ServiceRuntimeException {
 		try{
 			return daoGetGroupPermit(deviceId,personGroupId);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1151,6 +1230,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public boolean getPersonPermit(int deviceId,int personId)throws ServiceRuntimeException {
 		try{
 			return daoGetPersonPermit(deviceId,personId);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1159,6 +1240,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public List<Boolean> getGroupPermits(int deviceId,List<Integer> personGroupIdList)throws ServiceRuntimeException {
 		try{
 			return daoGetGroupPermit(deviceId, personGroupIdList);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1167,6 +1250,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public List<Boolean> getPersonPermits(int deviceId,List<Integer> personIdList)throws ServiceRuntimeException {
 		try{
 			return daoGetPermit(deviceId, personIdList);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1175,6 +1260,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 	public List<PermitBean> loadPermitByUpdate(long timestamp)throws ServiceRuntimeException {
 		try{
 			return daoLoadPermitByCreateTime(new Date(timestamp));
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
@@ -1183,7 +1270,9 @@ public class FaceLogImpl extends BaseFaceLog  {
     public List<PersonGroupBean> loadPersonGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntimeException{
     	try{
     		return daoLoadPersonGroupByWhere(where, startRow, numRows);
-    	} catch (RuntimeException e) {
+    	} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
     }
@@ -1191,7 +1280,9 @@ public class FaceLogImpl extends BaseFaceLog  {
     public int countPersonGroupByWhere(String where)throws ServiceRuntimeException{
     	try{
     		return daoCountPersonGroupByWhere(where);
-    	} catch (RuntimeException e) {
+    	} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
     }
@@ -1199,7 +1290,9 @@ public class FaceLogImpl extends BaseFaceLog  {
     public List<Integer> loadPersonGroupIdByWhere(String where)throws ServiceRuntimeException{
     	try{
     		return daoLoadPersonGroupIdByWhere(where);
-    	} catch (RuntimeException e) {
+    	} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
     }
