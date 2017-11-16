@@ -12,9 +12,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
-import com.google.common.base.Objects;
 import com.google.common.base.Function;
 
 #join($tables '
@@ -385,7 +385,7 @@ class Dao implements CommonConstant {
      */
     $!{modifier}$eBeanClass daoCheckGroup($eBeanClass ${etable.asVarBean()})
                     throws RuntimeDaoException{
-        if(null != ${etable.asVarBean()} && Objects.equal(${etable.asVarBean()}.getGroupId(), DEFAULT_GROUP_ID)){
+        if(null != ${etable.asVarBean()} && Objects.equals(${etable.asVarBean()}.getGroupId(), DEFAULT_GROUP_ID)){
             daoSaveDefault${coreClass}IfAbsent();
         }
         return ${etable.asVarBean()};

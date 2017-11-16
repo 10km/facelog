@@ -8,6 +8,8 @@
 package net.gdface.facelog.client;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
+
 /**
  * PermitBean is a mapping of fl_permit Table.
  * <br>Meta Data Information (in progress):
@@ -111,10 +113,7 @@ public  class PermitBean
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
-    public static final boolean equal(Object a, Object b) {
-        return a == b || (a != null && a.equals(b));
-    }
-    public static final <T extends Comparable<T>>boolean compare(T a, T b) {
+    protected static final <T extends Comparable<T>>boolean equals(T a, T b) {
         return a == b || (a != null && 0==a.compareTo(b));
     }
     public PermitBean(){
@@ -151,7 +150,7 @@ public  class PermitBean
     }
     /**
      * Setter method for {@link #deviceGroupId}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -160,7 +159,7 @@ public  class PermitBean
     public void setDeviceGroupId(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, deviceGroupId) && checkDeviceGroupIdInitialized()) {
+        if (Objects.equals(newVal, deviceGroupId) && checkDeviceGroupIdInitialized()) {
             return;
         }
         deviceGroupId = newVal;
@@ -219,7 +218,7 @@ public  class PermitBean
     }
     /**
      * Setter method for {@link #personGroupId}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -228,7 +227,7 @@ public  class PermitBean
     public void setPersonGroupId(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, personGroupId) && checkPersonGroupIdInitialized()) {
+        if (Objects.equals(newVal, personGroupId) && checkPersonGroupIdInitialized()) {
             return;
         }
         personGroupId = newVal;
@@ -285,7 +284,7 @@ public  class PermitBean
     }
     /**
      * Setter method for {@link #createTime}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -294,7 +293,7 @@ public  class PermitBean
     public void setCreateTime(java.util.Date newVal)
     {
         checkMutable();
-        if (equal(newVal, createTime) && checkCreateTimeInitialized()) {
+        if (Objects.equals(newVal, createTime) && checkCreateTimeInitialized()) {
             return;
         }
         createTime = newVal;

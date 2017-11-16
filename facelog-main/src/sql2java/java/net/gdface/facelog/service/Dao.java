@@ -13,9 +13,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
-import com.google.common.base.Objects;
 import com.google.common.base.Function;
 
 
@@ -874,7 +874,7 @@ class Dao implements CommonConstant {
      */
     protected DeviceBean daoCheckGroup(DeviceBean deviceBean)
                     throws RuntimeDaoException{
-        if(null != deviceBean && Objects.equal(deviceBean.getGroupId(), DEFAULT_GROUP_ID)){
+        if(null != deviceBean && Objects.equals(deviceBean.getGroupId(), DEFAULT_GROUP_ID)){
             daoSaveDefaultDeviceGroupIfAbsent();
         }
         return deviceBean;
@@ -1781,7 +1781,7 @@ class Dao implements CommonConstant {
      */
     protected PersonBean daoCheckGroup(PersonBean personBean)
                     throws RuntimeDaoException{
-        if(null != personBean && Objects.equal(personBean.getGroupId(), DEFAULT_GROUP_ID)){
+        if(null != personBean && Objects.equals(personBean.getGroupId(), DEFAULT_GROUP_ID)){
             daoSaveDefaultPersonGroupIfAbsent();
         }
         return personBean;

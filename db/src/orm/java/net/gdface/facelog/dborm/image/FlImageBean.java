@@ -8,6 +8,8 @@
 package net.gdface.facelog.dborm.image;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
+
 import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
@@ -133,10 +135,7 @@ public  class FlImageBean
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
-    public static final boolean equal(Object a, Object b) {
-        return a == b || (a != null && a.equals(b));
-    }
-    public static final <T extends Comparable<T>>boolean compare(T a, T b) {
+    protected static final <T extends Comparable<T>>boolean equals(T a, T b) {
         return a == b || (a != null && 0==a.compareTo(b));
     }
     public FlImageBean(){
@@ -172,7 +171,7 @@ public  class FlImageBean
     }
     /**
      * Setter method for {@link #md5}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -181,7 +180,7 @@ public  class FlImageBean
     public void setMd5(String newVal)
     {
         checkMutable();
-        if (equal(newVal, md5) && checkMd5Initialized()) {
+        if (Objects.equals(newVal, md5) && checkMd5Initialized()) {
             return;
         }
         md5 = newVal;
@@ -227,7 +226,7 @@ public  class FlImageBean
     }
     /**
      * Setter method for {@link #format}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -236,7 +235,7 @@ public  class FlImageBean
     public void setFormat(String newVal)
     {
         checkMutable();
-        if (equal(newVal, format) && checkFormatInitialized()) {
+        if (Objects.equals(newVal, format) && checkFormatInitialized()) {
             return;
         }
         format = newVal;
@@ -283,7 +282,7 @@ public  class FlImageBean
     }
     /**
      * Setter method for {@link #width}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -292,7 +291,7 @@ public  class FlImageBean
     public void setWidth(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, width) && checkWidthInitialized()) {
+        if (Objects.equals(newVal, width) && checkWidthInitialized()) {
             return;
         }
         width = newVal;
@@ -349,7 +348,7 @@ public  class FlImageBean
     }
     /**
      * Setter method for {@link #height}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -358,7 +357,7 @@ public  class FlImageBean
     public void setHeight(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, height) && checkHeightInitialized()) {
+        if (Objects.equals(newVal, height) && checkHeightInitialized()) {
             return;
         }
         height = newVal;
@@ -416,7 +415,7 @@ public  class FlImageBean
     }
     /**
      * Setter method for {@link #depth}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -425,7 +424,7 @@ public  class FlImageBean
     public void setDepth(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, depth) && checkDepthInitialized()) {
+        if (Objects.equals(newVal, depth) && checkDepthInitialized()) {
             return;
         }
         depth = newVal;
@@ -483,7 +482,7 @@ public  class FlImageBean
     }
     /**
      * Setter method for {@link #faceNum}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -492,7 +491,7 @@ public  class FlImageBean
     public void setFaceNum(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, faceNum) && checkFaceNumInitialized()) {
+        if (Objects.equals(newVal, faceNum) && checkFaceNumInitialized()) {
             return;
         }
         faceNum = newVal;
@@ -548,7 +547,7 @@ public  class FlImageBean
     }
     /**
      * Setter method for {@link #thumbMd5}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -557,7 +556,7 @@ public  class FlImageBean
     public void setThumbMd5(String newVal)
     {
         checkMutable();
-        if (equal(newVal, thumbMd5) && checkThumbMd5Initialized()) {
+        if (Objects.equals(newVal, thumbMd5) && checkThumbMd5Initialized()) {
             return;
         }
         thumbMd5 = newVal;
@@ -604,7 +603,7 @@ public  class FlImageBean
     }
     /**
      * Setter method for {@link #deviceId}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -613,7 +612,7 @@ public  class FlImageBean
     public void setDeviceId(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, deviceId) && checkDeviceIdInitialized()) {
+        if (Objects.equals(newVal, deviceId) && checkDeviceIdInitialized()) {
             return;
         }
         deviceId = newVal;

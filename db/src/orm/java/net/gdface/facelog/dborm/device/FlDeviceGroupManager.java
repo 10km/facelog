@@ -2523,7 +2523,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
         java.util.List<FlDeviceGroupBean> list;
         for(list = new java.util.ArrayList<FlDeviceGroupBean>();null != parent;list.add(parent)){
             parent = loadByPrimaryKey(parent.getParent());
-            if(equal(id,parent.getId())){
+            if(java.util.Objects.equals(id,parent.getId())){
                 // cycle reference
                 list.add(parent);
                 break;
@@ -2556,7 +2556,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
         int count;
         for(count = 0;null != parent;++count){
             parent = loadByPrimaryKey(parent.getParent());
-            if(null != parent  && equal(id,parent.getId())){
+            if(null != parent  && java.util.Objects.equals(id,parent.getId())){
                 return -1;
             }
         }
@@ -2607,7 +2607,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
         FlDeviceGroupBean parent = new FlDeviceGroupBean(id);
         for(;null != parent.getParent();){
             parent = loadByPrimaryKey(parent.getParent());
-            if(equal(id,parent.getId())){
+            if(java.util.Objects.equals(id,parent.getId())){
                 throw new IllegalStateException("cycle on field: " + "parent");
             }
         }

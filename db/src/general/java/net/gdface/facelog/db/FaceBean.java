@@ -8,6 +8,8 @@
 package net.gdface.facelog.db;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
+
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftField.Requiredness;
@@ -157,10 +159,7 @@ public final class FaceBean
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
-    public static final boolean equal(Object a, Object b) {
-        return a == b || (a != null && a.equals(b));
-    }
-    public static final <T extends Comparable<T>>boolean compare(T a, T b) {
+    protected static final <T extends Comparable<T>>boolean equals(T a, T b) {
         return a == b || (a != null && 0==a.compareTo(b));
     }
     public FaceBean(){
@@ -197,7 +196,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #id}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -206,7 +205,7 @@ public final class FaceBean
     public void setId(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, id) && checkIdInitialized()) {
+        if (Objects.equals(newVal, id) && checkIdInitialized()) {
             return;
         }
         id = newVal;
@@ -275,7 +274,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #imageMd5}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -284,7 +283,7 @@ public final class FaceBean
     public void setImageMd5(String newVal)
     {
         checkMutable();
-        if (equal(newVal, imageMd5) && checkImageMd5Initialized()) {
+        if (Objects.equals(newVal, imageMd5) && checkImageMd5Initialized()) {
             return;
         }
         imageMd5 = newVal;
@@ -341,7 +340,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #faceLeft}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -350,7 +349,7 @@ public final class FaceBean
     public void setFaceLeft(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, faceLeft) && checkFaceLeftInitialized()) {
+        if (Objects.equals(newVal, faceLeft) && checkFaceLeftInitialized()) {
             return;
         }
         faceLeft = newVal;
@@ -417,7 +416,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #faceTop}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -426,7 +425,7 @@ public final class FaceBean
     public void setFaceTop(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, faceTop) && checkFaceTopInitialized()) {
+        if (Objects.equals(newVal, faceTop) && checkFaceTopInitialized()) {
             return;
         }
         faceTop = newVal;
@@ -493,7 +492,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #faceWidth}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -502,7 +501,7 @@ public final class FaceBean
     public void setFaceWidth(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, faceWidth) && checkFaceWidthInitialized()) {
+        if (Objects.equals(newVal, faceWidth) && checkFaceWidthInitialized()) {
             return;
         }
         faceWidth = newVal;
@@ -569,7 +568,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #faceHeight}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -578,7 +577,7 @@ public final class FaceBean
     public void setFaceHeight(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, faceHeight) && checkFaceHeightInitialized()) {
+        if (Objects.equals(newVal, faceHeight) && checkFaceHeightInitialized()) {
             return;
         }
         faceHeight = newVal;
@@ -644,7 +643,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #eyeLeftx}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -653,7 +652,7 @@ public final class FaceBean
     public void setEyeLeftx(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, eyeLeftx) && checkEyeLeftxInitialized()) {
+        if (Objects.equals(newVal, eyeLeftx) && checkEyeLeftxInitialized()) {
             return;
         }
         eyeLeftx = newVal;
@@ -719,7 +718,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #eyeLefty}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -728,7 +727,7 @@ public final class FaceBean
     public void setEyeLefty(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, eyeLefty) && checkEyeLeftyInitialized()) {
+        if (Objects.equals(newVal, eyeLefty) && checkEyeLeftyInitialized()) {
             return;
         }
         eyeLefty = newVal;
@@ -794,7 +793,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #eyeRightx}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -803,7 +802,7 @@ public final class FaceBean
     public void setEyeRightx(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, eyeRightx) && checkEyeRightxInitialized()) {
+        if (Objects.equals(newVal, eyeRightx) && checkEyeRightxInitialized()) {
             return;
         }
         eyeRightx = newVal;
@@ -869,7 +868,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #eyeRighty}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -878,7 +877,7 @@ public final class FaceBean
     public void setEyeRighty(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, eyeRighty) && checkEyeRightyInitialized()) {
+        if (Objects.equals(newVal, eyeRighty) && checkEyeRightyInitialized()) {
             return;
         }
         eyeRighty = newVal;
@@ -944,7 +943,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #mouthX}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -953,7 +952,7 @@ public final class FaceBean
     public void setMouthX(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, mouthX) && checkMouthXInitialized()) {
+        if (Objects.equals(newVal, mouthX) && checkMouthXInitialized()) {
             return;
         }
         mouthX = newVal;
@@ -1019,7 +1018,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #mouthY}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -1028,7 +1027,7 @@ public final class FaceBean
     public void setMouthY(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, mouthY) && checkMouthYInitialized()) {
+        if (Objects.equals(newVal, mouthY) && checkMouthYInitialized()) {
             return;
         }
         mouthY = newVal;
@@ -1094,7 +1093,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #noseX}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -1103,7 +1102,7 @@ public final class FaceBean
     public void setNoseX(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, noseX) && checkNoseXInitialized()) {
+        if (Objects.equals(newVal, noseX) && checkNoseXInitialized()) {
             return;
         }
         noseX = newVal;
@@ -1169,7 +1168,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #noseY}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -1178,7 +1177,7 @@ public final class FaceBean
     public void setNoseY(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, noseY) && checkNoseYInitialized()) {
+        if (Objects.equals(newVal, noseY) && checkNoseYInitialized()) {
             return;
         }
         noseY = newVal;
@@ -1244,7 +1243,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #angleYaw}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -1253,7 +1252,7 @@ public final class FaceBean
     public void setAngleYaw(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, angleYaw) && checkAngleYawInitialized()) {
+        if (Objects.equals(newVal, angleYaw) && checkAngleYawInitialized()) {
             return;
         }
         angleYaw = newVal;
@@ -1319,7 +1318,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #anglePitch}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -1328,7 +1327,7 @@ public final class FaceBean
     public void setAnglePitch(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, anglePitch) && checkAnglePitchInitialized()) {
+        if (Objects.equals(newVal, anglePitch) && checkAnglePitchInitialized()) {
             return;
         }
         anglePitch = newVal;
@@ -1394,7 +1393,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #angleRoll}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -1403,7 +1402,7 @@ public final class FaceBean
     public void setAngleRoll(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, angleRoll) && checkAngleRollInitialized()) {
+        if (Objects.equals(newVal, angleRoll) && checkAngleRollInitialized()) {
             return;
         }
         angleRoll = newVal;
@@ -1470,7 +1469,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #extInfo}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -1479,7 +1478,7 @@ public final class FaceBean
     public void setExtInfo(java.nio.ByteBuffer newVal)
     {
         checkMutable();
-        if (equal(newVal, extInfo) && checkExtInfoInitialized()) {
+        if (Objects.equals(newVal, extInfo) && checkExtInfoInitialized()) {
             return;
         }
         extInfo = newVal;
@@ -1537,7 +1536,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #featureMd5}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -1546,7 +1545,7 @@ public final class FaceBean
     public void setFeatureMd5(String newVal)
     {
         checkMutable();
-        if (equal(newVal, featureMd5) && checkFeatureMd5Initialized()) {
+        if (Objects.equals(newVal, featureMd5) && checkFeatureMd5Initialized()) {
             return;
         }
         featureMd5 = newVal;
@@ -1611,7 +1610,7 @@ public final class FaceBean
     }
     /**
      * Setter method for {@link #createTime}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -1620,7 +1619,7 @@ public final class FaceBean
     public void setCreateTime(java.util.Date newVal)
     {
         checkMutable();
-        if (equal(newVal, createTime) && checkCreateTimeInitialized()) {
+        if (Objects.equals(newVal, createTime) && checkCreateTimeInitialized()) {
             return;
         }
         createTime = newVal;

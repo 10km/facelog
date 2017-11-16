@@ -2523,7 +2523,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
         java.util.List<FlPersonGroupBean> list;
         for(list = new java.util.ArrayList<FlPersonGroupBean>();null != parent;list.add(parent)){
             parent = loadByPrimaryKey(parent.getParent());
-            if(equal(id,parent.getId())){
+            if(java.util.Objects.equals(id,parent.getId())){
                 // cycle reference
                 list.add(parent);
                 break;
@@ -2556,7 +2556,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
         int count;
         for(count = 0;null != parent;++count){
             parent = loadByPrimaryKey(parent.getParent());
-            if(null != parent  && equal(id,parent.getId())){
+            if(null != parent  && java.util.Objects.equals(id,parent.getId())){
                 return -1;
             }
         }
@@ -2607,7 +2607,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
         FlPersonGroupBean parent = new FlPersonGroupBean(id);
         for(;null != parent.getParent();){
             parent = loadByPrimaryKey(parent.getParent());
-            if(equal(id,parent.getId())){
+            if(java.util.Objects.equals(id,parent.getId())){
                 throw new IllegalStateException("cycle on field: " + "parent");
             }
         }

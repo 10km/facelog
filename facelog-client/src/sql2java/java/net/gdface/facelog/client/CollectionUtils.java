@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Objects;
 
 /**
  * @author guyadong
@@ -82,9 +83,6 @@ public class CollectionUtils {
                 return dual.fromRight(input);
             }
         };
-    }
-    private static boolean equal( Object a, Object b) {
-        return a == b || (a != null && a.equals(b));
     }
     /** 
      * Ensures that an object reference passed as a parameter to the calling method is not null. 
@@ -327,7 +325,7 @@ public class CollectionUtils {
                     Entry<?, ?> entry = (Entry<?, ?>) o;
                     Object key = entry.getKey();
                     V value = safeGet(map(), key);
-                    return equal(value, entry.getValue())
+                    return Objects.equals(value, entry.getValue())
                             && (value != null || map().containsKey(entry.getKey()));
                 }
                 return false;

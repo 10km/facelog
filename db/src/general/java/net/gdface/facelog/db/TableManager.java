@@ -443,9 +443,6 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
                 }
             });
         }
-        protected static boolean equal(Object a, Object b) {
-            return a == b || (a != null && a.equals(b));
-        }
     }    
 
     /**

@@ -8,6 +8,8 @@
 package net.gdface.facelog.db;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
+
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftField.Requiredness;
@@ -144,10 +146,7 @@ public final class PersonBean
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
-    public static final boolean equal(Object a, Object b) {
-        return a == b || (a != null && a.equals(b));
-    }
-    public static final <T extends Comparable<T>>boolean compare(T a, T b) {
+    protected static final <T extends Comparable<T>>boolean equals(T a, T b) {
         return a == b || (a != null && 0==a.compareTo(b));
     }
     public PersonBean(){
@@ -185,7 +184,7 @@ public final class PersonBean
     }
     /**
      * Setter method for {@link #id}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -194,7 +193,7 @@ public final class PersonBean
     public void setId(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, id) && checkIdInitialized()) {
+        if (Objects.equals(newVal, id) && checkIdInitialized()) {
             return;
         }
         id = newVal;
@@ -263,7 +262,7 @@ public final class PersonBean
     }
     /**
      * Setter method for {@link #groupId}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -272,7 +271,7 @@ public final class PersonBean
     public void setGroupId(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, groupId) && checkGroupIdInitialized()) {
+        if (Objects.equals(newVal, groupId) && checkGroupIdInitialized()) {
             return;
         }
         groupId = newVal;
@@ -340,7 +339,7 @@ public final class PersonBean
     }
     /**
      * Setter method for {@link #name}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -349,7 +348,7 @@ public final class PersonBean
     public void setName(String newVal)
     {
         checkMutable();
-        if (equal(newVal, name) && checkNameInitialized()) {
+        if (Objects.equals(newVal, name) && checkNameInitialized()) {
             return;
         }
         name = newVal;
@@ -406,7 +405,7 @@ public final class PersonBean
     }
     /**
      * Setter method for {@link #sex}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -415,7 +414,7 @@ public final class PersonBean
     public void setSex(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, sex) && checkSexInitialized()) {
+        if (Objects.equals(newVal, sex) && checkSexInitialized()) {
             return;
         }
         sex = newVal;
@@ -489,7 +488,7 @@ public final class PersonBean
     }
     /**
      * Setter method for {@link #birthdate}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -498,7 +497,7 @@ public final class PersonBean
     public void setBirthdate(java.util.Date newVal)
     {
         checkMutable();
-        if (equal(newVal, birthdate) && checkBirthdateInitialized()) {
+        if (Objects.equals(newVal, birthdate) && checkBirthdateInitialized()) {
             return;
         }
         birthdate = newVal;
@@ -565,7 +564,7 @@ public final class PersonBean
     }
     /**
      * Setter method for {@link #papersType}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -574,7 +573,7 @@ public final class PersonBean
     public void setPapersType(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, papersType) && checkPapersTypeInitialized()) {
+        if (Objects.equals(newVal, papersType) && checkPapersTypeInitialized()) {
             return;
         }
         papersType = newVal;
@@ -641,7 +640,7 @@ public final class PersonBean
     }
     /**
      * Setter method for {@link #papersNum}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -650,7 +649,7 @@ public final class PersonBean
     public void setPapersNum(String newVal)
     {
         checkMutable();
-        if (equal(newVal, papersNum) && checkPapersNumInitialized()) {
+        if (Objects.equals(newVal, papersNum) && checkPapersNumInitialized()) {
             return;
         }
         papersNum = newVal;
@@ -708,7 +707,7 @@ public final class PersonBean
     }
     /**
      * Setter method for {@link #imageMd5}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -717,7 +716,7 @@ public final class PersonBean
     public void setImageMd5(String newVal)
     {
         checkMutable();
-        if (equal(newVal, imageMd5) && checkImageMd5Initialized()) {
+        if (Objects.equals(newVal, imageMd5) && checkImageMd5Initialized()) {
             return;
         }
         imageMd5 = newVal;
@@ -782,7 +781,7 @@ public final class PersonBean
     }
     /**
      * Setter method for {@link #expiryDate}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -791,7 +790,7 @@ public final class PersonBean
     public void setExpiryDate(java.util.Date newVal)
     {
         checkMutable();
-        if (equal(newVal, expiryDate) && checkExpiryDateInitialized()) {
+        if (Objects.equals(newVal, expiryDate) && checkExpiryDateInitialized()) {
             return;
         }
         expiryDate = newVal;
@@ -866,7 +865,7 @@ public final class PersonBean
     }
     /**
      * Setter method for {@link #createTime}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -875,7 +874,7 @@ public final class PersonBean
     public void setCreateTime(java.util.Date newVal)
     {
         checkMutable();
-        if (equal(newVal, createTime) && checkCreateTimeInitialized()) {
+        if (Objects.equals(newVal, createTime) && checkCreateTimeInitialized()) {
             return;
         }
         createTime = newVal;
@@ -950,7 +949,7 @@ public final class PersonBean
     }
     /**
      * Setter method for {@link #updateTime}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -959,7 +958,7 @@ public final class PersonBean
     public void setUpdateTime(java.util.Date newVal)
     {
         checkMutable();
-        if (equal(newVal, updateTime) && checkUpdateTimeInitialized()) {
+        if (Objects.equals(newVal, updateTime) && checkUpdateTimeInitialized()) {
             return;
         }
         updateTime = newVal;

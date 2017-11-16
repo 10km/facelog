@@ -8,6 +8,8 @@
 package net.gdface.facelog.dborm.device;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
+
 import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
@@ -130,10 +132,7 @@ public  class FlDeviceBean
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
-    public static final boolean equal(Object a, Object b) {
-        return a == b || (a != null && a.equals(b));
-    }
-    public static final <T extends Comparable<T>>boolean compare(T a, T b) {
+    protected static final <T extends Comparable<T>>boolean equals(T a, T b) {
         return a == b || (a != null && 0==a.compareTo(b));
     }
     public FlDeviceBean(){
@@ -170,7 +169,7 @@ public  class FlDeviceBean
     }
     /**
      * Setter method for {@link #id}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -179,7 +178,7 @@ public  class FlDeviceBean
     public void setId(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, id) && checkIdInitialized()) {
+        if (Objects.equals(newVal, id) && checkIdInitialized()) {
             return;
         }
         id = newVal;
@@ -237,7 +236,7 @@ public  class FlDeviceBean
     }
     /**
      * Setter method for {@link #groupId}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -246,7 +245,7 @@ public  class FlDeviceBean
     public void setGroupId(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, groupId) && checkGroupIdInitialized()) {
+        if (Objects.equals(newVal, groupId) && checkGroupIdInitialized()) {
             return;
         }
         groupId = newVal;
@@ -302,7 +301,7 @@ public  class FlDeviceBean
     }
     /**
      * Setter method for {@link #name}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -311,7 +310,7 @@ public  class FlDeviceBean
     public void setName(String newVal)
     {
         checkMutable();
-        if (equal(newVal, name) && checkNameInitialized()) {
+        if (Objects.equals(newVal, name) && checkNameInitialized()) {
             return;
         }
         name = newVal;
@@ -357,7 +356,7 @@ public  class FlDeviceBean
     }
     /**
      * Setter method for {@link #version}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -366,7 +365,7 @@ public  class FlDeviceBean
     public void setVersion(String newVal)
     {
         checkMutable();
-        if (equal(newVal, version) && checkVersionInitialized()) {
+        if (Objects.equals(newVal, version) && checkVersionInitialized()) {
             return;
         }
         version = newVal;
@@ -412,7 +411,7 @@ public  class FlDeviceBean
     }
     /**
      * Setter method for {@link #serialNo}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -421,7 +420,7 @@ public  class FlDeviceBean
     public void setSerialNo(String newVal)
     {
         checkMutable();
-        if (equal(newVal, serialNo) && checkSerialNoInitialized()) {
+        if (Objects.equals(newVal, serialNo) && checkSerialNoInitialized()) {
             return;
         }
         serialNo = newVal;
@@ -467,7 +466,7 @@ public  class FlDeviceBean
     }
     /**
      * Setter method for {@link #mac}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -476,7 +475,7 @@ public  class FlDeviceBean
     public void setMac(String newVal)
     {
         checkMutable();
-        if (equal(newVal, mac) && checkMacInitialized()) {
+        if (Objects.equals(newVal, mac) && checkMacInitialized()) {
             return;
         }
         mac = newVal;
@@ -523,7 +522,7 @@ public  class FlDeviceBean
     }
     /**
      * Setter method for {@link #createTime}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -532,7 +531,7 @@ public  class FlDeviceBean
     public void setCreateTime(java.util.Date newVal)
     {
         checkMutable();
-        if (equal(newVal, createTime) && checkCreateTimeInitialized()) {
+        if (Objects.equals(newVal, createTime) && checkCreateTimeInitialized()) {
             return;
         }
         createTime = newVal;
@@ -589,7 +588,7 @@ public  class FlDeviceBean
     }
     /**
      * Setter method for {@link #updateTime}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -598,7 +597,7 @@ public  class FlDeviceBean
     public void setUpdateTime(java.util.Date newVal)
     {
         checkMutable();
-        if (equal(newVal, updateTime) && checkUpdateTimeInitialized()) {
+        if (Objects.equals(newVal, updateTime) && checkUpdateTimeInitialized()) {
             return;
         }
         updateTime = newVal;

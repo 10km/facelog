@@ -8,6 +8,8 @@
 package net.gdface.facelog.dborm.log;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
+
 import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
@@ -126,10 +128,7 @@ public  class FlLogLightBean
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
-    public static final boolean equal(Object a, Object b) {
-        return a == b || (a != null && a.equals(b));
-    }
-    public static final <T extends Comparable<T>>boolean compare(T a, T b) {
+    protected static final <T extends Comparable<T>>boolean equals(T a, T b) {
         return a == b || (a != null && 0==a.compareTo(b));
     }
     public FlLogLightBean(){
@@ -155,7 +154,7 @@ public  class FlLogLightBean
     }
     /**
      * Setter method for {@link #id}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -164,7 +163,7 @@ public  class FlLogLightBean
     public void setId(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, id) && checkIdInitialized()) {
+        if (Objects.equals(newVal, id) && checkIdInitialized()) {
             return;
         }
         id = newVal;
@@ -222,7 +221,7 @@ public  class FlLogLightBean
     }
     /**
      * Setter method for {@link #personId}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -231,7 +230,7 @@ public  class FlLogLightBean
     public void setPersonId(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, personId) && checkPersonIdInitialized()) {
+        if (Objects.equals(newVal, personId) && checkPersonIdInitialized()) {
             return;
         }
         personId = newVal;
@@ -288,7 +287,7 @@ public  class FlLogLightBean
     }
     /**
      * Setter method for {@link #name}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -297,7 +296,7 @@ public  class FlLogLightBean
     public void setName(String newVal)
     {
         checkMutable();
-        if (equal(newVal, name) && checkNameInitialized()) {
+        if (Objects.equals(newVal, name) && checkNameInitialized()) {
             return;
         }
         name = newVal;
@@ -343,7 +342,7 @@ public  class FlLogLightBean
     }
     /**
      * Setter method for {@link #papersType}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -352,7 +351,7 @@ public  class FlLogLightBean
     public void setPapersType(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, papersType) && checkPapersTypeInitialized()) {
+        if (Objects.equals(newVal, papersType) && checkPapersTypeInitialized()) {
             return;
         }
         papersType = newVal;
@@ -408,7 +407,7 @@ public  class FlLogLightBean
     }
     /**
      * Setter method for {@link #papersNum}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -417,7 +416,7 @@ public  class FlLogLightBean
     public void setPapersNum(String newVal)
     {
         checkMutable();
-        if (equal(newVal, papersNum) && checkPapersNumInitialized()) {
+        if (Objects.equals(newVal, papersNum) && checkPapersNumInitialized()) {
             return;
         }
         papersNum = newVal;
@@ -465,7 +464,7 @@ public  class FlLogLightBean
     }
     /**
      * Setter method for {@link #verifyTime}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -474,7 +473,7 @@ public  class FlLogLightBean
     public void setVerifyTime(java.util.Date newVal)
     {
         checkMutable();
-        if (equal(newVal, verifyTime) && checkVerifyTimeInitialized()) {
+        if (Objects.equals(newVal, verifyTime) && checkVerifyTimeInitialized()) {
             return;
         }
         verifyTime = newVal;

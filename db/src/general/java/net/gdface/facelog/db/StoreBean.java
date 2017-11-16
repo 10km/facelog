@@ -8,6 +8,8 @@
 package net.gdface.facelog.db;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
+
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftField.Requiredness;
@@ -122,10 +124,7 @@ public final class StoreBean
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
-    public static final boolean equal(Object a, Object b) {
-        return a == b || (a != null && a.equals(b));
-    }
-    public static final <T extends Comparable<T>>boolean compare(T a, T b) {
+    protected static final <T extends Comparable<T>>boolean equals(T a, T b) {
         return a == b || (a != null && 0==a.compareTo(b));
     }
     public StoreBean(){
@@ -160,7 +159,7 @@ public final class StoreBean
     }
     /**
      * Setter method for {@link #md5}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -169,7 +168,7 @@ public final class StoreBean
     public void setMd5(String newVal)
     {
         checkMutable();
-        if (equal(newVal, md5) && checkMd5Initialized()) {
+        if (Objects.equals(newVal, md5) && checkMd5Initialized()) {
             return;
         }
         md5 = newVal;
@@ -226,7 +225,7 @@ public final class StoreBean
     }
     /**
      * Setter method for {@link #encoding}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -235,7 +234,7 @@ public final class StoreBean
     public void setEncoding(String newVal)
     {
         checkMutable();
-        if (equal(newVal, encoding) && checkEncodingInitialized()) {
+        if (Objects.equals(newVal, encoding) && checkEncodingInitialized()) {
             return;
         }
         encoding = newVal;
@@ -292,7 +291,7 @@ public final class StoreBean
     }
     /**
      * Setter method for {@link #data}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -301,7 +300,7 @@ public final class StoreBean
     public void setData(java.nio.ByteBuffer newVal)
     {
         checkMutable();
-        if (equal(newVal, data) && checkDataInitialized()) {
+        if (Objects.equals(newVal, data) && checkDataInitialized()) {
             return;
         }
         data = newVal;

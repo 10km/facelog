@@ -1477,7 +1477,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         java.util.List<PersonGroupBean> list;
         for(list = new java.util.ArrayList<PersonGroupBean>();null != parent;list.add(parent)){
             parent = loadByPrimaryKey(parent.getParent());
-            if(equal(id,parent.getId())){
+            if(java.util.Objects.equals(id,parent.getId())){
                 // cycle reference
                 list.add(parent);
                 break;
@@ -1504,7 +1504,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         int count;
         for(count = 0;null != parent;++count){
             parent = loadByPrimaryKey(parent.getParent());
-            if(null != parent  && equal(id,parent.getId())){
+            if(null != parent  && java.util.Objects.equals(id,parent.getId())){
                 return -1;
             }
         }
@@ -1540,7 +1540,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         PersonGroupBean parent = new PersonGroupBean(id);
         for(;null != parent.getParent();){
             parent = loadByPrimaryKey(parent.getParent());
-            if(equal(id,parent.getId())){
+            if(java.util.Objects.equals(id,parent.getId())){
                 throw new IllegalStateException("cycle on field: " + "parent");
             }
         }

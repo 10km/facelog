@@ -8,6 +8,8 @@
 package net.gdface.facelog.client;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
+
 /**
  * FeatureBean is a mapping of fl_feature Table.
  * <br>Meta Data Information (in progress):
@@ -114,10 +116,7 @@ public  class FeatureBean
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
-    public static final boolean equal(Object a, Object b) {
-        return a == b || (a != null && a.equals(b));
-    }
-    public static final <T extends Comparable<T>>boolean compare(T a, T b) {
+    protected static final <T extends Comparable<T>>boolean equals(T a, T b) {
         return a == b || (a != null && 0==a.compareTo(b));
     }
     public FeatureBean(){
@@ -153,7 +152,7 @@ public  class FeatureBean
     }
     /**
      * Setter method for {@link #md5}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -162,7 +161,7 @@ public  class FeatureBean
     public void setMd5(String newVal)
     {
         checkMutable();
-        if (equal(newVal, md5) && checkMd5Initialized()) {
+        if (Objects.equals(newVal, md5) && checkMd5Initialized()) {
             return;
         }
         md5 = newVal;
@@ -209,7 +208,7 @@ public  class FeatureBean
     }
     /**
      * Setter method for {@link #personId}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -218,7 +217,7 @@ public  class FeatureBean
     public void setPersonId(Integer newVal)
     {
         checkMutable();
-        if (equal(newVal, personId) && checkPersonIdInitialized()) {
+        if (Objects.equals(newVal, personId) && checkPersonIdInitialized()) {
             return;
         }
         personId = newVal;
@@ -327,7 +326,7 @@ public  class FeatureBean
     }
     /**
      * Setter method for {@link #updateTime}.<br>
-     * The new value is set only if compareTo() says it is different,
+     * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
@@ -336,7 +335,7 @@ public  class FeatureBean
     public void setUpdateTime(java.util.Date newVal)
     {
         checkMutable();
-        if (equal(newVal, updateTime) && checkUpdateTimeInitialized()) {
+        if (Objects.equals(newVal, updateTime) && checkUpdateTimeInitialized()) {
             return;
         }
         updateTime = newVal;
