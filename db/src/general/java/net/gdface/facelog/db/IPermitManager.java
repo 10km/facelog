@@ -27,8 +27,9 @@ public interface IPermitManager extends TableManager<PermitBean>
      * @param deviceGroupId Integer - PK# 1
      * @param personGroupId Integer - PK# 2
      * @return a unique PermitBean or {@code null} if not found
+     * @throws RuntimeDaoException
      */
-    public PermitBean loadByPrimaryKey(Integer deviceGroupId,Integer personGroupId);
+    public PermitBean loadByPrimaryKey(Integer deviceGroupId,Integer personGroupId)throws RuntimeDaoException;
 
     //1.1
     /**
@@ -38,8 +39,9 @@ public interface IPermitManager extends TableManager<PermitBean>
      * @param personGroupId Integer - PK# 2
      * @return a unique PermitBean
      * @throws ObjectRetrievalException if not found
+     * @throws RuntimeDaoException
      */
-    public PermitBean loadByPrimaryKeyChecked(Integer deviceGroupId,Integer personGroupId) throws ObjectRetrievalException;
+    public PermitBean loadByPrimaryKeyChecked(Integer deviceGroupId,Integer personGroupId) throws RuntimeDaoException,ObjectRetrievalException;
     
     //1.4
     /**
@@ -48,8 +50,9 @@ public interface IPermitManager extends TableManager<PermitBean>
      * @param personGroupId Integer - PK# 2
      * @see #loadByPrimaryKey($keys)
      * @return
+     * @throws RuntimeDaoException
      */
-    public boolean existsPrimaryKey(Integer deviceGroupId,Integer personGroupId);
+    public boolean existsPrimaryKey(Integer deviceGroupId,Integer personGroupId)throws RuntimeDaoException;
     //2
     /**
      * Delete row according to its primary keys.<br>
@@ -58,24 +61,27 @@ public interface IPermitManager extends TableManager<PermitBean>
      * @param deviceGroupId Integer - PK# 1
      * @param personGroupId Integer - PK# 2
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(Integer deviceGroupId,Integer personGroupId);
+    public int deleteByPrimaryKey(Integer deviceGroupId,Integer personGroupId)throws RuntimeDaoException;
     //2.4
     /**
      * Delete beans.<br>
      *
      * @param beans PermitBean collection wille be deleted
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int delete(PermitBean... beans);
+    public int delete(PermitBean... beans)throws RuntimeDaoException;
     //2.5
     /**
      * Delete beans.<br>
      *
      * @param beans PermitBean collection wille be deleted
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int delete(java.util.Collection<PermitBean> beans);
+    public int delete(java.util.Collection<PermitBean> beans)throws RuntimeDaoException;
  
     //3.5 SYNC SAVE 
     /**
@@ -85,10 +91,11 @@ public interface IPermitManager extends TableManager<PermitBean>
      * @param refDevicegroupByDeviceGroupId the {@link DeviceGroupBean} bean referenced by {@link PermitBean} 
      * @param refPersongroupByPersonGroupId the {@link PersonGroupBean} bean referenced by {@link PermitBean} 
          * @return the inserted or updated {@link PermitBean} bean
+     * @throws RuntimeDaoException
      */
     public PermitBean save(PermitBean bean
         , DeviceGroupBean refDevicegroupByDeviceGroupId , PersonGroupBean refPersongroupByPersonGroupId 
-        );
+        )throws RuntimeDaoException;
     //3.6 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save<br>
@@ -97,10 +104,11 @@ public interface IPermitManager extends TableManager<PermitBean>
      * @param refDevicegroupByDeviceGroupId the {@link DeviceGroupBean} bean referenced by {@link PermitBean} 
      * @param refPersongroupByPersonGroupId the {@link PersonGroupBean} bean referenced by {@link PermitBean} 
          * @return the inserted or updated {@link PermitBean} bean
+     * @throws RuntimeDaoException
      */
     public PermitBean saveAsTransaction(final PermitBean bean
         ,final DeviceGroupBean refDevicegroupByDeviceGroupId ,final PersonGroupBean refPersongroupByPersonGroupId 
-        );
+        )throws RuntimeDaoException;
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
@@ -110,8 +118,9 @@ public interface IPermitManager extends TableManager<PermitBean>
      * FK_NAME : fl_permit_ibfk_1
      * @param bean the {@link PermitBean}
      * @return the associated {@link DeviceGroupBean} bean or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public DeviceGroupBean getReferencedByDeviceGroupId(PermitBean bean);
+    public DeviceGroupBean getReferencedByDeviceGroupId(PermitBean bean)throws RuntimeDaoException;
 
     //5.2 SET REFERENCED 
     /**
@@ -122,15 +131,16 @@ public interface IPermitManager extends TableManager<PermitBean>
      * @return always beanToSet saved
      * @throws RuntimeDaoException
      */
-    public DeviceGroupBean setReferencedByDeviceGroupId(PermitBean bean, DeviceGroupBean beanToSet);
+    public DeviceGroupBean setReferencedByDeviceGroupId(PermitBean bean, DeviceGroupBean beanToSet)throws RuntimeDaoException;
     //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link PersonGroupBean} object referenced by {@link PermitBean#getPersonGroupId}() field.<br>
      * FK_NAME : fl_permit_ibfk_2
      * @param bean the {@link PermitBean}
      * @return the associated {@link PersonGroupBean} bean or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public PersonGroupBean getReferencedByPersonGroupId(PermitBean bean);
+    public PersonGroupBean getReferencedByPersonGroupId(PermitBean bean)throws RuntimeDaoException;
 
     //5.2 SET REFERENCED 
     /**
@@ -141,7 +151,7 @@ public interface IPermitManager extends TableManager<PermitBean>
      * @return always beanToSet saved
      * @throws RuntimeDaoException
      */
-    public PersonGroupBean setReferencedByPersonGroupId(PermitBean bean, PersonGroupBean beanToSet);
+    public PersonGroupBean setReferencedByPersonGroupId(PermitBean bean, PersonGroupBean beanToSet)throws RuntimeDaoException;
 
 
 }

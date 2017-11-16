@@ -26,8 +26,9 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      *
      * @param id Integer - PK# 1
      * @return a unique DeviceGroupBean or {@code null} if not found
+     * @throws RuntimeDaoException
      */
-    public DeviceGroupBean loadByPrimaryKey(Integer id);
+    public DeviceGroupBean loadByPrimaryKey(Integer id)throws RuntimeDaoException;
 
     //1.1
     /**
@@ -36,8 +37,9 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param id Integer - PK# 1
      * @return a unique DeviceGroupBean
      * @throws ObjectRetrievalException if not found
+     * @throws RuntimeDaoException
      */
-    public DeviceGroupBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException;
+    public DeviceGroupBean loadByPrimaryKeyChecked(Integer id) throws RuntimeDaoException,ObjectRetrievalException;
     
     //1.4
     /**
@@ -45,32 +47,36 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param id Integer - PK# 1
      * @see #loadByPrimaryKey($keys)
      * @return
+     * @throws RuntimeDaoException
      */
-    public boolean existsPrimaryKey(Integer id);
+    public boolean existsPrimaryKey(Integer id)throws RuntimeDaoException;
     //1.4.1
     /**
      * Check duplicated row by primary keys,if row exists throw exception
      * @param id Integer
      * @return 
+     * @throws RuntimeDaoException
      * @throws ObjectRetrievalException
      */
-    public Integer checkDuplicate(Integer id)throws ObjectRetrievalException;
+    public Integer checkDuplicate(Integer id)throws RuntimeDaoException,ObjectRetrievalException;
     //1.8
     /**
      * Loads {@link DeviceGroupBean} from the fl_device_group using primary key fields.
      *
      * @param keys primary keys array
      * @return list of DeviceGroupBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceGroupBean> loadByPrimaryKey(int... keys);
+    public java.util.List<DeviceGroupBean> loadByPrimaryKey(int... keys)throws RuntimeDaoException;
     //1.9
     /**
      * Loads {@link DeviceGroupBean} from the fl_device_group using primary key fields.
      *
      * @param keys primary keys collection
      * @return list of DeviceGroupBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceGroupBean> loadByPrimaryKey(java.util.Collection<Integer> keys);
+    public java.util.List<DeviceGroupBean> loadByPrimaryKey(java.util.Collection<Integer> keys)throws RuntimeDaoException;
     //2
     /**
      * Delete row according to its primary keys.<br>
@@ -78,40 +84,45 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      *
      * @param id Integer - PK# 1
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(Integer id);
+    public int deleteByPrimaryKey(Integer id)throws RuntimeDaoException;
     //2.2
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys array
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(int... keys);
+    public int deleteByPrimaryKey(int... keys)throws RuntimeDaoException;
     //2.3
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys collection
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(java.util.Collection<Integer> keys);
+    public int deleteByPrimaryKey(java.util.Collection<Integer> keys)throws RuntimeDaoException;
     //2.4
     /**
      * Delete beans.<br>
      *
      * @param beans DeviceGroupBean collection wille be deleted
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int delete(DeviceGroupBean... beans);
+    public int delete(DeviceGroupBean... beans)throws RuntimeDaoException;
     //2.5
     /**
      * Delete beans.<br>
      *
      * @param beans DeviceGroupBean collection wille be deleted
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int delete(java.util.Collection<DeviceGroupBean> beans);
+    public int delete(java.util.Collection<DeviceGroupBean> beans)throws RuntimeDaoException;
  
 
     //////////////////////////////////////
@@ -123,8 +134,9 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * FK_NAME : fl_device_ibfk_1 
      * @param bean the {@link DeviceGroupBean}
      * @return the associated {@link DeviceBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public DeviceBean[] getDeviceBeansByGroupId(DeviceGroupBean bean);
+    public DeviceBean[] getDeviceBeansByGroupId(DeviceGroupBean bean)throws RuntimeDaoException;
     
     //3.1.2 GET IMPORTED
     /**
@@ -132,17 +144,18 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * FK_NAME : fl_device_ibfk_1 
      * @param idOfDeviceGroup Integer - PK# 1
      * @return the associated {@link DeviceBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public DeviceBean[] getDeviceBeansByGroupId(Integer idOfDeviceGroup);
+    public DeviceBean[] getDeviceBeansByGroupId(Integer idOfDeviceGroup)throws RuntimeDaoException;
     
     //3.2 GET IMPORTED
     /**
      * see also #getDeviceBeansByGroupIdAsList(DeviceGroupBean,int,int)
      * @param bean
      * @return
+     * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(DeviceGroupBean bean);
+    public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(DeviceGroupBean bean)throws RuntimeDaoException;
 
     //3.2.2 GET IMPORTED
     /**
@@ -150,17 +163,18 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * FK_NAME:fl_device_ibfk_1
      * @param idOfDeviceGroup Integer - PK# 1
      * @return the associated {@link DeviceBean} beans 
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(Integer idOfDeviceGroup);
+    public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(Integer idOfDeviceGroup)throws RuntimeDaoException;
     //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link DeviceBean} objects from fl_device.group_id field.<BR>
      * FK_NAME:fl_device_ibfk_1
      * @param idOfDeviceGroup Integer - PK# 1
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteDeviceBeansByGroupId(Integer idOfDeviceGroup);
+    public int deleteDeviceBeansByGroupId(Integer idOfDeviceGroup)throws RuntimeDaoException;
     //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link DeviceBean} object from fl_device.group_id field.<BR>
@@ -169,8 +183,9 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link DeviceBean} beans or empty list if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(DeviceGroupBean bean,int startRow,int numRows);    
+    public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(DeviceGroupBean bean,int startRow,int numRows)throws RuntimeDaoException;    
     //3.3 SET IMPORTED
     /**
      * set  the {@link DeviceBean} object array associate to DeviceGroupBean by the fl_device.group_id field.<BR>
@@ -179,8 +194,9 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param importedBeans imported beans from fl_device
      * @return importedBeans always
      * @see {@link DeviceManager#setReferencedByGroupId(DeviceBean, DeviceGroupBean)
+     * @throws RuntimeDaoException
      */
-    public DeviceBean[] setDeviceBeansByGroupId(DeviceGroupBean bean , DeviceBean[] importedBeans);
+    public DeviceBean[] setDeviceBeansByGroupId(DeviceGroupBean bean , DeviceBean[] importedBeans)throws RuntimeDaoException;
 
     //3.4 SET IMPORTED
     /**
@@ -190,8 +206,9 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param importedBeans imported beans from fl_device 
      * @return importedBeans always
      * @see {@link DeviceManager#setReferencedByGroupId(DeviceBean, DeviceGroupBean)
+     * @throws RuntimeDaoException
      */
-    public <C extends java.util.Collection<DeviceBean>> C setDeviceBeansByGroupId(DeviceGroupBean bean , C importedBeans);
+    public <C extends java.util.Collection<DeviceBean>> C setDeviceBeansByGroupId(DeviceGroupBean bean , C importedBeans)throws RuntimeDaoException;
 
     //3.1 GET IMPORTED
     /**
@@ -199,8 +216,9 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * FK_NAME : fl_device_group_ibfk_1 
      * @param bean the {@link DeviceGroupBean}
      * @return the associated {@link DeviceGroupBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public DeviceGroupBean[] getDeviceGroupBeansByParent(DeviceGroupBean bean);
+    public DeviceGroupBean[] getDeviceGroupBeansByParent(DeviceGroupBean bean)throws RuntimeDaoException;
     
     //3.1.2 GET IMPORTED
     /**
@@ -208,17 +226,18 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * FK_NAME : fl_device_group_ibfk_1 
      * @param idOfDeviceGroup Integer - PK# 1
      * @return the associated {@link DeviceGroupBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public DeviceGroupBean[] getDeviceGroupBeansByParent(Integer idOfDeviceGroup);
+    public DeviceGroupBean[] getDeviceGroupBeansByParent(Integer idOfDeviceGroup)throws RuntimeDaoException;
     
     //3.2 GET IMPORTED
     /**
      * see also #getDeviceGroupBeansByParentAsList(DeviceGroupBean,int,int)
      * @param bean
      * @return
+     * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceGroupBean> getDeviceGroupBeansByParentAsList(DeviceGroupBean bean);
+    public java.util.List<DeviceGroupBean> getDeviceGroupBeansByParentAsList(DeviceGroupBean bean)throws RuntimeDaoException;
 
     //3.2.2 GET IMPORTED
     /**
@@ -226,17 +245,18 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * FK_NAME:fl_device_group_ibfk_1
      * @param idOfDeviceGroup Integer - PK# 1
      * @return the associated {@link DeviceGroupBean} beans 
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceGroupBean> getDeviceGroupBeansByParentAsList(Integer idOfDeviceGroup);
+    public java.util.List<DeviceGroupBean> getDeviceGroupBeansByParentAsList(Integer idOfDeviceGroup)throws RuntimeDaoException;
     //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link DeviceGroupBean} objects from fl_device_group.parent field.<BR>
      * FK_NAME:fl_device_group_ibfk_1
      * @param idOfDeviceGroup Integer - PK# 1
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteDeviceGroupBeansByParent(Integer idOfDeviceGroup);
+    public int deleteDeviceGroupBeansByParent(Integer idOfDeviceGroup)throws RuntimeDaoException;
     //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link DeviceGroupBean} object from fl_device_group.parent field.<BR>
@@ -245,8 +265,9 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link DeviceGroupBean} beans or empty list if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceGroupBean> getDeviceGroupBeansByParentAsList(DeviceGroupBean bean,int startRow,int numRows);    
+    public java.util.List<DeviceGroupBean> getDeviceGroupBeansByParentAsList(DeviceGroupBean bean,int startRow,int numRows)throws RuntimeDaoException;    
     //3.3 SET IMPORTED
     /**
      * set  the {@link DeviceGroupBean} object array associate to DeviceGroupBean by the fl_device_group.parent field.<BR>
@@ -255,8 +276,9 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param importedBeans imported beans from fl_device_group
      * @return importedBeans always
      * @see {@link DeviceGroupManager#setReferencedByParent(DeviceGroupBean, DeviceGroupBean)
+     * @throws RuntimeDaoException
      */
-    public DeviceGroupBean[] setDeviceGroupBeansByParent(DeviceGroupBean bean , DeviceGroupBean[] importedBeans);
+    public DeviceGroupBean[] setDeviceGroupBeansByParent(DeviceGroupBean bean , DeviceGroupBean[] importedBeans)throws RuntimeDaoException;
 
     //3.4 SET IMPORTED
     /**
@@ -266,8 +288,9 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param importedBeans imported beans from fl_device_group 
      * @return importedBeans always
      * @see {@link DeviceGroupManager#setReferencedByParent(DeviceGroupBean, DeviceGroupBean)
+     * @throws RuntimeDaoException
      */
-    public <C extends java.util.Collection<DeviceGroupBean>> C setDeviceGroupBeansByParent(DeviceGroupBean bean , C importedBeans);
+    public <C extends java.util.Collection<DeviceGroupBean>> C setDeviceGroupBeansByParent(DeviceGroupBean bean , C importedBeans)throws RuntimeDaoException;
 
     //3.1 GET IMPORTED
     /**
@@ -275,8 +298,9 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * FK_NAME : fl_permit_ibfk_1 
      * @param bean the {@link DeviceGroupBean}
      * @return the associated {@link PermitBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public PermitBean[] getPermitBeansByDeviceGroupId(DeviceGroupBean bean);
+    public PermitBean[] getPermitBeansByDeviceGroupId(DeviceGroupBean bean)throws RuntimeDaoException;
     
     //3.1.2 GET IMPORTED
     /**
@@ -284,17 +308,18 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * FK_NAME : fl_permit_ibfk_1 
      * @param idOfDeviceGroup Integer - PK# 1
      * @return the associated {@link PermitBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public PermitBean[] getPermitBeansByDeviceGroupId(Integer idOfDeviceGroup);
+    public PermitBean[] getPermitBeansByDeviceGroupId(Integer idOfDeviceGroup)throws RuntimeDaoException;
     
     //3.2 GET IMPORTED
     /**
      * see also #getPermitBeansByDeviceGroupIdAsList(DeviceGroupBean,int,int)
      * @param bean
      * @return
+     * @throws RuntimeDaoException
      */
-    public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(DeviceGroupBean bean);
+    public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(DeviceGroupBean bean)throws RuntimeDaoException;
 
     //3.2.2 GET IMPORTED
     /**
@@ -302,17 +327,18 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * FK_NAME:fl_permit_ibfk_1
      * @param idOfDeviceGroup Integer - PK# 1
      * @return the associated {@link PermitBean} beans 
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(Integer idOfDeviceGroup);
+    public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(Integer idOfDeviceGroup)throws RuntimeDaoException;
     //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link PermitBean} objects from fl_permit.device_group_id field.<BR>
      * FK_NAME:fl_permit_ibfk_1
      * @param idOfDeviceGroup Integer - PK# 1
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deletePermitBeansByDeviceGroupId(Integer idOfDeviceGroup);
+    public int deletePermitBeansByDeviceGroupId(Integer idOfDeviceGroup)throws RuntimeDaoException;
     //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link PermitBean} object from fl_permit.device_group_id field.<BR>
@@ -321,8 +347,9 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link PermitBean} beans or empty list if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(DeviceGroupBean bean,int startRow,int numRows);    
+    public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(DeviceGroupBean bean,int startRow,int numRows)throws RuntimeDaoException;    
     //3.3 SET IMPORTED
     /**
      * set  the {@link PermitBean} object array associate to DeviceGroupBean by the fl_permit.device_group_id field.<BR>
@@ -331,8 +358,9 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param importedBeans imported beans from fl_permit
      * @return importedBeans always
      * @see {@link PermitManager#setReferencedByDeviceGroupId(PermitBean, DeviceGroupBean)
+     * @throws RuntimeDaoException
      */
-    public PermitBean[] setPermitBeansByDeviceGroupId(DeviceGroupBean bean , PermitBean[] importedBeans);
+    public PermitBean[] setPermitBeansByDeviceGroupId(DeviceGroupBean bean , PermitBean[] importedBeans)throws RuntimeDaoException;
 
     //3.4 SET IMPORTED
     /**
@@ -342,8 +370,9 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param importedBeans imported beans from fl_permit 
      * @return importedBeans always
      * @see {@link PermitManager#setReferencedByDeviceGroupId(PermitBean, DeviceGroupBean)
+     * @throws RuntimeDaoException
      */
-    public <C extends java.util.Collection<PermitBean>> C setPermitBeansByDeviceGroupId(DeviceGroupBean bean , C importedBeans);
+    public <C extends java.util.Collection<PermitBean>> C setPermitBeansByDeviceGroupId(DeviceGroupBean bean , C importedBeans)throws RuntimeDaoException;
 
     //3.5 SYNC SAVE 
     /**
@@ -355,10 +384,11 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param impDevicegroupByParent the {@link DeviceGroupBean} bean refer to {@link DeviceGroupBean} 
      * @param impPermitByDeviceGroupId the {@link PermitBean} bean refer to {@link DeviceGroupBean} 
      * @return the inserted or updated {@link DeviceGroupBean} bean
+     * @throws RuntimeDaoException
      */
     public DeviceGroupBean save(DeviceGroupBean bean
         , DeviceGroupBean refDevicegroupByParent 
-        , DeviceBean[] impDeviceByGroupId , DeviceGroupBean[] impDevicegroupByParent , PermitBean[] impPermitByDeviceGroupId );
+        , DeviceBean[] impDeviceByGroupId , DeviceGroupBean[] impDevicegroupByParent , PermitBean[] impPermitByDeviceGroupId )throws RuntimeDaoException;
     //3.6 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save<br>
@@ -369,10 +399,11 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param impDevicegroupByParent the {@link DeviceGroupBean} bean refer to {@link DeviceGroupBean} 
      * @param impPermitByDeviceGroupId the {@link PermitBean} bean refer to {@link DeviceGroupBean} 
      * @return the inserted or updated {@link DeviceGroupBean} bean
+     * @throws RuntimeDaoException
      */
     public DeviceGroupBean saveAsTransaction(final DeviceGroupBean bean
         ,final DeviceGroupBean refDevicegroupByParent 
-        ,final DeviceBean[] impDeviceByGroupId ,final DeviceGroupBean[] impDevicegroupByParent ,final PermitBean[] impPermitByDeviceGroupId );
+        ,final DeviceBean[] impDeviceByGroupId ,final DeviceGroupBean[] impDevicegroupByParent ,final PermitBean[] impPermitByDeviceGroupId )throws RuntimeDaoException;
     //3.7 SYNC SAVE 
     /**
      * Save the DeviceGroupBean bean and referenced beans and imported beans into the database.
@@ -383,10 +414,11 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param impDevicegroupByParent the {@link DeviceGroupBean} bean refer to {@link DeviceGroupBean} 
      * @param impPermitByDeviceGroupId the {@link PermitBean} bean refer to {@link DeviceGroupBean} 
      * @return the inserted or updated {@link DeviceGroupBean} bean
+     * @throws RuntimeDaoException
      */
     public DeviceGroupBean save(DeviceGroupBean bean
         , DeviceGroupBean refDevicegroupByParent 
-        , java.util.Collection<DeviceBean> impDeviceByGroupId , java.util.Collection<DeviceGroupBean> impDevicegroupByParent , java.util.Collection<PermitBean> impPermitByDeviceGroupId );
+        , java.util.Collection<DeviceBean> impDeviceByGroupId , java.util.Collection<DeviceGroupBean> impDevicegroupByParent , java.util.Collection<PermitBean> impPermitByDeviceGroupId )throws RuntimeDaoException;
     //3.8 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save<br>
@@ -397,10 +429,11 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param impDevicegroupByParent the {@link DeviceGroupBean} bean refer to {@link DeviceGroupBean} 
      * @param impPermitByDeviceGroupId the {@link PermitBean} bean refer to {@link DeviceGroupBean} 
      * @return the inserted or updated {@link DeviceGroupBean} bean
+     * @throws RuntimeDaoException
      */
     public DeviceGroupBean saveAsTransaction(final DeviceGroupBean bean
         ,final DeviceGroupBean refDevicegroupByParent 
-        ,final  java.util.Collection<DeviceBean> impDeviceByGroupId ,final  java.util.Collection<DeviceGroupBean> impDevicegroupByParent ,final  java.util.Collection<PermitBean> impPermitByDeviceGroupId );
+        ,final  java.util.Collection<DeviceBean> impDeviceByGroupId ,final  java.util.Collection<DeviceGroupBean> impDevicegroupByParent ,final  java.util.Collection<PermitBean> impPermitByDeviceGroupId )throws RuntimeDaoException;
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
@@ -410,8 +443,9 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * FK_NAME : fl_device_group_ibfk_1
      * @param bean the {@link DeviceGroupBean}
      * @return the associated {@link DeviceGroupBean} bean or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public DeviceGroupBean getReferencedByParent(DeviceGroupBean bean);
+    public DeviceGroupBean getReferencedByParent(DeviceGroupBean bean)throws RuntimeDaoException;
 
     //5.2 SET REFERENCED 
     /**
@@ -422,7 +456,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @return always beanToSet saved
      * @throws RuntimeDaoException
      */
-    public DeviceGroupBean setReferencedByParent(DeviceGroupBean bean, DeviceGroupBean beanToSet);
+    public DeviceGroupBean setReferencedByParent(DeviceGroupBean bean, DeviceGroupBean beanToSet)throws RuntimeDaoException;
     //_____________________________________________________________________
     //
     // USING INDICES
@@ -434,24 +468,27 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      *
      * @param parent the parent column's value filter.
      * @return an array of DeviceGroupBean
+     * @throws RuntimeDaoException
      */
-    public DeviceGroupBean[] loadByIndexParent(Integer parent);
+    public DeviceGroupBean[] loadByIndexParent(Integer parent)throws RuntimeDaoException;
     
     /**
      * Retrieves a list of DeviceGroupBean using the parent index.
      *
      * @param parent the parent column's value filter.
      * @return a list of DeviceGroupBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceGroupBean> loadByIndexParentAsList(Integer parent);
+    public java.util.List<DeviceGroupBean> loadByIndexParentAsList(Integer parent)throws RuntimeDaoException;
 
     /**
      * Deletes rows using the parent index.
      *
      * @param parent the parent column's value filter.
      * @return the number of deleted objects
+     * @throws RuntimeDaoException
      */
-    public int deleteByIndexParent(Integer parent);
+    public int deleteByIndexParent(Integer parent)throws RuntimeDaoException;
     
 
     //45
@@ -478,8 +515,9 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * see also #loadViaPermitAsList(DeviceGroupBean,int,int)
      * @param bean
      * @return
+     * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceGroupBean> loadViaPermitAsList(PersonGroupBean bean);
+    public java.util.List<DeviceGroupBean> loadViaPermitAsList(PersonGroupBean bean)throws RuntimeDaoException;
 
     //23 MANY TO MANY
     /**
@@ -490,53 +528,60 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return a list of DeviceGroupBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceGroupBean> loadViaPermitAsList(PersonGroupBean bean, int startRow, int numRows);
+    public java.util.List<DeviceGroupBean> loadViaPermitAsList(PersonGroupBean bean, int startRow, int numRows)throws RuntimeDaoException;
     //23.2 MANY TO MANY
     /**
      * add junction between {@link DeviceGroupBean} and {@link PersonGroupBean} if junction not exists
      * @param bean
      * @param linked
+     * @throws RuntimeDaoException
      */
-    public void addJunction(DeviceGroupBean bean,PersonGroupBean linked);
+    public void addJunction(DeviceGroupBean bean,PersonGroupBean linked)throws RuntimeDaoException;
     //23.3 MANY TO MANY
     /**
      * remove junction between {@link DeviceGroupBean} and {@link PersonGroupBean}
      * @param bean
      * @param linked
      * @return deleted rows count
+     * @throws RuntimeDaoException
      */
-    public int deleteJunction(DeviceGroupBean bean,PersonGroupBean linked);
+    public int deleteJunction(DeviceGroupBean bean,PersonGroupBean linked)throws RuntimeDaoException;
     //23.4 MANY TO MANY
     /** 
      * see also {@link #addJunction(DeviceGroupBean,PersonGroupBean)}
      * @param bean
      * @param linkedBeans
+     * @throws RuntimeDaoException
      */
-    public void addJunction(DeviceGroupBean bean,PersonGroupBean... linkedBeans);
+    public void addJunction(DeviceGroupBean bean,PersonGroupBean... linkedBeans)throws RuntimeDaoException;
     //23.5 MANY TO MANY
     /** 
      * see also {@link #addJunction(DeviceGroupBean,PersonGroupBean)}
      * @param bean
      * @param linkedBeans
+     * @throws RuntimeDaoException
      */
-    public void addJunction(DeviceGroupBean bean,java.util.Collection<PersonGroupBean> linkedBeans);
+    public void addJunction(DeviceGroupBean bean,java.util.Collection<PersonGroupBean> linkedBeans)throws RuntimeDaoException;
     //23.6 MANY TO MANY
     /** 
      * see also {@link #deleteJunction(DeviceGroupBean,PersonGroupBean)}
      * @param bean
      * @param linkedBeans
      * @return
+     * @throws RuntimeDaoException
      */
-    public int deleteJunction(DeviceGroupBean bean,PersonGroupBean... linkedBeans);
+    public int deleteJunction(DeviceGroupBean bean,PersonGroupBean... linkedBeans)throws RuntimeDaoException;
     //23.7 MANY TO MANY
     /** 
      * see also {@link #deleteJunction(DeviceGroupBean,PersonGroupBean)} 
      * @param bean
      * @param linkedBeans
      * @return
+     * @throws RuntimeDaoException
      */
-    public int deleteJunction(DeviceGroupBean bean,java.util.Collection<PersonGroupBean> linkedBeans);
+    public int deleteJunction(DeviceGroupBean bean,java.util.Collection<PersonGroupBean> linkedBeans)throws RuntimeDaoException;
 
     //_____________________________________________________________________
     //
@@ -551,14 +596,15 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      *         first element equal last if self-reference field is cycle
      * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceGroupBean> listOfParent(Integer id);
+    public java.util.List<DeviceGroupBean> listOfParent(Integer id)throws RuntimeDaoException;
     //48
     /**
      * see also {@link #listOfParent(Integer)}
      * @param bean
      * @return
+     * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceGroupBean> listOfParent(DeviceGroupBean bean);
+    public java.util.List<DeviceGroupBean> listOfParent(DeviceGroupBean bean)throws RuntimeDaoException;
     //49
     /**
      * get level count on the self-reference field : {@code fl_device_group(parent) }
@@ -567,14 +613,15 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      *         -1 if self-reference field is cycle
      * @throws RuntimeDaoException
      */
-    public int levelOfParent(Integer id);
+    public int levelOfParent(Integer id)throws RuntimeDaoException;
     //50
     /**
      * see also {@link #levelOfParent(Integer)}
      * @param bean
-     * @return 
+     * @return
+     * @throws RuntimeDaoException
      */
-    public int levelOfParent(DeviceGroupBean bean);
+    public int levelOfParent(DeviceGroupBean bean)throws RuntimeDaoException;
     //51
     /**
      * test whether the self-reference field is cycle : {@code fl_device_group(parent) }
@@ -582,8 +629,9 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @throws RuntimeDaoException
      * @see #levelOfParent(DeviceGroupBean)
      * @return
+     * @throws RuntimeDaoException
      */
-    public boolean isCycleOnParent(Integer id);
+    public boolean isCycleOnParent(Integer id)throws RuntimeDaoException;
     //52
     /**
      * test whether the self-reference field is cycle : {@code fl_device_group(parent) }
@@ -592,7 +640,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @throws RuntimeDaoException
      * @see #levelOfParent(DeviceGroupBean)
      */
-    public boolean isCycleOnParent(DeviceGroupBean bean);
+    public boolean isCycleOnParent(DeviceGroupBean bean)throws RuntimeDaoException;
     //53
     /**
      * return top bean that with {@code null} self-reference field  : {@code fl_device_group(parent) }
@@ -602,14 +650,15 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @throws IllegalStateException if self-reference field is cycle
      * @throws RuntimeDaoException
      */
-    public DeviceGroupBean topOfParent(Integer id);
+    public DeviceGroupBean topOfParent(Integer id)throws RuntimeDaoException;
     //54
     /**
      * see also {@link #topOfParent(Integer)}
      * @param bean
      * @return
+     * @throws RuntimeDaoException
      */
-    public DeviceGroupBean topOfParent(DeviceGroupBean bean);
+    public DeviceGroupBean topOfParent(DeviceGroupBean bean)throws RuntimeDaoException;
     //55
     /**
      * Ensures the self-reference field is not cycle : {@code fl_device_group(parent) }
@@ -619,7 +668,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @throws RuntimeDaoException
      * @see #isCycleOnParent(Integer)
      */
-    public Integer checkCycleOfParent(Integer id);
+    public Integer checkCycleOfParent(Integer id)throws RuntimeDaoException;
     //56
     /**
      * Ensures the self-reference field is not cycle : {@code fl_device_group(parent) }<br>
@@ -629,5 +678,5 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @throws RuntimeDaoException
      * @see #isCycleOnParent(DeviceGroupBean)
      */
-    public DeviceGroupBean checkCycleOfParent(DeviceGroupBean bean);
+    public DeviceGroupBean checkCycleOfParent(DeviceGroupBean bean)throws RuntimeDaoException;
 }

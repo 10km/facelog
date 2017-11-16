@@ -26,8 +26,9 @@ public interface ILogManager extends TableManager<LogBean>
      *
      * @param id Integer - PK# 1
      * @return a unique LogBean or {@code null} if not found
+     * @throws RuntimeDaoException
      */
-    public LogBean loadByPrimaryKey(Integer id);
+    public LogBean loadByPrimaryKey(Integer id)throws RuntimeDaoException;
 
     //1.1
     /**
@@ -36,8 +37,9 @@ public interface ILogManager extends TableManager<LogBean>
      * @param id Integer - PK# 1
      * @return a unique LogBean
      * @throws ObjectRetrievalException if not found
+     * @throws RuntimeDaoException
      */
-    public LogBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException;
+    public LogBean loadByPrimaryKeyChecked(Integer id) throws RuntimeDaoException,ObjectRetrievalException;
     
     //1.4
     /**
@@ -45,32 +47,36 @@ public interface ILogManager extends TableManager<LogBean>
      * @param id Integer - PK# 1
      * @see #loadByPrimaryKey($keys)
      * @return
+     * @throws RuntimeDaoException
      */
-    public boolean existsPrimaryKey(Integer id);
+    public boolean existsPrimaryKey(Integer id)throws RuntimeDaoException;
     //1.4.1
     /**
      * Check duplicated row by primary keys,if row exists throw exception
      * @param id Integer
      * @return 
+     * @throws RuntimeDaoException
      * @throws ObjectRetrievalException
      */
-    public Integer checkDuplicate(Integer id)throws ObjectRetrievalException;
+    public Integer checkDuplicate(Integer id)throws RuntimeDaoException,ObjectRetrievalException;
     //1.8
     /**
      * Loads {@link LogBean} from the fl_log using primary key fields.
      *
      * @param keys primary keys array
      * @return list of LogBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<LogBean> loadByPrimaryKey(int... keys);
+    public java.util.List<LogBean> loadByPrimaryKey(int... keys)throws RuntimeDaoException;
     //1.9
     /**
      * Loads {@link LogBean} from the fl_log using primary key fields.
      *
      * @param keys primary keys collection
      * @return list of LogBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<LogBean> loadByPrimaryKey(java.util.Collection<Integer> keys);
+    public java.util.List<LogBean> loadByPrimaryKey(java.util.Collection<Integer> keys)throws RuntimeDaoException;
     //2
     /**
      * Delete row according to its primary keys.<br>
@@ -78,40 +84,45 @@ public interface ILogManager extends TableManager<LogBean>
      *
      * @param id Integer - PK# 1
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(Integer id);
+    public int deleteByPrimaryKey(Integer id)throws RuntimeDaoException;
     //2.2
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys array
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(int... keys);
+    public int deleteByPrimaryKey(int... keys)throws RuntimeDaoException;
     //2.3
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys collection
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(java.util.Collection<Integer> keys);
+    public int deleteByPrimaryKey(java.util.Collection<Integer> keys)throws RuntimeDaoException;
     //2.4
     /**
      * Delete beans.<br>
      *
      * @param beans LogBean collection wille be deleted
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int delete(LogBean... beans);
+    public int delete(LogBean... beans)throws RuntimeDaoException;
     //2.5
     /**
      * Delete beans.<br>
      *
      * @param beans LogBean collection wille be deleted
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int delete(java.util.Collection<LogBean> beans);
+    public int delete(java.util.Collection<LogBean> beans)throws RuntimeDaoException;
  
     //3.5 SYNC SAVE 
     /**
@@ -123,10 +134,11 @@ public interface ILogManager extends TableManager<LogBean>
      * @param refFeatureByVerifyFeature the {@link FeatureBean} bean referenced by {@link LogBean} 
      * @param refPersonByPersonId the {@link PersonBean} bean referenced by {@link LogBean} 
          * @return the inserted or updated {@link LogBean} bean
+     * @throws RuntimeDaoException
      */
     public LogBean save(LogBean bean
         , DeviceBean refDeviceByDeviceId , FaceBean refFaceByCompareFace , FeatureBean refFeatureByVerifyFeature , PersonBean refPersonByPersonId 
-        );
+        )throws RuntimeDaoException;
     //3.6 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save<br>
@@ -137,10 +149,11 @@ public interface ILogManager extends TableManager<LogBean>
      * @param refFeatureByVerifyFeature the {@link FeatureBean} bean referenced by {@link LogBean} 
      * @param refPersonByPersonId the {@link PersonBean} bean referenced by {@link LogBean} 
          * @return the inserted or updated {@link LogBean} bean
+     * @throws RuntimeDaoException
      */
     public LogBean saveAsTransaction(final LogBean bean
         ,final DeviceBean refDeviceByDeviceId ,final FaceBean refFaceByCompareFace ,final FeatureBean refFeatureByVerifyFeature ,final PersonBean refPersonByPersonId 
-        );
+        )throws RuntimeDaoException;
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
@@ -150,8 +163,9 @@ public interface ILogManager extends TableManager<LogBean>
      * FK_NAME : fl_log_ibfk_2
      * @param bean the {@link LogBean}
      * @return the associated {@link DeviceBean} bean or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public DeviceBean getReferencedByDeviceId(LogBean bean);
+    public DeviceBean getReferencedByDeviceId(LogBean bean)throws RuntimeDaoException;
 
     //5.2 SET REFERENCED 
     /**
@@ -162,15 +176,16 @@ public interface ILogManager extends TableManager<LogBean>
      * @return always beanToSet saved
      * @throws RuntimeDaoException
      */
-    public DeviceBean setReferencedByDeviceId(LogBean bean, DeviceBean beanToSet);
+    public DeviceBean setReferencedByDeviceId(LogBean bean, DeviceBean beanToSet)throws RuntimeDaoException;
     //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link FaceBean} object referenced by {@link LogBean#getCompareFace}() field.<br>
      * FK_NAME : fl_log_ibfk_4
      * @param bean the {@link LogBean}
      * @return the associated {@link FaceBean} bean or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public FaceBean getReferencedByCompareFace(LogBean bean);
+    public FaceBean getReferencedByCompareFace(LogBean bean)throws RuntimeDaoException;
 
     //5.2 SET REFERENCED 
     /**
@@ -181,15 +196,16 @@ public interface ILogManager extends TableManager<LogBean>
      * @return always beanToSet saved
      * @throws RuntimeDaoException
      */
-    public FaceBean setReferencedByCompareFace(LogBean bean, FaceBean beanToSet);
+    public FaceBean setReferencedByCompareFace(LogBean bean, FaceBean beanToSet)throws RuntimeDaoException;
     //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link FeatureBean} object referenced by {@link LogBean#getVerifyFeature}() field.<br>
      * FK_NAME : fl_log_ibfk_3
      * @param bean the {@link LogBean}
      * @return the associated {@link FeatureBean} bean or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public FeatureBean getReferencedByVerifyFeature(LogBean bean);
+    public FeatureBean getReferencedByVerifyFeature(LogBean bean)throws RuntimeDaoException;
 
     //5.2 SET REFERENCED 
     /**
@@ -200,15 +216,16 @@ public interface ILogManager extends TableManager<LogBean>
      * @return always beanToSet saved
      * @throws RuntimeDaoException
      */
-    public FeatureBean setReferencedByVerifyFeature(LogBean bean, FeatureBean beanToSet);
+    public FeatureBean setReferencedByVerifyFeature(LogBean bean, FeatureBean beanToSet)throws RuntimeDaoException;
     //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link PersonBean} object referenced by {@link LogBean#getPersonId}() field.<br>
      * FK_NAME : fl_log_ibfk_1
      * @param bean the {@link LogBean}
      * @return the associated {@link PersonBean} bean or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public PersonBean getReferencedByPersonId(LogBean bean);
+    public PersonBean getReferencedByPersonId(LogBean bean)throws RuntimeDaoException;
 
     //5.2 SET REFERENCED 
     /**
@@ -219,7 +236,7 @@ public interface ILogManager extends TableManager<LogBean>
      * @return always beanToSet saved
      * @throws RuntimeDaoException
      */
-    public PersonBean setReferencedByPersonId(LogBean bean, PersonBean beanToSet);
+    public PersonBean setReferencedByPersonId(LogBean bean, PersonBean beanToSet)throws RuntimeDaoException;
     //_____________________________________________________________________
     //
     // USING INDICES
@@ -231,24 +248,27 @@ public interface ILogManager extends TableManager<LogBean>
      *
      * @param compareFace the compare_face column's value filter.
      * @return an array of LogBean
+     * @throws RuntimeDaoException
      */
-    public LogBean[] loadByIndexCompareFace(Integer compareFace);
+    public LogBean[] loadByIndexCompareFace(Integer compareFace)throws RuntimeDaoException;
     
     /**
      * Retrieves a list of LogBean using the compare_face index.
      *
      * @param compareFace the compare_face column's value filter.
      * @return a list of LogBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<LogBean> loadByIndexCompareFaceAsList(Integer compareFace);
+    public java.util.List<LogBean> loadByIndexCompareFaceAsList(Integer compareFace)throws RuntimeDaoException;
 
     /**
      * Deletes rows using the compare_face index.
      *
      * @param compareFace the compare_face column's value filter.
      * @return the number of deleted objects
+     * @throws RuntimeDaoException
      */
-    public int deleteByIndexCompareFace(Integer compareFace);
+    public int deleteByIndexCompareFace(Integer compareFace)throws RuntimeDaoException;
     
 
      /**
@@ -256,24 +276,27 @@ public interface ILogManager extends TableManager<LogBean>
      *
      * @param deviceId the device_id column's value filter.
      * @return an array of LogBean
+     * @throws RuntimeDaoException
      */
-    public LogBean[] loadByIndexDeviceId(Integer deviceId);
+    public LogBean[] loadByIndexDeviceId(Integer deviceId)throws RuntimeDaoException;
     
     /**
      * Retrieves a list of LogBean using the device_id index.
      *
      * @param deviceId the device_id column's value filter.
      * @return a list of LogBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<LogBean> loadByIndexDeviceIdAsList(Integer deviceId);
+    public java.util.List<LogBean> loadByIndexDeviceIdAsList(Integer deviceId)throws RuntimeDaoException;
 
     /**
      * Deletes rows using the device_id index.
      *
      * @param deviceId the device_id column's value filter.
      * @return the number of deleted objects
+     * @throws RuntimeDaoException
      */
-    public int deleteByIndexDeviceId(Integer deviceId);
+    public int deleteByIndexDeviceId(Integer deviceId)throws RuntimeDaoException;
     
 
      /**
@@ -281,24 +304,27 @@ public interface ILogManager extends TableManager<LogBean>
      *
      * @param personId the person_id column's value filter.
      * @return an array of LogBean
+     * @throws RuntimeDaoException
      */
-    public LogBean[] loadByIndexPersonId(Integer personId);
+    public LogBean[] loadByIndexPersonId(Integer personId)throws RuntimeDaoException;
     
     /**
      * Retrieves a list of LogBean using the person_id index.
      *
      * @param personId the person_id column's value filter.
      * @return a list of LogBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<LogBean> loadByIndexPersonIdAsList(Integer personId);
+    public java.util.List<LogBean> loadByIndexPersonIdAsList(Integer personId)throws RuntimeDaoException;
 
     /**
      * Deletes rows using the person_id index.
      *
      * @param personId the person_id column's value filter.
      * @return the number of deleted objects
+     * @throws RuntimeDaoException
      */
-    public int deleteByIndexPersonId(Integer personId);
+    public int deleteByIndexPersonId(Integer personId)throws RuntimeDaoException;
     
 
      /**
@@ -306,24 +332,27 @@ public interface ILogManager extends TableManager<LogBean>
      *
      * @param verifyFeature the verify_feature column's value filter.
      * @return an array of LogBean
+     * @throws RuntimeDaoException
      */
-    public LogBean[] loadByIndexVerifyFeature(String verifyFeature);
+    public LogBean[] loadByIndexVerifyFeature(String verifyFeature)throws RuntimeDaoException;
     
     /**
      * Retrieves a list of LogBean using the verify_feature index.
      *
      * @param verifyFeature the verify_feature column's value filter.
      * @return a list of LogBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<LogBean> loadByIndexVerifyFeatureAsList(String verifyFeature);
+    public java.util.List<LogBean> loadByIndexVerifyFeatureAsList(String verifyFeature)throws RuntimeDaoException;
 
     /**
      * Deletes rows using the verify_feature index.
      *
      * @param verifyFeature the verify_feature column's value filter.
      * @return the number of deleted objects
+     * @throws RuntimeDaoException
      */
-    public int deleteByIndexVerifyFeature(String verifyFeature);
+    public int deleteByIndexVerifyFeature(String verifyFeature)throws RuntimeDaoException;
     
 
     //45

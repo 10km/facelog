@@ -26,8 +26,9 @@ public interface IFaceManager extends TableManager<FaceBean>
      *
      * @param id Integer - PK# 1
      * @return a unique FaceBean or {@code null} if not found
+     * @throws RuntimeDaoException
      */
-    public FaceBean loadByPrimaryKey(Integer id);
+    public FaceBean loadByPrimaryKey(Integer id)throws RuntimeDaoException;
 
     //1.1
     /**
@@ -36,8 +37,9 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param id Integer - PK# 1
      * @return a unique FaceBean
      * @throws ObjectRetrievalException if not found
+     * @throws RuntimeDaoException
      */
-    public FaceBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException;
+    public FaceBean loadByPrimaryKeyChecked(Integer id) throws RuntimeDaoException,ObjectRetrievalException;
     
     //1.4
     /**
@@ -45,32 +47,36 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param id Integer - PK# 1
      * @see #loadByPrimaryKey($keys)
      * @return
+     * @throws RuntimeDaoException
      */
-    public boolean existsPrimaryKey(Integer id);
+    public boolean existsPrimaryKey(Integer id)throws RuntimeDaoException;
     //1.4.1
     /**
      * Check duplicated row by primary keys,if row exists throw exception
      * @param id Integer
      * @return 
+     * @throws RuntimeDaoException
      * @throws ObjectRetrievalException
      */
-    public Integer checkDuplicate(Integer id)throws ObjectRetrievalException;
+    public Integer checkDuplicate(Integer id)throws RuntimeDaoException,ObjectRetrievalException;
     //1.8
     /**
      * Loads {@link FaceBean} from the fl_face using primary key fields.
      *
      * @param keys primary keys array
      * @return list of FaceBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<FaceBean> loadByPrimaryKey(int... keys);
+    public java.util.List<FaceBean> loadByPrimaryKey(int... keys)throws RuntimeDaoException;
     //1.9
     /**
      * Loads {@link FaceBean} from the fl_face using primary key fields.
      *
      * @param keys primary keys collection
      * @return list of FaceBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<FaceBean> loadByPrimaryKey(java.util.Collection<Integer> keys);
+    public java.util.List<FaceBean> loadByPrimaryKey(java.util.Collection<Integer> keys)throws RuntimeDaoException;
     //2
     /**
      * Delete row according to its primary keys.<br>
@@ -78,40 +84,45 @@ public interface IFaceManager extends TableManager<FaceBean>
      *
      * @param id Integer - PK# 1
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(Integer id);
+    public int deleteByPrimaryKey(Integer id)throws RuntimeDaoException;
     //2.2
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys array
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(int... keys);
+    public int deleteByPrimaryKey(int... keys)throws RuntimeDaoException;
     //2.3
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys collection
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(java.util.Collection<Integer> keys);
+    public int deleteByPrimaryKey(java.util.Collection<Integer> keys)throws RuntimeDaoException;
     //2.4
     /**
      * Delete beans.<br>
      *
      * @param beans FaceBean collection wille be deleted
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int delete(FaceBean... beans);
+    public int delete(FaceBean... beans)throws RuntimeDaoException;
     //2.5
     /**
      * Delete beans.<br>
      *
      * @param beans FaceBean collection wille be deleted
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int delete(java.util.Collection<FaceBean> beans);
+    public int delete(java.util.Collection<FaceBean> beans)throws RuntimeDaoException;
  
 
     //////////////////////////////////////
@@ -123,8 +134,9 @@ public interface IFaceManager extends TableManager<FaceBean>
      * FK_NAME : fl_log_ibfk_4 
      * @param bean the {@link FaceBean}
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public LogBean[] getLogBeansByCompareFace(FaceBean bean);
+    public LogBean[] getLogBeansByCompareFace(FaceBean bean)throws RuntimeDaoException;
     
     //3.1.2 GET IMPORTED
     /**
@@ -132,17 +144,18 @@ public interface IFaceManager extends TableManager<FaceBean>
      * FK_NAME : fl_log_ibfk_4 
      * @param idOfFace Integer - PK# 1
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public LogBean[] getLogBeansByCompareFace(Integer idOfFace);
+    public LogBean[] getLogBeansByCompareFace(Integer idOfFace)throws RuntimeDaoException;
     
     //3.2 GET IMPORTED
     /**
      * see also #getLogBeansByCompareFaceAsList(FaceBean,int,int)
      * @param bean
      * @return
+     * @throws RuntimeDaoException
      */
-    public java.util.List<LogBean> getLogBeansByCompareFaceAsList(FaceBean bean);
+    public java.util.List<LogBean> getLogBeansByCompareFaceAsList(FaceBean bean)throws RuntimeDaoException;
 
     //3.2.2 GET IMPORTED
     /**
@@ -150,17 +163,18 @@ public interface IFaceManager extends TableManager<FaceBean>
      * FK_NAME:fl_log_ibfk_4
      * @param idOfFace Integer - PK# 1
      * @return the associated {@link LogBean} beans 
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public java.util.List<LogBean> getLogBeansByCompareFaceAsList(Integer idOfFace);
+    public java.util.List<LogBean> getLogBeansByCompareFaceAsList(Integer idOfFace)throws RuntimeDaoException;
     //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link LogBean} objects from fl_log.compare_face field.<BR>
      * FK_NAME:fl_log_ibfk_4
      * @param idOfFace Integer - PK# 1
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteLogBeansByCompareFace(Integer idOfFace);
+    public int deleteLogBeansByCompareFace(Integer idOfFace)throws RuntimeDaoException;
     //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link LogBean} object from fl_log.compare_face field.<BR>
@@ -169,8 +183,9 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link LogBean} beans or empty list if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public java.util.List<LogBean> getLogBeansByCompareFaceAsList(FaceBean bean,int startRow,int numRows);    
+    public java.util.List<LogBean> getLogBeansByCompareFaceAsList(FaceBean bean,int startRow,int numRows)throws RuntimeDaoException;    
     //3.3 SET IMPORTED
     /**
      * set  the {@link LogBean} object array associate to FaceBean by the fl_log.compare_face field.<BR>
@@ -179,8 +194,9 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param importedBeans imported beans from fl_log
      * @return importedBeans always
      * @see {@link LogManager#setReferencedByCompareFace(LogBean, FaceBean)
+     * @throws RuntimeDaoException
      */
-    public LogBean[] setLogBeansByCompareFace(FaceBean bean , LogBean[] importedBeans);
+    public LogBean[] setLogBeansByCompareFace(FaceBean bean , LogBean[] importedBeans)throws RuntimeDaoException;
 
     //3.4 SET IMPORTED
     /**
@@ -190,8 +206,9 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param importedBeans imported beans from fl_log 
      * @return importedBeans always
      * @see {@link LogManager#setReferencedByCompareFace(LogBean, FaceBean)
+     * @throws RuntimeDaoException
      */
-    public <C extends java.util.Collection<LogBean>> C setLogBeansByCompareFace(FaceBean bean , C importedBeans);
+    public <C extends java.util.Collection<LogBean>> C setLogBeansByCompareFace(FaceBean bean , C importedBeans)throws RuntimeDaoException;
 
     //3.5 SYNC SAVE 
     /**
@@ -202,10 +219,11 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param refImageByImageMd5 the {@link ImageBean} bean referenced by {@link FaceBean} 
      * @param impLogByCompareFace the {@link LogBean} bean refer to {@link FaceBean} 
      * @return the inserted or updated {@link FaceBean} bean
+     * @throws RuntimeDaoException
      */
     public FaceBean save(FaceBean bean
         , FeatureBean refFeatureByFeatureMd5 , ImageBean refImageByImageMd5 
-        , LogBean[] impLogByCompareFace );
+        , LogBean[] impLogByCompareFace )throws RuntimeDaoException;
     //3.6 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save<br>
@@ -215,10 +233,11 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param refImageByImageMd5 the {@link ImageBean} bean referenced by {@link FaceBean} 
      * @param impLogByCompareFace the {@link LogBean} bean refer to {@link FaceBean} 
      * @return the inserted or updated {@link FaceBean} bean
+     * @throws RuntimeDaoException
      */
     public FaceBean saveAsTransaction(final FaceBean bean
         ,final FeatureBean refFeatureByFeatureMd5 ,final ImageBean refImageByImageMd5 
-        ,final LogBean[] impLogByCompareFace );
+        ,final LogBean[] impLogByCompareFace )throws RuntimeDaoException;
     //3.7 SYNC SAVE 
     /**
      * Save the FaceBean bean and referenced beans and imported beans into the database.
@@ -228,10 +247,11 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param refImageByImageMd5 the {@link ImageBean} bean referenced by {@link FaceBean} 
      * @param impLogByCompareFace the {@link LogBean} bean refer to {@link FaceBean} 
      * @return the inserted or updated {@link FaceBean} bean
+     * @throws RuntimeDaoException
      */
     public FaceBean save(FaceBean bean
         , FeatureBean refFeatureByFeatureMd5 , ImageBean refImageByImageMd5 
-        , java.util.Collection<LogBean> impLogByCompareFace );
+        , java.util.Collection<LogBean> impLogByCompareFace )throws RuntimeDaoException;
     //3.8 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save<br>
@@ -241,10 +261,11 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param refImageByImageMd5 the {@link ImageBean} bean referenced by {@link FaceBean} 
      * @param impLogByCompareFace the {@link LogBean} bean refer to {@link FaceBean} 
      * @return the inserted or updated {@link FaceBean} bean
+     * @throws RuntimeDaoException
      */
     public FaceBean saveAsTransaction(final FaceBean bean
         ,final FeatureBean refFeatureByFeatureMd5 ,final ImageBean refImageByImageMd5 
-        ,final  java.util.Collection<LogBean> impLogByCompareFace );
+        ,final  java.util.Collection<LogBean> impLogByCompareFace )throws RuntimeDaoException;
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
@@ -254,8 +275,9 @@ public interface IFaceManager extends TableManager<FaceBean>
      * FK_NAME : fl_face_ibfk_2
      * @param bean the {@link FaceBean}
      * @return the associated {@link FeatureBean} bean or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public FeatureBean getReferencedByFeatureMd5(FaceBean bean);
+    public FeatureBean getReferencedByFeatureMd5(FaceBean bean)throws RuntimeDaoException;
 
     //5.2 SET REFERENCED 
     /**
@@ -266,15 +288,16 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @return always beanToSet saved
      * @throws RuntimeDaoException
      */
-    public FeatureBean setReferencedByFeatureMd5(FaceBean bean, FeatureBean beanToSet);
+    public FeatureBean setReferencedByFeatureMd5(FaceBean bean, FeatureBean beanToSet)throws RuntimeDaoException;
     //5.1 GET REFERENCED VALUE
     /**
      * Retrieves the {@link ImageBean} object referenced by {@link FaceBean#getImageMd5}() field.<br>
      * FK_NAME : fl_face_ibfk_1
      * @param bean the {@link FaceBean}
      * @return the associated {@link ImageBean} bean or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public ImageBean getReferencedByImageMd5(FaceBean bean);
+    public ImageBean getReferencedByImageMd5(FaceBean bean)throws RuntimeDaoException;
 
     //5.2 SET REFERENCED 
     /**
@@ -285,7 +308,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @return always beanToSet saved
      * @throws RuntimeDaoException
      */
-    public ImageBean setReferencedByImageMd5(FaceBean bean, ImageBean beanToSet);
+    public ImageBean setReferencedByImageMd5(FaceBean bean, ImageBean beanToSet)throws RuntimeDaoException;
     //_____________________________________________________________________
     //
     // USING INDICES
@@ -297,24 +320,27 @@ public interface IFaceManager extends TableManager<FaceBean>
      *
      * @param featureMd5 the feature_md5 column's value filter.
      * @return an array of FaceBean
+     * @throws RuntimeDaoException
      */
-    public FaceBean[] loadByIndexFeatureMd5(String featureMd5);
+    public FaceBean[] loadByIndexFeatureMd5(String featureMd5)throws RuntimeDaoException;
     
     /**
      * Retrieves a list of FaceBean using the feature_md5 index.
      *
      * @param featureMd5 the feature_md5 column's value filter.
      * @return a list of FaceBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<FaceBean> loadByIndexFeatureMd5AsList(String featureMd5);
+    public java.util.List<FaceBean> loadByIndexFeatureMd5AsList(String featureMd5)throws RuntimeDaoException;
 
     /**
      * Deletes rows using the feature_md5 index.
      *
      * @param featureMd5 the feature_md5 column's value filter.
      * @return the number of deleted objects
+     * @throws RuntimeDaoException
      */
-    public int deleteByIndexFeatureMd5(String featureMd5);
+    public int deleteByIndexFeatureMd5(String featureMd5)throws RuntimeDaoException;
     
 
      /**
@@ -322,24 +348,27 @@ public interface IFaceManager extends TableManager<FaceBean>
      *
      * @param imageMd5 the image_md5 column's value filter.
      * @return an array of FaceBean
+     * @throws RuntimeDaoException
      */
-    public FaceBean[] loadByIndexImageMd5(String imageMd5);
+    public FaceBean[] loadByIndexImageMd5(String imageMd5)throws RuntimeDaoException;
     
     /**
      * Retrieves a list of FaceBean using the image_md5 index.
      *
      * @param imageMd5 the image_md5 column's value filter.
      * @return a list of FaceBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<FaceBean> loadByIndexImageMd5AsList(String imageMd5);
+    public java.util.List<FaceBean> loadByIndexImageMd5AsList(String imageMd5)throws RuntimeDaoException;
 
     /**
      * Deletes rows using the image_md5 index.
      *
      * @param imageMd5 the image_md5 column's value filter.
      * @return the number of deleted objects
+     * @throws RuntimeDaoException
      */
-    public int deleteByIndexImageMd5(String imageMd5);
+    public int deleteByIndexImageMd5(String imageMd5)throws RuntimeDaoException;
     
 
     //45

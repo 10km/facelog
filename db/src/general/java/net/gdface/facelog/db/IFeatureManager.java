@@ -26,8 +26,9 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      *
      * @param md5 String - PK# 1
      * @return a unique FeatureBean or {@code null} if not found
+     * @throws RuntimeDaoException
      */
-    public FeatureBean loadByPrimaryKey(String md5);
+    public FeatureBean loadByPrimaryKey(String md5)throws RuntimeDaoException;
 
     //1.1
     /**
@@ -36,8 +37,9 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param md5 String - PK# 1
      * @return a unique FeatureBean
      * @throws ObjectRetrievalException if not found
+     * @throws RuntimeDaoException
      */
-    public FeatureBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException;
+    public FeatureBean loadByPrimaryKeyChecked(String md5) throws RuntimeDaoException,ObjectRetrievalException;
     
     //1.4
     /**
@@ -45,32 +47,36 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param md5 String - PK# 1
      * @see #loadByPrimaryKey($keys)
      * @return
+     * @throws RuntimeDaoException
      */
-    public boolean existsPrimaryKey(String md5);
+    public boolean existsPrimaryKey(String md5)throws RuntimeDaoException;
     //1.4.1
     /**
      * Check duplicated row by primary keys,if row exists throw exception
      * @param md5 String
      * @return 
+     * @throws RuntimeDaoException
      * @throws ObjectRetrievalException
      */
-    public String checkDuplicate(String md5)throws ObjectRetrievalException;
+    public String checkDuplicate(String md5)throws RuntimeDaoException,ObjectRetrievalException;
     //1.8
     /**
      * Loads {@link FeatureBean} from the fl_feature using primary key fields.
      *
      * @param keys primary keys array
      * @return list of FeatureBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<FeatureBean> loadByPrimaryKey(String... keys);
+    public java.util.List<FeatureBean> loadByPrimaryKey(String... keys)throws RuntimeDaoException;
     //1.9
     /**
      * Loads {@link FeatureBean} from the fl_feature using primary key fields.
      *
      * @param keys primary keys collection
      * @return list of FeatureBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<FeatureBean> loadByPrimaryKey(java.util.Collection<String> keys);
+    public java.util.List<FeatureBean> loadByPrimaryKey(java.util.Collection<String> keys)throws RuntimeDaoException;
     //2
     /**
      * Delete row according to its primary keys.<br>
@@ -78,40 +84,45 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      *
      * @param md5 String - PK# 1
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(String md5);
+    public int deleteByPrimaryKey(String md5)throws RuntimeDaoException;
     //2.2
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys array
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(String... keys);
+    public int deleteByPrimaryKey(String... keys)throws RuntimeDaoException;
     //2.3
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys collection
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(java.util.Collection<String> keys);
+    public int deleteByPrimaryKey(java.util.Collection<String> keys)throws RuntimeDaoException;
     //2.4
     /**
      * Delete beans.<br>
      *
      * @param beans FeatureBean collection wille be deleted
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int delete(FeatureBean... beans);
+    public int delete(FeatureBean... beans)throws RuntimeDaoException;
     //2.5
     /**
      * Delete beans.<br>
      *
      * @param beans FeatureBean collection wille be deleted
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int delete(java.util.Collection<FeatureBean> beans);
+    public int delete(java.util.Collection<FeatureBean> beans)throws RuntimeDaoException;
  
 
     //////////////////////////////////////
@@ -123,8 +134,9 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * FK_NAME : fl_face_ibfk_2 
      * @param bean the {@link FeatureBean}
      * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public FaceBean[] getFaceBeansByFeatureMd5(FeatureBean bean);
+    public FaceBean[] getFaceBeansByFeatureMd5(FeatureBean bean)throws RuntimeDaoException;
     
     //3.1.2 GET IMPORTED
     /**
@@ -132,17 +144,18 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * FK_NAME : fl_face_ibfk_2 
      * @param md5OfFeature String - PK# 1
      * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public FaceBean[] getFaceBeansByFeatureMd5(String md5OfFeature);
+    public FaceBean[] getFaceBeansByFeatureMd5(String md5OfFeature)throws RuntimeDaoException;
     
     //3.2 GET IMPORTED
     /**
      * see also #getFaceBeansByFeatureMd5AsList(FeatureBean,int,int)
      * @param bean
      * @return
+     * @throws RuntimeDaoException
      */
-    public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(FeatureBean bean);
+    public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(FeatureBean bean)throws RuntimeDaoException;
 
     //3.2.2 GET IMPORTED
     /**
@@ -150,17 +163,18 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * FK_NAME:fl_face_ibfk_2
      * @param md5OfFeature String - PK# 1
      * @return the associated {@link FaceBean} beans 
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(String md5OfFeature);
+    public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(String md5OfFeature)throws RuntimeDaoException;
     //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link FaceBean} objects from fl_face.feature_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_2
      * @param md5OfFeature String - PK# 1
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteFaceBeansByFeatureMd5(String md5OfFeature);
+    public int deleteFaceBeansByFeatureMd5(String md5OfFeature)throws RuntimeDaoException;
     //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link FaceBean} object from fl_face.feature_md5 field.<BR>
@@ -169,8 +183,9 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link FaceBean} beans or empty list if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(FeatureBean bean,int startRow,int numRows);    
+    public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(FeatureBean bean,int startRow,int numRows)throws RuntimeDaoException;    
     //3.3 SET IMPORTED
     /**
      * set  the {@link FaceBean} object array associate to FeatureBean by the fl_face.feature_md5 field.<BR>
@@ -179,8 +194,9 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param importedBeans imported beans from fl_face
      * @return importedBeans always
      * @see {@link FaceManager#setReferencedByFeatureMd5(FaceBean, FeatureBean)
+     * @throws RuntimeDaoException
      */
-    public FaceBean[] setFaceBeansByFeatureMd5(FeatureBean bean , FaceBean[] importedBeans);
+    public FaceBean[] setFaceBeansByFeatureMd5(FeatureBean bean , FaceBean[] importedBeans)throws RuntimeDaoException;
 
     //3.4 SET IMPORTED
     /**
@@ -190,8 +206,9 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param importedBeans imported beans from fl_face 
      * @return importedBeans always
      * @see {@link FaceManager#setReferencedByFeatureMd5(FaceBean, FeatureBean)
+     * @throws RuntimeDaoException
      */
-    public <C extends java.util.Collection<FaceBean>> C setFaceBeansByFeatureMd5(FeatureBean bean , C importedBeans);
+    public <C extends java.util.Collection<FaceBean>> C setFaceBeansByFeatureMd5(FeatureBean bean , C importedBeans)throws RuntimeDaoException;
 
     //3.1 GET IMPORTED
     /**
@@ -199,8 +216,9 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * FK_NAME : fl_log_ibfk_3 
      * @param bean the {@link FeatureBean}
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public LogBean[] getLogBeansByVerifyFeature(FeatureBean bean);
+    public LogBean[] getLogBeansByVerifyFeature(FeatureBean bean)throws RuntimeDaoException;
     
     //3.1.2 GET IMPORTED
     /**
@@ -208,17 +226,18 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * FK_NAME : fl_log_ibfk_3 
      * @param md5OfFeature String - PK# 1
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public LogBean[] getLogBeansByVerifyFeature(String md5OfFeature);
+    public LogBean[] getLogBeansByVerifyFeature(String md5OfFeature)throws RuntimeDaoException;
     
     //3.2 GET IMPORTED
     /**
      * see also #getLogBeansByVerifyFeatureAsList(FeatureBean,int,int)
      * @param bean
      * @return
+     * @throws RuntimeDaoException
      */
-    public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(FeatureBean bean);
+    public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(FeatureBean bean)throws RuntimeDaoException;
 
     //3.2.2 GET IMPORTED
     /**
@@ -226,17 +245,18 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * FK_NAME:fl_log_ibfk_3
      * @param md5OfFeature String - PK# 1
      * @return the associated {@link LogBean} beans 
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(String md5OfFeature);
+    public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(String md5OfFeature)throws RuntimeDaoException;
     //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link LogBean} objects from fl_log.verify_feature field.<BR>
      * FK_NAME:fl_log_ibfk_3
      * @param md5OfFeature String - PK# 1
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteLogBeansByVerifyFeature(String md5OfFeature);
+    public int deleteLogBeansByVerifyFeature(String md5OfFeature)throws RuntimeDaoException;
     //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link LogBean} object from fl_log.verify_feature field.<BR>
@@ -245,8 +265,9 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link LogBean} beans or empty list if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(FeatureBean bean,int startRow,int numRows);    
+    public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(FeatureBean bean,int startRow,int numRows)throws RuntimeDaoException;    
     //3.3 SET IMPORTED
     /**
      * set  the {@link LogBean} object array associate to FeatureBean by the fl_log.verify_feature field.<BR>
@@ -255,8 +276,9 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param importedBeans imported beans from fl_log
      * @return importedBeans always
      * @see {@link LogManager#setReferencedByVerifyFeature(LogBean, FeatureBean)
+     * @throws RuntimeDaoException
      */
-    public LogBean[] setLogBeansByVerifyFeature(FeatureBean bean , LogBean[] importedBeans);
+    public LogBean[] setLogBeansByVerifyFeature(FeatureBean bean , LogBean[] importedBeans)throws RuntimeDaoException;
 
     //3.4 SET IMPORTED
     /**
@@ -266,8 +288,9 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param importedBeans imported beans from fl_log 
      * @return importedBeans always
      * @see {@link LogManager#setReferencedByVerifyFeature(LogBean, FeatureBean)
+     * @throws RuntimeDaoException
      */
-    public <C extends java.util.Collection<LogBean>> C setLogBeansByVerifyFeature(FeatureBean bean , C importedBeans);
+    public <C extends java.util.Collection<LogBean>> C setLogBeansByVerifyFeature(FeatureBean bean , C importedBeans)throws RuntimeDaoException;
 
     //3.5 SYNC SAVE 
     /**
@@ -278,10 +301,11 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param impFaceByFeatureMd5 the {@link FaceBean} bean refer to {@link FeatureBean} 
      * @param impLogByVerifyFeature the {@link LogBean} bean refer to {@link FeatureBean} 
      * @return the inserted or updated {@link FeatureBean} bean
+     * @throws RuntimeDaoException
      */
     public FeatureBean save(FeatureBean bean
         , PersonBean refPersonByPersonId 
-        , FaceBean[] impFaceByFeatureMd5 , LogBean[] impLogByVerifyFeature );
+        , FaceBean[] impFaceByFeatureMd5 , LogBean[] impLogByVerifyFeature )throws RuntimeDaoException;
     //3.6 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save<br>
@@ -291,10 +315,11 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param impFaceByFeatureMd5 the {@link FaceBean} bean refer to {@link FeatureBean} 
      * @param impLogByVerifyFeature the {@link LogBean} bean refer to {@link FeatureBean} 
      * @return the inserted or updated {@link FeatureBean} bean
+     * @throws RuntimeDaoException
      */
     public FeatureBean saveAsTransaction(final FeatureBean bean
         ,final PersonBean refPersonByPersonId 
-        ,final FaceBean[] impFaceByFeatureMd5 ,final LogBean[] impLogByVerifyFeature );
+        ,final FaceBean[] impFaceByFeatureMd5 ,final LogBean[] impLogByVerifyFeature )throws RuntimeDaoException;
     //3.7 SYNC SAVE 
     /**
      * Save the FeatureBean bean and referenced beans and imported beans into the database.
@@ -304,10 +329,11 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param impFaceByFeatureMd5 the {@link FaceBean} bean refer to {@link FeatureBean} 
      * @param impLogByVerifyFeature the {@link LogBean} bean refer to {@link FeatureBean} 
      * @return the inserted or updated {@link FeatureBean} bean
+     * @throws RuntimeDaoException
      */
     public FeatureBean save(FeatureBean bean
         , PersonBean refPersonByPersonId 
-        , java.util.Collection<FaceBean> impFaceByFeatureMd5 , java.util.Collection<LogBean> impLogByVerifyFeature );
+        , java.util.Collection<FaceBean> impFaceByFeatureMd5 , java.util.Collection<LogBean> impLogByVerifyFeature )throws RuntimeDaoException;
     //3.8 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save<br>
@@ -317,10 +343,11 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param impFaceByFeatureMd5 the {@link FaceBean} bean refer to {@link FeatureBean} 
      * @param impLogByVerifyFeature the {@link LogBean} bean refer to {@link FeatureBean} 
      * @return the inserted or updated {@link FeatureBean} bean
+     * @throws RuntimeDaoException
      */
     public FeatureBean saveAsTransaction(final FeatureBean bean
         ,final PersonBean refPersonByPersonId 
-        ,final  java.util.Collection<FaceBean> impFaceByFeatureMd5 ,final  java.util.Collection<LogBean> impLogByVerifyFeature );
+        ,final  java.util.Collection<FaceBean> impFaceByFeatureMd5 ,final  java.util.Collection<LogBean> impLogByVerifyFeature )throws RuntimeDaoException;
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
@@ -330,8 +357,9 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * FK_NAME : fl_feature_ibfk_1
      * @param bean the {@link FeatureBean}
      * @return the associated {@link PersonBean} bean or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public PersonBean getReferencedByPersonId(FeatureBean bean);
+    public PersonBean getReferencedByPersonId(FeatureBean bean)throws RuntimeDaoException;
 
     //5.2 SET REFERENCED 
     /**
@@ -342,7 +370,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @return always beanToSet saved
      * @throws RuntimeDaoException
      */
-    public PersonBean setReferencedByPersonId(FeatureBean bean, PersonBean beanToSet);
+    public PersonBean setReferencedByPersonId(FeatureBean bean, PersonBean beanToSet)throws RuntimeDaoException;
     //_____________________________________________________________________
     //
     // USING INDICES
@@ -354,24 +382,27 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      *
      * @param personId the person_id column's value filter.
      * @return an array of FeatureBean
+     * @throws RuntimeDaoException
      */
-    public FeatureBean[] loadByIndexPersonId(Integer personId);
+    public FeatureBean[] loadByIndexPersonId(Integer personId)throws RuntimeDaoException;
     
     /**
      * Retrieves a list of FeatureBean using the person_id index.
      *
      * @param personId the person_id column's value filter.
      * @return a list of FeatureBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<FeatureBean> loadByIndexPersonIdAsList(Integer personId);
+    public java.util.List<FeatureBean> loadByIndexPersonIdAsList(Integer personId)throws RuntimeDaoException;
 
     /**
      * Deletes rows using the person_id index.
      *
      * @param personId the person_id column's value filter.
      * @return the number of deleted objects
+     * @throws RuntimeDaoException
      */
-    public int deleteByIndexPersonId(Integer personId);
+    public int deleteByIndexPersonId(Integer personId)throws RuntimeDaoException;
     
 
     //45

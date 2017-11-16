@@ -26,8 +26,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      *
      * @param id Integer - PK# 1
      * @return a unique PersonGroupBean or {@code null} if not found
+     * @throws RuntimeDaoException
      */
-    public PersonGroupBean loadByPrimaryKey(Integer id);
+    public PersonGroupBean loadByPrimaryKey(Integer id)throws RuntimeDaoException;
 
     //1.1
     /**
@@ -36,8 +37,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param id Integer - PK# 1
      * @return a unique PersonGroupBean
      * @throws ObjectRetrievalException if not found
+     * @throws RuntimeDaoException
      */
-    public PersonGroupBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException;
+    public PersonGroupBean loadByPrimaryKeyChecked(Integer id) throws RuntimeDaoException,ObjectRetrievalException;
     
     //1.4
     /**
@@ -45,32 +47,36 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param id Integer - PK# 1
      * @see #loadByPrimaryKey($keys)
      * @return
+     * @throws RuntimeDaoException
      */
-    public boolean existsPrimaryKey(Integer id);
+    public boolean existsPrimaryKey(Integer id)throws RuntimeDaoException;
     //1.4.1
     /**
      * Check duplicated row by primary keys,if row exists throw exception
      * @param id Integer
      * @return 
+     * @throws RuntimeDaoException
      * @throws ObjectRetrievalException
      */
-    public Integer checkDuplicate(Integer id)throws ObjectRetrievalException;
+    public Integer checkDuplicate(Integer id)throws RuntimeDaoException,ObjectRetrievalException;
     //1.8
     /**
      * Loads {@link PersonGroupBean} from the fl_person_group using primary key fields.
      *
      * @param keys primary keys array
      * @return list of PersonGroupBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<PersonGroupBean> loadByPrimaryKey(int... keys);
+    public java.util.List<PersonGroupBean> loadByPrimaryKey(int... keys)throws RuntimeDaoException;
     //1.9
     /**
      * Loads {@link PersonGroupBean} from the fl_person_group using primary key fields.
      *
      * @param keys primary keys collection
      * @return list of PersonGroupBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<PersonGroupBean> loadByPrimaryKey(java.util.Collection<Integer> keys);
+    public java.util.List<PersonGroupBean> loadByPrimaryKey(java.util.Collection<Integer> keys)throws RuntimeDaoException;
     //2
     /**
      * Delete row according to its primary keys.<br>
@@ -78,40 +84,45 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      *
      * @param id Integer - PK# 1
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(Integer id);
+    public int deleteByPrimaryKey(Integer id)throws RuntimeDaoException;
     //2.2
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys array
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(int... keys);
+    public int deleteByPrimaryKey(int... keys)throws RuntimeDaoException;
     //2.3
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys collection
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(java.util.Collection<Integer> keys);
+    public int deleteByPrimaryKey(java.util.Collection<Integer> keys)throws RuntimeDaoException;
     //2.4
     /**
      * Delete beans.<br>
      *
      * @param beans PersonGroupBean collection wille be deleted
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int delete(PersonGroupBean... beans);
+    public int delete(PersonGroupBean... beans)throws RuntimeDaoException;
     //2.5
     /**
      * Delete beans.<br>
      *
      * @param beans PersonGroupBean collection wille be deleted
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int delete(java.util.Collection<PersonGroupBean> beans);
+    public int delete(java.util.Collection<PersonGroupBean> beans)throws RuntimeDaoException;
  
 
     //////////////////////////////////////
@@ -123,8 +134,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME : fl_permit_ibfk_2 
      * @param bean the {@link PersonGroupBean}
      * @return the associated {@link PermitBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public PermitBean[] getPermitBeansByPersonGroupId(PersonGroupBean bean);
+    public PermitBean[] getPermitBeansByPersonGroupId(PersonGroupBean bean)throws RuntimeDaoException;
     
     //3.1.2 GET IMPORTED
     /**
@@ -132,17 +144,18 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME : fl_permit_ibfk_2 
      * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PermitBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public PermitBean[] getPermitBeansByPersonGroupId(Integer idOfPersonGroup);
+    public PermitBean[] getPermitBeansByPersonGroupId(Integer idOfPersonGroup)throws RuntimeDaoException;
     
     //3.2 GET IMPORTED
     /**
      * see also #getPermitBeansByPersonGroupIdAsList(PersonGroupBean,int,int)
      * @param bean
      * @return
+     * @throws RuntimeDaoException
      */
-    public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(PersonGroupBean bean);
+    public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(PersonGroupBean bean)throws RuntimeDaoException;
 
     //3.2.2 GET IMPORTED
     /**
@@ -150,17 +163,18 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME:fl_permit_ibfk_2
      * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PermitBean} beans 
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(Integer idOfPersonGroup);
+    public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(Integer idOfPersonGroup)throws RuntimeDaoException;
     //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link PermitBean} objects from fl_permit.person_group_id field.<BR>
      * FK_NAME:fl_permit_ibfk_2
      * @param idOfPersonGroup Integer - PK# 1
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deletePermitBeansByPersonGroupId(Integer idOfPersonGroup);
+    public int deletePermitBeansByPersonGroupId(Integer idOfPersonGroup)throws RuntimeDaoException;
     //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link PermitBean} object from fl_permit.person_group_id field.<BR>
@@ -169,8 +183,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link PermitBean} beans or empty list if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(PersonGroupBean bean,int startRow,int numRows);    
+    public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(PersonGroupBean bean,int startRow,int numRows)throws RuntimeDaoException;    
     //3.3 SET IMPORTED
     /**
      * set  the {@link PermitBean} object array associate to PersonGroupBean by the fl_permit.person_group_id field.<BR>
@@ -179,8 +194,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param importedBeans imported beans from fl_permit
      * @return importedBeans always
      * @see {@link PermitManager#setReferencedByPersonGroupId(PermitBean, PersonGroupBean)
+     * @throws RuntimeDaoException
      */
-    public PermitBean[] setPermitBeansByPersonGroupId(PersonGroupBean bean , PermitBean[] importedBeans);
+    public PermitBean[] setPermitBeansByPersonGroupId(PersonGroupBean bean , PermitBean[] importedBeans)throws RuntimeDaoException;
 
     //3.4 SET IMPORTED
     /**
@@ -190,8 +206,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param importedBeans imported beans from fl_permit 
      * @return importedBeans always
      * @see {@link PermitManager#setReferencedByPersonGroupId(PermitBean, PersonGroupBean)
+     * @throws RuntimeDaoException
      */
-    public <C extends java.util.Collection<PermitBean>> C setPermitBeansByPersonGroupId(PersonGroupBean bean , C importedBeans);
+    public <C extends java.util.Collection<PermitBean>> C setPermitBeansByPersonGroupId(PersonGroupBean bean , C importedBeans)throws RuntimeDaoException;
 
     //3.1 GET IMPORTED
     /**
@@ -199,8 +216,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME : fl_person_ibfk_1 
      * @param bean the {@link PersonGroupBean}
      * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public PersonBean[] getPersonBeansByGroupId(PersonGroupBean bean);
+    public PersonBean[] getPersonBeansByGroupId(PersonGroupBean bean)throws RuntimeDaoException;
     
     //3.1.2 GET IMPORTED
     /**
@@ -208,17 +226,18 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME : fl_person_ibfk_1 
      * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public PersonBean[] getPersonBeansByGroupId(Integer idOfPersonGroup);
+    public PersonBean[] getPersonBeansByGroupId(Integer idOfPersonGroup)throws RuntimeDaoException;
     
     //3.2 GET IMPORTED
     /**
      * see also #getPersonBeansByGroupIdAsList(PersonGroupBean,int,int)
      * @param bean
      * @return
+     * @throws RuntimeDaoException
      */
-    public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(PersonGroupBean bean);
+    public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(PersonGroupBean bean)throws RuntimeDaoException;
 
     //3.2.2 GET IMPORTED
     /**
@@ -226,17 +245,18 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME:fl_person_ibfk_1
      * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PersonBean} beans 
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(Integer idOfPersonGroup);
+    public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(Integer idOfPersonGroup)throws RuntimeDaoException;
     //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link PersonBean} objects from fl_person.group_id field.<BR>
      * FK_NAME:fl_person_ibfk_1
      * @param idOfPersonGroup Integer - PK# 1
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deletePersonBeansByGroupId(Integer idOfPersonGroup);
+    public int deletePersonBeansByGroupId(Integer idOfPersonGroup)throws RuntimeDaoException;
     //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link PersonBean} object from fl_person.group_id field.<BR>
@@ -245,8 +265,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link PersonBean} beans or empty list if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(PersonGroupBean bean,int startRow,int numRows);    
+    public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(PersonGroupBean bean,int startRow,int numRows)throws RuntimeDaoException;    
     //3.3 SET IMPORTED
     /**
      * set  the {@link PersonBean} object array associate to PersonGroupBean by the fl_person.group_id field.<BR>
@@ -255,8 +276,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param importedBeans imported beans from fl_person
      * @return importedBeans always
      * @see {@link PersonManager#setReferencedByGroupId(PersonBean, PersonGroupBean)
+     * @throws RuntimeDaoException
      */
-    public PersonBean[] setPersonBeansByGroupId(PersonGroupBean bean , PersonBean[] importedBeans);
+    public PersonBean[] setPersonBeansByGroupId(PersonGroupBean bean , PersonBean[] importedBeans)throws RuntimeDaoException;
 
     //3.4 SET IMPORTED
     /**
@@ -266,8 +288,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param importedBeans imported beans from fl_person 
      * @return importedBeans always
      * @see {@link PersonManager#setReferencedByGroupId(PersonBean, PersonGroupBean)
+     * @throws RuntimeDaoException
      */
-    public <C extends java.util.Collection<PersonBean>> C setPersonBeansByGroupId(PersonGroupBean bean , C importedBeans);
+    public <C extends java.util.Collection<PersonBean>> C setPersonBeansByGroupId(PersonGroupBean bean , C importedBeans)throws RuntimeDaoException;
 
     //3.1 GET IMPORTED
     /**
@@ -275,8 +298,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME : fl_person_group_ibfk_1 
      * @param bean the {@link PersonGroupBean}
      * @return the associated {@link PersonGroupBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public PersonGroupBean[] getPersonGroupBeansByParent(PersonGroupBean bean);
+    public PersonGroupBean[] getPersonGroupBeansByParent(PersonGroupBean bean)throws RuntimeDaoException;
     
     //3.1.2 GET IMPORTED
     /**
@@ -284,17 +308,18 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME : fl_person_group_ibfk_1 
      * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PersonGroupBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public PersonGroupBean[] getPersonGroupBeansByParent(Integer idOfPersonGroup);
+    public PersonGroupBean[] getPersonGroupBeansByParent(Integer idOfPersonGroup)throws RuntimeDaoException;
     
     //3.2 GET IMPORTED
     /**
      * see also #getPersonGroupBeansByParentAsList(PersonGroupBean,int,int)
      * @param bean
      * @return
+     * @throws RuntimeDaoException
      */
-    public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(PersonGroupBean bean);
+    public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(PersonGroupBean bean)throws RuntimeDaoException;
 
     //3.2.2 GET IMPORTED
     /**
@@ -302,17 +327,18 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME:fl_person_group_ibfk_1
      * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link PersonGroupBean} beans 
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(Integer idOfPersonGroup);
+    public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(Integer idOfPersonGroup)throws RuntimeDaoException;
     //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link PersonGroupBean} objects from fl_person_group.parent field.<BR>
      * FK_NAME:fl_person_group_ibfk_1
      * @param idOfPersonGroup Integer - PK# 1
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deletePersonGroupBeansByParent(Integer idOfPersonGroup);
+    public int deletePersonGroupBeansByParent(Integer idOfPersonGroup)throws RuntimeDaoException;
     //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link PersonGroupBean} object from fl_person_group.parent field.<BR>
@@ -321,8 +347,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link PersonGroupBean} beans or empty list if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(PersonGroupBean bean,int startRow,int numRows);    
+    public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(PersonGroupBean bean,int startRow,int numRows)throws RuntimeDaoException;    
     //3.3 SET IMPORTED
     /**
      * set  the {@link PersonGroupBean} object array associate to PersonGroupBean by the fl_person_group.parent field.<BR>
@@ -331,8 +358,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param importedBeans imported beans from fl_person_group
      * @return importedBeans always
      * @see {@link PersonGroupManager#setReferencedByParent(PersonGroupBean, PersonGroupBean)
+     * @throws RuntimeDaoException
      */
-    public PersonGroupBean[] setPersonGroupBeansByParent(PersonGroupBean bean , PersonGroupBean[] importedBeans);
+    public PersonGroupBean[] setPersonGroupBeansByParent(PersonGroupBean bean , PersonGroupBean[] importedBeans)throws RuntimeDaoException;
 
     //3.4 SET IMPORTED
     /**
@@ -342,8 +370,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param importedBeans imported beans from fl_person_group 
      * @return importedBeans always
      * @see {@link PersonGroupManager#setReferencedByParent(PersonGroupBean, PersonGroupBean)
+     * @throws RuntimeDaoException
      */
-    public <C extends java.util.Collection<PersonGroupBean>> C setPersonGroupBeansByParent(PersonGroupBean bean , C importedBeans);
+    public <C extends java.util.Collection<PersonGroupBean>> C setPersonGroupBeansByParent(PersonGroupBean bean , C importedBeans)throws RuntimeDaoException;
 
     //3.5 SYNC SAVE 
     /**
@@ -355,10 +384,11 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param impPersonByGroupId the {@link PersonBean} bean refer to {@link PersonGroupBean} 
      * @param impPersongroupByParent the {@link PersonGroupBean} bean refer to {@link PersonGroupBean} 
      * @return the inserted or updated {@link PersonGroupBean} bean
+     * @throws RuntimeDaoException
      */
     public PersonGroupBean save(PersonGroupBean bean
         , PersonGroupBean refPersongroupByParent 
-        , PermitBean[] impPermitByPersonGroupId , PersonBean[] impPersonByGroupId , PersonGroupBean[] impPersongroupByParent );
+        , PermitBean[] impPermitByPersonGroupId , PersonBean[] impPersonByGroupId , PersonGroupBean[] impPersongroupByParent )throws RuntimeDaoException;
     //3.6 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save<br>
@@ -369,10 +399,11 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param impPersonByGroupId the {@link PersonBean} bean refer to {@link PersonGroupBean} 
      * @param impPersongroupByParent the {@link PersonGroupBean} bean refer to {@link PersonGroupBean} 
      * @return the inserted or updated {@link PersonGroupBean} bean
+     * @throws RuntimeDaoException
      */
     public PersonGroupBean saveAsTransaction(final PersonGroupBean bean
         ,final PersonGroupBean refPersongroupByParent 
-        ,final PermitBean[] impPermitByPersonGroupId ,final PersonBean[] impPersonByGroupId ,final PersonGroupBean[] impPersongroupByParent );
+        ,final PermitBean[] impPermitByPersonGroupId ,final PersonBean[] impPersonByGroupId ,final PersonGroupBean[] impPersongroupByParent )throws RuntimeDaoException;
     //3.7 SYNC SAVE 
     /**
      * Save the PersonGroupBean bean and referenced beans and imported beans into the database.
@@ -383,10 +414,11 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param impPersonByGroupId the {@link PersonBean} bean refer to {@link PersonGroupBean} 
      * @param impPersongroupByParent the {@link PersonGroupBean} bean refer to {@link PersonGroupBean} 
      * @return the inserted or updated {@link PersonGroupBean} bean
+     * @throws RuntimeDaoException
      */
     public PersonGroupBean save(PersonGroupBean bean
         , PersonGroupBean refPersongroupByParent 
-        , java.util.Collection<PermitBean> impPermitByPersonGroupId , java.util.Collection<PersonBean> impPersonByGroupId , java.util.Collection<PersonGroupBean> impPersongroupByParent );
+        , java.util.Collection<PermitBean> impPermitByPersonGroupId , java.util.Collection<PersonBean> impPersonByGroupId , java.util.Collection<PersonGroupBean> impPersongroupByParent )throws RuntimeDaoException;
     //3.8 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save<br>
@@ -397,10 +429,11 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param impPersonByGroupId the {@link PersonBean} bean refer to {@link PersonGroupBean} 
      * @param impPersongroupByParent the {@link PersonGroupBean} bean refer to {@link PersonGroupBean} 
      * @return the inserted or updated {@link PersonGroupBean} bean
+     * @throws RuntimeDaoException
      */
     public PersonGroupBean saveAsTransaction(final PersonGroupBean bean
         ,final PersonGroupBean refPersongroupByParent 
-        ,final  java.util.Collection<PermitBean> impPermitByPersonGroupId ,final  java.util.Collection<PersonBean> impPersonByGroupId ,final  java.util.Collection<PersonGroupBean> impPersongroupByParent );
+        ,final  java.util.Collection<PermitBean> impPermitByPersonGroupId ,final  java.util.Collection<PersonBean> impPersonByGroupId ,final  java.util.Collection<PersonGroupBean> impPersongroupByParent )throws RuntimeDaoException;
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
@@ -410,8 +443,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * FK_NAME : fl_person_group_ibfk_1
      * @param bean the {@link PersonGroupBean}
      * @return the associated {@link PersonGroupBean} bean or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public PersonGroupBean getReferencedByParent(PersonGroupBean bean);
+    public PersonGroupBean getReferencedByParent(PersonGroupBean bean)throws RuntimeDaoException;
 
     //5.2 SET REFERENCED 
     /**
@@ -422,7 +456,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @return always beanToSet saved
      * @throws RuntimeDaoException
      */
-    public PersonGroupBean setReferencedByParent(PersonGroupBean bean, PersonGroupBean beanToSet);
+    public PersonGroupBean setReferencedByParent(PersonGroupBean bean, PersonGroupBean beanToSet)throws RuntimeDaoException;
     //_____________________________________________________________________
     //
     // USING INDICES
@@ -434,24 +468,27 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      *
      * @param parent the parent column's value filter.
      * @return an array of PersonGroupBean
+     * @throws RuntimeDaoException
      */
-    public PersonGroupBean[] loadByIndexParent(Integer parent);
+    public PersonGroupBean[] loadByIndexParent(Integer parent)throws RuntimeDaoException;
     
     /**
      * Retrieves a list of PersonGroupBean using the parent index.
      *
      * @param parent the parent column's value filter.
      * @return a list of PersonGroupBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<PersonGroupBean> loadByIndexParentAsList(Integer parent);
+    public java.util.List<PersonGroupBean> loadByIndexParentAsList(Integer parent)throws RuntimeDaoException;
 
     /**
      * Deletes rows using the parent index.
      *
      * @param parent the parent column's value filter.
      * @return the number of deleted objects
+     * @throws RuntimeDaoException
      */
-    public int deleteByIndexParent(Integer parent);
+    public int deleteByIndexParent(Integer parent)throws RuntimeDaoException;
     
 
     //45
@@ -478,8 +515,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * see also #loadViaPermitAsList(PersonGroupBean,int,int)
      * @param bean
      * @return
+     * @throws RuntimeDaoException
      */
-    public java.util.List<PersonGroupBean> loadViaPermitAsList(DeviceGroupBean bean);
+    public java.util.List<PersonGroupBean> loadViaPermitAsList(DeviceGroupBean bean)throws RuntimeDaoException;
 
     //23 MANY TO MANY
     /**
@@ -490,53 +528,60 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return a list of PersonGroupBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<PersonGroupBean> loadViaPermitAsList(DeviceGroupBean bean, int startRow, int numRows);
+    public java.util.List<PersonGroupBean> loadViaPermitAsList(DeviceGroupBean bean, int startRow, int numRows)throws RuntimeDaoException;
     //23.2 MANY TO MANY
     /**
      * add junction between {@link PersonGroupBean} and {@link DeviceGroupBean} if junction not exists
      * @param bean
      * @param linked
+     * @throws RuntimeDaoException
      */
-    public void addJunction(PersonGroupBean bean,DeviceGroupBean linked);
+    public void addJunction(PersonGroupBean bean,DeviceGroupBean linked)throws RuntimeDaoException;
     //23.3 MANY TO MANY
     /**
      * remove junction between {@link PersonGroupBean} and {@link DeviceGroupBean}
      * @param bean
      * @param linked
      * @return deleted rows count
+     * @throws RuntimeDaoException
      */
-    public int deleteJunction(PersonGroupBean bean,DeviceGroupBean linked);
+    public int deleteJunction(PersonGroupBean bean,DeviceGroupBean linked)throws RuntimeDaoException;
     //23.4 MANY TO MANY
     /** 
      * see also {@link #addJunction(PersonGroupBean,DeviceGroupBean)}
      * @param bean
      * @param linkedBeans
+     * @throws RuntimeDaoException
      */
-    public void addJunction(PersonGroupBean bean,DeviceGroupBean... linkedBeans);
+    public void addJunction(PersonGroupBean bean,DeviceGroupBean... linkedBeans)throws RuntimeDaoException;
     //23.5 MANY TO MANY
     /** 
      * see also {@link #addJunction(PersonGroupBean,DeviceGroupBean)}
      * @param bean
      * @param linkedBeans
+     * @throws RuntimeDaoException
      */
-    public void addJunction(PersonGroupBean bean,java.util.Collection<DeviceGroupBean> linkedBeans);
+    public void addJunction(PersonGroupBean bean,java.util.Collection<DeviceGroupBean> linkedBeans)throws RuntimeDaoException;
     //23.6 MANY TO MANY
     /** 
      * see also {@link #deleteJunction(PersonGroupBean,DeviceGroupBean)}
      * @param bean
      * @param linkedBeans
      * @return
+     * @throws RuntimeDaoException
      */
-    public int deleteJunction(PersonGroupBean bean,DeviceGroupBean... linkedBeans);
+    public int deleteJunction(PersonGroupBean bean,DeviceGroupBean... linkedBeans)throws RuntimeDaoException;
     //23.7 MANY TO MANY
     /** 
      * see also {@link #deleteJunction(PersonGroupBean,DeviceGroupBean)} 
      * @param bean
      * @param linkedBeans
      * @return
+     * @throws RuntimeDaoException
      */
-    public int deleteJunction(PersonGroupBean bean,java.util.Collection<DeviceGroupBean> linkedBeans);
+    public int deleteJunction(PersonGroupBean bean,java.util.Collection<DeviceGroupBean> linkedBeans)throws RuntimeDaoException;
 
     //_____________________________________________________________________
     //
@@ -551,14 +596,15 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      *         first element equal last if self-reference field is cycle
      * @throws RuntimeDaoException
      */
-    public java.util.List<PersonGroupBean> listOfParent(Integer id);
+    public java.util.List<PersonGroupBean> listOfParent(Integer id)throws RuntimeDaoException;
     //48
     /**
      * see also {@link #listOfParent(Integer)}
      * @param bean
      * @return
+     * @throws RuntimeDaoException
      */
-    public java.util.List<PersonGroupBean> listOfParent(PersonGroupBean bean);
+    public java.util.List<PersonGroupBean> listOfParent(PersonGroupBean bean)throws RuntimeDaoException;
     //49
     /**
      * get level count on the self-reference field : {@code fl_person_group(parent) }
@@ -567,14 +613,15 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      *         -1 if self-reference field is cycle
      * @throws RuntimeDaoException
      */
-    public int levelOfParent(Integer id);
+    public int levelOfParent(Integer id)throws RuntimeDaoException;
     //50
     /**
      * see also {@link #levelOfParent(Integer)}
      * @param bean
-     * @return 
+     * @return
+     * @throws RuntimeDaoException
      */
-    public int levelOfParent(PersonGroupBean bean);
+    public int levelOfParent(PersonGroupBean bean)throws RuntimeDaoException;
     //51
     /**
      * test whether the self-reference field is cycle : {@code fl_person_group(parent) }
@@ -582,8 +629,9 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @throws RuntimeDaoException
      * @see #levelOfParent(PersonGroupBean)
      * @return
+     * @throws RuntimeDaoException
      */
-    public boolean isCycleOnParent(Integer id);
+    public boolean isCycleOnParent(Integer id)throws RuntimeDaoException;
     //52
     /**
      * test whether the self-reference field is cycle : {@code fl_person_group(parent) }
@@ -592,7 +640,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @throws RuntimeDaoException
      * @see #levelOfParent(PersonGroupBean)
      */
-    public boolean isCycleOnParent(PersonGroupBean bean);
+    public boolean isCycleOnParent(PersonGroupBean bean)throws RuntimeDaoException;
     //53
     /**
      * return top bean that with {@code null} self-reference field  : {@code fl_person_group(parent) }
@@ -602,14 +650,15 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @throws IllegalStateException if self-reference field is cycle
      * @throws RuntimeDaoException
      */
-    public PersonGroupBean topOfParent(Integer id);
+    public PersonGroupBean topOfParent(Integer id)throws RuntimeDaoException;
     //54
     /**
      * see also {@link #topOfParent(Integer)}
      * @param bean
      * @return
+     * @throws RuntimeDaoException
      */
-    public PersonGroupBean topOfParent(PersonGroupBean bean);
+    public PersonGroupBean topOfParent(PersonGroupBean bean)throws RuntimeDaoException;
     //55
     /**
      * Ensures the self-reference field is not cycle : {@code fl_person_group(parent) }
@@ -619,7 +668,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @throws RuntimeDaoException
      * @see #isCycleOnParent(Integer)
      */
-    public Integer checkCycleOfParent(Integer id);
+    public Integer checkCycleOfParent(Integer id)throws RuntimeDaoException;
     //56
     /**
      * Ensures the self-reference field is not cycle : {@code fl_person_group(parent) }<br>
@@ -629,5 +678,5 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @throws RuntimeDaoException
      * @see #isCycleOnParent(PersonGroupBean)
      */
-    public PersonGroupBean checkCycleOfParent(PersonGroupBean bean);
+    public PersonGroupBean checkCycleOfParent(PersonGroupBean bean)throws RuntimeDaoException;
 }

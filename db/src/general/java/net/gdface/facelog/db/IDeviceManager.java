@@ -26,8 +26,9 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      *
      * @param id Integer - PK# 1
      * @return a unique DeviceBean or {@code null} if not found
+     * @throws RuntimeDaoException
      */
-    public DeviceBean loadByPrimaryKey(Integer id);
+    public DeviceBean loadByPrimaryKey(Integer id)throws RuntimeDaoException;
 
     //1.1
     /**
@@ -36,8 +37,9 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param id Integer - PK# 1
      * @return a unique DeviceBean
      * @throws ObjectRetrievalException if not found
+     * @throws RuntimeDaoException
      */
-    public DeviceBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException;
+    public DeviceBean loadByPrimaryKeyChecked(Integer id) throws RuntimeDaoException,ObjectRetrievalException;
     
     //1.4
     /**
@@ -45,32 +47,36 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param id Integer - PK# 1
      * @see #loadByPrimaryKey($keys)
      * @return
+     * @throws RuntimeDaoException
      */
-    public boolean existsPrimaryKey(Integer id);
+    public boolean existsPrimaryKey(Integer id)throws RuntimeDaoException;
     //1.4.1
     /**
      * Check duplicated row by primary keys,if row exists throw exception
      * @param id Integer
      * @return 
+     * @throws RuntimeDaoException
      * @throws ObjectRetrievalException
      */
-    public Integer checkDuplicate(Integer id)throws ObjectRetrievalException;
+    public Integer checkDuplicate(Integer id)throws RuntimeDaoException,ObjectRetrievalException;
     //1.8
     /**
      * Loads {@link DeviceBean} from the fl_device using primary key fields.
      *
      * @param keys primary keys array
      * @return list of DeviceBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceBean> loadByPrimaryKey(int... keys);
+    public java.util.List<DeviceBean> loadByPrimaryKey(int... keys)throws RuntimeDaoException;
     //1.9
     /**
      * Loads {@link DeviceBean} from the fl_device using primary key fields.
      *
      * @param keys primary keys collection
      * @return list of DeviceBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceBean> loadByPrimaryKey(java.util.Collection<Integer> keys);
+    public java.util.List<DeviceBean> loadByPrimaryKey(java.util.Collection<Integer> keys)throws RuntimeDaoException;
     //2
     /**
      * Delete row according to its primary keys.<br>
@@ -78,40 +84,45 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      *
      * @param id Integer - PK# 1
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(Integer id);
+    public int deleteByPrimaryKey(Integer id)throws RuntimeDaoException;
     //2.2
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys array
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(int... keys);
+    public int deleteByPrimaryKey(int... keys)throws RuntimeDaoException;
     //2.3
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys collection
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(java.util.Collection<Integer> keys);
+    public int deleteByPrimaryKey(java.util.Collection<Integer> keys)throws RuntimeDaoException;
     //2.4
     /**
      * Delete beans.<br>
      *
      * @param beans DeviceBean collection wille be deleted
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int delete(DeviceBean... beans);
+    public int delete(DeviceBean... beans)throws RuntimeDaoException;
     //2.5
     /**
      * Delete beans.<br>
      *
      * @param beans DeviceBean collection wille be deleted
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int delete(java.util.Collection<DeviceBean> beans);
+    public int delete(java.util.Collection<DeviceBean> beans)throws RuntimeDaoException;
  
 
     //////////////////////////////////////
@@ -123,8 +134,9 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * FK_NAME : fl_image_ibfk_1 
      * @param bean the {@link DeviceBean}
      * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public ImageBean[] getImageBeansByDeviceId(DeviceBean bean);
+    public ImageBean[] getImageBeansByDeviceId(DeviceBean bean)throws RuntimeDaoException;
     
     //3.1.2 GET IMPORTED
     /**
@@ -132,17 +144,18 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * FK_NAME : fl_image_ibfk_1 
      * @param idOfDevice Integer - PK# 1
      * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public ImageBean[] getImageBeansByDeviceId(Integer idOfDevice);
+    public ImageBean[] getImageBeansByDeviceId(Integer idOfDevice)throws RuntimeDaoException;
     
     //3.2 GET IMPORTED
     /**
      * see also #getImageBeansByDeviceIdAsList(DeviceBean,int,int)
      * @param bean
      * @return
+     * @throws RuntimeDaoException
      */
-    public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(DeviceBean bean);
+    public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(DeviceBean bean)throws RuntimeDaoException;
 
     //3.2.2 GET IMPORTED
     /**
@@ -150,17 +163,18 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * FK_NAME:fl_image_ibfk_1
      * @param idOfDevice Integer - PK# 1
      * @return the associated {@link ImageBean} beans 
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(Integer idOfDevice);
+    public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(Integer idOfDevice)throws RuntimeDaoException;
     //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link ImageBean} objects from fl_image.device_id field.<BR>
      * FK_NAME:fl_image_ibfk_1
      * @param idOfDevice Integer - PK# 1
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteImageBeansByDeviceId(Integer idOfDevice);
+    public int deleteImageBeansByDeviceId(Integer idOfDevice)throws RuntimeDaoException;
     //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link ImageBean} object from fl_image.device_id field.<BR>
@@ -169,8 +183,9 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link ImageBean} beans or empty list if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(DeviceBean bean,int startRow,int numRows);    
+    public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(DeviceBean bean,int startRow,int numRows)throws RuntimeDaoException;    
     //3.3 SET IMPORTED
     /**
      * set  the {@link ImageBean} object array associate to DeviceBean by the fl_image.device_id field.<BR>
@@ -179,8 +194,9 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param importedBeans imported beans from fl_image
      * @return importedBeans always
      * @see {@link ImageManager#setReferencedByDeviceId(ImageBean, DeviceBean)
+     * @throws RuntimeDaoException
      */
-    public ImageBean[] setImageBeansByDeviceId(DeviceBean bean , ImageBean[] importedBeans);
+    public ImageBean[] setImageBeansByDeviceId(DeviceBean bean , ImageBean[] importedBeans)throws RuntimeDaoException;
 
     //3.4 SET IMPORTED
     /**
@@ -190,8 +206,9 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param importedBeans imported beans from fl_image 
      * @return importedBeans always
      * @see {@link ImageManager#setReferencedByDeviceId(ImageBean, DeviceBean)
+     * @throws RuntimeDaoException
      */
-    public <C extends java.util.Collection<ImageBean>> C setImageBeansByDeviceId(DeviceBean bean , C importedBeans);
+    public <C extends java.util.Collection<ImageBean>> C setImageBeansByDeviceId(DeviceBean bean , C importedBeans)throws RuntimeDaoException;
 
     //3.1 GET IMPORTED
     /**
@@ -199,8 +216,9 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * FK_NAME : fl_log_ibfk_2 
      * @param bean the {@link DeviceBean}
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public LogBean[] getLogBeansByDeviceId(DeviceBean bean);
+    public LogBean[] getLogBeansByDeviceId(DeviceBean bean)throws RuntimeDaoException;
     
     //3.1.2 GET IMPORTED
     /**
@@ -208,17 +226,18 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * FK_NAME : fl_log_ibfk_2 
      * @param idOfDevice Integer - PK# 1
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public LogBean[] getLogBeansByDeviceId(Integer idOfDevice);
+    public LogBean[] getLogBeansByDeviceId(Integer idOfDevice)throws RuntimeDaoException;
     
     //3.2 GET IMPORTED
     /**
      * see also #getLogBeansByDeviceIdAsList(DeviceBean,int,int)
      * @param bean
      * @return
+     * @throws RuntimeDaoException
      */
-    public java.util.List<LogBean> getLogBeansByDeviceIdAsList(DeviceBean bean);
+    public java.util.List<LogBean> getLogBeansByDeviceIdAsList(DeviceBean bean)throws RuntimeDaoException;
 
     //3.2.2 GET IMPORTED
     /**
@@ -226,17 +245,18 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * FK_NAME:fl_log_ibfk_2
      * @param idOfDevice Integer - PK# 1
      * @return the associated {@link LogBean} beans 
-     * @throws DaoException
+     * @throws RuntimeDaoException
      */
-    public java.util.List<LogBean> getLogBeansByDeviceIdAsList(Integer idOfDevice);
+    public java.util.List<LogBean> getLogBeansByDeviceIdAsList(Integer idOfDevice)throws RuntimeDaoException;
     //3.2.3 DELETE IMPORTED
     /**
      * delete the associated {@link LogBean} objects from fl_log.device_id field.<BR>
      * FK_NAME:fl_log_ibfk_2
      * @param idOfDevice Integer - PK# 1
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteLogBeansByDeviceId(Integer idOfDevice);
+    public int deleteLogBeansByDeviceId(Integer idOfDevice)throws RuntimeDaoException;
     //3.2.4 GET IMPORTED
     /**
      * Retrieves the {@link LogBean} object from fl_log.device_id field.<BR>
@@ -245,8 +265,9 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the associated {@link LogBean} beans or empty list if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public java.util.List<LogBean> getLogBeansByDeviceIdAsList(DeviceBean bean,int startRow,int numRows);    
+    public java.util.List<LogBean> getLogBeansByDeviceIdAsList(DeviceBean bean,int startRow,int numRows)throws RuntimeDaoException;    
     //3.3 SET IMPORTED
     /**
      * set  the {@link LogBean} object array associate to DeviceBean by the fl_log.device_id field.<BR>
@@ -255,8 +276,9 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param importedBeans imported beans from fl_log
      * @return importedBeans always
      * @see {@link LogManager#setReferencedByDeviceId(LogBean, DeviceBean)
+     * @throws RuntimeDaoException
      */
-    public LogBean[] setLogBeansByDeviceId(DeviceBean bean , LogBean[] importedBeans);
+    public LogBean[] setLogBeansByDeviceId(DeviceBean bean , LogBean[] importedBeans)throws RuntimeDaoException;
 
     //3.4 SET IMPORTED
     /**
@@ -266,8 +288,9 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param importedBeans imported beans from fl_log 
      * @return importedBeans always
      * @see {@link LogManager#setReferencedByDeviceId(LogBean, DeviceBean)
+     * @throws RuntimeDaoException
      */
-    public <C extends java.util.Collection<LogBean>> C setLogBeansByDeviceId(DeviceBean bean , C importedBeans);
+    public <C extends java.util.Collection<LogBean>> C setLogBeansByDeviceId(DeviceBean bean , C importedBeans)throws RuntimeDaoException;
 
     //3.5 SYNC SAVE 
     /**
@@ -278,10 +301,11 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param impImageByDeviceId the {@link ImageBean} bean refer to {@link DeviceBean} 
      * @param impLogByDeviceId the {@link LogBean} bean refer to {@link DeviceBean} 
      * @return the inserted or updated {@link DeviceBean} bean
+     * @throws RuntimeDaoException
      */
     public DeviceBean save(DeviceBean bean
         , DeviceGroupBean refDevicegroupByGroupId 
-        , ImageBean[] impImageByDeviceId , LogBean[] impLogByDeviceId );
+        , ImageBean[] impImageByDeviceId , LogBean[] impLogByDeviceId )throws RuntimeDaoException;
     //3.6 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save<br>
@@ -291,10 +315,11 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param impImageByDeviceId the {@link ImageBean} bean refer to {@link DeviceBean} 
      * @param impLogByDeviceId the {@link LogBean} bean refer to {@link DeviceBean} 
      * @return the inserted or updated {@link DeviceBean} bean
+     * @throws RuntimeDaoException
      */
     public DeviceBean saveAsTransaction(final DeviceBean bean
         ,final DeviceGroupBean refDevicegroupByGroupId 
-        ,final ImageBean[] impImageByDeviceId ,final LogBean[] impLogByDeviceId );
+        ,final ImageBean[] impImageByDeviceId ,final LogBean[] impLogByDeviceId )throws RuntimeDaoException;
     //3.7 SYNC SAVE 
     /**
      * Save the DeviceBean bean and referenced beans and imported beans into the database.
@@ -304,10 +329,11 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param impImageByDeviceId the {@link ImageBean} bean refer to {@link DeviceBean} 
      * @param impLogByDeviceId the {@link LogBean} bean refer to {@link DeviceBean} 
      * @return the inserted or updated {@link DeviceBean} bean
+     * @throws RuntimeDaoException
      */
     public DeviceBean save(DeviceBean bean
         , DeviceGroupBean refDevicegroupByGroupId 
-        , java.util.Collection<ImageBean> impImageByDeviceId , java.util.Collection<LogBean> impLogByDeviceId );
+        , java.util.Collection<ImageBean> impImageByDeviceId , java.util.Collection<LogBean> impLogByDeviceId )throws RuntimeDaoException;
     //3.8 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save<br>
@@ -317,10 +343,11 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param impImageByDeviceId the {@link ImageBean} bean refer to {@link DeviceBean} 
      * @param impLogByDeviceId the {@link LogBean} bean refer to {@link DeviceBean} 
      * @return the inserted or updated {@link DeviceBean} bean
+     * @throws RuntimeDaoException
      */
     public DeviceBean saveAsTransaction(final DeviceBean bean
         ,final DeviceGroupBean refDevicegroupByGroupId 
-        ,final  java.util.Collection<ImageBean> impImageByDeviceId ,final  java.util.Collection<LogBean> impLogByDeviceId );
+        ,final  java.util.Collection<ImageBean> impImageByDeviceId ,final  java.util.Collection<LogBean> impLogByDeviceId )throws RuntimeDaoException;
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
@@ -330,8 +357,9 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * FK_NAME : fl_device_ibfk_1
      * @param bean the {@link DeviceBean}
      * @return the associated {@link DeviceGroupBean} bean or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public DeviceGroupBean getReferencedByGroupId(DeviceBean bean);
+    public DeviceGroupBean getReferencedByGroupId(DeviceBean bean)throws RuntimeDaoException;
 
     //5.2 SET REFERENCED 
     /**
@@ -342,7 +370,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @return always beanToSet saved
      * @throws RuntimeDaoException
      */
-    public DeviceGroupBean setReferencedByGroupId(DeviceBean bean, DeviceGroupBean beanToSet);
+    public DeviceGroupBean setReferencedByGroupId(DeviceBean bean, DeviceGroupBean beanToSet)throws RuntimeDaoException;
     //_____________________________________________________________________
     //
     // USING INDICES
@@ -356,7 +384,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @return an DeviceBean,otherwise null if not found or exists null in input arguments
      * @throws RuntimeDaoException
      */
-    public DeviceBean loadByIndexMac(String mac);
+    public DeviceBean loadByIndexMac(String mac)throws RuntimeDaoException;
     /**
      * Retrieves an unique DeviceBean using the mac index.
      * 
@@ -366,43 +394,48 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @throws ObjectRetrievalException if not found
      * @throws RuntimeDaoException
      */
-    public DeviceBean loadByIndexMacChecked(String mac)throws ObjectRetrievalException;
+    public DeviceBean loadByIndexMacChecked(String mac)throws RuntimeDaoException,ObjectRetrievalException;
     /**
      * Retrieves an unique DeviceBean for each mac index.
      *
      * @param indexs index array
      * @return an list of DeviceBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceBean> loadByIndexMac(String... indexs);
+    public java.util.List<DeviceBean> loadByIndexMac(String... indexs)throws RuntimeDaoException;
     /**
      * Retrieves an unique DeviceBean for each mac index.
      *
      * @param indexs index collection
      * @return an list of DeviceBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceBean> loadByIndexMac(java.util.Collection<String> indexs);
+    public java.util.List<DeviceBean> loadByIndexMac(java.util.Collection<String> indexs)throws RuntimeDaoException;
     /**
      * Deletes rows for each mac index.
      *
      * @param indexs index array
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByIndexMac(String... indexs);
+    public int deleteByIndexMac(String... indexs)throws RuntimeDaoException;
     /**
      * Deletes rows for each mac index.
      *
      * @param indexs index collection
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByIndexMac(java.util.Collection<String> indexs);
+    public int deleteByIndexMac(java.util.Collection<String> indexs)throws RuntimeDaoException;
 
     /**
      * Deletes rows using the mac index.
      *
      * @param mac the mac column's value filter.
      * @return the number of deleted objects
+     * @throws RuntimeDaoException
      */
-    public int deleteByIndexMac(String mac);
+    public int deleteByIndexMac(String mac)throws RuntimeDaoException;
     
 
     /**
@@ -412,7 +445,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @return an DeviceBean,otherwise null if not found or exists null in input arguments
      * @throws RuntimeDaoException
      */
-    public DeviceBean loadByIndexSerialNo(String serialNo);
+    public DeviceBean loadByIndexSerialNo(String serialNo)throws RuntimeDaoException;
     /**
      * Retrieves an unique DeviceBean using the serial_no index.
      * 
@@ -422,43 +455,48 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @throws ObjectRetrievalException if not found
      * @throws RuntimeDaoException
      */
-    public DeviceBean loadByIndexSerialNoChecked(String serialNo)throws ObjectRetrievalException;
+    public DeviceBean loadByIndexSerialNoChecked(String serialNo)throws RuntimeDaoException,ObjectRetrievalException;
     /**
      * Retrieves an unique DeviceBean for each serial_no index.
      *
      * @param indexs index array
      * @return an list of DeviceBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceBean> loadByIndexSerialNo(String... indexs);
+    public java.util.List<DeviceBean> loadByIndexSerialNo(String... indexs)throws RuntimeDaoException;
     /**
      * Retrieves an unique DeviceBean for each serial_no index.
      *
      * @param indexs index collection
      * @return an list of DeviceBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceBean> loadByIndexSerialNo(java.util.Collection<String> indexs);
+    public java.util.List<DeviceBean> loadByIndexSerialNo(java.util.Collection<String> indexs)throws RuntimeDaoException;
     /**
      * Deletes rows for each serial_no index.
      *
      * @param indexs index array
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByIndexSerialNo(String... indexs);
+    public int deleteByIndexSerialNo(String... indexs)throws RuntimeDaoException;
     /**
      * Deletes rows for each serial_no index.
      *
      * @param indexs index collection
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByIndexSerialNo(java.util.Collection<String> indexs);
+    public int deleteByIndexSerialNo(java.util.Collection<String> indexs)throws RuntimeDaoException;
 
     /**
      * Deletes rows using the serial_no index.
      *
      * @param serialNo the serial_no column's value filter.
      * @return the number of deleted objects
+     * @throws RuntimeDaoException
      */
-    public int deleteByIndexSerialNo(String serialNo);
+    public int deleteByIndexSerialNo(String serialNo)throws RuntimeDaoException;
     
 
      /**
@@ -466,24 +504,27 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      *
      * @param groupId the group_id column's value filter.
      * @return an array of DeviceBean
+     * @throws RuntimeDaoException
      */
-    public DeviceBean[] loadByIndexGroupId(Integer groupId);
+    public DeviceBean[] loadByIndexGroupId(Integer groupId)throws RuntimeDaoException;
     
     /**
      * Retrieves a list of DeviceBean using the group_id index.
      *
      * @param groupId the group_id column's value filter.
      * @return a list of DeviceBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<DeviceBean> loadByIndexGroupIdAsList(Integer groupId);
+    public java.util.List<DeviceBean> loadByIndexGroupIdAsList(Integer groupId)throws RuntimeDaoException;
 
     /**
      * Deletes rows using the group_id index.
      *
      * @param groupId the group_id column's value filter.
      * @return the number of deleted objects
+     * @throws RuntimeDaoException
      */
-    public int deleteByIndexGroupId(Integer groupId);
+    public int deleteByIndexGroupId(Integer groupId)throws RuntimeDaoException;
     
 
     //45

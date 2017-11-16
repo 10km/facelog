@@ -26,8 +26,9 @@ public interface IStoreManager extends TableManager<StoreBean>
      *
      * @param md5 String - PK# 1
      * @return a unique StoreBean or {@code null} if not found
+     * @throws RuntimeDaoException
      */
-    public StoreBean loadByPrimaryKey(String md5);
+    public StoreBean loadByPrimaryKey(String md5)throws RuntimeDaoException;
 
     //1.1
     /**
@@ -36,8 +37,9 @@ public interface IStoreManager extends TableManager<StoreBean>
      * @param md5 String - PK# 1
      * @return a unique StoreBean
      * @throws ObjectRetrievalException if not found
+     * @throws RuntimeDaoException
      */
-    public StoreBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException;
+    public StoreBean loadByPrimaryKeyChecked(String md5) throws RuntimeDaoException,ObjectRetrievalException;
     
     //1.4
     /**
@@ -45,32 +47,36 @@ public interface IStoreManager extends TableManager<StoreBean>
      * @param md5 String - PK# 1
      * @see #loadByPrimaryKey($keys)
      * @return
+     * @throws RuntimeDaoException
      */
-    public boolean existsPrimaryKey(String md5);
+    public boolean existsPrimaryKey(String md5)throws RuntimeDaoException;
     //1.4.1
     /**
      * Check duplicated row by primary keys,if row exists throw exception
      * @param md5 String
      * @return 
+     * @throws RuntimeDaoException
      * @throws ObjectRetrievalException
      */
-    public String checkDuplicate(String md5)throws ObjectRetrievalException;
+    public String checkDuplicate(String md5)throws RuntimeDaoException,ObjectRetrievalException;
     //1.8
     /**
      * Loads {@link StoreBean} from the fl_store using primary key fields.
      *
      * @param keys primary keys array
      * @return list of StoreBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<StoreBean> loadByPrimaryKey(String... keys);
+    public java.util.List<StoreBean> loadByPrimaryKey(String... keys)throws RuntimeDaoException;
     //1.9
     /**
      * Loads {@link StoreBean} from the fl_store using primary key fields.
      *
      * @param keys primary keys collection
      * @return list of StoreBean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<StoreBean> loadByPrimaryKey(java.util.Collection<String> keys);
+    public java.util.List<StoreBean> loadByPrimaryKey(java.util.Collection<String> keys)throws RuntimeDaoException;
     //2
     /**
      * Delete row according to its primary keys.<br>
@@ -78,40 +84,45 @@ public interface IStoreManager extends TableManager<StoreBean>
      *
      * @param md5 String - PK# 1
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(String md5);
+    public int deleteByPrimaryKey(String md5)throws RuntimeDaoException;
     //2.2
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys array
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(String... keys);
+    public int deleteByPrimaryKey(String... keys)throws RuntimeDaoException;
     //2.3
     /**
      * Delete rows according to primary key.<br>
      *
      * @param keys primary keys collection
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByPrimaryKey(java.util.Collection<String> keys);
+    public int deleteByPrimaryKey(java.util.Collection<String> keys)throws RuntimeDaoException;
     //2.4
     /**
      * Delete beans.<br>
      *
      * @param beans StoreBean collection wille be deleted
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int delete(StoreBean... beans);
+    public int delete(StoreBean... beans)throws RuntimeDaoException;
     //2.5
     /**
      * Delete beans.<br>
      *
      * @param beans StoreBean collection wille be deleted
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int delete(java.util.Collection<StoreBean> beans);
+    public int delete(java.util.Collection<StoreBean> beans)throws RuntimeDaoException;
  
  
     //45
