@@ -63,13 +63,13 @@ public interface CommonConstant {
      * 服务异常类型定义
      */
     public static enum ExceptionType{
-        /** unclassified exception type*/
+        /** 其他未分类异常 */
         UNCLASSIFIED,
-        /** database access exception type */
+        /** 数据库访问异常 */
         DAO,
-        /** RuntimeException*/
+        /** RuntimeException */
         RUNTIME,
-        /** IOException */
-        IOERROR
+        /** 图像数据异常 */
+        IMAGE_ERROR
     }
 }

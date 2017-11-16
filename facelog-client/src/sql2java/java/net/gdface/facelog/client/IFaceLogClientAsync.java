@@ -6,6 +6,7 @@
 // template: service.client.async.java.vm
 // ______________________________________________________
 package net.gdface.facelog.client;
+
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -13,11 +14,13 @@ import java.nio.ByteBuffer;
 import java.util.*;
 
 /**
- * 定义 FaceLog 服务接口<br>
+ * FaceLog 服务接口<br>
  * <ul>
  * <li>所有标明为图像数据的参数,是指具有特定图像格式的图像数据(如jpg,png...),而非无格式的原始点阵位图</li>
- * <li>在执行涉及数据库操作的方法时如果数据库发生异常，则会被封装到{@link RuntimeDaoException}抛出，
- * 所有非{@link RuntimeException}异常会被封装在{@link ServiceRuntimeException}抛出</li>
+ * <li>在执行涉及数据库操作的方法时如果数据库发生异常，则会被封装到{@link RuntimeDaoException}抛出</li>
+ * <li>所有{@link RuntimeException}异常会被封装在{@link ServiceRuntimeException}抛出,
+ * client端可以通过{@link ServiceRuntimeException#getType()}获取异常类型,
+ * 异常类型定义参见{@link CommonConstant.ExceptionType}</li>
  * <li>所有数据库对象(Java Bean,比如 {@link PersonBean}),在执行保存操作(save)时,
  * 如果为新增记录({@link PersonBean#isNew()}为true),则执行insert操作,否则执行update操作,
  * 如果数据库已经存在指定的记录而{@code isNew()}为{@code true},则那么执行insert操作数据库就会抛出异常，
@@ -58,8 +61,7 @@ class IFaceLogClientAsync implements Constant{
      * @param service a instance of net.gdface.facelog.client.thrift.IFaceLog.Async created by Swift, must not be null
      */
     IFaceLogClientAsync(net.gdface.facelog.client.thrift.IFaceLog.Async service){
-        checkNotNull(service,"service is null");
-        this.service = service;
+        this.service = checkNotNull(service,"service is null");
     }
     // 1 SERIVCE PORT : addFeature
     /**
