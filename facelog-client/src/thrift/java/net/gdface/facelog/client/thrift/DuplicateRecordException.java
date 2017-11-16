@@ -4,21 +4,21 @@ import com.facebook.swift.codec.*;
 import com.facebook.swift.codec.ThriftField.Requiredness;
 import java.util.*;
 
-@ThriftStruct("DuplicateReordException")
-public final class DuplicateReordException extends Exception
+@ThriftStruct("DuplicateRecordException")
+public final class DuplicateRecordException extends Exception
 {
     private static final long serialVersionUID = 1L;
 
-    public DuplicateReordException() {
+    public DuplicateRecordException() {
     }
 
-    private String serviceMessage;
+    private String message;
 
-    @ThriftField(value=1, name="serviceMessage", requiredness=Requiredness.NONE)
-    public String getServiceMessage() { return serviceMessage; }
+    @ThriftField(value=1, name="message", requiredness=Requiredness.NONE)
+    public String getMessage() { return message; }
 
     @ThriftField
-    public void setServiceMessage(final String serviceMessage) { this.serviceMessage = serviceMessage; }
+    public void setMessage(final String message) { this.message = message; }
 
     private String causeClass;
 
@@ -35,12 +35,4 @@ public final class DuplicateReordException extends Exception
 
     @ThriftField
     public void setServiceStackTraceMessage(final String serviceStackTraceMessage) { this.serviceStackTraceMessage = serviceStackTraceMessage; }
-
-    private String message;
-
-    @ThriftField(value=4, name="message", requiredness=Requiredness.NONE)
-    public String getMessage() { return message; }
-
-    @ThriftField
-    public void setMessage(final String message) { this.message = message; }
 }

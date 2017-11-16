@@ -12,13 +12,13 @@ public final class ServiceRuntimeException extends Exception
     public ServiceRuntimeException() {
     }
 
-    private String serviceMessage;
+    private String message;
 
-    @ThriftField(value=1, name="serviceMessage", requiredness=Requiredness.NONE)
-    public String getServiceMessage() { return serviceMessage; }
+    @ThriftField(value=1, name="message", requiredness=Requiredness.NONE)
+    public String getMessage() { return message; }
 
     @ThriftField
-    public void setServiceMessage(final String serviceMessage) { this.serviceMessage = serviceMessage; }
+    public void setMessage(final String message) { this.message = message; }
 
     private String causeClass;
 

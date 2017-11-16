@@ -76,7 +76,8 @@ class Dao implements CommonConstant {
      * @see ${beanClass}${esc.hash}replaceNull(List)
      * @throws RuntimeDaoException
      */
-    $!{modifier}List<$beanClass> daoGet${coreClass}s(Collection<$primaryKey.javaType> ${primaryKey.varName}Collection)throws RuntimeDaoException{
+    $!{modifier}List<$beanClass> daoGet${coreClass}s(Collection<$primaryKey.javaType> ${primaryKey.varName}Collection)
+                    throws RuntimeDaoException{
         return ${beanClass}.replaceNull((${table.getGetManagerMethod()}().loadByPrimaryKey(${primaryKey.varName}Collection)));
     }
     //3  
@@ -86,7 +87,8 @@ class Dao implements CommonConstant {
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}deleteByPrimaryKey(Collection)}
      * @throws RuntimeDaoException
      */
-    $!{modifier}int daoDelete${coreClass}sByPrimaryKey(Collection<$primaryKey.javaType> ${primaryKey.varName}Collection)throws RuntimeDaoException{
+    $!{modifier}int daoDelete${coreClass}sByPrimaryKey(Collection<$primaryKey.javaType> ${primaryKey.varName}Collection)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != ${primaryKey.varName}Collection){
             for($primaryKey.javaType $primaryKey.varName:${primaryKey.varName}Collection){
@@ -127,7 +129,8 @@ class Dao implements CommonConstant {
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}existsPrimaryKey($varTypes)}
      * @throws RuntimeDaoException
      */
-    $!{modifier}boolean daoExists${coreClass}($params)throws RuntimeDaoException{
+    $!{modifier}boolean daoExists${coreClass}($params)
+                    throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().existsPrimaryKey($varNames);
     }
     //4-2
@@ -136,7 +139,8 @@ class Dao implements CommonConstant {
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}existsPrimaryKey($beanClass)}
      * @throws RuntimeDaoException
      */
-    $!{modifier}boolean daoExists${coreClass}($beanClass bean)throws RuntimeDaoException{
+    $!{modifier}boolean daoExists${coreClass}($beanClass bean)
+                    throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().existsPrimaryKey(bean);
     }
     //5
@@ -147,7 +151,8 @@ class Dao implements CommonConstant {
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}deleteByPrimaryKey($varTypes)}
      * @throws RuntimeDaoException
      */
-    $!{modifier}int daoDelete${coreClass}($params)throws RuntimeDaoException{
+    $!{modifier}int daoDelete${coreClass}($params)
+                    throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().deleteByPrimaryKey($varNames);
     }
     //5-2
@@ -158,7 +163,8 @@ class Dao implements CommonConstant {
      * @see ${esc.hash}daoDelete${coreClass}($varTypes)
      * @throws RuntimeDaoException
      */
-    $!{modifier}int daoDelete${coreClass}($beanClass bean)throws RuntimeDaoException{
+    $!{modifier}int daoDelete${coreClass}($beanClass bean)
+                    throws RuntimeDaoException{
         return null == bean ? 0 : daoDelete${coreClass}(#join($primaryKeys 'bean.$e.getGetMethod()()' ','));
     }
     //6
@@ -168,7 +174,8 @@ class Dao implements CommonConstant {
      * @see ${esc.hash}daoDelete${coreClass}($varTypes)
      * @throws RuntimeDaoException
      */
-    $!{modifier}int daoDelete${coreClass}s(Collection<$beanClass> beans)throws RuntimeDaoException{
+    $!{modifier}int daoDelete${coreClass}s(Collection<$beanClass> beans)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != beans){        
             for($beanClass bean:beans){
@@ -185,13 +192,14 @@ class Dao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      */
-    $!{modifier}$beanClass daoCheckDuplicate($beanClass $table.asVarBean())throws RuntimeDaoException,DuplicateReordException{
+    $!{modifier}$beanClass daoCheckDuplicate($beanClass $table.asVarBean())
+                    throws RuntimeDaoException,DuplicateRecordException{
         try{
             return ${table.getGetManagerMethod()}().checkDuplicate($table.asVarBean());
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
     }
 ################# CHECK DUPLICATE PRIMARY KEY##########
@@ -207,14 +215,15 @@ class Dao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * $fullParamComments
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)}
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * $!checkReturnComment
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException
+     * @throws DuplicateRecordException
      */
-    $!{modifier}$checkReturnType daoCheckDuplicate${coreClass}($fullParams)throws RuntimeDaoException,DuplicateReordException{
+    $!{modifier}$checkReturnType daoCheckDuplicate${coreClass}($fullParams)
+                    throws RuntimeDaoException,DuplicateRecordException{
         if(${table.getGetManagerMethod()}().existsPrimaryKey($fullVarNames)){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
 #if($table.countPrimaryKeys() == 1)
         return $primaryKey.fullVarName;
@@ -253,7 +262,8 @@ class Dao implements CommonConstant {
      * @throws RuntimeDaoException
      */
 #end
-    $!{modifier}List<$importedClass> ${methodName}($fullParams)throws RuntimeDaoException{
+    $!{modifier}List<$importedClass> ${methodName}($fullParams)
+                    throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().${importedTable.getImportedBeansGetMethod($fkName)}AsList($fullVarNames);
     }
     //8-2
@@ -263,7 +273,8 @@ class Dao implements CommonConstant {
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}${importedTable.getImportedBeansDelMethod($fkName)}($varTypes)}
      * @throws RuntimeDaoException
      */
-    $!{modifier}int ${importedTable.getImportedBeansDelMethod($fkName).replaceFirst('delete','daoDelete')}On${coreClass}($fullParams)throws RuntimeDaoException{
+    $!{modifier}int ${importedTable.getImportedBeansDelMethod($fkName).replaceFirst('delete','daoDelete')}On${coreClass}($fullParams)
+                    throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().${importedTable.getImportedBeansDelMethod($fkName)}($fullVarNames);
     }
 #end###foreach( $fkName in $importedTable.getFkMapNames($table.name) )
@@ -280,7 +291,8 @@ class Dao implements CommonConstant {
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}$table.getReferencedVarGetMethod($fkName)($beanClass)}
      * @throws RuntimeDaoException
      */
-    $!{modifier}$foreignClass $table.getReferencedVarGetMethod($fkName).replaceFirst('get','daoGet')On${coreClass}($beanClass bean)throws RuntimeDaoException{
+    $!{modifier}$foreignClass $table.getReferencedVarGetMethod($fkName).replaceFirst('get','daoGet')On${coreClass}($beanClass bean)
+                    throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().$table.getReferencedVarGetMethod($fkName)(bean);
     }
     //8-4
@@ -292,7 +304,8 @@ class Dao implements CommonConstant {
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}$table.getReferencedVarSetMethod($fkName)($beanClass,$foreignClass)}
      * @throws RuntimeDaoException
      */
-    $!{modifier}$foreignClass $table.getReferencedVarSetMethod($fkName).replaceFirst('set','daoSet')On${coreClass}($beanClass bean,$foreignClass beanToSet)throws RuntimeDaoException{
+    $!{modifier}$foreignClass $table.getReferencedVarSetMethod($fkName).replaceFirst('set','daoSet')On${coreClass}($beanClass bean,$foreignClass beanToSet)
+                    throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().$table.getReferencedVarSetMethod($fkName)(bean,beanToSet);
     }
 ###### CONVERTER BETWEEN BEAN AND FOREIGN KEY########    
@@ -317,7 +330,8 @@ class Dao implements CommonConstant {
      * @see $table.asManagerInterfaceNSP()${esc.hash}$table.getListMethod($selfFk)($varTypes)
      * @throws RuntimeDaoException
      */
-    $!{modifier}java.util.List<$beanClass> $table.getListMethod($selfFk).replaceFirst('list','daoList')For${coreClass}($fullParams)throws RuntimeDaoException{
+    $!{modifier}java.util.List<$beanClass> $table.getListMethod($selfFk).replaceFirst('list','daoList')For${coreClass}($fullParams)
+                    throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().$table.getListMethod($selfFk)($fullVarNames);
     }
     //9-2
@@ -327,7 +341,8 @@ class Dao implements CommonConstant {
      * @see $table.asManagerInterfaceNSP()${esc.hash}$table.getListMethod($selfFk)($selfFk.foreignTable.asBeanClassNSP())
      * @throws RuntimeDaoException
      */
-    $!{modifier}java.util.List<$beanClass> $table.getListMethod($selfFk).replaceFirst('list','daoList')For${coreClass}($selfFk.foreignTable.asBeanClassNSP() $selfFk.foreignTable.asVarBean())throws RuntimeDaoException{
+    $!{modifier}java.util.List<$beanClass> $table.getListMethod($selfFk).replaceFirst('list','daoList')For${coreClass}($selfFk.foreignTable.asBeanClassNSP() $selfFk.foreignTable.asVarBean())
+                    throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().$table.getListMethod($selfFk)($selfFk.foreignTable.asVarBean());
     }
 #end###foreach($selfFk in $table.selfRefKeys)
@@ -342,7 +357,8 @@ class Dao implements CommonConstant {
      * @throws IllegalStateException 创建失败
      * @throws RuntimeDaoException
      */
-    $!{modifier}void daoSaveDefault${coreClass}IfAbsent()throws RuntimeDaoException{
+    $!{modifier}void daoSaveDefault${coreClass}IfAbsent()
+                    throws RuntimeDaoException{
         if(!daoExists${coreClass}(DEFAULT_GROUP_ID)){
             try{
                 $beanClass bean = new $beanClass(DEFAULT_GROUP_ID);
@@ -367,7 +383,8 @@ class Dao implements CommonConstant {
      * @see ${esc.hash}daoSaveDefault${coreClass}IfAbsent()
      * @throws RuntimeDaoException
      */
-    $!{modifier}$eBeanClass daoCheckGroup($eBeanClass ${etable.asVarBean()})throws RuntimeDaoException{
+    $!{modifier}$eBeanClass daoCheckGroup($eBeanClass ${etable.asVarBean()})
+                    throws RuntimeDaoException{
         if(null != ${etable.asVarBean()} && Objects.equal(${etable.asVarBean()}.getGroupId(), DEFAULT_GROUP_ID)){
             daoSaveDefault${coreClass}IfAbsent();
         }
@@ -383,10 +400,11 @@ class Dao implements CommonConstant {
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}save($beanClass)}
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code ${table.asVarBean()}.isNew()} is {@code false}
      */
-    $!{modifier}$beanClass daoAdd${coreClass}($beanClass $table.asVarBean())throws RuntimeDaoException,DuplicateReordException{
+    $!{modifier}$beanClass daoAdd${coreClass}($beanClass $table.asVarBean())
+                    throws RuntimeDaoException,DuplicateRecordException{
         return ${table.getGetManagerMethod()}().save(daoCheckDuplicate($table.asVarBean()));
     }
 #####  连接表方法 ######
@@ -410,7 +428,8 @@ class Dao implements CommonConstant {
      * @see ${esc.hash}daoAdd${coreClass}($leftClass,$rightClass)
      * @throws RuntimeDaoException
      */
-    $!{modifier}$beanClass daoAdd${coreClass}($leftCol.javaType $leftVar,$rightCol.javaType $rightVar)throws RuntimeDaoException{
+    $!{modifier}$beanClass daoAdd${coreClass}($leftCol.javaType $leftVar,$rightCol.javaType $rightVar)
+                    throws RuntimeDaoException{
         return daoAdd${coreClass}(
                     daoGet${leftTable.asCoreClassNSP()}($leftVar),
                     daoGet${rightTable.asCoreClassNSP()}($rightVar));
@@ -426,13 +445,14 @@ class Dao implements CommonConstant {
      * @param $rightVar
      * @throws RuntimeDaoException
      */
-    $!{modifier}$beanClass daoAdd${coreClass}($leftClass $leftVar,$rightClass $rightVar)throws RuntimeDaoException{
+    $!{modifier}$beanClass daoAdd${coreClass}($leftClass $leftVar,$rightClass $rightVar)
+                    throws RuntimeDaoException{
         if(daoExists${leftTable.asCoreClassNSP()}($leftVar) && daoExists${rightTable.asCoreClassNSP()}($rightVar)){
             try{
                 return daoAdd${coreClass}(
                             new ${beanClass}($pkParams),
                             $leftVar,$rightVar);
-            }catch(DuplicateReordException e){
+            }catch(DuplicateRecordException e){
                 return daoGet${coreClass}($pkParams);
             }
         }
@@ -446,7 +466,8 @@ class Dao implements CommonConstant {
      * @param $rightVar
      * @throws RuntimeDaoException
      */
-    $!{modifier}int daoDelete${coreClass}($leftClass $leftVar,$rightClass $rightVar)throws RuntimeDaoException{
+    $!{modifier}int daoDelete${coreClass}($leftClass $leftVar,$rightClass $rightVar)
+                    throws RuntimeDaoException{
         return (null == $leftVar || null == $rightVar)
             ? 0
             : daoDelete${coreClass}($pkParams);
@@ -460,7 +481,7 @@ class Dao implements CommonConstant {
      * see also {@link $table.asManagerInterfaceNSP()${esc.hash}save($beanClass #foreachForeignTables('native' $table  ", $m_foreignClass" '' '') #foreachImportedTables('native' $table  ", Collection" '' '') )}<br>
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code ${table.asVarBean()}.isNew()} is {@code false}
      */
     $!{modifier}$beanClass daoAdd${coreClass}($beanClass $table.asVarBean()
@@ -468,7 +489,7 @@ class Dao implements CommonConstant {
         ' '')
 
         #foreachImportedTables('native' $table  ", Collection<${m_importedClass}> $m_importedTable.asImpArg($m_fkName) " '
-        ' ''))throws RuntimeDaoException,DuplicateReordException{
+        ' ''))throws RuntimeDaoException,DuplicateRecordException{
         checkArgument(null == ${table.asVarBean()} || ${table.asVarBean()}.isNew(),"can be add,delete,but modify record for $table.name,so the _isNew field must be true");
         daoCheckDuplicate($table.asVarBean());
         return ${table.getGetManagerMethod()}().save($table.asVarBean()
@@ -485,7 +506,8 @@ class Dao implements CommonConstant {
      * 参见 {@link $table.asManagerInterfaceNSP()${esc.hash}save($beanClass)}
      * @throws RuntimeDaoException
      */
-    $!{modifier}$beanClass daoSave${coreClass}($beanClass $table.asVarBean())throws RuntimeDaoException{
+    $!{modifier}$beanClass daoSave${coreClass}($beanClass $table.asVarBean())
+                    throws RuntimeDaoException{
 #if($table.getColumn('group_id'))
         daoCheckGroup($table.asVarBean());
 #end
@@ -520,7 +542,7 @@ class Dao implements CommonConstant {
 #set($throwsStr = '')
 #if($onlyAdd)
 #set($mprefix = 'daoAdd')
-#set($throwsStr = ',DuplicateReordException')
+#set($throwsStr = ',DuplicateRecordException')
 #end
     //12-3-3
     /** 
@@ -530,7 +552,8 @@ class Dao implements CommonConstant {
      * @see ${esc.hash}${mprefix}${coreClass}($beanClass)
      * @throws RuntimeDaoException
      */
-    $!{modifier}Collection<$beanClass> ${mprefix}${coreClass}s(Collection<$beanClass> beans)throws RuntimeDaoException $!{throwsStr}{
+    $!{modifier}Collection<$beanClass> ${mprefix}${coreClass}s(Collection<$beanClass> beans)
+                    throws RuntimeDaoException $!{throwsStr}{
         if(null != beans){
             for($beanClass bean : beans){
                 ${mprefix}${coreClass}(bean);
@@ -543,7 +566,8 @@ class Dao implements CommonConstant {
      * {@link ${esc.hash}${mprefix}${coreClass}(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
-    $!{modifier}Collection<$beanClass> ${mprefix}${coreClass}sAsTransaction(final Collection<$beanClass> beans)throws RuntimeDaoException $!{throwsStr}{
+    $!{modifier}Collection<$beanClass> ${mprefix}${coreClass}sAsTransaction(final Collection<$beanClass> beans)
+                    throws RuntimeDaoException $!{throwsStr}{
         return daoRunAsTransaction(new Callable<Collection<$beanClass>>(){      
             @Override
             public Collection<$beanClass> call() throws Exception {
@@ -561,7 +585,8 @@ class Dao implements CommonConstant {
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadByWhereAsList(String,int[],int,int)}
      * @throws RuntimeDaoException
      */
-    $!{modifier}List<$beanClass> daoLoad${coreClass}ByWhere(String where,int startRow, int numRows)throws RuntimeDaoException{
+    $!{modifier}List<$beanClass> daoLoad${coreClass}ByWhere(String where,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().loadByWhereAsList(where,null,startRow,numRows);
     }
     //17
@@ -570,7 +595,8 @@ class Dao implements CommonConstant {
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadAllAsList()}
      * @throws RuntimeDaoException
      */
-    $!{modifier}List<$beanClass> daoLoad${coreClass}All()throws RuntimeDaoException{
+    $!{modifier}List<$beanClass> daoLoad${coreClass}All()
+                    throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().loadAllAsList();
     }
     //17-2
@@ -579,7 +605,8 @@ class Dao implements CommonConstant {
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}Where(String)}
      * @throws RuntimeDaoException
      */
-    $!{modifier}int daoCount${coreClass}ByWhere(String where)throws RuntimeDaoException{
+    $!{modifier}int daoCount${coreClass}ByWhere(String where)
+                    throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().countWhere(where);
     }
 #if($table.countPrimaryKeys() == 1)
@@ -591,7 +618,8 @@ class Dao implements CommonConstant {
      * @see ${esc.hash}daoLoad${coreClass}ByWhere(String,int,int)
      * @throws RuntimeDaoException
      */
-    $!{modifier}List<$primaryKey.javaType> daoLoad${coreClass}${pkName}ByWhere(String where)throws RuntimeDaoException{
+    $!{modifier}List<$primaryKey.javaType> daoLoad${coreClass}${pkName}ByWhere(String where)
+                    throws RuntimeDaoException{
         return daoToPrimaryKeyListFrom${coreClass}s(daoLoad${coreClass}ByWhere(where,1,-1));
     }
 #end
@@ -606,7 +634,8 @@ class Dao implements CommonConstant {
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadBy${index.asCamelCaseName()}(#join($indexColumns '$e.javaType' ','))}
      * @throws RuntimeDaoException
      */
-    $!{modifier}$beanClass daoGet${coreClass}By${index.asCamelCaseName()}(#join($indexColumns '$e.javaType $e.varName' ','))throws RuntimeDaoException{
+    $!{modifier}$beanClass daoGet${coreClass}By${index.asCamelCaseName()}(#join($indexColumns '$e.javaType $e.varName' ','))
+                    throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().loadBy${index.asCamelCaseName()}(#join($indexColumns '$e.varName' ','));
     }
 #end
@@ -622,7 +651,8 @@ class Dao implements CommonConstant {
      * @throws RuntimeDaoException
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    $!{modifier}List<$beanClass> daoLoad${coreClass}By${m_suffix}(Date timestamp,int startRow, int numRows)throws RuntimeDaoException{
+    $!{modifier}List<$beanClass> daoLoad${coreClass}By${m_suffix}(Date timestamp,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return daoLoad${coreClass}ByWhere(makeWhere(timestamp,"$timestampColumn"),startRow,numRows);
     }
     //20
@@ -630,7 +660,8 @@ class Dao implements CommonConstant {
      * 参见 {@link ${esc.hash}daoLoad${coreClass}By${m_suffix}(Date,int,int)} 
      * @throws RuntimeDaoException
      */
-    $!{modifier}List<$beanClass> daoLoad${coreClass}By${m_suffix}(Date timestamp)throws RuntimeDaoException{
+    $!{modifier}List<$beanClass> daoLoad${coreClass}By${m_suffix}(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoad${coreClass}By${m_suffix}(timestamp,1,-1);
     }
     //20-5
@@ -639,7 +670,8 @@ class Dao implements CommonConstant {
      * @see ${esc.hash}daoCount${coreClass}ByWhere(String)
      * @throws RuntimeDaoException
      */
-    $!{modifier}int daoCount${coreClass}By${m_suffix}(Date timestamp)throws RuntimeDaoException{
+    $!{modifier}int daoCount${coreClass}By${m_suffix}(Date timestamp)
+                    throws RuntimeDaoException{
         return daoCount${coreClass}ByWhere(makeWhere(timestamp,"$timestampColumn"));
     }
 #if($table.countPrimaryKeys() == 1)
@@ -652,7 +684,8 @@ class Dao implements CommonConstant {
      * @see {@link ${esc.hash}daoLoad${coreClass}${pkName}ByWhere(String)}
      * @throws RuntimeDaoException
      */
-    $!{modifier}List<$primaryKey.javaType> daoLoad${coreClass}${pkName}By${m_suffix}(Date timestamp)throws RuntimeDaoException{
+    $!{modifier}List<$primaryKey.javaType> daoLoad${coreClass}${pkName}By${m_suffix}(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoad${coreClass}${pkName}ByWhere(makeWhere(timestamp,"$timestampColumn"));
     }
 #end
@@ -676,14 +709,16 @@ $defineLoadByTimestamp
      * 事务执行 
      * @throws RuntimeDaoException
      */
-    protected static <T> T daoRunAsTransaction(Callable<T> fun)throws RuntimeDaoException{
+    protected static <T> T daoRunAsTransaction(Callable<T> fun)
+                    throws RuntimeDaoException{
         return getPersonManager().runAsTransaction(checkNotNull(fun));
     }
     /** 
      * 事务执行 
      * @throws RuntimeDaoException
      */
-    protected static void daoRunAsTransaction(Runnable fun)throws RuntimeDaoException{
+    protected static void daoRunAsTransaction(Runnable fun)
+                    throws RuntimeDaoException{
         getPersonManager().runAsTransaction(checkNotNull(fun));
     }
 ##join($tables '#defineMethod($e false)' '')

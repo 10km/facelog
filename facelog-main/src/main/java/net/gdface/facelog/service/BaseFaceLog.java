@@ -31,14 +31,17 @@ import net.gdface.facelog.service.Dao;
  * FaceLog 服务接口<br>
  * <ul>
  * <li>所有标明为图像数据的参数,是指具有特定图像格式的图像数据(如jpg,png...),而非无格式的原始点阵位图</li>
- * <li>在执行涉及数据库操作的方法时如果数据库发生异常，则会被封装到{@link RuntimeDaoException}抛出</li>
  * <li>所有{@link RuntimeException}异常会被封装在{@link ServiceRuntimeException}抛出,
- * client端可以通过{@link ServiceRuntimeException#getType()}获取异常类型,
- * 异常类型定义参见{@link CommonConstant.ExceptionType}</li>
+ * client端可以通过{@link ServiceRuntimeException#getType()}获取异常类型.<br>
+ * 异常类型定义参见{@link CommonConstant.ExceptionType},<br>
+ * 例如: 在执行涉及数据库操作的异常{@link RuntimeDaoException}，
+ * 被封装到{@link ServiceRuntimeException}抛出时type为{@link ExceptionType#DAO}</li>
  * <li>所有数据库对象(Java Bean,比如 {@link PersonBean}),在执行保存操作(save)时,
  * 如果为新增记录({@link PersonBean#isNew()}为true),则执行insert操作,否则执行update操作,
  * 如果数据库已经存在指定的记录而{@code isNew()}为{@code true},则那么执行insert操作数据库就会抛出异常，
  * 所以请在执行save时特别注意{@code isNew()}状态</li>
+ * <li>对于以add为前缀的添加记录方法,在添加记录前会检查数据库中是否有(主键)相同记录,
+ * 如果有则会抛出异常{@link DuplicateRecordException}</li>
  * </ul>
  * @author guyadong
  */
@@ -419,26 +422,26 @@ public abstract class BaseFaceLog extends Dao{
 	 * 添加一条验证日志记录
 	 * @param bean
 	 * @throws ServiceRuntimeException
-	 * @throws DuplicateReordException 数据库中存在相同记录
+	 * @throws DuplicateRecordException 数据库中存在相同记录
 	 */
 	@ThriftMethod(exception = {
             @ThriftException(type=ServiceRuntimeException.class, id=1),
-            @ThriftException(type=DuplicateReordException.class, id=2)
+            @ThriftException(type=DuplicateRecordException.class, id=2)
 			})
-	public void addLog(LogBean bean) throws ServiceRuntimeException, DuplicateReordException {
+	public void addLog(LogBean bean) throws ServiceRuntimeException, DuplicateRecordException {
 	}
 
 	/**
 	 * 添加一组验证日志记录(事务存储)
 	 * @param beans
 	 * @throws ServiceRuntimeException
-	 * @throws DuplicateReordException 数据库中存在相同记录
+	 * @throws DuplicateRecordException 数据库中存在相同记录
 	 */
 	@ThriftMethod(exception = {
             @ThriftException(type=ServiceRuntimeException.class, id=1),
-            @ThriftException(type=DuplicateReordException.class, id=2)
+            @ThriftException(type=DuplicateRecordException.class, id=2)
 			})
-	public void addLogs(List<LogBean> beans) throws ServiceRuntimeException, DuplicateReordException {
+	public void addLogs(List<LogBean> beans) throws ServiceRuntimeException, DuplicateRecordException {
 	}
 	/**
 	 * 日志查询<br>
@@ -526,15 +529,15 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param faceBean 关联的人脸信息对象,可为null
 	 * @param personId 关联的人员id(fl_person.id),可为null
 	 * @return
-	 * @throws DuplicateReordException 数据库中已经存在要保存的图像数据
+	 * @throws DuplicateRecordException 数据库中已经存在要保存的图像数据
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod(exception = {
             @ThriftException(type=ServiceRuntimeException.class, id=1),
-            @ThriftException(type=DuplicateReordException.class, id=2)
+            @ThriftException(type=DuplicateRecordException.class, id=2)
 			})
 	public ImageBean addImage(ByteBuffer imageData, Integer deviceId, FaceBean faceBean, Integer personId)
-			throws ServiceRuntimeException, DuplicateReordException {
+			throws ServiceRuntimeException, DuplicateRecordException {
 		return null;
 	}
 
@@ -556,15 +559,15 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws ServiceRuntimeException
-	 * @throws DuplicateReordException 
+	 * @throws DuplicateRecordException 
 	 */
 	@ThriftMethod(
 			exception = {
             @ThriftException(type=ServiceRuntimeException.class, id=1),
-            @ThriftException(type=DuplicateReordException.class, id=2)
+            @ThriftException(type=DuplicateRecordException.class, id=2)
 			}
 		)
-	public FeatureBean addFeature(ByteBuffer feature, Integer personId, List<FaceBean> faecBeans) throws ServiceRuntimeException, DuplicateReordException {
+	public FeatureBean addFeature(ByteBuffer feature, Integer personId, List<FaceBean> faecBeans) throws ServiceRuntimeException, DuplicateRecordException {
 		return null;
 	}
 
@@ -576,15 +579,15 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param deviceId 图像来源设备id,可为null
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws ServiceRuntimeException
-	 * @throws DuplicateReordException 
+	 * @throws DuplicateRecordException 
 	 */
 	@ThriftMethod(value = "addFeatureMulti",
 			exception = {
             @ThriftException(type=ServiceRuntimeException.class, id=1),
-            @ThriftException(type=DuplicateReordException.class, id=2)
+            @ThriftException(type=DuplicateRecordException.class, id=2)
 			})
 	public FeatureBean addFeature(ByteBuffer feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo, Integer deviceId)
-			throws ServiceRuntimeException, DuplicateReordException {
+			throws ServiceRuntimeException, DuplicateRecordException {
 		return null;
 	}
 

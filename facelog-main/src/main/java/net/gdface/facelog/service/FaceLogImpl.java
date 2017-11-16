@@ -31,7 +31,7 @@ import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
-import net.gdface.facelog.service.DuplicateReordException;
+import net.gdface.facelog.service.DuplicateRecordException;
 import net.gdface.facelog.service.ServiceRuntimeException;
 import net.gdface.image.LazyImage;
 import net.gdface.image.NotImage;
@@ -156,7 +156,7 @@ public class FaceLogImpl extends BaseFaceLog  {
 		return Pair.with(imageBean, storeBean);
 	}
 	protected ImageBean daoAddImage(ByteBuffer imageBytes,DeviceBean refFlDevicebyDeviceId
-	        , Collection<FaceBean> impFlFacebyImgMd5 , Collection<PersonBean> impFlPersonbyImageMd5) throws DuplicateReordException{
+	        , Collection<FaceBean> impFlFacebyImgMd5 , Collection<PersonBean> impFlPersonbyImageMd5) throws DuplicateRecordException{
 		if(Judge.isEmpty(imageBytes)){
 			return null;
 		}
@@ -198,10 +198,10 @@ public class FaceLogImpl extends BaseFaceLog  {
 		featureBean.setFeature(feature);
 		return featureBean;
 	}
-	protected FeatureBean daoAddFeature(ByteBuffer feature,PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5) throws DuplicateReordException{
+	protected FeatureBean daoAddFeature(ByteBuffer feature,PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5) throws DuplicateRecordException{
 		return daoAddFeature(daoMakeFeature(feature), refPersonByPersonId, impFaceByFeatureMd5, null);
 	}
-	protected FeatureBean daoAddFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean) throws DuplicateReordException{
+	protected FeatureBean daoAddFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean) throws DuplicateRecordException{
 		if(null != faceInfo){
 			for(Entry<ByteBuffer, FaceBean> entry:faceInfo.entrySet()){
 				ByteBuffer imageBytes = entry.getKey();
@@ -259,7 +259,7 @@ public class FaceLogImpl extends BaseFaceLog  {
 		return daoSetRefPersonOfFeature(featureMd5,personId);
 	}
 
-	protected int daoSavePerson(Map<ByteBuffer,PersonBean> persons) throws DuplicateReordException {
+	protected int daoSavePerson(Map<ByteBuffer,PersonBean> persons) throws DuplicateRecordException {
 		if(null == persons ){return 0;}
 		int count = 0;
 		PersonBean personBean ;
@@ -277,13 +277,13 @@ public class FaceLogImpl extends BaseFaceLog  {
 	}
 
 	protected PersonBean daoSavePerson(PersonBean bean, ByteBuffer idPhoto, FeatureBean featureBean,
-			DeviceBean deviceBean) throws DuplicateReordException {
+			DeviceBean deviceBean) throws DuplicateRecordException {
 		ImageBean imageBean = daoAddImage(idPhoto, deviceBean, null, null);
 		return daoSavePerson(bean, imageBean, Arrays.asList(featureBean));
 	}
 
 	protected PersonBean daoSavePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature,
-			Map<ByteBuffer, FaceBean> faceInfo, DeviceBean deviceBean) throws DuplicateReordException {
+			Map<ByteBuffer, FaceBean> faceInfo, DeviceBean deviceBean) throws DuplicateRecordException {
 		return daoSavePerson(bean, idPhoto, daoAddFeature(feature, bean, faceInfo, deviceBean), null);
 	}
 
@@ -296,10 +296,10 @@ public class FaceLogImpl extends BaseFaceLog  {
 	 * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
 	 * @param deviceBean featureImage来源设备对象
 	 * @return
-	 * @throws DuplicateReordException 
+	 * @throws DuplicateRecordException 
 	 */
 	protected PersonBean daoSavePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature,
-			ByteBuffer featureImage, FaceBean featureFaceBean, DeviceBean deviceBean) throws DuplicateReordException {
+			ByteBuffer featureImage, FaceBean featureFaceBean, DeviceBean deviceBean) throws DuplicateRecordException {
 		Map<ByteBuffer, FaceBean> faceInfo = null;
 		if (null != featureFaceBean) {
 			if (Judge.isEmpty(featureImage)){
@@ -775,7 +775,7 @@ public class FaceLogImpl extends BaseFaceLog  {
 	}
 
 	@Override
-	public void addLog(LogBean bean)throws ServiceRuntimeException, DuplicateReordException {
+	public void addLog(LogBean bean)throws ServiceRuntimeException, DuplicateRecordException {
 		try{
 			daoAddLog(bean);
 		} catch(RuntimeDaoException e){
@@ -786,7 +786,7 @@ public class FaceLogImpl extends BaseFaceLog  {
 	}
 
 	@Override
-	public void addLogs(List<LogBean> beans)throws ServiceRuntimeException, DuplicateReordException {
+	public void addLogs(List<LogBean> beans)throws ServiceRuntimeException, DuplicateRecordException {
 		try{
 			daoAddLogsAsTransaction(beans);
 		} catch (RuntimeException e) {
@@ -866,7 +866,7 @@ public class FaceLogImpl extends BaseFaceLog  {
 
 	@Override
 	public ImageBean addImage(ByteBuffer imageData,Integer deviceId
-			, FaceBean faceBean , Integer personId) throws ServiceRuntimeException, DuplicateReordException{
+			, FaceBean faceBean , Integer personId) throws ServiceRuntimeException, DuplicateRecordException{
 		try{
 			return daoAddImage(imageData,daoGetDevice(deviceId),Arrays.asList(faceBean),Arrays.asList(daoGetPerson(personId)));		
 		} catch(RuntimeDaoException e){
@@ -888,7 +888,7 @@ public class FaceLogImpl extends BaseFaceLog  {
 	}
 
 	@Override
-	public FeatureBean addFeature(ByteBuffer feature,Integer personId,List<FaceBean> faecBeans)throws ServiceRuntimeException, DuplicateReordException{
+	public FeatureBean addFeature(ByteBuffer feature,Integer personId,List<FaceBean> faecBeans)throws ServiceRuntimeException, DuplicateRecordException{
 		try{
 			return daoAddFeature(feature, daoGetPerson(personId), faecBeans);
 		} catch(RuntimeDaoException e){
@@ -900,7 +900,7 @@ public class FaceLogImpl extends BaseFaceLog  {
 
 	@Override
 	public FeatureBean addFeature(ByteBuffer feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo,
-			Integer deviceId) throws ServiceRuntimeException, DuplicateReordException {
+			Integer deviceId) throws ServiceRuntimeException, DuplicateRecordException {
 		try {
 			return daoAddFeature(feature, daoGetPerson(personId), faceInfo, daoGetDevice(deviceId));
 		} catch(RuntimeDaoException e){

@@ -17,14 +17,17 @@ import java.util.*;
  * FaceLog 服务接口<br>
  * <ul>
  * <li>所有标明为图像数据的参数,是指具有特定图像格式的图像数据(如jpg,png...),而非无格式的原始点阵位图</li>
- * <li>在执行涉及数据库操作的方法时如果数据库发生异常，则会被封装到{@link RuntimeDaoException}抛出</li>
  * <li>所有{@link RuntimeException}异常会被封装在{@link ServiceRuntimeException}抛出,
- * client端可以通过{@link ServiceRuntimeException#getType()}获取异常类型,
- * 异常类型定义参见{@link CommonConstant.ExceptionType}</li>
+ * client端可以通过{@link ServiceRuntimeException#getType()}获取异常类型.<br>
+ * 异常类型定义参见{@link CommonConstant.ExceptionType},<br>
+ * 例如: 在执行涉及数据库操作的异常{@link RuntimeDaoException}，
+ * 被封装到{@link ServiceRuntimeException}抛出时type为{@link ExceptionType#DAO}</li>
  * <li>所有数据库对象(Java Bean,比如 {@link PersonBean}),在执行保存操作(save)时,
  * 如果为新增记录({@link PersonBean#isNew()}为true),则执行insert操作,否则执行update操作,
  * 如果数据库已经存在指定的记录而{@code isNew()}为{@code true},则那么执行insert操作数据库就会抛出异常，
  * 所以请在执行save时特别注意{@code isNew()}状态</li>
+ * <li>对于以add为前缀的添加记录方法,在添加记录前会检查数据库中是否有(主键)相同记录,
+ * 如果有则会抛出异常{@link DuplicateRecordException}</li>
  * </ul>
  * remote implementation of the service IFaceLog(asynchronous implementation)<br>
  * all method comments be copied from {@code net.gdface.facelog.service.BaseFaceLog.java}<br>

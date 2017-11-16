@@ -95,14 +95,16 @@ class Dao implements CommonConstant {
      * 事务执行 
      * @throws RuntimeDaoException
      */
-    protected static <T> T daoRunAsTransaction(Callable<T> fun)throws RuntimeDaoException{
+    protected static <T> T daoRunAsTransaction(Callable<T> fun)
+                    throws RuntimeDaoException{
         return getPersonManager().runAsTransaction(checkNotNull(fun));
     }
     /** 
      * 事务执行 
      * @throws RuntimeDaoException
      */
-    protected static void daoRunAsTransaction(Runnable fun)throws RuntimeDaoException{
+    protected static void daoRunAsTransaction(Runnable fun)
+                    throws RuntimeDaoException{
         getPersonManager().runAsTransaction(checkNotNull(fun));
     }
     //////////// FL_DEVICE /////////
@@ -125,7 +127,8 @@ class Dao implements CommonConstant {
      * @see DeviceBean#replaceNull(List)
      * @throws RuntimeDaoException
      */
-    protected List<DeviceBean> daoGetDevices(Collection<Integer> idCollection)throws RuntimeDaoException{
+    protected List<DeviceBean> daoGetDevices(Collection<Integer> idCollection)
+                    throws RuntimeDaoException{
         return DeviceBean.replaceNull((getDeviceManager().loadByPrimaryKey(idCollection)));
     }
     //3  
@@ -135,7 +138,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceManager#deleteByPrimaryKey(Collection)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteDevicesByPrimaryKey(Collection<Integer> idCollection)throws RuntimeDaoException{
+    protected int daoDeleteDevicesByPrimaryKey(Collection<Integer> idCollection)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != idCollection){
             for(Integer id:idCollection){
@@ -175,7 +179,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceManager#existsPrimaryKey(Integer)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsDevice(Integer id)throws RuntimeDaoException{
+    protected boolean daoExistsDevice(Integer id)
+                    throws RuntimeDaoException{
         return getDeviceManager().existsPrimaryKey(id);
     }
     //4-2
@@ -184,7 +189,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceManager#existsPrimaryKey(DeviceBean)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsDevice(DeviceBean bean)throws RuntimeDaoException{
+    protected boolean daoExistsDevice(DeviceBean bean)
+                    throws RuntimeDaoException{
         return getDeviceManager().existsPrimaryKey(bean);
     }
     //5
@@ -196,7 +202,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceManager#deleteByPrimaryKey(Integer)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteDevice(Integer id)throws RuntimeDaoException{
+    protected int daoDeleteDevice(Integer id)
+                    throws RuntimeDaoException{
         return getDeviceManager().deleteByPrimaryKey(id);
     }
     //5-2
@@ -207,7 +214,8 @@ class Dao implements CommonConstant {
      * @see #daoDeleteDevice(Integer)
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteDevice(DeviceBean bean)throws RuntimeDaoException{
+    protected int daoDeleteDevice(DeviceBean bean)
+                    throws RuntimeDaoException{
         return null == bean ? 0 : daoDeleteDevice(bean.getId());
     }
     //6
@@ -217,7 +225,8 @@ class Dao implements CommonConstant {
      * @see #daoDeleteDevice(Integer)
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteDevices(Collection<DeviceBean> beans)throws RuntimeDaoException{
+    protected int daoDeleteDevices(Collection<DeviceBean> beans)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != beans){        
             for(DeviceBean bean:beans){
@@ -233,13 +242,14 @@ class Dao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IDeviceManager#checkDuplicate(DeviceBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      */
-    protected DeviceBean daoCheckDuplicate(DeviceBean deviceBean)throws RuntimeDaoException,DuplicateReordException{
+    protected DeviceBean daoCheckDuplicate(DeviceBean deviceBean)
+                    throws RuntimeDaoException,DuplicateRecordException{
         try{
             return getDeviceManager().checkDuplicate(deviceBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
     }
     //7-3
@@ -248,14 +258,15 @@ class Dao implements CommonConstant {
      * 
      * @param idOfDevice 设备id 
      * @see {@link IDeviceManager#checkDuplicate(DeviceBean)}
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code idOfDevice} 
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException
+     * @throws DuplicateRecordException
      */
-    protected Integer daoCheckDuplicateDevice(Integer idOfDevice)throws RuntimeDaoException,DuplicateReordException{
+    protected Integer daoCheckDuplicateDevice(Integer idOfDevice)
+                    throws RuntimeDaoException,DuplicateRecordException{
         if(getDeviceManager().existsPrimaryKey(idOfDevice)){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
         return idOfDevice;
     }
@@ -267,7 +278,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceManager#getImageBeansByDeviceIdAsList(Integer)}
      * @throws RuntimeDaoException
      */
-    protected List<ImageBean> daoGetImageBeansByDeviceIdOnDevice(Integer idOfDevice)throws RuntimeDaoException{
+    protected List<ImageBean> daoGetImageBeansByDeviceIdOnDevice(Integer idOfDevice)
+                    throws RuntimeDaoException{
         return getDeviceManager().getImageBeansByDeviceIdAsList(idOfDevice);
     }
     //8-2
@@ -278,7 +290,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceManager#deleteImageBeansByDeviceId(Integer)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteImageBeansByDeviceIdOnDevice(Integer idOfDevice)throws RuntimeDaoException{
+    protected int daoDeleteImageBeansByDeviceIdOnDevice(Integer idOfDevice)
+                    throws RuntimeDaoException{
         return getDeviceManager().deleteImageBeansByDeviceId(idOfDevice);
     }
     //8
@@ -289,7 +302,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceManager#getLogBeansByDeviceIdAsList(Integer)}
      * @throws RuntimeDaoException
      */
-    protected List<LogBean> daoGetLogBeansByDeviceIdOnDevice(Integer idOfDevice)throws RuntimeDaoException{
+    protected List<LogBean> daoGetLogBeansByDeviceIdOnDevice(Integer idOfDevice)
+                    throws RuntimeDaoException{
         return getDeviceManager().getLogBeansByDeviceIdAsList(idOfDevice);
     }
     //8-2
@@ -300,7 +314,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceManager#deleteLogBeansByDeviceId(Integer)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteLogBeansByDeviceIdOnDevice(Integer idOfDevice)throws RuntimeDaoException{
+    protected int daoDeleteLogBeansByDeviceIdOnDevice(Integer idOfDevice)
+                    throws RuntimeDaoException{
         return getDeviceManager().deleteLogBeansByDeviceId(idOfDevice);
     }
     //8-3
@@ -310,7 +325,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceManager#getReferencedByGroupId(DeviceBean)}
      * @throws RuntimeDaoException
      */
-    protected DeviceGroupBean daoGetReferencedByGroupIdOnDevice(DeviceBean bean)throws RuntimeDaoException{
+    protected DeviceGroupBean daoGetReferencedByGroupIdOnDevice(DeviceBean bean)
+                    throws RuntimeDaoException{
         return getDeviceManager().getReferencedByGroupId(bean);
     }
     //8-4
@@ -322,7 +338,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceManager#setReferencedByGroupId(DeviceBean,DeviceGroupBean)}
      * @throws RuntimeDaoException
      */
-    protected DeviceGroupBean daoSetReferencedByGroupIdOnDevice(DeviceBean bean,DeviceGroupBean beanToSet)throws RuntimeDaoException{
+    protected DeviceGroupBean daoSetReferencedByGroupIdOnDevice(DeviceBean bean,DeviceGroupBean beanToSet)
+                    throws RuntimeDaoException{
         return getDeviceManager().setReferencedByGroupId(bean,beanToSet);
     }
     //8-6
@@ -337,7 +354,8 @@ class Dao implements CommonConstant {
      * 参见 {@link IDeviceManager#save(DeviceBean)}
      * @throws RuntimeDaoException
      */
-    protected DeviceBean daoSaveDevice(DeviceBean deviceBean)throws RuntimeDaoException{
+    protected DeviceBean daoSaveDevice(DeviceBean deviceBean)
+                    throws RuntimeDaoException{
         daoCheckGroup(deviceBean);
         return getDeviceManager().save(deviceBean);
     }
@@ -364,7 +382,8 @@ class Dao implements CommonConstant {
      * @see #daoSaveDevice(DeviceBean)
      * @throws RuntimeDaoException
      */
-    protected Collection<DeviceBean> daoSaveDevices(Collection<DeviceBean> beans)throws RuntimeDaoException {
+    protected Collection<DeviceBean> daoSaveDevices(Collection<DeviceBean> beans)
+                    throws RuntimeDaoException {
         if(null != beans){
             for(DeviceBean bean : beans){
                 daoSaveDevice(bean);
@@ -377,7 +396,8 @@ class Dao implements CommonConstant {
      * {@link #daoSaveDevice(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
-    protected Collection<DeviceBean> daoSaveDevicesAsTransaction(final Collection<DeviceBean> beans)throws RuntimeDaoException {
+    protected Collection<DeviceBean> daoSaveDevicesAsTransaction(final Collection<DeviceBean> beans)
+                    throws RuntimeDaoException {
         return daoRunAsTransaction(new Callable<Collection<DeviceBean>>(){      
             @Override
             public Collection<DeviceBean> call() throws Exception {
@@ -393,7 +413,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceManager#loadByWhereAsList(String,int[],int,int)}
      * @throws RuntimeDaoException
      */
-    protected List<DeviceBean> daoLoadDeviceByWhere(String where,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<DeviceBean> daoLoadDeviceByWhere(String where,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return getDeviceManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     //17
@@ -402,7 +423,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceManager#loadAllAsList()}
      * @throws RuntimeDaoException
      */
-    protected List<DeviceBean> daoLoadDeviceAll()throws RuntimeDaoException{
+    protected List<DeviceBean> daoLoadDeviceAll()
+                    throws RuntimeDaoException{
         return getDeviceManager().loadAllAsList();
     }
     //17-2
@@ -411,7 +433,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceManager#Where(String)}
      * @throws RuntimeDaoException
      */
-    protected int daoCountDeviceByWhere(String where)throws RuntimeDaoException{
+    protected int daoCountDeviceByWhere(String where)
+                    throws RuntimeDaoException{
         return getDeviceManager().countWhere(where);
     }
     //18
@@ -421,7 +444,8 @@ class Dao implements CommonConstant {
      * @see #daoLoadDeviceByWhere(String,int,int)
      * @throws RuntimeDaoException
      */
-    protected List<Integer> daoLoadDeviceIdByWhere(String where)throws RuntimeDaoException{
+    protected List<Integer> daoLoadDeviceIdByWhere(String where)
+                    throws RuntimeDaoException{
         return daoToPrimaryKeyListFromDevices(daoLoadDeviceByWhere(where,1,-1));
     }
     //18-5
@@ -432,7 +456,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceManager#loadByIndexMac(String)}
      * @throws RuntimeDaoException
      */
-    protected DeviceBean daoGetDeviceByIndexMac(String mac)throws RuntimeDaoException{
+    protected DeviceBean daoGetDeviceByIndexMac(String mac)
+                    throws RuntimeDaoException{
         return getDeviceManager().loadByIndexMac(mac);
     }
     //18-5
@@ -443,7 +468,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceManager#loadByIndexSerialNo(String)}
      * @throws RuntimeDaoException
      */
-    protected DeviceBean daoGetDeviceByIndexSerialNo(String serialNo)throws RuntimeDaoException{
+    protected DeviceBean daoGetDeviceByIndexSerialNo(String serialNo)
+                    throws RuntimeDaoException{
         return getDeviceManager().loadByIndexSerialNo(serialNo);
     }
     //19
@@ -454,7 +480,8 @@ class Dao implements CommonConstant {
      * @throws RuntimeDaoException
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    protected List<DeviceBean> daoLoadDeviceByCreateTime(Date timestamp,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<DeviceBean> daoLoadDeviceByCreateTime(Date timestamp,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return daoLoadDeviceByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
     }
     //20
@@ -462,7 +489,8 @@ class Dao implements CommonConstant {
      * 参见 {@link #daoLoadDeviceByCreateTime(Date,int,int)} 
      * @throws RuntimeDaoException
      */
-    protected List<DeviceBean> daoLoadDeviceByCreateTime(Date timestamp)throws RuntimeDaoException{
+    protected List<DeviceBean> daoLoadDeviceByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoadDeviceByCreateTime(timestamp,1,-1);
     }
     //20-5
@@ -471,7 +499,8 @@ class Dao implements CommonConstant {
      * @see #daoCountDeviceByWhere(String)
      * @throws RuntimeDaoException
      */
-    protected int daoCountDeviceByCreateTime(Date timestamp)throws RuntimeDaoException{
+    protected int daoCountDeviceByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoCountDeviceByWhere(makeWhere(timestamp,"create_time"));
     }
     //21
@@ -482,7 +511,8 @@ class Dao implements CommonConstant {
      * @see {@link #daoLoadDeviceIdByWhere(String)}
      * @throws RuntimeDaoException
      */
-    protected List<Integer> daoLoadDeviceIdByCreateTime(Date timestamp)throws RuntimeDaoException{
+    protected List<Integer> daoLoadDeviceIdByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoadDeviceIdByWhere(makeWhere(timestamp,"create_time"));
     }
 
@@ -494,7 +524,8 @@ class Dao implements CommonConstant {
      * @throws RuntimeDaoException
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    protected List<DeviceBean> daoLoadDeviceByUpdateTime(Date timestamp,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<DeviceBean> daoLoadDeviceByUpdateTime(Date timestamp,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return daoLoadDeviceByWhere(makeWhere(timestamp,"update_time"),startRow,numRows);
     }
     //20
@@ -502,7 +533,8 @@ class Dao implements CommonConstant {
      * 参见 {@link #daoLoadDeviceByUpdateTime(Date,int,int)} 
      * @throws RuntimeDaoException
      */
-    protected List<DeviceBean> daoLoadDeviceByUpdateTime(Date timestamp)throws RuntimeDaoException{
+    protected List<DeviceBean> daoLoadDeviceByUpdateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoadDeviceByUpdateTime(timestamp,1,-1);
     }
     //20-5
@@ -511,7 +543,8 @@ class Dao implements CommonConstant {
      * @see #daoCountDeviceByWhere(String)
      * @throws RuntimeDaoException
      */
-    protected int daoCountDeviceByUpdateTime(Date timestamp)throws RuntimeDaoException{
+    protected int daoCountDeviceByUpdateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoCountDeviceByWhere(makeWhere(timestamp,"update_time"));
     }
     //21
@@ -522,7 +555,8 @@ class Dao implements CommonConstant {
      * @see {@link #daoLoadDeviceIdByWhere(String)}
      * @throws RuntimeDaoException
      */
-    protected List<Integer> daoLoadDeviceIdByUpdateTime(Date timestamp)throws RuntimeDaoException{
+    protected List<Integer> daoLoadDeviceIdByUpdateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoadDeviceIdByWhere(makeWhere(timestamp,"update_time"));
     }
 
@@ -547,7 +581,8 @@ class Dao implements CommonConstant {
      * @see DeviceGroupBean#replaceNull(List)
      * @throws RuntimeDaoException
      */
-    protected List<DeviceGroupBean> daoGetDeviceGroups(Collection<Integer> idCollection)throws RuntimeDaoException{
+    protected List<DeviceGroupBean> daoGetDeviceGroups(Collection<Integer> idCollection)
+                    throws RuntimeDaoException{
         return DeviceGroupBean.replaceNull((getDeviceGroupManager().loadByPrimaryKey(idCollection)));
     }
     //3  
@@ -557,7 +592,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceGroupManager#deleteByPrimaryKey(Collection)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteDeviceGroupsByPrimaryKey(Collection<Integer> idCollection)throws RuntimeDaoException{
+    protected int daoDeleteDeviceGroupsByPrimaryKey(Collection<Integer> idCollection)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != idCollection){
             for(Integer id:idCollection){
@@ -597,7 +633,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceGroupManager#existsPrimaryKey(Integer)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsDeviceGroup(Integer id)throws RuntimeDaoException{
+    protected boolean daoExistsDeviceGroup(Integer id)
+                    throws RuntimeDaoException{
         return getDeviceGroupManager().existsPrimaryKey(id);
     }
     //4-2
@@ -606,7 +643,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceGroupManager#existsPrimaryKey(DeviceGroupBean)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsDeviceGroup(DeviceGroupBean bean)throws RuntimeDaoException{
+    protected boolean daoExistsDeviceGroup(DeviceGroupBean bean)
+                    throws RuntimeDaoException{
         return getDeviceGroupManager().existsPrimaryKey(bean);
     }
     //5
@@ -618,7 +656,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceGroupManager#deleteByPrimaryKey(Integer)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteDeviceGroup(Integer id)throws RuntimeDaoException{
+    protected int daoDeleteDeviceGroup(Integer id)
+                    throws RuntimeDaoException{
         return getDeviceGroupManager().deleteByPrimaryKey(id);
     }
     //5-2
@@ -629,7 +668,8 @@ class Dao implements CommonConstant {
      * @see #daoDeleteDeviceGroup(Integer)
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteDeviceGroup(DeviceGroupBean bean)throws RuntimeDaoException{
+    protected int daoDeleteDeviceGroup(DeviceGroupBean bean)
+                    throws RuntimeDaoException{
         return null == bean ? 0 : daoDeleteDeviceGroup(bean.getId());
     }
     //6
@@ -639,7 +679,8 @@ class Dao implements CommonConstant {
      * @see #daoDeleteDeviceGroup(Integer)
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteDeviceGroups(Collection<DeviceGroupBean> beans)throws RuntimeDaoException{
+    protected int daoDeleteDeviceGroups(Collection<DeviceGroupBean> beans)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != beans){        
             for(DeviceGroupBean bean:beans){
@@ -655,13 +696,14 @@ class Dao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IDeviceGroupManager#checkDuplicate(DeviceGroupBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      */
-    protected DeviceGroupBean daoCheckDuplicate(DeviceGroupBean deviceGroupBean)throws RuntimeDaoException,DuplicateReordException{
+    protected DeviceGroupBean daoCheckDuplicate(DeviceGroupBean deviceGroupBean)
+                    throws RuntimeDaoException,DuplicateRecordException{
         try{
             return getDeviceGroupManager().checkDuplicate(deviceGroupBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
     }
     //7-3
@@ -670,14 +712,15 @@ class Dao implements CommonConstant {
      * 
      * @param idOfDeviceGroup 设备组id 
      * @see {@link IDeviceGroupManager#checkDuplicate(DeviceGroupBean)}
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code idOfDeviceGroup} 
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException
+     * @throws DuplicateRecordException
      */
-    protected Integer daoCheckDuplicateDeviceGroup(Integer idOfDeviceGroup)throws RuntimeDaoException,DuplicateReordException{
+    protected Integer daoCheckDuplicateDeviceGroup(Integer idOfDeviceGroup)
+                    throws RuntimeDaoException,DuplicateRecordException{
         if(getDeviceGroupManager().existsPrimaryKey(idOfDeviceGroup)){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
         return idOfDeviceGroup;
     }
@@ -689,7 +732,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceGroupManager#getDeviceBeansByGroupIdAsList(Integer)}
      * @throws RuntimeDaoException
      */
-    protected List<DeviceBean> daoGetDevicesOfGroup(Integer idOfDeviceGroup)throws RuntimeDaoException{
+    protected List<DeviceBean> daoGetDevicesOfGroup(Integer idOfDeviceGroup)
+                    throws RuntimeDaoException{
         return getDeviceGroupManager().getDeviceBeansByGroupIdAsList(idOfDeviceGroup);
     }
     //8-2
@@ -700,7 +744,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceGroupManager#deleteDeviceBeansByGroupId(Integer)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteDeviceBeansByGroupIdOnDeviceGroup(Integer idOfDeviceGroup)throws RuntimeDaoException{
+    protected int daoDeleteDeviceBeansByGroupIdOnDeviceGroup(Integer idOfDeviceGroup)
+                    throws RuntimeDaoException{
         return getDeviceGroupManager().deleteDeviceBeansByGroupId(idOfDeviceGroup);
     }
     //8
@@ -711,7 +756,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceGroupManager#getDeviceGroupBeansByParentAsList(Integer)}
      * @throws RuntimeDaoException
      */
-    protected List<DeviceGroupBean> daoGetSubDeviceGroup(Integer idOfDeviceGroup)throws RuntimeDaoException{
+    protected List<DeviceGroupBean> daoGetSubDeviceGroup(Integer idOfDeviceGroup)
+                    throws RuntimeDaoException{
         return getDeviceGroupManager().getDeviceGroupBeansByParentAsList(idOfDeviceGroup);
     }
     //8-2
@@ -722,7 +768,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceGroupManager#deleteDeviceGroupBeansByParent(Integer)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteDeviceGroupBeansByParentOnDeviceGroup(Integer idOfDeviceGroup)throws RuntimeDaoException{
+    protected int daoDeleteDeviceGroupBeansByParentOnDeviceGroup(Integer idOfDeviceGroup)
+                    throws RuntimeDaoException{
         return getDeviceGroupManager().deleteDeviceGroupBeansByParent(idOfDeviceGroup);
     }
     //8
@@ -733,7 +780,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceGroupManager#getPermitBeansByDeviceGroupIdAsList(Integer)}
      * @throws RuntimeDaoException
      */
-    protected List<PermitBean> daoGetPermitBeansByDeviceGroupIdOnDeviceGroup(Integer idOfDeviceGroup)throws RuntimeDaoException{
+    protected List<PermitBean> daoGetPermitBeansByDeviceGroupIdOnDeviceGroup(Integer idOfDeviceGroup)
+                    throws RuntimeDaoException{
         return getDeviceGroupManager().getPermitBeansByDeviceGroupIdAsList(idOfDeviceGroup);
     }
     //8-2
@@ -744,7 +792,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceGroupManager#deletePermitBeansByDeviceGroupId(Integer)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeletePermitBeansByDeviceGroupIdOnDeviceGroup(Integer idOfDeviceGroup)throws RuntimeDaoException{
+    protected int daoDeletePermitBeansByDeviceGroupIdOnDeviceGroup(Integer idOfDeviceGroup)
+                    throws RuntimeDaoException{
         return getDeviceGroupManager().deletePermitBeansByDeviceGroupId(idOfDeviceGroup);
     }
     //8-3
@@ -754,7 +803,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceGroupManager#getReferencedByParent(DeviceGroupBean)}
      * @throws RuntimeDaoException
      */
-    protected DeviceGroupBean daoGetReferencedByParentOnDeviceGroup(DeviceGroupBean bean)throws RuntimeDaoException{
+    protected DeviceGroupBean daoGetReferencedByParentOnDeviceGroup(DeviceGroupBean bean)
+                    throws RuntimeDaoException{
         return getDeviceGroupManager().getReferencedByParent(bean);
     }
     //8-4
@@ -766,7 +816,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceGroupManager#setReferencedByParent(DeviceGroupBean,DeviceGroupBean)}
      * @throws RuntimeDaoException
      */
-    protected DeviceGroupBean daoSetReferencedByParentOnDeviceGroup(DeviceGroupBean bean,DeviceGroupBean beanToSet)throws RuntimeDaoException{
+    protected DeviceGroupBean daoSetReferencedByParentOnDeviceGroup(DeviceGroupBean bean,DeviceGroupBean beanToSet)
+                    throws RuntimeDaoException{
         return getDeviceGroupManager().setReferencedByParent(bean,beanToSet);
     }
     //9
@@ -776,7 +827,8 @@ class Dao implements CommonConstant {
      * @see IDeviceGroupManager#listOfParent(Integer)
      * @throws RuntimeDaoException
      */
-    protected java.util.List<DeviceGroupBean> daoListOfParentForDeviceGroup(Integer idOfDeviceGroup)throws RuntimeDaoException{
+    protected java.util.List<DeviceGroupBean> daoListOfParentForDeviceGroup(Integer idOfDeviceGroup)
+                    throws RuntimeDaoException{
         return getDeviceGroupManager().listOfParent(idOfDeviceGroup);
     }
     //9-2
@@ -786,7 +838,8 @@ class Dao implements CommonConstant {
      * @see IDeviceGroupManager#listOfParent(DeviceGroupBean)
      * @throws RuntimeDaoException
      */
-    protected java.util.List<DeviceGroupBean> daoListOfParentForDeviceGroup(DeviceGroupBean deviceGroupBean)throws RuntimeDaoException{
+    protected java.util.List<DeviceGroupBean> daoListOfParentForDeviceGroup(DeviceGroupBean deviceGroupBean)
+                    throws RuntimeDaoException{
         return getDeviceGroupManager().listOfParent(deviceGroupBean);
     }
     //10
@@ -796,7 +849,8 @@ class Dao implements CommonConstant {
      * @throws IllegalStateException 创建失败
      * @throws RuntimeDaoException
      */
-    protected void daoSaveDefaultDeviceGroupIfAbsent()throws RuntimeDaoException{
+    protected void daoSaveDefaultDeviceGroupIfAbsent()
+                    throws RuntimeDaoException{
         if(!daoExistsDeviceGroup(DEFAULT_GROUP_ID)){
             try{
                 DeviceGroupBean bean = new DeviceGroupBean(DEFAULT_GROUP_ID);
@@ -818,7 +872,8 @@ class Dao implements CommonConstant {
      * @see #daoSaveDefaultDeviceGroupIfAbsent()
      * @throws RuntimeDaoException
      */
-    protected DeviceBean daoCheckGroup(DeviceBean deviceBean)throws RuntimeDaoException{
+    protected DeviceBean daoCheckGroup(DeviceBean deviceBean)
+                    throws RuntimeDaoException{
         if(null != deviceBean && Objects.equal(deviceBean.getGroupId(), DEFAULT_GROUP_ID)){
             daoSaveDefaultDeviceGroupIfAbsent();
         }
@@ -829,7 +884,8 @@ class Dao implements CommonConstant {
      * 参见 {@link IDeviceGroupManager#save(DeviceGroupBean)}
      * @throws RuntimeDaoException
      */
-    protected DeviceGroupBean daoSaveDeviceGroup(DeviceGroupBean deviceGroupBean)throws RuntimeDaoException{
+    protected DeviceGroupBean daoSaveDeviceGroup(DeviceGroupBean deviceGroupBean)
+                    throws RuntimeDaoException{
         return getDeviceGroupManager().save(deviceGroupBean);
     }
     //15
@@ -856,7 +912,8 @@ class Dao implements CommonConstant {
      * @see #daoSaveDeviceGroup(DeviceGroupBean)
      * @throws RuntimeDaoException
      */
-    protected Collection<DeviceGroupBean> daoSaveDeviceGroups(Collection<DeviceGroupBean> beans)throws RuntimeDaoException {
+    protected Collection<DeviceGroupBean> daoSaveDeviceGroups(Collection<DeviceGroupBean> beans)
+                    throws RuntimeDaoException {
         if(null != beans){
             for(DeviceGroupBean bean : beans){
                 daoSaveDeviceGroup(bean);
@@ -869,7 +926,8 @@ class Dao implements CommonConstant {
      * {@link #daoSaveDeviceGroup(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
-    protected Collection<DeviceGroupBean> daoSaveDeviceGroupsAsTransaction(final Collection<DeviceGroupBean> beans)throws RuntimeDaoException {
+    protected Collection<DeviceGroupBean> daoSaveDeviceGroupsAsTransaction(final Collection<DeviceGroupBean> beans)
+                    throws RuntimeDaoException {
         return daoRunAsTransaction(new Callable<Collection<DeviceGroupBean>>(){      
             @Override
             public Collection<DeviceGroupBean> call() throws Exception {
@@ -885,7 +943,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceGroupManager#loadByWhereAsList(String,int[],int,int)}
      * @throws RuntimeDaoException
      */
-    protected List<DeviceGroupBean> daoLoadDeviceGroupByWhere(String where,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<DeviceGroupBean> daoLoadDeviceGroupByWhere(String where,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return getDeviceGroupManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     //17
@@ -894,7 +953,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceGroupManager#loadAllAsList()}
      * @throws RuntimeDaoException
      */
-    protected List<DeviceGroupBean> daoLoadDeviceGroupAll()throws RuntimeDaoException{
+    protected List<DeviceGroupBean> daoLoadDeviceGroupAll()
+                    throws RuntimeDaoException{
         return getDeviceGroupManager().loadAllAsList();
     }
     //17-2
@@ -903,7 +963,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceGroupManager#Where(String)}
      * @throws RuntimeDaoException
      */
-    protected int daoCountDeviceGroupByWhere(String where)throws RuntimeDaoException{
+    protected int daoCountDeviceGroupByWhere(String where)
+                    throws RuntimeDaoException{
         return getDeviceGroupManager().countWhere(where);
     }
     //18
@@ -913,7 +974,8 @@ class Dao implements CommonConstant {
      * @see #daoLoadDeviceGroupByWhere(String,int,int)
      * @throws RuntimeDaoException
      */
-    protected List<Integer> daoLoadDeviceGroupIdByWhere(String where)throws RuntimeDaoException{
+    protected List<Integer> daoLoadDeviceGroupIdByWhere(String where)
+                    throws RuntimeDaoException{
         return daoToPrimaryKeyListFromDeviceGroups(daoLoadDeviceGroupByWhere(where,1,-1));
     }
 
@@ -939,7 +1001,8 @@ class Dao implements CommonConstant {
      * @see PersonBean#replaceNull(List)
      * @throws RuntimeDaoException
      */
-    protected List<PersonBean> daoGetPersons(Collection<Integer> idCollection)throws RuntimeDaoException{
+    protected List<PersonBean> daoGetPersons(Collection<Integer> idCollection)
+                    throws RuntimeDaoException{
         return PersonBean.replaceNull((getPersonManager().loadByPrimaryKey(idCollection)));
     }
     //3  
@@ -949,7 +1012,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonManager#deleteByPrimaryKey(Collection)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeletePersonsByPrimaryKey(Collection<Integer> idCollection)throws RuntimeDaoException{
+    protected int daoDeletePersonsByPrimaryKey(Collection<Integer> idCollection)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != idCollection){
             for(Integer id:idCollection){
@@ -989,7 +1053,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonManager#existsPrimaryKey(Integer)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsPerson(Integer id)throws RuntimeDaoException{
+    protected boolean daoExistsPerson(Integer id)
+                    throws RuntimeDaoException{
         return getPersonManager().existsPrimaryKey(id);
     }
     //4-2
@@ -998,7 +1063,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonManager#existsPrimaryKey(PersonBean)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsPerson(PersonBean bean)throws RuntimeDaoException{
+    protected boolean daoExistsPerson(PersonBean bean)
+                    throws RuntimeDaoException{
         return getPersonManager().existsPrimaryKey(bean);
     }
     //5
@@ -1010,7 +1076,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonManager#deleteByPrimaryKey(Integer)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeletePerson(Integer id)throws RuntimeDaoException{
+    protected int daoDeletePerson(Integer id)
+                    throws RuntimeDaoException{
         return getPersonManager().deleteByPrimaryKey(id);
     }
     //5-2
@@ -1021,7 +1088,8 @@ class Dao implements CommonConstant {
      * @see #daoDeletePerson(Integer)
      * @throws RuntimeDaoException
      */
-    protected int daoDeletePerson(PersonBean bean)throws RuntimeDaoException{
+    protected int daoDeletePerson(PersonBean bean)
+                    throws RuntimeDaoException{
         return null == bean ? 0 : daoDeletePerson(bean.getId());
     }
     //6
@@ -1031,7 +1099,8 @@ class Dao implements CommonConstant {
      * @see #daoDeletePerson(Integer)
      * @throws RuntimeDaoException
      */
-    protected int daoDeletePersons(Collection<PersonBean> beans)throws RuntimeDaoException{
+    protected int daoDeletePersons(Collection<PersonBean> beans)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != beans){        
             for(PersonBean bean:beans){
@@ -1047,13 +1116,14 @@ class Dao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IPersonManager#checkDuplicate(PersonBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      */
-    protected PersonBean daoCheckDuplicate(PersonBean personBean)throws RuntimeDaoException,DuplicateReordException{
+    protected PersonBean daoCheckDuplicate(PersonBean personBean)
+                    throws RuntimeDaoException,DuplicateRecordException{
         try{
             return getPersonManager().checkDuplicate(personBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
     }
     //7-3
@@ -1062,14 +1132,15 @@ class Dao implements CommonConstant {
      * 
      * @param idOfPerson 用户id 
      * @see {@link IPersonManager#checkDuplicate(PersonBean)}
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code idOfPerson} 
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException
+     * @throws DuplicateRecordException
      */
-    protected Integer daoCheckDuplicatePerson(Integer idOfPerson)throws RuntimeDaoException,DuplicateReordException{
+    protected Integer daoCheckDuplicatePerson(Integer idOfPerson)
+                    throws RuntimeDaoException,DuplicateRecordException{
         if(getPersonManager().existsPrimaryKey(idOfPerson)){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
         return idOfPerson;
     }
@@ -1081,7 +1152,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonManager#getFeatureBeansByPersonIdAsList(Integer)}
      * @throws RuntimeDaoException
      */
-    protected List<FeatureBean> daoGetFeatureBeansByPersonIdOnPerson(Integer idOfPerson)throws RuntimeDaoException{
+    protected List<FeatureBean> daoGetFeatureBeansByPersonIdOnPerson(Integer idOfPerson)
+                    throws RuntimeDaoException{
         return getPersonManager().getFeatureBeansByPersonIdAsList(idOfPerson);
     }
     //8-2
@@ -1092,7 +1164,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonManager#deleteFeatureBeansByPersonId(Integer)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteFeatureBeansByPersonIdOnPerson(Integer idOfPerson)throws RuntimeDaoException{
+    protected int daoDeleteFeatureBeansByPersonIdOnPerson(Integer idOfPerson)
+                    throws RuntimeDaoException{
         return getPersonManager().deleteFeatureBeansByPersonId(idOfPerson);
     }
     //8
@@ -1103,7 +1176,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonManager#getLogBeansByPersonIdAsList(Integer)}
      * @throws RuntimeDaoException
      */
-    protected List<LogBean> daoGetLogBeansByPersonIdOnPerson(Integer idOfPerson)throws RuntimeDaoException{
+    protected List<LogBean> daoGetLogBeansByPersonIdOnPerson(Integer idOfPerson)
+                    throws RuntimeDaoException{
         return getPersonManager().getLogBeansByPersonIdAsList(idOfPerson);
     }
     //8-2
@@ -1114,7 +1188,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonManager#deleteLogBeansByPersonId(Integer)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteLogBeansByPersonIdOnPerson(Integer idOfPerson)throws RuntimeDaoException{
+    protected int daoDeleteLogBeansByPersonIdOnPerson(Integer idOfPerson)
+                    throws RuntimeDaoException{
         return getPersonManager().deleteLogBeansByPersonId(idOfPerson);
     }
     //8-3
@@ -1124,7 +1199,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonManager#getReferencedByImageMd5(PersonBean)}
      * @throws RuntimeDaoException
      */
-    protected ImageBean daoGetReferencedByImageMd5OnPerson(PersonBean bean)throws RuntimeDaoException{
+    protected ImageBean daoGetReferencedByImageMd5OnPerson(PersonBean bean)
+                    throws RuntimeDaoException{
         return getPersonManager().getReferencedByImageMd5(bean);
     }
     //8-4
@@ -1136,7 +1212,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonManager#setReferencedByImageMd5(PersonBean,ImageBean)}
      * @throws RuntimeDaoException
      */
-    protected ImageBean daoSetReferencedByImageMd5OnPerson(PersonBean bean,ImageBean beanToSet)throws RuntimeDaoException{
+    protected ImageBean daoSetReferencedByImageMd5OnPerson(PersonBean bean,ImageBean beanToSet)
+                    throws RuntimeDaoException{
         return getPersonManager().setReferencedByImageMd5(bean,beanToSet);
     }
     //8-6
@@ -1153,7 +1230,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonManager#getReferencedByGroupId(PersonBean)}
      * @throws RuntimeDaoException
      */
-    protected PersonGroupBean daoGetReferencedByGroupIdOnPerson(PersonBean bean)throws RuntimeDaoException{
+    protected PersonGroupBean daoGetReferencedByGroupIdOnPerson(PersonBean bean)
+                    throws RuntimeDaoException{
         return getPersonManager().getReferencedByGroupId(bean);
     }
     //8-4
@@ -1165,7 +1243,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonManager#setReferencedByGroupId(PersonBean,PersonGroupBean)}
      * @throws RuntimeDaoException
      */
-    protected PersonGroupBean daoSetReferencedByGroupIdOnPerson(PersonBean bean,PersonGroupBean beanToSet)throws RuntimeDaoException{
+    protected PersonGroupBean daoSetReferencedByGroupIdOnPerson(PersonBean bean,PersonGroupBean beanToSet)
+                    throws RuntimeDaoException{
         return getPersonManager().setReferencedByGroupId(bean,beanToSet);
     }
     //8-6
@@ -1180,7 +1259,8 @@ class Dao implements CommonConstant {
      * 参见 {@link IPersonManager#save(PersonBean)}
      * @throws RuntimeDaoException
      */
-    protected PersonBean daoSavePerson(PersonBean personBean)throws RuntimeDaoException{
+    protected PersonBean daoSavePerson(PersonBean personBean)
+                    throws RuntimeDaoException{
         daoCheckGroup(personBean);
         return getPersonManager().save(personBean);
     }
@@ -1209,7 +1289,8 @@ class Dao implements CommonConstant {
      * @see #daoSavePerson(PersonBean)
      * @throws RuntimeDaoException
      */
-    protected Collection<PersonBean> daoSavePersons(Collection<PersonBean> beans)throws RuntimeDaoException {
+    protected Collection<PersonBean> daoSavePersons(Collection<PersonBean> beans)
+                    throws RuntimeDaoException {
         if(null != beans){
             for(PersonBean bean : beans){
                 daoSavePerson(bean);
@@ -1222,7 +1303,8 @@ class Dao implements CommonConstant {
      * {@link #daoSavePerson(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
-    protected Collection<PersonBean> daoSavePersonsAsTransaction(final Collection<PersonBean> beans)throws RuntimeDaoException {
+    protected Collection<PersonBean> daoSavePersonsAsTransaction(final Collection<PersonBean> beans)
+                    throws RuntimeDaoException {
         return daoRunAsTransaction(new Callable<Collection<PersonBean>>(){      
             @Override
             public Collection<PersonBean> call() throws Exception {
@@ -1238,7 +1320,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonManager#loadByWhereAsList(String,int[],int,int)}
      * @throws RuntimeDaoException
      */
-    protected List<PersonBean> daoLoadPersonByWhere(String where,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<PersonBean> daoLoadPersonByWhere(String where,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return getPersonManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     //17
@@ -1247,7 +1330,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonManager#loadAllAsList()}
      * @throws RuntimeDaoException
      */
-    protected List<PersonBean> daoLoadPersonAll()throws RuntimeDaoException{
+    protected List<PersonBean> daoLoadPersonAll()
+                    throws RuntimeDaoException{
         return getPersonManager().loadAllAsList();
     }
     //17-2
@@ -1256,7 +1340,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonManager#Where(String)}
      * @throws RuntimeDaoException
      */
-    protected int daoCountPersonByWhere(String where)throws RuntimeDaoException{
+    protected int daoCountPersonByWhere(String where)
+                    throws RuntimeDaoException{
         return getPersonManager().countWhere(where);
     }
     //18
@@ -1266,7 +1351,8 @@ class Dao implements CommonConstant {
      * @see #daoLoadPersonByWhere(String,int,int)
      * @throws RuntimeDaoException
      */
-    protected List<Integer> daoLoadPersonIdByWhere(String where)throws RuntimeDaoException{
+    protected List<Integer> daoLoadPersonIdByWhere(String where)
+                    throws RuntimeDaoException{
         return daoToPrimaryKeyListFromPersons(daoLoadPersonByWhere(where,1,-1));
     }
     //18-5
@@ -1277,7 +1363,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonManager#loadByIndexImageMd5(String)}
      * @throws RuntimeDaoException
      */
-    protected PersonBean daoGetPersonByIndexImageMd5(String imageMd5)throws RuntimeDaoException{
+    protected PersonBean daoGetPersonByIndexImageMd5(String imageMd5)
+                    throws RuntimeDaoException{
         return getPersonManager().loadByIndexImageMd5(imageMd5);
     }
     //18-5
@@ -1288,7 +1375,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonManager#loadByIndexPapersNum(String)}
      * @throws RuntimeDaoException
      */
-    protected PersonBean daoGetPersonByIndexPapersNum(String papersNum)throws RuntimeDaoException{
+    protected PersonBean daoGetPersonByIndexPapersNum(String papersNum)
+                    throws RuntimeDaoException{
         return getPersonManager().loadByIndexPapersNum(papersNum);
     }
     //19
@@ -1299,7 +1387,8 @@ class Dao implements CommonConstant {
      * @throws RuntimeDaoException
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    protected List<PersonBean> daoLoadPersonByCreateTime(Date timestamp,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<PersonBean> daoLoadPersonByCreateTime(Date timestamp,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return daoLoadPersonByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
     }
     //20
@@ -1307,7 +1396,8 @@ class Dao implements CommonConstant {
      * 参见 {@link #daoLoadPersonByCreateTime(Date,int,int)} 
      * @throws RuntimeDaoException
      */
-    protected List<PersonBean> daoLoadPersonByCreateTime(Date timestamp)throws RuntimeDaoException{
+    protected List<PersonBean> daoLoadPersonByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoadPersonByCreateTime(timestamp,1,-1);
     }
     //20-5
@@ -1316,7 +1406,8 @@ class Dao implements CommonConstant {
      * @see #daoCountPersonByWhere(String)
      * @throws RuntimeDaoException
      */
-    protected int daoCountPersonByCreateTime(Date timestamp)throws RuntimeDaoException{
+    protected int daoCountPersonByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoCountPersonByWhere(makeWhere(timestamp,"create_time"));
     }
     //21
@@ -1327,7 +1418,8 @@ class Dao implements CommonConstant {
      * @see {@link #daoLoadPersonIdByWhere(String)}
      * @throws RuntimeDaoException
      */
-    protected List<Integer> daoLoadPersonIdByCreateTime(Date timestamp)throws RuntimeDaoException{
+    protected List<Integer> daoLoadPersonIdByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoadPersonIdByWhere(makeWhere(timestamp,"create_time"));
     }
 
@@ -1339,7 +1431,8 @@ class Dao implements CommonConstant {
      * @throws RuntimeDaoException
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    protected List<PersonBean> daoLoadPersonByUpdateTime(Date timestamp,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<PersonBean> daoLoadPersonByUpdateTime(Date timestamp,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return daoLoadPersonByWhere(makeWhere(timestamp,"update_time"),startRow,numRows);
     }
     //20
@@ -1347,7 +1440,8 @@ class Dao implements CommonConstant {
      * 参见 {@link #daoLoadPersonByUpdateTime(Date,int,int)} 
      * @throws RuntimeDaoException
      */
-    protected List<PersonBean> daoLoadPersonByUpdateTime(Date timestamp)throws RuntimeDaoException{
+    protected List<PersonBean> daoLoadPersonByUpdateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoadPersonByUpdateTime(timestamp,1,-1);
     }
     //20-5
@@ -1356,7 +1450,8 @@ class Dao implements CommonConstant {
      * @see #daoCountPersonByWhere(String)
      * @throws RuntimeDaoException
      */
-    protected int daoCountPersonByUpdateTime(Date timestamp)throws RuntimeDaoException{
+    protected int daoCountPersonByUpdateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoCountPersonByWhere(makeWhere(timestamp,"update_time"));
     }
     //21
@@ -1367,7 +1462,8 @@ class Dao implements CommonConstant {
      * @see {@link #daoLoadPersonIdByWhere(String)}
      * @throws RuntimeDaoException
      */
-    protected List<Integer> daoLoadPersonIdByUpdateTime(Date timestamp)throws RuntimeDaoException{
+    protected List<Integer> daoLoadPersonIdByUpdateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoadPersonIdByWhere(makeWhere(timestamp,"update_time"));
     }
 
@@ -1392,7 +1488,8 @@ class Dao implements CommonConstant {
      * @see PersonGroupBean#replaceNull(List)
      * @throws RuntimeDaoException
      */
-    protected List<PersonGroupBean> daoGetPersonGroups(Collection<Integer> idCollection)throws RuntimeDaoException{
+    protected List<PersonGroupBean> daoGetPersonGroups(Collection<Integer> idCollection)
+                    throws RuntimeDaoException{
         return PersonGroupBean.replaceNull((getPersonGroupManager().loadByPrimaryKey(idCollection)));
     }
     //3  
@@ -1402,7 +1499,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonGroupManager#deleteByPrimaryKey(Collection)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeletePersonGroupsByPrimaryKey(Collection<Integer> idCollection)throws RuntimeDaoException{
+    protected int daoDeletePersonGroupsByPrimaryKey(Collection<Integer> idCollection)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != idCollection){
             for(Integer id:idCollection){
@@ -1442,7 +1540,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonGroupManager#existsPrimaryKey(Integer)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsPersonGroup(Integer id)throws RuntimeDaoException{
+    protected boolean daoExistsPersonGroup(Integer id)
+                    throws RuntimeDaoException{
         return getPersonGroupManager().existsPrimaryKey(id);
     }
     //4-2
@@ -1451,7 +1550,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonGroupManager#existsPrimaryKey(PersonGroupBean)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsPersonGroup(PersonGroupBean bean)throws RuntimeDaoException{
+    protected boolean daoExistsPersonGroup(PersonGroupBean bean)
+                    throws RuntimeDaoException{
         return getPersonGroupManager().existsPrimaryKey(bean);
     }
     //5
@@ -1463,7 +1563,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonGroupManager#deleteByPrimaryKey(Integer)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeletePersonGroup(Integer id)throws RuntimeDaoException{
+    protected int daoDeletePersonGroup(Integer id)
+                    throws RuntimeDaoException{
         return getPersonGroupManager().deleteByPrimaryKey(id);
     }
     //5-2
@@ -1474,7 +1575,8 @@ class Dao implements CommonConstant {
      * @see #daoDeletePersonGroup(Integer)
      * @throws RuntimeDaoException
      */
-    protected int daoDeletePersonGroup(PersonGroupBean bean)throws RuntimeDaoException{
+    protected int daoDeletePersonGroup(PersonGroupBean bean)
+                    throws RuntimeDaoException{
         return null == bean ? 0 : daoDeletePersonGroup(bean.getId());
     }
     //6
@@ -1484,7 +1586,8 @@ class Dao implements CommonConstant {
      * @see #daoDeletePersonGroup(Integer)
      * @throws RuntimeDaoException
      */
-    protected int daoDeletePersonGroups(Collection<PersonGroupBean> beans)throws RuntimeDaoException{
+    protected int daoDeletePersonGroups(Collection<PersonGroupBean> beans)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != beans){        
             for(PersonGroupBean bean:beans){
@@ -1500,13 +1603,14 @@ class Dao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IPersonGroupManager#checkDuplicate(PersonGroupBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      */
-    protected PersonGroupBean daoCheckDuplicate(PersonGroupBean personGroupBean)throws RuntimeDaoException,DuplicateReordException{
+    protected PersonGroupBean daoCheckDuplicate(PersonGroupBean personGroupBean)
+                    throws RuntimeDaoException,DuplicateRecordException{
         try{
             return getPersonGroupManager().checkDuplicate(personGroupBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
     }
     //7-3
@@ -1515,14 +1619,15 @@ class Dao implements CommonConstant {
      * 
      * @param idOfPersonGroup 用户组id 
      * @see {@link IPersonGroupManager#checkDuplicate(PersonGroupBean)}
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code idOfPersonGroup} 
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException
+     * @throws DuplicateRecordException
      */
-    protected Integer daoCheckDuplicatePersonGroup(Integer idOfPersonGroup)throws RuntimeDaoException,DuplicateReordException{
+    protected Integer daoCheckDuplicatePersonGroup(Integer idOfPersonGroup)
+                    throws RuntimeDaoException,DuplicateRecordException{
         if(getPersonGroupManager().existsPrimaryKey(idOfPersonGroup)){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
         return idOfPersonGroup;
     }
@@ -1534,7 +1639,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonGroupManager#getPermitBeansByPersonGroupIdAsList(Integer)}
      * @throws RuntimeDaoException
      */
-    protected List<PermitBean> daoGetPermitBeansByPersonGroupIdOnPersonGroup(Integer idOfPersonGroup)throws RuntimeDaoException{
+    protected List<PermitBean> daoGetPermitBeansByPersonGroupIdOnPersonGroup(Integer idOfPersonGroup)
+                    throws RuntimeDaoException{
         return getPersonGroupManager().getPermitBeansByPersonGroupIdAsList(idOfPersonGroup);
     }
     //8-2
@@ -1545,7 +1651,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonGroupManager#deletePermitBeansByPersonGroupId(Integer)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeletePermitBeansByPersonGroupIdOnPersonGroup(Integer idOfPersonGroup)throws RuntimeDaoException{
+    protected int daoDeletePermitBeansByPersonGroupIdOnPersonGroup(Integer idOfPersonGroup)
+                    throws RuntimeDaoException{
         return getPersonGroupManager().deletePermitBeansByPersonGroupId(idOfPersonGroup);
     }
     //8
@@ -1556,7 +1663,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonGroupManager#getPersonBeansByGroupIdAsList(Integer)}
      * @throws RuntimeDaoException
      */
-    protected List<PersonBean> daoGetPersonsOfGroup(Integer idOfPersonGroup)throws RuntimeDaoException{
+    protected List<PersonBean> daoGetPersonsOfGroup(Integer idOfPersonGroup)
+                    throws RuntimeDaoException{
         return getPersonGroupManager().getPersonBeansByGroupIdAsList(idOfPersonGroup);
     }
     //8-2
@@ -1567,7 +1675,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonGroupManager#deletePersonBeansByGroupId(Integer)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeletePersonBeansByGroupIdOnPersonGroup(Integer idOfPersonGroup)throws RuntimeDaoException{
+    protected int daoDeletePersonBeansByGroupIdOnPersonGroup(Integer idOfPersonGroup)
+                    throws RuntimeDaoException{
         return getPersonGroupManager().deletePersonBeansByGroupId(idOfPersonGroup);
     }
     //8
@@ -1578,7 +1687,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonGroupManager#getPersonGroupBeansByParentAsList(Integer)}
      * @throws RuntimeDaoException
      */
-    protected List<PersonGroupBean> daoGetSubPersonGroup(Integer idOfPersonGroup)throws RuntimeDaoException{
+    protected List<PersonGroupBean> daoGetSubPersonGroup(Integer idOfPersonGroup)
+                    throws RuntimeDaoException{
         return getPersonGroupManager().getPersonGroupBeansByParentAsList(idOfPersonGroup);
     }
     //8-2
@@ -1589,7 +1699,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonGroupManager#deletePersonGroupBeansByParent(Integer)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeletePersonGroupBeansByParentOnPersonGroup(Integer idOfPersonGroup)throws RuntimeDaoException{
+    protected int daoDeletePersonGroupBeansByParentOnPersonGroup(Integer idOfPersonGroup)
+                    throws RuntimeDaoException{
         return getPersonGroupManager().deletePersonGroupBeansByParent(idOfPersonGroup);
     }
     //8-3
@@ -1599,7 +1710,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonGroupManager#getReferencedByParent(PersonGroupBean)}
      * @throws RuntimeDaoException
      */
-    protected PersonGroupBean daoGetReferencedByParentOnPersonGroup(PersonGroupBean bean)throws RuntimeDaoException{
+    protected PersonGroupBean daoGetReferencedByParentOnPersonGroup(PersonGroupBean bean)
+                    throws RuntimeDaoException{
         return getPersonGroupManager().getReferencedByParent(bean);
     }
     //8-4
@@ -1611,7 +1723,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonGroupManager#setReferencedByParent(PersonGroupBean,PersonGroupBean)}
      * @throws RuntimeDaoException
      */
-    protected PersonGroupBean daoSetReferencedByParentOnPersonGroup(PersonGroupBean bean,PersonGroupBean beanToSet)throws RuntimeDaoException{
+    protected PersonGroupBean daoSetReferencedByParentOnPersonGroup(PersonGroupBean bean,PersonGroupBean beanToSet)
+                    throws RuntimeDaoException{
         return getPersonGroupManager().setReferencedByParent(bean,beanToSet);
     }
     //9
@@ -1621,7 +1734,8 @@ class Dao implements CommonConstant {
      * @see IPersonGroupManager#listOfParent(Integer)
      * @throws RuntimeDaoException
      */
-    protected java.util.List<PersonGroupBean> daoListOfParentForPersonGroup(Integer idOfPersonGroup)throws RuntimeDaoException{
+    protected java.util.List<PersonGroupBean> daoListOfParentForPersonGroup(Integer idOfPersonGroup)
+                    throws RuntimeDaoException{
         return getPersonGroupManager().listOfParent(idOfPersonGroup);
     }
     //9-2
@@ -1631,7 +1745,8 @@ class Dao implements CommonConstant {
      * @see IPersonGroupManager#listOfParent(PersonGroupBean)
      * @throws RuntimeDaoException
      */
-    protected java.util.List<PersonGroupBean> daoListOfParentForPersonGroup(PersonGroupBean personGroupBean)throws RuntimeDaoException{
+    protected java.util.List<PersonGroupBean> daoListOfParentForPersonGroup(PersonGroupBean personGroupBean)
+                    throws RuntimeDaoException{
         return getPersonGroupManager().listOfParent(personGroupBean);
     }
     //10
@@ -1641,7 +1756,8 @@ class Dao implements CommonConstant {
      * @throws IllegalStateException 创建失败
      * @throws RuntimeDaoException
      */
-    protected void daoSaveDefaultPersonGroupIfAbsent()throws RuntimeDaoException{
+    protected void daoSaveDefaultPersonGroupIfAbsent()
+                    throws RuntimeDaoException{
         if(!daoExistsPersonGroup(DEFAULT_GROUP_ID)){
             try{
                 PersonGroupBean bean = new PersonGroupBean(DEFAULT_GROUP_ID);
@@ -1663,7 +1779,8 @@ class Dao implements CommonConstant {
      * @see #daoSaveDefaultPersonGroupIfAbsent()
      * @throws RuntimeDaoException
      */
-    protected PersonBean daoCheckGroup(PersonBean personBean)throws RuntimeDaoException{
+    protected PersonBean daoCheckGroup(PersonBean personBean)
+                    throws RuntimeDaoException{
         if(null != personBean && Objects.equal(personBean.getGroupId(), DEFAULT_GROUP_ID)){
             daoSaveDefaultPersonGroupIfAbsent();
         }
@@ -1674,7 +1791,8 @@ class Dao implements CommonConstant {
      * 参见 {@link IPersonGroupManager#save(PersonGroupBean)}
      * @throws RuntimeDaoException
      */
-    protected PersonGroupBean daoSavePersonGroup(PersonGroupBean personGroupBean)throws RuntimeDaoException{
+    protected PersonGroupBean daoSavePersonGroup(PersonGroupBean personGroupBean)
+                    throws RuntimeDaoException{
         return getPersonGroupManager().save(personGroupBean);
     }
     //15
@@ -1701,7 +1819,8 @@ class Dao implements CommonConstant {
      * @see #daoSavePersonGroup(PersonGroupBean)
      * @throws RuntimeDaoException
      */
-    protected Collection<PersonGroupBean> daoSavePersonGroups(Collection<PersonGroupBean> beans)throws RuntimeDaoException {
+    protected Collection<PersonGroupBean> daoSavePersonGroups(Collection<PersonGroupBean> beans)
+                    throws RuntimeDaoException {
         if(null != beans){
             for(PersonGroupBean bean : beans){
                 daoSavePersonGroup(bean);
@@ -1714,7 +1833,8 @@ class Dao implements CommonConstant {
      * {@link #daoSavePersonGroup(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
-    protected Collection<PersonGroupBean> daoSavePersonGroupsAsTransaction(final Collection<PersonGroupBean> beans)throws RuntimeDaoException {
+    protected Collection<PersonGroupBean> daoSavePersonGroupsAsTransaction(final Collection<PersonGroupBean> beans)
+                    throws RuntimeDaoException {
         return daoRunAsTransaction(new Callable<Collection<PersonGroupBean>>(){      
             @Override
             public Collection<PersonGroupBean> call() throws Exception {
@@ -1730,7 +1850,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonGroupManager#loadByWhereAsList(String,int[],int,int)}
      * @throws RuntimeDaoException
      */
-    protected List<PersonGroupBean> daoLoadPersonGroupByWhere(String where,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<PersonGroupBean> daoLoadPersonGroupByWhere(String where,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return getPersonGroupManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     //17
@@ -1739,7 +1860,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonGroupManager#loadAllAsList()}
      * @throws RuntimeDaoException
      */
-    protected List<PersonGroupBean> daoLoadPersonGroupAll()throws RuntimeDaoException{
+    protected List<PersonGroupBean> daoLoadPersonGroupAll()
+                    throws RuntimeDaoException{
         return getPersonGroupManager().loadAllAsList();
     }
     //17-2
@@ -1748,7 +1870,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonGroupManager#Where(String)}
      * @throws RuntimeDaoException
      */
-    protected int daoCountPersonGroupByWhere(String where)throws RuntimeDaoException{
+    protected int daoCountPersonGroupByWhere(String where)
+                    throws RuntimeDaoException{
         return getPersonGroupManager().countWhere(where);
     }
     //18
@@ -1758,7 +1881,8 @@ class Dao implements CommonConstant {
      * @see #daoLoadPersonGroupByWhere(String,int,int)
      * @throws RuntimeDaoException
      */
-    protected List<Integer> daoLoadPersonGroupIdByWhere(String where)throws RuntimeDaoException{
+    protected List<Integer> daoLoadPersonGroupIdByWhere(String where)
+                    throws RuntimeDaoException{
         return daoToPrimaryKeyListFromPersonGroups(daoLoadPersonGroupByWhere(where,1,-1));
     }
 
@@ -1784,7 +1908,8 @@ class Dao implements CommonConstant {
      * @see FaceBean#replaceNull(List)
      * @throws RuntimeDaoException
      */
-    protected List<FaceBean> daoGetFaces(Collection<Integer> idCollection)throws RuntimeDaoException{
+    protected List<FaceBean> daoGetFaces(Collection<Integer> idCollection)
+                    throws RuntimeDaoException{
         return FaceBean.replaceNull((getFaceManager().loadByPrimaryKey(idCollection)));
     }
     //3  
@@ -1794,7 +1919,8 @@ class Dao implements CommonConstant {
      * @see {@link IFaceManager#deleteByPrimaryKey(Collection)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteFacesByPrimaryKey(Collection<Integer> idCollection)throws RuntimeDaoException{
+    protected int daoDeleteFacesByPrimaryKey(Collection<Integer> idCollection)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != idCollection){
             for(Integer id:idCollection){
@@ -1834,7 +1960,8 @@ class Dao implements CommonConstant {
      * @see {@link IFaceManager#existsPrimaryKey(Integer)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsFace(Integer id)throws RuntimeDaoException{
+    protected boolean daoExistsFace(Integer id)
+                    throws RuntimeDaoException{
         return getFaceManager().existsPrimaryKey(id);
     }
     //4-2
@@ -1843,7 +1970,8 @@ class Dao implements CommonConstant {
      * @see {@link IFaceManager#existsPrimaryKey(FaceBean)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsFace(FaceBean bean)throws RuntimeDaoException{
+    protected boolean daoExistsFace(FaceBean bean)
+                    throws RuntimeDaoException{
         return getFaceManager().existsPrimaryKey(bean);
     }
     //5
@@ -1855,7 +1983,8 @@ class Dao implements CommonConstant {
      * @see {@link IFaceManager#deleteByPrimaryKey(Integer)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteFace(Integer id)throws RuntimeDaoException{
+    protected int daoDeleteFace(Integer id)
+                    throws RuntimeDaoException{
         return getFaceManager().deleteByPrimaryKey(id);
     }
     //5-2
@@ -1866,7 +1995,8 @@ class Dao implements CommonConstant {
      * @see #daoDeleteFace(Integer)
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteFace(FaceBean bean)throws RuntimeDaoException{
+    protected int daoDeleteFace(FaceBean bean)
+                    throws RuntimeDaoException{
         return null == bean ? 0 : daoDeleteFace(bean.getId());
     }
     //6
@@ -1876,7 +2006,8 @@ class Dao implements CommonConstant {
      * @see #daoDeleteFace(Integer)
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteFaces(Collection<FaceBean> beans)throws RuntimeDaoException{
+    protected int daoDeleteFaces(Collection<FaceBean> beans)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != beans){        
             for(FaceBean bean:beans){
@@ -1892,13 +2023,14 @@ class Dao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IFaceManager#checkDuplicate(FaceBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      */
-    protected FaceBean daoCheckDuplicate(FaceBean faceBean)throws RuntimeDaoException,DuplicateReordException{
+    protected FaceBean daoCheckDuplicate(FaceBean faceBean)
+                    throws RuntimeDaoException,DuplicateRecordException{
         try{
             return getFaceManager().checkDuplicate(faceBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
     }
     //7-3
@@ -1907,14 +2039,15 @@ class Dao implements CommonConstant {
      * 
      * @param idOfFace 主键 
      * @see {@link IFaceManager#checkDuplicate(FaceBean)}
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code idOfFace} 
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException
+     * @throws DuplicateRecordException
      */
-    protected Integer daoCheckDuplicateFace(Integer idOfFace)throws RuntimeDaoException,DuplicateReordException{
+    protected Integer daoCheckDuplicateFace(Integer idOfFace)
+                    throws RuntimeDaoException,DuplicateRecordException{
         if(getFaceManager().existsPrimaryKey(idOfFace)){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
         return idOfFace;
     }
@@ -1926,7 +2059,8 @@ class Dao implements CommonConstant {
      * @see {@link IFaceManager#getLogBeansByCompareFaceAsList(Integer)}
      * @throws RuntimeDaoException
      */
-    protected List<LogBean> daoGetLogBeansByCompareFaceOnFace(Integer idOfFace)throws RuntimeDaoException{
+    protected List<LogBean> daoGetLogBeansByCompareFaceOnFace(Integer idOfFace)
+                    throws RuntimeDaoException{
         return getFaceManager().getLogBeansByCompareFaceAsList(idOfFace);
     }
     //8-2
@@ -1937,7 +2071,8 @@ class Dao implements CommonConstant {
      * @see {@link IFaceManager#deleteLogBeansByCompareFace(Integer)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteLogBeansByCompareFaceOnFace(Integer idOfFace)throws RuntimeDaoException{
+    protected int daoDeleteLogBeansByCompareFaceOnFace(Integer idOfFace)
+                    throws RuntimeDaoException{
         return getFaceManager().deleteLogBeansByCompareFace(idOfFace);
     }
     //8-3
@@ -1947,7 +2082,8 @@ class Dao implements CommonConstant {
      * @see {@link IFaceManager#getReferencedByFeatureMd5(FaceBean)}
      * @throws RuntimeDaoException
      */
-    protected FeatureBean daoGetReferencedByFeatureMd5OnFace(FaceBean bean)throws RuntimeDaoException{
+    protected FeatureBean daoGetReferencedByFeatureMd5OnFace(FaceBean bean)
+                    throws RuntimeDaoException{
         return getFaceManager().getReferencedByFeatureMd5(bean);
     }
     //8-4
@@ -1959,7 +2095,8 @@ class Dao implements CommonConstant {
      * @see {@link IFaceManager#setReferencedByFeatureMd5(FaceBean,FeatureBean)}
      * @throws RuntimeDaoException
      */
-    protected FeatureBean daoSetReferencedByFeatureMd5OnFace(FaceBean bean,FeatureBean beanToSet)throws RuntimeDaoException{
+    protected FeatureBean daoSetReferencedByFeatureMd5OnFace(FaceBean bean,FeatureBean beanToSet)
+                    throws RuntimeDaoException{
         return getFaceManager().setReferencedByFeatureMd5(bean,beanToSet);
     }
     //8-6
@@ -1976,7 +2113,8 @@ class Dao implements CommonConstant {
      * @see {@link IFaceManager#getReferencedByImageMd5(FaceBean)}
      * @throws RuntimeDaoException
      */
-    protected ImageBean daoGetReferencedByImageMd5OnFace(FaceBean bean)throws RuntimeDaoException{
+    protected ImageBean daoGetReferencedByImageMd5OnFace(FaceBean bean)
+                    throws RuntimeDaoException{
         return getFaceManager().getReferencedByImageMd5(bean);
     }
     //8-4
@@ -1988,7 +2126,8 @@ class Dao implements CommonConstant {
      * @see {@link IFaceManager#setReferencedByImageMd5(FaceBean,ImageBean)}
      * @throws RuntimeDaoException
      */
-    protected ImageBean daoSetReferencedByImageMd5OnFace(FaceBean bean,ImageBean beanToSet)throws RuntimeDaoException{
+    protected ImageBean daoSetReferencedByImageMd5OnFace(FaceBean bean,ImageBean beanToSet)
+                    throws RuntimeDaoException{
         return getFaceManager().setReferencedByImageMd5(bean,beanToSet);
     }
     //8-6
@@ -2006,10 +2145,11 @@ class Dao implements CommonConstant {
      * @see {@link IFaceManager#save(FaceBean)}
      * @see {@link IFaceManager#checkDuplicate(FaceBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code faceBean.isNew()} is {@code false}
      */
-    protected FaceBean daoAddFace(FaceBean faceBean)throws RuntimeDaoException,DuplicateReordException{
+    protected FaceBean daoAddFace(FaceBean faceBean)
+                    throws RuntimeDaoException,DuplicateRecordException{
         return getFaceManager().save(daoCheckDuplicate(faceBean));
     }
     //13
@@ -2019,13 +2159,13 @@ class Dao implements CommonConstant {
      * see also {@link IFaceManager#save(FaceBean , FeatureBean, ImageBean , Collection )}<br>
      * @see {@link IFaceManager#checkDuplicate(FaceBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code faceBean.isNew()} is {@code false}
      */
     protected FaceBean daoAddFace(FaceBean faceBean
         , FeatureBean refFeatureByFeatureMd5 
         , ImageBean refImageByImageMd5 
-        , Collection<LogBean> impLogByCompareFace )throws RuntimeDaoException,DuplicateReordException{
+        , Collection<LogBean> impLogByCompareFace )throws RuntimeDaoException,DuplicateRecordException{
         checkArgument(null == faceBean || faceBean.isNew(),"can be add,delete,but modify record for fl_face,so the _isNew field must be true");
         daoCheckDuplicate(faceBean);
         return getFaceManager().save(faceBean
@@ -2041,7 +2181,8 @@ class Dao implements CommonConstant {
      * @see #daoAddFace(FaceBean)
      * @throws RuntimeDaoException
      */
-    protected Collection<FaceBean> daoAddFaces(Collection<FaceBean> beans)throws RuntimeDaoException ,DuplicateReordException{
+    protected Collection<FaceBean> daoAddFaces(Collection<FaceBean> beans)
+                    throws RuntimeDaoException ,DuplicateRecordException{
         if(null != beans){
             for(FaceBean bean : beans){
                 daoAddFace(bean);
@@ -2054,7 +2195,8 @@ class Dao implements CommonConstant {
      * {@link #daoAddFace(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
-    protected Collection<FaceBean> daoAddFacesAsTransaction(final Collection<FaceBean> beans)throws RuntimeDaoException ,DuplicateReordException{
+    protected Collection<FaceBean> daoAddFacesAsTransaction(final Collection<FaceBean> beans)
+                    throws RuntimeDaoException ,DuplicateRecordException{
         return daoRunAsTransaction(new Callable<Collection<FaceBean>>(){      
             @Override
             public Collection<FaceBean> call() throws Exception {
@@ -2070,7 +2212,8 @@ class Dao implements CommonConstant {
      * @see {@link IFaceManager#loadByWhereAsList(String,int[],int,int)}
      * @throws RuntimeDaoException
      */
-    protected List<FaceBean> daoLoadFaceByWhere(String where,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<FaceBean> daoLoadFaceByWhere(String where,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return getFaceManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     //17
@@ -2079,7 +2222,8 @@ class Dao implements CommonConstant {
      * @see {@link IFaceManager#loadAllAsList()}
      * @throws RuntimeDaoException
      */
-    protected List<FaceBean> daoLoadFaceAll()throws RuntimeDaoException{
+    protected List<FaceBean> daoLoadFaceAll()
+                    throws RuntimeDaoException{
         return getFaceManager().loadAllAsList();
     }
     //17-2
@@ -2088,7 +2232,8 @@ class Dao implements CommonConstant {
      * @see {@link IFaceManager#Where(String)}
      * @throws RuntimeDaoException
      */
-    protected int daoCountFaceByWhere(String where)throws RuntimeDaoException{
+    protected int daoCountFaceByWhere(String where)
+                    throws RuntimeDaoException{
         return getFaceManager().countWhere(where);
     }
     //18
@@ -2098,7 +2243,8 @@ class Dao implements CommonConstant {
      * @see #daoLoadFaceByWhere(String,int,int)
      * @throws RuntimeDaoException
      */
-    protected List<Integer> daoLoadFaceIdByWhere(String where)throws RuntimeDaoException{
+    protected List<Integer> daoLoadFaceIdByWhere(String where)
+                    throws RuntimeDaoException{
         return daoToPrimaryKeyListFromFaces(daoLoadFaceByWhere(where,1,-1));
     }
     //19
@@ -2109,7 +2255,8 @@ class Dao implements CommonConstant {
      * @throws RuntimeDaoException
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    protected List<FaceBean> daoLoadFaceByCreateTime(Date timestamp,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<FaceBean> daoLoadFaceByCreateTime(Date timestamp,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return daoLoadFaceByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
     }
     //20
@@ -2117,7 +2264,8 @@ class Dao implements CommonConstant {
      * 参见 {@link #daoLoadFaceByCreateTime(Date,int,int)} 
      * @throws RuntimeDaoException
      */
-    protected List<FaceBean> daoLoadFaceByCreateTime(Date timestamp)throws RuntimeDaoException{
+    protected List<FaceBean> daoLoadFaceByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoadFaceByCreateTime(timestamp,1,-1);
     }
     //20-5
@@ -2126,7 +2274,8 @@ class Dao implements CommonConstant {
      * @see #daoCountFaceByWhere(String)
      * @throws RuntimeDaoException
      */
-    protected int daoCountFaceByCreateTime(Date timestamp)throws RuntimeDaoException{
+    protected int daoCountFaceByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoCountFaceByWhere(makeWhere(timestamp,"create_time"));
     }
     //21
@@ -2137,7 +2286,8 @@ class Dao implements CommonConstant {
      * @see {@link #daoLoadFaceIdByWhere(String)}
      * @throws RuntimeDaoException
      */
-    protected List<Integer> daoLoadFaceIdByCreateTime(Date timestamp)throws RuntimeDaoException{
+    protected List<Integer> daoLoadFaceIdByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoadFaceIdByWhere(makeWhere(timestamp,"create_time"));
     }
 
@@ -2163,7 +2313,8 @@ class Dao implements CommonConstant {
      * @see FeatureBean#replaceNull(List)
      * @throws RuntimeDaoException
      */
-    protected List<FeatureBean> daoGetFeatures(Collection<String> md5Collection)throws RuntimeDaoException{
+    protected List<FeatureBean> daoGetFeatures(Collection<String> md5Collection)
+                    throws RuntimeDaoException{
         return FeatureBean.replaceNull((getFeatureManager().loadByPrimaryKey(md5Collection)));
     }
     //3  
@@ -2173,7 +2324,8 @@ class Dao implements CommonConstant {
      * @see {@link IFeatureManager#deleteByPrimaryKey(Collection)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteFeaturesByPrimaryKey(Collection<String> md5Collection)throws RuntimeDaoException{
+    protected int daoDeleteFeaturesByPrimaryKey(Collection<String> md5Collection)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != md5Collection){
             for(String md5:md5Collection){
@@ -2213,7 +2365,8 @@ class Dao implements CommonConstant {
      * @see {@link IFeatureManager#existsPrimaryKey(String)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsFeature(String md5)throws RuntimeDaoException{
+    protected boolean daoExistsFeature(String md5)
+                    throws RuntimeDaoException{
         return getFeatureManager().existsPrimaryKey(md5);
     }
     //4-2
@@ -2222,7 +2375,8 @@ class Dao implements CommonConstant {
      * @see {@link IFeatureManager#existsPrimaryKey(FeatureBean)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsFeature(FeatureBean bean)throws RuntimeDaoException{
+    protected boolean daoExistsFeature(FeatureBean bean)
+                    throws RuntimeDaoException{
         return getFeatureManager().existsPrimaryKey(bean);
     }
     //5
@@ -2234,7 +2388,8 @@ class Dao implements CommonConstant {
      * @see {@link IFeatureManager#deleteByPrimaryKey(String)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteFeature(String md5)throws RuntimeDaoException{
+    protected int daoDeleteFeature(String md5)
+                    throws RuntimeDaoException{
         return getFeatureManager().deleteByPrimaryKey(md5);
     }
     //5-2
@@ -2245,7 +2400,8 @@ class Dao implements CommonConstant {
      * @see #daoDeleteFeature(String)
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteFeature(FeatureBean bean)throws RuntimeDaoException{
+    protected int daoDeleteFeature(FeatureBean bean)
+                    throws RuntimeDaoException{
         return null == bean ? 0 : daoDeleteFeature(bean.getMd5());
     }
     //6
@@ -2255,7 +2411,8 @@ class Dao implements CommonConstant {
      * @see #daoDeleteFeature(String)
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteFeatures(Collection<FeatureBean> beans)throws RuntimeDaoException{
+    protected int daoDeleteFeatures(Collection<FeatureBean> beans)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != beans){        
             for(FeatureBean bean:beans){
@@ -2271,13 +2428,14 @@ class Dao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IFeatureManager#checkDuplicate(FeatureBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      */
-    protected FeatureBean daoCheckDuplicate(FeatureBean featureBean)throws RuntimeDaoException,DuplicateReordException{
+    protected FeatureBean daoCheckDuplicate(FeatureBean featureBean)
+                    throws RuntimeDaoException,DuplicateRecordException{
         try{
             return getFeatureManager().checkDuplicate(featureBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
     }
     //7-3
@@ -2286,14 +2444,15 @@ class Dao implements CommonConstant {
      * 
      * @param md5OfFeature 主键,特征码md5校验码 
      * @see {@link IFeatureManager#checkDuplicate(FeatureBean)}
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code md5OfFeature} 
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException
+     * @throws DuplicateRecordException
      */
-    protected String daoCheckDuplicateFeature(String md5OfFeature)throws RuntimeDaoException,DuplicateReordException{
+    protected String daoCheckDuplicateFeature(String md5OfFeature)
+                    throws RuntimeDaoException,DuplicateRecordException{
         if(getFeatureManager().existsPrimaryKey(md5OfFeature)){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
         return md5OfFeature;
     }
@@ -2305,7 +2464,8 @@ class Dao implements CommonConstant {
      * @see {@link IFeatureManager#getFaceBeansByFeatureMd5AsList(String)}
      * @throws RuntimeDaoException
      */
-    protected List<FaceBean> daoGetFaceBeansByFeatureMd5OnFeature(String md5OfFeature)throws RuntimeDaoException{
+    protected List<FaceBean> daoGetFaceBeansByFeatureMd5OnFeature(String md5OfFeature)
+                    throws RuntimeDaoException{
         return getFeatureManager().getFaceBeansByFeatureMd5AsList(md5OfFeature);
     }
     //8-2
@@ -2316,7 +2476,8 @@ class Dao implements CommonConstant {
      * @see {@link IFeatureManager#deleteFaceBeansByFeatureMd5(String)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteFaceBeansByFeatureMd5OnFeature(String md5OfFeature)throws RuntimeDaoException{
+    protected int daoDeleteFaceBeansByFeatureMd5OnFeature(String md5OfFeature)
+                    throws RuntimeDaoException{
         return getFeatureManager().deleteFaceBeansByFeatureMd5(md5OfFeature);
     }
     //8
@@ -2327,7 +2488,8 @@ class Dao implements CommonConstant {
      * @see {@link IFeatureManager#getLogBeansByVerifyFeatureAsList(String)}
      * @throws RuntimeDaoException
      */
-    protected List<LogBean> daoGetLogBeansByVerifyFeatureOnFeature(String md5OfFeature)throws RuntimeDaoException{
+    protected List<LogBean> daoGetLogBeansByVerifyFeatureOnFeature(String md5OfFeature)
+                    throws RuntimeDaoException{
         return getFeatureManager().getLogBeansByVerifyFeatureAsList(md5OfFeature);
     }
     //8-2
@@ -2338,7 +2500,8 @@ class Dao implements CommonConstant {
      * @see {@link IFeatureManager#deleteLogBeansByVerifyFeature(String)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteLogBeansByVerifyFeatureOnFeature(String md5OfFeature)throws RuntimeDaoException{
+    protected int daoDeleteLogBeansByVerifyFeatureOnFeature(String md5OfFeature)
+                    throws RuntimeDaoException{
         return getFeatureManager().deleteLogBeansByVerifyFeature(md5OfFeature);
     }
     //8-3
@@ -2348,7 +2511,8 @@ class Dao implements CommonConstant {
      * @see {@link IFeatureManager#getReferencedByPersonId(FeatureBean)}
      * @throws RuntimeDaoException
      */
-    protected PersonBean daoGetReferencedByPersonIdOnFeature(FeatureBean bean)throws RuntimeDaoException{
+    protected PersonBean daoGetReferencedByPersonIdOnFeature(FeatureBean bean)
+                    throws RuntimeDaoException{
         return getFeatureManager().getReferencedByPersonId(bean);
     }
     //8-4
@@ -2360,7 +2524,8 @@ class Dao implements CommonConstant {
      * @see {@link IFeatureManager#setReferencedByPersonId(FeatureBean,PersonBean)}
      * @throws RuntimeDaoException
      */
-    protected PersonBean daoSetReferencedByPersonIdOnFeature(FeatureBean bean,PersonBean beanToSet)throws RuntimeDaoException{
+    protected PersonBean daoSetReferencedByPersonIdOnFeature(FeatureBean bean,PersonBean beanToSet)
+                    throws RuntimeDaoException{
         return getFeatureManager().setReferencedByPersonId(bean,beanToSet);
     }
     //8-6
@@ -2378,10 +2543,11 @@ class Dao implements CommonConstant {
      * @see {@link IFeatureManager#save(FeatureBean)}
      * @see {@link IFeatureManager#checkDuplicate(FeatureBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code featureBean.isNew()} is {@code false}
      */
-    protected FeatureBean daoAddFeature(FeatureBean featureBean)throws RuntimeDaoException,DuplicateReordException{
+    protected FeatureBean daoAddFeature(FeatureBean featureBean)
+                    throws RuntimeDaoException,DuplicateRecordException{
         return getFeatureManager().save(daoCheckDuplicate(featureBean));
     }
     //13
@@ -2391,13 +2557,13 @@ class Dao implements CommonConstant {
      * see also {@link IFeatureManager#save(FeatureBean , PersonBean , Collection, Collection )}<br>
      * @see {@link IFeatureManager#checkDuplicate(FeatureBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code featureBean.isNew()} is {@code false}
      */
     protected FeatureBean daoAddFeature(FeatureBean featureBean
         , PersonBean refPersonByPersonId 
         , Collection<FaceBean> impFaceByFeatureMd5 
-        , Collection<LogBean> impLogByVerifyFeature )throws RuntimeDaoException,DuplicateReordException{
+        , Collection<LogBean> impLogByVerifyFeature )throws RuntimeDaoException,DuplicateRecordException{
         checkArgument(null == featureBean || featureBean.isNew(),"can be add,delete,but modify record for fl_feature,so the _isNew field must be true");
         daoCheckDuplicate(featureBean);
         return getFeatureManager().save(featureBean
@@ -2413,7 +2579,8 @@ class Dao implements CommonConstant {
      * @see #daoAddFeature(FeatureBean)
      * @throws RuntimeDaoException
      */
-    protected Collection<FeatureBean> daoAddFeatures(Collection<FeatureBean> beans)throws RuntimeDaoException ,DuplicateReordException{
+    protected Collection<FeatureBean> daoAddFeatures(Collection<FeatureBean> beans)
+                    throws RuntimeDaoException ,DuplicateRecordException{
         if(null != beans){
             for(FeatureBean bean : beans){
                 daoAddFeature(bean);
@@ -2426,7 +2593,8 @@ class Dao implements CommonConstant {
      * {@link #daoAddFeature(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
-    protected Collection<FeatureBean> daoAddFeaturesAsTransaction(final Collection<FeatureBean> beans)throws RuntimeDaoException ,DuplicateReordException{
+    protected Collection<FeatureBean> daoAddFeaturesAsTransaction(final Collection<FeatureBean> beans)
+                    throws RuntimeDaoException ,DuplicateRecordException{
         return daoRunAsTransaction(new Callable<Collection<FeatureBean>>(){      
             @Override
             public Collection<FeatureBean> call() throws Exception {
@@ -2442,7 +2610,8 @@ class Dao implements CommonConstant {
      * @see {@link IFeatureManager#loadByWhereAsList(String,int[],int,int)}
      * @throws RuntimeDaoException
      */
-    protected List<FeatureBean> daoLoadFeatureByWhere(String where,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<FeatureBean> daoLoadFeatureByWhere(String where,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return getFeatureManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     //17
@@ -2451,7 +2620,8 @@ class Dao implements CommonConstant {
      * @see {@link IFeatureManager#loadAllAsList()}
      * @throws RuntimeDaoException
      */
-    protected List<FeatureBean> daoLoadFeatureAll()throws RuntimeDaoException{
+    protected List<FeatureBean> daoLoadFeatureAll()
+                    throws RuntimeDaoException{
         return getFeatureManager().loadAllAsList();
     }
     //17-2
@@ -2460,7 +2630,8 @@ class Dao implements CommonConstant {
      * @see {@link IFeatureManager#Where(String)}
      * @throws RuntimeDaoException
      */
-    protected int daoCountFeatureByWhere(String where)throws RuntimeDaoException{
+    protected int daoCountFeatureByWhere(String where)
+                    throws RuntimeDaoException{
         return getFeatureManager().countWhere(where);
     }
     //18
@@ -2470,7 +2641,8 @@ class Dao implements CommonConstant {
      * @see #daoLoadFeatureByWhere(String,int,int)
      * @throws RuntimeDaoException
      */
-    protected List<String> daoLoadFeatureMd5ByWhere(String where)throws RuntimeDaoException{
+    protected List<String> daoLoadFeatureMd5ByWhere(String where)
+                    throws RuntimeDaoException{
         return daoToPrimaryKeyListFromFeatures(daoLoadFeatureByWhere(where,1,-1));
     }
 
@@ -2482,7 +2654,8 @@ class Dao implements CommonConstant {
      * @throws RuntimeDaoException
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    protected List<FeatureBean> daoLoadFeatureByUpdateTime(Date timestamp,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<FeatureBean> daoLoadFeatureByUpdateTime(Date timestamp,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return daoLoadFeatureByWhere(makeWhere(timestamp,"update_time"),startRow,numRows);
     }
     //20
@@ -2490,7 +2663,8 @@ class Dao implements CommonConstant {
      * 参见 {@link #daoLoadFeatureByUpdateTime(Date,int,int)} 
      * @throws RuntimeDaoException
      */
-    protected List<FeatureBean> daoLoadFeatureByUpdateTime(Date timestamp)throws RuntimeDaoException{
+    protected List<FeatureBean> daoLoadFeatureByUpdateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoadFeatureByUpdateTime(timestamp,1,-1);
     }
     //20-5
@@ -2499,7 +2673,8 @@ class Dao implements CommonConstant {
      * @see #daoCountFeatureByWhere(String)
      * @throws RuntimeDaoException
      */
-    protected int daoCountFeatureByUpdateTime(Date timestamp)throws RuntimeDaoException{
+    protected int daoCountFeatureByUpdateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoCountFeatureByWhere(makeWhere(timestamp,"update_time"));
     }
     //21
@@ -2510,7 +2685,8 @@ class Dao implements CommonConstant {
      * @see {@link #daoLoadFeatureMd5ByWhere(String)}
      * @throws RuntimeDaoException
      */
-    protected List<String> daoLoadFeatureMd5ByUpdateTime(Date timestamp)throws RuntimeDaoException{
+    protected List<String> daoLoadFeatureMd5ByUpdateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoadFeatureMd5ByWhere(makeWhere(timestamp,"update_time"));
     }
 
@@ -2535,7 +2711,8 @@ class Dao implements CommonConstant {
      * @see ImageBean#replaceNull(List)
      * @throws RuntimeDaoException
      */
-    protected List<ImageBean> daoGetImages(Collection<String> md5Collection)throws RuntimeDaoException{
+    protected List<ImageBean> daoGetImages(Collection<String> md5Collection)
+                    throws RuntimeDaoException{
         return ImageBean.replaceNull((getImageManager().loadByPrimaryKey(md5Collection)));
     }
     //3  
@@ -2545,7 +2722,8 @@ class Dao implements CommonConstant {
      * @see {@link IImageManager#deleteByPrimaryKey(Collection)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteImagesByPrimaryKey(Collection<String> md5Collection)throws RuntimeDaoException{
+    protected int daoDeleteImagesByPrimaryKey(Collection<String> md5Collection)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != md5Collection){
             for(String md5:md5Collection){
@@ -2585,7 +2763,8 @@ class Dao implements CommonConstant {
      * @see {@link IImageManager#existsPrimaryKey(String)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsImage(String md5)throws RuntimeDaoException{
+    protected boolean daoExistsImage(String md5)
+                    throws RuntimeDaoException{
         return getImageManager().existsPrimaryKey(md5);
     }
     //4-2
@@ -2594,7 +2773,8 @@ class Dao implements CommonConstant {
      * @see {@link IImageManager#existsPrimaryKey(ImageBean)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsImage(ImageBean bean)throws RuntimeDaoException{
+    protected boolean daoExistsImage(ImageBean bean)
+                    throws RuntimeDaoException{
         return getImageManager().existsPrimaryKey(bean);
     }
     //5
@@ -2606,7 +2786,8 @@ class Dao implements CommonConstant {
      * @see {@link IImageManager#deleteByPrimaryKey(String)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteImage(String md5)throws RuntimeDaoException{
+    protected int daoDeleteImage(String md5)
+                    throws RuntimeDaoException{
         return getImageManager().deleteByPrimaryKey(md5);
     }
     //5-2
@@ -2617,7 +2798,8 @@ class Dao implements CommonConstant {
      * @see #daoDeleteImage(String)
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteImage(ImageBean bean)throws RuntimeDaoException{
+    protected int daoDeleteImage(ImageBean bean)
+                    throws RuntimeDaoException{
         return null == bean ? 0 : daoDeleteImage(bean.getMd5());
     }
     //6
@@ -2627,7 +2809,8 @@ class Dao implements CommonConstant {
      * @see #daoDeleteImage(String)
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteImages(Collection<ImageBean> beans)throws RuntimeDaoException{
+    protected int daoDeleteImages(Collection<ImageBean> beans)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != beans){        
             for(ImageBean bean:beans){
@@ -2643,13 +2826,14 @@ class Dao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IImageManager#checkDuplicate(ImageBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      */
-    protected ImageBean daoCheckDuplicate(ImageBean imageBean)throws RuntimeDaoException,DuplicateReordException{
+    protected ImageBean daoCheckDuplicate(ImageBean imageBean)
+                    throws RuntimeDaoException,DuplicateRecordException{
         try{
             return getImageManager().checkDuplicate(imageBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
     }
     //7-3
@@ -2658,14 +2842,15 @@ class Dao implements CommonConstant {
      * 
      * @param md5OfImage 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
      * @see {@link IImageManager#checkDuplicate(ImageBean)}
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code md5OfImage} 
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException
+     * @throws DuplicateRecordException
      */
-    protected String daoCheckDuplicateImage(String md5OfImage)throws RuntimeDaoException,DuplicateReordException{
+    protected String daoCheckDuplicateImage(String md5OfImage)
+                    throws RuntimeDaoException,DuplicateRecordException{
         if(getImageManager().existsPrimaryKey(md5OfImage)){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
         return md5OfImage;
     }
@@ -2677,7 +2862,8 @@ class Dao implements CommonConstant {
      * @see {@link IImageManager#getFaceBeansByImageMd5AsList(String)}
      * @throws RuntimeDaoException
      */
-    protected List<FaceBean> daoGetFaceBeansByImageMd5OnImage(String md5OfImage)throws RuntimeDaoException{
+    protected List<FaceBean> daoGetFaceBeansByImageMd5OnImage(String md5OfImage)
+                    throws RuntimeDaoException{
         return getImageManager().getFaceBeansByImageMd5AsList(md5OfImage);
     }
     //8-2
@@ -2688,7 +2874,8 @@ class Dao implements CommonConstant {
      * @see {@link IImageManager#deleteFaceBeansByImageMd5(String)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteFaceBeansByImageMd5OnImage(String md5OfImage)throws RuntimeDaoException{
+    protected int daoDeleteFaceBeansByImageMd5OnImage(String md5OfImage)
+                    throws RuntimeDaoException{
         return getImageManager().deleteFaceBeansByImageMd5(md5OfImage);
     }
     //8
@@ -2699,7 +2886,8 @@ class Dao implements CommonConstant {
      * @see {@link IImageManager#getPersonBeansByImageMd5AsList(String)}
      * @throws RuntimeDaoException
      */
-    protected List<PersonBean> daoGetPersonBeansByImageMd5OnImage(String md5OfImage)throws RuntimeDaoException{
+    protected List<PersonBean> daoGetPersonBeansByImageMd5OnImage(String md5OfImage)
+                    throws RuntimeDaoException{
         return getImageManager().getPersonBeansByImageMd5AsList(md5OfImage);
     }
     //8-2
@@ -2710,7 +2898,8 @@ class Dao implements CommonConstant {
      * @see {@link IImageManager#deletePersonBeansByImageMd5(String)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeletePersonBeansByImageMd5OnImage(String md5OfImage)throws RuntimeDaoException{
+    protected int daoDeletePersonBeansByImageMd5OnImage(String md5OfImage)
+                    throws RuntimeDaoException{
         return getImageManager().deletePersonBeansByImageMd5(md5OfImage);
     }
     //8-3
@@ -2720,7 +2909,8 @@ class Dao implements CommonConstant {
      * @see {@link IImageManager#getReferencedByDeviceId(ImageBean)}
      * @throws RuntimeDaoException
      */
-    protected DeviceBean daoGetReferencedByDeviceIdOnImage(ImageBean bean)throws RuntimeDaoException{
+    protected DeviceBean daoGetReferencedByDeviceIdOnImage(ImageBean bean)
+                    throws RuntimeDaoException{
         return getImageManager().getReferencedByDeviceId(bean);
     }
     //8-4
@@ -2732,7 +2922,8 @@ class Dao implements CommonConstant {
      * @see {@link IImageManager#setReferencedByDeviceId(ImageBean,DeviceBean)}
      * @throws RuntimeDaoException
      */
-    protected DeviceBean daoSetReferencedByDeviceIdOnImage(ImageBean bean,DeviceBean beanToSet)throws RuntimeDaoException{
+    protected DeviceBean daoSetReferencedByDeviceIdOnImage(ImageBean bean,DeviceBean beanToSet)
+                    throws RuntimeDaoException{
         return getImageManager().setReferencedByDeviceId(bean,beanToSet);
     }
     //8-6
@@ -2750,10 +2941,11 @@ class Dao implements CommonConstant {
      * @see {@link IImageManager#save(ImageBean)}
      * @see {@link IImageManager#checkDuplicate(ImageBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code imageBean.isNew()} is {@code false}
      */
-    protected ImageBean daoAddImage(ImageBean imageBean)throws RuntimeDaoException,DuplicateReordException{
+    protected ImageBean daoAddImage(ImageBean imageBean)
+                    throws RuntimeDaoException,DuplicateRecordException{
         return getImageManager().save(daoCheckDuplicate(imageBean));
     }
     //13
@@ -2763,13 +2955,13 @@ class Dao implements CommonConstant {
      * see also {@link IImageManager#save(ImageBean , DeviceBean , Collection, Collection )}<br>
      * @see {@link IImageManager#checkDuplicate(ImageBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code imageBean.isNew()} is {@code false}
      */
     protected ImageBean daoAddImage(ImageBean imageBean
         , DeviceBean refDeviceByDeviceId 
         , Collection<FaceBean> impFaceByImageMd5 
-        , Collection<PersonBean> impPersonByImageMd5 )throws RuntimeDaoException,DuplicateReordException{
+        , Collection<PersonBean> impPersonByImageMd5 )throws RuntimeDaoException,DuplicateRecordException{
         checkArgument(null == imageBean || imageBean.isNew(),"can be add,delete,but modify record for fl_image,so the _isNew field must be true");
         daoCheckDuplicate(imageBean);
         return getImageManager().save(imageBean
@@ -2785,7 +2977,8 @@ class Dao implements CommonConstant {
      * @see #daoAddImage(ImageBean)
      * @throws RuntimeDaoException
      */
-    protected Collection<ImageBean> daoAddImages(Collection<ImageBean> beans)throws RuntimeDaoException ,DuplicateReordException{
+    protected Collection<ImageBean> daoAddImages(Collection<ImageBean> beans)
+                    throws RuntimeDaoException ,DuplicateRecordException{
         if(null != beans){
             for(ImageBean bean : beans){
                 daoAddImage(bean);
@@ -2798,7 +2991,8 @@ class Dao implements CommonConstant {
      * {@link #daoAddImage(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
-    protected Collection<ImageBean> daoAddImagesAsTransaction(final Collection<ImageBean> beans)throws RuntimeDaoException ,DuplicateReordException{
+    protected Collection<ImageBean> daoAddImagesAsTransaction(final Collection<ImageBean> beans)
+                    throws RuntimeDaoException ,DuplicateRecordException{
         return daoRunAsTransaction(new Callable<Collection<ImageBean>>(){      
             @Override
             public Collection<ImageBean> call() throws Exception {
@@ -2814,7 +3008,8 @@ class Dao implements CommonConstant {
      * @see {@link IImageManager#loadByWhereAsList(String,int[],int,int)}
      * @throws RuntimeDaoException
      */
-    protected List<ImageBean> daoLoadImageByWhere(String where,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<ImageBean> daoLoadImageByWhere(String where,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return getImageManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     //17
@@ -2823,7 +3018,8 @@ class Dao implements CommonConstant {
      * @see {@link IImageManager#loadAllAsList()}
      * @throws RuntimeDaoException
      */
-    protected List<ImageBean> daoLoadImageAll()throws RuntimeDaoException{
+    protected List<ImageBean> daoLoadImageAll()
+                    throws RuntimeDaoException{
         return getImageManager().loadAllAsList();
     }
     //17-2
@@ -2832,7 +3028,8 @@ class Dao implements CommonConstant {
      * @see {@link IImageManager#Where(String)}
      * @throws RuntimeDaoException
      */
-    protected int daoCountImageByWhere(String where)throws RuntimeDaoException{
+    protected int daoCountImageByWhere(String where)
+                    throws RuntimeDaoException{
         return getImageManager().countWhere(where);
     }
     //18
@@ -2842,7 +3039,8 @@ class Dao implements CommonConstant {
      * @see #daoLoadImageByWhere(String,int,int)
      * @throws RuntimeDaoException
      */
-    protected List<String> daoLoadImageMd5ByWhere(String where)throws RuntimeDaoException{
+    protected List<String> daoLoadImageMd5ByWhere(String where)
+                    throws RuntimeDaoException{
         return daoToPrimaryKeyListFromImages(daoLoadImageByWhere(where,1,-1));
     }
 
@@ -2868,7 +3066,8 @@ class Dao implements CommonConstant {
      * @see LogBean#replaceNull(List)
      * @throws RuntimeDaoException
      */
-    protected List<LogBean> daoGetLogs(Collection<Integer> idCollection)throws RuntimeDaoException{
+    protected List<LogBean> daoGetLogs(Collection<Integer> idCollection)
+                    throws RuntimeDaoException{
         return LogBean.replaceNull((getLogManager().loadByPrimaryKey(idCollection)));
     }
     //3  
@@ -2878,7 +3077,8 @@ class Dao implements CommonConstant {
      * @see {@link ILogManager#deleteByPrimaryKey(Collection)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteLogsByPrimaryKey(Collection<Integer> idCollection)throws RuntimeDaoException{
+    protected int daoDeleteLogsByPrimaryKey(Collection<Integer> idCollection)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != idCollection){
             for(Integer id:idCollection){
@@ -2918,7 +3118,8 @@ class Dao implements CommonConstant {
      * @see {@link ILogManager#existsPrimaryKey(Integer)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsLog(Integer id)throws RuntimeDaoException{
+    protected boolean daoExistsLog(Integer id)
+                    throws RuntimeDaoException{
         return getLogManager().existsPrimaryKey(id);
     }
     //4-2
@@ -2927,7 +3128,8 @@ class Dao implements CommonConstant {
      * @see {@link ILogManager#existsPrimaryKey(LogBean)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsLog(LogBean bean)throws RuntimeDaoException{
+    protected boolean daoExistsLog(LogBean bean)
+                    throws RuntimeDaoException{
         return getLogManager().existsPrimaryKey(bean);
     }
     //5
@@ -2939,7 +3141,8 @@ class Dao implements CommonConstant {
      * @see {@link ILogManager#deleteByPrimaryKey(Integer)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteLog(Integer id)throws RuntimeDaoException{
+    protected int daoDeleteLog(Integer id)
+                    throws RuntimeDaoException{
         return getLogManager().deleteByPrimaryKey(id);
     }
     //5-2
@@ -2950,7 +3153,8 @@ class Dao implements CommonConstant {
      * @see #daoDeleteLog(Integer)
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteLog(LogBean bean)throws RuntimeDaoException{
+    protected int daoDeleteLog(LogBean bean)
+                    throws RuntimeDaoException{
         return null == bean ? 0 : daoDeleteLog(bean.getId());
     }
     //6
@@ -2960,7 +3164,8 @@ class Dao implements CommonConstant {
      * @see #daoDeleteLog(Integer)
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteLogs(Collection<LogBean> beans)throws RuntimeDaoException{
+    protected int daoDeleteLogs(Collection<LogBean> beans)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != beans){        
             for(LogBean bean:beans){
@@ -2976,13 +3181,14 @@ class Dao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link ILogManager#checkDuplicate(LogBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      */
-    protected LogBean daoCheckDuplicate(LogBean logBean)throws RuntimeDaoException,DuplicateReordException{
+    protected LogBean daoCheckDuplicate(LogBean logBean)
+                    throws RuntimeDaoException,DuplicateRecordException{
         try{
             return getLogManager().checkDuplicate(logBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
     }
     //7-3
@@ -2991,14 +3197,15 @@ class Dao implements CommonConstant {
      * 
      * @param idOfLog 日志id 
      * @see {@link ILogManager#checkDuplicate(LogBean)}
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code idOfLog} 
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException
+     * @throws DuplicateRecordException
      */
-    protected Integer daoCheckDuplicateLog(Integer idOfLog)throws RuntimeDaoException,DuplicateReordException{
+    protected Integer daoCheckDuplicateLog(Integer idOfLog)
+                    throws RuntimeDaoException,DuplicateRecordException{
         if(getLogManager().existsPrimaryKey(idOfLog)){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
         return idOfLog;
     }
@@ -3009,7 +3216,8 @@ class Dao implements CommonConstant {
      * @see {@link ILogManager#getReferencedByDeviceId(LogBean)}
      * @throws RuntimeDaoException
      */
-    protected DeviceBean daoGetReferencedByDeviceIdOnLog(LogBean bean)throws RuntimeDaoException{
+    protected DeviceBean daoGetReferencedByDeviceIdOnLog(LogBean bean)
+                    throws RuntimeDaoException{
         return getLogManager().getReferencedByDeviceId(bean);
     }
     //8-4
@@ -3021,7 +3229,8 @@ class Dao implements CommonConstant {
      * @see {@link ILogManager#setReferencedByDeviceId(LogBean,DeviceBean)}
      * @throws RuntimeDaoException
      */
-    protected DeviceBean daoSetReferencedByDeviceIdOnLog(LogBean bean,DeviceBean beanToSet)throws RuntimeDaoException{
+    protected DeviceBean daoSetReferencedByDeviceIdOnLog(LogBean bean,DeviceBean beanToSet)
+                    throws RuntimeDaoException{
         return getLogManager().setReferencedByDeviceId(bean,beanToSet);
     }
     //8-6
@@ -3038,7 +3247,8 @@ class Dao implements CommonConstant {
      * @see {@link ILogManager#getReferencedByCompareFace(LogBean)}
      * @throws RuntimeDaoException
      */
-    protected FaceBean daoGetReferencedByCompareFaceOnLog(LogBean bean)throws RuntimeDaoException{
+    protected FaceBean daoGetReferencedByCompareFaceOnLog(LogBean bean)
+                    throws RuntimeDaoException{
         return getLogManager().getReferencedByCompareFace(bean);
     }
     //8-4
@@ -3050,7 +3260,8 @@ class Dao implements CommonConstant {
      * @see {@link ILogManager#setReferencedByCompareFace(LogBean,FaceBean)}
      * @throws RuntimeDaoException
      */
-    protected FaceBean daoSetReferencedByCompareFaceOnLog(LogBean bean,FaceBean beanToSet)throws RuntimeDaoException{
+    protected FaceBean daoSetReferencedByCompareFaceOnLog(LogBean bean,FaceBean beanToSet)
+                    throws RuntimeDaoException{
         return getLogManager().setReferencedByCompareFace(bean,beanToSet);
     }
     //8-6
@@ -3067,7 +3278,8 @@ class Dao implements CommonConstant {
      * @see {@link ILogManager#getReferencedByVerifyFeature(LogBean)}
      * @throws RuntimeDaoException
      */
-    protected FeatureBean daoGetReferencedByVerifyFeatureOnLog(LogBean bean)throws RuntimeDaoException{
+    protected FeatureBean daoGetReferencedByVerifyFeatureOnLog(LogBean bean)
+                    throws RuntimeDaoException{
         return getLogManager().getReferencedByVerifyFeature(bean);
     }
     //8-4
@@ -3079,7 +3291,8 @@ class Dao implements CommonConstant {
      * @see {@link ILogManager#setReferencedByVerifyFeature(LogBean,FeatureBean)}
      * @throws RuntimeDaoException
      */
-    protected FeatureBean daoSetReferencedByVerifyFeatureOnLog(LogBean bean,FeatureBean beanToSet)throws RuntimeDaoException{
+    protected FeatureBean daoSetReferencedByVerifyFeatureOnLog(LogBean bean,FeatureBean beanToSet)
+                    throws RuntimeDaoException{
         return getLogManager().setReferencedByVerifyFeature(bean,beanToSet);
     }
     //8-6
@@ -3096,7 +3309,8 @@ class Dao implements CommonConstant {
      * @see {@link ILogManager#getReferencedByPersonId(LogBean)}
      * @throws RuntimeDaoException
      */
-    protected PersonBean daoGetReferencedByPersonIdOnLog(LogBean bean)throws RuntimeDaoException{
+    protected PersonBean daoGetReferencedByPersonIdOnLog(LogBean bean)
+                    throws RuntimeDaoException{
         return getLogManager().getReferencedByPersonId(bean);
     }
     //8-4
@@ -3108,7 +3322,8 @@ class Dao implements CommonConstant {
      * @see {@link ILogManager#setReferencedByPersonId(LogBean,PersonBean)}
      * @throws RuntimeDaoException
      */
-    protected PersonBean daoSetReferencedByPersonIdOnLog(LogBean bean,PersonBean beanToSet)throws RuntimeDaoException{
+    protected PersonBean daoSetReferencedByPersonIdOnLog(LogBean bean,PersonBean beanToSet)
+                    throws RuntimeDaoException{
         return getLogManager().setReferencedByPersonId(bean,beanToSet);
     }
     //8-6
@@ -3126,10 +3341,11 @@ class Dao implements CommonConstant {
      * @see {@link ILogManager#save(LogBean)}
      * @see {@link ILogManager#checkDuplicate(LogBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code logBean.isNew()} is {@code false}
      */
-    protected LogBean daoAddLog(LogBean logBean)throws RuntimeDaoException,DuplicateReordException{
+    protected LogBean daoAddLog(LogBean logBean)
+                    throws RuntimeDaoException,DuplicateRecordException{
         return getLogManager().save(daoCheckDuplicate(logBean));
     }
     //13
@@ -3139,7 +3355,7 @@ class Dao implements CommonConstant {
      * see also {@link ILogManager#save(LogBean , DeviceBean, FaceBean, FeatureBean, PersonBean  )}<br>
      * @see {@link ILogManager#checkDuplicate(LogBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code logBean.isNew()} is {@code false}
      */
     protected LogBean daoAddLog(LogBean logBean
@@ -3147,7 +3363,7 @@ class Dao implements CommonConstant {
         , FaceBean refFaceByCompareFace 
         , FeatureBean refFeatureByVerifyFeature 
         , PersonBean refPersonByPersonId 
-        )throws RuntimeDaoException,DuplicateReordException{
+        )throws RuntimeDaoException,DuplicateRecordException{
         checkArgument(null == logBean || logBean.isNew(),"can be add,delete,but modify record for fl_log,so the _isNew field must be true");
         daoCheckDuplicate(logBean);
         return getLogManager().save(logBean
@@ -3165,7 +3381,8 @@ class Dao implements CommonConstant {
      * @see #daoAddLog(LogBean)
      * @throws RuntimeDaoException
      */
-    protected Collection<LogBean> daoAddLogs(Collection<LogBean> beans)throws RuntimeDaoException ,DuplicateReordException{
+    protected Collection<LogBean> daoAddLogs(Collection<LogBean> beans)
+                    throws RuntimeDaoException ,DuplicateRecordException{
         if(null != beans){
             for(LogBean bean : beans){
                 daoAddLog(bean);
@@ -3178,7 +3395,8 @@ class Dao implements CommonConstant {
      * {@link #daoAddLog(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
-    protected Collection<LogBean> daoAddLogsAsTransaction(final Collection<LogBean> beans)throws RuntimeDaoException ,DuplicateReordException{
+    protected Collection<LogBean> daoAddLogsAsTransaction(final Collection<LogBean> beans)
+                    throws RuntimeDaoException ,DuplicateRecordException{
         return daoRunAsTransaction(new Callable<Collection<LogBean>>(){      
             @Override
             public Collection<LogBean> call() throws Exception {
@@ -3194,7 +3412,8 @@ class Dao implements CommonConstant {
      * @see {@link ILogManager#loadByWhereAsList(String,int[],int,int)}
      * @throws RuntimeDaoException
      */
-    protected List<LogBean> daoLoadLogByWhere(String where,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<LogBean> daoLoadLogByWhere(String where,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return getLogManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     //17
@@ -3203,7 +3422,8 @@ class Dao implements CommonConstant {
      * @see {@link ILogManager#loadAllAsList()}
      * @throws RuntimeDaoException
      */
-    protected List<LogBean> daoLoadLogAll()throws RuntimeDaoException{
+    protected List<LogBean> daoLoadLogAll()
+                    throws RuntimeDaoException{
         return getLogManager().loadAllAsList();
     }
     //17-2
@@ -3212,7 +3432,8 @@ class Dao implements CommonConstant {
      * @see {@link ILogManager#Where(String)}
      * @throws RuntimeDaoException
      */
-    protected int daoCountLogByWhere(String where)throws RuntimeDaoException{
+    protected int daoCountLogByWhere(String where)
+                    throws RuntimeDaoException{
         return getLogManager().countWhere(where);
     }
     //18
@@ -3222,7 +3443,8 @@ class Dao implements CommonConstant {
      * @see #daoLoadLogByWhere(String,int,int)
      * @throws RuntimeDaoException
      */
-    protected List<Integer> daoLoadLogIdByWhere(String where)throws RuntimeDaoException{
+    protected List<Integer> daoLoadLogIdByWhere(String where)
+                    throws RuntimeDaoException{
         return daoToPrimaryKeyListFromLogs(daoLoadLogByWhere(where,1,-1));
     }
     //19
@@ -3233,7 +3455,8 @@ class Dao implements CommonConstant {
      * @throws RuntimeDaoException
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    protected List<LogBean> daoLoadLogByCreateTime(Date timestamp,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<LogBean> daoLoadLogByCreateTime(Date timestamp,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return daoLoadLogByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
     }
     //20
@@ -3241,7 +3464,8 @@ class Dao implements CommonConstant {
      * 参见 {@link #daoLoadLogByCreateTime(Date,int,int)} 
      * @throws RuntimeDaoException
      */
-    protected List<LogBean> daoLoadLogByCreateTime(Date timestamp)throws RuntimeDaoException{
+    protected List<LogBean> daoLoadLogByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoadLogByCreateTime(timestamp,1,-1);
     }
     //20-5
@@ -3250,7 +3474,8 @@ class Dao implements CommonConstant {
      * @see #daoCountLogByWhere(String)
      * @throws RuntimeDaoException
      */
-    protected int daoCountLogByCreateTime(Date timestamp)throws RuntimeDaoException{
+    protected int daoCountLogByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoCountLogByWhere(makeWhere(timestamp,"create_time"));
     }
     //21
@@ -3261,7 +3486,8 @@ class Dao implements CommonConstant {
      * @see {@link #daoLoadLogIdByWhere(String)}
      * @throws RuntimeDaoException
      */
-    protected List<Integer> daoLoadLogIdByCreateTime(Date timestamp)throws RuntimeDaoException{
+    protected List<Integer> daoLoadLogIdByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoadLogIdByWhere(makeWhere(timestamp,"create_time"));
     }
 
@@ -3274,7 +3500,8 @@ class Dao implements CommonConstant {
      * @throws RuntimeDaoException
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    protected List<LogBean> daoLoadLogByVerifyTime(Date timestamp,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<LogBean> daoLoadLogByVerifyTime(Date timestamp,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return daoLoadLogByWhere(makeWhere(timestamp,"verify_time"),startRow,numRows);
     }
     //20
@@ -3282,7 +3509,8 @@ class Dao implements CommonConstant {
      * 参见 {@link #daoLoadLogByVerifyTime(Date,int,int)} 
      * @throws RuntimeDaoException
      */
-    protected List<LogBean> daoLoadLogByVerifyTime(Date timestamp)throws RuntimeDaoException{
+    protected List<LogBean> daoLoadLogByVerifyTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoadLogByVerifyTime(timestamp,1,-1);
     }
     //20-5
@@ -3291,7 +3519,8 @@ class Dao implements CommonConstant {
      * @see #daoCountLogByWhere(String)
      * @throws RuntimeDaoException
      */
-    protected int daoCountLogByVerifyTime(Date timestamp)throws RuntimeDaoException{
+    protected int daoCountLogByVerifyTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoCountLogByWhere(makeWhere(timestamp,"verify_time"));
     }
     //21
@@ -3302,7 +3531,8 @@ class Dao implements CommonConstant {
      * @see {@link #daoLoadLogIdByWhere(String)}
      * @throws RuntimeDaoException
      */
-    protected List<Integer> daoLoadLogIdByVerifyTime(Date timestamp)throws RuntimeDaoException{
+    protected List<Integer> daoLoadLogIdByVerifyTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoadLogIdByWhere(makeWhere(timestamp,"verify_time"));
     }
 
@@ -3328,7 +3558,8 @@ class Dao implements CommonConstant {
      * @see {@link IPermitManager#existsPrimaryKey(Integer,Integer)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsPermit(Integer deviceGroupId,Integer personGroupId)throws RuntimeDaoException{
+    protected boolean daoExistsPermit(Integer deviceGroupId,Integer personGroupId)
+                    throws RuntimeDaoException{
         return getPermitManager().existsPrimaryKey(deviceGroupId,personGroupId);
     }
     //4-2
@@ -3337,7 +3568,8 @@ class Dao implements CommonConstant {
      * @see {@link IPermitManager#existsPrimaryKey(PermitBean)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsPermit(PermitBean bean)throws RuntimeDaoException{
+    protected boolean daoExistsPermit(PermitBean bean)
+                    throws RuntimeDaoException{
         return getPermitManager().existsPrimaryKey(bean);
     }
     //5
@@ -3350,7 +3582,8 @@ class Dao implements CommonConstant {
      * @see {@link IPermitManager#deleteByPrimaryKey(Integer,Integer)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeletePermit(Integer deviceGroupId,Integer personGroupId)throws RuntimeDaoException{
+    protected int daoDeletePermit(Integer deviceGroupId,Integer personGroupId)
+                    throws RuntimeDaoException{
         return getPermitManager().deleteByPrimaryKey(deviceGroupId,personGroupId);
     }
     //5-2
@@ -3361,7 +3594,8 @@ class Dao implements CommonConstant {
      * @see #daoDeletePermit(Integer,Integer)
      * @throws RuntimeDaoException
      */
-    protected int daoDeletePermit(PermitBean bean)throws RuntimeDaoException{
+    protected int daoDeletePermit(PermitBean bean)
+                    throws RuntimeDaoException{
         return null == bean ? 0 : daoDeletePermit(bean.getDeviceGroupId(),bean.getPersonGroupId());
     }
     //6
@@ -3371,7 +3605,8 @@ class Dao implements CommonConstant {
      * @see #daoDeletePermit(Integer,Integer)
      * @throws RuntimeDaoException
      */
-    protected int daoDeletePermits(Collection<PermitBean> beans)throws RuntimeDaoException{
+    protected int daoDeletePermits(Collection<PermitBean> beans)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != beans){        
             for(PermitBean bean:beans){
@@ -3387,13 +3622,14 @@ class Dao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IPermitManager#checkDuplicate(PermitBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      */
-    protected PermitBean daoCheckDuplicate(PermitBean permitBean)throws RuntimeDaoException,DuplicateReordException{
+    protected PermitBean daoCheckDuplicate(PermitBean permitBean)
+                    throws RuntimeDaoException,DuplicateRecordException{
         try{
             return getPermitManager().checkDuplicate(permitBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
     }
     //7-3
@@ -3403,14 +3639,15 @@ class Dao implements CommonConstant {
      * @param deviceGroupIdOfPermit 外键,设备组id 
      * @param personGroupIdOfPermit 外键,人员组id 
      * @see {@link IPermitManager#checkDuplicate(PermitBean)}
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * 
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException
+     * @throws DuplicateRecordException
      */
-    protected void daoCheckDuplicatePermit(Integer deviceGroupIdOfPermit,Integer personGroupIdOfPermit)throws RuntimeDaoException,DuplicateReordException{
+    protected void daoCheckDuplicatePermit(Integer deviceGroupIdOfPermit,Integer personGroupIdOfPermit)
+                    throws RuntimeDaoException,DuplicateRecordException{
         if(getPermitManager().existsPrimaryKey(deviceGroupIdOfPermit,personGroupIdOfPermit)){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
     }
     //8-3
@@ -3420,7 +3657,8 @@ class Dao implements CommonConstant {
      * @see {@link IPermitManager#getReferencedByDeviceGroupId(PermitBean)}
      * @throws RuntimeDaoException
      */
-    protected DeviceGroupBean daoGetReferencedByDeviceGroupIdOnPermit(PermitBean bean)throws RuntimeDaoException{
+    protected DeviceGroupBean daoGetReferencedByDeviceGroupIdOnPermit(PermitBean bean)
+                    throws RuntimeDaoException{
         return getPermitManager().getReferencedByDeviceGroupId(bean);
     }
     //8-4
@@ -3432,7 +3670,8 @@ class Dao implements CommonConstant {
      * @see {@link IPermitManager#setReferencedByDeviceGroupId(PermitBean,DeviceGroupBean)}
      * @throws RuntimeDaoException
      */
-    protected DeviceGroupBean daoSetReferencedByDeviceGroupIdOnPermit(PermitBean bean,DeviceGroupBean beanToSet)throws RuntimeDaoException{
+    protected DeviceGroupBean daoSetReferencedByDeviceGroupIdOnPermit(PermitBean bean,DeviceGroupBean beanToSet)
+                    throws RuntimeDaoException{
         return getPermitManager().setReferencedByDeviceGroupId(bean,beanToSet);
     }
     //8-6
@@ -3449,7 +3688,8 @@ class Dao implements CommonConstant {
      * @see {@link IPermitManager#getReferencedByPersonGroupId(PermitBean)}
      * @throws RuntimeDaoException
      */
-    protected PersonGroupBean daoGetReferencedByPersonGroupIdOnPermit(PermitBean bean)throws RuntimeDaoException{
+    protected PersonGroupBean daoGetReferencedByPersonGroupIdOnPermit(PermitBean bean)
+                    throws RuntimeDaoException{
         return getPermitManager().getReferencedByPersonGroupId(bean);
     }
     //8-4
@@ -3461,7 +3701,8 @@ class Dao implements CommonConstant {
      * @see {@link IPermitManager#setReferencedByPersonGroupId(PermitBean,PersonGroupBean)}
      * @throws RuntimeDaoException
      */
-    protected PersonGroupBean daoSetReferencedByPersonGroupIdOnPermit(PermitBean bean,PersonGroupBean beanToSet)throws RuntimeDaoException{
+    protected PersonGroupBean daoSetReferencedByPersonGroupIdOnPermit(PermitBean bean,PersonGroupBean beanToSet)
+                    throws RuntimeDaoException{
         return getPermitManager().setReferencedByPersonGroupId(bean,beanToSet);
     }
     //8-6
@@ -3479,10 +3720,11 @@ class Dao implements CommonConstant {
      * @see {@link IPermitManager#save(PermitBean)}
      * @see {@link IPermitManager#checkDuplicate(PermitBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code permitBean.isNew()} is {@code false}
      */
-    protected PermitBean daoAddPermit(PermitBean permitBean)throws RuntimeDaoException,DuplicateReordException{
+    protected PermitBean daoAddPermit(PermitBean permitBean)
+                    throws RuntimeDaoException,DuplicateRecordException{
         return getPermitManager().save(daoCheckDuplicate(permitBean));
     }
     //12-5
@@ -3494,7 +3736,8 @@ class Dao implements CommonConstant {
      * @see #daoAddPermit(DeviceGroupBean,PersonGroupBean)
      * @throws RuntimeDaoException
      */
-    protected PermitBean daoAddPermit(Integer deviceGroupId,Integer personGroupId)throws RuntimeDaoException{
+    protected PermitBean daoAddPermit(Integer deviceGroupId,Integer personGroupId)
+                    throws RuntimeDaoException{
         return daoAddPermit(
                     daoGetDeviceGroup(deviceGroupId),
                     daoGetPersonGroup(personGroupId));
@@ -3507,13 +3750,14 @@ class Dao implements CommonConstant {
      * @param personGroupBean
      * @throws RuntimeDaoException
      */
-    protected PermitBean daoAddPermit(DeviceGroupBean deviceGroupBean,PersonGroupBean personGroupBean)throws RuntimeDaoException{
+    protected PermitBean daoAddPermit(DeviceGroupBean deviceGroupBean,PersonGroupBean personGroupBean)
+                    throws RuntimeDaoException{
         if(daoExistsDeviceGroup(deviceGroupBean) && daoExistsPersonGroup(personGroupBean)){
             try{
                 return daoAddPermit(
                             new PermitBean(deviceGroupBean.getId(),personGroupBean.getId()),
                             deviceGroupBean,personGroupBean);
-            }catch(DuplicateReordException e){
+            }catch(DuplicateRecordException e){
                 return daoGetPermit(deviceGroupBean.getId(),personGroupBean.getId());
             }
         }
@@ -3527,7 +3771,8 @@ class Dao implements CommonConstant {
      * @param personGroupBean
      * @throws RuntimeDaoException
      */
-    protected int daoDeletePermit(DeviceGroupBean deviceGroupBean,PersonGroupBean personGroupBean)throws RuntimeDaoException{
+    protected int daoDeletePermit(DeviceGroupBean deviceGroupBean,PersonGroupBean personGroupBean)
+                    throws RuntimeDaoException{
         return (null == deviceGroupBean || null == personGroupBean)
             ? 0
             : daoDeletePermit(deviceGroupBean.getId(),personGroupBean.getId());
@@ -3539,13 +3784,13 @@ class Dao implements CommonConstant {
      * see also {@link IPermitManager#save(PermitBean , DeviceGroupBean, PersonGroupBean  )}<br>
      * @see {@link IPermitManager#checkDuplicate(PermitBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code permitBean.isNew()} is {@code false}
      */
     protected PermitBean daoAddPermit(PermitBean permitBean
         , DeviceGroupBean refDevicegroupByDeviceGroupId 
         , PersonGroupBean refPersongroupByPersonGroupId 
-        )throws RuntimeDaoException,DuplicateReordException{
+        )throws RuntimeDaoException,DuplicateRecordException{
         checkArgument(null == permitBean || permitBean.isNew(),"can be add,delete,but modify record for fl_permit,so the _isNew field must be true");
         daoCheckDuplicate(permitBean);
         return getPermitManager().save(permitBean
@@ -3561,7 +3806,8 @@ class Dao implements CommonConstant {
      * @see #daoAddPermit(PermitBean)
      * @throws RuntimeDaoException
      */
-    protected Collection<PermitBean> daoAddPermits(Collection<PermitBean> beans)throws RuntimeDaoException ,DuplicateReordException{
+    protected Collection<PermitBean> daoAddPermits(Collection<PermitBean> beans)
+                    throws RuntimeDaoException ,DuplicateRecordException{
         if(null != beans){
             for(PermitBean bean : beans){
                 daoAddPermit(bean);
@@ -3574,7 +3820,8 @@ class Dao implements CommonConstant {
      * {@link #daoAddPermit(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
-    protected Collection<PermitBean> daoAddPermitsAsTransaction(final Collection<PermitBean> beans)throws RuntimeDaoException ,DuplicateReordException{
+    protected Collection<PermitBean> daoAddPermitsAsTransaction(final Collection<PermitBean> beans)
+                    throws RuntimeDaoException ,DuplicateRecordException{
         return daoRunAsTransaction(new Callable<Collection<PermitBean>>(){      
             @Override
             public Collection<PermitBean> call() throws Exception {
@@ -3590,7 +3837,8 @@ class Dao implements CommonConstant {
      * @see {@link IPermitManager#loadByWhereAsList(String,int[],int,int)}
      * @throws RuntimeDaoException
      */
-    protected List<PermitBean> daoLoadPermitByWhere(String where,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<PermitBean> daoLoadPermitByWhere(String where,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return getPermitManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     //17
@@ -3599,7 +3847,8 @@ class Dao implements CommonConstant {
      * @see {@link IPermitManager#loadAllAsList()}
      * @throws RuntimeDaoException
      */
-    protected List<PermitBean> daoLoadPermitAll()throws RuntimeDaoException{
+    protected List<PermitBean> daoLoadPermitAll()
+                    throws RuntimeDaoException{
         return getPermitManager().loadAllAsList();
     }
     //17-2
@@ -3608,7 +3857,8 @@ class Dao implements CommonConstant {
      * @see {@link IPermitManager#Where(String)}
      * @throws RuntimeDaoException
      */
-    protected int daoCountPermitByWhere(String where)throws RuntimeDaoException{
+    protected int daoCountPermitByWhere(String where)
+                    throws RuntimeDaoException{
         return getPermitManager().countWhere(where);
     }
     //19
@@ -3619,7 +3869,8 @@ class Dao implements CommonConstant {
      * @throws RuntimeDaoException
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    protected List<PermitBean> daoLoadPermitByCreateTime(Date timestamp,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<PermitBean> daoLoadPermitByCreateTime(Date timestamp,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return daoLoadPermitByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
     }
     //20
@@ -3627,7 +3878,8 @@ class Dao implements CommonConstant {
      * 参见 {@link #daoLoadPermitByCreateTime(Date,int,int)} 
      * @throws RuntimeDaoException
      */
-    protected List<PermitBean> daoLoadPermitByCreateTime(Date timestamp)throws RuntimeDaoException{
+    protected List<PermitBean> daoLoadPermitByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoadPermitByCreateTime(timestamp,1,-1);
     }
     //20-5
@@ -3636,7 +3888,8 @@ class Dao implements CommonConstant {
      * @see #daoCountPermitByWhere(String)
      * @throws RuntimeDaoException
      */
-    protected int daoCountPermitByCreateTime(Date timestamp)throws RuntimeDaoException{
+    protected int daoCountPermitByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoCountPermitByWhere(makeWhere(timestamp,"create_time"));
     }
 
@@ -3662,7 +3915,8 @@ class Dao implements CommonConstant {
      * @see StoreBean#replaceNull(List)
      * @throws RuntimeDaoException
      */
-    protected List<StoreBean> daoGetStores(Collection<String> md5Collection)throws RuntimeDaoException{
+    protected List<StoreBean> daoGetStores(Collection<String> md5Collection)
+                    throws RuntimeDaoException{
         return StoreBean.replaceNull((getStoreManager().loadByPrimaryKey(md5Collection)));
     }
     //3  
@@ -3672,7 +3926,8 @@ class Dao implements CommonConstant {
      * @see {@link IStoreManager#deleteByPrimaryKey(Collection)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteStoresByPrimaryKey(Collection<String> md5Collection)throws RuntimeDaoException{
+    protected int daoDeleteStoresByPrimaryKey(Collection<String> md5Collection)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != md5Collection){
             for(String md5:md5Collection){
@@ -3712,7 +3967,8 @@ class Dao implements CommonConstant {
      * @see {@link IStoreManager#existsPrimaryKey(String)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsStore(String md5)throws RuntimeDaoException{
+    protected boolean daoExistsStore(String md5)
+                    throws RuntimeDaoException{
         return getStoreManager().existsPrimaryKey(md5);
     }
     //4-2
@@ -3721,7 +3977,8 @@ class Dao implements CommonConstant {
      * @see {@link IStoreManager#existsPrimaryKey(StoreBean)}
      * @throws RuntimeDaoException
      */
-    protected boolean daoExistsStore(StoreBean bean)throws RuntimeDaoException{
+    protected boolean daoExistsStore(StoreBean bean)
+                    throws RuntimeDaoException{
         return getStoreManager().existsPrimaryKey(bean);
     }
     //5
@@ -3733,7 +3990,8 @@ class Dao implements CommonConstant {
      * @see {@link IStoreManager#deleteByPrimaryKey(String)}
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteStore(String md5)throws RuntimeDaoException{
+    protected int daoDeleteStore(String md5)
+                    throws RuntimeDaoException{
         return getStoreManager().deleteByPrimaryKey(md5);
     }
     //5-2
@@ -3744,7 +4002,8 @@ class Dao implements CommonConstant {
      * @see #daoDeleteStore(String)
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteStore(StoreBean bean)throws RuntimeDaoException{
+    protected int daoDeleteStore(StoreBean bean)
+                    throws RuntimeDaoException{
         return null == bean ? 0 : daoDeleteStore(bean.getMd5());
     }
     //6
@@ -3754,7 +4013,8 @@ class Dao implements CommonConstant {
      * @see #daoDeleteStore(String)
      * @throws RuntimeDaoException
      */
-    protected int daoDeleteStores(Collection<StoreBean> beans)throws RuntimeDaoException{
+    protected int daoDeleteStores(Collection<StoreBean> beans)
+                    throws RuntimeDaoException{
         int count =0;
         if(null != beans){        
             for(StoreBean bean:beans){
@@ -3770,13 +4030,14 @@ class Dao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IStoreManager#checkDuplicate(StoreBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      */
-    protected StoreBean daoCheckDuplicate(StoreBean storeBean)throws RuntimeDaoException,DuplicateReordException{
+    protected StoreBean daoCheckDuplicate(StoreBean storeBean)
+                    throws RuntimeDaoException,DuplicateRecordException{
         try{
             return getStoreManager().checkDuplicate(storeBean);
         }catch(ObjectRetrievalException e){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
     }
     //7-3
@@ -3785,14 +4046,15 @@ class Dao implements CommonConstant {
      * 
      * @param md5OfStore 主键,md5检验码 
      * @see {@link IStoreManager#checkDuplicate(StoreBean)}
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code md5OfStore} 
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException
+     * @throws DuplicateRecordException
      */
-    protected String daoCheckDuplicateStore(String md5OfStore)throws RuntimeDaoException,DuplicateReordException{
+    protected String daoCheckDuplicateStore(String md5OfStore)
+                    throws RuntimeDaoException,DuplicateRecordException{
         if(getStoreManager().existsPrimaryKey(md5OfStore)){
-            throw new DuplicateReordException();
+            throw new DuplicateRecordException();
         }
         return md5OfStore;
     }
@@ -3804,10 +4066,11 @@ class Dao implements CommonConstant {
      * @see {@link IStoreManager#save(StoreBean)}
      * @see {@link IStoreManager#checkDuplicate(StoreBean)}
      * @throws RuntimeDaoException
-     * @throws DuplicateReordException if exists duplicated row
+     * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code storeBean.isNew()} is {@code false}
      */
-    protected StoreBean daoAddStore(StoreBean storeBean)throws RuntimeDaoException,DuplicateReordException{
+    protected StoreBean daoAddStore(StoreBean storeBean)
+                    throws RuntimeDaoException,DuplicateRecordException{
         return getStoreManager().save(daoCheckDuplicate(storeBean));
     }
     //12-3-3
@@ -3818,7 +4081,8 @@ class Dao implements CommonConstant {
      * @see #daoAddStore(StoreBean)
      * @throws RuntimeDaoException
      */
-    protected Collection<StoreBean> daoAddStores(Collection<StoreBean> beans)throws RuntimeDaoException ,DuplicateReordException{
+    protected Collection<StoreBean> daoAddStores(Collection<StoreBean> beans)
+                    throws RuntimeDaoException ,DuplicateRecordException{
         if(null != beans){
             for(StoreBean bean : beans){
                 daoAddStore(bean);
@@ -3831,7 +4095,8 @@ class Dao implements CommonConstant {
      * {@link #daoAddStore(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
-    protected Collection<StoreBean> daoAddStoresAsTransaction(final Collection<StoreBean> beans)throws RuntimeDaoException ,DuplicateReordException{
+    protected Collection<StoreBean> daoAddStoresAsTransaction(final Collection<StoreBean> beans)
+                    throws RuntimeDaoException ,DuplicateRecordException{
         return daoRunAsTransaction(new Callable<Collection<StoreBean>>(){      
             @Override
             public Collection<StoreBean> call() throws Exception {
@@ -3847,7 +4112,8 @@ class Dao implements CommonConstant {
      * @see {@link IStoreManager#loadByWhereAsList(String,int[],int,int)}
      * @throws RuntimeDaoException
      */
-    protected List<StoreBean> daoLoadStoreByWhere(String where,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<StoreBean> daoLoadStoreByWhere(String where,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return getStoreManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     //17
@@ -3856,7 +4122,8 @@ class Dao implements CommonConstant {
      * @see {@link IStoreManager#loadAllAsList()}
      * @throws RuntimeDaoException
      */
-    protected List<StoreBean> daoLoadStoreAll()throws RuntimeDaoException{
+    protected List<StoreBean> daoLoadStoreAll()
+                    throws RuntimeDaoException{
         return getStoreManager().loadAllAsList();
     }
     //17-2
@@ -3865,7 +4132,8 @@ class Dao implements CommonConstant {
      * @see {@link IStoreManager#Where(String)}
      * @throws RuntimeDaoException
      */
-    protected int daoCountStoreByWhere(String where)throws RuntimeDaoException{
+    protected int daoCountStoreByWhere(String where)
+                    throws RuntimeDaoException{
         return getStoreManager().countWhere(where);
     }
     //18
@@ -3875,7 +4143,8 @@ class Dao implements CommonConstant {
      * @see #daoLoadStoreByWhere(String,int,int)
      * @throws RuntimeDaoException
      */
-    protected List<String> daoLoadStoreMd5ByWhere(String where)throws RuntimeDaoException{
+    protected List<String> daoLoadStoreMd5ByWhere(String where)
+                    throws RuntimeDaoException{
         return daoToPrimaryKeyListFromStores(daoLoadStoreByWhere(where,1,-1));
     }
 
@@ -3891,7 +4160,8 @@ class Dao implements CommonConstant {
      * @see {@link ILogLightManager#loadByWhereAsList(String,int[],int,int)}
      * @throws RuntimeDaoException
      */
-    protected List<LogLightBean> daoLoadLogLightByWhere(String where,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<LogLightBean> daoLoadLogLightByWhere(String where,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return getLogLightManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     //17
@@ -3900,7 +4170,8 @@ class Dao implements CommonConstant {
      * @see {@link ILogLightManager#loadAllAsList()}
      * @throws RuntimeDaoException
      */
-    protected List<LogLightBean> daoLoadLogLightAll()throws RuntimeDaoException{
+    protected List<LogLightBean> daoLoadLogLightAll()
+                    throws RuntimeDaoException{
         return getLogLightManager().loadAllAsList();
     }
     //17-2
@@ -3909,7 +4180,8 @@ class Dao implements CommonConstant {
      * @see {@link ILogLightManager#Where(String)}
      * @throws RuntimeDaoException
      */
-    protected int daoCountLogLightByWhere(String where)throws RuntimeDaoException{
+    protected int daoCountLogLightByWhere(String where)
+                    throws RuntimeDaoException{
         return getLogLightManager().countWhere(where);
     }
 
@@ -3922,7 +4194,8 @@ class Dao implements CommonConstant {
      * @throws RuntimeDaoException
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-    protected List<LogLightBean> daoLoadLogLightByVerifyTime(Date timestamp,int startRow, int numRows)throws RuntimeDaoException{
+    protected List<LogLightBean> daoLoadLogLightByVerifyTime(Date timestamp,int startRow, int numRows)
+                    throws RuntimeDaoException{
         return daoLoadLogLightByWhere(makeWhere(timestamp,"verify_time"),startRow,numRows);
     }
     //20
@@ -3930,7 +4203,8 @@ class Dao implements CommonConstant {
      * 参见 {@link #daoLoadLogLightByVerifyTime(Date,int,int)} 
      * @throws RuntimeDaoException
      */
-    protected List<LogLightBean> daoLoadLogLightByVerifyTime(Date timestamp)throws RuntimeDaoException{
+    protected List<LogLightBean> daoLoadLogLightByVerifyTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoLoadLogLightByVerifyTime(timestamp,1,-1);
     }
     //20-5
@@ -3939,7 +4213,8 @@ class Dao implements CommonConstant {
      * @see #daoCountLogLightByWhere(String)
      * @throws RuntimeDaoException
      */
-    protected int daoCountLogLightByVerifyTime(Date timestamp)throws RuntimeDaoException{
+    protected int daoCountLogLightByVerifyTime(Date timestamp)
+                    throws RuntimeDaoException{
         return daoCountLogLightByWhere(makeWhere(timestamp,"verify_time"));
     }
 

@@ -67,7 +67,7 @@ public interface CommonConstant {
         UNCLASSIFIED,
         /** 数据库访问异常 */
         DAO,
-        /** Redis 服务器异常 */
+        /** redis 服务器异常 */
         REDIS_ERROR,
         /** RuntimeException */
         RUNTIME,
