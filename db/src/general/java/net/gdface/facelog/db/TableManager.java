@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Collection;
 import java.util.concurrent.Callable;
+import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 /**
  * Interface to handle database calls (save, load, count, etc...) for table.
@@ -25,8 +26,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         /**
          * do action for {@code bean}
          * @param bean input bean
+         * @throws RuntimeDaoException
          */
-        void call(B bean);
+        void call(B bean)throws RuntimeDaoException;
         /**
          * return a B instance
          * @return B bean
@@ -45,16 +47,18 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
          * 
          * @param bean the B bean to be saved
          * @return the inserted bean
+         * @throws RuntimeDaoException
          */
-        protected abstract B insert(B bean);
+        protected abstract B insert(B bean)throws RuntimeDaoException;
         //14
         /**
          * Update the B bean record in the database according to the changes.
          *
          * @param bean the B bean to be updated
          * @return the updated bean
+         * @throws RuntimeDaoException
          */
-        protected abstract B update(B bean);
+        protected abstract B update(B bean)throws RuntimeDaoException;
         
         public class ListAction implements Action<B> {
             final List<B> list;
@@ -77,166 +81,166 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
             }
         }
         @Override
-        public int countAll(){
+        public int countAll()throws RuntimeDaoException{
             return this.countWhere("");
         }
 
         @Override
-        public int countUsingTemplate(B bean){
+        public int countUsingTemplate(B bean)throws RuntimeDaoException{
             return this.countUsingTemplate(bean, SEARCH_EXACT);
         }
 
         @Override
-        public int deleteAll(){
+        public int deleteAll()throws RuntimeDaoException{
             return this.deleteByWhere("");
         }
 
 
         @Override
-        public B[] loadAll(){
+        public B[] loadAll()throws RuntimeDaoException{
             return this.loadUsingTemplate(null, 1, -1, SEARCH_EXACT);
         }
 
         @Override
-        public int loadAll(Action<B> action){
+        public int loadAll(Action<B> action)throws RuntimeDaoException{
             return this.loadUsingTemplate(null,null,1,-1, SEARCH_EXACT, action);
         }
 
         @Override
-        public B[] loadAll(int startRow, int numRows){
+        public B[] loadAll(int startRow, int numRows)throws RuntimeDaoException{
             return this.loadUsingTemplate(null, startRow, numRows, SEARCH_EXACT);
         }
 
         @Override
-        public int loadAll(int startRow, int numRows, Action<B> action){
+        public int loadAll(int startRow, int numRows, Action<B> action)throws RuntimeDaoException{
             return this.loadUsingTemplate(null, null, startRow, numRows, SEARCH_EXACT, action);
         }
 
         @Override
-        public List<B> loadAllAsList(){
+        public List<B> loadAllAsList()throws RuntimeDaoException{
             return this.loadUsingTemplateAsList(null,1, -1, SEARCH_EXACT);
         }
 
         @Override
-        public List<B> loadAllAsList(int startRow, int numRows){
+        public List<B> loadAllAsList(int startRow, int numRows)throws RuntimeDaoException{
             return this.loadUsingTemplateAsList(null, startRow, numRows, SEARCH_EXACT);
         }
 
         @Override
-        public boolean existsByPrimaryKey(B bean){
+        public boolean existsByPrimaryKey(B bean)throws RuntimeDaoException{
             return null!=loadByPrimaryKey(bean);
         }
         @Override
-        public B checkDuplicate(B bean) throws ObjectRetrievalException{
+        public B checkDuplicate(B bean)throws RuntimeDaoException,ObjectRetrievalException{
             throw new UnsupportedOperationException();
         }
         @Override
-        public boolean existsPrimaryKey(Object ...keys){
+        public boolean existsPrimaryKey(Object ...keys)throws RuntimeDaoException{
             return null!=loadByPrimaryKey(keys);
         }
         
         @Override
-        public B[] loadByWhere(String where){
+        public B[] loadByWhere(String where)throws RuntimeDaoException{
             return this.loadByWhere(where, (int[])null);
         }
 
         @Override
-        public int loadByWhere(String where, Action<B> action){
+        public int loadByWhere(String where, Action<B> action)throws RuntimeDaoException{
             return this.loadByWhere(where, null, action);
         }
 
         @Override
-        public B[] loadByWhere(String where, int[] fieldList){
+        public B[] loadByWhere(String where, int[] fieldList)throws RuntimeDaoException{
             return this.loadByWhere(where, fieldList, 1, -1);
         }
 
         @Override
-        public int loadByWhere(String where, int[] fieldList, Action<B> action){
+        public int loadByWhere(String where, int[] fieldList, Action<B> action)throws RuntimeDaoException{
             return this.loadByWhere(where, fieldList, 1, -1, action);
         }
 
         @SuppressWarnings("unchecked")
         @Override
-        public B[] loadByWhere(String where, int[] fieldList, int startRow, int numRows){
+        public B[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)throws RuntimeDaoException{
             return this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray((B[])java.lang.reflect.Array.newInstance(beanType(),0));
         }
 
         @Override
         public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,
-                Action<B> action){
+                Action<B> action)throws RuntimeDaoException{
             return this.loadByWhereForAction(where, fieldList, startRow, numRows, action);
         }
 
         @Override
-        public List<B> loadByWhereAsList(String where){
+        public List<B> loadByWhereAsList(String where)throws RuntimeDaoException{
             return this.loadByWhereAsList(where, null, 1, -1);
         }
 
         @Override
-        public List<B> loadByWhereAsList(String where, int[] fieldList){
+        public List<B> loadByWhereAsList(String where, int[] fieldList)throws RuntimeDaoException{
             return this.loadByWhereAsList(where, fieldList, 1, -1);
         }
 
         @Override
-        public List<B> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows){
+        public List<B> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)throws RuntimeDaoException{
             ListAction action = new ListAction();
             loadByWhereForAction(where, fieldList, startRow, numRows, action);              
             return action.getList();
         }
     
         @Override
-        public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<B> action){
+        public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<B> action)throws RuntimeDaoException{
             String sql=createSelectSql(fieldList, where);
             // System.out.println("loadByWhere: " + sql);
             return this.loadBySqlForAction(sql, null, fieldList, startRow, numRows, action);
         }
     
         @Override
-        public B[] loadUsingTemplate(B bean){
+        public B[] loadUsingTemplate(B bean)throws RuntimeDaoException{
             return this.loadUsingTemplate(bean, 1, -1, SEARCH_EXACT);
         }
 
         @Override
-        public int loadUsingTemplate(B bean, Action<B> action){
+        public int loadUsingTemplate(B bean, Action<B> action)throws RuntimeDaoException{
             return this.loadUsingTemplate(bean, null, 1, -1, SEARCH_EXACT, action);
         }
 
         @Override
-        public B[] loadUsingTemplate(B bean, int startRow, int numRows){
+        public B[] loadUsingTemplate(B bean, int startRow, int numRows)throws RuntimeDaoException{
             return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
         }
 
         @Override
         public int loadUsingTemplate(B bean, int startRow, int numRows,
-                Action<B> action){
+                Action<B> action)throws RuntimeDaoException{
             return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
         }
 
         @SuppressWarnings("unchecked")
         @Override
-        public B[] loadUsingTemplate(B bean, int startRow, int numRows, int searchType){
+        public B[] loadUsingTemplate(B bean, int startRow, int numRows, int searchType)throws RuntimeDaoException{
             return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray((B[])java.lang.reflect.Array.newInstance(beanType(),0));
         }
 
         @Override
-        public List<B> loadUsingTemplateAsList(B bean){
+        public List<B> loadUsingTemplateAsList(B bean)throws RuntimeDaoException{
             return this.loadUsingTemplateAsList(bean, 1, -1, SEARCH_EXACT);
         }
 
         @Override
-        public List<B> loadUsingTemplateAsList(B bean, int startRow, int numRows){
+        public List<B> loadUsingTemplateAsList(B bean, int startRow, int numRows)throws RuntimeDaoException{
             return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
         }
 
         @Override
-        public List<B> loadUsingTemplateAsList(B bean, int startRow, int numRows, int searchType){
+        public List<B> loadUsingTemplateAsList(B bean, int startRow, int numRows, int searchType)throws RuntimeDaoException{
             ListAction action = new ListAction();
             loadUsingTemplate(bean,null,startRow,numRows,searchType, action);
             return action.getList();
         }
         
         @Override
-        public B save(B bean){
+        public B save(B bean)throws RuntimeDaoException{
             if(null != bean){
                 if (bean.isNew()) {
                     this.insert(bean);
@@ -248,7 +252,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         }
         
         @Override
-        public B[] save(B[] beans){
+        public B[] save(B[] beans)throws RuntimeDaoException{
             if(null != beans){
                 for (B bean : beans) 
                 {
@@ -259,7 +263,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         }
 
         @Override
-        public <C extends Collection<B>> C save(C beans){
+        public <C extends Collection<B>> C save(C beans)throws RuntimeDaoException{
             if(null != beans){
                 for (B bean : beans) 
                 {
@@ -270,7 +274,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         }
         
         @Override
-        public <C extends Collection<B>> C saveAsTransaction(final C beans){
+        public <C extends Collection<B>> C saveAsTransaction(final C beans)throws RuntimeDaoException{
             return this.runAsTransaction(new Callable<C>(){
                 @Override
                 public C call() throws Exception {
@@ -279,7 +283,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         }
 
         @Override
-        public B[] saveAsTransaction(final B[] beans){
+        public B[] saveAsTransaction(final B[] beans)throws RuntimeDaoException{
             return this.runAsTransaction(new Callable<B[]>(){
                 @Override
                 public B[] call() throws Exception {
@@ -289,12 +293,12 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
 
         @SuppressWarnings("unchecked")
         @Override
-        public B[] loadBySql(String sql, Object[] argList, int[] fieldList){
+        public B[] loadBySql(String sql, Object[] argList, int[] fieldList)throws RuntimeDaoException{
             return loadBySqlAsList(sql, argList, fieldList).toArray((B[])java.lang.reflect.Array.newInstance(beanType(),0));
         }
 
         @Override
-        public List<B> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
+        public List<B> loadBySqlAsList(String sql, Object[] argList, int[] fieldList)throws RuntimeDaoException{
             ListAction action = new ListAction();
             loadBySqlForAction(sql,argList,fieldList,1,-1,action);
             return action.getList();
@@ -329,90 +333,90 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         }
 
         @Override
-        public int delete(B bean){
+        public int delete(B bean)throws RuntimeDaoException{
             throw new UnsupportedOperationException();
         }
         
         @Override
-        public <T extends BaseBean<T>> T getReferencedBean(B bean, int fkIndex){
+        public <T extends BaseBean<T>> T getReferencedBean(B bean, int fkIndex)throws RuntimeDaoException{
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public <T extends BaseBean<T>> T setReferencedBean(B bean, T beanToSet, int fkIndex){
+        public <T extends BaseBean<T>> T setReferencedBean(B bean, T beanToSet, int fkIndex)throws RuntimeDaoException{
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public <T extends BaseBean<T>> T[] getImportedBeans(B bean, int ikIndex){
+        public <T extends BaseBean<T>> T[] getImportedBeans(B bean, int ikIndex)throws RuntimeDaoException{
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public <T extends BaseBean<T>> List<T> getImportedBeansAsList(B bean, int ikIndex){
+        public <T extends BaseBean<T>> List<T> getImportedBeansAsList(B bean, int ikIndex)throws RuntimeDaoException{
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public <T extends BaseBean<T>> T[] setImportedBeans(B bean, T[] importedBeans, int ikIndex){
+        public <T extends BaseBean<T>> T[] setImportedBeans(B bean, T[] importedBeans, int ikIndex)throws RuntimeDaoException{
             throw new UnsupportedOperationException();
         }
 
         @Override
         public <T extends BaseBean<T>, C extends Collection<T>> C setImportedBeans(B bean, C importedBeans,
-                int ikIndex){
+                int ikIndex)throws RuntimeDaoException{
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public B loadByPrimaryKey(B bean){
+        public B loadByPrimaryKey(B bean)throws RuntimeDaoException{
             throw new UnsupportedOperationException();
         }
         @Override
-        public B loadByPrimaryKeyChecked(B bean) throws ObjectRetrievalException{
+        public B loadByPrimaryKeyChecked(B bean)throws RuntimeDaoException,ObjectRetrievalException{
             throw new UnsupportedOperationException();
         }
         @Override
-        public B loadByPrimaryKey(Object ...keys){
+        public B loadByPrimaryKey(Object ...keys)throws RuntimeDaoException{
             throw new UnsupportedOperationException();
         }
         @Override
-        public B loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
+        public B loadByPrimaryKeyChecked(Object ...keys)throws RuntimeDaoException,ObjectRetrievalException{
             throw new UnsupportedOperationException();
         }
         @Override
-        public int deleteByPrimaryKey(Object ...keys){
+        public int deleteByPrimaryKey(Object ...keys)throws RuntimeDaoException{
             throw new UnsupportedOperationException();
         }
         
         @SuppressWarnings("unchecked")
         @Override
-        public B[] loadByIndex(int keyIndex,Object ...keys){
+        public B[] loadByIndex(int keyIndex,Object ...keys)throws RuntimeDaoException{
             return this.loadByIndexAsList(keyIndex,keys).toArray((B[])java.lang.reflect.Array.newInstance(beanType(),0));
         }
         
         @Override
-        public List<B> loadByIndexAsList(int keyIndex,Object ...keys){
+        public List<B> loadByIndexAsList(int keyIndex,Object ...keys)throws RuntimeDaoException{
             throw new UnsupportedOperationException();
         }
         
         @Override
-        public int deleteByIndex(int keyIndex,Object ...keys){
+        public int deleteByIndex(int keyIndex,Object ...keys)throws RuntimeDaoException{
             throw new UnsupportedOperationException();
         }
         
         @Override
-        public B save(B bean,Object ...args){
+        public B save(B bean,Object ...args)throws RuntimeDaoException{
             throw new UnsupportedOperationException();
         }
         
         @Override
-        public B saveCollection(B bean,Object ...args){
+        public B saveCollection(B bean,Object ...args)throws RuntimeDaoException{
             throw new UnsupportedOperationException();
         }
         
         @Override
-        public B saveAsTransaction(final B bean,final Object ...args){
+        public B saveAsTransaction(final B bean,final Object ...args)throws RuntimeDaoException{
             return this.runAsTransaction(new Callable<B>(){
                 @Override
                 public B call() throws Exception {
@@ -421,7 +425,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         }
         
         @Override
-        public B saveCollectionAsTransaction(final B bean,final Object ...args){
+        public B saveCollectionAsTransaction(final B bean,final Object ...args)throws RuntimeDaoException{
             return this.runAsTransaction(new Callable<B>(){
                 @Override
                 public B call() throws Exception {
@@ -430,7 +434,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         }
         
         @Override
-        public void runAsTransaction(final Runnable fun){
+        public void runAsTransaction(final Runnable fun)throws RuntimeDaoException{
             this.runAsTransaction(new Callable<Object>() {
                 @Override
                 public Object call() throws Exception {
@@ -486,8 +490,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * Retrieves the number of rows of the table.
      *
      * @return the number of rows returned
+     * @throws RuntimeDaoException
      */
-    public int countAll();
+    public int countAll()throws RuntimeDaoException;
     
     //27
     /**
@@ -495,8 +500,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *
      * @param bean the bean to look for ant count
      * @return the number of rows returned
+     * @throws RuntimeDaoException
      */
-    public int countUsingTemplate( B bean);
+    public int countUsingTemplate( B bean)throws RuntimeDaoException;
   
     //20
     /**
@@ -511,8 +517,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *                {@value Constant#SEARCH_STARTING_LIKE}   {@link Constant#SEARCH_STARTING_LIKE} <br>
      *                {@value Constant#SEARCH_ENDING_LIKE}   {@link Constant#SEARCH_ENDING_LIKE} <br>  
      * @return the number of rows returned
+     * @throws RuntimeDaoException
      */
-    public int countUsingTemplate(B bean, int searchType);
+    public int countUsingTemplate(B bean, int searchType)throws RuntimeDaoException;
 
     //25
     /**
@@ -521,15 +528,17 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *
      * @param where the restriction clause
      * @return the number of rows returned
+     * @throws RuntimeDaoException
      */
-    public int countWhere(String where);
+    public int countWhere(String where)throws RuntimeDaoException;
 
     //10
     /**
      * Deletes all rows from table.
      * @return the number of deleted rows.
+     * @throws RuntimeDaoException
      */
-    public int deleteAll();
+    public int deleteAll()throws RuntimeDaoException;
 
     //11
     /**
@@ -539,8 +548,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *
      * @param where the sql 'where' clause
      * @return the number of deleted rows
+     * @throws RuntimeDaoException
      */
-    public int deleteByWhere(String where);
+    public int deleteByWhere(String where)throws RuntimeDaoException;
 
     //21
     /**
@@ -548,8 +558,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *
      * @param bean the template object(s) to be deleted
      * @return the number of deleted objects
+     * @throws RuntimeDaoException
      */
-    public int deleteUsingTemplate(B bean);
+    public int deleteUsingTemplate(B bean)throws RuntimeDaoException;
 
     //2.1
     /**
@@ -578,8 +589,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *          PK# 1 fl_store.md5 type String<br>
      * @return the number of deleted rows
      * @see #delete(B)
+     * @throws RuntimeDaoException
      */   
-    public int deleteByPrimaryKey(Object ...keys);
+    public int deleteByPrimaryKey(Object ...keys)throws RuntimeDaoException;
 
     //2.2
     /**
@@ -587,8 +599,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * 
      * @param bean will be deleted ,all keys must not be null
      * @return the number of deleted rows,0 returned if bean is null
+     * @throws RuntimeDaoException
      */
-    public int delete(B bean);
+    public int delete(B bean)throws RuntimeDaoException;
 
 
     //////////////////////////////////////
@@ -600,16 +613,18 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * Loads all the rows from table.
      *
      * @return an array of B bean
+     * @throws RuntimeDaoException
      */
-    public B[] loadAll();
+    public B[] loadAll()throws RuntimeDaoException;
 
     //5-1    
     /**
      * Loads each row from table and dealt with action.
      * @param action  Action object for do something(not null)
      * @return the count dealt by action
+     * @throws RuntimeDaoException
      */
-    public int loadAll(Action<B> action);
+    public int loadAll(Action<B> action)throws RuntimeDaoException;
 
     //6
     /**
@@ -618,8 +633,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return an array of B bean
+     * @throws RuntimeDaoException
      */
-    public B[] loadAll(int startRow, int numRows);
+    public B[] loadAll(int startRow, int numRows)throws RuntimeDaoException;
 
     //6-1    
     /**
@@ -628,16 +644,18 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param action  Action object for do something(not null)
      * @return the count dealt by action
+     * @throws RuntimeDaoException
      */
-    public int loadAll(int startRow, int numRows,Action<B> action);
+    public int loadAll(int startRow, int numRows,Action<B> action)throws RuntimeDaoException;
 
     //5-2
     /**
      * Loads all the rows from table.
      *
      * @return a list of B bean
+     * @throws RuntimeDaoException
      */
-    public List<B> loadAllAsList();
+    public List<B> loadAllAsList()throws RuntimeDaoException;
 
     //6-2
     /**
@@ -646,16 +664,18 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return a list of B bean
+     * @throws RuntimeDaoException
      */
-    public List<B> loadAllAsList(int startRow, int numRows);
+    public List<B> loadAllAsList(int startRow, int numRows)throws RuntimeDaoException;
 
     //1.2
     /**
      * Loads a B bean from the table using primary key fields of {@code bean}.
      * @param bean the B bean with primary key fields
      * @return a unique B or {@code null} if not found or bean is null
+     * @throws RuntimeDaoException
      */
-    public B loadByPrimaryKey(B bean);
+    public B loadByPrimaryKey(B bean)throws RuntimeDaoException;
     
     //1.2.2
     /**
@@ -663,8 +683,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param bean
      * @return a unique B ,otherwise throw exception
      * @throws ObjectRetrievalException not found
+     * @throws RuntimeDaoException
      */
-    public B loadByPrimaryKeyChecked(B bean) throws ObjectRetrievalException;
+    public B loadByPrimaryKeyChecked(B bean)throws RuntimeDaoException,ObjectRetrievalException;
     //1.3
     /**
      * Loads a B bean from the table using primary key fields.
@@ -691,8 +712,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *      for fl_store table<br>
      *          PK# 1 fl_store.md5 type String<br>
      * @return a unique B or {@code null} if not found
+     * @throws RuntimeDaoException
      */
-    public B loadByPrimaryKey(Object ...keys);
+    public B loadByPrimaryKey(Object ...keys)throws RuntimeDaoException;
 
     //1.3.2
     /**
@@ -700,8 +722,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param keys
      * @return a unique B,otherwise throw exception
      * @throws ObjectRetrievalException not found
+     * @throws RuntimeDaoException
      */
-    public B loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException;
+    public B loadByPrimaryKeyChecked(Object ...keys)throws RuntimeDaoException,ObjectRetrievalException;
     
     //1.5
     /**
@@ -709,8 +732,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param keys primary keys value
      * @see #loadByPrimaryKey(Object...)
      * @return 
+     * @throws RuntimeDaoException
      */
-    public boolean existsPrimaryKey(Object ...keys);
+    public boolean existsPrimaryKey(Object ...keys)throws RuntimeDaoException;
     
     //1.6
     /**
@@ -719,8 +743,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param bean the B bean with primary key fields
      * @return 
      * @see {@link #loadByPrimaryKey(B bean)}
+     * @throws RuntimeDaoException
      */
-    public boolean existsByPrimaryKey(B bean);
+    public boolean existsByPrimaryKey(B bean)throws RuntimeDaoException;
     //1.7
     /**
      * Check duplicated row by primary keys,if row exists throw exception
@@ -728,8 +753,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @return always bean
      * @see {@link #existsPrimaryKey(B bean)}
      * @throws ObjectRetrievalException has duplicated record
+     * @throws RuntimeDaoException
      */
-    public B checkDuplicate(B bean) throws ObjectRetrievalException;
+    public B checkDuplicate(B bean)throws RuntimeDaoException,ObjectRetrievalException;
    
     //////////////////////////////////////
     // SQL 'WHERE' METHOD
@@ -740,8 +766,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *
      * @param where the sql 'where' clause
      * @return 
+     * @throws RuntimeDaoException
      */
-    public B[] loadByWhere(String where);
+    public B[] loadByWhere(String where)throws RuntimeDaoException;
     
     //7-1
     /**
@@ -749,8 +776,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param where the sql 'where' clause
      * @param action  Action object for do something(not null)
      * @return the count dealt by action
+     * @throws RuntimeDaoException
      */
-    public int loadByWhere(String where,Action<B> action);
+    public int loadByWhere(String where,Action<B> action)throws RuntimeDaoException;
 
     //8
     /**
@@ -760,8 +788,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param where the sql 'WHERE' clause
      * @param fieldList array of field's ID
      * @return 
+     * @throws RuntimeDaoException
      */
-    public B[] loadByWhere(String where, int[] fieldList);
+    public B[] loadByWhere(String where, int[] fieldList)throws RuntimeDaoException;
    
     //8-1 
     /**
@@ -772,8 +801,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param fieldList array of field's ID
      * @param action Action object for do something(not null)
      * @return the count dealt by action
+     * @throws RuntimeDaoException
      */
-    public int loadByWhere(String where, int[] fieldList,Action<B> action);
+    public int loadByWhere(String where, int[] fieldList,Action<B> action)throws RuntimeDaoException;
 
     //9
     /**
@@ -785,8 +815,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return 
+     * @throws RuntimeDaoException
      */
-    public B[] loadByWhere(String where, int[] fieldList, int startRow, int numRows);
+    public B[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)throws RuntimeDaoException;
 
     //9-1    
     /**
@@ -800,16 +831,18 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param action Action object for do something(not null)
      * @return the count dealt by action
+     * @throws RuntimeDaoException
      */
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<B> action);
+    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<B> action)throws RuntimeDaoException;
     //7
     /**
      * Retrieves a list of B bean given a sql 'where' clause.
      *
      * @param where the sql 'where' clause
      * @return
+     * @throws RuntimeDaoException
      */
-    public List<B> loadByWhereAsList(String where);
+    public List<B> loadByWhereAsList(String where)throws RuntimeDaoException;
 
     //8
     /**
@@ -819,8 +852,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param where the sql 'WHERE' clause
      * @param fieldList array of field's ID
      * @return
+     * @throws RuntimeDaoException
      */
-    public List<B> loadByWhereAsList(String where, int[] fieldList);
+    public List<B> loadByWhereAsList(String where, int[] fieldList)throws RuntimeDaoException;
     
     //9-2
     /**
@@ -832,8 +866,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return
+     * @throws RuntimeDaoException
      */
-    public List<B> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows);
+    public List<B> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)throws RuntimeDaoException;
 
     //9-3
     /**
@@ -847,8 +882,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param action Action object for do something(not null)
      * @return the count dealt by action
+     * @throws RuntimeDaoException
      */
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<B> action);
+    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<B> action)throws RuntimeDaoException;
 
     //_____________________________________________________________________
     //
@@ -861,8 +897,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param bean the B bean to look for
      * @return the bean matching the template,or {@code null} if not found or null input argument
      * @throws ObjectRetrievalException more than one row
+     * @throws RuntimeDaoException
      */
-    public B loadUniqueUsingTemplate(B bean);
+    public B loadUniqueUsingTemplate(B bean)throws RuntimeDaoException;
 
     //18-1
     /**
@@ -871,8 +908,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param bean the B bean to look for
      * @return the bean matching the template
      * @throws ObjectRetrievalException not found or more than one row
+     * @throws RuntimeDaoException
      */
-    public B loadUniqueUsingTemplateChecked(B bean) throws ObjectRetrievalException;
+    public B loadUniqueUsingTemplateChecked(B bean)throws RuntimeDaoException,ObjectRetrievalException;
 
     //19
     /**
@@ -880,8 +918,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *
      * @param bean the B bean template to look for
      * @return all the B beans matching the template
+     * @throws RuntimeDaoException
      */
-    public B[] loadUsingTemplate(B bean);
+    public B[] loadUsingTemplate(B bean)throws RuntimeDaoException;
     
     //19-1
     /**
@@ -890,8 +929,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param bean the B bean template to look for
      * @param action Action object for do something(not null)
      * @return the count dealt by action
+     * @throws RuntimeDaoException
      */
-    public int loadUsingTemplate(B bean,Action<B> action);
+    public int loadUsingTemplate(B bean,Action<B> action)throws RuntimeDaoException;
 
     //20
     /**
@@ -901,8 +941,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return all the B matching the template
+     * @throws RuntimeDaoException
      */
-    public B[] loadUsingTemplate(B bean, int startRow, int numRows);
+    public B[] loadUsingTemplate(B bean, int startRow, int numRows)throws RuntimeDaoException;
     
     //20-1
     /**
@@ -913,8 +954,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param action Action object for do something(not null)
      * @return the count dealt by action
+     * @throws RuntimeDaoException
      */
-    public int loadUsingTemplate(B bean, int startRow, int numRows,Action<B> action);
+    public int loadUsingTemplate(B bean, int startRow, int numRows,Action<B> action)throws RuntimeDaoException;
 
     //20-5
     /**
@@ -931,8 +973,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *                {@value Constant#SEARCH_ENDING_LIKE}   {@link Constant#SEARCH_ENDING_LIKE} <br>  
      * @param action Action object for do something(not null)
      * @return the count dealt by action
+     * @throws RuntimeDaoException
      */
-    public int loadUsingTemplate(B bean, int[] fieldList, int startRow, int numRows,int searchType, Action<B> action);
+    public int loadUsingTemplate(B bean, int[] fieldList, int startRow, int numRows,int searchType, Action<B> action)throws RuntimeDaoException;
     //20-4
     /**
      * Loads a list of B bean from a template one, given the start row and number of rows.
@@ -946,8 +989,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *                {@value Constant#SEARCH_STARTING_LIKE}   {@link Constant#SEARCH_STARTING_LIKE} <br>
      *                {@value Constant#SEARCH_ENDING_LIKE}   {@link Constant#SEARCH_ENDING_LIKE} <br>  
      * @return all the B bean matching the template
+     * @throws RuntimeDaoException
      */
-    public B[] loadUsingTemplate(B bean, int startRow, int numRows, int searchType);
+    public B[] loadUsingTemplate(B bean, int startRow, int numRows, int searchType)throws RuntimeDaoException;
 
     //19-2
     /**
@@ -955,8 +999,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *
      * @param bean the B bean template to look for
      * @return all the B beans matching the template
+     * @throws RuntimeDaoException
      */
-    public List<B> loadUsingTemplateAsList(B bean);
+    public List<B> loadUsingTemplateAsList(B bean)throws RuntimeDaoException;
 
     //20-2
     /**
@@ -966,8 +1011,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return all the B bean matching the template
+     * @throws RuntimeDaoException
      */
-    public List<B> loadUsingTemplateAsList(B bean, int startRow, int numRows);
+    public List<B> loadUsingTemplateAsList(B bean, int startRow, int numRows)throws RuntimeDaoException;
 
     //20-3
     /**
@@ -982,8 +1028,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *                {@value Constant#SEARCH_STARTING_LIKE}   {@link Constant#SEARCH_STARTING_LIKE} <br>
      *                {@value Constant#SEARCH_ENDING_LIKE}   {@link Constant#SEARCH_ENDING_LIKE} <br>  
      * @return all the B beans matching the template
+     * @throws RuntimeDaoException
      */
-    public List<B> loadUsingTemplateAsList(B bean, int startRow, int numRows, int searchType);
+    public List<B> loadUsingTemplateAsList(B bean, int startRow, int numRows, int searchType)throws RuntimeDaoException;
 
     //_____________________________________________________________________
     //
@@ -994,9 +1041,10 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param keyIndex valid values:see also {@link #loadByIndexAsList(int,Object ...)}
      * @param keys key values of index
      * @return
+     * @throws RuntimeDaoException
      * @see #loadByIndexAsList(int ,Object ...)
      */
-    public B[] loadByIndex(int keyIndex,Object ...keys);
+    public B[] loadByIndex(int keyIndex,Object ...keys)throws RuntimeDaoException;
     
     /**
      * Retrieves a list of B bean using the index specified by keyIndex.
@@ -1019,16 +1067,18 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *        {@link Constant#FL_PERSON_GROUP_INDEX_PARENT}<br>     
      * @param keys key values of index
      * @return a list of B bean
+     * @throws RuntimeDaoException
      */
-    public java.util.List<B> loadByIndexAsList(int keyIndex,Object ...keys);
+    public java.util.List<B> loadByIndexAsList(int keyIndex,Object ...keys)throws RuntimeDaoException;
     
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: see also {@link #loadByIndexAsList(int,Object ...)}
      * @param keys key values of index
      * @return the number of deleted objects
+     * @throws RuntimeDaoException
      */
-    public int deleteByIndex(int keyIndex,Object ...keys);
+    public int deleteByIndex(int keyIndex,Object ...keys)throws RuntimeDaoException;
     //_____________________________________________________________________
     //
     // LISTENER
@@ -1055,8 +1105,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * see also {@link TableListener.Event#fire(TableListener.ListenerContainer, Object)}
      * @param event
      * @param bean
+     * @throws RuntimeDaoException
      */
-    public void fire(TableListener.Event event, B bean) ;
+    public void fire(TableListener.Event event, B bean) throws RuntimeDaoException;
     
     //37-1
     /**
@@ -1064,8 +1115,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param event 
      * @param bean
      * @throws IllegalArgumentException invalid event id
+     * @throws RuntimeDaoException
      */
-    public void fire(int event, B bean) ;
+    public void fire(int event, B bean) throws RuntimeDaoException;
     //_____________________________________________________________________
     //
     // SAVE
@@ -1076,8 +1128,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *
      * @param bean the B bean to be saved
      * @return the inserted or updated bean,or null if bean is null
+     * @throws RuntimeDaoException
      */
-    public B save(B bean);
+    public B save(B bean)throws RuntimeDaoException;
 
     //15
     /**
@@ -1085,8 +1138,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *
      * @param beans the array of  B bean to be saved
      * @return always beans saved
+     * @throws RuntimeDaoException
      */
-    public B[] save(B[] beans);
+    public B[] save(B[] beans)throws RuntimeDaoException;
     
     //15-2
     /**
@@ -1094,8 +1148,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *
      * @param beans the B bean table to be saved
      * @return alwarys beans saved
+     * @throws RuntimeDaoException
      */
-    public <C extends Collection<B>> C saveAsTransaction(C beans);
+    public <C extends Collection<B>> C saveAsTransaction(C beans)throws RuntimeDaoException;
     
     //15-3
     /**
@@ -1104,8 +1159,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param beans the B bean table to be saved
      * @return alwarys beans saved
      * @see #save(B[])
+     * @throws RuntimeDaoException
      */
-    public B[] saveAsTransaction(B[] beans);
+    public B[] saveAsTransaction(B[] beans)throws RuntimeDaoException;
 
     //15-4
     /**
@@ -1113,8 +1169,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *
      * @param beans the B bean table to be saved
      * @return alwarys beans saved
+     * @throws RuntimeDaoException
      */
-    public <C extends Collection<B>> C save(C beans);
+    public <C extends Collection<B>> C save(C beans)throws RuntimeDaoException;
 
     //3.9 SYNC SAVE 
     /**
@@ -1141,8 +1198,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
             for fl_person_group table:<br>
                 {@code  PersonGroupBean PermitBean[] PersonBean[] PersonGroupBean[]}<br>
      * @return the inserted or updated B bean
-      */
-    public B save(B bean,Object ...args);
+      * @throws RuntimeDaoException
+     */
+    public B save(B bean,Object ...args)throws RuntimeDaoException;
     
     //3.10 SYNC SAVE 
     /**
@@ -1169,8 +1227,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
             for fl_person_group table:<br>
                 {@code  PersonGroupBean Collection<PermitBean> Collection<PersonBean> Collection<PersonGroupBean>}<br>
      * @return the inserted or updated B bean
+     * @throws RuntimeDaoException
      */
-    public B saveCollection(B bean,Object ...args);
+    public B saveCollection(B bean,Object ...args)throws RuntimeDaoException;
     
     //3.11 SYNC SAVE 
     /**
@@ -1179,8 +1238,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param bean the B bean to be saved
      * @param args referenced beans or imported beans<br>
      * @return the inserted or updated B bean
+     * @throws RuntimeDaoException
      */
-    public B saveAsTransaction(B bean,Object ...args);
+    public B saveAsTransaction(B bean,Object ...args)throws RuntimeDaoException;
     
     //3.12 SYNC SAVE 
     /**
@@ -1189,8 +1249,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param bean the B bean to be saved
      * @param args referenced beans or imported beans<br>
      * @return the inserted or updated B bean
+     * @throws RuntimeDaoException
      */
-    public B saveCollectionAsTransaction(B bean,Object ...args);
+    public B saveCollectionAsTransaction(B bean,Object ...args)throws RuntimeDaoException;
         
     /**
      * Load all the elements using a SQL statement specifying a list of fields to be retrieved.
@@ -1198,8 +1259,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param argList the arguments to use fill given prepared statement,may be null
      * @param fieldList table of the field's associated constants
      * @return an array of B bean
+     * @throws RuntimeDaoException
      */
-    public B[] loadBySql(String sql, Object[] argList, int[] fieldList);
+    public B[] loadBySql(String sql, Object[] argList, int[] fieldList)throws RuntimeDaoException;
     
     /**
      * Load all elements using a SQL statement specifying a list of fields to be retrieved.
@@ -1207,8 +1269,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param argList the arguments to use fill given prepared statement,may be null
      * @param fieldList table of the field's associated constants
      * @return an list of B bean
+     * @throws RuntimeDaoException
      */
-    public List<B> loadBySqlAsList(String sql, Object[] argList, int[] fieldList);
+    public List<B> loadBySqlAsList(String sql, Object[] argList, int[] fieldList)throws RuntimeDaoException;
     
     /**
      * Load each the elements using a SQL statement specifying a list of fields to be retrieved and dealt by action.
@@ -1219,8 +1282,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param action Action object for do something(not null)
      * @return the count dealt by action
+     * @throws RuntimeDaoException
      */
-    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<B> action);
+    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<B> action)throws RuntimeDaoException;
     /**
      * Run {@code Callable<T>} as a transaction.<br>
      * all exceptions but {@code SQLException} threw by {@code Callable<T>} is warpped into {@code RuntimeException}<br>
@@ -1228,16 +1292,18 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param <T>  type of return result
      * @param fun
      * @return
+     * @throws RuntimeDaoException
      */
-    public<T> T runAsTransaction(Callable<T> fun);
+    public<T> T runAsTransaction(Callable<T> fun)throws RuntimeDaoException;
 
     /**
      * Run {@code Runnable} as a transaction.no return
      * @param fun
      * @
      * @see #runAsTransaction(Runnable)
+     * @throws RuntimeDaoException
      */
-    public void runAsTransaction(Runnable fun);
+    public void runAsTransaction(Runnable fun)throws RuntimeDaoException;
     
     /**
      * Retrieves the T object referenced by fkName.<br>
@@ -1305,8 +1371,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *        for for fl_person_group table:<br>
      *        {@link Constant#FL_PERSON_GROUP_FK_PARENT}<br>
      * @return the associated <T> bean or {@code null} if {@code bean}  is {@code null}
+     * @throws RuntimeDaoException
      */
-    public <T extends BaseBean<T>> T getReferencedBean(B bean,int fkIndex);
+    public <T extends BaseBean<T>> T getReferencedBean(B bean,int fkIndex)throws RuntimeDaoException;
     
     /**
      * Associates the B object to the T object by fkName field.<br>
@@ -1315,8 +1382,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param beanToSet the T object to associate to the B bean
      * @param fkIndex see also {@link #getReferencedBean(B, int)}
      * @return always beanToSet saved
+     * @throws RuntimeDaoException
      */
-    public <T extends BaseBean<T>> T setReferencedBean(B bean,T beanToSet,int fkIndex);
+    public <T extends BaseBean<T>> T setReferencedBean(B bean,T beanToSet,int fkIndex)throws RuntimeDaoException;
     
     /**
      * Retrieves imported T objects by fkIndex.<br>
@@ -1374,8 +1442,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *        for fl_person_group table:<br>
      *        {@link Constant#FL_PERMIT_FK_PERSON_GROUP_ID},{@link Constant#FL_PERSON_FK_GROUP_ID},{@link Constant#FL_PERSON_GROUP_FK_PARENT}<br>
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public <T extends BaseBean<T>> T[] getImportedBeans(B bean,int ikIndex);
+    public <T extends BaseBean<T>> T[] getImportedBeans(B bean,int ikIndex)throws RuntimeDaoException;
     
     /**
      * Retrieves imported T objects by ikIndex.<br>
@@ -1383,8 +1452,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param bean the B object to use
      * @param ikIndex foreign key name.see also {@link #getImportedBeans(B, int)}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
+     * @throws RuntimeDaoException
      */
-    public <T extends BaseBean<T>> List<T> getImportedBeansAsList(B bean,int ikIndex);
+    public <T extends BaseBean<T>> List<T> getImportedBeansAsList(B bean,int ikIndex)throws RuntimeDaoException;
     
     /**
      * Set the importedBeans associates to the bean by {@code ikIndex}<br>
@@ -1394,8 +1464,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param importedBeans the T object to associate to bean
      * @param ikIndex foreign key name.see also {@link #getImportedBeans(B, int)}
      * @return importedBeans always
+     * @throws RuntimeDaoException
      */
-    public <T extends BaseBean<T>> T[] setImportedBeans(B bean,T[] importedBeans,int ikIndex);
+    public <T extends BaseBean<T>> T[] setImportedBeans(B bean,T[] importedBeans,int ikIndex)throws RuntimeDaoException;
     
     /**
      * Set the importedBeans associates to the bean by fkIndex<br>
@@ -1405,6 +1476,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param importedBeans the T object to associate to bean
      * @param ikIndex foreign key name. see also {@link #getImportedBeans(B, int)}
      * @return importedBeans always
+     * @throws RuntimeDaoException
      */
-    public <T extends BaseBean<T>,C extends Collection<T>> C setImportedBeans(B bean,C importedBeans,int ikIndex);
+    public <T extends BaseBean<T>,C extends Collection<T>> C setImportedBeans(B bean,C importedBeans,int ikIndex)throws RuntimeDaoException;
 }

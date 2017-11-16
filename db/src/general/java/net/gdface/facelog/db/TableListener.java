@@ -8,6 +8,7 @@
 package net.gdface.facelog.db;
 
 import java.util.LinkedHashSet;
+import net.gdface.facelog.db.exception.RuntimeDaoException;
 
 /**
  * Listener that is notified of table changes.
@@ -23,69 +24,75 @@ public interface TableListener<B>{
     public static class Adapter<B> implements TableListener<B>{
 
         @Override
-        public void beforeInsert(B bean) {}
+        public void beforeInsert(B bean)throws RuntimeDaoException {}
 
         @Override
-        public void afterInsert(B bean) {}
+        public void afterInsert(B bean)throws RuntimeDaoException {}
 
         @Override
-        public void beforeUpdate(B bean) {}
+        public void beforeUpdate(B bean)throws RuntimeDaoException {}
 
         @Override
-        public void afterUpdate(B bean) {}
+        public void afterUpdate(B bean)throws RuntimeDaoException {}
 
         @Override
-        public void beforeDelete(B bean) {}
+        public void beforeDelete(B bean)throws RuntimeDaoException {}
 
         @Override
-        public void afterDelete(B bean) {}
+        public void afterDelete(B bean)throws RuntimeDaoException {}
     }
     /**
      * Invoked just before inserting a B record into the database.
      *
      * @param bean the B that is about to be inserted
+     * @throws RuntimeDaoException
      */
-    public void beforeInsert(B bean);
+    public void beforeInsert(B bean)throws RuntimeDaoException;
 
 
     /**
      * Invoked just after a B record is inserted in the database.
      *
      * @param bean the B that was just inserted
+     * @throws RuntimeDaoException
      */
-    public void afterInsert(B bean);
+    public void afterInsert(B bean)throws RuntimeDaoException;
 
 
     /**
      * Invoked just before updating a B record in the database.
      *
      * @param bean the B that is about to be updated
+     * @throws RuntimeDaoException
      */
-    public void beforeUpdate(B bean);
+    public void beforeUpdate(B bean)throws RuntimeDaoException;
 
 
     /**
      * Invoked just after updating a B record in the database.
      *
      * @param bean the B that was just updated
+     * @throws RuntimeDaoException
      */
-    public void afterUpdate(B bean);
+    public void afterUpdate(B bean)throws RuntimeDaoException;
 
 
     /**
      * Invoked just before deleting a B record in the database.
      *
      * @param bean the B that is about to be deleted
+     * @throws RuntimeDaoException
      */
-    public void beforeDelete(B bean);
+    public void beforeDelete(B bean)throws RuntimeDaoException;
 
 
     /**
      * Invoked just after deleting a B record in the database.
      *
      * @param bean the B that was just deleted
+     * @throws RuntimeDaoException
      */
-    public void afterDelete(B bean);
+    public void afterDelete(B bean)throws RuntimeDaoException;
 
     /**
      * listener event
@@ -102,8 +109,9 @@ public interface TableListener<B>{
          * fire current event by  {@link ListenerContainer}
          * @param container
          * @param bean
+         * @throws RuntimeDaoException
          */
-        public <B> void fire(ListenerContainer<B> container,B bean) {
+        public <B> void fire(ListenerContainer<B> container,B bean)throws RuntimeDaoException {
             if(null == container || null == bean){
                 return;
             }
@@ -121,7 +129,7 @@ public interface TableListener<B>{
                 break;
             }
         }
-        public <B extends BaseBean<B>> void fire(TableManager<B > manager,B bean) {
+        public <B extends BaseBean<B>> void fire(TableManager<B > manager,B bean)throws RuntimeDaoException {
             if(null == manager || null == bean){
                 return;
             }
@@ -135,42 +143,42 @@ public interface TableListener<B>{
         }
     
         @Override
-        public void beforeInsert(B bean){
+        public void beforeInsert(B bean)throws RuntimeDaoException{
             for(TableListener<B> listener:listeners){
                 listener.beforeInsert(bean);
             }
         }
     
         @Override
-        public void afterInsert(B bean){
+        public void afterInsert(B bean)throws RuntimeDaoException{
             for(TableListener<B> listener:listeners){
                 listener.afterInsert(bean);
             }
         }
     
         @Override
-        public void beforeUpdate(B bean){
+        public void beforeUpdate(B bean)throws RuntimeDaoException{
             for(TableListener<B> listener:listeners){
                 listener.beforeUpdate(bean);
             }
         }
     
         @Override
-        public void afterUpdate(B bean){
+        public void afterUpdate(B bean)throws RuntimeDaoException{
             for(TableListener<B> listener:listeners){
                 listener.afterUpdate(bean);
             }
         }
     
         @Override
-        public void beforeDelete(B bean){
+        public void beforeDelete(B bean)throws RuntimeDaoException{
             for(TableListener<B> listener:listeners){
                 listener.beforeDelete(bean);
             }
         }
     
         @Override
-        public void afterDelete(B bean){
+        public void afterDelete(B bean)throws RuntimeDaoException{
             for(TableListener<B> listener:listeners){
                 listener.afterDelete(bean);
             }
