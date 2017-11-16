@@ -1,4 +1,4 @@
-namespace java.swift net.gdface.facelog
+namespace java.swift net.gdface.facelog.service
 namespace py gdface.thrift
 namespace java com.gdface
 namespace cpp gdface
@@ -33,7 +33,9 @@ struct FaceBean {
 
 exception ServiceRuntimeException {
   1:  i32 type;
-  2:  string serverStackTraceMessage;
+  2:  string serverMessage;
+  3:  string causeClass;
+  4:  string serverStackTraceMessage;
 }
 
 exception DuplicateReordException {

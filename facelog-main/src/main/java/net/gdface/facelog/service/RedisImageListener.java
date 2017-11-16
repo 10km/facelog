@@ -1,10 +1,12 @@
-package net.gdface.facelog;
+package net.gdface.facelog.service;
 
 import com.google.common.base.Preconditions;
 
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.TableListener;
+import net.gdface.facelog.service.CommonConstant;
+import net.gdface.facelog.service.Dao;
 /**
  * 图像表({@code fl_image})变动侦听器<br>
  * @author guyadong

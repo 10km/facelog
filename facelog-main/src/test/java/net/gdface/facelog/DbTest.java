@@ -7,6 +7,7 @@ import org.junit.Test;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.IDeviceManager;
 import net.gdface.facelog.db.mysql.DeviceManager;
+import net.gdface.facelog.service.TableManagerInitializer;
 
 /**
  * @author guyadong

@@ -24,7 +24,7 @@ import java.util.*;
  * 所以请在执行save时特别注意{@code isNew()}状态</li>
  * </ul>
  * remote implementation of the service IFaceLog(asynchronous implementation)<br>
- * all method comments be copied from {@code net.gdface.facelog.BaseFaceLog.java}<br>
+ * all method comments be copied from {@code net.gdface.facelog.service.BaseFaceLog.java}<br>
  * <b>NOTE 1:</b>methods with 'Generic' suffix support generic type argument for {@code byte[]}.See also {@link GenericUtils#toBytes(Object)}<br>
  * <b>NOTE 2:</b>for each method,{@link List} type input argument must not have {@code null} element.<br>
  * @author guyadong

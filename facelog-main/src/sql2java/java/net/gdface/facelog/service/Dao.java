@@ -5,7 +5,7 @@
 // JDBC driver used at code generation time: com.mysql.jdbc.Driver
 // template: dao.java.vm
 // ______________________________________________________
-package net.gdface.facelog;
+package net.gdface.facelog.service;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;

@@ -1,4 +1,4 @@
-package net.gdface.facelog;
+package net.gdface.facelog.service;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -30,6 +30,8 @@ import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.StoreBean;
+import net.gdface.facelog.service.DuplicateReordException;
+import net.gdface.facelog.service.ServiceRuntimeException;
 import net.gdface.image.LazyImage;
 import net.gdface.image.NotImage;
 import net.gdface.image.UnsupportedFormat;

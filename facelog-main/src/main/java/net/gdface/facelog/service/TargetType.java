@@ -1,4 +1,4 @@
-package net.gdface.facelog;
+package net.gdface.facelog.service;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

@@ -10,6 +10,8 @@ import com.facebook.swift.service.metadata.ThriftMethodMetadata;
 import com.facebook.swift.service.metadata.ThriftServiceMetadata;
 import com.google.common.base.Preconditions;
 
+import net.gdface.facelog.service.BaseFaceLog;
+
 /**
  * @author guyadong
  *

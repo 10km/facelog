@@ -7,6 +7,7 @@ import com.facebook.swift.service.ThriftMethod;
 import com.facebook.swift.service.ThriftService;
 
 import net.gdface.facelog.db.DeviceBean;
+import net.gdface.facelog.service.ServiceRuntimeException;
 
 /**
  * @author guyadong

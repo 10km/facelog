@@ -3,8 +3,6 @@ package net.gdface.facelog.service;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import net.gdface.facelog.FaceLogImpl;
-
 /**
  * @author guyadong
  *

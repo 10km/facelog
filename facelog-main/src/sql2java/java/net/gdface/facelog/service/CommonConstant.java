@@ -5,7 +5,7 @@
 // JDBC driver used at code generation time: com.mysql.jdbc.Driver
 // template: common.constant.java.vm
 // ______________________________________________________
-package net.gdface.facelog;
+package net.gdface.facelog.service;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -65,9 +65,13 @@ public interface CommonConstant {
      * 服务异常类型定义
      */
     public static enum ExceptionType{
-        /** unknown type*/
-        UNKNOWN,
-        /** database access exception type*/
-        DAO
+        /** unclassified exception type*/
+        UNCLASSIFIED,
+        /** database access exception type */
+        DAO,
+        /** RuntimeException*/
+        RUNTIME,
+        /** IOException */
+        IOERROR
     }
 }
