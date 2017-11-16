@@ -16,18 +16,9 @@ import com.google.common.base.Preconditions;
  */
 @ThriftStruct
 public final class ServiceRuntimeException extends Exception{
-	/**
-	 * 服务异常类型定义
-	 */
-	public static enum ExceptionType{
-		/** unknown type*/
-		UNKNOWN,
-		/** database access exception type*/
-		DAO
-	}
 	private static final long serialVersionUID = 1L;
 	/** 异常类型 */
-	private ExceptionType type = ExceptionType.UNKNOWN;
+	private int type = 0;
 	/**
 	 * 服务器端错误堆栈信息
 	 */
@@ -44,7 +35,7 @@ public final class ServiceRuntimeException extends Exception{
 	/**
 	 * @param cause
 	 */
-	public ServiceRuntimeException(ExceptionType type,Throwable cause) {
+	public ServiceRuntimeException(int type,Throwable cause) {
 		this(cause);
 		this.type = type;
 	}
@@ -80,11 +71,11 @@ public final class ServiceRuntimeException extends Exception{
 	}
 	/** 返回异常类型 */
 	@ThriftField(1)
-	public ExceptionType getType() {
+	public int getType() {
 		return type;
 	}
 	@ThriftField
-	public void setType(ExceptionType type) {
+	public void setType(int type) {
 		this.type = type;
 	}
 	/**

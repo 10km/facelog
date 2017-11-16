@@ -56,8 +56,18 @@ public interface CommonConstant {
     
     /** 用于SQL语句的时间戳格式转换对象 */
     public static final ThreadLocal<SimpleDateFormat> TIMESTAMP_FORMATTER = new ThreadLocal<SimpleDateFormat>(){
-		@Override
-		protected SimpleDateFormat initialValue() {
-			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		}};
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        }};
+        
+    /**
+     * 服务异常类型定义
+     */
+    public static enum ExceptionType{
+        /** unknown type*/
+        UNKNOWN,
+        /** database access exception type*/
+        DAO
+    }
 }
