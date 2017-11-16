@@ -7,29 +7,44 @@
 // ______________________________________________________
 package net.gdface.facelog.service;
 
+import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftStruct;
 
 /**
- * 记录已存在异常
+ * duplicated record exception
  * @author guyadong
  *
  */
 @ThriftStruct
 public final class DuplicateReordException extends Exception {
 	private static final long serialVersionUID = 5368342551644905292L;
-
+	private String message;
+	
 	public DuplicateReordException() {
 	}
 
 	public DuplicateReordException(String message) {
 		super(message);
+		this.message = super.getMessage();
 	}
 
 	public DuplicateReordException(Throwable cause) {
 		super(cause);
+		this.message = super.getMessage();
 	}
 
 	public DuplicateReordException(String message, Throwable cause) {
 		super(message, cause);
+		this.message = super.getMessage();
+	}
+
+	@Override
+	@ThriftField(1)
+	public String getMessage() {
+		return message;
+	}
+	@ThriftField
+	public void setMessage(String message) {
+		this.message = message;
 	}
 }

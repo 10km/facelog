@@ -12,5 +12,11 @@ public final class DuplicateReordException extends Exception
     public DuplicateReordException() {
     }
 
+    private String message;
 
+    @ThriftField(value=1, name="message", requiredness=Requiredness.NONE)
+    public String getMessage() { return message; }
+
+    @ThriftField
+    public void setMessage(final String message) { this.message = message; }
 }

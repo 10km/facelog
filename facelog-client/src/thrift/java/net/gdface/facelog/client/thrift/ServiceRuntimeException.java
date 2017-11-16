@@ -20,13 +20,13 @@ public final class ServiceRuntimeException extends Exception
     @ThriftField
     public void setType(final int type) { this.type = type; }
 
-    private String serverMessage;
+    private String serviceMessage;
 
-    @ThriftField(value=2, name="serverMessage", requiredness=Requiredness.NONE)
-    public String getServerMessage() { return serverMessage; }
+    @ThriftField(value=2, name="serviceMessage", requiredness=Requiredness.NONE)
+    public String getServiceMessage() { return serviceMessage; }
 
     @ThriftField
-    public void setServerMessage(final String serverMessage) { this.serverMessage = serverMessage; }
+    public void setServiceMessage(final String serviceMessage) { this.serviceMessage = serviceMessage; }
 
     private String causeClass;
 
@@ -36,11 +36,11 @@ public final class ServiceRuntimeException extends Exception
     @ThriftField
     public void setCauseClass(final String causeClass) { this.causeClass = causeClass; }
 
-    private String serverStackTraceMessage;
+    private String serviceStackTraceMessage;
 
-    @ThriftField(value=4, name="serverStackTraceMessage", requiredness=Requiredness.NONE)
-    public String getServerStackTraceMessage() { return serverStackTraceMessage; }
+    @ThriftField(value=4, name="serviceStackTraceMessage", requiredness=Requiredness.NONE)
+    public String getServiceStackTraceMessage() { return serviceStackTraceMessage; }
 
     @ThriftField
-    public void setServerStackTraceMessage(final String serverStackTraceMessage) { this.serverStackTraceMessage = serverStackTraceMessage; }
+    public void setServiceStackTraceMessage(final String serviceStackTraceMessage) { this.serviceStackTraceMessage = serviceStackTraceMessage; }
 }

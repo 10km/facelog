@@ -33,7 +33,7 @@ public class ClientTest implements CommonConstant {
 			PersonBean person = facelogClient.getPerson(newPerson.getId());
 			logger.info("person = {}", person.toString());
 		} catch(ServiceRuntimeException e){
-			e.printServerStackTrace();
+			e.printServiceStackTrace();
 		}catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
@@ -48,7 +48,7 @@ public class ClientTest implements CommonConstant {
 				System.out.println(id);
 			}
 		}catch(ServiceRuntimeException e){
-			e.printServerStackTrace();
+			e.printServiceStackTrace();
 		}catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}

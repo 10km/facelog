@@ -33,12 +33,13 @@ struct FaceBean {
 
 exception ServiceRuntimeException {
   1:  i32 type;
-  2:  string serverMessage;
+  2:  string serviceMessage;
   3:  string causeClass;
-  4:  string serverStackTraceMessage;
+  4:  string serviceStackTraceMessage;
 }
 
 exception DuplicateReordException {
+  1:  string message;
 }
 
 struct FeatureBean {
