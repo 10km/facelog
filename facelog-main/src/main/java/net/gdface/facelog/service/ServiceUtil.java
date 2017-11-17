@@ -18,6 +18,9 @@ public class ServiceUtil {
 	 */
 	public static SocketAddress niftyClientAddress(){
 		RequestContext request = RequestContexts.getCurrentContext();
+		if(null == request){
+			return null;
+		}
 		ConnectionContext connect = request.getConnectionContext();
 		return connect.getRemoteAddress();	
 	}
