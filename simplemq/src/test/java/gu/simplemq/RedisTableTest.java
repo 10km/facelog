@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.google.common.base.Function;
 
-import gu.simplemq.IKeyHelper;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisTable;
 /**
@@ -109,9 +109,9 @@ public class RedisTableTest {
 		group.addUser(guestUser);
 		group.addUser(rootUser);
 		RedisTable<Group> table = RedisFactory.getTable(Group.class);
-		table.setKeyHelper(new IKeyHelper<Group>(){
+		table.setKeyHelper(new Function<Group,String>(){
 			@Override
-			public String returnKey(Group v) {
+			public String apply(Group v) {
 				return v.getId().toString();
 			}});
 		table.set(group, false);

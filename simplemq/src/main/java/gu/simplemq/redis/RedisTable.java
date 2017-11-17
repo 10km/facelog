@@ -317,7 +317,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 				// types 为 空或 null时,返回所有 field
 				fieldHash = jedis.hgetAll(key);
 			}else{
-				String[] fields = types.keySet().toArray(new String[0]);
+				String[] fields = types.keySet().toArray(new String[types.size()]);
 				List<String> values = jedis.hmget(key, fields);
 				fieldHash = new LinkedHashMap<String,String>();
 				for(int i = 0; i < fields.length ; ++i){
@@ -332,7 +332,9 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	
 	@Override
 	public boolean containsKey(String key) {
-		checkArgument(!Strings.isNullOrEmpty(key),"key is null or empty");
+		if(Strings.isNullOrEmpty(key)){
+			return false;
+		}
 		key = wrapKey(key);
 		Jedis jedis = pool.apply();
 		try {
