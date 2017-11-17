@@ -72,6 +72,13 @@ public class Server {
                 .setWorkerThreadExecutor(this.executor)
                 .build();
         server = new ThriftServer(serverConfig, serverDef);
+        // Arrange to stop the server at shutdown
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                server.close();
+            }
+        });
    }
 
     public void stop() {
