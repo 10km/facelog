@@ -19,9 +19,7 @@ import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.util.FieldInfo;
-
 import gu.simplemq.json.ByteBufferCodec;
-import gu.simplemq.utils.TypeUtils;
 
 /**
  * @author guyadong
@@ -271,26 +269,26 @@ public class FastjsonTest {
 	}
 	@Test
 	public void testComputeGetters(){
-		Type type = new TypeUtils<GenBean<Date>>(){}.getType();
-		Class<?> clazz = getDeclaredClass(type);
+		Type type = new TypeReference<GenBean<Date>>(){}.getType();
+		Class<?> clazz = getRawClass(type);
 		System.out.println(clazz.getName());
 		List<FieldInfo> fieldInfo = com.alibaba.fastjson.util.TypeUtils.computeGetters(clazz, null);
 		for(FieldInfo field:fieldInfo){
 			System.out.printf("name %s %s\n",field.name,field.fieldType.toString());
 		}
 	}
-	public Class<?> getDeclaredClass(Type type){		
+	public Class<?> getRawClass(Type type){		
 		if(type instanceof Class<?>){
 			return (Class<?>)type;
 		}
 		else if ( type instanceof ParameterizedType){
-			return getDeclaredClass(((ParameterizedType)type).getRawType());
+			return getRawClass(((ParameterizedType)type).getRawType());
 		}
 		return null;
 	}
 	@Test
 	public void testType(){
-		Type type = new TypeUtils<Map<Date,List<String>>>(){}.getType();
+		Type type = new TypeReference<Map<Date,List<String>>>(){}.getType();
 		String typeString = JSON.toJSONString(type);
 		System.out.println(typeString);
 		 Object dObj = JSON.parse(typeString);

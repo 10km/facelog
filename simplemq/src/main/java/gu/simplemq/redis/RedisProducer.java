@@ -4,11 +4,12 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.common.reflect.TypeToken;
+
 import gu.simplemq.Channel;
 import gu.simplemq.IProducer;
 import gu.simplemq.json.BaseJsonEncoder;
 import gu.simplemq.utils.CommonUtils;
-import gu.simplemq.utils.TypeUtils;
 import redis.clients.jedis.Jedis;
 
 /**
@@ -91,7 +92,7 @@ public class RedisProducer implements IRedisComponent, IProducer{
 	@SuppressWarnings("unchecked")
 	public <T> void produce(Channel<T> channel, boolean offerLast, Collection<T>c) {
 		if(null != c ) {
-			produce(channel,offerLast, c.toArray((T[]) Array.newInstance(TypeUtils.getRawClass(channel.type), 0)));
+			produce(channel,offerLast, c.toArray((T[]) Array.newInstance(TypeToken.of(channel.type).getRawType(), 0)));
 		}
 	}
 	@Override

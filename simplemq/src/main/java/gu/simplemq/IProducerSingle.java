@@ -5,7 +5,7 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.concurrent.BlockingDeque;
 
-import gu.simplemq.utils.TypeUtils;
+import com.google.common.reflect.TypeToken;
 
 /**
  * 生产者模型接口(单队列)
@@ -22,7 +22,7 @@ public interface IProducerSingle<T> {
 	    public AbstractHandler(Type type) {
 			super();
 			this.type = type;
-			this.rawType = TypeUtils.getRawClass(type);
+			this.rawType = TypeToken.of(type).getRawType();
 		}
 		@Override
 		public int produce(@SuppressWarnings("unchecked") T...array){
