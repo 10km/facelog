@@ -17,6 +17,8 @@ import java.util.Objects;
 import java.util.concurrent.Callable;
 
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 
 import net.gdface.facelog.db.IDeviceManager;
@@ -149,28 +151,54 @@ class Dao implements CommonConstant {
         return count;
     }
     //3-5
-    /**
-     * unwrap primary key from {@link DeviceBean}
-     * @param {@link DeviceBean} collection
-     * @return primary key list 
-     */
-    protected List<Integer> daoToPrimaryKeyListFromDevices(Collection<DeviceBean> beans){
-        return getDeviceManager().toPrimaryKeyList(beans);
-    }
-    //3-7
     /** transformer : DeviceBean to fl_device.id */ 
     protected final Function<DeviceBean,Integer> daoCastDeviceToPk = new Function<DeviceBean,Integer>(){
             @Override
             public Integer apply(DeviceBean input) {
                 return null == input ? null : input.getId();
             }};
-    //3-8
+    //3-6
     /** transformer : fl_device.id to DeviceBean */ 
     protected final Function<Integer,DeviceBean> daoCastDeviceFromPk = new Function<Integer,DeviceBean>(){
             @Override
             public DeviceBean apply(Integer input) {
                 return daoGetDevice(input);
             }};
+    //3-8
+    /**
+     * unwrap primary key from {@link DeviceBean}<br>
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     *
+     * @param {@link DeviceBean} collection
+     * @return primary key list
+     * @see {@link IDeviceManager#toPrimaryKeyList(Collection)}
+     */
+    protected List<Integer> daoToPrimaryKeyListFromDevices(Collection<DeviceBean> beans){
+        if (null == beans){
+            return ImmutableList.of();
+        }else{
+            return getDeviceManager().toPrimaryKeyList(beans);
+        }
+    }
+    //3-9
+    /**
+     * unwrap primary key from {@link DeviceBean}<br>
+     *
+     * the returned list is a transformed view of {@code beans}; 
+     * changes to {@code beans} will be reflected in the returned list and vice versa. 
+     *
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     * @param {@link DeviceBean} list
+     * @return primary key list 
+     * @see {@link Lists$#transform(List, Function)
+     */
+    protected List<Integer> daoToPrimaryKeyListFromDevices(List<DeviceBean> beans){
+    	if(null == beans){
+    		return ImmutableList.of();
+    	}else{
+    		return Lists.transform(beans,daoCastDeviceToPk);
+    	}
+    }
     //4
     /** 
      *　判断主键指定的记录是否存在
@@ -230,9 +258,7 @@ class Dao implements CommonConstant {
         int count =0;
         if(null != beans){        
             for(DeviceBean bean:beans){
-                if(null != bean){
-                    count += daoDeleteDevice(bean.getId());
-                }
+                count += daoDeleteDevice(bean);
             }
         }
         return count;
@@ -256,19 +282,19 @@ class Dao implements CommonConstant {
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
-     * @param idOfDevice 设备id 
+     * @param id 设备id 
      * @see {@link IDeviceManager#checkDuplicate(DeviceBean)}
      * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code idOfDevice} 
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException
      */
-    protected Integer daoCheckDuplicateDevice(Integer idOfDevice)
+    protected Integer daoCheckDuplicateDevice(Integer id)
                     throws RuntimeDaoException,DuplicateRecordException{
-        if(getDeviceManager().existsPrimaryKey(idOfDevice)){
+        if(getDeviceManager().existsPrimaryKey(id)){
             throw new DuplicateRecordException();
         }
-        return idOfDevice;
+        return id;
     }
     //8
     /**
@@ -603,28 +629,54 @@ class Dao implements CommonConstant {
         return count;
     }
     //3-5
-    /**
-     * unwrap primary key from {@link DeviceGroupBean}
-     * @param {@link DeviceGroupBean} collection
-     * @return primary key list 
-     */
-    protected List<Integer> daoToPrimaryKeyListFromDeviceGroups(Collection<DeviceGroupBean> beans){
-        return getDeviceGroupManager().toPrimaryKeyList(beans);
-    }
-    //3-7
     /** transformer : DeviceGroupBean to fl_device_group.id */ 
     protected final Function<DeviceGroupBean,Integer> daoCastDeviceGroupToPk = new Function<DeviceGroupBean,Integer>(){
             @Override
             public Integer apply(DeviceGroupBean input) {
                 return null == input ? null : input.getId();
             }};
-    //3-8
+    //3-6
     /** transformer : fl_device_group.id to DeviceGroupBean */ 
     protected final Function<Integer,DeviceGroupBean> daoCastDeviceGroupFromPk = new Function<Integer,DeviceGroupBean>(){
             @Override
             public DeviceGroupBean apply(Integer input) {
                 return daoGetDeviceGroup(input);
             }};
+    //3-8
+    /**
+     * unwrap primary key from {@link DeviceGroupBean}<br>
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     *
+     * @param {@link DeviceGroupBean} collection
+     * @return primary key list
+     * @see {@link IDeviceGroupManager#toPrimaryKeyList(Collection)}
+     */
+    protected List<Integer> daoToPrimaryKeyListFromDeviceGroups(Collection<DeviceGroupBean> beans){
+        if (null == beans){
+            return ImmutableList.of();
+        }else{
+            return getDeviceGroupManager().toPrimaryKeyList(beans);
+        }
+    }
+    //3-9
+    /**
+     * unwrap primary key from {@link DeviceGroupBean}<br>
+     *
+     * the returned list is a transformed view of {@code beans}; 
+     * changes to {@code beans} will be reflected in the returned list and vice versa. 
+     *
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     * @param {@link DeviceGroupBean} list
+     * @return primary key list 
+     * @see {@link Lists$#transform(List, Function)
+     */
+    protected List<Integer> daoToPrimaryKeyListFromDeviceGroups(List<DeviceGroupBean> beans){
+    	if(null == beans){
+    		return ImmutableList.of();
+    	}else{
+    		return Lists.transform(beans,daoCastDeviceGroupToPk);
+    	}
+    }
     //4
     /** 
      *　判断主键指定的记录是否存在
@@ -684,9 +736,7 @@ class Dao implements CommonConstant {
         int count =0;
         if(null != beans){        
             for(DeviceGroupBean bean:beans){
-                if(null != bean){
-                    count += daoDeleteDeviceGroup(bean.getId());
-                }
+                count += daoDeleteDeviceGroup(bean);
             }
         }
         return count;
@@ -710,19 +760,19 @@ class Dao implements CommonConstant {
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
-     * @param idOfDeviceGroup 设备组id 
+     * @param id 设备组id 
      * @see {@link IDeviceGroupManager#checkDuplicate(DeviceGroupBean)}
      * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code idOfDeviceGroup} 
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException
      */
-    protected Integer daoCheckDuplicateDeviceGroup(Integer idOfDeviceGroup)
+    protected Integer daoCheckDuplicateDeviceGroup(Integer id)
                     throws RuntimeDaoException,DuplicateRecordException{
-        if(getDeviceGroupManager().existsPrimaryKey(idOfDeviceGroup)){
+        if(getDeviceGroupManager().existsPrimaryKey(id)){
             throw new DuplicateRecordException();
         }
-        return idOfDeviceGroup;
+        return id;
     }
     //8
     /**
@@ -1023,28 +1073,54 @@ class Dao implements CommonConstant {
         return count;
     }
     //3-5
-    /**
-     * unwrap primary key from {@link PersonBean}
-     * @param {@link PersonBean} collection
-     * @return primary key list 
-     */
-    protected List<Integer> daoToPrimaryKeyListFromPersons(Collection<PersonBean> beans){
-        return getPersonManager().toPrimaryKeyList(beans);
-    }
-    //3-7
     /** transformer : PersonBean to fl_person.id */ 
     protected final Function<PersonBean,Integer> daoCastPersonToPk = new Function<PersonBean,Integer>(){
             @Override
             public Integer apply(PersonBean input) {
                 return null == input ? null : input.getId();
             }};
-    //3-8
+    //3-6
     /** transformer : fl_person.id to PersonBean */ 
     protected final Function<Integer,PersonBean> daoCastPersonFromPk = new Function<Integer,PersonBean>(){
             @Override
             public PersonBean apply(Integer input) {
                 return daoGetPerson(input);
             }};
+    //3-8
+    /**
+     * unwrap primary key from {@link PersonBean}<br>
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     *
+     * @param {@link PersonBean} collection
+     * @return primary key list
+     * @see {@link IPersonManager#toPrimaryKeyList(Collection)}
+     */
+    protected List<Integer> daoToPrimaryKeyListFromPersons(Collection<PersonBean> beans){
+        if (null == beans){
+            return ImmutableList.of();
+        }else{
+            return getPersonManager().toPrimaryKeyList(beans);
+        }
+    }
+    //3-9
+    /**
+     * unwrap primary key from {@link PersonBean}<br>
+     *
+     * the returned list is a transformed view of {@code beans}; 
+     * changes to {@code beans} will be reflected in the returned list and vice versa. 
+     *
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     * @param {@link PersonBean} list
+     * @return primary key list 
+     * @see {@link Lists$#transform(List, Function)
+     */
+    protected List<Integer> daoToPrimaryKeyListFromPersons(List<PersonBean> beans){
+    	if(null == beans){
+    		return ImmutableList.of();
+    	}else{
+    		return Lists.transform(beans,daoCastPersonToPk);
+    	}
+    }
     //4
     /** 
      *　判断主键指定的记录是否存在
@@ -1104,9 +1180,7 @@ class Dao implements CommonConstant {
         int count =0;
         if(null != beans){        
             for(PersonBean bean:beans){
-                if(null != bean){
-                    count += daoDeletePerson(bean.getId());
-                }
+                count += daoDeletePerson(bean);
             }
         }
         return count;
@@ -1130,19 +1204,19 @@ class Dao implements CommonConstant {
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
-     * @param idOfPerson 用户id 
+     * @param id 用户id 
      * @see {@link IPersonManager#checkDuplicate(PersonBean)}
      * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code idOfPerson} 
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException
      */
-    protected Integer daoCheckDuplicatePerson(Integer idOfPerson)
+    protected Integer daoCheckDuplicatePerson(Integer id)
                     throws RuntimeDaoException,DuplicateRecordException{
-        if(getPersonManager().existsPrimaryKey(idOfPerson)){
+        if(getPersonManager().existsPrimaryKey(id)){
             throw new DuplicateRecordException();
         }
-        return idOfPerson;
+        return id;
     }
     //8
     /**
@@ -1510,28 +1584,54 @@ class Dao implements CommonConstant {
         return count;
     }
     //3-5
-    /**
-     * unwrap primary key from {@link PersonGroupBean}
-     * @param {@link PersonGroupBean} collection
-     * @return primary key list 
-     */
-    protected List<Integer> daoToPrimaryKeyListFromPersonGroups(Collection<PersonGroupBean> beans){
-        return getPersonGroupManager().toPrimaryKeyList(beans);
-    }
-    //3-7
     /** transformer : PersonGroupBean to fl_person_group.id */ 
     protected final Function<PersonGroupBean,Integer> daoCastPersonGroupToPk = new Function<PersonGroupBean,Integer>(){
             @Override
             public Integer apply(PersonGroupBean input) {
                 return null == input ? null : input.getId();
             }};
-    //3-8
+    //3-6
     /** transformer : fl_person_group.id to PersonGroupBean */ 
     protected final Function<Integer,PersonGroupBean> daoCastPersonGroupFromPk = new Function<Integer,PersonGroupBean>(){
             @Override
             public PersonGroupBean apply(Integer input) {
                 return daoGetPersonGroup(input);
             }};
+    //3-8
+    /**
+     * unwrap primary key from {@link PersonGroupBean}<br>
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     *
+     * @param {@link PersonGroupBean} collection
+     * @return primary key list
+     * @see {@link IPersonGroupManager#toPrimaryKeyList(Collection)}
+     */
+    protected List<Integer> daoToPrimaryKeyListFromPersonGroups(Collection<PersonGroupBean> beans){
+        if (null == beans){
+            return ImmutableList.of();
+        }else{
+            return getPersonGroupManager().toPrimaryKeyList(beans);
+        }
+    }
+    //3-9
+    /**
+     * unwrap primary key from {@link PersonGroupBean}<br>
+     *
+     * the returned list is a transformed view of {@code beans}; 
+     * changes to {@code beans} will be reflected in the returned list and vice versa. 
+     *
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     * @param {@link PersonGroupBean} list
+     * @return primary key list 
+     * @see {@link Lists$#transform(List, Function)
+     */
+    protected List<Integer> daoToPrimaryKeyListFromPersonGroups(List<PersonGroupBean> beans){
+    	if(null == beans){
+    		return ImmutableList.of();
+    	}else{
+    		return Lists.transform(beans,daoCastPersonGroupToPk);
+    	}
+    }
     //4
     /** 
      *　判断主键指定的记录是否存在
@@ -1591,9 +1691,7 @@ class Dao implements CommonConstant {
         int count =0;
         if(null != beans){        
             for(PersonGroupBean bean:beans){
-                if(null != bean){
-                    count += daoDeletePersonGroup(bean.getId());
-                }
+                count += daoDeletePersonGroup(bean);
             }
         }
         return count;
@@ -1617,19 +1715,19 @@ class Dao implements CommonConstant {
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
-     * @param idOfPersonGroup 用户组id 
+     * @param id 用户组id 
      * @see {@link IPersonGroupManager#checkDuplicate(PersonGroupBean)}
      * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code idOfPersonGroup} 
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException
      */
-    protected Integer daoCheckDuplicatePersonGroup(Integer idOfPersonGroup)
+    protected Integer daoCheckDuplicatePersonGroup(Integer id)
                     throws RuntimeDaoException,DuplicateRecordException{
-        if(getPersonGroupManager().existsPrimaryKey(idOfPersonGroup)){
+        if(getPersonGroupManager().existsPrimaryKey(id)){
             throw new DuplicateRecordException();
         }
-        return idOfPersonGroup;
+        return id;
     }
     //8
     /**
@@ -1930,28 +2028,54 @@ class Dao implements CommonConstant {
         return count;
     }
     //3-5
-    /**
-     * unwrap primary key from {@link FaceBean}
-     * @param {@link FaceBean} collection
-     * @return primary key list 
-     */
-    protected List<Integer> daoToPrimaryKeyListFromFaces(Collection<FaceBean> beans){
-        return getFaceManager().toPrimaryKeyList(beans);
-    }
-    //3-7
     /** transformer : FaceBean to fl_face.id */ 
     protected final Function<FaceBean,Integer> daoCastFaceToPk = new Function<FaceBean,Integer>(){
             @Override
             public Integer apply(FaceBean input) {
                 return null == input ? null : input.getId();
             }};
-    //3-8
+    //3-6
     /** transformer : fl_face.id to FaceBean */ 
     protected final Function<Integer,FaceBean> daoCastFaceFromPk = new Function<Integer,FaceBean>(){
             @Override
             public FaceBean apply(Integer input) {
                 return daoGetFace(input);
             }};
+    //3-8
+    /**
+     * unwrap primary key from {@link FaceBean}<br>
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     *
+     * @param {@link FaceBean} collection
+     * @return primary key list
+     * @see {@link IFaceManager#toPrimaryKeyList(Collection)}
+     */
+    protected List<Integer> daoToPrimaryKeyListFromFaces(Collection<FaceBean> beans){
+        if (null == beans){
+            return ImmutableList.of();
+        }else{
+            return getFaceManager().toPrimaryKeyList(beans);
+        }
+    }
+    //3-9
+    /**
+     * unwrap primary key from {@link FaceBean}<br>
+     *
+     * the returned list is a transformed view of {@code beans}; 
+     * changes to {@code beans} will be reflected in the returned list and vice versa. 
+     *
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     * @param {@link FaceBean} list
+     * @return primary key list 
+     * @see {@link Lists$#transform(List, Function)
+     */
+    protected List<Integer> daoToPrimaryKeyListFromFaces(List<FaceBean> beans){
+    	if(null == beans){
+    		return ImmutableList.of();
+    	}else{
+    		return Lists.transform(beans,daoCastFaceToPk);
+    	}
+    }
     //4
     /** 
      *　判断主键指定的记录是否存在
@@ -2011,9 +2135,7 @@ class Dao implements CommonConstant {
         int count =0;
         if(null != beans){        
             for(FaceBean bean:beans){
-                if(null != bean){
-                    count += daoDeleteFace(bean.getId());
-                }
+                count += daoDeleteFace(bean);
             }
         }
         return count;
@@ -2037,19 +2159,19 @@ class Dao implements CommonConstant {
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
-     * @param idOfFace 主键 
+     * @param id 主键 
      * @see {@link IFaceManager#checkDuplicate(FaceBean)}
      * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code idOfFace} 
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException
      */
-    protected Integer daoCheckDuplicateFace(Integer idOfFace)
+    protected Integer daoCheckDuplicateFace(Integer id)
                     throws RuntimeDaoException,DuplicateRecordException{
-        if(getFaceManager().existsPrimaryKey(idOfFace)){
+        if(getFaceManager().existsPrimaryKey(id)){
             throw new DuplicateRecordException();
         }
-        return idOfFace;
+        return id;
     }
     //8
     /**
@@ -2335,28 +2457,54 @@ class Dao implements CommonConstant {
         return count;
     }
     //3-5
-    /**
-     * unwrap primary key from {@link FeatureBean}
-     * @param {@link FeatureBean} collection
-     * @return primary key list 
-     */
-    protected List<String> daoToPrimaryKeyListFromFeatures(Collection<FeatureBean> beans){
-        return getFeatureManager().toPrimaryKeyList(beans);
-    }
-    //3-7
     /** transformer : FeatureBean to fl_feature.md5 */ 
     protected final Function<FeatureBean,String> daoCastFeatureToPk = new Function<FeatureBean,String>(){
             @Override
             public String apply(FeatureBean input) {
                 return null == input ? null : input.getMd5();
             }};
-    //3-8
+    //3-6
     /** transformer : fl_feature.md5 to FeatureBean */ 
     protected final Function<String,FeatureBean> daoCastFeatureFromPk = new Function<String,FeatureBean>(){
             @Override
             public FeatureBean apply(String input) {
                 return daoGetFeature(input);
             }};
+    //3-8
+    /**
+     * unwrap primary key from {@link FeatureBean}<br>
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     *
+     * @param {@link FeatureBean} collection
+     * @return primary key list
+     * @see {@link IFeatureManager#toPrimaryKeyList(Collection)}
+     */
+    protected List<String> daoToPrimaryKeyListFromFeatures(Collection<FeatureBean> beans){
+        if (null == beans){
+            return ImmutableList.of();
+        }else{
+            return getFeatureManager().toPrimaryKeyList(beans);
+        }
+    }
+    //3-9
+    /**
+     * unwrap primary key from {@link FeatureBean}<br>
+     *
+     * the returned list is a transformed view of {@code beans}; 
+     * changes to {@code beans} will be reflected in the returned list and vice versa. 
+     *
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     * @param {@link FeatureBean} list
+     * @return primary key list 
+     * @see {@link Lists$#transform(List, Function)
+     */
+    protected List<String> daoToPrimaryKeyListFromFeatures(List<FeatureBean> beans){
+    	if(null == beans){
+    		return ImmutableList.of();
+    	}else{
+    		return Lists.transform(beans,daoCastFeatureToPk);
+    	}
+    }
     //4
     /** 
      *　判断主键指定的记录是否存在
@@ -2416,9 +2564,7 @@ class Dao implements CommonConstant {
         int count =0;
         if(null != beans){        
             for(FeatureBean bean:beans){
-                if(null != bean){
-                    count += daoDeleteFeature(bean.getMd5());
-                }
+                count += daoDeleteFeature(bean);
             }
         }
         return count;
@@ -2442,19 +2588,19 @@ class Dao implements CommonConstant {
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
-     * @param md5OfFeature 主键,特征码md5校验码 
+     * @param md5 主键,特征码md5校验码 
      * @see {@link IFeatureManager#checkDuplicate(FeatureBean)}
      * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code md5OfFeature} 
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException
      */
-    protected String daoCheckDuplicateFeature(String md5OfFeature)
+    protected String daoCheckDuplicateFeature(String md5)
                     throws RuntimeDaoException,DuplicateRecordException{
-        if(getFeatureManager().existsPrimaryKey(md5OfFeature)){
+        if(getFeatureManager().existsPrimaryKey(md5)){
             throw new DuplicateRecordException();
         }
-        return md5OfFeature;
+        return md5;
     }
     //8
     /**
@@ -2733,28 +2879,54 @@ class Dao implements CommonConstant {
         return count;
     }
     //3-5
-    /**
-     * unwrap primary key from {@link ImageBean}
-     * @param {@link ImageBean} collection
-     * @return primary key list 
-     */
-    protected List<String> daoToPrimaryKeyListFromImages(Collection<ImageBean> beans){
-        return getImageManager().toPrimaryKeyList(beans);
-    }
-    //3-7
     /** transformer : ImageBean to fl_image.md5 */ 
     protected final Function<ImageBean,String> daoCastImageToPk = new Function<ImageBean,String>(){
             @Override
             public String apply(ImageBean input) {
                 return null == input ? null : input.getMd5();
             }};
-    //3-8
+    //3-6
     /** transformer : fl_image.md5 to ImageBean */ 
     protected final Function<String,ImageBean> daoCastImageFromPk = new Function<String,ImageBean>(){
             @Override
             public ImageBean apply(String input) {
                 return daoGetImage(input);
             }};
+    //3-8
+    /**
+     * unwrap primary key from {@link ImageBean}<br>
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     *
+     * @param {@link ImageBean} collection
+     * @return primary key list
+     * @see {@link IImageManager#toPrimaryKeyList(Collection)}
+     */
+    protected List<String> daoToPrimaryKeyListFromImages(Collection<ImageBean> beans){
+        if (null == beans){
+            return ImmutableList.of();
+        }else{
+            return getImageManager().toPrimaryKeyList(beans);
+        }
+    }
+    //3-9
+    /**
+     * unwrap primary key from {@link ImageBean}<br>
+     *
+     * the returned list is a transformed view of {@code beans}; 
+     * changes to {@code beans} will be reflected in the returned list and vice versa. 
+     *
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     * @param {@link ImageBean} list
+     * @return primary key list 
+     * @see {@link Lists$#transform(List, Function)
+     */
+    protected List<String> daoToPrimaryKeyListFromImages(List<ImageBean> beans){
+    	if(null == beans){
+    		return ImmutableList.of();
+    	}else{
+    		return Lists.transform(beans,daoCastImageToPk);
+    	}
+    }
     //4
     /** 
      *　判断主键指定的记录是否存在
@@ -2814,9 +2986,7 @@ class Dao implements CommonConstant {
         int count =0;
         if(null != beans){        
             for(ImageBean bean:beans){
-                if(null != bean){
-                    count += daoDeleteImage(bean.getMd5());
-                }
+                count += daoDeleteImage(bean);
             }
         }
         return count;
@@ -2840,19 +3010,19 @@ class Dao implements CommonConstant {
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
-     * @param md5OfImage 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
+     * @param md5 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
      * @see {@link IImageManager#checkDuplicate(ImageBean)}
      * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code md5OfImage} 
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException
      */
-    protected String daoCheckDuplicateImage(String md5OfImage)
+    protected String daoCheckDuplicateImage(String md5)
                     throws RuntimeDaoException,DuplicateRecordException{
-        if(getImageManager().existsPrimaryKey(md5OfImage)){
+        if(getImageManager().existsPrimaryKey(md5)){
             throw new DuplicateRecordException();
         }
-        return md5OfImage;
+        return md5;
     }
     //8
     /**
@@ -3088,28 +3258,54 @@ class Dao implements CommonConstant {
         return count;
     }
     //3-5
-    /**
-     * unwrap primary key from {@link LogBean}
-     * @param {@link LogBean} collection
-     * @return primary key list 
-     */
-    protected List<Integer> daoToPrimaryKeyListFromLogs(Collection<LogBean> beans){
-        return getLogManager().toPrimaryKeyList(beans);
-    }
-    //3-7
     /** transformer : LogBean to fl_log.id */ 
     protected final Function<LogBean,Integer> daoCastLogToPk = new Function<LogBean,Integer>(){
             @Override
             public Integer apply(LogBean input) {
                 return null == input ? null : input.getId();
             }};
-    //3-8
+    //3-6
     /** transformer : fl_log.id to LogBean */ 
     protected final Function<Integer,LogBean> daoCastLogFromPk = new Function<Integer,LogBean>(){
             @Override
             public LogBean apply(Integer input) {
                 return daoGetLog(input);
             }};
+    //3-8
+    /**
+     * unwrap primary key from {@link LogBean}<br>
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     *
+     * @param {@link LogBean} collection
+     * @return primary key list
+     * @see {@link ILogManager#toPrimaryKeyList(Collection)}
+     */
+    protected List<Integer> daoToPrimaryKeyListFromLogs(Collection<LogBean> beans){
+        if (null == beans){
+            return ImmutableList.of();
+        }else{
+            return getLogManager().toPrimaryKeyList(beans);
+        }
+    }
+    //3-9
+    /**
+     * unwrap primary key from {@link LogBean}<br>
+     *
+     * the returned list is a transformed view of {@code beans}; 
+     * changes to {@code beans} will be reflected in the returned list and vice versa. 
+     *
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     * @param {@link LogBean} list
+     * @return primary key list 
+     * @see {@link Lists$#transform(List, Function)
+     */
+    protected List<Integer> daoToPrimaryKeyListFromLogs(List<LogBean> beans){
+    	if(null == beans){
+    		return ImmutableList.of();
+    	}else{
+    		return Lists.transform(beans,daoCastLogToPk);
+    	}
+    }
     //4
     /** 
      *　判断主键指定的记录是否存在
@@ -3169,9 +3365,7 @@ class Dao implements CommonConstant {
         int count =0;
         if(null != beans){        
             for(LogBean bean:beans){
-                if(null != bean){
-                    count += daoDeleteLog(bean.getId());
-                }
+                count += daoDeleteLog(bean);
             }
         }
         return count;
@@ -3195,19 +3389,19 @@ class Dao implements CommonConstant {
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
-     * @param idOfLog 日志id 
+     * @param id 日志id 
      * @see {@link ILogManager#checkDuplicate(LogBean)}
      * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code idOfLog} 
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException
      */
-    protected Integer daoCheckDuplicateLog(Integer idOfLog)
+    protected Integer daoCheckDuplicateLog(Integer id)
                     throws RuntimeDaoException,DuplicateRecordException{
-        if(getLogManager().existsPrimaryKey(idOfLog)){
+        if(getLogManager().existsPrimaryKey(id)){
             throw new DuplicateRecordException();
         }
-        return idOfLog;
+        return id;
     }
     //8-3
     /**
@@ -3610,9 +3804,7 @@ class Dao implements CommonConstant {
         int count =0;
         if(null != beans){        
             for(PermitBean bean:beans){
-                if(null != bean){
-                    count += daoDeletePermit(bean.getDeviceGroupId(),bean.getPersonGroupId());
-                }
+                count += daoDeletePermit(bean);
             }
         }
         return count;
@@ -3636,17 +3828,17 @@ class Dao implements CommonConstant {
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
-     * @param deviceGroupIdOfPermit 外键,设备组id 
-     * @param personGroupIdOfPermit 外键,人员组id 
+     * @param deviceGroupId 外键,设备组id 
+     * @param personGroupId 外键,人员组id 
      * @see {@link IPermitManager#checkDuplicate(PermitBean)}
      * @throws DuplicateRecordException if exists duplicated row
      * 
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException
      */
-    protected void daoCheckDuplicatePermit(Integer deviceGroupIdOfPermit,Integer personGroupIdOfPermit)
+    protected void daoCheckDuplicatePermit(Integer deviceGroupId,Integer personGroupId)
                     throws RuntimeDaoException,DuplicateRecordException{
-        if(getPermitManager().existsPrimaryKey(deviceGroupIdOfPermit,personGroupIdOfPermit)){
+        if(getPermitManager().existsPrimaryKey(deviceGroupId,personGroupId)){
             throw new DuplicateRecordException();
         }
     }
@@ -3937,28 +4129,54 @@ class Dao implements CommonConstant {
         return count;
     }
     //3-5
-    /**
-     * unwrap primary key from {@link StoreBean}
-     * @param {@link StoreBean} collection
-     * @return primary key list 
-     */
-    protected List<String> daoToPrimaryKeyListFromStores(Collection<StoreBean> beans){
-        return getStoreManager().toPrimaryKeyList(beans);
-    }
-    //3-7
     /** transformer : StoreBean to fl_store.md5 */ 
     protected final Function<StoreBean,String> daoCastStoreToPk = new Function<StoreBean,String>(){
             @Override
             public String apply(StoreBean input) {
                 return null == input ? null : input.getMd5();
             }};
-    //3-8
+    //3-6
     /** transformer : fl_store.md5 to StoreBean */ 
     protected final Function<String,StoreBean> daoCastStoreFromPk = new Function<String,StoreBean>(){
             @Override
             public StoreBean apply(String input) {
                 return daoGetStore(input);
             }};
+    //3-8
+    /**
+     * unwrap primary key from {@link StoreBean}<br>
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     *
+     * @param {@link StoreBean} collection
+     * @return primary key list
+     * @see {@link IStoreManager#toPrimaryKeyList(Collection)}
+     */
+    protected List<String> daoToPrimaryKeyListFromStores(Collection<StoreBean> beans){
+        if (null == beans){
+            return ImmutableList.of();
+        }else{
+            return getStoreManager().toPrimaryKeyList(beans);
+        }
+    }
+    //3-9
+    /**
+     * unwrap primary key from {@link StoreBean}<br>
+     *
+     * the returned list is a transformed view of {@code beans}; 
+     * changes to {@code beans} will be reflected in the returned list and vice versa. 
+     *
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     * @param {@link StoreBean} list
+     * @return primary key list 
+     * @see {@link Lists$#transform(List, Function)
+     */
+    protected List<String> daoToPrimaryKeyListFromStores(List<StoreBean> beans){
+    	if(null == beans){
+    		return ImmutableList.of();
+    	}else{
+    		return Lists.transform(beans,daoCastStoreToPk);
+    	}
+    }
     //4
     /** 
      *　判断主键指定的记录是否存在
@@ -4018,9 +4236,7 @@ class Dao implements CommonConstant {
         int count =0;
         if(null != beans){        
             for(StoreBean bean:beans){
-                if(null != bean){
-                    count += daoDeleteStore(bean.getMd5());
-                }
+                count += daoDeleteStore(bean);
             }
         }
         return count;
@@ -4044,19 +4260,19 @@ class Dao implements CommonConstant {
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
-     * @param md5OfStore 主键,md5检验码 
+     * @param md5 主键,md5检验码 
      * @see {@link IStoreManager#checkDuplicate(StoreBean)}
      * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code md5OfStore} 
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException
      */
-    protected String daoCheckDuplicateStore(String md5OfStore)
+    protected String daoCheckDuplicateStore(String md5)
                     throws RuntimeDaoException,DuplicateRecordException{
-        if(getStoreManager().existsPrimaryKey(md5OfStore)){
+        if(getStoreManager().existsPrimaryKey(md5)){
             throw new DuplicateRecordException();
         }
-        return md5OfStore;
+        return md5;
     }
     //12
     /** 

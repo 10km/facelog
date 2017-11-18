@@ -16,6 +16,8 @@ import java.util.Objects;
 import java.util.concurrent.Callable;
 
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 #join($tables '
 import ${schemaPkg}.${e.asManagerInterfaceNSP()};
@@ -97,30 +99,56 @@ class Dao implements CommonConstant {
         }
         return count;
     }
-    //3-5
-    /**
-     * unwrap primary key from {@link $beanClass}
-     * @param {@link $beanClass} collection
-     * @return primary key list 
-     */
-    $!{modifier}List<$primaryKey.javaType> daoToPrimaryKeyListFrom${coreClass}s(Collection<$beanClass> beans){
-        return ${table.getGetManagerMethod()}().toPrimaryKeyList(beans);
-    }
 ###### CONVERTER BETWEEN BEAN AND PRIMARY KEY########
-    //3-7
+    //3-5
     /** transformer : $beanClass to $primaryKey.fullName */ 
     $!{modifier}final Function<$beanClass,$primaryKey.javaType> daoCast${coreClass}ToPk = new Function<$beanClass,$primaryKey.javaType>(){
             @Override
             public $primaryKey.javaType apply($beanClass input) {
                 return null == input ? null : input.$primaryKey.getGetMethod()();
             }};
-    //3-8
+    //3-6
     /** transformer : $primaryKey.fullName to $beanClass */ 
     $!{modifier}final Function<$primaryKey.javaType,$beanClass> daoCast${coreClass}FromPk = new Function<$primaryKey.javaType,$beanClass>(){
             @Override
             public $beanClass apply($primaryKey.javaType input) {
                 return daoGet${coreClass}(input);
             }};
+    //3-8
+    /**
+     * unwrap primary key from {@link $beanClass}<br>
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     *
+     * @param {@link $beanClass} collection
+     * @return primary key list
+     * @see {@link ${table.asManagerInterfaceNSP()}${esc.hash}toPrimaryKeyList(Collection)}
+     */
+    $!{modifier}List<$primaryKey.javaType> daoToPrimaryKeyListFrom${coreClass}s(Collection<$beanClass> beans){
+        if (null == beans){
+            return ImmutableList.of();
+        }else{
+            return ${table.getGetManagerMethod()}().toPrimaryKeyList(beans);
+        }
+    }
+    //3-9
+    /**
+     * unwrap primary key from {@link $beanClass}<br>
+     *
+     * the returned list is a transformed view of {@code beans}; 
+     * changes to {@code beans} will be reflected in the returned list and vice versa. 
+     *
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     * @param {@link $beanClass} list
+     * @return primary key list 
+     * @see {@link Lists$${esc.hash}transform(List, Function)
+     */
+    $!{modifier}List<$primaryKey.javaType> daoToPrimaryKeyListFrom${coreClass}s(List<$beanClass> beans){
+    	if(null == beans){
+    		return ImmutableList.of();
+    	}else{
+    		return Lists.transform(beans,daoCast${coreClass}ToPk);
+    	}
+    }
 #end
     //4
     /** 
@@ -179,9 +207,7 @@ class Dao implements CommonConstant {
         int count =0;
         if(null != beans){        
             for($beanClass bean:beans){
-                if(null != bean){
-                    count += daoDelete${coreClass}(#join($primaryKeys 'bean.$e.getGetMethod()()' ','));
-                }
+                count += daoDelete${coreClass}(bean);
             }
         }
         return count;
@@ -213,20 +239,20 @@ class Dao implements CommonConstant {
     //7-3
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
-     * $fullParamComments
+     * $paramComments
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)}
      * @throws DuplicateRecordException if exists duplicated row
      * $!checkReturnComment
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException
      */
-    $!{modifier}$checkReturnType daoCheckDuplicate${coreClass}($fullParams)
+    $!{modifier}$checkReturnType daoCheckDuplicate${coreClass}($params)
                     throws RuntimeDaoException,DuplicateRecordException{
-        if(${table.getGetManagerMethod()}().existsPrimaryKey($fullVarNames)){
+        if(${table.getGetManagerMethod()}().existsPrimaryKey($varNames)){
             throw new DuplicateRecordException();
         }
 #if($table.countPrimaryKeys() == 1)
-        return $primaryKey.fullVarName;
+        return $primaryKey.varName;
 #end
     }
 #end
