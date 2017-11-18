@@ -431,6 +431,7 @@ class Dao implements CommonConstant {
      */
     $!{modifier}$beanClass daoAdd${coreClass}($beanClass $table.asVarBean())
                     throws RuntimeDaoException,DuplicateRecordException{
+        checkArgument(null == ${table.asVarBean()} || ${table.asVarBean()}.isNew(),"can be add,delete,but modify record for $table.name,so the _isNew field must be true");
         return ${table.getGetManagerMethod()}().save(daoCheckDuplicate($table.asVarBean()));
     }
 #####  连接表方法 ######

@@ -2272,6 +2272,7 @@ class Dao implements CommonConstant {
      */
     protected FaceBean daoAddFace(FaceBean faceBean)
                     throws RuntimeDaoException,DuplicateRecordException{
+        checkArgument(null == faceBean || faceBean.isNew(),"can be add,delete,but modify record for fl_face,so the _isNew field must be true");
         return getFaceManager().save(daoCheckDuplicate(faceBean));
     }
     //13
@@ -2694,6 +2695,7 @@ class Dao implements CommonConstant {
      */
     protected FeatureBean daoAddFeature(FeatureBean featureBean)
                     throws RuntimeDaoException,DuplicateRecordException{
+        checkArgument(null == featureBean || featureBean.isNew(),"can be add,delete,but modify record for fl_feature,so the _isNew field must be true");
         return getFeatureManager().save(daoCheckDuplicate(featureBean));
     }
     //13
@@ -3116,6 +3118,7 @@ class Dao implements CommonConstant {
      */
     protected ImageBean daoAddImage(ImageBean imageBean)
                     throws RuntimeDaoException,DuplicateRecordException{
+        checkArgument(null == imageBean || imageBean.isNew(),"can be add,delete,but modify record for fl_image,so the _isNew field must be true");
         return getImageManager().save(daoCheckDuplicate(imageBean));
     }
     //13
@@ -3540,6 +3543,7 @@ class Dao implements CommonConstant {
      */
     protected LogBean daoAddLog(LogBean logBean)
                     throws RuntimeDaoException,DuplicateRecordException{
+        checkArgument(null == logBean || logBean.isNew(),"can be add,delete,but modify record for fl_log,so the _isNew field must be true");
         return getLogManager().save(daoCheckDuplicate(logBean));
     }
     //13
@@ -3917,6 +3921,7 @@ class Dao implements CommonConstant {
      */
     protected PermitBean daoAddPermit(PermitBean permitBean)
                     throws RuntimeDaoException,DuplicateRecordException{
+        checkArgument(null == permitBean || permitBean.isNew(),"can be add,delete,but modify record for fl_permit,so the _isNew field must be true");
         return getPermitManager().save(daoCheckDuplicate(permitBean));
     }
     //12-5
@@ -4287,6 +4292,7 @@ class Dao implements CommonConstant {
      */
     protected StoreBean daoAddStore(StoreBean storeBean)
                     throws RuntimeDaoException,DuplicateRecordException{
+        checkArgument(null == storeBean || storeBean.isNew(),"can be add,delete,but modify record for fl_store,so the _isNew field must be true");
         return getStoreManager().save(daoCheckDuplicate(storeBean));
     }
     //12-3-3

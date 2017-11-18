@@ -1060,4 +1060,20 @@ public abstract class BaseFaceLog extends Dao{
     public List<Integer> loadPersonGroupIdByWhere(String where)throws ServiceRuntimeException{
 		return null;
     }
+	/**
+	 * 新设备注册
+	 * @param deviceBean
+	 * @return
+	 * @throws ServiceRuntimeException
+	 * @throws DeviceException
+	 * @throws DuplicateRecordException
+	 */
+	@ThriftMethod(exception = {
+            @ThriftException(type=ServiceRuntimeException.class, id=1),
+            @ThriftException(type=DeviceException.class, id=2),
+            @ThriftException(type=DuplicateRecordException.class, id=3)
+			})
+	public DeviceBean registerDevice(DeviceBean deviceBean) throws ServiceRuntimeException, DeviceException, DuplicateRecordException{
+		return deviceBean;		
+	}
 }

@@ -19,6 +19,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
@@ -31,6 +33,7 @@ import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
+import net.gdface.facelog.service.DeviceException.DeviceExceptionType;
 import net.gdface.facelog.service.DuplicateRecordException;
 import net.gdface.facelog.service.ServiceRuntimeException;
 import net.gdface.image.LazyImage;
@@ -373,6 +376,37 @@ public class FaceLogImpl extends BaseFaceLog  {
 			}
 		}
 		return new ArrayList<PersonBean>(m.values());
+	}
+	///////////////// DEVICE MANAGEMENT///////
+	
+	private static final boolean isValidMac(String mac){
+		return !Strings.isNullOrEmpty(mac) && mac.matches("[a-fA-F0-9]{12}");
+	}
+	protected boolean isValidSerialNo(String sn){
+		return true;
+	}
+	protected DeviceBean daoRegisterDevice(DeviceBean deviceBean)
+			throws RuntimeDaoException, DeviceException, DuplicateRecordException{
+		checkArgument(null != deviceBean,"deviceBean must not be null");
+        checkArgument(deviceBean.isNew() && null == deviceBean.getId(),
+        		"for device registeration the 'deviceBean' must be a new record,so the _isNew field must be true and id must be null");
+		if(!isValidMac(deviceBean.getMac())){
+			throw new DeviceException(DeviceExceptionType.INVALID_MAC);
+		}
+		if(!isValidSerialNo(deviceBean.getSerialNo())){
+			throw new DeviceException(DeviceExceptionType.INVALID_SN);
+		}
+		DeviceBean dmac = this.daoGetDeviceByIndexMac(deviceBean.getMac());
+		DeviceBean dsn = this.daoGetDeviceByIndexSerialNo(deviceBean.getSerialNo());
+		if(null !=dmac ){
+			if(dmac.equals(dsn)){
+				return dmac;
+			}
+		}
+		if(null !=dsn){
+			throw new DeviceException(DeviceExceptionType.OCCUPIED_SN);
+		}
+		return this.daoSaveDevice(deviceBean);
 	}
 	@Override
 	public PersonBean getPerson(int personId)throws ServiceRuntimeException {
@@ -1364,6 +1398,16 @@ public class FaceLogImpl extends BaseFaceLog  {
     public List<Integer> loadPersonGroupIdByWhere(String where)throws ServiceRuntimeException{
     	try{
     		return daoLoadPersonGroupIdByWhere(where);
+    	} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
+			throw new ServiceRuntimeException(e);
+		}
+    }
+    @Override
+    public DeviceBean registerDevice(DeviceBean deviceBean) throws ServiceRuntimeException, DeviceException, DuplicateRecordException{
+    	try{
+    		return daoRegisterDevice(deviceBean);
     	} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {

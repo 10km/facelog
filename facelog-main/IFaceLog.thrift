@@ -4,6 +4,9 @@ namespace java com.gdface
 namespace cpp gdface
 
 
+enum DeviceExceptionType {
+  UNCLASSIFIED, INVALID_MAC, INVALID_SN, OCCUPIED_SN
+}
 
 struct FaceBean {
   1: required bool _new;
@@ -154,6 +157,13 @@ struct PermitBean {
   6:  i64 createTime;
 }
 
+exception DeviceException {
+  1:  string message;
+  2:  string causeClass;
+  3:  string serviceStackTraceMessage;
+  4:  DeviceExceptionType type;
+}
+
 service IFaceLog {
   FeatureBean addFeature(1:  binary feature, 2:  i32 personId, 3:  list<FaceBean> faecBeans) throws (1: ServiceRuntimeException ex1, 2: DuplicateRecordException ex2);
   FeatureBean addFeatureMulti(1:  binary feature, 2:  i32 personId, 3:  map<binary, FaceBean> faceInfo, 4:  i32 deviceId) throws (1: ServiceRuntimeException ex1, 2: DuplicateRecordException ex2);
@@ -229,6 +239,7 @@ service IFaceLog {
   list<i32> loadPersonIdByUpdateTime(1:  i64 timestamp) throws (1: ServiceRuntimeException ex1);
   list<i32> loadPersonIdByWhere(1:  string where) throws (1: ServiceRuntimeException ex1);
   list<i32> loadUpdatedPersons(1:  i64 timestamp) throws (1: ServiceRuntimeException ex1);
+  DeviceBean registerDevice(1:  DeviceBean deviceBean) throws (1: ServiceRuntimeException ex1, 2: DeviceException ex2, 3: DuplicateRecordException ex3);
   void replaceFeature(1:  i32 personId, 2:  string featureMd5, 3:  bool deleteOldFeatureImage) throws (1: ServiceRuntimeException ex1);
   DeviceBean saveDevice(1:  DeviceBean deviceBean) throws (1: ServiceRuntimeException ex1);
   DeviceGroupBean saveDeviceGroup(1:  DeviceGroupBean deviceGroupBean) throws (1: ServiceRuntimeException ex1);
