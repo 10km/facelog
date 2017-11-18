@@ -639,6 +639,16 @@ public interface IFaceLog
             @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
         );
 
+        @ThriftMethod(value = "registerDevice",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1),
+                          @ThriftException(type=DeviceException.class, id=2),
+                          @ThriftException(type=DuplicateRecordException.class, id=3)
+                      })
+        ListenableFuture<DeviceBean> registerDevice(
+            @ThriftField(value=1, name="deviceBean", requiredness=Requiredness.NONE) final DeviceBean deviceBean
+        );
+
         @ThriftMethod(value = "replaceFeature",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1406,6 +1416,16 @@ public interface IFaceLog
     List<Integer> loadUpdatedPersons(
         @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
     ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "registerDevice",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1),
+                      @ThriftException(type=DeviceException.class, id=2),
+                      @ThriftException(type=DuplicateRecordException.class, id=3)
+                  })
+    DeviceBean registerDevice(
+        @ThriftField(value=1, name="deviceBean", requiredness=Requiredness.NONE) final DeviceBean deviceBean
+    ) throws ServiceRuntimeException, DeviceException, DuplicateRecordException;
 
     @ThriftMethod(value = "replaceFeature",
                   exception = {

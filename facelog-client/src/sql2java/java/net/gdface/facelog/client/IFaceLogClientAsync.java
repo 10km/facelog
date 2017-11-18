@@ -1128,7 +1128,23 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<List<Integer>> loadUpdatedPersons(Date timestamp){
         return service.loadUpdatedPersons(GenericUtils.toLong(timestamp,Date.class));
     }
-    // 75 SERIVCE PORT : replaceFeature
+    // 75 SERIVCE PORT : registerDevice
+    /**
+     * 新设备注册
+     * @param deviceBean
+     * @return 
+     */
+    public ListenableFuture<DeviceBean> registerDevice(DeviceBean deviceBean){
+        return Futures.transform(
+                service.registerDevice(converterDeviceBean.toRight(deviceBean)), 
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
+                    @Override
+                    public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
+                        return converterDeviceBean.fromRight(input);
+                    }
+                });
+    }
+    // 76 SERIVCE PORT : replaceFeature
     /**
      * 替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录
      * @param personId 人员记录id
@@ -1144,7 +1160,7 @@ class IFaceLogClientAsync implements Constant{
                     featureMd5,
                     deleteOldFeatureImage);
     }
-    // 76 SERIVCE PORT : saveDevice
+    // 77 SERIVCE PORT : saveDevice
     /**
      * 保存设备记录
      * @param deviceBean
@@ -1160,7 +1176,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 77 SERIVCE PORT : saveDeviceGroup
+    // 78 SERIVCE PORT : saveDeviceGroup
     /**
      * 保存设备组记录
      * @param deviceGroupBean
@@ -1176,7 +1192,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 78 SERIVCE PORT : savePerson
+    // 79 SERIVCE PORT : savePerson
     /**
      * 保存人员(person)记录
      * @param bean
@@ -1192,7 +1208,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 79 SERIVCE PORT : savePersonFull
+    // 80 SERIVCE PORT : savePersonFull
     /**
      * @param bean 人员信息对象
      * @param idPhoto 标准照图像
@@ -1224,7 +1240,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 79 GENERIC
+    // 80 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],byte[],byte[],FaceBean,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -1253,7 +1269,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 80 SERIVCE PORT : savePersonGroup
+    // 81 SERIVCE PORT : savePersonGroup
     /**
      * 保存人员组记录
      * @param personGroupBean
@@ -1269,7 +1285,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 81 SERIVCE PORT : savePersons
+    // 82 SERIVCE PORT : savePersons
     /**
      * 保存人员(person)记录
      * @param beans
@@ -1277,7 +1293,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Void> savePersons(List<PersonBean> beans){
         return service.savePersons(converterPersonBean.toRight(CollectionUtils.checkNotNullElement(beans)));
     }
-    // 82 SERIVCE PORT : savePersonsWithPhoto
+    // 83 SERIVCE PORT : savePersonsWithPhoto
     /**
      * 保存人员信息记录(包含标准照)
      * @param persons
@@ -1286,7 +1302,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Integer> savePerson(Map<ByteBuffer, PersonBean> persons){
         return service.savePersonsWithPhoto(GenericUtils.toBytesKey(converterPersonBean.toRightValue(persons)));
     }
-    // 83 SERIVCE PORT : savePersonWithPhoto
+    // 84 SERIVCE PORT : savePersonWithPhoto
     /**
      * 保存人员信息记录
      * @param bean
@@ -1307,7 +1323,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 83 GENERIC
+    // 84 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[])}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -1328,7 +1344,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 84 SERIVCE PORT : savePersonWithPhotoAndFeature
+    // 85 SERIVCE PORT : savePersonWithPhotoAndFeature
     /**
      * 保存人员信息记录
      * @param bean
@@ -1355,7 +1371,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 84 GENERIC
+    // 85 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],FeatureBean,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -1380,7 +1396,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 85 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
+    // 86 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
     /**
      * 保存人员信息记录
      * @param bean
@@ -1407,7 +1423,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 85 GENERIC
+    // 86 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],byte[],List)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -1432,7 +1448,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 86 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
+    // 87 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
     /**
      * 保存人员信息记录
      * @param bean
@@ -1462,7 +1478,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 86 GENERIC
+    // 87 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],byte[],Map,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -1489,7 +1505,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 87 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
+    // 88 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
     /**
      * 保存人员信息记录
      * @param bean
@@ -1513,7 +1529,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 88 SERIVCE PORT : setPersonExpiryDate
+    // 89 SERIVCE PORT : setPersonExpiryDate
     /**
      * 修改 personId 指定的人员记录的有效期
      * @param personId
@@ -1526,7 +1542,7 @@ class IFaceLogClientAsync implements Constant{
                     personId,
                     GenericUtils.toLong(expiryDate,Date.class));
     }
-    // 89 SERIVCE PORT : setPersonExpiryDateList
+    // 90 SERIVCE PORT : setPersonExpiryDateList
     /**
      * 修改 personIdList 指定的人员记录的有效期
      * @param personIdList 人员id列表

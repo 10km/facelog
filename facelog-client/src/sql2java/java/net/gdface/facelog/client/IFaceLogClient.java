@@ -1767,7 +1767,32 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 75 SERIVCE PORT : replaceFeature
+    // 75 SERIVCE PORT : registerDevice
+    /**
+     * 新设备注册
+     * @param deviceBean
+     * @return 
+     * @throws ServiceRuntimeException
+     * @throws DeviceException
+     * @throws DuplicateRecordException
+     */
+    public DeviceBean registerDevice(DeviceBean deviceBean)throws net.gdface.facelog.client.thrift.DeviceException,net.gdface.facelog.client.thrift.DuplicateRecordException{
+        try{
+            return converterDeviceBean.fromRight(service.registerDevice(converterDeviceBean.toRight(deviceBean)));
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    // 76 SERIVCE PORT : replaceFeature
     /**
      * 替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录
      * @param personId 人员记录id
@@ -1789,7 +1814,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 76 SERIVCE PORT : saveDevice
+    // 77 SERIVCE PORT : saveDevice
     /**
      * 保存设备记录
      * @param deviceBean
@@ -1812,7 +1837,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 77 SERIVCE PORT : saveDeviceGroup
+    // 78 SERIVCE PORT : saveDeviceGroup
     /**
      * 保存设备组记录
      * @param deviceGroupBean
@@ -1836,7 +1861,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 78 SERIVCE PORT : savePerson
+    // 79 SERIVCE PORT : savePerson
     /**
      * 保存人员(person)记录
      * @param bean
@@ -1859,7 +1884,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 79 SERIVCE PORT : savePersonFull
+    // 80 SERIVCE PORT : savePersonFull
     /**
      * @param bean 人员信息对象
      * @param idPhoto 标准照图像
@@ -1897,7 +1922,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 79 GENERIC
+    // 80 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],byte[],byte[],FaceBean,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -1932,7 +1957,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 80 SERIVCE PORT : savePersonGroup
+    // 81 SERIVCE PORT : savePersonGroup
     /**
      * 保存人员组记录
      * @param personGroupBean
@@ -1956,7 +1981,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 81 SERIVCE PORT : savePersons
+    // 82 SERIVCE PORT : savePersons
     /**
      * 保存人员(person)记录
      * @param beans
@@ -1970,7 +1995,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 82 SERIVCE PORT : savePersonsWithPhoto
+    // 83 SERIVCE PORT : savePersonsWithPhoto
     /**
      * 保存人员信息记录(包含标准照)
      * @param persons
@@ -1985,7 +2010,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 83 SERIVCE PORT : savePersonWithPhoto
+    // 84 SERIVCE PORT : savePersonWithPhoto
     /**
      * 保存人员信息记录
      * @param bean
@@ -2013,7 +2038,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 83 GENERIC
+    // 84 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[])}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -2040,7 +2065,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 84 SERIVCE PORT : savePersonWithPhotoAndFeature
+    // 85 SERIVCE PORT : savePersonWithPhotoAndFeature
     /**
      * 保存人员信息记录
      * @param bean
@@ -2074,7 +2099,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 84 GENERIC
+    // 85 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],FeatureBean,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -2105,7 +2130,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 85 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
+    // 86 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
     /**
      * 保存人员信息记录
      * @param bean
@@ -2139,7 +2164,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 85 GENERIC
+    // 86 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],byte[],List)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -2170,7 +2195,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 86 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
+    // 87 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
     /**
      * 保存人员信息记录
      * @param bean
@@ -2207,7 +2232,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 86 GENERIC
+    // 87 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],byte[],Map,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -2240,7 +2265,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 87 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
+    // 88 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
     /**
      * 保存人员信息记录
      * @param bean
@@ -2271,7 +2296,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 88 SERIVCE PORT : setPersonExpiryDate
+    // 89 SERIVCE PORT : setPersonExpiryDate
     /**
      * 修改 personId 指定的人员记录的有效期
      * @param personId
@@ -2290,7 +2315,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 89 SERIVCE PORT : setPersonExpiryDateList
+    // 90 SERIVCE PORT : setPersonExpiryDateList
     /**
      * 修改 personIdList 指定的人员记录的有效期
      * @param personIdList 人员id列表
