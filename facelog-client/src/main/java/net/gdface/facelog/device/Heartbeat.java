@@ -1,11 +1,8 @@
 package net.gdface.facelog.device;
 
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Preconditions;
-
-import com.google.common.base.Strings;
 
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
@@ -19,52 +16,44 @@ import net.gdface.facelog.client.CommonConstant;
  * @author guyadong
  *
  */
-public class Heartbeat extends Thread implements CommonConstant{
+public class Heartbeat implements CommonConstant{
 	private static Heartbeat heartbeat;
-	
-	/**
-	 * 启动设备心跳线程
-	 * @param deviceID
-	 * @param pool
-	 * @return
-	 */
-	public static synchronized Heartbeat startHeartbeat(String deviceID,JedisPoolLazy pool){
-		if(null ==heartbeat  || !heartbeat.isAlive()){
-			heartbeat = new Heartbeat(deviceID,pool);
-			heartbeat.start();
-		}
-		return heartbeat;
-	}
 	/** 心跳间隔 */
 	private long intervalMills = TimeUnit.MILLISECONDS.convert(DEFAULT_HEARTBEAT_INTERVAL,TimeUnit.SECONDS);
-	private final RedisTable<Date> table;
-	private final String deivceID;
-	private Heartbeat(String deviceID,JedisPoolLazy pool) {
+	private final RedisTable<Integer> table;
+	private final int deivceID;
+	/** MAC 地址 */
+	private final String hardwareAddress;
+	private final HeartbeatThread heartBeatThread;
+	private Heartbeat(byte[] hardwareAddress,int deviceID, JedisPoolLazy pool) {
 		super();
-		Preconditions.checkArgument(!Strings.isNullOrEmpty(deviceID),"deviceID is null or empty");
 		this.deivceID = deviceID;
+		this.hardwareAddress = NetworkUtil.formatMac(validateMac(hardwareAddress), null);
 		this.table =  RedisFactory.getTable(TABLE_HEARTBEAT, pool);
 		this.table.setExpire(DEFAULT_HEARTBEAT_EXPIRE, TimeUnit.SECONDS);
+		this.heartBeatThread = new HeartbeatThread();
 		// 设置为守护线程
-		this.setDaemon(true);
-		this.setName(TABLE_HEARTBEAT.name);
+		this.heartBeatThread.setDaemon(true);
+		this.heartBeatThread.setName(TABLE_HEARTBEAT.name);
 	}
-
-	@Override
-	public void run() {
-		while(true){
-			try {
-				// 写入当前时间
-				table.set(deivceID, new Date(), false);
-				table.expire(deivceID);
-				Thread.sleep(intervalMills);
-			} catch(InterruptedException e){	
-			} catch(RuntimeException e){
-				logger.warn(e.getMessage());
+	/** 心跳包线程 */
+	private final class HeartbeatThread extends Thread{
+		@Override
+		public void run() {
+			while(true){
+				try {
+					// 写入当前时间
+					table.set(hardwareAddress,deivceID, false);
+					table.expire(hardwareAddress);
+					Thread.sleep(intervalMills);
+				} catch(InterruptedException e){
+					// do nothing
+				} catch(RuntimeException e){
+					logger.warn(e.getMessage());
+				}
 			}
 		}
-	}
-
+	};
 	public Heartbeat setInterval(long time,TimeUnit timeUnit){
 		if(time > 0 ){
 			this.intervalMills = TimeUnit.MILLISECONDS.convert(time, timeUnit);
@@ -82,5 +71,31 @@ public class Heartbeat extends Thread implements CommonConstant{
 			this.table.setExpire(time, TimeUnit.SECONDS);
 		}
 		return this;
+	}
+	/** 
+	 * 验证MAC地址有效性
+	 * @throws IllegalArgumentException MAC地址无效
+	  */
+	public static final byte[] validateMac(byte[]mac){
+		Preconditions.checkArgument(null != mac && 6 == mac.length ,"MAC address must ");
+		return mac;
+	}
+
+	/**
+	 * 启动设备心跳线程
+	 * @param hardwareAddress 网卡物理地址(MAC)
+	 * @param deviceID 设备ID
+	 * @param pool
+	 * @return
+	 */
+	public static synchronized Heartbeat startHeartbeat(
+			byte[] hardwareAddress,
+			int deviceID, 
+			JedisPoolLazy pool){
+		if(null ==heartbeat  || !heartbeat.heartBeatThread.isAlive()){
+			heartbeat = new Heartbeat(hardwareAddress,deviceID, pool);
+			heartbeat.heartBeatThread.start();
+		}
+		return heartbeat;
 	}
 }

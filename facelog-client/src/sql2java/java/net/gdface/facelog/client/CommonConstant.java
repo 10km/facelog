@@ -7,7 +7,6 @@
 // ______________________________________________________
 package net.gdface.facelog.client;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +25,8 @@ public interface CommonConstant {
     public static final String NULL_ID_STRING = "";
     /** 默认服务端口号 */
     public static final int DEFAULT_PORT = 26411;
-    /** 设备心跳包表 */
-    public static final Channel<Date> TABLE_HEARTBEAT = new Channel<Date>("DeviceHeartbeat"){} ;
+    /** 设备心跳包表 {@code 设备MAC地址 -> 设备ID} */
+    public static final Channel<Integer> TABLE_HEARTBEAT = new Channel<Integer>("DeviceHeartbeat"){} ;
     /** 心跳包间隔(秒) */
     public static final int DEFAULT_HEARTBEAT_INTERVAL = 8;
     /** 心跳包失效时间(秒) */
