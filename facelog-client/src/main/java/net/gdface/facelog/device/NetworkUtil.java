@@ -46,7 +46,6 @@ public class NetworkUtil {
 				return false;
 			}
 			try{
-				byte[] hardwareAddress;
 				switch(this){
 				case UP:
 					return input.isUp();
@@ -54,12 +53,13 @@ public class NetworkUtil {
 					return input.isVirtual();
 				case LOOPBACK:
 					return input.isLoopback();
-				case PHYICAL_ONLY :
-					hardwareAddress = input.getHardwareAddress();
+				case PHYICAL_ONLY :{
+					byte[] hardwareAddress = input.getHardwareAddress();
 					return null != hardwareAddress 
 							&& hardwareAddress.length > 0 
 							&& !input.isVirtual() 
 							&& !isVMMac(hardwareAddress);
+				}
 				case ALL:
 				default :
 					return true;
