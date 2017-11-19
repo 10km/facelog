@@ -79,7 +79,7 @@ class DeviceMangement implements ServiceConstant {
 			throws RuntimeDaoException, DeviceException{
 		checkArgument(null != newDevice,"deviceBean must not be null");
         checkArgument(newDevice.isNew() && null == newDevice.getId(),
-        		"for device registeration the 'deviceBean' must be a new record,so the _isNew field must be true and id must be null");
+        		"for device registeration the 'newDevice' must be a new record,so the _isNew field must be true and id must be null");
 		checkValidMac(newDevice.getMac());
 		DeviceBean dmac = this.dao.daoGetDeviceByIndexMac(newDevice.getMac());
 		DeviceBean dsn = this.dao.daoGetDeviceByIndexSerialNo(newDevice.getSerialNo());
