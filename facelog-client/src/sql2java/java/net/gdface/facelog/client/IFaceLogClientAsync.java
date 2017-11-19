@@ -1128,15 +1128,37 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<List<Integer>> loadUpdatedPersons(Date timestamp){
         return service.loadUpdatedPersons(GenericUtils.toLong(timestamp,Date.class));
     }
-    // 75 SERIVCE PORT : registerDevice
+    // 75 SERIVCE PORT : loginDevice
     /**
-     * 新设备注册
-     * @param deviceBean
+     * 设备上线登录,每次调用都会产生一个新的令牌
+     * @param loginDevice
+     * @return 设备访问令牌
+     */
+    public ListenableFuture<Long> loginDevice(DeviceBean loginDevice){
+        return service.loginDevice(converterDeviceBean.toRight(loginDevice));
+    }
+    // 76 SERIVCE PORT : logoutDevice
+    /**
+     * 设备离线,删除设备令牌
+     * @param deviceId
+     * @param token
+     */
+    public ListenableFuture<Void> logoutDevice(
+            int deviceId,
+            long token){
+        return service.logoutDevice(
+                    deviceId,
+                    token);
+    }
+    // 77 SERIVCE PORT : registerDevice
+    /**
+     * 新设备注册,如果设备已经注册则返回注册设备记录
+     * @param newDevice
      * @return 
      */
-    public ListenableFuture<DeviceBean> registerDevice(DeviceBean deviceBean){
+    public ListenableFuture<DeviceBean> registerDevice(DeviceBean newDevice){
         return Futures.transform(
-                service.registerDevice(converterDeviceBean.toRight(deviceBean)), 
+                service.registerDevice(converterDeviceBean.toRight(newDevice)), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
                     @Override
                     public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
@@ -1144,7 +1166,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 76 SERIVCE PORT : replaceFeature
+    // 78 SERIVCE PORT : replaceFeature
     /**
      * 替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录
      * @param personId 人员记录id
@@ -1160,7 +1182,7 @@ class IFaceLogClientAsync implements Constant{
                     featureMd5,
                     deleteOldFeatureImage);
     }
-    // 77 SERIVCE PORT : saveDevice
+    // 79 SERIVCE PORT : saveDevice
     /**
      * 保存设备记录
      * @param deviceBean
@@ -1176,7 +1198,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 78 SERIVCE PORT : saveDeviceGroup
+    // 80 SERIVCE PORT : saveDeviceGroup
     /**
      * 保存设备组记录
      * @param deviceGroupBean
@@ -1192,7 +1214,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 79 SERIVCE PORT : savePerson
+    // 81 SERIVCE PORT : savePerson
     /**
      * 保存人员(person)记录
      * @param bean
@@ -1208,7 +1230,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 80 SERIVCE PORT : savePersonFull
+    // 82 SERIVCE PORT : savePersonFull
     /**
      * @param bean 人员信息对象
      * @param idPhoto 标准照图像
@@ -1240,7 +1262,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 80 GENERIC
+    // 82 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],byte[],byte[],FaceBean,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -1269,7 +1291,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 81 SERIVCE PORT : savePersonGroup
+    // 83 SERIVCE PORT : savePersonGroup
     /**
      * 保存人员组记录
      * @param personGroupBean
@@ -1285,7 +1307,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 82 SERIVCE PORT : savePersons
+    // 84 SERIVCE PORT : savePersons
     /**
      * 保存人员(person)记录
      * @param beans
@@ -1293,7 +1315,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Void> savePersons(List<PersonBean> beans){
         return service.savePersons(converterPersonBean.toRight(CollectionUtils.checkNotNullElement(beans)));
     }
-    // 83 SERIVCE PORT : savePersonsWithPhoto
+    // 85 SERIVCE PORT : savePersonsWithPhoto
     /**
      * 保存人员信息记录(包含标准照)
      * @param persons
@@ -1302,7 +1324,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Integer> savePerson(Map<ByteBuffer, PersonBean> persons){
         return service.savePersonsWithPhoto(GenericUtils.toBytesKey(converterPersonBean.toRightValue(persons)));
     }
-    // 84 SERIVCE PORT : savePersonWithPhoto
+    // 86 SERIVCE PORT : savePersonWithPhoto
     /**
      * 保存人员信息记录
      * @param bean
@@ -1323,7 +1345,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 84 GENERIC
+    // 86 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[])}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -1344,7 +1366,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 85 SERIVCE PORT : savePersonWithPhotoAndFeature
+    // 87 SERIVCE PORT : savePersonWithPhotoAndFeature
     /**
      * 保存人员信息记录
      * @param bean
@@ -1371,7 +1393,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 85 GENERIC
+    // 87 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],FeatureBean,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -1396,7 +1418,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 86 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
+    // 88 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
     /**
      * 保存人员信息记录
      * @param bean
@@ -1423,7 +1445,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 86 GENERIC
+    // 88 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],byte[],List)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -1448,7 +1470,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 87 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
+    // 89 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
     /**
      * 保存人员信息记录
      * @param bean
@@ -1478,7 +1500,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 87 GENERIC
+    // 89 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],byte[],Map,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -1505,7 +1527,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 88 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
+    // 90 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
     /**
      * 保存人员信息记录
      * @param bean
@@ -1529,7 +1551,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 89 SERIVCE PORT : setPersonExpiryDate
+    // 91 SERIVCE PORT : setPersonExpiryDate
     /**
      * 修改 personId 指定的人员记录的有效期
      * @param personId
@@ -1542,7 +1564,7 @@ class IFaceLogClientAsync implements Constant{
                     personId,
                     GenericUtils.toLong(expiryDate,Date.class));
     }
-    // 90 SERIVCE PORT : setPersonExpiryDateList
+    // 92 SERIVCE PORT : setPersonExpiryDateList
     /**
      * 修改 personIdList 指定的人员记录的有效期
      * @param personIdList 人员id列表
@@ -1554,5 +1576,18 @@ class IFaceLogClientAsync implements Constant{
         return service.setPersonExpiryDateList(
                     CollectionUtils.checkNotNullElement(personIdList),
                     GenericUtils.toLong(expiryDate,Date.class));
+    }
+    // 93 SERIVCE PORT : unregisterDevice
+    /**
+     * (设备端)设备删除
+     * @param deviceId
+     * @param token 设备验证令牌
+     */
+    public ListenableFuture<Void> unregisterDevice(
+            int deviceId,
+            long token){
+        return service.unregisterDevice(
+                    deviceId,
+                    token);
     }
 }

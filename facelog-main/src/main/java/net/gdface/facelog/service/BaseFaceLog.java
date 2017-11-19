@@ -1061,19 +1061,60 @@ public abstract class BaseFaceLog extends Dao{
 		return null;
     }
 	/**
-	 * 新设备注册
-	 * @param deviceBean
+	 * 新设备注册,如果设备已经注册则返回注册设备记录
+	 * @param newDevice
 	 * @return
 	 * @throws ServiceRuntimeException
 	 * @throws DeviceException
-	 * @throws DuplicateRecordException
 	 */
 	@ThriftMethod(exception = {
             @ThriftException(type=ServiceRuntimeException.class, id=1),
-            @ThriftException(type=DeviceException.class, id=2),
-            @ThriftException(type=DuplicateRecordException.class, id=3)
+            @ThriftException(type=DeviceException.class, id=2)
 			})
-	public DeviceBean registerDevice(DeviceBean deviceBean) throws ServiceRuntimeException, DeviceException, DuplicateRecordException{
-		return deviceBean;		
+	public DeviceBean registerDevice(DeviceBean newDevice) throws ServiceRuntimeException, DeviceException{
+		return newDevice;		
+	}
+	/**
+	 * (设备端)设备删除
+	 * @param deviceId
+	 * @param token 设备验证令牌
+	 * @throws ServiceRuntimeException
+	 * @throws DeviceException
+	 */
+	@ThriftMethod(exception = {
+            @ThriftException(type=ServiceRuntimeException.class, id=1),
+            @ThriftException(type=DeviceException.class, id=2)
+			})
+	public void unregisterDevice(int deviceId,long token)
+			throws ServiceRuntimeException,DeviceException{		
+	}
+	/**
+	 * 设备上线登录,每次调用都会产生一个新的令牌
+	 * @param loginDevice
+	 * @return 设备访问令牌
+	 * @throws ServiceRuntimeException
+	 * @throws DeviceException
+	 */
+	@ThriftMethod(exception = {
+            @ThriftException(type=ServiceRuntimeException.class, id=1),
+            @ThriftException(type=DeviceException.class, id=2)
+			})
+	public long loginDevice(DeviceBean loginDevice)
+			throws ServiceRuntimeException, DeviceException{
+				return 0;
+	}
+	/**
+	 * 设备离线,删除设备令牌
+	 * @param deviceId
+	 * @param token
+	 * @throws ServiceRuntimeException
+	 * @throws DeviceException
+	 */
+	@ThriftMethod(exception = {
+            @ThriftException(type=ServiceRuntimeException.class, id=1),
+            @ThriftException(type=DeviceException.class, id=2)
+			})
+	public void logoutDevice(int deviceId,long token)
+			throws ServiceRuntimeException, DeviceException{
 	}
 }

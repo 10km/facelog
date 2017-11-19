@@ -18,7 +18,9 @@ public final class DeviceException extends BaseServiceException {
         /** 其他未分类异常 */UNCLASSIFIED,
         /** 无效MAC地址 */INVALID_MAC,
         /** 无效序列号 */INVALID_SN,
-        /** 序列号被占用 */OCCUPIED_SN
+        /** 序列号被占用 */OCCUPIED_SN,
+        /** 无效的设备令牌 */INVALID_TOKEN,
+        /** 无效设备ID*/INVALID_DEVICE_ID
 	}
     private DeviceExceptionType type = DeviceExceptionType.UNCLASSIFIED;
     private Integer deviceID;

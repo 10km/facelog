@@ -2,6 +2,7 @@ package net.gdface.facelog;
 
 import static org.junit.Assert.*;
 
+import java.nio.ByteBuffer;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,7 +33,9 @@ public class CloneTest {
 	}
 	@Test
 	public void test() throws ParseException  {
-		
+		ByteBuffer buffer = ByteBuffer.wrap(new byte[]{1,2,3,4,5,6,7,8,9,0,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f});
+		System.out.println(Long.toHexString(buffer.getLong()));
+		System.out.println(Long.toHexString(buffer.getLong()));
 		//SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		//Date date = format.parse("2050-12-31");
 		//Date date = DateFormat.getDateTimeInstance().parse("2050-12-31 12:12:1.2");

@@ -112,14 +112,28 @@ class Dao implements CommonConstant {
     //////////// FL_DEVICE /////////
     //1
     /** 
-     * 根据主键从数据库读取记录
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
      * 
      * @param id 设备id 
+     * @return 
      * @see {@link IDeviceManager#loadByPrimaryKey(Integer)}
      * @throws RuntimeDaoException
      */
     protected DeviceBean daoGetDevice(Integer id)throws RuntimeDaoException{
         return getDeviceManager().loadByPrimaryKey(id);
+    }
+    //1-2
+    /** 
+     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 
+     * @param id 设备id 
+     * @return 
+     * @see {@link IDeviceManager#loadByPrimaryKeyChecked(Integer)}
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    protected DeviceBean daoGetDeviceChecked(Integer id)throws RuntimeDaoException,ObjectRetrievalException{
+        return getDeviceManager().loadByPrimaryKeyChecked(id);
     }
     //2    
     /** 
@@ -476,7 +490,7 @@ class Dao implements CommonConstant {
     }
     //18-5
     /** 
-     * 索引(fl_device.mac)查询<br>
+     * 索引(fl_device.mac)查询,没有找到记录返回{@code null}<br>
      * 
      * @param mac 6字节MAC地址(HEX)
      * @see {@link IDeviceManager#loadByIndexMac(String)}
@@ -486,9 +500,22 @@ class Dao implements CommonConstant {
                     throws RuntimeDaoException{
         return getDeviceManager().loadByIndexMac(mac);
     }
+    //18-7
+    /** 
+     * 索引(fl_device.mac)查询,没有找到记录抛出异常<br>
+     * 
+     * @param mac 6字节MAC地址(HEX)
+     * @see {@link IDeviceManager#loadByIndexMacChecked(String)}
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    protected DeviceBean daoGetDeviceByIndexMacChecked(String mac)
+                    throws RuntimeDaoException,ObjectRetrievalException{
+        return getDeviceManager().loadByIndexMacChecked(mac);
+    }
     //18-5
     /** 
-     * 索引(fl_device.serial_no)查询<br>
+     * 索引(fl_device.serial_no)查询,没有找到记录返回{@code null}<br>
      * 
      * @param serialNo 设备序列号
      * @see {@link IDeviceManager#loadByIndexSerialNo(String)}
@@ -497,6 +524,19 @@ class Dao implements CommonConstant {
     protected DeviceBean daoGetDeviceByIndexSerialNo(String serialNo)
                     throws RuntimeDaoException{
         return getDeviceManager().loadByIndexSerialNo(serialNo);
+    }
+    //18-7
+    /** 
+     * 索引(fl_device.serial_no)查询,没有找到记录抛出异常<br>
+     * 
+     * @param serialNo 设备序列号
+     * @see {@link IDeviceManager#loadByIndexSerialNoChecked(String)}
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    protected DeviceBean daoGetDeviceByIndexSerialNoChecked(String serialNo)
+                    throws RuntimeDaoException,ObjectRetrievalException{
+        return getDeviceManager().loadByIndexSerialNoChecked(serialNo);
     }
     //19
     /**
@@ -590,14 +630,28 @@ class Dao implements CommonConstant {
     //////////// FL_DEVICE_GROUP /////////
     //1
     /** 
-     * 根据主键从数据库读取记录
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
      * 
      * @param id 设备组id 
+     * @return 
      * @see {@link IDeviceGroupManager#loadByPrimaryKey(Integer)}
      * @throws RuntimeDaoException
      */
     protected DeviceGroupBean daoGetDeviceGroup(Integer id)throws RuntimeDaoException{
         return getDeviceGroupManager().loadByPrimaryKey(id);
+    }
+    //1-2
+    /** 
+     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 
+     * @param id 设备组id 
+     * @return 
+     * @see {@link IDeviceGroupManager#loadByPrimaryKeyChecked(Integer)}
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    protected DeviceGroupBean daoGetDeviceGroupChecked(Integer id)throws RuntimeDaoException,ObjectRetrievalException{
+        return getDeviceGroupManager().loadByPrimaryKeyChecked(id);
     }
     //2    
     /** 
@@ -1034,14 +1088,28 @@ class Dao implements CommonConstant {
     //////////// FL_PERSON /////////
     //1
     /** 
-     * 根据主键从数据库读取记录
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
      * 
      * @param id 用户id 
+     * @return 
      * @see {@link IPersonManager#loadByPrimaryKey(Integer)}
      * @throws RuntimeDaoException
      */
     protected PersonBean daoGetPerson(Integer id)throws RuntimeDaoException{
         return getPersonManager().loadByPrimaryKey(id);
+    }
+    //1-2
+    /** 
+     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 
+     * @param id 用户id 
+     * @return 
+     * @see {@link IPersonManager#loadByPrimaryKeyChecked(Integer)}
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    protected PersonBean daoGetPersonChecked(Integer id)throws RuntimeDaoException,ObjectRetrievalException{
+        return getPersonManager().loadByPrimaryKeyChecked(id);
     }
     //2    
     /** 
@@ -1431,7 +1499,7 @@ class Dao implements CommonConstant {
     }
     //18-5
     /** 
-     * 索引(fl_person.image_md5)查询<br>
+     * 索引(fl_person.image_md5)查询,没有找到记录返回{@code null}<br>
      * 
      * @param imageMd5 用户默认照片(证件照,标准照)的md5校验码,外键
      * @see {@link IPersonManager#loadByIndexImageMd5(String)}
@@ -1441,9 +1509,22 @@ class Dao implements CommonConstant {
                     throws RuntimeDaoException{
         return getPersonManager().loadByIndexImageMd5(imageMd5);
     }
+    //18-7
+    /** 
+     * 索引(fl_person.image_md5)查询,没有找到记录抛出异常<br>
+     * 
+     * @param imageMd5 用户默认照片(证件照,标准照)的md5校验码,外键
+     * @see {@link IPersonManager#loadByIndexImageMd5Checked(String)}
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    protected PersonBean daoGetPersonByIndexImageMd5Checked(String imageMd5)
+                    throws RuntimeDaoException,ObjectRetrievalException{
+        return getPersonManager().loadByIndexImageMd5Checked(imageMd5);
+    }
     //18-5
     /** 
-     * 索引(fl_person.papers_num)查询<br>
+     * 索引(fl_person.papers_num)查询,没有找到记录返回{@code null}<br>
      * 
      * @param papersNum 证件号码
      * @see {@link IPersonManager#loadByIndexPapersNum(String)}
@@ -1452,6 +1533,19 @@ class Dao implements CommonConstant {
     protected PersonBean daoGetPersonByIndexPapersNum(String papersNum)
                     throws RuntimeDaoException{
         return getPersonManager().loadByIndexPapersNum(papersNum);
+    }
+    //18-7
+    /** 
+     * 索引(fl_person.papers_num)查询,没有找到记录抛出异常<br>
+     * 
+     * @param papersNum 证件号码
+     * @see {@link IPersonManager#loadByIndexPapersNumChecked(String)}
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    protected PersonBean daoGetPersonByIndexPapersNumChecked(String papersNum)
+                    throws RuntimeDaoException,ObjectRetrievalException{
+        return getPersonManager().loadByIndexPapersNumChecked(papersNum);
     }
     //19
     /**
@@ -1545,14 +1639,28 @@ class Dao implements CommonConstant {
     //////////// FL_PERSON_GROUP /////////
     //1
     /** 
-     * 根据主键从数据库读取记录
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
      * 
      * @param id 用户组id 
+     * @return 
      * @see {@link IPersonGroupManager#loadByPrimaryKey(Integer)}
      * @throws RuntimeDaoException
      */
     protected PersonGroupBean daoGetPersonGroup(Integer id)throws RuntimeDaoException{
         return getPersonGroupManager().loadByPrimaryKey(id);
+    }
+    //1-2
+    /** 
+     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 
+     * @param id 用户组id 
+     * @return 
+     * @see {@link IPersonGroupManager#loadByPrimaryKeyChecked(Integer)}
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    protected PersonGroupBean daoGetPersonGroupChecked(Integer id)throws RuntimeDaoException,ObjectRetrievalException{
+        return getPersonGroupManager().loadByPrimaryKeyChecked(id);
     }
     //2    
     /** 
@@ -1989,14 +2097,28 @@ class Dao implements CommonConstant {
     //////////// FL_FACE /////////
     //1
     /** 
-     * 根据主键从数据库读取记录
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
      * 
      * @param id 主键 
+     * @return 
      * @see {@link IFaceManager#loadByPrimaryKey(Integer)}
      * @throws RuntimeDaoException
      */
     protected FaceBean daoGetFace(Integer id)throws RuntimeDaoException{
         return getFaceManager().loadByPrimaryKey(id);
+    }
+    //1-2
+    /** 
+     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 
+     * @param id 主键 
+     * @return 
+     * @see {@link IFaceManager#loadByPrimaryKeyChecked(Integer)}
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    protected FaceBean daoGetFaceChecked(Integer id)throws RuntimeDaoException,ObjectRetrievalException{
+        return getFaceManager().loadByPrimaryKeyChecked(id);
     }
     //2    
     /** 
@@ -2419,14 +2541,28 @@ class Dao implements CommonConstant {
     //////////// FL_FEATURE /////////
     //1
     /** 
-     * 根据主键从数据库读取记录
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
      * 
      * @param md5 主键,特征码md5校验码 
+     * @return 
      * @see {@link IFeatureManager#loadByPrimaryKey(String)}
      * @throws RuntimeDaoException
      */
     protected FeatureBean daoGetFeature(String md5)throws RuntimeDaoException{
         return getFeatureManager().loadByPrimaryKey(md5);
+    }
+    //1-2
+    /** 
+     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 
+     * @param md5 主键,特征码md5校验码 
+     * @return 
+     * @see {@link IFeatureManager#loadByPrimaryKeyChecked(String)}
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    protected FeatureBean daoGetFeatureChecked(String md5)throws RuntimeDaoException,ObjectRetrievalException{
+        return getFeatureManager().loadByPrimaryKeyChecked(md5);
     }
     //2    
     /** 
@@ -2842,14 +2978,28 @@ class Dao implements CommonConstant {
     //////////// FL_IMAGE /////////
     //1
     /** 
-     * 根据主键从数据库读取记录
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
      * 
      * @param md5 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
+     * @return 
      * @see {@link IImageManager#loadByPrimaryKey(String)}
      * @throws RuntimeDaoException
      */
     protected ImageBean daoGetImage(String md5)throws RuntimeDaoException{
         return getImageManager().loadByPrimaryKey(md5);
+    }
+    //1-2
+    /** 
+     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 
+     * @param md5 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
+     * @return 
+     * @see {@link IImageManager#loadByPrimaryKeyChecked(String)}
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    protected ImageBean daoGetImageChecked(String md5)throws RuntimeDaoException,ObjectRetrievalException{
+        return getImageManager().loadByPrimaryKeyChecked(md5);
     }
     //2    
     /** 
@@ -3222,14 +3372,28 @@ class Dao implements CommonConstant {
     //////////// FL_LOG /////////
     //1
     /** 
-     * 根据主键从数据库读取记录
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
      * 
      * @param id 日志id 
+     * @return 
      * @see {@link ILogManager#loadByPrimaryKey(Integer)}
      * @throws RuntimeDaoException
      */
     protected LogBean daoGetLog(Integer id)throws RuntimeDaoException{
         return getLogManager().loadByPrimaryKey(id);
+    }
+    //1-2
+    /** 
+     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 
+     * @param id 日志id 
+     * @return 
+     * @see {@link ILogManager#loadByPrimaryKeyChecked(Integer)}
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    protected LogBean daoGetLogChecked(Integer id)throws RuntimeDaoException,ObjectRetrievalException{
+        return getLogManager().loadByPrimaryKeyChecked(id);
     }
     //2    
     /** 
@@ -3737,15 +3901,30 @@ class Dao implements CommonConstant {
     //////////// FL_PERMIT /////////
     //1
     /** 
-     * 根据主键从数据库读取记录
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
      * 
      * @param deviceGroupId 外键,设备组id 
      * @param personGroupId 外键,人员组id 
+     * @return 
      * @see {@link IPermitManager#loadByPrimaryKey(Integer,Integer)}
      * @throws RuntimeDaoException
      */
     protected PermitBean daoGetPermit(Integer deviceGroupId,Integer personGroupId)throws RuntimeDaoException{
         return getPermitManager().loadByPrimaryKey(deviceGroupId,personGroupId);
+    }
+    //1-2
+    /** 
+     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 
+     * @param deviceGroupId 外键,设备组id 
+     * @param personGroupId 外键,人员组id 
+     * @return 
+     * @see {@link IPermitManager#loadByPrimaryKeyChecked(Integer,Integer)}
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    protected PermitBean daoGetPermitChecked(Integer deviceGroupId,Integer personGroupId)throws RuntimeDaoException,ObjectRetrievalException{
+        return getPermitManager().loadByPrimaryKeyChecked(deviceGroupId,personGroupId);
     }
     //4
     /** 
@@ -4095,14 +4274,28 @@ class Dao implements CommonConstant {
     //////////// FL_STORE /////////
     //1
     /** 
-     * 根据主键从数据库读取记录
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
      * 
      * @param md5 主键,md5检验码 
+     * @return 
      * @see {@link IStoreManager#loadByPrimaryKey(String)}
      * @throws RuntimeDaoException
      */
     protected StoreBean daoGetStore(String md5)throws RuntimeDaoException{
         return getStoreManager().loadByPrimaryKey(md5);
+    }
+    //1-2
+    /** 
+     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 
+     * @param md5 主键,md5检验码 
+     * @return 
+     * @see {@link IStoreManager#loadByPrimaryKeyChecked(String)}
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    protected StoreBean daoGetStoreChecked(String md5)throws RuntimeDaoException,ObjectRetrievalException{
+        return getStoreManager().loadByPrimaryKeyChecked(md5);
     }
     //2    
     /** 

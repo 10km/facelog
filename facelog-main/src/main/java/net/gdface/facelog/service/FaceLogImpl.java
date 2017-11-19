@@ -19,8 +19,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
@@ -33,7 +31,6 @@ import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
-import net.gdface.facelog.service.DeviceException.DeviceExceptionType;
 import net.gdface.facelog.service.DuplicateRecordException;
 import net.gdface.facelog.service.ServiceRuntimeException;
 import net.gdface.image.LazyImage;
@@ -48,7 +45,7 @@ import net.gdface.utils.Judge;
  * @author guyadong
  *
  */
-public class FaceLogImpl extends BaseFaceLog  {
+public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	private final RedisPersonListener redisPersonListener = new RedisPersonListener();
 	private final RedisImageListener redisImageListener = new RedisImageListener(redisPersonListener,this);
 	private final RedisFeatureListener redisFeatureListener = new RedisFeatureListener();
@@ -378,37 +375,8 @@ public class FaceLogImpl extends BaseFaceLog  {
 		return new ArrayList<PersonBean>(m.values());
 	}
 	///////////////// DEVICE MANAGEMENT///////
-	
-	private static final boolean isValidMac(String mac){
-		return !Strings.isNullOrEmpty(mac) && mac.matches("[a-fA-F0-9]{12}");
-	}
-	protected boolean isValidSerialNo(String sn){
-		return true;
-	}
-	protected DeviceBean daoRegisterDevice(DeviceBean deviceBean)
-			throws RuntimeDaoException, DeviceException, DuplicateRecordException{
-		checkArgument(null != deviceBean,"deviceBean must not be null");
-        checkArgument(deviceBean.isNew() && null == deviceBean.getId(),
-        		"for device registeration the 'deviceBean' must be a new record,so the _isNew field must be true and id must be null");
-		if(!isValidMac(deviceBean.getMac())){
-			throw new DeviceException(DeviceExceptionType.INVALID_MAC);
-		}
-		if(!isValidSerialNo(deviceBean.getSerialNo())){
-			throw new DeviceException(DeviceExceptionType.INVALID_SN);
-		}
-		DeviceBean dmac = this.daoGetDeviceByIndexMac(deviceBean.getMac());
-		DeviceBean dsn = this.daoGetDeviceByIndexSerialNo(deviceBean.getSerialNo());
-		if(null !=dmac ){
-			if(dmac.equals(dsn)){
-				// 设备已经注册
-				return dmac;
-			}
-		}
-		if(null !=dsn){
-			throw new DeviceException(DeviceExceptionType.OCCUPIED_SN);
-		}
-		return this.daoSaveDevice(deviceBean);
-	}
+	private DeviceMangement dm = new DeviceMangement(this);
+	////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public PersonBean getPerson(int personId)throws ServiceRuntimeException {
 		try{
@@ -1406,13 +1374,44 @@ public class FaceLogImpl extends BaseFaceLog  {
 		}
     }
     @Override
-    public DeviceBean registerDevice(DeviceBean deviceBean) throws ServiceRuntimeException, DeviceException, DuplicateRecordException{
+    public DeviceBean registerDevice(DeviceBean newDevice) throws ServiceRuntimeException, DeviceException{
     	try{
-    		return daoRegisterDevice(deviceBean);
+    		return dm.daoRegisterDevice(newDevice);
     	} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
     }
+    @Override
+	public void unregisterDevice(int deviceId,long token)
+			throws ServiceRuntimeException,DeviceException{
+    	try{
+    		dm.daoUnregisterDevice(deviceId,token);
+    	} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
+			throw new ServiceRuntimeException(e);
+		}
+	}
+	public long loginDevice(DeviceBean loginDevice)
+			throws ServiceRuntimeException, DeviceException{
+    	try{
+    		return dm.daoLoginDevice(loginDevice);
+    	} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
+			throw new ServiceRuntimeException(e);
+		}
+	}
+	public void logoutDevice(int deviceId,long token)
+			throws ServiceRuntimeException, DeviceException{
+    	try{
+    		dm.daoLogoutDevice(deviceId,token);
+    	} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
+			throw new ServiceRuntimeException(e);
+		}
+	}
 }

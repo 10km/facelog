@@ -5,7 +5,7 @@ namespace cpp gdface
 
 
 enum DeviceExceptionType {
-  UNCLASSIFIED, INVALID_MAC, INVALID_SN, OCCUPIED_SN
+  UNCLASSIFIED, INVALID_MAC, INVALID_SN, OCCUPIED_SN, INVALID_TOKEN, INVALID_DEVICE_ID
 }
 
 struct FaceBean {
@@ -239,7 +239,9 @@ service IFaceLog {
   list<i32> loadPersonIdByUpdateTime(1:  i64 timestamp) throws (1: ServiceRuntimeException ex1);
   list<i32> loadPersonIdByWhere(1:  string where) throws (1: ServiceRuntimeException ex1);
   list<i32> loadUpdatedPersons(1:  i64 timestamp) throws (1: ServiceRuntimeException ex1);
-  DeviceBean registerDevice(1:  DeviceBean deviceBean) throws (1: ServiceRuntimeException ex1, 2: DeviceException ex2, 3: DuplicateRecordException ex3);
+  i64 loginDevice(1:  DeviceBean loginDevice) throws (1: ServiceRuntimeException ex1, 2: DeviceException ex2);
+  void logoutDevice(1:  i32 deviceId, 2:  i64 token) throws (1: ServiceRuntimeException ex1, 2: DeviceException ex2);
+  DeviceBean registerDevice(1:  DeviceBean newDevice) throws (1: ServiceRuntimeException ex1, 2: DeviceException ex2);
   void replaceFeature(1:  i32 personId, 2:  string featureMd5, 3:  bool deleteOldFeatureImage) throws (1: ServiceRuntimeException ex1);
   DeviceBean saveDevice(1:  DeviceBean deviceBean) throws (1: ServiceRuntimeException ex1);
   DeviceGroupBean saveDeviceGroup(1:  DeviceGroupBean deviceGroupBean) throws (1: ServiceRuntimeException ex1);
@@ -255,4 +257,5 @@ service IFaceLog {
   i32 savePersonsWithPhoto(1:  map<binary, PersonBean> persons) throws (1: ServiceRuntimeException ex1);
   void setPersonExpiryDate(1:  i32 personId, 2:  i64 expiryDate) throws (1: ServiceRuntimeException ex1);
   void setPersonExpiryDateList(1:  list<i32> personIdList, 2:  i64 expiryDate) throws (1: ServiceRuntimeException ex1);
+  void unregisterDevice(1:  i32 deviceId, 2:  i64 token) throws (1: ServiceRuntimeException ex1, 2: DeviceException ex2);
 }

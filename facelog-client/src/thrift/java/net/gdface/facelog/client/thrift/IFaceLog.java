@@ -639,14 +639,32 @@ public interface IFaceLog
             @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
         );
 
+        @ThriftMethod(value = "loginDevice",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1),
+                          @ThriftException(type=DeviceException.class, id=2)
+                      })
+        ListenableFuture<Long> loginDevice(
+            @ThriftField(value=1, name="loginDevice", requiredness=Requiredness.NONE) final DeviceBean loginDevice
+        );
+
+        @ThriftMethod(value = "logoutDevice",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1),
+                          @ThriftException(type=DeviceException.class, id=2)
+                      })
+        ListenableFuture<Void> logoutDevice(
+            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+            @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final long token
+        );
+
         @ThriftMethod(value = "registerDevice",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1),
-                          @ThriftException(type=DeviceException.class, id=2),
-                          @ThriftException(type=DuplicateRecordException.class, id=3)
+                          @ThriftException(type=DeviceException.class, id=2)
                       })
         ListenableFuture<DeviceBean> registerDevice(
-            @ThriftField(value=1, name="deviceBean", requiredness=Requiredness.NONE) final DeviceBean deviceBean
+            @ThriftField(value=1, name="newDevice", requiredness=Requiredness.NONE) final DeviceBean newDevice
         );
 
         @ThriftMethod(value = "replaceFeature",
@@ -789,6 +807,16 @@ public interface IFaceLog
         ListenableFuture<Void> setPersonExpiryDateList(
             @ThriftField(value=1, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList,
             @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.NONE) final long expiryDate
+        );
+
+        @ThriftMethod(value = "unregisterDevice",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1),
+                          @ThriftException(type=DeviceException.class, id=2)
+                      })
+        ListenableFuture<Void> unregisterDevice(
+            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+            @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final long token
         );
     }
     @ThriftMethod(value = "addFeature",
@@ -1417,15 +1445,33 @@ public interface IFaceLog
         @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
     ) throws ServiceRuntimeException;
 
+    @ThriftMethod(value = "loginDevice",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1),
+                      @ThriftException(type=DeviceException.class, id=2)
+                  })
+    long loginDevice(
+        @ThriftField(value=1, name="loginDevice", requiredness=Requiredness.NONE) final DeviceBean loginDevice
+    ) throws ServiceRuntimeException, DeviceException;
+
+    @ThriftMethod(value = "logoutDevice",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1),
+                      @ThriftException(type=DeviceException.class, id=2)
+                  })
+    void logoutDevice(
+        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+        @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final long token
+    ) throws ServiceRuntimeException, DeviceException;
+
     @ThriftMethod(value = "registerDevice",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1),
-                      @ThriftException(type=DeviceException.class, id=2),
-                      @ThriftException(type=DuplicateRecordException.class, id=3)
+                      @ThriftException(type=DeviceException.class, id=2)
                   })
     DeviceBean registerDevice(
-        @ThriftField(value=1, name="deviceBean", requiredness=Requiredness.NONE) final DeviceBean deviceBean
-    ) throws ServiceRuntimeException, DeviceException, DuplicateRecordException;
+        @ThriftField(value=1, name="newDevice", requiredness=Requiredness.NONE) final DeviceBean newDevice
+    ) throws ServiceRuntimeException, DeviceException;
 
     @ThriftMethod(value = "replaceFeature",
                   exception = {
@@ -1568,4 +1614,14 @@ public interface IFaceLog
         @ThriftField(value=1, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList,
         @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.NONE) final long expiryDate
     ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "unregisterDevice",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1),
+                      @ThriftException(type=DeviceException.class, id=2)
+                  })
+    void unregisterDevice(
+        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+        @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final long token
+    ) throws ServiceRuntimeException, DeviceException;
 }

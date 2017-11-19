@@ -61,13 +61,26 @@ class Dao implements CommonConstant {
 #if($table.hasPrimaryKey())
     //1
     /** 
-     * 根据主键从数据库读取记录
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}<br>
      * $paramComments
+     * @return 
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadByPrimaryKey($varTypes)}
      * @throws RuntimeDaoException
      */
     $!{modifier}$beanClass daoGet${coreClass}($params)throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().loadByPrimaryKey($varNames);
+    }
+    //1-2
+    /** 
+     * 根据主键从数据库读取记录,没有找到记录抛出异常<br>
+     * $paramComments
+     * @return 
+     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadByPrimaryKeyChecked($varTypes)}
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    $!{modifier}$beanClass daoGet${coreClass}Checked($params)throws RuntimeDaoException,ObjectRetrievalException{
+        return ${table.getGetManagerMethod()}().loadByPrimaryKeyChecked($varNames);
     }
 #if($table.countPrimaryKeys() == 1)
     //2    
@@ -654,7 +667,7 @@ class Dao implements CommonConstant {
 #set ($indexColumns = $index.getIndexColumnsList())
     //18-5
     /** 
-     * 索引(${table.name}.${index.name})查询<br>
+     * 索引(${table.name}.${index.name})查询,没有找到记录返回{@code null}<br>
      * #join($indexColumns '
      * @param $e.varName $e.remarks' '')
 
@@ -664,6 +677,20 @@ class Dao implements CommonConstant {
     $!{modifier}$beanClass daoGet${coreClass}By${index.asCamelCaseName()}(#join($indexColumns '$e.javaType $e.varName' ','))
                     throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().loadBy${index.asCamelCaseName()}(#join($indexColumns '$e.varName' ','));
+    }
+    //18-7
+    /** 
+     * 索引(${table.name}.${index.name})查询,没有找到记录抛出异常<br>
+     * #join($indexColumns '
+     * @param $e.varName $e.remarks' '')
+
+     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadBy${index.asCamelCaseName()}Checked(#join($indexColumns '$e.javaType' ','))}
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    $!{modifier}$beanClass daoGet${coreClass}By${index.asCamelCaseName()}Checked(#join($indexColumns '$e.javaType $e.varName' ','))
+                    throws RuntimeDaoException,ObjectRetrievalException{
+        return ${table.getGetManagerMethod()}().loadBy${index.asCamelCaseName()}Checked(#join($indexColumns '$e.varName' ','));
     }
 #end
 #### 生成 loadByTimestamp方法
