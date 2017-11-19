@@ -400,6 +400,7 @@ public class FaceLogImpl extends BaseFaceLog  {
 		DeviceBean dsn = this.daoGetDeviceByIndexSerialNo(deviceBean.getSerialNo());
 		if(null !=dmac ){
 			if(dmac.equals(dsn)){
+				// 设备已经注册
 				return dmac;
 			}
 		}
