@@ -4,7 +4,7 @@ namespace java com.gdface
 namespace cpp gdface
 
 
-enum DeviceExceptionType {
+enum SecurityExceptionType {
   UNCLASSIFIED, INVALID_MAC, INVALID_SN, OCCUPIED_SN, INVALID_TOKEN, INVALID_DEVICE_ID, INVALID_PERSON_ID
 }
 
@@ -38,13 +38,15 @@ exception ServiceRuntimeException {
   1:  string message;
   2:  string causeClass;
   3:  string serviceStackTraceMessage;
-  4:  i32 type;
+  4:  string causeField;
+  5:  i32 type;
 }
 
 exception DuplicateRecordException {
   1:  string message;
   2:  string causeClass;
   3:  string serviceStackTraceMessage;
+  4:  string causeField;
 }
 
 struct FeatureBean {
@@ -162,12 +164,13 @@ struct PermitBean {
   6:  i64 createTime;
 }
 
-exception SecurityException {
+exception ServiceSecurityException {
   1:  string message;
   2:  string causeClass;
   3:  string serviceStackTraceMessage;
-  4:  DeviceExceptionType type;
-  5:  i32 deviceID;
+  4:  string causeField;
+  5:  SecurityExceptionType type;
+  6:  i32 deviceID;
 }
 
 service IFaceLog {
@@ -178,7 +181,7 @@ service IFaceLog {
   void addLogs(1:  list<LogBean> beans) throws (1: ServiceRuntimeException ex1, 2: DuplicateRecordException ex2);
   void addPermit(1:  DeviceGroupBean deviceGroup, 2:  PersonGroupBean personGroup) throws (1: ServiceRuntimeException ex1);
   void addPermitById(1:  i32 deviceGroupId, 2:  i32 personGroupId) throws (1: ServiceRuntimeException ex1);
-  Token applyPersonToken(1:  i32 personId) throws (1: ServiceRuntimeException ex1, 2: SecurityException ex2);
+  Token applyPersonToken(1:  i32 personId) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
   i32 countDeviceByWhere(1:  string where) throws (1: ServiceRuntimeException ex1);
   i32 countDeviceGroupByWhere(1:  string where) throws (1: ServiceRuntimeException ex1);
   i32 countLogByWhere(1:  string where) throws (1: ServiceRuntimeException ex1);
@@ -246,10 +249,10 @@ service IFaceLog {
   list<i32> loadPersonIdByUpdateTime(1:  i64 timestamp) throws (1: ServiceRuntimeException ex1);
   list<i32> loadPersonIdByWhere(1:  string where) throws (1: ServiceRuntimeException ex1);
   list<i32> loadUpdatedPersons(1:  i64 timestamp) throws (1: ServiceRuntimeException ex1);
-  void offline(1:  i32 deviceId, 2:  Token token) throws (1: ServiceRuntimeException ex1, 2: SecurityException ex2);
-  Token online(1:  DeviceBean loginDevice) throws (1: ServiceRuntimeException ex1, 2: SecurityException ex2);
-  DeviceBean registerDevice(1:  DeviceBean newDevice) throws (1: ServiceRuntimeException ex1, 2: SecurityException ex2);
-  void releasePersonToken(1:  i32 personId, 2:  Token token) throws (1: ServiceRuntimeException ex1, 2: SecurityException ex2);
+  void offline(1:  i32 deviceId, 2:  Token token) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
+  Token online(1:  DeviceBean device) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
+  DeviceBean registerDevice(1:  DeviceBean newDevice) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
+  void releasePersonToken(1:  i32 personId, 2:  Token token) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
   void replaceFeature(1:  i32 personId, 2:  string featureMd5, 3:  bool deleteOldFeatureImage) throws (1: ServiceRuntimeException ex1);
   DeviceBean saveDevice(1:  DeviceBean deviceBean) throws (1: ServiceRuntimeException ex1);
   DeviceGroupBean saveDeviceGroup(1:  DeviceGroupBean deviceGroupBean) throws (1: ServiceRuntimeException ex1);
@@ -265,5 +268,5 @@ service IFaceLog {
   i32 savePersonsWithPhoto(1:  map<binary, PersonBean> persons) throws (1: ServiceRuntimeException ex1);
   void setPersonExpiryDate(1:  i32 personId, 2:  i64 expiryDate) throws (1: ServiceRuntimeException ex1);
   void setPersonExpiryDateList(1:  list<i32> personIdList, 2:  i64 expiryDate) throws (1: ServiceRuntimeException ex1);
-  void unregisterDevice(1:  i32 deviceId, 2:  Token token) throws (1: ServiceRuntimeException ex1, 2: SecurityException ex2);
+  void unregisterDevice(1:  i32 deviceId, 2:  Token token) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
 }

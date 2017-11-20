@@ -1065,13 +1065,13 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param newDevice
 	 * @return
 	 * @throws ServiceRuntimeException
-	 * @throws SecurityException
+	 * @throws ServiceSecurityException
 	 */
 	@ThriftMethod(exception = {
             @ThriftException(type=ServiceRuntimeException.class, id=1),
-            @ThriftException(type=SecurityException.class, id=2)
+            @ThriftException(type=ServiceSecurityException.class, id=2)
 			})
-	public DeviceBean registerDevice(DeviceBean newDevice) throws ServiceRuntimeException, SecurityException{
+	public DeviceBean registerDevice(DeviceBean newDevice) throws ServiceRuntimeException, ServiceSecurityException{
 		return newDevice;		
 	}
 	/**
@@ -1079,28 +1079,28 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param deviceId
 	 * @param token 设备验证令牌
 	 * @throws ServiceRuntimeException
-	 * @throws SecurityException
+	 * @throws ServiceSecurityException
 	 */
 	@ThriftMethod(exception = {
             @ThriftException(type=ServiceRuntimeException.class, id=1),
-            @ThriftException(type=SecurityException.class, id=2)
+            @ThriftException(type=ServiceSecurityException.class, id=2)
 			})
 	public void unregisterDevice(int deviceId,Token token)
-			throws ServiceRuntimeException,SecurityException{	
+			throws ServiceRuntimeException,ServiceSecurityException{	
 	}
 	/**
 	 * 设备申请上线,每次调用都会产生一个新的令牌
 	 * @param device 上线设备信息，必须提供{@code id, mac, serialNo}字段
 	 * @return 设备访问令牌
 	 * @throws ServiceRuntimeException
-	 * @throws SecurityException
+	 * @throws ServiceSecurityException
 	 */
 	@ThriftMethod(exception = {
             @ThriftException(type=ServiceRuntimeException.class, id=1),
-            @ThriftException(type=SecurityException.class, id=2)
+            @ThriftException(type=ServiceSecurityException.class, id=2)
 			})
 	public Token online(DeviceBean device)
-			throws ServiceRuntimeException, SecurityException{
+			throws ServiceRuntimeException, ServiceSecurityException{
 				return null;
 	}
 	/**
@@ -1108,28 +1108,28 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param deviceId
 	 * @param token 当前持有的令牌
 	 * @throws ServiceRuntimeException
-	 * @throws SecurityException
+	 * @throws ServiceSecurityException
 	 */
 	@ThriftMethod(exception = {
             @ThriftException(type=ServiceRuntimeException.class, id=1),
-            @ThriftException(type=SecurityException.class, id=2)
+            @ThriftException(type=ServiceSecurityException.class, id=2)
 			})
 	public void offline(int deviceId,Token token)
-			throws ServiceRuntimeException, SecurityException{
+			throws ServiceRuntimeException, ServiceSecurityException{
 	}
 	/**
 	 * 申请人员访问令牌
 	 * @param personId
 	 * @return
 	 * @throws ServiceRuntimeException
-	 * @throws SecurityException
+	 * @throws ServiceSecurityException
 	 */
 	@ThriftMethod(exception = {
             @ThriftException(type=ServiceRuntimeException.class, id=1),
-            @ThriftException(type=SecurityException.class, id=2)
+            @ThriftException(type=ServiceSecurityException.class, id=2)
 			})
 	public Token applyPersonToken(int personId)
-			throws ServiceRuntimeException, SecurityException{
+			throws ServiceRuntimeException, ServiceSecurityException{
 				return null;		
 	}
 	/**
@@ -1137,13 +1137,13 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param personId
 	 * @param token 当前持有的令牌
 	 * @throws ServiceRuntimeException
-	 * @throws SecurityException
+	 * @throws ServiceSecurityException
 	 */
 	@ThriftMethod(exception = {
             @ThriftException(type=ServiceRuntimeException.class, id=1),
-            @ThriftException(type=SecurityException.class, id=2)
+            @ThriftException(type=ServiceSecurityException.class, id=2)
 			})
 	public void releasePersonToken(int personId,Token token)
-			throws ServiceRuntimeException, SecurityException{
+			throws ServiceRuntimeException, ServiceSecurityException{
 	}
 }

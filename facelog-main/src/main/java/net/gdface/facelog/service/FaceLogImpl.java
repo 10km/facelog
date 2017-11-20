@@ -375,8 +375,10 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		return new ArrayList<PersonBean>(m.values());
 	}
 	///////////////// TOKEN MANAGEMENT///////
+	
 	private final TokenMangement tm = new TokenMangement(this);
 	////////////////////////////////////////////////////////////////////////////////////
+	
 	@Override
 	public PersonBean getPerson(int personId)throws ServiceRuntimeException {
 		try{
@@ -1374,7 +1376,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
     }
     @Override
-    public DeviceBean registerDevice(DeviceBean newDevice) throws ServiceRuntimeException, SecurityException{
+    public DeviceBean registerDevice(DeviceBean newDevice) throws ServiceRuntimeException, ServiceSecurityException{
     	try{
     		return tm.registerDevice(newDevice);
     	} catch(RuntimeDaoException e){
@@ -1385,7 +1387,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
     }
     @Override
 	public void unregisterDevice(int deviceId,Token token)
-			throws ServiceRuntimeException,SecurityException{
+			throws ServiceRuntimeException,ServiceSecurityException{
     	try{
     		tm.unregisterDevice(deviceId,token);
     	} catch(RuntimeDaoException e){
@@ -1396,7 +1398,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	}
     @Override
 	public Token online(DeviceBean device)
-			throws ServiceRuntimeException, SecurityException{
+			throws ServiceRuntimeException, ServiceSecurityException{
     	try{
     		return tm.applyDeviceToken(device);
     	} catch(RuntimeDaoException e){
@@ -1407,7 +1409,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	}
     @Override
 	public void offline(int deviceId,Token token)
-			throws ServiceRuntimeException, SecurityException{
+			throws ServiceRuntimeException, ServiceSecurityException{
     	try{
     		tm.releaseDeviceToken(deviceId,token);
     	} catch(RuntimeDaoException e){
@@ -1418,7 +1420,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	}
     @Override
 	public Token applyPersonToken(int personId)
-			throws ServiceRuntimeException, SecurityException{
+			throws ServiceRuntimeException, ServiceSecurityException{
     	try{
     		return tm.applyPersonToken(personId);
     	} catch(RuntimeDaoException e){
@@ -1429,7 +1431,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	}
     @Override
 	public void releasePersonToken(int personId,Token token)
-			throws ServiceRuntimeException, SecurityException{
+			throws ServiceRuntimeException, ServiceSecurityException{
     	try{
     		tm.releasePersonToken(personId,token);
     	} catch(RuntimeDaoException e){

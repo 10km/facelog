@@ -4,12 +4,12 @@ import com.facebook.swift.codec.*;
 import com.facebook.swift.codec.ThriftField.Requiredness;
 import java.util.*;
 
-@ThriftStruct("SecurityException")
-public final class SecurityException extends Exception
+@ThriftStruct("ServiceSecurityException")
+public final class ServiceSecurityException extends Exception
 {
     private static final long serialVersionUID = 1L;
 
-    public SecurityException() {
+    public ServiceSecurityException() {
     }
 
     private String message;
@@ -36,17 +36,25 @@ public final class SecurityException extends Exception
     @ThriftField
     public void setServiceStackTraceMessage(final String serviceStackTraceMessage) { this.serviceStackTraceMessage = serviceStackTraceMessage; }
 
-    private DeviceExceptionType type;
+    private String causeField;
 
-    @ThriftField(value=4, name="type", requiredness=Requiredness.NONE)
-    public DeviceExceptionType getType() { return type; }
+    @ThriftField(value=4, name="causeField", requiredness=Requiredness.NONE)
+    public String getCauseField() { return causeField; }
 
     @ThriftField
-    public void setType(final DeviceExceptionType type) { this.type = type; }
+    public void setCauseField(final String causeField) { this.causeField = causeField; }
+
+    private SecurityExceptionType type;
+
+    @ThriftField(value=5, name="type", requiredness=Requiredness.NONE)
+    public SecurityExceptionType getType() { return type; }
+
+    @ThriftField
+    public void setType(final SecurityExceptionType type) { this.type = type; }
 
     private int deviceID;
 
-    @ThriftField(value=5, name="deviceID", requiredness=Requiredness.NONE)
+    @ThriftField(value=6, name="deviceID", requiredness=Requiredness.NONE)
     public int getDeviceID() { return deviceID; }
 
     @ThriftField

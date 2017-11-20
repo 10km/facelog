@@ -2315,9 +2315,9 @@ class IFaceLogClient implements Constant{
      * @param newDevice
      * @return 
      * @throws ServiceRuntimeException
-     * @throws SecurityException
+     * @throws ServiceSecurityException
      */
-    public DeviceBean registerDevice(DeviceBean newDevice)throws net.gdface.facelog.client.thrift.SecurityException{
+    public DeviceBean registerDevice(DeviceBean newDevice)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
         try{
             return converterDeviceBean.fromRight(service.registerDevice(converterDeviceBean.toRight(newDevice)));
         }
@@ -2339,11 +2339,11 @@ class IFaceLogClient implements Constant{
      * @param deviceId
      * @param token 设备验证令牌
      * @throws ServiceRuntimeException
-     * @throws SecurityException
+     * @throws ServiceSecurityException
      */
     public void unregisterDevice(
             int deviceId,
-            net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.SecurityException{
+            net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
         try{
             service.unregisterDevice(
                     deviceId,
@@ -2359,9 +2359,9 @@ class IFaceLogClient implements Constant{
      * @param device 上线设备信息，必须提供{@code id, mac, serialNo}字段
      * @return 设备访问令牌
      * @throws ServiceRuntimeException
-     * @throws SecurityException
+     * @throws ServiceSecurityException
      */
-    public net.gdface.facelog.client.thrift.Token online(DeviceBean device)throws net.gdface.facelog.client.thrift.SecurityException{
+    public net.gdface.facelog.client.thrift.Token online(DeviceBean device)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
         try{
             return service.online(converterDeviceBean.toRight(device));
         }
@@ -2383,11 +2383,11 @@ class IFaceLogClient implements Constant{
      * @param deviceId
      * @param token 当前持有的令牌
      * @throws ServiceRuntimeException
-     * @throws SecurityException
+     * @throws ServiceSecurityException
      */
     public void offline(
             int deviceId,
-            net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.SecurityException{
+            net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
         try{
             service.offline(
                     deviceId,
@@ -2403,9 +2403,9 @@ class IFaceLogClient implements Constant{
      * @param personId
      * @return 
      * @throws ServiceRuntimeException
-     * @throws SecurityException
+     * @throws ServiceSecurityException
      */
-    public net.gdface.facelog.client.thrift.Token applyPersonToken(int personId)throws net.gdface.facelog.client.thrift.SecurityException{
+    public net.gdface.facelog.client.thrift.Token applyPersonToken(int personId)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
         try{
             return service.applyPersonToken(personId);
         }
@@ -2427,11 +2427,11 @@ class IFaceLogClient implements Constant{
      * @param personId
      * @param token 当前持有的令牌
      * @throws ServiceRuntimeException
-     * @throws SecurityException
+     * @throws ServiceSecurityException
      */
     public void releasePersonToken(
             int personId,
-            net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.SecurityException{
+            net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
         try{
             service.releasePersonToken(
                     personId,

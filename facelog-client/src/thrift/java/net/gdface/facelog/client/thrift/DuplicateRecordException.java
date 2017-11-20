@@ -35,4 +35,12 @@ public final class DuplicateRecordException extends Exception
 
     @ThriftField
     public void setServiceStackTraceMessage(final String serviceStackTraceMessage) { this.serviceStackTraceMessage = serviceStackTraceMessage; }
+
+    private String causeField;
+
+    @ThriftField(value=4, name="causeField", requiredness=Requiredness.NONE)
+    public String getCauseField() { return causeField; }
+
+    @ThriftField
+    public void setCauseField(final String causeField) { this.causeField = causeField; }
 }

@@ -87,7 +87,7 @@ public interface IFaceLog
         @ThriftMethod(value = "applyPersonToken",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1),
-                          @ThriftException(type=SecurityException.class, id=2)
+                          @ThriftException(type=ServiceSecurityException.class, id=2)
                       })
         ListenableFuture<Token> applyPersonToken(
             @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
@@ -651,7 +651,7 @@ public interface IFaceLog
         @ThriftMethod(value = "offline",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1),
-                          @ThriftException(type=SecurityException.class, id=2)
+                          @ThriftException(type=ServiceSecurityException.class, id=2)
                       })
         ListenableFuture<Void> offline(
             @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
@@ -661,16 +661,16 @@ public interface IFaceLog
         @ThriftMethod(value = "online",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1),
-                          @ThriftException(type=SecurityException.class, id=2)
+                          @ThriftException(type=ServiceSecurityException.class, id=2)
                       })
         ListenableFuture<Token> online(
-            @ThriftField(value=1, name="loginDevice", requiredness=Requiredness.NONE) final DeviceBean loginDevice
+            @ThriftField(value=1, name="device", requiredness=Requiredness.NONE) final DeviceBean device
         );
 
         @ThriftMethod(value = "registerDevice",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1),
-                          @ThriftException(type=SecurityException.class, id=2)
+                          @ThriftException(type=ServiceSecurityException.class, id=2)
                       })
         ListenableFuture<DeviceBean> registerDevice(
             @ThriftField(value=1, name="newDevice", requiredness=Requiredness.NONE) final DeviceBean newDevice
@@ -679,7 +679,7 @@ public interface IFaceLog
         @ThriftMethod(value = "releasePersonToken",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1),
-                          @ThriftException(type=SecurityException.class, id=2)
+                          @ThriftException(type=ServiceSecurityException.class, id=2)
                       })
         ListenableFuture<Void> releasePersonToken(
             @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
@@ -831,7 +831,7 @@ public interface IFaceLog
         @ThriftMethod(value = "unregisterDevice",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1),
-                          @ThriftException(type=SecurityException.class, id=2)
+                          @ThriftException(type=ServiceSecurityException.class, id=2)
                       })
         ListenableFuture<Void> unregisterDevice(
             @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
@@ -912,11 +912,11 @@ public interface IFaceLog
     @ThriftMethod(value = "applyPersonToken",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1),
-                      @ThriftException(type=SecurityException.class, id=2)
+                      @ThriftException(type=ServiceSecurityException.class, id=2)
                   })
     Token applyPersonToken(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
-    ) throws ServiceRuntimeException, SecurityException;
+    ) throws ServiceRuntimeException, ServiceSecurityException;
 
     @ThriftMethod(value = "countDeviceByWhere",
                   exception = {
@@ -1476,40 +1476,40 @@ public interface IFaceLog
     @ThriftMethod(value = "offline",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1),
-                      @ThriftException(type=SecurityException.class, id=2)
+                      @ThriftException(type=ServiceSecurityException.class, id=2)
                   })
     void offline(
         @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
         @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
-    ) throws ServiceRuntimeException, SecurityException;
+    ) throws ServiceRuntimeException, ServiceSecurityException;
 
     @ThriftMethod(value = "online",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1),
-                      @ThriftException(type=SecurityException.class, id=2)
+                      @ThriftException(type=ServiceSecurityException.class, id=2)
                   })
     Token online(
-        @ThriftField(value=1, name="loginDevice", requiredness=Requiredness.NONE) final DeviceBean loginDevice
-    ) throws ServiceRuntimeException, SecurityException;
+        @ThriftField(value=1, name="device", requiredness=Requiredness.NONE) final DeviceBean device
+    ) throws ServiceRuntimeException, ServiceSecurityException;
 
     @ThriftMethod(value = "registerDevice",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1),
-                      @ThriftException(type=SecurityException.class, id=2)
+                      @ThriftException(type=ServiceSecurityException.class, id=2)
                   })
     DeviceBean registerDevice(
         @ThriftField(value=1, name="newDevice", requiredness=Requiredness.NONE) final DeviceBean newDevice
-    ) throws ServiceRuntimeException, SecurityException;
+    ) throws ServiceRuntimeException, ServiceSecurityException;
 
     @ThriftMethod(value = "releasePersonToken",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1),
-                      @ThriftException(type=SecurityException.class, id=2)
+                      @ThriftException(type=ServiceSecurityException.class, id=2)
                   })
     void releasePersonToken(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
         @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
-    ) throws ServiceRuntimeException, SecurityException;
+    ) throws ServiceRuntimeException, ServiceSecurityException;
 
     @ThriftMethod(value = "replaceFeature",
                   exception = {
@@ -1656,10 +1656,10 @@ public interface IFaceLog
     @ThriftMethod(value = "unregisterDevice",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1),
-                      @ThriftException(type=SecurityException.class, id=2)
+                      @ThriftException(type=ServiceSecurityException.class, id=2)
                   })
     void unregisterDevice(
         @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
         @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
-    ) throws ServiceRuntimeException, SecurityException;
+    ) throws ServiceRuntimeException, ServiceSecurityException;
 }

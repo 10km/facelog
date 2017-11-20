@@ -11,10 +11,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  */
 @ThriftStruct
-public final class SecurityException extends BaseServiceException {
+public final class ServiceSecurityException extends BaseServiceException {
 	private static final long serialVersionUID = 5298414024971333060L;
 	@ThriftStruct
-	public static enum DeviceExceptionType{
+	public static enum SecurityExceptionType{
         /** 其他未分类异常 */UNCLASSIFIED,
         /** 无效MAC地址 */INVALID_MAC,
         /** 无效序列号 */INVALID_SN,
@@ -23,44 +23,55 @@ public final class SecurityException extends BaseServiceException {
         /** 无效设备ID*/INVALID_DEVICE_ID,
         /** 无效人员ID*/INVALID_PERSON_ID
 	}
-    private DeviceExceptionType type = DeviceExceptionType.UNCLASSIFIED;
+    private SecurityExceptionType type = SecurityExceptionType.UNCLASSIFIED;
     private Integer deviceID;
-	public SecurityException() {
+	public ServiceSecurityException() {
 	}
 
-	public SecurityException(String message) {
+	public ServiceSecurityException(String message) {
 		super(message);
 	}
 
-	public SecurityException(String message, Throwable cause) {
+	public ServiceSecurityException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public SecurityException(Throwable cause) {
+	public ServiceSecurityException(Throwable cause) {
 		super(cause);
 	}
 	
-	public SecurityException(DeviceExceptionType type) {
+	public ServiceSecurityException(SecurityExceptionType type) {
 		super();
 		this.type = checkNotNull(type);
 	}
     /** return exception type */
-    @ThriftField(4)
-    public DeviceExceptionType getType() {
+    @ThriftField(5)
+    public SecurityExceptionType getType() {
         return type;
     }
     @ThriftField
-    public SecurityException setType(DeviceExceptionType type) {
+    public ServiceSecurityException setType(SecurityExceptionType type) {
         this.type = type;
         return this;
     }
-    @ThriftField(5)
+    @ThriftField(6)
 	public Integer getDeviceID() {
 		return deviceID;
 	}
     @ThriftField
-	public SecurityException setDeviceID(Integer deviceID) {
+	public ServiceSecurityException setDeviceID(Integer deviceID) {
 		this.deviceID = deviceID;
 		return this;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("ServiceSecurityException [type=");
+		builder.append(type);
+		builder.append(", deviceID=");
+		builder.append(deviceID);
+		builder.append("]");
+		return builder.toString();
+	}    
 }
