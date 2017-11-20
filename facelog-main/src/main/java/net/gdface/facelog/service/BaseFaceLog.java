@@ -1090,7 +1090,7 @@ public abstract class BaseFaceLog extends Dao{
 	}
 	/**
 	 * 设备申请上线,每次调用都会产生一个新的令牌
-	 * @param loginDevice
+	 * @param device 上线设备信息，必须提供{@code id, mac, serialNo}字段
 	 * @return 设备访问令牌
 	 * @throws ServiceRuntimeException
 	 * @throws SecurityException
@@ -1099,14 +1099,14 @@ public abstract class BaseFaceLog extends Dao{
             @ThriftException(type=ServiceRuntimeException.class, id=1),
             @ThriftException(type=SecurityException.class, id=2)
 			})
-	public Token online(DeviceBean loginDevice)
+	public Token online(DeviceBean device)
 			throws ServiceRuntimeException, SecurityException{
 				return null;
 	}
 	/**
 	 * 设备申请离线,删除设备令牌
 	 * @param deviceId
-	 * @param token
+	 * @param token 当前持有的令牌
 	 * @throws ServiceRuntimeException
 	 * @throws SecurityException
 	 */
@@ -1135,7 +1135,7 @@ public abstract class BaseFaceLog extends Dao{
 	/**
 	 * 释放人员访问令牌
 	 * @param personId
-	 * @param token
+	 * @param token 当前持有的令牌
 	 * @throws ServiceRuntimeException
 	 * @throws SecurityException
 	 */

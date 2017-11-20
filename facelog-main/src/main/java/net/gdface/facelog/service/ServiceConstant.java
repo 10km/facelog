@@ -1,8 +1,5 @@
 package net.gdface.facelog.service;
 
-import com.facebook.swift.codec.ThriftField;
-import com.facebook.swift.codec.ThriftStruct;
-
 import gu.simplemq.Channel;
 
 /**

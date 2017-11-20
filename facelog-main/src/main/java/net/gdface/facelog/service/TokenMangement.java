@@ -35,11 +35,11 @@ class TokenMangement implements ServiceConstant {
 		this.personTokenTable =  RedisFactory.getTable(TABLE_PERSON_TOKEN, JedisPoolLazy.getDefaultInstance());
 		this.personTokenTable.setExpire(DEFAULT_PERSON_TOKEN_EXPIRE, TimeUnit.MINUTES);
 	}
-	/** 验证MAC地址是否有效 */
-	public static final boolean isValidMac(String mac){
-		return !Strings.isNullOrEmpty(mac) && mac.matches("[a-fA-F0-9]{12}");
+	/** 验证MAC地址是否有效(HEX格式,12字符,无分隔符,不区分大小写) */
+	protected static final boolean isValidMac(String mac){
+		return !Strings.isNullOrEmpty(mac) && mac.matches("^[a-fA-F0-9]{12}$");
 	}
-	public static final void checkValidMac(String mac) throws SecurityException{
+	protected static final void checkValidMac(String mac) throws SecurityException{
 		if(!isValidMac(mac)){
 			throw new SecurityException(String.format("INVALID MAC:%s ", mac))
 			.setType(DeviceExceptionType.INVALID_MAC);
@@ -178,6 +178,13 @@ class TokenMangement implements ServiceConstant {
 		checkValidDeviceId(deviceId);
 		this.dao.daoDeleteDevice(deviceId);
 	}
+	/**
+	 * 申请设备令牌
+	 * @param loginDevice 申请信息设备信息，必须提供{@code id, mac, serialNo}字段
+	 * @return
+	 * @throws RuntimeDaoException
+	 * @throws SecurityException
+	 */
 	protected Token applyDeviceToken(DeviceBean loginDevice)
 			throws RuntimeDaoException, SecurityException{
 		checkValidDeviceId(loginDevice.getId());
@@ -195,11 +202,25 @@ class TokenMangement implements ServiceConstant {
 		deviceTokenTable.set(device.getId().toString(), token, false);
 		return token;
 	}
+	/**
+	 * 释放设备令牌
+	 * @param deviceId
+	 * @param token 当前持有的令牌
+	 * @throws RuntimeDaoException
+	 * @throws SecurityException
+	 */
 	protected void releaseDeviceToken(int deviceId,Token token)
 			throws RuntimeDaoException, SecurityException{
 		checkValidToken(deviceId,token);
 		removeDeviceTokenOf(deviceId);
 	}
+	/**
+	 * 申请人员访问令牌
+	 * @param personId
+	 * @return
+	 * @throws RuntimeDaoException
+	 * @throws SecurityException
+	 */
 	protected Token applyPersonToken(int personId)
 			throws RuntimeDaoException, SecurityException{
 		// 生成一个新令牌
@@ -212,6 +233,13 @@ class TokenMangement implements ServiceConstant {
 		deviceTokenTable.expire(key);
 		return token;
 	}
+	/**
+	 * 释放人员访问令牌
+	 * @param personId
+	 * @param token 当前持有的令牌
+	 * @throws RuntimeDaoException
+	 * @throws SecurityException
+	 */
 	protected void releasePersonToken(int personId,Token token)
 			throws RuntimeDaoException, SecurityException{
 		checkValidToken(personId,token);

@@ -1395,10 +1395,10 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
 	}
     @Override
-	public Token online(DeviceBean loginDevice)
+	public Token online(DeviceBean device)
 			throws ServiceRuntimeException, SecurityException{
     	try{
-    		return tm.applyDeviceToken(loginDevice);
+    		return tm.applyDeviceToken(device);
     	} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
