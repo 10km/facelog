@@ -15,21 +15,21 @@ import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisTable;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
-import net.gdface.facelog.service.DeviceException.DeviceExceptionType;
+import net.gdface.facelog.service.SecurityException.DeviceExceptionType;
 import net.gdface.utils.FaceUtilits;
 
 /**
- * 设备管理模块
+ * 令牌管理模块
  * @author guyadong
  *
  */
-class DeviceMangement implements ServiceConstant {
+class TokenMangement implements ServiceConstant {
 	private final Dao dao;
 	/**  {@code 设备ID -> token} 映射表 */
 	private final RedisTable<Token> deviceTokenTable;
 	/**  {@code 人员ID -> token} 映射表 */
 	private final RedisTable<Token> personTokenTable;
-	DeviceMangement(Dao dao) {
+	TokenMangement(Dao dao) {
 		this.dao = checkNotNull(dao,"dao is null");
 		this.deviceTokenTable =  RedisFactory.getTable(TABLE_DEVICE_TOKEN, JedisPoolLazy.getDefaultInstance());
 		this.personTokenTable =  RedisFactory.getTable(TABLE_PERSON_TOKEN, JedisPoolLazy.getDefaultInstance());
@@ -39,9 +39,9 @@ class DeviceMangement implements ServiceConstant {
 	public static final boolean isValidMac(String mac){
 		return !Strings.isNullOrEmpty(mac) && mac.matches("[a-fA-F0-9]{12}");
 	}
-	public static final void checkValidMac(String mac) throws DeviceException{
+	public static final void checkValidMac(String mac) throws SecurityException{
 		if(!isValidMac(mac)){
-			throw new DeviceException(String.format("INVALID MAC:%s ", mac))
+			throw new SecurityException(String.format("INVALID MAC:%s ", mac))
 			.setType(DeviceExceptionType.INVALID_MAC);
 		}
 	}
@@ -50,46 +50,47 @@ class DeviceMangement implements ServiceConstant {
 		return true;
 	}
 	/** 序列号已经被占用则抛出异常 */
-	protected void checkNotOccupiedSerialNo(String sn) throws DeviceException{
-		DeviceBean bean = dao.daoGetDeviceByIndexSerialNo(sn);
+	protected void checkNotOccupiedSerialNo(String sn) throws SecurityException{
+		DeviceBean bean = null == sn ? null : dao.daoGetDeviceByIndexSerialNo(sn);
 		if(null != bean){
-			throw new DeviceException(String.format("serian no:%s occupied by %d", sn,bean.getId()))
-					.setType(DeviceExceptionType.OCCUPIED_SN);
+			throw new SecurityException(
+					String.format("serian no:%s be occupied by device ID[%d] MAC[%s]", sn,bean.getId(),bean.getMac()))
+					.setType(DeviceExceptionType.OCCUPIED_SN).setDeviceID(bean.getId());
 		}			
 	}
 	/** 序列号无效则抛出异常 */
-	protected void checkValidSerialNo(String sn) throws DeviceException{
+	protected void checkValidSerialNo(String sn) throws SecurityException{
 		if(!isValidSerialNo(sn)){
-			throw new DeviceException(String.format("INVALID serial number:%s", sn))
+			throw new SecurityException(String.format("INVALID serial number:%s", sn))
 					.setType(DeviceExceptionType.INVALID_SN);
 		}
 	}
 	/** 验证设备令牌是否有效 */
-	protected boolean isValidDeviceToken(int deviceId, Token token){
+	private boolean isValidDeviceToken(int deviceId, Token token){
 		return null == token ? false : Objects.equal(token,deviceTokenTable.get(Integer.toString(deviceId)));
 	}
 	/** 验证人员令牌是否有效 */
-	protected boolean isValidPersonToken(int personId, Token token){
+	private boolean isValidPersonToken(int personId, Token token){
 		return null == token ? false : Objects.equal(token,personTokenTable.get(Integer.toString(personId)));
 	}
 	/**
 	 * 令牌无效抛出异常
 	 * @param id
 	 * @param token
-	 * @throws DeviceException
+	 * @throws SecurityException
 	 */
-	protected void checkValidToken(int id, Token token) throws DeviceException{
+	protected void checkValidToken(int id, Token token) throws SecurityException{
 		if(null != token){
 			if(isValidDeviceToken(id, token) || isValidPersonToken(id, token)){
 				return;
 			}
 		}
-		throw new DeviceException(DeviceExceptionType.INVALID_TOKEN);
+		throw new SecurityException(DeviceExceptionType.INVALID_TOKEN);
 	}
-	/** 检查数据库是否存在指定的设备记录,没有则抛出异常{@link DeviceException} */
-	protected void checkValidDeviceId(Integer deviceId) throws DeviceException{
+	/** 检查数据库是否存在指定的设备记录,没有则抛出异常{@link SecurityException} */
+	protected void checkValidDeviceId(Integer deviceId) throws SecurityException{
 		if(!this.dao.daoExistsDevice(deviceId)){
-			throw new DeviceException(String.format("NOT EXISTS device %d", deviceId))
+			throw new SecurityException(String.format("NOT EXISTS device %d", deviceId))
 					.setType(DeviceExceptionType.INVALID_DEVICE_ID);
 		}
 	}
@@ -131,18 +132,18 @@ class DeviceMangement implements ServiceConstant {
 	 * 从{@link #deviceTokenTable}删除指定设备的令牌
 	 * @param deviceId
 	 */
-	protected void removeDeviceTokenOf(int deviceId){
+	private void removeDeviceTokenOf(int deviceId){
 		deviceTokenTable.remove(Integer.toString(deviceId));
 	}
 	/**
 	 * 从{@link #personTokenTable}删除指定人员的令牌
 	 * @param personId
 	 */
-	protected void removePersonTokenOf(int personId){
+	private void removePersonTokenOf(int personId){
 		personTokenTable.remove(Integer.toString(personId));
 	}
-	protected DeviceBean daoRegisterDevice(DeviceBean newDevice)
-			throws RuntimeDaoException, DeviceException{
+	protected DeviceBean registerDevice(DeviceBean newDevice)
+			throws RuntimeDaoException, SecurityException{
 		checkArgument(null != newDevice,"deviceBean must not be null");
 	    checkArgument(newDevice.isNew() && null == newDevice.getId(),
 	    		"for device registeration the 'newDevice' must be a new record,so the _isNew field must be true and id must be null");
@@ -172,21 +173,21 @@ class DeviceMangement implements ServiceConstant {
 		}
 	}
 	protected void unregisterDevice(int deviceId,Token token)
-			throws RuntimeDaoException, DeviceException{
+			throws RuntimeDaoException, SecurityException{
 		checkValidToken(deviceId, token);
 		checkValidDeviceId(deviceId);
 		this.dao.daoDeleteDevice(deviceId);
 	}
-	protected Token loginDevice(DeviceBean loginDevice)
-			throws RuntimeDaoException, DeviceException{
+	protected Token applyDeviceToken(DeviceBean loginDevice)
+			throws RuntimeDaoException, SecurityException{
 		checkValidDeviceId(loginDevice.getId());
 		DeviceBean device = dao.daoGetDevice(loginDevice.getId());
 		if(!Objects.equal(device.getMac(), loginDevice.getMac()) ){
-			throw new DeviceException(String.format("MISMATCH MAC:%s", device.getMac()))
+			throw new SecurityException(String.format("MISMATCH MAC:%s", device.getMac()))
 			.setType(DeviceExceptionType.INVALID_MAC);
 		}
 		if(!Objects.equal(device.getSerialNo(), loginDevice.getSerialNo())){
-			throw new DeviceException(String.format("MISMATCH Serial Number:%s", device.getSerialNo()))
+			throw new SecurityException(String.format("MISMATCH Serial Number:%s", device.getSerialNo()))
 			.setType(DeviceExceptionType.INVALID_SN);
 		}
 		// 生成一个新令牌
@@ -194,20 +195,25 @@ class DeviceMangement implements ServiceConstant {
 		deviceTokenTable.set(device.getId().toString(), token, false);
 		return token;
 	}
-	protected void logoutDevice(int deviceId,Token token)
-			throws RuntimeDaoException, DeviceException{
+	protected void releaseDeviceToken(int deviceId,Token token)
+			throws RuntimeDaoException, SecurityException{
 		checkValidToken(deviceId,token);
 		removeDeviceTokenOf(deviceId);
 	}
-	protected Token loginPerson(int personId)
-			throws RuntimeDaoException, DeviceException{
+	protected Token applyPersonToken(int personId)
+			throws RuntimeDaoException, SecurityException{
 		// 生成一个新令牌
+		if(!dao.daoExistsPerson(personId)){
+			throw new SecurityException(DeviceExceptionType.INVALID_PERSON_ID);
+		}
 		Token token = makePersonTokenOf(personId);
-		deviceTokenTable.set(Integer.toString(personId), token, false);
+		String key = Integer.toString(personId);
+		deviceTokenTable.set(key, token, false);
+		deviceTokenTable.expire(key);
 		return token;
 	}
-	protected void logoutPerson(int personId,Token token)
-			throws RuntimeDaoException, DeviceException{
+	protected void releasePersonToken(int personId,Token token)
+			throws RuntimeDaoException, SecurityException{
 		checkValidToken(personId,token);
 		removePersonTokenOf(personId);
 	}

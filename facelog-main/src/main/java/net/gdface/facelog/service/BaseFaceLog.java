@@ -1065,13 +1065,13 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param newDevice
 	 * @return
 	 * @throws ServiceRuntimeException
-	 * @throws DeviceException
+	 * @throws SecurityException
 	 */
 	@ThriftMethod(exception = {
             @ThriftException(type=ServiceRuntimeException.class, id=1),
-            @ThriftException(type=DeviceException.class, id=2)
+            @ThriftException(type=SecurityException.class, id=2)
 			})
-	public DeviceBean registerDevice(DeviceBean newDevice) throws ServiceRuntimeException, DeviceException{
+	public DeviceBean registerDevice(DeviceBean newDevice) throws ServiceRuntimeException, SecurityException{
 		return newDevice;		
 	}
 	/**
@@ -1079,42 +1079,71 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param deviceId
 	 * @param token 设备验证令牌
 	 * @throws ServiceRuntimeException
-	 * @throws DeviceException
+	 * @throws SecurityException
 	 */
 	@ThriftMethod(exception = {
             @ThriftException(type=ServiceRuntimeException.class, id=1),
-            @ThriftException(type=DeviceException.class, id=2)
+            @ThriftException(type=SecurityException.class, id=2)
 			})
 	public void unregisterDevice(int deviceId,Token token)
-			throws ServiceRuntimeException,DeviceException{	
+			throws ServiceRuntimeException,SecurityException{	
 	}
 	/**
-	 * 设备上线登录,每次调用都会产生一个新的令牌
+	 * 设备申请上线,每次调用都会产生一个新的令牌
 	 * @param loginDevice
 	 * @return 设备访问令牌
 	 * @throws ServiceRuntimeException
-	 * @throws DeviceException
+	 * @throws SecurityException
 	 */
 	@ThriftMethod(exception = {
             @ThriftException(type=ServiceRuntimeException.class, id=1),
-            @ThriftException(type=DeviceException.class, id=2)
+            @ThriftException(type=SecurityException.class, id=2)
 			})
-	public Token loginDevice(DeviceBean loginDevice)
-			throws ServiceRuntimeException, DeviceException{
+	public Token online(DeviceBean loginDevice)
+			throws ServiceRuntimeException, SecurityException{
 				return null;
 	}
 	/**
-	 * 设备离线,删除设备令牌
+	 * 设备申请离线,删除设备令牌
 	 * @param deviceId
 	 * @param token
 	 * @throws ServiceRuntimeException
-	 * @throws DeviceException
+	 * @throws SecurityException
 	 */
 	@ThriftMethod(exception = {
             @ThriftException(type=ServiceRuntimeException.class, id=1),
-            @ThriftException(type=DeviceException.class, id=2)
+            @ThriftException(type=SecurityException.class, id=2)
 			})
-	public void logoutDevice(int deviceId,Token token)
-			throws ServiceRuntimeException, DeviceException{
+	public void offline(int deviceId,Token token)
+			throws ServiceRuntimeException, SecurityException{
+	}
+	/**
+	 * 申请人员访问令牌
+	 * @param personId
+	 * @return
+	 * @throws ServiceRuntimeException
+	 * @throws SecurityException
+	 */
+	@ThriftMethod(exception = {
+            @ThriftException(type=ServiceRuntimeException.class, id=1),
+            @ThriftException(type=SecurityException.class, id=2)
+			})
+	public Token applyPersonToken(int personId)
+			throws ServiceRuntimeException, SecurityException{
+				return null;		
+	}
+	/**
+	 * 释放人员访问令牌
+	 * @param personId
+	 * @param token
+	 * @throws ServiceRuntimeException
+	 * @throws SecurityException
+	 */
+	@ThriftMethod(exception = {
+            @ThriftException(type=ServiceRuntimeException.class, id=1),
+            @ThriftException(type=SecurityException.class, id=2)
+			})
+	public void releasePersonToken(int personId,Token token)
+			throws ServiceRuntimeException, SecurityException{
 	}
 }

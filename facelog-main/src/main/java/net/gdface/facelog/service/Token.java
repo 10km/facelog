@@ -4,6 +4,7 @@ import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftStruct;
 
 /**
+ * 访问令牌
  * @author guyadong
  *
  */

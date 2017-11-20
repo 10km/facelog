@@ -324,7 +324,31 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 8 SERIVCE PORT : countDeviceByWhere
+    // 8 SERIVCE PORT : applyPersonToken
+    /**
+     * 申请人员访问令牌
+     * @param personId
+     * @return 
+     * @throws ServiceRuntimeException
+     * @throws SecurityException
+     */
+    public net.gdface.facelog.client.thrift.Token applyPersonToken(int personId)throws net.gdface.facelog.client.thrift.SecurityException{
+        try{
+            return service.applyPersonToken(personId);
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    // 9 SERIVCE PORT : countDeviceByWhere
     /**
      * 返回满足{@code where} SQL条件语句的fl_device记录总数
      * @param where
@@ -339,7 +363,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 9 SERIVCE PORT : countDeviceGroupByWhere
+    // 10 SERIVCE PORT : countDeviceGroupByWhere
     /**
      * 返回满足{@code where} SQL条件语句的fl_device_group记录总数
      */
@@ -351,7 +375,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 10 SERIVCE PORT : countLogByWhere
+    // 11 SERIVCE PORT : countLogByWhere
     /**
      * 返回满足{@code where}条件的日志记录(fl_log)数目
      * @param where 为{@code null}时返回所有记录
@@ -366,7 +390,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 11 SERIVCE PORT : countLogLightByVerifyTime
+    // 12 SERIVCE PORT : countLogLightByVerifyTime
     /**
      * 返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
      * @see #countLogLightByWhere(String)
@@ -380,7 +404,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 12 SERIVCE PORT : countLogLightByWhere
+    // 13 SERIVCE PORT : countLogLightByWhere
     /**
      * 返回符合{@code where}条件的记录条数
      * @param where
@@ -395,7 +419,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 13 SERIVCE PORT : countPersonByWhere
+    // 14 SERIVCE PORT : countPersonByWhere
     /**
      * 返回满足{@code where}条件的日志记录(fl_person)数目
      * @param where 为{@code null}时返回所有记录
@@ -410,7 +434,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 14 SERIVCE PORT : countPersonGroupByWhere
+    // 15 SERIVCE PORT : countPersonGroupByWhere
     /**
      * 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
      * @see {@link IPersonGroupManager#Where(String)}
@@ -423,7 +447,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 15 SERIVCE PORT : deleteAllFeaturesByPersonId
+    // 16 SERIVCE PORT : deleteAllFeaturesByPersonId
     /**
      * 删除 personId 关联的所有特征(feature)记录
      * @param personId
@@ -444,7 +468,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 16 SERIVCE PORT : deleteDeviceGroup
+    // 17 SERIVCE PORT : deleteDeviceGroup
     /**
      * 删除{@code deviceGroupId}指定的设备组<br>
      * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
@@ -461,7 +485,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 17 SERIVCE PORT : deleteFeature
+    // 18 SERIVCE PORT : deleteFeature
     /**
      * 删除featureMd5指定的特征记录及关联的face记录
      * @param featureMd5
@@ -490,7 +514,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 18 SERIVCE PORT : deleteImage
+    // 19 SERIVCE PORT : deleteImage
     /**
      * 删除imageMd5指定图像及其缩略图
      * @param imageMd5
@@ -505,7 +529,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 19 SERIVCE PORT : deletePermit
+    // 20 SERIVCE PORT : deletePermit
     /**
      * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean)}
      * @param deviceGroup
@@ -526,7 +550,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 20 SERIVCE PORT : deletePerson
+    // 21 SERIVCE PORT : deletePerson
     /**
      * 删除personId指定的人员(person)记录及关联的所有记录
      * @param personId
@@ -541,7 +565,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 21 SERIVCE PORT : deletePersonByPapersNum
+    // 22 SERIVCE PORT : deletePersonByPapersNum
     /**
      * 删除papersNum指定的人员(person)记录及关联的所有记录
      * @param papersNum 证件号码
@@ -557,7 +581,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 22 SERIVCE PORT : deletePersonGroup
+    // 23 SERIVCE PORT : deletePersonGroup
     /**
      * 删除{@code personGroupId}指定的人员组<br>
      * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
@@ -574,7 +598,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 23 SERIVCE PORT : deletePersons
+    // 24 SERIVCE PORT : deletePersons
     /**
      * 删除personIdList指定的人员(person)记录及关联的所有记录
      * @param personIdList 人员id列表
@@ -589,7 +613,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 24 SERIVCE PORT : deletePersonsByPapersNum
+    // 25 SERIVCE PORT : deletePersonsByPapersNum
     /**
      * 删除papersNum指定的人员(person)记录及关联的所有记录
      * @param papersNumlist 证件号码列表
@@ -604,7 +628,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 25 SERIVCE PORT : disablePerson
+    // 26 SERIVCE PORT : disablePerson
     /**
      * 设置 personId 指定的人员为禁止状态
      * @param personId
@@ -619,7 +643,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 26 SERIVCE PORT : disablePersonList
+    // 27 SERIVCE PORT : disablePersonList
     /**
      * 设置 personIdList 指定的人员为禁止状态
      * @param personIdList 人员id列表
@@ -633,7 +657,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 27 SERIVCE PORT : existsDevice
+    // 28 SERIVCE PORT : existsDevice
     /**
      * 判断id指定的设备记录是否存在
      * @param id
@@ -648,7 +672,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 28 SERIVCE PORT : existsFeature
+    // 29 SERIVCE PORT : existsFeature
     /**
      * 判断md5指定的特征记录是否存在
      * @param md5
@@ -663,7 +687,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 29 SERIVCE PORT : existsImage
+    // 30 SERIVCE PORT : existsImage
     /**
      * 判断md5指定的图像记录是否存在
      * @param md5
@@ -678,7 +702,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 30 SERIVCE PORT : existsPerson
+    // 31 SERIVCE PORT : existsPerson
     /**
      * 判断是否存在personId指定的人员记录
      * @param persionId
@@ -693,7 +717,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 31 SERIVCE PORT : getDevice
+    // 32 SERIVCE PORT : getDevice
     /**
      * 返回{@code deviceId}指定的设备记录
      * @param deviceId
@@ -716,7 +740,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 32 SERIVCE PORT : getDeviceGroup
+    // 33 SERIVCE PORT : getDeviceGroup
     /**
      * 根据设备组id返回数据库记录
      * @param deviceGroupId
@@ -740,7 +764,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 33 SERIVCE PORT : getDeviceGroups
+    // 34 SERIVCE PORT : getDeviceGroups
     /**
      * 返回设备组id列表指定的数据库记录
      * @param groupIdList
@@ -764,7 +788,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 34 SERIVCE PORT : getDeviceIdOfFeature
+    // 35 SERIVCE PORT : getDeviceIdOfFeature
     /**
      * 返回featureMd5的人脸特征记录关联的设备id<br>
      * @param featureMd5
@@ -787,7 +811,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 35 SERIVCE PORT : getDevices
+    // 36 SERIVCE PORT : getDevices
     /**
      * 返回 {@code idList} 指定的设备记录
      * @param idList
@@ -810,7 +834,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 36 SERIVCE PORT : getDevicesOfGroup
+    // 37 SERIVCE PORT : getDevicesOfGroup
     /**
      * 返回{@code deviceGroupId}指定的设备组下属的所有设备记录<br>
      * 如果没有下属设备记录则返回空表
@@ -835,7 +859,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 37 SERIVCE PORT : getFeature
+    // 38 SERIVCE PORT : getFeature
     /**
      * 根据MD5校验码返回人脸特征数据记录
      * @param md5
@@ -858,7 +882,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 38 SERIVCE PORT : getFeatureBeansByPersonId
+    // 39 SERIVCE PORT : getFeatureBeansByPersonId
     /**
      * 返回 persionId 关联的所有人脸特征记录
      * @param personId fl_person.id
@@ -881,7 +905,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 39 SERIVCE PORT : getFeatureBytes
+    // 40 SERIVCE PORT : getFeatureBytes
     /**
      * 根据MD5校验码返回人脸特征数据
      * @param md5
@@ -904,7 +928,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 40 SERIVCE PORT : getFeatures
+    // 41 SERIVCE PORT : getFeatures
     /**
      * 根据MD5校验码返回人脸特征数据记录
      * @param md5 md5列表
@@ -927,7 +951,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 41 SERIVCE PORT : getFeaturesOfPerson
+    // 42 SERIVCE PORT : getFeaturesOfPerson
     /**
      * 返回指定人员{@code personId}关联的所有特征<br>
      * @param personId
@@ -950,7 +974,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 42 SERIVCE PORT : getGroupPermit
+    // 43 SERIVCE PORT : getGroupPermit
     /**
      * 获取人员组通行权限<br>
      * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行
@@ -972,7 +996,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 43 SERIVCE PORT : getGroupPermits
+    // 44 SERIVCE PORT : getGroupPermits
     /**
      * 参见 {@link #getGroupPermit(Integer, Integer) }
      */
@@ -996,7 +1020,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 44 SERIVCE PORT : getImage
+    // 45 SERIVCE PORT : getImage
     /**
      * 根据图像的MD5校验码返回图像记录
      * @param imageMD5
@@ -1019,7 +1043,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 45 SERIVCE PORT : getImageBytes
+    // 46 SERIVCE PORT : getImageBytes
     /**
      * 根据图像的MD5校验码返回图像数据
      * @param imageMD5
@@ -1043,7 +1067,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 46 SERIVCE PORT : getImagesAssociatedByFeature
+    // 47 SERIVCE PORT : getImagesAssociatedByFeature
     /**
      * 返回featureMd5的人脸特征记录关联的所有图像记录id(MD5)
      * @param featureMd5 人脸特征id(MD5)
@@ -1066,7 +1090,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 47 SERIVCE PORT : getLogBeansByPersonId
+    // 48 SERIVCE PORT : getLogBeansByPersonId
     /**
      * 返回 persionId 关联的所有日志记录
      * @param personId fl_person.id
@@ -1089,7 +1113,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 48 SERIVCE PORT : getPerson
+    // 49 SERIVCE PORT : getPerson
     /**
      * 返回personId指定的人员记录
      * @param personId
@@ -1112,7 +1136,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 49 SERIVCE PORT : getPersonByPapersNum
+    // 50 SERIVCE PORT : getPersonByPapersNum
     /**
      * 根据证件号码返回人员记录
      * @param papersNum
@@ -1135,7 +1159,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 50 SERIVCE PORT : getPersonGroup
+    // 51 SERIVCE PORT : getPersonGroup
     /**
      * 根据人员组id返回数据库记录
      * @param personGroupId
@@ -1159,7 +1183,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 51 SERIVCE PORT : getPersonGroups
+    // 52 SERIVCE PORT : getPersonGroups
     /**
      * 返回人员组id列表指定的数据库记录
      * @param groupIdList
@@ -1183,7 +1207,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 52 SERIVCE PORT : getPersonPermit
+    // 53 SERIVCE PORT : getPersonPermit
     /**
      * 获取人员通行权限<br>
      * 返回{@code personId}指定的人员在{@code deviceId}设备上是否允许通行
@@ -1205,7 +1229,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 53 SERIVCE PORT : getPersonPermits
+    // 54 SERIVCE PORT : getPersonPermits
     /**
      * 参见 {@link #getPersonPermit(Integer, Integer) }
      */
@@ -1229,7 +1253,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 54 SERIVCE PORT : getPersons
+    // 55 SERIVCE PORT : getPersons
     /**
      * 返回 list 指定的人员记录
      * @param idList 人员id列表
@@ -1252,7 +1276,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 55 SERIVCE PORT : getPersonsOfGroup
+    // 56 SERIVCE PORT : getPersonsOfGroup
     /**
      * 返回{@code deviceGroupId}指定的人员组下属的所有人员记录<br>
      * 如果没有下属人员记录则返回空表
@@ -1277,7 +1301,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 56 SERIVCE PORT : getSubDeviceGroup
+    // 57 SERIVCE PORT : getSubDeviceGroup
     /**
      * 返回{@code deviceGroupId}指定的设备组下的所有子节点<br>
      * 如果没有子节点则返回空表
@@ -1302,7 +1326,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 57 SERIVCE PORT : getSubPersonGroup
+    // 58 SERIVCE PORT : getSubPersonGroup
     /**
      * 返回{@code personGroupId}指定的人员组下的所有子节点<br>
      * 如果没有子节点则返回空表
@@ -1327,7 +1351,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 58 SERIVCE PORT : isDisable
+    // 59 SERIVCE PORT : isDisable
     /**
      * 判断 personId 指定的人员记录是否过期
      * @param personId
@@ -1342,7 +1366,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 59 SERIVCE PORT : loadAllPerson
+    // 60 SERIVCE PORT : loadAllPerson
     /**
      * 返回所有人员记录
      * @return 
@@ -1364,7 +1388,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 60 SERIVCE PORT : loadDeviceByWhere
+    // 61 SERIVCE PORT : loadDeviceByWhere
     /**
      * 根据{@code where}指定的查询条件查询设备记录
      * @param where SQL 条件语句
@@ -1395,7 +1419,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 61 SERIVCE PORT : loadDeviceGroupByWhere
+    // 62 SERIVCE PORT : loadDeviceGroupByWhere
     /**
      * 查询{@code where} SQL条件语句指定的记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
@@ -1424,7 +1448,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 62 SERIVCE PORT : loadDeviceGroupIdByWhere
+    // 63 SERIVCE PORT : loadDeviceGroupIdByWhere
     /**
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
@@ -1446,7 +1470,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 63 SERIVCE PORT : loadDeviceIdByWhere
+    // 64 SERIVCE PORT : loadDeviceIdByWhere
     /**
      * 根据{@code where}指定的查询条件查询设备记录
      * @param where
@@ -1469,7 +1493,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 64 SERIVCE PORT : loadFeatureMd5ByUpdate
+    // 65 SERIVCE PORT : loadFeatureMd5ByUpdate
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_feature.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_feature记录
@@ -1493,7 +1517,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 65 SERIVCE PORT : loadLogByWhere
+    // 66 SERIVCE PORT : loadLogByWhere
     /**
      * 日志查询<br>
      * 根据{@code where}指定的查询条件查询日志记录
@@ -1525,7 +1549,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 66 SERIVCE PORT : loadLogLightByVerifyTime
+    // 67 SERIVCE PORT : loadLogLightByVerifyTime
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
@@ -1555,7 +1579,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 67 SERIVCE PORT : loadLogLightByWhere
+    // 68 SERIVCE PORT : loadLogLightByWhere
     /**
      * 日志查询<br>
      * 根据{@code where}指定的查询条件查询日志记录{@link LogLightBean}
@@ -1587,7 +1611,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 68 SERIVCE PORT : loadPermitByUpdate
+    // 69 SERIVCE PORT : loadPermitByUpdate
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录
@@ -1612,7 +1636,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 69 SERIVCE PORT : loadPersonByWhere
+    // 70 SERIVCE PORT : loadPersonByWhere
     /**
      * 返回 where 指定的所有人员记录
      * @param where SQL条件语句
@@ -1643,7 +1667,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 70 SERIVCE PORT : loadPersonGroupByWhere
+    // 71 SERIVCE PORT : loadPersonGroupByWhere
     /**
      * 查询{@code where} SQL条件语句指定的记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
@@ -1672,7 +1696,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 71 SERIVCE PORT : loadPersonGroupIdByWhere
+    // 72 SERIVCE PORT : loadPersonGroupIdByWhere
     /**
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
@@ -1695,7 +1719,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 72 SERIVCE PORT : loadPersonIdByUpdateTime
+    // 73 SERIVCE PORT : loadPersonIdByUpdateTime
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_person.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_person记录
@@ -1719,7 +1743,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 73 SERIVCE PORT : loadPersonIdByWhere
+    // 74 SERIVCE PORT : loadPersonIdByWhere
     /**
      * 返回 where 指定的所有人员记录
      * @param where SQL条件语句
@@ -1742,7 +1766,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 74 SERIVCE PORT : loadUpdatedPersons
+    // 75 SERIVCE PORT : loadUpdatedPersons
     /**
      * (主动更新机制实现)<br>
      * 返回fl_person.update_time字段大于指定时间戳( {@code timestamp} )的所有fl_person记录<br>
@@ -1767,17 +1791,37 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 75 SERIVCE PORT : loginDevice
+    // 76 SERIVCE PORT : offline
     /**
-     * 设备上线登录,每次调用都会产生一个新的令牌
+     * 设备申请离线,删除设备令牌
+     * @param deviceId
+     * @param token
+     * @throws ServiceRuntimeException
+     * @throws SecurityException
+     */
+    public void offline(
+            int deviceId,
+            net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.SecurityException{
+        try{
+            service.offline(
+                    deviceId,
+                    token);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    // 77 SERIVCE PORT : online
+    /**
+     * 设备申请上线,每次调用都会产生一个新的令牌
      * @param loginDevice
      * @return 设备访问令牌
      * @throws ServiceRuntimeException
-     * @throws DeviceException
+     * @throws SecurityException
      */
-    public net.gdface.facelog.client.thrift.Token loginDevice(DeviceBean loginDevice)throws net.gdface.facelog.client.thrift.DeviceException{
+    public net.gdface.facelog.client.thrift.Token online(DeviceBean loginDevice)throws net.gdface.facelog.client.thrift.SecurityException{
         try{
-            return service.loginDevice(converterDeviceBean.toRight(loginDevice));
+            return service.online(converterDeviceBean.toRight(loginDevice));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1791,35 +1835,15 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 76 SERIVCE PORT : logoutDevice
-    /**
-     * 设备离线,删除设备令牌
-     * @param deviceId
-     * @param token
-     * @throws ServiceRuntimeException
-     * @throws DeviceException
-     */
-    public void logoutDevice(
-            int deviceId,
-            net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.DeviceException{
-        try{
-            service.logoutDevice(
-                    deviceId,
-                    token);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-    }
-    // 77 SERIVCE PORT : registerDevice
+    // 78 SERIVCE PORT : registerDevice
     /**
      * 新设备注册,如果设备已经注册则返回注册设备记录
      * @param newDevice
      * @return 
      * @throws ServiceRuntimeException
-     * @throws DeviceException
+     * @throws SecurityException
      */
-    public DeviceBean registerDevice(DeviceBean newDevice)throws net.gdface.facelog.client.thrift.DeviceException{
+    public DeviceBean registerDevice(DeviceBean newDevice)throws net.gdface.facelog.client.thrift.SecurityException{
         try{
             return converterDeviceBean.fromRight(service.registerDevice(converterDeviceBean.toRight(newDevice)));
         }
@@ -1835,7 +1859,27 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 78 SERIVCE PORT : replaceFeature
+    // 79 SERIVCE PORT : releasePersonToken
+    /**
+     * 释放人员访问令牌
+     * @param personId
+     * @param token
+     * @throws ServiceRuntimeException
+     * @throws SecurityException
+     */
+    public void releasePersonToken(
+            int personId,
+            net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.SecurityException{
+        try{
+            service.releasePersonToken(
+                    personId,
+                    token);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    // 80 SERIVCE PORT : replaceFeature
     /**
      * 替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录
      * @param personId 人员记录id
@@ -1857,7 +1901,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 79 SERIVCE PORT : saveDevice
+    // 81 SERIVCE PORT : saveDevice
     /**
      * 保存设备记录
      * @param deviceBean
@@ -1880,7 +1924,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 80 SERIVCE PORT : saveDeviceGroup
+    // 82 SERIVCE PORT : saveDeviceGroup
     /**
      * 保存设备组记录
      * @param deviceGroupBean
@@ -1904,7 +1948,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 81 SERIVCE PORT : savePerson
+    // 83 SERIVCE PORT : savePerson
     /**
      * 保存人员(person)记录
      * @param bean
@@ -1927,7 +1971,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 82 SERIVCE PORT : savePersonFull
+    // 84 SERIVCE PORT : savePersonFull
     /**
      * @param bean 人员信息对象
      * @param idPhoto 标准照图像
@@ -1965,7 +2009,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 82 GENERIC
+    // 84 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],byte[],byte[],FaceBean,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -2000,7 +2044,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 83 SERIVCE PORT : savePersonGroup
+    // 85 SERIVCE PORT : savePersonGroup
     /**
      * 保存人员组记录
      * @param personGroupBean
@@ -2024,7 +2068,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 84 SERIVCE PORT : savePersons
+    // 86 SERIVCE PORT : savePersons
     /**
      * 保存人员(person)记录
      * @param beans
@@ -2038,7 +2082,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 85 SERIVCE PORT : savePersonsWithPhoto
+    // 87 SERIVCE PORT : savePersonsWithPhoto
     /**
      * 保存人员信息记录(包含标准照)
      * @param persons
@@ -2053,7 +2097,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 86 SERIVCE PORT : savePersonWithPhoto
+    // 88 SERIVCE PORT : savePersonWithPhoto
     /**
      * 保存人员信息记录
      * @param bean
@@ -2081,7 +2125,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 86 GENERIC
+    // 88 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[])}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -2108,7 +2152,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 87 SERIVCE PORT : savePersonWithPhotoAndFeature
+    // 89 SERIVCE PORT : savePersonWithPhotoAndFeature
     /**
      * 保存人员信息记录
      * @param bean
@@ -2142,7 +2186,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 87 GENERIC
+    // 89 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],FeatureBean,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -2173,7 +2217,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 88 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
+    // 90 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
     /**
      * 保存人员信息记录
      * @param bean
@@ -2207,7 +2251,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 88 GENERIC
+    // 90 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],byte[],List)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -2238,7 +2282,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 89 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
+    // 91 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
     /**
      * 保存人员信息记录
      * @param bean
@@ -2275,7 +2319,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 89 GENERIC
+    // 91 GENERIC
     /** 
      * Generic version of {@link #savePerson(PersonBean,byte[],byte[],Map,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
@@ -2308,7 +2352,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 90 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
+    // 92 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
     /**
      * 保存人员信息记录
      * @param bean
@@ -2339,7 +2383,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 91 SERIVCE PORT : setPersonExpiryDate
+    // 93 SERIVCE PORT : setPersonExpiryDate
     /**
      * 修改 personId 指定的人员记录的有效期
      * @param personId
@@ -2358,7 +2402,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 92 SERIVCE PORT : setPersonExpiryDateList
+    // 94 SERIVCE PORT : setPersonExpiryDateList
     /**
      * 修改 personIdList 指定的人员记录的有效期
      * @param personIdList 人员id列表
@@ -2377,17 +2421,17 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 93 SERIVCE PORT : unregisterDevice
+    // 95 SERIVCE PORT : unregisterDevice
     /**
      * (设备端)设备删除
      * @param deviceId
      * @param token 设备验证令牌
      * @throws ServiceRuntimeException
-     * @throws DeviceException
+     * @throws SecurityException
      */
     public void unregisterDevice(
             int deviceId,
-            net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.DeviceException{
+            net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.SecurityException{
         try{
             service.unregisterDevice(
                     deviceId,

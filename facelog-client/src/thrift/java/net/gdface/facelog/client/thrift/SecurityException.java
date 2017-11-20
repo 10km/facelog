@@ -4,12 +4,12 @@ import com.facebook.swift.codec.*;
 import com.facebook.swift.codec.ThriftField.Requiredness;
 import java.util.*;
 
-@ThriftStruct("DeviceException")
-public final class DeviceException extends Exception
+@ThriftStruct("SecurityException")
+public final class SecurityException extends Exception
 {
     private static final long serialVersionUID = 1L;
 
-    public DeviceException() {
+    public SecurityException() {
     }
 
     private String message;
@@ -43,4 +43,12 @@ public final class DeviceException extends Exception
 
     @ThriftField
     public void setType(final DeviceExceptionType type) { this.type = type; }
+
+    private int deviceID;
+
+    @ThriftField(value=5, name="deviceID", requiredness=Requiredness.NONE)
+    public int getDeviceID() { return deviceID; }
+
+    @ThriftField
+    public void setDeviceID(final int deviceID) { this.deviceID = deviceID; }
 }
