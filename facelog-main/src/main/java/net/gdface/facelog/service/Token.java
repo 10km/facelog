@@ -49,6 +49,7 @@ public final class Token{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + id;
 		result = prime * result + (int) (t1 ^ (t1 >>> 32));
 		result = prime * result + (int) (t2 ^ (t2 >>> 32));
 		return result;
@@ -65,6 +66,9 @@ public final class Token{
 			return false;
 		}
 		Token other = (Token) obj;
+		if (id != other.id) {
+			return false;
+		}
 		if (t1 != other.t1) {
 			return false;
 		}
@@ -73,4 +77,17 @@ public final class Token{
 		}
 		return true;
 	}
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Token [id=");
+		builder.append(id);
+		builder.append(", t1=");
+		builder.append(t1);
+		builder.append(", t2=");
+		builder.append(t2);
+		builder.append("]");
+		return builder.toString();
+	}
+
 }

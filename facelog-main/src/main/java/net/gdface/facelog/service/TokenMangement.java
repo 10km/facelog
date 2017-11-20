@@ -85,7 +85,7 @@ class TokenMangement implements ServiceConstant {
 	/** 验证设备令牌是否有效 */
 	private boolean isValidDeviceToken(Token token){
 		if(validateDeviceToken){
-			return null == token ? false : Objects.equal(token,deviceTokenTable.get(Integer.toString(token.getId())));			
+			return null == token ? false : token.equals(deviceTokenTable.get(Integer.toString(token.getId())));			
 		}else{
 			return true;
 		}		
@@ -93,7 +93,7 @@ class TokenMangement implements ServiceConstant {
 	/** 验证人员令牌是否有效 */
 	private boolean isValidPersonToken(Token token){
 		if(validatePersonToken){
-			return null == token ? false : Objects.equal(token,personTokenTable.get(Integer.toString(token.getId())));
+			return null == token ? false : token.equals(personTokenTable.get(Integer.toString(token.getId())));
 		}else{
 			return true;
 		}			
@@ -145,12 +145,12 @@ class TokenMangement implements ServiceConstant {
 				&& null != device.getMac() 
 				&& null != device.getSerialNo(),
 				"null device argument(id,mac,serialNo)");
-		return makeToken(device.getId(),device.getMac(),device.getSerialNo());
+		return makeToken(device.getId(),device.getMac(),device.getSerialNo()).setId(device.getId());
 	}
 	protected static Token makePersonTokenOf(int personId){
 		ByteBuffer buffer = ByteBuffer.wrap(new byte[8]);
 		buffer.asLongBuffer().put(personId);
-		return makeToken(buffer.array());
+		return makeToken(buffer.array()).setId(personId);
 	}
 	/**
 	 * 从{@link #deviceTokenTable}删除指定设备的令牌
@@ -222,7 +222,7 @@ class TokenMangement implements ServiceConstant {
 			.setType(SecurityExceptionType.INVALID_SN);
 		}
 		// 生成一个新令牌
-		Token token = makeDeviceTokenOf(device).setId(device.getId());
+		Token token = makeDeviceTokenOf(device);
 		deviceTokenTable.set(device.getId().toString(), token, false);
 		return token;
 	}
@@ -250,7 +250,7 @@ class TokenMangement implements ServiceConstant {
 		if(!dao.daoExistsPerson(personId)){
 			throw new ServiceSecurityException(SecurityExceptionType.INVALID_PERSON_ID);
 		}
-		Token token = makePersonTokenOf(personId).setId(personId);
+		Token token = makePersonTokenOf(personId);
 		String key = Integer.toString(personId);
 		deviceTokenTable.set(key, token, false);
 		deviceTokenTable.expire(token);
