@@ -6,9 +6,12 @@ import java.nio.ByteBuffer;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 import org.junit.Test;
+
+import com.google.common.base.MoreObjects;
 
 /**
  * @author guyadong
@@ -33,6 +36,17 @@ public class CloneTest {
 	}
 	@Test
 	public void test() throws ParseException  {
+		{
+			byte[] array = new byte[8];
+			ByteBuffer buffer = ByteBuffer.wrap(array);
+			buffer.remaining();
+			long nano = 0x12345678900a0b0cL;//System.nanoTime();
+			System.out.printf("%s\n",Long.toHexString(nano));
+			buffer.asLongBuffer().put(nano);
+			
+			System.out.println(Arrays.deepToString(new Object[]{buffer.array()}));
+			System.out.println(MoreObjects.toStringHelper(buffer.array()).add("array",buffer.array()).toString());
+		}
 		ByteBuffer buffer = ByteBuffer.wrap(new byte[]{1,2,3,4,5,6,7,8,9,0,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f});
 		System.out.println(Long.toHexString(buffer.getLong()));
 		System.out.println(Long.toHexString(buffer.getLong()));

@@ -1384,30 +1384,32 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
     }
     @Override
-	public void unregisterDevice(int deviceId,long token)
+	public void unregisterDevice(int deviceId,Token token)
 			throws ServiceRuntimeException,DeviceException{
     	try{
-    		dm.daoUnregisterDevice(deviceId,token);
+    		dm.unregisterDevice(deviceId,token);
     	} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
 	}
-	public long loginDevice(DeviceBean loginDevice)
+    @Override
+	public Token loginDevice(DeviceBean loginDevice)
 			throws ServiceRuntimeException, DeviceException{
     	try{
-    		return dm.daoLoginDevice(loginDevice);
+    		return dm.loginDevice(loginDevice);
     	} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
 		}
 	}
-	public void logoutDevice(int deviceId,long token)
+    @Override
+	public void logoutDevice(int deviceId,Token token)
 			throws ServiceRuntimeException, DeviceException{
     	try{
-    		dm.daoLogoutDevice(deviceId,token);
+    		dm.logoutDevice(deviceId,token);
     	} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {

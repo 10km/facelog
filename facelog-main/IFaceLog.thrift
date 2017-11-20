@@ -157,6 +157,11 @@ struct PermitBean {
   6:  i64 createTime;
 }
 
+struct Token {
+  1:  i64 t1;
+  2:  i64 t2;
+}
+
 exception DeviceException {
   1:  string message;
   2:  string causeClass;
@@ -239,8 +244,8 @@ service IFaceLog {
   list<i32> loadPersonIdByUpdateTime(1:  i64 timestamp) throws (1: ServiceRuntimeException ex1);
   list<i32> loadPersonIdByWhere(1:  string where) throws (1: ServiceRuntimeException ex1);
   list<i32> loadUpdatedPersons(1:  i64 timestamp) throws (1: ServiceRuntimeException ex1);
-  i64 loginDevice(1:  DeviceBean loginDevice) throws (1: ServiceRuntimeException ex1, 2: DeviceException ex2);
-  void logoutDevice(1:  i32 deviceId, 2:  i64 token) throws (1: ServiceRuntimeException ex1, 2: DeviceException ex2);
+  Token loginDevice(1:  DeviceBean loginDevice) throws (1: ServiceRuntimeException ex1, 2: DeviceException ex2);
+  void logoutDevice(1:  i32 deviceId, 2:  Token token) throws (1: ServiceRuntimeException ex1, 2: DeviceException ex2);
   DeviceBean registerDevice(1:  DeviceBean newDevice) throws (1: ServiceRuntimeException ex1, 2: DeviceException ex2);
   void replaceFeature(1:  i32 personId, 2:  string featureMd5, 3:  bool deleteOldFeatureImage) throws (1: ServiceRuntimeException ex1);
   DeviceBean saveDevice(1:  DeviceBean deviceBean) throws (1: ServiceRuntimeException ex1);
@@ -257,5 +262,5 @@ service IFaceLog {
   i32 savePersonsWithPhoto(1:  map<binary, PersonBean> persons) throws (1: ServiceRuntimeException ex1);
   void setPersonExpiryDate(1:  i32 personId, 2:  i64 expiryDate) throws (1: ServiceRuntimeException ex1);
   void setPersonExpiryDateList(1:  list<i32> personIdList, 2:  i64 expiryDate) throws (1: ServiceRuntimeException ex1);
-  void unregisterDevice(1:  i32 deviceId, 2:  i64 token) throws (1: ServiceRuntimeException ex1, 2: DeviceException ex2);
+  void unregisterDevice(1:  i32 deviceId, 2:  Token token) throws (1: ServiceRuntimeException ex1, 2: DeviceException ex2);
 }

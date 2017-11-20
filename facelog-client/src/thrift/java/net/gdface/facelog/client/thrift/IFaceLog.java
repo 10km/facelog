@@ -644,7 +644,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1),
                           @ThriftException(type=DeviceException.class, id=2)
                       })
-        ListenableFuture<Long> loginDevice(
+        ListenableFuture<Token> loginDevice(
             @ThriftField(value=1, name="loginDevice", requiredness=Requiredness.NONE) final DeviceBean loginDevice
         );
 
@@ -655,7 +655,7 @@ public interface IFaceLog
                       })
         ListenableFuture<Void> logoutDevice(
             @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
-            @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final long token
+            @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
         @ThriftMethod(value = "registerDevice",
@@ -816,7 +816,7 @@ public interface IFaceLog
                       })
         ListenableFuture<Void> unregisterDevice(
             @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
-            @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final long token
+            @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
         );
     }
     @ThriftMethod(value = "addFeature",
@@ -1450,7 +1450,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1),
                       @ThriftException(type=DeviceException.class, id=2)
                   })
-    long loginDevice(
+    Token loginDevice(
         @ThriftField(value=1, name="loginDevice", requiredness=Requiredness.NONE) final DeviceBean loginDevice
     ) throws ServiceRuntimeException, DeviceException;
 
@@ -1461,7 +1461,7 @@ public interface IFaceLog
                   })
     void logoutDevice(
         @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
-        @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final long token
+        @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException, DeviceException;
 
     @ThriftMethod(value = "registerDevice",
@@ -1622,6 +1622,6 @@ public interface IFaceLog
                   })
     void unregisterDevice(
         @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
-        @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final long token
+        @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException, DeviceException;
 }

@@ -1134,7 +1134,7 @@ class IFaceLogClientAsync implements Constant{
      * @param loginDevice
      * @return 设备访问令牌
      */
-    public ListenableFuture<Long> loginDevice(DeviceBean loginDevice){
+    public ListenableFuture<net.gdface.facelog.client.thrift.Token> loginDevice(DeviceBean loginDevice){
         return service.loginDevice(converterDeviceBean.toRight(loginDevice));
     }
     // 76 SERIVCE PORT : logoutDevice
@@ -1145,7 +1145,7 @@ class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Void> logoutDevice(
             int deviceId,
-            long token){
+            net.gdface.facelog.client.thrift.Token token){
         return service.logoutDevice(
                     deviceId,
                     token);
@@ -1585,7 +1585,7 @@ class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Void> unregisterDevice(
             int deviceId,
-            long token){
+            net.gdface.facelog.client.thrift.Token token){
         return service.unregisterDevice(
                     deviceId,
                     token);

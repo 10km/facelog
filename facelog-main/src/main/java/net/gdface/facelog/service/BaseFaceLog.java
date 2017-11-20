@@ -1085,8 +1085,8 @@ public abstract class BaseFaceLog extends Dao{
             @ThriftException(type=ServiceRuntimeException.class, id=1),
             @ThriftException(type=DeviceException.class, id=2)
 			})
-	public void unregisterDevice(int deviceId,long token)
-			throws ServiceRuntimeException,DeviceException{		
+	public void unregisterDevice(int deviceId,Token token)
+			throws ServiceRuntimeException,DeviceException{	
 	}
 	/**
 	 * 设备上线登录,每次调用都会产生一个新的令牌
@@ -1099,9 +1099,9 @@ public abstract class BaseFaceLog extends Dao{
             @ThriftException(type=ServiceRuntimeException.class, id=1),
             @ThriftException(type=DeviceException.class, id=2)
 			})
-	public long loginDevice(DeviceBean loginDevice)
+	public Token loginDevice(DeviceBean loginDevice)
 			throws ServiceRuntimeException, DeviceException{
-				return 0;
+				return null;
 	}
 	/**
 	 * 设备离线,删除设备令牌
@@ -1114,7 +1114,7 @@ public abstract class BaseFaceLog extends Dao{
             @ThriftException(type=ServiceRuntimeException.class, id=1),
             @ThriftException(type=DeviceException.class, id=2)
 			})
-	public void logoutDevice(int deviceId,long token)
+	public void logoutDevice(int deviceId,Token token)
 			throws ServiceRuntimeException, DeviceException{
 	}
 }

@@ -112,7 +112,7 @@ class Dao implements CommonConstant {
     //////////// FL_DEVICE /////////
     //1
     /** 
-     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}<br>
      * 
      * @param id 设备id 
      * @return 
@@ -124,7 +124,7 @@ class Dao implements CommonConstant {
     }
     //1-2
     /** 
-     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 根据主键从数据库读取记录,没有找到记录抛出异常<br>
      * 
      * @param id 设备id 
      * @return 
@@ -630,7 +630,7 @@ class Dao implements CommonConstant {
     //////////// FL_DEVICE_GROUP /////////
     //1
     /** 
-     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}<br>
      * 
      * @param id 设备组id 
      * @return 
@@ -642,7 +642,7 @@ class Dao implements CommonConstant {
     }
     //1-2
     /** 
-     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 根据主键从数据库读取记录,没有找到记录抛出异常<br>
      * 
      * @param id 设备组id 
      * @return 
@@ -1088,7 +1088,7 @@ class Dao implements CommonConstant {
     //////////// FL_PERSON /////////
     //1
     /** 
-     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}<br>
      * 
      * @param id 用户id 
      * @return 
@@ -1100,7 +1100,7 @@ class Dao implements CommonConstant {
     }
     //1-2
     /** 
-     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 根据主键从数据库读取记录,没有找到记录抛出异常<br>
      * 
      * @param id 用户id 
      * @return 
@@ -1639,7 +1639,7 @@ class Dao implements CommonConstant {
     //////////// FL_PERSON_GROUP /////////
     //1
     /** 
-     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}<br>
      * 
      * @param id 用户组id 
      * @return 
@@ -1651,7 +1651,7 @@ class Dao implements CommonConstant {
     }
     //1-2
     /** 
-     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 根据主键从数据库读取记录,没有找到记录抛出异常<br>
      * 
      * @param id 用户组id 
      * @return 
@@ -2097,7 +2097,7 @@ class Dao implements CommonConstant {
     //////////// FL_FACE /////////
     //1
     /** 
-     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}<br>
      * 
      * @param id 主键 
      * @return 
@@ -2109,7 +2109,7 @@ class Dao implements CommonConstant {
     }
     //1-2
     /** 
-     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 根据主键从数据库读取记录,没有找到记录抛出异常<br>
      * 
      * @param id 主键 
      * @return 
@@ -2541,7 +2541,7 @@ class Dao implements CommonConstant {
     //////////// FL_FEATURE /////////
     //1
     /** 
-     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}<br>
      * 
      * @param md5 主键,特征码md5校验码 
      * @return 
@@ -2553,7 +2553,7 @@ class Dao implements CommonConstant {
     }
     //1-2
     /** 
-     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 根据主键从数据库读取记录,没有找到记录抛出异常<br>
      * 
      * @param md5 主键,特征码md5校验码 
      * @return 
@@ -2978,7 +2978,7 @@ class Dao implements CommonConstant {
     //////////// FL_IMAGE /////////
     //1
     /** 
-     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}<br>
      * 
      * @param md5 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
      * @return 
@@ -2990,7 +2990,7 @@ class Dao implements CommonConstant {
     }
     //1-2
     /** 
-     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 根据主键从数据库读取记录,没有找到记录抛出异常<br>
      * 
      * @param md5 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
      * @return 
@@ -3372,7 +3372,7 @@ class Dao implements CommonConstant {
     //////////// FL_LOG /////////
     //1
     /** 
-     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}<br>
      * 
      * @param id 日志id 
      * @return 
@@ -3384,7 +3384,7 @@ class Dao implements CommonConstant {
     }
     //1-2
     /** 
-     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 根据主键从数据库读取记录,没有找到记录抛出异常<br>
      * 
      * @param id 日志id 
      * @return 
@@ -3901,7 +3901,7 @@ class Dao implements CommonConstant {
     //////////// FL_PERMIT /////////
     //1
     /** 
-     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}<br>
      * 
      * @param deviceGroupId 外键,设备组id 
      * @param personGroupId 外键,人员组id 
@@ -3914,7 +3914,7 @@ class Dao implements CommonConstant {
     }
     //1-2
     /** 
-     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 根据主键从数据库读取记录,没有找到记录抛出异常<br>
      * 
      * @param deviceGroupId 外键,设备组id 
      * @param personGroupId 外键,人员组id 
@@ -4274,7 +4274,7 @@ class Dao implements CommonConstant {
     //////////// FL_STORE /////////
     //1
     /** 
-     * 根据主键从数据库读取记录,没有找到记录返回{@code null}
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}<br>
      * 
      * @param md5 主键,md5检验码 
      * @return 
@@ -4286,7 +4286,7 @@ class Dao implements CommonConstant {
     }
     //1-2
     /** 
-     * 根据主键从数据库读取记录,没有找到记录抛出异常
+     * 根据主键从数据库读取记录,没有找到记录抛出异常<br>
      * 
      * @param md5 主键,md5检验码 
      * @return 

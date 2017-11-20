@@ -1775,9 +1775,17 @@ class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      * @throws DeviceException
      */
-    public long loginDevice(DeviceBean loginDevice)throws net.gdface.facelog.client.thrift.DeviceException{
+    public net.gdface.facelog.client.thrift.Token loginDevice(DeviceBean loginDevice)throws net.gdface.facelog.client.thrift.DeviceException{
         try{
             return service.loginDevice(converterDeviceBean.toRight(loginDevice));
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1793,7 +1801,7 @@ class IFaceLogClient implements Constant{
      */
     public void logoutDevice(
             int deviceId,
-            long token)throws net.gdface.facelog.client.thrift.DeviceException{
+            net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.DeviceException{
         try{
             service.logoutDevice(
                     deviceId,
@@ -2379,7 +2387,7 @@ class IFaceLogClient implements Constant{
      */
     public void unregisterDevice(
             int deviceId,
-            long token)throws net.gdface.facelog.client.thrift.DeviceException{
+            net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.DeviceException{
         try{
             service.unregisterDevice(
                     deviceId,
