@@ -654,8 +654,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceSecurityException.class, id=2)
                       })
         ListenableFuture<Void> offline(
-            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
-            @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
+            @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
         @ThriftMethod(value = "online",
@@ -682,8 +681,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceSecurityException.class, id=2)
                       })
         ListenableFuture<Void> releasePersonToken(
-            @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
-            @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
+            @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
         @ThriftMethod(value = "replaceFeature",
@@ -1479,8 +1477,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceSecurityException.class, id=2)
                   })
     void offline(
-        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
-        @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
+        @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException, ServiceSecurityException;
 
     @ThriftMethod(value = "online",
@@ -1507,8 +1504,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceSecurityException.class, id=2)
                   })
     void releasePersonToken(
-        @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
-        @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
+        @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException, ServiceSecurityException;
 
     @ThriftMethod(value = "replaceFeature",

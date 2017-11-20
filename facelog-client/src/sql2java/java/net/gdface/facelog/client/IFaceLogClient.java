@@ -2380,18 +2380,13 @@ class IFaceLogClient implements Constant{
     // 93 SERIVCE PORT : offline
     /**
      * 设备申请离线,删除设备令牌
-     * @param deviceId
      * @param token 当前持有的令牌
      * @throws ServiceRuntimeException
      * @throws ServiceSecurityException
      */
-    public void offline(
-            int deviceId,
-            net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
+    public void offline(net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
         try{
-            service.offline(
-                    deviceId,
-                    token);
+            service.offline(token);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -2424,18 +2419,13 @@ class IFaceLogClient implements Constant{
     // 95 SERIVCE PORT : releasePersonToken
     /**
      * 释放人员访问令牌
-     * @param personId
      * @param token 当前持有的令牌
      * @throws ServiceRuntimeException
      * @throws ServiceSecurityException
      */
-    public void releasePersonToken(
-            int personId,
-            net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
+    public void releasePersonToken(net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
         try{
-            service.releasePersonToken(
-                    personId,
-                    token);
+            service.releasePersonToken(token);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);

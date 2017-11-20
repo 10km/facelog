@@ -1105,7 +1105,6 @@ public abstract class BaseFaceLog extends Dao{
 	}
 	/**
 	 * 设备申请离线,删除设备令牌
-	 * @param deviceId
 	 * @param token 当前持有的令牌
 	 * @throws ServiceRuntimeException
 	 * @throws ServiceSecurityException
@@ -1114,7 +1113,7 @@ public abstract class BaseFaceLog extends Dao{
             @ThriftException(type=ServiceRuntimeException.class, id=1),
             @ThriftException(type=ServiceSecurityException.class, id=2)
 			})
-	public void offline(int deviceId,Token token)
+	public void offline(Token token)
 			throws ServiceRuntimeException, ServiceSecurityException{
 	}
 	/**
@@ -1134,7 +1133,6 @@ public abstract class BaseFaceLog extends Dao{
 	}
 	/**
 	 * 释放人员访问令牌
-	 * @param personId
 	 * @param token 当前持有的令牌
 	 * @throws ServiceRuntimeException
 	 * @throws ServiceSecurityException
@@ -1143,7 +1141,7 @@ public abstract class BaseFaceLog extends Dao{
             @ThriftException(type=ServiceRuntimeException.class, id=1),
             @ThriftException(type=ServiceSecurityException.class, id=2)
 			})
-	public void releasePersonToken(int personId,Token token)
+	public void releasePersonToken(Token token)
 			throws ServiceRuntimeException, ServiceSecurityException{
 	}
 }

@@ -1580,15 +1580,10 @@ class IFaceLogClientAsync implements Constant{
     // 93 SERIVCE PORT : offline
     /**
      * 设备申请离线,删除设备令牌
-     * @param deviceId
      * @param token 当前持有的令牌
      */
-    public ListenableFuture<Void> offline(
-            int deviceId,
-            net.gdface.facelog.client.thrift.Token token){
-        return service.offline(
-                    deviceId,
-                    token);
+    public ListenableFuture<Void> offline(net.gdface.facelog.client.thrift.Token token){
+        return service.offline(token);
     }
     // 94 SERIVCE PORT : applyPersonToken
     /**
@@ -1602,14 +1597,9 @@ class IFaceLogClientAsync implements Constant{
     // 95 SERIVCE PORT : releasePersonToken
     /**
      * 释放人员访问令牌
-     * @param personId
      * @param token 当前持有的令牌
      */
-    public ListenableFuture<Void> releasePersonToken(
-            int personId,
-            net.gdface.facelog.client.thrift.Token token){
-        return service.releasePersonToken(
-                    personId,
-                    token);
+    public ListenableFuture<Void> releasePersonToken(net.gdface.facelog.client.thrift.Token token){
+        return service.releasePersonToken(token);
     }
 }

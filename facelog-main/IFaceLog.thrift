@@ -108,8 +108,9 @@ struct PersonGroupBean {
 }
 
 struct Token {
-  1:  i64 t1;
-  2:  i64 t2;
+  1:  i32 id;
+  2:  i64 t1;
+  3:  i64 t2;
 }
 
 struct DeviceBean {
@@ -249,10 +250,10 @@ service IFaceLog {
   list<i32> loadPersonIdByUpdateTime(1:  i64 timestamp) throws (1: ServiceRuntimeException ex1);
   list<i32> loadPersonIdByWhere(1:  string where) throws (1: ServiceRuntimeException ex1);
   list<i32> loadUpdatedPersons(1:  i64 timestamp) throws (1: ServiceRuntimeException ex1);
-  void offline(1:  i32 deviceId, 2:  Token token) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
+  void offline(1:  Token token) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
   Token online(1:  DeviceBean device) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
   DeviceBean registerDevice(1:  DeviceBean newDevice) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
-  void releasePersonToken(1:  i32 personId, 2:  Token token) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
+  void releasePersonToken(1:  Token token) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
   void replaceFeature(1:  i32 personId, 2:  string featureMd5, 3:  bool deleteOldFeatureImage) throws (1: ServiceRuntimeException ex1);
   DeviceBean saveDevice(1:  DeviceBean deviceBean) throws (1: ServiceRuntimeException ex1);
   DeviceGroupBean saveDeviceGroup(1:  DeviceGroupBean deviceGroupBean) throws (1: ServiceRuntimeException ex1);

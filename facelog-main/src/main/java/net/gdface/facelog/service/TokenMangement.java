@@ -6,6 +6,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.primitives.Bytes;
@@ -29,10 +30,26 @@ class TokenMangement implements ServiceConstant {
 	private final RedisTable<Token> deviceTokenTable;
 	/**  {@code 人员ID -> token} 映射表 */
 	private final RedisTable<Token> personTokenTable;
-	TokenMangement(Dao dao) {
+	/** 是否执行设备令牌验证 */
+	private final boolean validateDeviceToken;
+	/** 是否执行人员令牌验证 */
+	private final boolean validatePersonToken;
+	/**
+	 * @param dao
+	 * @param validateDeviceToken 是否执行设备令牌验证
+	 * @param validatePersonToken 是否执行人员令牌验证
+	 */
+	TokenMangement(Dao dao, boolean validateDeviceToken, boolean validatePersonToken) {
 		this.dao = checkNotNull(dao,"dao is null");
+		this.validateDeviceToken = validateDeviceToken;
+		this.validatePersonToken = validatePersonToken;
 		this.deviceTokenTable =  RedisFactory.getTable(TABLE_DEVICE_TOKEN, JedisPoolLazy.getDefaultInstance());
 		this.personTokenTable =  RedisFactory.getTable(TABLE_PERSON_TOKEN, JedisPoolLazy.getDefaultInstance());
+		this.personTokenTable.setKeyHelper(new Function<Token,String>(){
+			@Override
+			public String apply(Token input) {
+				return null == input ? null : Integer.toString(input.getId());
+			}});
 		this.personTokenTable.setExpire(DEFAULT_PERSON_TOKEN_EXPIRE, TimeUnit.MINUTES);
 	}
 	/** 验证MAC地址是否有效(HEX格式,12字符,无分隔符,不区分大小写) */
@@ -66,22 +83,29 @@ class TokenMangement implements ServiceConstant {
 		}
 	}
 	/** 验证设备令牌是否有效 */
-	private boolean isValidDeviceToken(int deviceId, Token token){
-		return null == token ? false : Objects.equal(token,deviceTokenTable.get(Integer.toString(deviceId)));
+	private boolean isValidDeviceToken(Token token){
+		if(validateDeviceToken){
+			return null == token ? false : Objects.equal(token,deviceTokenTable.get(Integer.toString(token.getId())));			
+		}else{
+			return true;
+		}		
 	}
 	/** 验证人员令牌是否有效 */
-	private boolean isValidPersonToken(int personId, Token token){
-		return null == token ? false : Objects.equal(token,personTokenTable.get(Integer.toString(personId)));
+	private boolean isValidPersonToken(Token token){
+		if(validatePersonToken){
+			return null == token ? false : Objects.equal(token,personTokenTable.get(Integer.toString(token.getId())));
+		}else{
+			return true;
+		}			
 	}
 	/**
 	 * 令牌无效抛出异常
-	 * @param id
 	 * @param token
 	 * @throws ServiceSecurityException
 	 */
-	protected void checkValidToken(int id, Token token) throws ServiceSecurityException{
+	protected void checkValidToken(Token token) throws ServiceSecurityException{
 		if(null != token){
-			if(isValidDeviceToken(id, token) || isValidPersonToken(id, token)){
+			if(isValidDeviceToken(token) || isValidPersonToken(token)){
 				return;
 			}
 		}
@@ -174,7 +198,7 @@ class TokenMangement implements ServiceConstant {
 	}
 	protected void unregisterDevice(int deviceId,Token token)
 			throws RuntimeDaoException, ServiceSecurityException{
-		checkValidToken(deviceId, token);
+		checkValidToken(token);
 		checkValidDeviceId(deviceId);
 		this.dao.daoDeleteDevice(deviceId);
 	}
@@ -198,21 +222,20 @@ class TokenMangement implements ServiceConstant {
 			.setType(SecurityExceptionType.INVALID_SN);
 		}
 		// 生成一个新令牌
-		Token token = makeDeviceTokenOf(device);
+		Token token = makeDeviceTokenOf(device).setId(device.getId());
 		deviceTokenTable.set(device.getId().toString(), token, false);
 		return token;
 	}
 	/**
 	 * 释放设备令牌
-	 * @param deviceId
 	 * @param token 当前持有的令牌
 	 * @throws RuntimeDaoException
 	 * @throws ServiceSecurityException
 	 */
-	protected void releaseDeviceToken(int deviceId,Token token)
+	protected void releaseDeviceToken(Token token)
 			throws RuntimeDaoException, ServiceSecurityException{
-		checkValidToken(deviceId,token);
-		removeDeviceTokenOf(deviceId);
+		checkValidToken(token);
+		removeDeviceTokenOf(token.getId());
 	}
 	/**
 	 * 申请人员访问令牌
@@ -227,22 +250,21 @@ class TokenMangement implements ServiceConstant {
 		if(!dao.daoExistsPerson(personId)){
 			throw new ServiceSecurityException(SecurityExceptionType.INVALID_PERSON_ID);
 		}
-		Token token = makePersonTokenOf(personId);
+		Token token = makePersonTokenOf(personId).setId(personId);
 		String key = Integer.toString(personId);
 		deviceTokenTable.set(key, token, false);
-		deviceTokenTable.expire(key);
+		deviceTokenTable.expire(token);
 		return token;
 	}
 	/**
 	 * 释放人员访问令牌
-	 * @param personId
 	 * @param token 当前持有的令牌
 	 * @throws RuntimeDaoException
 	 * @throws ServiceSecurityException
 	 */
-	protected void releasePersonToken(int personId,Token token)
+	protected void releasePersonToken(Token token)
 			throws RuntimeDaoException, ServiceSecurityException{
-		checkValidToken(personId,token);
-		removePersonTokenOf(personId);
+		checkValidToken(token);
+		removePersonTokenOf(token.getId());
 	}
 }

@@ -10,6 +10,8 @@ import com.facebook.swift.codec.ThriftStruct;
  */
 @ThriftStruct
 public final class Token{
+	/** 持有令牌的设备/人员ID */
+	private int id;
 	private long t1,t2;
 	public Token() {
 		super();
@@ -19,6 +21,15 @@ public final class Token{
 		this.t2 = t2;
 	}
 	@ThriftField(1)
+	public int getId() {
+		return id;
+	}
+	@ThriftField
+	public Token setId(int id) {
+		this.id = id;
+		return this;
+	}
+	@ThriftField(2)
 	public long getT1() {
 		return t1;
 	}
@@ -26,7 +37,7 @@ public final class Token{
 	public void setT1(long t1) {
 		this.t1 = t1;
 	}
-	@ThriftField(2)
+	@ThriftField(3)
 	public long getT2() {
 		return t2;
 	}

@@ -376,7 +376,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	}
 	///////////////// TOKEN MANAGEMENT///////
 	
-	private final TokenMangement tm = new TokenMangement(this);
+	private final TokenMangement tm = new TokenMangement(this, true, true);
 	////////////////////////////////////////////////////////////////////////////////////
 	
 	@Override
@@ -1408,10 +1408,10 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
 	}
     @Override
-	public void offline(int deviceId,Token token)
+	public void offline(Token token)
 			throws ServiceRuntimeException, ServiceSecurityException{
     	try{
-    		tm.releaseDeviceToken(deviceId,token);
+    		tm.releaseDeviceToken(token);
     	} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
@@ -1430,10 +1430,10 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
 	}
     @Override
-	public void releasePersonToken(int personId,Token token)
+	public void releasePersonToken(Token token)
 			throws ServiceRuntimeException, ServiceSecurityException{
     	try{
-    		tm.releasePersonToken(personId,token);
+    		tm.releasePersonToken(token);
     	} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {

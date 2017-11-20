@@ -12,9 +12,17 @@ public final class Token
     public Token() {
     }
 
+    private int id;
+
+    @ThriftField(value=1, name="id", requiredness=Requiredness.NONE)
+    public int getId() { return id; }
+
+    @ThriftField
+    public void setId(final int id) { this.id = id; }
+
     private long t1;
 
-    @ThriftField(value=1, name="t1", requiredness=Requiredness.NONE)
+    @ThriftField(value=2, name="t1", requiredness=Requiredness.NONE)
     public long getT1() { return t1; }
 
     @ThriftField
@@ -22,7 +30,7 @@ public final class Token
 
     private long t2;
 
-    @ThriftField(value=2, name="t2", requiredness=Requiredness.NONE)
+    @ThriftField(value=3, name="t2", requiredness=Requiredness.NONE)
     public long getT2() { return t2; }
 
     @ThriftField
@@ -32,6 +40,7 @@ public final class Token
     public String toString()
     {
         return toStringHelper(this)
+            .add("id", id)
             .add("t1", t1)
             .add("t2", t2)
             .toString();
