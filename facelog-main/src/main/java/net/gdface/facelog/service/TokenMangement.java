@@ -118,14 +118,14 @@ class TokenMangement implements ServiceConstant {
 					.setType(SecurityExceptionType.INVALID_DEVICE_ID);
 		}
 	}
-	protected static Token makeToken(byte[] source){
+	private static Token makeToken(byte[] source){
 		ByteBuffer buffer = ByteBuffer.wrap(new byte[8]);
 		buffer.asLongBuffer().put(System.nanoTime());
 		byte[] md5 = FaceUtilits.getMD5(Bytes.concat(checkNotNull(source),buffer.array()));
 		ByteBuffer byteBuffers = ByteBuffer.wrap(md5);
 		return new Token(byteBuffers.getLong(), byteBuffers.getLong());
 	}
-	protected static Token makeToken(Object ...objs){
+	private static Token makeToken(Object ...objs){
 		checkArgument(null != objs && 0 != objs.length,"objs must not be null or empty");
 		StringBuffer buffer = new StringBuffer(64);
 		for(Object obj :objs){
@@ -139,18 +139,19 @@ class TokenMangement implements ServiceConstant {
 	 * @return 设备访问令牌
 	 * @throws IllegalArgumentException 设备参数为{@code null}
 	 */
-	protected static Token makeDeviceTokenOf(DeviceBean device){
-		checkArgument(null != device
-				&& null != device.getId() 
-				&& null != device.getMac() 
-				&& null != device.getSerialNo(),
+	private static Token makeDeviceTokenOf(DeviceBean device){
+		checkArgument(null != device,"device is null");
+		checkArgument(
+						null != device.getId() 
+				&& 	null != device.getMac() 
+				&& 	null != device.getSerialNo(),
 				"null device argument(id,mac,serialNo)");
-		return makeToken(device.getId(),device.getMac(),device.getSerialNo()).setId(device.getId());
+		return makeToken(device.getId(),device.getMac(),device.getSerialNo()).asDeviceToken(device.getId());
 	}
-	protected static Token makePersonTokenOf(int personId){
+	private static Token makePersonTokenOf(int personId){
 		ByteBuffer buffer = ByteBuffer.wrap(new byte[8]);
 		buffer.asLongBuffer().put(personId);
-		return makeToken(buffer.array()).setId(personId);
+		return makeToken(buffer.array()).asPersonToken(personId);
 	}
 	/**
 	 * 从{@link #deviceTokenTable}删除指定设备的令牌

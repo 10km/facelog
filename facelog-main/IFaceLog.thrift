@@ -8,6 +8,10 @@ enum SecurityExceptionType {
   UNCLASSIFIED, INVALID_MAC, INVALID_SN, OCCUPIED_SN, INVALID_TOKEN, INVALID_DEVICE_ID, INVALID_PERSON_ID
 }
 
+enum TokenType {
+  UNINITIALIZED, DEVICE, PERSON
+}
+
 struct FaceBean {
   1: required bool _new;
   2: required i64 modified;
@@ -107,12 +111,6 @@ struct PersonGroupBean {
   7:  i32 parent;
 }
 
-struct Token {
-  1:  i32 id;
-  2:  i64 t1;
-  3:  i64 t2;
-}
-
 struct DeviceBean {
   1: required bool _new;
   2: required i64 modified;
@@ -172,6 +170,13 @@ exception ServiceSecurityException {
   4:  string causeField;
   5:  SecurityExceptionType type;
   6:  i32 deviceID;
+}
+
+struct Token {
+  1:  i32 id;
+  2:  TokenType type;
+  3:  i64 t1;
+  4:  i64 t2;
 }
 
 service IFaceLog {
