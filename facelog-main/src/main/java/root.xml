@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<properties fileName="${sys:user.home}/.facelog/config.properties" />
+	<!-- <xml fileName="${sys:user.home}/.facelog/config.xml" /> -->
+	<xml fileName="config.xml" />
+</configuration>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<admin>
+		<user>
+			<name>root</name>
+			<password>root</password>
+		</user>
+	</admin>
+	<token>
+		<device>
+			<validate description="是否执行令牌验证">true</validate>
+		</device>
+		<person>
+			<validate description="是否执行令牌验证">true</validate>
+			<expire description="人员令牌失效时间(分钟) ">60</expire>
+		</person>
+	</token>
+</configuration>
