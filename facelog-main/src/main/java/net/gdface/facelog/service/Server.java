@@ -17,10 +17,10 @@ import com.google.common.collect.ImmutableList;
  * @author guyadong
  *
  */
-public class Server {
+public class Server implements ServiceConstant{
 	public static class Builder {
 	    private ExecutorService executor;
-	    private int serverPort=DEFAULT_PORT;
+	    private int servicePort=DEFAULT_PORT;
 	    private List<?> services = ImmutableList.of();
 		public Builder() {
 		}
@@ -32,9 +32,8 @@ public class Server {
 	    	this.services = services;
 			return this;    	
 	    }
-	    public Builder setServerPort(int serverPort) {
-	    	checkArgument(serverPort>0);
-			this.serverPort = serverPort;
+	    public Builder setServerPort(int servicePort) {
+			this.servicePort = servicePort;
 			return this;
 		}
 		public Builder setExecutor(ExecutorService executor) {
@@ -42,20 +41,20 @@ public class Server {
 			return this;
 		}
 		public Server build(){
-			return new Server(services, serverPort, executor);
+			return new Server(services, servicePort, executor);
 		}
 	}
 	public static final Builder bulider(){
 		return new Builder();
 	}
-	public static final int DEFAULT_PORT = 26411;
     private final ExecutorService executor;
     private final ThriftServer server;
-    private final int serverPort;
+    private final int servicePort;
     private final ThriftServiceProcessor processor;
-    public Server(List<?> services, int serverPort, ExecutorService executor) {
+    public Server(List<?> services, int servicePort, ExecutorService executor) {
 		checkArgument(null != services && !services.isEmpty());
-		this.serverPort = serverPort>0? serverPort : DEFAULT_PORT;
+		checkArgument(servicePort > 0 && servicePort < 65535,"INVALID service port %s",servicePort);
+		this.servicePort = servicePort;
 		this.executor = checkNotNull(executor);
 		processor = new ThriftServiceProcessor(
     			new ThriftCodecManager(),
@@ -63,7 +62,7 @@ public class Server {
     			services
     			);
         ThriftServerDef serverDef = ThriftServerDef.newBuilder()
-                .listen(serverPort)
+                .listen(servicePort)
                 .withProcessor(processor)
                 .using(this.executor)
                 .build();
@@ -92,6 +91,6 @@ public class Server {
 	}
 
 	public int getServerPort() {
-		return serverPort;
+		return servicePort;
 	}
 }

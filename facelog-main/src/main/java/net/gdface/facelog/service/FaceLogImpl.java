@@ -376,7 +376,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	}
 	///////////////// TOKEN MANAGEMENT///////
 	
-	private final TokenMangement tm = new TokenMangement(this, true, true);
+	private final TokenMangement tm = new TokenMangement(this);
 	////////////////////////////////////////////////////////////////////////////////////
 	
 	@Override

@@ -11,6 +11,10 @@ import org.apache.commons.configuration2.tree.DefaultExpressionEngineSymbols;
 import org.apache.commons.configuration2.tree.xpath.XPathExpressionEngine;
 import org.junit.Test;
 
+/**
+ * @author guyadong
+ *
+ */
 public class ConfigTest {
 
 	@Test
@@ -102,6 +106,8 @@ public class ConfigTest {
 	public void test4(){
 		try
 		{
+			System.out.println("user.home:"+ System.getProperty("user.home"));
+			System.out.println("user.dir:"+ System.getProperty("user.dir"));
 			DefaultExpressionEngine engine = new DefaultExpressionEngine(DefaultExpressionEngineSymbols.DEFAULT_SYMBOLS);
 			Configurations configs = new Configurations();
 			CombinedConfiguration config = configs.combined(this.getClass().getClassLoader().getResource("root.xml"));
@@ -109,7 +115,7 @@ public class ConfigTest {
 		    System.out.println(config.getBoolean("token.device.validate"));
 		    System.out.println(config.getInt("token.person.expire"));
 		    System.out.println(config.getString("token.person.expire[@description]"));
-		    System.out.println(config.getString("admin.user.password"));
+		    System.out.println(config.getString("root.password"));
 		}
 		catch(Throwable e)
 		{

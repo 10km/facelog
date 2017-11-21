@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-	<admin>
-		<user>
-			<name>root</name>
-			<password>root</password>
-		</user>
-	</admin>
+	<root>
+			<password description="root帐户密码">root</password>
+	</root>
 	<token>
 		<device>
 			<validate description="是否执行令牌验证">true</validate>
@@ -15,4 +12,11 @@
 			<expire description="人员令牌失效时间(分钟) ">60</expire>
 		</person>
 	</token>
+	<net>
+		<port description="服务端口号">26411</port>
+	</net>
+	<heartbeat>
+		<interval description = "心跳包间隔(秒)">8</interval>
+		<expire description= "心跳包失效时间(秒)">60</expire>
+	</heartbeat>
 </configuration>
