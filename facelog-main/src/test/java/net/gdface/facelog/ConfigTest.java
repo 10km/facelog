@@ -108,6 +108,7 @@ public class ConfigTest {
 		{
 			System.out.println("user.home:"+ System.getProperty("user.home"));
 			System.out.println("user.dir:"+ System.getProperty("user.dir"));
+		    FileBasedConfigurationBuilder.setDefaultEncoding(PropertiesConfiguration.class, "UTF-8");
 			DefaultExpressionEngine engine = new DefaultExpressionEngine(DefaultExpressionEngineSymbols.DEFAULT_SYMBOLS);
 			Configurations configs = new Configurations();
 			CombinedConfiguration config = configs.combined(this.getClass().getClassLoader().getResource("root.xml"));
@@ -116,6 +117,8 @@ public class ConfigTest {
 		    System.out.println(config.getInt("token.person.expire"));
 		    System.out.println(config.getString("token.person.expire[@description]"));
 		    System.out.println(config.getString("root.password"));
+		    System.out.println(config.getString("root.password.description"));
+		    System.out.println(config.getString("root.password[@description]"));
 		}
 		catch(Throwable e)
 		{

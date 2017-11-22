@@ -28,7 +28,7 @@ class Server implements ServiceConstant{
 	public static class Builder {
 		private List<?> services = ImmutableList.of();
 		private ThriftServerConfig thriftServerConfig= new ThriftServerConfig();
-		private List<ThriftEventHandler> eventHandlers = ImmutableList.<ThriftEventHandler>of();
+		private List<ThriftEventHandler> eventHandlers = ImmutableList.of();
 		private Builder() {
 		}
 
@@ -37,7 +37,7 @@ class Server implements ServiceConstant{
 		}
 
 		public Builder withServices(List<?> services) {
-			this.services = services;
+			this.services = checkNotNull(services);
 			return this;
 		}
 		public Builder setEventHandlers(List<ThriftEventHandler> eventHandlers){
@@ -109,7 +109,7 @@ class Server implements ServiceConstant{
 	public ThriftServer getServer() {
 		return server;
 	}
-
+	/** 返回初始化参数对象 */
 	public ThriftServerConfig getThriftServerConfig() {
 		return thriftServerConfig;
 	}

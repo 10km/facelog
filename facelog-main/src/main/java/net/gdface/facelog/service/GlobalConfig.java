@@ -3,6 +3,8 @@ package net.gdface.facelog.service;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.configuration2.CombinedConfiguration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngine;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngineSymbols;
@@ -24,6 +26,9 @@ public class GlobalConfig implements ServiceConstant{
 	}
 	private static CombinedConfiguration init(){
 		try{
+			// 指定文件编码方式,否则properties文件读取中文会是乱码,要求文件编码是UTF-8
+		    FileBasedConfigurationBuilder.setDefaultEncoding(PropertiesConfiguration.class, "UTF-8");
+		    // 使用默认表达式引擎
 			DefaultExpressionEngine engine = new DefaultExpressionEngine(DefaultExpressionEngineSymbols.DEFAULT_SYMBOLS);
 			Configurations configs = new Configurations();
 			CombinedConfiguration config = configs.combined(GlobalConfig.class.getClassLoader().getResource(ROOT_XML));
@@ -45,23 +50,17 @@ public class GlobalConfig implements ServiceConstant{
 		ThriftServerConfig thriftServerConfig = new ThriftServerConfig();
 		int intValue ;
 		thriftServerConfig.setPort(CONFIG.getInt(SERVER_PORT,DEFAULT_PORT));
-		
 		if((intValue  = CONFIG.getInt(SERVER_CONNECTION_LIMIT,0)) >0){
 			thriftServerConfig.setConnectionLimit(intValue);
-			logger.info("{}:{}",SERVER_CONNECTION_LIMIT,intValue);
 		}
 		if((intValue = CONFIG.getInt(SERVER_IDLE_CONNECTION_TIMEMOUT,0))>0){
 			Duration timeout = new Duration(intValue,TimeUnit.SECONDS);
-			thriftServerConfig.setIdleConnectionTimeout(
-					timeout);
-			logger.info("{}:{}",SERVER_IDLE_CONNECTION_TIMEMOUT,timeout);
-
+			thriftServerConfig.setIdleConnectionTimeout(	timeout);
 		}
 		if((intValue = CONFIG.getInt(SERVER_WORKER_THREAD_COUNT,0))>0){
 			thriftServerConfig.setWorkerThreads(intValue);
-			logger.info("{}:{}",SERVER_WORKER_THREAD_COUNT,intValue);
 		}
-		return thriftServerConfig;		
+		return thriftServerConfig;
 	}
 	/** log 输出{@code config}中的关键参数 */
 	static final void showThriftServerConfig(ThriftServerConfig config){

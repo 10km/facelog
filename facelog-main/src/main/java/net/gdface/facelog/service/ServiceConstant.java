@@ -16,8 +16,7 @@ public interface ServiceConstant extends CommonConstant{
     public static final Channel<Token> TABLE_PERSON_TOKEN = new Channel<Token>("PersonToken"){} ;
     /** 默认人员令牌失效时间(分钟) */
     public static final int DEFAULT_PERSON_TOKEN_EXPIRE = 60;
-    
-	public static final String ROOT_NAME = "root";
+
 	///////////// PROPERTY KEY DEFINITION ///////////
 	
 	public static final String ROOT_PASSWORD = "root.password";
