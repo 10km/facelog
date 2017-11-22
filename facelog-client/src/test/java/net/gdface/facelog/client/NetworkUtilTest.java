@@ -5,8 +5,8 @@ import static org.junit.Assert.*;
 import java.net.NetworkInterface;
 
 import org.junit.Test;
-import org.weakref.jmx.com.google.common.base.Joiner;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Iterators;
 
 import net.gdface.facelog.device.NetworkUtil;
