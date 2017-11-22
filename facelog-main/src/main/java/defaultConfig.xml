@@ -12,9 +12,12 @@
 			<expire description="人员令牌失效时间(分钟)">60</expire>
 		</person>
 	</token>
-	<net>
+	<server>
 		<port description="服务端口号">26411</port>
-	</net>
+		<!-- <connectiontLimit description= "最大连接数"></connectiontLimit> -->
+		<!-- <ideConnectionTimeout description= "空闲连接超时(秒)"></ideConnectionTimeout> -->
+		<!-- <workerThreadCount description= "工作线程数"></workerThreadCount> -->
+	</server>
 	<heartbeat>
 		<interval description = "心跳包间隔(秒)">8</interval>
 		<expire description= "心跳包失效时间(秒)">60</expire>

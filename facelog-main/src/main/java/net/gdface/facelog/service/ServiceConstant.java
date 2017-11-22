@@ -29,7 +29,13 @@ public interface ServiceConstant extends CommonConstant{
 	public static final String TOKEN_PERSON_EXPIRE = "token.person.expire";
 	public static final String TOKEN_PERSON_EXPIRE_DESC = "token.person.expire[@description]";
 	/** 服务端口号 */
-	public static final String NET_PORT = "net.port";
+	public static final String SERVER_PORT = "server.port";
+	/** 最大连接数 */
+	public static final String SERVER_CONNECTION_LIMIT = "server.connectiontLimit";
+	/** 空闲连接超时(秒) */
+	public static final String SERVER_IDLE_CONNECTION_TIMEMOUT = "server.idleConnectionTimeout";
+	/** 工作线程数 */
+	public static final String SERVER_WORKER_THREAD_COUNT ="server.workerThreadCount";
 	/**  心跳包间隔(秒)  */
 	public static final String HEARTBEAT_INTERVAL = "heartbeat.interval";
 	/** 心跳包失效时间(秒) */
