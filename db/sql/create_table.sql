@@ -91,7 +91,9 @@ CREATE TABLE IF NOT EXISTS fl_person (
   `group_id`    int(11) DEFAULT 1 COMMENT '所属用户组id',
   `name`        varchar(32) NOT NULL COMMENT '姓名',
   `sex`         tinyint(1) DEFAULT NULL COMMENT '性别,0:女,1:男',
+  `admin`       tinyint(1) DEFAULT NULL COMMENT '是否为管理员,0:否,1:是',
   `birthdate`   date DEFAULT NULL COMMENT '出生日期',
+  `mobile_phone`char(11) NULL COMMENT '手机号码',
   `papers_type` tinyint(1) DEFAULT NULL COMMENT '证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他',
   `papers_num`  varchar(32) DEFAULT NULL UNIQUE COMMENT '证件号码' ,
   `image_md5`   char(32)    DEFAULT NULL UNIQUE COMMENT '用户默认照片(证件照,标准照)的md5校验码,外键',
@@ -104,7 +106,9 @@ CREATE TABLE IF NOT EXISTS fl_person (
   # 验证 papers_type 字段有效性
   CHECK(papers_type>=0 AND papers_type<=8),
   # 验证 sex 字段有效性
-  CHECK(sex>=0 AND sex<=1)
+  CHECK(sex>=0 AND sex<=1),
+  # 验证 admin 字段有效性
+  CHECK(admin>=0 AND admin<=1)
 ) COMMENT '人员基本描述信息' ;
 
 /* 
