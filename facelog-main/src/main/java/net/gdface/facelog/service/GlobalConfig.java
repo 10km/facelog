@@ -11,16 +11,16 @@ import org.apache.commons.configuration2.tree.DefaultExpressionEngineSymbols;
  *
  */
 public class GlobalConfig implements ServiceConstant{
-	
-	public static final CombinedConfiguration config = load();
+	private static final String ROOT_XML = "root.xml";
+	private static final CombinedConfiguration CONFIG = init();
 	private GlobalConfig() {
 	}
-	private static CombinedConfiguration load(){
+	private static CombinedConfiguration init(){
 		try
 		{
 			DefaultExpressionEngine engine = new DefaultExpressionEngine(DefaultExpressionEngineSymbols.DEFAULT_SYMBOLS);
 			Configurations configs = new Configurations();
-			CombinedConfiguration config = configs.combined(GlobalConfig.class.getClassLoader().getResource("root.xml"));
+			CombinedConfiguration config = configs.combined(GlobalConfig.class.getClassLoader().getResource(ROOT_XML));
 			config.setExpressionEngine(engine);
 			return config;
 		}
@@ -29,4 +29,9 @@ public class GlobalConfig implements ServiceConstant{
 			throw new ExceptionInInitializerError(e);
 		}
 	}
+	/** 全局配置参数对象 */
+	public static CombinedConfiguration getConfig() {
+		return CONFIG;
+	}
+	
 }

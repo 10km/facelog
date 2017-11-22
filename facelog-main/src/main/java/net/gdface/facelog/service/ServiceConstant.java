@@ -1,5 +1,7 @@
 package net.gdface.facelog.service;
 
+import org.apache.commons.configuration2.CombinedConfiguration;
+
 import gu.simplemq.Channel;
 
 /**
@@ -19,12 +21,20 @@ public interface ServiceConstant extends CommonConstant{
 	///////////// PROPERTY KEY DEFINITION ///////////
 	
 	public static final String ROOT_PASSWORD = "root.password";
+	/** 是否执行设备令牌验证 */
 	public static final String TOKEN_DEVICE_VALIDATE = "token.device.validate";
+	/** 是否执行人员令牌验证 */
 	public static final String TOKEN_PERSON_VALIDATE = "token.person.validate";
+	/** 人员令牌失效时间(分钟) */
 	public static final String TOKEN_PERSON_EXPIRE = "token.person.expire";
 	public static final String TOKEN_PERSON_EXPIRE_DESC = "token.person.expire[@description]";
+	/** 服务端口号 */
 	public static final String NET_PORT = "net.port";
+	/**  心跳包间隔(秒)  */
 	public static final String HEARTBEAT_INTERVAL = "heartbeat.interval";
+	/** 心跳包失效时间(秒) */
 	public static final String HEARTBEAT_EXPIRE = "heartbeat.expire";
-
+	
+	/** 全局配置参数对象 */
+	public static final CombinedConfiguration CONFIG = GlobalConfig.getConfig();
 }

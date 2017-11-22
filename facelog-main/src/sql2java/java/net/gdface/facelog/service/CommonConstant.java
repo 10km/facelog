@@ -6,7 +6,6 @@
 // template: common.constant.java.vm
 // ______________________________________________________
 package net.gdface.facelog.service;
-import java.text.SimpleDateFormat;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,12 +52,8 @@ public interface CommonConstant {
     public static final Channel<LogBean> QUEUE_LOG = new Channel<LogBean>("queueLog"){};
 
     
-    /** 用于SQL语句的时间戳格式转换对象 */
-    public static final ThreadLocal<SimpleDateFormat> TIMESTAMP_FORMATTER = new ThreadLocal<SimpleDateFormat>(){
-        @Override
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        }};
+    /** 用于SQL语句的时间戳格式转换格式 */
+    public static final String TIMESTAMP_FORMATTER_STR = "yyyy-MM-dd HH:mm:ss";
         
     /**
      * 服务异常类型定义

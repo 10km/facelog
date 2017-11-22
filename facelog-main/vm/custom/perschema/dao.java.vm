@@ -9,6 +9,7 @@ package $extensionPkg;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -754,10 +755,11 @@ $defineLoadByTimestamp
 #end###macro(defineMethod $table $onlyAdd)
     /** 生成 SQL where 语句,example: {@code WHERE create_time >'2017-09-02 12:12:12'} */
     static private String makeWhere(Date timestamp,String field){
+        SimpleDateFormat formatter = new SimpleDateFormat(TIMESTAMP_FORMATTER_STR);
         return String.format(
                 "WHERE %s > '%s'", 
                 field,
-                TIMESTAMP_FORMATTER.get().format(checkNotNull(timestamp)));    
+                formatter.format(checkNotNull(timestamp)));    
     }
     /** 
      * 事务执行 

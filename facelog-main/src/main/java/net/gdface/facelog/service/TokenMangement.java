@@ -41,9 +41,9 @@ class TokenMangement implements ServiceConstant {
 	 */
 	TokenMangement(Dao dao) {
 		this.dao = checkNotNull(dao,"dao is null");
-		this.validateDeviceToken = GlobalConfig.config.getBoolean(TOKEN_DEVICE_VALIDATE);
-		this.validatePersonToken = GlobalConfig.config.getBoolean(TOKEN_PERSON_VALIDATE);
-		this.personTokenExpire =GlobalConfig.config.getInt(
+		this.validateDeviceToken = CONFIG.getBoolean(TOKEN_DEVICE_VALIDATE);
+		this.validatePersonToken = CONFIG.getBoolean(TOKEN_PERSON_VALIDATE);
+		this.personTokenExpire =CONFIG.getInt(
 				TOKEN_PERSON_EXPIRE,
 				DEFAULT_PERSON_TOKEN_EXPIRE);
 		this.deviceTokenTable =  RedisFactory.getTable(TABLE_DEVICE_TOKEN, JedisPoolLazy.getDefaultInstance());
@@ -99,7 +99,7 @@ class TokenMangement implements ServiceConstant {
 			return null == token ? false : token.equals(personTokenTable.get(Integer.toString(token.getId())));
 		}else{
 			return true;
-		}			
+		}
 	}
 	/**
 	 * 令牌无效抛出异常

@@ -15,10 +15,10 @@ public class ConfigTest2 implements ServiceConstant {
 
 	@Test
 	public void test() {
-	    System.out.println(GlobalConfig.config.getBoolean(ServiceConstant.TOKEN_DEVICE_VALIDATE));
-	    System.out.println(GlobalConfig.config.getInt(ServiceConstant.TOKEN_PERSON_EXPIRE));
-	    System.out.println(GlobalConfig.config.getString(ServiceConstant.TOKEN_PERSON_EXPIRE_DESC));
-	    System.out.println(GlobalConfig.config.getString(ServiceConstant.ROOT_PASSWORD));
+	    System.out.println(GlobalConfig.getConfig().getBoolean(ServiceConstant.TOKEN_DEVICE_VALIDATE));
+	    System.out.println(GlobalConfig.getConfig().getInt(ServiceConstant.TOKEN_PERSON_EXPIRE));
+	    System.out.println(GlobalConfig.getConfig().getString(ServiceConstant.TOKEN_PERSON_EXPIRE_DESC));
+	    System.out.println(GlobalConfig.getConfig().getString(ServiceConstant.ROOT_PASSWORD));
 	}
 
 }

@@ -5,11 +5,11 @@
 	</root>
 	<token>
 		<device>
-			<validate description="是否执行令牌验证">true</validate>
+			<validate description="是否执行设备令牌验证">true</validate>
 		</device>
 		<person>
-			<validate description="是否执行令牌验证">true</validate>
-			<expire description="人员令牌失效时间(分钟) ">60</expire>
+			<validate description="是否执行人员令牌验证">true</validate>
+			<expire description="人员令牌失效时间(分钟)">60</expire>
 		</person>
 	</token>
 	<net>
