@@ -475,7 +475,6 @@ public final class PersonBean
      * <ul>
      * <li>full name: fl_person.admin</li>
      * <li>comments: 是否为管理员,0:否,1:是</li>
-     * <li>default value: '0'</li>
      * <li>column size: 3</li>
      * <li>JDBC type returned by the driver: Types.TINYINT</li>
      * </ul>
@@ -1315,8 +1314,7 @@ public final class PersonBean
         this.groupId = new Integer(1);
         this.name = null;
         this.sex = null;
-        /* DEFAULT:'0'*/
-        this.admin = new Integer(0);
+        this.admin = null;
         this.birthdate = null;
         this.mobilePhone = null;
         this.papersType = null;
@@ -1330,7 +1328,7 @@ public final class PersonBean
         this.updateTime = null;
         this.isNew = true;
         this.modified = 0L;
-        this.initialized = (FL_PERSON_ID_GROUP_ID_MASK | FL_PERSON_ID_ADMIN_MASK | FL_PERSON_ID_EXPIRY_DATE_MASK);
+        this.initialized = (FL_PERSON_ID_GROUP_ID_MASK | FL_PERSON_ID_EXPIRY_DATE_MASK);
     }
     @Override
     public boolean equals(Object object)
