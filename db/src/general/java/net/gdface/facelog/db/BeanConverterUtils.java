@@ -2303,7 +2303,9 @@ public class BeanConverterUtils implements Constant {
             groupId("getGroupId","setGroupId"),
             name("getName","setName"),
             sex("getSex","setSex"),
+            admin("getAdmin","setAdmin"),
             birthdate("getBirthdate","setBirthdate"),
+            mobilePhone("getMobilePhone","setMobilePhone"),
             papersType("getPapersType","setPapersType"),
             papersNum("getPapersNum","setPapersNum"),
             imageMd5("getImageMd5","setImageMd5"),
@@ -2416,8 +2418,12 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.name.setter,String.class); 
             getGetter(Column.sex.getter);
             getSetterNoThrow(Column.sex.setter,Integer.class,int.class);                    
+            getGetter(Column.admin.getter);
+            getSetterNoThrow(Column.admin.setter,Integer.class,int.class);                    
             getGetter(Column.birthdate.getter);
             getSetterNoThrow(Column.birthdate.setter,java.util.Date.class,Long.class,long.class);  
+            getGetter(Column.mobilePhone.getter);
+            getSetterNoThrow(Column.mobilePhone.setter,String.class); 
             getGetter(Column.papersType.getter);
             getSetterNoThrow(Column.papersType.setter,Integer.class,int.class);                    
             getGetter(Column.papersNum.getter);
@@ -2470,10 +2476,22 @@ public class BeanConverterUtils implements Constant {
                         selfModified |= FL_PERSON_ID_SEX_MASK;
                     }
                 }
+                if( bitCheck(Column.admin.name(),initialized) && (null != (getterMethod = methods.get(Column.admin.getter)))){
+                    left.setAdmin(cast(Integer.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.admin.name(),modified)){
+                        selfModified |= FL_PERSON_ID_ADMIN_MASK;
+                    }
+                }
                 if( bitCheck(Column.birthdate.name(),initialized) && (null != (getterMethod = methods.get(Column.birthdate.getter)))){
                     left.setBirthdate(cast(java.util.Date.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.birthdate.name(),modified)){
                         selfModified |= FL_PERSON_ID_BIRTHDATE_MASK;
+                    }
+                }
+                if( bitCheck(Column.mobilePhone.name(),initialized) && (null != (getterMethod = methods.get(Column.mobilePhone.getter)))){
+                    left.setMobilePhone(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.mobilePhone.name(),modified)){
+                        selfModified |= FL_PERSON_ID_MOBILE_PHONE_MASK;
                     }
                 }
                 if( bitCheck(Column.papersType.name(),initialized) && (null != (getterMethod = methods.get(Column.papersType.getter)))){
@@ -2565,12 +2583,30 @@ public class BeanConverterUtils implements Constant {
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
+                if(null != (setterMethod = methods.get(Column.admin.setter)) && left.checkAdminInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.admin.setter),left.getAdmin()));
+                        bitOR(Column.admin.name(),initialized);
+                        if(left.checkAdminModified()){
+                            bitOR(Column.admin.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
                 if(null != (setterMethod = methods.get(Column.birthdate.setter)) && left.checkBirthdateInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get(Column.birthdate.setter),left.getBirthdate()));
                         bitOR(Column.birthdate.name(),initialized);
                         if(left.checkBirthdateModified()){
                             bitOR(Column.birthdate.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.mobilePhone.setter)) && left.checkMobilePhoneInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.mobilePhone.setter),left.getMobilePhone()));
+                        bitOR(Column.mobilePhone.name(),initialized);
+                        if(left.checkMobilePhoneModified()){
+                            bitOR(Column.mobilePhone.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }

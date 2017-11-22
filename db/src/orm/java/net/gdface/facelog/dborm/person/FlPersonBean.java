@@ -42,8 +42,14 @@ public  class FlPersonBean
     /** comments:性别,0:女,1:男 */
     private Integer sex;
 
+    /** comments:是否为管理员,0:否,1:是 */
+    private Integer admin;
+
     /** comments:出生日期 */
     private java.util.Date birthdate;
+
+    /** comments:手机号码 */
+    private String mobilePhone;
 
     /** comments:证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他 */
     private Integer papersType;
@@ -416,6 +422,72 @@ public  class FlPersonBean
         return 0L !=  (initialized & FL_PERSON_ID_SEX_MASK);
     }
     /**
+     * Getter method for {@link #admin}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_person.admin</li>
+     * <li>comments: 是否为管理员,0:否,1:是</li>
+     * <li>default value: '0'</li>
+     * <li>column size: 3</li>
+     * <li>JDBC type returned by the driver: Types.TINYINT</li>
+     * </ul>
+     *
+     * @return the value of admin
+     */
+    public Integer getAdmin(){
+        return admin;
+    }
+    /**
+     * Setter method for {@link #admin}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to admin
+     */
+    public void setAdmin(Integer newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, admin) && checkAdminInitialized()) {
+            return;
+        }
+        admin = newVal;
+
+        modified |= FL_PERSON_ID_ADMIN_MASK;
+        initialized |= FL_PERSON_ID_ADMIN_MASK;
+    }
+    /**
+     * Setter method for {@link #admin}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to admin
+     */
+    public void setAdmin(int newVal)
+    {
+        setAdmin(new Integer(newVal));
+    }
+    /**
+     * Determines if the admin has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkAdminModified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_ADMIN_MASK);
+    }
+
+    /**
+     * Determines if the admin has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkAdminInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_ADMIN_MASK);
+    }
+    /**
      * Getter method for {@link #birthdate}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -479,6 +551,61 @@ public  class FlPersonBean
     public boolean checkBirthdateInitialized()
     {
         return 0L !=  (initialized & FL_PERSON_ID_BIRTHDATE_MASK);
+    }
+    /**
+     * Getter method for {@link #mobilePhone}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_person.mobile_phone</li>
+     * <li>comments: 手机号码</li>
+     * <li>column size: 11</li>
+     * <li>JDBC type returned by the driver: Types.CHAR</li>
+     * </ul>
+     *
+     * @return the value of mobilePhone
+     */
+    public String getMobilePhone(){
+        return mobilePhone;
+    }
+    /**
+     * Setter method for {@link #mobilePhone}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to mobilePhone
+     */
+    public void setMobilePhone(String newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, mobilePhone) && checkMobilePhoneInitialized()) {
+            return;
+        }
+        mobilePhone = newVal;
+
+        modified |= FL_PERSON_ID_MOBILE_PHONE_MASK;
+        initialized |= FL_PERSON_ID_MOBILE_PHONE_MASK;
+    }
+    /**
+     * Determines if the mobilePhone has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkMobilePhoneModified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_MOBILE_PHONE_MASK);
+    }
+
+    /**
+     * Determines if the mobilePhone has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkMobilePhoneInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_MOBILE_PHONE_MASK);
     }
     /**
      * Getter method for {@link #papersType}.<br>
@@ -901,8 +1028,12 @@ public  class FlPersonBean
             return checkNameModified();
         case FL_PERSON_ID_SEX:
             return checkSexModified();
+        case FL_PERSON_ID_ADMIN:
+            return checkAdminModified();
         case FL_PERSON_ID_BIRTHDATE:
             return checkBirthdateModified();
+        case FL_PERSON_ID_MOBILE_PHONE:
+            return checkMobilePhoneModified();
         case FL_PERSON_ID_PAPERS_TYPE:
             return checkPapersTypeModified();
         case FL_PERSON_ID_PAPERS_NUM:
@@ -931,8 +1062,12 @@ public  class FlPersonBean
             return checkNameInitialized();
         case FL_PERSON_ID_SEX:
             return checkSexInitialized();
+        case FL_PERSON_ID_ADMIN:
+            return checkAdminInitialized();
         case FL_PERSON_ID_BIRTHDATE:
             return checkBirthdateInitialized();
+        case FL_PERSON_ID_MOBILE_PHONE:
+            return checkMobilePhoneInitialized();
         case FL_PERSON_ID_PAPERS_TYPE:
             return checkPapersTypeInitialized();
         case FL_PERSON_ID_PAPERS_NUM:
@@ -980,7 +1115,9 @@ public  class FlPersonBean
         modified &= (~(FL_PERSON_ID_GROUP_ID_MASK |
             FL_PERSON_ID_NAME_MASK |
             FL_PERSON_ID_SEX_MASK |
+            FL_PERSON_ID_ADMIN_MASK |
             FL_PERSON_ID_BIRTHDATE_MASK |
+            FL_PERSON_ID_MOBILE_PHONE_MASK |
             FL_PERSON_ID_PAPERS_TYPE_MASK |
             FL_PERSON_ID_PAPERS_NUM_MASK |
             FL_PERSON_ID_IMAGE_MD5_MASK |
@@ -1003,7 +1140,10 @@ public  class FlPersonBean
         this.groupId = new Integer(1);
         this.name = null;
         this.sex = null;
+        /* DEFAULT:'0'*/
+        this.admin = new Integer(0);
         this.birthdate = null;
+        this.mobilePhone = null;
         this.papersType = null;
         this.papersNum = null;
         this.imageMd5 = null;
@@ -1015,7 +1155,7 @@ public  class FlPersonBean
         this.updateTime = null;
         this.isNew = true;
         this.modified = 0L;
-        this.initialized = (FL_PERSON_ID_GROUP_ID_MASK | FL_PERSON_ID_EXPIRY_DATE_MASK);
+        this.initialized = (FL_PERSON_ID_GROUP_ID_MASK | FL_PERSON_ID_ADMIN_MASK | FL_PERSON_ID_EXPIRY_DATE_MASK);
     }
     @Override
     public boolean equals(Object object)
@@ -1030,7 +1170,9 @@ public  class FlPersonBean
             .append(getGroupId(), obj.getGroupId())
             .append(getName(), obj.getName())
             .append(getSex(), obj.getSex())
+            .append(getAdmin(), obj.getAdmin())
             .append(getBirthdate(), obj.getBirthdate())
+            .append(getMobilePhone(), obj.getMobilePhone())
             .append(getPapersType(), obj.getPapersType())
             .append(getPapersNum(), obj.getPapersNum())
             .append(getImageMd5(), obj.getImageMd5())
@@ -1077,11 +1219,23 @@ public  class FlPersonBean
             }
             builder.append("sex=").append(getSex());
         }
+        if(checkAdminInitialized()){
+            if(count++ >0){
+                builder.append(",");
+            }
+            builder.append("admin=").append(getAdmin());
+        }
         if(checkBirthdateInitialized()){
             if(count++ >0){
                 builder.append(",");
             }
             builder.append("birthdate=").append(getBirthdate());
+        }
+        if(checkMobilePhoneInitialized()){
+            if(count++ >0){
+                builder.append(",");
+            }
+            builder.append("mobile_phone=").append(getMobilePhone());
         }
         if(checkPapersTypeInitialized()){
             if(count++ >0){
@@ -1130,7 +1284,9 @@ public  class FlPersonBean
             .append(getGroupId(), object.getGroupId())
             .append(getName(), object.getName())
             .append(getSex(), object.getSex())
+            .append(getAdmin(), object.getAdmin())
             .append(getBirthdate(), object.getBirthdate())
+            .append(getMobilePhone(), object.getMobilePhone())
             .append(getPapersType(), object.getPapersType())
             .append(getPapersNum(), object.getPapersNum())
             .append(getImageMd5(), object.getImageMd5())
@@ -1161,7 +1317,9 @@ public  class FlPersonBean
         setGroupId(null);
         setName(null);
         setSex(null);
+        setAdmin(null);
         setBirthdate(null);
+        setMobilePhone(null);
         setPapersType(null);
         setPapersNum(null);
         setImageMd5(null);
@@ -1263,8 +1421,12 @@ public  class FlPersonBean
             return (T)getName();        
         case FL_PERSON_ID_SEX: 
             return (T)getSex();        
+        case FL_PERSON_ID_ADMIN: 
+            return (T)getAdmin();        
         case FL_PERSON_ID_BIRTHDATE: 
             return (T)getBirthdate();        
+        case FL_PERSON_ID_MOBILE_PHONE: 
+            return (T)getMobilePhone();        
         case FL_PERSON_ID_PAPERS_TYPE: 
             return (T)getPapersType();        
         case FL_PERSON_ID_PAPERS_NUM: 
@@ -1298,8 +1460,14 @@ public  class FlPersonBean
         case FL_PERSON_ID_SEX:
             setSex((Integer)value);
             break;
+        case FL_PERSON_ID_ADMIN:
+            setAdmin((Integer)value);
+            break;
         case FL_PERSON_ID_BIRTHDATE:
             setBirthdate((java.util.Date)value);
+            break;
+        case FL_PERSON_ID_MOBILE_PHONE:
+            setMobilePhone((String)value);
             break;
         case FL_PERSON_ID_PAPERS_TYPE:
             setPapersType((Integer)value);
@@ -1428,6 +1596,16 @@ public  class FlPersonBean
             return this;
         }
         /** 
+         * fill the field : fl_person.admin
+         * @param admin 是否为管理员,0:否,1:是
+         * @see {@link FlPersonBean#getAdmin()}
+         * @see {@link FlPersonBean#setAdmin(Integer)}
+         */
+        public Builder admin(Integer admin){
+            TEMPLATE.get().setAdmin(admin);
+            return this;
+        }
+        /** 
          * fill the field : fl_person.birthdate
          * @param birthdate 出生日期
          * @see {@link FlPersonBean#getBirthdate()}
@@ -1435,6 +1613,16 @@ public  class FlPersonBean
          */
         public Builder birthdate(java.util.Date birthdate){
             TEMPLATE.get().setBirthdate(birthdate);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person.mobile_phone
+         * @param mobilePhone 手机号码
+         * @see {@link FlPersonBean#getMobilePhone()}
+         * @see {@link FlPersonBean#setMobilePhone(String)}
+         */
+        public Builder mobilePhone(String mobilePhone){
+            TEMPLATE.get().setMobilePhone(mobilePhone);
             return this;
         }
         /** 

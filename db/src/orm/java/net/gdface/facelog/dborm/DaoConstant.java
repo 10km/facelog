@@ -596,7 +596,7 @@ public interface DaoConstant {
     public static interface PersonConst{
         public static final String TABLENAME = "fl_person";
         /** column count for fl_person table */
-        public static final int COLUMN_COUNT = 11;
+        public static final int COLUMN_COUNT = 13;
         /** primary keys count for fl_person table */
         public static final int PRIMARY_KEY_COUNT = 1;
         /** foreign keys count for fl_person table */
@@ -610,7 +610,9 @@ public interface DaoConstant {
                             + ",fl_person.group_id"
                             + ",fl_person.name"
                             + ",fl_person.sex"
+                            + ",fl_person.admin"
                             + ",fl_person.birthdate"
+                            + ",fl_person.mobile_phone"
                             + ",fl_person.papers_type"
                             + ",fl_person.papers_num"
                             + ",fl_person.image_md5"
@@ -622,7 +624,9 @@ public interface DaoConstant {
                             + ",group_id"
                             + ",name"
                             + ",sex"
+                            + ",admin"
                             + ",birthdate"
+                            + ",mobile_phone"
                             + ",papers_type"
                             + ",papers_num"
                             + ",image_md5"
@@ -636,7 +640,9 @@ public interface DaoConstant {
                             + ",groupId"
                             + ",name"
                             + ",sex"
+                            + ",admin"
                             + ",birthdate"
+                            + ",mobilePhone"
                             + ",papersType"
                             + ",papersNum"
                             + ",imageMd5"
@@ -669,20 +675,24 @@ public interface DaoConstant {
             name("fl_person","name",3,"getName","setName"),
             /** constant for fl_person.sex  */
             sex("fl_person","sex",4,"getSex","setSex"),
+            /** constant for fl_person.admin  */
+            admin("fl_person","admin",5,"getAdmin","setAdmin"),
             /** constant for fl_person.birthdate  */
-            birthdate("fl_person","birthdate",5,"getBirthdate","setBirthdate"),
+            birthdate("fl_person","birthdate",6,"getBirthdate","setBirthdate"),
+            /** constant for fl_person.mobile_phone  */
+            mobilePhone("fl_person","mobile_phone",7,"getMobilePhone","setMobilePhone"),
             /** constant for fl_person.papers_type  */
-            papersType("fl_person","papers_type",6,"getPapersType","setPapersType"),
+            papersType("fl_person","papers_type",8,"getPapersType","setPapersType"),
             /** constant for fl_person.papers_num  */
-            papersNum("fl_person","papers_num",7,"getPapersNum","setPapersNum"),
+            papersNum("fl_person","papers_num",9,"getPapersNum","setPapersNum"),
             /** constant for fl_person.image_md5  */
-            imageMd5("fl_person","image_md5",8,"getImageMd5","setImageMd5"),
+            imageMd5("fl_person","image_md5",10,"getImageMd5","setImageMd5"),
             /** constant for fl_person.expiry_date  */
-            expiryDate("fl_person","expiry_date",9,"getExpiryDate","setExpiryDate"),
+            expiryDate("fl_person","expiry_date",11,"getExpiryDate","setExpiryDate"),
             /** constant for fl_person.create_time  */
-            createTime("fl_person","create_time",10,"getCreateTime","setCreateTime"),
+            createTime("fl_person","create_time",12,"getCreateTime","setCreateTime"),
             /** constant for fl_person.update_time  */
-            updateTime("fl_person","update_time",11,"getUpdateTime","setUpdateTime");
+            updateTime("fl_person","update_time",13,"getUpdateTime","setUpdateTime");
             final ColumnMeta meta;
             private Column(String table,String field,int ordinal,String getter,String setter){
                 meta = new ColumnMeta(table,field,ordinal,getter,setter);

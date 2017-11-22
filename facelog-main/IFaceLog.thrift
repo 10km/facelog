@@ -133,13 +133,15 @@ struct PersonBean {
   5:  i32 groupId;
   6:  string name;
   7:  i32 sex;
-  8:  i64 birthdate;
-  9:  i32 papersType;
-  10:  string papersNum;
-  11:  string imageMd5;
-  12:  i64 expiryDate;
-  13:  i64 createTime;
-  14:  i64 updateTime;
+  8:  i32 admin;
+  9:  i64 birthdate;
+  10:  string mobilePhone;
+  11:  i32 papersType;
+  12:  string papersNum;
+  13:  string imageMd5;
+  14:  i64 expiryDate;
+  15:  i64 createTime;
+  16:  i64 updateTime;
 }
 
 struct LogLightBean {

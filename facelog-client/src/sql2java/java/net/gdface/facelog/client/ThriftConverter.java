@@ -491,8 +491,14 @@ public class ThriftConverter implements Constant{
             if(0L !=  (initialized & FL_PERSON_ID_SEX_MASK)){
                 left.setSex(right.getSex());
             }
+            if(0L !=  (initialized & FL_PERSON_ID_ADMIN_MASK)){
+                left.setAdmin(right.getAdmin());
+            }
             if(0L !=  (initialized & FL_PERSON_ID_BIRTHDATE_MASK)){
                 left.setBirthdate(right.getBirthdate());
+            }
+            if(0L !=  (initialized & FL_PERSON_ID_MOBILE_PHONE_MASK)){
+                left.setMobilePhone(right.getMobilePhone());
             }
             if(0L !=  (initialized & FL_PERSON_ID_PAPERS_TYPE_MASK)){
                 left.setPapersType(right.getPapersType());
@@ -530,8 +536,14 @@ public class ThriftConverter implements Constant{
             if(left.checkSexInitialized() ){
                 right.setSex(left.getSex());
             }
+            if(left.checkAdminInitialized() ){
+                right.setAdmin(left.getAdmin());
+            }
             if(left.checkBirthdateInitialized() ){
                 right.setBirthdate(left.getBirthdate().getTime());
+            }
+            if(left.checkMobilePhoneInitialized() ){
+                right.setMobilePhone(left.getMobilePhone());
             }
             if(left.checkPapersTypeInitialized() ){
                 right.setPapersType(left.getPapersType());

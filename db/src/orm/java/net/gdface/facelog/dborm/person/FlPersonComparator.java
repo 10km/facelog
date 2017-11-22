@@ -41,7 +41,9 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
      *   <li>{@link Constant#FL_PERSON_ID_GROUP_ID}
      *   <li>{@link Constant#FL_PERSON_ID_NAME}
      *   <li>{@link Constant#FL_PERSON_ID_SEX}
+     *   <li>{@link Constant#FL_PERSON_ID_ADMIN}
      *   <li>{@link Constant#FL_PERSON_ID_BIRTHDATE}
+     *   <li>{@link Constant#FL_PERSON_ID_MOBILE_PHONE}
      *   <li>{@link Constant#FL_PERSON_ID_PAPERS_TYPE}
      *   <li>{@link Constant#FL_PERSON_ID_PAPERS_NUM}
      *   <li>{@link Constant#FL_PERSON_ID_IMAGE_MD5}
@@ -70,7 +72,9 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
      *   <li>{@link Constant#FL_PERSON_ID_GROUP_ID})
      *   <li>{@link Constant#FL_PERSON_ID_NAME})
      *   <li>{@link Constant#FL_PERSON_ID_SEX})
+     *   <li>{@link Constant#FL_PERSON_ID_ADMIN})
      *   <li>{@link Constant#FL_PERSON_ID_BIRTHDATE})
+     *   <li>{@link Constant#FL_PERSON_ID_MOBILE_PHONE})
      *   <li>{@link Constant#FL_PERSON_ID_PAPERS_TYPE})
      *   <li>{@link Constant#FL_PERSON_ID_PAPERS_NUM})
      *   <li>{@link Constant#FL_PERSON_ID_IMAGE_MD5})
@@ -137,6 +141,17 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
                     iReturn = b1.getSex().compareTo(b2.getSex());
                 }
                 break;
+            case FL_PERSON_ID_ADMIN:
+                if (b1.getAdmin() == null && b2.getAdmin() != null) {
+                    iReturn = -1;
+                } else if (b1.getAdmin() == null && b2.getAdmin() == null) {
+                    iReturn = 0;
+                } else if (b1.getAdmin() != null && b2.getAdmin() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getAdmin().compareTo(b2.getAdmin());
+                }
+                break;
             case FL_PERSON_ID_BIRTHDATE:
                 if (b1.getBirthdate() == null && b2.getBirthdate() != null) {
                     iReturn = -1;
@@ -146,6 +161,17 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getBirthdate().compareTo(b2.getBirthdate());
+                }
+                break;
+            case FL_PERSON_ID_MOBILE_PHONE:
+                if (b1.getMobilePhone() == null && b2.getMobilePhone() != null) {
+                    iReturn = -1;
+                } else if (b1.getMobilePhone() == null && b2.getMobilePhone() == null) {
+                    iReturn = 0;
+                } else if (b1.getMobilePhone() != null && b2.getMobilePhone() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getMobilePhone().compareTo(b2.getMobilePhone());
                 }
                 break;
             case FL_PERSON_ID_PAPERS_TYPE:

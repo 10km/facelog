@@ -490,8 +490,14 @@ public class DbConverter implements IDbConverter<
             if(right.checkSexInitialized()){
                 left.setSex(right.getSex());
             }
+            if(right.checkAdminInitialized()){
+                left.setAdmin(right.getAdmin());
+            }
             if(right.checkBirthdateInitialized()){
                 left.setBirthdate(right.getBirthdate());
+            }
+            if(right.checkMobilePhoneInitialized()){
+                left.setMobilePhone(right.getMobilePhone());
             }
             if(right.checkPapersTypeInitialized()){
                 left.setPapersType(right.getPapersType());
@@ -529,8 +535,14 @@ public class DbConverter implements IDbConverter<
             if(left.checkSexInitialized() ){
                 right.setSex(left.getSex());
             }
+            if(left.checkAdminInitialized() ){
+                right.setAdmin(left.getAdmin());
+            }
             if(left.checkBirthdateInitialized() ){
                 right.setBirthdate(left.getBirthdate());
+            }
+            if(left.checkMobilePhoneInitialized() ){
+                right.setMobilePhone(left.getMobilePhone());
             }
             if(left.checkPapersTypeInitialized() ){
                 right.setPapersType(left.getPapersType());
