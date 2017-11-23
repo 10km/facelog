@@ -1,8 +1,11 @@
 package net.gdface.facelog.service;
 
+import java.util.Map;
+
 import org.apache.commons.configuration2.CombinedConfiguration;
 
 import gu.simplemq.Channel;
+import gu.simplemq.redis.JedisPoolLazy.PropName;
 
 /**
  * 服务端常量定义
@@ -38,7 +41,20 @@ public interface ServiceConstant extends CommonConstant{
 	public static final String HEARTBEAT_INTERVAL = "heartbeat.interval";
 	/** 心跳包失效时间(秒) */
 	public static final String HEARTBEAT_EXPIRE = "heartbeat.expire";
+	/** REDIS 服务器主机名 */
+	public static final String REDIS_HOST = "redis.host";
+	/** REDIS 服务器端口 */
+	public static final String REDIS_PORT = "redis.port";	
+	/** REDIS 数据库索引号 */
+	public static final String REDIS_DATABASE = "redis.database";		
+	/** REDIS 服务器超时(秒) */
+	public static final String REDIS_TIMEOUT = "redis.timeout";
+	/** REDIS 服务器密码 */
+	public static final String REDIS_PASSWORD = "redis.password";		
+	/** jedis pool 最大线程数 */
+	public static final String REDIS_POOL_MAXTOTAL = "redis.pool.maxTotal";
 	
 	/** 全局配置参数对象 */
 	public static final CombinedConfiguration CONFIG = GlobalConfig.getConfig();
+
 }

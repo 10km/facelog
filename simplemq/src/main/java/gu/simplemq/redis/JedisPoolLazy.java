@@ -6,12 +6,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Predicates;
+import com.google.common.collect.Maps;
 
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Jedis;
@@ -102,17 +104,12 @@ public class JedisPoolLazy {
 	
 	private static HashMap<PropName,Object> initParameters(Map<PropName,Object> props){
 		// 初始化时复制一份缺省参数
-		HashMap<PropName,Object> params = new HashMap<PropName,Object>(DEFAULT_PARAMETERS);
+		HashMap<PropName,Object> params = Maps.newHashMap(DEFAULT_PARAMETERS);
 		if(null != props){			
-			for(Iterator<Entry<PropName, Object>> itor = props.entrySet().iterator();itor.hasNext();){
-				Entry<PropName, Object> entry = itor.next();
-				// 删除所有为null的参数，避免将缺省参数覆盖为null
-				if(null == entry.getValue()){
-					itor.remove();
-				}
-			}
+			// 过滤掉所有为null的参数，避免将缺省参数覆盖为null
+			Map<PropName, Object> filtered = Maps.filterValues(props, Predicates.notNull());
 			// 缺省参数与输入参数合并
-			params.putAll(props);
+			params.putAll(filtered);
 		}
 		return params;
 	}

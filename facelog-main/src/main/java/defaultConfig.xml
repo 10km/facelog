@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 	<root>
-			<password description="root帐户密码">root</password>
+		<password description="root帐户密码">root</password>
 	</root>
 	<token>
 		<device>
@@ -19,7 +19,19 @@
 		<!-- <workerThreadCount description= "工作线程数"></workerThreadCount> -->
 	</server>
 	<heartbeat>
-		<interval description = "心跳包间隔(秒)">8</interval>
-		<expire description= "心跳包失效时间(秒)">60</expire>
+		<interval description="心跳包间隔(秒)">8</interval>
+		<expire description="心跳包失效时间(秒)">60</expire>
 	</heartbeat>
+<!-- 	
+	<redis>
+		<host description = "REDIS 服务器主机名"></host>
+		<port description = "REDIS 服务器端口"></port>
+		<database description = "REDIS 数据库索引号"></database>
+		<timeout description = "REDIS 服务器超时(秒)"></timeout>
+		<password description = "REDIS 服务器密码"></password>
+		<pool>
+			<maxTotal description = "jedis pool 最大线程数"></maxTotal>
+		</pool>
+	</redis> 
+-->
 </configuration>

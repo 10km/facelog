@@ -54,11 +54,13 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	private final RedisFeatureListener redisFeatureListener = new RedisFeatureListener();
 	private final RedisPermitListener redisPermitListener = new RedisPermitListener();
 	//private final RedisLogConsumer redisLogConsumer  = new RedisLogConsumer();
+	private final RedisInfo redisInfo;
 	
 	public FaceLogImpl() {
-		init();
+		redisInfo = new RedisInfo();
+		initListener();
 	}
-	private void init(){
+	private void initListener(){
 		getPersonManager().registerListener(redisPersonListener);
 		getImageManager().registerListener(redisImageListener);
 		getFeatureManager().registerListener(redisFeatureListener);
@@ -1556,4 +1558,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(e);
 		}
 	}
+    public String getRedisUri(){
+    	return redisInfo.getRedisURI();
+    }
 }
