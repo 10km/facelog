@@ -2,6 +2,7 @@ package net.gdface.facelog.service;
 
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftStruct;
+import com.google.common.base.Function;
 
 /**
  * 访问令牌
@@ -119,6 +120,9 @@ public final class Token{
 		builder.append("]");
 		return builder.toString();
 	}
-
-
+	static Function<Token,String> KEY_HELPER = new Function<Token,String>(){
+		@Override
+		public String apply(Token input) {
+			return null == input ? null : Integer.toString(input.getId());
+		}};
 }

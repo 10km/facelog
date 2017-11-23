@@ -6,7 +6,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
 
-import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.primitives.Bytes;
@@ -46,11 +45,8 @@ class TokenMangement implements ServiceConstant {
 		this.personTokenExpire =CONFIG.getInt(TOKEN_PERSON_EXPIRE,DEFAULT_PERSON_TOKEN_EXPIRE);
 		this.deviceTokenTable =  RedisFactory.getTable(TABLE_DEVICE_TOKEN, JedisPoolLazy.getDefaultInstance());
 		this.personTokenTable =  RedisFactory.getTable(TABLE_PERSON_TOKEN, JedisPoolLazy.getDefaultInstance());
-		this.personTokenTable.setKeyHelper(new Function<Token,String>(){
-			@Override
-			public String apply(Token input) {
-				return null == input ? null : Integer.toString(input.getId());
-			}});
+		this.deviceTokenTable.setKeyHelper(Token.KEY_HELPER);
+		this.personTokenTable.setKeyHelper(Token.KEY_HELPER);
 		this.personTokenTable.setExpire(personTokenExpire, TimeUnit.MINUTES);
 		logger.info("{}:{}",
 				GlobalConfig.descriptionOf(TOKEN_DEVICE_VALIDATE),
