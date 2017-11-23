@@ -81,6 +81,8 @@ public interface CommonConstant {
         /** RuntimeException */
         RUNTIME,
         /** 图像数据异常 */
-        IMAGE_ERROR
+        IMAGE_ERROR,
+        /** 安全异常 ServiceSecurityException */
+        SECURITY_ERROR
     }
 }

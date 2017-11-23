@@ -85,13 +85,57 @@ class TokenMangement implements ServiceConstant {
 					.setType(SecurityExceptionType.INVALID_SN);
 		}
 	}
+	/** 允许的令牌类型 */
+	enum Enable{
+		/** 允许所有令牌类型 */ALL,
+		/** 只允许人员令牌 */PERSON_ONLY,
+		/** 只允许设备令牌 */DEVICE_ONLY;
+		boolean isValid(TokenMangement tm,Token token){
+			switch(this){
+			case PERSON_ONLY:
+				return tm.isValidPersonToken(token);
+			case DEVICE_ONLY:
+				return tm.isValidDeviceToken(token);
+			case ALL:
+				return tm.isValidPersonToken(token) || tm.isValidDeviceToken(token);
+			default:
+				return false;
+			}
+		}
+		/** 
+		 * 验证令牌是否有效,无效抛出异常
+		 * @throws ServiceSecurityException 
+		 */
+		void check(TokenMangement tm,Token token) throws ServiceSecurityException{
+			if(isValid(tm,token)){
+				return;
+			}
+			StringBuffer message = new StringBuffer("INVALID TOKEN");
+			if(null != token){
+				switch(this){
+				case PERSON_ONLY:
+					message.append(",Person Token required");
+					break;
+				case DEVICE_ONLY:
+					message.append(",Device Token required");
+					break;
+				default:
+					break;
+				}
+			}else{
+				message.append(",null token");
+			}
+			throw new ServiceSecurityException(message.toString())
+								.setType(SecurityExceptionType.INVALID_TOKEN);
+		}
+	}
 	/** 验证设备令牌是否有效 */
 	private boolean isValidDeviceToken(Token token){
 		if(validateDeviceToken){
 			return null == token ? false : token.equals(deviceTokenTable.get(Integer.toString(token.getId())));			
 		}else{
 			return true;
-		}		
+		}
 	}
 	/** 验证人员令牌是否有效 */
 	private boolean isValidPersonToken(Token token){
@@ -100,19 +144,6 @@ class TokenMangement implements ServiceConstant {
 		}else{
 			return true;
 		}
-	}
-	/**
-	 * 令牌无效抛出异常
-	 * @param token
-	 * @throws ServiceSecurityException
-	 */
-	protected void checkValidToken(Token token) throws ServiceSecurityException{
-		if(null != token){
-			if(isValidDeviceToken(token) || isValidPersonToken(token)){
-				return;
-			}
-		}
-		throw new ServiceSecurityException(SecurityExceptionType.INVALID_TOKEN);
 	}
 	/** 检查数据库是否存在指定的设备记录,没有则抛出异常{@link ServiceSecurityException} */
 	protected void checkValidDeviceId(Integer deviceId) throws ServiceSecurityException{
@@ -202,7 +233,7 @@ class TokenMangement implements ServiceConstant {
 	}
 	protected void unregisterDevice(int deviceId,Token token)
 			throws RuntimeDaoException, ServiceSecurityException{
-		checkValidToken(token);
+		Enable.DEVICE_ONLY.check(this, token);
 		checkValidDeviceId(deviceId);
 		this.dao.daoDeleteDevice(deviceId);
 	}
@@ -238,7 +269,7 @@ class TokenMangement implements ServiceConstant {
 	 */
 	protected void releaseDeviceToken(Token token)
 			throws RuntimeDaoException, ServiceSecurityException{
-		checkValidToken(token);
+		Enable.DEVICE_ONLY.check(this, token);
 		removeDeviceTokenOf(token.getId());
 	}
 	/**
@@ -268,7 +299,7 @@ class TokenMangement implements ServiceConstant {
 	 */
 	protected void releasePersonToken(Token token)
 			throws RuntimeDaoException, ServiceSecurityException{
-		checkValidToken(token);
+		Enable.PERSON_ONLY.check(this, token);
 		removePersonTokenOf(token.getId());
 	}
 }

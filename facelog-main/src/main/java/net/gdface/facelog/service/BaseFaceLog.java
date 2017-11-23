@@ -95,45 +95,49 @@ public abstract class BaseFaceLog extends Dao{
 	/**
 	 * 删除personId指定的人员(person)记录及关联的所有记录
 	 * @param personId
+	 * @param token 
 	 * @return
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int deletePerson(int personId) throws ServiceRuntimeException {
+	public int deletePerson(int personId, Token token) throws ServiceRuntimeException {
 		return 0;
 	}
 
 	/**
 	 * 删除personIdList指定的人员(person)记录及关联的所有记录
 	 * @param personIdList 人员id列表
+	 * @param token TODO
 	 * @return 返回删除的 person 记录数量
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int deletePersons(List<Integer> personIdList) throws ServiceRuntimeException {
+	public int deletePersons(List<Integer> personIdList, Token token) throws ServiceRuntimeException {
 		return 0;
 	}
 
 	/**
 	 * 删除papersNum指定的人员(person)记录及关联的所有记录
 	 * @param papersNum 证件号码
+	 * @param token TODO
 	 * @return 返回删除的 person 记录数量
 	 * @throws ServiceRuntimeException
-	 * @see {@link #deletePerson(int)}
+	 * @see {@link #deletePerson(int, Token)}
 	 */
 	@ThriftMethod
-	public int deletePersonByPapersNum(String papersNum) throws ServiceRuntimeException {
+	public int deletePersonByPapersNum(String papersNum, Token token) throws ServiceRuntimeException {
 		return 0;
 	}
 
 	/**
 	 * 删除papersNum指定的人员(person)记录及关联的所有记录
 	 * @param papersNumlist 证件号码列表
+	 * @param token TODO
 	 * @return 返回删除的 person 记录数量
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int deletePersonsByPapersNum(List<String> papersNumlist) throws ServiceRuntimeException {
+	public int deletePersonsByPapersNum(List<String> papersNumlist, Token token) throws ServiceRuntimeException {
 		return 0;
 	}
 
@@ -162,40 +166,44 @@ public abstract class BaseFaceLog extends Dao{
 	/**
 	 * 设置 personId 指定的人员为禁止状态
 	 * @param personId
+	 * @param token TODO
 	 * @throws ServiceRuntimeException
-	 * @see #setPersonExpiryDate(int, long)
+	 * @see #setPersonExpiryDate(int, long, Token)
 	 */
 	@ThriftMethod
-	public void disablePerson(int personId) throws ServiceRuntimeException {
+	public void disablePerson(int personId, Token token) throws ServiceRuntimeException {
 	}
 
 	/**
 	 * 修改 personId 指定的人员记录的有效期
 	 * @param personId
 	 * @param expiryDate 失效日期
+	 * @param token TODO
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public void setPersonExpiryDate(int personId, @TargetType(java.util.Date.class)long expiryDate) throws ServiceRuntimeException {
+	public void setPersonExpiryDate(int personId, @TargetType(java.util.Date.class)long expiryDate, Token token) throws ServiceRuntimeException {
 	}
 
 	/**
 	 * 修改 personIdList 指定的人员记录的有效期
 	 * @param personIdList 人员id列表
 	 * @param expiryDate 失效日期 
+	 * @param token TODO
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod("setPersonExpiryDateList")
-	public void setPersonExpiryDate(List<Integer> personIdList, @TargetType(java.util.Date.class)long expiryDate) throws ServiceRuntimeException {
+	public void setPersonExpiryDate(List<Integer> personIdList, @TargetType(java.util.Date.class)long expiryDate, Token token) throws ServiceRuntimeException {
 	}
 
 	/**
 	 * 设置 personIdList 指定的人员为禁止状态
 	 * @param personIdList 人员id列表
+	 * @param token TODO
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod("disablePersonList")
-	public void disablePerson(List<Integer> personIdList) throws ServiceRuntimeException {
+	public void disablePerson(List<Integer> personIdList, Token token) throws ServiceRuntimeException {
 	}
 
 	/**
@@ -255,43 +263,47 @@ public abstract class BaseFaceLog extends Dao{
 	/**
 	 * 保存人员(person)记录
 	 * @param bean
+	 * @param token TODO
 	 * @return
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public PersonBean savePerson(PersonBean bean) throws ServiceRuntimeException {
+	public PersonBean savePerson(PersonBean bean, Token token) throws ServiceRuntimeException {
 		return null;
 	}
 
 	/**
 	 * 保存人员(person)记录
 	 * @param beans 
+	 * @param token TODO
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public void savePersons(List<PersonBean> beans) throws ServiceRuntimeException {
+	public void savePersons(List<PersonBean> beans, Token token) throws ServiceRuntimeException {
 	}
 
 	/**
 	 * 保存人员信息记录
 	 * @param bean
 	 * @param idPhoto 标准照图像对象,可为null
+	 * @param token TODO
 	 * @return
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod("savePersonWithPhoto")
-	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto) throws ServiceRuntimeException {
+	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, Token token) throws ServiceRuntimeException {
 		return null;
 	}
 
 	/**
 	 * 保存人员信息记录(包含标准照)
 	 * @param persons
+	 * @param token TODO
 	 * @return
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod("savePersonsWithPhoto")
-	public int savePerson(Map<ByteBuffer, PersonBean> persons) throws ServiceRuntimeException {
+	public int savePerson(Map<ByteBuffer, PersonBean> persons, Token token) throws ServiceRuntimeException {
 		return 0;
 	}
 
@@ -300,11 +312,12 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param bean
 	 * @param idPhotoMd5 标准照图像对象,可为null
 	 * @param featureMd5 用于验证的人脸特征数据对象,可为null
+	 * @param token TODO
 	 * @return
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod("savePersonWithPhotoAndFeatureSaved")
-	public PersonBean savePerson(PersonBean bean, String idPhotoMd5, String featureMd5) throws ServiceRuntimeException {
+	public PersonBean savePerson(PersonBean bean, String idPhotoMd5, String featureMd5, Token token) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -314,11 +327,12 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param idPhoto 标准照图像,可为null
 	 * @param featureBean 用于验证的人脸特征数据对象,可为null
 	 * @param deviceId 标准照图像来源设备id,可为null
+	 * @param token TODO
 	 * @return
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod("savePersonWithPhotoAndFeature")
-	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, FeatureBean featureBean, Integer deviceId)
+	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, FeatureBean featureBean, Integer deviceId, Token token)
 			throws ServiceRuntimeException {
 		return null;
 	}
@@ -327,13 +341,14 @@ public abstract class BaseFaceLog extends Dao{
 	 * 保存人员信息记录
 	 * @param bean
 	 * @param idPhoto 标准照图像,可为null
-	 * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(ByteBuffer, Integer, List)}
-	 * @param faceBeans 参见 {@link #addFeature(ByteBuffer, Integer, List)}
+	 * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(ByteBuffer, Integer, List, Token)}
+	 * @param faceBeans 参见 {@link #addFeature(ByteBuffer, Integer, List, Token)}
+	 * @param token TODO
 	 * @return
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod("savePersonWithPhotoAndFeatureMultiFaces")
-	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature, List<FaceBean> faceBeans)
+	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature, List<FaceBean> faceBeans, Token token)
 			throws ServiceRuntimeException {
 		return null;
 	}
@@ -345,12 +360,13 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param feature 用于验证的人脸特征数据,可为null 
 	 * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
 	 * @param deviceId faceInfo 图像来源设备id,可为null 
+	 * @param token TODO
 	 * @return bean 保存的{@link PersonBean}对象
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod("savePersonWithPhotoAndFeatureMultiImage")
 	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature, Map<ByteBuffer, FaceBean> faceInfo,
-			Integer deviceId) throws ServiceRuntimeException {
+			Integer deviceId, Token token) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -361,12 +377,13 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param feature 人脸特征数据
 	 * @param featureImage 提取特征源图像,为null 时,默认使用idPhoto
 	 * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
+	 * @param token TODO
 	 * @param deviceBean featureImage来源设备对象
 	 * @return
 	 */
 	@ThriftMethod("savePersonFull")
 	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature, ByteBuffer featureImage,
-			FaceBean featureFaceBean, Integer deviceId) throws ServiceRuntimeException {
+			FaceBean featureFaceBean, Integer deviceId, Token token) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -375,10 +392,11 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param personId 人员记录id
 	 * @param featureMd5 人脸特征数据记录id (已经保存在数据库中)
 	 * @param deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
+	 * @param token TODO
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public void replaceFeature(Integer personId, String featureMd5, boolean deleteOldFeatureImage) throws ServiceRuntimeException {
+	public void replaceFeature(Integer personId, String featureMd5, boolean deleteOldFeatureImage, Token token) throws ServiceRuntimeException {
 	}
 
 	/**
@@ -528,6 +546,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param deviceId 图像来源设备id,可为null
 	 * @param faceBean 关联的人脸信息对象,可为null
 	 * @param personId 关联的人员id(fl_person.id),可为null
+	 * @param token TODO
 	 * @return
 	 * @throws DuplicateRecordException 数据库中已经存在要保存的图像数据
 	 * @throws ServiceRuntimeException
@@ -536,7 +555,7 @@ public abstract class BaseFaceLog extends Dao{
             @ThriftException(type=ServiceRuntimeException.class, id=1),
             @ThriftException(type=DuplicateRecordException.class, id=2)
 			})
-	public ImageBean addImage(ByteBuffer imageData, Integer deviceId, FaceBean faceBean, Integer personId)
+	public ImageBean addImage(ByteBuffer imageData, Integer deviceId, FaceBean faceBean, Integer personId, Token token)
 			throws ServiceRuntimeException, DuplicateRecordException {
 		return null;
 	}
@@ -557,6 +576,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param feature 特征数据
 	 * @param personId 关联的人员id(fl_person.id),可为null
 	 * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
+	 * @param token TODO
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws ServiceRuntimeException
 	 * @throws DuplicateRecordException 
@@ -567,7 +587,7 @@ public abstract class BaseFaceLog extends Dao{
             @ThriftException(type=DuplicateRecordException.class, id=2)
 			}
 		)
-	public FeatureBean addFeature(ByteBuffer feature, Integer personId, List<FaceBean> faecBeans) throws ServiceRuntimeException, DuplicateRecordException {
+	public FeatureBean addFeature(ByteBuffer feature, Integer personId, List<FaceBean> faecBeans, Token token) throws ServiceRuntimeException, DuplicateRecordException {
 		return null;
 	}
 
@@ -577,6 +597,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param personId 关联的人员id(fl_person.id),可为null
 	 * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
 	 * @param deviceId 图像来源设备id,可为null
+	 * @param token TODO
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws ServiceRuntimeException
 	 * @throws DuplicateRecordException 
@@ -586,7 +607,7 @@ public abstract class BaseFaceLog extends Dao{
             @ThriftException(type=ServiceRuntimeException.class, id=1),
             @ThriftException(type=DuplicateRecordException.class, id=2)
 			})
-	public FeatureBean addFeature(ByteBuffer feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo, Integer deviceId)
+	public FeatureBean addFeature(ByteBuffer feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo, Integer deviceId, Token token)
 			throws ServiceRuntimeException, DuplicateRecordException {
 		return null;
 	}
@@ -595,12 +616,13 @@ public abstract class BaseFaceLog extends Dao{
 	 * 删除featureMd5指定的特征记录及关联的face记录
 	 * @param featureMd5
 	 * @param deleteImage 是否删除关联的 image记录
+	 * @param token TODO
 	 * @return 返回删除的特征记录关联的图像(image)记录的MD5<br>
 	 *                {@code deleteImage}为{@code true}时返回空表
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<String> deleteFeature(String featureMd5, boolean deleteImage) throws ServiceRuntimeException {
+	public List<String> deleteFeature(String featureMd5, boolean deleteImage, Token token) throws ServiceRuntimeException {
 		return null;
 	}
 
@@ -608,12 +630,13 @@ public abstract class BaseFaceLog extends Dao{
 	 * 删除 personId 关联的所有特征(feature)记录
 	 * @param personId
 	 * @param deleteImage 是否删除关联的 image记录
+	 * @param token TODO
 	 * @return
-	 * @see #deleteFeature(String, boolean)
+	 * @see #deleteFeature(String, boolean, Token)
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int deleteAllFeaturesByPersonId(int personId, boolean deleteImage) throws ServiceRuntimeException {
+	public int deleteAllFeaturesByPersonId(int personId, boolean deleteImage, Token token) throws ServiceRuntimeException {
 		return 0;
 	}
 
@@ -705,11 +728,12 @@ public abstract class BaseFaceLog extends Dao{
 	/**
 	 * 删除imageMd5指定图像及其缩略图
 	 * @param imageMd5
+	 * @param token TODO
 	 * @return 删除成功返回1,否则返回0
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int deleteImage(String imageMd5) throws ServiceRuntimeException {
+	public int deleteImage(String imageMd5, Token token) throws ServiceRuntimeException {
 		return 0;
 	}
 
@@ -726,11 +750,12 @@ public abstract class BaseFaceLog extends Dao{
 	/**
 	 * 保存设备记录
 	 * @param deviceBean
+	 * @param token TODO
 	 * @return
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public DeviceBean saveDevice(DeviceBean deviceBean) throws ServiceRuntimeException {
+	public DeviceBean saveDevice(DeviceBean deviceBean, Token token) throws ServiceRuntimeException {
 		return null;
 	}
 	/**
@@ -790,12 +815,13 @@ public abstract class BaseFaceLog extends Dao{
 	/**
 	 * 保存设备组记录
 	 * @param deviceGroupBean
+	 * @param token TODO
 	 * @return
 	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean)throws ServiceRuntimeException {
+	public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean, Token token)throws ServiceRuntimeException {
 		return null;
 	}
 	/**
@@ -824,12 +850,13 @@ public abstract class BaseFaceLog extends Dao{
 	 * 删除{@code deviceGroupId}指定的设备组<br>
 	 * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
 	 * @param deviceGroupId
+	 * @param token TODO
 	 * @return  返回删除的记录条数
 	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int deleteDeviceGroup(int deviceGroupId)throws ServiceRuntimeException {
+	public int deleteDeviceGroup(int deviceGroupId, Token token)throws ServiceRuntimeException {
 		return 0;
 	}
 	/**
@@ -860,12 +887,13 @@ public abstract class BaseFaceLog extends Dao{
 	/**
 	 * 保存人员组记录
 	 * @param personGroupBean
+	 * @param token TODO
 	 * @return
 	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean)throws ServiceRuntimeException {
+	public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean, Token token)throws ServiceRuntimeException {
 		return personGroupBean;
 	}
 	/**
@@ -894,12 +922,13 @@ public abstract class BaseFaceLog extends Dao{
 	 * 删除{@code personGroupId}指定的人员组<br>
 	 * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
 	 * @param personGroupId
+	 * @param token TODO
 	 * @return 
 	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int deletePersonGroup(int personGroupId)throws ServiceRuntimeException {
+	public int deletePersonGroup(int personGroupId, Token token)throws ServiceRuntimeException {
 		return personGroupId;
 	}
 	/**
@@ -958,30 +987,33 @@ public abstract class BaseFaceLog extends Dao{
 	 * {@code deviceGroup}指定的设备组下属的所有设备通行
 	 * @param deviceGroup
 	 * @param personGroup
+	 * @param token TODO
 	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntimeException {}
+	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup, Token token)throws ServiceRuntimeException {}
     /**
      * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
      * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
      * @param deviceGroupId 外键,设备组id
      * @param personGroupId 外键,人员组id
-     * @see #addPermit(DeviceGroupBean,PersonGroupBean)
+     * @param token TODO
+     * @see #addPermit(DeviceGroupBean,PersonGroupBean, Token)
      */
 	@ThriftMethod("addPermitById")
-	public void addPermit(int deviceGroupId,int personGroupId)throws ServiceRuntimeException{}
+	public void addPermit(int deviceGroupId,int personGroupId, Token token)throws ServiceRuntimeException{}
 	/**
-	 * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean)}
+	 * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean, Token)}
 	 * @param deviceGroup
 	 * @param personGroup
+	 * @param token TODO
 	 * @return 删除成功返回1,否则返回0
 	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public int deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntimeException {
+	public int deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup, Token token)throws ServiceRuntimeException {
 		return 0;
 	}
 	/**

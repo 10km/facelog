@@ -33,6 +33,7 @@ import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.service.DuplicateRecordException;
 import net.gdface.facelog.service.ServiceRuntimeException;
+import net.gdface.facelog.service.TokenMangement.Enable;
 import net.gdface.image.LazyImage;
 import net.gdface.image.NotImage;
 import net.gdface.image.UnsupportedFormat;
@@ -422,8 +423,9 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	}
 
 	@Override
-	public int deletePerson(final int personId)throws ServiceRuntimeException {
+	public int deletePerson(final int personId, Token token)throws ServiceRuntimeException {
 		try{
+			Enable.ALL.check(tm, token);
 			return daoRunAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
@@ -433,12 +435,15 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch(RuntimeException e){
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
 	@Override
-	public int deletePersons(final List<Integer> personIdList)throws ServiceRuntimeException {
+	public int deletePersons(final List<Integer> personIdList, Token token)throws ServiceRuntimeException {
 		try{
+			Enable.ALL.check(tm, token);
 			return daoRunAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
@@ -448,12 +453,15 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch(RuntimeException e){
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
 	@Override
-	public int deletePersonByPapersNum(final String papersNum)throws ServiceRuntimeException  {
+	public int deletePersonByPapersNum(final String papersNum, Token token)throws ServiceRuntimeException  {
 		try{	
+			Enable.ALL.check(tm, token);
 			return daoRunAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
@@ -463,12 +471,15 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch(RuntimeException e){
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
 	@Override
-	public  int deletePersonsByPapersNum(final List<String> papersNumlist)throws ServiceRuntimeException {
+	public  int deletePersonsByPapersNum(final List<String> papersNumlist, Token token)throws ServiceRuntimeException {
 		try{		
+			Enable.ALL.check(tm, token);
 			return daoRunAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
@@ -478,6 +489,8 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch(RuntimeException e){
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -504,30 +517,37 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	}
 
 	@Override
-	public void disablePerson(int personId)throws ServiceRuntimeException{
+	public void disablePerson(int personId, Token token)throws ServiceRuntimeException{
 		try{
+			Enable.ALL.check(tm, token);
 			daoSetPersonExpiryDate(daoGetPerson(personId),new Date());
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
 	@Override
-	public void setPersonExpiryDate(int personId,long expiryDate)throws ServiceRuntimeException{
+	public void setPersonExpiryDate(int personId,long expiryDate, Token token)throws ServiceRuntimeException{
 		try{
+			Enable.ALL.check(tm, token);
 			daoSetPersonExpiryDate(daoGetPerson(personId),new Date(expiryDate));
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
 	@Override
-	public  void setPersonExpiryDate(final List<Integer> personIdList,final long expiryDate)throws ServiceRuntimeException{
+	public  void setPersonExpiryDate(final List<Integer> personIdList,final long expiryDate, Token token)throws ServiceRuntimeException{
 		try{		
+			Enable.ALL.check(tm, token);
 			daoRunAsTransaction(new Runnable(){
 				@Override
 				public void run() {
@@ -537,12 +557,14 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
 	@Override
-	public  void disablePerson(final List<Integer> personIdList)throws ServiceRuntimeException{
-		setPersonExpiryDate(personIdList,System.currentTimeMillis());
+	public  void disablePerson(final List<Integer> personIdList, Token token)throws ServiceRuntimeException{
+		setPersonExpiryDate(personIdList,System.currentTimeMillis(), token);
 	}
 
 	@Override
@@ -598,30 +620,37 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		} 
 	}
 	@Override
-	public PersonBean savePerson(PersonBean bean)throws ServiceRuntimeException {
+	public PersonBean savePerson(PersonBean bean, Token token)throws ServiceRuntimeException {
 		try{
+			Enable.ALL.check(tm, token);
 			return daoSavePerson(bean);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
-		} 
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		}
 	}
 
 	@Override
-	public void savePersons(List<PersonBean> beans)throws ServiceRuntimeException  {
+	public void savePersons(List<PersonBean> beans, Token token)throws ServiceRuntimeException  {
 		try{
+			Enable.ALL.check(tm, token);
 			daoSavePersonsAsTransaction(beans);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
-		} 
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		}
 	}
 
 	@Override
-	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto)throws ServiceRuntimeException {
+	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, Token token)throws ServiceRuntimeException {
 		try{
+			Enable.ALL.check(tm, token);
 			return daoRunAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
@@ -631,12 +660,15 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
-		} 
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		}
 	}
 
 	@Override
-	public int savePerson(final Map<ByteBuffer,PersonBean> persons)throws ServiceRuntimeException {
+	public int savePerson(final Map<ByteBuffer,PersonBean> persons, Token token)throws ServiceRuntimeException {
 		try{
+			Enable.ALL.check(tm, token);
 			return daoRunAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
@@ -646,13 +678,16 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
-		} 
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		}
 	}
 
 	@Override
-	public PersonBean savePerson(final PersonBean bean, final String idPhotoMd5, final String featureMd5)
+	public PersonBean savePerson(final PersonBean bean, final String idPhotoMd5, final String featureMd5, Token token)
 			throws ServiceRuntimeException {
 		try {
+			Enable.ALL.check(tm, token);
 			return daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
@@ -663,13 +698,16 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	
 	@Override
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final FeatureBean featureBean,
-			final Integer deviceId) throws ServiceRuntimeException {
+			final Integer deviceId, Token token) throws ServiceRuntimeException {
 		try {
+			Enable.ALL.check(tm, token);
 			return daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
@@ -680,13 +718,16 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
 	@Override
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final ByteBuffer feature,
-			final List<FaceBean> faceBeans) throws ServiceRuntimeException {
+			final List<FaceBean> faceBeans, Token token) throws ServiceRuntimeException {
 		try {
+			Enable.ALL.check(tm, token);
 			return daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
@@ -697,13 +738,16 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
 	@Override
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final ByteBuffer feature,
-			final Map<ByteBuffer, FaceBean> faceInfo, final Integer deviceId) throws ServiceRuntimeException {
+			final Map<ByteBuffer, FaceBean> faceInfo, final Integer deviceId, Token token) throws ServiceRuntimeException {
 		try {
+			Enable.ALL.check(tm, token);
 			return daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
@@ -714,13 +758,16 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
 	@Override
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final ByteBuffer feature,
-			final ByteBuffer featureImage, final FaceBean featureFaceBean, final Integer deviceId)throws ServiceRuntimeException {
+			final ByteBuffer featureImage, final FaceBean featureFaceBean, final Integer deviceId, Token token)throws ServiceRuntimeException {
 		try{
+			Enable.ALL.check(tm, token);
 			return daoRunAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
@@ -730,13 +777,16 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
-		} 
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		}
 	}
 
 	@Override
-	public void replaceFeature(final Integer personId, final String featureMd5, final boolean deleteOldFeatureImage)
+	public void replaceFeature(final Integer personId, final String featureMd5, final boolean deleteOldFeatureImage, Token token)
 			throws ServiceRuntimeException {
 		try {
+			Enable.ALL.check(tm, token);
 			daoRunAsTransaction(new Runnable() {
 				@Override
 				public void run() {
@@ -747,6 +797,8 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -871,14 +923,17 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 
 	@Override
 	public ImageBean addImage(ByteBuffer imageData,Integer deviceId
-			, FaceBean faceBean , Integer personId) throws ServiceRuntimeException, DuplicateRecordException{
+			, FaceBean faceBean , Integer personId, Token token) throws ServiceRuntimeException, DuplicateRecordException{
 		try{
+			Enable.ALL.check(tm, token);
 			return daoAddImage(imageData,daoGetDevice(deviceId),Arrays.asList(faceBean),Arrays.asList(daoGetPerson(personId)));		
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
-		} 
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		}
 	}
 
     @Override
@@ -893,48 +948,60 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	}
 
 	@Override
-	public FeatureBean addFeature(ByteBuffer feature,Integer personId,List<FaceBean> faecBeans)throws ServiceRuntimeException, DuplicateRecordException{
+	public FeatureBean addFeature(ByteBuffer feature,Integer personId,List<FaceBean> faecBeans, Token token)throws ServiceRuntimeException, DuplicateRecordException{
 		try{
+			Enable.ALL.check(tm, token);
 			return daoAddFeature(feature, daoGetPerson(personId), faecBeans);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
-		} 
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		}
 	}
 
 	@Override
 	public FeatureBean addFeature(ByteBuffer feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo,
-			Integer deviceId) throws ServiceRuntimeException, DuplicateRecordException {
+			Integer deviceId, Token token) throws ServiceRuntimeException, DuplicateRecordException {
 		try {
+			Enable.ALL.check(tm, token);
 			return daoAddFeature(feature, daoGetPerson(personId), faceInfo, daoGetDevice(deviceId));
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
-		} 
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		}
 	}
 
 	@Override
-	public List<String> deleteFeature(String featureMd5,boolean deleteImage)throws ServiceRuntimeException{
+	public List<String> deleteFeature(String featureMd5,boolean deleteImage, Token token)throws ServiceRuntimeException{
 		try{
+			Enable.ALL.check(tm, token);
 			return daoDeleteFeature(featureMd5,deleteImage);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
-		} 
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		}
 	}
 
 	@Override
-	public int deleteAllFeaturesByPersonId(int personId,boolean deleteImage)throws ServiceRuntimeException{
+	public int deleteAllFeaturesByPersonId(int personId,boolean deleteImage, Token token)throws ServiceRuntimeException{
 		try{
+			Enable.ALL.check(tm, token);
 			return daoDeleteAllFeaturesByPersonId(personId,deleteImage);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
-		} 
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		}
 	}
 
 	@Override
@@ -1026,14 +1093,17 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
 	}
 	@Override
-	public int deleteImage(String imageMd5)throws ServiceRuntimeException{
+	public int deleteImage(String imageMd5, Token token)throws ServiceRuntimeException{
 		try{
+			Enable.ALL.check(tm, token);
 			return daoDeleteImage(imageMd5);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
-		} 
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		}
 	}
 
     @Override
@@ -1047,21 +1117,24 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		} 
 	}
 
-    @Override
-    public DeviceBean saveDevice(DeviceBean deviceBean)throws ServiceRuntimeException{
-    	try{
-    		return daoSaveDevice(deviceBean);
-    	} catch(RuntimeDaoException e){
+	@Override
+	public DeviceBean saveDevice(DeviceBean deviceBean, Token token)throws ServiceRuntimeException{
+		try{
+			Enable.ALL.check(tm, token);
+			return daoSaveDevice(deviceBean);
+		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
-    		throw new ServiceRuntimeException(e);
-    	} 
-    }
+			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		}
+	}
 
 	@Override
 	public DeviceBean getDevice(int deviceId)throws ServiceRuntimeException{
-    	try{
-    		return daoGetDevice(deviceId);
+		try{
+			return daoGetDevice(deviceId);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
@@ -1112,13 +1185,16 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	////////////////////////////////DeviceGroupBean/////////////
 	
 	@Override
-	public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean)throws ServiceRuntimeException {
+	public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean, Token token)throws ServiceRuntimeException {
 		try{
+			Enable.ALL.check(tm, token);
 			return daoSaveDeviceGroup(deviceGroupBean);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch(RuntimeException e){
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
@@ -1142,13 +1218,16 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
 	}
 	@Override
-	public int deleteDeviceGroup(int deviceGroupId)throws ServiceRuntimeException {
+	public int deleteDeviceGroup(int deviceGroupId, Token token)throws ServiceRuntimeException {
 		try{
+			Enable.ALL.check(tm, token);
 			return daoDeleteDeviceGroup(deviceGroupId);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
@@ -1174,13 +1253,16 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	////////////////////////////////PersonGroupBean/////////////
 	
 	@Override
-	public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean)throws ServiceRuntimeException {
+	public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean, Token token)throws ServiceRuntimeException {
 		try{
+			Enable.ALL.check(tm, token);
 			return daoSavePersonGroup(personGroupBean);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
@@ -1204,13 +1286,16 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
 	}
 	@Override
-	public int deletePersonGroup(int personGroupId)throws ServiceRuntimeException {
+	public int deletePersonGroup(int personGroupId, Token token)throws ServiceRuntimeException {
 		try{
+			Enable.ALL.check(tm, token);
 			return daoDeletePersonGroup(personGroupId);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
@@ -1266,33 +1351,42 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	/////////////////////PERMIT/////
     
 	@Override
-	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntimeException {
+	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup, Token token)throws ServiceRuntimeException {
 		try{
+			Enable.ALL.check(tm, token);
 			daoAddPermit(deviceGroup, personGroup);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
-	public void addPermit(int deviceGroupId,int personGroupId)throws ServiceRuntimeException{
+	public void addPermit(int deviceGroupId,int personGroupId, Token token)throws ServiceRuntimeException{
 		try{
+			Enable.ALL.check(tm, token);
 			daoAddPermit(deviceGroupId, personGroupId);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
-	public int deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntimeException {
+	public int deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup, Token token)throws ServiceRuntimeException {
 		try{
+			Enable.ALL.check(tm, token);
 			return daoDeletePermit(deviceGroup, personGroup);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
