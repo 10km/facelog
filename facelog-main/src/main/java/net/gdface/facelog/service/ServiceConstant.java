@@ -26,7 +26,6 @@ public interface ServiceConstant extends CommonConstant{
 	public static final String TOKEN_PERSON_VALIDATE = "token.person.validate";
 	/** 人员令牌失效时间(分钟) */
 	public static final String TOKEN_PERSON_EXPIRE = "token.person.expire";
-	public static final String TOKEN_PERSON_EXPIRE_DESC = "token.person.expire[@description]";
 	/** 服务端口号 */
 	public static final String SERVER_PORT = "server.port";
 	/** 最大连接数 */

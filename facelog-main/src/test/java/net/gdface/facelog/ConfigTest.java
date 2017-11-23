@@ -11,6 +11,8 @@ import org.apache.commons.configuration2.tree.DefaultExpressionEngineSymbols;
 import org.apache.commons.configuration2.tree.xpath.XPathExpressionEngine;
 import org.junit.Test;
 
+import net.gdface.facelog.service.GlobalConfig;
+
 /**
  * @author guyadong
  *
@@ -119,6 +121,7 @@ public class ConfigTest {
 		    System.out.println(config.getString("root.password"));
 		    System.out.println(config.getString("root.password.description"));
 		    System.out.println(config.getString("root.password[@description]"));
+		    System.out.println(config.getString(GlobalConfig.descriptionOf("root.password")));
 		}
 		catch(Throwable e)
 		{

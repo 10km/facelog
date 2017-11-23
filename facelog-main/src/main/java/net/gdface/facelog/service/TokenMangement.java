@@ -43,9 +43,7 @@ class TokenMangement implements ServiceConstant {
 		this.dao = checkNotNull(dao,"dao is null");
 		this.validateDeviceToken = CONFIG.getBoolean(TOKEN_DEVICE_VALIDATE);
 		this.validatePersonToken = CONFIG.getBoolean(TOKEN_PERSON_VALIDATE);
-		this.personTokenExpire =CONFIG.getInt(
-				TOKEN_PERSON_EXPIRE,
-				DEFAULT_PERSON_TOKEN_EXPIRE);
+		this.personTokenExpire =CONFIG.getInt(TOKEN_PERSON_EXPIRE,DEFAULT_PERSON_TOKEN_EXPIRE);
 		this.deviceTokenTable =  RedisFactory.getTable(TABLE_DEVICE_TOKEN, JedisPoolLazy.getDefaultInstance());
 		this.personTokenTable =  RedisFactory.getTable(TABLE_PERSON_TOKEN, JedisPoolLazy.getDefaultInstance());
 		this.personTokenTable.setKeyHelper(new Function<Token,String>(){
@@ -54,6 +52,15 @@ class TokenMangement implements ServiceConstant {
 				return null == input ? null : Integer.toString(input.getId());
 			}});
 		this.personTokenTable.setExpire(personTokenExpire, TimeUnit.MINUTES);
+		logger.info("{}:{}",
+				CONFIG.getString(GlobalConfig.descriptionOf(TOKEN_DEVICE_VALIDATE)),
+				this.validateDeviceToken);
+		logger.info("{}:{}",
+				CONFIG.getString(GlobalConfig.descriptionOf(TOKEN_PERSON_VALIDATE)),
+				this.validatePersonToken);
+		logger.info("{}:{}",
+				CONFIG.getString(GlobalConfig.descriptionOf(TOKEN_PERSON_EXPIRE)),
+				this.personTokenExpire);	
 	}
 	/** 验证MAC地址是否有效(HEX格式,12字符,无分隔符,不区分大小写) */
 	protected static final boolean isValidMac(String mac){

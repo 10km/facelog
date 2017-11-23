@@ -13,6 +13,8 @@ import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import org.javatuples.Pair;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import com.google.common.base.Function;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
@@ -425,7 +427,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	@Override
 	public int deletePerson(final int personId, Token token)throws ServiceRuntimeException {
 		try{
-			Enable.ALL.check(tm, token);
+			Enable.PERSON_ONLY.check(tm, token);
 			return daoRunAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
@@ -443,7 +445,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	@Override
 	public int deletePersons(final List<Integer> personIdList, Token token)throws ServiceRuntimeException {
 		try{
-			Enable.ALL.check(tm, token);
+			Enable.PERSON_ONLY.check(tm, token);
 			return daoRunAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
@@ -461,7 +463,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	@Override
 	public int deletePersonByPapersNum(final String papersNum, Token token)throws ServiceRuntimeException  {
 		try{	
-			Enable.ALL.check(tm, token);
+			Enable.PERSON_ONLY.check(tm, token);
 			return daoRunAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
@@ -479,7 +481,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	@Override
 	public  int deletePersonsByPapersNum(final List<String> papersNumlist, Token token)throws ServiceRuntimeException {
 		try{		
-			Enable.ALL.check(tm, token);
+			Enable.PERSON_ONLY.check(tm, token);
 			return daoRunAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
@@ -519,7 +521,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	@Override
 	public void disablePerson(int personId, Token token)throws ServiceRuntimeException{
 		try{
-			Enable.ALL.check(tm, token);
+			Enable.PERSON_ONLY.check(tm, token);
 			daoSetPersonExpiryDate(daoGetPerson(personId),new Date());
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
@@ -533,7 +535,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	@Override
 	public void setPersonExpiryDate(int personId,long expiryDate, Token token)throws ServiceRuntimeException{
 		try{
-			Enable.ALL.check(tm, token);
+			Enable.PERSON_ONLY.check(tm, token);
 			daoSetPersonExpiryDate(daoGetPerson(personId),new Date(expiryDate));
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
@@ -547,7 +549,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	@Override
 	public  void setPersonExpiryDate(final List<Integer> personIdList,final long expiryDate, Token token)throws ServiceRuntimeException{
 		try{		
-			Enable.ALL.check(tm, token);
+			Enable.PERSON_ONLY.check(tm, token);
 			daoRunAsTransaction(new Runnable(){
 				@Override
 				public void run() {
@@ -636,7 +638,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	@Override
 	public void savePersons(List<PersonBean> beans, Token token)throws ServiceRuntimeException  {
 		try{
-			Enable.ALL.check(tm, token);
+			Enable.PERSON_ONLY.check(tm, token);
 			daoSavePersonsAsTransaction(beans);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
@@ -668,7 +670,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	@Override
 	public int savePerson(final Map<ByteBuffer,PersonBean> persons, Token token)throws ServiceRuntimeException {
 		try{
-			Enable.ALL.check(tm, token);
+			Enable.PERSON_ONLY.check(tm, token);
 			return daoRunAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
@@ -707,7 +709,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final FeatureBean featureBean,
 			final Integer deviceId, Token token) throws ServiceRuntimeException {
 		try {
-			Enable.ALL.check(tm, token);
+			Enable.DEVICE_ONLY.check(tm, token);
 			return daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
@@ -727,7 +729,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final ByteBuffer feature,
 			final List<FaceBean> faceBeans, Token token) throws ServiceRuntimeException {
 		try {
-			Enable.ALL.check(tm, token);
+			Enable.DEVICE_ONLY.check(tm, token);
 			return daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
@@ -747,7 +749,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final ByteBuffer feature,
 			final Map<ByteBuffer, FaceBean> faceInfo, final Integer deviceId, Token token) throws ServiceRuntimeException {
 		try {
-			Enable.ALL.check(tm, token);
+			Enable.DEVICE_ONLY.check(tm, token);
 			return daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
@@ -767,7 +769,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final ByteBuffer feature,
 			final ByteBuffer featureImage, final FaceBean featureFaceBean, final Integer deviceId, Token token)throws ServiceRuntimeException {
 		try{
-			Enable.ALL.check(tm, token);
+			Enable.DEVICE_ONLY.check(tm, token);
 			return daoRunAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
@@ -950,7 +952,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	@Override
 	public FeatureBean addFeature(ByteBuffer feature,Integer personId,List<FaceBean> faecBeans, Token token)throws ServiceRuntimeException, DuplicateRecordException{
 		try{
-			Enable.ALL.check(tm, token);
+			Enable.DEVICE_ONLY.check(tm, token);
 			return daoAddFeature(feature, daoGetPerson(personId), faecBeans);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
@@ -965,7 +967,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	public FeatureBean addFeature(ByteBuffer feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo,
 			Integer deviceId, Token token) throws ServiceRuntimeException, DuplicateRecordException {
 		try {
-			Enable.ALL.check(tm, token);
+			Enable.DEVICE_ONLY.check(tm, token);
 			return daoAddFeature(feature, daoGetPerson(personId), faceInfo, daoGetDevice(deviceId));
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
@@ -1120,7 +1122,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	@Override
 	public DeviceBean saveDevice(DeviceBean deviceBean, Token token)throws ServiceRuntimeException{
 		try{
-			Enable.ALL.check(tm, token);
+			Enable.PERSON_ONLY.check(tm, token);
 			return daoSaveDevice(deviceBean);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
@@ -1130,7 +1132,21 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
-
+	@Override
+	public DeviceBean updateDevice(DeviceBean deviceBean, Token token)throws ServiceRuntimeException{
+		try{
+			Enable.ALL.check(tm, token);
+			checkArgument(null != deviceBean && !deviceBean.isNew(),
+					"require the device must be exists record");
+			return daoSaveDevice(deviceBean);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
+			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		}
+	}
 	@Override
 	public DeviceBean getDevice(int deviceId)throws ServiceRuntimeException{
 		try{
@@ -1187,7 +1203,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	@Override
 	public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean, Token token)throws ServiceRuntimeException {
 		try{
-			Enable.ALL.check(tm, token);
+			Enable.PERSON_ONLY.check(tm, token);
 			return daoSaveDeviceGroup(deviceGroupBean);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
@@ -1220,7 +1236,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	@Override
 	public int deleteDeviceGroup(int deviceGroupId, Token token)throws ServiceRuntimeException {
 		try{
-			Enable.ALL.check(tm, token);
+			Enable.PERSON_ONLY.check(tm, token);
 			return daoDeleteDeviceGroup(deviceGroupId);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
@@ -1255,7 +1271,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	@Override
 	public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean, Token token)throws ServiceRuntimeException {
 		try{
-			Enable.ALL.check(tm, token);
+			Enable.PERSON_ONLY.check(tm, token);
 			return daoSavePersonGroup(personGroupBean);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
@@ -1288,7 +1304,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	@Override
 	public int deletePersonGroup(int personGroupId, Token token)throws ServiceRuntimeException {
 		try{
-			Enable.ALL.check(tm, token);
+			Enable.PERSON_ONLY.check(tm, token);
 			return daoDeletePersonGroup(personGroupId);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
@@ -1353,7 +1369,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	@Override
 	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup, Token token)throws ServiceRuntimeException {
 		try{
-			Enable.ALL.check(tm, token);
+			Enable.PERSON_ONLY.check(tm, token);
 			daoAddPermit(deviceGroup, personGroup);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
@@ -1366,7 +1382,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	@Override
 	public void addPermit(int deviceGroupId,int personGroupId, Token token)throws ServiceRuntimeException{
 		try{
-			Enable.ALL.check(tm, token);
+			Enable.PERSON_ONLY.check(tm, token);
 			daoAddPermit(deviceGroupId, personGroupId);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
@@ -1379,7 +1395,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	@Override
 	public int deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup, Token token)throws ServiceRuntimeException {
 		try{
-			Enable.ALL.check(tm, token);
+			Enable.PERSON_ONLY.check(tm, token);
 			return daoDeletePermit(deviceGroup, personGroup);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);

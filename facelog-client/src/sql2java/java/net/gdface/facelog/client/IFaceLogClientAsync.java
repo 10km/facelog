@@ -28,6 +28,10 @@ import java.util.*;
  * 所以请在执行save时特别注意{@code isNew()}状态</li>
  * <li>对于以add为前缀的添加记录方法,在添加记录前会检查数据库中是否有(主键)相同记录,
  * 如果有则会抛出异常{@link DuplicateRecordException}</li>
+ * <li>所有带{@link Token}参数的方法都需要提供访问令牌,访问令牌分为人员令牌和设备令牌,
+ * 注释中标注为{@code PERSON_ONLY}的方法只接受人员令牌,
+ * 注释中标注为{@code DEVICE_ONLY}的方法只接受设备令牌,
+ * 关于令牌申请和释放参见{@link #applyPersonToken(int)},{@link #releasePersonToken(Token)},{@link #online(DeviceBean)},{@link #offline(Token)}</li>
  * </ul>
  * remote implementation of the service IFaceLog(asynchronous implementation)<br>
  * all method comments be copied from {@code net.gdface.facelog.service.BaseFaceLog.java}<br>
@@ -66,16 +70,7 @@ class IFaceLogClientAsync implements Constant{
     IFaceLogClientAsync(net.gdface.facelog.client.thrift.IFaceLog.Async service){
         this.service = checkNotNull(service,"service is null");
     }
-    // 1 SERIVCE PORT : addPermitById
-
-    public ListenableFuture<Void> addPermit(
-            int deviceGroupId,
-            int personGroupId){
-        return service.addPermitById(
-                    deviceGroupId,
-                    personGroupId);
-    }
-    // 2 SERIVCE PORT : getPerson
+    // 1 SERIVCE PORT : getPerson
     /**
      * 返回personId指定的人员记录
      * @param personId
@@ -91,7 +86,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 3 SERIVCE PORT : getPersons
+    // 2 SERIVCE PORT : getPersons
     /**
      * 返回 list 指定的人员记录
      * @param idList 人员id列表
@@ -107,7 +102,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 4 SERIVCE PORT : getPersonByPapersNum
+    // 3 SERIVCE PORT : getPersonByPapersNum
     /**
      * 根据证件号码返回人员记录
      * @param papersNum
@@ -123,7 +118,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 5 SERIVCE PORT : getFeatureBeansByPersonId
+    // 4 SERIVCE PORT : getFeatureBeansByPersonId
     /**
      * 返回 persionId 关联的所有人脸特征记录
      * @param personId fl_person.id
@@ -132,44 +127,68 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<List<String>> getFeatureBeansByPersonId(int personId){
         return service.getFeatureBeansByPersonId(personId);
     }
-    // 6 SERIVCE PORT : deletePerson
+    // 5 SERIVCE PORT : deletePerson
     /**
      * 删除personId指定的人员(person)记录及关联的所有记录
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param personId
+     * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<Integer> deletePerson(int personId){
-        return service.deletePerson(personId);
+    public ListenableFuture<Integer> deletePerson(
+            int personId,
+            net.gdface.facelog.client.thrift.Token token){
+        return service.deletePerson(
+                    personId,
+                    token);
     }
-    // 7 SERIVCE PORT : deletePersons
+    // 6 SERIVCE PORT : deletePersons
     /**
      * 删除personIdList指定的人员(person)记录及关联的所有记录
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param personIdList 人员id列表
+     * @param token 访问令牌
      * @return 返回删除的 person 记录数量
      */
-    public ListenableFuture<Integer> deletePersons(List<Integer> personIdList){
-        return service.deletePersons(CollectionUtils.checkNotNullElement(personIdList));
+    public ListenableFuture<Integer> deletePersons(
+            List<Integer> personIdList,
+            net.gdface.facelog.client.thrift.Token token){
+        return service.deletePersons(
+                    CollectionUtils.checkNotNullElement(personIdList),
+                    token);
     }
-    // 8 SERIVCE PORT : deletePersonByPapersNum
+    // 7 SERIVCE PORT : deletePersonByPapersNum
     /**
      * 删除papersNum指定的人员(person)记录及关联的所有记录
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param papersNum 证件号码
+     * @param token 访问令牌
      * @return 返回删除的 person 记录数量
-     * @see {@link #deletePerson(int)}
+     * @see {@link #deletePerson(int, Token)}
      */
-    public ListenableFuture<Integer> deletePersonByPapersNum(String papersNum){
-        return service.deletePersonByPapersNum(papersNum);
+    public ListenableFuture<Integer> deletePersonByPapersNum(
+            String papersNum,
+            net.gdface.facelog.client.thrift.Token token){
+        return service.deletePersonByPapersNum(
+                    papersNum,
+                    token);
     }
-    // 9 SERIVCE PORT : deletePersonsByPapersNum
+    // 8 SERIVCE PORT : deletePersonsByPapersNum
     /**
      * 删除papersNum指定的人员(person)记录及关联的所有记录
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param papersNumlist 证件号码列表
+     * @param token 访问令牌
      * @return 返回删除的 person 记录数量
      */
-    public ListenableFuture<Integer> deletePersonsByPapersNum(List<String> papersNumlist){
-        return service.deletePersonsByPapersNum(CollectionUtils.checkNotNullElement(papersNumlist));
+    public ListenableFuture<Integer> deletePersonsByPapersNum(
+            List<String> papersNumlist,
+            net.gdface.facelog.client.thrift.Token token){
+        return service.deletePersonsByPapersNum(
+                    CollectionUtils.checkNotNullElement(papersNumlist),
+                    token);
     }
-    // 10 SERIVCE PORT : existsPerson
+    // 9 SERIVCE PORT : existsPerson
     /**
      * 判断是否存在personId指定的人员记录
      * @param persionId
@@ -178,7 +197,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Boolean> existsPerson(int persionId){
         return service.existsPerson(persionId);
     }
-    // 11 SERIVCE PORT : isDisable
+    // 10 SERIVCE PORT : isDisable
     /**
      * 判断 personId 指定的人员记录是否过期
      * @param personId
@@ -187,50 +206,70 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Boolean> isDisable(int personId){
         return service.isDisable(personId);
     }
-    // 12 SERIVCE PORT : disablePerson
+    // 11 SERIVCE PORT : disablePerson
     /**
      * 设置 personId 指定的人员为禁止状态
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param personId
-     * @see #setPersonExpiryDate(int, long)
+     * @param token 访问令牌
+     * @see #setPersonExpiryDate(int, long, Token)
      */
-    public ListenableFuture<Void> disablePerson(int personId){
-        return service.disablePerson(personId);
+    public ListenableFuture<Void> disablePerson(
+            int personId,
+            net.gdface.facelog.client.thrift.Token token){
+        return service.disablePerson(
+                    personId,
+                    token);
     }
-    // 13 SERIVCE PORT : setPersonExpiryDate
+    // 12 SERIVCE PORT : setPersonExpiryDate
     /**
      * 修改 personId 指定的人员记录的有效期
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param personId
      * @param expiryDate 失效日期
+     * @param token 访问令牌
      */
     public ListenableFuture<Void> setPersonExpiryDate(
             int personId,
-            Date expiryDate){
+            Date expiryDate,
+            net.gdface.facelog.client.thrift.Token token){
         return service.setPersonExpiryDate(
                     personId,
-                    GenericUtils.toLong(expiryDate,Date.class));
+                    GenericUtils.toLong(expiryDate,Date.class),
+                    token);
     }
-    // 14 SERIVCE PORT : setPersonExpiryDateList
+    // 13 SERIVCE PORT : setPersonExpiryDateList
     /**
      * 修改 personIdList 指定的人员记录的有效期
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param personIdList 人员id列表
      * @param expiryDate 失效日期
+     * @param token 访问令牌
      */
     public ListenableFuture<Void> setPersonExpiryDate(
             List<Integer> personIdList,
-            Date expiryDate){
+            Date expiryDate,
+            net.gdface.facelog.client.thrift.Token token){
         return service.setPersonExpiryDateList(
                     CollectionUtils.checkNotNullElement(personIdList),
-                    GenericUtils.toLong(expiryDate,Date.class));
+                    GenericUtils.toLong(expiryDate,Date.class),
+                    token);
     }
-    // 15 SERIVCE PORT : disablePersonList
+    // 14 SERIVCE PORT : disablePersonList
     /**
      * 设置 personIdList 指定的人员为禁止状态
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param personIdList 人员id列表
+     * @param token 访问令牌
      */
-    public ListenableFuture<Void> disablePerson(List<Integer> personIdList){
-        return service.disablePersonList(CollectionUtils.checkNotNullElement(personIdList));
+    public ListenableFuture<Void> disablePerson(
+            List<Integer> personIdList,
+            net.gdface.facelog.client.thrift.Token token){
+        return service.disablePersonList(
+                    CollectionUtils.checkNotNullElement(personIdList),
+                    token);
     }
-    // 16 SERIVCE PORT : getLogBeansByPersonId
+    // 15 SERIVCE PORT : getLogBeansByPersonId
     /**
      * 返回 persionId 关联的所有日志记录
      * @param personId fl_person.id
@@ -246,7 +285,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 17 SERIVCE PORT : loadAllPerson
+    // 16 SERIVCE PORT : loadAllPerson
     /**
      * 返回所有人员记录
      * @return 
@@ -254,7 +293,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<List<Integer>> loadAllPerson(){
         return service.loadAllPerson();
     }
-    // 18 SERIVCE PORT : loadPersonIdByWhere
+    // 17 SERIVCE PORT : loadPersonIdByWhere
     /**
      * 返回 where 指定的所有人员记录
      * @param where SQL条件语句
@@ -263,7 +302,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<List<Integer>> loadPersonIdByWhere(String where){
         return service.loadPersonIdByWhere(where);
     }
-    // 19 SERIVCE PORT : loadPersonByWhere
+    // 18 SERIVCE PORT : loadPersonByWhere
     /**
      * 返回 where 指定的所有人员记录
      * @param where SQL条件语句
@@ -287,7 +326,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 20 SERIVCE PORT : countPersonByWhere
+    // 19 SERIVCE PORT : countPersonByWhere
     /**
      * 返回满足{@code where}条件的日志记录(fl_person)数目
      * @param where 为{@code null}时返回所有记录
@@ -296,44 +335,20 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Integer> countPersonByWhere(String where){
         return service.countPersonByWhere(where);
     }
-    // 21 SERIVCE PORT : savePerson
+    // 20 SERIVCE PORT : savePerson
     /**
      * 保存人员(person)记录
      * @param bean
-     * @return 
-     */
-    public ListenableFuture<PersonBean> savePerson(PersonBean bean){
-        return Futures.transform(
-                service.savePerson(converterPersonBean.toRight(bean)), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                    @Override
-                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return converterPersonBean.fromRight(input);
-                    }
-                });
-    }
-    // 22 SERIVCE PORT : savePersons
-    /**
-     * 保存人员(person)记录
-     * @param beans
-     */
-    public ListenableFuture<Void> savePersons(List<PersonBean> beans){
-        return service.savePersons(converterPersonBean.toRight(CollectionUtils.checkNotNullElement(beans)));
-    }
-    // 23 SERIVCE PORT : savePersonWithPhoto
-    /**
-     * 保存人员信息记录
-     * @param bean
-     * @param idPhoto 标准照图像对象,可为null
+     * @param token 访问令牌
      * @return 
      */
     public ListenableFuture<PersonBean> savePerson(
             PersonBean bean,
-            byte[] idPhoto){
+            net.gdface.facelog.client.thrift.Token token){
         return Futures.transform(
-                service.savePersonWithPhoto(
+                service.savePerson(
                     converterPersonBean.toRight(bean),
-                    idPhoto), 
+                    token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -341,20 +356,60 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 23 GENERIC
+    // 21 SERIVCE PORT : savePersons
+    /**
+     * 保存人员(person)记录
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * @param beans
+     * @param token 访问令牌
+     */
+    public ListenableFuture<Void> savePersons(
+            List<PersonBean> beans,
+            net.gdface.facelog.client.thrift.Token token){
+        return service.savePersons(
+                    converterPersonBean.toRight(CollectionUtils.checkNotNullElement(beans)),
+                    token);
+    }
+    // 22 SERIVCE PORT : savePersonWithPhoto
+    /**
+     * 保存人员信息记录
+     * @param bean
+     * @param idPhoto 标准照图像对象,可为null
+     * @param token 访问令牌
+     * @return 
+     */
+    public ListenableFuture<PersonBean> savePerson(
+            PersonBean bean,
+            byte[] idPhoto,
+            net.gdface.facelog.client.thrift.Token token){
+        return Futures.transform(
+                service.savePersonWithPhoto(
+                    converterPersonBean.toRight(bean),
+                    idPhoto,
+                    token), 
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                    @Override
+                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                        return converterPersonBean.fromRight(input);
+                    }
+                });
+    }
+    // 22 GENERIC
     /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[])}<br>
+     * Generic version of {@link #savePerson(PersonBean,byte[],net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
     public ListenableFuture<PersonBean> savePersonGeneric(
             PersonBean bean,
-            Object idPhoto){
+            Object idPhoto,
+            net.gdface.facelog.client.thrift.Token token){
         return Futures.transform(
                 service.savePersonWithPhoto(
                     converterPersonBean.toRight(bean),
-                    GenericUtils.toBytes(idPhoto)), 
+                    GenericUtils.toBytes(idPhoto),
+                    token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -362,32 +417,41 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 24 SERIVCE PORT : savePersonsWithPhoto
+    // 23 SERIVCE PORT : savePersonsWithPhoto
     /**
      * 保存人员信息记录(包含标准照)
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param persons
+     * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<Integer> savePerson(Map<ByteBuffer, PersonBean> persons){
-        return service.savePersonsWithPhoto(GenericUtils.toBytesKey(converterPersonBean.toRightValue(persons)));
+    public ListenableFuture<Integer> savePerson(
+            Map<ByteBuffer, PersonBean> persons,
+            net.gdface.facelog.client.thrift.Token token){
+        return service.savePersonsWithPhoto(
+                    GenericUtils.toBytesKey(converterPersonBean.toRightValue(persons)),
+                    token);
     }
-    // 25 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
+    // 24 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
     /**
      * 保存人员信息记录
      * @param bean
      * @param idPhotoMd5 标准照图像对象,可为null
      * @param featureMd5 用于验证的人脸特征数据对象,可为null
+     * @param token 访问令牌
      * @return 
      */
     public ListenableFuture<PersonBean> savePerson(
             PersonBean bean,
             String idPhotoMd5,
-            String featureMd5){
+            String featureMd5,
+            net.gdface.facelog.client.thrift.Token token){
         return Futures.transform(
                 service.savePersonWithPhotoAndFeatureSaved(
                     converterPersonBean.toRight(bean),
                     idPhotoMd5,
-                    featureMd5), 
+                    featureMd5,
+                    token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -395,26 +459,88 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 26 SERIVCE PORT : savePersonWithPhotoAndFeature
+    // 25 SERIVCE PORT : savePersonWithPhotoAndFeature
     /**
      * 保存人员信息记录
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param bean
      * @param idPhoto 标准照图像,可为null
      * @param featureBean 用于验证的人脸特征数据对象,可为null
      * @param deviceId 标准照图像来源设备id,可为null
+     * @param token 访问令牌
      * @return 
      */
     public ListenableFuture<PersonBean> savePerson(
             PersonBean bean,
             byte[] idPhoto,
             FeatureBean featureBean,
-            int deviceId){
+            int deviceId,
+            net.gdface.facelog.client.thrift.Token token){
         return Futures.transform(
                 service.savePersonWithPhotoAndFeature(
                     converterPersonBean.toRight(bean),
                     idPhoto,
                     converterFeatureBean.toRight(featureBean),
-                    deviceId), 
+                    deviceId,
+                    token), 
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                    @Override
+                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                        return converterPersonBean.fromRight(input);
+                    }
+                });
+    }
+    // 25 GENERIC
+    /** 
+     * Generic version of {@link #savePerson(PersonBean,byte[],FeatureBean,int,net.gdface.facelog.client.thrift.Token)}<br>
+     * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
+     * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
+     * @see {@link GenericUtils#toBytes(Object)}
+     */
+    public ListenableFuture<PersonBean> savePersonGeneric(
+            PersonBean bean,
+            Object idPhoto,
+            FeatureBean featureBean,
+            int deviceId,
+            net.gdface.facelog.client.thrift.Token token){
+        return Futures.transform(
+                service.savePersonWithPhotoAndFeature(
+                    converterPersonBean.toRight(bean),
+                    GenericUtils.toBytes(idPhoto),
+                    converterFeatureBean.toRight(featureBean),
+                    deviceId,
+                    token), 
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                    @Override
+                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                        return converterPersonBean.fromRight(input);
+                    }
+                });
+    }
+    // 26 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
+    /**
+     * 保存人员信息记录
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+     * @param bean
+     * @param idPhoto 标准照图像,可为null
+     * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(ByteBuffer, Integer, List, Token)}
+     * @param faceBeans 参见 {@link #addFeature(ByteBuffer, Integer, List, Token)}
+     * @param token 访问令牌
+     * @return 
+     */
+    public ListenableFuture<PersonBean> savePerson(
+            PersonBean bean,
+            byte[] idPhoto,
+            byte[] feature,
+            List<FaceBean> faceBeans,
+            net.gdface.facelog.client.thrift.Token token){
+        return Futures.transform(
+                service.savePersonWithPhotoAndFeatureMultiFaces(
+                    converterPersonBean.toRight(bean),
+                    idPhoto,
+                    feature,
+                    converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faceBeans)),
+                    token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -424,7 +550,7 @@ class IFaceLogClientAsync implements Constant{
     }
     // 26 GENERIC
     /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[],FeatureBean,int)}<br>
+     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],List,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -432,14 +558,16 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<PersonBean> savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
-            FeatureBean featureBean,
-            int deviceId){
+            Object feature,
+            List<FaceBean> faceBeans,
+            net.gdface.facelog.client.thrift.Token token){
         return Futures.transform(
-                service.savePersonWithPhotoAndFeature(
+                service.savePersonWithPhotoAndFeatureMultiFaces(
                     converterPersonBean.toRight(bean),
                     GenericUtils.toBytes(idPhoto),
-                    converterFeatureBean.toRight(featureBean),
-                    deviceId), 
+                    GenericUtils.toBytes(feature),
+                    converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faceBeans)),
+                    token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -447,26 +575,33 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 27 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
+    // 27 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
     /**
      * 保存人员信息记录
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param bean
      * @param idPhoto 标准照图像,可为null
-     * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(ByteBuffer, Integer, List)}
-     * @param faceBeans 参见 {@link #addFeature(ByteBuffer, Integer, List)}
-     * @return 
+     * @param feature 用于验证的人脸特征数据,可为null
+     * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
+     * @param deviceId faceInfo 图像来源设备id,可为null
+     * @param token 访问令牌
+     * @return bean 保存的{@link PersonBean}对象
      */
     public ListenableFuture<PersonBean> savePerson(
             PersonBean bean,
             byte[] idPhoto,
             byte[] feature,
-            List<FaceBean> faceBeans){
+            Map<ByteBuffer, FaceBean> faceInfo,
+            int deviceId,
+            net.gdface.facelog.client.thrift.Token token){
         return Futures.transform(
-                service.savePersonWithPhotoAndFeatureMultiFaces(
+                service.savePersonWithPhotoAndFeatureMultiImage(
                     converterPersonBean.toRight(bean),
                     idPhoto,
                     feature,
-                    converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faceBeans))), 
+                    GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
+                    deviceId,
+                    token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -476,62 +611,7 @@ class IFaceLogClientAsync implements Constant{
     }
     // 27 GENERIC
     /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],List)}<br>
-     * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
-     * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
-     * @see {@link GenericUtils#toBytes(Object)}
-     */
-    public ListenableFuture<PersonBean> savePersonGeneric(
-            PersonBean bean,
-            Object idPhoto,
-            Object feature,
-            List<FaceBean> faceBeans){
-        return Futures.transform(
-                service.savePersonWithPhotoAndFeatureMultiFaces(
-                    converterPersonBean.toRight(bean),
-                    GenericUtils.toBytes(idPhoto),
-                    GenericUtils.toBytes(feature),
-                    converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faceBeans))), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                    @Override
-                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return converterPersonBean.fromRight(input);
-                    }
-                });
-    }
-    // 28 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
-    /**
-     * 保存人员信息记录
-     * @param bean
-     * @param idPhoto 标准照图像,可为null
-     * @param feature 用于验证的人脸特征数据,可为null
-     * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
-     * @param deviceId faceInfo 图像来源设备id,可为null
-     * @return bean 保存的{@link PersonBean}对象
-     */
-    public ListenableFuture<PersonBean> savePerson(
-            PersonBean bean,
-            byte[] idPhoto,
-            byte[] feature,
-            Map<ByteBuffer, FaceBean> faceInfo,
-            int deviceId){
-        return Futures.transform(
-                service.savePersonWithPhotoAndFeatureMultiImage(
-                    converterPersonBean.toRight(bean),
-                    idPhoto,
-                    feature,
-                    GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
-                    deviceId), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                    @Override
-                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return converterPersonBean.fromRight(input);
-                    }
-                });
-    }
-    // 28 GENERIC
-    /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],Map,int)}<br>
+     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],Map,int,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -541,14 +621,16 @@ class IFaceLogClientAsync implements Constant{
             Object idPhoto,
             Object feature,
             Map<ByteBuffer, FaceBean> faceInfo,
-            int deviceId){
+            int deviceId,
+            net.gdface.facelog.client.thrift.Token token){
         return Futures.transform(
                 service.savePersonWithPhotoAndFeatureMultiImage(
                     converterPersonBean.toRight(bean),
                     GenericUtils.toBytes(idPhoto),
                     GenericUtils.toBytes(feature),
                     GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
-                    deviceId), 
+                    deviceId,
+                    token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -556,13 +638,15 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 29 SERIVCE PORT : savePersonFull
+    // 28 SERIVCE PORT : savePersonFull
     /**
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param bean 人员信息对象
      * @param idPhoto 标准照图像
      * @param feature 人脸特征数据
      * @param featureImage 提取特征源图像,为null 时,默认使用idPhoto
      * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
+     * @param token 访问令牌
      * @param deviceBean featureImage来源设备对象
      * @return 
      */
@@ -572,7 +656,8 @@ class IFaceLogClientAsync implements Constant{
             byte[] feature,
             byte[] featureImage,
             FaceBean featureFaceBean,
-            int deviceId){
+            int deviceId,
+            net.gdface.facelog.client.thrift.Token token){
         return Futures.transform(
                 service.savePersonFull(
                     converterPersonBean.toRight(bean),
@@ -580,7 +665,8 @@ class IFaceLogClientAsync implements Constant{
                     feature,
                     featureImage,
                     converterFaceBean.toRight(featureFaceBean),
-                    deviceId), 
+                    deviceId,
+                    token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -588,9 +674,9 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 29 GENERIC
+    // 28 GENERIC
     /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],byte[],FaceBean,int)}<br>
+     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],byte[],FaceBean,int,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -601,7 +687,8 @@ class IFaceLogClientAsync implements Constant{
             Object feature,
             Object featureImage,
             FaceBean featureFaceBean,
-            int deviceId){
+            int deviceId,
+            net.gdface.facelog.client.thrift.Token token){
         return Futures.transform(
                 service.savePersonFull(
                     converterPersonBean.toRight(bean),
@@ -609,7 +696,8 @@ class IFaceLogClientAsync implements Constant{
                     GenericUtils.toBytes(feature),
                     GenericUtils.toBytes(featureImage),
                     converterFaceBean.toRight(featureFaceBean),
-                    deviceId), 
+                    deviceId,
+                    token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -617,23 +705,26 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 30 SERIVCE PORT : replaceFeature
+    // 29 SERIVCE PORT : replaceFeature
     /**
      * 替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录
      * @param personId 人员记录id
      * @param featureMd5 人脸特征数据记录id (已经保存在数据库中)
      * @param deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
+     * @param token 访问令牌
      */
     public ListenableFuture<Void> replaceFeature(
             int personId,
             String featureMd5,
-            boolean deleteOldFeatureImage){
+            boolean deleteOldFeatureImage,
+            net.gdface.facelog.client.thrift.Token token){
         return service.replaceFeature(
                     personId,
                     featureMd5,
-                    deleteOldFeatureImage);
+                    deleteOldFeatureImage,
+                    token);
     }
-    // 31 SERIVCE PORT : loadUpdatedPersons
+    // 30 SERIVCE PORT : loadUpdatedPersons
     /**
      * (主动更新机制实现)<br>
      * 返回fl_person.update_time字段大于指定时间戳( {@code timestamp} )的所有fl_person记录<br>
@@ -644,7 +735,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<List<Integer>> loadUpdatedPersons(Date timestamp){
         return service.loadUpdatedPersons(GenericUtils.toLong(timestamp,Date.class));
     }
-    // 32 SERIVCE PORT : loadPersonIdByUpdateTime
+    // 31 SERIVCE PORT : loadPersonIdByUpdateTime
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_person.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_person记录
@@ -654,7 +745,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<List<Integer>> loadPersonIdByUpdateTime(Date timestamp){
         return service.loadPersonIdByUpdateTime(GenericUtils.toLong(timestamp,Date.class));
     }
-    // 33 SERIVCE PORT : loadFeatureMd5ByUpdate
+    // 32 SERIVCE PORT : loadFeatureMd5ByUpdate
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_feature.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_feature记录
@@ -664,7 +755,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<List<String>> loadFeatureMd5ByUpdate(Date timestamp){
         return service.loadFeatureMd5ByUpdate(GenericUtils.toLong(timestamp,Date.class));
     }
-    // 34 SERIVCE PORT : addLog
+    // 33 SERIVCE PORT : addLog
     /**
      * 添加一条验证日志记录
      * @param bean
@@ -672,7 +763,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Void> addLog(LogBean bean){
         return service.addLog(converterLogBean.toRight(bean));
     }
-    // 35 SERIVCE PORT : addLogs
+    // 34 SERIVCE PORT : addLogs
     /**
      * 添加一组验证日志记录(事务存储)
      * @param beans
@@ -680,7 +771,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Void> addLogs(List<LogBean> beans){
         return service.addLogs(converterLogBean.toRight(CollectionUtils.checkNotNullElement(beans)));
     }
-    // 36 SERIVCE PORT : loadLogByWhere
+    // 35 SERIVCE PORT : loadLogByWhere
     /**
      * 日志查询<br>
      * 根据{@code where}指定的查询条件查询日志记录
@@ -705,7 +796,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 37 SERIVCE PORT : loadLogLightByWhere
+    // 36 SERIVCE PORT : loadLogLightByWhere
     /**
      * 日志查询<br>
      * 根据{@code where}指定的查询条件查询日志记录{@link LogLightBean}
@@ -730,7 +821,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 38 SERIVCE PORT : countLogLightByWhere
+    // 37 SERIVCE PORT : countLogLightByWhere
     /**
      * 返回符合{@code where}条件的记录条数
      * @param where
@@ -739,7 +830,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Integer> countLogLightByWhere(String where){
         return service.countLogLightByWhere(where);
     }
-    // 39 SERIVCE PORT : countLogByWhere
+    // 38 SERIVCE PORT : countLogByWhere
     /**
      * 返回满足{@code where}条件的日志记录(fl_log)数目
      * @param where 为{@code null}时返回所有记录
@@ -748,7 +839,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Integer> countLogByWhere(String where){
         return service.countLogByWhere(where);
     }
-    // 40 SERIVCE PORT : loadLogLightByVerifyTime
+    // 39 SERIVCE PORT : loadLogLightByVerifyTime
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
@@ -770,7 +861,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 41 SERIVCE PORT : countLogLightByVerifyTime
+    // 40 SERIVCE PORT : countLogLightByVerifyTime
     /**
      * 返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
      * @see #countLogLightByWhere(String)
@@ -778,7 +869,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Integer> countLogLightByVerifyTime(Date timestamp){
         return service.countLogLightByVerifyTime(GenericUtils.toLong(timestamp,Date.class));
     }
-    // 42 SERIVCE PORT : existsImage
+    // 41 SERIVCE PORT : existsImage
     /**
      * 判断md5指定的图像记录是否存在
      * @param md5
@@ -787,26 +878,29 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Boolean> existsImage(String md5){
         return service.existsImage(md5);
     }
-    // 43 SERIVCE PORT : addImage
+    // 42 SERIVCE PORT : addImage
     /**
      * 保存图像数据,如果图像数据已经存在，则抛出异常
      * @param imageData 图像数据
      * @param deviceId 图像来源设备id,可为null
      * @param faceBean 关联的人脸信息对象,可为null
      * @param personId 关联的人员id(fl_person.id),可为null
+     * @param token 访问令牌
      * @return 
      */
     public ListenableFuture<ImageBean> addImage(
             byte[] imageData,
             int deviceId,
             FaceBean faceBean,
-            int personId){
+            int personId,
+            net.gdface.facelog.client.thrift.Token token){
         return Futures.transform(
                 service.addImage(
                     imageData,
                     deviceId,
                     converterFaceBean.toRight(faceBean),
-                    personId), 
+                    personId,
+                    token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
                     @Override
                     public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
@@ -814,9 +908,9 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 43 GENERIC
+    // 42 GENERIC
     /** 
-     * Generic version of {@link #addImage(byte[],int,FaceBean,int)}<br>
+     * Generic version of {@link #addImage(byte[],int,FaceBean,int,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -825,13 +919,15 @@ class IFaceLogClientAsync implements Constant{
             Object imageData,
             int deviceId,
             FaceBean faceBean,
-            int personId){
+            int personId,
+            net.gdface.facelog.client.thrift.Token token){
         return Futures.transform(
                 service.addImage(
                     GenericUtils.toBytes(imageData),
                     deviceId,
                     converterFaceBean.toRight(faceBean),
-                    personId), 
+                    personId,
+                    token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
                     @Override
                     public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
@@ -839,7 +935,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 44 SERIVCE PORT : existsFeature
+    // 43 SERIVCE PORT : existsFeature
     /**
      * 判断md5指定的特征记录是否存在
      * @param md5
@@ -848,23 +944,83 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Boolean> existsFeature(String md5){
         return service.existsFeature(md5);
     }
-    // 45 SERIVCE PORT : addFeature
+    // 44 SERIVCE PORT : addFeature
     /**
      * 增加一个人脸特征记录，如果记录已经存在则抛出异常
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param feature 特征数据
      * @param personId 关联的人员id(fl_person.id),可为null
      * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
+     * @param token 访问令牌
      * @return 保存的人脸特征记录{@link FeatureBean}
      */
     public ListenableFuture<FeatureBean> addFeature(
             byte[] feature,
             int personId,
-            List<FaceBean> faecBeans){
+            List<FaceBean> faecBeans,
+            net.gdface.facelog.client.thrift.Token token){
         return Futures.transform(
                 service.addFeature(
                     feature,
                     personId,
-                    converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faecBeans))), 
+                    converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faecBeans)),
+                    token), 
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
+                    @Override
+                    public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
+                        return converterFeatureBean.fromRight(input);
+                    }
+                });
+    }
+    // 44 GENERIC
+    /** 
+     * Generic version of {@link #addFeature(byte[],int,List,net.gdface.facelog.client.thrift.Token)}<br>
+     * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
+     * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
+     * @see {@link GenericUtils#toBytes(Object)}
+     */
+    public ListenableFuture<FeatureBean> addFeatureGeneric(
+            Object feature,
+            int personId,
+            List<FaceBean> faecBeans,
+            net.gdface.facelog.client.thrift.Token token){
+        return Futures.transform(
+                service.addFeature(
+                    GenericUtils.toBytes(feature),
+                    personId,
+                    converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faecBeans)),
+                    token), 
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
+                    @Override
+                    public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
+                        return converterFeatureBean.fromRight(input);
+                    }
+                });
+    }
+    // 45 SERIVCE PORT : addFeatureMulti
+    /**
+     * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+     * @param feature 特征数据
+     * @param personId 关联的人员id(fl_person.id),可为null
+     * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
+     * @param deviceId 图像来源设备id,可为null
+     * @param token 访问令牌
+     * @return 保存的人脸特征记录{@link FeatureBean}
+     */
+    public ListenableFuture<FeatureBean> addFeature(
+            byte[] feature,
+            int personId,
+            Map<ByteBuffer, FaceBean> faceInfo,
+            int deviceId,
+            net.gdface.facelog.client.thrift.Token token){
+        return Futures.transform(
+                service.addFeatureMulti(
+                    feature,
+                    personId,
+                    GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
+                    deviceId,
+                    token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
                     @Override
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
@@ -874,57 +1030,7 @@ class IFaceLogClientAsync implements Constant{
     }
     // 45 GENERIC
     /** 
-     * Generic version of {@link #addFeature(byte[],int,List)}<br>
-     * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
-     * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
-     * @see {@link GenericUtils#toBytes(Object)}
-     */
-    public ListenableFuture<FeatureBean> addFeatureGeneric(
-            Object feature,
-            int personId,
-            List<FaceBean> faecBeans){
-        return Futures.transform(
-                service.addFeature(
-                    GenericUtils.toBytes(feature),
-                    personId,
-                    converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faecBeans))), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
-                    @Override
-                    public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                        return converterFeatureBean.fromRight(input);
-                    }
-                });
-    }
-    // 46 SERIVCE PORT : addFeatureMulti
-    /**
-     * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
-     * @param feature 特征数据
-     * @param personId 关联的人员id(fl_person.id),可为null
-     * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
-     * @param deviceId 图像来源设备id,可为null
-     * @return 保存的人脸特征记录{@link FeatureBean}
-     */
-    public ListenableFuture<FeatureBean> addFeature(
-            byte[] feature,
-            int personId,
-            Map<ByteBuffer, FaceBean> faceInfo,
-            int deviceId){
-        return Futures.transform(
-                service.addFeatureMulti(
-                    feature,
-                    personId,
-                    GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
-                    deviceId), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
-                    @Override
-                    public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                        return converterFeatureBean.fromRight(input);
-                    }
-                });
-    }
-    // 46 GENERIC
-    /** 
-     * Generic version of {@link #addFeature(byte[],int,Map,int)}<br>
+     * Generic version of {@link #addFeature(byte[],int,Map,int,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -933,13 +1039,15 @@ class IFaceLogClientAsync implements Constant{
             Object feature,
             int personId,
             Map<ByteBuffer, FaceBean> faceInfo,
-            int deviceId){
+            int deviceId,
+            net.gdface.facelog.client.thrift.Token token){
         return Futures.transform(
                 service.addFeatureMulti(
                     GenericUtils.toBytes(feature),
                     personId,
                     GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
-                    deviceId), 
+                    deviceId,
+                    token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
                     @Override
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
@@ -947,37 +1055,43 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 47 SERIVCE PORT : deleteFeature
+    // 46 SERIVCE PORT : deleteFeature
     /**
      * 删除featureMd5指定的特征记录及关联的face记录
      * @param featureMd5
      * @param deleteImage 是否删除关联的 image记录
+     * @param token 访问令牌
      * @return 返回删除的特征记录关联的图像(image)记录的MD5<br>
      * {@code deleteImage}为{@code true}时返回空表
      */
     public ListenableFuture<List<String>> deleteFeature(
             String featureMd5,
-            boolean deleteImage){
+            boolean deleteImage,
+            net.gdface.facelog.client.thrift.Token token){
         return service.deleteFeature(
                     featureMd5,
-                    deleteImage);
+                    deleteImage,
+                    token);
     }
-    // 48 SERIVCE PORT : deleteAllFeaturesByPersonId
+    // 47 SERIVCE PORT : deleteAllFeaturesByPersonId
     /**
      * 删除 personId 关联的所有特征(feature)记录
      * @param personId
      * @param deleteImage 是否删除关联的 image记录
+     * @param token 访问令牌
      * @return 
-     * @see #deleteFeature(String, boolean)
+     * @see #deleteFeature(String, boolean, Token)
      */
     public ListenableFuture<Integer> deleteAllFeaturesByPersonId(
             int personId,
-            boolean deleteImage){
+            boolean deleteImage,
+            net.gdface.facelog.client.thrift.Token token){
         return service.deleteAllFeaturesByPersonId(
                     personId,
-                    deleteImage);
+                    deleteImage,
+                    token);
     }
-    // 49 SERIVCE PORT : getFeature
+    // 48 SERIVCE PORT : getFeature
     /**
      * 根据MD5校验码返回人脸特征数据记录
      * @param md5
@@ -993,7 +1107,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 50 SERIVCE PORT : getFeatures
+    // 49 SERIVCE PORT : getFeatures
     /**
      * 根据MD5校验码返回人脸特征数据记录
      * @param md5 md5列表
@@ -1009,7 +1123,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 51 SERIVCE PORT : getFeaturesOfPerson
+    // 50 SERIVCE PORT : getFeaturesOfPerson
     /**
      * 返回指定人员{@code personId}关联的所有特征<br>
      * @param personId
@@ -1018,7 +1132,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<List<String>> getFeaturesOfPerson(int personId){
         return service.getFeaturesOfPerson(personId);
     }
-    // 52 SERIVCE PORT : getFeatureBytes
+    // 51 SERIVCE PORT : getFeatureBytes
     /**
      * 根据MD5校验码返回人脸特征数据
      * @param md5
@@ -1027,7 +1141,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<byte[]> getFeatureBytes(String md5){
         return service.getFeatureBytes(md5);
     }
-    // 53 SERIVCE PORT : getImageBytes
+    // 52 SERIVCE PORT : getImageBytes
     /**
      * 根据图像的MD5校验码返回图像数据
      * @param imageMD5
@@ -1037,7 +1151,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<byte[]> getImageBytes(String imageMD5){
         return service.getImageBytes(imageMD5);
     }
-    // 54 SERIVCE PORT : getImage
+    // 53 SERIVCE PORT : getImage
     /**
      * 根据图像的MD5校验码返回图像记录
      * @param imageMD5
@@ -1053,7 +1167,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 55 SERIVCE PORT : getImagesAssociatedByFeature
+    // 54 SERIVCE PORT : getImagesAssociatedByFeature
     /**
      * 返回featureMd5的人脸特征记录关联的所有图像记录id(MD5)
      * @param featureMd5 人脸特征id(MD5)
@@ -1062,7 +1176,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<List<String>> getImagesAssociatedByFeature(String featureMd5){
         return service.getImagesAssociatedByFeature(featureMd5);
     }
-    // 56 SERIVCE PORT : getDeviceIdOfFeature
+    // 55 SERIVCE PORT : getDeviceIdOfFeature
     /**
      * 返回featureMd5的人脸特征记录关联的设备id<br>
      * @param featureMd5
@@ -1071,16 +1185,21 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Integer> getDeviceIdOfFeature(String featureMd5){
         return service.getDeviceIdOfFeature(featureMd5);
     }
-    // 57 SERIVCE PORT : deleteImage
+    // 56 SERIVCE PORT : deleteImage
     /**
      * 删除imageMd5指定图像及其缩略图
      * @param imageMd5
+     * @param token 访问令牌
      * @return 删除成功返回1,否则返回0
      */
-    public ListenableFuture<Integer> deleteImage(String imageMd5){
-        return service.deleteImage(imageMd5);
+    public ListenableFuture<Integer> deleteImage(
+            String imageMd5,
+            net.gdface.facelog.client.thrift.Token token){
+        return service.deleteImage(
+                    imageMd5,
+                    token);
     }
-    // 58 SERIVCE PORT : existsDevice
+    // 57 SERIVCE PORT : existsDevice
     /**
      * 判断id指定的设备记录是否存在
      * @param id
@@ -1089,15 +1208,42 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Boolean> existsDevice(int id){
         return service.existsDevice(id);
     }
-    // 59 SERIVCE PORT : saveDevice
+    // 58 SERIVCE PORT : saveDevice
     /**
      * 保存设备记录
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param deviceBean
+     * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<DeviceBean> saveDevice(DeviceBean deviceBean){
+    public ListenableFuture<DeviceBean> saveDevice(
+            DeviceBean deviceBean,
+            net.gdface.facelog.client.thrift.Token token){
         return Futures.transform(
-                service.saveDevice(converterDeviceBean.toRight(deviceBean)), 
+                service.saveDevice(
+                    converterDeviceBean.toRight(deviceBean),
+                    token), 
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
+                    @Override
+                    public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
+                        return converterDeviceBean.fromRight(input);
+                    }
+                });
+    }
+    // 59 SERIVCE PORT : updateDevice
+    /**
+     * 更新设备记录(必须是已经存在的设备记录，否则抛出异常)
+     * @param deviceBean
+     * @param token 访问令牌
+     * @return 
+     */
+    public ListenableFuture<DeviceBean> updateDevice(
+            DeviceBean deviceBean,
+            net.gdface.facelog.client.thrift.Token token){
+        return Futures.transform(
+                service.updateDevice(
+                    converterDeviceBean.toRight(deviceBean),
+                    token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
                     @Override
                     public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
@@ -1182,12 +1328,18 @@ class IFaceLogClientAsync implements Constant{
     // 65 SERIVCE PORT : saveDeviceGroup
     /**
      * 保存设备组记录
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param deviceGroupBean
+     * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<DeviceGroupBean> saveDeviceGroup(DeviceGroupBean deviceGroupBean){
+    public ListenableFuture<DeviceGroupBean> saveDeviceGroup(
+            DeviceGroupBean deviceGroupBean,
+            net.gdface.facelog.client.thrift.Token token){
         return Futures.transform(
-                service.saveDeviceGroup(converterDeviceGroupBean.toRight(deviceGroupBean)), 
+                service.saveDeviceGroup(
+                    converterDeviceGroupBean.toRight(deviceGroupBean),
+                    token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.DeviceGroupBean,DeviceGroupBean>(){
                     @Override
                     public DeviceGroupBean apply(net.gdface.facelog.client.thrift.DeviceGroupBean input) {
@@ -1231,11 +1383,17 @@ class IFaceLogClientAsync implements Constant{
     /**
      * 删除{@code deviceGroupId}指定的设备组<br>
      * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param deviceGroupId
+     * @param token 访问令牌
      * @return 返回删除的记录条数
      */
-    public ListenableFuture<Integer> deleteDeviceGroup(int deviceGroupId){
-        return service.deleteDeviceGroup(deviceGroupId);
+    public ListenableFuture<Integer> deleteDeviceGroup(
+            int deviceGroupId,
+            net.gdface.facelog.client.thrift.Token token){
+        return service.deleteDeviceGroup(
+                    deviceGroupId,
+                    token);
     }
     // 69 SERIVCE PORT : getSubDeviceGroup
     /**
@@ -1274,12 +1432,18 @@ class IFaceLogClientAsync implements Constant{
     // 71 SERIVCE PORT : savePersonGroup
     /**
      * 保存人员组记录
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param personGroupBean
+     * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<PersonGroupBean> savePersonGroup(PersonGroupBean personGroupBean){
+    public ListenableFuture<PersonGroupBean> savePersonGroup(
+            PersonGroupBean personGroupBean,
+            net.gdface.facelog.client.thrift.Token token){
         return Futures.transform(
-                service.savePersonGroup(converterPersonGroupBean.toRight(personGroupBean)), 
+                service.savePersonGroup(
+                    converterPersonGroupBean.toRight(personGroupBean),
+                    token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonGroupBean,PersonGroupBean>(){
                     @Override
                     public PersonGroupBean apply(net.gdface.facelog.client.thrift.PersonGroupBean input) {
@@ -1323,11 +1487,17 @@ class IFaceLogClientAsync implements Constant{
     /**
      * 删除{@code personGroupId}指定的人员组<br>
      * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param personGroupId
+     * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<Integer> deletePersonGroup(int personGroupId){
-        return service.deletePersonGroup(personGroupId);
+    public ListenableFuture<Integer> deletePersonGroup(
+            int personGroupId,
+            net.gdface.facelog.client.thrift.Token token){
+        return service.deletePersonGroup(
+                    personGroupId,
+                    token);
     }
     // 75 SERIVCE PORT : getSubPersonGroup
     /**
@@ -1406,31 +1576,58 @@ class IFaceLogClientAsync implements Constant{
     /**
      * 添加一个(允许)通行关联记录:允许{@code personGroup}指定的人员组在
      * {@code deviceGroup}指定的设备组下属的所有设备通行
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param deviceGroup
      * @param personGroup
+     * @param token 访问令牌
      */
     public ListenableFuture<Void> addPermit(
             DeviceGroupBean deviceGroup,
-            PersonGroupBean personGroup){
+            PersonGroupBean personGroup,
+            net.gdface.facelog.client.thrift.Token token){
         return service.addPermit(
                     converterDeviceGroupBean.toRight(deviceGroup),
-                    converterPersonGroupBean.toRight(personGroup));
+                    converterPersonGroupBean.toRight(personGroup),
+                    token);
     }
-    // 81 SERIVCE PORT : deletePermit
+    // 81 SERIVCE PORT : addPermitById
     /**
-     * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean)}
+     * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
+     * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * @param deviceGroupId 外键,设备组id
+     * @param personGroupId 外键,人员组id
+     * @param token 访问令牌
+     * @see #addPermit(DeviceGroupBean,PersonGroupBean, Token)
+     */
+    public ListenableFuture<Void> addPermit(
+            int deviceGroupId,
+            int personGroupId,
+            net.gdface.facelog.client.thrift.Token token){
+        return service.addPermitById(
+                    deviceGroupId,
+                    personGroupId,
+                    token);
+    }
+    // 82 SERIVCE PORT : deletePermit
+    /**
+     * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean, Token)}
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param deviceGroup
      * @param personGroup
+     * @param token 访问令牌
      * @return 删除成功返回1,否则返回0
      */
     public ListenableFuture<Integer> deletePermit(
             DeviceGroupBean deviceGroup,
-            PersonGroupBean personGroup){
+            PersonGroupBean personGroup,
+            net.gdface.facelog.client.thrift.Token token){
         return service.deletePermit(
                     converterDeviceGroupBean.toRight(deviceGroup),
-                    converterPersonGroupBean.toRight(personGroup));
+                    converterPersonGroupBean.toRight(personGroup),
+                    token);
     }
-    // 82 SERIVCE PORT : getGroupPermit
+    // 83 SERIVCE PORT : getGroupPermit
     /**
      * 获取人员组通行权限<br>
      * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行
@@ -1445,7 +1642,7 @@ class IFaceLogClientAsync implements Constant{
                     deviceId,
                     personGroupId);
     }
-    // 83 SERIVCE PORT : getPersonPermit
+    // 84 SERIVCE PORT : getPersonPermit
     /**
      * 获取人员通行权限<br>
      * 返回{@code personId}指定的人员在{@code deviceId}设备上是否允许通行
@@ -1460,7 +1657,7 @@ class IFaceLogClientAsync implements Constant{
                     deviceId,
                     personId);
     }
-    // 84 SERIVCE PORT : getGroupPermits
+    // 85 SERIVCE PORT : getGroupPermits
     /**
      * 参见 {@link #getGroupPermit(Integer, Integer) }
      */
@@ -1471,7 +1668,7 @@ class IFaceLogClientAsync implements Constant{
                     deviceId,
                     CollectionUtils.checkNotNullElement(personGroupIdList));
     }
-    // 85 SERIVCE PORT : getPersonPermits
+    // 86 SERIVCE PORT : getPersonPermits
     /**
      * 参见 {@link #getPersonPermit(Integer, Integer) }
      */
@@ -1482,7 +1679,7 @@ class IFaceLogClientAsync implements Constant{
                     deviceId,
                     CollectionUtils.checkNotNullElement(personIdList));
     }
-    // 86 SERIVCE PORT : loadPermitByUpdate
+    // 87 SERIVCE PORT : loadPermitByUpdate
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录
@@ -1499,7 +1696,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 87 SERIVCE PORT : loadPersonGroupByWhere
+    // 88 SERIVCE PORT : loadPersonGroupByWhere
     /**
      * 查询{@code where} SQL条件语句指定的记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
@@ -1522,7 +1719,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 88 SERIVCE PORT : countPersonGroupByWhere
+    // 89 SERIVCE PORT : countPersonGroupByWhere
     /**
      * 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
      * @see {@link IPersonGroupManager#Where(String)}
@@ -1530,7 +1727,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Integer> countPersonGroupByWhere(String where){
         return service.countPersonGroupByWhere(where);
     }
-    // 89 SERIVCE PORT : loadPersonGroupIdByWhere
+    // 90 SERIVCE PORT : loadPersonGroupIdByWhere
     /**
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
@@ -1539,9 +1736,10 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<List<Integer>> loadPersonGroupIdByWhere(String where){
         return service.loadPersonGroupIdByWhere(where);
     }
-    // 90 SERIVCE PORT : registerDevice
+    // 91 SERIVCE PORT : registerDevice
     /**
-     * 新设备注册,如果设备已经注册则返回注册设备记录
+     * 新设备注册,如果设备已经注册则返回注册设备记录<br>
+     * 注册时必须提供设备MAC地址,是否提供序列号,根据应用需要选择
      * @param newDevice
      * @return 
      */
@@ -1555,9 +1753,10 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 91 SERIVCE PORT : unregisterDevice
+    // 92 SERIVCE PORT : unregisterDevice
     /**
      * (设备端)设备删除
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param deviceId
      * @param token 设备验证令牌
      */
@@ -1568,7 +1767,7 @@ class IFaceLogClientAsync implements Constant{
                     deviceId,
                     token);
     }
-    // 92 SERIVCE PORT : online
+    // 93 SERIVCE PORT : online
     /**
      * 设备申请上线,每次调用都会产生一个新的令牌
      * @param device 上线设备信息，必须提供{@code id, mac, serialNo}字段
@@ -1577,15 +1776,16 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<net.gdface.facelog.client.thrift.Token> online(DeviceBean device){
         return service.online(converterDeviceBean.toRight(device));
     }
-    // 93 SERIVCE PORT : offline
+    // 94 SERIVCE PORT : offline
     /**
      * 设备申请离线,删除设备令牌
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param token 当前持有的令牌
      */
     public ListenableFuture<Void> offline(net.gdface.facelog.client.thrift.Token token){
         return service.offline(token);
     }
-    // 94 SERIVCE PORT : applyPersonToken
+    // 95 SERIVCE PORT : applyPersonToken
     /**
      * 申请人员访问令牌
      * @param personId
@@ -1594,9 +1794,10 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<net.gdface.facelog.client.thrift.Token> applyPersonToken(int personId){
         return service.applyPersonToken(personId);
     }
-    // 95 SERIVCE PORT : releasePersonToken
+    // 96 SERIVCE PORT : releasePersonToken
     /**
      * 释放人员访问令牌
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param token 当前持有的令牌
      */
     public ListenableFuture<Void> releasePersonToken(net.gdface.facelog.client.thrift.Token token){

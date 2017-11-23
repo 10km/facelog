@@ -42,6 +42,10 @@ import net.gdface.facelog.service.Dao;
  * 所以请在执行save时特别注意{@code isNew()}状态</li>
  * <li>对于以add为前缀的添加记录方法,在添加记录前会检查数据库中是否有(主键)相同记录,
  * 如果有则会抛出异常{@link DuplicateRecordException}</li>
+ * <li>所有带{@link Token}参数的方法都需要提供访问令牌,访问令牌分为人员令牌和设备令牌,
+ * 注释中标注为{@code PERSON_ONLY}的方法只接受人员令牌,
+ * 注释中标注为{@code DEVICE_ONLY}的方法只接受设备令牌,
+ * 关于令牌申请和释放参见{@link #applyPersonToken(int)},{@link #releasePersonToken(Token)},{@link #online(DeviceBean)},{@link #offline(Token)}</li>
  * </ul>
  * @author guyadong
  */
@@ -94,8 +98,9 @@ public abstract class BaseFaceLog extends Dao{
 
 	/**
 	 * 删除personId指定的人员(person)记录及关联的所有记录
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param personId
-	 * @param token 
+	 * @param token 访问令牌
 	 * @return
 	 * @throws ServiceRuntimeException
 	 */
@@ -106,8 +111,9 @@ public abstract class BaseFaceLog extends Dao{
 
 	/**
 	 * 删除personIdList指定的人员(person)记录及关联的所有记录
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param personIdList 人员id列表
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return 返回删除的 person 记录数量
 	 * @throws ServiceRuntimeException
 	 */
@@ -118,8 +124,9 @@ public abstract class BaseFaceLog extends Dao{
 
 	/**
 	 * 删除papersNum指定的人员(person)记录及关联的所有记录
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param papersNum 证件号码
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return 返回删除的 person 记录数量
 	 * @throws ServiceRuntimeException
 	 * @see {@link #deletePerson(int, Token)}
@@ -131,8 +138,9 @@ public abstract class BaseFaceLog extends Dao{
 
 	/**
 	 * 删除papersNum指定的人员(person)记录及关联的所有记录
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param papersNumlist 证件号码列表
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return 返回删除的 person 记录数量
 	 * @throws ServiceRuntimeException
 	 */
@@ -165,8 +173,9 @@ public abstract class BaseFaceLog extends Dao{
 
 	/**
 	 * 设置 personId 指定的人员为禁止状态
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param personId
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @throws ServiceRuntimeException
 	 * @see #setPersonExpiryDate(int, long, Token)
 	 */
@@ -176,9 +185,10 @@ public abstract class BaseFaceLog extends Dao{
 
 	/**
 	 * 修改 personId 指定的人员记录的有效期
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param personId
 	 * @param expiryDate 失效日期
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
@@ -187,9 +197,10 @@ public abstract class BaseFaceLog extends Dao{
 
 	/**
 	 * 修改 personIdList 指定的人员记录的有效期
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param personIdList 人员id列表
 	 * @param expiryDate 失效日期 
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod("setPersonExpiryDateList")
@@ -198,8 +209,9 @@ public abstract class BaseFaceLog extends Dao{
 
 	/**
 	 * 设置 personIdList 指定的人员为禁止状态
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param personIdList 人员id列表
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod("disablePersonList")
@@ -263,7 +275,7 @@ public abstract class BaseFaceLog extends Dao{
 	/**
 	 * 保存人员(person)记录
 	 * @param bean
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return
 	 * @throws ServiceRuntimeException
 	 */
@@ -274,8 +286,9 @@ public abstract class BaseFaceLog extends Dao{
 
 	/**
 	 * 保存人员(person)记录
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param beans 
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
@@ -286,7 +299,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * 保存人员信息记录
 	 * @param bean
 	 * @param idPhoto 标准照图像对象,可为null
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return
 	 * @throws ServiceRuntimeException
 	 */
@@ -297,8 +310,9 @@ public abstract class BaseFaceLog extends Dao{
 
 	/**
 	 * 保存人员信息记录(包含标准照)
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param persons
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return
 	 * @throws ServiceRuntimeException
 	 */
@@ -312,7 +326,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param bean
 	 * @param idPhotoMd5 标准照图像对象,可为null
 	 * @param featureMd5 用于验证的人脸特征数据对象,可为null
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return
 	 * @throws ServiceRuntimeException
 	 */
@@ -323,11 +337,12 @@ public abstract class BaseFaceLog extends Dao{
 
 	/**
 	 * 保存人员信息记录
+	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
 	 * @param bean
 	 * @param idPhoto 标准照图像,可为null
 	 * @param featureBean 用于验证的人脸特征数据对象,可为null
 	 * @param deviceId 标准照图像来源设备id,可为null
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return
 	 * @throws ServiceRuntimeException
 	 */
@@ -339,11 +354,12 @@ public abstract class BaseFaceLog extends Dao{
 
 	/**
 	 * 保存人员信息记录
+	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
 	 * @param bean
 	 * @param idPhoto 标准照图像,可为null
 	 * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(ByteBuffer, Integer, List, Token)}
 	 * @param faceBeans 参见 {@link #addFeature(ByteBuffer, Integer, List, Token)}
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return
 	 * @throws ServiceRuntimeException
 	 */
@@ -355,12 +371,13 @@ public abstract class BaseFaceLog extends Dao{
 
 	/**
 	 * 保存人员信息记录
+	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
 	 * @param bean 
 	 * @param idPhoto 标准照图像,可为null
 	 * @param feature 用于验证的人脸特征数据,可为null 
 	 * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
 	 * @param deviceId faceInfo 图像来源设备id,可为null 
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return bean 保存的{@link PersonBean}对象
 	 * @throws ServiceRuntimeException
 	 */
@@ -372,12 +389,13 @@ public abstract class BaseFaceLog extends Dao{
 
 	/**
 	 * 
+	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
 	 * @param bean 人员信息对象
 	 * @param idPhoto 标准照图像
 	 * @param feature 人脸特征数据
 	 * @param featureImage 提取特征源图像,为null 时,默认使用idPhoto
 	 * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @param deviceBean featureImage来源设备对象
 	 * @return
 	 */
@@ -392,7 +410,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param personId 人员记录id
 	 * @param featureMd5 人脸特征数据记录id (已经保存在数据库中)
 	 * @param deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
@@ -546,7 +564,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * @param deviceId 图像来源设备id,可为null
 	 * @param faceBean 关联的人脸信息对象,可为null
 	 * @param personId 关联的人员id(fl_person.id),可为null
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return
 	 * @throws DuplicateRecordException 数据库中已经存在要保存的图像数据
 	 * @throws ServiceRuntimeException
@@ -573,10 +591,11 @@ public abstract class BaseFaceLog extends Dao{
 
 	/**
 	 * 增加一个人脸特征记录，如果记录已经存在则抛出异常
+	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
 	 * @param feature 特征数据
 	 * @param personId 关联的人员id(fl_person.id),可为null
 	 * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws ServiceRuntimeException
 	 * @throws DuplicateRecordException 
@@ -593,11 +612,12 @@ public abstract class BaseFaceLog extends Dao{
 
 	/**
 	 * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
+	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
 	 * @param feature 特征数据
 	 * @param personId 关联的人员id(fl_person.id),可为null
 	 * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
 	 * @param deviceId 图像来源设备id,可为null
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws ServiceRuntimeException
 	 * @throws DuplicateRecordException 
@@ -616,7 +636,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * 删除featureMd5指定的特征记录及关联的face记录
 	 * @param featureMd5
 	 * @param deleteImage 是否删除关联的 image记录
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return 返回删除的特征记录关联的图像(image)记录的MD5<br>
 	 *                {@code deleteImage}为{@code true}时返回空表
 	 * @throws ServiceRuntimeException
@@ -630,7 +650,7 @@ public abstract class BaseFaceLog extends Dao{
 	 * 删除 personId 关联的所有特征(feature)记录
 	 * @param personId
 	 * @param deleteImage 是否删除关联的 image记录
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return
 	 * @see #deleteFeature(String, boolean, Token)
 	 * @throws ServiceRuntimeException
@@ -728,7 +748,7 @@ public abstract class BaseFaceLog extends Dao{
 	/**
 	 * 删除imageMd5指定图像及其缩略图
 	 * @param imageMd5
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return 删除成功返回1,否则返回0
 	 * @throws ServiceRuntimeException
 	 */
@@ -749,13 +769,25 @@ public abstract class BaseFaceLog extends Dao{
 	}
 	/**
 	 * 保存设备记录
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param deviceBean
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
 	public DeviceBean saveDevice(DeviceBean deviceBean, Token token) throws ServiceRuntimeException {
+		return null;
+	}
+	/**
+	 * 更新设备记录(必须是已经存在的设备记录，否则抛出异常)
+	 * @param deviceBean
+	 * @param token 访问令牌
+	 * @return
+	 * @throws ServiceRuntimeException
+	 */
+	@ThriftMethod
+	public DeviceBean updateDevice(DeviceBean deviceBean, Token token) throws ServiceRuntimeException {
 		return null;
 	}
 	/**
@@ -814,8 +846,9 @@ public abstract class BaseFaceLog extends Dao{
 	////////////////////////////////DeviceGroupBean/////////////
 	/**
 	 * 保存设备组记录
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param deviceGroupBean
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return
 	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
@@ -849,8 +882,9 @@ public abstract class BaseFaceLog extends Dao{
 	/**
 	 * 删除{@code deviceGroupId}指定的设备组<br>
 	 * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param deviceGroupId
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return  返回删除的记录条数
 	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
@@ -886,8 +920,9 @@ public abstract class BaseFaceLog extends Dao{
 	////////////////////////////////PersonGroupBean/////////////
 	/**
 	 * 保存人员组记录
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param personGroupBean
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return
 	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
@@ -921,8 +956,9 @@ public abstract class BaseFaceLog extends Dao{
 	/**
 	 * 删除{@code personGroupId}指定的人员组<br>
 	 * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param personGroupId
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return 
 	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
@@ -985,9 +1021,10 @@ public abstract class BaseFaceLog extends Dao{
 	/**
 	 * 添加一个(允许)通行关联记录:允许{@code personGroup}指定的人员组在
 	 * {@code deviceGroup}指定的设备组下属的所有设备通行
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param deviceGroup
 	 * @param personGroup
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
@@ -996,18 +1033,20 @@ public abstract class BaseFaceLog extends Dao{
     /**
      * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
      * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param deviceGroupId 外键,设备组id
      * @param personGroupId 外键,人员组id
-     * @param token TODO
+     * @param token 访问令牌
      * @see #addPermit(DeviceGroupBean,PersonGroupBean, Token)
      */
 	@ThriftMethod("addPermitById")
 	public void addPermit(int deviceGroupId,int personGroupId, Token token)throws ServiceRuntimeException{}
 	/**
 	 * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean, Token)}
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param deviceGroup
 	 * @param personGroup
-	 * @param token TODO
+	 * @param token 访问令牌
 	 * @return 删除成功返回1,否则返回0
 	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
@@ -1093,7 +1132,8 @@ public abstract class BaseFaceLog extends Dao{
 		return null;
     }
 	/**
-	 * 新设备注册,如果设备已经注册则返回注册设备记录
+	 * 新设备注册,如果设备已经注册则返回注册设备记录<br>
+	 * 注册时必须提供设备MAC地址,是否提供序列号,根据应用需要选择
 	 * @param newDevice
 	 * @return
 	 * @throws ServiceRuntimeException
@@ -1104,10 +1144,11 @@ public abstract class BaseFaceLog extends Dao{
             @ThriftException(type=ServiceSecurityException.class, id=2)
 			})
 	public DeviceBean registerDevice(DeviceBean newDevice) throws ServiceRuntimeException, ServiceSecurityException{
-		return newDevice;		
+		return newDevice;
 	}
 	/**
 	 * (设备端)设备删除
+	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
 	 * @param deviceId
 	 * @param token 设备验证令牌
 	 * @throws ServiceRuntimeException
@@ -1137,6 +1178,7 @@ public abstract class BaseFaceLog extends Dao{
 	}
 	/**
 	 * 设备申请离线,删除设备令牌
+	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
 	 * @param token 当前持有的令牌
 	 * @throws ServiceRuntimeException
 	 * @throws ServiceSecurityException
@@ -1165,6 +1207,7 @@ public abstract class BaseFaceLog extends Dao{
 	}
 	/**
 	 * 释放人员访问令牌
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param token 当前持有的令牌
 	 * @throws ServiceRuntimeException
 	 * @throws ServiceSecurityException

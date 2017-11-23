@@ -10,6 +10,9 @@ import org.apache.commons.configuration2.tree.DefaultExpressionEngine;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngineSymbols;
 
 import com.facebook.swift.service.ThriftServerConfig;
+import com.google.common.base.Strings;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 import io.airlift.units.Duration;
 
@@ -20,6 +23,7 @@ import io.airlift.units.Duration;
  */
 public class GlobalConfig implements ServiceConstant{
 	private static final String ROOT_XML = "root.xml";
+	private static final String ATTR_DESCRIPTION ="description"; 
 	/** 配置参数对象 */
 	private static final CombinedConfiguration CONFIG = init();
 	private GlobalConfig() {
@@ -37,6 +41,26 @@ public class GlobalConfig implements ServiceConstant{
 		}catch(Exception e){
 			throw new ExceptionInInitializerError(e);
 		}
+	}
+	/**
+	 * 返回{@code key}的attribute的表达式
+	 * @param key
+	 * @param attr attribute name
+	 * @return
+	 * @throws IllegalArgumentException 输入参数为{@code null}或空
+	 */
+	public static final String expressionOfAttribute(String key,String attr){
+		checkArgument(!Strings.isNullOrEmpty(key) && !Strings.isNullOrEmpty(attr),"input argument must not be null or empty");
+		return String.format("%s[@%s]", key,attr);		
+	}
+	/**
+	 * 返回描述({@code 'description'})attribute表达式
+	 * @param key
+	 * @return
+	 * @see #expressionOfAttribute(String, String)
+	 */
+	public static final String descriptionOf(String key){
+		return expressionOfAttribute(key,ATTR_DESCRIPTION);
 	}
 	/** 全局配置参数对象 */
 	public static CombinedConfiguration getConfig() {

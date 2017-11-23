@@ -71,7 +71,7 @@ public interface CommonConstant {
         RUNTIME,
         /** 图像数据异常 */
         IMAGE_ERROR,
-        /** ServiceSecurityException */
+        /** 安全异常 ServiceSecurityException */
         SECURITY_ERROR
     }
 }

@@ -34,6 +34,8 @@ public interface CommonConstant {
     public static final int DEFAULT_GROUP_ID = 1;
     /** 默认(设备/人员)组名 */
     public static final String DEFAULT_GROUP_NAME = "DEFAULT_GROUP";
+    /** 超级管理员用户名 */
+    public static final String ROOT_NAME = "root";
 
     public static final Channel<Integer> PUBSUB_PERSON_INSERT = new Channel<Integer>("PersonInsert"){};
     public static final Channel<Integer> PUBSUB_PERSON_UPDATE = new Channel<Integer>("PersonUpdate"){};
@@ -66,6 +68,8 @@ public interface CommonConstant {
         /** RuntimeException */
         RUNTIME,
         /** 图像数据异常 */
-        IMAGE_ERROR
+        IMAGE_ERROR,
+        /** 安全异常 ServiceSecurityException */
+        SECURITY_ERROR
     }
 }
