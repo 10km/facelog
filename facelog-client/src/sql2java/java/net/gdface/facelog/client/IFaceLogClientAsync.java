@@ -758,18 +758,30 @@ class IFaceLogClientAsync implements Constant{
     // 33 SERIVCE PORT : addLog
     /**
      * 添加一条验证日志记录
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param bean
+     * @param token 访问令牌
      */
-    public ListenableFuture<Void> addLog(LogBean bean){
-        return service.addLog(converterLogBean.toRight(bean));
+    public ListenableFuture<Void> addLog(
+            LogBean bean,
+            net.gdface.facelog.client.thrift.Token token){
+        return service.addLog(
+                    converterLogBean.toRight(bean),
+                    token);
     }
     // 34 SERIVCE PORT : addLogs
     /**
      * 添加一组验证日志记录(事务存储)
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param beans
+     * @param token 访问令牌
      */
-    public ListenableFuture<Void> addLogs(List<LogBean> beans){
-        return service.addLogs(converterLogBean.toRight(CollectionUtils.checkNotNullElement(beans)));
+    public ListenableFuture<Void> addLogs(
+            List<LogBean> beans,
+            net.gdface.facelog.client.thrift.Token token){
+        return service.addLogs(
+                    converterLogBean.toRight(CollectionUtils.checkNotNullElement(beans)),
+                    token);
     }
     // 35 SERIVCE PORT : loadLogByWhere
     /**

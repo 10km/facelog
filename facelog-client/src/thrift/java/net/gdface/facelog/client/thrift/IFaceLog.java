@@ -57,7 +57,8 @@ public interface IFaceLog
                           @ThriftException(type=DuplicateRecordException.class, id=2)
                       })
         ListenableFuture<Void> addLog(
-            @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final LogBean bean
+            @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final LogBean bean,
+            @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
         @ThriftMethod(value = "addLogs",
@@ -66,7 +67,8 @@ public interface IFaceLog
                           @ThriftException(type=DuplicateRecordException.class, id=2)
                       })
         ListenableFuture<Void> addLogs(
-            @ThriftField(value=1, name="beans", requiredness=Requiredness.NONE) final List<LogBean> beans
+            @ThriftField(value=1, name="beans", requiredness=Requiredness.NONE) final List<LogBean> beans,
+            @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
         @ThriftMethod(value = "addPermit",
@@ -921,7 +923,8 @@ public interface IFaceLog
                       @ThriftException(type=DuplicateRecordException.class, id=2)
                   })
     void addLog(
-        @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final LogBean bean
+        @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final LogBean bean,
+        @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException, DuplicateRecordException;
 
     @ThriftMethod(value = "addLogs",
@@ -930,7 +933,8 @@ public interface IFaceLog
                       @ThriftException(type=DuplicateRecordException.class, id=2)
                   })
     void addLogs(
-        @ThriftField(value=1, name="beans", requiredness=Requiredness.NONE) final List<LogBean> beans
+        @ThriftField(value=1, name="beans", requiredness=Requiredness.NONE) final List<LogBean> beans,
+        @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException, DuplicateRecordException;
 
     @ThriftMethod(value = "addPermit",

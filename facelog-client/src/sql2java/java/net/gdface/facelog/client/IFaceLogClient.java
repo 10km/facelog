@@ -1039,13 +1039,19 @@ class IFaceLogClient implements Constant{
     // 33 SERIVCE PORT : addLog
     /**
      * 添加一条验证日志记录
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param bean
+     * @param token 访问令牌
      * @throws ServiceRuntimeException
      * @throws DuplicateRecordException 数据库中存在相同记录
      */
-    public void addLog(LogBean bean)throws net.gdface.facelog.client.thrift.DuplicateRecordException{
+    public void addLog(
+            LogBean bean,
+            net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.DuplicateRecordException{
         try{
-            service.addLog(converterLogBean.toRight(bean));
+            service.addLog(
+                    converterLogBean.toRight(bean),
+                    token);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1054,13 +1060,19 @@ class IFaceLogClient implements Constant{
     // 34 SERIVCE PORT : addLogs
     /**
      * 添加一组验证日志记录(事务存储)
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param beans
+     * @param token 访问令牌
      * @throws ServiceRuntimeException
      * @throws DuplicateRecordException 数据库中存在相同记录
      */
-    public void addLogs(List<LogBean> beans)throws net.gdface.facelog.client.thrift.DuplicateRecordException{
+    public void addLogs(
+            List<LogBean> beans,
+            net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.DuplicateRecordException{
         try{
-            service.addLogs(converterLogBean.toRight(CollectionUtils.checkNotNullElement(beans)));
+            service.addLogs(
+                    converterLogBean.toRight(CollectionUtils.checkNotNullElement(beans)),
+                    token);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);

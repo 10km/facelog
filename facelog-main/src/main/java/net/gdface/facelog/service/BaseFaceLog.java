@@ -456,7 +456,9 @@ public abstract class BaseFaceLog extends Dao{
 
 	/**
 	 * 添加一条验证日志记录
+	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
 	 * @param bean
+	 * @param token 访问令牌
 	 * @throws ServiceRuntimeException
 	 * @throws DuplicateRecordException 数据库中存在相同记录
 	 */
@@ -464,12 +466,14 @@ public abstract class BaseFaceLog extends Dao{
             @ThriftException(type=ServiceRuntimeException.class, id=1),
             @ThriftException(type=DuplicateRecordException.class, id=2)
 			})
-	public void addLog(LogBean bean) throws ServiceRuntimeException, DuplicateRecordException {
+	public void addLog(LogBean bean, Token token) throws ServiceRuntimeException, DuplicateRecordException {
 	}
 
 	/**
 	 * 添加一组验证日志记录(事务存储)
+	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
 	 * @param beans
+	 * @param token 访问令牌
 	 * @throws ServiceRuntimeException
 	 * @throws DuplicateRecordException 数据库中存在相同记录
 	 */
@@ -477,7 +481,7 @@ public abstract class BaseFaceLog extends Dao{
             @ThriftException(type=ServiceRuntimeException.class, id=1),
             @ThriftException(type=DuplicateRecordException.class, id=2)
 			})
-	public void addLogs(List<LogBean> beans) throws ServiceRuntimeException, DuplicateRecordException {
+	public void addLogs(List<LogBean> beans, Token token) throws ServiceRuntimeException, DuplicateRecordException {
 	}
 	/**
 	 * 日志查询<br>

@@ -45,7 +45,14 @@ public abstract class BaseServiceException extends Exception{
         this.message = getMessage();
         this.causeClass = null == getCause()? null : getCause().getClass().getName();
         this.causeFields = null == getCause()? null : getCause().toString();
+        if(getCause() instanceof BaseServiceException){
+            this.causeFields = ((BaseServiceException)getCause()).jsonOfDeclaredFields();    
+        }
         fillStackTraceMessage(getCause());
+    }
+    /** return a JSON string of declared fields,subclass override it */
+    protected String jsonOfDeclaredFields(){
+        return "";
     }
     /**
      * return cause wrapped by {@link RuntimeException}<br>
@@ -100,7 +107,11 @@ public abstract class BaseServiceException extends Exception{
     public void setServiceStackTraceMessage(String serviceStackTraceMessage) {
         this.serviceStackTraceMessage = serviceStackTraceMessage;
     }
-    /** return field value of cause {@link Throwable#toString()},as JSON string */
+    /** 
+     * return JSON string of declared field values if cause is subclass of this class 
+     * and override {@code jsonOfDeclaredFields} method, otherwise return empty string
+     * @see {@link #jsonOfDeclaredFields()}
+     */
     @ThriftField(4)
     public String getCauseFields() {
         return causeFields;

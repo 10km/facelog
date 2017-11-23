@@ -1,9 +1,13 @@
 package net.gdface.facelog.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftStruct;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.HashMap;
 
 /**
  * 安全异常
@@ -63,15 +67,20 @@ public final class ServiceSecurityException extends BaseServiceException {
 		this.deviceID = deviceID;
 		return this;
 	}
-
+    
+    /** return a JSON string of declared fields  */
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("ServiceSecurityException [type=");
-		builder.append(type);
-		builder.append(", deviceID=");
-		builder.append(deviceID);
-		builder.append("]");
-		return builder.toString();
-	}    
+		return jsonOfDeclaredFields();
+	} 
+	
+	@Override
+	public String jsonOfDeclaredFields(){
+		HashMap<String,Object> fields = new HashMap<String,Object>();
+		fields.put("type", getType());
+		fields.put("deviceID", getDeviceID());
+		int features=SerializerFeature.config(
+				JSON.DEFAULT_GENERATE_FEATURE, SerializerFeature.QuoteFieldNames, false);
+		return JSON.toJSONString(fields,features);
+	}
 }

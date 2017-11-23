@@ -834,22 +834,28 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	}
 
 	@Override
-	public void addLog(LogBean bean)throws ServiceRuntimeException, DuplicateRecordException {
+	public void addLog(LogBean bean, Token token)throws ServiceRuntimeException, DuplicateRecordException {
 		try{
+			Enable.DEVICE_ONLY.check(tm, token);
 			daoAddLog(bean);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
 	@Override
-	public void addLogs(List<LogBean> beans)throws ServiceRuntimeException, DuplicateRecordException {
+	public void addLogs(List<LogBean> beans, Token token)throws ServiceRuntimeException, DuplicateRecordException {
 		try{
+			Enable.DEVICE_ONLY.check(tm, token);
 			daoAddLogsAsTransaction(beans);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
