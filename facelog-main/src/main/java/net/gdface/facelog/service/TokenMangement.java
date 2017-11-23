@@ -53,13 +53,13 @@ class TokenMangement implements ServiceConstant {
 			}});
 		this.personTokenTable.setExpire(personTokenExpire, TimeUnit.MINUTES);
 		logger.info("{}:{}",
-				CONFIG.getString(GlobalConfig.descriptionOf(TOKEN_DEVICE_VALIDATE)),
+				GlobalConfig.descriptionOf(TOKEN_DEVICE_VALIDATE),
 				this.validateDeviceToken);
 		logger.info("{}:{}",
-				CONFIG.getString(GlobalConfig.descriptionOf(TOKEN_PERSON_VALIDATE)),
+				GlobalConfig.descriptionOf(TOKEN_PERSON_VALIDATE),
 				this.validatePersonToken);
 		logger.info("{}:{}",
-				CONFIG.getString(GlobalConfig.descriptionOf(TOKEN_PERSON_EXPIRE)),
+				GlobalConfig.descriptionOf(TOKEN_PERSON_EXPIRE),
 				this.personTokenExpire);	
 	}
 	/** 验证MAC地址是否有效(HEX格式,12字符,无分隔符,不区分大小写) */

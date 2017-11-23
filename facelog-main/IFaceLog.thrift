@@ -42,7 +42,7 @@ exception ServiceRuntimeException {
   1:  string message;
   2:  string causeClass;
   3:  string serviceStackTraceMessage;
-  4:  string causeField;
+  4:  string causeFields;
   5:  i32 type;
 }
 
@@ -50,7 +50,7 @@ exception DuplicateRecordException {
   1:  string message;
   2:  string causeClass;
   3:  string serviceStackTraceMessage;
-  4:  string causeField;
+  4:  string causeFields;
 }
 
 struct FeatureBean {
@@ -176,7 +176,7 @@ exception ServiceSecurityException {
   1:  string message;
   2:  string causeClass;
   3:  string serviceStackTraceMessage;
-  4:  string causeField;
+  4:  string causeFields;
   5:  SecurityExceptionType type;
   6:  i32 deviceID;
 }

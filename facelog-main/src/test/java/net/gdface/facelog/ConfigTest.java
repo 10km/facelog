@@ -121,7 +121,7 @@ public class ConfigTest {
 		    System.out.println(config.getString("root.password"));
 		    System.out.println(config.getString("root.password.description"));
 		    System.out.println(config.getString("root.password[@description]"));
-		    System.out.println(config.getString(GlobalConfig.descriptionOf("root.password")));
+		    System.out.println(GlobalConfig.descriptionOf("root.password"));
 		}
 		catch(Throwable e)
 		{

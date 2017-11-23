@@ -23,10 +23,12 @@ import com.google.common.base.Preconditions;
  */
 public final class ServiceRuntimeException extends RuntimeException {
     private static final long serialVersionUID = 1L;
-    private String message;    
+    private final int type;
+    private String message;
     private String causeClass;
+    private final String causeFields;
     private final String serviceStackTraceMessage;
-    private final int type;    
+
     /**
      * @param cause
      */
@@ -35,6 +37,7 @@ public final class ServiceRuntimeException extends RuntimeException {
         type = cause.getType();
         message = cause.getMessage();
         causeClass = cause.getCauseClass();
+        causeFields = cause.getCauseFields();
         serviceStackTraceMessage = cause.getServiceStackTraceMessage();
     }
 
@@ -85,5 +88,28 @@ public final class ServiceRuntimeException extends RuntimeException {
     /** return exception type */
     public int getType() {
         return type;
+    }
+    /** 
+     * return cause field value string<br>
+     * format be dependent on the {@code toString()} method of cause 
+     */
+    public String getCauseFields() {
+        return causeFields;
+    }
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("ServiceRuntimeException [type=");
+        builder.append(type);
+        builder.append(", message=");
+        builder.append(message);
+        builder.append(", causeClass=");
+        builder.append(causeClass);
+        builder.append(", causeFields=");
+        builder.append(causeFields);
+        builder.append(", serviceStackTraceMessage=");
+        builder.append(serviceStackTraceMessage);
+        builder.append("]");
+        return builder.toString();
     }
 }

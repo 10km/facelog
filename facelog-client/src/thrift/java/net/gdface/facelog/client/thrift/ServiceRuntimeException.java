@@ -36,13 +36,13 @@ public final class ServiceRuntimeException extends Exception
     @ThriftField
     public void setServiceStackTraceMessage(final String serviceStackTraceMessage) { this.serviceStackTraceMessage = serviceStackTraceMessage; }
 
-    private String causeField;
+    private String causeFields;
 
-    @ThriftField(value=4, name="causeField", requiredness=Requiredness.NONE)
-    public String getCauseField() { return causeField; }
+    @ThriftField(value=4, name="causeFields", requiredness=Requiredness.NONE)
+    public String getCauseFields() { return causeFields; }
 
     @ThriftField
-    public void setCauseField(final String causeField) { this.causeField = causeField; }
+    public void setCauseFields(final String causeFields) { this.causeFields = causeFields; }
 
     private int type;
 

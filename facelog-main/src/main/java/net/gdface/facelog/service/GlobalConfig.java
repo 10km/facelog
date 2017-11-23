@@ -54,13 +54,13 @@ public class GlobalConfig implements ServiceConstant{
 		return String.format("%s[@%s]", key,attr);		
 	}
 	/**
-	 * 返回描述({@code 'description'})attribute表达式
+	 * 返回{@code key}的描述({@code 'description'})
 	 * @param key
 	 * @return
 	 * @see #expressionOfAttribute(String, String)
 	 */
 	public static final String descriptionOf(String key){
-		return expressionOfAttribute(key,ATTR_DESCRIPTION);
+		return CONFIG.getString(expressionOfAttribute(key,ATTR_DESCRIPTION),"");
 	}
 	/** 全局配置参数对象 */
 	public static CombinedConfiguration getConfig() {
