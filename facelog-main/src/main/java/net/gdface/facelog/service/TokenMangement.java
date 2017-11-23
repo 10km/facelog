@@ -14,7 +14,6 @@ import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisTable;
 import net.gdface.facelog.db.DeviceBean;
-import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.service.ServiceSecurityException.SecurityExceptionType;
 import net.gdface.utils.FaceUtilits;
 
@@ -204,8 +203,14 @@ class TokenMangement implements ServiceConstant {
 	private void removePersonTokenOf(int personId){
 		personTokenTable.remove(Integer.toString(personId));
 	}
+	/**
+	 * 设备注册
+	 * @param newDevice
+	 * @return
+	 * @throws ServiceSecurityException
+	 */
 	protected DeviceBean registerDevice(DeviceBean newDevice)
-			throws RuntimeDaoException, ServiceSecurityException{
+			throws ServiceSecurityException{
 		checkArgument(null != newDevice,"deviceBean must not be null");
 	    checkArgument(newDevice.isNew() && null == newDevice.getId(),
 	    		"for device registeration the 'newDevice' must be a new record,so the _isNew field must be true and id must be null");
@@ -234,8 +239,14 @@ class TokenMangement implements ServiceConstant {
 			return this.dao.daoSaveDevice(newDevice);
 		}
 	}
+	/**
+	 * 设备注销
+	 * @param deviceId
+	 * @param token
+	 * @throws ServiceSecurityException
+	 */
 	protected void unregisterDevice(int deviceId,Token token)
-			throws RuntimeDaoException, ServiceSecurityException{
+			throws ServiceSecurityException{
 		Enable.DEVICE_ONLY.check(this, token);
 		checkValidDeviceId(deviceId);
 		this.dao.daoDeleteDevice(deviceId);
@@ -244,11 +255,10 @@ class TokenMangement implements ServiceConstant {
 	 * 申请设备令牌
 	 * @param loginDevice 申请信息设备信息，必须提供{@code id, mac, serialNo}字段
 	 * @return
-	 * @throws RuntimeDaoException
 	 * @throws ServiceSecurityException
 	 */
 	protected Token applyDeviceToken(DeviceBean loginDevice)
-			throws RuntimeDaoException, ServiceSecurityException{
+			throws ServiceSecurityException{
 		checkValidDeviceId(loginDevice.getId());
 		DeviceBean device = dao.daoGetDevice(loginDevice.getId());
 		if(!Objects.equal(device.getMac(), loginDevice.getMac()) ){
@@ -267,11 +277,10 @@ class TokenMangement implements ServiceConstant {
 	/**
 	 * 释放设备令牌
 	 * @param token 当前持有的令牌
-	 * @throws RuntimeDaoException
 	 * @throws ServiceSecurityException
 	 */
 	protected void releaseDeviceToken(Token token)
-			throws RuntimeDaoException, ServiceSecurityException{
+			throws ServiceSecurityException{
 		Enable.DEVICE_ONLY.check(this, token);
 		removeDeviceTokenOf(token.getId());
 	}
@@ -279,11 +288,10 @@ class TokenMangement implements ServiceConstant {
 	 * 申请人员访问令牌
 	 * @param personId
 	 * @return
-	 * @throws RuntimeDaoException
 	 * @throws ServiceSecurityException
 	 */
 	protected Token applyPersonToken(int personId)
-			throws RuntimeDaoException, ServiceSecurityException{
+			throws ServiceSecurityException{
 		// 生成一个新令牌
 		if(!dao.daoExistsPerson(personId)){
 			throw new ServiceSecurityException(SecurityExceptionType.INVALID_PERSON_ID);
@@ -297,11 +305,10 @@ class TokenMangement implements ServiceConstant {
 	/**
 	 * 释放人员访问令牌
 	 * @param token 当前持有的令牌
-	 * @throws RuntimeDaoException
 	 * @throws ServiceSecurityException
 	 */
 	protected void releasePersonToken(Token token)
-			throws RuntimeDaoException, ServiceSecurityException{
+			throws ServiceSecurityException{
 		Enable.PERSON_ONLY.check(this, token);
 		removePersonTokenOf(token.getId());
 	}
