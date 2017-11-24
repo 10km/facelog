@@ -49,6 +49,7 @@ class RedisManagement implements ServiceConstant{
 	public String getRedisURI() {
 		return redisURI;
 	}
+	/** redis 连接初始化,并测试连接,如果连接异常,则尝试启动本地redis服务器或等待redis server启动 */
 	private void init(){
 		JedisPoolLazy poolLazy = JedisPoolLazy.getDefaultInstance();
 		boolean waitIfAbsent = CONFIG.getBoolean(REDIS_WAITIFABSENT,false);
