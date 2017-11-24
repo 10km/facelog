@@ -111,11 +111,13 @@ class RedisManagement implements ServiceConstant{
 					.append(suffixOfExe()).toString();
 			if(new File(exe).canExecute()){
 				ArrayList<String> args = Lists.newArrayList(shell(),exe);
+				// 命令行指定端口
 				if(parameters.containsKey(PropName.port)){
-					args.add("--port " + PropName.port);
+					args.add("--port " + parameters.get(PropName.port));
 				}
+				// 命令行指定password
 				if(parameters.containsKey(PropName.password)){
-					args.add("--requirepass " + PropName.password);
+					args.add("--requirepass " + parameters.get(PropName.password));
 				}
 				try {
 					String cmd = Joiner.on(' ').join(args);
