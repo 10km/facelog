@@ -4,6 +4,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 
+import com.google.common.base.Strings;
+
 import redis.clients.jedis.Protocol;
 import redis.clients.util.JedisURIHelper;
 
@@ -16,7 +18,7 @@ public class JedisUtils {
 
 	public static URI createJedisURI(String host, int port,String password,int database){
 		String userInfo = null;
-		if (null != password && !password.isEmpty()) {
+		if (!Strings.isNullOrEmpty(password)) {
 			userInfo = ":" + password;
 		}
 		try {

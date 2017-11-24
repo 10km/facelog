@@ -7,12 +7,13 @@ import gu.simplemq.redis.JedisPoolLazy;
  * @author guyadong
  *
  */
-class RedisInfo {	
+class RedisManagement implements ServiceConstant{	
 	private final String redisURI;
 	private String commendChannel;
-	public RedisInfo() {
+	public RedisManagement() {
 		JedisPoolLazy.createDefaultInstance(GlobalConfig.makeRedisParameters());
 		redisURI = JedisPoolLazy.getDefaultInstance().getCanonicalURI().toString();
+		GlobalConfig.showRedisParameters(JedisPoolLazy.getDefaultInstance().getParameters());
 	}
 	/** 返回redis服务器地址 */
 	public String getRedisURI() {

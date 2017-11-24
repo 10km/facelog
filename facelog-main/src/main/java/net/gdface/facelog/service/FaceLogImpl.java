@@ -54,10 +54,12 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	private final RedisFeatureListener redisFeatureListener = new RedisFeatureListener();
 	private final RedisPermitListener redisPermitListener = new RedisPermitListener();
 	//private final RedisLogConsumer redisLogConsumer  = new RedisLogConsumer();
-	private final RedisInfo redisInfo;
-	
+	private final RedisManagement rm;
+	///////////////// TOKEN MANAGEMENT///////	
+	private final TokenMangement tm;
 	public FaceLogImpl() {
-		redisInfo = new RedisInfo();
+		rm = new RedisManagement();
+		tm = new TokenMangement(this);
 		initListener();
 	}
 	private void initListener(){
@@ -379,9 +381,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
 		return new ArrayList<PersonBean>(m.values());
 	}
-	///////////////// TOKEN MANAGEMENT///////
-	
-	private final TokenMangement tm = new TokenMangement(this);
+
 	////////////////////////////////////////////////////////////////////////////////////
 	
 	@Override
@@ -1559,6 +1559,6 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
 	}
     public String getRedisUri(){
-    	return redisInfo.getRedisURI();
+    	return rm.getRedisURI();
     }
 }

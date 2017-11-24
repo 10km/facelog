@@ -1,8 +1,8 @@
 package net.gdface.facelog.service;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.configuration2.CombinedConfiguration;
@@ -104,45 +104,48 @@ public class GlobalConfig implements ServiceConstant{
 	/** 从配置文件中读取REDIS参数 */
 	static Map<PropName,Object> makeRedisParameters(){
 		HashMap<PropName, Object> params = new HashMap<PropName,Object>(16);
-		boolean bak = CONFIG.isThrowExceptionOnMissing();
-		try{
-			CONFIG.setThrowExceptionOnMissing(false);
-			params.put(PropName.host, CONFIG.getString(REDIS_HOST));
-			params.put(PropName.port, CONFIG.getInt(REDIS_PORT));
-			params.put(PropName.database, CONFIG.getInt(REDIS_DATABASE));
-			params.put(PropName.timeout, CONFIG.getInt(REDIS_TIMEOUT));
-			params.put(PropName.password, CONFIG.getString(REDIS_PASSWORD));
-			
-			if(CONFIG.containsKey(REDIS_POOL_MAXTOTAL)){
-				JedisPoolConfig poolConfig = new JedisPoolConfig();
-				poolConfig.setMaxTotal(CONFIG.getInt(REDIS_POOL_MAXTOTAL));
-				params.put(PropName.jedisPoolConfig, poolConfig);
-			}
-			// 过滤掉所有为null的参数
-			return Maps.filterValues(params, Predicates.notNull());
-		}finally{
-			CONFIG.setThrowExceptionOnMissing(bak);
+		if(CONFIG.containsKey(REDIS_URI)){
+			params.put(PropName.uri, URI.create(CONFIG.getString(REDIS_URI)));
 		}
+		params.put(PropName.host, CONFIG.getString(REDIS_HOST,null));
+		params.put(PropName.port, CONFIG.getInteger(REDIS_PORT,null));
+		params.put(PropName.database, CONFIG.getInteger(REDIS_DATABASE,null));
+		params.put(PropName.timeout, CONFIG.getInteger(REDIS_TIMEOUT,null));
+		params.put(PropName.password, CONFIG.getString(REDIS_PASSWORD,null));
+
+		if(CONFIG.containsKey(REDIS_POOL_MAXTOTAL)){
+			JedisPoolConfig poolConfig = new JedisPoolConfig();
+			poolConfig.setMaxTotal(CONFIG.getInt(REDIS_POOL_MAXTOTAL));
+			params.put(PropName.jedisPoolConfig, poolConfig);
+		}
+		// 过滤掉所有为null的参数
+		return Maps.filterValues(params, Predicates.notNull());
+
 	}
 	/** log 输出REDIS参数 */
 	static final void showRedisParameters(Map<PropName,Object>params){
-		if(params.containsKey(PropName.host)){
-			logger.info("{}({}):{}", PropName.host,descriptionOf(REDIS_HOST),params.get(PropName.host));
-		}
-		if(params.containsKey(PropName.port)){
-			logger.info("{}({}):{}", PropName.port,descriptionOf(REDIS_PORT),params.get(PropName.port));
-		}
-		if(params.containsKey(PropName.database)){
-			logger.info("{}({}):{}", PropName.database,descriptionOf(REDIS_DATABASE),params.get(PropName.database));
+		if(params.containsKey(PropName.uri)){
+			logger.info("{}({}):{}", PropName.uri,descriptionOf(REDIS_URI),params.get(PropName.uri));
+		}else{
+			if(params.containsKey(PropName.host)){
+				logger.info("{}({}):{}", PropName.host,descriptionOf(REDIS_HOST),params.get(PropName.host));
+			}
+			if(params.containsKey(PropName.port)){
+				logger.info("{}({}):{}", PropName.port,descriptionOf(REDIS_PORT),params.get(PropName.port));
+			}
+			if(params.containsKey(PropName.database)){
+				logger.info("{}({}):{}", PropName.database,descriptionOf(REDIS_DATABASE),params.get(PropName.database));
+			}
+			if(params.containsKey(PropName.password)){
+				logger.info("{}({}):{}", PropName.password,descriptionOf(REDIS_PASSWORD),params.get(PropName.password));
+			}
 		}
 		if(params.containsKey(PropName.timeout)){
 			logger.info("{}({}):{}", PropName.timeout,descriptionOf(REDIS_TIMEOUT),params.get(PropName.timeout));
 		}
-		if(params.containsKey(PropName.password)){
-			logger.info("{}({}):{}", PropName.password,descriptionOf(REDIS_PASSWORD),params.get(PropName.password));
-		}
+
 		if(params.containsKey(PropName.jedisPoolConfig)){
-			logger.info("{}({}):{}", "maxTotal",descriptionOf(REDIS_POOL_MAXTOTAL),
+			logger.info("{}({}):{}", "jedisPoolConfig.maxTotal",descriptionOf(REDIS_POOL_MAXTOTAL),
 					((JedisPoolConfig)params.get(PropName.jedisPoolConfig)).getMaxTotal());
 		}
 	}

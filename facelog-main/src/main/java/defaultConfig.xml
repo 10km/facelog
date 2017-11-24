@@ -22,16 +22,17 @@
 		<interval description="心跳包间隔(秒)">8</interval>
 		<expire description="心跳包失效时间(秒)">60</expire>
 	</heartbeat>
-<!-- 	
+	
 	<redis>
-		<host description = "REDIS 服务器主机名"></host>
-		<port description = "REDIS 服务器端口"></port>
-		<database description = "REDIS 数据库索引号"></database>
-		<timeout description = "REDIS 服务器超时(秒)"></timeout>
-		<password description = "REDIS 服务器密码"></password>
+		<host description = "redis 主机名"></host>
+		<port description = "redis 端口"></port>
+		<database description = "redis 数据库"></database>
+		<password description = "redis 密码"></password>
+		<uri description = "redis 服务器访问地址"></uri>
+		<timeout description = "redis 超时(秒)"></timeout>
 		<pool>
 			<maxTotal description = "jedis pool 最大线程数"></maxTotal>
 		</pool>
 	</redis> 
--->
+
 </configuration>

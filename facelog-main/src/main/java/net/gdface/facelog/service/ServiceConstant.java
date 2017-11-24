@@ -41,16 +41,18 @@ public interface ServiceConstant extends CommonConstant{
 	public static final String HEARTBEAT_INTERVAL = "heartbeat.interval";
 	/** 心跳包失效时间(秒) */
 	public static final String HEARTBEAT_EXPIRE = "heartbeat.expire";
-	/** REDIS 服务器主机名 */
+	/** REDIS 主机名 */
 	public static final String REDIS_HOST = "redis.host";
-	/** REDIS 服务器端口 */
+	/** REDIS 端口 */
 	public static final String REDIS_PORT = "redis.port";	
-	/** REDIS 数据库索引号 */
+	/** REDIS 数据库 */
 	public static final String REDIS_DATABASE = "redis.database";		
-	/** REDIS 服务器超时(秒) */
-	public static final String REDIS_TIMEOUT = "redis.timeout";
-	/** REDIS 服务器密码 */
+	/** REDIS 密码 */
 	public static final String REDIS_PASSWORD = "redis.password";		
+	/** REDIS 访问地址(host,port,database,password) */
+	public static final String REDIS_URI = "redis.uri";
+	/** REDIS 超时(秒) */
+	public static final String REDIS_TIMEOUT = "redis.timeout";
 	/** jedis pool 最大线程数 */
 	public static final String REDIS_POOL_MAXTOTAL = "redis.pool.maxTotal";
 	
