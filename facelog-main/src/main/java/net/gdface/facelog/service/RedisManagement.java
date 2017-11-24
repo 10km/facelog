@@ -23,14 +23,15 @@ import redis.clients.jedis.exceptions.JedisDataException;
  *
  */
 class RedisManagement implements ServiceConstant{	
-	private String redisURI;
+	private static String redisURI;
 	/** 本地redis服务器启动标志 */
-	static boolean localServerStarted = false;
+	private static boolean localServerStarted = false;
 	private String commendChannel;
 	private static Map<PropName, Object> parameters;
 	static{
 		parameters = GlobalConfig.makeRedisParameters();
 		JedisPoolLazy.createDefaultInstance(parameters);
+		redisURI = JedisPoolLazy.getDefaultInstance().getCanonicalURI().toString();
 		/** 程序结束时关闭 redis 服务器 */
 		Runtime.getRuntime().addShutdownHook(new Thread(){
 			@Override
@@ -49,7 +50,6 @@ class RedisManagement implements ServiceConstant{
 		return redisURI;
 	}
 	private void init(){
-		redisURI = JedisPoolLazy.getDefaultInstance().getCanonicalURI().toString();
 		JedisPoolLazy poolLazy = JedisPoolLazy.getDefaultInstance();
 		boolean waitIfAbsent = CONFIG.getBoolean(REDIS_WAITIFABSENT,false);
 		boolean selfBind = NetworkUtil.selfBind(poolLazy.getCanonicalURI().getHost());
