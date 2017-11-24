@@ -1,0 +1,74 @@
+#parse( "header.include.vm" )
+#parse( "macros.include.vm" )
+#set ( $javaClassName = 'BaseCommandAdapter' )
+$codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
+#set($commands =  {
+      'reset'  : {'desc':'设备重启',    
+                  'return':'void',   
+                  'params':{}},
+      'message': {'desc':'发送消息',    
+                  'return':'void',   
+                  'params':{'message':['String','发送到设备的消息']}},
+      'update' : {'desc':'更新版本',    
+                  'return':'void',   
+                  'params':{'url':['URL','更新版本的位置'],
+                            'version':['String','版本号']}},
+      'custom' : {'desc':'自定义命令',  
+                  'return':'Object', 
+                  'params':{'parameters':['LinkedHashMap<String,Object>','自定义参数表']}}
+                  })
+##set($resetParam = {})
+##set($messageParam = {'message':'String'})
+##set($updateParam = {'url':'java.util.URL'})
+##set($custom = {'parameters':'java.util.LinkedHashMap'})
+##set($commandParams = {    
+##                                'reset'  :{},
+##                                'message':{'message':'String'},
+##                                'update' :{'url':'URL'},
+##                                'custom' :{'parameters':'LinkedHashMap'})
+package $extensionPkg;
+
+import java.net.URL;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+/**
+ * 命令执行基类
+ * @author guyadong
+ *
+ */
+public class BaseCommandAdapter {
+    public static enum Cmd{
+        #join($commands.entrySet() '/** $e.value["desc"] */$e.key' ',
+        ');
+        void run(BaseCommandAdapter adapter,Map<String,Object> parameters){
+            switch(this){
+#foreach($entry in $commands.entrySet())
+#set($key = $entry.key)
+#set($params = $entry.value['params'].entrySet())
+            case $key:
+                adapter.${key}(#join($params '($e.value[0])parameters.get("$e.key")' ','));
+                break;
+#end
+            default:
+                break;
+            }
+        }
+    }
+#foreach($entry in $commands.entrySet())
+#set($key = $entry.key)
+#set($value = $entry.value)
+#set($params = $value['params'].entrySet())
+    /**
+     * $value['desc']<br>#join($params '
+     * @param $e.key $!{e.value[1]}' '')
+
+     *
+     */
+    public $value['return'] ${key}(#join($params '$e.value[0] $e.key' ',')){
+#if($value['return']!='void')
+        return null;
+#end
+    }
+#end    
+}
