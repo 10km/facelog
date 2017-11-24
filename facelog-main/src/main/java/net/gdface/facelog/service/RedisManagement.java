@@ -13,7 +13,7 @@ class RedisManagement implements ServiceConstant{
 	public RedisManagement() {
 		JedisPoolLazy.createDefaultInstance(GlobalConfig.makeRedisParameters());
 		redisURI = JedisPoolLazy.getDefaultInstance().getCanonicalURI().toString();
-		GlobalConfig.showRedisParameters(JedisPoolLazy.getDefaultInstance().getParameters());
+		GlobalConfig.logRedisParameters(JedisPoolLazy.getDefaultInstance().getParameters());
 	}
 	/** 返回redis服务器地址 */
 	public String getRedisURI() {

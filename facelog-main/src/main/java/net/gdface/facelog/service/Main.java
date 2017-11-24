@@ -23,7 +23,7 @@ public class Main implements ServiceConstant {
 			server.getServer().start();
 			logger.info("{} service is running(服务启动)",
 					Server.getServiceName(FaceLogImpl.class));
-			GlobalConfig.showThriftServerConfig(server.getThriftServerConfig());
+			GlobalConfig.logThriftServerConfig(server.getThriftServerConfig());
 
 		}finally{
 		}

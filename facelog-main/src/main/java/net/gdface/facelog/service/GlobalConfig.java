@@ -87,7 +87,7 @@ public class GlobalConfig implements ServiceConstant{
 		}
 		if((intValue = CONFIG.getInt(SERVER_IDLE_CONNECTION_TIMEMOUT,0))>0){
 			Duration timeout = new Duration(intValue,TimeUnit.SECONDS);
-			thriftServerConfig.setIdleConnectionTimeout(	timeout);
+			thriftServerConfig.setIdleConnectionTimeout(timeout);
 		}
 		if((intValue = CONFIG.getInt(SERVER_WORKER_THREAD_COUNT,0))>0){
 			thriftServerConfig.setWorkerThreads(intValue);
@@ -95,11 +95,12 @@ public class GlobalConfig implements ServiceConstant{
 		return thriftServerConfig;
 	}
 	/** log 输出{@code config}中的关键参数 */
-	static final void showThriftServerConfig(ThriftServerConfig config){
-		logger.info("Service Parameter: port: {}", config.getPort());
-		logger.info("Service Parameter: connectionLimit: {}", config.getConnectionLimit());
-		logger.info("Service Parameter: idleConnectionTimeout: {}", config.getIdleConnectionTimeout());
-		logger.info("Service Parameter: workerThreads: {}", config.getWorkerThreads());
+	static final void logThriftServerConfig(ThriftServerConfig config){
+		logger.info("RPC Service Parameters(服务运行参数):");
+		logger.info("port({}): {}", descriptionOf(SERVER_PORT),config.getPort());
+		logger.info("connectionLimit({}): {}", descriptionOf(SERVER_CONNECTION_LIMIT),config.getConnectionLimit());
+		logger.info("idleConnectionTimeout({}): {}", descriptionOf(SERVER_IDLE_CONNECTION_TIMEMOUT),config.getIdleConnectionTimeout());
+		logger.info("workerThreads({}): {}", descriptionOf(SERVER_WORKER_THREAD_COUNT),config.getWorkerThreads());
 	}
 	/** 从配置文件中读取REDIS参数 */
 	static Map<PropName,Object> makeRedisParameters(){
@@ -123,7 +124,8 @@ public class GlobalConfig implements ServiceConstant{
 
 	}
 	/** log 输出REDIS参数 */
-	static final void showRedisParameters(Map<PropName,Object>params){
+	static final void logRedisParameters(Map<PropName,Object>params){
+		logger.info("redis 服务器参数:");
 		if(params.containsKey(PropName.uri)){
 			logger.info("{}({}):{}", PropName.uri,descriptionOf(REDIS_URI),params.get(PropName.uri));
 		}else{
@@ -148,5 +150,18 @@ public class GlobalConfig implements ServiceConstant{
 			logger.info("{}({}):{}", "jedisPoolConfig.maxTotal",descriptionOf(REDIS_POOL_MAXTOTAL),
 					((JedisPoolConfig)params.get(PropName.jedisPoolConfig)).getMaxTotal());
 		}
+	}
+	/** log 输出令牌管理参数 */
+	static void logTokenParameters(){
+		logger.info("令牌管理参数:");
+		logger.info("{}:{}",
+				descriptionOf(TOKEN_DEVICE_VALIDATE),
+				CONFIG.getBoolean(TOKEN_DEVICE_VALIDATE));
+		logger.info("{}:{}",
+				descriptionOf(TOKEN_PERSON_VALIDATE),
+				CONFIG.getBoolean(TOKEN_PERSON_VALIDATE));
+		logger.info("{}:{}",
+				descriptionOf(TOKEN_PERSON_EXPIRE),
+				CONFIG.getInt(TOKEN_PERSON_EXPIRE));		
 	}
 }
