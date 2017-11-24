@@ -57,7 +57,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	private final RedisImageListener redisImageListener = new RedisImageListener(redisPersonListener,this);
 	private final RedisFeatureListener redisFeatureListener = new RedisFeatureListener();
 	private final RedisPermitListener redisPermitListener = new RedisPermitListener();
-	//private final RedisLogConsumer redisLogConsumer  = new RedisLogConsumer();
+	//private final RedisLogConsumer redisLogConsumer  = new RedisLogConsumer(this);
 
 	public FaceLogImpl() {
 		initListener();

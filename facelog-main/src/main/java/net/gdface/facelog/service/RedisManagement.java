@@ -6,10 +6,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.weakref.jmx.com.google.common.base.Joiner;
+import com.google.common.base.Joiner;
 
 import com.google.common.collect.Lists;
 
+import gu.simplemq.Channel;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.JedisPoolLazy.PropName;
 import gu.simplemq.redis.JedisUtils;
@@ -18,15 +19,17 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.jedis.exceptions.JedisDataException;
 
 /**
+ * 
  * redis管理模块
  * @author guyadong
  *
  */
 class RedisManagement implements ServiceConstant{	
+	private static final String CMD_PREFIX = "cmd_";
 	private static String redisURI;
 	/** 本地redis服务器启动标志 */
 	private static boolean localServerStarted = false;
-	private String commendChannel;
+	private final Channel<DeviceInstruction> cmdChannel;
 	private static Map<PropName, Object> parameters;
 	static{
 		parameters = GlobalConfig.makeRedisParameters();
@@ -38,12 +41,18 @@ class RedisManagement implements ServiceConstant{
 			public void run() {
 				shutdownLocalServer();
 			}
-			
 		});
 	}
 	public RedisManagement() {
 		init();
+		cmdChannel = createCmdChannel();
 		GlobalConfig.logRedisParameters(JedisPoolLazy.getDefaultInstance().getParameters());
+	}
+	/** 创建随机命令通道 */
+	private Channel<DeviceInstruction> createCmdChannel(){
+		String timestamp = String.format("%06x", System.nanoTime());
+		String commendChannel = CMD_PREFIX + timestamp.substring(timestamp.length()-6, timestamp.length());
+		return new Channel<DeviceInstruction>(commendChannel){};
 	}
 	/** 返回redis服务器地址 */
 	public String getRedisURI() {
@@ -104,6 +113,7 @@ class RedisManagement implements ServiceConstant{
 	private static final  void startLocalServer(Map<PropName, Object> parameters){
 		String home = CONFIG.getString(REDIS_HOME,"");
 		if(!home.isEmpty()){
+			// redis-server 可执行程序路径
 			String exe = new StringBuffer()
 					.append(home)
 					.append(File.separator)

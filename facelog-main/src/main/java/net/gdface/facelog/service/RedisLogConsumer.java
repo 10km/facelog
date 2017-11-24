@@ -14,9 +14,9 @@ import net.gdface.facelog.service.Dao;
 class RedisLogConsumer implements CommonConstant {
 	private final RedisConsumer consumer;
 	private final Dao dao;
-	public RedisLogConsumer(JedisPoolLazy jedisPoolLazy,Dao dao){
+	public RedisLogConsumer(Dao dao){
 		this.dao = Preconditions.checkNotNull(dao);
-		this.consumer = RedisFactory.getConsumer(null ==jedisPoolLazy ?JedisPoolLazy.getDefaultInstance():jedisPoolLazy);
+		this.consumer = RedisFactory.getConsumer(JedisPoolLazy.getDefaultInstance());
 		this.consumer.register(QUEUE_LOG.clone().setAdapter(new IMessageAdapter<LogBean>(){
 			@Override
 			public void onSubscribe(LogBean t) throws SmqUnsubscribeException {

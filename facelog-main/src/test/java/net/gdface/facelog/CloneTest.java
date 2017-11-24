@@ -52,7 +52,10 @@ public class CloneTest {
 	@Test
 	public void test() {
 		try{
-
+			{
+				System.out.println("["+Long.toHexString(System.currentTimeMillis())+"]");
+				System.out.printf("[%06x]\n", System.currentTimeMillis());
+			}
 			{
 				ServiceSecurityException exp = new ServiceSecurityException("hello").setType(SecurityExceptionType.INVALID_PERSON_ID).setDeviceID(10);
 				System.out.println(JSON.toJSONString(exp));
