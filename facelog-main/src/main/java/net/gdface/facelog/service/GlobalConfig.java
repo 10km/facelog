@@ -150,6 +150,9 @@ public class GlobalConfig implements ServiceConstant{
 			logger.info("{}({}):{}", "jedisPoolConfig.maxTotal",descriptionOf(REDIS_POOL_MAXTOTAL),
 					((JedisPoolConfig)params.get(PropName.jedisPoolConfig)).getMaxTotal());
 		}
+		if(CONFIG.containsKey(REDIS_HOME)){
+			logger.info("{}:{}",descriptionOf(REDIS_HOME),CONFIG.getString(REDIS_HOME));
+		}
 	}
 	/** log 输出令牌管理参数 */
 	static void logTokenParameters(){

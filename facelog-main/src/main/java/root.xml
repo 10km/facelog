@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 	<!-- 从系统 home 位置读取 -->
+	<xml fileName="${sys:user.home}/.facelog/config.xml" config-optional="true"/>
 	<properties fileName="${sys:user.home}/.facelog/config.properties" config-optional="true"/>
 	<!-- 如果定义了 FACELOG_HOME 环境变量,从变量指定的位置读取配置 -->
+	<xml fileName="${env:FACELOG_HOME}/config.xml" config-optional="true"/>
 	<properties fileName="${env:FACELOG_HOME}/config.properties" config-optional="true"/>
 	<xml fileName="defaultConfig.xml" />
 </configuration>

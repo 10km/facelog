@@ -57,7 +57,7 @@ public class JedisPoolLazy {
 			setMaxTotal(Runtime.getRuntime().availableProcessors());
 		}
 	};
-	
+	/** redis缺省连接参数 */
 	public static final Map<PropName, Object> DEFAULT_PARAMETERS = Collections.unmodifiableMap(new HashMap<PropName, Object>() {
 		private static final long serialVersionUID = 1L;
 		{
@@ -101,8 +101,8 @@ public class JedisPoolLazy {
 	static JedisPoolLazy createInstance(Map<PropName,Object> props) {
 		return new JedisPoolLazy(props);
 	}
-	
-	private static HashMap<PropName,Object> initParameters(Map<PropName,Object> props){
+	/** 根据{@code props}提供的参数及缺省参数{@link DEFAULT_PARAMETERS}创建一组完整的初始化参数 */
+	public static HashMap<PropName,Object> initParameters(Map<PropName,Object> props){
 		// 初始化时复制一份缺省参数
 		HashMap<PropName,Object> params = Maps.newHashMap(DEFAULT_PARAMETERS);
 		if(null != props){			

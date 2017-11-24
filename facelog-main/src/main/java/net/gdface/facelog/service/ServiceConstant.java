@@ -36,6 +36,14 @@ public interface ServiceConstant extends CommonConstant{
 	public static final String HEARTBEAT_INTERVAL = "heartbeat.interval";
 	/** 心跳包失效时间(秒) */
 	public static final String HEARTBEAT_EXPIRE = "heartbeat.expire";
+	/** REDIS 安装位置 */
+	public static final String REDIS_HOME = "redis.home";
+	/** REDIS 没启动时是否等待 */
+	public static final String REDIS_WAITIFABSENT = "redis.waitIfAbsent";
+	/** REDIS  等待重试次数 */
+	public static final String REDIS_TRYCOUNT = "redis.tryCount";
+	/** REDIS  等待重试间隔(毫秒) */
+	public static final String REDIS_TRYINTERVAL = "redis.tryInterval";
 	/** REDIS 主机名 */
 	public static final String REDIS_HOST = "redis.host";
 	/** REDIS 端口 */

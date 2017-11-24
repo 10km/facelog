@@ -24,6 +24,10 @@
 	</heartbeat>
 	
 	<redis>
+		<home description = "redis 安装位置"></home>
+		<waitIfAbsent description = "redis 没启动时是否等待"></waitIfAbsent>
+		<tryCount description = "redis 等待重试次数">10</tryCount>
+		<tryInterval description = "redis 等待重试间隔(毫秒)">2000</tryInterval>
 		<host description = "redis 主机名"></host>
 		<port description = "redis 端口"></port>
 		<database description = "redis 数据库"></database>
