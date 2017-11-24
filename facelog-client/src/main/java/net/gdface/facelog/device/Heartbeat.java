@@ -8,6 +8,7 @@ import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisTable;
 import net.gdface.facelog.client.CommonConstant;
+import net.gdface.facelog.client.NetworkUtil;
 
 /**
  * 设备心跳包redis实现<br>

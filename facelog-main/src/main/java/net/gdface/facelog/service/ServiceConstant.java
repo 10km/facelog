@@ -1,11 +1,8 @@
 package net.gdface.facelog.service;
 
-import java.util.Map;
-
 import org.apache.commons.configuration2.CombinedConfiguration;
 
 import gu.simplemq.Channel;
-import gu.simplemq.redis.JedisPoolLazy.PropName;
 
 /**
  * 服务端常量定义
