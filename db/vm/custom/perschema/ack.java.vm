@@ -1,0 +1,83 @@
+#parse( "header.include.vm" )
+#parse( "macros.include.vm" )
+#set ( $javaClassName = 'Ack' )
+$codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
+package $extensionPkg;
+
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
+
+/**
+ * 
+ * @author guyadong
+ *
+ * @param <T>
+ */
+public class Ack<T> {
+    private int cmdSn;
+    private int deviceId;
+    private T value;
+    private Status status;
+    private String errorMessage;
+    public static enum Status{
+        /** 调用正常返回 */OK,
+        /** 调用出错 */ERROR;
+        /**
+         * 返回状态信息
+         * @param ack
+         * @return
+         */
+        public <T>String message(Ack<T>ack){
+            Preconditions.checkArgument(null != ack,"ack is null");
+            StringBuffer buffer = new StringBuffer(String.format("device%d@%d:%s", ack.deviceId,ack.cmdSn,this.name()));
+            switch(this){
+            case ERROR:
+                if(!Strings.isNullOrEmpty(ack.errorMessage)){
+                    buffer.append(":").append(ack.errorMessage);
+                }
+                break;
+            case OK:
+            default:
+                break;
+            }
+            return buffer.toString();
+        }
+    }
+    public Ack() {
+    }
+    public int getCmdSn() {
+        return cmdSn;
+    }
+    public Ack<T> setCmdSn(int cmdSn) {
+        this.cmdSn = cmdSn;
+        return this;
+    }
+    public int getDeviceId() {
+        return deviceId;
+    }
+    public Ack<T> setDeviceId(int deviceId) {
+        this.deviceId = deviceId;
+        return this;
+    }
+    public T getValue() {
+        return value;
+    }
+    public Ack<T> setValue(T value) {
+        this.value = value;
+        return this;
+    }
+    public Status getStatus() {
+        return status;
+    }
+    public Ack<T> setStatus(Status status) {
+        this.status = status;
+        return this;
+    }
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+    public Ack<T> setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+        return this;
+    }
+}

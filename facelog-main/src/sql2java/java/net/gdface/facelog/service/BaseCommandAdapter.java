@@ -8,7 +8,6 @@
 package net.gdface.facelog.service;
 
 import java.net.URL;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -22,22 +21,54 @@ public class BaseCommandAdapter {
         /** 发送消息 */message,
         /** 更新版本 */update,
         /** 自定义命令 */custom;
-        void run(BaseCommandAdapter adapter,Map<String,Object> parameters){
+        @SuppressWarnings("unchecked")
+        public <T> Ack<?> run(BaseCommandAdapter adapter,Map<String,Object> parameters){
             switch(this){
-            case reset:
-                adapter.reset();
-                break;
-            case message:
-                adapter.message((String)parameters.get("message"));
-                break;
-            case update:
-                adapter.update((URL)parameters.get("url"),(String)parameters.get("version"));
-                break;
-            case custom:
-                adapter.custom((LinkedHashMap<String,Object>)parameters.get("parameters"));
-                break;
+            case reset:{
+                    Ack<Void> ack = new Ack<Void>().setStatus(Ack.Status.OK);
+                    try{
+                        adapter.reset();
+                    }catch(Exception e){
+                        // 填入异常状态,设置错误信息
+                        ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
+                    }                
+                    return ack;
+                }
+            case message:{
+                    Ack<Void> ack = new Ack<Void>().setStatus(Ack.Status.OK);
+                    try{
+                        adapter.message((String)parameters.get("message"));
+                    }catch(Exception e){
+                        // 填入异常状态,设置错误信息
+                        ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
+                    }                
+                    return ack;
+                }
+            case update:{
+                    Ack<Void> ack = new Ack<Void>().setStatus(Ack.Status.OK);
+                    try{
+                        adapter.update((URL)parameters.get("url"),(String)parameters.get("version"));
+                    }catch(Exception e){
+                        // 填入异常状态,设置错误信息
+                        ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
+                    }                
+                    return ack;
+                }
+            case custom:{
+                    Ack<Object> ack = new Ack<Object>().setStatus(Ack.Status.OK);
+                    try{
+                        Object res = adapter.custom((Map<String,Object>)parameters.get("parameters"));
+                        // 填入返回值
+                        ack.setValue(res);
+                    }catch(Exception e){
+                        // 填入异常状态,设置错误信息
+                        ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
+                    }                
+                    return ack;
+                }
             default:
-                break;
+                // dead code 不会执行到这里
+                throw new IllegalArgumentException();
             }
         }
     }
@@ -67,7 +98,7 @@ public class BaseCommandAdapter {
      * @param parameters 自定义参数表
      *
      */
-    public Object custom(LinkedHashMap<String,Object> parameters){
+    public Object custom(Map<String,Object> parameters){
         return null;
     }
 }

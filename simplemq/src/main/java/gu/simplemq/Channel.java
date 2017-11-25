@@ -46,7 +46,7 @@ public class Channel<T> implements IMessageAdapter<Object>, Cloneable {
      * usage:<pre>new Channel&lt;Model&gt;("name"){};</pre>
      * @param name
      */
-    public Channel(String name){
+    protected Channel(String name){
     	checkArgument(!Strings.isNullOrEmpty(name), "name is null or empty");
         this.name = name;
         Type superClass = getClass().getGenericSuperclass();

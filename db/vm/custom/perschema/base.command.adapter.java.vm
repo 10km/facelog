@@ -15,21 +15,11 @@ $codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
                             'version':['String','版本号']}},
       'custom' : {'desc':'自定义命令',  
                   'return':'Object', 
-                  'params':{'parameters':['LinkedHashMap<String,Object>','自定义参数表']}}
+                  'params':{'parameters':['Map<String,Object>','自定义参数表']}}
                   })
-##set($resetParam = {})
-##set($messageParam = {'message':'String'})
-##set($updateParam = {'url':'java.util.URL'})
-##set($custom = {'parameters':'java.util.LinkedHashMap'})
-##set($commandParams = {    
-##                                'reset'  :{},
-##                                'message':{'message':'String'},
-##                                'update' :{'url':'URL'},
-##                                'custom' :{'parameters':'LinkedHashMap'})
 package $extensionPkg;
 
 import java.net.URL;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -41,17 +31,39 @@ public class BaseCommandAdapter {
     public static enum Cmd{
         #join($commands.entrySet() '/** $e.value["desc"] */$e.key' ',
         ');
-        void run(BaseCommandAdapter adapter,Map<String,Object> parameters){
+        @SuppressWarnings("unchecked")
+        public <T> Ack<?> run(BaseCommandAdapter adapter,Map<String,Object> parameters){
             switch(this){
 #foreach($entry in $commands.entrySet())
 #set($key = $entry.key)
-#set($params = $entry.value['params'].entrySet())
-            case $key:
-                adapter.${key}(#join($params '($e.value[0])parameters.get("$e.key")' ','));
-                break;
+#set($value = $entry.value)
+#set($params = $value['params'].entrySet())
+#if($entry.value['return']=='void')
+#set($returnParamType ='Void')
+#else
+#set($returnParamType =$entry.value['return'])
+#end
+            case $key:{
+                    Ack<$returnParamType> ack = new Ack<$returnParamType>().setStatus(Ack.Status.OK);
+#define($callCmd)adapter.${key}(#join($params '($e.value[0])parameters.get("$e.key")' ','))#end
+                    try{
+#if($entry.value['return']=='void')
+                        $callCmd;
+#else
+                        Object res = $callCmd;
+                        // 填入返回值
+                        ack.setValue(res);
+#end
+                    }catch(Exception e){
+                        // 填入异常状态,设置错误信息
+                        ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
+                    }                
+                    return ack;
+                }
 #end
             default:
-                break;
+                // dead code 不会执行到这里
+                throw new IllegalArgumentException();
             }
         }
     }
@@ -70,5 +82,5 @@ public class BaseCommandAdapter {
         return null;
 #end
     }
-#end    
+#end
 }

@@ -21,32 +21,37 @@ public class DeviceInstruction implements CommonConstant {
 	public Cmd getCmd() {
 		return cmd;
 	}
-	public void setCmd(Cmd cmd) {
+	public DeviceInstruction setCmd(Cmd cmd) {
 		this.cmd = cmd;
+		return this;
 	}
 	public List<Integer> getTarget() {
 		return target;
 	}
-	public void setTarget(List<Integer> target) {
+	public DeviceInstruction setTarget(List<Integer> target) {
 		this.target = target;
+		return this;
 	}
 	public boolean isGroup() {
 		return group;
 	}
-	public void setGroup(boolean group) {
+	public DeviceInstruction setGroup(boolean group) {
 		this.group = group;
+		return this;
 	}
 	public String getAckChannel() {
 		return ackChannel;
 	}
-	public void setAckChannel(String ackChannel) {
+	public DeviceInstruction setAckChannel(String ackChannel) {
 		this.ackChannel = ackChannel;
+		return this;
 	}
 	public Map<String, Object> getParameters() {
 		return parameters;
 	}
-	public void setParameters(Map<String, Object> parameters) {
+	public DeviceInstruction setParameters(Map<String, Object> parameters) {
 		this.parameters = parameters;
+		return this;
 	}
 
 }

@@ -14,6 +14,7 @@ import gu.simplemq.Channel;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.JedisPoolLazy.PropName;
 import gu.simplemq.redis.JedisUtils;
+import gu.simplemq.redis.RedisPublisher;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.jedis.exceptions.JedisDataException;
@@ -31,9 +32,11 @@ class RedisManagement implements ServiceConstant{
 	private static boolean localServerStarted = false;
 	private final Channel<DeviceInstruction> cmdChannel;
 	private static Map<PropName, Object> parameters;
+	private static RedisPublisher redisPublisher;
 	static{
 		parameters = GlobalConfig.makeRedisParameters();
 		JedisPoolLazy.createDefaultInstance(parameters);
+		redisPublisher = new RedisPublisher(JedisPoolLazy.getDefaultInstance());
 		redisURI = JedisPoolLazy.getDefaultInstance().getCanonicalURI().toString();
 		/** 程序结束时关闭 redis 服务器 */
 		Runtime.getRuntime().addShutdownHook(new Thread(){
@@ -155,5 +158,9 @@ class RedisManagement implements ServiceConstant{
 				jedis.close();
 			}
 		}
+	}
+	/** 返回redis发布者实例 */
+	public static RedisPublisher getRedisPublisher() {
+		return redisPublisher;
 	}
 }
