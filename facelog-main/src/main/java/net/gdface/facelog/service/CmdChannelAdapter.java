@@ -8,6 +8,7 @@ import java.util.List;
 import com.google.common.collect.Iterators;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
 
 import gu.simplemq.Channel;
 import gu.simplemq.IMessageAdapter;
@@ -41,9 +42,11 @@ public class CmdChannelAdapter implements IMessageAdapter<DeviceInstruction>{
 	public void onSubscribe(DeviceInstruction t) throws SmqUnsubscribeException {
 		if(selfIncluded(t.isGroup(),t.getTarget())){
 			Ack<?> ack = t.getCmd().run(cmdAdapter, t.getParameters());
-			// 向指定的频道发送响应消息
-			Channel<Ack<?>> ackChannel = new Channel<Ack<?>>(t.getAckChannel(),Ack.class);
-			RedisManagement.getRedisPublisher().publish(ackChannel, ack);
+			// 如果指定了响应频道则向指定的频道发送响应消息
+			if(!Strings.isNullOrEmpty(t.getAckChannel())){
+				Channel<Ack<?>> ackChannel = new Channel<Ack<?>>(t.getAckChannel()){};
+				RedisManagement.getRedisPublisher().publish(ackChannel, ack);
+			}
 		}
 	}
 

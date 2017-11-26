@@ -15,12 +15,17 @@ $codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
                             'version':['String','版本号']}},
       'custom' : {'desc':'自定义命令',  
                   'return':'Object', 
-                  'params':{'parameters':['Map<String,Object>','自定义参数表']}}
+                  'params':{'cmdName':['String','自定义命令名称'],'parameters':['Map<String,Object>','自定义参数表']}}
                   })
 package $extensionPkg;
 
 import java.net.URL;
 import java.util.Map;
+
+import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson.util.TypeUtils;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.reflect.TypeToken;
 
 /**
  * 命令执行基类
@@ -31,8 +36,17 @@ public class BaseCommandAdapter {
     public static enum Cmd{
         #join($commands.entrySet() '/** $e.value["desc"] */$e.key' ',
         ');
-        @SuppressWarnings("unchecked")
-        public <T> Ack<?> run(BaseCommandAdapter adapter,Map<String,Object> parameters){
+        /**
+         * 执行当前设备命令
+         * @param adapter
+         * @param parameters
+         * @return
+         */
+        @SuppressWarnings("serial")
+        public Ack<?> run(BaseCommandAdapter adapter,Map<String,Object> parameters){
+            if(null == parameters){
+                parameters = ImmutableMap.of();
+            }
             switch(this){
 #foreach($entry in $commands.entrySet())
 #set($key = $entry.key)
@@ -45,7 +59,8 @@ public class BaseCommandAdapter {
 #end
             case $key:{
                     Ack<$returnParamType> ack = new Ack<$returnParamType>().setStatus(Ack.Status.OK);
-#define($callCmd)adapter.${key}(#join($params '($e.value[0])parameters.get("$e.key")' ','))#end
+#define($callCmd)adapter.${key}(#join($params '
+                                cast(parameters.get("$e.key"),new TypeToken<${e.value[0]}>(){})' ','))#end
                     try{
 #if($entry.value['return']=='void')
                         $callCmd;
@@ -66,6 +81,12 @@ public class BaseCommandAdapter {
                 throw new IllegalArgumentException();
             }
         }
+    }
+    @SuppressWarnings("unchecked")
+    static private<T> T cast(Object value,TypeToken<T> typeToken){
+        return (T)TypeUtils.cast(value,
+                typeToken.getType(),
+                ParserConfig.getGlobalInstance());
     }
 #foreach($entry in $commands.entrySet())
 #set($key = $entry.key)

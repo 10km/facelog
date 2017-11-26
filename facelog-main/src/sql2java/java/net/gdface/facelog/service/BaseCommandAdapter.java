@@ -10,6 +10,11 @@ package net.gdface.facelog.service;
 import java.net.URL;
 import java.util.Map;
 
+import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson.util.TypeUtils;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.reflect.TypeToken;
+
 /**
  * 命令执行基类
  * @author guyadong
@@ -21,8 +26,17 @@ public class BaseCommandAdapter {
         /** 发送消息 */message,
         /** 更新版本 */update,
         /** 自定义命令 */custom;
-        @SuppressWarnings("unchecked")
-        public <T> Ack<?> run(BaseCommandAdapter adapter,Map<String,Object> parameters){
+        /**
+         * 执行当前设备命令
+         * @param adapter
+         * @param parameters
+         * @return
+         */
+        @SuppressWarnings("serial")
+        public Ack<?> run(BaseCommandAdapter adapter,Map<String,Object> parameters){
+            if(null == parameters){
+                parameters = ImmutableMap.of();
+            }
             switch(this){
             case reset:{
                     Ack<Void> ack = new Ack<Void>().setStatus(Ack.Status.OK);
@@ -37,7 +51,8 @@ public class BaseCommandAdapter {
             case message:{
                     Ack<Void> ack = new Ack<Void>().setStatus(Ack.Status.OK);
                     try{
-                        adapter.message((String)parameters.get("message"));
+                        adapter.message(
+                                cast(parameters.get("message"),new TypeToken<String>(){}));
                     }catch(Exception e){
                         // 填入异常状态,设置错误信息
                         ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
@@ -47,7 +62,9 @@ public class BaseCommandAdapter {
             case update:{
                     Ack<Void> ack = new Ack<Void>().setStatus(Ack.Status.OK);
                     try{
-                        adapter.update((URL)parameters.get("url"),(String)parameters.get("version"));
+                        adapter.update(
+                                cast(parameters.get("url"),new TypeToken<URL>(){}),
+                                cast(parameters.get("version"),new TypeToken<String>(){}));
                     }catch(Exception e){
                         // 填入异常状态,设置错误信息
                         ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
@@ -57,7 +74,9 @@ public class BaseCommandAdapter {
             case custom:{
                     Ack<Object> ack = new Ack<Object>().setStatus(Ack.Status.OK);
                     try{
-                        Object res = adapter.custom((Map<String,Object>)parameters.get("parameters"));
+                        Object res = adapter.custom(
+                                cast(parameters.get("cmdName"),new TypeToken<String>(){}),
+                                cast(parameters.get("parameters"),new TypeToken<Map<String,Object>>(){}));
                         // 填入返回值
                         ack.setValue(res);
                     }catch(Exception e){
@@ -71,6 +90,12 @@ public class BaseCommandAdapter {
                 throw new IllegalArgumentException();
             }
         }
+    }
+    @SuppressWarnings("unchecked")
+    static private<T> T cast(Object value,TypeToken<T> typeToken){
+        return (T)TypeUtils.cast(value,
+                typeToken.getType(),
+                ParserConfig.getGlobalInstance());
     }
     /**
      * 设备重启<br>
@@ -95,10 +120,11 @@ public class BaseCommandAdapter {
     }
     /**
      * 自定义命令<br>
+     * @param cmdName 自定义命令名称
      * @param parameters 自定义参数表
      *
      */
-    public Object custom(Map<String,Object> parameters){
+    public Object custom(String cmdName,Map<String,Object> parameters){
         return null;
     }
 }
