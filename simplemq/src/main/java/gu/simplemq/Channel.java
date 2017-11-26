@@ -55,7 +55,7 @@ public class Channel<T> implements IMessageAdapter<Object>, Cloneable {
     /**
      * usage:<pre>new Channel&lt;Model&gt;("name",handle){};</pre>
      */
-    public Channel(String name,IMessageAdapter<T> handle){
+    protected Channel(String name,IMessageAdapter<T> handle){
     	this(name);
     	this.adapter = handle;
     }
