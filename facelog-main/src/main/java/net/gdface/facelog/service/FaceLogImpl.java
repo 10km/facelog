@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import gu.simplemq.redis.JedisUtils;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
@@ -42,6 +43,7 @@ import net.gdface.image.UnsupportedFormat;
 import net.gdface.utils.Assert;
 import net.gdface.utils.FaceUtilits;
 import net.gdface.utils.Judge;
+import redis.clients.jedis.exceptions.JedisException;
 
 /**
  * IFaceLog 服务实现
@@ -1274,6 +1276,16 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(e);
 		}
 	}
+	@Override
+	public List<Integer> listOfParentForDeviceGroup(int deviceGroupId)throws ServiceRuntimeException{
+		try{
+			return daoToPrimaryKeyListFromDeviceGroups(daoListOfParentForDeviceGroup(deviceGroupId));
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
+			throw new ServiceRuntimeException(e);
+		}
+	}
 	////////////////////////////////PersonGroupBean/////////////
 	
 	@Override
@@ -1561,4 +1573,34 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
     public String getRedisUri(){
     	return rm.getRedisURI();
     }
+    public String applyAckChannel(Token token) throws ServiceRuntimeException{
+    	try {
+			Enable.PERSON_ONLY.check(tm, token);
+			return rm.applyAckChannel();
+		} catch (JedisException e){
+			throw new ServiceRuntimeException(ExceptionType.REDIS_ERROR.ordinal(),e);
+		}catch (RuntimeException e) {
+			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		} 
+	}
+    public void sendDeviceCmd(Cmd cmd,
+			List<Integer> target,
+			boolean group,
+			String ackChannel,
+			Map<String,String> parameters,
+			Token token) throws ServiceRuntimeException{
+    	try{
+			Enable.PERSON_ONLY.check(tm, token);
+			rm.sendDeviceCmd(cmd,target,group,ackChannel,parameters);
+		} catch (JedisException e){
+			throw new ServiceRuntimeException(ExceptionType.REDIS_ERROR.ordinal(),e);
+		}catch (RuntimeException e) {
+			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		} 
+    }
+    
 }

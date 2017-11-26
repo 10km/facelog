@@ -91,6 +91,14 @@ public interface IFaceLog
             @ThriftField(value=3, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
+        @ThriftMethod(value = "applyAckChannel",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<String> applyAckChannel(
+            @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
+        );
+
         @ThriftMethod(value = "applyPersonToken",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1),
@@ -527,6 +535,14 @@ public interface IFaceLog
             @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
         );
 
+        @ThriftMethod(value = "listOfParentForDeviceGroup",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<List<Integer>> listOfParentForDeviceGroup(
+            @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
+        );
+
         @ThriftMethod(value = "loadAllPerson",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -840,6 +856,19 @@ public interface IFaceLog
             @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
+        @ThriftMethod(value = "sendDeviceCmd",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Void> sendDeviceCmd(
+            @ThriftField(value=1, name="cmd", requiredness=Requiredness.NONE) final Cmd cmd,
+            @ThriftField(value=2, name="target", requiredness=Requiredness.NONE) final List<Integer> target,
+            @ThriftField(value=3, name="group", requiredness=Requiredness.NONE) final boolean group,
+            @ThriftField(value=4, name="ackChannel", requiredness=Requiredness.NONE) final String ackChannel,
+            @ThriftField(value=5, name="parameters", requiredness=Requiredness.NONE) final Map<String, String> parameters,
+            @ThriftField(value=6, name="token", requiredness=Requiredness.NONE) final Token token
+        );
+
         @ThriftMethod(value = "setPersonExpiryDate",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -955,6 +984,14 @@ public interface IFaceLog
         @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId,
         @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId,
         @ThriftField(value=3, name="token", requiredness=Requiredness.NONE) final Token token
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "applyAckChannel",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    String applyAckChannel(
+        @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "applyPersonToken",
@@ -1393,6 +1430,14 @@ public interface IFaceLog
         @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
     ) throws ServiceRuntimeException;
 
+    @ThriftMethod(value = "listOfParentForDeviceGroup",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    List<Integer> listOfParentForDeviceGroup(
+        @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
+    ) throws ServiceRuntimeException;
+
     @ThriftMethod(value = "loadAllPerson",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1704,6 +1749,19 @@ public interface IFaceLog
     int savePersonsWithPhoto(
         @ThriftField(value=1, name="persons", requiredness=Requiredness.NONE) final Map<byte [], PersonBean> persons,
         @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "sendDeviceCmd",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    void sendDeviceCmd(
+        @ThriftField(value=1, name="cmd", requiredness=Requiredness.NONE) final Cmd cmd,
+        @ThriftField(value=2, name="target", requiredness=Requiredness.NONE) final List<Integer> target,
+        @ThriftField(value=3, name="group", requiredness=Requiredness.NONE) final boolean group,
+        @ThriftField(value=4, name="ackChannel", requiredness=Requiredness.NONE) final String ackChannel,
+        @ThriftField(value=5, name="parameters", requiredness=Requiredness.NONE) final Map<String, String> parameters,
+        @ThriftField(value=6, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "setPersonExpiryDate",

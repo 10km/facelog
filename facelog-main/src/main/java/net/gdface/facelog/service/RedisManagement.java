@@ -13,7 +13,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -222,7 +221,7 @@ class RedisManagement implements ServiceConstant{
 							List<Integer> target,
 							boolean group,
 							String ackChannel,
-							Map<String,Object> parameters){
+							Map<String, String> parameters){
 		DeviceInstruction deviceInstruction = new DeviceInstruction()
 				.setCmd(checkNotNull(cmd))
 				.setCmdSn(applyCmdSn())
@@ -243,7 +242,7 @@ class RedisManagement implements ServiceConstant{
 			int target,
 			boolean group,
 			String ackChannel,
-			Map<String,Object> parameters){
+			Map<String, String> parameters){
 		sendDeviceCmd(cmd,Lists.newArrayList(target),group,ackChannel,parameters);
 	}
 	/**
@@ -256,7 +255,7 @@ class RedisManagement implements ServiceConstant{
 	protected void sendDeviceCmd(Cmd cmd,
 			int deviceId,
 			String ackChannel,
-			Map<String,Object> parameters){
+			Map<String, String> parameters){
 		sendDeviceCmd(cmd,Lists.newArrayList(deviceId),false,ackChannel,parameters);
 	}
 }

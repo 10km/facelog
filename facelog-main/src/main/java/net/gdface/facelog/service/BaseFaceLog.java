@@ -13,6 +13,7 @@ import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
+import net.gdface.facelog.db.IDeviceGroupManager;
 import net.gdface.facelog.db.IPersonGroupManager;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
@@ -921,6 +922,17 @@ public abstract class BaseFaceLog extends Dao{
 	public List<DeviceBean> getDevicesOfGroup(int deviceGroupId)throws ServiceRuntimeException {
 		return null;
 	}
+    /**
+     * 返回({@code deviceGroupId}))指定的fl_device_group记录的所有的父节点(包括自己)<br>
+     * 自引用字段:fl_device_group(parent)
+	 * @param deviceGroupId
+	 * @return
+     * @throws ServiceRuntimeException
+     */
+	@ThriftMethod
+	public List<Integer> listOfParentForDeviceGroup(int deviceGroupId)throws ServiceRuntimeException{
+		return null;
+	}
 	////////////////////////////////PersonGroupBean/////////////
 	/**
 	 * 保存人员组记录
@@ -1222,5 +1234,35 @@ public abstract class BaseFaceLog extends Dao{
 			})
 	public void releasePersonToken(Token token)
 			throws ServiceRuntimeException, ServiceSecurityException{
+	}
+	/**
+	 * 申请一个唯一的命令响应通道
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * @param token
+	 * @return
+	 * @throws ServiceRuntimeException
+	 */
+	@ThriftMethod
+	public String applyAckChannel(Token token) throws ServiceRuntimeException{
+		return null;
+	}
+	/**
+	 * 发送设备命令
+	 * @param cmd
+	 * @param target 执行命令的目标(设备/设备组)
+	 * @param group 为@{@code true}时{@code target}为设备组
+	 * @param ackChannel 命令响应通道
+	 * @param parameters 命令参数
+	 * @see {@link DeviceInstruction}
+	 * @param token
+	 * @throws ServiceRuntimeException
+	 */
+	@ThriftMethod
+	public void sendDeviceCmd(Cmd cmd,
+			List<Integer> target,
+			boolean group,
+			String ackChannel,
+			Map<String,String> parameters,
+			Token token) throws ServiceRuntimeException{
 	}
 }
