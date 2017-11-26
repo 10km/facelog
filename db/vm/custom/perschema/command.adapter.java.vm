@@ -1,0 +1,39 @@
+#parse( "header.include.vm" )
+#parse( "macros.include.vm" )
+#parse( "commands.definition.vm" )
+#set ( $javaClassName = 'CommandAdapter' )
+$codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
+
+package $extensionPkg;
+
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 设备命令执行基类,应用项目根据需要继承此类,实现命令方法
+ * @author guyadong
+ *
+ */
+public class CommandAdapter {
+#foreach($entry in $commands.entrySet())
+#set($key = $entry.key)
+#set($value = $entry.value)
+#set($params = $value['params'].entrySet())
+    /**
+     * 设备命令 <br>
+     * $value['desc']<br>#join($params '
+     * @param $e.key $!{e.value[1]}' '')
+
+#if($value['return']!='void')
+     * @return $!{value['returnDesc']}
+#end
+     *
+     */
+    public $value['return'] ${key}(#join($params '$e.value[0] $e.key' ',')){
+#if($value['return']!='void')
+        return null;
+#end
+    }
+#end
+}

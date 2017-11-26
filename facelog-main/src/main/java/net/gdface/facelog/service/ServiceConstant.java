@@ -14,9 +14,16 @@ public interface ServiceConstant extends CommonConstant{
     public static final Channel<Token> TABLE_DEVICE_TOKEN = new Channel<Token>("DeviceToken"){} ;
     /** 人员访问令牌表 {@code 人员ID -> token} */
     public static final Channel<Token> TABLE_PERSON_TOKEN = new Channel<Token>("PersonToken"){} ;
-
+    /////////////  REDIS KEYS ////////////////////////////
+	/** redis 全局变量 : 设备命令序列号, 调用{@link RedisManagement#applyCmdSn()}时每次加1,保证序列号在全网络唯一 */
+	String KEY_CMD_SN = "CMD_SN";
+	/** redis 全局变量 : 设备响应通道序列号, 调用{@link RedisManagement#applyCmdSn()}时每次加1,保证序列号在全网络唯一 */
+	String KEY_ACK_SN = "ACK_CHANNEL";
+	/** redis 全局常量 : 设备命令通道 */
+	String KEY_CMD_CHANNEL = "CMD_CHANNEL";
 	///////////// PROPERTY KEY DEFINITION ///////////
 	
+    /** root 用户密码 */
 	public static final String ROOT_PASSWORD = "root.password";
 	/** 是否执行设备令牌验证 */
 	public static final String TOKEN_DEVICE_VALIDATE = "token.device.validate";
@@ -61,5 +68,6 @@ public interface ServiceConstant extends CommonConstant{
 	
 	/** 全局配置参数对象 */
 	public static final CombinedConfiguration CONFIG = GlobalConfig.getConfig();
+
 
 }

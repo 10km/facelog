@@ -14,12 +14,17 @@ import gu.simplemq.Channel;
 import gu.simplemq.IMessageAdapter;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
 
+/**
+ * 设备命令执行对象
+ * @author guyadong
+ *
+ */
 public class CmdChannelAdapter implements IMessageAdapter<DeviceInstruction>{
-	private final BaseCommandAdapter cmdAdapter;
+	private final CommandAdapter cmdAdapter;
 	private final Dao dao;
 	private final int deviceId;
 	private List<Integer> groupIdList;
-	public CmdChannelAdapter(BaseCommandAdapter cmdAdapter,Dao dao,int deviceId) {
+	public CmdChannelAdapter(CommandAdapter cmdAdapter,Dao dao,int deviceId) {
 		this.cmdAdapter = checkNotNull(cmdAdapter,"cmdAdapter is null");
 		this.dao = checkNotNull(dao,"dao is null");
 		checkArgument(this.dao.daoExistsDevice(deviceId),"INVALID deviceId");
@@ -38,10 +43,13 @@ public class CmdChannelAdapter implements IMessageAdapter<DeviceInstruction>{
 			return idList.contains(this.deviceId);
 		}
 	}
+	/**
+	 * 执行指定的设备命令并向命令响应频道返回命令结果
+	 */
 	@Override
 	public void onSubscribe(DeviceInstruction t) throws SmqUnsubscribeException {
-		if(selfIncluded(t.isGroup(),t.getTarget())){
-			Ack<?> ack = t.getCmd().run(cmdAdapter, t.getParameters());
+		if(null != t.getTarget() && selfIncluded(t.isGroup(),t.getTarget())){
+			Ack<?> ack = t.getCmd().run(cmdAdapter, t.getParameters()).setCmdSn(t.getCmdSn());
 			// 如果指定了响应频道则向指定的频道发送响应消息
 			if(!Strings.isNullOrEmpty(t.getAckChannel())){
 				Channel<Ack<?>> ackChannel = new Channel<Ack<?>>(t.getAckChannel()){};

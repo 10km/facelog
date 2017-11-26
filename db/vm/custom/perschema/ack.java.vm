@@ -8,10 +8,10 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 
 /**
- * 
+ * 设备命令响应对象
  * @author guyadong
  *
- * @param <T>
+ * @param <T> 设备命令执行返回结果类型
  */
 public class Ack<T> {
     private int cmdSn;
@@ -45,6 +45,7 @@ public class Ack<T> {
     }
     public Ack() {
     }
+    /** 返回设备命令序列号 */
     public int getCmdSn() {
         return cmdSn;
     }
@@ -52,13 +53,16 @@ public class Ack<T> {
         this.cmdSn = cmdSn;
         return this;
     }
+    /** 返回执行设备命令的设备ID */
     public int getDeviceId() {
         return deviceId;
     }
+
     public Ack<T> setDeviceId(int deviceId) {
         this.deviceId = deviceId;
         return this;
     }
+    /** 返回设备命令执行结果对象 */
     public T getValue() {
         return value;
     }
@@ -66,6 +70,7 @@ public class Ack<T> {
         this.value = value;
         return this;
     }
+    /** 返回设备命令执行状态 */
     public Status getStatus() {
         return status;
     }
@@ -73,6 +78,7 @@ public class Ack<T> {
         this.status = status;
         return this;
     }
+    /** 返回设备命令执行错误信息 */
     public String getErrorMessage() {
         return errorMessage;
     }
