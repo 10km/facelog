@@ -12,8 +12,8 @@ enum SecurityExceptionType {
   UNCLASSIFIED, INVALID_MAC, INVALID_SN, OCCUPIED_SN, INVALID_TOKEN, INVALID_DEVICE_ID, INVALID_PERSON_ID
 }
 
-enum Cmd {
-  parameter, config, status, report, enable, isEnable, reset, time, update, message, custom
+enum RedisParam {
+  RedisUri, CmdChannel
 }
 
 struct FaceBean {
@@ -194,6 +194,7 @@ service IFaceLog {
   void addPermit(1:  DeviceGroupBean deviceGroup, 2:  PersonGroupBean personGroup, 3:  Token token) throws (1: ServiceRuntimeException ex1);
   void addPermitById(1:  i32 deviceGroupId, 2:  i32 personGroupId, 3:  Token token) throws (1: ServiceRuntimeException ex1);
   string applyAckChannel(1:  Token token) throws (1: ServiceRuntimeException ex1);
+  i64 applyCmdSn(1:  Token token) throws (1: ServiceRuntimeException ex1);
   Token applyPersonToken(1:  i32 personId) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
   i32 countDeviceByWhere(1:  string where) throws (1: ServiceRuntimeException ex1);
   i32 countDeviceGroupByWhere(1:  string where) throws (1: ServiceRuntimeException ex1);
@@ -243,6 +244,7 @@ service IFaceLog {
   list<bool> getPersonPermits(1:  i32 deviceId, 2:  list<i32> personIdList) throws (1: ServiceRuntimeException ex1);
   list<PersonBean> getPersons(1:  list<i32> idList) throws (1: ServiceRuntimeException ex1);
   list<PersonBean> getPersonsOfGroup(1:  i32 personGroupId) throws (1: ServiceRuntimeException ex1);
+  map<RedisParam, string> getRedisParameters(1:  Token token) throws (1: ServiceRuntimeException ex1);
   list<DeviceGroupBean> getSubDeviceGroup(1:  i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
   list<PersonGroupBean> getSubPersonGroup(1:  i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   bool isDisable(1:  i32 personId) throws (1: ServiceRuntimeException ex1);
@@ -280,7 +282,6 @@ service IFaceLog {
   PersonBean savePersonWithPhotoAndFeatureSaved(1:  PersonBean bean, 2:  string idPhotoMd5, 3:  string featureMd5, 4:  Token token) throws (1: ServiceRuntimeException ex1);
   void savePersons(1:  list<PersonBean> beans, 2:  Token token) throws (1: ServiceRuntimeException ex1);
   i32 savePersonsWithPhoto(1:  map<binary, PersonBean> persons, 2:  Token token) throws (1: ServiceRuntimeException ex1);
-  void sendDeviceCmd(1:  Cmd cmd, 2:  list<i32> target, 3:  bool group, 4:  string ackChannel, 5:  map<string, string> parameters, 6:  Token token) throws (1: ServiceRuntimeException ex1);
   void setPersonExpiryDate(1:  i32 personId, 2:  i64 expiryDate, 3:  Token token) throws (1: ServiceRuntimeException ex1);
   void setPersonExpiryDateList(1:  list<i32> personIdList, 2:  i64 expiryDate, 3:  Token token) throws (1: ServiceRuntimeException ex1);
   void unregisterDevice(1:  i32 deviceId, 2:  Token token) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);

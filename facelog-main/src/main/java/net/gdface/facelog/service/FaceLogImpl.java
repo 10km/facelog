@@ -36,6 +36,7 @@ import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.service.DuplicateRecordException;
 import net.gdface.facelog.service.ServiceRuntimeException;
+import net.gdface.facelog.service.RedisManagement.RedisParam;
 import net.gdface.facelog.service.TokenMangement.Enable;
 import net.gdface.image.LazyImage;
 import net.gdface.image.NotImage;
@@ -1570,9 +1571,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(e);
 		}
 	}
-    public String getRedisUri(){
-    	return rm.getRedisURI();
-    }
+    @Override
     public String applyAckChannel(Token token) throws ServiceRuntimeException{
     	try {
 			Enable.PERSON_ONLY.check(tm, token);
@@ -1585,15 +1584,24 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		} 
 	}
-    public void sendDeviceCmd(Cmd cmd,
-			List<Integer> target,
-			boolean group,
-			String ackChannel,
-			Map<String,String> parameters,
-			Token token) throws ServiceRuntimeException{
-    	try{
+    @Override
+    public long applyCmdSn(Token token) throws ServiceRuntimeException{
+    	try {
 			Enable.PERSON_ONLY.check(tm, token);
-			rm.sendDeviceCmd(cmd,target,group,ackChannel,parameters);
+			return rm.applyCmdSn();
+		} catch (JedisException e){
+			throw new ServiceRuntimeException(ExceptionType.REDIS_ERROR.ordinal(),e);
+		}catch (RuntimeException e) {
+			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		} 
+	}
+    @Override
+    public Map<RedisParam,String> getRedisParameters(Token token)throws ServiceRuntimeException{
+    	try {
+			Enable.ALL.check(tm, token);
+			return rm.getRedisParameters();
 		} catch (JedisException e){
 			throw new ServiceRuntimeException(ExceptionType.REDIS_ERROR.ordinal(),e);
 		}catch (RuntimeException e) {
@@ -1602,5 +1610,4 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		} 
     }
-    
 }

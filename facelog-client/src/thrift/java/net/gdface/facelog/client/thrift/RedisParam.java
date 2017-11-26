@@ -2,13 +2,13 @@ package net.gdface.facelog.client.thrift;
 
 import com.facebook.swift.codec.*;
 
-public enum Cmd
+public enum RedisParam
 {
-    PARAMETER(0), CONFIG(1), STATUS(2), REPORT(3), ENABLE(4), IS_ENABLE(5), RESET(6), TIME(7), UPDATE(8), MESSAGE(9), CUSTOM(10);
+    REDIS_URI(0), CMD_CHANNEL(1);
 
     private final int value;
 
-    Cmd(int value)
+    RedisParam(int value)
     {
         this.value = value;
     }

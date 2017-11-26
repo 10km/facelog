@@ -4,20 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkArgument;
-
-import com.alibaba.fastjson.JSON;
-import com.google.common.base.Function;
+import com.facebook.swift.codec.ThriftStruct;
 import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import gu.simplemq.Channel;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.JedisPoolLazy.PropName;
 import gu.simplemq.redis.JedisUtils;
@@ -33,14 +26,21 @@ import redis.clients.jedis.exceptions.JedisDataException;
  *
  */
 class RedisManagement implements ServiceConstant{	
+	@ThriftStruct
+	public enum RedisParam {
+		/** redis服务器地址 */RedisUri,
+		/** 设备命令通道名 */CmdChannel
+	}
 	private static final String CMD_PREFIX = "cmd_";
 	private static final String ACK_PREFIX = "ack_";
 	private static String redisURI;
 	/** 本地redis服务器启动标志 */
 	private static boolean localServerStarted = false;
-	private final Channel<DeviceInstruction> cmdChannel;
+	/**  设备命令通道名 */
+	private final String cmdChannel;
 	/** redis数据库配置参数 */
 	private static Map<PropName, Object> parameters;
+	private final Map<RedisParam,String> redisParam = Maps.newHashMap();
 	private static RedisPublisher redisPublisher;
 	static{
 		parameters = GlobalConfig.makeRedisParameters();
@@ -58,14 +58,16 @@ class RedisManagement implements ServiceConstant{
 	protected RedisManagement() {
 		init();
 		cmdChannel = createCmdChannel();
+		redisParam.put(RedisParam.CmdChannel, cmdChannel);
+		redisParam.put(RedisParam.RedisUri, redisURI);
 		GlobalConfig.logRedisParameters(JedisPoolLazy.getDefaultInstance().getParameters());
 	}
 	/** 创建随机命令通道 */
-	private Channel<DeviceInstruction> createCmdChannel(){
+	private String createCmdChannel(){
 		// 初始化redis 全局常量 KEY_CMD_CHANNEL
 		String timestamp = String.format("%06x", System.nanoTime());
 		String commendChannel = CMD_PREFIX + timestamp.substring(timestamp.length()-6, timestamp.length());
-		return new Channel<DeviceInstruction>(JedisUtils.setnx(KEY_CMD_CHANNEL,commendChannel)){};
+		return JedisUtils.setnx(KEY_CMD_CHANNEL,commendChannel);
 	}
 	/** redis 连接初始化,并测试连接,如果连接异常,则尝试启动本地redis服务器或等待redis server启动 */
 	private void init(){
@@ -92,12 +94,12 @@ class RedisManagement implements ServiceConstant{
 						startLocalServer(parameters);
 						localServerStarted = true;	
 					}else {
-						throw new RuntimeException(String.format("cann't connect redis server(无法连接redis服务器) %s",getRedisURI()),e);
+						throw new RuntimeException(String.format("cann't connect redis server(无法连接redis服务器) %s",redisURI),e);
 					}
 				} else if(waitIfAbsent && tryCountLimit-- > 0){
 					logger.info("waiting for redis server...{}",tryCountLimit);
 				} else {
-					throw new RuntimeException(String.format("cann't connect redis server(无法连接redis服务器) %s",getRedisURI()),e);
+					throw new RuntimeException(String.format("cann't connect redis server(无法连接redis服务器) %s",redisURI),e);
 				}				
 			}catch(JedisDataException e){
 				throw new RuntimeException(String.format("access error(服务器访问异常),%s", e.getMessage()),e);
@@ -108,7 +110,7 @@ class RedisManagement implements ServiceConstant{
 				break;
 			}
 		}while(tryCountLimit >0);
-		throw new RuntimeException(String.format("cann't connect redis server(无法连接redis服务器) %s",getRedisURI()));
+		throw new RuntimeException(String.format("cann't connect redis server(无法连接redis服务器) %s",redisURI));
 
 	}
 	private static final String REDIS_SERVER_EXE = "redis-server";
@@ -165,9 +167,9 @@ class RedisManagement implements ServiceConstant{
 			}
 		}
 	}
-	/** 返回redis服务器地址 */
-	protected String getRedisURI() {
-		return redisURI;
+	/** 返回redis访问参数 */
+	protected Map<RedisParam,String> getRedisParameters(){
+		return Maps.newHashMap(this.redisParam);
 	}
 	/** 返回redis发布者实例 */
 	protected static RedisPublisher getRedisPublisher() {
@@ -182,80 +184,5 @@ class RedisManagement implements ServiceConstant{
 		return new StringBuffer(ACK_PREFIX)
 				.append(JedisUtils.incr(KEY_ACK_SN))
 				.toString();
-	}
-	/** 返回设备命令通道对象 */
-	protected Channel<DeviceInstruction> getCmdChannel() {
-		return cmdChannel.clone();
-	}
-	/**
-	 * 发送设备命令
-	 * @param cmd
-	 */
-	protected void sendDeviceCmd(DeviceInstruction cmd){
-		if(null != cmd){
-			checkArgument(null != cmd.getCmd(),"cmd field  of DeviceInstruction must not be null");
-			Map<String,String>params;
-			if(null == cmd.getParameters()){
-					params = ImmutableMap.of();
-			}else{
-					params = Maps.transformValues(cmd.getParameters(), new Function<Object,String>(){
-						@Override
-						public String apply(Object input) {
-							return JSON.toJSONString(input);
-						}});
-			}
-			cmd.setParameters(params);
-			getRedisPublisher().publish(this.cmdChannel, cmd);
-		}
-	}
-	/**
-	 * 发送设备命令
-	 * @param cmd
-	 * @param target 执行命令的目标(设备/设备组)
-	 * @param group 为@{@code true}时{@code target}为设备组
-	 * @param ackChannel 命令响应通道
-	 * @param parameters 命令参数
-	 * @see {@link DeviceInstruction}
-	 */
-	protected void sendDeviceCmd(Cmd cmd,
-							List<Integer> target,
-							boolean group,
-							String ackChannel,
-							Map<String, String> parameters){
-		DeviceInstruction deviceInstruction = new DeviceInstruction()
-				.setCmd(checkNotNull(cmd))
-				.setCmdSn(applyCmdSn())
-				.setTarget(target, group)
-				.setAckChannel(ackChannel)
-				.setParameters(parameters);
-		sendDeviceCmd(deviceInstruction);
-	}
-	/**
-	 * 发送设备命令
-	 * @param cmd
-	 * @param target 
-	 * @param group 
-	 * @param ackChannel 
-	 * @param parameters
-	 */
-	protected void sendDeviceCmd(Cmd cmd,
-			int target,
-			boolean group,
-			String ackChannel,
-			Map<String, String> parameters){
-		sendDeviceCmd(cmd,Lists.newArrayList(target),group,ackChannel,parameters);
-	}
-	/**
-	 * 向指定设备({@code deviceId})发送设备命令
-	 * @param cmd
-	 * @param deviceId
-	 * @param ackChannel
-	 * @param parameters
-	 */
-	protected void sendDeviceCmd(Cmd cmd,
-			int deviceId,
-			String ackChannel,
-			Map<String, String> parameters){
-		sendDeviceCmd(cmd,Lists.newArrayList(deviceId),false,ackChannel,parameters);
 	}
 }

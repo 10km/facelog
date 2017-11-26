@@ -13,7 +13,6 @@ import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
-import net.gdface.facelog.db.IDeviceGroupManager;
 import net.gdface.facelog.db.IPersonGroupManager;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
@@ -23,6 +22,7 @@ import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.service.Dao;
+import net.gdface.facelog.service.RedisManagement.RedisParam;
 
 // 由于Java语言的限制,导致swift无法从interface中获取参数名信息，所以采用interface定义生成的thrift IDL文件中service中的方法
 // 无法生成正确的参数名称(只能是无意义的arg0,arg1...)<br>
@@ -1238,7 +1238,7 @@ public abstract class BaseFaceLog extends Dao{
 	/**
 	 * 申请一个唯一的命令响应通道
 	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
-	 * @param token
+	 * @param token 访问令牌
 	 * @return
 	 * @throws ServiceRuntimeException
 	 */
@@ -1247,24 +1247,26 @@ public abstract class BaseFaceLog extends Dao{
 		return null;
 	}
 	/**
-	 * 发送设备命令
+	 * 申请一个唯一的命令序列号
 	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
-	 * @param cmd 设备命令类型
-	 * @param target 执行命令的目标(设备/设备组)
-	 * @param group 为@{@code true}时{@code target}为设备组
-	 * @param ackChannel 命令响应通道,如果需要处理命令结果响应{@code Ack}对象,需要填此参数,否则保持{@code null},
-	 *                                   参见 {@link #applyAckChannel(Token)}
-	 * @param parameters 命令参数
-	 * @see {@link DeviceInstruction}
-	 * @param token
+	 * @param token 访问令牌
+	 * @return
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public void sendDeviceCmd(Cmd cmd,
-			List<Integer> target,
-			boolean group,
-			String ackChannel,
-			Map<String,String> parameters,
-			Token token) throws ServiceRuntimeException{
+	public long applyCmdSn(Token token) throws ServiceRuntimeException {
+		return 0;
 	}
+    /**
+     * 返回redis访问参数
+     * @param token 访问令牌
+     * @return
+     * @throws ServiceRuntimeException
+     */
+	@ThriftMethod
+    public Map<RedisParam,String> getRedisParameters(Token token)throws ServiceRuntimeException{
+		return null;
+    }
+
+    	
 }
