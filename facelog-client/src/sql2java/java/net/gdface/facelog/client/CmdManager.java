@@ -147,7 +147,7 @@ public class CmdManager {
         }
         /**
          * 完成build,返回 {@link CmdManager}对象<br> 
-         * @param autoRemove 为{@code true}时,完成设备命令发送后自动清除Thread Local Storage变量{@link CmdManager#tlsTarget},
+         * @param autoRemove 为{@code true}时,完成设备命令发送后自动清除Thread Local Storage变量{@link CmdManager#TLS_BUILDER},
          *                                    默认值为{@code true}
          * @return
          */
@@ -166,19 +166,19 @@ public class CmdManager {
      * 如果{@link CmdBuilder#autoRemove}为{@code true},则调用设备命令方法发送完命令后会自动清除TLS变量,
      * 否则需要调用 {@link CmdManager#removeTlsTarget()}方法手动清除。
       */
-    private static ThreadLocal<CmdBuilder> tlsTarget= new ThreadLocal<CmdBuilder>();
+    private static final ThreadLocal<CmdBuilder> TLS_BUILDER= new ThreadLocal<CmdBuilder>();
     public CmdBuilder targetBuilder(){
-        if(null == tlsTarget.get()){
-            tlsTarget.set(new CmdBuilder(this));
+        if(null == TLS_BUILDER.get()){
+            TLS_BUILDER.set(new CmdBuilder(this));
         }
-        return tlsTarget.get();
+        return TLS_BUILDER.get();
     }
     /** 
-     * 清除TLS变量 {@link #tlsTarget}
+     * 清除TLS变量 {@link #TLS_BUILDER}
      * @see {@link ThreadLocal#remove()}
      */
     public CmdManager removeTlsTarget(){
-        tlsTarget.remove();
+        TLS_BUILDER.remove();
         return this;
     }
     /**
@@ -189,9 +189,9 @@ public class CmdManager {
      *
      */
     public void parameter(String key,String value){
-        checkArgument(null !=tlsTarget.get(),
+        checkArgument(null !=TLS_BUILDER.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = tlsTarget.get();
+        CmdBuilder builder = TLS_BUILDER.get();
         // 所有的命令参数封装到 Map
         ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
                 .put("key", key)
@@ -215,9 +215,9 @@ public class CmdManager {
      *
      */
     public void config(Map<String,String> properties){
-        checkArgument(null !=tlsTarget.get(),
+        checkArgument(null !=TLS_BUILDER.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = tlsTarget.get();
+        CmdBuilder builder = TLS_BUILDER.get();
         // 所有的命令参数封装到 Map
         ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
                 .put("properties", properties)
@@ -241,9 +241,9 @@ public class CmdManager {
      *
      */
     public void status(String name){
-        checkArgument(null !=tlsTarget.get(),
+        checkArgument(null !=TLS_BUILDER.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = tlsTarget.get();
+        CmdBuilder builder = TLS_BUILDER.get();
         // 所有的命令参数封装到 Map
         ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
                 .put("name", name)
@@ -267,9 +267,9 @@ public class CmdManager {
      *
      */
     public void report(List<String> names){
-        checkArgument(null !=tlsTarget.get(),
+        checkArgument(null !=TLS_BUILDER.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = tlsTarget.get();
+        CmdBuilder builder = TLS_BUILDER.get();
         // 所有的命令参数封装到 Map
         ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
                 .put("names", names)
@@ -292,9 +292,9 @@ public class CmdManager {
      *
      */
     public void enable(Boolean enable){
-        checkArgument(null !=tlsTarget.get(),
+        checkArgument(null !=TLS_BUILDER.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = tlsTarget.get();
+        CmdBuilder builder = TLS_BUILDER.get();
         // 所有的命令参数封装到 Map
         ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
                 .put("enable", enable)
@@ -318,9 +318,9 @@ public class CmdManager {
      *
      */
     public void isEnable(String message){
-        checkArgument(null !=tlsTarget.get(),
+        checkArgument(null !=TLS_BUILDER.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = tlsTarget.get();
+        CmdBuilder builder = TLS_BUILDER.get();
         // 所有的命令参数封装到 Map
         ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
                 .put("message", message)
@@ -342,9 +342,9 @@ public class CmdManager {
      *
      */
     public void reset(){
-        checkArgument(null !=tlsTarget.get(),
+        checkArgument(null !=TLS_BUILDER.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = tlsTarget.get();
+        CmdBuilder builder = TLS_BUILDER.get();
         // 所有的命令参数封装到 Map
         ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
                 
@@ -367,9 +367,9 @@ public class CmdManager {
      *
      */
     public void time(Long unixTimestamp){
-        checkArgument(null !=tlsTarget.get(),
+        checkArgument(null !=TLS_BUILDER.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = tlsTarget.get();
+        CmdBuilder builder = TLS_BUILDER.get();
         // 所有的命令参数封装到 Map
         ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
                 .put("unixTimestamp", unixTimestamp)
@@ -393,9 +393,9 @@ public class CmdManager {
      *
      */
     public void update(URL url,String version){
-        checkArgument(null !=tlsTarget.get(),
+        checkArgument(null !=TLS_BUILDER.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = tlsTarget.get();
+        CmdBuilder builder = TLS_BUILDER.get();
         // 所有的命令参数封装到 Map
         ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
                 .put("url", url)
@@ -419,9 +419,9 @@ public class CmdManager {
      *
      */
     public void message(String message){
-        checkArgument(null !=tlsTarget.get(),
+        checkArgument(null !=TLS_BUILDER.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = tlsTarget.get();
+        CmdBuilder builder = TLS_BUILDER.get();
         // 所有的命令参数封装到 Map
         ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
                 .put("message", message)
@@ -446,9 +446,9 @@ public class CmdManager {
      *
      */
     public void custom(String cmdName,Map<String,Object> parameters){
-        checkArgument(null !=tlsTarget.get(),
+        checkArgument(null !=TLS_BUILDER.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = tlsTarget.get();
+        CmdBuilder builder = TLS_BUILDER.get();
         // 所有的命令参数封装到 Map
         ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
                 .put("cmdName", cmdName)

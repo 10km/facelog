@@ -14,7 +14,6 @@ import java.util.Map;
 
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.util.TypeUtils;
-import com.facebook.swift.codec.ThriftStruct;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.TypeToken;
 
@@ -22,7 +21,6 @@ import com.google.common.reflect.TypeToken;
  * 设备命令定义 
  * @author guyadong
  */
-@ThriftStruct
 public enum Cmd{
     /** 设置参数,可用于运行时修改参数 */parameter,
     /** 设置一组参数,可用于需要重启有效的参数 */config,

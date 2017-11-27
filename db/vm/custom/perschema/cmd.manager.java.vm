@@ -150,7 +150,7 @@ public class CmdManager {
         }
         /**
          * 完成build,返回 {@link CmdManager}对象<br> 
-         * @param autoRemove 为{@code true}时,完成设备命令发送后自动清除Thread Local Storage变量{@link CmdManager#tlsTarget},
+         * @param autoRemove 为{@code true}时,完成设备命令发送后自动清除Thread Local Storage变量{@link CmdManager#TLS_BUILDER},
          *                                    默认值为{@code true}
          * @return
          */
@@ -169,19 +169,19 @@ public class CmdManager {
      * 如果{@link CmdBuilder#autoRemove}为{@code true},则调用设备命令方法发送完命令后会自动清除TLS变量,
      * 否则需要调用 {@link CmdManager#removeTlsTarget()}方法手动清除。
       */
-    private static ThreadLocal<CmdBuilder> tlsTarget= new ThreadLocal<CmdBuilder>();
+    private static final ThreadLocal<CmdBuilder> TLS_BUILDER= new ThreadLocal<CmdBuilder>();
     public CmdBuilder targetBuilder(){
-        if(null == tlsTarget.get()){
-            tlsTarget.set(new CmdBuilder(this));
+        if(null == TLS_BUILDER.get()){
+            TLS_BUILDER.set(new CmdBuilder(this));
         }
-        return tlsTarget.get();
+        return TLS_BUILDER.get();
     }
     /** 
-     * 清除TLS变量 {@link #tlsTarget}
+     * 清除TLS变量 {@link #TLS_BUILDER}
      * @see {@link ThreadLocal#remove()}
      */
     public CmdManager removeTlsTarget(){
-        tlsTarget.remove();
+        TLS_BUILDER.remove();
         return this;
     }
 #foreach($entry in $commands.entrySet())
@@ -199,9 +199,9 @@ public class CmdManager {
      *
      */
     public void ${key}(#join($params '$e.value[0] $e.key' ',')){
-        checkArgument(null !=tlsTarget.get(),
+        checkArgument(null !=TLS_BUILDER.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = tlsTarget.get();
+        CmdBuilder builder = TLS_BUILDER.get();
         // 所有的命令参数封装到 Map
         ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
                 #join($params '.put("$e.key", $e.key)' '
