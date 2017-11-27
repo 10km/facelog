@@ -16,11 +16,39 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 设备命令执行基类,应用项目根据需要继承此类,实现命令方法
+ * 设备命令执行基类,应用项目根据需要继承此类,实现命令方法<br>
+ * 没有override的方法会抛出{@link UnsupportCmdExeption}异常,
+ * 命令响应端收到的对应命令执行状态是{@link Ack.Status#UNSUPPORTED}
  * @author guyadong
  *
  */
 public class CommandAdapter {
+    /** 
+     * 发送给命令响应接收端的异常,
+     * 如果希望命令响应端收到设备命令执行的异常信息,
+     * 就将异常信息封装到此类中抛出.
+     */
+    @SuppressWarnings("serial")
+    protected class DeviceCmdException extends Exception {
+        protected DeviceCmdException() {}
+
+        protected DeviceCmdException(String message, Throwable cause) {
+            super(message, cause);
+        }
+
+        protected DeviceCmdException(String message) {
+            super(message);
+        }
+
+        protected DeviceCmdException(Throwable cause) {
+            super(cause);
+        }
+    }
+    /** 当前命令设备端未实现时抛出此异常 */
+    @SuppressWarnings("serial")
+    protected class UnsupportCmdExeption extends RuntimeException {
+        private UnsupportCmdExeption() {}
+    }
 #foreach($entry in $commands.entrySet())
 #set($key = $entry.key)
 #set($value = $entry.value)
@@ -35,10 +63,8 @@ public class CommandAdapter {
 #end
      *
      */
-    public $value['return'] ${key}(#join($params '$e.value[0] $e.key' ',')){
-#if($value['return']!='void')
-        return null;
-#end
+    public $value['return'] ${key}(#join($params '$e.value[0] $e.key' ','))throws DeviceCmdException{
+        throw new UnsupportCmdExeption();
     }
 #end
 }

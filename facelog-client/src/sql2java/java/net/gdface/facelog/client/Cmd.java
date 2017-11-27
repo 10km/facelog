@@ -52,7 +52,10 @@ public enum Cmd{
                     adapter.parameter(
                             cast(parameters.get("key"),new TypeToken<String>(){}),
                             cast(parameters.get("value"),new TypeToken<String>(){}));
-                }catch(Exception e){
+                }catch(CommandAdapter.UnsupportCmdExeption e){
+                    // 该命令设备端未实现
+                    ack.setStatus(Ack.Status.UNSUPPORTED);
+                }catch(CommandAdapter.DeviceCmdException e){
                     // 填入异常状态,设置错误信息
                     ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
                 }                
@@ -63,7 +66,10 @@ public enum Cmd{
                 try{
                     adapter.config(
                             cast(parameters.get("properties"),new TypeToken<Map<String,String>>(){}));
-                }catch(Exception e){
+                }catch(CommandAdapter.UnsupportCmdExeption e){
+                    // 该命令设备端未实现
+                    ack.setStatus(Ack.Status.UNSUPPORTED);
+                }catch(CommandAdapter.DeviceCmdException e){
                     // 填入异常状态,设置错误信息
                     ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
                 }                
@@ -76,7 +82,10 @@ public enum Cmd{
                             cast(parameters.get("name"),new TypeToken<String>(){}));
                     // 填入返回值
                     ack.setValue(res);
-                }catch(Exception e){
+                }catch(CommandAdapter.UnsupportCmdExeption e){
+                    // 该命令设备端未实现
+                    ack.setStatus(Ack.Status.UNSUPPORTED);
+                }catch(CommandAdapter.DeviceCmdException e){
                     // 填入异常状态,设置错误信息
                     ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
                 }                
@@ -89,7 +98,10 @@ public enum Cmd{
                             cast(parameters.get("names"),new TypeToken<List<String>>(){}));
                     // 填入返回值
                     ack.setValue(res);
-                }catch(Exception e){
+                }catch(CommandAdapter.UnsupportCmdExeption e){
+                    // 该命令设备端未实现
+                    ack.setStatus(Ack.Status.UNSUPPORTED);
+                }catch(CommandAdapter.DeviceCmdException e){
                     // 填入异常状态,设置错误信息
                     ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
                 }                
@@ -100,7 +112,10 @@ public enum Cmd{
                 try{
                     adapter.enable(
                             cast(parameters.get("enable"),new TypeToken<Boolean>(){}));
-                }catch(Exception e){
+                }catch(CommandAdapter.UnsupportCmdExeption e){
+                    // 该命令设备端未实现
+                    ack.setStatus(Ack.Status.UNSUPPORTED);
+                }catch(CommandAdapter.DeviceCmdException e){
                     // 填入异常状态,设置错误信息
                     ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
                 }                
@@ -113,7 +128,10 @@ public enum Cmd{
                             cast(parameters.get("message"),new TypeToken<String>(){}));
                     // 填入返回值
                     ack.setValue(res);
-                }catch(Exception e){
+                }catch(CommandAdapter.UnsupportCmdExeption e){
+                    // 该命令设备端未实现
+                    ack.setStatus(Ack.Status.UNSUPPORTED);
+                }catch(CommandAdapter.DeviceCmdException e){
                     // 填入异常状态,设置错误信息
                     ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
                 }                
@@ -123,7 +141,10 @@ public enum Cmd{
                 Ack<Void> ack = new Ack<Void>().setStatus(Ack.Status.OK);
                 try{
                     adapter.reset();
-                }catch(Exception e){
+                }catch(CommandAdapter.UnsupportCmdExeption e){
+                    // 该命令设备端未实现
+                    ack.setStatus(Ack.Status.UNSUPPORTED);
+                }catch(CommandAdapter.DeviceCmdException e){
                     // 填入异常状态,设置错误信息
                     ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
                 }                
@@ -134,7 +155,10 @@ public enum Cmd{
                 try{
                     adapter.time(
                             cast(parameters.get("unixTimestamp"),new TypeToken<Long>(){}));
-                }catch(Exception e){
+                }catch(CommandAdapter.UnsupportCmdExeption e){
+                    // 该命令设备端未实现
+                    ack.setStatus(Ack.Status.UNSUPPORTED);
+                }catch(CommandAdapter.DeviceCmdException e){
                     // 填入异常状态,设置错误信息
                     ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
                 }                
@@ -146,7 +170,10 @@ public enum Cmd{
                     adapter.update(
                             cast(parameters.get("url"),new TypeToken<URL>(){}),
                             cast(parameters.get("version"),new TypeToken<String>(){}));
-                }catch(Exception e){
+                }catch(CommandAdapter.UnsupportCmdExeption e){
+                    // 该命令设备端未实现
+                    ack.setStatus(Ack.Status.UNSUPPORTED);
+                }catch(CommandAdapter.DeviceCmdException e){
                     // 填入异常状态,设置错误信息
                     ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
                 }                
@@ -157,7 +184,10 @@ public enum Cmd{
                 try{
                     adapter.message(
                             cast(parameters.get("message"),new TypeToken<String>(){}));
-                }catch(Exception e){
+                }catch(CommandAdapter.UnsupportCmdExeption e){
+                    // 该命令设备端未实现
+                    ack.setStatus(Ack.Status.UNSUPPORTED);
+                }catch(CommandAdapter.DeviceCmdException e){
                     // 填入异常状态,设置错误信息
                     ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
                 }                
@@ -171,7 +201,10 @@ public enum Cmd{
                             cast(parameters.get("parameters"),new TypeToken<Map<String,Object>>(){}));
                     // 填入返回值
                     ack.setValue(res);
-                }catch(Exception e){
+                }catch(CommandAdapter.UnsupportCmdExeption e){
+                    // 该命令设备端未实现
+                    ack.setStatus(Ack.Status.UNSUPPORTED);
+                }catch(CommandAdapter.DeviceCmdException e){
                     // 填入异常状态,设置错误信息
                     ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
                 }                

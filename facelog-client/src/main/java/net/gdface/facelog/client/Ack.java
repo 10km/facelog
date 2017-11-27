@@ -17,8 +17,10 @@ public class Ack<T> {
 	private T value;
 	private Status status;
 	private String errorMessage;
+	/** 设备命令执行状态 */
 	public static enum Status{
 		/** 调用正常返回 */OK,
+		/** 设备端不支持的操作 */UNSUPPORTED,
 		/** 调用出错 */ERROR;
 		/**
 		 * 返回状态信息
@@ -34,6 +36,7 @@ public class Ack<T> {
 					buffer.append(":").append(ack.errorMessage);
 				}
 				break;
+			case UNSUPPORTED:
 			case OK:
 			default:
 				break;

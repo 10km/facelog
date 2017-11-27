@@ -1,0 +1,61 @@
+#parse( "header.include.vm" )
+#parse( "macros.include.vm" )
+#parse( "commands.definition.vm" )
+## 只在thrift_client时生成
+#if(!$codewriter.getPropertyExplodedAsList("template.folder.include").contains("thrift_client"))
+#set($codewriter.saveCurrentFile = false)
+#stop
+#end
+#set ( $javaClassName = 'CommandAdapterContainer' )
+$codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
+
+package $extensionPkg;
+
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 命令执行器容器对象<br>
+ * 允许应用项目用不同的{@link CommandAdapter}对象分别实现设备命令
+ * @author guyadong
+ *
+ */
+public class CommandAdapterContainer extends CommandAdapter{
+#foreach($entry in $commands.entrySet())
+#set($key = $entry.key)
+#set($value = $entry.value)
+#set($params = $value['params'].entrySet())
+#set($adapterVar = "${key}Adapter")
+    /** {@link Cmd${esc.hash}${key}} 的命令执行器 */
+    private CommandAdapter $adapterVar;
+    /** setter of {@link ${esc.hash}${adapterVar}} */
+    public CommandAdapterContainer set${strUtil.firstUpperCase($adapterVar)}(CommandAdapter $adapterVar){
+        this.$adapterVar = $adapterVar;
+        return this;
+    }
+    /** getter of {@link ${esc.hash}${adapterVar}} */
+    public CommandAdapter get${strUtil.firstUpperCase($adapterVar)}(){
+        return this.$adapterVar;
+    }
+    /** 
+     * 调用 {@link ${esc.hash}${adapterVar}} 命令执行器<br>
+     * 如果 {@link ${esc.hash}${adapterVar}} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     */
+    @Override
+    public $value['return'] ${key}(#join($params '$e.value[0] $e.key' ','))throws DeviceCmdException{
+#define($paramList)#join($params '$e.key' ',')#end
+#if($value['return']!='void')
+        return null == this.${adapterVar} 
+            ? super.${key}($paramList)
+            : this.${adapterVar}.${key}($paramList);
+#else
+        if(null != this.${adapterVar}){
+            this.${adapterVar}.${key}($paramList);
+        }else{
+            super.${key}($paramList);
+        }
+#end
+    }
+#end
+}

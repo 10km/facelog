@@ -61,7 +61,10 @@ public enum Cmd{
                     // 填入返回值
                     ack.setValue(res);
 #end
-                }catch(Exception e){
+                }catch(CommandAdapter.UnsupportCmdExeption e){
+                    // 该命令设备端未实现
+                    ack.setStatus(Ack.Status.UNSUPPORTED);
+                }catch(CommandAdapter.DeviceCmdException e){
                     // 填入异常状态,设置错误信息
                     ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
                 }                

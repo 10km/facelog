@@ -13,11 +13,39 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 设备命令执行基类,应用项目根据需要继承此类,实现命令方法
+ * 设备命令执行基类,应用项目根据需要继承此类,实现命令方法<br>
+ * 没有override的方法会抛出{@link UnsupportCmdExeption}异常,
+ * 命令响应端收到的对应命令执行状态是{@link Ack.Status#UNSUPPORTED}
  * @author guyadong
  *
  */
 public class CommandAdapter {
+    /** 
+     * 发送给命令响应接收端的异常,
+     * 如果希望命令响应端收到设备命令执行的异常信息,
+     * 就将异常信息封装到此类中抛出.
+     */
+    @SuppressWarnings("serial")
+    protected class DeviceCmdException extends Exception {
+        protected DeviceCmdException() {}
+
+        protected DeviceCmdException(String message, Throwable cause) {
+            super(message, cause);
+        }
+
+        protected DeviceCmdException(String message) {
+            super(message);
+        }
+
+        protected DeviceCmdException(Throwable cause) {
+            super(cause);
+        }
+    }
+    /** 当前命令设备端未实现时抛出此异常 */
+    @SuppressWarnings("serial")
+    protected class UnsupportCmdExeption extends RuntimeException {
+        private UnsupportCmdExeption() {}
+    }
     /**
      * 设备命令 <br>
      * 设置参数,可用于运行时修改参数<br>
@@ -25,7 +53,8 @@ public class CommandAdapter {
      * @param value 参数值
      *
      */
-    public void parameter(String key,String value){
+    public void parameter(String key,String value)throws DeviceCmdException{
+        throw new UnsupportCmdExeption();
     }
     /**
      * 设备命令 <br>
@@ -33,7 +62,8 @@ public class CommandAdapter {
      * @param properties 参数配置对象, {@code 参数名(key)->参数值(value)映射}
      *
      */
-    public void config(Map<String,String> properties){
+    public void config(Map<String,String> properties)throws DeviceCmdException{
+        throw new UnsupportCmdExeption();
     }
     /**
      * 设备命令 <br>
@@ -42,8 +72,8 @@ public class CommandAdapter {
      * @return {@code name}指定设备状态参数值
      *
      */
-    public Object status(String name){
-        return null;
+    public Object status(String name)throws DeviceCmdException{
+        throw new UnsupportCmdExeption();
     }
     /**
      * 设备命令 <br>
@@ -52,8 +82,8 @@ public class CommandAdapter {
      * @return 设备状态参数对象,{@code 参数名(key)->参数值(value)映射},key与{@code names}对应
      *
      */
-    public Map<String,Object> report(List<String> names){
-        return null;
+    public Map<String,Object> report(List<String> names)throws DeviceCmdException{
+        throw new UnsupportCmdExeption();
     }
     /**
      * 设备命令 <br>
@@ -61,7 +91,8 @@ public class CommandAdapter {
      * @param enable {@code true}:工作状态,否则为非工作状态
      *
      */
-    public void enable(Boolean enable){
+    public void enable(Boolean enable)throws DeviceCmdException{
+        throw new UnsupportCmdExeption();
     }
     /**
      * 设备命令 <br>
@@ -70,15 +101,16 @@ public class CommandAdapter {
      * @return 为{@code true}:工作状态,{@code false}:非工作状态
      *
      */
-    public Boolean isEnable(String message){
-        return null;
+    public Boolean isEnable(String message)throws DeviceCmdException{
+        throw new UnsupportCmdExeption();
     }
     /**
      * 设备命令 <br>
      * 设备重启<br>
      *
      */
-    public void reset(){
+    public void reset()throws DeviceCmdException{
+        throw new UnsupportCmdExeption();
     }
     /**
      * 设备命令 <br>
@@ -86,7 +118,8 @@ public class CommandAdapter {
      * @param unixTimestamp 服务器 unix 时间(秒),参见<a href = "https://en.wikipedia.org/wiki/Unix_time">Unix time</a>
      *
      */
-    public void time(Long unixTimestamp){
+    public void time(Long unixTimestamp)throws DeviceCmdException{
+        throw new UnsupportCmdExeption();
     }
     /**
      * 设备命令 <br>
@@ -95,7 +128,8 @@ public class CommandAdapter {
      * @param version 版本号
      *
      */
-    public void update(URL url,String version){
+    public void update(URL url,String version)throws DeviceCmdException{
+        throw new UnsupportCmdExeption();
     }
     /**
      * 设备命令 <br>
@@ -103,7 +137,8 @@ public class CommandAdapter {
      * @param message 发送到设备的消息
      *
      */
-    public void message(String message){
+    public void message(String message)throws DeviceCmdException{
+        throw new UnsupportCmdExeption();
     }
     /**
      * 设备命令 <br>
@@ -113,7 +148,7 @@ public class CommandAdapter {
      * @return 返回自定义结果对象
      *
      */
-    public Object custom(String cmdName,Map<String,Object> parameters){
-        return null;
+    public Object custom(String cmdName,Map<String,Object> parameters)throws DeviceCmdException{
+        throw new UnsupportCmdExeption();
     }
 }
