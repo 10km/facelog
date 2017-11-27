@@ -1,13 +1,4 @@
-#parse( "header.include.vm" )
-#parse( "macros.include.vm" )
-## 只在thrift_client时生成
-#if(!$codewriter.getPropertyExplodedAsList("template.folder.include").contains("thrift_client"))
-#set($codewriter.saveCurrentFile = false)
-#stop
-#end
-#set ( $javaClassName = 'Ack' )
-$codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
-package $extensionPkg;
+package net.gdface.facelog.client;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
