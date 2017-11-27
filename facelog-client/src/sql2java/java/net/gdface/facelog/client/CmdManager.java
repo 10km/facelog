@@ -102,8 +102,9 @@ public class CmdManager {
     /**
      * 发送设备命令
      * @param cmd
+     * @return 收到命令的客户端数目
      */
-    private void sendCmd(DeviceInstruction cmd){
+    private long sendCmd(DeviceInstruction cmd){
         checkArgument(null != cmd,"cmd is null");
         checkArgument(null != cmd.getCmd(),"DeviceInstruction.cmd field must not be null");
         checkArgument(null != cmd.getTarget() && !cmd.getTarget().isEmpty(),"DeviceInstruction.target field must not be null");
@@ -111,7 +112,7 @@ public class CmdManager {
         if(null == cmd.getParameters()){
             cmd.setParameters(ImmutableMap.<String,Object>of());
         }
-        redisPublisher.publish(this.cmdChannel, cmd);
+        return redisPublisher.publish(this.cmdChannel, cmd);
     }
     /** 
      * 设备命令构建类,用于设置除{@link DeviceInstruction#parameters}字段之的其他字段
@@ -198,208 +199,226 @@ public class CmdManager {
         TLS_BUILDER.remove();
         return this;
     }
+    protected static final CmdBuilder checkTlsAvailable(){
+        return checkNotNull(TLS_BUILDER.get(),
+                "not defined target,please call method targetBuilder(),and set target info");
+    }
+
     /**
      * 设备命令 <br>
      * 设置参数,可用于运行时修改参数<br>
      * @param key 参数名
      * @param value 参数值
+     * @return 收到命令的客户端数目
      *
      */
-    public void parameter(String key,String value){
-        checkArgument(null !=TLS_BUILDER.get(),
-            "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = TLS_BUILDER.get();
-        // 所有的命令参数封装到 Map
-        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                .put("key", key)
-                .put("value", value)
-                .build();
-        DeviceInstruction deviceInstruction = new DeviceInstruction()
-                .setCmd(Cmd.parameter)
-                .setCmdSn(builder.cmdSn)
-                .setTarget(builder.target, builder.group)
-                .setAckChannel(builder.ackChannel)
-                .setParameters(params);
-        sendCmd(deviceInstruction);
-        if(builder.autoRemove){
-            removeTlsTarget(); 
+    public long parameter(String key,String value){
+        CmdBuilder builder = checkTlsAvailable();
+        try{
+            // 所有的命令参数封装到 Map
+            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                    .put("key", key)
+                    .put("value", value)    
+                    .build();
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
+                    .setCmd(Cmd.parameter)
+                    .setCmdSn(builder.cmdSn)
+                    .setTarget(builder.target, builder.group)
+                    .setAckChannel(builder.ackChannel)
+                    .setParameters(params);
+            return sendCmd(deviceInstruction);
+        }finally{
+            if(builder.autoRemove){
+                removeTlsTarget(); 
+            }
         }
     }
     /**
      * 设备命令 <br>
      * 设置一组参数,可用于需要重启有效的参数<br>
      * @param properties 参数配置对象, {@code 参数名(key)->参数值(value)映射}
+     * @return 收到命令的客户端数目
      *
      */
-    public void config(Map<String,String> properties){
-        checkArgument(null !=TLS_BUILDER.get(),
-            "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = TLS_BUILDER.get();
-        // 所有的命令参数封装到 Map
-        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                .put("properties", properties)
-                .build();
-        DeviceInstruction deviceInstruction = new DeviceInstruction()
-                .setCmd(Cmd.config)
-                .setCmdSn(builder.cmdSn)
-                .setTarget(builder.target, builder.group)
-                .setAckChannel(builder.ackChannel)
-                .setParameters(params);
-        sendCmd(deviceInstruction);
-        if(builder.autoRemove){
-            removeTlsTarget(); 
+    public long config(Map<String,String> properties){
+        CmdBuilder builder = checkTlsAvailable();
+        try{
+            // 所有的命令参数封装到 Map
+            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                    .put("properties", properties)    
+                    .build();
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
+                    .setCmd(Cmd.config)
+                    .setCmdSn(builder.cmdSn)
+                    .setTarget(builder.target, builder.group)
+                    .setAckChannel(builder.ackChannel)
+                    .setParameters(params);
+            return sendCmd(deviceInstruction);
+        }finally{
+            if(builder.autoRemove){
+                removeTlsTarget(); 
+            }
         }
     }
     /**
      * 设备命令 <br>
      * 读取设备状态参数<br>
      * @param name 需要报告状态的参数名
-     * @return {@code name}指定设备状态参数值
+     * @return 收到命令的客户端数目
      *
      */
-    public void status(String name){
-        checkArgument(null !=TLS_BUILDER.get(),
-            "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = TLS_BUILDER.get();
-        // 所有的命令参数封装到 Map
-        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                .put("name", name)
-                .build();
-        DeviceInstruction deviceInstruction = new DeviceInstruction()
-                .setCmd(Cmd.status)
-                .setCmdSn(builder.cmdSn)
-                .setTarget(builder.target, builder.group)
-                .setAckChannel(builder.ackChannel)
-                .setParameters(params);
-        sendCmd(deviceInstruction);
-        if(builder.autoRemove){
-            removeTlsTarget(); 
+    public long status(String name){
+        CmdBuilder builder = checkTlsAvailable();
+        try{
+            // 所有的命令参数封装到 Map
+            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                    .put("name", name)    
+                    .build();
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
+                    .setCmd(Cmd.status)
+                    .setCmdSn(builder.cmdSn)
+                    .setTarget(builder.target, builder.group)
+                    .setAckChannel(builder.ackChannel)
+                    .setParameters(params);
+            return sendCmd(deviceInstruction);
+        }finally{
+            if(builder.autoRemove){
+                removeTlsTarget(); 
+            }
         }
     }
     /**
      * 设备命令 <br>
      * 设备状态报告,返回一组状态参数<br>
      * @param names 需要报告状态的参数名列表
-     * @return 设备状态参数对象,{@code 参数名(key)->参数值(value)映射},key与{@code names}对应
+     * @return 收到命令的客户端数目
      *
      */
-    public void report(List<String> names){
-        checkArgument(null !=TLS_BUILDER.get(),
-            "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = TLS_BUILDER.get();
-        // 所有的命令参数封装到 Map
-        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                .put("names", names)
-                .build();
-        DeviceInstruction deviceInstruction = new DeviceInstruction()
-                .setCmd(Cmd.report)
-                .setCmdSn(builder.cmdSn)
-                .setTarget(builder.target, builder.group)
-                .setAckChannel(builder.ackChannel)
-                .setParameters(params);
-        sendCmd(deviceInstruction);
-        if(builder.autoRemove){
-            removeTlsTarget(); 
+    public long report(List<String> names){
+        CmdBuilder builder = checkTlsAvailable();
+        try{
+            // 所有的命令参数封装到 Map
+            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                    .put("names", names)    
+                    .build();
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
+                    .setCmd(Cmd.report)
+                    .setCmdSn(builder.cmdSn)
+                    .setTarget(builder.target, builder.group)
+                    .setAckChannel(builder.ackChannel)
+                    .setParameters(params);
+            return sendCmd(deviceInstruction);
+        }finally{
+            if(builder.autoRemove){
+                removeTlsTarget(); 
+            }
         }
     }
     /**
      * 设备命令 <br>
      * 设置设备工作状态<br>
      * @param enable {@code true}:工作状态,否则为非工作状态
+     * @return 收到命令的客户端数目
      *
      */
-    public void enable(Boolean enable){
-        checkArgument(null !=TLS_BUILDER.get(),
-            "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = TLS_BUILDER.get();
-        // 所有的命令参数封装到 Map
-        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                .put("enable", enable)
-                .build();
-        DeviceInstruction deviceInstruction = new DeviceInstruction()
-                .setCmd(Cmd.enable)
-                .setCmdSn(builder.cmdSn)
-                .setTarget(builder.target, builder.group)
-                .setAckChannel(builder.ackChannel)
-                .setParameters(params);
-        sendCmd(deviceInstruction);
-        if(builder.autoRemove){
-            removeTlsTarget(); 
+    public long enable(Boolean enable){
+        CmdBuilder builder = checkTlsAvailable();
+        try{
+            // 所有的命令参数封装到 Map
+            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                    .put("enable", enable)    
+                    .build();
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
+                    .setCmd(Cmd.enable)
+                    .setCmdSn(builder.cmdSn)
+                    .setTarget(builder.target, builder.group)
+                    .setAckChannel(builder.ackChannel)
+                    .setParameters(params);
+            return sendCmd(deviceInstruction);
+        }finally{
+            if(builder.autoRemove){
+                removeTlsTarget(); 
+            }
         }
     }
     /**
      * 设备命令 <br>
      * 返回设备工作状态<br>
      * @param message 工作状态附加消息,比如"设备维修,禁止通行"
-     * @return 为{@code true}:工作状态,{@code false}:非工作状态
+     * @return 收到命令的客户端数目
      *
      */
-    public void isEnable(String message){
-        checkArgument(null !=TLS_BUILDER.get(),
-            "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = TLS_BUILDER.get();
-        // 所有的命令参数封装到 Map
-        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                .put("message", message)
-                .build();
-        DeviceInstruction deviceInstruction = new DeviceInstruction()
-                .setCmd(Cmd.isEnable)
-                .setCmdSn(builder.cmdSn)
-                .setTarget(builder.target, builder.group)
-                .setAckChannel(builder.ackChannel)
-                .setParameters(params);
-        sendCmd(deviceInstruction);
-        if(builder.autoRemove){
-            removeTlsTarget(); 
+    public long isEnable(String message){
+        CmdBuilder builder = checkTlsAvailable();
+        try{
+            // 所有的命令参数封装到 Map
+            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                    .put("message", message)    
+                    .build();
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
+                    .setCmd(Cmd.isEnable)
+                    .setCmdSn(builder.cmdSn)
+                    .setTarget(builder.target, builder.group)
+                    .setAckChannel(builder.ackChannel)
+                    .setParameters(params);
+            return sendCmd(deviceInstruction);
+        }finally{
+            if(builder.autoRemove){
+                removeTlsTarget(); 
+            }
         }
     }
     /**
      * 设备命令 <br>
      * 设备重启<br>
+     * @return 收到命令的客户端数目
      *
      */
-    public void reset(){
-        checkArgument(null !=TLS_BUILDER.get(),
-            "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = TLS_BUILDER.get();
-        // 所有的命令参数封装到 Map
-        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                
-                .build();
-        DeviceInstruction deviceInstruction = new DeviceInstruction()
-                .setCmd(Cmd.reset)
-                .setCmdSn(builder.cmdSn)
-                .setTarget(builder.target, builder.group)
-                .setAckChannel(builder.ackChannel)
-                .setParameters(params);
-        sendCmd(deviceInstruction);
-        if(builder.autoRemove){
-            removeTlsTarget(); 
+    public long reset(){
+        CmdBuilder builder = checkTlsAvailable();
+        try{
+            // 所有的命令参数封装到 Map
+            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                        
+                    .build();
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
+                    .setCmd(Cmd.reset)
+                    .setCmdSn(builder.cmdSn)
+                    .setTarget(builder.target, builder.group)
+                    .setAckChannel(builder.ackChannel)
+                    .setParameters(params);
+            return sendCmd(deviceInstruction);
+        }finally{
+            if(builder.autoRemove){
+                removeTlsTarget(); 
+            }
         }
     }
     /**
      * 设备命令 <br>
      * 设备与服务器时间同步<br>
      * @param unixTimestamp 服务器 unix 时间(秒),参见<a href = "https://en.wikipedia.org/wiki/Unix_time">Unix time</a>
+     * @return 收到命令的客户端数目
      *
      */
-    public void time(Long unixTimestamp){
-        checkArgument(null !=TLS_BUILDER.get(),
-            "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = TLS_BUILDER.get();
-        // 所有的命令参数封装到 Map
-        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                .put("unixTimestamp", unixTimestamp)
-                .build();
-        DeviceInstruction deviceInstruction = new DeviceInstruction()
-                .setCmd(Cmd.time)
-                .setCmdSn(builder.cmdSn)
-                .setTarget(builder.target, builder.group)
-                .setAckChannel(builder.ackChannel)
-                .setParameters(params);
-        sendCmd(deviceInstruction);
-        if(builder.autoRemove){
-            removeTlsTarget(); 
+    public long time(Long unixTimestamp){
+        CmdBuilder builder = checkTlsAvailable();
+        try{
+            // 所有的命令参数封装到 Map
+            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                    .put("unixTimestamp", unixTimestamp)    
+                    .build();
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
+                    .setCmd(Cmd.time)
+                    .setCmdSn(builder.cmdSn)
+                    .setTarget(builder.target, builder.group)
+                    .setAckChannel(builder.ackChannel)
+                    .setParameters(params);
+            return sendCmd(deviceInstruction);
+        }finally{
+            if(builder.autoRemove){
+                removeTlsTarget(); 
+            }
         }
     }
     /**
@@ -407,51 +426,55 @@ public class CmdManager {
      * 更新版本<br>
      * @param url 更新版本的位置
      * @param version 版本号
+     * @return 收到命令的客户端数目
      *
      */
-    public void update(URL url,String version){
-        checkArgument(null !=TLS_BUILDER.get(),
-            "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = TLS_BUILDER.get();
-        // 所有的命令参数封装到 Map
-        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                .put("url", url)
-                .put("version", version)
-                .build();
-        DeviceInstruction deviceInstruction = new DeviceInstruction()
-                .setCmd(Cmd.update)
-                .setCmdSn(builder.cmdSn)
-                .setTarget(builder.target, builder.group)
-                .setAckChannel(builder.ackChannel)
-                .setParameters(params);
-        sendCmd(deviceInstruction);
-        if(builder.autoRemove){
-            removeTlsTarget(); 
+    public long update(URL url,String version){
+        CmdBuilder builder = checkTlsAvailable();
+        try{
+            // 所有的命令参数封装到 Map
+            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                    .put("url", url)
+                    .put("version", version)    
+                    .build();
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
+                    .setCmd(Cmd.update)
+                    .setCmdSn(builder.cmdSn)
+                    .setTarget(builder.target, builder.group)
+                    .setAckChannel(builder.ackChannel)
+                    .setParameters(params);
+            return sendCmd(deviceInstruction);
+        }finally{
+            if(builder.autoRemove){
+                removeTlsTarget(); 
+            }
         }
     }
     /**
      * 设备命令 <br>
      * 发送消息<br>
      * @param message 发送到设备的消息
+     * @return 收到命令的客户端数目
      *
      */
-    public void message(String message){
-        checkArgument(null !=TLS_BUILDER.get(),
-            "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = TLS_BUILDER.get();
-        // 所有的命令参数封装到 Map
-        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                .put("message", message)
-                .build();
-        DeviceInstruction deviceInstruction = new DeviceInstruction()
-                .setCmd(Cmd.message)
-                .setCmdSn(builder.cmdSn)
-                .setTarget(builder.target, builder.group)
-                .setAckChannel(builder.ackChannel)
-                .setParameters(params);
-        sendCmd(deviceInstruction);
-        if(builder.autoRemove){
-            removeTlsTarget(); 
+    public long message(String message){
+        CmdBuilder builder = checkTlsAvailable();
+        try{
+            // 所有的命令参数封装到 Map
+            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                    .put("message", message)    
+                    .build();
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
+                    .setCmd(Cmd.message)
+                    .setCmdSn(builder.cmdSn)
+                    .setTarget(builder.target, builder.group)
+                    .setAckChannel(builder.ackChannel)
+                    .setParameters(params);
+            return sendCmd(deviceInstruction);
+        }finally{
+            if(builder.autoRemove){
+                removeTlsTarget(); 
+            }
         }
     }
     /**
@@ -459,27 +482,28 @@ public class CmdManager {
      * 自定义命令,命令名及命令参数由项目自定义<br>
      * @param cmdName 自定义命令名称
      * @param parameters 自定义参数表
-     * @return 返回自定义结果对象
+     * @return 收到命令的客户端数目
      *
      */
-    public void custom(String cmdName,Map<String,Object> parameters){
-        checkArgument(null !=TLS_BUILDER.get(),
-            "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = TLS_BUILDER.get();
-        // 所有的命令参数封装到 Map
-        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                .put("cmdName", cmdName)
-                .put("parameters", parameters)
-                .build();
-        DeviceInstruction deviceInstruction = new DeviceInstruction()
-                .setCmd(Cmd.custom)
-                .setCmdSn(builder.cmdSn)
-                .setTarget(builder.target, builder.group)
-                .setAckChannel(builder.ackChannel)
-                .setParameters(params);
-        sendCmd(deviceInstruction);
-        if(builder.autoRemove){
-            removeTlsTarget(); 
+    public long custom(String cmdName,Map<String,Object> parameters){
+        CmdBuilder builder = checkTlsAvailable();
+        try{
+            // 所有的命令参数封装到 Map
+            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                    .put("cmdName", cmdName)
+                    .put("parameters", parameters)    
+                    .build();
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
+                    .setCmd(Cmd.custom)
+                    .setCmdSn(builder.cmdSn)
+                    .setTarget(builder.target, builder.group)
+                    .setAckChannel(builder.ackChannel)
+                    .setParameters(params);
+            return sendCmd(deviceInstruction);
+        }finally{
+            if(builder.autoRemove){
+                removeTlsTarget(); 
+            }
         }
     }
 }

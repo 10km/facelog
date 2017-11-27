@@ -29,9 +29,9 @@ public class RedisPublisher implements IPublisher,IRedisComponent{
 	}
 	
 	@Override
-	public <T>void publish(Channel<T> channel, T obj) {
+	public <T> long publish(Channel<T> channel, T obj) {
 		if(null == obj){
-			return;
+			return 0L;
 		}
 		if(null != channel.type){
 			// 检查发布的对象类型与频道数据类型是否匹配
@@ -41,7 +41,8 @@ public class RedisPublisher implements IPublisher,IRedisComponent{
 		}
 		Jedis jedis = this.poolLazy.apply();
 		try{
-			jedis.publish(channel.name, this.encoder.toJsonString(obj));
+			Long numOfClient = jedis.publish(channel.name, this.encoder.toJsonString(obj));
+			return null == numOfClient ? 0L : numOfClient.longValue();
 		}finally{
 			this.poolLazy.free();
 		}

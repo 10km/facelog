@@ -12,8 +12,9 @@ public interface IPublisher  {
 	 * 向指定的频道发布消息
 	 * @param channel 频道
 	 * @param obj 消息对象
+	 * @return  the number of clients that received the message
 	 */
-	<T> void publish(Channel<T> channel,T obj);
+	<T> long publish(Channel<T> channel,T obj);
 
 	/**
 	 * 参见 {@link #publish(Channel, Object)}

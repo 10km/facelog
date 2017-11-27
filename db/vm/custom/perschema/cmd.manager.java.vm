@@ -105,8 +105,9 @@ public class CmdManager {
     /**
      * 发送设备命令
      * @param cmd
+     * @return 收到命令的客户端数目
      */
-    private void sendCmd(DeviceInstruction cmd){
+    private long sendCmd(DeviceInstruction cmd){
         checkArgument(null != cmd,"cmd is null");
         checkArgument(null != cmd.getCmd(),"DeviceInstruction.cmd field must not be null");
         checkArgument(null != cmd.getTarget() && !cmd.getTarget().isEmpty(),"DeviceInstruction.target field must not be null");
@@ -114,7 +115,7 @@ public class CmdManager {
         if(null == cmd.getParameters()){
             cmd.setParameters(ImmutableMap.<String,Object>of());
         }
-        redisPublisher.publish(this.cmdChannel, cmd);
+        return redisPublisher.publish(this.cmdChannel, cmd);
     }
     /** 
      * 设备命令构建类,用于设置除{@link DeviceInstruction#parameters}字段之的其他字段
@@ -201,6 +202,11 @@ public class CmdManager {
         TLS_BUILDER.remove();
         return this;
     }
+    protected static final CmdBuilder checkTlsAvailable(){
+        return checkNotNull(TLS_BUILDER.get(),
+                "not defined target,please call method targetBuilder(),and set target info");
+    }
+
 #foreach($entry in $commands.entrySet())
 #set($key = $entry.key)
 #set($value = $entry.value)
@@ -210,30 +216,29 @@ public class CmdManager {
      * $value['desc']<br>#join($params '
      * @param $e.key $!{e.value[1]}' '')
 
-#if($value['return']!='void')
-     * @return $!{value['returnDesc']}
-#end
+     * @return 收到命令的客户端数目
      *
      */
-    public void ${key}(#join($params '$e.value[0] $e.key' ',')){
-        checkArgument(null !=TLS_BUILDER.get(),
-            "not defined target,please call method targetBuilder(),and set target info");
-        CmdBuilder builder = TLS_BUILDER.get();
-        // 所有的命令参数封装到 Map
-        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                #join($params '.put("$e.key", $e.key)' '
-                ')
-
-                .build();
-        DeviceInstruction deviceInstruction = new DeviceInstruction()
-                .setCmd(Cmd.${key})
-                .setCmdSn(builder.cmdSn)
-                .setTarget(builder.target, builder.group)
-                .setAckChannel(builder.ackChannel)
-                .setParameters(params);
-        sendCmd(deviceInstruction);
-        if(builder.autoRemove){
-            removeTlsTarget(); 
+    public long ${key}(#join($params '$e.value[0] $e.key' ',')){
+        CmdBuilder builder = checkTlsAvailable();
+        try{
+            // 所有的命令参数封装到 Map
+            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                    #join($params '.put("$e.key", $e.key)' '
+                    ')
+    
+                    .build();
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
+                    .setCmd(Cmd.${key})
+                    .setCmdSn(builder.cmdSn)
+                    .setTarget(builder.target, builder.group)
+                    .setAckChannel(builder.ackChannel)
+                    .setParameters(params);
+            return sendCmd(deviceInstruction);
+        }finally{
+            if(builder.autoRemove){
+                removeTlsTarget(); 
+            }
         }
     }
 #end
