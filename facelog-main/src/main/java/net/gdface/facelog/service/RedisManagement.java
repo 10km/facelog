@@ -158,6 +158,9 @@ class RedisManagement implements ServiceConstant{
 			HashMap<PropName, Object> param = JedisPoolLazy.initParameters(parameters);
 			Jedis jedis = new Jedis(JedisUtils.getCanonicalURI(param));
 			try{
+				// shutdown前清除全局变量避免持久化
+				jedis.del(KEY_CMD_SN);
+				jedis.del(KEY_ACK_SN);
 				jedis.shutdown();
 			}finally{
 				jedis.close();
