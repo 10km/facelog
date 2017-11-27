@@ -70,7 +70,7 @@ public class CmdManager {
     }
     /**
      * 构造方法
-     * @param poolLazy
+     * @param poolLazy redis 连接池对象
      * @param cmdChannelAdapter 应用程序执行设备命令的对象
      * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(Token)}
      * @param deviceId 当前设备ID
@@ -82,6 +82,23 @@ public class CmdManager {
             int deviceId,
             List<Integer> groupIdList) {
     	this(poolLazy,
+    			new CmdChannelAdapter(cmdChannelAdapter,deviceId,groupIdList),
+    			redisParameters);
+    }
+    /**
+     * 构造方法<br>
+     * 使用默认{@link JedisPoolLazy}对象,参见 {@link JedisPoolLazy${esc.hash}getDefaultInstance()}
+     * @param cmdChannelAdapter
+     * @param redisParameters
+     * @param deviceId
+     * @param groupIdList
+     * @see ${esc.hash}CmdManager(JedisPoolLazy, CommandAdapter, Map, int, List)
+     */
+    public CmdManager(CommandAdapter cmdChannelAdapter,
+            Map<RedisParam, String> redisParameters,
+            int deviceId,
+            List<Integer> groupIdList) {
+    	this(JedisPoolLazy.getDefaultInstance(),
     			new CmdChannelAdapter(cmdChannelAdapter,deviceId,groupIdList),
     			redisParameters);
     }
