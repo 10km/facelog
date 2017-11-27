@@ -21,7 +21,6 @@ import gu.simplemq.Channel;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import net.gdface.facelog.client.thrift.RedisParam;
-import net.gdface.facelog.client.thrift.Token;
 
 import gu.simplemq.redis.RedisPublisher;
 import gu.simplemq.redis.RedisSubscriber;
@@ -52,7 +51,7 @@ public class CmdManager {
      * 构造方法
      * @param poolLazy 
      * @param cmdChannelAdapter 
-     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(Token)}
+     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(net.gdface.facelog.client.thrift.Token)}
      */
     protected CmdManager(JedisPoolLazy poolLazy,
             CmdChannelAdapter cmdChannelAdapter,
@@ -69,7 +68,7 @@ public class CmdManager {
      * 构造方法
      * @param poolLazy redis 连接池对象
      * @param cmdChannelAdapter 应用程序执行设备命令的对象
-     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(Token)}
+     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(net.gdface.facelog.client.thrift.Token)}
      * @param deviceId 当前设备ID
      * @param groupIdList 当前设备ID所属的所有设备组ID, 参见 {@link IFaceLogClient#listOfParentForDeviceGroup(int)}
      */

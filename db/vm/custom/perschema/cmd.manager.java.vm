@@ -24,7 +24,6 @@ import gu.simplemq.Channel;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import net.gdface.facelog.client.thrift.RedisParam;
-import net.gdface.facelog.client.thrift.Token;
 
 import gu.simplemq.redis.RedisPublisher;
 import gu.simplemq.redis.RedisSubscriber;
@@ -55,7 +54,7 @@ public class CmdManager {
      * 构造方法
      * @param poolLazy 
      * @param cmdChannelAdapter 
-     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient${esc.hash}getRedisParameters(Token)}
+     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient${esc.hash}getRedisParameters(net.gdface.facelog.client.thrift.Token)}
      */
     protected CmdManager(JedisPoolLazy poolLazy,
             CmdChannelAdapter cmdChannelAdapter,
@@ -72,9 +71,9 @@ public class CmdManager {
      * 构造方法
      * @param poolLazy redis 连接池对象
      * @param cmdChannelAdapter 应用程序执行设备命令的对象
-     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(Token)}
+     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient${esc.hash}getRedisParameters(net.gdface.facelog.client.thrift.Token)}
      * @param deviceId 当前设备ID
-     * @param groupIdList 当前设备ID所属的所有设备组ID, 参见 {@link IFaceLogClient#listOfParentForDeviceGroup(int)}
+     * @param groupIdList 当前设备ID所属的所有设备组ID, 参见 {@link IFaceLogClient${esc.hash}listOfParentForDeviceGroup(int)}
      */
     public CmdManager(JedisPoolLazy poolLazy,
     		CommandAdapter cmdChannelAdapter,
@@ -118,7 +117,7 @@ public class CmdManager {
         return redisPublisher.publish(this.cmdChannel, cmd);
     }
     /** 
-     * 设备命令构建类,用于设置除{@link DeviceInstruction#parameters}字段之的其他字段
+     * 设备命令构建类,用于设置除{@link DeviceInstruction${esc.hash}parameters}字段之的其他字段
      */
     public class CmdBuilder{   	
         private List<Integer> target;
@@ -130,45 +129,45 @@ public class CmdManager {
         private CmdBuilder(CmdManager parent){
             this.parent = parent;
         }
-        /** 参见 {@link DeviceInstruction#setTarget(List, boolean)} */
+        /** 参见 {@link DeviceInstruction${esc.hash}setTarget(List, boolean)} */
         public CmdBuilder setTarget(List<Integer> target,boolean group){
             this.target = target;
             this.group = group;
             return this;
         }
-        /** 指定设备目标为设备ID列表,参见 {@link DeviceInstruction#setTarget(List, boolean)} */
+        /** 指定设备目标为设备ID列表,参见 {@link DeviceInstruction${esc.hash}setTarget(List, boolean)} */
         public CmdBuilder setDeviceTarget(List<Integer> target){
             this.target = target;
             this.group = false;
             return this;
         }
-        /** 指定设备目标为设备ID列表,参见 {@link DeviceInstruction#setTarget(List, boolean)} */
+        /** 指定设备目标为设备ID列表,参见 {@link DeviceInstruction${esc.hash}setTarget(List, boolean)} */
         public CmdBuilder setDeviceTarget(int... target){
             return setDeviceTarget(Ints.asList(target));
         }
-        /** 指定设备目标为设备组ID列表,参见 {@link DeviceInstruction#setTarget(List, boolean)} */
+        /** 指定设备目标为设备组ID列表,参见 {@link DeviceInstruction${esc.hash}setTarget(List, boolean)} */
         public CmdBuilder setDeviceGroupTarget(List<Integer> target){
             this.target = target;
             this.group = true;
             return this;
         }
-        /** 指定设备目标为设备组ID列表,参见 {@link DeviceInstruction#setTarget(List, boolean)} */
+        /** 指定设备目标为设备组ID列表,参见 {@link DeviceInstruction${esc.hash}setTarget(List, boolean)} */
         public CmdBuilder setDeviceGroupTarget(int... target){
             return setDeviceGroupTarget(Ints.asList(target));
         }
-        /** 参见 {@link DeviceInstruction#setCmdSn(long)} */
+        /** 参见 {@link DeviceInstruction${esc.hash}setCmdSn(long)} */
         public CmdBuilder setCmdSn(long cmdSn) {
             this.cmdSn = cmdSn;
             return this;
         }
-        /** 参见 {@link DeviceInstruction#setAckChannel(String)} */
+        /** 参见 {@link DeviceInstruction${esc.hash}setAckChannel(String)} */
         public CmdBuilder setAckChannel(String ackChannel){
             this.ackChannel = ackChannel;
             return this;
         }
         /**
          * 完成build,返回 {@link CmdManager}对象<br> 
-         * @param autoRemove 为{@code true}时,完成设备命令发送后自动清除Thread Local Storage变量{@link CmdManager#TLS_BUILDER},
+         * @param autoRemove 为{@code true}时,完成设备命令发送后自动清除Thread Local Storage变量{@link CmdManager${esc.hash}TLS_BUILDER},
          *                                    默认值为{@code true}
          * @return
          */
@@ -183,9 +182,9 @@ public class CmdManager {
     } 
     /** 
      * 用于保存当前线程使用的 {@link CmdBuilder}对象<br>,
-     * TLS变量,在多线程高并发环境如果不显式执行{@link ThreadLocal#remove()}有资源泄漏风险,
-     * 如果{@link CmdBuilder#autoRemove}为{@code true},则调用设备命令方法发送完命令后会自动清除TLS变量,
-     * 否则需要调用 {@link CmdManager#removeTlsTarget()}方法手动清除。
+     * TLS变量,在多线程高并发环境如果不显式执行{@link ThreadLocal${esc.hash}remove()}有资源泄漏风险,
+     * 如果{@link CmdBuilder${esc.hash}autoRemove}为{@code true},则调用设备命令方法发送完命令后会自动清除TLS变量,
+     * 否则需要调用 {@link CmdManager${esc.hash}removeTlsTarget()}方法手动清除。
       */
     private static final ThreadLocal<CmdBuilder> TLS_BUILDER= new ThreadLocal<CmdBuilder>();
     public CmdBuilder targetBuilder(){
@@ -195,8 +194,8 @@ public class CmdManager {
         return TLS_BUILDER.get();
     }
     /** 
-     * 清除TLS变量 {@link #TLS_BUILDER}
-     * @see {@link ThreadLocal#remove()}
+     * 清除TLS变量 {@link ${esc.hash}TLS_BUILDER}
+     * @see {@link ThreadLocal${esc.hash}remove()}
      */
     public CmdManager removeTlsTarget(){
         TLS_BUILDER.remove();
