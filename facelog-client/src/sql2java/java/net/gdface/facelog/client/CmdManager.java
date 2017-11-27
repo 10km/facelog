@@ -14,11 +14,7 @@ import java.util.Map;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkArgument;
 
-import com.alibaba.fastjson.JSON;
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
 
 import gu.simplemq.Channel;
@@ -32,185 +28,159 @@ import gu.simplemq.redis.RedisSubscriber;
 
 /**
  * 
- * client 端 redis管理模块
+ * client 端 redis管理模块<br>
+ * 发送设备命令示例:
+ * <pre>
+ *    String ackChannel = iFaceLogClient.applyAckChannel(myToken); // 向facelog服务申请命令响应通道
+ *    long cmdSn = iFaceLogClient.applyCmdSn(myToken); // 向facelog服务申请命令序列号
+ *  	targetBuilder()
+ *  		.setCmdSn(cmdSn) /
+ *  		.setDeviceTarget(deviceId) // 指定目标设备ID
+ *  		.setAckChannel(ackChannel) 
+ *  		.build()
+ *  		.reset(); // 执行reset命令
+ * </pre>
  * @author guyadong
  *
  */
 public class CmdManager {    
     private final Channel<DeviceInstruction> cmdChannel;
-    private final IFaceLogClient client;
-    private final Token token;
     private final RedisPublisher redisPublisher ;
     private final Map<RedisParam, String> redisParameters;
     private final RedisSubscriber subscriber;
-    public CmdManager(IFaceLogClient client,
-            JedisPoolLazy poolLazy,
+    /**
+     * 构造方法
+     * @param poolLazy 
+     * @param cmdChannelAdapter 
+     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(Token)}
+     */
+    protected CmdManager(JedisPoolLazy poolLazy,
             CmdChannelAdapter cmdChannelAdapter,
-            Token token) {
-        this.client = checkNotNull(client);
-        this.token = checkNotNull(token);
+            Map<RedisParam, String> redisParameters) {
         this.redisPublisher = RedisFactory.getPublisher(checkNotNull(poolLazy));
         this.subscriber = RedisFactory.getSubscriber(checkNotNull(poolLazy));
-        this.redisParameters = client.getRedisParameters(token);
+        this.redisParameters = checkNotNull(redisParameters);
         this.cmdChannel = new Channel<DeviceInstruction>(
                 this.redisParameters.get(RedisParam.CMD_CHANNEL),
                 cmdChannelAdapter){};
         this.subscriber.register(cmdChannel);
     }
-
+    /**
+     * 构造方法
+     * @param poolLazy
+     * @param cmdChannelAdapter 应用程序执行设备命令的对象
+     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(Token)}
+     * @param deviceId 当前设备ID
+     * @param groupIdList 当前设备ID所属的所有设备组ID, 参见 {@link IFaceLogClient#listOfParentForDeviceGroup(int)}
+     */
+    public CmdManager(JedisPoolLazy poolLazy,
+    		CommandAdapter cmdChannelAdapter,
+            Map<RedisParam, String> redisParameters,
+            int deviceId,
+            List<Integer> groupIdList) {
+    	this(poolLazy,
+    			new CmdChannelAdapter(cmdChannelAdapter,deviceId,groupIdList),
+    			redisParameters);
+    }
     /**
      * 发送设备命令
      * @param cmd
      */
     private void sendCmd(DeviceInstruction cmd){
-        if(null != cmd){
-            checkArgument(null != cmd.getCmd(),"cmd field  of DeviceInstruction must not be null");
-            Map<String,String>params;
-            if(null == cmd.getParameters()){
-                    params = ImmutableMap.of();
-            }else{
-                    params = Maps.transformValues(cmd.getParameters(), new Function<Object,String>(){
-                        @Override
-                        public String apply(Object input) {
-                            return JSON.toJSONString(input);
-                        }});
-            }
-            cmd.setParameters(params);
-            redisPublisher.publish(this.cmdChannel, cmd);
+        checkArgument(null != cmd,"cmd is null");
+        checkArgument(null != cmd.getCmd(),"DeviceInstruction.cmd field must not be null");
+        checkArgument(null != cmd.getTarget() && !cmd.getTarget().isEmpty(),"DeviceInstruction.target field must not be null");
+        checkArgument(null != cmd.getCmdSn(),"DeviceInstruction.cmdSn field must not be null");
+        if(null == cmd.getParameters()){
+            cmd.setParameters(ImmutableMap.<String,Object>of());
         }
+        redisPublisher.publish(this.cmdChannel, cmd);
     }
-    /**
-     * 发送设备命令
-     * @param cmd
-     * @param target 执行命令的目标(设备/设备组)
-     * @param group 为@{@code true}时{@code target}为设备组
-     * @param ackChannel 命令响应通道
-     * @param parameters 命令参数
-     * @see {@link DeviceInstruction}
+    /** 
+     * 设备命令构建类,用于设置除{@link DeviceInstruction#parameters}字段之的其他字段
      */
-    public void sendCmd(Cmd cmd,
-                            List<Integer> target,
-                            boolean group,
-                            String ackChannel,
-                            Map<String, String> parameters){
-        DeviceInstruction deviceInstruction = new DeviceInstruction()
-                .setCmd(checkNotNull(cmd))
-                .setCmdSn(client.applyCmdSn(token))
-                .setTarget(target, group)
-                .setAckChannel(ackChannel)
-                .setParameters(parameters);
-        sendCmd(deviceInstruction);
-    }
-    /**
-     * 发送设备命令
-     * @param cmd
-     * @param target 
-     * @param group 
-     * @param ackChannel 
-     * @param parameters
-     */
-    public void sendCmd(Cmd cmd,
-            int target,
-            boolean group,
-            String ackChannel,
-            Map<String, String> parameters){
-        sendCmd(cmd,Lists.newArrayList(target),group,ackChannel,parameters);
-    }
-    /**
-     * 向指定设备({@code deviceId})发送设备命令
-     * @param cmd
-     * @param deviceId
-     * @param ackChannel
-     * @param parameters
-     */
-    public void sendDeviceCmd(Cmd cmd,
-            int deviceId,
-            String ackChannel,
-            Map<String, String> parameters){
-        sendCmd(cmd,Lists.newArrayList(deviceId),false,ackChannel,parameters);
-    }
-    /**
-     * 向指定设备组({@code deviceGroupId})发送设备命令
-     * @param cmd
-     * @param deviceGroupId
-     * @param ackChannel
-     * @param parameters
-     */
-    public void sendDeviceGroupCmd(Cmd cmd,
-            int deviceGroupId,
-            String ackChannel,
-            Map<String, String> parameters){
-        sendCmd(cmd,Lists.newArrayList(deviceGroupId),true,ackChannel,parameters);
-    }
-    public static class Target{
+    public class CmdBuilder{   	
         private List<Integer> target;
         private boolean group;
+        private Long cmdSn;
         private String ackChannel;
         private final CmdManager parent;
         private boolean autoRemove = true;
-        private Target(CmdManager parent){
+        private CmdBuilder(CmdManager parent){
             this.parent = parent;
         }
-        public Target setTarget(List<Integer> target,boolean group){
+        /** 参见 {@link DeviceInstruction#setTarget(List, boolean)} */
+        public CmdBuilder setTarget(List<Integer> target,boolean group){
             this.target = target;
             this.group = group;
             return this;
         }
-        public Target setDeviceTarget(List<Integer> target){
+        /** 指定设备目标为设备ID列表,参见 {@link DeviceInstruction#setTarget(List, boolean)} */
+        public CmdBuilder setDeviceTarget(List<Integer> target){
             this.target = target;
             this.group = false;
             return this;
         }
-        public Target setDeviceTarget(int... target){
+        /** 指定设备目标为设备ID列表,参见 {@link DeviceInstruction#setTarget(List, boolean)} */
+        public CmdBuilder setDeviceTarget(int... target){
             return setDeviceTarget(Ints.asList(target));
         }
-        public Target setDeviceGroupTarget(List<Integer> target){
+        /** 指定设备目标为设备组ID列表,参见 {@link DeviceInstruction#setTarget(List, boolean)} */
+        public CmdBuilder setDeviceGroupTarget(List<Integer> target){
             this.target = target;
             this.group = true;
             return this;
         }
-        public Target setDeviceGroupTarget(int... target){
+        /** 指定设备目标为设备组ID列表,参见 {@link DeviceInstruction#setTarget(List, boolean)} */
+        public CmdBuilder setDeviceGroupTarget(int... target){
             return setDeviceGroupTarget(Ints.asList(target));
         }
-        public Target setAckChannel(String ackChannel){
+        /** 参见 {@link DeviceInstruction#setCmdSn(long)} */
+        public CmdBuilder setCmdSn(long cmdSn) {
+            this.cmdSn = cmdSn;
+            return this;
+        }
+        /** 参见 {@link DeviceInstruction#setAckChannel(String)} */
+        public CmdBuilder setAckChannel(String ackChannel){
             this.ackChannel = ackChannel;
             return this;
         }
+        /**
+         * 完成build,返回 {@link CmdManager}对象<br> 
+         * @param autoRemove 为{@code true}时,完成设备命令发送后自动清除Thread Local Storage变量{@link CmdManager#tlsTarget},
+         *                                    默认值为{@code true}
+         * @return
+         */
         public CmdManager build(boolean autoRemove){
             this.autoRemove = autoRemove;
             return this.parent;
         }
+        /** 完成build,返回 {@link CmdManager}对象 */
         public CmdManager build(){
             return this.parent;
         }
     } 
-    private static ThreadLocal<Target> tlsTarget= new ThreadLocal<Target>();
-    public Target targetBuilder(){
+    /** 
+     * 用于保存当前线程使用的 {@link CmdBuilder}对象<br>,
+     * TLS变量,在多线程高并发环境如果不显式执行{@link ThreadLocal#remove()}有资源泄漏风险,
+     * 如果{@link CmdBuilder#autoRemove}为{@code true},则调用设备命令方法发送完命令后会自动清除TLS变量,
+     * 否则需要调用 {@link CmdManager#removeTlsTarget()}方法手动清除。
+      */
+    private static ThreadLocal<CmdBuilder> tlsTarget= new ThreadLocal<CmdBuilder>();
+    public CmdBuilder targetBuilder(){
         if(null == tlsTarget.get()){
-            tlsTarget.set(new Target(this));
+            tlsTarget.set(new CmdBuilder(this));
         }
         return tlsTarget.get();
     }
+    /** 
+     * 清除TLS变量 {@link #tlsTarget}
+     * @see {@link ThreadLocal#remove()}
+     */
     public CmdManager removeTlsTarget(){
         tlsTarget.remove();
         return this;
     }
-/*
-    public CmdManager parameter(String key,String value){
-        checkArgument(null !=tlsTarget.get(),
-                "not defined target,please call method targetBuilder(),and set target info");
-        Target target = tlsTarget.get();
-        sendCmd(Cmd.parameter,
-                target.target,
-                target.group,
-                target.ackChannel,
-                ImmutableMap.of("key", key, "value", value));
-        if(target.autoRemove){
-            tlsTarget.remove();    
-        }        
-        return this;
-    }
-*/    
     /**
      * 设备命令 <br>
      * 设置参数,可用于运行时修改参数<br>
@@ -221,20 +191,22 @@ public class CmdManager {
     public void parameter(String key,String value){
         checkArgument(null !=tlsTarget.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        Target target = tlsTarget.get();
-        ImmutableMap<String, String> params = ImmutableMap.<String,String>builder()
-            .put("key", key)
-            .put("value", value)
-            .build();
-        sendCmd(Cmd.parameter,
-            target.target,
-            target.group,
-            target.ackChannel,
-            params);
-        if(target.autoRemove){
-            tlsTarget.remove();    
-        }        
-
+        CmdBuilder builder = tlsTarget.get();
+        // 所有的命令参数封装到 Map
+        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                .put("key", key)
+                .put("value", value)
+                .build();
+        DeviceInstruction deviceInstruction = new DeviceInstruction()
+                .setCmd(Cmd.parameter)
+                .setCmdSn(builder.cmdSn)
+                .setTarget(builder.target, builder.group)
+                .setAckChannel(builder.ackChannel)
+                .setParameters(params);
+        sendCmd(deviceInstruction);
+        if(builder.autoRemove){
+            removeTlsTarget(); 
+        }
     }
     /**
      * 设备命令 <br>
@@ -245,19 +217,21 @@ public class CmdManager {
     public void config(Map<String,String> properties){
         checkArgument(null !=tlsTarget.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        Target target = tlsTarget.get();
-        ImmutableMap<String, String> params = ImmutableMap.<String,String>builder()
-            .put("properties", properties)
-            .build();
-        sendCmd(Cmd.parameter,
-            target.target,
-            target.group,
-            target.ackChannel,
-            params);
-        if(target.autoRemove){
-            tlsTarget.remove();    
-        }        
-
+        CmdBuilder builder = tlsTarget.get();
+        // 所有的命令参数封装到 Map
+        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                .put("properties", properties)
+                .build();
+        DeviceInstruction deviceInstruction = new DeviceInstruction()
+                .setCmd(Cmd.config)
+                .setCmdSn(builder.cmdSn)
+                .setTarget(builder.target, builder.group)
+                .setAckChannel(builder.ackChannel)
+                .setParameters(params);
+        sendCmd(deviceInstruction);
+        if(builder.autoRemove){
+            removeTlsTarget(); 
+        }
     }
     /**
      * 设备命令 <br>
@@ -269,19 +243,21 @@ public class CmdManager {
     public void status(String name){
         checkArgument(null !=tlsTarget.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        Target target = tlsTarget.get();
-        ImmutableMap<String, String> params = ImmutableMap.<String,String>builder()
-            .put("name", name)
-            .build();
-        sendCmd(Cmd.parameter,
-            target.target,
-            target.group,
-            target.ackChannel,
-            params);
-        if(target.autoRemove){
-            tlsTarget.remove();    
-        }        
-
+        CmdBuilder builder = tlsTarget.get();
+        // 所有的命令参数封装到 Map
+        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                .put("name", name)
+                .build();
+        DeviceInstruction deviceInstruction = new DeviceInstruction()
+                .setCmd(Cmd.status)
+                .setCmdSn(builder.cmdSn)
+                .setTarget(builder.target, builder.group)
+                .setAckChannel(builder.ackChannel)
+                .setParameters(params);
+        sendCmd(deviceInstruction);
+        if(builder.autoRemove){
+            removeTlsTarget(); 
+        }
     }
     /**
      * 设备命令 <br>
@@ -293,19 +269,21 @@ public class CmdManager {
     public void report(List<String> names){
         checkArgument(null !=tlsTarget.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        Target target = tlsTarget.get();
-        ImmutableMap<String, String> params = ImmutableMap.<String,String>builder()
-            .put("names", names)
-            .build();
-        sendCmd(Cmd.parameter,
-            target.target,
-            target.group,
-            target.ackChannel,
-            params);
-        if(target.autoRemove){
-            tlsTarget.remove();    
-        }        
-
+        CmdBuilder builder = tlsTarget.get();
+        // 所有的命令参数封装到 Map
+        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                .put("names", names)
+                .build();
+        DeviceInstruction deviceInstruction = new DeviceInstruction()
+                .setCmd(Cmd.report)
+                .setCmdSn(builder.cmdSn)
+                .setTarget(builder.target, builder.group)
+                .setAckChannel(builder.ackChannel)
+                .setParameters(params);
+        sendCmd(deviceInstruction);
+        if(builder.autoRemove){
+            removeTlsTarget(); 
+        }
     }
     /**
      * 设备命令 <br>
@@ -316,19 +294,21 @@ public class CmdManager {
     public void enable(Boolean enable){
         checkArgument(null !=tlsTarget.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        Target target = tlsTarget.get();
-        ImmutableMap<String, String> params = ImmutableMap.<String,String>builder()
-            .put("enable", enable)
-            .build();
-        sendCmd(Cmd.parameter,
-            target.target,
-            target.group,
-            target.ackChannel,
-            params);
-        if(target.autoRemove){
-            tlsTarget.remove();    
-        }        
-
+        CmdBuilder builder = tlsTarget.get();
+        // 所有的命令参数封装到 Map
+        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                .put("enable", enable)
+                .build();
+        DeviceInstruction deviceInstruction = new DeviceInstruction()
+                .setCmd(Cmd.enable)
+                .setCmdSn(builder.cmdSn)
+                .setTarget(builder.target, builder.group)
+                .setAckChannel(builder.ackChannel)
+                .setParameters(params);
+        sendCmd(deviceInstruction);
+        if(builder.autoRemove){
+            removeTlsTarget(); 
+        }
     }
     /**
      * 设备命令 <br>
@@ -340,19 +320,21 @@ public class CmdManager {
     public void isEnable(String message){
         checkArgument(null !=tlsTarget.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        Target target = tlsTarget.get();
-        ImmutableMap<String, String> params = ImmutableMap.<String,String>builder()
-            .put("message", message)
-            .build();
-        sendCmd(Cmd.parameter,
-            target.target,
-            target.group,
-            target.ackChannel,
-            params);
-        if(target.autoRemove){
-            tlsTarget.remove();    
-        }        
-
+        CmdBuilder builder = tlsTarget.get();
+        // 所有的命令参数封装到 Map
+        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                .put("message", message)
+                .build();
+        DeviceInstruction deviceInstruction = new DeviceInstruction()
+                .setCmd(Cmd.isEnable)
+                .setCmdSn(builder.cmdSn)
+                .setTarget(builder.target, builder.group)
+                .setAckChannel(builder.ackChannel)
+                .setParameters(params);
+        sendCmd(deviceInstruction);
+        if(builder.autoRemove){
+            removeTlsTarget(); 
+        }
     }
     /**
      * 设备命令 <br>
@@ -362,19 +344,21 @@ public class CmdManager {
     public void reset(){
         checkArgument(null !=tlsTarget.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        Target target = tlsTarget.get();
-        ImmutableMap<String, String> params = ImmutableMap.<String,String>builder()
-            
-            .build();
-        sendCmd(Cmd.parameter,
-            target.target,
-            target.group,
-            target.ackChannel,
-            params);
-        if(target.autoRemove){
-            tlsTarget.remove();    
-        }        
-
+        CmdBuilder builder = tlsTarget.get();
+        // 所有的命令参数封装到 Map
+        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                
+                .build();
+        DeviceInstruction deviceInstruction = new DeviceInstruction()
+                .setCmd(Cmd.reset)
+                .setCmdSn(builder.cmdSn)
+                .setTarget(builder.target, builder.group)
+                .setAckChannel(builder.ackChannel)
+                .setParameters(params);
+        sendCmd(deviceInstruction);
+        if(builder.autoRemove){
+            removeTlsTarget(); 
+        }
     }
     /**
      * 设备命令 <br>
@@ -385,19 +369,21 @@ public class CmdManager {
     public void time(Long unixTimestamp){
         checkArgument(null !=tlsTarget.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        Target target = tlsTarget.get();
-        ImmutableMap<String, String> params = ImmutableMap.<String,String>builder()
-            .put("unixTimestamp", unixTimestamp)
-            .build();
-        sendCmd(Cmd.parameter,
-            target.target,
-            target.group,
-            target.ackChannel,
-            params);
-        if(target.autoRemove){
-            tlsTarget.remove();    
-        }        
-
+        CmdBuilder builder = tlsTarget.get();
+        // 所有的命令参数封装到 Map
+        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                .put("unixTimestamp", unixTimestamp)
+                .build();
+        DeviceInstruction deviceInstruction = new DeviceInstruction()
+                .setCmd(Cmd.time)
+                .setCmdSn(builder.cmdSn)
+                .setTarget(builder.target, builder.group)
+                .setAckChannel(builder.ackChannel)
+                .setParameters(params);
+        sendCmd(deviceInstruction);
+        if(builder.autoRemove){
+            removeTlsTarget(); 
+        }
     }
     /**
      * 设备命令 <br>
@@ -409,20 +395,22 @@ public class CmdManager {
     public void update(URL url,String version){
         checkArgument(null !=tlsTarget.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        Target target = tlsTarget.get();
-        ImmutableMap<String, String> params = ImmutableMap.<String,String>builder()
-            .put("url", url)
-            .put("version", version)
-            .build();
-        sendCmd(Cmd.parameter,
-            target.target,
-            target.group,
-            target.ackChannel,
-            params);
-        if(target.autoRemove){
-            tlsTarget.remove();    
-        }        
-
+        CmdBuilder builder = tlsTarget.get();
+        // 所有的命令参数封装到 Map
+        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                .put("url", url)
+                .put("version", version)
+                .build();
+        DeviceInstruction deviceInstruction = new DeviceInstruction()
+                .setCmd(Cmd.update)
+                .setCmdSn(builder.cmdSn)
+                .setTarget(builder.target, builder.group)
+                .setAckChannel(builder.ackChannel)
+                .setParameters(params);
+        sendCmd(deviceInstruction);
+        if(builder.autoRemove){
+            removeTlsTarget(); 
+        }
     }
     /**
      * 设备命令 <br>
@@ -433,19 +421,21 @@ public class CmdManager {
     public void message(String message){
         checkArgument(null !=tlsTarget.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        Target target = tlsTarget.get();
-        ImmutableMap<String, String> params = ImmutableMap.<String,String>builder()
-            .put("message", message)
-            .build();
-        sendCmd(Cmd.parameter,
-            target.target,
-            target.group,
-            target.ackChannel,
-            params);
-        if(target.autoRemove){
-            tlsTarget.remove();    
-        }        
-
+        CmdBuilder builder = tlsTarget.get();
+        // 所有的命令参数封装到 Map
+        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                .put("message", message)
+                .build();
+        DeviceInstruction deviceInstruction = new DeviceInstruction()
+                .setCmd(Cmd.message)
+                .setCmdSn(builder.cmdSn)
+                .setTarget(builder.target, builder.group)
+                .setAckChannel(builder.ackChannel)
+                .setParameters(params);
+        sendCmd(deviceInstruction);
+        if(builder.autoRemove){
+            removeTlsTarget(); 
+        }
     }
     /**
      * 设备命令 <br>
@@ -458,19 +448,21 @@ public class CmdManager {
     public void custom(String cmdName,Map<String,Object> parameters){
         checkArgument(null !=tlsTarget.get(),
             "not defined target,please call method targetBuilder(),and set target info");
-        Target target = tlsTarget.get();
-        ImmutableMap<String, String> params = ImmutableMap.<String,String>builder()
-            .put("cmdName", cmdName)
-            .put("parameters", parameters)
-            .build();
-        sendCmd(Cmd.parameter,
-            target.target,
-            target.group,
-            target.ackChannel,
-            params);
-        if(target.autoRemove){
-            tlsTarget.remove();    
-        }        
-
+        CmdBuilder builder = tlsTarget.get();
+        // 所有的命令参数封装到 Map
+        ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
+                .put("cmdName", cmdName)
+                .put("parameters", parameters)
+                .build();
+        DeviceInstruction deviceInstruction = new DeviceInstruction()
+                .setCmd(Cmd.custom)
+                .setCmdSn(builder.cmdSn)
+                .setTarget(builder.target, builder.group)
+                .setAckChannel(builder.ackChannel)
+                .setParameters(params);
+        sendCmd(deviceInstruction);
+        if(builder.autoRemove){
+            removeTlsTarget(); 
+        }
     }
 }

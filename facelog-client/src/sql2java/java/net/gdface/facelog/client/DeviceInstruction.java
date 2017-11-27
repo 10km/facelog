@@ -10,28 +10,22 @@ package net.gdface.facelog.client;
 import java.util.List;
 import java.util.Map;
 
-import com.facebook.swift.codec.ThriftField;
-import com.facebook.swift.codec.ThriftStruct;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkArgument;
-
 /**
- * 设备指令
+ * 设备命令数据<br>
+ * 此类对象将做为设备命令经redis服务器发送到设备端,
+ * 数据发到redis服务器以及设备端从redis服务器收到数据的过程要经过JSON序列化和反序列化<br>
  * @author guyadong
  *
  */
-@ThriftStruct
-public final class DeviceInstruction implements CommonConstant {
+public final class DeviceInstruction{
     private Cmd cmd;
-    private long cmdSn;
+    private Long cmdSn;
     private List<Integer> target;
     private boolean group;
     private String ackChannel;
-    private Map<String, ? extends Object> parameters;
+    private Map<String, ?> parameters;
     public DeviceInstruction() {
     }
-    @ThriftField(1)
     public Cmd getCmd() {
         return cmd;
     }
@@ -40,28 +34,24 @@ public final class DeviceInstruction implements CommonConstant {
      * @param cmd
      * @return
      */
-    @ThriftField
     public DeviceInstruction setCmd(Cmd cmd) {
-        this.cmd = checkNotNull(cmd,"cmd is null");
+        this.cmd = cmd;
         return this;
     }
-    @ThriftField(2)
-    public long getCmdSn() {
+    public Long getCmdSn() {
         return cmdSn;
     }
     /**
-     * 设置唯一的命令序列号,每一次设备命令执行都要求一个唯一的序列号,
+     * 设置唯一的命令序列号,每一次设备命令执行都应该要求一个唯一的序列号,
      * 以便于命令响应端区分命令响应对象{@link net.gdface.facelog.service.Ack}来源
      * @param cmdSn
      * @return 
-     * @see {@link RedisManagement#applyCmdSn()}
+     * @see {@link net.gdface.facelog.client.IFaceLogClient#applyCmdSn(net.gdface.facelog.client.thrift.Token)}
      */
-    @ThriftField
-    public DeviceInstruction setCmdSn(long cmdSn) {
+    public DeviceInstruction setCmdSn(Long cmdSn) {
         this.cmdSn = cmdSn;
         return this;
     }
-    @ThriftField(3)
     public List<Integer> getTarget() {
         return target;
     }
@@ -71,13 +61,12 @@ public final class DeviceInstruction implements CommonConstant {
      * @param target
      * @return
      */
-    @ThriftField
     public DeviceInstruction setTarget(List<Integer> target) {
-        checkArgument(null!=target && !target.isEmpty(),"target must not be null or empty");
         this.target = target;
         return this;
     }
     /**
+     * 指定设备命令的目标ID及目标类型(设备/设备组)
      * @param target
      * @param group
      * @return
@@ -89,7 +78,6 @@ public final class DeviceInstruction implements CommonConstant {
         setGroup(group);
         return this;
     }
-    @ThriftField(4)
     public boolean isGroup() {
         return group;
     }
@@ -98,28 +86,26 @@ public final class DeviceInstruction implements CommonConstant {
      * @param group 目标类型:{@code true}:设备组,{@code false}:设备
      * @return
      */
-    @ThriftField
     public DeviceInstruction setGroup(boolean group) {
         this.group = group;
         return this;
     }
-    @ThriftField(5)
     public String getAckChannel() {
         return ackChannel;
     }
     /**
-     * 设置用于接收设备命令响应{@link net.gdface.facelog.service.Ack}的通道
+     * 设置用于接收设备命令响应{@link net.gdface.facelog.client.Ack}的通道,
+     * 如果不指定命令响应通道,则命令发送方法无法知道命令执行状态,
+     * 每一次设备命令发送都应该有一个唯一的命令响应接受通道,以便于命令发送方区命令响应来源
      * @param ackChannel
      * @return
-     * @see {@link RedisManagement#applyAckChannel()}
+     * @see {@link net.gdface.facelog.client.IFaceLogClient#applyAckChannel(net.gdface.facelog.client.thrift.Token)}
      */
-    @ThriftField
     public DeviceInstruction setAckChannel(String ackChannel) {
         this.ackChannel = ackChannel;
         return this;
     }
-    @ThriftField(6)
-    public Map<String, ? extends Object> getParameters() {
+    public Map<String, ?> getParameters() {
         return parameters;
     }
     /**
@@ -128,8 +114,7 @@ public final class DeviceInstruction implements CommonConstant {
      * @return
      * @see {@link CommandAdapter}
      */
-    @ThriftField
-    public DeviceInstruction setParameters(Map<String,? extends Object> parameters) {
+    public DeviceInstruction setParameters(Map<String,?> parameters) {
         this.parameters = parameters;
         return this;
     }
