@@ -76,9 +76,17 @@ public final class LogBean
     @ThriftField
     public void setCompareFace(final int compareFace) { this.compareFace = compareFace; }
 
+    private int verifyStatus;
+
+    @ThriftField(value=9, name="verifyStatus", requiredness=Requiredness.NONE)
+    public int getVerifyStatus() { return verifyStatus; }
+
+    @ThriftField
+    public void setVerifyStatus(final int verifyStatus) { this.verifyStatus = verifyStatus; }
+
     private double similarty;
 
-    @ThriftField(value=9, name="similarty", requiredness=Requiredness.NONE)
+    @ThriftField(value=10, name="similarty", requiredness=Requiredness.NONE)
     public double getSimilarty() { return similarty; }
 
     @ThriftField
@@ -86,7 +94,7 @@ public final class LogBean
 
     private long verifyTime;
 
-    @ThriftField(value=10, name="verifyTime", requiredness=Requiredness.NONE)
+    @ThriftField(value=11, name="verifyTime", requiredness=Requiredness.NONE)
     public long getVerifyTime() { return verifyTime; }
 
     @ThriftField
@@ -94,7 +102,7 @@ public final class LogBean
 
     private long createTime;
 
-    @ThriftField(value=11, name="createTime", requiredness=Requiredness.NONE)
+    @ThriftField(value=12, name="createTime", requiredness=Requiredness.NONE)
     public long getCreateTime() { return createTime; }
 
     @ThriftField
@@ -112,6 +120,7 @@ public final class LogBean
             .add("deviceId", deviceId)
             .add("verifyFeature", verifyFeature)
             .add("compareFace", compareFace)
+            .add("verifyStatus", verifyStatus)
             .add("similarty", similarty)
             .add("verifyTime", verifyTime)
             .add("createTime", createTime)

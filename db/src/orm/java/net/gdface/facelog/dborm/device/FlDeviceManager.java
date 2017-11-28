@@ -1082,6 +1082,14 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                 dirtyCount++;
             }
 
+            if (bean.checkRemarkModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("remark");
+                dirtyCount++;
+            }
+
             if (bean.checkCreateTimeModified()) {
                 if (dirtyCount>0) {
                     sql.append(",");
@@ -1229,6 +1237,15 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                     useComma=true;
                 }
                 sql.append("mac=?");
+            }
+
+            if (bean.checkRemarkModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("remark=?");
             }
 
             if (bean.checkCreateTimeModified()) {
@@ -1993,6 +2010,14 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mac ").append(sqlEqualsOperation).append("?");
                 }
             }
+            if (bean.checkRemarkModified()) {
+                dirtyCount ++;
+                if (bean.getRemark() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("remark IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("remark ").append(sqlEqualsOperation).append("?");
+                }
+            }
             if (bean.checkCreateTimeModified()) {
                 dirtyCount ++;
                 if (bean.getCreateTime() == null) {
@@ -2129,6 +2154,28 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                         throw new DaoException("Unknown search type " + searchType);
                 }
             }
+            if (bean.checkRemarkModified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getRemark() + "]");
+                        if (bean.getRemark() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getRemark()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getRemark() + "%]");
+                        if ( bean.getRemark()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getRemark() + SQL_LIKE_WILDCARD); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getRemark() + "]");
+                        if ( bean.getRemark() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getRemark()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getRemark() + "%]");
+                        if (bean.getRemark()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getRemark() + SQL_LIKE_WILDCARD); }
+                        break;
+                    default:
+                        throw new DaoException("Unknown search type " + searchType);
+                }
+            }
             if (bean.checkCreateTimeModified()) {
                 // System.out.println("Setting for " + dirtyCount + " [" + bean.getCreateTime() + "]");
                 if (bean.getCreateTime() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TIMESTAMP);} } else { ps.setTimestamp(++dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
@@ -2260,8 +2307,9 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
             bean.setVersion(rs.getString(4));
             bean.setSerialNo(rs.getString(5));
             bean.setMac(rs.getString(6));
-            bean.setCreateTime(rs.getTimestamp(7));
-            bean.setUpdateTime(rs.getTimestamp(8));
+            bean.setRemark(rs.getString(7));
+            bean.setCreateTime(rs.getTimestamp(8));
+            bean.setUpdateTime(rs.getTimestamp(9));
         }
         catch(SQLException e)
         {
@@ -2318,6 +2366,10 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                         ++pos;
                         bean.setMac(rs.getString(pos));
                         break;
+                    case FL_DEVICE_ID_REMARK:
+                        ++pos;
+                        bean.setRemark(rs.getString(pos));
+                        break;
                     case FL_DEVICE_ID_CREATE_TIME:
                         ++pos;
                         bean.setCreateTime(rs.getTimestamp(pos));
@@ -2360,6 +2412,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
             bean.setVersion(rs.getString("version"));
             bean.setSerialNo(rs.getString("serial_no"));
             bean.setMac(rs.getString("mac"));
+            bean.setRemark(rs.getString("remark"));
             bean.setCreateTime(rs.getTimestamp("create_time"));
             bean.setUpdateTime(rs.getTimestamp("update_time"));
         }

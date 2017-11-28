@@ -47,6 +47,9 @@ public  class FlDeviceBean
     /** comments:6字节MAC地址(HEX) */
     private String mac;
 
+    /** comments:备注 */
+    private String remark;
+
     private java.util.Date createTime;
 
     private java.util.Date updateTime;
@@ -505,6 +508,61 @@ public  class FlDeviceBean
         return 0L !=  (initialized & FL_DEVICE_ID_MAC_MASK);
     }
     /**
+     * Getter method for {@link #remark}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.remark</li>
+     * <li>comments: 备注</li>
+     * <li>column size: 256</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of remark
+     */
+    public String getRemark(){
+        return remark;
+    }
+    /**
+     * Setter method for {@link #remark}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to remark
+     */
+    public void setRemark(String newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, remark) && checkRemarkInitialized()) {
+            return;
+        }
+        remark = newVal;
+
+        modified |= FL_DEVICE_ID_REMARK_MASK;
+        initialized |= FL_DEVICE_ID_REMARK_MASK;
+    }
+    /**
+     * Determines if the remark has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkRemarkModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_REMARK_MASK);
+    }
+
+    /**
+     * Determines if the remark has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkRemarkInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_REMARK_MASK);
+    }
+    /**
      * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -674,6 +732,8 @@ public  class FlDeviceBean
             return checkSerialNoModified();
         case FL_DEVICE_ID_MAC:
             return checkMacModified();
+        case FL_DEVICE_ID_REMARK:
+            return checkRemarkModified();
         case FL_DEVICE_ID_CREATE_TIME:
             return checkCreateTimeModified();
         case FL_DEVICE_ID_UPDATE_TIME:
@@ -698,6 +758,8 @@ public  class FlDeviceBean
             return checkSerialNoInitialized();
         case FL_DEVICE_ID_MAC:
             return checkMacInitialized();
+        case FL_DEVICE_ID_REMARK:
+            return checkRemarkInitialized();
         case FL_DEVICE_ID_CREATE_TIME:
             return checkCreateTimeInitialized();
         case FL_DEVICE_ID_UPDATE_TIME:
@@ -739,6 +801,7 @@ public  class FlDeviceBean
             FL_DEVICE_ID_VERSION_MASK |
             FL_DEVICE_ID_SERIAL_NO_MASK |
             FL_DEVICE_ID_MAC_MASK |
+            FL_DEVICE_ID_REMARK_MASK |
             FL_DEVICE_ID_CREATE_TIME_MASK |
             FL_DEVICE_ID_UPDATE_TIME_MASK));
     }
@@ -759,6 +822,7 @@ public  class FlDeviceBean
         this.version = null;
         this.serialNo = null;
         this.mac = null;
+        this.remark = null;
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
         this.createTime = null;
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
@@ -782,6 +846,7 @@ public  class FlDeviceBean
             .append(getVersion(), obj.getVersion())
             .append(getSerialNo(), obj.getSerialNo())
             .append(getMac(), obj.getMac())
+            .append(getRemark(), obj.getRemark())
             .append(getCreateTime(), obj.getCreateTime())
             .append(getUpdateTime(), obj.getUpdateTime())
             .isEquals();
@@ -836,6 +901,12 @@ public  class FlDeviceBean
             }
             builder.append("mac=").append(getMac());
         }
+        if(checkRemarkInitialized()){
+            if(count++ >0){
+                builder.append(",");
+            }
+            builder.append("remark=").append(getRemark());
+        }
         if(checkCreateTimeInitialized()){
             if(count++ >0){
                 builder.append(",");
@@ -861,6 +932,7 @@ public  class FlDeviceBean
             .append(getVersion(), object.getVersion())
             .append(getSerialNo(), object.getSerialNo())
             .append(getMac(), object.getMac())
+            .append(getRemark(), object.getRemark())
             .append(getCreateTime(), object.getCreateTime())
             .append(getUpdateTime(), object.getUpdateTime())
             .toComparison();
@@ -889,6 +961,7 @@ public  class FlDeviceBean
         setVersion(null);
         setSerialNo(null);
         setMac(null);
+        setRemark(null);
         setCreateTime(null);
         setUpdateTime(null);
         isNew(true);
@@ -990,6 +1063,8 @@ public  class FlDeviceBean
             return (T)getSerialNo();        
         case FL_DEVICE_ID_MAC: 
             return (T)getMac();        
+        case FL_DEVICE_ID_REMARK: 
+            return (T)getRemark();        
         case FL_DEVICE_ID_CREATE_TIME: 
             return (T)getCreateTime();        
         case FL_DEVICE_ID_UPDATE_TIME: 
@@ -1020,6 +1095,9 @@ public  class FlDeviceBean
             break;
         case FL_DEVICE_ID_MAC:
             setMac((String)value);
+            break;
+        case FL_DEVICE_ID_REMARK:
+            setRemark((String)value);
             break;
         case FL_DEVICE_ID_CREATE_TIME:
             setCreateTime((java.util.Date)value);
@@ -1153,6 +1231,16 @@ public  class FlDeviceBean
          */
         public Builder mac(String mac){
             TEMPLATE.get().setMac(mac);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device.remark
+         * @param remark 备注
+         * @see {@link FlDeviceBean#getRemark()}
+         * @see {@link FlDeviceBean#setRemark(String)}
+         */
+        public Builder remark(String remark){
+            TEMPLATE.get().setRemark(remark);
             return this;
         }
         /** 

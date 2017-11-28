@@ -878,6 +878,14 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                 dirtyCount++;
             }
 
+            if (bean.checkVerifyStatusModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("verify_status");
+                dirtyCount++;
+            }
+
             if (bean.checkSimilartyModified()) {
                 if (dirtyCount>0) {
                     sql.append(",");
@@ -1024,6 +1032,15 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                     useComma=true;
                 }
                 sql.append("compare_face=?");
+            }
+
+            if (bean.checkVerifyStatusModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("verify_status=?");
             }
 
             if (bean.checkSimilartyModified()) {
@@ -1669,6 +1686,14 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("compare_face = ?");
                 }
             }
+            if (bean.checkVerifyStatusModified()) {
+                dirtyCount ++;
+                if (bean.getVerifyStatus() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("verify_status IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("verify_status = ?");
+                }
+            }
             if (bean.checkSimilartyModified()) {
                 dirtyCount ++;
                 if (bean.getSimilarty() == null) {
@@ -1754,6 +1779,10 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
             if (bean.checkCompareFaceModified()) {
                 // System.out.println("Setting for " + dirtyCount + " [" + bean.getCompareFace() + "]");
                 if (bean.getCompareFace() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getCompareFace()); }
+            }
+            if (bean.checkVerifyStatusModified()) {
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getVerifyStatus() + "]");
+                if (bean.getVerifyStatus() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TINYINT);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getVerifyStatus()); }
             }
             if (bean.checkSimilartyModified()) {
                 // System.out.println("Setting for " + dirtyCount + " [" + bean.getSimilarty() + "]");
@@ -1889,9 +1918,10 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
             bean.setDeviceId(Manager.getInteger(rs, 3));
             bean.setVerifyFeature(rs.getString(4));
             bean.setCompareFace(Manager.getInteger(rs, 5));
-            bean.setSimilarty(Manager.getDouble(rs, 6));
-            bean.setVerifyTime(rs.getTimestamp(7));
-            bean.setCreateTime(rs.getTimestamp(8));
+            bean.setVerifyStatus(Manager.getInteger(rs, 6));
+            bean.setSimilarty(Manager.getDouble(rs, 7));
+            bean.setVerifyTime(rs.getTimestamp(8));
+            bean.setCreateTime(rs.getTimestamp(9));
         }
         catch(SQLException e)
         {
@@ -1944,6 +1974,10 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                         ++pos;
                         bean.setCompareFace(Manager.getInteger(rs, pos));
                         break;
+                    case FL_LOG_ID_VERIFY_STATUS:
+                        ++pos;
+                        bean.setVerifyStatus(Manager.getInteger(rs, pos));
+                        break;
                     case FL_LOG_ID_SIMILARTY:
                         ++pos;
                         bean.setSimilarty(Manager.getDouble(rs, pos));
@@ -1989,6 +2023,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
             bean.setDeviceId(Manager.getInteger(rs, "device_id"));
             bean.setVerifyFeature(rs.getString("verify_feature"));
             bean.setCompareFace(Manager.getInteger(rs, "compare_face"));
+            bean.setVerifyStatus(Manager.getInteger(rs, "verify_status"));
             bean.setSimilarty(Manager.getDouble(rs, "similarty"));
             bean.setVerifyTime(rs.getTimestamp("verify_time"));
             bean.setCreateTime(rs.getTimestamp("create_time"));

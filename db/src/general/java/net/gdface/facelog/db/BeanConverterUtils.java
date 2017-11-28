@@ -156,6 +156,7 @@ public class BeanConverterUtils implements Constant {
             version("getVersion","setVersion"),
             serialNo("getSerialNo","setSerialNo"),
             mac("getMac","setMac"),
+            remark("getRemark","setRemark"),
             createTime("getCreateTime","setCreateTime"),
             updateTime("getUpdateTime","setUpdateTime");
             final String getter;
@@ -268,6 +269,8 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.serialNo.setter,String.class); 
             getGetter(Column.mac.getter);
             getSetterNoThrow(Column.mac.setter,String.class); 
+            getGetter(Column.remark.getter);
+            getSetterNoThrow(Column.remark.setter,String.class); 
             getGetter(Column.createTime.getter);
             getSetterNoThrow(Column.createTime.setter,java.util.Date.class,Long.class,long.class);  
             getGetter(Column.updateTime.getter);
@@ -322,6 +325,12 @@ public class BeanConverterUtils implements Constant {
                     left.setMac(cast(String.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.mac.name(),modified)){
                         selfModified |= FL_DEVICE_ID_MAC_MASK;
+                    }
+                }
+                if( bitCheck(Column.remark.name(),initialized) && (null != (getterMethod = methods.get(Column.remark.getter)))){
+                    left.setRemark(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.remark.name(),modified)){
+                        selfModified |= FL_DEVICE_ID_REMARK_MASK;
                     }
                 }
                 if( bitCheck(Column.createTime.name(),initialized) && (null != (getterMethod = methods.get(Column.createTime.getter)))){
@@ -407,6 +416,15 @@ public class BeanConverterUtils implements Constant {
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
+                if(null != (setterMethod = methods.get(Column.remark.setter)) && left.checkRemarkInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.remark.setter),left.getRemark()));
+                        bitOR(Column.remark.name(),initialized);
+                        if(left.checkRemarkModified()){
+                            bitOR(Column.remark.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
 // IGNORE field fl_device.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
                 if(null != (setterMethod = methods.get(Column.createTime.setter)) && left.checkCreateTimeInitialized()){
@@ -466,7 +484,10 @@ public class BeanConverterUtils implements Constant {
             id("getId","setId"),
             name("getName","setName"),
             leaf("getLeaf","setLeaf"),
-            parent("getParent","setParent");
+            parent("getParent","setParent"),
+            remark("getRemark","setRemark"),
+            extBin("getExtBin","setExtBin"),
+            extTxt("getExtTxt","setExtTxt");
             final String getter;
             final String setter;
             Column(String getter,String setter){
@@ -573,6 +594,12 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.leaf.setter,Integer.class,int.class);                    
             getGetter(Column.parent.getter);
             getSetterNoThrow(Column.parent.setter,Integer.class,int.class);                    
+            getGetter(Column.remark.getter);
+            getSetterNoThrow(Column.remark.setter,String.class); 
+            getGetter(Column.extBin.getter);
+            getSetterNoThrow(Column.extBin.setter,java.nio.ByteBuffer.class,byte[].class);                    
+            getGetter(Column.extTxt.getter);
+            getSetterNoThrow(Column.extTxt.setter,String.class); 
         }
         @Override
         protected void doFromRight(DeviceGroupBean left, R_DEVICEGROUP right) {
@@ -611,6 +638,24 @@ public class BeanConverterUtils implements Constant {
                     left.setParent(cast(Integer.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.parent.name(),modified)){
                         selfModified |= FL_DEVICE_GROUP_ID_PARENT_MASK;
+                    }
+                }
+                if( bitCheck(Column.remark.name(),initialized) && (null != (getterMethod = methods.get(Column.remark.getter)))){
+                    left.setRemark(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.remark.name(),modified)){
+                        selfModified |= FL_DEVICE_GROUP_ID_REMARK_MASK;
+                    }
+                }
+                if( bitCheck(Column.extBin.name(),initialized) && (null != (getterMethod = methods.get(Column.extBin.getter)))){
+                    left.setExtBin(cast(java.nio.ByteBuffer.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.extBin.name(),modified)){
+                        selfModified |= FL_DEVICE_GROUP_ID_EXT_BIN_MASK;
+                    }
+                }
+                if( bitCheck(Column.extTxt.name(),initialized) && (null != (getterMethod = methods.get(Column.extTxt.getter)))){
+                    left.setExtTxt(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.extTxt.name(),modified)){
+                        selfModified |= FL_DEVICE_GROUP_ID_EXT_TXT_MASK;
                     }
                 }
                 left.isNew((Boolean)methods.get(IS_NEW).invoke(right));
@@ -663,6 +708,33 @@ public class BeanConverterUtils implements Constant {
                         bitOR(Column.parent.name(),initialized);
                         if(left.checkParentModified()){
                             bitOR(Column.parent.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.remark.setter)) && left.checkRemarkInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.remark.setter),left.getRemark()));
+                        bitOR(Column.remark.name(),initialized);
+                        if(left.checkRemarkModified()){
+                            bitOR(Column.remark.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.extBin.setter)) && left.checkExtBinInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.extBin.setter),left.getExtBin()));
+                        bitOR(Column.extBin.name(),initialized);
+                        if(left.checkExtBinModified()){
+                            bitOR(Column.extBin.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.extTxt.setter)) && left.checkExtTxtInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.extTxt.setter),left.getExtTxt()));
+                        bitOR(Column.extTxt.name(),initialized);
+                        if(left.checkExtTxtModified()){
+                            bitOR(Column.extTxt.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
@@ -1774,6 +1846,7 @@ public class BeanConverterUtils implements Constant {
             deviceId("getDeviceId","setDeviceId"),
             verifyFeature("getVerifyFeature","setVerifyFeature"),
             compareFace("getCompareFace","setCompareFace"),
+            verifyStatus("getVerifyStatus","setVerifyStatus"),
             similarty("getSimilarty","setSimilarty"),
             verifyTime("getVerifyTime","setVerifyTime"),
             createTime("getCreateTime","setCreateTime");
@@ -1885,6 +1958,8 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.verifyFeature.setter,String.class); 
             getGetter(Column.compareFace.getter);
             getSetterNoThrow(Column.compareFace.setter,Integer.class,int.class);                    
+            getGetter(Column.verifyStatus.getter);
+            getSetterNoThrow(Column.verifyStatus.setter,Integer.class,int.class);                    
             getGetter(Column.similarty.getter);
             getSetterNoThrow(Column.similarty.setter,Double.class,double.class);                    
             getGetter(Column.verifyTime.getter);
@@ -1935,6 +2010,12 @@ public class BeanConverterUtils implements Constant {
                     left.setCompareFace(cast(Integer.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.compareFace.name(),modified)){
                         selfModified |= FL_LOG_ID_COMPARE_FACE_MASK;
+                    }
+                }
+                if( bitCheck(Column.verifyStatus.name(),initialized) && (null != (getterMethod = methods.get(Column.verifyStatus.getter)))){
+                    left.setVerifyStatus(cast(Integer.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.verifyStatus.name(),modified)){
+                        selfModified |= FL_LOG_ID_VERIFY_STATUS_MASK;
                     }
                 }
                 if( bitCheck(Column.similarty.name(),initialized) && (null != (getterMethod = methods.get(Column.similarty.getter)))){
@@ -2017,6 +2098,15 @@ public class BeanConverterUtils implements Constant {
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
+                if(null != (setterMethod = methods.get(Column.verifyStatus.setter)) && left.checkVerifyStatusInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.verifyStatus.setter),left.getVerifyStatus()));
+                        bitOR(Column.verifyStatus.name(),initialized);
+                        if(left.checkVerifyStatusModified()){
+                            bitOR(Column.verifyStatus.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
                 if(null != (setterMethod = methods.get(Column.similarty.setter)) && left.checkSimilartyInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get(Column.similarty.setter),left.getSimilarty()));
@@ -2081,6 +2171,9 @@ public class BeanConverterUtils implements Constant {
             /** column method info */
             deviceGroupId("getDeviceGroupId","setDeviceGroupId"),
             personGroupId("getPersonGroupId","setPersonGroupId"),
+            remark("getRemark","setRemark"),
+            extBin("getExtBin","setExtBin"),
+            extTxt("getExtTxt","setExtTxt"),
             createTime("getCreateTime","setCreateTime");
             final String getter;
             final String setter;
@@ -2184,6 +2277,12 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.deviceGroupId.setter,Integer.class,int.class);                    
             getGetter(Column.personGroupId.getter);
             getSetterNoThrow(Column.personGroupId.setter,Integer.class,int.class);                    
+            getGetter(Column.remark.getter);
+            getSetterNoThrow(Column.remark.setter,String.class); 
+            getGetter(Column.extBin.getter);
+            getSetterNoThrow(Column.extBin.setter,java.nio.ByteBuffer.class,byte[].class);                    
+            getGetter(Column.extTxt.getter);
+            getSetterNoThrow(Column.extTxt.setter,String.class); 
             getGetter(Column.createTime.getter);
             getSetterNoThrow(Column.createTime.setter,java.util.Date.class,Long.class,long.class);  
         }
@@ -2212,6 +2311,24 @@ public class BeanConverterUtils implements Constant {
                     left.setPersonGroupId(cast(Integer.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.personGroupId.name(),modified)){
                         selfModified |= FL_PERMIT_ID_PERSON_GROUP_ID_MASK;
+                    }
+                }
+                if( bitCheck(Column.remark.name(),initialized) && (null != (getterMethod = methods.get(Column.remark.getter)))){
+                    left.setRemark(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.remark.name(),modified)){
+                        selfModified |= FL_PERMIT_ID_REMARK_MASK;
+                    }
+                }
+                if( bitCheck(Column.extBin.name(),initialized) && (null != (getterMethod = methods.get(Column.extBin.getter)))){
+                    left.setExtBin(cast(java.nio.ByteBuffer.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.extBin.name(),modified)){
+                        selfModified |= FL_PERMIT_ID_EXT_BIN_MASK;
+                    }
+                }
+                if( bitCheck(Column.extTxt.name(),initialized) && (null != (getterMethod = methods.get(Column.extTxt.getter)))){
+                    left.setExtTxt(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.extTxt.name(),modified)){
+                        selfModified |= FL_PERMIT_ID_EXT_TXT_MASK;
                     }
                 }
                 if( bitCheck(Column.createTime.name(),initialized) && (null != (getterMethod = methods.get(Column.createTime.getter)))){
@@ -2252,6 +2369,33 @@ public class BeanConverterUtils implements Constant {
                         bitOR(Column.personGroupId.name(),initialized);
                         if(left.checkPersonGroupIdModified()){
                             bitOR(Column.personGroupId.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.remark.setter)) && left.checkRemarkInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.remark.setter),left.getRemark()));
+                        bitOR(Column.remark.name(),initialized);
+                        if(left.checkRemarkModified()){
+                            bitOR(Column.remark.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.extBin.setter)) && left.checkExtBinInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.extBin.setter),left.getExtBin()));
+                        bitOR(Column.extBin.name(),initialized);
+                        if(left.checkExtBinModified()){
+                            bitOR(Column.extBin.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.extTxt.setter)) && left.checkExtTxtInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.extTxt.setter),left.getExtTxt()));
+                        bitOR(Column.extTxt.name(),initialized);
+                        if(left.checkExtTxtModified()){
+                            bitOR(Column.extTxt.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
@@ -2304,12 +2448,14 @@ public class BeanConverterUtils implements Constant {
             name("getName","setName"),
             sex("getSex","setSex"),
             admin("getAdmin","setAdmin"),
+            password("getPassword","setPassword"),
             birthdate("getBirthdate","setBirthdate"),
             mobilePhone("getMobilePhone","setMobilePhone"),
             papersType("getPapersType","setPapersType"),
             papersNum("getPapersNum","setPapersNum"),
             imageMd5("getImageMd5","setImageMd5"),
             expiryDate("getExpiryDate","setExpiryDate"),
+            remark("getRemark","setRemark"),
             createTime("getCreateTime","setCreateTime"),
             updateTime("getUpdateTime","setUpdateTime");
             final String getter;
@@ -2420,6 +2566,8 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.sex.setter,Integer.class,int.class);                    
             getGetter(Column.admin.getter);
             getSetterNoThrow(Column.admin.setter,Integer.class,int.class);                    
+            getGetter(Column.password.getter);
+            getSetterNoThrow(Column.password.setter,String.class); 
             getGetter(Column.birthdate.getter);
             getSetterNoThrow(Column.birthdate.setter,java.util.Date.class,Long.class,long.class);  
             getGetter(Column.mobilePhone.getter);
@@ -2432,6 +2580,8 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.imageMd5.setter,String.class); 
             getGetter(Column.expiryDate.getter);
             getSetterNoThrow(Column.expiryDate.setter,java.util.Date.class,Long.class,long.class);  
+            getGetter(Column.remark.getter);
+            getSetterNoThrow(Column.remark.setter,String.class); 
             getGetter(Column.createTime.getter);
             getSetterNoThrow(Column.createTime.setter,java.util.Date.class,Long.class,long.class);  
             getGetter(Column.updateTime.getter);
@@ -2482,6 +2632,12 @@ public class BeanConverterUtils implements Constant {
                         selfModified |= FL_PERSON_ID_ADMIN_MASK;
                     }
                 }
+                if( bitCheck(Column.password.name(),initialized) && (null != (getterMethod = methods.get(Column.password.getter)))){
+                    left.setPassword(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.password.name(),modified)){
+                        selfModified |= FL_PERSON_ID_PASSWORD_MASK;
+                    }
+                }
                 if( bitCheck(Column.birthdate.name(),initialized) && (null != (getterMethod = methods.get(Column.birthdate.getter)))){
                     left.setBirthdate(cast(java.util.Date.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.birthdate.name(),modified)){
@@ -2516,6 +2672,12 @@ public class BeanConverterUtils implements Constant {
                     left.setExpiryDate(cast(java.util.Date.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.expiryDate.name(),modified)){
                         selfModified |= FL_PERSON_ID_EXPIRY_DATE_MASK;
+                    }
+                }
+                if( bitCheck(Column.remark.name(),initialized) && (null != (getterMethod = methods.get(Column.remark.getter)))){
+                    left.setRemark(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.remark.name(),modified)){
+                        selfModified |= FL_PERSON_ID_REMARK_MASK;
                     }
                 }
                 if( bitCheck(Column.createTime.name(),initialized) && (null != (getterMethod = methods.get(Column.createTime.getter)))){
@@ -2592,6 +2754,15 @@ public class BeanConverterUtils implements Constant {
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
+                if(null != (setterMethod = methods.get(Column.password.setter)) && left.checkPasswordInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.password.setter),left.getPassword()));
+                        bitOR(Column.password.name(),initialized);
+                        if(left.checkPasswordModified()){
+                            bitOR(Column.password.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
                 if(null != (setterMethod = methods.get(Column.birthdate.setter)) && left.checkBirthdateInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get(Column.birthdate.setter),left.getBirthdate()));
@@ -2643,6 +2814,15 @@ public class BeanConverterUtils implements Constant {
                         bitOR(Column.expiryDate.name(),initialized);
                         if(left.checkExpiryDateModified()){
                             bitOR(Column.expiryDate.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.remark.setter)) && left.checkRemarkInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.remark.setter),left.getRemark()));
+                        bitOR(Column.remark.name(),initialized);
+                        if(left.checkRemarkModified()){
+                            bitOR(Column.remark.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
@@ -2705,7 +2885,10 @@ public class BeanConverterUtils implements Constant {
             id("getId","setId"),
             name("getName","setName"),
             leaf("getLeaf","setLeaf"),
-            parent("getParent","setParent");
+            parent("getParent","setParent"),
+            remark("getRemark","setRemark"),
+            extBin("getExtBin","setExtBin"),
+            extTxt("getExtTxt","setExtTxt");
             final String getter;
             final String setter;
             Column(String getter,String setter){
@@ -2812,6 +2995,12 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.leaf.setter,Integer.class,int.class);                    
             getGetter(Column.parent.getter);
             getSetterNoThrow(Column.parent.setter,Integer.class,int.class);                    
+            getGetter(Column.remark.getter);
+            getSetterNoThrow(Column.remark.setter,String.class); 
+            getGetter(Column.extBin.getter);
+            getSetterNoThrow(Column.extBin.setter,java.nio.ByteBuffer.class,byte[].class);                    
+            getGetter(Column.extTxt.getter);
+            getSetterNoThrow(Column.extTxt.setter,String.class); 
         }
         @Override
         protected void doFromRight(PersonGroupBean left, R_PERSONGROUP right) {
@@ -2850,6 +3039,24 @@ public class BeanConverterUtils implements Constant {
                     left.setParent(cast(Integer.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.parent.name(),modified)){
                         selfModified |= FL_PERSON_GROUP_ID_PARENT_MASK;
+                    }
+                }
+                if( bitCheck(Column.remark.name(),initialized) && (null != (getterMethod = methods.get(Column.remark.getter)))){
+                    left.setRemark(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.remark.name(),modified)){
+                        selfModified |= FL_PERSON_GROUP_ID_REMARK_MASK;
+                    }
+                }
+                if( bitCheck(Column.extBin.name(),initialized) && (null != (getterMethod = methods.get(Column.extBin.getter)))){
+                    left.setExtBin(cast(java.nio.ByteBuffer.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.extBin.name(),modified)){
+                        selfModified |= FL_PERSON_GROUP_ID_EXT_BIN_MASK;
+                    }
+                }
+                if( bitCheck(Column.extTxt.name(),initialized) && (null != (getterMethod = methods.get(Column.extTxt.getter)))){
+                    left.setExtTxt(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.extTxt.name(),modified)){
+                        selfModified |= FL_PERSON_GROUP_ID_EXT_TXT_MASK;
                     }
                 }
                 left.isNew((Boolean)methods.get(IS_NEW).invoke(right));
@@ -2902,6 +3109,33 @@ public class BeanConverterUtils implements Constant {
                         bitOR(Column.parent.name(),initialized);
                         if(left.checkParentModified()){
                             bitOR(Column.parent.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.remark.setter)) && left.checkRemarkInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.remark.setter),left.getRemark()));
+                        bitOR(Column.remark.name(),initialized);
+                        if(left.checkRemarkModified()){
+                            bitOR(Column.remark.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.extBin.setter)) && left.checkExtBinInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.extBin.setter),left.getExtBin()));
+                        bitOR(Column.extBin.name(),initialized);
+                        if(left.checkExtBinModified()){
+                            bitOR(Column.extBin.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.extTxt.setter)) && left.checkExtTxtInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.extTxt.setter),left.getExtTxt()));
+                        bitOR(Column.extTxt.name(),initialized);
+                        if(left.checkExtTxtModified()){
+                            bitOR(Column.extTxt.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }

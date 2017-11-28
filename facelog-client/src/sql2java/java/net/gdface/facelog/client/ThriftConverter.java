@@ -37,6 +37,9 @@ public class ThriftConverter implements Constant{
             if(0L !=  (initialized & FL_DEVICE_ID_MAC_MASK)){
                 left.setMac(right.getMac());
             }
+            if(0L !=  (initialized & FL_DEVICE_ID_REMARK_MASK)){
+                left.setRemark(right.getRemark());
+            }
             if(0L !=  (initialized & FL_DEVICE_ID_CREATE_TIME_MASK)){
                 left.setCreateTime(right.getCreateTime());
             }
@@ -66,6 +69,9 @@ public class ThriftConverter implements Constant{
             }
             if(left.checkMacInitialized() ){
                 right.setMac(left.getMac());
+            }
+            if(left.checkRemarkInitialized() ){
+                right.setRemark(left.getRemark());
             }
 // IGNORE field fl_device.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
@@ -101,6 +107,15 @@ public class ThriftConverter implements Constant{
             if(0L !=  (initialized & FL_DEVICE_GROUP_ID_PARENT_MASK)){
                 left.setParent(right.getParent());
             }
+            if(0L !=  (initialized & FL_DEVICE_GROUP_ID_REMARK_MASK)){
+                left.setRemark(right.getRemark());
+            }
+            if(0L !=  (initialized & FL_DEVICE_GROUP_ID_EXT_BIN_MASK)){
+                left.setExtBin(right.getExtBin());
+            }
+            if(0L !=  (initialized & FL_DEVICE_GROUP_ID_EXT_TXT_MASK)){
+                left.setExtTxt(right.getExtTxt());
+            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
@@ -118,6 +133,15 @@ public class ThriftConverter implements Constant{
             }
             if(left.checkParentInitialized() ){
                 right.setParent(left.getParent());
+            }
+            if(left.checkRemarkInitialized() ){
+                right.setRemark(left.getRemark());
+            }
+            if(left.checkExtBinInitialized() ){
+                right.setExtBin(left.getExtBin());
+            }
+            if(left.checkExtTxtInitialized() ){
+                right.setExtTxt(left.getExtTxt());
             }
             right.setNew(left.isNew());
             right.setModified(left.getModified());
@@ -390,6 +414,9 @@ public class ThriftConverter implements Constant{
             if(0L !=  (initialized & FL_LOG_ID_COMPARE_FACE_MASK)){
                 left.setCompareFace(right.getCompareFace());
             }
+            if(0L !=  (initialized & FL_LOG_ID_VERIFY_STATUS_MASK)){
+                left.setVerifyStatus(right.getVerifyStatus());
+            }
             if(0L !=  (initialized & FL_LOG_ID_SIMILARTY_MASK)){
                 left.setSimilarty(right.getSimilarty());
             }
@@ -420,6 +447,9 @@ public class ThriftConverter implements Constant{
             if(left.checkCompareFaceInitialized() ){
                 right.setCompareFace(left.getCompareFace());
             }
+            if(left.checkVerifyStatusInitialized() ){
+                right.setVerifyStatus(left.getVerifyStatus());
+            }
             if(left.checkSimilartyInitialized() ){
                 right.setSimilarty(left.getSimilarty());
             }
@@ -448,6 +478,15 @@ public class ThriftConverter implements Constant{
             if(0L !=  (initialized & FL_PERMIT_ID_PERSON_GROUP_ID_MASK)){
                 left.setPersonGroupId(right.getPersonGroupId());
             }
+            if(0L !=  (initialized & FL_PERMIT_ID_REMARK_MASK)){
+                left.setRemark(right.getRemark());
+            }
+            if(0L !=  (initialized & FL_PERMIT_ID_EXT_BIN_MASK)){
+                left.setExtBin(right.getExtBin());
+            }
+            if(0L !=  (initialized & FL_PERMIT_ID_EXT_TXT_MASK)){
+                left.setExtTxt(right.getExtTxt());
+            }
             if(0L !=  (initialized & FL_PERMIT_ID_CREATE_TIME_MASK)){
                 left.setCreateTime(right.getCreateTime());
             }
@@ -462,6 +501,15 @@ public class ThriftConverter implements Constant{
             }
             if(left.checkPersonGroupIdInitialized() ){
                 right.setPersonGroupId(left.getPersonGroupId());
+            }
+            if(left.checkRemarkInitialized() ){
+                right.setRemark(left.getRemark());
+            }
+            if(left.checkExtBinInitialized() ){
+                right.setExtBin(left.getExtBin());
+            }
+            if(left.checkExtTxtInitialized() ){
+                right.setExtTxt(left.getExtTxt());
             }
 // IGNORE field fl_permit.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
@@ -494,6 +542,9 @@ public class ThriftConverter implements Constant{
             if(0L !=  (initialized & FL_PERSON_ID_ADMIN_MASK)){
                 left.setAdmin(right.getAdmin());
             }
+            if(0L !=  (initialized & FL_PERSON_ID_PASSWORD_MASK)){
+                left.setPassword(right.getPassword());
+            }
             if(0L !=  (initialized & FL_PERSON_ID_BIRTHDATE_MASK)){
                 left.setBirthdate(right.getBirthdate());
             }
@@ -511,6 +562,9 @@ public class ThriftConverter implements Constant{
             }
             if(0L !=  (initialized & FL_PERSON_ID_EXPIRY_DATE_MASK)){
                 left.setExpiryDate(right.getExpiryDate());
+            }
+            if(0L !=  (initialized & FL_PERSON_ID_REMARK_MASK)){
+                left.setRemark(right.getRemark());
             }
             if(0L !=  (initialized & FL_PERSON_ID_CREATE_TIME_MASK)){
                 left.setCreateTime(right.getCreateTime());
@@ -539,6 +593,9 @@ public class ThriftConverter implements Constant{
             if(left.checkAdminInitialized() ){
                 right.setAdmin(left.getAdmin());
             }
+            if(left.checkPasswordInitialized() ){
+                right.setPassword(left.getPassword());
+            }
             if(left.checkBirthdateInitialized() ){
                 right.setBirthdate(left.getBirthdate().getTime());
             }
@@ -556,6 +613,9 @@ public class ThriftConverter implements Constant{
             }
             if(left.checkExpiryDateInitialized() ){
                 right.setExpiryDate(left.getExpiryDate().getTime());
+            }
+            if(left.checkRemarkInitialized() ){
+                right.setRemark(left.getRemark());
             }
 // IGNORE field fl_person.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
@@ -591,6 +651,15 @@ public class ThriftConverter implements Constant{
             if(0L !=  (initialized & FL_PERSON_GROUP_ID_PARENT_MASK)){
                 left.setParent(right.getParent());
             }
+            if(0L !=  (initialized & FL_PERSON_GROUP_ID_REMARK_MASK)){
+                left.setRemark(right.getRemark());
+            }
+            if(0L !=  (initialized & FL_PERSON_GROUP_ID_EXT_BIN_MASK)){
+                left.setExtBin(right.getExtBin());
+            }
+            if(0L !=  (initialized & FL_PERSON_GROUP_ID_EXT_TXT_MASK)){
+                left.setExtTxt(right.getExtTxt());
+            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
@@ -608,6 +677,15 @@ public class ThriftConverter implements Constant{
             }
             if(left.checkParentInitialized() ){
                 right.setParent(left.getParent());
+            }
+            if(left.checkRemarkInitialized() ){
+                right.setRemark(left.getRemark());
+            }
+            if(left.checkExtBinInitialized() ){
+                right.setExtBin(left.getExtBin());
+            }
+            if(left.checkExtTxtInitialized() ){
+                right.setExtTxt(left.getExtTxt());
             }
             right.setNew(left.isNew());
             right.setModified(left.getModified());

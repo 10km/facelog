@@ -68,6 +68,30 @@ public final class PersonGroupBean
     @ThriftField
     public void setParent(final int parent) { this.parent = parent; }
 
+    private String remark;
+
+    @ThriftField(value=8, name="remark", requiredness=Requiredness.NONE)
+    public String getRemark() { return remark; }
+
+    @ThriftField
+    public void setRemark(final String remark) { this.remark = remark; }
+
+    private byte [] extBin;
+
+    @ThriftField(value=9, name="extBin", requiredness=Requiredness.NONE)
+    public byte [] getExtBin() { return extBin; }
+
+    @ThriftField
+    public void setExtBin(final byte [] extBin) { this.extBin = extBin; }
+
+    private String extTxt;
+
+    @ThriftField(value=10, name="extTxt", requiredness=Requiredness.NONE)
+    public String getExtTxt() { return extTxt; }
+
+    @ThriftField
+    public void setExtTxt(final String extTxt) { this.extTxt = extTxt; }
+
     @Override
     public String toString()
     {
@@ -79,6 +103,9 @@ public final class PersonGroupBean
             .add("name", name)
             .add("leaf", leaf)
             .add("parent", parent)
+            .add("remark", remark)
+            .add("extBin", extBin)
+            .add("extTxt", extTxt)
             .toString();
     }
 }

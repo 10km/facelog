@@ -90,9 +90,10 @@ struct LogBean {
   6:  i32 deviceId;
   7:  string verifyFeature;
   8:  i32 compareFace;
-  9:  double similarty;
-  10:  i64 verifyTime;
-  11:  i64 createTime;
+  9:  i32 verifyStatus;
+  10:  double similarty;
+  11:  i64 verifyTime;
+  12:  i64 createTime;
 }
 
 struct DeviceGroupBean {
@@ -103,6 +104,9 @@ struct DeviceGroupBean {
   5:  string name;
   6:  i32 leaf;
   7:  i32 parent;
+  8:  string remark;
+  9:  binary extBin;
+  10:  string extTxt;
 }
 
 struct PersonGroupBean {
@@ -113,6 +117,9 @@ struct PersonGroupBean {
   5:  string name;
   6:  i32 leaf;
   7:  i32 parent;
+  8:  string remark;
+  9:  binary extBin;
+  10:  string extTxt;
 }
 
 struct DeviceBean {
@@ -125,8 +132,9 @@ struct DeviceBean {
   7:  string version;
   8:  string serialNo;
   9:  string mac;
-  10:  i64 createTime;
-  11:  i64 updateTime;
+  10:  string remark;
+  11:  i64 createTime;
+  12:  i64 updateTime;
 }
 
 struct PersonBean {
@@ -138,14 +146,16 @@ struct PersonBean {
   6:  string name;
   7:  i32 sex;
   8:  i32 admin;
-  9:  i64 birthdate;
-  10:  string mobilePhone;
-  11:  i32 papersType;
-  12:  string papersNum;
-  13:  string imageMd5;
-  14:  i64 expiryDate;
-  15:  i64 createTime;
-  16:  i64 updateTime;
+  9:  string password;
+  10:  i64 birthdate;
+  11:  string mobilePhone;
+  12:  i32 papersType;
+  13:  string papersNum;
+  14:  string imageMd5;
+  15:  i64 expiryDate;
+  16:  string remark;
+  17:  i64 createTime;
+  18:  i64 updateTime;
 }
 
 struct LogLightBean {
@@ -166,7 +176,10 @@ struct PermitBean {
   3: required i64 initialized;
   4:  i32 deviceGroupId;
   5:  i32 personGroupId;
-  6:  i64 createTime;
+  6:  string remark;
+  7:  binary extBin;
+  8:  string extTxt;
+  9:  i64 createTime;
 }
 
 struct Token {

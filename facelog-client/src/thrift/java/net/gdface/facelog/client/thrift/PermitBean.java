@@ -52,9 +52,33 @@ public final class PermitBean
     @ThriftField
     public void setPersonGroupId(final int personGroupId) { this.personGroupId = personGroupId; }
 
+    private String remark;
+
+    @ThriftField(value=6, name="remark", requiredness=Requiredness.NONE)
+    public String getRemark() { return remark; }
+
+    @ThriftField
+    public void setRemark(final String remark) { this.remark = remark; }
+
+    private byte [] extBin;
+
+    @ThriftField(value=7, name="extBin", requiredness=Requiredness.NONE)
+    public byte [] getExtBin() { return extBin; }
+
+    @ThriftField
+    public void setExtBin(final byte [] extBin) { this.extBin = extBin; }
+
+    private String extTxt;
+
+    @ThriftField(value=8, name="extTxt", requiredness=Requiredness.NONE)
+    public String getExtTxt() { return extTxt; }
+
+    @ThriftField
+    public void setExtTxt(final String extTxt) { this.extTxt = extTxt; }
+
     private long createTime;
 
-    @ThriftField(value=6, name="createTime", requiredness=Requiredness.NONE)
+    @ThriftField(value=9, name="createTime", requiredness=Requiredness.NONE)
     public long getCreateTime() { return createTime; }
 
     @ThriftField
@@ -69,6 +93,9 @@ public final class PermitBean
             .add("initialized", initialized)
             .add("deviceGroupId", deviceGroupId)
             .add("personGroupId", personGroupId)
+            .add("remark", remark)
+            .add("extBin", extBin)
+            .add("extTxt", extTxt)
             .add("createTime", createTime)
             .toString();
     }

@@ -48,6 +48,9 @@ public  class FlLogBean
     /** comments:外键,数据库中相似度最高的人脸 id */
     private Integer compareFace;
 
+    /** comments:验证状态,NULL,0:允许通过,其他:拒绝 */
+    private Integer verifyStatus;
+
     /** comments:验证相似度 */
     private Double similarty;
 
@@ -476,6 +479,71 @@ public  class FlLogBean
         return 0L !=  (initialized & FL_LOG_ID_COMPARE_FACE_MASK);
     }
     /**
+     * Getter method for {@link #verifyStatus}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_log.verify_status</li>
+     * <li>comments: 验证状态,NULL,0:允许通过,其他:拒绝</li>
+     * <li>column size: 3</li>
+     * <li>JDBC type returned by the driver: Types.TINYINT</li>
+     * </ul>
+     *
+     * @return the value of verifyStatus
+     */
+    public Integer getVerifyStatus(){
+        return verifyStatus;
+    }
+    /**
+     * Setter method for {@link #verifyStatus}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to verifyStatus
+     */
+    public void setVerifyStatus(Integer newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, verifyStatus) && checkVerifyStatusInitialized()) {
+            return;
+        }
+        verifyStatus = newVal;
+
+        modified |= FL_LOG_ID_VERIFY_STATUS_MASK;
+        initialized |= FL_LOG_ID_VERIFY_STATUS_MASK;
+    }
+    /**
+     * Setter method for {@link #verifyStatus}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to verifyStatus
+     */
+    public void setVerifyStatus(int newVal)
+    {
+        setVerifyStatus(new Integer(newVal));
+    }
+    /**
+     * Determines if the verifyStatus has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkVerifyStatusModified()
+    {
+        return 0L !=  (modified & FL_LOG_ID_VERIFY_STATUS_MASK);
+    }
+
+    /**
+     * Determines if the verifyStatus has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkVerifyStatusInitialized()
+    {
+        return 0L !=  (initialized & FL_LOG_ID_VERIFY_STATUS_MASK);
+    }
+    /**
      * Getter method for {@link #similarty}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -748,6 +816,8 @@ public  class FlLogBean
             return checkVerifyFeatureModified();
         case FL_LOG_ID_COMPARE_FACE:
             return checkCompareFaceModified();
+        case FL_LOG_ID_VERIFY_STATUS:
+            return checkVerifyStatusModified();
         case FL_LOG_ID_SIMILARTY:
             return checkSimilartyModified();
         case FL_LOG_ID_VERIFY_TIME:
@@ -772,6 +842,8 @@ public  class FlLogBean
             return checkVerifyFeatureInitialized();
         case FL_LOG_ID_COMPARE_FACE:
             return checkCompareFaceInitialized();
+        case FL_LOG_ID_VERIFY_STATUS:
+            return checkVerifyStatusInitialized();
         case FL_LOG_ID_SIMILARTY:
             return checkSimilartyInitialized();
         case FL_LOG_ID_VERIFY_TIME:
@@ -814,6 +886,7 @@ public  class FlLogBean
             FL_LOG_ID_DEVICE_ID_MASK |
             FL_LOG_ID_VERIFY_FEATURE_MASK |
             FL_LOG_ID_COMPARE_FACE_MASK |
+            FL_LOG_ID_VERIFY_STATUS_MASK |
             FL_LOG_ID_SIMILARTY_MASK |
             FL_LOG_ID_VERIFY_TIME_MASK |
             FL_LOG_ID_CREATE_TIME_MASK));
@@ -833,6 +906,7 @@ public  class FlLogBean
         this.deviceId = null;
         this.verifyFeature = null;
         this.compareFace = null;
+        this.verifyStatus = null;
         this.similarty = null;
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
         this.verifyTime = null;
@@ -856,6 +930,7 @@ public  class FlLogBean
             .append(getDeviceId(), obj.getDeviceId())
             .append(getVerifyFeature(), obj.getVerifyFeature())
             .append(getCompareFace(), obj.getCompareFace())
+            .append(getVerifyStatus(), obj.getVerifyStatus())
             .append(getSimilarty(), obj.getSimilarty())
             .append(getVerifyTime(), obj.getVerifyTime())
             .append(getCreateTime(), obj.getCreateTime())
@@ -905,6 +980,12 @@ public  class FlLogBean
             }
             builder.append("compare_face=").append(getCompareFace());
         }
+        if(checkVerifyStatusInitialized()){
+            if(count++ >0){
+                builder.append(",");
+            }
+            builder.append("verify_status=").append(getVerifyStatus());
+        }
         if(checkSimilartyInitialized()){
             if(count++ >0){
                 builder.append(",");
@@ -935,6 +1016,7 @@ public  class FlLogBean
             .append(getDeviceId(), object.getDeviceId())
             .append(getVerifyFeature(), object.getVerifyFeature())
             .append(getCompareFace(), object.getCompareFace())
+            .append(getVerifyStatus(), object.getVerifyStatus())
             .append(getSimilarty(), object.getSimilarty())
             .append(getVerifyTime(), object.getVerifyTime())
             .append(getCreateTime(), object.getCreateTime())
@@ -963,6 +1045,7 @@ public  class FlLogBean
         setDeviceId(null);
         setVerifyFeature(null);
         setCompareFace(null);
+        setVerifyStatus(null);
         setSimilarty(null);
         setVerifyTime(null);
         setCreateTime(null);
@@ -1063,6 +1146,8 @@ public  class FlLogBean
             return (T)getVerifyFeature();        
         case FL_LOG_ID_COMPARE_FACE: 
             return (T)getCompareFace();        
+        case FL_LOG_ID_VERIFY_STATUS: 
+            return (T)getVerifyStatus();        
         case FL_LOG_ID_SIMILARTY: 
             return (T)getSimilarty();        
         case FL_LOG_ID_VERIFY_TIME: 
@@ -1092,6 +1177,9 @@ public  class FlLogBean
             break;
         case FL_LOG_ID_COMPARE_FACE:
             setCompareFace((Integer)value);
+            break;
+        case FL_LOG_ID_VERIFY_STATUS:
+            setVerifyStatus((Integer)value);
             break;
         case FL_LOG_ID_SIMILARTY:
             setSimilarty((Double)value);
@@ -1218,6 +1306,16 @@ public  class FlLogBean
          */
         public Builder compareFace(Integer compareFace){
             TEMPLATE.get().setCompareFace(compareFace);
+            return this;
+        }
+        /** 
+         * fill the field : fl_log.verify_status
+         * @param verifyStatus 验证状态,NULL,0:允许通过,其他:拒绝
+         * @see {@link FlLogBean#getVerifyStatus()}
+         * @see {@link FlLogBean#setVerifyStatus(Integer)}
+         */
+        public Builder verifyStatus(Integer verifyStatus){
+            TEMPLATE.get().setVerifyStatus(verifyStatus);
             return this;
         }
         /** 

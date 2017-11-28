@@ -40,6 +40,15 @@ public final class DeviceGroupBean
     /** comments:上一级设备组id */
     private Integer parent;
 
+    /** comments:备注 */
+    private String remark;
+
+    /** comments:应用项目自定义二进制扩展字段 */
+    private java.nio.ByteBuffer extBin;
+
+    /** comments:应用项目自定义文本扩展字段 */
+    private String extTxt;
+
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
@@ -444,6 +453,204 @@ public final class DeviceGroupBean
     {
         return 0L !=  (initialized & FL_DEVICE_GROUP_ID_PARENT_MASK);
     }
+    /**
+     * Getter method for {@link #remark}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device_group.remark</li>
+     * <li>comments: 备注</li>
+     * <li>column size: 256</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of remark
+     */
+    @ThriftField(value=8)
+    public String getRemark(){
+        return remark;
+    }
+    /**
+     * Setter method for {@link #remark}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to remark
+     */
+    public void setRemark(String newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, remark) && checkRemarkInitialized()) {
+            return;
+        }
+        remark = newVal;
+
+        modified |= FL_DEVICE_GROUP_ID_REMARK_MASK;
+        initialized |= FL_DEVICE_GROUP_ID_REMARK_MASK;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "remark")
+    public void writeRemark(String newVal){
+        checkMutable();
+        remark = newVal;
+    }
+    /**
+     * Determines if the remark has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkRemarkModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_GROUP_ID_REMARK_MASK);
+    }
+
+    /**
+     * Determines if the remark has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkRemarkInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_GROUP_ID_REMARK_MASK);
+    }
+    /**
+     * Getter method for {@link #extBin}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device_group.ext_bin</li>
+     * <li>comments: 应用项目自定义二进制扩展字段</li>
+     * <li>column size: 65535</li>
+     * <li>JDBC type returned by the driver: Types.LONGVARBINARY</li>
+     * </ul>
+     *
+     * @return the value of extBin
+     */
+    @ThriftField(value=9)
+    public java.nio.ByteBuffer getExtBin(){
+        return extBin;
+    }
+    /**
+     * Setter method for {@link #extBin}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to extBin
+     */
+    public void setExtBin(java.nio.ByteBuffer newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, extBin) && checkExtBinInitialized()) {
+            return;
+        }
+        extBin = newVal;
+
+        modified |= FL_DEVICE_GROUP_ID_EXT_BIN_MASK;
+        initialized |= FL_DEVICE_GROUP_ID_EXT_BIN_MASK;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "extBin")
+    public void writeExtBin(java.nio.ByteBuffer newVal){
+        checkMutable();
+        extBin = newVal;
+    }
+    /**
+     * Determines if the extBin has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkExtBinModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_GROUP_ID_EXT_BIN_MASK);
+    }
+
+    /**
+     * Determines if the extBin has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkExtBinInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_GROUP_ID_EXT_BIN_MASK);
+    }
+    /**
+     * Getter method for {@link #extTxt}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device_group.ext_txt</li>
+     * <li>comments: 应用项目自定义文本扩展字段</li>
+     * <li>column size: 65535</li>
+     * <li>JDBC type returned by the driver: Types.LONGVARCHAR</li>
+     * </ul>
+     *
+     * @return the value of extTxt
+     */
+    @ThriftField(value=10)
+    public String getExtTxt(){
+        return extTxt;
+    }
+    /**
+     * Setter method for {@link #extTxt}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to extTxt
+     */
+    public void setExtTxt(String newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, extTxt) && checkExtTxtInitialized()) {
+            return;
+        }
+        extTxt = newVal;
+
+        modified |= FL_DEVICE_GROUP_ID_EXT_TXT_MASK;
+        initialized |= FL_DEVICE_GROUP_ID_EXT_TXT_MASK;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "extTxt")
+    public void writeExtTxt(String newVal){
+        checkMutable();
+        extTxt = newVal;
+    }
+    /**
+     * Determines if the extTxt has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkExtTxtModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_GROUP_ID_EXT_TXT_MASK);
+    }
+
+    /**
+     * Determines if the extTxt has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkExtTxtInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_GROUP_ID_EXT_TXT_MASK);
+    }
     //////////////////////////////////////
     // referenced bean for FOREIGN KEYS
     //////////////////////////////////////
@@ -478,6 +685,12 @@ public final class DeviceGroupBean
             return checkLeafModified();
         case FL_DEVICE_GROUP_ID_PARENT:
             return checkParentModified();
+        case FL_DEVICE_GROUP_ID_REMARK:
+            return checkRemarkModified();
+        case FL_DEVICE_GROUP_ID_EXT_BIN:
+            return checkExtBinModified();
+        case FL_DEVICE_GROUP_ID_EXT_TXT:
+            return checkExtTxtModified();
         default:
             return false;
         }        
@@ -494,6 +707,12 @@ public final class DeviceGroupBean
             return checkLeafInitialized();
         case FL_DEVICE_GROUP_ID_PARENT:
             return checkParentInitialized();
+        case FL_DEVICE_GROUP_ID_REMARK:
+            return checkRemarkInitialized();
+        case FL_DEVICE_GROUP_ID_EXT_BIN:
+            return checkExtBinInitialized();
+        case FL_DEVICE_GROUP_ID_EXT_TXT:
+            return checkExtTxtInitialized();
         default:
             return false;
         }
@@ -528,7 +747,10 @@ public final class DeviceGroupBean
     {
         modified &= (~(FL_DEVICE_GROUP_ID_NAME_MASK |
             FL_DEVICE_GROUP_ID_LEAF_MASK |
-            FL_DEVICE_GROUP_ID_PARENT_MASK));
+            FL_DEVICE_GROUP_ID_PARENT_MASK |
+            FL_DEVICE_GROUP_ID_REMARK_MASK |
+            FL_DEVICE_GROUP_ID_EXT_BIN_MASK |
+            FL_DEVICE_GROUP_ID_EXT_TXT_MASK));
     }
     /**
      * Resets the object initialization status to 'not initialized'.
@@ -544,6 +766,9 @@ public final class DeviceGroupBean
         this.name = null;
         this.leaf = null;
         this.parent = null;
+        this.remark = null;
+        this.extBin = null;
+        this.extTxt = null;
         this.isNew = true;
         this.modified = 0L;
         this.initialized = 0L;
@@ -561,6 +786,9 @@ public final class DeviceGroupBean
             .append(getName(), obj.getName())
             .append(getLeaf(), obj.getLeaf())
             .append(getParent(), obj.getParent())
+            .append(getRemark(), obj.getRemark())
+            .append(getExtBin(), obj.getExtBin())
+            .append(getExtTxt(), obj.getExtTxt())
             .isEquals();
     }
 
@@ -601,6 +829,24 @@ public final class DeviceGroupBean
             }
             builder.append("parent=").append(getParent());
         }
+        if(checkRemarkInitialized()){
+            if(count++ >0){
+                builder.append(",");
+            }
+            builder.append("remark=").append(getRemark());
+        }
+        if(checkExtBinInitialized()){
+            if(count++ >0){
+                builder.append(",");
+            }
+            builder.append("ext_bin=").append(getExtBin());
+        }
+        if(checkExtTxtInitialized()){
+            if(count++ >0){
+                builder.append(",");
+            }
+            builder.append("ext_txt=").append(getExtTxt());
+        }
         builder.append("]");
         return builder.toString();
     }
@@ -612,6 +858,9 @@ public final class DeviceGroupBean
             .append(getName(), object.getName())
             .append(getLeaf(), object.getLeaf())
             .append(getParent(), object.getParent())
+            .append(getRemark(), object.getRemark())
+            .append(getExtBin(), object.getExtBin())
+            .append(getExtTxt(), object.getExtTxt())
             .toComparison();
     }
     @Override
@@ -636,6 +885,9 @@ public final class DeviceGroupBean
         setName(null);
         setLeaf(null);
         setParent(null);
+        setRemark(null);
+        setExtBin(null);
+        setExtTxt(null);
         isNew(true);
         resetInitialized();
         resetIsModified();
@@ -731,6 +983,12 @@ public final class DeviceGroupBean
             return (T)getLeaf();        
         case FL_DEVICE_GROUP_ID_PARENT: 
             return (T)getParent();        
+        case FL_DEVICE_GROUP_ID_REMARK: 
+            return (T)getRemark();        
+        case FL_DEVICE_GROUP_ID_EXT_BIN: 
+            return (T)getExtBin();        
+        case FL_DEVICE_GROUP_ID_EXT_TXT: 
+            return (T)getExtTxt();        
         default:
             return null;
         }
@@ -751,6 +1009,15 @@ public final class DeviceGroupBean
             break;
         case FL_DEVICE_GROUP_ID_PARENT:
             setParent((Integer)value);
+            break;
+        case FL_DEVICE_GROUP_ID_REMARK:
+            setRemark((String)value);
+            break;
+        case FL_DEVICE_GROUP_ID_EXT_BIN:
+            setExtBin((java.nio.ByteBuffer)value);
+            break;
+        case FL_DEVICE_GROUP_ID_EXT_TXT:
+            setExtTxt((String)value);
             break;
         default:
             break;
@@ -858,6 +1125,36 @@ public final class DeviceGroupBean
          */
         public Builder parent(Integer parent){
             TEMPLATE.get().setParent(parent);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device_group.remark
+         * @param remark 备注
+         * @see {@link DeviceGroupBean#getRemark()}
+         * @see {@link DeviceGroupBean#setRemark(String)}
+         */
+        public Builder remark(String remark){
+            TEMPLATE.get().setRemark(remark);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device_group.ext_bin
+         * @param extBin 应用项目自定义二进制扩展字段
+         * @see {@link DeviceGroupBean#getExtBin()}
+         * @see {@link DeviceGroupBean#setExtBin(java.nio.ByteBuffer)}
+         */
+        public Builder extBin(java.nio.ByteBuffer extBin){
+            TEMPLATE.get().setExtBin(extBin);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device_group.ext_txt
+         * @param extTxt 应用项目自定义文本扩展字段
+         * @see {@link DeviceGroupBean#getExtTxt()}
+         * @see {@link DeviceGroupBean#setExtTxt(String)}
+         */
+        public Builder extTxt(String extTxt){
+            TEMPLATE.get().setExtTxt(extTxt);
             return this;
         }
     }

@@ -1139,6 +1139,14 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                 dirtyCount++;
             }
 
+            if (bean.checkPasswordModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("password");
+                dirtyCount++;
+            }
+
             if (bean.checkBirthdateModified()) {
                 if (dirtyCount>0) {
                     sql.append(",");
@@ -1184,6 +1192,14 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                     sql.append(",");
                 }
                 sql.append("expiry_date");
+                dirtyCount++;
+            }
+
+            if (bean.checkRemarkModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("remark");
                 dirtyCount++;
             }
 
@@ -1327,6 +1343,15 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                 sql.append("admin=?");
             }
 
+            if (bean.checkPasswordModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("password=?");
+            }
+
             if (bean.checkBirthdateModified()) {
                 if (useComma) {
                     sql.append(", ");
@@ -1379,6 +1404,15 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                     useComma=true;
                 }
                 sql.append("expiry_date=?");
+            }
+
+            if (bean.checkRemarkModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("remark=?");
             }
 
             if (bean.checkCreateTimeModified()) {
@@ -2195,6 +2229,14 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("admin = ?");
                 }
             }
+            if (bean.checkPasswordModified()) {
+                dirtyCount ++;
+                if (bean.getPassword() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("password IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("password ").append(sqlEqualsOperation).append("?");
+                }
+            }
             if (bean.checkBirthdateModified()) {
                 dirtyCount ++;
                 if (bean.getBirthdate() == null) {
@@ -2241,6 +2283,14 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("expiry_date IS NULL");
                 } else {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("expiry_date = ?");
+                }
+            }
+            if (bean.checkRemarkModified()) {
+                dirtyCount ++;
+                if (bean.getRemark() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("remark IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("remark ").append(sqlEqualsOperation).append("?");
                 }
             }
             if (bean.checkCreateTimeModified()) {
@@ -2321,6 +2371,28 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                 // System.out.println("Setting for " + dirtyCount + " [" + bean.getAdmin() + "]");
                 if (bean.getAdmin() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TINYINT);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getAdmin()); }
             }
+            if (bean.checkPasswordModified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getPassword() + "]");
+                        if (bean.getPassword() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getPassword()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getPassword() + "%]");
+                        if ( bean.getPassword()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getPassword() + SQL_LIKE_WILDCARD); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getPassword() + "]");
+                        if ( bean.getPassword() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getPassword()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getPassword() + "%]");
+                        if (bean.getPassword()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getPassword() + SQL_LIKE_WILDCARD); }
+                        break;
+                    default:
+                        throw new DaoException("Unknown search type " + searchType);
+                }
+            }
             if (bean.checkBirthdateModified()) {
                 // System.out.println("Setting for " + dirtyCount + " [" + bean.getBirthdate() + "]");
                 if (bean.getBirthdate() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.DATE);} } else { ps.setDate(++dirtyCount, new java.sql.Date(bean.getBirthdate().getTime())); }
@@ -2398,6 +2470,28 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
             if (bean.checkExpiryDateModified()) {
                 // System.out.println("Setting for " + dirtyCount + " [" + bean.getExpiryDate() + "]");
                 if (bean.getExpiryDate() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.DATE);} } else { ps.setDate(++dirtyCount, new java.sql.Date(bean.getExpiryDate().getTime())); }
+            }
+            if (bean.checkRemarkModified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getRemark() + "]");
+                        if (bean.getRemark() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getRemark()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getRemark() + "%]");
+                        if ( bean.getRemark()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getRemark() + SQL_LIKE_WILDCARD); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getRemark() + "]");
+                        if ( bean.getRemark() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getRemark()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getRemark() + "%]");
+                        if (bean.getRemark()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getRemark() + SQL_LIKE_WILDCARD); }
+                        break;
+                    default:
+                        throw new DaoException("Unknown search type " + searchType);
+                }
             }
             if (bean.checkCreateTimeModified()) {
                 // System.out.println("Setting for " + dirtyCount + " [" + bean.getCreateTime() + "]");
@@ -2529,14 +2623,16 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
             bean.setName(rs.getString(3));
             bean.setSex(Manager.getInteger(rs, 4));
             bean.setAdmin(Manager.getInteger(rs, 5));
-            bean.setBirthdate(rs.getDate(6));
-            bean.setMobilePhone(rs.getString(7));
-            bean.setPapersType(Manager.getInteger(rs, 8));
-            bean.setPapersNum(rs.getString(9));
-            bean.setImageMd5(rs.getString(10));
-            bean.setExpiryDate(rs.getDate(11));
-            bean.setCreateTime(rs.getTimestamp(12));
-            bean.setUpdateTime(rs.getTimestamp(13));
+            bean.setPassword(rs.getString(6));
+            bean.setBirthdate(rs.getDate(7));
+            bean.setMobilePhone(rs.getString(8));
+            bean.setPapersType(Manager.getInteger(rs, 9));
+            bean.setPapersNum(rs.getString(10));
+            bean.setImageMd5(rs.getString(11));
+            bean.setExpiryDate(rs.getDate(12));
+            bean.setRemark(rs.getString(13));
+            bean.setCreateTime(rs.getTimestamp(14));
+            bean.setUpdateTime(rs.getTimestamp(15));
         }
         catch(SQLException e)
         {
@@ -2589,6 +2685,10 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                         ++pos;
                         bean.setAdmin(Manager.getInteger(rs, pos));
                         break;
+                    case FL_PERSON_ID_PASSWORD:
+                        ++pos;
+                        bean.setPassword(rs.getString(pos));
+                        break;
                     case FL_PERSON_ID_BIRTHDATE:
                         ++pos;
                         bean.setBirthdate(rs.getDate(pos));
@@ -2612,6 +2712,10 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                     case FL_PERSON_ID_EXPIRY_DATE:
                         ++pos;
                         bean.setExpiryDate(rs.getDate(pos));
+                        break;
+                    case FL_PERSON_ID_REMARK:
+                        ++pos;
+                        bean.setRemark(rs.getString(pos));
                         break;
                     case FL_PERSON_ID_CREATE_TIME:
                         ++pos;
@@ -2654,12 +2758,14 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
             bean.setName(rs.getString("name"));
             bean.setSex(Manager.getInteger(rs, "sex"));
             bean.setAdmin(Manager.getInteger(rs, "admin"));
+            bean.setPassword(rs.getString("password"));
             bean.setBirthdate(rs.getDate("birthdate"));
             bean.setMobilePhone(rs.getString("mobile_phone"));
             bean.setPapersType(Manager.getInteger(rs, "papers_type"));
             bean.setPapersNum(rs.getString("papers_num"));
             bean.setImageMd5(rs.getString("image_md5"));
             bean.setExpiryDate(rs.getDate("expiry_date"));
+            bean.setRemark(rs.getString("remark"));
             bean.setCreateTime(rs.getTimestamp("create_time"));
             bean.setUpdateTime(rs.getTimestamp("update_time"));
         }

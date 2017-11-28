@@ -34,6 +34,15 @@ public final class PermitBean
     /** comments:外键,人员组id */
     private Integer personGroupId;
 
+    /** comments:备注 */
+    private String remark;
+
+    /** comments:应用项目自定义二进制扩展字段 */
+    private java.nio.ByteBuffer extBin;
+
+    /** comments:应用项目自定义文本扩展字段 */
+    private String extTxt;
+
     private java.util.Date createTime;
 
     /** flag whether {@code this} can be modified */
@@ -299,6 +308,204 @@ public final class PermitBean
         return 0L !=  (initialized & FL_PERMIT_ID_PERSON_GROUP_ID_MASK);
     }
     /**
+     * Getter method for {@link #remark}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_permit.remark</li>
+     * <li>comments: 备注</li>
+     * <li>column size: 256</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of remark
+     */
+    @ThriftField(value=6)
+    public String getRemark(){
+        return remark;
+    }
+    /**
+     * Setter method for {@link #remark}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to remark
+     */
+    public void setRemark(String newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, remark) && checkRemarkInitialized()) {
+            return;
+        }
+        remark = newVal;
+
+        modified |= FL_PERMIT_ID_REMARK_MASK;
+        initialized |= FL_PERMIT_ID_REMARK_MASK;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "remark")
+    public void writeRemark(String newVal){
+        checkMutable();
+        remark = newVal;
+    }
+    /**
+     * Determines if the remark has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkRemarkModified()
+    {
+        return 0L !=  (modified & FL_PERMIT_ID_REMARK_MASK);
+    }
+
+    /**
+     * Determines if the remark has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkRemarkInitialized()
+    {
+        return 0L !=  (initialized & FL_PERMIT_ID_REMARK_MASK);
+    }
+    /**
+     * Getter method for {@link #extBin}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_permit.ext_bin</li>
+     * <li>comments: 应用项目自定义二进制扩展字段</li>
+     * <li>column size: 65535</li>
+     * <li>JDBC type returned by the driver: Types.LONGVARBINARY</li>
+     * </ul>
+     *
+     * @return the value of extBin
+     */
+    @ThriftField(value=7)
+    public java.nio.ByteBuffer getExtBin(){
+        return extBin;
+    }
+    /**
+     * Setter method for {@link #extBin}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to extBin
+     */
+    public void setExtBin(java.nio.ByteBuffer newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, extBin) && checkExtBinInitialized()) {
+            return;
+        }
+        extBin = newVal;
+
+        modified |= FL_PERMIT_ID_EXT_BIN_MASK;
+        initialized |= FL_PERMIT_ID_EXT_BIN_MASK;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "extBin")
+    public void writeExtBin(java.nio.ByteBuffer newVal){
+        checkMutable();
+        extBin = newVal;
+    }
+    /**
+     * Determines if the extBin has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkExtBinModified()
+    {
+        return 0L !=  (modified & FL_PERMIT_ID_EXT_BIN_MASK);
+    }
+
+    /**
+     * Determines if the extBin has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkExtBinInitialized()
+    {
+        return 0L !=  (initialized & FL_PERMIT_ID_EXT_BIN_MASK);
+    }
+    /**
+     * Getter method for {@link #extTxt}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_permit.ext_txt</li>
+     * <li>comments: 应用项目自定义文本扩展字段</li>
+     * <li>column size: 65535</li>
+     * <li>JDBC type returned by the driver: Types.LONGVARCHAR</li>
+     * </ul>
+     *
+     * @return the value of extTxt
+     */
+    @ThriftField(value=8)
+    public String getExtTxt(){
+        return extTxt;
+    }
+    /**
+     * Setter method for {@link #extTxt}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to extTxt
+     */
+    public void setExtTxt(String newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, extTxt) && checkExtTxtInitialized()) {
+            return;
+        }
+        extTxt = newVal;
+
+        modified |= FL_PERMIT_ID_EXT_TXT_MASK;
+        initialized |= FL_PERMIT_ID_EXT_TXT_MASK;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "extTxt")
+    public void writeExtTxt(String newVal){
+        checkMutable();
+        extTxt = newVal;
+    }
+    /**
+     * Determines if the extTxt has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkExtTxtModified()
+    {
+        return 0L !=  (modified & FL_PERMIT_ID_EXT_TXT_MASK);
+    }
+
+    /**
+     * Determines if the extTxt has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkExtTxtInitialized()
+    {
+        return 0L !=  (initialized & FL_PERMIT_ID_EXT_TXT_MASK);
+    }
+    /**
      * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -318,7 +525,7 @@ public final class PermitBean
      * use Long to represent date type for thrift:swift support 
      * @see #getCreateTime()
      */
-    @ThriftField(name = "createTime",value = 6)
+    @ThriftField(name = "createTime",value = 9)
     public Long readCreateTime(){
         return null == createTime ? null:createTime.getTime();
     }
@@ -425,6 +632,12 @@ public final class PermitBean
             return checkDeviceGroupIdModified();
         case FL_PERMIT_ID_PERSON_GROUP_ID:
             return checkPersonGroupIdModified();
+        case FL_PERMIT_ID_REMARK:
+            return checkRemarkModified();
+        case FL_PERMIT_ID_EXT_BIN:
+            return checkExtBinModified();
+        case FL_PERMIT_ID_EXT_TXT:
+            return checkExtTxtModified();
         case FL_PERMIT_ID_CREATE_TIME:
             return checkCreateTimeModified();
         default:
@@ -439,6 +652,12 @@ public final class PermitBean
             return checkDeviceGroupIdInitialized();
         case FL_PERMIT_ID_PERSON_GROUP_ID:
             return checkPersonGroupIdInitialized();
+        case FL_PERMIT_ID_REMARK:
+            return checkRemarkInitialized();
+        case FL_PERMIT_ID_EXT_BIN:
+            return checkExtBinInitialized();
+        case FL_PERMIT_ID_EXT_TXT:
+            return checkExtTxtInitialized();
         case FL_PERMIT_ID_CREATE_TIME:
             return checkCreateTimeInitialized();
         default:
@@ -474,7 +693,10 @@ public final class PermitBean
      */
     public void resetModifiedExceptPrimaryKeys()
     {
-        modified &= (~(FL_PERMIT_ID_CREATE_TIME_MASK));
+        modified &= (~(FL_PERMIT_ID_REMARK_MASK |
+            FL_PERMIT_ID_EXT_BIN_MASK |
+            FL_PERMIT_ID_EXT_TXT_MASK |
+            FL_PERMIT_ID_CREATE_TIME_MASK));
     }
     /**
      * Resets the object initialization status to 'not initialized'.
@@ -488,6 +710,9 @@ public final class PermitBean
         checkMutable();
         this.deviceGroupId = null;
         this.personGroupId = null;
+        this.remark = null;
+        this.extBin = null;
+        this.extTxt = null;
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
         this.createTime = null;
         this.isNew = true;
@@ -505,6 +730,9 @@ public final class PermitBean
         return new EqualsBuilder()
             .append(getDeviceGroupId(), obj.getDeviceGroupId())
             .append(getPersonGroupId(), obj.getPersonGroupId())
+            .append(getRemark(), obj.getRemark())
+            .append(getExtBin(), obj.getExtBin())
+            .append(getExtTxt(), obj.getExtTxt())
             .append(getCreateTime(), obj.getCreateTime())
             .isEquals();
     }
@@ -535,6 +763,24 @@ public final class PermitBean
             }
             builder.append("person_group_id=").append(getPersonGroupId());
         }
+        if(checkRemarkInitialized()){
+            if(count++ >0){
+                builder.append(",");
+            }
+            builder.append("remark=").append(getRemark());
+        }
+        if(checkExtBinInitialized()){
+            if(count++ >0){
+                builder.append(",");
+            }
+            builder.append("ext_bin=").append(getExtBin());
+        }
+        if(checkExtTxtInitialized()){
+            if(count++ >0){
+                builder.append(",");
+            }
+            builder.append("ext_txt=").append(getExtTxt());
+        }
         if(checkCreateTimeInitialized()){
             if(count++ >0){
                 builder.append(",");
@@ -550,6 +796,9 @@ public final class PermitBean
         return new CompareToBuilder()
             .append(getDeviceGroupId(), object.getDeviceGroupId())
             .append(getPersonGroupId(), object.getPersonGroupId())
+            .append(getRemark(), object.getRemark())
+            .append(getExtBin(), object.getExtBin())
+            .append(getExtTxt(), object.getExtTxt())
             .append(getCreateTime(), object.getCreateTime())
             .toComparison();
     }
@@ -573,6 +822,9 @@ public final class PermitBean
         
         setDeviceGroupId(null);
         setPersonGroupId(null);
+        setRemark(null);
+        setExtBin(null);
+        setExtTxt(null);
         setCreateTime(null);
         isNew(true);
         resetInitialized();
@@ -665,6 +917,12 @@ public final class PermitBean
             return (T)getDeviceGroupId();        
         case FL_PERMIT_ID_PERSON_GROUP_ID: 
             return (T)getPersonGroupId();        
+        case FL_PERMIT_ID_REMARK: 
+            return (T)getRemark();        
+        case FL_PERMIT_ID_EXT_BIN: 
+            return (T)getExtBin();        
+        case FL_PERMIT_ID_EXT_TXT: 
+            return (T)getExtTxt();        
         case FL_PERMIT_ID_CREATE_TIME: 
             return (T)getCreateTime();        
         default:
@@ -681,6 +939,15 @@ public final class PermitBean
             break;
         case FL_PERMIT_ID_PERSON_GROUP_ID:
             setPersonGroupId((Integer)value);
+            break;
+        case FL_PERMIT_ID_REMARK:
+            setRemark((String)value);
+            break;
+        case FL_PERMIT_ID_EXT_BIN:
+            setExtBin((java.nio.ByteBuffer)value);
+            break;
+        case FL_PERMIT_ID_EXT_TXT:
+            setExtTxt((String)value);
             break;
         case FL_PERMIT_ID_CREATE_TIME:
             setCreateTime((java.util.Date)value);
@@ -771,6 +1038,36 @@ public final class PermitBean
          */
         public Builder personGroupId(Integer personGroupId){
             TEMPLATE.get().setPersonGroupId(personGroupId);
+            return this;
+        }
+        /** 
+         * fill the field : fl_permit.remark
+         * @param remark 备注
+         * @see {@link PermitBean#getRemark()}
+         * @see {@link PermitBean#setRemark(String)}
+         */
+        public Builder remark(String remark){
+            TEMPLATE.get().setRemark(remark);
+            return this;
+        }
+        /** 
+         * fill the field : fl_permit.ext_bin
+         * @param extBin 应用项目自定义二进制扩展字段
+         * @see {@link PermitBean#getExtBin()}
+         * @see {@link PermitBean#setExtBin(java.nio.ByteBuffer)}
+         */
+        public Builder extBin(java.nio.ByteBuffer extBin){
+            TEMPLATE.get().setExtBin(extBin);
+            return this;
+        }
+        /** 
+         * fill the field : fl_permit.ext_txt
+         * @param extTxt 应用项目自定义文本扩展字段
+         * @see {@link PermitBean#getExtTxt()}
+         * @see {@link PermitBean#setExtTxt(String)}
+         */
+        public Builder extTxt(String extTxt){
+            TEMPLATE.get().setExtTxt(extTxt);
             return this;
         }
         /** 

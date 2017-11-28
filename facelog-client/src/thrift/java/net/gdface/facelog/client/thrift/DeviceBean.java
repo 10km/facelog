@@ -84,9 +84,17 @@ public final class DeviceBean
     @ThriftField
     public void setMac(final String mac) { this.mac = mac; }
 
+    private String remark;
+
+    @ThriftField(value=10, name="remark", requiredness=Requiredness.NONE)
+    public String getRemark() { return remark; }
+
+    @ThriftField
+    public void setRemark(final String remark) { this.remark = remark; }
+
     private long createTime;
 
-    @ThriftField(value=10, name="createTime", requiredness=Requiredness.NONE)
+    @ThriftField(value=11, name="createTime", requiredness=Requiredness.NONE)
     public long getCreateTime() { return createTime; }
 
     @ThriftField
@@ -94,7 +102,7 @@ public final class DeviceBean
 
     private long updateTime;
 
-    @ThriftField(value=11, name="updateTime", requiredness=Requiredness.NONE)
+    @ThriftField(value=12, name="updateTime", requiredness=Requiredness.NONE)
     public long getUpdateTime() { return updateTime; }
 
     @ThriftField
@@ -113,6 +121,7 @@ public final class DeviceBean
             .add("version", version)
             .add("serialNo", serialNo)
             .add("mac", mac)
+            .add("remark", remark)
             .add("createTime", createTime)
             .add("updateTime", updateTime)
             .toString();

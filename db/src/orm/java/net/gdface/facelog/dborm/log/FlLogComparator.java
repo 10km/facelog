@@ -42,6 +42,7 @@ public class FlLogComparator implements Comparator<FlLogBean>,Constant
      *   <li>{@link Constant#FL_LOG_ID_DEVICE_ID}
      *   <li>{@link Constant#FL_LOG_ID_VERIFY_FEATURE}
      *   <li>{@link Constant#FL_LOG_ID_COMPARE_FACE}
+     *   <li>{@link Constant#FL_LOG_ID_VERIFY_STATUS}
      *   <li>{@link Constant#FL_LOG_ID_SIMILARTY}
      *   <li>{@link Constant#FL_LOG_ID_VERIFY_TIME}
      *   <li>{@link Constant#FL_LOG_ID_CREATE_TIME}
@@ -68,6 +69,7 @@ public class FlLogComparator implements Comparator<FlLogBean>,Constant
      *   <li>{@link Constant#FL_LOG_ID_DEVICE_ID})
      *   <li>{@link Constant#FL_LOG_ID_VERIFY_FEATURE})
      *   <li>{@link Constant#FL_LOG_ID_COMPARE_FACE})
+     *   <li>{@link Constant#FL_LOG_ID_VERIFY_STATUS})
      *   <li>{@link Constant#FL_LOG_ID_SIMILARTY})
      *   <li>{@link Constant#FL_LOG_ID_VERIFY_TIME})
      *   <li>{@link Constant#FL_LOG_ID_CREATE_TIME})
@@ -140,6 +142,17 @@ public class FlLogComparator implements Comparator<FlLogBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getCompareFace().compareTo(b2.getCompareFace());
+                }
+                break;
+            case FL_LOG_ID_VERIFY_STATUS:
+                if (b1.getVerifyStatus() == null && b2.getVerifyStatus() != null) {
+                    iReturn = -1;
+                } else if (b1.getVerifyStatus() == null && b2.getVerifyStatus() == null) {
+                    iReturn = 0;
+                } else if (b1.getVerifyStatus() != null && b2.getVerifyStatus() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getVerifyStatus().compareTo(b2.getVerifyStatus());
                 }
                 break;
             case FL_LOG_ID_SIMILARTY:

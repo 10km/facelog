@@ -39,6 +39,9 @@ public class FlPermitComparator implements Comparator<FlPermitBean>,Constant
      * <ul>
      *   <li>{@link Constant#FL_PERMIT_ID_DEVICE_GROUP_ID}
      *   <li>{@link Constant#FL_PERMIT_ID_PERSON_GROUP_ID}
+     *   <li>{@link Constant#FL_PERMIT_ID_REMARK}
+     *   <li>{@link Constant#FL_PERMIT_ID_EXT_BIN}
+     *   <li>{@link Constant#FL_PERMIT_ID_EXT_TXT}
      *   <li>{@link Constant#FL_PERMIT_ID_CREATE_TIME}
      * </ul>
      */
@@ -60,6 +63,9 @@ public class FlPermitComparator implements Comparator<FlPermitBean>,Constant
      * <ul>
      *   <li>{@link Constant#FL_PERMIT_ID_DEVICE_GROUP_ID})
      *   <li>{@link Constant#FL_PERMIT_ID_PERSON_GROUP_ID})
+     *   <li>{@link Constant#FL_PERMIT_ID_REMARK})
+     *   <li>{@link Constant#FL_PERMIT_ID_EXT_BIN})
+     *   <li>{@link Constant#FL_PERMIT_ID_EXT_TXT})
      *   <li>{@link Constant#FL_PERMIT_ID_CREATE_TIME})
      * </ul>
      *
@@ -97,6 +103,39 @@ public class FlPermitComparator implements Comparator<FlPermitBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getPersonGroupId().compareTo(b2.getPersonGroupId());
+                }
+                break;
+            case FL_PERMIT_ID_REMARK:
+                if (b1.getRemark() == null && b2.getRemark() != null) {
+                    iReturn = -1;
+                } else if (b1.getRemark() == null && b2.getRemark() == null) {
+                    iReturn = 0;
+                } else if (b1.getRemark() != null && b2.getRemark() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getRemark().compareTo(b2.getRemark());
+                }
+                break;
+            case FL_PERMIT_ID_EXT_BIN:
+                if (b1.getExtBin() == null && b2.getExtBin() != null) {
+                    iReturn = -1;
+                } else if (b1.getExtBin() == null && b2.getExtBin() == null) {
+                    iReturn = 0;
+                } else if (b1.getExtBin() != null && b2.getExtBin() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getExtBin().compareTo(b2.getExtBin());
+                }
+                break;
+            case FL_PERMIT_ID_EXT_TXT:
+                if (b1.getExtTxt() == null && b2.getExtTxt() != null) {
+                    iReturn = -1;
+                } else if (b1.getExtTxt() == null && b2.getExtTxt() == null) {
+                    iReturn = 0;
+                } else if (b1.getExtTxt() != null && b2.getExtTxt() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getExtTxt().compareTo(b2.getExtTxt());
                 }
                 break;
             case FL_PERMIT_ID_CREATE_TIME:

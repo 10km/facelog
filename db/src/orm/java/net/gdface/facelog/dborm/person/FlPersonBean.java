@@ -45,6 +45,9 @@ public  class FlPersonBean
     /** comments:是否为管理员,0:否,1:是 */
     private Integer admin;
 
+    /** comments:管理员密码,MD5 */
+    private String password;
+
     /** comments:出生日期 */
     private java.util.Date birthdate;
 
@@ -62,6 +65,9 @@ public  class FlPersonBean
 
     /** comments:验证有效期限(超过期限不能通过验证),为NULL永久有效 */
     private java.util.Date expiryDate;
+
+    /** comments:备注 */
+    private String remark;
 
     private java.util.Date createTime;
 
@@ -487,6 +493,61 @@ public  class FlPersonBean
         return 0L !=  (initialized & FL_PERSON_ID_ADMIN_MASK);
     }
     /**
+     * Getter method for {@link #password}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_person.password</li>
+     * <li>comments: 管理员密码,MD5</li>
+     * <li>column size: 32</li>
+     * <li>JDBC type returned by the driver: Types.CHAR</li>
+     * </ul>
+     *
+     * @return the value of password
+     */
+    public String getPassword(){
+        return password;
+    }
+    /**
+     * Setter method for {@link #password}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to password
+     */
+    public void setPassword(String newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, password) && checkPasswordInitialized()) {
+            return;
+        }
+        password = newVal;
+
+        modified |= FL_PERSON_ID_PASSWORD_MASK;
+        initialized |= FL_PERSON_ID_PASSWORD_MASK;
+    }
+    /**
+     * Determines if the password has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkPasswordModified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_PASSWORD_MASK);
+    }
+
+    /**
+     * Determines if the password has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkPasswordInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_PASSWORD_MASK);
+    }
+    /**
      * Getter method for {@link #birthdate}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -849,6 +910,61 @@ public  class FlPersonBean
         return 0L !=  (initialized & FL_PERSON_ID_EXPIRY_DATE_MASK);
     }
     /**
+     * Getter method for {@link #remark}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_person.remark</li>
+     * <li>comments: 备注</li>
+     * <li>column size: 256</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of remark
+     */
+    public String getRemark(){
+        return remark;
+    }
+    /**
+     * Setter method for {@link #remark}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to remark
+     */
+    public void setRemark(String newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, remark) && checkRemarkInitialized()) {
+            return;
+        }
+        remark = newVal;
+
+        modified |= FL_PERSON_ID_REMARK_MASK;
+        initialized |= FL_PERSON_ID_REMARK_MASK;
+    }
+    /**
+     * Determines if the remark has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkRemarkModified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_REMARK_MASK);
+    }
+
+    /**
+     * Determines if the remark has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkRemarkInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_REMARK_MASK);
+    }
+    /**
      * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -1029,6 +1145,8 @@ public  class FlPersonBean
             return checkSexModified();
         case FL_PERSON_ID_ADMIN:
             return checkAdminModified();
+        case FL_PERSON_ID_PASSWORD:
+            return checkPasswordModified();
         case FL_PERSON_ID_BIRTHDATE:
             return checkBirthdateModified();
         case FL_PERSON_ID_MOBILE_PHONE:
@@ -1041,6 +1159,8 @@ public  class FlPersonBean
             return checkImageMd5Modified();
         case FL_PERSON_ID_EXPIRY_DATE:
             return checkExpiryDateModified();
+        case FL_PERSON_ID_REMARK:
+            return checkRemarkModified();
         case FL_PERSON_ID_CREATE_TIME:
             return checkCreateTimeModified();
         case FL_PERSON_ID_UPDATE_TIME:
@@ -1063,6 +1183,8 @@ public  class FlPersonBean
             return checkSexInitialized();
         case FL_PERSON_ID_ADMIN:
             return checkAdminInitialized();
+        case FL_PERSON_ID_PASSWORD:
+            return checkPasswordInitialized();
         case FL_PERSON_ID_BIRTHDATE:
             return checkBirthdateInitialized();
         case FL_PERSON_ID_MOBILE_PHONE:
@@ -1075,6 +1197,8 @@ public  class FlPersonBean
             return checkImageMd5Initialized();
         case FL_PERSON_ID_EXPIRY_DATE:
             return checkExpiryDateInitialized();
+        case FL_PERSON_ID_REMARK:
+            return checkRemarkInitialized();
         case FL_PERSON_ID_CREATE_TIME:
             return checkCreateTimeInitialized();
         case FL_PERSON_ID_UPDATE_TIME:
@@ -1115,12 +1239,14 @@ public  class FlPersonBean
             FL_PERSON_ID_NAME_MASK |
             FL_PERSON_ID_SEX_MASK |
             FL_PERSON_ID_ADMIN_MASK |
+            FL_PERSON_ID_PASSWORD_MASK |
             FL_PERSON_ID_BIRTHDATE_MASK |
             FL_PERSON_ID_MOBILE_PHONE_MASK |
             FL_PERSON_ID_PAPERS_TYPE_MASK |
             FL_PERSON_ID_PAPERS_NUM_MASK |
             FL_PERSON_ID_IMAGE_MD5_MASK |
             FL_PERSON_ID_EXPIRY_DATE_MASK |
+            FL_PERSON_ID_REMARK_MASK |
             FL_PERSON_ID_CREATE_TIME_MASK |
             FL_PERSON_ID_UPDATE_TIME_MASK));
     }
@@ -1140,6 +1266,7 @@ public  class FlPersonBean
         this.name = null;
         this.sex = null;
         this.admin = null;
+        this.password = null;
         this.birthdate = null;
         this.mobilePhone = null;
         this.papersType = null;
@@ -1147,6 +1274,7 @@ public  class FlPersonBean
         this.imageMd5 = null;
         /* DEFAULT:'2050-12-31'*/
         this.expiryDate = java.text.DateFormat.getDateInstance().parse("2050-12-31",new java.text.ParsePosition(0));
+        this.remark = null;
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
         this.createTime = null;
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
@@ -1169,12 +1297,14 @@ public  class FlPersonBean
             .append(getName(), obj.getName())
             .append(getSex(), obj.getSex())
             .append(getAdmin(), obj.getAdmin())
+            .append(getPassword(), obj.getPassword())
             .append(getBirthdate(), obj.getBirthdate())
             .append(getMobilePhone(), obj.getMobilePhone())
             .append(getPapersType(), obj.getPapersType())
             .append(getPapersNum(), obj.getPapersNum())
             .append(getImageMd5(), obj.getImageMd5())
             .append(getExpiryDate(), obj.getExpiryDate())
+            .append(getRemark(), obj.getRemark())
             .append(getCreateTime(), obj.getCreateTime())
             .append(getUpdateTime(), obj.getUpdateTime())
             .isEquals();
@@ -1223,6 +1353,12 @@ public  class FlPersonBean
             }
             builder.append("admin=").append(getAdmin());
         }
+        if(checkPasswordInitialized()){
+            if(count++ >0){
+                builder.append(",");
+            }
+            builder.append("password=").append(getPassword());
+        }
         if(checkBirthdateInitialized()){
             if(count++ >0){
                 builder.append(",");
@@ -1259,6 +1395,12 @@ public  class FlPersonBean
             }
             builder.append("expiry_date=").append(getExpiryDate());
         }
+        if(checkRemarkInitialized()){
+            if(count++ >0){
+                builder.append(",");
+            }
+            builder.append("remark=").append(getRemark());
+        }
         if(checkCreateTimeInitialized()){
             if(count++ >0){
                 builder.append(",");
@@ -1283,12 +1425,14 @@ public  class FlPersonBean
             .append(getName(), object.getName())
             .append(getSex(), object.getSex())
             .append(getAdmin(), object.getAdmin())
+            .append(getPassword(), object.getPassword())
             .append(getBirthdate(), object.getBirthdate())
             .append(getMobilePhone(), object.getMobilePhone())
             .append(getPapersType(), object.getPapersType())
             .append(getPapersNum(), object.getPapersNum())
             .append(getImageMd5(), object.getImageMd5())
             .append(getExpiryDate(), object.getExpiryDate())
+            .append(getRemark(), object.getRemark())
             .append(getCreateTime(), object.getCreateTime())
             .append(getUpdateTime(), object.getUpdateTime())
             .toComparison();
@@ -1316,12 +1460,14 @@ public  class FlPersonBean
         setName(null);
         setSex(null);
         setAdmin(null);
+        setPassword(null);
         setBirthdate(null);
         setMobilePhone(null);
         setPapersType(null);
         setPapersNum(null);
         setImageMd5(null);
         setExpiryDate(null);
+        setRemark(null);
         setCreateTime(null);
         setUpdateTime(null);
         isNew(true);
@@ -1421,6 +1567,8 @@ public  class FlPersonBean
             return (T)getSex();        
         case FL_PERSON_ID_ADMIN: 
             return (T)getAdmin();        
+        case FL_PERSON_ID_PASSWORD: 
+            return (T)getPassword();        
         case FL_PERSON_ID_BIRTHDATE: 
             return (T)getBirthdate();        
         case FL_PERSON_ID_MOBILE_PHONE: 
@@ -1433,6 +1581,8 @@ public  class FlPersonBean
             return (T)getImageMd5();        
         case FL_PERSON_ID_EXPIRY_DATE: 
             return (T)getExpiryDate();        
+        case FL_PERSON_ID_REMARK: 
+            return (T)getRemark();        
         case FL_PERSON_ID_CREATE_TIME: 
             return (T)getCreateTime();        
         case FL_PERSON_ID_UPDATE_TIME: 
@@ -1461,6 +1611,9 @@ public  class FlPersonBean
         case FL_PERSON_ID_ADMIN:
             setAdmin((Integer)value);
             break;
+        case FL_PERSON_ID_PASSWORD:
+            setPassword((String)value);
+            break;
         case FL_PERSON_ID_BIRTHDATE:
             setBirthdate((java.util.Date)value);
             break;
@@ -1478,6 +1631,9 @@ public  class FlPersonBean
             break;
         case FL_PERSON_ID_EXPIRY_DATE:
             setExpiryDate((java.util.Date)value);
+            break;
+        case FL_PERSON_ID_REMARK:
+            setRemark((String)value);
             break;
         case FL_PERSON_ID_CREATE_TIME:
             setCreateTime((java.util.Date)value);
@@ -1604,6 +1760,16 @@ public  class FlPersonBean
             return this;
         }
         /** 
+         * fill the field : fl_person.password
+         * @param password 管理员密码,MD5
+         * @see {@link FlPersonBean#getPassword()}
+         * @see {@link FlPersonBean#setPassword(String)}
+         */
+        public Builder password(String password){
+            TEMPLATE.get().setPassword(password);
+            return this;
+        }
+        /** 
          * fill the field : fl_person.birthdate
          * @param birthdate 出生日期
          * @see {@link FlPersonBean#getBirthdate()}
@@ -1661,6 +1827,16 @@ public  class FlPersonBean
          */
         public Builder expiryDate(java.util.Date expiryDate){
             TEMPLATE.get().setExpiryDate(expiryDate);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person.remark
+         * @param remark 备注
+         * @see {@link FlPersonBean#getRemark()}
+         * @see {@link FlPersonBean#setRemark(String)}
+         */
+        public Builder remark(String remark){
+            TEMPLATE.get().setRemark(remark);
             return this;
         }
         /** 

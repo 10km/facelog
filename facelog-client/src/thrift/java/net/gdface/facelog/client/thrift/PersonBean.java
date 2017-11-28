@@ -76,9 +76,17 @@ public final class PersonBean
     @ThriftField
     public void setAdmin(final int admin) { this.admin = admin; }
 
+    private String password;
+
+    @ThriftField(value=9, name="password", requiredness=Requiredness.NONE)
+    public String getPassword() { return password; }
+
+    @ThriftField
+    public void setPassword(final String password) { this.password = password; }
+
     private long birthdate;
 
-    @ThriftField(value=9, name="birthdate", requiredness=Requiredness.NONE)
+    @ThriftField(value=10, name="birthdate", requiredness=Requiredness.NONE)
     public long getBirthdate() { return birthdate; }
 
     @ThriftField
@@ -86,7 +94,7 @@ public final class PersonBean
 
     private String mobilePhone;
 
-    @ThriftField(value=10, name="mobilePhone", requiredness=Requiredness.NONE)
+    @ThriftField(value=11, name="mobilePhone", requiredness=Requiredness.NONE)
     public String getMobilePhone() { return mobilePhone; }
 
     @ThriftField
@@ -94,7 +102,7 @@ public final class PersonBean
 
     private int papersType;
 
-    @ThriftField(value=11, name="papersType", requiredness=Requiredness.NONE)
+    @ThriftField(value=12, name="papersType", requiredness=Requiredness.NONE)
     public int getPapersType() { return papersType; }
 
     @ThriftField
@@ -102,7 +110,7 @@ public final class PersonBean
 
     private String papersNum;
 
-    @ThriftField(value=12, name="papersNum", requiredness=Requiredness.NONE)
+    @ThriftField(value=13, name="papersNum", requiredness=Requiredness.NONE)
     public String getPapersNum() { return papersNum; }
 
     @ThriftField
@@ -110,7 +118,7 @@ public final class PersonBean
 
     private String imageMd5;
 
-    @ThriftField(value=13, name="imageMd5", requiredness=Requiredness.NONE)
+    @ThriftField(value=14, name="imageMd5", requiredness=Requiredness.NONE)
     public String getImageMd5() { return imageMd5; }
 
     @ThriftField
@@ -118,15 +126,23 @@ public final class PersonBean
 
     private long expiryDate;
 
-    @ThriftField(value=14, name="expiryDate", requiredness=Requiredness.NONE)
+    @ThriftField(value=15, name="expiryDate", requiredness=Requiredness.NONE)
     public long getExpiryDate() { return expiryDate; }
 
     @ThriftField
     public void setExpiryDate(final long expiryDate) { this.expiryDate = expiryDate; }
 
+    private String remark;
+
+    @ThriftField(value=16, name="remark", requiredness=Requiredness.NONE)
+    public String getRemark() { return remark; }
+
+    @ThriftField
+    public void setRemark(final String remark) { this.remark = remark; }
+
     private long createTime;
 
-    @ThriftField(value=15, name="createTime", requiredness=Requiredness.NONE)
+    @ThriftField(value=17, name="createTime", requiredness=Requiredness.NONE)
     public long getCreateTime() { return createTime; }
 
     @ThriftField
@@ -134,7 +150,7 @@ public final class PersonBean
 
     private long updateTime;
 
-    @ThriftField(value=16, name="updateTime", requiredness=Requiredness.NONE)
+    @ThriftField(value=18, name="updateTime", requiredness=Requiredness.NONE)
     public long getUpdateTime() { return updateTime; }
 
     @ThriftField
@@ -152,12 +168,14 @@ public final class PersonBean
             .add("name", name)
             .add("sex", sex)
             .add("admin", admin)
+            .add("password", password)
             .add("birthdate", birthdate)
             .add("mobilePhone", mobilePhone)
             .add("papersType", papersType)
             .add("papersNum", papersNum)
             .add("imageMd5", imageMd5)
             .add("expiryDate", expiryDate)
+            .add("remark", remark)
             .add("createTime", createTime)
             .add("updateTime", updateTime)
             .toString();

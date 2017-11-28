@@ -1203,6 +1203,30 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                 dirtyCount++;
             }
 
+            if (bean.checkRemarkModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("remark");
+                dirtyCount++;
+            }
+
+            if (bean.checkExtBinModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("ext_bin");
+                dirtyCount++;
+            }
+
+            if (bean.checkExtTxtModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("ext_txt");
+                dirtyCount++;
+            }
+
             sql.append(") values (");
             if(dirtyCount > 0) {
                 sql.append("?");
@@ -1316,6 +1340,33 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                     useComma=true;
                 }
                 sql.append("parent=?");
+            }
+
+            if (bean.checkRemarkModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("remark=?");
+            }
+
+            if (bean.checkExtBinModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("ext_bin=?");
+            }
+
+            if (bean.checkExtTxtModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("ext_txt=?");
             }
             sql.append(" WHERE ");
             sql.append("id=?");
@@ -1879,6 +1930,30 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("parent = ?");
                 }
             }
+            if (bean.checkRemarkModified()) {
+                dirtyCount ++;
+                if (bean.getRemark() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("remark IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("remark ").append(sqlEqualsOperation).append("?");
+                }
+            }
+            if (bean.checkExtBinModified()) {
+                dirtyCount ++;
+                if (bean.getExtBin() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_bin IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_bin = ?");
+                }
+            }
+            if (bean.checkExtTxtModified()) {
+                dirtyCount ++;
+                if (bean.getExtTxt() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_txt IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_txt ").append(sqlEqualsOperation).append("?");
+                }
+            }
         }
         finally
         {
@@ -1936,6 +2011,54 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
             if (bean.checkParentModified()) {
                 // System.out.println("Setting for " + dirtyCount + " [" + bean.getParent() + "]");
                 if (bean.getParent() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getParent()); }
+            }
+            if (bean.checkRemarkModified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getRemark() + "]");
+                        if (bean.getRemark() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getRemark()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getRemark() + "%]");
+                        if ( bean.getRemark()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getRemark() + SQL_LIKE_WILDCARD); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getRemark() + "]");
+                        if ( bean.getRemark() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getRemark()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getRemark() + "%]");
+                        if (bean.getRemark()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getRemark() + SQL_LIKE_WILDCARD); }
+                        break;
+                    default:
+                        throw new DaoException("Unknown search type " + searchType);
+                }
+            }
+            if (bean.checkExtBinModified()) {
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getExtBin() + "]");
+                if (bean.getExtBin() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.LONGVARBINARY);} } else { Manager.setBytes(Types.LONGVARBINARY,ps, ++dirtyCount, bean.getExtBin()); }
+            }
+            if (bean.checkExtTxtModified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getExtTxt() + "]");
+                        if (bean.getExtTxt() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.LONGVARCHAR);} } else { ps.setString(++dirtyCount, bean.getExtTxt()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getExtTxt() + "%]");
+                        if ( bean.getExtTxt()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.LONGVARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getExtTxt() + SQL_LIKE_WILDCARD); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getExtTxt() + "]");
+                        if ( bean.getExtTxt() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.LONGVARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getExtTxt()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getExtTxt() + "%]");
+                        if (bean.getExtTxt()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.LONGVARCHAR);} } else { ps.setString(++dirtyCount, bean.getExtTxt() + SQL_LIKE_WILDCARD); }
+                        break;
+                    default:
+                        throw new DaoException("Unknown search type " + searchType);
+                }
             }
         }
         catch(SQLException e)
@@ -2058,6 +2181,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
             bean.setName(rs.getString(2));
             bean.setLeaf(Manager.getInteger(rs, 3));
             bean.setParent(Manager.getInteger(rs, 4));
+            bean.setRemark(rs.getString(5));
+            bean.setExtBin(Manager.getBytes(rs, 6));
+            bean.setExtTxt(rs.getString(7));
         }
         catch(SQLException e)
         {
@@ -2106,6 +2232,18 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                         ++pos;
                         bean.setParent(Manager.getInteger(rs, pos));
                         break;
+                    case FL_DEVICE_GROUP_ID_REMARK:
+                        ++pos;
+                        bean.setRemark(rs.getString(pos));
+                        break;
+                    case FL_DEVICE_GROUP_ID_EXT_BIN:
+                        ++pos;
+                        bean.setExtBin(Manager.getBytes(rs, pos));
+                        break;
+                    case FL_DEVICE_GROUP_ID_EXT_TXT:
+                        ++pos;
+                        bean.setExtTxt(rs.getString(pos));
+                        break;
                     default:
                         throw new DaoException("Unknown field id " + fieldList[i]);
                 }
@@ -2138,6 +2276,9 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
             bean.setName(rs.getString("name"));
             bean.setLeaf(Manager.getInteger(rs, "leaf"));
             bean.setParent(Manager.getInteger(rs, "parent"));
+            bean.setRemark(rs.getString("remark"));
+            bean.setExtBin(Manager.getBytes(rs, "ext_bin"));
+            bean.setExtTxt(rs.getString("ext_txt"));
         }
         catch(SQLException e)
         {

@@ -733,6 +733,30 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
                 dirtyCount++;
             }
 
+            if (bean.checkRemarkModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("remark");
+                dirtyCount++;
+            }
+
+            if (bean.checkExtBinModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("ext_bin");
+                dirtyCount++;
+            }
+
+            if (bean.checkExtTxtModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("ext_txt");
+                dirtyCount++;
+            }
+
             if (bean.checkCreateTimeModified()) {
                 if (dirtyCount>0) {
                     sql.append(",");
@@ -819,6 +843,33 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
                     useComma=true;
                 }
                 sql.append("person_group_id=?");
+            }
+
+            if (bean.checkRemarkModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("remark=?");
+            }
+
+            if (bean.checkExtBinModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("ext_bin=?");
+            }
+
+            if (bean.checkExtTxtModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("ext_txt=?");
             }
 
             if (bean.checkCreateTimeModified()) {
@@ -1137,6 +1188,30 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_group_id = ?");
                 }
             }
+            if (bean.checkRemarkModified()) {
+                dirtyCount ++;
+                if (bean.getRemark() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("remark IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("remark ").append(sqlEqualsOperation).append("?");
+                }
+            }
+            if (bean.checkExtBinModified()) {
+                dirtyCount ++;
+                if (bean.getExtBin() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_bin IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_bin = ?");
+                }
+            }
+            if (bean.checkExtTxtModified()) {
+                dirtyCount ++;
+                if (bean.getExtTxt() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_txt IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_txt ").append(sqlEqualsOperation).append("?");
+                }
+            }
             if (bean.checkCreateTimeModified()) {
                 dirtyCount ++;
                 if (bean.getCreateTime() == null) {
@@ -1176,6 +1251,54 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
             if (bean.checkPersonGroupIdModified()) {
                 // System.out.println("Setting for " + dirtyCount + " [" + bean.getPersonGroupId() + "]");
                 if (bean.getPersonGroupId() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getPersonGroupId()); }
+            }
+            if (bean.checkRemarkModified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getRemark() + "]");
+                        if (bean.getRemark() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getRemark()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getRemark() + "%]");
+                        if ( bean.getRemark()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getRemark() + SQL_LIKE_WILDCARD); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getRemark() + "]");
+                        if ( bean.getRemark() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getRemark()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getRemark() + "%]");
+                        if (bean.getRemark()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getRemark() + SQL_LIKE_WILDCARD); }
+                        break;
+                    default:
+                        throw new DaoException("Unknown search type " + searchType);
+                }
+            }
+            if (bean.checkExtBinModified()) {
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getExtBin() + "]");
+                if (bean.getExtBin() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.LONGVARBINARY);} } else { Manager.setBytes(Types.LONGVARBINARY,ps, ++dirtyCount, bean.getExtBin()); }
+            }
+            if (bean.checkExtTxtModified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getExtTxt() + "]");
+                        if (bean.getExtTxt() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.LONGVARCHAR);} } else { ps.setString(++dirtyCount, bean.getExtTxt()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getExtTxt() + "%]");
+                        if ( bean.getExtTxt()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.LONGVARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getExtTxt() + SQL_LIKE_WILDCARD); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getExtTxt() + "]");
+                        if ( bean.getExtTxt() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.LONGVARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getExtTxt()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getExtTxt() + "%]");
+                        if (bean.getExtTxt()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.LONGVARCHAR);} } else { ps.setString(++dirtyCount, bean.getExtTxt() + SQL_LIKE_WILDCARD); }
+                        break;
+                    default:
+                        throw new DaoException("Unknown search type " + searchType);
+                }
             }
             if (bean.checkCreateTimeModified()) {
                 // System.out.println("Setting for " + dirtyCount + " [" + bean.getCreateTime() + "]");
@@ -1300,7 +1423,10 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         {
             bean.setDeviceGroupId(Manager.getInteger(rs, 1));
             bean.setPersonGroupId(Manager.getInteger(rs, 2));
-            bean.setCreateTime(rs.getTimestamp(3));
+            bean.setRemark(rs.getString(3));
+            bean.setExtBin(Manager.getBytes(rs, 4));
+            bean.setExtTxt(rs.getString(5));
+            bean.setCreateTime(rs.getTimestamp(6));
         }
         catch(SQLException e)
         {
@@ -1341,6 +1467,18 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
                         ++pos;
                         bean.setPersonGroupId(Manager.getInteger(rs, pos));
                         break;
+                    case FL_PERMIT_ID_REMARK:
+                        ++pos;
+                        bean.setRemark(rs.getString(pos));
+                        break;
+                    case FL_PERMIT_ID_EXT_BIN:
+                        ++pos;
+                        bean.setExtBin(Manager.getBytes(rs, pos));
+                        break;
+                    case FL_PERMIT_ID_EXT_TXT:
+                        ++pos;
+                        bean.setExtTxt(rs.getString(pos));
+                        break;
                     case FL_PERMIT_ID_CREATE_TIME:
                         ++pos;
                         bean.setCreateTime(rs.getTimestamp(pos));
@@ -1375,6 +1513,9 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         {
             bean.setDeviceGroupId(Manager.getInteger(rs, "device_group_id"));
             bean.setPersonGroupId(Manager.getInteger(rs, "person_group_id"));
+            bean.setRemark(rs.getString("remark"));
+            bean.setExtBin(Manager.getBytes(rs, "ext_bin"));
+            bean.setExtTxt(rs.getString("ext_txt"));
             bean.setCreateTime(rs.getTimestamp("create_time"));
         }
         catch(SQLException e)

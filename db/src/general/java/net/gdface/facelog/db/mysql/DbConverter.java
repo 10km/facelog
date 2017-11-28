@@ -62,6 +62,9 @@ public class DbConverter implements IDbConverter<
             if(right.checkMacInitialized()){
                 left.setMac(right.getMac());
             }
+            if(right.checkRemarkInitialized()){
+                left.setRemark(right.getRemark());
+            }
             if(right.checkCreateTimeInitialized()){
                 left.setCreateTime(right.getCreateTime());
             }
@@ -92,6 +95,9 @@ public class DbConverter implements IDbConverter<
             if(left.checkMacInitialized() ){
                 right.setMac(left.getMac());
             }
+            if(left.checkRemarkInitialized() ){
+                right.setRemark(left.getRemark());
+            }
 // IGNORE field fl_device.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(left.checkCreateTimeInitialized() ){
 //                 right.setCreateTime(left.getCreateTime());
@@ -120,6 +126,15 @@ public class DbConverter implements IDbConverter<
             if(right.checkParentInitialized()){
                 left.setParent(right.getParent());
             }
+            if(right.checkRemarkInitialized()){
+                left.setRemark(right.getRemark());
+            }
+            if(right.checkExtBinInitialized()){
+                left.setExtBin(right.getExtBin());
+            }
+            if(right.checkExtTxtInitialized()){
+                left.setExtTxt(right.getExtTxt());
+            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
@@ -137,6 +152,15 @@ public class DbConverter implements IDbConverter<
             }
             if(left.checkParentInitialized() ){
                 right.setParent(left.getParent());
+            }
+            if(left.checkRemarkInitialized() ){
+                right.setRemark(left.getRemark());
+            }
+            if(left.checkExtBinInitialized() ){
+                right.setExtBin(left.getExtBin());
+            }
+            if(left.checkExtTxtInitialized() ){
+                right.setExtTxt(left.getExtTxt());
             }
             right.setNew(left.isNew());
             right.setModified(left.getModified());
@@ -397,6 +421,9 @@ public class DbConverter implements IDbConverter<
             if(right.checkCompareFaceInitialized()){
                 left.setCompareFace(right.getCompareFace());
             }
+            if(right.checkVerifyStatusInitialized()){
+                left.setVerifyStatus(right.getVerifyStatus());
+            }
             if(right.checkSimilartyInitialized()){
                 left.setSimilarty(right.getSimilarty());
             }
@@ -427,6 +454,9 @@ public class DbConverter implements IDbConverter<
             if(left.checkCompareFaceInitialized() ){
                 right.setCompareFace(left.getCompareFace());
             }
+            if(left.checkVerifyStatusInitialized() ){
+                right.setVerifyStatus(left.getVerifyStatus());
+            }
             if(left.checkSimilartyInitialized() ){
                 right.setSimilarty(left.getSimilarty());
             }
@@ -451,6 +481,15 @@ public class DbConverter implements IDbConverter<
             if(right.checkPersonGroupIdInitialized()){
                 left.setPersonGroupId(right.getPersonGroupId());
             }
+            if(right.checkRemarkInitialized()){
+                left.setRemark(right.getRemark());
+            }
+            if(right.checkExtBinInitialized()){
+                left.setExtBin(right.getExtBin());
+            }
+            if(right.checkExtTxtInitialized()){
+                left.setExtTxt(right.getExtTxt());
+            }
             if(right.checkCreateTimeInitialized()){
                 left.setCreateTime(right.getCreateTime());
             }
@@ -465,6 +504,15 @@ public class DbConverter implements IDbConverter<
             }
             if(left.checkPersonGroupIdInitialized() ){
                 right.setPersonGroupId(left.getPersonGroupId());
+            }
+            if(left.checkRemarkInitialized() ){
+                right.setRemark(left.getRemark());
+            }
+            if(left.checkExtBinInitialized() ){
+                right.setExtBin(left.getExtBin());
+            }
+            if(left.checkExtTxtInitialized() ){
+                right.setExtTxt(left.getExtTxt());
             }
 // IGNORE field fl_permit.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(left.checkCreateTimeInitialized() ){
@@ -493,6 +541,9 @@ public class DbConverter implements IDbConverter<
             if(right.checkAdminInitialized()){
                 left.setAdmin(right.getAdmin());
             }
+            if(right.checkPasswordInitialized()){
+                left.setPassword(right.getPassword());
+            }
             if(right.checkBirthdateInitialized()){
                 left.setBirthdate(right.getBirthdate());
             }
@@ -510,6 +561,9 @@ public class DbConverter implements IDbConverter<
             }
             if(right.checkExpiryDateInitialized()){
                 left.setExpiryDate(right.getExpiryDate());
+            }
+            if(right.checkRemarkInitialized()){
+                left.setRemark(right.getRemark());
             }
             if(right.checkCreateTimeInitialized()){
                 left.setCreateTime(right.getCreateTime());
@@ -538,6 +592,9 @@ public class DbConverter implements IDbConverter<
             if(left.checkAdminInitialized() ){
                 right.setAdmin(left.getAdmin());
             }
+            if(left.checkPasswordInitialized() ){
+                right.setPassword(left.getPassword());
+            }
             if(left.checkBirthdateInitialized() ){
                 right.setBirthdate(left.getBirthdate());
             }
@@ -555,6 +612,9 @@ public class DbConverter implements IDbConverter<
             }
             if(left.checkExpiryDateInitialized() ){
                 right.setExpiryDate(left.getExpiryDate());
+            }
+            if(left.checkRemarkInitialized() ){
+                right.setRemark(left.getRemark());
             }
 // IGNORE field fl_person.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(left.checkCreateTimeInitialized() ){
@@ -584,6 +644,15 @@ public class DbConverter implements IDbConverter<
             if(right.checkParentInitialized()){
                 left.setParent(right.getParent());
             }
+            if(right.checkRemarkInitialized()){
+                left.setRemark(right.getRemark());
+            }
+            if(right.checkExtBinInitialized()){
+                left.setExtBin(right.getExtBin());
+            }
+            if(right.checkExtTxtInitialized()){
+                left.setExtTxt(right.getExtTxt());
+            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
@@ -601,6 +670,15 @@ public class DbConverter implements IDbConverter<
             }
             if(left.checkParentInitialized() ){
                 right.setParent(left.getParent());
+            }
+            if(left.checkRemarkInitialized() ){
+                right.setRemark(left.getRemark());
+            }
+            if(left.checkExtBinInitialized() ){
+                right.setExtBin(left.getExtBin());
+            }
+            if(left.checkExtTxtInitialized() ){
+                right.setExtTxt(left.getExtTxt());
             }
             right.setNew(left.isNew());
             right.setModified(left.getModified());

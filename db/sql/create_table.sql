@@ -31,6 +31,9 @@ CREATE TABLE IF NOT EXISTS fl_device_group (
   `name`        varchar(32) NOT NULL COMMENT '设备组名',
   `leaf`        tinyint(1) DEFAULT NULL COMMENT '是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可',
   `parent`      int(11) DEFAULT NULL COMMENT '上一级设备组id',
+  `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
+  `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段',
+  `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段',
   FOREIGN KEY (parent)  REFERENCES fl_device_group(id) ON DELETE SET NULL
 ) COMMENT '设备组信息' ;
 
@@ -39,12 +42,18 @@ CREATE TABLE IF NOT EXISTS fl_person_group (
   `name`        varchar(32) NOT NULL COMMENT '用户组名',
   `leaf`        tinyint(1) DEFAULT NULL COMMENT '是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可',
   `parent`      int(11) DEFAULT NULL COMMENT '上一级用户组id',
+  `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
+  `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段',
+  `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段',
   FOREIGN KEY (parent)  REFERENCES fl_person_group(id) ON DELETE SET NULL
 ) COMMENT '用户组信息' ;
 
 CREATE TABLE IF NOT EXISTS fl_permit (
   `device_group_id`   int(11) NOT NULL COMMENT '外键,设备组id',
   `person_group_id`    int(11) NOT NULL COMMENT '外键,人员组id',
+  `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
+  `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段',
+  `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段',
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`device_group_id`, `person_group_id`),
   FOREIGN KEY (device_group_id)  REFERENCES fl_device_group(id) ON DELETE CASCADE,
@@ -58,6 +67,7 @@ CREATE TABLE IF NOT EXISTS fl_device (
   `version`     varchar(32) DEFAULT NULL COMMENT '设备版本号',
   `serial_no`   varchar(32) DEFAULT NULL UNIQUE COMMENT '设备序列号',
   `mac`         char(12) DEFAULT NULL UNIQUE COMMENT '6字节MAC地址(HEX)',
+  `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (group_id)  REFERENCES fl_device_group(id) ON DELETE SET NULL,
@@ -92,12 +102,14 @@ CREATE TABLE IF NOT EXISTS fl_person (
   `name`        varchar(32) NOT NULL COMMENT '姓名',
   `sex`         tinyint(1) DEFAULT NULL COMMENT '性别,0:女,1:男',
   `admin`       tinyint(1) DEFAULT NULL COMMENT '是否为管理员,0:否,1:是',
+  `password`    char(32) DEFAULT NULL COMMENT '管理员密码,MD5',
   `birthdate`   date DEFAULT NULL COMMENT '出生日期',
   `mobile_phone`char(11) NULL COMMENT '手机号码',
   `papers_type` tinyint(1) DEFAULT NULL COMMENT '证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他',
   `papers_num`  varchar(32) DEFAULT NULL UNIQUE COMMENT '证件号码' ,
   `image_md5`   char(32)    DEFAULT NULL UNIQUE COMMENT '用户默认照片(证件照,标准照)的md5校验码,外键',
   `expiry_date` date DEFAULT '2050-12-31' COMMENT '验证有效期限(超过期限不能通过验证),为NULL永久有效',
+  `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (group_id)  REFERENCES fl_person_group(id) ON DELETE SET NULL,
@@ -162,6 +174,7 @@ CREATE TABLE IF NOT EXISTS fl_log (
   `device_id`       int(11) DEFAULT NULL COMMENT '外键,图像来源设备id',
   `verify_feature`  char(32)DEFAULT NULL COMMENT '外键,用于验证身份的人脸特征数据MD5 id',
   `compare_face`    int(11) DEFAULT NULL COMMENT '外键,数据库中相似度最高的人脸 id',
+  `verify_status`   tinyint(1) DEFAULT NULL COMMENT '验证状态,NULL,0:允许通过,其他:拒绝',
   `similarty`	    double  DEFAULT NULL COMMENT '验证相似度',
   `verify_time`     timestamp NOT NULL COMMENT '验证时间(可能由前端设备提供时间)',
   `create_time`     timestamp DEFAULT CURRENT_TIMESTAMP,
