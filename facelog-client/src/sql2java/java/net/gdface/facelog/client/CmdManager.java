@@ -10,6 +10,7 @@ package net.gdface.facelog.client;
 import net.gdface.facelog.client.thrift.RedisParam;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -311,6 +312,31 @@ public class CmdManager {
     }
     /**
      * 设备命令 <br>
+     * 获取设备版本号<br>
+     * @return 收到命令的客户端数目
+     *
+     */
+    public long version(){
+        CmdBuilder builder = checkTlsAvailable();
+        try{
+            // 所有的命令参数封装到 Map
+            Map<String, Object> params = Maps.newHashMap();
+            
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
+                    .setCmd(Cmd.version)
+                    .setCmdSn(builder.cmdSn)
+                    .setTarget(builder.target, builder.group)
+                    .setAckChannel(builder.ackChannel)
+                    .setParameters(params);
+            return sendCmd(deviceInstruction);
+        }finally{
+            if(builder.autoRemove){
+                removeTlsTarget(); 
+            }
+        }
+    }
+    /**
+     * 设备命令 <br>
      * 设置设备工作状态<br>
      * @param enable {@code true}:工作状态,否则为非工作状态
      * @return 收到命令的客户端数目
@@ -364,15 +390,16 @@ public class CmdManager {
     /**
      * 设备命令 <br>
      * 设备重启<br>
+     * @param schedule 指定执行时间(unix time[秒]),为{@code null}立即执行
      * @return 收到命令的客户端数目
      *
      */
-    public long reset(){
+    public long reset(Long schedule){
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
-            
+            params.put("schedule", schedule);
             DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.reset)
                     .setCmdSn(builder.cmdSn)
@@ -389,7 +416,7 @@ public class CmdManager {
     /**
      * 设备命令 <br>
      * 设备与服务器时间同步<br>
-     * @param unixTimestamp 服务器 unix 时间(秒),参见<a href = "https://en.wikipedia.org/wiki/Unix_time">Unix time</a>
+     * @param unixTimestamp 服务器 unix 时间[秒],参见<a href = "https://en.wikipedia.org/wiki/Unix_time">Unix time</a>
      * @return 收到命令的客户端数目
      *
      */
@@ -417,16 +444,18 @@ public class CmdManager {
      * 更新版本<br>
      * @param url 更新版本的位置
      * @param version 版本号
+     * @param schedule 指定执行时间(unix time[秒]),为{@code null}立即执行
      * @return 收到命令的客户端数目
      *
      */
-    public long update(URL url,String version){
+    public long update(URL url,String version,Long schedule){
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
             params.put("url", url);
             params.put("version", version);
+            params.put("schedule", schedule);
             DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.update)
                     .setCmdSn(builder.cmdSn)
@@ -442,19 +471,55 @@ public class CmdManager {
     }
     /**
      * 设备命令 <br>
-     * 发送消息<br>
+     * 设置空闲时显示的消息<br>
      * @param message 发送到设备的消息
+     * @param duration 持续时间[分钟],为{@code null}一直显示
      * @return 收到命令的客户端数目
      *
      */
-    public long message(String message){
+    public long idleMessage(String message,Long duration){
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
             params.put("message", message);
+            params.put("duration", duration);
             DeviceInstruction deviceInstruction = new DeviceInstruction()
-                    .setCmd(Cmd.message)
+                    .setCmd(Cmd.idleMessage)
+                    .setCmdSn(builder.cmdSn)
+                    .setTarget(builder.target, builder.group)
+                    .setAckChannel(builder.ackChannel)
+                    .setParameters(params);
+            return sendCmd(deviceInstruction);
+        }finally{
+            if(builder.autoRemove){
+                removeTlsTarget(); 
+            }
+        }
+    }
+    /**
+     * 设备命令 <br>
+     * 为指定人员通过时显示的临时消息<br>
+     * @param message 发送到设备的消息
+     * @param id 人员/人员组ID
+     * @param group 为{@code true}时{@code id}参数为人员组ID
+     * @param onceOnly 为{@code true}时只显示一次
+     * @param duration 持续时间[分钟],为{@code null}一直显示
+     * @return 收到命令的客户端数目
+     *
+     */
+    public long personMessage(String message,Integer id,Boolean group,Boolean onceOnly,Long duration){
+        CmdBuilder builder = checkTlsAvailable();
+        try{
+            // 所有的命令参数封装到 Map
+            Map<String, Object> params = Maps.newHashMap();
+            params.put("message", message);
+            params.put("id", id);
+            params.put("group", group);
+            params.put("onceOnly", onceOnly);
+            params.put("duration", duration);
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
+                    .setCmd(Cmd.personMessage)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
                     .setAckChannel(builder.ackChannel)

@@ -87,6 +87,15 @@ public class CommandAdapter {
     }
     /**
      * 设备命令 <br>
+     * 获取设备版本号<br>
+     * @return 返回设备版本描述
+     *
+     */
+    public String version()throws DeviceCmdException{
+        throw new UnsupportCmdExeption();
+    }
+    /**
+     * 设备命令 <br>
      * 设置设备工作状态<br>
      * @param enable {@code true}:工作状态,否则为非工作状态
      *
@@ -107,15 +116,16 @@ public class CommandAdapter {
     /**
      * 设备命令 <br>
      * 设备重启<br>
+     * @param schedule 指定执行时间(unix time[秒]),为{@code null}立即执行
      *
      */
-    public void reset()throws DeviceCmdException{
+    public void reset(Long schedule)throws DeviceCmdException{
         throw new UnsupportCmdExeption();
     }
     /**
      * 设备命令 <br>
      * 设备与服务器时间同步<br>
-     * @param unixTimestamp 服务器 unix 时间(秒),参见<a href = "https://en.wikipedia.org/wiki/Unix_time">Unix time</a>
+     * @param unixTimestamp 服务器 unix 时间[秒],参见<a href = "https://en.wikipedia.org/wiki/Unix_time">Unix time</a>
      *
      */
     public void time(Long unixTimestamp)throws DeviceCmdException{
@@ -126,18 +136,33 @@ public class CommandAdapter {
      * 更新版本<br>
      * @param url 更新版本的位置
      * @param version 版本号
+     * @param schedule 指定执行时间(unix time[秒]),为{@code null}立即执行
      *
      */
-    public void update(URL url,String version)throws DeviceCmdException{
+    public void update(URL url,String version,Long schedule)throws DeviceCmdException{
         throw new UnsupportCmdExeption();
     }
     /**
      * 设备命令 <br>
-     * 发送消息<br>
+     * 设置空闲时显示的消息<br>
      * @param message 发送到设备的消息
+     * @param duration 持续时间[分钟],为{@code null}一直显示
      *
      */
-    public void message(String message)throws DeviceCmdException{
+    public void idleMessage(String message,Long duration)throws DeviceCmdException{
+        throw new UnsupportCmdExeption();
+    }
+    /**
+     * 设备命令 <br>
+     * 为指定人员通过时显示的临时消息<br>
+     * @param message 发送到设备的消息
+     * @param id 人员/人员组ID
+     * @param group 为{@code true}时{@code id}参数为人员组ID
+     * @param onceOnly 为{@code true}时只显示一次
+     * @param duration 持续时间[分钟],为{@code null}一直显示
+     *
+     */
+    public void personMessage(String message,Integer id,Boolean group,Boolean onceOnly,Long duration)throws DeviceCmdException{
         throw new UnsupportCmdExeption();
     }
     /**

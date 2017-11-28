@@ -23,6 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  */
 public class CommandAdapterContainer extends CommandAdapter{
+    /** 设备命令执行器对象映射,每一个设备命令对应一个执行器对象 */
     private final Map<Cmd, CommandAdapter> adapters= Collections.synchronizedMap(new EnumMap<Cmd, CommandAdapter>(Cmd.class));
     
     public CommandAdapterContainer() {
@@ -115,6 +116,16 @@ public class CommandAdapterContainer extends CommandAdapter{
             : this.adapters.get(Cmd.report).report(names);
     }
     /** 
+     * 调用 {@link #versionAdapter} 命令执行器<br>
+     * 如果 {@link #versionAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     */
+    @Override
+    public String version()throws DeviceCmdException{
+        return this.adapters.containsKey(Cmd.version)
+            ? super.version()
+            : this.adapters.get(Cmd.version).version();
+    }
+    /** 
      * 调用 {@link #enableAdapter} 命令执行器<br>
      * 如果 {@link #enableAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
      */
@@ -141,11 +152,11 @@ public class CommandAdapterContainer extends CommandAdapter{
      * 如果 {@link #resetAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
      */
     @Override
-    public void reset()throws DeviceCmdException{
+    public void reset(Long schedule)throws DeviceCmdException{
         if(this.adapters.containsKey(Cmd.reset)){
-            this.adapters.get(Cmd.reset).reset();
+            this.adapters.get(Cmd.reset).reset(schedule);
         }else{
-            super.reset();
+            super.reset(schedule);
         }
     }
     /** 
@@ -165,23 +176,35 @@ public class CommandAdapterContainer extends CommandAdapter{
      * 如果 {@link #updateAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
      */
     @Override
-    public void update(URL url,String version)throws DeviceCmdException{
+    public void update(URL url,String version,Long schedule)throws DeviceCmdException{
         if(this.adapters.containsKey(Cmd.update)){
-            this.adapters.get(Cmd.update).update(url,version);
+            this.adapters.get(Cmd.update).update(url,version,schedule);
         }else{
-            super.update(url,version);
+            super.update(url,version,schedule);
         }
     }
     /** 
-     * 调用 {@link #messageAdapter} 命令执行器<br>
-     * 如果 {@link #messageAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 调用 {@link #idleMessageAdapter} 命令执行器<br>
+     * 如果 {@link #idleMessageAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
      */
     @Override
-    public void message(String message)throws DeviceCmdException{
-        if(this.adapters.containsKey(Cmd.message)){
-            this.adapters.get(Cmd.message).message(message);
+    public void idleMessage(String message,Long duration)throws DeviceCmdException{
+        if(this.adapters.containsKey(Cmd.idleMessage)){
+            this.adapters.get(Cmd.idleMessage).idleMessage(message,duration);
         }else{
-            super.message(message);
+            super.idleMessage(message,duration);
+        }
+    }
+    /** 
+     * 调用 {@link #personMessageAdapter} 命令执行器<br>
+     * 如果 {@link #personMessageAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     */
+    @Override
+    public void personMessage(String message,Integer id,Boolean group,Boolean onceOnly,Long duration)throws DeviceCmdException{
+        if(this.adapters.containsKey(Cmd.personMessage)){
+            this.adapters.get(Cmd.personMessage).personMessage(message,id,group,onceOnly,duration);
+        }else{
+            super.personMessage(message,id,group,onceOnly,duration);
         }
     }
     /** 

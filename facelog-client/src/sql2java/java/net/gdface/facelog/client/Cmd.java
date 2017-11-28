@@ -26,12 +26,14 @@ public enum Cmd{
     /** 设置一组参数,可用于需要重启有效的参数 */config,
     /** 读取设备状态参数 */status,
     /** 设备状态报告,返回一组状态参数 */report,
+    /** 获取设备版本号 */version,
     /** 设置设备工作状态 */enable,
     /** 返回设备工作状态 */isEnable,
     /** 设备重启 */reset,
     /** 设备与服务器时间同步 */time,
     /** 更新版本 */update,
-    /** 发送消息 */message,
+    /** 设置空闲时显示的消息 */idleMessage,
+    /** 为指定人员通过时显示的临时消息 */personMessage,
     /** 自定义命令,命令名及命令参数由项目自定义 */custom;
     
     /**
@@ -107,6 +109,21 @@ public enum Cmd{
                 }                
                 return ack;
             }
+        case version:{
+                Ack<String> ack = new Ack<String>().setStatus(Ack.Status.OK);
+                try{
+                    String res = adapter.version();
+                    // 填入返回值
+                    ack.setValue(res);
+                }catch(CommandAdapter.UnsupportCmdExeption e){
+                    // 该命令设备端未实现
+                    ack.setStatus(Ack.Status.UNSUPPORTED);
+                }catch(CommandAdapter.DeviceCmdException e){
+                    // 填入异常状态,设置错误信息
+                    ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
+                }                
+                return ack;
+            }
         case enable:{
                 Ack<Void> ack = new Ack<Void>().setStatus(Ack.Status.OK);
                 try{
@@ -140,7 +157,8 @@ public enum Cmd{
         case reset:{
                 Ack<Void> ack = new Ack<Void>().setStatus(Ack.Status.OK);
                 try{
-                    adapter.reset();
+                    adapter.reset(
+                            cast(parameters.get("schedule"),new TypeToken<Long>(){}));
                 }catch(CommandAdapter.UnsupportCmdExeption e){
                     // 该命令设备端未实现
                     ack.setStatus(Ack.Status.UNSUPPORTED);
@@ -169,7 +187,8 @@ public enum Cmd{
                 try{
                     adapter.update(
                             cast(parameters.get("url"),new TypeToken<URL>(){}),
-                            cast(parameters.get("version"),new TypeToken<String>(){}));
+                            cast(parameters.get("version"),new TypeToken<String>(){}),
+                            cast(parameters.get("schedule"),new TypeToken<Long>(){}));
                 }catch(CommandAdapter.UnsupportCmdExeption e){
                     // 该命令设备端未实现
                     ack.setStatus(Ack.Status.UNSUPPORTED);
@@ -179,11 +198,30 @@ public enum Cmd{
                 }                
                 return ack;
             }
-        case message:{
+        case idleMessage:{
                 Ack<Void> ack = new Ack<Void>().setStatus(Ack.Status.OK);
                 try{
-                    adapter.message(
-                            cast(parameters.get("message"),new TypeToken<String>(){}));
+                    adapter.idleMessage(
+                            cast(parameters.get("message"),new TypeToken<String>(){}),
+                            cast(parameters.get("duration"),new TypeToken<Long>(){}));
+                }catch(CommandAdapter.UnsupportCmdExeption e){
+                    // 该命令设备端未实现
+                    ack.setStatus(Ack.Status.UNSUPPORTED);
+                }catch(CommandAdapter.DeviceCmdException e){
+                    // 填入异常状态,设置错误信息
+                    ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
+                }                
+                return ack;
+            }
+        case personMessage:{
+                Ack<Void> ack = new Ack<Void>().setStatus(Ack.Status.OK);
+                try{
+                    adapter.personMessage(
+                            cast(parameters.get("message"),new TypeToken<String>(){}),
+                            cast(parameters.get("id"),new TypeToken<Integer>(){}),
+                            cast(parameters.get("group"),new TypeToken<Boolean>(){}),
+                            cast(parameters.get("onceOnly"),new TypeToken<Boolean>(){}),
+                            cast(parameters.get("duration"),new TypeToken<Long>(){}));
                 }catch(CommandAdapter.UnsupportCmdExeption e){
                     // 该命令设备端未实现
                     ack.setStatus(Ack.Status.UNSUPPORTED);
