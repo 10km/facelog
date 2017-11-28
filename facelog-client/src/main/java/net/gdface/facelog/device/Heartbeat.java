@@ -18,7 +18,7 @@ import net.gdface.facelog.client.NetworkUtil;
 /**
  * 设备心跳包redis实现<br>
  * 以{@link #intervalMills}指定的间隔向redis表({@link CommonConstant#TABLE_HEARTBEAT})写入当前设备序列号及报道时间.<br>
- * 如果指定了心跳实时监控通道({@link #setMonitorChannel(String)}),还会向该通道(频道)发布订阅消息, 以便于应用实时显示人员验证信息。
+ * 如果指定了心跳实时监控通道({@link #setMonitorChannel(String)}),还会向该通道(频道)发布订阅消息, 以便于应用实时显示人员验证信息.<br>
  * 心跳包线程为守护线程无需停止
  * @author guyadong
  *
@@ -132,7 +132,7 @@ public class Heartbeat implements CommonConstant{
 		}
 		return heartbeat;
 	}
-	/** 返回本机ip地址,如果获取IP地址不正确,请重写此方法 */
+	/** 返回本机IP地址,如果获取IP地址不正确,请重写此方法 */
 	protected String getHostAddress(){
 		try {
 			return InetAddress.getLocalHost().getHostAddress();
