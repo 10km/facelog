@@ -34,7 +34,9 @@ class RedisManagement implements ServiceConstant{
 		/** redis服务器地址 */REDIS_URI,
 		/** 设备命令通道名 */CMD_CHANNEL,
 		/** 人员验证实时监控通道名 */LOG_MONITOR_CHANNEL,
-		/** 设备心跳实时监控通道名 */HB_MONITOR_CHANNEL
+		/** 设备心跳实时监控通道名 */HB_MONITOR_CHANNEL,
+		/** 设备心跳包间隔时间(秒) */HB_INTERVAL,
+		/** 设备心跳包失效时间(秒) */HB_EXPIRE
 	}
 	private static final String CMD_PREFIX = "cmd_";
 	private static final String ACK_PREFIX = "ack_";
@@ -67,6 +69,8 @@ class RedisManagement implements ServiceConstant{
 			.put(MQParam.CMD_CHANNEL, createCmdChannel())
 			.put(MQParam.LOG_MONITOR_CHANNEL, createLogMonitorChannel())
 			.put(MQParam.HB_MONITOR_CHANNEL, createHeartbeatMonitorChannel())
+			.put(MQParam.HB_INTERVAL, CONFIG.getInteger(HEARTBEAT_INTERVAL, DEFAULT_HEARTBEAT_INTERVAL).toString())
+			.put(MQParam.HB_EXPIRE, CONFIG.getInteger(HEARTBEAT_EXPIRE, DEFAULT_HEARTBEAT_EXPIRE).toString())
 			.build();
 		GlobalConfig.logRedisParameters(JedisPoolLazy.getDefaultInstance().getParameters());
 	}
