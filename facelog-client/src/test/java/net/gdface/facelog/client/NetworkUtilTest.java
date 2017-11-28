@@ -2,7 +2,9 @@ package net.gdface.facelog.client;
 
 import static org.junit.Assert.*;
 
+import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.UnknownHostException;
 
 import org.junit.Test;
 
@@ -19,5 +21,14 @@ public class NetworkUtilTest {
 			System.out.printf("\t%s\n", Joiner.on(",\n\t").join((nic.getInterfaceAddresses())));
 		}
 	}
-
+	@Test
+	public void test2(){
+		try {
+			System.out.println(InetAddress.getLocalHost());
+			System.out.println(InetAddress.getLocalHost().getHostAddress());
+		} catch (UnknownHostException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+	}
 }

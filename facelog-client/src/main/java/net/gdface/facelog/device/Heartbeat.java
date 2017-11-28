@@ -1,5 +1,7 @@
 package net.gdface.facelog.device;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Preconditions;
@@ -19,16 +21,16 @@ import net.gdface.facelog.client.NetworkUtil;
  */
 public class Heartbeat implements CommonConstant{
 	private static Heartbeat heartbeat;
-	/** 心跳间隔 */
+	/** 心跳间隔(毫秒) */
 	private long intervalMills = TimeUnit.MILLISECONDS.convert(DEFAULT_HEARTBEAT_INTERVAL,TimeUnit.SECONDS);
-	private final RedisTable<Integer> table;
-	private final int deivceID;
+	private final RedisTable<HeadbeatPackage> table;
 	/** MAC 地址 */
 	private final String hardwareAddress;
 	private final HeartbeatThread heartBeatThread;
+	private final HeadbeatPackage heartBeatPackage;
 	private Heartbeat(byte[] hardwareAddress,int deviceID, JedisPoolLazy pool) {
 		super();
-		this.deivceID = deviceID;
+		this.heartBeatPackage = new HeadbeatPackage().setDeviceId(deviceID);
 		this.hardwareAddress = NetworkUtil.formatMac(validateMac(hardwareAddress), null);
 		this.table =  RedisFactory.getTable(TABLE_HEARTBEAT, pool);
 		this.table.setExpire(DEFAULT_HEARTBEAT_EXPIRE, TimeUnit.SECONDS);
@@ -43,8 +45,8 @@ public class Heartbeat implements CommonConstant{
 		public void run() {
 			while(true){
 				try {
-					// 写入当前时间
-					table.set(hardwareAddress,deivceID, false);
+					heartBeatPackage.setHostAddress(getHostAddress());
+					table.set(hardwareAddress,heartBeatPackage, false);
 					table.expire(hardwareAddress);
 					Thread.sleep(intervalMills);
 				} catch(InterruptedException e){
@@ -55,6 +57,12 @@ public class Heartbeat implements CommonConstant{
 			}
 		}
 	};
+	/**
+	 * 设置设备心跳包发送间隔
+	 * @param time
+	 * @param timeUnit
+	 * @return
+	 */
 	public Heartbeat setInterval(long time,TimeUnit timeUnit){
 		if(time > 0 ){
 			this.intervalMills = TimeUnit.MILLISECONDS.convert(time, timeUnit);
@@ -63,7 +71,7 @@ public class Heartbeat implements CommonConstant{
 	}
 	
 	/**
-	 * 设置设备心跳表中数据过期时间
+	 * 设置设备心跳表中数据过期时间(秒)
 	 * @param time
 	 * @return
 	 */
@@ -98,5 +106,13 @@ public class Heartbeat implements CommonConstant{
 			heartbeat.heartBeatThread.start();
 		}
 		return heartbeat;
+	}
+	/** 返回本机ip地址,如果获取IP地址不正确,请重写此方法 */
+	protected String getHostAddress(){
+		try {
+			return InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

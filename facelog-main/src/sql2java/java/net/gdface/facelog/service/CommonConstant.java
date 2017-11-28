@@ -26,12 +26,33 @@ public interface CommonConstant {
     public static final String NULL_ID_STRING = "";
     /** 默认服务端口号 */
     public static final int DEFAULT_PORT = 26411;
-    /** 设备心跳包表 {@code 设备MAC地址 -> 设备ID} */
-    public static final Channel<Integer> TABLE_HEARTBEAT = new Channel<Integer>("DeviceHeartbeat"){} ;
+    /** 设备心跳包表 {@code 设备MAC地址 -> HeadbeatPackage} */
+    public static final Channel<HeadbeatPackage> TABLE_HEARTBEAT = new Channel<HeadbeatPackage>("DeviceHeartbeat"){} ;
     /** 心跳包间隔(秒) */
     public static final int DEFAULT_HEARTBEAT_INTERVAL = 8;
     /** 心跳包失效时间(秒) */
     public static final int DEFAULT_HEARTBEAT_EXPIRE = 60;
+    /** 心跳包报道数据 */
+    public static class HeadbeatPackage{
+        /** 设备ID */
+        private int deviceId;
+        /** 设备当前IP地址 */
+        private String hostAddress;
+        public int getDeviceId() {
+            return deviceId;
+        }
+        public HeadbeatPackage setDeviceId(int deviceId) {
+            this.deviceId = deviceId;
+            return this;
+        }
+        public String getHostAddress() {
+            return hostAddress;
+        }
+        public HeadbeatPackage setHostAddress(String hostAddress) {
+            this.hostAddress = hostAddress;
+            return this;
+        }
+    }
     /** 默认(设备/人员)组id */
     public static final int DEFAULT_GROUP_ID = 1;
     /** 默认(设备/人员)组名 */
