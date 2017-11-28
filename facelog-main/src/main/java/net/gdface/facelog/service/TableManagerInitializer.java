@@ -21,6 +21,7 @@ import net.gdface.facelog.db.mysql.DeviceGroupCacheManager;
 import net.gdface.facelog.db.mysql.FaceCacheManager;
 import net.gdface.facelog.db.mysql.FeatureCacheManager;
 import net.gdface.facelog.db.mysql.ImageCacheManager;
+import net.gdface.facelog.db.mysql.ManagerUtil;
 import net.gdface.facelog.db.mysql.PermitCacheManager;
 import net.gdface.facelog.db.mysql.PersonCacheManager;
 import net.gdface.facelog.db.mysql.PersonGroupCacheManager;
@@ -45,7 +46,10 @@ public class TableManagerInitializer {
 	public final IStoreManager storeManager ;
 	public final IFeatureManager featureManager ;
 	public final IPermitManager permitManager;
-	
+	static{
+		// 向底层数据库操作类注入当前项目使用的数据库连接配置
+		ManagerUtil.injectProperties(null);
+	}
 	public static final TableManagerInitializer INSTANCE = new TableManagerInitializer();
 	private TableManagerInitializer() {
 		// 配置cache参数

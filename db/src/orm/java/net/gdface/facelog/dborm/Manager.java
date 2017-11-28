@@ -17,6 +17,7 @@ import java.sql.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 import javax.sql.DataSource;
@@ -40,9 +41,47 @@ import net.gdface.facelog.dborm.exception.DaoException;
  */
 public final class Manager
 {
-    private static Manager instance = new Manager();
+    private static class Singleton{
+        private static final Manager INSTANCE = new Manager();
+    }
     private static InheritableThreadLocal<Connection> transactionConnection = new InheritableThreadLocal<Connection>();
+    /** JDBC properties from properties file */
+    private static Properties databaseProperties;
     
+    static{
+        String envVar="config_folder";
+        String propFile="database.properties";
+        String confFolder="conf";
+        databaseProperties = ConfigUtils.loadAllProperties(propFile, confFolder, envVar, Manager.class, false);
+    }
+    /** JDBC property name definition */
+    public static final String[] JDBC_KEYS = new String[]{
+            "jdbc.driver",
+            "jdbc.url",
+            "jdbc.username",
+            "jdbc.password",
+            "c3p0.minPoolSize",
+            "c3p0.maxPoolSize",
+            "c3p0.maxIdleTime",
+            "c3p0.idleConnectionTestPeriod"};
+    /**
+     * inject properties to {@link #databaseProperties}
+     * @param properties
+     * @see #JDBC_KEYS
+     */
+    public static final void injectProperties(Map<String,String> properties){
+        if(null != properties){
+            boolean isDebug = "true".equalsIgnoreCase(databaseProperties.getProperty("isDebug").trim());
+            String prefix=isDebug?"debug.":"work.";
+            String value;
+            for(String key : JDBC_KEYS){
+                value = properties.get(key);
+                if( null !=value && !value.isEmpty()){
+                    databaseProperties.setProperty(prefix+key, value);
+                }
+            }
+        }
+    }
     private PrintWriter pw = new PrintWriter(System.out);
     private DataSource ds = null;
     private String jdbcDriver = null;
@@ -59,11 +98,7 @@ public final class Manager
      */
     private Manager()
     {
-        String envVar="config_folder";
-        String propFile="database.properties";
-        String confFolder="conf";
-        Properties properties = ConfigUtils.loadAllProperties(propFile, confFolder, envVar, Manager.class, false);
-        loadProperties(properties);
+        loadProperties(databaseProperties);
     }
 
     /**
@@ -71,7 +106,7 @@ public final class Manager
      */
     public static Manager getInstance()
     {
-        return instance;
+        return Singleton.INSTANCE;
     }
     
     /** dispose pool */
