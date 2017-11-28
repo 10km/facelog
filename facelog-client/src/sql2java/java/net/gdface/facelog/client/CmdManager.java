@@ -53,48 +53,48 @@ public class CmdManager {
     /**
      * 构造方法
      * @param poolLazy 
-     * @param cmdChannelAdapter 
+     * @param cmdDispatcher 
      * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(net.gdface.facelog.client.thrift.Token)}
      */
     protected CmdManager(JedisPoolLazy poolLazy,
-            CmdChannelAdapter cmdChannelAdapter,
+            CmdDispatcher cmdDispatcher,
             Map<RedisParam, String> redisParameters) {
         this.redisPublisher = RedisFactory.getPublisher(checkNotNull(poolLazy));
         this.subscriber = RedisFactory.getSubscriber(checkNotNull(poolLazy));
         this.redisParameters = checkNotNull(redisParameters);
         this.cmdChannel = new Channel<DeviceInstruction>(
                 this.redisParameters.get(RedisParam.CMD_CHANNEL),
-                cmdChannelAdapter){};
+                cmdDispatcher){};
         this.subscriber.register(cmdChannel);
     }
     /**
      * 构造方法
      * @param poolLazy redis 连接池对象
-     * @param cmdChannelAdapter 应用程序执行设备命令的对象
+     * @param adapter 应用程序执行设备命令的对象
      * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(net.gdface.facelog.client.thrift.Token)}
      * @param deviceId 当前设备ID
      */
     public CmdManager(JedisPoolLazy poolLazy,
-            CommandAdapter cmdChannelAdapter,
+            CommandAdapter adapter,
             Map<RedisParam, String> redisParameters,
             int deviceId) {
         this(poolLazy,
-                new CmdChannelAdapter(cmdChannelAdapter,deviceId),
+                new CmdDispatcher(deviceId).setCmdAdapter(adapter),
                 redisParameters);
     }
     /**
      * 构造方法<br>
      * 使用默认{@link JedisPoolLazy}对象,参见 {@link JedisPoolLazy#getDefaultInstance()}
-     * @param cmdChannelAdapter
+     * @param adapter
      * @param redisParameters
      * @param deviceId
      * @see #CmdManager(JedisPoolLazy, CommandAdapter, Map, int, List)
      */
-    public CmdManager(CommandAdapter cmdChannelAdapter,
+    public CmdManager(CommandAdapter adapter,
             Map<RedisParam, String> redisParameters,
             int deviceId) {
         this(JedisPoolLazy.getDefaultInstance(),
-                new CmdChannelAdapter(cmdChannelAdapter,deviceId),
+                new CmdDispatcher(deviceId).setCmdAdapter(adapter),
                 redisParameters);
     }
     /**

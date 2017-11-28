@@ -12,32 +12,73 @@ $codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
 package $extensionPkg;
 
 import java.net.URL;
+import java.util.Collections;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
- * 命令执行器容器对象<br>
+ * 设备命令执行器容器对象<br>
  * 允许应用项目用不同的{@link CommandAdapter}对象分别实现设备命令
  * @author guyadong
  *
  */
 public class CommandAdapterContainer extends CommandAdapter{
+    /** 设备命令执行器对象映射,每一个设备命令对应一个执行器对象 */
+    private final Map<Cmd, CommandAdapter> adapters= Collections.synchronizedMap(new EnumMap<Cmd, CommandAdapter>(Cmd.class));
+    
+    public CommandAdapterContainer() {
+        this(null);
+    }
+    public CommandAdapterContainer(Map<Cmd, CommandAdapter> adapters) {
+        if(null != adapters){
+            this.adapters.putAll(adapters);
+        }
+    }
+    /**
+     * 返回{@code cmd}注册的命令执行器对象,如果没有返回{@code null}
+     * @param cmd
+     * @return
+     */
+    public CommandAdapter adapterOf(Cmd cmd) {
+        return adapters.get(cmd);
+    }
+    /**
+     * 注册指定命令({@code cmd})的命令执行器
+     * @param cmd 设备命令类型,不可为{@code null}
+     * @param adapter  命令执行器,不可为{@code null}
+     * @return
+     * @see {@link EnumMap#put(Enum, Object)}
+     */
+    public CommandAdapterContainer register(Cmd cmd, CommandAdapter adapter) {
+        adapters.put(checkNotNull(cmd,"key is null"), checkNotNull(adapter,"adapter is null"));
+        return this;
+    }
+    /**
+     * 注销{@code cmd}指定的命令执行器
+     * @param cmd
+     * @return 返回被删除的命令执行器
+     * @see {@link EnumMap#remove(Object)}
+     */
+    public CommandAdapterContainer unregister(Cmd cmd) {
+        adapters.remove(cmd);
+        return this;
+    }
+    
+    /**
+     * 删除所有命令执行器
+     * @see {@link EnumMap#clear()}
+     */
+    public void clear() {
+        adapters.clear();
+    }
 #foreach($entry in $commands.entrySet())
 #set($key = $entry.key)
 #set($value = $entry.value)
 #set($params = $value['params'].entrySet())
 #set($adapterVar = "${key}Adapter")
-    /** {@link Cmd${esc.hash}${key}} 的命令执行器 */
-    private CommandAdapter $adapterVar;
-    /** setter of {@link ${esc.hash}${adapterVar}} */
-    public CommandAdapterContainer set${strUtil.firstUpperCase($adapterVar)}(CommandAdapter $adapterVar){
-        this.$adapterVar = $adapterVar;
-        return this;
-    }
-    /** getter of {@link ${esc.hash}${adapterVar}} */
-    public CommandAdapter get${strUtil.firstUpperCase($adapterVar)}(){
-        return this.$adapterVar;
-    }
     /** 
      * 调用 {@link ${esc.hash}${adapterVar}} 命令执行器<br>
      * 如果 {@link ${esc.hash}${adapterVar}} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
@@ -46,12 +87,12 @@ public class CommandAdapterContainer extends CommandAdapter{
     public $value['return'] ${key}(#join($params '$e.value[0] $e.key' ','))throws DeviceCmdException{
 #define($paramList)#join($params '$e.key' ',')#end
 #if($value['return']!='void')
-        return null == this.${adapterVar} 
+        return this.adapters.containsKey(Cmd.${key})
             ? super.${key}($paramList)
-            : this.${adapterVar}.${key}($paramList);
+            : this.adapters.get(Cmd.${key}).${key}($paramList);
 #else
-        if(null != this.${adapterVar}){
-            this.${adapterVar}.${key}($paramList);
+        if(this.adapters.containsKey(Cmd.${key})){
+            this.adapters.get(Cmd.${key}).${key}($paramList);
         }else{
             super.${key}($paramList);
         }

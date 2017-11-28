@@ -9,26 +9,66 @@
 package net.gdface.facelog.client;
 
 import java.net.URL;
+import java.util.Collections;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
- * 命令执行器容器对象<br>
+ * 设备命令执行器容器对象<br>
  * 允许应用项目用不同的{@link CommandAdapter}对象分别实现设备命令
  * @author guyadong
  *
  */
 public class CommandAdapterContainer extends CommandAdapter{
-    /** {@link Cmd#parameter} 的命令执行器 */
-    private CommandAdapter parameterAdapter;
-    /** setter of {@link #parameterAdapter} */
-    public CommandAdapterContainer setParameterAdapter(CommandAdapter parameterAdapter){
-        this.parameterAdapter = parameterAdapter;
+    private final Map<Cmd, CommandAdapter> adapters= Collections.synchronizedMap(new EnumMap<Cmd, CommandAdapter>(Cmd.class));
+    
+    public CommandAdapterContainer() {
+        this(null);
+    }
+    public CommandAdapterContainer(Map<Cmd, CommandAdapter> adapters) {
+        if(null != adapters){
+            this.adapters.putAll(adapters);
+        }
+    }
+    /**
+     * 返回{@code cmd}注册的命令执行器对象,如果没有返回{@code null}
+     * @param cmd
+     * @return
+     */
+    public CommandAdapter adapterOf(Cmd cmd) {
+        return adapters.get(cmd);
+    }
+    /**
+     * 注册指定命令({@code cmd})的命令执行器
+     * @param cmd 设备命令类型,不可为{@code null}
+     * @param adapter  命令执行器,不可为{@code null}
+     * @return
+     * @see {@link EnumMap#put(Enum, Object)}
+     */
+    public CommandAdapterContainer register(Cmd cmd, CommandAdapter adapter) {
+        adapters.put(checkNotNull(cmd,"key is null"), checkNotNull(adapter,"adapter is null"));
         return this;
     }
-    /** getter of {@link #parameterAdapter} */
-    public CommandAdapter getParameterAdapter(){
-        return this.parameterAdapter;
+    /**
+     * 注销{@code cmd}指定的命令执行器
+     * @param cmd
+     * @return 返回被删除的命令执行器
+     * @see {@link EnumMap#remove(Object)}
+     */
+    public CommandAdapterContainer unregister(Cmd cmd) {
+        adapters.remove(cmd);
+        return this;
+    }
+    
+    /**
+     * 删除所有命令执行器
+     * @see {@link EnumMap#clear()}
+     */
+    public void clear() {
+        adapters.clear();
     }
     /** 
      * 调用 {@link #parameterAdapter} 命令执行器<br>
@@ -36,22 +76,11 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public void parameter(String key,String value)throws DeviceCmdException{
-        if(null != this.parameterAdapter){
-            this.parameterAdapter.parameter(key,value);
+        if(this.adapters.containsKey(Cmd.parameter)){
+            this.adapters.get(Cmd.parameter).parameter(key,value);
         }else{
             super.parameter(key,value);
         }
-    }
-    /** {@link Cmd#config} 的命令执行器 */
-    private CommandAdapter configAdapter;
-    /** setter of {@link #configAdapter} */
-    public CommandAdapterContainer setConfigAdapter(CommandAdapter configAdapter){
-        this.configAdapter = configAdapter;
-        return this;
-    }
-    /** getter of {@link #configAdapter} */
-    public CommandAdapter getConfigAdapter(){
-        return this.configAdapter;
     }
     /** 
      * 调用 {@link #configAdapter} 命令执行器<br>
@@ -59,22 +88,11 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public void config(Map<String,String> properties)throws DeviceCmdException{
-        if(null != this.configAdapter){
-            this.configAdapter.config(properties);
+        if(this.adapters.containsKey(Cmd.config)){
+            this.adapters.get(Cmd.config).config(properties);
         }else{
             super.config(properties);
         }
-    }
-    /** {@link Cmd#status} 的命令执行器 */
-    private CommandAdapter statusAdapter;
-    /** setter of {@link #statusAdapter} */
-    public CommandAdapterContainer setStatusAdapter(CommandAdapter statusAdapter){
-        this.statusAdapter = statusAdapter;
-        return this;
-    }
-    /** getter of {@link #statusAdapter} */
-    public CommandAdapter getStatusAdapter(){
-        return this.statusAdapter;
     }
     /** 
      * 调用 {@link #statusAdapter} 命令执行器<br>
@@ -82,20 +100,9 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public Object status(String name)throws DeviceCmdException{
-        return null == this.statusAdapter 
+        return this.adapters.containsKey(Cmd.status)
             ? super.status(name)
-            : this.statusAdapter.status(name);
-    }
-    /** {@link Cmd#report} 的命令执行器 */
-    private CommandAdapter reportAdapter;
-    /** setter of {@link #reportAdapter} */
-    public CommandAdapterContainer setReportAdapter(CommandAdapter reportAdapter){
-        this.reportAdapter = reportAdapter;
-        return this;
-    }
-    /** getter of {@link #reportAdapter} */
-    public CommandAdapter getReportAdapter(){
-        return this.reportAdapter;
+            : this.adapters.get(Cmd.status).status(name);
     }
     /** 
      * 调用 {@link #reportAdapter} 命令执行器<br>
@@ -103,20 +110,9 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public Map<String,Object> report(List<String> names)throws DeviceCmdException{
-        return null == this.reportAdapter 
+        return this.adapters.containsKey(Cmd.report)
             ? super.report(names)
-            : this.reportAdapter.report(names);
-    }
-    /** {@link Cmd#enable} 的命令执行器 */
-    private CommandAdapter enableAdapter;
-    /** setter of {@link #enableAdapter} */
-    public CommandAdapterContainer setEnableAdapter(CommandAdapter enableAdapter){
-        this.enableAdapter = enableAdapter;
-        return this;
-    }
-    /** getter of {@link #enableAdapter} */
-    public CommandAdapter getEnableAdapter(){
-        return this.enableAdapter;
+            : this.adapters.get(Cmd.report).report(names);
     }
     /** 
      * 调用 {@link #enableAdapter} 命令执行器<br>
@@ -124,22 +120,11 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public void enable(Boolean enable)throws DeviceCmdException{
-        if(null != this.enableAdapter){
-            this.enableAdapter.enable(enable);
+        if(this.adapters.containsKey(Cmd.enable)){
+            this.adapters.get(Cmd.enable).enable(enable);
         }else{
             super.enable(enable);
         }
-    }
-    /** {@link Cmd#isEnable} 的命令执行器 */
-    private CommandAdapter isEnableAdapter;
-    /** setter of {@link #isEnableAdapter} */
-    public CommandAdapterContainer setIsEnableAdapter(CommandAdapter isEnableAdapter){
-        this.isEnableAdapter = isEnableAdapter;
-        return this;
-    }
-    /** getter of {@link #isEnableAdapter} */
-    public CommandAdapter getIsEnableAdapter(){
-        return this.isEnableAdapter;
     }
     /** 
      * 调用 {@link #isEnableAdapter} 命令执行器<br>
@@ -147,20 +132,9 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public Boolean isEnable(String message)throws DeviceCmdException{
-        return null == this.isEnableAdapter 
+        return this.adapters.containsKey(Cmd.isEnable)
             ? super.isEnable(message)
-            : this.isEnableAdapter.isEnable(message);
-    }
-    /** {@link Cmd#reset} 的命令执行器 */
-    private CommandAdapter resetAdapter;
-    /** setter of {@link #resetAdapter} */
-    public CommandAdapterContainer setResetAdapter(CommandAdapter resetAdapter){
-        this.resetAdapter = resetAdapter;
-        return this;
-    }
-    /** getter of {@link #resetAdapter} */
-    public CommandAdapter getResetAdapter(){
-        return this.resetAdapter;
+            : this.adapters.get(Cmd.isEnable).isEnable(message);
     }
     /** 
      * 调用 {@link #resetAdapter} 命令执行器<br>
@@ -168,22 +142,11 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public void reset()throws DeviceCmdException{
-        if(null != this.resetAdapter){
-            this.resetAdapter.reset();
+        if(this.adapters.containsKey(Cmd.reset)){
+            this.adapters.get(Cmd.reset).reset();
         }else{
             super.reset();
         }
-    }
-    /** {@link Cmd#time} 的命令执行器 */
-    private CommandAdapter timeAdapter;
-    /** setter of {@link #timeAdapter} */
-    public CommandAdapterContainer setTimeAdapter(CommandAdapter timeAdapter){
-        this.timeAdapter = timeAdapter;
-        return this;
-    }
-    /** getter of {@link #timeAdapter} */
-    public CommandAdapter getTimeAdapter(){
-        return this.timeAdapter;
     }
     /** 
      * 调用 {@link #timeAdapter} 命令执行器<br>
@@ -191,22 +154,11 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public void time(Long unixTimestamp)throws DeviceCmdException{
-        if(null != this.timeAdapter){
-            this.timeAdapter.time(unixTimestamp);
+        if(this.adapters.containsKey(Cmd.time)){
+            this.adapters.get(Cmd.time).time(unixTimestamp);
         }else{
             super.time(unixTimestamp);
         }
-    }
-    /** {@link Cmd#update} 的命令执行器 */
-    private CommandAdapter updateAdapter;
-    /** setter of {@link #updateAdapter} */
-    public CommandAdapterContainer setUpdateAdapter(CommandAdapter updateAdapter){
-        this.updateAdapter = updateAdapter;
-        return this;
-    }
-    /** getter of {@link #updateAdapter} */
-    public CommandAdapter getUpdateAdapter(){
-        return this.updateAdapter;
     }
     /** 
      * 调用 {@link #updateAdapter} 命令执行器<br>
@@ -214,22 +166,11 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public void update(URL url,String version)throws DeviceCmdException{
-        if(null != this.updateAdapter){
-            this.updateAdapter.update(url,version);
+        if(this.adapters.containsKey(Cmd.update)){
+            this.adapters.get(Cmd.update).update(url,version);
         }else{
             super.update(url,version);
         }
-    }
-    /** {@link Cmd#message} 的命令执行器 */
-    private CommandAdapter messageAdapter;
-    /** setter of {@link #messageAdapter} */
-    public CommandAdapterContainer setMessageAdapter(CommandAdapter messageAdapter){
-        this.messageAdapter = messageAdapter;
-        return this;
-    }
-    /** getter of {@link #messageAdapter} */
-    public CommandAdapter getMessageAdapter(){
-        return this.messageAdapter;
     }
     /** 
      * 调用 {@link #messageAdapter} 命令执行器<br>
@@ -237,22 +178,11 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public void message(String message)throws DeviceCmdException{
-        if(null != this.messageAdapter){
-            this.messageAdapter.message(message);
+        if(this.adapters.containsKey(Cmd.message)){
+            this.adapters.get(Cmd.message).message(message);
         }else{
             super.message(message);
         }
-    }
-    /** {@link Cmd#custom} 的命令执行器 */
-    private CommandAdapter customAdapter;
-    /** setter of {@link #customAdapter} */
-    public CommandAdapterContainer setCustomAdapter(CommandAdapter customAdapter){
-        this.customAdapter = customAdapter;
-        return this;
-    }
-    /** getter of {@link #customAdapter} */
-    public CommandAdapter getCustomAdapter(){
-        return this.customAdapter;
     }
     /** 
      * 调用 {@link #customAdapter} 命令执行器<br>
@@ -260,8 +190,8 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public Object custom(String cmdName,Map<String,Object> parameters)throws DeviceCmdException{
-        return null == this.customAdapter 
+        return this.adapters.containsKey(Cmd.custom)
             ? super.custom(cmdName,parameters)
-            : this.customAdapter.custom(cmdName,parameters);
+            : this.adapters.get(Cmd.custom).custom(cmdName,parameters);
     }
 }

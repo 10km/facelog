@@ -1,6 +1,5 @@
 package net.gdface.facelog.client;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.List;
 
 import com.google.common.collect.Iterators;
@@ -15,24 +14,21 @@ import gu.simplemq.redis.RedisPublisher;
 import gu.simplemq.redis.JedisPoolLazy;
 
 /**
- * 设备命令执行对象,实现{@link IMessageAdapter}接口<br>
+ * 设备命令分发器,实现{@link IMessageAdapter}接口,将redis操作与业务逻辑隔离<br>
  * 从订阅频道得到设备指令{@link DeviceInstruction},并将交给{@link CommandAdapter}执行<br>
  * 如果是与当前设备无关的命令则跳过
  * @author guyadong
  *
  */
-public class CmdChannelAdapter implements IMessageAdapter<DeviceInstruction>{
-	private final CommandAdapter cmdAdapter;
+public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>{
+	private CommandAdapter cmdAdapter;
 	private final int deviceId;
 	private List<Integer> groupsBelongs;
 	private RedisPublisher redisPublisher = new RedisPublisher(JedisPoolLazy.getDefaultInstance());
 	/**
-	 * @param cmdAdapter 应用程序执行设备命令的对象
 	 * @param deviceId 当前设备ID
 	 */
-	public CmdChannelAdapter(CommandAdapter cmdAdapter,
-			int deviceId) {
-		this.cmdAdapter = checkNotNull(cmdAdapter,"cmdAdapter is null");
+	public CmdDispatcher(int deviceId) {
 		this.deviceId= deviceId;
 	}
 	/** 判断target列表是否包括当前设备 */
@@ -56,7 +52,8 @@ public class CmdChannelAdapter implements IMessageAdapter<DeviceInstruction>{
 	 */
 	@Override
 	public void onSubscribe(DeviceInstruction t) throws SmqUnsubscribeException {
-		if(null != t.getTarget() && selfIncluded(t.isGroup(),t.getTarget())){
+		if(null != cmdAdapter && null != t.getTarget() && selfIncluded(t.isGroup(),t.getTarget())){
+			// 将设备命令交给命令类型对应的方法执行设备命令
 			Ack<?> ack = t.getCmd().run(cmdAdapter, t.getParameters()).setCmdSn(t.getCmdSn());
 			// 如果指定了响应频道则向指定的频道发送响应消息
 			if(!Strings.isNullOrEmpty(t.getAckChannel())){
@@ -75,13 +72,23 @@ public class CmdChannelAdapter implements IMessageAdapter<DeviceInstruction>{
 	}
 	/**
 	 * 设置当前设备所属的设备组ID列表,
-	 * 创建{@link CmdChannelAdapter}对象时如果不调用本方法,设备不会响应任何设备组命令
+	 * 创建{@link CmdDispatcher}对象时如果不调用本方法,设备不会响应任何设备组命令
 	 * @param groupIdList 当前设备ID所属的所有设备组ID,
 	 * @return
 	 * @see  {@link IFaceLogClient#getDeviceGroupsBelongs(int)}
 	 */
-	public CmdChannelAdapter groupsBelongs(List<Integer> groupIdList) {
+	public CmdDispatcher setGroupsBelongs(List<Integer> groupIdList) {
 		this.groupsBelongs = groupIdList;
+		return this;
+	}
+	/**
+	 * 设置应用程序执行设备命令的对象<br>
+	 * 创建{@link CmdDispatcher}对象时如果不调用本方法,设备不会响应任何设备命令
+	 * @param cmdAdapter
+	 * @return
+	 */
+	public CmdDispatcher setCmdAdapter(CommandAdapter cmdAdapter) {
+		this.cmdAdapter = cmdAdapter;
 		return this;
 	}
 

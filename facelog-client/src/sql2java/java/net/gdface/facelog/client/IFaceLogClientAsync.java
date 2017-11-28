@@ -1455,7 +1455,7 @@ class IFaceLogClientAsync implements Constant{
     /**
      * 返回({@code deviceId}))指定的设备所属所有设备组<br>
      * @param deviceId
-     * @return 
+     * @return 如果{@code deviceId}无效则返回空表
      */
     public ListenableFuture<List<Integer>> getDeviceGroupsBelongs(int deviceId){
         return service.getDeviceGroupsBelongs(deviceId);
