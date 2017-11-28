@@ -2740,7 +2740,14 @@ class IFaceLogClient implements Constant{
     }
     // 101 SERIVCE PORT : getRedisParameters
     /**
-     * 返回redis访问参数
+     * 返回redis访问参数:<br>
+     * <ul>
+     * <li>redis服务器地址</li>
+     * <li>设备命令通道名</li>
+     * <li>人员验证实时监控通道名</li>
+     * <li>设备心跳实时监控通道名</li>
+     * </ul>
+     * 参见{@link MQParam}定义
      * @param token 访问令牌
      * @return 
      * @throws ServiceRuntimeException
