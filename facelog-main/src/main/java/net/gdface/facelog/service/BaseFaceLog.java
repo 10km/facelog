@@ -933,6 +933,16 @@ public abstract class BaseFaceLog extends Dao{
 	public List<Integer> listOfParentForDeviceGroup(int deviceGroupId)throws ServiceRuntimeException{
 		return null;
 	}
+	/**
+     * 返回({@code deviceId}))指定的设备所属所有设备组<br>
+	 * @param deviceId
+	 * @return
+	 * @throws ServiceRuntimeException
+	 */
+	@ThriftMethod
+	public List<Integer> getDeviceGroupsBelongs(int deviceId)throws ServiceRuntimeException{
+		return null;
+	}
 	////////////////////////////////PersonGroupBean/////////////
 	/**
 	 * 保存人员组记录

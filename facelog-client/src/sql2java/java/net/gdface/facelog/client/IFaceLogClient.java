@@ -2079,7 +2079,30 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 72 SERIVCE PORT : savePersonGroup
+    // 72 SERIVCE PORT : getDeviceGroupsBelongs
+    /**
+     * 返回({@code deviceId}))指定的设备所属所有设备组<br>
+     * @param deviceId
+     * @return 
+     * @throws ServiceRuntimeException
+     */
+    public List<Integer> getDeviceGroupsBelongs(int deviceId){
+        try{
+            return service.getDeviceGroupsBelongs(deviceId);
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    // 73 SERIVCE PORT : savePersonGroup
     /**
      * 保存人员组记录
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
@@ -2109,7 +2132,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 73 SERIVCE PORT : getPersonGroup
+    // 74 SERIVCE PORT : getPersonGroup
     /**
      * 根据人员组id返回数据库记录
      * @param personGroupId
@@ -2133,7 +2156,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 74 SERIVCE PORT : getPersonGroups
+    // 75 SERIVCE PORT : getPersonGroups
     /**
      * 返回人员组id列表指定的数据库记录
      * @param groupIdList
@@ -2157,7 +2180,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 75 SERIVCE PORT : deletePersonGroup
+    // 76 SERIVCE PORT : deletePersonGroup
     /**
      * 删除{@code personGroupId}指定的人员组<br>
      * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
@@ -2180,7 +2203,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 76 SERIVCE PORT : getSubPersonGroup
+    // 77 SERIVCE PORT : getSubPersonGroup
     /**
      * 返回{@code personGroupId}指定的人员组下的所有子节点<br>
      * 如果没有子节点则返回空表
@@ -2205,7 +2228,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 77 SERIVCE PORT : getPersonsOfGroup
+    // 78 SERIVCE PORT : getPersonsOfGroup
     /**
      * 返回{@code deviceGroupId}指定的人员组下属的所有人员记录<br>
      * 如果没有下属人员记录则返回空表
@@ -2230,7 +2253,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 78 SERIVCE PORT : loadDeviceGroupByWhere
+    // 79 SERIVCE PORT : loadDeviceGroupByWhere
     /**
      * 查询{@code where} SQL条件语句指定的记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
@@ -2259,7 +2282,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 79 SERIVCE PORT : countDeviceGroupByWhere
+    // 80 SERIVCE PORT : countDeviceGroupByWhere
     /**
      * 返回满足{@code where} SQL条件语句的fl_device_group记录总数
      */
@@ -2271,7 +2294,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 80 SERIVCE PORT : loadDeviceGroupIdByWhere
+    // 81 SERIVCE PORT : loadDeviceGroupIdByWhere
     /**
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
@@ -2293,7 +2316,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 81 SERIVCE PORT : addPermit
+    // 82 SERIVCE PORT : addPermit
     /**
      * 添加一个(允许)通行关联记录:允许{@code personGroup}指定的人员组在
      * {@code deviceGroup}指定的设备组下属的所有设备通行
@@ -2318,7 +2341,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 82 SERIVCE PORT : addPermitById
+    // 83 SERIVCE PORT : addPermitById
     /**
      * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
      * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
@@ -2342,7 +2365,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 83 SERIVCE PORT : deletePermit
+    // 84 SERIVCE PORT : deletePermit
     /**
      * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean, Token)}
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
@@ -2367,7 +2390,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 84 SERIVCE PORT : getGroupPermit
+    // 85 SERIVCE PORT : getGroupPermit
     /**
      * 获取人员组通行权限<br>
      * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行
@@ -2389,7 +2412,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 85 SERIVCE PORT : getPersonPermit
+    // 86 SERIVCE PORT : getPersonPermit
     /**
      * 获取人员通行权限<br>
      * 返回{@code personId}指定的人员在{@code deviceId}设备上是否允许通行
@@ -2411,7 +2434,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 86 SERIVCE PORT : getGroupPermits
+    // 87 SERIVCE PORT : getGroupPermits
     /**
      * 参见 {@link #getGroupPermit(Integer, Integer) }
      */
@@ -2435,7 +2458,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 87 SERIVCE PORT : getPersonPermits
+    // 88 SERIVCE PORT : getPersonPermits
     /**
      * 参见 {@link #getPersonPermit(Integer, Integer) }
      */
@@ -2459,7 +2482,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 88 SERIVCE PORT : loadPermitByUpdate
+    // 89 SERIVCE PORT : loadPermitByUpdate
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录
@@ -2484,7 +2507,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 89 SERIVCE PORT : loadPersonGroupByWhere
+    // 90 SERIVCE PORT : loadPersonGroupByWhere
     /**
      * 查询{@code where} SQL条件语句指定的记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
@@ -2513,7 +2536,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 90 SERIVCE PORT : countPersonGroupByWhere
+    // 91 SERIVCE PORT : countPersonGroupByWhere
     /**
      * 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
      * @see {@link IPersonGroupManager#Where(String)}
@@ -2526,7 +2549,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 91 SERIVCE PORT : loadPersonGroupIdByWhere
+    // 92 SERIVCE PORT : loadPersonGroupIdByWhere
     /**
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
@@ -2549,7 +2572,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 92 SERIVCE PORT : registerDevice
+    // 93 SERIVCE PORT : registerDevice
     /**
      * 新设备注册,如果设备已经注册则返回注册设备记录<br>
      * 注册时必须提供设备MAC地址,是否提供序列号,根据应用需要选择
@@ -2574,7 +2597,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 93 SERIVCE PORT : unregisterDevice
+    // 94 SERIVCE PORT : unregisterDevice
     /**
      * (设备端)设备删除
      * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
@@ -2595,7 +2618,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 94 SERIVCE PORT : online
+    // 95 SERIVCE PORT : online
     /**
      * 设备申请上线,每次调用都会产生一个新的令牌
      * @param device 上线设备信息，必须提供{@code id, mac, serialNo}字段
@@ -2619,7 +2642,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 95 SERIVCE PORT : offline
+    // 96 SERIVCE PORT : offline
     /**
      * 设备申请离线,删除设备令牌
      * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
@@ -2635,7 +2658,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 96 SERIVCE PORT : applyPersonToken
+    // 97 SERIVCE PORT : applyPersonToken
     /**
      * 申请人员访问令牌
      * @param personId
@@ -2659,7 +2682,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 97 SERIVCE PORT : releasePersonToken
+    // 98 SERIVCE PORT : releasePersonToken
     /**
      * 释放人员访问令牌
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
@@ -2675,7 +2698,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 98 SERIVCE PORT : applyAckChannel
+    // 99 SERIVCE PORT : applyAckChannel
     /**
      * 申请一个唯一的命令响应通道
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
@@ -2699,7 +2722,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 99 SERIVCE PORT : applyCmdSn
+    // 100 SERIVCE PORT : applyCmdSn
     /**
      * 申请一个唯一的命令序列号
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
@@ -2715,7 +2738,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 100 SERIVCE PORT : getRedisParameters
+    // 101 SERIVCE PORT : getRedisParameters
     /**
      * 返回redis访问参数
      * @param token 访问令牌

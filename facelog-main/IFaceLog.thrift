@@ -222,6 +222,7 @@ service IFaceLog {
   DeviceBean getDevice(1:  i32 deviceId) throws (1: ServiceRuntimeException ex1);
   DeviceGroupBean getDeviceGroup(1:  i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
   list<DeviceGroupBean> getDeviceGroups(1:  list<i32> groupIdList) throws (1: ServiceRuntimeException ex1);
+  list<i32> getDeviceGroupsBelongs(1:  i32 deviceId) throws (1: ServiceRuntimeException ex1);
   i32 getDeviceIdOfFeature(1:  string featureMd5) throws (1: ServiceRuntimeException ex1);
   list<DeviceBean> getDevices(1:  list<i32> idList) throws (1: ServiceRuntimeException ex1);
   list<DeviceBean> getDevicesOfGroup(1:  i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);

@@ -7,20 +7,23 @@
 // ______________________________________________________
 package net.gdface.facelog.client;
 
+import net.gdface.facelog.client.thrift.RedisParam;
+
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
 
 import gu.simplemq.Channel;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
-import net.gdface.facelog.client.thrift.RedisParam;
 
 import gu.simplemq.redis.RedisPublisher;
 import gu.simplemq.redis.RedisSubscriber;
@@ -32,12 +35,12 @@ import gu.simplemq.redis.RedisSubscriber;
  * <pre>
  *    String ackChannel = iFaceLogClient.applyAckChannel(myToken); // 向facelog服务申请命令响应通道
  *    long cmdSn = iFaceLogClient.applyCmdSn(myToken); // 向facelog服务申请命令序列号
- *  	targetBuilder()
- *  		.setCmdSn(cmdSn) /
- *  		.setDeviceTarget(deviceId) // 指定目标设备ID
- *  		.setAckChannel(ackChannel) 
- *  		.build()
- *  		.reset(); // 执行reset命令
+ *      targetBuilder()
+ *          .setCmdSn(cmdSn) /
+ *          .setDeviceTarget(deviceId) // 指定目标设备ID
+ *          .setAckChannel(ackChannel) 
+ *          .build()
+ *          .reset(); // 执行reset命令
  * </pre>
  * @author guyadong
  *
@@ -70,16 +73,14 @@ public class CmdManager {
      * @param cmdChannelAdapter 应用程序执行设备命令的对象
      * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(net.gdface.facelog.client.thrift.Token)}
      * @param deviceId 当前设备ID
-     * @param groupIdList 当前设备ID所属的所有设备组ID, 参见 {@link IFaceLogClient#listOfParentForDeviceGroup(int)}
      */
     public CmdManager(JedisPoolLazy poolLazy,
-    		CommandAdapter cmdChannelAdapter,
+            CommandAdapter cmdChannelAdapter,
             Map<RedisParam, String> redisParameters,
-            int deviceId,
-            List<Integer> groupIdList) {
-    	this(poolLazy,
-    			new CmdChannelAdapter(cmdChannelAdapter,deviceId,groupIdList),
-    			redisParameters);
+            int deviceId) {
+        this(poolLazy,
+                new CmdChannelAdapter(cmdChannelAdapter,deviceId),
+                redisParameters);
     }
     /**
      * 构造方法<br>
@@ -87,16 +88,14 @@ public class CmdManager {
      * @param cmdChannelAdapter
      * @param redisParameters
      * @param deviceId
-     * @param groupIdList
      * @see #CmdManager(JedisPoolLazy, CommandAdapter, Map, int, List)
      */
     public CmdManager(CommandAdapter cmdChannelAdapter,
             Map<RedisParam, String> redisParameters,
-            int deviceId,
-            List<Integer> groupIdList) {
-    	this(JedisPoolLazy.getDefaultInstance(),
-    			new CmdChannelAdapter(cmdChannelAdapter,deviceId,groupIdList),
-    			redisParameters);
+            int deviceId) {
+        this(JedisPoolLazy.getDefaultInstance(),
+                new CmdChannelAdapter(cmdChannelAdapter,deviceId),
+                redisParameters);
     }
     /**
      * 发送设备命令
@@ -107,7 +106,6 @@ public class CmdManager {
         checkArgument(null != cmd,"cmd is null");
         checkArgument(null != cmd.getCmd(),"DeviceInstruction.cmd field must not be null");
         checkArgument(null != cmd.getTarget() && !cmd.getTarget().isEmpty(),"DeviceInstruction.target field must not be null");
-        checkArgument(null != cmd.getCmdSn(),"DeviceInstruction.cmdSn field must not be null");
         if(null == cmd.getParameters()){
             cmd.setParameters(ImmutableMap.<String,Object>of());
         }
@@ -116,7 +114,7 @@ public class CmdManager {
     /** 
      * 设备命令构建类,用于设置除{@link DeviceInstruction#parameters}字段之的其他字段
      */
-    public class CmdBuilder{   	
+    public class CmdBuilder{       
         private List<Integer> target;
         private boolean group;
         private Long cmdSn;
@@ -134,9 +132,7 @@ public class CmdManager {
         }
         /** 指定设备目标为设备ID列表,参见 {@link DeviceInstruction#setTarget(List, boolean)} */
         public CmdBuilder setDeviceTarget(List<Integer> target){
-            this.target = target;
-            this.group = false;
-            return this;
+            return setTarget(target,false);
         }
         /** 指定设备目标为设备ID列表,参见 {@link DeviceInstruction#setTarget(List, boolean)} */
         public CmdBuilder setDeviceTarget(int... target){
@@ -144,9 +140,7 @@ public class CmdManager {
         }
         /** 指定设备目标为设备组ID列表,参见 {@link DeviceInstruction#setTarget(List, boolean)} */
         public CmdBuilder setDeviceGroupTarget(List<Integer> target){
-            this.target = target;
-            this.group = true;
-            return this;
+            return setTarget(target,true);
         }
         /** 指定设备目标为设备组ID列表,参见 {@link DeviceInstruction#setTarget(List, boolean)} */
         public CmdBuilder setDeviceGroupTarget(int... target){
@@ -162,6 +156,10 @@ public class CmdManager {
             this.ackChannel = ackChannel;
             return this;
         }
+        /** 数据有效性验证 */
+        private void validate(){
+            checkState(null != cmdSn,"cmdSn is uninitialized");
+        }
         /**
          * 完成build,返回 {@link CmdManager}对象<br> 
          * @param autoRemove 为{@code true}时,完成设备命令发送后自动清除Thread Local Storage变量{@link CmdManager#TLS_BUILDER},
@@ -169,11 +167,13 @@ public class CmdManager {
          * @return
          */
         public CmdManager build(boolean autoRemove){
+            validate();
             this.autoRemove = autoRemove;
             return this.parent;
         }
         /** 完成build,返回 {@link CmdManager}对象 */
         public CmdManager build(){
+            validate();
             return this.parent;
         }
     } 
@@ -215,10 +215,9 @@ public class CmdManager {
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
-            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                    .put("key", key)
-                    .put("value", value)    
-                    .build();
+            Map<String, Object> params = Maps.newHashMap();
+            params.put("key", key);
+            params.put("value", value);
             DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.parameter)
                     .setCmdSn(builder.cmdSn)
@@ -243,9 +242,8 @@ public class CmdManager {
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
-            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                    .put("properties", properties)    
-                    .build();
+            Map<String, Object> params = Maps.newHashMap();
+            params.put("properties", properties);
             DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.config)
                     .setCmdSn(builder.cmdSn)
@@ -270,9 +268,8 @@ public class CmdManager {
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
-            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                    .put("name", name)    
-                    .build();
+            Map<String, Object> params = Maps.newHashMap();
+            params.put("name", name);
             DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.status)
                     .setCmdSn(builder.cmdSn)
@@ -297,9 +294,8 @@ public class CmdManager {
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
-            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                    .put("names", names)    
-                    .build();
+            Map<String, Object> params = Maps.newHashMap();
+            params.put("names", names);
             DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.report)
                     .setCmdSn(builder.cmdSn)
@@ -324,9 +320,8 @@ public class CmdManager {
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
-            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                    .put("enable", enable)    
-                    .build();
+            Map<String, Object> params = Maps.newHashMap();
+            params.put("enable", enable);
             DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.enable)
                     .setCmdSn(builder.cmdSn)
@@ -351,9 +346,8 @@ public class CmdManager {
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
-            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                    .put("message", message)    
-                    .build();
+            Map<String, Object> params = Maps.newHashMap();
+            params.put("message", message);
             DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.isEnable)
                     .setCmdSn(builder.cmdSn)
@@ -377,9 +371,8 @@ public class CmdManager {
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
-            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                        
-                    .build();
+            Map<String, Object> params = Maps.newHashMap();
+            
             DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.reset)
                     .setCmdSn(builder.cmdSn)
@@ -404,9 +397,8 @@ public class CmdManager {
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
-            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                    .put("unixTimestamp", unixTimestamp)    
-                    .build();
+            Map<String, Object> params = Maps.newHashMap();
+            params.put("unixTimestamp", unixTimestamp);
             DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.time)
                     .setCmdSn(builder.cmdSn)
@@ -432,10 +424,9 @@ public class CmdManager {
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
-            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                    .put("url", url)
-                    .put("version", version)    
-                    .build();
+            Map<String, Object> params = Maps.newHashMap();
+            params.put("url", url);
+            params.put("version", version);
             DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.update)
                     .setCmdSn(builder.cmdSn)
@@ -460,9 +451,8 @@ public class CmdManager {
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
-            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                    .put("message", message)    
-                    .build();
+            Map<String, Object> params = Maps.newHashMap();
+            params.put("message", message);
             DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.message)
                     .setCmdSn(builder.cmdSn)
@@ -488,10 +478,9 @@ public class CmdManager {
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
-            ImmutableMap<String, Object> params = ImmutableMap.<String,Object>builder()
-                    .put("cmdName", cmdName)
-                    .put("parameters", parameters)    
-                    .build();
+            Map<String, Object> params = Maps.newHashMap();
+            params.put("cmdName", cmdName);
+            params.put("parameters", parameters);
             DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.custom)
                     .setCmdSn(builder.cmdSn)

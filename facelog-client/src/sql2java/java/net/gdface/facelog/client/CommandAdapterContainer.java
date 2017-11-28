@@ -83,7 +83,7 @@ public class CommandAdapterContainer extends CommandAdapter{
     @Override
     public Object status(String name)throws DeviceCmdException{
         return null == this.statusAdapter 
-            ? super.status(name) 
+            ? super.status(name)
             : this.statusAdapter.status(name);
     }
     /** {@link Cmd#report} 的命令执行器 */
@@ -104,7 +104,7 @@ public class CommandAdapterContainer extends CommandAdapter{
     @Override
     public Map<String,Object> report(List<String> names)throws DeviceCmdException{
         return null == this.reportAdapter 
-            ? super.report(names) 
+            ? super.report(names)
             : this.reportAdapter.report(names);
     }
     /** {@link Cmd#enable} 的命令执行器 */
@@ -148,7 +148,7 @@ public class CommandAdapterContainer extends CommandAdapter{
     @Override
     public Boolean isEnable(String message)throws DeviceCmdException{
         return null == this.isEnableAdapter 
-            ? super.isEnable(message) 
+            ? super.isEnable(message)
             : this.isEnableAdapter.isEnable(message);
     }
     /** {@link Cmd#reset} 的命令执行器 */
@@ -261,7 +261,7 @@ public class CommandAdapterContainer extends CommandAdapter{
     @Override
     public Object custom(String cmdName,Map<String,Object> parameters)throws DeviceCmdException{
         return null == this.customAdapter 
-            ? super.custom(cmdName,parameters) 
+            ? super.custom(cmdName,parameters)
             : this.customAdapter.custom(cmdName,parameters);
     }
 }

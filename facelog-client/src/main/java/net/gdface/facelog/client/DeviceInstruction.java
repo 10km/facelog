@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class DeviceInstruction{
 	private Cmd cmd;
-	private Long cmdSn;
+	private long cmdSn;
 	private List<Integer> target;
 	private boolean group;
 	private String ackChannel;
@@ -31,7 +31,8 @@ public class DeviceInstruction{
 		this.cmd = cmd;
 		return this;
 	}
-	public Long getCmdSn() {
+	/** 设置要执行的设备命令类型 */
+	public long getCmdSn() {
 		return cmdSn;
 	}
 	/**
@@ -41,10 +42,11 @@ public class DeviceInstruction{
 	 * @return 
 	 * @see {@link net.gdface.facelog.client.IFaceLogClient#applyCmdSn(net.gdface.facelog.client.thrift.Token)}
 	 */
-	public DeviceInstruction setCmdSn(Long cmdSn) {
+	public DeviceInstruction setCmdSn(long cmdSn) {
 		this.cmdSn = cmdSn;
 		return this;
 	}
+	
 	public List<Integer> getTarget() {
 		return target;
 	}

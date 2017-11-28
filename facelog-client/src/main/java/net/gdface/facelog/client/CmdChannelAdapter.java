@@ -24,27 +24,28 @@ import gu.simplemq.redis.JedisPoolLazy;
 public class CmdChannelAdapter implements IMessageAdapter<DeviceInstruction>{
 	private final CommandAdapter cmdAdapter;
 	private final int deviceId;
-	private List<Integer> groupIdList;
+	private List<Integer> groupsBelongs;
 	private RedisPublisher redisPublisher = new RedisPublisher(JedisPoolLazy.getDefaultInstance());
 	/**
 	 * @param cmdAdapter 应用程序执行设备命令的对象
 	 * @param deviceId 当前设备ID
-	 * @param groupIdList 当前设备ID所属的所有设备组ID, 参见 {@link IFaceLogClient#listOfParentForDeviceGroup(int)}
 	 */
 	public CmdChannelAdapter(CommandAdapter cmdAdapter,
-			int deviceId,
-			List<Integer> groupIdList) {
+			int deviceId) {
 		this.cmdAdapter = checkNotNull(cmdAdapter,"cmdAdapter is null");
 		this.deviceId= deviceId;
-		this.groupIdList= checkNotNull(groupIdList,"groupIdList is null");
 	}
 	/** 判断target列表是否包括当前设备 */
 	private boolean selfIncluded(boolean group,List<Integer> idList){
+		final List<Integer> g = getGroupsBelongs();
+		if(null == g){
+			return false;
+		}
 		if(group){
 			return Iterators.tryFind(idList.iterator(), new Predicate<Integer>(){
 				@Override
-				public boolean apply(Integer input) {
-					return groupIdList.contains(input);
+				public boolean apply(Integer input) {					
+					return g.contains(input);
 				}}).isPresent();
 		}else{
 			return idList.contains(this.deviceId);
@@ -64,4 +65,24 @@ public class CmdChannelAdapter implements IMessageAdapter<DeviceInstruction>{
 			}
 		}
 	}
+	/** 
+	 * 返回当前设备所属的设备组ID列表<br>
+	 * 对于前端设备来说，基所属的设备组是可以动态变化的,所以应用项目可以通过继承此类,
+	 * 在子类中重写此方法的途径,提供实时变化的设备组信息
+	 *  */
+	protected List<Integer> getGroupsBelongs() {
+		return groupsBelongs;
+	}
+	/**
+	 * 设置当前设备所属的设备组ID列表,
+	 * 创建{@link CmdChannelAdapter}对象时如果不调用本方法,设备不会响应任何设备组命令
+	 * @param groupIdList 当前设备ID所属的所有设备组ID,
+	 * @return
+	 * @see  {@link IFaceLogClient#getDeviceGroupsBelongs(int)}
+	 */
+	public CmdChannelAdapter groupsBelongs(List<Integer> groupIdList) {
+		this.groupsBelongs = groupIdList;
+		return this;
+	}
+
 }

@@ -21,7 +21,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import gu.simplemq.redis.JedisUtils;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
@@ -1281,6 +1280,19 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	public List<Integer> listOfParentForDeviceGroup(int deviceGroupId)throws ServiceRuntimeException{
 		try{
 			return daoToPrimaryKeyListFromDeviceGroups(daoListOfParentForDeviceGroup(deviceGroupId));
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
+			throw new ServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public List<Integer> getDeviceGroupsBelongs(int deviceId)throws ServiceRuntimeException{
+		try{
+			DeviceBean deviceBean = daoGetDevice(deviceId);
+			return null == deviceBean 
+						? ImmutableList.<Integer>of()
+						: listOfParentForDeviceGroup(deviceBean.getGroupId());
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
