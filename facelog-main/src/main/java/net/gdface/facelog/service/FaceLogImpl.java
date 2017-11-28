@@ -70,6 +70,18 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		getFeatureManager().registerListener(redisFeatureListener);
 		getPermitManager().registerListener(redisPermitListener);
 	}
+	/** 检查姓名是否有效,不允许使用保留字{@code root} ,无效抛出{@link IllegalArgumentException} 异常 */
+	protected static void checkPersonName(PersonBean personBean){
+		checkArgument(null == personBean || !ROOT_NAME.equals(personBean.getName()),
+				"INVALID person name:%s, reserved word",ROOT_NAME);
+	}
+	/** 增加人员姓名检查,参见 {@link #checkPersonName(PersonBean)}*/
+	@Override
+	protected PersonBean daoSavePerson(PersonBean personBean) throws RuntimeDaoException {
+		checkPersonName(personBean);
+		return super.daoSavePerson(personBean);
+	}
+
 	protected static StoreBean makeStoreBean(ByteBuffer imageBytes,String md5,String encodeing){
 		if(Judge.isEmpty(imageBytes)){
 			return null;
