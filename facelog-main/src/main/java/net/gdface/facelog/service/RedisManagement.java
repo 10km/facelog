@@ -8,9 +8,8 @@ import java.util.Map;
 
 import com.facebook.swift.codec.ThriftStruct;
 import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.JedisPoolLazy.PropName;
 import gu.simplemq.redis.JedisUtils;
@@ -24,22 +23,31 @@ import redis.clients.jedis.exceptions.JedisDataException;
  * @author guyadong
  *
  */
-class RedisManagement implements ServiceConstant{	
+class RedisManagement implements ServiceConstant{
+	/**
+	 * 消息系统(redis)基本参数名
+	 * @author guyadong
+	 *
+	 */
 	@ThriftStruct
-	public enum RedisParam {
-		/** redis服务器地址 */RedisUri,
-		/** 设备命令通道名 */CmdChannel
+	public enum MQParam {
+		/** redis服务器地址 */REDIS_URI,
+		/** 设备命令通道名 */CMD_CHANNEL,
+		/** 人员验证实时监控通道名 */LOG_MONITOR_CHANNEL,
+		/** 设备心跳实时监控通道名 */HB_MONITOR_CHANNEL
 	}
 	private static final String CMD_PREFIX = "cmd_";
 	private static final String ACK_PREFIX = "ack_";
+	private static final String LOG_MONITOR_PREFIX = "log_monitor_";
+	private static final String HEARTBEAT_MONITOR_PREFIX = "hb_monitor_";
+
 	private static String redisURI;
 	/** 本地redis服务器启动标志 */
 	private static boolean localServerStarted = false;
-	/**  设备命令通道名 */
-	private final String cmdChannel;
 	/** redis数据库配置参数 */
 	private static Map<PropName, Object> parameters;
-	private final Map<RedisParam,String> redisParam = Maps.newHashMap();
+	/** 消息系统(redis)基本参数  */
+	private final ImmutableMap<MQParam,String> redisParam ;
 	static{
 		parameters = GlobalConfig.makeRedisParameters();
 		JedisPoolLazy.createDefaultInstance(parameters);
@@ -54,9 +62,12 @@ class RedisManagement implements ServiceConstant{
 	}
 	protected RedisManagement() {
 		init();
-		cmdChannel = createCmdChannel();
-		redisParam.put(RedisParam.CmdChannel, cmdChannel);
-		redisParam.put(RedisParam.RedisUri, redisURI);
+		redisParam = ImmutableMap.<MQParam,String>builder()
+			.put(MQParam.REDIS_URI, redisURI)
+			.put(MQParam.CMD_CHANNEL, createCmdChannel())
+			.put(MQParam.LOG_MONITOR_CHANNEL, createLogMonitorChannel())
+			.put(MQParam.HB_MONITOR_CHANNEL, createHeartbeatMonitorChannel())
+			.build();
 		GlobalConfig.logRedisParameters(JedisPoolLazy.getDefaultInstance().getParameters());
 	}
 	/** 创建随机命令通道 */
@@ -65,6 +76,20 @@ class RedisManagement implements ServiceConstant{
 		String timestamp = String.format("%06x", System.nanoTime());
 		String commendChannel = CMD_PREFIX + timestamp.substring(timestamp.length()-6, timestamp.length());
 		return JedisUtils.setnx(KEY_CMD_CHANNEL,commendChannel);
+	}
+	/** 创建随机人员验证实时监控通道名 */
+	private String createLogMonitorChannel(){
+		// 初始化redis 全局常量 KEY_LOG_MONITOR_CHANNEL
+		String timestamp = String.format("%06x", System.nanoTime());
+		String monitorChannel = LOG_MONITOR_PREFIX + timestamp.substring(timestamp.length()-6, timestamp.length());
+		return JedisUtils.setnx(KEY_LOG_MONITOR_CHANNEL,monitorChannel);
+	}
+	/** 创建随机设备心跳实时监控通道名 */
+	private String createHeartbeatMonitorChannel(){
+		// 初始化redis 全局常量 KEY_LOG_MONITOR_CHANNEL
+		String timestamp = String.format("%06x", System.nanoTime());
+		String monitorChannel = HEARTBEAT_MONITOR_PREFIX + timestamp.substring(timestamp.length()-6, timestamp.length());
+		return JedisUtils.setnx(KEY_HB_MONITOR_CHANNEL,monitorChannel);
 	}
 	/** redis 连接初始化,并测试连接,如果连接异常,则尝试启动本地redis服务器或等待redis server启动 */
 	private void init(){
@@ -161,6 +186,9 @@ class RedisManagement implements ServiceConstant{
 				// shutdown前清除全局变量避免持久化
 				jedis.del(KEY_CMD_SN);
 				jedis.del(KEY_ACK_SN);
+				jedis.del(KEY_CMD_CHANNEL);
+				jedis.del(KEY_LOG_MONITOR_CHANNEL);
+				jedis.del(KEY_HB_MONITOR_CHANNEL);
 				jedis.shutdown();
 			}finally{
 				jedis.close();
@@ -168,8 +196,8 @@ class RedisManagement implements ServiceConstant{
 		}
 	}
 	/** 返回redis访问参数 */
-	protected Map<RedisParam,String> getRedisParameters(){
-		return Maps.newHashMap(this.redisParam);
+	protected Map<MQParam,String> getRedisParameters(){
+		return this.redisParam;
 	}
 	/** 申请一个唯一的命令序列号 */
 	protected long applyCmdSn(){

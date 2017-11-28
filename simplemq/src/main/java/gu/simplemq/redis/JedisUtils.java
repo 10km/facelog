@@ -105,6 +105,19 @@ public class JedisUtils {
 				return input.get(key);
 			}});
 	}
+	/**
+	 * 执行 {@link Jedis#get(String)} 返回{@code key}的值<br>
+	 * @param key 不可为{@code null}
+	 * @return
+	 */
+	public static String get(final String key){
+		checkArgument(!Strings.isNullOrEmpty(key),"key is null or empty");
+		return runOnRedis(new Function<Jedis,String>(){
+			@Override
+			public String apply(Jedis input) {
+				return input.get(key);
+			}});
+	}
 
 	/**
 	 * 将redis中{@code key}指定的变量步进加1并返回

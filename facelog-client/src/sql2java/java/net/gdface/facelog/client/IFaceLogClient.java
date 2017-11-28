@@ -2745,7 +2745,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntimeException
      */
-    public Map<net.gdface.facelog.client.thrift.RedisParam, String> getRedisParameters(net.gdface.facelog.client.thrift.Token token){
+    public Map<net.gdface.facelog.client.thrift.MQParam, String> getRedisParameters(net.gdface.facelog.client.thrift.Token token){
         try{
             return service.getRedisParameters(token);
         }

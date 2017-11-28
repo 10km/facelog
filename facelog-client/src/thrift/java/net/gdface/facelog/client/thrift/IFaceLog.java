@@ -531,7 +531,7 @@ public interface IFaceLog
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
-        ListenableFuture<Map<RedisParam, String>> getRedisParameters(
+        ListenableFuture<Map<MQParam, String>> getRedisParameters(
             @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
@@ -1437,7 +1437,7 @@ public interface IFaceLog
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
-    Map<RedisParam, String> getRedisParameters(
+    Map<MQParam, String> getRedisParameters(
         @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 

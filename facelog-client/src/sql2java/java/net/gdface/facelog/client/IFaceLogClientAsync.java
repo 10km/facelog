@@ -1860,7 +1860,7 @@ class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<Map<net.gdface.facelog.client.thrift.RedisParam, String>> getRedisParameters(net.gdface.facelog.client.thrift.Token token){
+    public ListenableFuture<Map<net.gdface.facelog.client.thrift.MQParam, String>> getRedisParameters(net.gdface.facelog.client.thrift.Token token){
         return service.getRedisParameters(token);
     }
 }

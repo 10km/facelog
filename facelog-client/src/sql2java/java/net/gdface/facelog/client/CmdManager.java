@@ -7,7 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.client;
 
-import net.gdface.facelog.client.thrift.RedisParam;
+import net.gdface.facelog.client.thrift.MQParam;
 
 import java.net.URL;
 import java.util.Date;
@@ -49,7 +49,7 @@ import gu.simplemq.redis.RedisSubscriber;
 public class CmdManager {    
     private final Channel<DeviceInstruction> cmdChannel;
     private final RedisPublisher redisPublisher ;
-    private final Map<RedisParam, String> redisParameters;
+    private final Map<MQParam, String> redisParameters;
     private final RedisSubscriber subscriber;
     /**
      * 构造方法
@@ -59,12 +59,12 @@ public class CmdManager {
      */
     protected CmdManager(JedisPoolLazy poolLazy,
             CmdDispatcher cmdDispatcher,
-            Map<RedisParam, String> redisParameters) {
+            Map<MQParam, String> redisParameters) {
         this.redisPublisher = RedisFactory.getPublisher(checkNotNull(poolLazy));
         this.subscriber = RedisFactory.getSubscriber(checkNotNull(poolLazy));
         this.redisParameters = checkNotNull(redisParameters);
         this.cmdChannel = new Channel<DeviceInstruction>(
-                this.redisParameters.get(RedisParam.CMD_CHANNEL),
+                this.redisParameters.get(MQParam.CMD_CHANNEL),
                 cmdDispatcher){};
         this.subscriber.register(cmdChannel);
     }
@@ -77,7 +77,7 @@ public class CmdManager {
      */
     public CmdManager(JedisPoolLazy poolLazy,
             CommandAdapter adapter,
-            Map<RedisParam, String> redisParameters,
+            Map<MQParam, String> redisParameters,
             int deviceId) {
         this(poolLazy,
                 new CmdDispatcher(deviceId).setCmdAdapter(adapter),
@@ -92,7 +92,7 @@ public class CmdManager {
      * @see #CmdManager(JedisPoolLazy, CommandAdapter, Map, int, List)
      */
     public CmdManager(CommandAdapter adapter,
-            Map<RedisParam, String> redisParameters,
+            Map<MQParam, String> redisParameters,
             int deviceId) {
         this(JedisPoolLazy.getDefaultInstance(),
                 new CmdDispatcher(deviceId).setCmdAdapter(adapter),

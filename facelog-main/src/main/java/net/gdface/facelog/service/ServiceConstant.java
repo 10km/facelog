@@ -21,6 +21,10 @@ public interface ServiceConstant extends CommonConstant{
 	String KEY_ACK_SN = "ACK_CHANNEL";
 	/** redis 全局常量 : 设备命令通道 */
 	String KEY_CMD_CHANNEL = "CMD_CHANNEL";
+	/** redis 全局常量 : 人员验证实时监控通道 */
+	String KEY_LOG_MONITOR_CHANNEL = "LOG_MONITOR_CHANNEL";
+	/** redis 全局常量 : 设备心跳实时监控通道 */
+	String KEY_HB_MONITOR_CHANNEL = "HB_MONITOR_CHANNEL";
 	///////////// PROPERTY KEY DEFINITION ///////////
 	
     /** root 用户密码 */

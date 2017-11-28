@@ -12,8 +12,8 @@ enum SecurityExceptionType {
   UNCLASSIFIED, INVALID_MAC, INVALID_SN, OCCUPIED_SN, INVALID_TOKEN, INVALID_DEVICE_ID, INVALID_PERSON_ID
 }
 
-enum RedisParam {
-  RedisUri, CmdChannel
+enum MQParam {
+  REDIS_URI, CMD_CHANNEL, LOG_MONITOR_CHANNEL, HB_MONITOR_CHANNEL
 }
 
 struct FaceBean {
@@ -245,7 +245,7 @@ service IFaceLog {
   list<bool> getPersonPermits(1:  i32 deviceId, 2:  list<i32> personIdList) throws (1: ServiceRuntimeException ex1);
   list<PersonBean> getPersons(1:  list<i32> idList) throws (1: ServiceRuntimeException ex1);
   list<PersonBean> getPersonsOfGroup(1:  i32 personGroupId) throws (1: ServiceRuntimeException ex1);
-  map<RedisParam, string> getRedisParameters(1:  Token token) throws (1: ServiceRuntimeException ex1);
+  map<MQParam, string> getRedisParameters(1:  Token token) throws (1: ServiceRuntimeException ex1);
   list<DeviceGroupBean> getSubDeviceGroup(1:  i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
   list<PersonGroupBean> getSubPersonGroup(1:  i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   bool isDisable(1:  i32 personId) throws (1: ServiceRuntimeException ex1);

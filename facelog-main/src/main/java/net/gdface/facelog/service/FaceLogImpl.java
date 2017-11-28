@@ -35,7 +35,7 @@ import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.service.DuplicateRecordException;
 import net.gdface.facelog.service.ServiceRuntimeException;
-import net.gdface.facelog.service.RedisManagement.RedisParam;
+import net.gdface.facelog.service.RedisManagement.MQParam;
 import net.gdface.facelog.service.TokenMangement.Enable;
 import net.gdface.image.LazyImage;
 import net.gdface.image.NotImage;
@@ -1610,7 +1610,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		} 
 	}
     @Override
-    public Map<RedisParam,String> getRedisParameters(Token token)throws ServiceRuntimeException{
+    public Map<MQParam,String> getRedisParameters(Token token)throws ServiceRuntimeException{
     	try {
 			Enable.ALL.check(tm, token);
 			return rm.getRedisParameters();
