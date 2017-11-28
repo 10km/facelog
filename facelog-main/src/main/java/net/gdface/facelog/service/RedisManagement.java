@@ -72,24 +72,27 @@ class RedisManagement implements ServiceConstant{
 	}
 	/** 创建随机命令通道 */
 	private String createCmdChannel(){
-		// 初始化redis 全局常量 KEY_CMD_CHANNEL
-		String timestamp = String.format("%06x", System.nanoTime());
-		String commendChannel = CMD_PREFIX + timestamp.substring(timestamp.length()-6, timestamp.length());
-		return JedisUtils.setnx(KEY_CMD_CHANNEL,commendChannel);
+		return createRandomConstOnRedis(KEY_CMD_CHANNEL,CMD_PREFIX);
 	}
 	/** 创建随机人员验证实时监控通道名 */
 	private String createLogMonitorChannel(){
-		// 初始化redis 全局常量 KEY_LOG_MONITOR_CHANNEL
-		String timestamp = String.format("%06x", System.nanoTime());
-		String monitorChannel = LOG_MONITOR_PREFIX + timestamp.substring(timestamp.length()-6, timestamp.length());
-		return JedisUtils.setnx(KEY_LOG_MONITOR_CHANNEL,monitorChannel);
+		return createRandomConstOnRedis(KEY_LOG_MONITOR_CHANNEL,LOG_MONITOR_PREFIX);
 	}
 	/** 创建随机设备心跳实时监控通道名 */
 	private String createHeartbeatMonitorChannel(){
+		return createRandomConstOnRedis(KEY_HB_MONITOR_CHANNEL,HEARTBEAT_MONITOR_PREFIX);
+	}
+	/**
+	 * 用当前时间生成一个随机的字符串值存到Redis服务器上({@code key})
+	 * @param key 常量名 redis上key
+	 * @param prefix 随机字符串前缀
+	 * @return
+	 */
+	private String createRandomConstOnRedis(String key,String prefix){
 		// 初始化redis 全局常量 KEY_LOG_MONITOR_CHANNEL
 		String timestamp = String.format("%06x", System.nanoTime());
-		String monitorChannel = HEARTBEAT_MONITOR_PREFIX + timestamp.substring(timestamp.length()-6, timestamp.length());
-		return JedisUtils.setnx(KEY_HB_MONITOR_CHANNEL,monitorChannel);
+		String monitorChannel = prefix + timestamp.substring(timestamp.length()-6, timestamp.length());
+		return JedisUtils.setnx(key,monitorChannel);		
 	}
 	/** redis 连接初始化,并测试连接,如果连接异常,则尝试启动本地redis服务器或等待redis server启动 */
 	private void init(){
