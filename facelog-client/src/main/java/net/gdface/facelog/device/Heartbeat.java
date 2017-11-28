@@ -111,7 +111,7 @@ public class Heartbeat implements CommonConstant{
 	 * @throws IllegalArgumentException MAC地址无效
 	  */
 	public static final byte[] validateMac(byte[]mac){
-		checkArgument(null != mac && 6 == mac.length ,"MAC address must ");
+		checkArgument(null != mac && 6 == mac.length ,"INVAILD MAC address");
 		return mac;
 	}
 
