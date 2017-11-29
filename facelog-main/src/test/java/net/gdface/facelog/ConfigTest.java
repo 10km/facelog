@@ -164,8 +164,10 @@ public class ConfigTest implements ServiceConstant{
 	@Test
 	public void test6() {
 		try{
-			GlobalConfig.setProperty(JdbcProperty.JDBC_USERNAME.withPrefix(PREFIX_DATABASE), "大家好");
+			GlobalConfig.setProperty(JdbcProperty.JDBC_USERNAME.withPrefix(PREFIX_DATABASE), "中文测试");
 			GlobalConfig.persistence();
+			String p = GlobalConfig.getConfig().getString(JdbcProperty.JDBC_USERNAME.withPrefix(PREFIX_DATABASE));
+			System.out.println(p);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
