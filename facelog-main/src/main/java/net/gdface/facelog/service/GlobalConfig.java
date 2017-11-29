@@ -1,8 +1,10 @@
 package net.gdface.facelog.service;
 
 import java.net.URI;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.configuration2.CombinedConfiguration;
@@ -11,9 +13,12 @@ import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngine;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngineSymbols;
+
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 import com.facebook.swift.service.ThriftServerConfig;
+import com.google.common.base.Function;
 import com.google.common.base.Predicates;
 import com.google.common.base.Strings;
 
@@ -22,6 +27,7 @@ import gu.simplemq.redis.JedisPoolLazy.PropName;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import io.airlift.units.Duration;
+import net.gdface.facelog.db.Constant.JdbcProperty;
 import redis.clients.jedis.JedisPoolConfig;
 
 /**
@@ -166,5 +172,41 @@ public class GlobalConfig implements ServiceConstant{
 		logger.info("{}:{}",
 				descriptionOf(TOKEN_PERSON_EXPIRE),
 				CONFIG.getInt(TOKEN_PERSON_EXPIRE));		
+	}
+	
+	/**
+	 * 从配置文件中读取数据库配置参数
+	 * @return
+	 */
+	static EnumMap<JdbcProperty,String> makeDatabaseConfig(){
+		EnumMap<JdbcProperty, String> params = new EnumMap<JdbcProperty,String>(JdbcProperty.class);
+		for(JdbcProperty prop: JdbcProperty.values()){
+			String value = CONFIG.getString(prop.withPrefix(PREFIX_DATABASE), null);
+			if(null !=value){
+				params.put(prop, value);
+			}
+		}
+		return params;		
+	}
+	static Map<String,String> toStringKey(Map<JdbcProperty,String> params){
+		ImmutableMap<String, Entry<JdbcProperty, String>> m1 = Maps.uniqueIndex(params.entrySet(), new Function<Entry<JdbcProperty,String>,String>(){
+			@Override
+			public String apply(Entry<JdbcProperty, String> input) {
+				return input.getKey().key;
+			}});
+		return Maps.transformValues(m1, new Function<Entry<JdbcProperty, String>,String>(){
+			@Override
+			public String apply(Entry<JdbcProperty, String> input) {
+				return input.getValue();
+			}});
+	}
+	/** log 输出数据库配置参数 */
+	static void logDatabaseProperties(Map<JdbcProperty,String> params){
+		for(Entry<JdbcProperty, String> entry:params.entrySet()){
+			String value = entry.getValue();
+			if(null != value){
+				logger.info("{}({}):{}",entry.getKey().key,descriptionOf(entry.getKey().withPrefix(PREFIX_DATABASE)),value);
+			}
+		}
 	}
 }

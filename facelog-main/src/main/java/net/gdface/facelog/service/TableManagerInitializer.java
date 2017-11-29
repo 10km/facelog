@@ -1,7 +1,9 @@
 package net.gdface.facelog.service;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import net.gdface.facelog.db.Constant.JdbcProperty;
 import net.gdface.facelog.db.IDeviceGroupManager;
 import net.gdface.facelog.db.IDeviceManager;
 import net.gdface.facelog.db.IFaceManager;
@@ -48,7 +50,9 @@ public class TableManagerInitializer {
 	public final IPermitManager permitManager;
 	static{
 		// 向底层数据库操作类注入当前项目使用的数据库连接配置
-		ManagerUtil.injectProperties(null);
+		Map<JdbcProperty, String> databaseConfig = GlobalConfig.makeDatabaseConfig();
+		//GlobalConfig.logDatabaseProperties(databaseConfig);
+		ManagerUtil.injectProperties(GlobalConfig.toStringKey(databaseConfig));
 	}
 	public static final TableManagerInitializer INSTANCE = new TableManagerInitializer();
 	private TableManagerInitializer() {
@@ -75,4 +79,6 @@ public class TableManagerInitializer {
 		storeManager = (IStoreManager) TableInstance.getInstance(StoreBean.class);
 		featureManager = (IFeatureManager) TableInstance.getInstance(FeatureBean.class);*/
 	}	
+	
+
 }

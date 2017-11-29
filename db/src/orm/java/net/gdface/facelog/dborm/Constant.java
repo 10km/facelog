@@ -21,7 +21,41 @@ public interface Constant {
     public static final int SEARCH_STARTING_LIKE = 2;
     /** set QUERY% for loadLikeTemplate */
     public static final int SEARCH_ENDING_LIKE = 3;
-   
+
+    /** JDBC property name definition */
+    public static enum JdbcProperty{
+        /** debug status */DEBUG("isDebug"),
+        /** JDBC driver class name */JDBC_DRIVER("jdbc.driver"),
+        /** JDBC connection url */JDBC_URL("jdbc.url"),
+        /** JDBC user name */JDBC_USERNAME("jdbc.username"),
+        /** JDBC password */JDBC_PASSWORD("jdbc.password"),
+        /** data source type, c3p0 supported only now */DATASOURCE("datasource"),
+        /** c3p0 property */C3P0_MINPOOLSIZE("c3p0.minPoolSize"),
+        /** c3p0 property */C3P0_MAXPOOLSIZE("c3p0.maxPoolSize"),
+        /** c3p0 property */C3P0_MAXIDLETIME("c3p0.maxIdleTime"),
+        /** c3p0 property */C3P0_IDLECONNECTIONTESTPERIOD("c3p0.idleConnectionTestPeriod");
+        /** JDBC property name */
+        public final String key;
+        
+        JdbcProperty(String key){
+            this.key = key;
+        }
+        /** return {@link #key} with {@code prefix} */
+        public String withPrefix(String prefix){
+            return new StringBuffer().append(prefix).append(key).toString();
+        }
+        /** 
+         * cast key to {@link JdbcProperty} instance if {@link #key} field equal the argument {@code key},
+         * otherwise return {@code null} 
+         */
+        public static final JdbcProperty fromKey(String key){
+            for(JdbcProperty p: values()){
+                if(p.key.equals(key))return p;
+            }
+            return null;
+        }
+
+    }
     //////////////////////////////////////
     // COLUMN COLUMN CONSTANT
     //////////////////////////////////////    

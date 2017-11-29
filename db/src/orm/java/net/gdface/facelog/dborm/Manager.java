@@ -17,14 +17,16 @@ import java.sql.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.EnumMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 import javax.sql.DataSource;
-//guyadong change datasource pool to c3p0 2014/10/09
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.mchange.v2.c3p0.DataSources;
 
+import net.gdface.facelog.dborm.Constant.JdbcProperty;
 import net.gdface.facelog.dborm.exception.DaoException;
 
 /**
@@ -39,7 +41,7 @@ import net.gdface.facelog.dborm.exception.DaoException;
  * @author sql2java
  * @version $Revision: 1.5 $
  */
-public final class Manager
+public final class Manager implements Constant
 {
     private static class Singleton{
         private static final Manager INSTANCE = new Manager();
@@ -54,35 +56,49 @@ public final class Manager
         String confFolder="conf";
         databaseProperties = ConfigUtils.loadAllProperties(propFile, confFolder, envVar, Manager.class, false);
     }
-    /** JDBC property name definition */
-    public static final String[] JDBC_KEYS = new String[]{
-            "jdbc.driver",
-            "jdbc.url",
-            "jdbc.username",
-            "jdbc.password",
-            "c3p0.minPoolSize",
-            "c3p0.maxPoolSize",
-            "c3p0.maxIdleTime",
-            "c3p0.idleConnectionTestPeriod"};
     /**
-     * inject properties to {@link #databaseProperties}
+     * inject properties to {@link #databaseProperties}<br>
+     * be effected only while called before initializing singleton instance 
      * @param properties
-     * @see #JDBC_KEYS
+     * @see {@link JdbcProperty}
      */
     public static final void injectProperties(Map<String,String> properties){
         if(null != properties){
-            boolean isDebug = "true".equalsIgnoreCase(databaseProperties.getProperty("isDebug").trim());
+            EnumMap<JdbcProperty, String> enumMap = new EnumMap<JdbcProperty,String>(JdbcProperty.class);
+            JdbcProperty property;
+            for(Entry<String, String> entry:properties.entrySet()){
+                if(null != (property = JdbcProperty.fromKey(entry.getKey()))){
+                    enumMap.put(property, entry.getValue());
+                }
+            }
+            injectProperties(enumMap);
+        }
+    }
+    /**
+     * inject properties to {@link #databaseProperties}<br>
+     * be effected only while called before initializing singleton instance 
+     * @param properties
+     */
+    public static final void injectProperties(EnumMap<JdbcProperty,String> properties){
+        if(null != properties){
+            Boolean isDebug = false;
+            if(properties.containsKey(JdbcProperty.DEBUG)){
+                isDebug = "true".equalsIgnoreCase(properties.get(JdbcProperty.DEBUG));
+                databaseProperties.setProperty(JdbcProperty.DEBUG.key, isDebug.toString());
+            }
             String prefix=isDebug?"debug.":"work.";
             String value;
-            for(String key : JDBC_KEYS){
-                value = properties.get(key);
-                if( null !=value && !value.isEmpty()){
-                    databaseProperties.setProperty(prefix+key, value);
+            JdbcProperty key;
+            for(Entry<JdbcProperty, String> entry : properties.entrySet()){
+                value = entry.getValue();
+                key = entry.getKey();
+                if( key != JdbcProperty.DEBUG && null !=value && !value.isEmpty()){
+                    databaseProperties.setProperty(key.withPrefix(prefix), value);
                 }
             }
         }
     }
-    private PrintWriter pw = new PrintWriter(System.out);
+    private PrintWriter pw = new PrintWriter(System.out,true);
     private DataSource ds = null;
     private String jdbcDriver = null;
     private String jdbcUrl = null;
@@ -92,6 +108,7 @@ public final class Manager
     private String idleConnectionTestPeriod;
     private String maxPoolSize;
     private String minPoolSize;
+    private boolean isDebug = false;
     
     /**
      * Returns the manager singleton instance.
@@ -118,37 +135,41 @@ public final class Manager
         }
     }
     
-    /**configure with the parameters given in the properties object
+    /**
+     * configure with the parameters given in the properties object
      * @param properties the properties object to be used
      */
     public void loadProperties(Properties properties){
-        boolean isDebug = properties.getProperty("isDebug").trim().equalsIgnoreCase("true");
-        String prefix=isDebug?"debug":"work";            
-        jdbcDriver = properties.getProperty(prefix+".jdbc.driver").trim();
-        jdbcUrl = properties.getProperty(prefix+".jdbc.url").trim();
-        jdbcUsername = properties.getProperty(prefix+".jdbc.username").trim();
-        jdbcPassword = properties.getProperty(prefix+".jdbc.password").trim();
-        maxPoolSize = properties.getProperty(prefix+".c3p0.maxPoolSize").trim();
-        minPoolSize = properties.getProperty(prefix+".c3p0.minPoolSize").trim();
-        maxIdleTime = properties.getProperty(prefix+".c3p0.maxIdleTime").trim();
-        idleConnectionTestPeriod = properties.getProperty(prefix+".c3p0.idleConnectionTestPeriod").trim();
-        
-        log(String.format("database using %s environment parameter: ",prefix));
-        log("jdbcUrl = " +jdbcUrl);
-        log("jdbcUsername = " +jdbcUsername);
-        log("jdbcPassword = " +jdbcPassword);
-        log("maxPoolSize = " +maxPoolSize);
-        log("minPoolSize = " +minPoolSize);
-        log("maxIdleTime = " +maxIdleTime);
-        log("idleConnectionTestPeriod = " +idleConnectionTestPeriod);
+        isDebug = properties.getProperty("isDebug").equalsIgnoreCase("true");
+        String prefix=isDebug?"debug.":"work.";
+        jdbcDriver = properties.getProperty(JdbcProperty.JDBC_DRIVER.withPrefix(prefix));
+        jdbcUrl = properties.getProperty(JdbcProperty.JDBC_URL.withPrefix(prefix));
+        jdbcUsername = properties.getProperty(JdbcProperty.JDBC_USERNAME.withPrefix(prefix));
+        jdbcPassword = properties.getProperty(JdbcProperty.JDBC_PASSWORD.withPrefix(prefix));
+        maxPoolSize = properties.getProperty(JdbcProperty.C3P0_MAXPOOLSIZE.withPrefix(prefix));
+        minPoolSize = properties.getProperty(JdbcProperty.C3P0_MINPOOLSIZE.withPrefix(prefix));
+        maxIdleTime = properties.getProperty(JdbcProperty.C3P0_MAXIDLETIME.withPrefix(prefix));
+        idleConnectionTestPeriod = properties.getProperty(JdbcProperty.C3P0_IDLECONNECTIONTESTPERIOD.withPrefix(prefix));
     }
-    
+    private void logDatabaseParameters(){
+        if(isDebug){
+            log("database using debug environment parameter: ");
+            log("jdbcUrl = " + jdbcUrl);
+            log("jdbcUsername = " + jdbcUsername);
+            log("jdbcPassword = " + jdbcPassword);
+            log("maxPoolSize = " + maxPoolSize);
+            log("minPoolSize = " + minPoolSize);
+            log("maxIdleTime = " + maxIdleTime);
+            log("idleConnectionTestPeriod = " + idleConnectionTestPeriod);
+        }
+    }    
     /**
      * use key synchronized to be sure the ds created once 
      */
     private synchronized void initDataSource(){
         try{
             if (ds == null){
+                logDatabaseParameters();
                 //set C3P0 properties
                 ComboPooledDataSource cpds = new ComboPooledDataSource();                
                 cpds.setDriverClass(jdbcDriver);

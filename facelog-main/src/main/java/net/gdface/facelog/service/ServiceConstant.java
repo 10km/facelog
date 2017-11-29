@@ -70,6 +70,9 @@ public interface ServiceConstant extends CommonConstant{
 	/** jedis pool 最大线程数 */
 	public static final String REDIS_POOL_MAXTOTAL = "redis.pool.maxTotal";
 	
+	/** database 配置属性前缀 */
+	public static final String PREFIX_DATABASE = "database.";
+	
 	/** 全局配置参数对象 */
 	public static final CombinedConfiguration CONFIG = GlobalConfig.getConfig();
 
