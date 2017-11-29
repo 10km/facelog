@@ -1,6 +1,13 @@
 package net.gdface.facelog.service;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.nio.file.Paths;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,9 +15,14 @@ import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.configuration2.CombinedConfiguration;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.FileBasedConfiguration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.io.FileHandler;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngine;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngineSymbols;
 
@@ -36,13 +48,17 @@ import redis.clients.jedis.JedisPoolConfig;
  *
  */
 public class GlobalConfig implements ServiceConstant{
+	public static final String HOME_FOLDER = ".facelog";
+	public static final String USER_PROPERTIES= "config.properties";
 	private static final String ROOT_XML = "root.xml";
 	private static final String ATTR_DESCRIPTION ="description"; 
+	private static final File USER_CONFIG_FILE = Paths.get(System.getProperty("user.home"),HOME_FOLDER,USER_PROPERTIES).toFile();
 	/** 配置参数对象 */
-	private static final CombinedConfiguration CONFIG = init();
+	private static final CombinedConfiguration CONFIG =readConfig();
+	private static final PropertiesConfiguration USER_CONFIG = createUserConfig();
 	private GlobalConfig() {
 	}
-	private static CombinedConfiguration init(){
+	private static CombinedConfiguration readConfig(){
 		try{
 			// 指定文件编码方式,否则properties文件读取中文会是乱码,要求文件编码是UTF-8
 		    FileBasedConfigurationBuilder.setDefaultEncoding(PropertiesConfiguration.class, "UTF-8");
@@ -55,6 +71,15 @@ public class GlobalConfig implements ServiceConstant{
 		}catch(Exception e){
 			throw new ExceptionInInitializerError(e);
 		}
+	}
+	private static PropertiesConfiguration createUserConfig(){
+		PropertiesConfiguration userConfig ;
+		if(CONFIG.getNumberOfConfigurations()>1){
+			userConfig = (PropertiesConfiguration) CONFIG.getConfiguration(0);	
+		}else{
+			userConfig = new PropertiesConfiguration();
+		}
+		return userConfig;
 	}
 	/**
 	 * 返回{@code key}的attribute的表达式
@@ -207,6 +232,23 @@ public class GlobalConfig implements ServiceConstant{
 			if(null != value){
 				logger.info("{}({}):{}",entry.getKey().key,descriptionOf(entry.getKey().withPrefix(PREFIX_DATABASE)),value);
 			}
+		}
+	}
+	public static void setProperty(String key,Object value){
+		USER_CONFIG.setProperty(key, value);
+	}
+	public static void persistence() {
+		try {
+			OutputStreamWriter wirter = new OutputStreamWriter(
+					new FileOutputStream(USER_CONFIG_FILE), "utf8");
+			USER_CONFIG.write(wirter);
+			wirter.close();
+			FileHandler handler = new FileHandler(USER_CONFIG);
+			handler.setEncoding("utf8");
+			handler.save(USER_CONFIG_FILE);
+		} catch (Exception e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
 		}
 	}
 }
