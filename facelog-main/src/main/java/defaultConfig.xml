@@ -39,11 +39,11 @@
 		</pool>
 	</redis>
 	<database description="数据库参数配置">
-	 	<isDebug description="是否为调试状态">true</isDebug>
+	 	<isDebug description="是否为调试状态">false</isDebug>
 		<jdbc>
-			<!-- 数据库JDBC驱动类名,目前只支持mysql,不要修改 -->
+			<!-- JDBC驱动类名,目前只支持mysql,不要修改 -->
 			<driver description="JDBC driver class name"></driver>
-			<host description="数据库服务器地址">192.168.1.95</host>
+			<host description="数据库服务器地址">localhost</host>
 			<port description="数据库服务器端口">3306</port>
 			<schema description="数据库schema">test</schema>
 			<encoding description="数据库字符编码方式">utf8</encoding>
