@@ -1,26 +1,18 @@
 package net.gdface.facelog;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.nio.file.Paths;
 import java.util.Iterator;
 
 import org.apache.commons.configuration2.CombinedConfiguration;
-import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.configuration2.FileBasedConfiguration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.XMLConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
-import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.apache.commons.configuration2.io.FileBased;
-import org.apache.commons.configuration2.io.FileHandler;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngine;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngineSymbols;
 import org.apache.commons.configuration2.tree.xpath.XPathExpressionEngine;
@@ -28,6 +20,7 @@ import org.junit.Test;
 
 import net.gdface.facelog.db.Constant.JdbcProperty;
 import net.gdface.facelog.service.GlobalConfig;
+import net.gdface.facelog.service.IOFactoryNoescape;
 import net.gdface.facelog.service.ServiceConstant;
 
 /**
@@ -152,13 +145,15 @@ public class ConfigTest implements ServiceConstant{
 			System.out.println(name);
 		}
 		PropertiesConfiguration firstConfig = (PropertiesConfiguration) config.getConfiguration(0);
-		firstConfig.setProperty(JdbcProperty.JDBC_USERNAME.withPrefix(PREFIX_DATABASE), null);
+		firstConfig.setIOFactory(new IOFactoryNoescape());
+		firstConfig.setProperty(JdbcProperty.JDBC_USERNAME.withPrefix(PREFIX_DATABASE), "中文测试");
 		OutputStreamWriter wirter = new OutputStreamWriter(
-				new FileOutputStream(new File("d:\\tmp\\test.properties")), "utf8");
+				new FileOutputStream(new File("d:\\tmp\\test.properties")), "UTF-8");
 		firstConfig.write(wirter);
 		wirter.close();
 		for(Iterator<String> itor = firstConfig.getKeys();itor.hasNext();){
-			System.out.println(itor.next());
+			String key = itor.next();
+			System.out.println(key + ":" + firstConfig.getString(key));
 		}
 		XMLConfiguration xmlConfig = new XMLConfiguration(config);
 		xmlConfig.setProperty(JdbcProperty.JDBC_USERNAME.withPrefix(PREFIX_DATABASE), "hello");
@@ -169,12 +164,11 @@ public class ConfigTest implements ServiceConstant{
 	@Test
 	public void test6() {
 		try{
-
 			GlobalConfig.setProperty(JdbcProperty.JDBC_USERNAME.withPrefix(PREFIX_DATABASE), "大家好");
 			GlobalConfig.persistence();
-			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
+
 }

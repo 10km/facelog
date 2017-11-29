@@ -1,11 +1,8 @@
 package net.gdface.facelog.service;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.nio.file.Paths;
 import java.util.EnumMap;
@@ -15,14 +12,9 @@ import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.configuration2.CombinedConfiguration;
-import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.configuration2.FileBasedConfiguration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
-import org.apache.commons.configuration2.builder.fluent.Parameters;
-import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.apache.commons.configuration2.io.FileHandler;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngine;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngineSymbols;
 
@@ -52,9 +44,11 @@ public class GlobalConfig implements ServiceConstant{
 	public static final String USER_PROPERTIES= "config.properties";
 	private static final String ROOT_XML = "root.xml";
 	private static final String ATTR_DESCRIPTION ="description"; 
+	/** 用户自定义文件位置 ${user.home}/{@value #HOME_FOLDER}/{@value #USER_PROPERTIES} */
 	private static final File USER_CONFIG_FILE = Paths.get(System.getProperty("user.home"),HOME_FOLDER,USER_PROPERTIES).toFile();
-	/** 配置参数对象 */
+	/** 全局配置参数对象 */
 	private static final CombinedConfiguration CONFIG =readConfig();
+	/** 用户定义配置对象 */
 	private static final PropertiesConfiguration USER_CONFIG = createUserConfig();
 	private GlobalConfig() {
 	}
@@ -75,8 +69,10 @@ public class GlobalConfig implements ServiceConstant{
 	private static PropertiesConfiguration createUserConfig(){
 		PropertiesConfiguration userConfig ;
 		if(CONFIG.getNumberOfConfigurations()>1){
+			// 有自定义配置文件
 			userConfig = (PropertiesConfiguration) CONFIG.getConfiguration(0);	
 		}else{
+			// 创建一个新的自定义配置文件
 			userConfig = new PropertiesConfiguration();
 		}
 		return userConfig;
@@ -234,21 +230,27 @@ public class GlobalConfig implements ServiceConstant{
 			}
 		}
 	}
-	public static void setProperty(String key,Object value){
+	/**
+	 * 修改指定的配置参数
+	 * @param key
+	 * @param value
+	 */
+	static void setProperty(String key,Object value){
+		CONFIG.setProperty(key, value);
 		USER_CONFIG.setProperty(key, value);
 	}
-	public static void persistence() {
+	/**
+	 * 保存修改的配置到自定义配置文件中
+	 */
+	static void persistence() {
 		try {
+			USER_CONFIG.setIOFactory(new IOFactoryNoescape());
 			OutputStreamWriter wirter = new OutputStreamWriter(
-					new FileOutputStream(USER_CONFIG_FILE), "utf8");
+					new FileOutputStream(USER_CONFIG_FILE));
 			USER_CONFIG.write(wirter);
 			wirter.close();
-			FileHandler handler = new FileHandler(USER_CONFIG);
-			handler.setEncoding("utf8");
-			handler.save(USER_CONFIG_FILE);
 		} catch (Exception e) {
-			// TODO 自动生成的 catch 块
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 }
