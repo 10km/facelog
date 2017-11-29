@@ -235,14 +235,14 @@ public class GlobalConfig implements ServiceConstant{
 	 * @param key
 	 * @param value
 	 */
-	static void setProperty(String key,Object value){
+	public static void setProperty(String key,Object value){
 		CONFIG.setProperty(key, value);
 		USER_CONFIG.setProperty(key, value);
 	}
 	/**
 	 * 保存修改的配置到自定义配置文件中
 	 */
-	static void persistence() {
+	public static void persistence() {
 		try {
 			USER_CONFIG.setIOFactory(new IOFactoryNoescape());
 			OutputStreamWriter wirter = new OutputStreamWriter(
