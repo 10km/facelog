@@ -1,4 +1,4 @@
-package net.gdface.facelog;
+package net.gdface.facelog.service;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;

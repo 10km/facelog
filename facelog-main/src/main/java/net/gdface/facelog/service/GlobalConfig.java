@@ -1,9 +1,8 @@
 package net.gdface.facelog.service;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
 import java.net.URI;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -15,6 +14,9 @@ import org.apache.commons.configuration2.CombinedConfiguration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.io.FileHandler;
+import org.apache.commons.configuration2.sync.ReadWriteSynchronizer;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngine;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngineSymbols;
 
@@ -40,27 +42,33 @@ import redis.clients.jedis.JedisPoolConfig;
  *
  */
 public class GlobalConfig implements ServiceConstant{
+	/** 必须为public static final,{@value #ROOT_XML}会引用  */
 	public static final String HOME_FOLDER = ".facelog";
+	/** 必须为public static final,{@value #ROOT_XML}会引用  */
 	public static final String USER_PROPERTIES= "config.properties";
+	private static final String ENCODING = "UTF-8";
 	private static final String ROOT_XML = "root.xml";
+	private static final URL ROOT_URL = GlobalConfig.class.getClassLoader().getResource(ROOT_XML);
 	private static final String ATTR_DESCRIPTION ="description"; 
 	/** 用户自定义文件位置 ${user.home}/{@value #HOME_FOLDER}/{@value #USER_PROPERTIES} */
 	private static final File USER_CONFIG_FILE = Paths.get(System.getProperty("user.home"),HOME_FOLDER,USER_PROPERTIES).toFile();
-	/** 全局配置参数对象 */
+	/** 全局配置参数对象(immutable,修改无效) */
 	private static final CombinedConfiguration CONFIG =readConfig();
-	/** 用户定义配置对象 */
+	/** 用户定义配置对象(mutable),所有对参数的修改都基于此对象 */
 	private static final PropertiesConfiguration USER_CONFIG = createUserConfig();
 	private GlobalConfig() {
 	}
 	private static CombinedConfiguration readConfig(){
 		try{
 			// 指定文件编码方式,否则properties文件读取中文会是乱码,要求文件编码是UTF-8
-		    FileBasedConfigurationBuilder.setDefaultEncoding(PropertiesConfiguration.class, "UTF-8");
+		    FileBasedConfigurationBuilder.setDefaultEncoding(PropertiesConfiguration.class, ENCODING);
 		    // 使用默认表达式引擎
 			DefaultExpressionEngine engine = new DefaultExpressionEngine(DefaultExpressionEngineSymbols.DEFAULT_SYMBOLS);
 			Configurations configs = new Configurations();
-			CombinedConfiguration config = configs.combined(GlobalConfig.class.getClassLoader().getResource(ROOT_XML));
+			CombinedConfiguration config = configs.combined(ROOT_URL);
 			config.setExpressionEngine(engine);
+			// 设置同步器
+			config.setSynchronizer(new ReadWriteSynchronizer());
 			return config;
 		}catch(Exception e){
 			throw new ExceptionInInitializerError(e);
@@ -72,9 +80,12 @@ public class GlobalConfig implements ServiceConstant{
 			// 有自定义配置文件
 			userConfig = (PropertiesConfiguration) CONFIG.getConfiguration(0);	
 		}else{
-			// 创建一个新的自定义配置文件
-			userConfig = new PropertiesConfiguration();
+			// root.xml中对用户配置文件指定为 config-forceCreate 就不会抛出此异常
+			throw new IllegalStateException("NOT FOUND user config file,please check " + ROOT_URL );
 		}
+		// 设置同步器
+		userConfig.setSynchronizer(new ReadWriteSynchronizer());
+		userConfig.setIOFactory(IOFactoryNoescape.INSTANCE);
 		return userConfig;
 	}
 	/**
@@ -231,26 +242,36 @@ public class GlobalConfig implements ServiceConstant{
 		}
 	}
 	/**
-	 * 修改指定的配置参数
+	 * 修改指定的配置参数<br>
+	 * {@link #CONFIG}是组合配置对象,是一组配置文件的镜像视图,不具备持久化能力,对其进行参数修改无效,
+	 * 只有这个方法设置参数才能被正确保存的用户自定义配置文件{@link #USER_CONFIG_FILE}<br>
 	 * @param key
 	 * @param value
 	 */
-	public static void setProperty(String key,Object value){
-		CONFIG.setProperty(key, value);
+	static void setProperty(String key,Object value){
 		USER_CONFIG.setProperty(key, value);
 	}
 	/**
-	 * 保存修改的配置到自定义配置文件中
+	 * 修改一组配置参数
+	 * @param config
+	 * @see #setProperty(String, Object)
 	 */
-	public static void persistence() {
-		try {
-			USER_CONFIG.setIOFactory(new IOFactoryNoescape());
-			OutputStreamWriter wirter = new OutputStreamWriter(
-					new FileOutputStream(USER_CONFIG_FILE));
-			USER_CONFIG.write(wirter);
-			wirter.close();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+	static void setProperty(Map<String,Object> config){
+		for(Entry<String, Object> entry:config.entrySet()){
+			setProperty(entry.getKey(),entry.getValue());
 		}
+	}
+	/**
+	 * 配置参数持久化<br>
+	 * 保存修改的配置到自定义配置文件({@link #USER_CONFIG_FILE})
+	 */
+	static void persistence() {
+		try {
+			// readConfig 方法中已经指定了文件默认编码方式为UTF-8,这里不需要再指定 
+			FileHandler handler = new FileHandler(USER_CONFIG);
+			handler.save(USER_CONFIG_FILE);
+		} catch (ConfigurationException e) {
+			throw new RuntimeException(e);
+		} 
 	}
 }

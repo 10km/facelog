@@ -1,10 +1,12 @@
-package net.gdface.facelog;
+package net.gdface.facelog.service;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.configuration2.CombinedConfiguration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
@@ -17,6 +19,10 @@ import org.apache.commons.configuration2.tree.DefaultExpressionEngine;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngineSymbols;
 import org.apache.commons.configuration2.tree.xpath.XPathExpressionEngine;
 import org.junit.Test;
+import org.weakref.jmx.com.google.common.collect.Lists;
+
+import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableList;
 
 import net.gdface.facelog.db.Constant.JdbcProperty;
 import net.gdface.facelog.service.GlobalConfig;
@@ -164,10 +170,15 @@ public class ConfigTest implements ServiceConstant{
 	@Test
 	public void test6() {
 		try{
-			GlobalConfig.setProperty(JdbcProperty.JDBC_USERNAME.withPrefix(PREFIX_DATABASE), "中文测试");
+			GlobalConfig.getConfig().setProperty(JdbcProperty.JDBC_USERNAME.withPrefix(PREFIX_DATABASE), "中文测试2");
+			GlobalConfig.setProperty("测试", "中文测试@"+ new Date());
+			GlobalConfig.setProperty("list.test", Lists.newArrayList("hello","智能制造","水乡乌镇"));
 			GlobalConfig.persistence();
-			String p = GlobalConfig.getConfig().getString(JdbcProperty.JDBC_USERNAME.withPrefix(PREFIX_DATABASE));
+			String p = GlobalConfig.getConfig().getString("测试");
 			System.out.println(p);
+			List<Object> listTest = GlobalConfig.getConfig().getList("list.test",ImmutableList.<String>of());
+			System.out.println(Joiner.on(",").join(listTest));
+			System.out.println(GlobalConfig.getConfig().getString("list.test"));
 		}catch(Exception e){
 			e.printStackTrace();
 		}

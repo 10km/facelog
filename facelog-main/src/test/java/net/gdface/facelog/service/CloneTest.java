@@ -1,4 +1,4 @@
-package net.gdface.facelog;
+package net.gdface.facelog.service;
 
 import static org.junit.Assert.*;
 
