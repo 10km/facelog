@@ -18,6 +18,7 @@ import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.configuration2.io.FileHandler;
 import org.apache.commons.configuration2.sync.ReadWriteSynchronizer;
+import org.apache.commons.configuration2.sync.Synchronizer;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngine;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngineSymbols;
 
@@ -259,8 +260,14 @@ public class GlobalConfig implements ServiceConstant{
 	 * @see #setProperty(String, Object)
 	 */
 	static void setProperties(Map<String,? extends Object> config){
-		for(Entry<String, ? extends Object> entry:config.entrySet()){
-			setProperty(entry.getKey(),entry.getValue());
+		Synchronizer sync = USER_CONFIG.getSynchronizer();
+		sync.beginWrite();
+		try{
+			for(Entry<String, ? extends Object> entry:config.entrySet()){
+				setProperty(entry.getKey(),entry.getValue());
+			}
+		}finally{
+			sync.endWrite();
 		}
 	}
 	/**
@@ -276,8 +283,14 @@ public class GlobalConfig implements ServiceConstant{
 			throw new RuntimeException(e);
 		} 
 	}
+	/**
+	 * 将指定的{@link Configuration}转为map
+	 * @param config
+	 * @return
+	 */
 	static Map<String,String> toMap(final Configuration config){
-		config.getSynchronizer().beginRead();
+		Synchronizer sync = config.getSynchronizer();
+		sync.beginRead();
 		try{
 			return Maps.asMap(ImmutableSet.copyOf(config.getKeys()),new Function<String,String>(){
 
@@ -286,7 +299,7 @@ public class GlobalConfig implements ServiceConstant{
 				return config.getString(input);
 			}});
 		}finally{
-			config.getSynchronizer().endRead();
+			sync.endRead();
 		}
 	}
 }

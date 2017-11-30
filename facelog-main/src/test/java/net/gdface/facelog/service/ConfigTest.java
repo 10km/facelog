@@ -19,6 +19,7 @@ import org.apache.commons.configuration2.tree.DefaultExpressionEngine;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngineSymbols;
 import org.apache.commons.configuration2.tree.xpath.XPathExpressionEngine;
 import org.junit.Test;
+import org.weakref.jmx.com.google.common.collect.ImmutableMap;
 import org.weakref.jmx.com.google.common.collect.Lists;
 
 import com.google.common.base.Joiner;
@@ -183,5 +184,18 @@ public class ConfigTest implements ServiceConstant{
 			e.printStackTrace();
 		}
 	}
-
+	@Test
+	public void test7() {
+		try{
+			ImmutableMap<String, String> map = ImmutableMap.<String, String>builder()
+							.put("ke1", "v1")
+							.put("k2","v2")
+							.put("k3","v3")
+							.build();
+			GlobalConfig.setProperties(map);
+			GlobalConfig.persistence();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 }
