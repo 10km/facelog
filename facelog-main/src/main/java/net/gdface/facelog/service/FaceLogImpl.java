@@ -1657,4 +1657,48 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		} 
     }
+    @Override
+    public Map<String,String> getServiceConfig(Token token)throws ServiceRuntimeException{
+    	try {
+			Enable.PERSON_ONLY.check(tm, token);
+			return GlobalConfig.toMap(CONFIG);
+		} catch (RuntimeException e) {
+			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		} 	
+    }
+    @Override
+    public void setProperty(String key,String value,Token token)throws ServiceRuntimeException{
+    	try {
+			Enable.PERSON_ONLY.check(tm, token);
+			GlobalConfig.setProperty(key,value);
+		} catch (RuntimeException e) {
+			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		} 	
+    }
+    @Override
+    public void setProperties(Map<String,String> config,Token token)throws ServiceRuntimeException{
+    	try {
+			Enable.PERSON_ONLY.check(tm, token);
+			GlobalConfig.setProperties(config);
+		} catch (RuntimeException e) {
+			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		} 	
+    }
+    @Override
+    public void saveServiceConfig(Token token)throws ServiceRuntimeException{
+    	try {
+			Enable.PERSON_ONLY.check(tm, token);
+			GlobalConfig.persistence();
+		} catch (RuntimeException e) {
+			throw new ServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		} 	
+    }
 }

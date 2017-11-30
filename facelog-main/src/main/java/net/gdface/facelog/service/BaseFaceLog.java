@@ -1311,4 +1311,49 @@ public abstract class BaseFaceLog extends Dao{
     public Map<MQParam,String> getRedisParameters(Token token)throws ServiceRuntimeException{
 		return null;
     }
+	/**
+	 * 获取服务的所有配置参数
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * @param token 访问令牌
+	 * @return
+	 * @throws ServiceRuntimeException
+	 */
+	@ThriftMethod
+	public Map<String,String> getServiceConfig(Token token)throws ServiceRuntimeException{
+		return null;
+	}
+	/**
+	 * 修改/增加指定的配置参数
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * @param key 参数名
+	 * @param value 参数值
+	 * @param token 访问令牌
+	 * @throws ServiceRuntimeException
+	 */
+	@ThriftMethod
+    public void setProperty(String key,String value,Token token)throws ServiceRuntimeException{
+    }
+    /**
+     * 修改一组配置参数
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * @param config 参数名-参数值对
+     * @param token 访问令牌
+     * @throws ServiceRuntimeException
+     */
+	@ThriftMethod
+    public void setProperties(Map<String,String> config,Token token)throws ServiceRuntimeException{
+    	
+    }
+	/**
+	 * 配置参数持久化<br>
+	 * 保存修改的配置到自定义配置文件
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * @param token 访问令牌
+	 * @throws ServiceRuntimeException
+	 */
+	@ThriftMethod
+    public void saveServiceConfig(Token token)throws ServiceRuntimeException{
+    }
+
+    	
 }

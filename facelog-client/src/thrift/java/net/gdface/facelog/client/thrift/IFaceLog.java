@@ -543,6 +543,14 @@ public interface IFaceLog
             @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
+        @ThriftMethod(value = "getServiceConfig",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Map<String, String>> getServiceConfig(
+            @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
+        );
+
         @ThriftMethod(value = "getSubDeviceGroup",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -896,6 +904,14 @@ public interface IFaceLog
             @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
+        @ThriftMethod(value = "saveServiceConfig",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Void> saveServiceConfig(
+            @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
+        );
+
         @ThriftMethod(value = "setPersonExpiryDate",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -913,6 +929,25 @@ public interface IFaceLog
         ListenableFuture<Void> setPersonExpiryDateList(
             @ThriftField(value=1, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList,
             @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.NONE) final long expiryDate,
+            @ThriftField(value=3, name="token", requiredness=Requiredness.NONE) final Token token
+        );
+
+        @ThriftMethod(value = "setProperties",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Void> setProperties(
+            @ThriftField(value=1, name="config", requiredness=Requiredness.NONE) final Map<String, String> config,
+            @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
+        );
+
+        @ThriftMethod(value = "setProperty",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Void> setProperty(
+            @ThriftField(value=1, name="key", requiredness=Requiredness.NONE) final String key,
+            @ThriftField(value=2, name="value", requiredness=Requiredness.NONE) final String value,
             @ThriftField(value=3, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
@@ -1465,6 +1500,14 @@ public interface IFaceLog
         @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 
+    @ThriftMethod(value = "getServiceConfig",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    Map<String, String> getServiceConfig(
+        @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
+    ) throws ServiceRuntimeException;
+
     @ThriftMethod(value = "getSubDeviceGroup",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1818,6 +1861,14 @@ public interface IFaceLog
         @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 
+    @ThriftMethod(value = "saveServiceConfig",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    void saveServiceConfig(
+        @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
+    ) throws ServiceRuntimeException;
+
     @ThriftMethod(value = "setPersonExpiryDate",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1835,6 +1886,25 @@ public interface IFaceLog
     void setPersonExpiryDateList(
         @ThriftField(value=1, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList,
         @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.NONE) final long expiryDate,
+        @ThriftField(value=3, name="token", requiredness=Requiredness.NONE) final Token token
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "setProperties",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    void setProperties(
+        @ThriftField(value=1, name="config", requiredness=Requiredness.NONE) final Map<String, String> config,
+        @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "setProperty",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    void setProperty(
+        @ThriftField(value=1, name="key", requiredness=Requiredness.NONE) final String key,
+        @ThriftField(value=2, name="value", requiredness=Requiredness.NONE) final String value,
         @ThriftField(value=3, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 

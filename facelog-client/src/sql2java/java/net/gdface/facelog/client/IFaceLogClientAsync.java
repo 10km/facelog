@@ -1853,6 +1853,57 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Map<net.gdface.facelog.client.thrift.MQParam, String>> getRedisParameters(net.gdface.facelog.client.thrift.Token token){
         return service.getRedisParameters(token);
     }
+    // 104 SERIVCE PORT : getServiceConfig
+    /**
+     * 获取服务的所有配置参数
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * @param token 访问令牌
+     * @return 
+     */
+    public ListenableFuture<Map<String, String>> getServiceConfig(net.gdface.facelog.client.thrift.Token token){
+        return service.getServiceConfig(token);
+    }
+    // 105 SERIVCE PORT : setProperty
+    /**
+     * 修改/增加指定的配置参数
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * @param key 参数名
+     * @param value 参数值
+     * @param token 访问令牌
+     */
+    public ListenableFuture<Void> setProperty(
+            String key,
+            String value,
+            net.gdface.facelog.client.thrift.Token token){
+        return service.setProperty(
+                    key,
+                    value,
+                    token);
+    }
+    // 106 SERIVCE PORT : setProperties
+    /**
+     * 修改一组配置参数
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * @param config 参数名-参数值对
+     * @param token 访问令牌
+     */
+    public ListenableFuture<Void> setProperties(
+            Map<String, String> config,
+            net.gdface.facelog.client.thrift.Token token){
+        return service.setProperties(
+                    config,
+                    token);
+    }
+    // 107 SERIVCE PORT : saveServiceConfig
+    /**
+     * 配置参数持久化<br>
+     * 保存修改的配置到自定义配置文件
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * @param token 访问令牌
+     */
+    public ListenableFuture<Void> saveServiceConfig(net.gdface.facelog.client.thrift.Token token){
+        return service.saveServiceConfig(token);
+    }
     ///////////////// CLIENT EXTENSIVE /////////////
     
     /**

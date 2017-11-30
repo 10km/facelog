@@ -2821,6 +2821,89 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
+    // 104 SERIVCE PORT : getServiceConfig
+    /**
+     * 获取服务的所有配置参数
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * @param token 访问令牌
+     * @return 
+     * @throws ServiceRuntimeException
+     */
+    public Map<String, String> getServiceConfig(net.gdface.facelog.client.thrift.Token token){
+        try{
+            return service.getServiceConfig(token);
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    // 105 SERIVCE PORT : setProperty
+    /**
+     * 修改/增加指定的配置参数
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * @param key 参数名
+     * @param value 参数值
+     * @param token 访问令牌
+     * @throws ServiceRuntimeException
+     */
+    public void setProperty(
+            String key,
+            String value,
+            net.gdface.facelog.client.thrift.Token token){
+        try{
+            service.setProperty(
+                    key,
+                    value,
+                    token);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    // 106 SERIVCE PORT : setProperties
+    /**
+     * 修改一组配置参数
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * @param config 参数名-参数值对
+     * @param token 访问令牌
+     * @throws ServiceRuntimeException
+     */
+    public void setProperties(
+            Map<String, String> config,
+            net.gdface.facelog.client.thrift.Token token){
+        try{
+            service.setProperties(
+                    config,
+                    token);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    // 107 SERIVCE PORT : saveServiceConfig
+    /**
+     * 配置参数持久化<br>
+     * 保存修改的配置到自定义配置文件
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * @param token 访问令牌
+     * @throws ServiceRuntimeException
+     */
+    public void saveServiceConfig(net.gdface.facelog.client.thrift.Token token){
+        try{
+            service.saveServiceConfig(token);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
     ///////////////// CLIENT EXTENSIVE /////////////
     
     /**

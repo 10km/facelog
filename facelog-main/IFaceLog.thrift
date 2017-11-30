@@ -260,6 +260,7 @@ service IFaceLog {
   list<PersonBean> getPersons(1:  list<i32> idList) throws (1: ServiceRuntimeException ex1);
   list<i32> getPersonsOfGroup(1:  i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   map<MQParam, string> getRedisParameters(1:  Token token) throws (1: ServiceRuntimeException ex1);
+  map<string, string> getServiceConfig(1:  Token token) throws (1: ServiceRuntimeException ex1);
   list<i32> getSubDeviceGroup(1:  i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
   list<i32> getSubPersonGroup(1:  i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   bool isDisable(1:  i32 personId) throws (1: ServiceRuntimeException ex1);
@@ -298,8 +299,11 @@ service IFaceLog {
   PersonBean savePersonWithPhotoAndFeatureSaved(1:  PersonBean bean, 2:  string idPhotoMd5, 3:  string featureMd5, 4:  Token token) throws (1: ServiceRuntimeException ex1);
   void savePersons(1:  list<PersonBean> beans, 2:  Token token) throws (1: ServiceRuntimeException ex1);
   i32 savePersonsWithPhoto(1:  map<binary, PersonBean> persons, 2:  Token token) throws (1: ServiceRuntimeException ex1);
+  void saveServiceConfig(1:  Token token) throws (1: ServiceRuntimeException ex1);
   void setPersonExpiryDate(1:  i32 personId, 2:  i64 expiryDate, 3:  Token token) throws (1: ServiceRuntimeException ex1);
   void setPersonExpiryDateList(1:  list<i32> personIdList, 2:  i64 expiryDate, 3:  Token token) throws (1: ServiceRuntimeException ex1);
+  void setProperties(1:  map<string, string> config, 2:  Token token) throws (1: ServiceRuntimeException ex1);
+  void setProperty(1:  string key, 2:  string value, 3:  Token token) throws (1: ServiceRuntimeException ex1);
   void unregisterDevice(1:  i32 deviceId, 2:  Token token) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
   DeviceBean updateDevice(1:  DeviceBean deviceBean, 2:  Token token) throws (1: ServiceRuntimeException ex1);
 }

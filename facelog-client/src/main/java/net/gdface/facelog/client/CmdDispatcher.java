@@ -2,7 +2,6 @@ package net.gdface.facelog.client;
 
 import java.util.List;
 
-import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 
@@ -29,16 +28,16 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>{
 	 *  设备所属的组可能是可以变化的,所以这里需要用{@code Supplier} 接口来动态获取当前设备的设备组
 	 * @param deviceId 当前设备ID,应用项目应确保ID是有效的
 	 * @param groupIdSupplier 用于提供{@code deviceId}所属的设备组,
-	 * 参见默认实现: {@link IFaceLogClient#getDeviceGroupIdSupplier(int)},为{@code null}抛出异常
+	 * 参见默认实现: {@link IFaceLogClient#getDeviceGroupIdSupplier(int)},为{@code null}不响应设备组命令
 	 */
 	public CmdDispatcher(int deviceId, Supplier<Integer> groupIdSupplier) {
 		this.deviceId= deviceId;
-		this.groupIdSupplier = Preconditions.checkNotNull(groupIdSupplier);
+		this.groupIdSupplier = groupIdSupplier;
 	}
 	/** 判断target列表是否包括当前设备 */
 	private boolean selfIncluded(boolean group,List<Integer> target){
 		return group 
-				? target.contains(groupIdSupplier.get())
+				? (null == groupIdSupplier ? false : target.contains(groupIdSupplier.get()))
 				: target.contains(this.deviceId);
 	}
 	/**

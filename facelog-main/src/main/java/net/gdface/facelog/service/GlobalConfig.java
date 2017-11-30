@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.configuration2.CombinedConfiguration;
+import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
@@ -21,6 +22,7 @@ import org.apache.commons.configuration2.tree.DefaultExpressionEngine;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngineSymbols;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
 import com.facebook.swift.service.ThriftServerConfig;
@@ -256,8 +258,8 @@ public class GlobalConfig implements ServiceConstant{
 	 * @param config
 	 * @see #setProperty(String, Object)
 	 */
-	static void setProperty(Map<String,Object> config){
-		for(Entry<String, Object> entry:config.entrySet()){
+	static void setProperties(Map<String,? extends Object> config){
+		for(Entry<String, ? extends Object> entry:config.entrySet()){
 			setProperty(entry.getKey(),entry.getValue());
 		}
 	}
@@ -273,5 +275,18 @@ public class GlobalConfig implements ServiceConstant{
 		} catch (ConfigurationException e) {
 			throw new RuntimeException(e);
 		} 
+	}
+	static Map<String,String> toMap(final Configuration config){
+		config.getSynchronizer().beginRead();
+		try{
+			return Maps.asMap(ImmutableSet.copyOf(config.getKeys()),new Function<String,String>(){
+
+			@Override
+			public String apply(String input) {
+				return config.getString(input);
+			}});
+		}finally{
+			config.getSynchronizer().endRead();
+		}
 	}
 }
