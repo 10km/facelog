@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * 设备命令执行器容器对象<br>
@@ -51,10 +50,7 @@ public class CommandAdapterContainer extends CommandAdapter{
      * @see {@link EnumMap#put(Enum, Object)}
      */
     public CommandAdapterContainer register(Cmd cmd, CommandAdapter adapter) {
-    	checkArgument(null != adapter,"adapter is null");
-    	// cycle check 不允许循环调用
-    	checkArgument(! (adapter instanceof CommandAdapterContainer),"INVALID loop register");
-        adapters.put(checkNotNull(cmd,"key is null"), adapter);
+        adapters.put(checkNotNull(cmd,"key is null"), checkNotNull(adapter,"adapter is null"));
         return this;
     }
     /**

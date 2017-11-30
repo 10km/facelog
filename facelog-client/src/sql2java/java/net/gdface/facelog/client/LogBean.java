@@ -30,7 +30,7 @@ public  class LogBean
     /** comments:外键,用户id */
     private Integer personId;
 
-    /** comments:外键,图像来源设备id */
+    /** comments:外键,日志来源设备id */
     private Integer deviceId;
 
     /** comments:外键,用于验证身份的人脸特征数据MD5 id */
@@ -287,7 +287,7 @@ public  class LogBean
      * <ul>
      * <li>full name: fl_log.device_id</li>
      * <li> foreign key: fl_device.id</li>
-     * <li>comments: 外键,图像来源设备id</li>
+     * <li>comments: 外键,日志来源设备id</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -1271,7 +1271,7 @@ public  class LogBean
         }
         /** 
          * fill the field : fl_log.device_id
-         * @param deviceId 外键,图像来源设备id
+         * @param deviceId 外键,日志来源设备id
          * @see {@link LogBean#getDeviceId()}
          * @see {@link LogBean#setDeviceId(Integer)}
          */

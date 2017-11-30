@@ -391,6 +391,15 @@ class Dao implements CommonConstant {
             public Integer apply(DeviceBean input) {
                 return null == input ? null : input.getGroupId();
             }};
+    //8-8
+    /** transformer : fl_device.id to fl_device.group_id */
+    protected final Function<Integer,Integer> daoCastDevicePkToGroupId = new Function<Integer,Integer>(){
+            @Override
+            public Integer apply(Integer input) {
+                return null == input 
+                    ? null 
+                    : daoCastDeviceToGroupId.apply(daoGetDevice(input));
+            }};
     //14
     /** 
      * 参见 {@link IDeviceManager#save(DeviceBean)}
@@ -1367,6 +1376,15 @@ class Dao implements CommonConstant {
             public String apply(PersonBean input) {
                 return null == input ? null : input.getImageMd5();
             }};
+    //8-8
+    /** transformer : fl_person.id to fl_person.image_md5 */
+    protected final Function<Integer,String> daoCastPersonPkToImageMd5 = new Function<Integer,String>(){
+            @Override
+            public String apply(Integer input) {
+                return null == input 
+                    ? null 
+                    : daoCastPersonToImageMd5.apply(daoGetPerson(input));
+            }};
     //8-3
     /**
      * 返回外键(fl_person.group_id)引用的 fl_person_group 记录
@@ -1397,6 +1415,15 @@ class Dao implements CommonConstant {
             @Override
             public Integer apply(PersonBean input) {
                 return null == input ? null : input.getGroupId();
+            }};
+    //8-8
+    /** transformer : fl_person.id to fl_person.group_id */
+    protected final Function<Integer,Integer> daoCastPersonPkToGroupId = new Function<Integer,Integer>(){
+            @Override
+            public Integer apply(Integer input) {
+                return null == input 
+                    ? null 
+                    : daoCastPersonToGroupId.apply(daoGetPerson(input));
             }};
     //14
     /** 
@@ -2352,6 +2379,15 @@ class Dao implements CommonConstant {
             public String apply(FaceBean input) {
                 return null == input ? null : input.getFeatureMd5();
             }};
+    //8-8
+    /** transformer : fl_face.id to fl_face.feature_md5 */
+    protected final Function<Integer,String> daoCastFacePkToFeatureMd5 = new Function<Integer,String>(){
+            @Override
+            public String apply(Integer input) {
+                return null == input 
+                    ? null 
+                    : daoCastFaceToFeatureMd5.apply(daoGetFace(input));
+            }};
     //8-3
     /**
      * 返回外键(fl_face.image_md5)引用的 fl_image 记录
@@ -2382,6 +2418,15 @@ class Dao implements CommonConstant {
             @Override
             public String apply(FaceBean input) {
                 return null == input ? null : input.getImageMd5();
+            }};
+    //8-8
+    /** transformer : fl_face.id to fl_face.image_md5 */
+    protected final Function<Integer,String> daoCastFacePkToImageMd5 = new Function<Integer,String>(){
+            @Override
+            public String apply(Integer input) {
+                return null == input 
+                    ? null 
+                    : daoCastFaceToImageMd5.apply(daoGetFace(input));
             }};
     //12
     /** 
@@ -2820,6 +2865,15 @@ class Dao implements CommonConstant {
             public Integer apply(FeatureBean input) {
                 return null == input ? null : input.getPersonId();
             }};
+    //8-8
+    /** transformer : fl_feature.md5 to fl_feature.person_id */
+    protected final Function<String,Integer> daoCastFeaturePkToPersonId = new Function<String,Integer>(){
+            @Override
+            public Integer apply(String input) {
+                return null == input 
+                    ? null 
+                    : daoCastFeatureToPersonId.apply(daoGetFeature(input));
+            }};
     //12
     /** 
      * 添加新记录<br>
@@ -3257,6 +3311,15 @@ class Dao implements CommonConstant {
             public Integer apply(ImageBean input) {
                 return null == input ? null : input.getDeviceId();
             }};
+    //8-8
+    /** transformer : fl_image.md5 to fl_image.device_id */
+    protected final Function<String,Integer> daoCastImagePkToDeviceId = new Function<String,Integer>(){
+            @Override
+            public Integer apply(String input) {
+                return null == input 
+                    ? null 
+                    : daoCastImageToDeviceId.apply(daoGetImage(input));
+            }};
     //12
     /** 
      * 添加新记录<br>
@@ -3603,6 +3666,15 @@ class Dao implements CommonConstant {
             public Integer apply(LogBean input) {
                 return null == input ? null : input.getDeviceId();
             }};
+    //8-8
+    /** transformer : fl_log.id to fl_log.device_id */
+    protected final Function<Integer,Integer> daoCastLogPkToDeviceId = new Function<Integer,Integer>(){
+            @Override
+            public Integer apply(Integer input) {
+                return null == input 
+                    ? null 
+                    : daoCastLogToDeviceId.apply(daoGetLog(input));
+            }};
     //8-3
     /**
      * 返回外键(fl_log.compare_face)引用的 fl_face 记录
@@ -3633,6 +3705,15 @@ class Dao implements CommonConstant {
             @Override
             public Integer apply(LogBean input) {
                 return null == input ? null : input.getCompareFace();
+            }};
+    //8-8
+    /** transformer : fl_log.id to fl_log.compare_face */
+    protected final Function<Integer,Integer> daoCastLogPkToCompareFace = new Function<Integer,Integer>(){
+            @Override
+            public Integer apply(Integer input) {
+                return null == input 
+                    ? null 
+                    : daoCastLogToCompareFace.apply(daoGetLog(input));
             }};
     //8-3
     /**
@@ -3665,6 +3746,15 @@ class Dao implements CommonConstant {
             public String apply(LogBean input) {
                 return null == input ? null : input.getVerifyFeature();
             }};
+    //8-8
+    /** transformer : fl_log.id to fl_log.verify_feature */
+    protected final Function<Integer,String> daoCastLogPkToVerifyFeature = new Function<Integer,String>(){
+            @Override
+            public String apply(Integer input) {
+                return null == input 
+                    ? null 
+                    : daoCastLogToVerifyFeature.apply(daoGetLog(input));
+            }};
     //8-3
     /**
      * 返回外键(fl_log.person_id)引用的 fl_person 记录
@@ -3695,6 +3785,15 @@ class Dao implements CommonConstant {
             @Override
             public Integer apply(LogBean input) {
                 return null == input ? null : input.getPersonId();
+            }};
+    //8-8
+    /** transformer : fl_log.id to fl_log.person_id */
+    protected final Function<Integer,Integer> daoCastLogPkToPersonId = new Function<Integer,Integer>(){
+            @Override
+            public Integer apply(Integer input) {
+                return null == input 
+                    ? null 
+                    : daoCastLogToPersonId.apply(daoGetLog(input));
             }};
     //12
     /** 

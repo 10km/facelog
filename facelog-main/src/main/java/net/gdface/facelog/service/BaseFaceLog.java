@@ -22,6 +22,7 @@ import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.service.Dao;
+import net.gdface.facelog.service.CommonConstant.ExceptionType;
 import net.gdface.facelog.service.RedisManagement.MQParam;
 
 // 由于Java语言的限制,导致swift无法从interface中获取参数名信息，所以采用interface定义生成的thrift IDL文件中service中的方法
@@ -899,15 +900,15 @@ public abstract class BaseFaceLog extends Dao{
 		return 0;
 	}
 	/**
-	 * 返回{@code deviceGroupId}指定的设备组下的所有子节点<br>
+	 * 返回{@code deviceGroupId}指定的设备组下的所有子节点(设备组)<br>
 	 * 如果没有子节点则返回空表
 	 * @param deviceGroupId
-	 * @return
+	 * @return 设备组ID列表
 	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId)throws ServiceRuntimeException {
+	public List<Integer> getSubDeviceGroup(int deviceGroupId)throws ServiceRuntimeException {
 		return null;
 	}
 	/**
@@ -919,14 +920,14 @@ public abstract class BaseFaceLog extends Dao{
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<DeviceBean> getDevicesOfGroup(int deviceGroupId)throws ServiceRuntimeException {
+	public List<Integer> getDevicesOfGroup(int deviceGroupId)throws ServiceRuntimeException {
 		return null;
 	}
     /**
-     * 返回({@code deviceGroupId}))指定的fl_device_group记录的所有的父节点(包括自己)<br>
+     * 返回({@code deviceGroupId})指定的fl_device_group记录的所有的父节点(包括自己)<br>
      * 自引用字段:fl_device_group(parent)
 	 * @param deviceGroupId
-	 * @return
+	 * @return  如果{@code deviceGroupId}无效则返回空表
      * @throws ServiceRuntimeException
      */
 	@ThriftMethod
@@ -934,10 +935,11 @@ public abstract class BaseFaceLog extends Dao{
 		return null;
 	}
 	/**
-     * 返回({@code deviceId}))指定的设备所属所有设备组<br>
+     * 返回({@code deviceId})指定的设备所属所有设备组<br>
 	 * @param deviceId
 	 * @return 如果{@code deviceId}无效则返回空表
 	 * @throws ServiceRuntimeException
+	 * @see {@link #listOfParentForDeviceGroup(int)}
 	 */
 	@ThriftMethod
 	public List<Integer> getDeviceGroupsBelongs(int deviceId)throws ServiceRuntimeException{
@@ -994,37 +996,59 @@ public abstract class BaseFaceLog extends Dao{
 		return personGroupId;
 	}
 	/**
-	 * 返回{@code personGroupId}指定的人员组下的所有子节点<br>
+	 * 返回{@code personGroupId}指定的人员组下的所有子节点(人员组)<br>
 	 * 如果没有子节点则返回空表
 	 * @param personGroupId
-	 * @return
+	 * @return 人员组ID列表
 	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<PersonGroupBean> getSubPersonGroup(int personGroupId)throws ServiceRuntimeException {
+	public List<Integer> getSubPersonGroup(int personGroupId)throws ServiceRuntimeException {
 		return null;
 	}
 	/**
 	 * 返回{@code deviceGroupId}指定的人员组下属的所有人员记录<br>
 	 * 如果没有下属人员记录则返回空表
 	 * @param deviceGroupId
-	 * @return
+	 * @return 人员ID列表
 	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
 	 */
 	@ThriftMethod
-	public List<PersonBean> getPersonsOfGroup(int personGroupId)throws ServiceRuntimeException {
+	public List<Integer> getPersonsOfGroup(int personGroupId)throws ServiceRuntimeException {
 		return null;
 	}
+    /**
+     * 返回({@code personGroupId})指定的fl_person_group记录的所有的父节点(包括自己)<br>
+     * 自引用字段:fl_person_group(parent)
+	 * @param personGroupId
+	 * @return  如果{@code personGroupId}无效则返回空表
+     * @throws ServiceRuntimeException
+     */
+	@ThriftMethod
+	public List<Integer> listOfParentForPersonGroup(int personGroupId)throws ServiceRuntimeException{
+		return null;
+	}
+	/**
+     * 返回({@code personId})指定的人员所属所有人员组<br>
+	 * @param personId
+	 * @return 如果{@code personId}无效则返回空表
+	 * @throws ServiceRuntimeException
+	 * @see {@link #listOfParentForPersonGroup(int)}
+	 */
+	@ThriftMethod
+	public List<Integer> getPersonGroupsBelongs(int personId)throws ServiceRuntimeException{
+		return null;}
     /**
      * 查询{@code where} SQL条件语句指定的记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
+     * @return 设备组ID列表
      */
 	@ThriftMethod
-    public List<DeviceGroupBean> loadDeviceGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntimeException{
+    public List<Integer> loadDeviceGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntimeException{
 		return null;
     }
     /**
@@ -1134,9 +1158,10 @@ public abstract class BaseFaceLog extends Dao{
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
+     * @return 人员组ID列表
      */
 	@ThriftMethod
-    public List<PersonGroupBean> loadPersonGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntimeException{
+    public List<Integer> loadPersonGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntimeException{
 		return null;    	
     }
     /**

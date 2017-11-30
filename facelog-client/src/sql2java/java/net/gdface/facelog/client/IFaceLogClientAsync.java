@@ -9,7 +9,7 @@ package net.gdface.facelog.client;
 
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
 import java.util.*;
 
@@ -68,7 +68,7 @@ class IFaceLogClientAsync implements Constant{
      * @param service a instance of net.gdface.facelog.client.thrift.IFaceLog.Async created by Swift, must not be null
      */
     IFaceLogClientAsync(net.gdface.facelog.client.thrift.IFaceLog.Async service){
-        this.service = checkNotNull(service,"service is null");
+        this.service = Preconditions.checkNotNull(service,"service is null");
     }
     // 1 SERIVCE PORT : getPerson
     /**
@@ -1409,20 +1409,13 @@ class IFaceLogClientAsync implements Constant{
     }
     // 69 SERIVCE PORT : getSubDeviceGroup
     /**
-     * 返回{@code deviceGroupId}指定的设备组下的所有子节点<br>
+     * 返回{@code deviceGroupId}指定的设备组下的所有子节点(设备组)<br>
      * 如果没有子节点则返回空表
      * @param deviceGroupId
-     * @return 
+     * @return 设备组ID列表
      */
-    public ListenableFuture<List<DeviceGroupBean>> getSubDeviceGroup(int deviceGroupId){
-        return Futures.transform(
-                service.getSubDeviceGroup(deviceGroupId), 
-                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.DeviceGroupBean>,List<DeviceGroupBean>>(){
-                    @Override
-                    public List<DeviceGroupBean> apply(List<net.gdface.facelog.client.thrift.DeviceGroupBean> input) {
-                        return DeviceGroupBean.replaceNullInstance(converterDeviceGroupBean.fromRight(input));
-                    }
-                });
+    public ListenableFuture<List<Integer>> getSubDeviceGroup(int deviceGroupId){
+        return service.getSubDeviceGroup(deviceGroupId);
     }
     // 70 SERIVCE PORT : getDevicesOfGroup
     /**
@@ -1431,31 +1424,25 @@ class IFaceLogClientAsync implements Constant{
      * @param deviceGroupId
      * @return 
      */
-    public ListenableFuture<List<DeviceBean>> getDevicesOfGroup(int deviceGroupId){
-        return Futures.transform(
-                service.getDevicesOfGroup(deviceGroupId), 
-                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.DeviceBean>,List<DeviceBean>>(){
-                    @Override
-                    public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
-                        return DeviceBean.replaceNullInstance(converterDeviceBean.fromRight(input));
-                    }
-                });
+    public ListenableFuture<List<Integer>> getDevicesOfGroup(int deviceGroupId){
+        return service.getDevicesOfGroup(deviceGroupId);
     }
     // 71 SERIVCE PORT : listOfParentForDeviceGroup
     /**
-     * 返回({@code deviceGroupId}))指定的fl_device_group记录的所有的父节点(包括自己)<br>
+     * 返回({@code deviceGroupId})指定的fl_device_group记录的所有的父节点(包括自己)<br>
      * 自引用字段:fl_device_group(parent)
      * @param deviceGroupId
-     * @return 
+     * @return 如果{@code deviceGroupId}无效则返回空表
      */
     public ListenableFuture<List<Integer>> listOfParentForDeviceGroup(int deviceGroupId){
         return service.listOfParentForDeviceGroup(deviceGroupId);
     }
     // 72 SERIVCE PORT : getDeviceGroupsBelongs
     /**
-     * 返回({@code deviceId}))指定的设备所属所有设备组<br>
+     * 返回({@code deviceId})指定的设备所属所有设备组<br>
      * @param deviceId
      * @return 如果{@code deviceId}无效则返回空表
+     * @see {@link #listOfParentForDeviceGroup(int)}
      */
     public ListenableFuture<List<Integer>> getDeviceGroupsBelongs(int deviceId){
         return service.getDeviceGroupsBelongs(deviceId);
@@ -1532,69 +1519,69 @@ class IFaceLogClientAsync implements Constant{
     }
     // 77 SERIVCE PORT : getSubPersonGroup
     /**
-     * 返回{@code personGroupId}指定的人员组下的所有子节点<br>
+     * 返回{@code personGroupId}指定的人员组下的所有子节点(人员组)<br>
      * 如果没有子节点则返回空表
      * @param personGroupId
-     * @return 
+     * @return 人员组ID列表
      */
-    public ListenableFuture<List<PersonGroupBean>> getSubPersonGroup(int personGroupId){
-        return Futures.transform(
-                service.getSubPersonGroup(personGroupId), 
-                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PersonGroupBean>,List<PersonGroupBean>>(){
-                    @Override
-                    public List<PersonGroupBean> apply(List<net.gdface.facelog.client.thrift.PersonGroupBean> input) {
-                        return PersonGroupBean.replaceNullInstance(converterPersonGroupBean.fromRight(input));
-                    }
-                });
+    public ListenableFuture<List<Integer>> getSubPersonGroup(int personGroupId){
+        return service.getSubPersonGroup(personGroupId);
     }
     // 78 SERIVCE PORT : getPersonsOfGroup
     /**
      * 返回{@code deviceGroupId}指定的人员组下属的所有人员记录<br>
      * 如果没有下属人员记录则返回空表
      * @param deviceGroupId
-     * @return 
+     * @return 人员ID列表
      */
-    public ListenableFuture<List<PersonBean>> getPersonsOfGroup(int personGroupId){
-        return Futures.transform(
-                service.getPersonsOfGroup(personGroupId), 
-                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>(){
-                    @Override
-                    public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
-                        return PersonBean.replaceNullInstance(converterPersonBean.fromRight(input));
-                    }
-                });
+    public ListenableFuture<List<Integer>> getPersonsOfGroup(int personGroupId){
+        return service.getPersonsOfGroup(personGroupId);
     }
-    // 79 SERIVCE PORT : loadDeviceGroupByWhere
+    // 79 SERIVCE PORT : listOfParentForPersonGroup
+    /**
+     * 返回({@code personGroupId})指定的fl_person_group记录的所有的父节点(包括自己)<br>
+     * 自引用字段:fl_person_group(parent)
+     * @param personGroupId
+     * @return 如果{@code personGroupId}无效则返回空表
+     */
+    public ListenableFuture<List<Integer>> listOfParentForPersonGroup(int personGroupId){
+        return service.listOfParentForPersonGroup(personGroupId);
+    }
+    // 80 SERIVCE PORT : getPersonGroupsBelongs
+    /**
+     * 返回({@code personId})指定的人员所属所有人员组<br>
+     * @param personId
+     * @return 如果{@code personId}无效则返回空表
+     * @see {@link #listOfParentForPersonGroup(int)}
+     */
+    public ListenableFuture<List<Integer>> getPersonGroupsBelongs(int personId){
+        return service.getPersonGroupsBelongs(personId);
+    }
+    // 81 SERIVCE PORT : loadDeviceGroupByWhere
     /**
      * 查询{@code where} SQL条件语句指定的记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
+     * @return 设备组ID列表
      */
-    public ListenableFuture<List<DeviceGroupBean>> loadDeviceGroupByWhere(
+    public ListenableFuture<List<Integer>> loadDeviceGroupByWhere(
             String where,
             int startRow,
             int numRows){
-        return Futures.transform(
-                service.loadDeviceGroupByWhere(
+        return service.loadDeviceGroupByWhere(
                     where,
                     startRow,
-                    numRows), 
-                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.DeviceGroupBean>,List<DeviceGroupBean>>(){
-                    @Override
-                    public List<DeviceGroupBean> apply(List<net.gdface.facelog.client.thrift.DeviceGroupBean> input) {
-                        return DeviceGroupBean.replaceNullInstance(converterDeviceGroupBean.fromRight(input));
-                    }
-                });
+                    numRows);
     }
-    // 80 SERIVCE PORT : countDeviceGroupByWhere
+    // 82 SERIVCE PORT : countDeviceGroupByWhere
     /**
      * 返回满足{@code where} SQL条件语句的fl_device_group记录总数
      */
     public ListenableFuture<Integer> countDeviceGroupByWhere(String where){
         return service.countDeviceGroupByWhere(where);
     }
-    // 81 SERIVCE PORT : loadDeviceGroupIdByWhere
+    // 83 SERIVCE PORT : loadDeviceGroupIdByWhere
     /**
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
@@ -1603,7 +1590,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<List<Integer>> loadDeviceGroupIdByWhere(String where){
         return service.loadDeviceGroupIdByWhere(where);
     }
-    // 82 SERIVCE PORT : addPermit
+    // 84 SERIVCE PORT : addPermit
     /**
      * 添加一个(允许)通行关联记录:允许{@code personGroup}指定的人员组在
      * {@code deviceGroup}指定的设备组下属的所有设备通行
@@ -1621,7 +1608,7 @@ class IFaceLogClientAsync implements Constant{
                     converterPersonGroupBean.toRight(personGroup),
                     token);
     }
-    // 83 SERIVCE PORT : addPermitById
+    // 85 SERIVCE PORT : addPermitById
     /**
      * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
      * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
@@ -1640,7 +1627,7 @@ class IFaceLogClientAsync implements Constant{
                     personGroupId,
                     token);
     }
-    // 84 SERIVCE PORT : deletePermit
+    // 86 SERIVCE PORT : deletePermit
     /**
      * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean, Token)}
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
@@ -1658,7 +1645,7 @@ class IFaceLogClientAsync implements Constant{
                     converterPersonGroupBean.toRight(personGroup),
                     token);
     }
-    // 85 SERIVCE PORT : getGroupPermit
+    // 87 SERIVCE PORT : getGroupPermit
     /**
      * 获取人员组通行权限<br>
      * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行
@@ -1673,7 +1660,7 @@ class IFaceLogClientAsync implements Constant{
                     deviceId,
                     personGroupId);
     }
-    // 86 SERIVCE PORT : getPersonPermit
+    // 88 SERIVCE PORT : getPersonPermit
     /**
      * 获取人员通行权限<br>
      * 返回{@code personId}指定的人员在{@code deviceId}设备上是否允许通行
@@ -1688,7 +1675,7 @@ class IFaceLogClientAsync implements Constant{
                     deviceId,
                     personId);
     }
-    // 87 SERIVCE PORT : getGroupPermits
+    // 89 SERIVCE PORT : getGroupPermits
     /**
      * 参见 {@link #getGroupPermit(Integer, Integer) }
      */
@@ -1699,7 +1686,7 @@ class IFaceLogClientAsync implements Constant{
                     deviceId,
                     CollectionUtils.checkNotNullElement(personGroupIdList));
     }
-    // 88 SERIVCE PORT : getPersonPermits
+    // 90 SERIVCE PORT : getPersonPermits
     /**
      * 参见 {@link #getPersonPermit(Integer, Integer) }
      */
@@ -1710,7 +1697,7 @@ class IFaceLogClientAsync implements Constant{
                     deviceId,
                     CollectionUtils.checkNotNullElement(personIdList));
     }
-    // 89 SERIVCE PORT : loadPermitByUpdate
+    // 91 SERIVCE PORT : loadPermitByUpdate
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录
@@ -1727,30 +1714,24 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 90 SERIVCE PORT : loadPersonGroupByWhere
+    // 92 SERIVCE PORT : loadPersonGroupByWhere
     /**
      * 查询{@code where} SQL条件语句指定的记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
+     * @return 人员组ID列表
      */
-    public ListenableFuture<List<PersonGroupBean>> loadPersonGroupByWhere(
+    public ListenableFuture<List<Integer>> loadPersonGroupByWhere(
             String where,
             int startRow,
             int numRows){
-        return Futures.transform(
-                service.loadPersonGroupByWhere(
+        return service.loadPersonGroupByWhere(
                     where,
                     startRow,
-                    numRows), 
-                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PersonGroupBean>,List<PersonGroupBean>>(){
-                    @Override
-                    public List<PersonGroupBean> apply(List<net.gdface.facelog.client.thrift.PersonGroupBean> input) {
-                        return PersonGroupBean.replaceNullInstance(converterPersonGroupBean.fromRight(input));
-                    }
-                });
+                    numRows);
     }
-    // 91 SERIVCE PORT : countPersonGroupByWhere
+    // 93 SERIVCE PORT : countPersonGroupByWhere
     /**
      * 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
      * @see {@link IPersonGroupManager#Where(String)}
@@ -1758,7 +1739,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Integer> countPersonGroupByWhere(String where){
         return service.countPersonGroupByWhere(where);
     }
-    // 92 SERIVCE PORT : loadPersonGroupIdByWhere
+    // 94 SERIVCE PORT : loadPersonGroupIdByWhere
     /**
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
@@ -1767,7 +1748,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<List<Integer>> loadPersonGroupIdByWhere(String where){
         return service.loadPersonGroupIdByWhere(where);
     }
-    // 93 SERIVCE PORT : registerDevice
+    // 95 SERIVCE PORT : registerDevice
     /**
      * 新设备注册,如果设备已经注册则返回注册设备记录<br>
      * 注册时必须提供设备MAC地址,是否提供序列号,根据应用需要选择
@@ -1784,7 +1765,7 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-    // 94 SERIVCE PORT : unregisterDevice
+    // 96 SERIVCE PORT : unregisterDevice
     /**
      * (设备端)设备删除
      * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
@@ -1798,7 +1779,7 @@ class IFaceLogClientAsync implements Constant{
                     deviceId,
                     token);
     }
-    // 95 SERIVCE PORT : online
+    // 97 SERIVCE PORT : online
     /**
      * 设备申请上线,每次调用都会产生一个新的令牌
      * @param device 上线设备信息，必须提供{@code id, mac, serialNo}字段
@@ -1807,7 +1788,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<net.gdface.facelog.client.thrift.Token> online(DeviceBean device){
         return service.online(converterDeviceBean.toRight(device));
     }
-    // 96 SERIVCE PORT : offline
+    // 98 SERIVCE PORT : offline
     /**
      * 设备申请离线,删除设备令牌
      * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
@@ -1816,7 +1797,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Void> offline(net.gdface.facelog.client.thrift.Token token){
         return service.offline(token);
     }
-    // 97 SERIVCE PORT : applyPersonToken
+    // 99 SERIVCE PORT : applyPersonToken
     /**
      * 申请人员访问令牌
      * @param personId
@@ -1825,7 +1806,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<net.gdface.facelog.client.thrift.Token> applyPersonToken(int personId){
         return service.applyPersonToken(personId);
     }
-    // 98 SERIVCE PORT : releasePersonToken
+    // 100 SERIVCE PORT : releasePersonToken
     /**
      * 释放人员访问令牌
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
@@ -1834,7 +1815,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Void> releasePersonToken(net.gdface.facelog.client.thrift.Token token){
         return service.releasePersonToken(token);
     }
-    // 99 SERIVCE PORT : applyAckChannel
+    // 101 SERIVCE PORT : applyAckChannel
     /**
      * 申请一个唯一的命令响应通道
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
@@ -1844,7 +1825,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<String> applyAckChannel(net.gdface.facelog.client.thrift.Token token){
         return service.applyAckChannel(token);
     }
-    // 100 SERIVCE PORT : applyCmdSn
+    // 102 SERIVCE PORT : applyCmdSn
     /**
      * 申请一个唯一的命令序列号
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
@@ -1854,7 +1835,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Long> applyCmdSn(net.gdface.facelog.client.thrift.Token token){
         return service.applyCmdSn(token);
     }
-    // 101 SERIVCE PORT : getRedisParameters
+    // 103 SERIVCE PORT : getRedisParameters
     /**
      * 返回redis访问基本参数:<br>
      * <ul>
@@ -1871,5 +1852,115 @@ class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Map<net.gdface.facelog.client.thrift.MQParam, String>> getRedisParameters(net.gdface.facelog.client.thrift.Token token){
         return service.getRedisParameters(token);
+    }
+    ///////////////// CLIENT EXTENSIVE /////////////
+    
+    /**
+     * 根据设备ID返回设备所属的设备组ID的{@code Function}实例,
+     * 设备ID无效则返回{@code null}
+     */
+    public final com.google.common.base.Function<Integer,Integer> deviceGroupIdGetter = 
+        new com.google.common.base.Function<Integer,Integer>(){
+        @Override
+        public Integer apply(Integer input) {
+            try{
+                DeviceBean device = getDevice(input).get();
+                return null == device ? null : device.getGroupId();
+            }catch(RuntimeException e){
+                throw e;
+            }catch(Exception e){
+                throw new RuntimeException(e);
+            }   
+        }};
+    /**
+     * 根据设备ID返回一个获取设备组ID的{@code Supplier}实例
+     * @param deviceId
+     * @return 对应的groupId,如果{@code deviceId}无效则返回{@code null}
+     * @see #deviceGroupIdGetter
+     * @throws ServiceRuntimeException
+     */
+    public com.google.common.base.Supplier<Integer> getDeviceGroupIdSupplier(final int deviceId){
+        return new com.google.common.base.Supplier<Integer>(){
+            @Override
+            public Integer get() {
+                return deviceGroupIdGetter.apply(deviceId);
+            }        
+        };
+    }
+    /**
+     * 根据人员ID返回人员所属的所有组ID的{@code Function}实例
+     * 如果人员ID无效则返回空表
+     */
+    public final com.google.common.base.Function<Integer,List<Integer>> personGroupBelonsGetter = 
+        new com.google.common.base.Function<Integer,List<Integer>>(){
+        @Override
+        public List<Integer> apply(Integer personId) {
+            try{
+                return getPersonGroupsBelongs(personId).get();
+            }catch(RuntimeException e){
+                throw e;
+            }catch(Exception e){
+                throw new RuntimeException(e);
+            }   
+        }};
+    /**
+     * 根据人员ID返回一个获取所属组ID列表的{@code Supplier}实例
+     * @param personId
+     * @return 人员组ID列表,如果{@code personId}无效则返回空表
+     * @see #personGroupBelonsGetter
+     * @throws ServiceRuntimeException
+     */
+    public com.google.common.base.Supplier<List<Integer>> getPersonGroupBelonsSupplier(final int personId){
+        return new com.google.common.base.Supplier<List<Integer>>(){
+            @Override
+            public List<Integer> get() {
+                return personGroupBelonsGetter.apply(personId);
+            }        
+        };
+    }
+    /**
+     * 创建{@link CmdManager}实例
+     * @param poolLazy REDIS 连接池对象
+     * @param adapter 设备命令执行器实例
+     * @param deviceId 当前设备ID
+     * @param token 访问令牌
+     * @return
+     * @throws ServiceRuntimeException
+     */
+    public CmdManager makeCmdManager(
+            gu.simplemq.redis.JedisPoolLazy poolLazy,
+            CommandAdapter adapter,
+            int deviceId,
+            net.gdface.facelog.client.thrift.Token token){
+    	try{
+    		Preconditions.checkArgument(existsDevice(deviceId).get(),"INVALID device ID %s",deviceId);
+    		return new CmdManager(
+    				Preconditions.checkNotNull(poolLazy),
+    				Preconditions.checkNotNull(adapter),
+    				getRedisParameters(token).get(),
+    				deviceId,
+    				getDeviceGroupIdSupplier(deviceId)
+    				);
+    	}catch(RuntimeException e){
+    		throw e;
+    	}catch(Exception e){
+    		throw new RuntimeException(e);
+    	}   
+    }
+    /**
+     * 创建{@link CmdManager}实例<br>
+     * 使用默认REDIS连接池,参见 {@link gu.simplemq.redis.JedisPoolLazy#getDefaultInstance()}
+     * @param adapter
+     * @param deviceId
+     * @param token
+     * @return
+     * @throws ServiceRuntimeException
+     * @see #makeCmdManager(gu.simplemq.redis.JedisPoolLazy, CommandAdapter, int, net.gdface.facelog.client.thrift.Token)
+     */
+    public CmdManager makeCmdManager(
+            CommandAdapter adapter,
+            int deviceId,
+            net.gdface.facelog.client.thrift.Token token){
+    	return makeCmdManager(gu.simplemq.redis.JedisPoolLazy.getDefaultInstance(),adapter,deviceId,token);
     }
 }

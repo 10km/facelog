@@ -10,7 +10,6 @@ package net.gdface.facelog.client;
 import net.gdface.facelog.client.thrift.MQParam;
 
 import java.net.URL;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +17,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 
+import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
@@ -74,13 +74,15 @@ public class CmdManager {
      * @param adapter 应用程序执行设备命令的对象
      * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(net.gdface.facelog.client.thrift.Token)}
      * @param deviceId 当前设备ID
+     * @param groupIdSupplier 参见 {@link CmdDispatcher#CmdDispatcher(int, Supplier)}
      */
     public CmdManager(JedisPoolLazy poolLazy,
             CommandAdapter adapter,
             Map<MQParam, String> redisParameters,
-            int deviceId) {
+            int deviceId, 
+            Supplier<Integer> groupIdSupplier) {
         this(poolLazy,
-                new CmdDispatcher(deviceId).setCmdAdapter(adapter),
+                new CmdDispatcher(deviceId, groupIdSupplier).setCmdAdapter(adapter),
                 redisParameters);
     }
     /**
@@ -88,15 +90,19 @@ public class CmdManager {
      * 使用默认{@link JedisPoolLazy}对象,参见 {@link JedisPoolLazy#getDefaultInstance()}
      * @param adapter
      * @param redisParameters
+     * @param groupIdSupplier 
      * @param deviceId
      * @see #CmdManager(JedisPoolLazy, CommandAdapter, Map, int, List)
      */
     public CmdManager(CommandAdapter adapter,
             Map<MQParam, String> redisParameters,
-            int deviceId) {
+            int deviceId, 
+            Supplier<Integer> groupIdSupplier) {
         this(JedisPoolLazy.getDefaultInstance(),
-                new CmdDispatcher(deviceId).setCmdAdapter(adapter),
-                redisParameters);
+        		adapter,
+                redisParameters,
+                deviceId,
+                groupIdSupplier);
     }
     /**
      * 发送设备命令

@@ -1,0 +1,113 @@
+#if($isAsync)
+#set ($portRet = '.get()')
+#else
+#set ($portRet = '')
+#end
+    /**
+     * 根据设备ID返回设备所属的设备组ID的{@code Function}实例,
+     * 设备ID无效则返回{@code null}
+     */
+    public final com.google.common.base.Function<Integer,Integer> deviceGroupIdGetter = 
+        new com.google.common.base.Function<Integer,Integer>(){
+        @Override
+        public Integer apply(Integer input) {
+            try{
+                DeviceBean device = getDevice(input)$!{portRet};
+                return null == device ? null : device.getGroupId();
+            }catch(RuntimeException e){
+                throw e;
+            }catch(Exception e){
+                throw new RuntimeException(e);
+            }   
+        }};
+    /**
+     * 根据设备ID返回一个获取设备组ID的{@code Supplier}实例
+     * @param deviceId
+     * @return 对应的groupId,如果{@code deviceId}无效则返回{@code null}
+     * @see ${esc.hash}deviceGroupIdGetter
+     * @throws ServiceRuntimeException
+     */
+    public com.google.common.base.Supplier<Integer> getDeviceGroupIdSupplier(final int deviceId){
+        return new com.google.common.base.Supplier<Integer>(){
+            @Override
+            public Integer get() {
+                return deviceGroupIdGetter.apply(deviceId);
+            }        
+        };
+    }
+    /**
+     * 根据人员ID返回人员所属的所有组ID的{@code Function}实例
+     * 如果人员ID无效则返回空表
+     */
+    public final com.google.common.base.Function<Integer,List<Integer>> personGroupBelonsGetter = 
+        new com.google.common.base.Function<Integer,List<Integer>>(){
+        @Override
+        public List<Integer> apply(Integer personId) {
+            try{
+                return getPersonGroupsBelongs(personId)$!{portRet};
+            }catch(RuntimeException e){
+                throw e;
+            }catch(Exception e){
+                throw new RuntimeException(e);
+            }   
+        }};
+    /**
+     * 根据人员ID返回一个获取所属组ID列表的{@code Supplier}实例
+     * @param personId
+     * @return 人员组ID列表,如果{@code personId}无效则返回空表
+     * @see ${esc.hash}personGroupBelonsGetter
+     * @throws ServiceRuntimeException
+     */
+    public com.google.common.base.Supplier<List<Integer>> getPersonGroupBelonsSupplier(final int personId){
+        return new com.google.common.base.Supplier<List<Integer>>(){
+            @Override
+            public List<Integer> get() {
+                return personGroupBelonsGetter.apply(personId);
+            }        
+        };
+    }
+    /**
+     * 创建{@link CmdManager}实例
+     * @param poolLazy REDIS 连接池对象
+     * @param adapter 设备命令执行器实例
+     * @param deviceId 当前设备ID
+     * @param token 访问令牌
+     * @return
+     * @throws ServiceRuntimeException
+     */
+    public CmdManager makeCmdManager(
+            gu.simplemq.redis.JedisPoolLazy poolLazy,
+            CommandAdapter adapter,
+            int deviceId,
+            net.gdface.facelog.client.thrift.Token token){
+    	try{
+    		Preconditions.checkArgument(existsDevice(deviceId)$!{portRet},"INVALID device ID %s",deviceId);
+    		return new CmdManager(
+    				Preconditions.checkNotNull(poolLazy),
+    				Preconditions.checkNotNull(adapter),
+    				getRedisParameters(token)$!{portRet},
+    				deviceId,
+    				getDeviceGroupIdSupplier(deviceId)
+    				);
+    	}catch(RuntimeException e){
+    		throw e;
+    	}catch(Exception e){
+    		throw new RuntimeException(e);
+    	}   
+    }
+    /**
+     * 创建{@link CmdManager}实例<br>
+     * 使用默认REDIS连接池,参见 {@link gu.simplemq.redis.JedisPoolLazy${esc.hash}getDefaultInstance()}
+     * @param adapter
+     * @param deviceId
+     * @param token
+     * @return
+     * @throws ServiceRuntimeException
+     * @see ${esc.hash}makeCmdManager(gu.simplemq.redis.JedisPoolLazy, CommandAdapter, int, net.gdface.facelog.client.thrift.Token)
+     */
+    public CmdManager makeCmdManager(
+            CommandAdapter adapter,
+            int deviceId,
+            net.gdface.facelog.client.thrift.Token token){
+    	return makeCmdManager(gu.simplemq.redis.JedisPoolLazy.getDefaultInstance(),adapter,deviceId,token);
+    }

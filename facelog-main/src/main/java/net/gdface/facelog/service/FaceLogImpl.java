@@ -1269,9 +1269,9 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
 	}
 	@Override
-	public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId)throws ServiceRuntimeException {
+	public List<Integer> getSubDeviceGroup(int deviceGroupId)throws ServiceRuntimeException {
 		try{
-			return daoGetSubDeviceGroup(deviceGroupId);
+			return daoToPrimaryKeyListFromDeviceGroups(daoGetSubDeviceGroup(deviceGroupId));
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
@@ -1279,9 +1279,9 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
 	}
 	@Override
-	public List<DeviceBean> getDevicesOfGroup(int deviceGroupId)throws ServiceRuntimeException {
+	public List<Integer> getDevicesOfGroup(int deviceGroupId)throws ServiceRuntimeException {
 		try{
-			return daoGetDevicesOfGroup(deviceGroupId);
+			return daoToPrimaryKeyListFromDevices(daoGetDevicesOfGroup(deviceGroupId));
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
@@ -1360,9 +1360,9 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
 	}
 	@Override
-	public List<PersonGroupBean> getSubPersonGroup(int personGroupId)throws ServiceRuntimeException {
+	public List<Integer> getSubPersonGroup(int personGroupId)throws ServiceRuntimeException {
 		try{
-			return daoGetSubPersonGroup(personGroupId);
+			return daoToPrimaryKeyListFromPersonGroups(daoGetSubPersonGroup(personGroupId));
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
@@ -1370,9 +1370,32 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
 	}
 	@Override
-	public List<PersonBean> getPersonsOfGroup(int personGroupId)throws ServiceRuntimeException {
+	public List<Integer> getPersonsOfGroup(int personGroupId)throws ServiceRuntimeException {
 		try{
-			return daoGetPersonsOfGroup(personGroupId);
+			return this.daoToPrimaryKeyListFromPersons(daoGetPersonsOfGroup(personGroupId));
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
+			throw new ServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public List<Integer> listOfParentForPersonGroup(int personGroupId)throws ServiceRuntimeException{
+		try{
+			return daoToPrimaryKeyListFromPersonGroups(daoListOfParentForPersonGroup(personGroupId));
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
+			throw new ServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public List<Integer> getPersonGroupsBelongs(int personId)throws ServiceRuntimeException{
+		try{
+			PersonBean personBean = daoGetPerson(personId);
+			return null == personBean 
+						? ImmutableList.<Integer>of()
+						: listOfParentForPersonGroup(personBean.getGroupId());
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
@@ -1380,9 +1403,9 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
 	}
     @Override
-    public List<DeviceGroupBean> loadDeviceGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntimeException{
+    public List<Integer> loadDeviceGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntimeException{
 		try{
-			return daoLoadDeviceGroupByWhere(where, startRow, numRows);
+			return daoToPrimaryKeyListFromDeviceGroups(daoLoadDeviceGroupByWhere(where, startRow, numRows));
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
@@ -1501,9 +1524,9 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
 	}
     @Override
-    public List<PersonGroupBean> loadPersonGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntimeException{
+    public List<Integer> loadPersonGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntimeException{
     	try{
-    		return daoLoadPersonGroupByWhere(where, startRow, numRows);
+    		return daoToPrimaryKeyListFromPersonGroups(daoLoadPersonGroupByWhere(where, startRow, numRows));
     	} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {

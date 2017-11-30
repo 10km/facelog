@@ -351,13 +351,25 @@ class Dao implements CommonConstant {
 ###### CONVERTER BETWEEN BEAN AND FOREIGN KEY########    
 #if(!$table.isSelfRef($fkObj) && $fkObj.columns.size() == 1)
 #set ($fkCol = $fkObj.columns[0])
+#set ($castFunVar = "daoCast${coreClass}To${strUtil.convertName($fkCol.name,false)}")
     //8-6
     /** transformer : $beanClass to $fkCol.fullName */
-    $!{modifier}final Function<$beanClass,$fkCol.javaType> daoCast${coreClass}To${strUtil.convertName($fkCol.name,false)} = new Function<$beanClass,$fkCol.javaType>(){
+    $!{modifier}final Function<$beanClass,$fkCol.javaType> ${castFunVar} = new Function<$beanClass,$fkCol.javaType>(){
             @Override
             public $fkCol.javaType apply($beanClass input) {
                 return null == input ? null : input.$fkCol.getGetMethod()();
             }};
+#if($table.countPrimaryKeys() == 1)
+    //8-8
+    /** transformer : $primaryKey.fullName to $fkCol.fullName */
+    $!{modifier}final Function<$primaryKey.javaType,$fkCol.javaType> daoCast${coreClass}PkTo${strUtil.convertName($fkCol.name,false)} = new Function<$primaryKey.javaType,$fkCol.javaType>(){
+            @Override
+            public $fkCol.javaType apply($primaryKey.javaType input) {
+                return null == input 
+                    ? null 
+                    : ${castFunVar}.apply(daoGet${coreClass}(input));
+            }};
+#end###if($table.countPrimaryKeys() == 1)
 #end###if(!$table.isSelfRef($fkObj) && $fkObj.columns.size() == 1)
 #end###foreach( $fkName in $table.getFkMapNames($foreignTable.name) )
 #end###foreach ($foreignTable in $foreignTables)

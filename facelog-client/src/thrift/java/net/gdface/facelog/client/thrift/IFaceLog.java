@@ -367,7 +367,7 @@ public interface IFaceLog
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
-        ListenableFuture<List<DeviceBean>> getDevicesOfGroup(
+        ListenableFuture<List<Integer>> getDevicesOfGroup(
             @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
         );
 
@@ -493,6 +493,14 @@ public interface IFaceLog
             @ThriftField(value=1, name="groupIdList", requiredness=Requiredness.NONE) final List<Integer> groupIdList
         );
 
+        @ThriftMethod(value = "getPersonGroupsBelongs",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<List<Integer>> getPersonGroupsBelongs(
+            @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
+        );
+
         @ThriftMethod(value = "getPersonPermit",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -523,7 +531,7 @@ public interface IFaceLog
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
-        ListenableFuture<List<PersonBean>> getPersonsOfGroup(
+        ListenableFuture<List<Integer>> getPersonsOfGroup(
             @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
         );
 
@@ -539,7 +547,7 @@ public interface IFaceLog
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
-        ListenableFuture<List<DeviceGroupBean>> getSubDeviceGroup(
+        ListenableFuture<List<Integer>> getSubDeviceGroup(
             @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
         );
 
@@ -547,7 +555,7 @@ public interface IFaceLog
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
-        ListenableFuture<List<PersonGroupBean>> getSubPersonGroup(
+        ListenableFuture<List<Integer>> getSubPersonGroup(
             @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
         );
 
@@ -565,6 +573,14 @@ public interface IFaceLog
                       })
         ListenableFuture<List<Integer>> listOfParentForDeviceGroup(
             @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
+        );
+
+        @ThriftMethod(value = "listOfParentForPersonGroup",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<List<Integer>> listOfParentForPersonGroup(
+            @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
         );
 
         @ThriftMethod(value = "loadAllPerson",
@@ -587,7 +603,7 @@ public interface IFaceLog
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
-        ListenableFuture<List<DeviceGroupBean>> loadDeviceGroupByWhere(
+        ListenableFuture<List<Integer>> loadDeviceGroupByWhere(
             @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
             @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
             @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
@@ -669,7 +685,7 @@ public interface IFaceLog
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
-        ListenableFuture<List<PersonGroupBean>> loadPersonGroupByWhere(
+        ListenableFuture<List<Integer>> loadPersonGroupByWhere(
             @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
             @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
             @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
@@ -1273,7 +1289,7 @@ public interface IFaceLog
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
-    List<DeviceBean> getDevicesOfGroup(
+    List<Integer> getDevicesOfGroup(
         @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
     ) throws ServiceRuntimeException;
 
@@ -1399,6 +1415,14 @@ public interface IFaceLog
         @ThriftField(value=1, name="groupIdList", requiredness=Requiredness.NONE) final List<Integer> groupIdList
     ) throws ServiceRuntimeException;
 
+    @ThriftMethod(value = "getPersonGroupsBelongs",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    List<Integer> getPersonGroupsBelongs(
+        @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
+    ) throws ServiceRuntimeException;
+
     @ThriftMethod(value = "getPersonPermit",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1429,7 +1453,7 @@ public interface IFaceLog
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
-    List<PersonBean> getPersonsOfGroup(
+    List<Integer> getPersonsOfGroup(
         @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
     ) throws ServiceRuntimeException;
 
@@ -1445,7 +1469,7 @@ public interface IFaceLog
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
-    List<DeviceGroupBean> getSubDeviceGroup(
+    List<Integer> getSubDeviceGroup(
         @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
     ) throws ServiceRuntimeException;
 
@@ -1453,7 +1477,7 @@ public interface IFaceLog
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
-    List<PersonGroupBean> getSubPersonGroup(
+    List<Integer> getSubPersonGroup(
         @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
     ) throws ServiceRuntimeException;
 
@@ -1471,6 +1495,14 @@ public interface IFaceLog
                   })
     List<Integer> listOfParentForDeviceGroup(
         @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "listOfParentForPersonGroup",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    List<Integer> listOfParentForPersonGroup(
+        @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "loadAllPerson",
@@ -1493,7 +1525,7 @@ public interface IFaceLog
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
-    List<DeviceGroupBean> loadDeviceGroupByWhere(
+    List<Integer> loadDeviceGroupByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
         @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
         @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
@@ -1575,7 +1607,7 @@ public interface IFaceLog
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
-    List<PersonGroupBean> loadPersonGroupByWhere(
+    List<Integer> loadPersonGroupByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
         @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
         @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
