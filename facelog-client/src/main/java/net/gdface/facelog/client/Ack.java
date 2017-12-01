@@ -19,9 +19,17 @@ public class Ack<T> {
 	private String errorMessage;
 	/** 设备命令执行状态 */
 	public static enum Status{
-		/** 调用正常返回 */OK,
-		/** 设备端不支持的操作 */UNSUPPORTED,
-		/** 调用出错 */ERROR;
+		/** 调用正常返回 */
+		OK,
+		/** 设备端不支持的操作 */
+		UNSUPPORTED,
+		/** 调用出错 */
+		ERROR,
+		/** 
+		 * 响应超时,此错误不是由设备端发送,
+		 * 是由命令发送端(本机)ACK监控线程在指定的时间内没有收到任何响应而取取消频道订阅时发送 
+		 */ 
+		TIMEOUT;
 		/**
 		 * 返回状态信息
 		 * @param ack
@@ -36,6 +44,7 @@ public class Ack<T> {
 					buffer.append(":").append(ack.errorMessage);
 				}
 				break;
+			case TIMEOUT:
 			case UNSUPPORTED:
 			case OK:
 			default:

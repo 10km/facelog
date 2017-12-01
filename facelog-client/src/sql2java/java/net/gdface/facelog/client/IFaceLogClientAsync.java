@@ -1983,20 +1983,20 @@ class IFaceLogClientAsync implements Constant{
             CommandAdapter adapter,
             int deviceId,
             net.gdface.facelog.client.thrift.Token token){
-    	try{
-    		Preconditions.checkArgument(existsDevice(deviceId).get(),"INVALID device ID %s",deviceId);
-    		return new CmdManager(
-    				Preconditions.checkNotNull(poolLazy),
-    				Preconditions.checkNotNull(adapter),
-    				getRedisParameters(token).get(),
-    				deviceId,
-    				getDeviceGroupIdSupplier(deviceId)
-    				);
-    	}catch(RuntimeException e){
-    		throw e;
-    	}catch(Exception e){
-    		throw new RuntimeException(e);
-    	}   
+        try{
+            Preconditions.checkArgument(existsDevice(deviceId).get(),"INVALID device ID %s",deviceId);
+            return new CmdManager(
+                    Preconditions.checkNotNull(poolLazy),
+                    Preconditions.checkNotNull(adapter),
+                    getRedisParameters(token).get(),
+                    deviceId,
+                    getDeviceGroupIdSupplier(deviceId)
+                    );
+        }catch(RuntimeException e){
+            throw e;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }   
     }
     /**
      * 创建{@link CmdManager}实例<br>
@@ -2012,6 +2012,46 @@ class IFaceLogClientAsync implements Constant{
             CommandAdapter adapter,
             int deviceId,
             net.gdface.facelog.client.thrift.Token token){
-    	return makeCmdManager(gu.simplemq.redis.JedisPoolLazy.getDefaultInstance(),adapter,deviceId,token);
+        return makeCmdManager(gu.simplemq.redis.JedisPoolLazy.getDefaultInstance(),adapter,deviceId,token);
+    }
+    /**
+     * 返回一个申请命令响应通道的{@code Supplier}实例
+     * @param token 访问令牌
+     * @return
+     */
+    public com.google.common.base.Supplier<String> 
+    getAckChannelSupplier(final net.gdface.facelog.client.thrift.Token token){
+        return new com.google.common.base.Supplier<String>(){
+            @Override
+            public String get() {
+                try{
+                    return applyAckChannel(token).get();
+                }catch(RuntimeException e){
+                    throw e;
+                }catch(Exception e){
+                    throw new RuntimeException(e);
+                }
+            }
+        }; 
+    }
+    /**
+     * 返回一个申请命令序号的{@code Supplier}实例
+     * @param token
+     * @return 访问令牌
+     */
+    public com.google.common.base.Supplier<Long> 
+    getCmdSnSupplier(final net.gdface.facelog.client.thrift.Token token){
+        return new com.google.common.base.Supplier<Long>(){
+            @Override
+            public Long get() {
+                try{
+                    return applyCmdSn(token).get();
+                }catch(RuntimeException e){
+                    throw e;
+                }catch(Exception e){
+                    throw new RuntimeException(e);
+                }
+            }
+        }; 
     }
 }

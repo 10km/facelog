@@ -31,6 +31,7 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 	/** 注册的频道对象 */
 	@SuppressWarnings("rawtypes")
 	protected final Map<String, Channel> channelSubs = Collections.synchronizedMap(new LinkedHashMap<String, Channel>());
+	/** 订阅的频道名 */
 	private final Set<String> subChannelSet=Collections.synchronizedSet(new LinkedHashSet<String>());
 
 	public ChannelDispatcher() {
@@ -48,6 +49,11 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 		return registedOnlyAsSet(channels).toArray(new String[0]);
 	}
 	
+	/**
+	 * 返回{@code channels}指定的频道名中已经注册的频道名
+	 * @param channels
+	 * @return
+	 */
 	public HashSet<String> registedOnlyAsSet(String... channels) {
 		HashSet<String> chSet = new HashSet<String>(CommonUtils.cleanEmptyAsList(channels));
 		if (!chSet.isEmpty()){
