@@ -17,6 +17,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 
+import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -36,12 +37,13 @@ import gu.simplemq.redis.RedisSubscriber;
  * <pre>
  *    String ackChannel = iFaceLogClient.applyAckChannel(myToken); // 向facelog服务申请命令响应通道
  *    long cmdSn = iFaceLogClient.applyCmdSn(myToken); // 向facelog服务申请命令序列号
- *      targetBuilder()
- *          .setCmdSn(cmdSn) /
- *          .setDeviceTarget(deviceId) // 指定目标设备ID
- *          .setAckChannel(ackChannel) 
- *          .build()
- *          .reset(); // 执行reset命令
+ *    targetBuilder()
+ *        .setCmdSn(cmdSn) // 设置命令序列号
+ *        .setDeviceTarget(deviceId) // 指定目标设备ID
+ *        .setAckChannel(ackChannel) // 设置命令响应通道
+ *        .build()
+ *        .reset(null); // 执行reset命令,立即执行
+ *    // 如果同时设置命令响应处理对象,请调用 reset(Long ,IAckAdapter&lt;Void&gt; )
  * </pre>
  * @author guyadong
  *
@@ -153,26 +155,27 @@ public class CmdManager {
         public CmdBuilder setDeviceGroupTarget(int... target){
             return setDeviceGroupTarget(Ints.asList(target));
         }
-        /** 参见 {@link DeviceInstruction#setCmdSn(long)} */
+        /** 指定命令序列号,参见 {@link DeviceInstruction#setCmdSn(long)} */
         public CmdBuilder setCmdSn(long cmdSn) {
             this.cmdSn = cmdSn;
             return this;
         }
         /** 
-         * 参见 {@link DeviceInstruction#setCmdSn(long)}
+         * 指定提供命令序列号的{@code Supplier}实例
          * @see {@link IFaceLogClient#getAckChannelSupplier(Token)}
          */
         public CmdBuilder setCmdSn(Supplier<Long> cmdSnSupplier) {
             this.cmdSn = cmdSnSupplier.get().longValue();
             return this;
         }
-        /** 参见 {@link DeviceInstruction#setAckChannel(String)} */
+        /** 
+         * 指定命令响应通道,参见 {@link DeviceInstruction#setAckChannel(String)} */
         public CmdBuilder setAckChannel(String ackChannel){
             this.ackChannel = ackChannel;
             return this;
         }
         /** 
-         * 参见 {@link DeviceInstruction#setAckChannel(String)}
+         * 指定提供命令响应通道的{@code Supplier}实例,
          * @see {@link IFaceLogClient#getAckChannelSupplier(Token)}
          */
         public CmdBuilder setAckChannel(Supplier<String> ackChannelSupplier){
@@ -221,6 +224,7 @@ public class CmdManager {
         TLS_BUILDER.remove();
         return this;
     }
+    /** 检查是否创建了{@CmdBuilder}对象没有则抛出异常 */
     protected static final CmdBuilder checkTlsAvailable(){
         return checkNotNull(TLS_BUILDER.get(),
                 "not defined target,please call method targetBuilder(),and set target info");
@@ -257,14 +261,17 @@ public class CmdManager {
     /**
      * 设备命令 <br>
      * 设置参数,可用于运行时修改参数<br>
-     * @param adapter 命令响应处理对象,不可为{@code null}
+     * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
+     * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
+     * 该方法要求必须指定命令响应通道,参见{@link CmdBuilder#setAckChannel(String)},{@link CmdBuilder#setAckChannel(Supplier)}
+     * 
      * @param key 参数名
-     * @param adapter 命令响应处理对象,不可为{@code null}
      * @param value 参数值
-     *
+     * @param adapter 命令响应处理对象,不可为{@code null}
      */
-    public void parameter(IAckAdapter<Void> adapter,String key,String value){
+    public void parameter(String key,String value,IAckAdapter<Void> adapter){
         CmdBuilder builder = checkTlsAvailable();
+        checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(new Channel<Ack<Void>>(builder.ackChannel){}
         						.setAdapter(checkNotNull(adapter,"adapter is null")));
         adapter.setClientNum(parameter(key,value));
@@ -298,12 +305,16 @@ public class CmdManager {
     /**
      * 设备命令 <br>
      * 设置一组参数,可用于需要重启有效的参数<br>
-     * @param adapter 命令响应处理对象,不可为{@code null}
+     * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
+     * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
+     * 该方法要求必须指定命令响应通道,参见{@link CmdBuilder#setAckChannel(String)},{@link CmdBuilder#setAckChannel(Supplier)}
+     * 
      * @param properties 参数配置对象, {@code 参数名(key)->参数值(value)映射}
-     *
+     * @param adapter 命令响应处理对象,不可为{@code null}
      */
-    public void config(IAckAdapter<Void> adapter,Map<String,String> properties){
+    public void config(Map<String,String> properties,IAckAdapter<Void> adapter){
         CmdBuilder builder = checkTlsAvailable();
+        checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(new Channel<Ack<Void>>(builder.ackChannel){}
         						.setAdapter(checkNotNull(adapter,"adapter is null")));
         adapter.setClientNum(config(properties));
@@ -337,12 +348,16 @@ public class CmdManager {
     /**
      * 设备命令 <br>
      * 读取设备状态参数<br>
-     * @param adapter 命令响应处理对象,不可为{@code null}
+     * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
+     * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
+     * 该方法要求必须指定命令响应通道,参见{@link CmdBuilder#setAckChannel(String)},{@link CmdBuilder#setAckChannel(Supplier)}
+     * 
      * @param name 需要报告状态的参数名
-     *
+     * @param adapter 命令响应处理对象,不可为{@code null}
      */
-    public void status(IAckAdapter<Object> adapter,String name){
+    public void status(String name,IAckAdapter<Object> adapter){
         CmdBuilder builder = checkTlsAvailable();
+        checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(new Channel<Ack<Object>>(builder.ackChannel){}
         						.setAdapter(checkNotNull(adapter,"adapter is null")));
         adapter.setClientNum(status(name));
@@ -376,12 +391,16 @@ public class CmdManager {
     /**
      * 设备命令 <br>
      * 设备状态报告,返回一组状态参数<br>
-     * @param adapter 命令响应处理对象,不可为{@code null}
+     * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
+     * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
+     * 该方法要求必须指定命令响应通道,参见{@link CmdBuilder#setAckChannel(String)},{@link CmdBuilder#setAckChannel(Supplier)}
+     * 
      * @param names 需要报告状态的参数名列表
-     *
+     * @param adapter 命令响应处理对象,不可为{@code null}
      */
-    public void report(IAckAdapter<Map<String,Object>> adapter,List<String> names){
+    public void report(List<String> names,IAckAdapter<Map<String,Object>> adapter){
         CmdBuilder builder = checkTlsAvailable();
+        checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(new Channel<Ack<Map<String,Object>>>(builder.ackChannel){}
         						.setAdapter(checkNotNull(adapter,"adapter is null")));
         adapter.setClientNum(report(names));
@@ -414,10 +433,15 @@ public class CmdManager {
     /**
      * 设备命令 <br>
      * 获取设备版本号<br>
-     *
+     * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
+     * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
+     * 该方法要求必须指定命令响应通道,参见{@link CmdBuilder#setAckChannel(String)},{@link CmdBuilder#setAckChannel(Supplier)}
+     * 
+     * @param adapter 命令响应处理对象,不可为{@code null}
      */
     public void version(IAckAdapter<String> adapter){
         CmdBuilder builder = checkTlsAvailable();
+        checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(new Channel<Ack<String>>(builder.ackChannel){}
         						.setAdapter(checkNotNull(adapter,"adapter is null")));
         adapter.setClientNum(version());
@@ -451,12 +475,16 @@ public class CmdManager {
     /**
      * 设备命令 <br>
      * 设置设备工作状态<br>
-     * @param adapter 命令响应处理对象,不可为{@code null}
+     * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
+     * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
+     * 该方法要求必须指定命令响应通道,参见{@link CmdBuilder#setAckChannel(String)},{@link CmdBuilder#setAckChannel(Supplier)}
+     * 
      * @param enable {@code true}:工作状态,否则为非工作状态
-     *
+     * @param adapter 命令响应处理对象,不可为{@code null}
      */
-    public void enable(IAckAdapter<Void> adapter,Boolean enable){
+    public void enable(Boolean enable,IAckAdapter<Void> adapter){
         CmdBuilder builder = checkTlsAvailable();
+        checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(new Channel<Ack<Void>>(builder.ackChannel){}
         						.setAdapter(checkNotNull(adapter,"adapter is null")));
         adapter.setClientNum(enable(enable));
@@ -490,12 +518,16 @@ public class CmdManager {
     /**
      * 设备命令 <br>
      * 返回设备工作状态<br>
-     * @param adapter 命令响应处理对象,不可为{@code null}
+     * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
+     * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
+     * 该方法要求必须指定命令响应通道,参见{@link CmdBuilder#setAckChannel(String)},{@link CmdBuilder#setAckChannel(Supplier)}
+     * 
      * @param message 工作状态附加消息,比如"设备维修,禁止通行"
-     *
+     * @param adapter 命令响应处理对象,不可为{@code null}
      */
-    public void isEnable(IAckAdapter<Boolean> adapter,String message){
+    public void isEnable(String message,IAckAdapter<Boolean> adapter){
         CmdBuilder builder = checkTlsAvailable();
+        checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(new Channel<Ack<Boolean>>(builder.ackChannel){}
         						.setAdapter(checkNotNull(adapter,"adapter is null")));
         adapter.setClientNum(isEnable(message));
@@ -529,12 +561,16 @@ public class CmdManager {
     /**
      * 设备命令 <br>
      * 设备重启<br>
-     * @param adapter 命令响应处理对象,不可为{@code null}
+     * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
+     * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
+     * 该方法要求必须指定命令响应通道,参见{@link CmdBuilder#setAckChannel(String)},{@link CmdBuilder#setAckChannel(Supplier)}
+     * 
      * @param schedule 指定执行时间(unix time[秒]),为{@code null}立即执行
-     *
+     * @param adapter 命令响应处理对象,不可为{@code null}
      */
-    public void reset(IAckAdapter<Void> adapter,Long schedule){
+    public void reset(Long schedule,IAckAdapter<Void> adapter){
         CmdBuilder builder = checkTlsAvailable();
+        checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(new Channel<Ack<Void>>(builder.ackChannel){}
         						.setAdapter(checkNotNull(adapter,"adapter is null")));
         adapter.setClientNum(reset(schedule));
@@ -568,12 +604,16 @@ public class CmdManager {
     /**
      * 设备命令 <br>
      * 设备与服务器时间同步<br>
-     * @param adapter 命令响应处理对象,不可为{@code null}
+     * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
+     * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
+     * 该方法要求必须指定命令响应通道,参见{@link CmdBuilder#setAckChannel(String)},{@link CmdBuilder#setAckChannel(Supplier)}
+     * 
      * @param unixTimestamp 服务器 unix 时间[秒],参见<a href = "https://en.wikipedia.org/wiki/Unix_time">Unix time</a>
-     *
+     * @param adapter 命令响应处理对象,不可为{@code null}
      */
-    public void time(IAckAdapter<Void> adapter,Long unixTimestamp){
+    public void time(Long unixTimestamp,IAckAdapter<Void> adapter){
         CmdBuilder builder = checkTlsAvailable();
+        checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(new Channel<Ack<Void>>(builder.ackChannel){}
         						.setAdapter(checkNotNull(adapter,"adapter is null")));
         adapter.setClientNum(time(unixTimestamp));
@@ -611,16 +651,18 @@ public class CmdManager {
     /**
      * 设备命令 <br>
      * 更新版本<br>
-     * @param adapter 命令响应处理对象,不可为{@code null}
+     * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
+     * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
+     * 该方法要求必须指定命令响应通道,参见{@link CmdBuilder#setAckChannel(String)},{@link CmdBuilder#setAckChannel(Supplier)}
+     * 
      * @param url 更新版本的位置
-     * @param adapter 命令响应处理对象,不可为{@code null}
      * @param version 版本号
-     * @param adapter 命令响应处理对象,不可为{@code null}
      * @param schedule 指定执行时间(unix time[秒]),为{@code null}立即执行
-     *
+     * @param adapter 命令响应处理对象,不可为{@code null}
      */
-    public void update(IAckAdapter<Void> adapter,URL url,String version,Long schedule){
+    public void update(URL url,String version,Long schedule,IAckAdapter<Void> adapter){
         CmdBuilder builder = checkTlsAvailable();
+        checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(new Channel<Ack<Void>>(builder.ackChannel){}
         						.setAdapter(checkNotNull(adapter,"adapter is null")));
         adapter.setClientNum(update(url,version,schedule));
@@ -656,14 +698,17 @@ public class CmdManager {
     /**
      * 设备命令 <br>
      * 设置空闲时显示的消息<br>
-     * @param adapter 命令响应处理对象,不可为{@code null}
+     * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
+     * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
+     * 该方法要求必须指定命令响应通道,参见{@link CmdBuilder#setAckChannel(String)},{@link CmdBuilder#setAckChannel(Supplier)}
+     * 
      * @param message 发送到设备的消息
-     * @param adapter 命令响应处理对象,不可为{@code null}
      * @param duration 持续时间[分钟],为{@code null}一直显示
-     *
+     * @param adapter 命令响应处理对象,不可为{@code null}
      */
-    public void idleMessage(IAckAdapter<Void> adapter,String message,Long duration){
+    public void idleMessage(String message,Long duration,IAckAdapter<Void> adapter){
         CmdBuilder builder = checkTlsAvailable();
+        checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(new Channel<Ack<Void>>(builder.ackChannel){}
         						.setAdapter(checkNotNull(adapter,"adapter is null")));
         adapter.setClientNum(idleMessage(message,duration));
@@ -705,20 +750,20 @@ public class CmdManager {
     /**
      * 设备命令 <br>
      * 为指定人员通过时显示的临时消息<br>
-     * @param adapter 命令响应处理对象,不可为{@code null}
+     * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
+     * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
+     * 该方法要求必须指定命令响应通道,参见{@link CmdBuilder#setAckChannel(String)},{@link CmdBuilder#setAckChannel(Supplier)}
+     * 
      * @param message 发送到设备的消息
-     * @param adapter 命令响应处理对象,不可为{@code null}
      * @param id 人员/人员组ID
-     * @param adapter 命令响应处理对象,不可为{@code null}
      * @param group 为{@code true}时{@code id}参数为人员组ID
-     * @param adapter 命令响应处理对象,不可为{@code null}
      * @param onceOnly 为{@code true}时只显示一次
-     * @param adapter 命令响应处理对象,不可为{@code null}
      * @param duration 持续时间[分钟],为{@code null}一直显示
-     *
+     * @param adapter 命令响应处理对象,不可为{@code null}
      */
-    public void personMessage(IAckAdapter<Void> adapter,String message,Integer id,Boolean group,Boolean onceOnly,Long duration){
+    public void personMessage(String message,Integer id,Boolean group,Boolean onceOnly,Long duration,IAckAdapter<Void> adapter){
         CmdBuilder builder = checkTlsAvailable();
+        checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(new Channel<Ack<Void>>(builder.ackChannel){}
         						.setAdapter(checkNotNull(adapter,"adapter is null")));
         adapter.setClientNum(personMessage(message,id,group,onceOnly,duration));
@@ -754,14 +799,17 @@ public class CmdManager {
     /**
      * 设备命令 <br>
      * 自定义命令,命令名及命令参数由项目自定义<br>
-     * @param adapter 命令响应处理对象,不可为{@code null}
+     * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
+     * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
+     * 该方法要求必须指定命令响应通道,参见{@link CmdBuilder#setAckChannel(String)},{@link CmdBuilder#setAckChannel(Supplier)}
+     * 
      * @param cmdName 自定义命令名称
-     * @param adapter 命令响应处理对象,不可为{@code null}
      * @param parameters 自定义参数表
-     *
+     * @param adapter 命令响应处理对象,不可为{@code null}
      */
-    public void custom(IAckAdapter<Object> adapter,String cmdName,Map<String,Object> parameters){
+    public void custom(String cmdName,Map<String,Object> parameters,IAckAdapter<Object> adapter){
         CmdBuilder builder = checkTlsAvailable();
+        checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(new Channel<Ack<Object>>(builder.ackChannel){}
         						.setAdapter(checkNotNull(adapter,"adapter is null")));
         adapter.setClientNum(custom(cmdName,parameters));

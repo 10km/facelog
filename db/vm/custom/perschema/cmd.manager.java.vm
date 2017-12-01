@@ -21,6 +21,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 
+import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -40,12 +41,13 @@ import gu.simplemq.redis.RedisSubscriber;
  * <pre>
  *    String ackChannel = iFaceLogClient.applyAckChannel(myToken); // 向facelog服务申请命令响应通道
  *    long cmdSn = iFaceLogClient.applyCmdSn(myToken); // 向facelog服务申请命令序列号
- *      targetBuilder()
- *          .setCmdSn(cmdSn) /
- *          .setDeviceTarget(deviceId) // 指定目标设备ID
- *          .setAckChannel(ackChannel) 
- *          .build()
- *          .reset(); // 执行reset命令
+ *    targetBuilder()
+ *        .setCmdSn(cmdSn) // 设置命令序列号
+ *        .setDeviceTarget(deviceId) // 指定目标设备ID
+ *        .setAckChannel(ackChannel) // 设置命令响应通道
+ *        .build()
+ *        .reset(null); // 执行reset命令,立即执行
+ *    // 如果同时设置命令响应处理对象,请调用 reset(Long ,IAckAdapter&lt;Void&gt; )
  * </pre>
  * @author guyadong
  *
@@ -157,26 +159,27 @@ public class CmdManager {
         public CmdBuilder setDeviceGroupTarget(int... target){
             return setDeviceGroupTarget(Ints.asList(target));
         }
-        /** 参见 {@link DeviceInstruction${esc.hash}setCmdSn(long)} */
+        /** 指定命令序列号,参见 {@link DeviceInstruction${esc.hash}setCmdSn(long)} */
         public CmdBuilder setCmdSn(long cmdSn) {
             this.cmdSn = cmdSn;
             return this;
         }
         /** 
-         * 参见 {@link DeviceInstruction${esc.hash}setCmdSn(long)}
+         * 指定提供命令序列号的{@code Supplier}实例
          * @see {@link IFaceLogClient${esc.hash}getAckChannelSupplier(Token)}
          */
         public CmdBuilder setCmdSn(Supplier<Long> cmdSnSupplier) {
             this.cmdSn = cmdSnSupplier.get().longValue();
             return this;
         }
-        /** 参见 {@link DeviceInstruction${esc.hash}setAckChannel(String)} */
+        /** 
+         * 指定命令响应通道,参见 {@link DeviceInstruction${esc.hash}setAckChannel(String)} */
         public CmdBuilder setAckChannel(String ackChannel){
             this.ackChannel = ackChannel;
             return this;
         }
         /** 
-         * 参见 {@link DeviceInstruction${esc.hash}setAckChannel(String)}
+         * 指定提供命令响应通道的{@code Supplier}实例,
          * @see {@link IFaceLogClient${esc.hash}getAckChannelSupplier(Token)}
          */
         public CmdBuilder setAckChannel(Supplier<String> ackChannelSupplier){
@@ -225,6 +228,7 @@ public class CmdManager {
         TLS_BUILDER.remove();
         return this;
     }
+    /** 检查是否创建了{@CmdBuilder}对象没有则抛出异常 */
     protected static final CmdBuilder checkTlsAvailable(){
         return checkNotNull(TLS_BUILDER.get(),
                 "not defined target,please call method targetBuilder(),and set target info");
@@ -270,14 +274,18 @@ public class CmdManager {
     }
     /**
      * 设备命令 <br>
-     * $value['desc']<br>#join($params '
-     * @param adapter 命令响应处理对象,不可为{@code null}
+     * $value['desc']<br>
+     * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
+     * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
+     * 该方法要求必须指定命令响应通道,参见{@link CmdBuilder#setAckChannel(String)},{@link CmdBuilder#setAckChannel(Supplier)}
+     * #join($params '
      * @param $e.key $!{e.value[1]}' '')
 
-     *
+     * @param adapter 命令响应处理对象,不可为{@code null}
      */
-    public void ${key}(IAckAdapter<$returnParamType> adapter#join($params ',$e.value[0] $e.key' '')){
+    public void ${key}(#join($params '$e.value[0] $e.key,' '')IAckAdapter<$returnParamType> adapter){
         CmdBuilder builder = checkTlsAvailable();
+        checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(new Channel<Ack<$returnParamType>>(builder.ackChannel){}
         						.setAdapter(checkNotNull(adapter,"adapter is null")));
         adapter.setClientNum(${key}(#join($params '$e.key' ',')));

@@ -14,7 +14,16 @@ import gu.simplemq.exceptions.SmqUnsubscribeException;
 import net.gdface.facelog.client.Ack.Status;
 
 /**
- * 命令响应{@link Ack}处理接口
+ * 命令响应{@link Ack}处理接口<br>
+ * 设备命令发送到设备端,设备端执行命令后会返回命令响应({@link Ack},也就是命令执行结果)给发送端。
+ * 该接口就是命令发送端用于处理收到的命令响应的接口。<br>
+ * 应用项目应根据需要实现对应命令响应的业务。建议继承{@link BaseAdapter},因为{@link BaseAdapter}实现了所有的接口方法，
+ * 应用项目只需要重写{@link BaseAdapter#onSubscribe(Ack)}方法就可以了<br>
+ * 因为设备命令发送功能可以支持同时向多个设备或设备组发送命令,所以一条设备命令发送会收到多个设备端的响应,
+ * 虽然发送方可以知道知道收到命令的设备端数量(参见{@link CmdManager}的设备命令方法)，但系统并不能保证所有收到命令的设备都会返回命令响应,
+ * 所以{@link #setExpire(long)}用于指定超时参数,超过指定时间还没有收到所有命令响应,
+ * 本机的命令响应监控线程{@link AckMonitor}也会产生一个虚拟的{@link Ack}消息,送给{@code IAckAdapter}接口,
+ * 参见{@link BaseAdapter#onSubscribe(Ack)},{@link Ack.Status#TIMEOUT}
  * @author guyadong
  *
  * @param <T> 设备命令响应返回数据类型
@@ -91,7 +100,8 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
         }
 
         /**
-         * 只能被调用一次,否则第二次会抛出异常
+         * 只能被调用一次,否则第二次会抛出异常,
+         * 设备命令发送后，REDIS会返回收到设备命令的设备端数量
          */
         @Override
         public BaseAdapter<T> setClientNum(long clientNum){

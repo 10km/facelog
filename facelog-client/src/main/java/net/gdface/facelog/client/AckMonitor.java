@@ -2,12 +2,12 @@ package net.gdface.facelog.client;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Predicate;
-
 import gu.simplemq.Channel;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.JedisPoolLazy;
@@ -15,16 +15,42 @@ import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisSubscriber;
 
 /**
+ * 设备命令响应对象监控类<br>
+ * 处理命令响应的{@link IAckAdapter}对象只是一个被动接收订阅消息的处理器,
+ * 设备命令发送后,发送端并不一定能保证收到所有命令接收端的响应{@link Ack},
+ * 如果没有外部协助，{@link IAckAdapter}对象无法主动知道自己已经等待超时。
+ * 此类的作用就是定时检查在{@link RedisSubscriber}注册的每个{@link IAckAdapter}对象是否已经超时，
+ * 如果超时，就将这个{@link IAckAdapter}对象从{@link RedisSubscriber}注销，
+ * 并向这个对象发送带有超时错误的{@code Ack}。参见 {@link #timeoutCleaner}的处理逻辑。
+ * {@link AckMonitor}不提供公开的构造函数，对于每一个{@link JedisPoolLazy}只会有一个{@link AckMonitor}实例。
+ * 通过调用 {@link AckMonitor#getInstance(JedisPoolLazy)}获取对应的实例。
+ * 应用项目获取 {@link AckMonitor}实例后需要调用 {@link #startCleaner(ScheduledExecutorService)}方法启动任务线程后，
+ * {@link AckMonitor}实例才开始工作。
+ * 
  * @author guyadong
  *
  */
 public class AckMonitor {
+	
+	private static final ConcurrentHashMap<JedisPoolLazy, AckMonitor> MONITOR_INSTANCE = 
+			new ConcurrentHashMap<JedisPoolLazy, AckMonitor>();
+    /**
+     * 获取{@code poolLazy}对应的{@code AckMonitor}实例
+     * @param poolLazy 不可为{@code null}
+     * @return
+     */
+    public AckMonitor getInstance(JedisPoolLazy poolLazy){
+    	if(!MONITOR_INSTANCE.containsKey(checkNotNull(poolLazy))){
+    		MONITOR_INSTANCE.putIfAbsent(poolLazy, new AckMonitor(poolLazy));
+    	}
+    	return MONITOR_INSTANCE.get(poolLazy);
+    }
 	/** 默认检查周期(毫秒) */
 	public static long DEFAULT_PERIOD = 20*1000L;
 	private long periodMills = DEFAULT_PERIOD;
 	private final RedisSubscriber subscriber;
 
-	public AckMonitor(JedisPoolLazy poolLazy) {
+	protected AckMonitor(JedisPoolLazy poolLazy) {
 		this.subscriber = RedisFactory.getSubscriber(checkNotNull(poolLazy));
 	}
 	/**
@@ -33,10 +59,10 @@ public class AckMonitor {
 	 * 如果超时则注销频道,同时向{@link Ack}对象发送超时错误{@link Ack.Status#TIMEOUT}
 	 */
 	private final Predicate<Channel<?>> timeoutCleaner = new Predicate<Channel<?>>(){
-		@SuppressWarnings("unchecked")
 		@Override
 		public boolean apply(Channel<?> input) {
 			if(input.getAdapter() instanceof IAckAdapter){
+				@SuppressWarnings("unchecked")
 				IAckAdapter<Object> adapter = (IAckAdapter<Object>)input.getAdapter();
 				if (System.currentTimeMillis() >= adapter.getExpire()) {
 					try{
@@ -65,6 +91,8 @@ public class AckMonitor {
 	/**
 	 * 启动定期清除超时响应任务,参见{@link #timerTask}
 	 * @param scheduleExecutorService 执行定时任务的线程池对象
+	 * @return
+	 * @see ScheduledExecutorService#scheduleAtFixedRate(Runnable, long, long, TimeUnit)
 	 * @return
 	 */
 	public ScheduledFuture<?> startCleaner(ScheduledExecutorService scheduleExecutorService) {
