@@ -2,12 +2,13 @@ package net.gdface.facelog.client;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.base.Predicate;
+
+import gu.simplemq.Channel;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
@@ -20,54 +21,58 @@ import gu.simplemq.redis.RedisSubscriber;
 public class AckMonitor {
 	/** 默认检查周期(毫秒) */
 	public static long DEFAULT_PERIOD = 20*1000L;
-	private final Set<IAckAdapter<?>> ackSubscribers = new HashSet<IAckAdapter<?>>();
 	private long periodMills = DEFAULT_PERIOD;
 	private final RedisSubscriber subscriber;
 
-	AckMonitor(JedisPoolLazy poolLazy) {
+	public AckMonitor(JedisPoolLazy poolLazy) {
 		this.subscriber = RedisFactory.getSubscriber(checkNotNull(poolLazy));
 	}
-
-	public boolean add(IAckAdapter<?> adapter) {
-		synchronized(this){
-			return ackSubscribers.add(checkNotNull(adapter,"adapter is null"));
-		}
-	}
-	/** 清理线程,定期清理超时对象 */
-	private Runnable task = new Runnable(){
-		@SuppressWarnings({ "rawtypes", "unchecked" })
+	/**
+	 * {@link Predicate}实例,用于过滤所有超时等待的{@link Ack}对象<br>
+	 * 检查正在订阅频道的{@link Ack}对象是否等待超时<br>
+	 * 如果超时则注销频道,同时向{@link Ack}对象发送超时错误{@link Ack.Status#TIMEOUT}
+	 */
+	private final Predicate<Channel<?>> timeoutCleaner = new Predicate<Channel<?>>(){
+		@SuppressWarnings("unchecked")
 		@Override
-		public void run() {
-			long time = System.currentTimeMillis();
-			synchronized(AckMonitor.this){
-				// 遍历所有对象判断是否有超时的
-				for(Iterator<IAckAdapter<?>> itor = ackSubscribers.iterator();itor.hasNext();){
-					IAckAdapter adapter = itor.next();
-					String channel = adapter.getChannel();
-					if(null == subscriber.getChannel(channel)){
-						// 未注册频道直接删除
-						itor.remove();
-						continue;
+		public boolean apply(Channel<?> input) {
+			if(input.getAdapter() instanceof IAckAdapter){
+				IAckAdapter<Object> adapter = (IAckAdapter<Object>)input.getAdapter();
+				if (System.currentTimeMillis() >= adapter.getExpire()) {
+					try{
+						// 通知执行器命令超时
+						adapter.onSubscribe(new Ack<Object>().setStatus(Ack.Status.TIMEOUT));
+					}catch(SmqUnsubscribeException e){								
+					}catch(RuntimeException e){
+						e.printStackTrace();
 					}
-					if (time >= adapter.getExpire()) {
-						// 判断超时则取消订阅
-						subscriber.unregister(channel);
-						itor.remove();
-						try{
-							// 通知执行器命令超时
-							adapter.onSubscribe(new Ack().setStatus(Ack.Status.TIMEOUT));
-						}catch(SmqUnsubscribeException e){								
-						}catch(RuntimeException e){
-							e.printStackTrace();
-						}
-					}
+					// 注销当前频道
+					return true;
 				}
 			}
+			return false;
 		}};
-
-	public AckMonitor startCleaner(ScheduledExecutorService scheduleExecutorService) {
-		scheduleExecutorService.scheduleAtFixedRate(task, periodMills, periodMills, TimeUnit.MILLISECONDS);
-		return this;
+	/**
+	 * 定时任务对象执行,对注册的{@link Ack}进行超时检查并清理
+	 * @see #timeoutCleaner
+	 * @see RedisSubscriber#unregister(Predicate)
+	 */
+	private final Runnable timerTask = new Runnable(){
+		@Override
+		public void run() {
+			subscriber.unregister(timeoutCleaner);
+		}};
+	/**
+	 * 启动定期清除超时响应任务,参见{@link #timerTask}
+	 * @param scheduleExecutorService 执行定时任务的线程池对象
+	 * @return
+	 */
+	public ScheduledFuture<?> startCleaner(ScheduledExecutorService scheduleExecutorService) {
+		return scheduleExecutorService.scheduleAtFixedRate(
+				timerTask, 
+				periodMills,
+				periodMills,
+				TimeUnit.MILLISECONDS);
 	}
 
 	/**
@@ -93,5 +98,14 @@ public class AckMonitor {
 			return setPeriodMills(TimeUnit.MILLISECONDS.convert(period, checkNotNull(unit,"unit is null")));
 		}
 		return this;
+	}
+
+	/**
+	 * 返回定时任务对象,如果不希望用{@link #startCleaner(ScheduledExecutorService)}方法开启定时任务,
+	 * 应用项目可以获取此方法自己实现定时任务
+	 * @return
+	 */
+	public Runnable getTimerTask() {
+		return timerTask;
 	}
 }

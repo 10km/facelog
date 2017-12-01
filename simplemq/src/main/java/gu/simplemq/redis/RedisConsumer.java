@@ -75,10 +75,9 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 		return customRunnable;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public Set<Channel> register(Channel... channels) {
-		Set<Channel> chSet = register.register(channels);
+	public Set<Channel<?>> register(Channel<?>... channels) {
+		Set<Channel<?>> chSet = register.register(channels);
 		this.open();
 		return chSet;
 	}
@@ -88,9 +87,8 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 		return register.unregister(channels);
 	}
 	
-	@SuppressWarnings("rawtypes")
 	@Override
-	public Set<String> unregister(Channel... channels) {
+	public Set<String> unregister(Channel<?>... channels) {
 		return register.unregister(channels);
 	}
 

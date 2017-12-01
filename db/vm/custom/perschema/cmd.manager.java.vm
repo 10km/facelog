@@ -12,7 +12,7 @@ $codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
 package $extensionPkg;
 
 import ${thriftPackage}.MQParam;
-
+import ${thriftPackage}.Token;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +59,7 @@ public class CmdManager {
      * 构造方法
      * @param poolLazy 
      * @param cmdDispatcher 
-     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient${esc.hash}getRedisParameters(net.gdface.facelog.client.thrift.Token)}
+     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient${esc.hash}getRedisParameters(Token)}
      */
     protected CmdManager(JedisPoolLazy poolLazy,
             CmdDispatcher cmdDispatcher,
@@ -76,7 +76,7 @@ public class CmdManager {
      * 构造方法
      * @param poolLazy redis 连接池对象
      * @param adapter 应用程序执行设备命令的对象
-     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient${esc.hash}getRedisParameters(net.gdface.facelog.client.thrift.Token)}
+     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient${esc.hash}getRedisParameters(Token)}
      * @param deviceId 当前设备ID
      * @param groupIdSupplier 参见 {@link CmdDispatcher${esc.hash}CmdDispatcher(int, Supplier)}
      */
@@ -162,9 +162,25 @@ public class CmdManager {
             this.cmdSn = cmdSn;
             return this;
         }
+        /** 
+         * 参见 {@link DeviceInstruction${esc.hash}setCmdSn(long)}
+         * @see {@link IFaceLogClient${esc.hash}getAckChannelSupplier(Token)}
+         */
+        public CmdBuilder setCmdSn(Supplier<Long> cmdSnSupplier) {
+            this.cmdSn = cmdSnSupplier.get().longValue();
+            return this;
+        }
         /** 参见 {@link DeviceInstruction${esc.hash}setAckChannel(String)} */
         public CmdBuilder setAckChannel(String ackChannel){
             this.ackChannel = ackChannel;
+            return this;
+        }
+        /** 
+         * 参见 {@link DeviceInstruction${esc.hash}setAckChannel(String)}
+         * @see {@link IFaceLogClient${esc.hash}getAckChannelSupplier(Token)}
+         */
+        public CmdBuilder setAckChannel(Supplier<String> ackChannelSupplier){
+            this.ackChannel = ackChannelSupplier.get();
             return this;
         }
         /** 数据有效性验证 */
@@ -218,6 +234,11 @@ public class CmdManager {
 #set($key = $entry.key)
 #set($value = $entry.value)
 #set($params = $value['params'].entrySet())
+#if($entry.value['return']=='void')
+#set($returnParamType ='Void')
+#else
+#set($returnParamType =$entry.value['return'])
+#end
     /**
      * 设备命令 <br>
      * $value['desc']<br>#join($params '
@@ -246,6 +267,20 @@ public class CmdManager {
                 removeTlsTarget(); 
             }
         }
+    }
+    /**
+     * 设备命令 <br>
+     * $value['desc']<br>#join($params '
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param $e.key $!{e.value[1]}' '')
+
+     *
+     */
+    public void ${key}(IAckAdapter<$returnParamType> adapter#join($params ',$e.value[0] $e.key' '')){
+        CmdBuilder builder = checkTlsAvailable();
+        subscriber.register(new Channel<Ack<$returnParamType>>(builder.ackChannel){}
+        						.setAdapter(checkNotNull(adapter,"adapter is null")));
+        adapter.setClientNum(${key}(#join($params '$e.key' ',')));
     }
 #end
 }

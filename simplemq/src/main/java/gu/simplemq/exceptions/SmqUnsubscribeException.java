@@ -11,4 +11,18 @@ import gu.simplemq.IMessageDispatcher;
  *
  */
 public class SmqUnsubscribeException extends SmqException{
-	private static final long serialVersionUID = 1L;}
+	private static final long serialVersionUID = 1L;
+	/** 是否注销频道 */
+	public final boolean unregister;
+	public SmqUnsubscribeException() {
+		this(false);
+	}
+	/**
+	 * @param unregister 是否注销订阅频道
+	 */
+	public SmqUnsubscribeException(boolean unregister) {
+		super();
+		this.unregister = unregister;
+	}
+	
+}

@@ -24,22 +24,18 @@ public abstract class AbstractSubcriber extends ChannelDispatcher implements Aut
 
 	@Override
 	public String[] subscribe(String... channels) {
-		synchronized (this) {
-			channels = super.subscribe(channels);
-			if (0 < channels.length){
-				this.doSubscribe(channels);
-			}
-			return channels;
+		channels = super.subscribe(channels);
+		if (0 < channels.length){
+			this.doSubscribe(channels);
 		}
+		return channels;
 	}
 	
 	@Override
 	public String[] unsubscribe(String... channels){
-		synchronized (this) {
-			channels = super.unsubscribe(channels);
-			doUnsubscribe(channels);
-			return channels;
-		}
+		channels = super.unsubscribe(channels);
+		doUnsubscribe(channels);
+		return channels;
 	}
 
 	@Override

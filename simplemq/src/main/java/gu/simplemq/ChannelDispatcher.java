@@ -2,20 +2,24 @@ package gu.simplemq;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import gu.simplemq.exceptions.SmqTypeException;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.json.BaseJsonEncoder;
 import gu.simplemq.utils.CommonUtils;
+import gu.simplemq.utils.Synchronizer;
+import gu.simplemq.utils.Synchronizer.ReadWriteSynchronizer;;
 
 /**
  * (消息)频道订阅对象({@link Channel})管理类,负责频道的注册/注销,订阅/取消,消息数据解析及分发
@@ -29,22 +33,26 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 	private BaseJsonEncoder encoder = BaseJsonEncoder.getEncoder();
 
 	/** 注册的频道对象 */
-	@SuppressWarnings("rawtypes")
-	protected final Map<String, Channel> channelSubs = Collections.synchronizedMap(new LinkedHashMap<String, Channel>());
+	protected final LinkedHashMap<String, Channel<?>> channelSubs = new LinkedHashMap<String, Channel<?>>();
 	/** 订阅的频道名 */
-	private final Set<String> subChannelSet=Collections.synchronizedSet(new LinkedHashSet<String>());
-
+	private final Set<String> subChannelSet= new LinkedHashSet<String>();
+	private final Synchronizer sync = new ReadWriteSynchronizer();
 	public ChannelDispatcher() {
 	}
 
-	public ChannelDispatcher(@SuppressWarnings("rawtypes") Channel...channels) {
+	public ChannelDispatcher(Channel<?>...channels) {
 		register(channels);
 	}
 	
-	public ChannelDispatcher(@SuppressWarnings("rawtypes") Collection<Channel> channels) {
+	public ChannelDispatcher(Collection<Channel<?>> channels) {
 		this(null ==channels?null:channels.toArray(new Channel[0]));
 	}
-	
+
+	/**
+	 * @param channels
+	 * @return
+	 * @see #registedOnlyAsSet(String...)
+	 */
 	public String[] registedOnly(String... channels) {
 		return registedOnlyAsSet(channels).toArray(new String[0]);
 	}
@@ -55,30 +63,32 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 	 * @return
 	 */
 	public HashSet<String> registedOnlyAsSet(String... channels) {
-		HashSet<String> chSet = new HashSet<String>(CommonUtils.cleanEmptyAsList(channels));
-		if (!chSet.isEmpty()){
-			chSet.retainAll(channelSubs.keySet());
+		sync.beginRead();
+		try{
+			HashSet<String> chSet = new HashSet<String>(CommonUtils.cleanEmptyAsList(channels));
+			if (!chSet.isEmpty()){
+				chSet.retainAll(channelSubs.keySet());
+			}
+			return chSet;
+		}finally{
+			sync.endRead();
 		}
-		return chSet;
 	}
-	@SuppressWarnings("rawtypes")
-	public static String[] getChannelNames(Channel... channels) {
+	public static String[] getChannelNames(Channel<?>... channels) {
 		return getChannelNamesAsList(channels).toArray(new String[0]);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public static Set<String> getChannelNames(Collection<Channel> channels) {
+	public static Set<String> getChannelNames(Collection<Channel<?>> channels) {
 		HashSet<String> names = new HashSet<String>();
-		for (Channel ch : CommonUtils.cleanNullAsList(channels)) {
+		for (Channel<?> ch : CommonUtils.cleanNullAsList(channels)) {
 			names.add(ch.name);
 		}
 		return names;
 	}
 	
-	@SuppressWarnings("rawtypes")
-	public static Set<String> getChannelNamesAsList(Channel... channels) {
+	public static Set<String> getChannelNamesAsList(Channel<?>... channels) {
 		HashSet<String> names = new HashSet<String>();
-		for (Channel ch : CommonUtils.cleanNullAsList(channels)) {
+		for (Channel<?> ch : CommonUtils.cleanNullAsList(channels)) {
 			names.add(ch.name);
 		}
 		return names;
@@ -92,21 +102,24 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 	 */
 	protected String check(String name) throws SmqTypeException{return name;}
 	
-	@SuppressWarnings({ "rawtypes" })
 	@Override
-	public Set<Channel> register(Channel... channels) {
-		synchronized (this) {
-			HashSet<Channel> chSet = new HashSet<Channel>(CommonUtils.cleanNullAsList(channels));
-			for (Channel ch : chSet) {
+	public Set<Channel<?>> register(Channel<?>... channels) {
+		sync.beginWrite();
+		try {
+			HashSet<Channel<?>> chSet = new HashSet<Channel<?>>(CommonUtils.cleanNullAsList(channels));
+			for (Channel<?> ch : chSet) {
 				channelSubs.put(check(ch.name), ch);
 			}
 			subscribe(getChannelNames(chSet).toArray(new String[0]));
 			return chSet;
+		}finally{
+			sync.endWrite();;
 		}
 	}
 	@Override
 	public Set<String> unregister(String... channels) {
-		synchronized (this) {
+		sync.beginWrite();
+		try {
 			HashSet<String> chSet = new HashSet<String>(CommonUtils.cleanEmptyAsList(channels));
 			if(!chSet.isEmpty()){
 				unsubscribe(chSet.toArray(new String[0]));
@@ -115,6 +128,8 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 				}
 			}
 			return chSet;
+		}finally{
+			sync.endWrite();
 		}
 	}
 
@@ -127,29 +142,43 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Channel getChannel(String channel) {
-		return channelSubs.get(channel);
+		sync.beginRead();
+		try{
+			return channelSubs.get(channel);
+		}finally{
+			sync.endRead();
+		}
 	}
 
 	@Override
 	public void dispatch(String channel, String message) {
-		@SuppressWarnings("unchecked")
-		Channel<Object> ch=channelSubs.get(channel);
-		if(null !=ch){
-			try{
-				Object deserialized = this.encoder.fromJson(message,ch.type);
-				ch.onSubscribe(deserialized);
-			} catch (SmqUnsubscribeException e) {
-				unsubscribe(ch.name);
-				logger.info("unregister channel: {}",channel);
-			} 
-		}else{
-			logger.warn("unregistered channel: '{}'",channel);
+		sync.beginWrite();
+		try{
+			Channel<?> ch = getChannel(channel);
+			if(null !=ch){
+				try{
+					Object deserialized = this.encoder.fromJson(message,ch.type);
+					ch.onSubscribe(deserialized);
+				} catch (SmqUnsubscribeException e) {
+					if(e.unregister){
+						unregister(ch.name);
+					}else{
+						unsubscribe(ch.name);	
+					}				
+					logger.info("unsubscribe channel: {}",channel);
+				} 
+			}else{
+				logger.warn("unregistered channel: '{}'",channel);
+			}
+		}finally{
+			sync.endWrite();
 		}
 	}
 	
 	@Override
 	public String[] subscribe(String... channels) {
-		synchronized(this){
+		sync.beginWrite();
+		try{
 			if (null == channels || 0 == channels.length)
 				channels = channelSubs.keySet().toArray(new String[0]);
 			else {
@@ -157,24 +186,64 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 			}
 			this.subChannelSet.addAll(Arrays.asList(channels));
 			return channels;
+		}finally{
+			sync.endWrite();
 		}
 	}
 
 	@Override
 	public String[] unsubscribe(String... channels) {
-		if (null == channels || 0 == channels.length){
-			channels = this.getSubscribes();
-			this.subChannelSet.clear();
-		}else{
-			HashSet<String> chSet = this.registedOnlyAsSet(channels);
-			this.subChannelSet.removeAll(chSet);
-			channels = chSet.toArray(new String[0]);
+		sync.beginWrite();
+		try{
+			if (null == channels || 0 == channels.length){
+				channels = this.getSubscribes();
+				this.subChannelSet.clear();
+			}else{
+				HashSet<String> chSet = this.registedOnlyAsSet(channels);
+				this.subChannelSet.removeAll(chSet);
+				channels = chSet.toArray(new String[0]);
+			}
+			return channels;
+		}finally{
+			sync.endWrite();
 		}
-		return channels;
 	}
 	
 	@Override
 	public String[] getSubscribes(){
-		 return this.subChannelSet.toArray(new String[0]);
+		sync.beginRead();
+		try{
+			return this.subChannelSet.toArray(new String[0]);
+		}finally{
+			sync.endRead();
+		}
+	}
+	/**
+	 * 注销符合条件{@code removeIfTrue}的的频道
+	 * @param removeIfTrue
+	 */
+	public void unregister(Predicate<Channel<?>> removeIfTrue){
+		sync.beginWrite();
+		try{
+			checkArgument(null != removeIfTrue,"retainIfTrue is null");
+			String[] channels = Maps.filterValues(channelSubs, removeIfTrue).keySet().toArray(new String[0]);
+			unregister(channels);
+		}finally{
+			sync.endWrite();
+		}
+	}
+	/**
+	 * 取消频道订阅符合条件{@code removeIfTrue}的的频道
+	 * @param removeIfTrue
+	 */
+	public void unsubscribe(Predicate<String> removeIfTrue){
+		sync.beginWrite();
+		try{
+			checkArgument(null != removeIfTrue,"retainIfTrue is null");
+			String[] channels = Sets.filter(subChannelSet, removeIfTrue).toArray(new String[0]);
+			unsubscribe(channels);
+		}finally{
+			sync.endWrite();
+		}
 	}
 }

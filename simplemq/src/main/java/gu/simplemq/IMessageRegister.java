@@ -29,8 +29,7 @@ public interface IMessageRegister {
 	 * @see #subscribe(String...)
 	 * @return 返回实际注册的频道名列表
 	 */
-	@SuppressWarnings("rawtypes")
-	Set<Channel> register(Channel... channels);
+	Set<Channel<?>> register(Channel<?>... channels);
 
 	/**
 	 * 取消订阅指定的频道,并注销频道
@@ -46,8 +45,7 @@ public interface IMessageRegister {
 	 * @see #unregister(String...)
 	 * @return 返回实际注销的频道名列表
 	 */
-	@SuppressWarnings("rawtypes")
-	Set<String> unregister(Channel... channels);
+	Set<String> unregister(Channel<?>... channels);
 
 	/**
 	 * 返回注册的 {@link Channel}对象

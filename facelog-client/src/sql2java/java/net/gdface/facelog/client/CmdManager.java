@@ -8,7 +8,7 @@
 package net.gdface.facelog.client;
 
 import net.gdface.facelog.client.thrift.MQParam;
-
+import net.gdface.facelog.client.thrift.Token;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +55,7 @@ public class CmdManager {
      * 构造方法
      * @param poolLazy 
      * @param cmdDispatcher 
-     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(net.gdface.facelog.client.thrift.Token)}
+     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(Token)}
      */
     protected CmdManager(JedisPoolLazy poolLazy,
             CmdDispatcher cmdDispatcher,
@@ -72,7 +72,7 @@ public class CmdManager {
      * 构造方法
      * @param poolLazy redis 连接池对象
      * @param adapter 应用程序执行设备命令的对象
-     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(net.gdface.facelog.client.thrift.Token)}
+     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(Token)}
      * @param deviceId 当前设备ID
      * @param groupIdSupplier 参见 {@link CmdDispatcher#CmdDispatcher(int, Supplier)}
      */
@@ -158,9 +158,25 @@ public class CmdManager {
             this.cmdSn = cmdSn;
             return this;
         }
+        /** 
+         * 参见 {@link DeviceInstruction#setCmdSn(long)}
+         * @see {@link IFaceLogClient#getAckChannelSupplier(Token)}
+         */
+        public CmdBuilder setCmdSn(Supplier<Long> cmdSnSupplier) {
+            this.cmdSn = cmdSnSupplier.get().longValue();
+            return this;
+        }
         /** 参见 {@link DeviceInstruction#setAckChannel(String)} */
         public CmdBuilder setAckChannel(String ackChannel){
             this.ackChannel = ackChannel;
+            return this;
+        }
+        /** 
+         * 参见 {@link DeviceInstruction#setAckChannel(String)}
+         * @see {@link IFaceLogClient#getAckChannelSupplier(Token)}
+         */
+        public CmdBuilder setAckChannel(Supplier<String> ackChannelSupplier){
+            this.ackChannel = ackChannelSupplier.get();
             return this;
         }
         /** 数据有效性验证 */
@@ -240,6 +256,21 @@ public class CmdManager {
     }
     /**
      * 设备命令 <br>
+     * 设置参数,可用于运行时修改参数<br>
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param key 参数名
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param value 参数值
+     *
+     */
+    public void parameter(IAckAdapter<Void> adapter,String key,String value){
+        CmdBuilder builder = checkTlsAvailable();
+        subscriber.register(new Channel<Ack<Void>>(builder.ackChannel){}
+        						.setAdapter(checkNotNull(adapter,"adapter is null")));
+        adapter.setClientNum(parameter(key,value));
+    }
+    /**
+     * 设备命令 <br>
      * 设置一组参数,可用于需要重启有效的参数<br>
      * @param properties 参数配置对象, {@code 参数名(key)->参数值(value)映射}
      * @return 收到命令的客户端数目
@@ -263,6 +294,19 @@ public class CmdManager {
                 removeTlsTarget(); 
             }
         }
+    }
+    /**
+     * 设备命令 <br>
+     * 设置一组参数,可用于需要重启有效的参数<br>
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param properties 参数配置对象, {@code 参数名(key)->参数值(value)映射}
+     *
+     */
+    public void config(IAckAdapter<Void> adapter,Map<String,String> properties){
+        CmdBuilder builder = checkTlsAvailable();
+        subscriber.register(new Channel<Ack<Void>>(builder.ackChannel){}
+        						.setAdapter(checkNotNull(adapter,"adapter is null")));
+        adapter.setClientNum(config(properties));
     }
     /**
      * 设备命令 <br>
@@ -292,6 +336,19 @@ public class CmdManager {
     }
     /**
      * 设备命令 <br>
+     * 读取设备状态参数<br>
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param name 需要报告状态的参数名
+     *
+     */
+    public void status(IAckAdapter<Object> adapter,String name){
+        CmdBuilder builder = checkTlsAvailable();
+        subscriber.register(new Channel<Ack<Object>>(builder.ackChannel){}
+        						.setAdapter(checkNotNull(adapter,"adapter is null")));
+        adapter.setClientNum(status(name));
+    }
+    /**
+     * 设备命令 <br>
      * 设备状态报告,返回一组状态参数<br>
      * @param names 需要报告状态的参数名列表
      * @return 收到命令的客户端数目
@@ -318,6 +375,19 @@ public class CmdManager {
     }
     /**
      * 设备命令 <br>
+     * 设备状态报告,返回一组状态参数<br>
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param names 需要报告状态的参数名列表
+     *
+     */
+    public void report(IAckAdapter<Map<String,Object>> adapter,List<String> names){
+        CmdBuilder builder = checkTlsAvailable();
+        subscriber.register(new Channel<Ack<Map<String,Object>>>(builder.ackChannel){}
+        						.setAdapter(checkNotNull(adapter,"adapter is null")));
+        adapter.setClientNum(report(names));
+    }
+    /**
+     * 设备命令 <br>
      * 获取设备版本号<br>
      * @return 收到命令的客户端数目
      *
@@ -340,6 +410,17 @@ public class CmdManager {
                 removeTlsTarget(); 
             }
         }
+    }
+    /**
+     * 设备命令 <br>
+     * 获取设备版本号<br>
+     *
+     */
+    public void version(IAckAdapter<String> adapter){
+        CmdBuilder builder = checkTlsAvailable();
+        subscriber.register(new Channel<Ack<String>>(builder.ackChannel){}
+        						.setAdapter(checkNotNull(adapter,"adapter is null")));
+        adapter.setClientNum(version());
     }
     /**
      * 设备命令 <br>
@@ -369,6 +450,19 @@ public class CmdManager {
     }
     /**
      * 设备命令 <br>
+     * 设置设备工作状态<br>
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param enable {@code true}:工作状态,否则为非工作状态
+     *
+     */
+    public void enable(IAckAdapter<Void> adapter,Boolean enable){
+        CmdBuilder builder = checkTlsAvailable();
+        subscriber.register(new Channel<Ack<Void>>(builder.ackChannel){}
+        						.setAdapter(checkNotNull(adapter,"adapter is null")));
+        adapter.setClientNum(enable(enable));
+    }
+    /**
+     * 设备命令 <br>
      * 返回设备工作状态<br>
      * @param message 工作状态附加消息,比如"设备维修,禁止通行"
      * @return 收到命令的客户端数目
@@ -392,6 +486,19 @@ public class CmdManager {
                 removeTlsTarget(); 
             }
         }
+    }
+    /**
+     * 设备命令 <br>
+     * 返回设备工作状态<br>
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param message 工作状态附加消息,比如"设备维修,禁止通行"
+     *
+     */
+    public void isEnable(IAckAdapter<Boolean> adapter,String message){
+        CmdBuilder builder = checkTlsAvailable();
+        subscriber.register(new Channel<Ack<Boolean>>(builder.ackChannel){}
+        						.setAdapter(checkNotNull(adapter,"adapter is null")));
+        adapter.setClientNum(isEnable(message));
     }
     /**
      * 设备命令 <br>
@@ -421,6 +528,19 @@ public class CmdManager {
     }
     /**
      * 设备命令 <br>
+     * 设备重启<br>
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param schedule 指定执行时间(unix time[秒]),为{@code null}立即执行
+     *
+     */
+    public void reset(IAckAdapter<Void> adapter,Long schedule){
+        CmdBuilder builder = checkTlsAvailable();
+        subscriber.register(new Channel<Ack<Void>>(builder.ackChannel){}
+        						.setAdapter(checkNotNull(adapter,"adapter is null")));
+        adapter.setClientNum(reset(schedule));
+    }
+    /**
+     * 设备命令 <br>
      * 设备与服务器时间同步<br>
      * @param unixTimestamp 服务器 unix 时间[秒],参见<a href = "https://en.wikipedia.org/wiki/Unix_time">Unix time</a>
      * @return 收到命令的客户端数目
@@ -444,6 +564,19 @@ public class CmdManager {
                 removeTlsTarget(); 
             }
         }
+    }
+    /**
+     * 设备命令 <br>
+     * 设备与服务器时间同步<br>
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param unixTimestamp 服务器 unix 时间[秒],参见<a href = "https://en.wikipedia.org/wiki/Unix_time">Unix time</a>
+     *
+     */
+    public void time(IAckAdapter<Void> adapter,Long unixTimestamp){
+        CmdBuilder builder = checkTlsAvailable();
+        subscriber.register(new Channel<Ack<Void>>(builder.ackChannel){}
+        						.setAdapter(checkNotNull(adapter,"adapter is null")));
+        adapter.setClientNum(time(unixTimestamp));
     }
     /**
      * 设备命令 <br>
@@ -477,6 +610,23 @@ public class CmdManager {
     }
     /**
      * 设备命令 <br>
+     * 更新版本<br>
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param url 更新版本的位置
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param version 版本号
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param schedule 指定执行时间(unix time[秒]),为{@code null}立即执行
+     *
+     */
+    public void update(IAckAdapter<Void> adapter,URL url,String version,Long schedule){
+        CmdBuilder builder = checkTlsAvailable();
+        subscriber.register(new Channel<Ack<Void>>(builder.ackChannel){}
+        						.setAdapter(checkNotNull(adapter,"adapter is null")));
+        adapter.setClientNum(update(url,version,schedule));
+    }
+    /**
+     * 设备命令 <br>
      * 设置空闲时显示的消息<br>
      * @param message 发送到设备的消息
      * @param duration 持续时间[分钟],为{@code null}一直显示
@@ -502,6 +652,21 @@ public class CmdManager {
                 removeTlsTarget(); 
             }
         }
+    }
+    /**
+     * 设备命令 <br>
+     * 设置空闲时显示的消息<br>
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param message 发送到设备的消息
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param duration 持续时间[分钟],为{@code null}一直显示
+     *
+     */
+    public void idleMessage(IAckAdapter<Void> adapter,String message,Long duration){
+        CmdBuilder builder = checkTlsAvailable();
+        subscriber.register(new Channel<Ack<Void>>(builder.ackChannel){}
+        						.setAdapter(checkNotNull(adapter,"adapter is null")));
+        adapter.setClientNum(idleMessage(message,duration));
     }
     /**
      * 设备命令 <br>
@@ -539,6 +704,27 @@ public class CmdManager {
     }
     /**
      * 设备命令 <br>
+     * 为指定人员通过时显示的临时消息<br>
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param message 发送到设备的消息
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param id 人员/人员组ID
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param group 为{@code true}时{@code id}参数为人员组ID
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param onceOnly 为{@code true}时只显示一次
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param duration 持续时间[分钟],为{@code null}一直显示
+     *
+     */
+    public void personMessage(IAckAdapter<Void> adapter,String message,Integer id,Boolean group,Boolean onceOnly,Long duration){
+        CmdBuilder builder = checkTlsAvailable();
+        subscriber.register(new Channel<Ack<Void>>(builder.ackChannel){}
+        						.setAdapter(checkNotNull(adapter,"adapter is null")));
+        adapter.setClientNum(personMessage(message,id,group,onceOnly,duration));
+    }
+    /**
+     * 设备命令 <br>
      * 自定义命令,命令名及命令参数由项目自定义<br>
      * @param cmdName 自定义命令名称
      * @param parameters 自定义参数表
@@ -564,5 +750,20 @@ public class CmdManager {
                 removeTlsTarget(); 
             }
         }
+    }
+    /**
+     * 设备命令 <br>
+     * 自定义命令,命令名及命令参数由项目自定义<br>
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param cmdName 自定义命令名称
+     * @param adapter 命令响应处理对象,不可为{@code null}
+     * @param parameters 自定义参数表
+     *
+     */
+    public void custom(IAckAdapter<Object> adapter,String cmdName,Map<String,Object> parameters){
+        CmdBuilder builder = checkTlsAvailable();
+        subscriber.register(new Channel<Ack<Object>>(builder.ackChannel){}
+        						.setAdapter(checkNotNull(adapter,"adapter is null")));
+        adapter.setClientNum(custom(cmdName,parameters));
     }
 }

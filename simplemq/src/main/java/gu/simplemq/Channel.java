@@ -44,7 +44,7 @@ public class Channel<T> implements IMessageAdapter<Object>, Cloneable {
     }
     /**
      * usage:<pre>new Channel&lt;Model&gt;("name"){};</pre>
-     * @param name
+     * @param name 频道(通道)名,不可为{@code null}
      */
     protected Channel(String name){
     	checkArgument(!Strings.isNullOrEmpty(name), "name is null or empty");

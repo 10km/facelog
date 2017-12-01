@@ -4,6 +4,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
+
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 
@@ -40,6 +42,12 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
         /** 订阅的命令响应频道名 */
         protected final String channel;
 
+        /**
+         * 构造函数<br>
+         * 超时参数使用默认值{@link #DEFAULT_DURATION}
+         * @param channel
+         * @see #BaseAdapter(long, String)
+         */
         public BaseAdapter(String channel) {
 			this(System.currentTimeMillis() + DEFAULT_DURATION,channel);
 		}
@@ -78,13 +86,16 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 				// 发送这个状态的本机线程会自动取消频道订阅
 			}else if(++ackCount ==clientNum.get()){
             	// 所有收到命令的设备都已经响应则抛出SmqUnsubscribeException异常用于取消当前频道订阅
-                throw new SmqUnsubscribeException();
+                throw new SmqUnsubscribeException(true);
             }
         }
 
+        /**
+         * 只能被调用一次,否则第二次会抛出异常
+         */
         @Override
         public BaseAdapter<T> setClientNum(long clientNum){
-            this.clientNum.set(clientNum);
+        	checkState(this.clientNum.compareAndSet(-1L, clientNum),"clientNum can be set once only");    
             return this;
         }
         @Override
