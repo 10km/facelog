@@ -99,11 +99,16 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 					// 在设备端响应命令很快时有可能会出现这种情况
 					// 或者收到命令响应的设备端为0,也会引起超时
 				}
-			}else if(++ackCount ==clientNum.get()){
-            	// 所有收到命令的设备都已经响应则抛出SmqUnsubscribeException异常用于取消当前频道订阅
-                throw new SmqUnsubscribeException(true);
-            }
-			// 响应处理业务逻辑 。。。
+			}else{
+				try{
+					// 正常响应处理业务逻辑 。。。
+				}finally{
+					if(++ackCount ==clientNum.get()){
+						// 所有收到命令的设备都已经响应则抛出SmqUnsubscribeException异常用于取消当前频道订阅
+						throw new SmqUnsubscribeException(true);
+					}
+				}
+			}
         }
 
         /**
