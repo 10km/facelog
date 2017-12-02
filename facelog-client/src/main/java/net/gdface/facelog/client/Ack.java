@@ -18,7 +18,7 @@ public class Ack<T> {
 	private Status status;
 	private String errorMessage;
 	/** 设备命令执行状态 */
-	public static enum Status{
+	public enum Status{
 		/** 调用正常返回 */
 		OK,
 		/** 设备端不支持的操作 */
@@ -29,31 +29,30 @@ public class Ack<T> {
 		 * 响应超时,此错误不是由设备端发送,
 		 * 是由命令发送端(本机)ACK监控线程在指定的时间内没有收到任何响应而取消频道订阅时发送 
 		 */ 
-		TIMEOUT;
-		/**
-		 * 返回状态信息
-		 * @param ack
-		 * @return
-		 */
-		public <T>String message(Ack<T>ack){
-			Preconditions.checkArgument(null != ack,"ack is null");
-			StringBuffer buffer = new StringBuffer(String.format("device%d@%d:%s", ack.deviceId,ack.cmdSn,this.name()));
-			switch(this){
-			case ERROR:
-				if(!Strings.isNullOrEmpty(ack.errorMessage)){
-					buffer.append(":").append(ack.errorMessage);
-				}
-				break;
-			case TIMEOUT:
-			case UNSUPPORTED:
-			case OK:
-			default:
-				break;
-			}
-			return buffer.toString();
-		}
+		TIMEOUT
 	}
 	public Ack() {
+	}
+	/**
+	 * 返回状态信息
+	 * @return
+	 */
+	public String message(){
+		Preconditions.checkArgument(null != status,"status field is null");
+		StringBuffer buffer = new StringBuffer(String.format("device%d@%d:%s", deviceId,cmdSn,status.name()));
+		switch(status){
+		case ERROR:
+			if(!Strings.isNullOrEmpty(errorMessage)){
+				buffer.append(":").append(errorMessage);
+			}
+			break;
+		case TIMEOUT:
+		case UNSUPPORTED:
+		case OK:
+		default:
+			break;
+		}
+		return buffer.toString();
 	}
 	/** 返回设备命令序列号 */
 	public long getCmdSn() {
