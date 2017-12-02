@@ -3,6 +3,8 @@
 #else
 #set ($portRet = '')
 #end
+    ///////////////// CLIENT EXTENSIVE CONVENIENCE TOOLS /////////////
+    
     /**
      * 根据设备ID返回设备所属的设备组ID的{@code Function}实例,
      * 设备ID无效则返回{@code null}

@@ -2904,7 +2904,7 @@ class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    ///////////////// CLIENT EXTENSIVE /////////////
+    ///////////////// CLIENT EXTENSIVE CONVENIENCE TOOLS /////////////
     
     /**
      * 根据设备ID返回设备所属的设备组ID的{@code Function}实例,

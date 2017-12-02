@@ -1904,7 +1904,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Void> saveServiceConfig(net.gdface.facelog.client.thrift.Token token){
         return service.saveServiceConfig(token);
     }
-    ///////////////// CLIENT EXTENSIVE /////////////
+    ///////////////// CLIENT EXTENSIVE CONVENIENCE TOOLS /////////////
     
     /**
      * 根据设备ID返回设备所属的设备组ID的{@code Function}实例,
