@@ -39,7 +39,7 @@ import java.util.*;
  * <b>NOTE 2:</b>for each method,{@link List} type input argument must not have {@code null} element.<br>
  * @author guyadong
  */
-class IFaceLogClient implements Constant{
+public class IFaceLogClient implements Constant{
     
     /** bean converter between {@link DeviceBean} and corresponding thrift bean */
     private IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> converterDeviceBean = ThriftConverter.CONVERTER_DEVICEBEAN;

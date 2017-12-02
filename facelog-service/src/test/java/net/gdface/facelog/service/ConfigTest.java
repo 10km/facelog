@@ -152,7 +152,7 @@ public class ConfigTest implements ServiceConstant{
 			System.out.println(name);
 		}
 		PropertiesConfiguration firstConfig = (PropertiesConfiguration) config.getConfiguration(0);
-		firstConfig.setIOFactory(new IOFactoryNoescape());
+		firstConfig.setIOFactory(IOFactoryNoescape.INSTANCE);
 		firstConfig.setProperty(JdbcProperty.JDBC_USERNAME.withPrefix(PREFIX_DATABASE), "中文测试");
 		OutputStreamWriter wirter = new OutputStreamWriter(
 				new FileOutputStream(new File("d:\\tmp\\test.properties")), "UTF-8");

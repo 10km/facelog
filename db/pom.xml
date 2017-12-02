@@ -49,10 +49,26 @@
 		</resources>
 		<plugins>
 			<plugin>
+				<!--引入source插件 -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.0</version>
+				<!-- 绑定source插件到Maven的生命周期,并在生命周期后执行绑定的source的goal -->
+				<executions>
+					<execution>
+						<!-- 绑定source插件到Maven的生命周期 -->
+						<phase>package</phase>
+						<!--在生命周期后执行绑定的source插件的goals -->
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<version>3.0.0</version>
-
 				<executions>
 					<!-- 配置orm,general文件夹,用于保存sql2java生成的ORM代码 -->
 					<execution>
@@ -67,6 +83,26 @@
 								<source>src/general/java</source>
 							</sources>
 						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<!--引入javadoc插件 -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<configuration>
+				<sourcepath>src/main/java;src/orm/java;src/general/java</sourcepath>
+				</configuration>
+				<!-- 绑定javadoc插件到Maven的生命周期,并在生命周期后执行绑定的javadoc的goal -->
+				<executions>
+					<execution>
+						<!-- 绑定javadoc插件到Maven的生命周期 -->
+						<phase>package</phase>
+						<!--在生命周期后执行绑定的javadoc插件的goals -->
+						<goals>
+							<goal>jar</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>

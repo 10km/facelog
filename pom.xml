@@ -1,30 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>net.gdface.facelog</groupId>
-  <artifactId>facelog</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.gdface.facelog</groupId>
+	<artifactId>facelog</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
-  <name>facelog aggregator</name>
-  <url>http://maven.apache.org</url>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+	<name>facelog aggregator</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
-  <dependencies>
-    <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.12</version>
-        <scope>test</scope>
-    </dependency>
-  </dependencies>
-  <modules>
-  	<module>common-java</module>
-  	<module>db</module>
-    <module>simplemq</module>
-    <module>facelog-service</module>
-    <module>facelog-client</module>
-  </modules>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<!--引入javadoc插件 -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<configuration>
+					<!-- 指定生成javadoc的源文件夹 -->
+					<sourcepath>
+						facelog-service/src/main/java;
+						facelog-service/src/sql2java/java;
+						facelog-client/src/main/java;
+						facelog-client/src/sql2java/java;
+						db/src/main/java;
+						db/src/orm/java;
+						db/src/general/java;
+						simplemq/src/main/java
+					</sourcepath>
+				</configuration>
+				<!-- 绑定javadoc插件到Maven的生命周期,并在生命周期后执行绑定的javadoc的goal -->
+				<executions>
+					<execution>
+						<!-- 绑定javadoc插件到Maven的生命周期 -->
+						<phase>package</phase>
+						<!--在生命周期后执行绑定的javadoc插件的goals -->
+						<goals>
+							<goal>aggregate-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<modules>
+		<module>common-java</module>
+		<module>db</module>
+		<module>simplemq</module>
+		<module>facelog-service</module>
+		<module>facelog-client</module>
+	</modules>
 </project>

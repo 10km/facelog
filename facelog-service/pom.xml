@@ -149,6 +149,26 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<!--引入javadoc插件 -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<configuration>
+				<sourcepath>src/main/java;src/sql2java/java</sourcepath>
+				</configuration>
+				<!-- 绑定javadoc插件到Maven的生命周期,并在生命周期后执行绑定的javadoc的goal -->
+				<executions>
+					<execution>
+						<!-- 绑定javadoc插件到Maven的生命周期 -->
+						<phase>package</phase>
+						<!--在生命周期后执行绑定的javadoc插件的goals -->
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>2.4.3</version>
