@@ -18,6 +18,8 @@ import org.apache.commons.configuration2.convert.ValueTransformer;
  */
 public class IOFactoryNoescape extends DefaultIOFactory {
 	public static final IOFactoryNoescape INSTANCE = new IOFactoryNoescape();
+	private IOFactoryNoescape() {
+	}
 	@Override
 	public PropertiesWriterNoescape createPropertiesWriter(Writer out, ListDelimiterHandler handler) {
 		return new PropertiesWriterNoescape(out, handler);
