@@ -45,7 +45,7 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
          * 命令响应等待有效期时间戳(毫秒), 参见 {@link System#currentTimeMillis()},
          * 超过这个时间会自动取消频道订阅 
          */
-        protected long expire = 0L;
+        protected long expire;
         /** 收到的命令响应计数 */
         protected long ackCount = 0L;
         /** 订阅的命令响应频道名 */
@@ -63,7 +63,7 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 
 		/**
 		 * 构造函数
-		 * @param expire 有效期
+		 * @param expire 有效期时间戳
 		 * @param channel 命令响应频道名
 		 */
 		public BaseAdapter(long expire, String channel) {

@@ -80,23 +80,18 @@ public class CommandAdapterContainer extends CommandAdapter{
 #set($params = $value['params'].entrySet())
 #set($adapterVar = "${key}Adapter")
     /** 
-     * 调用 {@link ${esc.hash}${adapterVar}} 命令执行器<br>
-     * 如果 {@link ${esc.hash}${adapterVar}} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 调用注册的 {@code ${key}} 命令执行器<br>
+     * 如果没有为 {@code ${key}} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
      */
     @Override
     public $value['return'] ${key}(#join($params '$e.value[0] $e.key' ','))throws DeviceCmdException{
 #define($paramList)#join($params '$e.key' ',')#end
-#if($value['return']!='void')
-        return this.adapters.containsKey(Cmd.${key})
-            ? super.${key}($paramList)
-            : this.adapters.get(Cmd.${key}).${key}($paramList);
-#else
+#if($value['return'] == 'void')#set($return = '')#else#set($return = 'return ')#end
         if(this.adapters.containsKey(Cmd.${key})){
-            this.adapters.get(Cmd.${key}).${key}($paramList);
+            $!{return}this.adapters.get(Cmd.${key}).${key}($paramList);
         }else{
-            super.${key}($paramList);
+            $!{return}super.${key}($paramList);
         }
-#end
     }
 #end
 }

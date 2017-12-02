@@ -72,8 +72,8 @@ public class CommandAdapterContainer extends CommandAdapter{
         adapters.clear();
     }
     /** 
-     * 调用 {@link #parameterAdapter} 命令执行器<br>
-     * 如果 {@link #parameterAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 调用注册的 {@code parameter} 命令执行器<br>
+     * 如果没有为 {@code parameter} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
      */
     @Override
     public void parameter(String key,String value)throws DeviceCmdException{
@@ -84,8 +84,8 @@ public class CommandAdapterContainer extends CommandAdapter{
         }
     }
     /** 
-     * 调用 {@link #configAdapter} 命令执行器<br>
-     * 如果 {@link #configAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 调用注册的 {@code config} 命令执行器<br>
+     * 如果没有为 {@code config} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
      */
     @Override
     public void config(Map<String,String> properties)throws DeviceCmdException{
@@ -96,38 +96,44 @@ public class CommandAdapterContainer extends CommandAdapter{
         }
     }
     /** 
-     * 调用 {@link #statusAdapter} 命令执行器<br>
-     * 如果 {@link #statusAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 调用注册的 {@code status} 命令执行器<br>
+     * 如果没有为 {@code status} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
      */
     @Override
     public Object status(String name)throws DeviceCmdException{
-        return this.adapters.containsKey(Cmd.status)
-            ? super.status(name)
-            : this.adapters.get(Cmd.status).status(name);
+        if(this.adapters.containsKey(Cmd.status)){
+            return this.adapters.get(Cmd.status).status(name);
+        }else{
+            return super.status(name);
+        }
     }
     /** 
-     * 调用 {@link #reportAdapter} 命令执行器<br>
-     * 如果 {@link #reportAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 调用注册的 {@code report} 命令执行器<br>
+     * 如果没有为 {@code report} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
      */
     @Override
     public Map<String,Object> report(List<String> names)throws DeviceCmdException{
-        return this.adapters.containsKey(Cmd.report)
-            ? super.report(names)
-            : this.adapters.get(Cmd.report).report(names);
+        if(this.adapters.containsKey(Cmd.report)){
+            return this.adapters.get(Cmd.report).report(names);
+        }else{
+            return super.report(names);
+        }
     }
     /** 
-     * 调用 {@link #versionAdapter} 命令执行器<br>
-     * 如果 {@link #versionAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 调用注册的 {@code version} 命令执行器<br>
+     * 如果没有为 {@code version} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
      */
     @Override
     public String version()throws DeviceCmdException{
-        return this.adapters.containsKey(Cmd.version)
-            ? super.version()
-            : this.adapters.get(Cmd.version).version();
+        if(this.adapters.containsKey(Cmd.version)){
+            return this.adapters.get(Cmd.version).version();
+        }else{
+            return super.version();
+        }
     }
     /** 
-     * 调用 {@link #enableAdapter} 命令执行器<br>
-     * 如果 {@link #enableAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 调用注册的 {@code enable} 命令执行器<br>
+     * 如果没有为 {@code enable} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
      */
     @Override
     public void enable(Boolean enable)throws DeviceCmdException{
@@ -138,18 +144,20 @@ public class CommandAdapterContainer extends CommandAdapter{
         }
     }
     /** 
-     * 调用 {@link #isEnableAdapter} 命令执行器<br>
-     * 如果 {@link #isEnableAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 调用注册的 {@code isEnable} 命令执行器<br>
+     * 如果没有为 {@code isEnable} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
      */
     @Override
     public Boolean isEnable(String message)throws DeviceCmdException{
-        return this.adapters.containsKey(Cmd.isEnable)
-            ? super.isEnable(message)
-            : this.adapters.get(Cmd.isEnable).isEnable(message);
+        if(this.adapters.containsKey(Cmd.isEnable)){
+            return this.adapters.get(Cmd.isEnable).isEnable(message);
+        }else{
+            return super.isEnable(message);
+        }
     }
     /** 
-     * 调用 {@link #resetAdapter} 命令执行器<br>
-     * 如果 {@link #resetAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 调用注册的 {@code reset} 命令执行器<br>
+     * 如果没有为 {@code reset} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
      */
     @Override
     public void reset(Long schedule)throws DeviceCmdException{
@@ -160,8 +168,8 @@ public class CommandAdapterContainer extends CommandAdapter{
         }
     }
     /** 
-     * 调用 {@link #timeAdapter} 命令执行器<br>
-     * 如果 {@link #timeAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 调用注册的 {@code time} 命令执行器<br>
+     * 如果没有为 {@code time} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
      */
     @Override
     public void time(Long unixTimestamp)throws DeviceCmdException{
@@ -172,8 +180,8 @@ public class CommandAdapterContainer extends CommandAdapter{
         }
     }
     /** 
-     * 调用 {@link #updateAdapter} 命令执行器<br>
-     * 如果 {@link #updateAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 调用注册的 {@code update} 命令执行器<br>
+     * 如果没有为 {@code update} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
      */
     @Override
     public void update(URL url,String version,Long schedule)throws DeviceCmdException{
@@ -184,8 +192,8 @@ public class CommandAdapterContainer extends CommandAdapter{
         }
     }
     /** 
-     * 调用 {@link #idleMessageAdapter} 命令执行器<br>
-     * 如果 {@link #idleMessageAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 调用注册的 {@code idleMessage} 命令执行器<br>
+     * 如果没有为 {@code idleMessage} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
      */
     @Override
     public void idleMessage(String message,Long duration)throws DeviceCmdException{
@@ -196,8 +204,8 @@ public class CommandAdapterContainer extends CommandAdapter{
         }
     }
     /** 
-     * 调用 {@link #personMessageAdapter} 命令执行器<br>
-     * 如果 {@link #personMessageAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 调用注册的 {@code personMessage} 命令执行器<br>
+     * 如果没有为 {@code personMessage} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
      */
     @Override
     public void personMessage(String message,Integer id,Boolean group,Boolean onceOnly,Long duration)throws DeviceCmdException{
@@ -208,13 +216,15 @@ public class CommandAdapterContainer extends CommandAdapter{
         }
     }
     /** 
-     * 调用 {@link #customAdapter} 命令执行器<br>
-     * 如果 {@link #customAdapter} 为 {@code null},则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 调用注册的 {@code custom} 命令执行器<br>
+     * 如果没有为 {@code custom} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
      */
     @Override
     public Object custom(String cmdName,Map<String,Object> parameters)throws DeviceCmdException{
-        return this.adapters.containsKey(Cmd.custom)
-            ? super.custom(cmdName,parameters)
-            : this.adapters.get(Cmd.custom).custom(cmdName,parameters);
+        if(this.adapters.containsKey(Cmd.custom)){
+            return this.adapters.get(Cmd.custom).custom(cmdName,parameters);
+        }else{
+            return super.custom(cmdName,parameters);
+        }
     }
 }
