@@ -167,7 +167,7 @@ public class CommandAdapter {
     }
     /**
      * 设备命令 <br>
-     * 自定义命令,命令名及命令参数由项目自定义<br>
+     * 自定义命令,命令名及命令参数类型由项目自定义,因为Map中没有定义每一个自定义命令参数的类型,设备端需要自行将命令参数转为与发送方协议约定的参数类型,参见{@link Cmd#cast(Object,Type)}<br>
      * @param cmdName 自定义命令名称
      * @param parameters 自定义参数表
      * @return 返回自定义结果对象

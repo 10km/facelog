@@ -11,6 +11,7 @@ $codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
 
 package $extensionPkg;
 
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,8 @@ import com.google.common.reflect.TypeToken;
  * @author guyadong
  */
 public enum Cmd{
-    #join($commands.entrySet() '/** $e.value["desc"] */$e.key' ',
+    #join($commands.entrySet() '/** $e.value["desc"] */
+    $e.key' ',
     ');
     
     /**
@@ -76,10 +78,38 @@ public enum Cmd{
             throw new IllegalArgumentException();
         }
     }
+    /**
+     * 将{@code value}转为{@code typeToken}指定的类型
+     * @param <T> 目标参数类型
+     * @param value
+     * @param typeToken
+     * @return
+     * @see ${esc.hash}cast(Object, Type)
+     */
+    public static final <T> T cast(Object value,TypeToken<T> typeToken){
+        return cast(value,typeToken.getType());
+    }
+    /**
+     * 将{@code value}转为{@code type}指定的类型
+     * @param <T> 目标参数类型
+     * @param value
+     * @param type
+     * @return
+     * @see TypeUtils${esc.hash}cast(Object, Type, ParserConfig)
+     */
     @SuppressWarnings("unchecked")
-    static private<T> T cast(Object value,TypeToken<T> typeToken){
-        return (T)TypeUtils.cast(value,
-                typeToken.getType(),
-                ParserConfig.getGlobalInstance());
+    public static final <T> T cast(Object value,Type type){
+        return (T)TypeUtils.cast(value,type,ParserConfig.getGlobalInstance());
+    }
+    /**
+     * 将{@code value}转为{@code clazz}指定的类型
+     * @param <T> 目标参数类型
+     * @param value
+     * @param clazz
+     * @return
+     * @see TypeUtils${esc.hash}cast(Object, Class, ParserConfig)
+     */
+    public static final <T> T cast(Object value,Class<T> clazz){
+        return TypeUtils.cast(value,clazz,ParserConfig.getGlobalInstance());
     }
 }

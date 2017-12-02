@@ -36,9 +36,16 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>{
 	}
 	/** 判断target列表是否包括当前设备 */
 	private boolean selfIncluded(boolean group,List<Integer> target){
-		return group 
-				? (null == groupIdSupplier ? false : target.contains(groupIdSupplier.get()))
-				: target.contains(this.deviceId);
+		if(group){
+			if(null == groupIdSupplier){
+				return false;
+			}
+			Integer groupId = groupIdSupplier.get();
+			return null == groupId ? false : target.contains(groupId); 
+		}
+		else {
+			return target.contains(this.deviceId);
+		}
 	}
 	/**
 	 * 执行指定的设备命令并向命令响应频道返回命令结果

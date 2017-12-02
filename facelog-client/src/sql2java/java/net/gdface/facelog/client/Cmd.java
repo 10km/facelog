@@ -8,6 +8,7 @@
 
 package net.gdface.facelog.client;
 
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -22,19 +23,32 @@ import com.google.common.reflect.TypeToken;
  * @author guyadong
  */
 public enum Cmd{
-    /** 设置参数,可用于运行时修改参数 */parameter,
-    /** 设置一组参数,可用于需要重启有效的参数 */config,
-    /** 读取设备状态参数 */status,
-    /** 设备状态报告,返回一组状态参数 */report,
-    /** 获取设备版本号 */version,
-    /** 设置设备工作状态 */enable,
-    /** 返回设备工作状态 */isEnable,
-    /** 设备重启 */reset,
-    /** 设备与服务器时间同步 */time,
-    /** 更新版本 */update,
-    /** 设置空闲时显示的消息 */idleMessage,
-    /** 为指定人员通过时显示的临时消息 */personMessage,
-    /** 自定义命令,命令名及命令参数由项目自定义 */custom;
+    /** 设置参数,可用于运行时修改参数 */
+    parameter,
+    /** 设置一组参数,可用于需要重启有效的参数 */
+    config,
+    /** 读取设备状态参数 */
+    status,
+    /** 设备状态报告,返回一组状态参数 */
+    report,
+    /** 获取设备版本号 */
+    version,
+    /** 设置设备工作状态 */
+    enable,
+    /** 返回设备工作状态 */
+    isEnable,
+    /** 设备重启 */
+    reset,
+    /** 设备与服务器时间同步 */
+    time,
+    /** 更新版本 */
+    update,
+    /** 设置空闲时显示的消息 */
+    idleMessage,
+    /** 为指定人员通过时显示的临时消息 */
+    personMessage,
+    /** 自定义命令,命令名及命令参数类型由项目自定义,因为Map中没有定义每一个自定义命令参数的类型,设备端需要自行将命令参数转为与发送方协议约定的参数类型,参见{@link Cmd#cast(Object,Type)} */
+    custom;
     
     /**
      * 对{@code adapter}执行当前设备命令
@@ -253,10 +267,38 @@ public enum Cmd{
             throw new IllegalArgumentException();
         }
     }
+    /**
+     * 将{@code value}转为{@code typeToken}指定的类型
+     * @param <T> 目标参数类型
+     * @param value
+     * @param typeToken
+     * @return
+     * @see #cast(Object, Type)
+     */
+    public static final <T> T cast(Object value,TypeToken<T> typeToken){
+        return cast(value,typeToken.getType());
+    }
+    /**
+     * 将{@code value}转为{@code type}指定的类型
+     * @param <T> 目标参数类型
+     * @param value
+     * @param type
+     * @return
+     * @see TypeUtils#cast(Object, Type, ParserConfig)
+     */
     @SuppressWarnings("unchecked")
-    static private<T> T cast(Object value,TypeToken<T> typeToken){
-        return (T)TypeUtils.cast(value,
-                typeToken.getType(),
-                ParserConfig.getGlobalInstance());
+    public static final <T> T cast(Object value,Type type){
+        return (T)TypeUtils.cast(value,type,ParserConfig.getGlobalInstance());
+    }
+    /**
+     * 将{@code value}转为{@code clazz}指定的类型
+     * @param <T> 目标参数类型
+     * @param value
+     * @param clazz
+     * @return
+     * @see TypeUtils#cast(Object, Class, ParserConfig)
+     */
+    public static final <T> T cast(Object value,Class<T> clazz){
+        return TypeUtils.cast(value,clazz,ParserConfig.getGlobalInstance());
     }
 }
