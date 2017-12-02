@@ -6,10 +6,13 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.Executor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -22,14 +25,22 @@ import gu.simplemq.utils.Synchronizer;
 import gu.simplemq.utils.Synchronizer.ReadWriteSynchronizer;;
 
 /**
- * (消息)频道订阅对象({@link Channel})管理类,负责频道的注册/注销,订阅/取消,消息数据解析及分发
- * 
+ * (消息)频道订阅对象({@link Channel})管理类,负责频道的注册/注销,订阅/取消,消息数据解析及分发<p>
+ * <b>NOTE:</b>如果不设置线程池对象,消息分发{@link #dispatch(String, String)}将以单线程工作,<br>
+ * 参见{@link  #setExecutor(Executor)}
  * @author guyadong
  *
  */
 public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 	protected static final Logger logger = LoggerFactory.getLogger(ChannelDispatcher.class);
-
+	/** 默认单线程实例 */
+    private final Executor defaultExecutor = new Executor() {
+        // DirectExecutor using caller thread
+    	@Override
+        public void execute(Runnable r) {
+            r.run();
+        }
+    };
 	private BaseJsonEncoder encoder = BaseJsonEncoder.getEncoder();
 
 	/** 注册的频道对象 */
@@ -37,6 +48,8 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 	/** 订阅的频道名 */
 	private final Set<String> subChannelSet= new LinkedHashSet<String>();
 	private final Synchronizer sync = new ReadWriteSynchronizer();
+	/** 线程池对象 */
+	private Executor executor = defaultExecutor; 
 	public ChannelDispatcher() {
 	}
 
@@ -151,28 +164,27 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 	}
 
 	@Override
-	public void dispatch(String channel, String message) {
-		sync.beginWrite();
-		try{
-			Channel<?> ch = getChannel(channel);
-			if(null !=ch){
-				try{
-					Object deserialized = this.encoder.fromJson(message,ch.type);
-					ch.onSubscribe(deserialized);
-				} catch (SmqUnsubscribeException e) {
-					if(e.unregister){
-						unregister(ch.name);
-					}else{
-						unsubscribe(ch.name);	
-					}				
-					logger.info("unsubscribe channel: {}",channel);
-				} 
-			}else{
-				logger.warn("unregistered channel: '{}'",channel);
-			}
-		}finally{
-			sync.endWrite();
-		}
+	public void dispatch(final String channel, final String message) {
+		this.executor.execute(new Runnable(){
+			@Override
+			public void run() {
+				Channel<?> ch = getChannel(channel);
+				if(null !=ch){
+					try{
+						Object deserialized = encoder.fromJson(message,ch.type);
+						ch.onSubscribe(deserialized);
+					} catch (SmqUnsubscribeException e) {
+						if(e.unregister){
+							unregister(ch.name);
+						}else{
+							unsubscribe(ch.name);	
+						}				
+						logger.info("unsubscribe channel: {}",channel);
+					} 
+				}else{
+					logger.warn("unregistered channel: '{}'",channel);
+				}
+			}});
 	}
 	
 	@Override
@@ -245,5 +257,16 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 		}finally{
 			sync.endWrite();
 		}
+	}
+
+	/**
+	 * 设置线程池对象,如果不指定线程对象,消息分发{@link #dispatch(String, String)}将以单线程工作
+	 * @param executor 线程池对象，不可为{@code null}
+	 * @return 
+	 * @return
+	 */
+	public ChannelDispatcher setExecutor(Executor executor) {
+		this.executor = checkNotNull(executor,"executor is null");
+		return this;
 	}
 }

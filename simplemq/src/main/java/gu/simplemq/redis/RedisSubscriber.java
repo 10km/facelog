@@ -1,5 +1,8 @@
 package gu.simplemq.redis;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.RejectedExecutionException;
 
@@ -23,7 +26,7 @@ public class RedisSubscriber extends AbstractSubcriber implements IRedisComponen
 	private final JedisPoolLazy poolLazy;
 	private final RedisSubHandle jedisPubSub; 
 	/** 执行消息线程的线程池对象 */
-	private ExecutorService executorService;
+	private Executor executor;
 	/** 为true时消息线程为守护线程，仅在{@link executorService}为null 时有效 */
 	private boolean daemon=false;
 	@Override
@@ -54,7 +57,7 @@ public class RedisSubscriber extends AbstractSubcriber implements IRedisComponen
 	}
 	
 	/**
-	 * 创建消息线程,如果指定了{@link #executorService} ，则消息线程在线程池中执行<br>
+	 * 创建消息线程,如果指定了{@link #executor} ，则消息线程在线程池中执行<br>
 	 * 否则创建新线程
 	 * @param channels 频道名列表
 	 */
@@ -72,12 +75,12 @@ public class RedisSubscriber extends AbstractSubcriber implements IRedisComponen
 				}
 			}};
 			
-		if( !this.daemon && null != executorService){
+		if( !this.daemon && null != executor){
 			try{
-				executorService.submit(run);
+				executor.execute(run);
 				return;
 			}catch(RejectedExecutionException e){
-				executorService = null;
+				executor = null;
 				logger.warn("RejectedExecutionException: {}",e.getMessage());
 			}
 		}
@@ -88,11 +91,14 @@ public class RedisSubscriber extends AbstractSubcriber implements IRedisComponen
 
 	/**
 	 * 设置用于执行消息线程的线程池
-	 * @param executorService
+	 * @param executor 必须是一个{@link ExecutorService}实例
 	 * @return
 	 */
-	public RedisSubscriber setExecutorService(ExecutorService executorService) {
-		this.executorService = executorService;
+	@Override
+	public RedisSubscriber setExecutor(Executor executor) {
+		checkArgument(executor instanceof ExecutorService,"executor must be a ExecutorService instance");
+		this.executor = executor;
+		super.setExecutor(executor);
 		return this;
 	}
 
