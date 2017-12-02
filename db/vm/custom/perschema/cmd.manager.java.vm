@@ -125,7 +125,8 @@ public class CmdManager {
         return redisPublisher.publish(this.cmdChannel, cmd);
     }
     /** 
-     * 设备命令构建类,用于设置除{@link DeviceInstruction${esc.hash}parameters}字段之的其他字段
+     * 设备命令参数构建工具类,用于设置{@link DeviceInstruction}对象除{@code cmd,parameters}字段之的其他字段,可以被不同的设备命令复用
+     * @author guyadong
      */
     public class CmdBuilder{       
         private List<Integer> target;
@@ -133,11 +134,12 @@ public class CmdManager {
         private Long cmdSn;
         private String ackChannel;
         private final CmdManager parent;
+        /** 命令发送后是否自动清除TLS变量 */
         private boolean autoRemove = true;
         private CmdBuilder(CmdManager parent){
             this.parent = parent;
         }
-        /** 参见 {@link DeviceInstruction${esc.hash}setTarget(List, boolean)} */
+        /** 指定目标ID(设备/设备组)列表,参见 {@link DeviceInstruction${esc.hash}setTarget(List, boolean)} */
         public CmdBuilder setTarget(List<Integer> target,boolean group){
             this.target = target;
             this.group = group;
@@ -208,9 +210,9 @@ public class CmdManager {
         }
     } 
     /** 
-     * 用于保存当前线程使用的 {@link CmdBuilder}对象<br>,
-     * TLS变量,在多线程高并发环境如果不显式执行{@link ThreadLocal${esc.hash}remove()}有资源泄漏风险,
-     * 如果{@link CmdBuilder${esc.hash}autoRemove}为{@code true},则调用设备命令方法发送完命令后会自动清除TLS变量,
+     * TLS变量,用于保存当前线程使用的 {@link CmdBuilder}对象<br>,
+     * TLS变量在多线程高并发环境如果不显式执行{@link ThreadLocal${esc.hash}remove()}有资源泄漏风险,
+     * 如果{@link CmdBuilder${esc.hash}autoRemove}为{@code true}(默认值),则调用设备命令方法发送完命令后会自动清除TLS变量,
      * 否则需要调用 {@link CmdManager${esc.hash}removeTlsTarget()}方法手动清除。
       */
     private static final ThreadLocal<CmdBuilder> TLS_BUILDER= new ThreadLocal<CmdBuilder>();
@@ -231,7 +233,7 @@ public class CmdManager {
     /** 检查是否创建了{@CmdBuilder}对象没有则抛出异常 */
     protected static final CmdBuilder checkTlsAvailable(){
         return checkNotNull(TLS_BUILDER.get(),
-                "not defined target,please call method targetBuilder(),and set target info");
+                "not defined target,please call method targetBuilder() to build parameters");
     }
 
 #foreach($entry in $commands.entrySet())
@@ -244,7 +246,7 @@ public class CmdManager {
 #set($returnParamType =$entry.value['return'])
 #end
     /**
-     * 设备命令 <br>
+     * 设备命令<br>
      * $value['desc']<br>#join($params '
      * @param $e.key $!{e.value[1]}' '')
 
@@ -273,7 +275,7 @@ public class CmdManager {
         }
     }
     /**
-     * 设备命令 <br>
+     * 设备命令<br>
      * $value['desc']<br>
      * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
      * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
