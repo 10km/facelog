@@ -49,7 +49,7 @@
                             'onceOnly':['Boolean','为{@code true}时只显示一次'],
                             'duration':['Long','持续时间[分钟],为{@code null}一直显示']
                            }},
-      'custom' : {'desc':'自定义命令,命令名及命令参数类型由项目自定义,因为Map中没有定义每一个自定义命令参数的类型,设备端需要自行将命令参数转为与发送方协议约定的参数类型,参见{@link Cmd#cast(Object,Type)}',
+      'custom' : {'desc':'自定义命令,命令名及命令参数类型由应用项目自定义,因为Map中没有定义每一个自定义命令参数的类型,设备端需要自行将命令参数转为项目约定的参数类型,参见{@link Cmd#cast(Object,Type)}',
                   'return':'Object', 
                   'returnDesc':'返回自定义结果对象',
                   'params':{'cmdName':['String','自定义命令名称'],'parameters':['Map<String,Object>','自定义参数表']}}

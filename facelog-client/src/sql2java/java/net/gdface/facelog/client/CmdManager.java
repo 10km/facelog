@@ -772,7 +772,7 @@ public class CmdManager {
     }
     /**
      * 设备命令<br>
-     * 自定义命令,命令名及命令参数类型由项目自定义,因为Map中没有定义每一个自定义命令参数的类型,设备端需要自行将命令参数转为与发送方协议约定的参数类型,参见{@link Cmd#cast(Object,Type)}<br>
+     * 自定义命令,命令名及命令参数类型由应用项目自定义,因为Map中没有定义每一个自定义命令参数的类型,设备端需要自行将命令参数转为项目约定的参数类型,参见{@link Cmd#cast(Object,Type)}<br>
      * @param cmdName 自定义命令名称
      * @param parameters 自定义参数表
      * @return 收到命令的客户端数目
@@ -800,7 +800,7 @@ public class CmdManager {
     }
     /**
      * 设备命令<br>
-     * 自定义命令,命令名及命令参数类型由项目自定义,因为Map中没有定义每一个自定义命令参数的类型,设备端需要自行将命令参数转为与发送方协议约定的参数类型,参见{@link Cmd#cast(Object,Type)}<br>
+     * 自定义命令,命令名及命令参数类型由应用项目自定义,因为Map中没有定义每一个自定义命令参数的类型,设备端需要自行将命令参数转为项目约定的参数类型,参见{@link Cmd#cast(Object,Type)}<br>
      * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
      * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
      * 该方法要求必须指定命令响应通道,参见{@link CmdBuilder#setAckChannel(String)},{@link CmdBuilder#setAckChannel(Supplier)}
