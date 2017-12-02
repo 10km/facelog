@@ -16,25 +16,32 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * 设备命令执行器容器对象<br>
- * 允许应用项目用不同的{@link CommandAdapter}对象分别实现设备命令
+ * 允许应用项目用不同的{@link CommandAdapter}对象分别实现设备命令,并支持命令执行器的动态的更新<br>
+ * 内部实现为通过命令执行器控制表(Map)管理每个命令对应的执行器.
  * @author guyadong
  *
  */
 public class CommandAdapterContainer extends CommandAdapter{
-    /** 设备命令执行器对象映射,每一个设备命令对应一个执行器对象 */
+    /** 命令执行器控制表,每一个设备命令对应一个执行器对象,默认为空 */
     private final Map<Cmd, CommandAdapter> adapters= Collections.synchronizedMap(new EnumMap<Cmd, CommandAdapter>(Cmd.class));
     
     public CommandAdapterContainer() {
         this(null);
     }
+    /**
+     * 用指定的一组命令执行器初始化命令执行器控制表,为{@code null}则忽略
+     */
     public CommandAdapterContainer(Map<Cmd, CommandAdapter> adapters) {
         if(null != adapters){
-            this.adapters.putAll(adapters);
+            for(Entry<Cmd, CommandAdapter> entry:adapters.entrySet()){
+            	register(entry.getKey(),entry.getValue());
+            }
         }
     }
     /**
@@ -48,12 +55,14 @@ public class CommandAdapterContainer extends CommandAdapter{
     /**
      * 注册指定命令({@code cmd})的命令执行器
      * @param cmd 设备命令类型,不可为{@code null}
-     * @param adapter  命令执行器,不可为{@code null}
+     * @param adapter  命令执行器,不可为{@code null},也不可为容器对象{@link CommandAdapterContainer}
      * @return
      * @see {@link EnumMap#put(Enum, Object)}
      */
     public CommandAdapterContainer register(Cmd cmd, CommandAdapter adapter) {
-        adapters.put(checkNotNull(cmd,"key is null"), checkNotNull(adapter,"adapter is null"));
+        checkArgument(null != cmd && null != adapter,"key or adapter is null");
+        checkArgument(!(adapter instanceof CommandAdapterContainer),"adapter for %s must not be container",cmd);
+        adapters.put(cmd, adapter);
         return this;
     }
     /**
@@ -71,8 +80,9 @@ public class CommandAdapterContainer extends CommandAdapter{
      * 删除所有命令执行器
      * @see {@link EnumMap#clear()}
      */
-    public void clear() {
+    public CommandAdapterContainer clear() {
         adapters.clear();
+        return this;
     }
 #foreach($entry in $commands.entrySet())
 #set($key = $entry.key)
@@ -87,8 +97,9 @@ public class CommandAdapterContainer extends CommandAdapter{
     public $value['return'] ${key}(#join($params '$e.value[0] $e.key' ','))throws DeviceCmdException{
 #define($paramList)#join($params '$e.key' ',')#end
 #if($value['return'] == 'void')#set($return = '')#else#set($return = 'return ')#end
-        if(this.adapters.containsKey(Cmd.${key})){
-            $!{return}this.adapters.get(Cmd.${key}).${key}($paramList);
+        CommandAdapter adapter = this.adapters.get(Cmd.${key});
+        if(null != adapter){
+            $!{return}adapter.${key}($paramList);
         }else{
             $!{return}super.${key}($paramList);
         }

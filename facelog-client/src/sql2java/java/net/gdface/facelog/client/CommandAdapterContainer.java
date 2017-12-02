@@ -13,25 +13,32 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * 设备命令执行器容器对象<br>
- * 允许应用项目用不同的{@link CommandAdapter}对象分别实现设备命令
+ * 允许应用项目用不同的{@link CommandAdapter}对象分别实现设备命令,并支持命令执行器的动态的更新<br>
+ * 内部实现为通过命令执行器控制表(Map)管理每个命令对应的执行器.
  * @author guyadong
  *
  */
 public class CommandAdapterContainer extends CommandAdapter{
-    /** 设备命令执行器对象映射,每一个设备命令对应一个执行器对象 */
+    /** 命令执行器控制表,每一个设备命令对应一个执行器对象,默认为空 */
     private final Map<Cmd, CommandAdapter> adapters= Collections.synchronizedMap(new EnumMap<Cmd, CommandAdapter>(Cmd.class));
     
     public CommandAdapterContainer() {
         this(null);
     }
+    /**
+     * 用指定的一组命令执行器初始化命令执行器控制表,为{@code null}则忽略
+     */
     public CommandAdapterContainer(Map<Cmd, CommandAdapter> adapters) {
         if(null != adapters){
-            this.adapters.putAll(adapters);
+            for(Entry<Cmd, CommandAdapter> entry:adapters.entrySet()){
+            	register(entry.getKey(),entry.getValue());
+            }
         }
     }
     /**
@@ -45,12 +52,14 @@ public class CommandAdapterContainer extends CommandAdapter{
     /**
      * 注册指定命令({@code cmd})的命令执行器
      * @param cmd 设备命令类型,不可为{@code null}
-     * @param adapter  命令执行器,不可为{@code null}
+     * @param adapter  命令执行器,不可为{@code null},也不可为容器对象{@link CommandAdapterContainer}
      * @return
      * @see {@link EnumMap#put(Enum, Object)}
      */
     public CommandAdapterContainer register(Cmd cmd, CommandAdapter adapter) {
-        adapters.put(checkNotNull(cmd,"key is null"), checkNotNull(adapter,"adapter is null"));
+        checkArgument(null != cmd && null != adapter,"key or adapter is null");
+        checkArgument(!(adapter instanceof CommandAdapterContainer),"adapter for %s must not be container",cmd);
+        adapters.put(cmd, adapter);
         return this;
     }
     /**
@@ -68,8 +77,9 @@ public class CommandAdapterContainer extends CommandAdapter{
      * 删除所有命令执行器
      * @see {@link EnumMap#clear()}
      */
-    public void clear() {
+    public CommandAdapterContainer clear() {
         adapters.clear();
+        return this;
     }
     /** 
      * 调用注册的 {@code parameter} 命令执行器<br>
@@ -77,8 +87,9 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public void parameter(String key,String value)throws DeviceCmdException{
-        if(this.adapters.containsKey(Cmd.parameter)){
-            this.adapters.get(Cmd.parameter).parameter(key,value);
+        CommandAdapter adapter = this.adapters.get(Cmd.parameter);
+        if(null != adapter){
+            adapter.parameter(key,value);
         }else{
             super.parameter(key,value);
         }
@@ -89,8 +100,9 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public void config(Map<String,String> properties)throws DeviceCmdException{
-        if(this.adapters.containsKey(Cmd.config)){
-            this.adapters.get(Cmd.config).config(properties);
+        CommandAdapter adapter = this.adapters.get(Cmd.config);
+        if(null != adapter){
+            adapter.config(properties);
         }else{
             super.config(properties);
         }
@@ -101,8 +113,9 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public Object status(String name)throws DeviceCmdException{
-        if(this.adapters.containsKey(Cmd.status)){
-            return this.adapters.get(Cmd.status).status(name);
+        CommandAdapter adapter = this.adapters.get(Cmd.status);
+        if(null != adapter){
+            return adapter.status(name);
         }else{
             return super.status(name);
         }
@@ -113,8 +126,9 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public Map<String,Object> report(List<String> names)throws DeviceCmdException{
-        if(this.adapters.containsKey(Cmd.report)){
-            return this.adapters.get(Cmd.report).report(names);
+        CommandAdapter adapter = this.adapters.get(Cmd.report);
+        if(null != adapter){
+            return adapter.report(names);
         }else{
             return super.report(names);
         }
@@ -125,8 +139,9 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public String version()throws DeviceCmdException{
-        if(this.adapters.containsKey(Cmd.version)){
-            return this.adapters.get(Cmd.version).version();
+        CommandAdapter adapter = this.adapters.get(Cmd.version);
+        if(null != adapter){
+            return adapter.version();
         }else{
             return super.version();
         }
@@ -137,8 +152,9 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public void enable(Boolean enable)throws DeviceCmdException{
-        if(this.adapters.containsKey(Cmd.enable)){
-            this.adapters.get(Cmd.enable).enable(enable);
+        CommandAdapter adapter = this.adapters.get(Cmd.enable);
+        if(null != adapter){
+            adapter.enable(enable);
         }else{
             super.enable(enable);
         }
@@ -149,8 +165,9 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public Boolean isEnable(String message)throws DeviceCmdException{
-        if(this.adapters.containsKey(Cmd.isEnable)){
-            return this.adapters.get(Cmd.isEnable).isEnable(message);
+        CommandAdapter adapter = this.adapters.get(Cmd.isEnable);
+        if(null != adapter){
+            return adapter.isEnable(message);
         }else{
             return super.isEnable(message);
         }
@@ -161,8 +178,9 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public void reset(Long schedule)throws DeviceCmdException{
-        if(this.adapters.containsKey(Cmd.reset)){
-            this.adapters.get(Cmd.reset).reset(schedule);
+        CommandAdapter adapter = this.adapters.get(Cmd.reset);
+        if(null != adapter){
+            adapter.reset(schedule);
         }else{
             super.reset(schedule);
         }
@@ -173,8 +191,9 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public void time(Long unixTimestamp)throws DeviceCmdException{
-        if(this.adapters.containsKey(Cmd.time)){
-            this.adapters.get(Cmd.time).time(unixTimestamp);
+        CommandAdapter adapter = this.adapters.get(Cmd.time);
+        if(null != adapter){
+            adapter.time(unixTimestamp);
         }else{
             super.time(unixTimestamp);
         }
@@ -185,8 +204,9 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public void update(URL url,String version,Long schedule)throws DeviceCmdException{
-        if(this.adapters.containsKey(Cmd.update)){
-            this.adapters.get(Cmd.update).update(url,version,schedule);
+        CommandAdapter adapter = this.adapters.get(Cmd.update);
+        if(null != adapter){
+            adapter.update(url,version,schedule);
         }else{
             super.update(url,version,schedule);
         }
@@ -197,8 +217,9 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public void idleMessage(String message,Long duration)throws DeviceCmdException{
-        if(this.adapters.containsKey(Cmd.idleMessage)){
-            this.adapters.get(Cmd.idleMessage).idleMessage(message,duration);
+        CommandAdapter adapter = this.adapters.get(Cmd.idleMessage);
+        if(null != adapter){
+            adapter.idleMessage(message,duration);
         }else{
             super.idleMessage(message,duration);
         }
@@ -209,8 +230,9 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public void personMessage(String message,Integer id,Boolean group,Boolean onceOnly,Long duration)throws DeviceCmdException{
-        if(this.adapters.containsKey(Cmd.personMessage)){
-            this.adapters.get(Cmd.personMessage).personMessage(message,id,group,onceOnly,duration);
+        CommandAdapter adapter = this.adapters.get(Cmd.personMessage);
+        if(null != adapter){
+            adapter.personMessage(message,id,group,onceOnly,duration);
         }else{
             super.personMessage(message,id,group,onceOnly,duration);
         }
@@ -221,8 +243,9 @@ public class CommandAdapterContainer extends CommandAdapter{
      */
     @Override
     public Object custom(String cmdName,Map<String,Object> parameters)throws DeviceCmdException{
-        if(this.adapters.containsKey(Cmd.custom)){
-            return this.adapters.get(Cmd.custom).custom(cmdName,parameters);
+        CommandAdapter adapter = this.adapters.get(Cmd.custom);
+        if(null != adapter){
+            return adapter.custom(cmdName,parameters);
         }else{
             return super.custom(cmdName,parameters);
         }
