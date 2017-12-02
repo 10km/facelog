@@ -24,7 +24,7 @@
   	<module>common-java</module>
   	<module>db</module>
     <module>simplemq</module>
-    <module>facelog-main</module>
+    <module>facelog-service</module>
     <module>facelog-client</module>
   </modules>
 </project>
