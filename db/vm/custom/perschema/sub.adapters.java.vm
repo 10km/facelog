@@ -1,0 +1,90 @@
+#parse( "header.include.vm" )
+#parse( "macros.include.vm" )
+#parse( "commands.definition.vm" )
+## 只在thrift_client时生成
+#if(!$codewriter.getPropertyExplodedAsList("template.folder.include").contains("thrift_client"))
+#set($codewriter.saveCurrentFile = false)
+#stop
+#end
+#set ($thriftPackage = ${codewriter.getDependencyPackage()})
+#set ( $javaClassName = 'SubAdapters' )
+$codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
+package $extensionPkg;
+
+import gu.simplemq.IMessageAdapter;
+import gu.simplemq.exceptions.SmqUnsubscribeException;
+import gu.simplemq.redis.RedisSubscriber;
+import gu.simplemq.Channel;
+
+/**
+ * 数据库表记录变化订阅对象父类集合,应用项目根据需要继承相应的类实现自己的业务逻辑
+ * @author guyadong
+ *
+ */
+public class SubAdapters implements CommonConstant{    
+########定义数据库对象频道
+#macro(subscriberDef $tableNames $useBeanType $prefix $suffixList)    
+#foreach($tableName in $tableNames)
+#set ($table = $db.getTable($tableName))
+#if($useBeanType)
+#set ($channelType = $table.asBeanClassNSP())
+#set ($channelVar = $table.asVar())
+#set ($paramDesc = "$table.name 表记录")
+#else
+#set ($channelType = $table.primaryKey.javaType)
+#set ($channelVar = $table.primaryKey.varName)
+#set ($paramDesc = $table.primaryKey.remarks)
+#end
+#set ($coreClass = $table.asCoreClassNSP())
+#set ($constPrefix = "${prefix}_${coreClass}")
+#if($suffixList)
+#foreach($suffix in $suffixList)
+#set($channelConst = "${constPrefix.toUpperCase()}_${suffix.toUpperCase()}")
+#set($subClass = "Base${coreClass}${suffix}SubAdapter")
+    /**
+     * 订阅 $table.name 表的 $suffix 消息,当表数据变化时执行相应的业务逻辑
+     * @author guyadong
+     *
+     */
+    public static class ${subClass} implements IMessageAdapter<$channelType>{
+        /** 订阅频道 */
+        final Channel<$channelType> channel = ${channelConst}.clone().setAdapter(this);
+        /**
+         * 向{@code subscriber}注册,注册后才能收到订阅消息
+         * @param subscriber 
+         * @return
+         * @see RedisSubscriber${esc.hash}register(Channel...)
+         */
+        public ${subClass} register(RedisSubscriber subscriber){
+            subscriber.register(channel);
+            return this;
+        }
+        /**
+         * 向{@code subscriber}注销订阅的频道,注销后不会再收到订阅消息
+         * @param subscriber 
+         * @return
+         * @see RedisSubscriber${esc.hash}unregister(Channel...)
+         */
+        public ${subClass} unregister(RedisSubscriber subscriber){
+            subscriber.unregister(channel);
+            return this;
+        }
+        /** 
+         * 应用项目重写此方法实现业务逻辑 
+         * @param $channelVar $!paramDesc
+         */
+        @Override
+        public void onSubscribe(${channelType} $channelVar) throws SmqUnsubscribeException {
+            // 实现业务逻辑
+        }
+    }    
+#end
+#else
+    // no code
+#end
+#end
+#end###foreach($tableName in $tableNames)
+#subscriberDef(['fl_person','fl_feature'] false 'Pubsub' ['Insert','Update','Delete'])
+#subscriberDef(['fl_permit'] true 'Pubsub' ['Insert','Update','Delete'] )
+#subscriberDef(['fl_log'] true 'Queue' $null )
+}
