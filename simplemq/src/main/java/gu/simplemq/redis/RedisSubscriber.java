@@ -1,6 +1,6 @@
 package gu.simplemq.redis;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -95,9 +95,8 @@ public class RedisSubscriber extends AbstractSubcriber implements IRedisComponen
 	 * @return
 	 */
 	@Override
-	public RedisSubscriber setExecutor(Executor executor) {
-		checkArgument(executor instanceof ExecutorService,"executor must be a ExecutorService instance");
-		this.executor = executor;
+	public RedisSubscriber setExecutor(ExecutorService executor) {
+		this.executor = checkNotNull(executor,"executor is null");
 		super.setExecutor(executor);
 		return this;
 	}

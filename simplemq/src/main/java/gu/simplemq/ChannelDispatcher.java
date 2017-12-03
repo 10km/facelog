@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,7 @@ import gu.simplemq.utils.Synchronizer.ReadWriteSynchronizer;;
 /**
  * (消息)频道订阅对象({@link Channel})管理类,负责频道的注册/注销,订阅/取消,消息数据解析及分发<p>
  * <b>NOTE:</b>如果不设置线程池对象,消息分发{@link #dispatch(String, String)}将以单线程工作,<br>
- * 参见{@link  #setExecutor(Executor)}
+ * 参见{@link  #setExecutor(ExecutorService)}
  * @author guyadong
  *
  */
@@ -265,7 +266,7 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 	 * @return 
 	 * @return
 	 */
-	public ChannelDispatcher setExecutor(Executor executor) {
+	public ChannelDispatcher setExecutor(ExecutorService executor) {
 		this.executor = checkNotNull(executor,"executor is null");
 		return this;
 	}
