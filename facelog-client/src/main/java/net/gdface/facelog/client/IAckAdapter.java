@@ -6,9 +6,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 
-import com.google.common.base.Strings;
-import com.google.common.base.Supplier;
-
 import gu.simplemq.IMessageAdapter;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
 import net.gdface.facelog.client.Ack.Status;
@@ -48,42 +45,12 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
         protected long expire;
         /** 收到的命令响应计数 */
         protected long ackCount = 0L;
-        /** 订阅的命令响应频道名 */
-        protected final String channel;
-
         /**
-         * 构造函数<br>
-         * 超时参数使用默认值{@link #DEFAULT_DURATION}
-         * @param channel
-         * @see #BaseAdapter(long, String)
-         */
-        public BaseAdapter(String channel) {
-			this(System.currentTimeMillis() + DEFAULT_DURATION,channel);
-		}
-
-		/**
 		 * 构造函数
 		 * @param expire 有效期时间戳
-		 * @param channel 命令响应频道名
 		 */
-		public BaseAdapter(long expire, String channel) {
-			checkArgument(!Strings.isNullOrEmpty(channel),"channel is null or empty");
-			this.channel = channel;
+		public BaseAdapter(long expire) {
 			this.expire = expire;
-		}
-		/**
-		 * 构造函数
-		 * @param ackChannelSupplier 参见 {@link IFaceLogClient#getAckChannelSupplier(net.gdface.facelog.client.thrift.Token)}
-		 */
-		public BaseAdapter(Supplier<String> ackChannelSupplier) {
-			this(ackChannelSupplier.get());
-		}
-		/**
-		 * @param expire
-		 * @param ackChannelSupplier
-		 */
-		public BaseAdapter(long expire, Supplier<String> ackChannelSupplier) {
-			this(expire,ackChannelSupplier.get());
 		}
 		/**
 		 * 命令响应处理实现,应用项目应重写此方法实现自己的业务逻辑
@@ -125,7 +92,6 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
         public long getExpire() {
             return expire;
         }
-        @Override
         public BaseAdapter<T> setExpire(long expire) {
             this.expire = expire;
             return this;
@@ -147,10 +113,6 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
         public BaseAdapter<T> setDuration(long duration) {
             return setExpire(System.currentTimeMillis() +duration);
         }
-        @Override
-        public String getChannel() {
-            return channel;
-        }
 	}
 	/**
 	 * 设置收到命令的client端数量<br>
@@ -165,17 +127,4 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
      * @return
      */
     public long getExpire();
-    /**
-     * 设置命令响应等待有效期时间戳(毫秒), 参见 {@link System#currentTimeMillis()},
-     * 超过这个时间会自动取消频道订阅 
-     * @param expire
-     * @return
-     */
-    public IAckAdapter<T> setExpire(long expire);
-    
-    /**
-     * 订阅的命令响应频道名
-     * @return
-     */
-    public String getChannel() ;
 }

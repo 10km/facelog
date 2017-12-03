@@ -16,6 +16,7 @@ import ${thriftPackage}.Token;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkArgument;
@@ -27,7 +28,9 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
 
+import gu.simplemq.IAfterUnregister;
 import gu.simplemq.Channel;
+import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 
@@ -105,7 +108,7 @@ public class CmdManager {
             int deviceId, 
             Supplier<Integer> groupIdSupplier) {
         this(JedisPoolLazy.getDefaultInstance(),
-        		adapter,
+                adapter,
                 redisParameters,
                 deviceId,
                 groupIdSupplier);
@@ -235,7 +238,26 @@ public class CmdManager {
         return checkNotNull(TLS_BUILDER.get(),
                 "not defined target,please call method targetBuilder() to build parameters");
     }
-
+    /**
+     * 用于处理超时等待的{@link Ack}对象<br>
+     * 向{@link Ack}对象发送超时错误{@link Ack.Status${esc.hash}TIMEOUT}
+     * @author guyadong
+     *
+     * @param <T>
+     */
+    private class TimeoutCleaner <T> implements IAfterUnregister<Ack<T>>{
+        @Override
+        public void apply(Channel<Ack<T>> input) {
+            IAckAdapter<T> adapter = (IAckAdapter<T>)input.getAdapter();
+            try{
+                // 通知执行器命令超时
+                adapter.onSubscribe(new Ack<T>().setStatus(Ack.Status.TIMEOUT));
+            }catch(SmqUnsubscribeException e){
+            }catch(RuntimeException e){
+                e.printStackTrace();
+            }
+        }
+    }
 #foreach($entry in $commands.entrySet())
 #set($key = $entry.key)
 #set($value = $entry.value)
@@ -288,8 +310,13 @@ public class CmdManager {
     public void ${key}(#join($params '$e.value[0] $e.key,' '')IAckAdapter<$returnParamType> adapter){
         CmdBuilder builder = checkTlsAvailable();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
-        subscriber.register(new Channel<Ack<$returnParamType>>(builder.ackChannel){}
-        						.setAdapter(checkNotNull(adapter,"adapter is null")));
+        subscriber.register(
+                new Channel<Ack<$returnParamType>>(builder.ackChannel){}
+                    .setAdapter(checkNotNull(adapter,"adapter is null")),
+                adapter.getExpire(),
+                TimeUnit.MILLISECONDS,
+                new TimeoutCleaner<$returnParamType>()
+                );
         adapter.setClientNum(${key}(#join($params '$e.key' ',')));
     }
 #end

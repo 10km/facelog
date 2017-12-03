@@ -8,15 +8,20 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.util.concurrent.MoreExecutors;
 
 import gu.simplemq.exceptions.SmqTypeException;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
@@ -34,14 +39,6 @@ import gu.simplemq.utils.Synchronizer.ReadWriteSynchronizer;;
  */
 public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 	protected static final Logger logger = LoggerFactory.getLogger(ChannelDispatcher.class);
-	/** 默认单线程实例 */
-    private final Executor defaultExecutor = new Executor() {
-        // DirectExecutor using caller thread
-    	@Override
-        public void execute(Runnable r) {
-            r.run();
-        }
-    };
 	private BaseJsonEncoder encoder = BaseJsonEncoder.getEncoder();
 
 	/** 注册的频道对象 */
@@ -50,7 +47,9 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 	private final Set<String> subChannelSet= new LinkedHashSet<String>();
 	private final Synchronizer sync = new ReadWriteSynchronizer();
 	/** 线程池对象 */
-	private Executor executor = defaultExecutor; 
+	private Executor executor = MoreExecutors.directExecutor(); 
+	/** 定时任务线程池 */
+	private ScheduledExecutorService timerExecutor;
 	public ChannelDispatcher() {
 	}
 
@@ -130,6 +129,34 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 			sync.endWrite();;
 		}
 	}
+	/**
+	 * 注册并订阅指定的频道,并在指定的时间后注销频道<br>
+	 * 调用该方法必须要提供一个{@link ScheduledExecutorService}对象,
+	 * 参见{@link #setTimerExecutor(ScheduledExecutorService)}
+	 * @param channel 频道名
+	 * @param duration 频道订阅持续时间
+	 * @param unit 时间单位,不可为{@code null}
+	 * @param afterUnregistered 当频道注册时执行的动作,可为{@code null},忽略返回值
+	 * @see #register(Channel...)
+	 */
+	public <T>void register(final Channel<T>channel,
+			long duration,
+			TimeUnit unit, 
+			final IAfterUnregister<T> afterUnregistered) {
+		checkArgument(null != unit,"unit is null");
+		checkState(null != this.timerExecutor,"timerExecutor is uninitialized,please call setTimerExecutor firstly");
+		register(checkNotNull(channel,"channel is null"));
+		this.timerExecutor.schedule(new Runnable(){
+			@Override
+			public void run() {
+				unregister(channel.name);
+				if(null != afterUnregistered){
+					// 忽略返回值
+					afterUnregistered.apply(channel);
+				}
+			}}, duration, unit);
+	}
+	
 	@Override
 	public Set<String> unregister(String... channels) {
 		sync.beginWrite();
@@ -263,11 +290,20 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 	/**
 	 * 设置线程池对象,如果不指定线程对象,消息分发{@link #dispatch(String, String)}将以单线程工作
 	 * @param executor 线程池对象，不可为{@code null}
-	 * @return 
 	 * @return
 	 */
 	public ChannelDispatcher setExecutor(ExecutorService executor) {
 		this.executor = checkNotNull(executor,"executor is null");
+		return this;
+	}
+
+	/**
+	 * 设置用于定时任务的线程池对象
+	 * @param timerExecutor
+	 * @return 
+	 */
+	public ChannelDispatcher setTimerExecutor(ScheduledExecutorService timerExecutor) {
+		this.timerExecutor = checkNotNull(timerExecutor,"timerExecutor is null");
 		return this;
 	}
 }
