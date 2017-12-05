@@ -310,14 +310,21 @@ public class CmdManager {
     public void ${key}(#join($params '$e.value[0] $e.key,' '')IAckAdapter<$returnParamType> adapter){
         CmdBuilder builder = checkTlsAvailable();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
+        Channel<Ack<$returnParamType>> channel = new Channel<Ack<$returnParamType>>(builder.ackChannel){}
+            .setAdapter(checkNotNull(adapter,"adapter is null"))
+            .setUnregistedListener(new TimeoutCleaner<$returnParamType>());
         subscriber.register(
-                new Channel<Ack<$returnParamType>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null"))
-                    .setUnregistedListener(new TimeoutCleaner<$returnParamType>()),
+                channel,
                 adapter.getExpire(),
                 TimeUnit.MILLISECONDS
                 );
-        adapter.setClientNum(${key}(#join($params '$e.key' ',')));
+        long clientNum = ${key}(#join($params '$e.key' ','));
+        if(0 == clientNum){
+            // 如果没有接收端收到命令则立即注销频道 
+            subscriber.unregister(channel);
+        }else{
+            adapter.setClientNum(clientNum);
+        }
     }
 #end
 }

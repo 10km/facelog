@@ -131,21 +131,23 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 	 * 调用该方法必须要提供一个{@link ScheduledExecutorService}对象,
 	 * 参见{@link #setTimerExecutor(ScheduledExecutorService)}
 	 * @param channel 频道名
-	 * @param duration 频道订阅持续时间
+	 * @param duration 频道订阅持续时间,>0有效
 	 * @param unit 时间单位,不可为{@code null}
 	 * @see #register(Channel...)
 	 */
 	public <T>void register(final Channel<T>channel,
 			long duration,
 			TimeUnit unit) {
-		checkArgument(null != unit,"unit is null");
 		checkState(null != this.timerExecutor,"timerExecutor is uninitialized,please call setTimerExecutor firstly");
 		register(checkNotNull(channel,"channel is null"));
-		this.timerExecutor.schedule(new Runnable(){
-			@Override
-			public void run() {
-				unregister(channel.name);
-			}}, duration, unit);
+		if(duration > 0){
+			checkArgument(null != unit,"unit is null");
+			this.timerExecutor.schedule(new Runnable(){
+				@Override
+				public void run() {
+					unregister(channel.name);
+				}}, duration, unit);
+		}
 	}
 	
 	@Override

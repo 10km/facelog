@@ -296,14 +296,21 @@ public class CmdManager {
     public void parameter(String key,String value,IAckAdapter<Void> adapter){
         CmdBuilder builder = checkTlsAvailable();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
+        Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
+            .setAdapter(checkNotNull(adapter,"adapter is null"))
+            .setUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
-                new Channel<Ack<Void>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null"))
-                    .setUnregistedListener(new TimeoutCleaner<Void>()),
+                channel,
                 adapter.getExpire(),
                 TimeUnit.MILLISECONDS
                 );
-        adapter.setClientNum(parameter(key,value));
+        long clientNum = parameter(key,value);
+        if(0 == clientNum){
+            // 如果没有接收端收到命令则立即注销频道 
+            subscriber.unregister(channel);
+        }else{
+            adapter.setClientNum(clientNum);
+        }
     }
     /**
      * 设备命令<br>
@@ -344,14 +351,21 @@ public class CmdManager {
     public void config(Map<String,String> properties,IAckAdapter<Void> adapter){
         CmdBuilder builder = checkTlsAvailable();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
+        Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
+            .setAdapter(checkNotNull(adapter,"adapter is null"))
+            .setUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
-                new Channel<Ack<Void>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null"))
-                    .setUnregistedListener(new TimeoutCleaner<Void>()),
+                channel,
                 adapter.getExpire(),
                 TimeUnit.MILLISECONDS
                 );
-        adapter.setClientNum(config(properties));
+        long clientNum = config(properties);
+        if(0 == clientNum){
+            // 如果没有接收端收到命令则立即注销频道 
+            subscriber.unregister(channel);
+        }else{
+            adapter.setClientNum(clientNum);
+        }
     }
     /**
      * 设备命令<br>
@@ -392,14 +406,21 @@ public class CmdManager {
     public void status(String name,IAckAdapter<Object> adapter){
         CmdBuilder builder = checkTlsAvailable();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
+        Channel<Ack<Object>> channel = new Channel<Ack<Object>>(builder.ackChannel){}
+            .setAdapter(checkNotNull(adapter,"adapter is null"))
+            .setUnregistedListener(new TimeoutCleaner<Object>());
         subscriber.register(
-                new Channel<Ack<Object>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null"))
-                    .setUnregistedListener(new TimeoutCleaner<Object>()),
+                channel,
                 adapter.getExpire(),
                 TimeUnit.MILLISECONDS
                 );
-        adapter.setClientNum(status(name));
+        long clientNum = status(name);
+        if(0 == clientNum){
+            // 如果没有接收端收到命令则立即注销频道 
+            subscriber.unregister(channel);
+        }else{
+            adapter.setClientNum(clientNum);
+        }
     }
     /**
      * 设备命令<br>
@@ -440,14 +461,21 @@ public class CmdManager {
     public void report(List<String> names,IAckAdapter<Map<String,Object>> adapter){
         CmdBuilder builder = checkTlsAvailable();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
+        Channel<Ack<Map<String,Object>>> channel = new Channel<Ack<Map<String,Object>>>(builder.ackChannel){}
+            .setAdapter(checkNotNull(adapter,"adapter is null"))
+            .setUnregistedListener(new TimeoutCleaner<Map<String,Object>>());
         subscriber.register(
-                new Channel<Ack<Map<String,Object>>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null"))
-                    .setUnregistedListener(new TimeoutCleaner<Map<String,Object>>()),
+                channel,
                 adapter.getExpire(),
                 TimeUnit.MILLISECONDS
                 );
-        adapter.setClientNum(report(names));
+        long clientNum = report(names);
+        if(0 == clientNum){
+            // 如果没有接收端收到命令则立即注销频道 
+            subscriber.unregister(channel);
+        }else{
+            adapter.setClientNum(clientNum);
+        }
     }
     /**
      * 设备命令<br>
@@ -486,14 +514,21 @@ public class CmdManager {
     public void version(IAckAdapter<String> adapter){
         CmdBuilder builder = checkTlsAvailable();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
+        Channel<Ack<String>> channel = new Channel<Ack<String>>(builder.ackChannel){}
+            .setAdapter(checkNotNull(adapter,"adapter is null"))
+            .setUnregistedListener(new TimeoutCleaner<String>());
         subscriber.register(
-                new Channel<Ack<String>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null"))
-                    .setUnregistedListener(new TimeoutCleaner<String>()),
+                channel,
                 adapter.getExpire(),
                 TimeUnit.MILLISECONDS
                 );
-        adapter.setClientNum(version());
+        long clientNum = version();
+        if(0 == clientNum){
+            // 如果没有接收端收到命令则立即注销频道 
+            subscriber.unregister(channel);
+        }else{
+            adapter.setClientNum(clientNum);
+        }
     }
     /**
      * 设备命令<br>
@@ -534,14 +569,21 @@ public class CmdManager {
     public void enable(Boolean enable,IAckAdapter<Void> adapter){
         CmdBuilder builder = checkTlsAvailable();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
+        Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
+            .setAdapter(checkNotNull(adapter,"adapter is null"))
+            .setUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
-                new Channel<Ack<Void>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null"))
-                    .setUnregistedListener(new TimeoutCleaner<Void>()),
+                channel,
                 adapter.getExpire(),
                 TimeUnit.MILLISECONDS
                 );
-        adapter.setClientNum(enable(enable));
+        long clientNum = enable(enable);
+        if(0 == clientNum){
+            // 如果没有接收端收到命令则立即注销频道 
+            subscriber.unregister(channel);
+        }else{
+            adapter.setClientNum(clientNum);
+        }
     }
     /**
      * 设备命令<br>
@@ -582,14 +624,21 @@ public class CmdManager {
     public void isEnable(String message,IAckAdapter<Boolean> adapter){
         CmdBuilder builder = checkTlsAvailable();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
+        Channel<Ack<Boolean>> channel = new Channel<Ack<Boolean>>(builder.ackChannel){}
+            .setAdapter(checkNotNull(adapter,"adapter is null"))
+            .setUnregistedListener(new TimeoutCleaner<Boolean>());
         subscriber.register(
-                new Channel<Ack<Boolean>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null"))
-                    .setUnregistedListener(new TimeoutCleaner<Boolean>()),
+                channel,
                 adapter.getExpire(),
                 TimeUnit.MILLISECONDS
                 );
-        adapter.setClientNum(isEnable(message));
+        long clientNum = isEnable(message);
+        if(0 == clientNum){
+            // 如果没有接收端收到命令则立即注销频道 
+            subscriber.unregister(channel);
+        }else{
+            adapter.setClientNum(clientNum);
+        }
     }
     /**
      * 设备命令<br>
@@ -630,14 +679,21 @@ public class CmdManager {
     public void reset(Long schedule,IAckAdapter<Void> adapter){
         CmdBuilder builder = checkTlsAvailable();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
+        Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
+            .setAdapter(checkNotNull(adapter,"adapter is null"))
+            .setUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
-                new Channel<Ack<Void>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null"))
-                    .setUnregistedListener(new TimeoutCleaner<Void>()),
+                channel,
                 adapter.getExpire(),
                 TimeUnit.MILLISECONDS
                 );
-        adapter.setClientNum(reset(schedule));
+        long clientNum = reset(schedule);
+        if(0 == clientNum){
+            // 如果没有接收端收到命令则立即注销频道 
+            subscriber.unregister(channel);
+        }else{
+            adapter.setClientNum(clientNum);
+        }
     }
     /**
      * 设备命令<br>
@@ -678,14 +734,21 @@ public class CmdManager {
     public void time(Long unixTimestamp,IAckAdapter<Void> adapter){
         CmdBuilder builder = checkTlsAvailable();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
+        Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
+            .setAdapter(checkNotNull(adapter,"adapter is null"))
+            .setUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
-                new Channel<Ack<Void>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null"))
-                    .setUnregistedListener(new TimeoutCleaner<Void>()),
+                channel,
                 adapter.getExpire(),
                 TimeUnit.MILLISECONDS
                 );
-        adapter.setClientNum(time(unixTimestamp));
+        long clientNum = time(unixTimestamp);
+        if(0 == clientNum){
+            // 如果没有接收端收到命令则立即注销频道 
+            subscriber.unregister(channel);
+        }else{
+            adapter.setClientNum(clientNum);
+        }
     }
     /**
      * 设备命令<br>
@@ -732,14 +795,21 @@ public class CmdManager {
     public void update(URL url,String version,Long schedule,IAckAdapter<Void> adapter){
         CmdBuilder builder = checkTlsAvailable();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
+        Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
+            .setAdapter(checkNotNull(adapter,"adapter is null"))
+            .setUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
-                new Channel<Ack<Void>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null"))
-                    .setUnregistedListener(new TimeoutCleaner<Void>()),
+                channel,
                 adapter.getExpire(),
                 TimeUnit.MILLISECONDS
                 );
-        adapter.setClientNum(update(url,version,schedule));
+        long clientNum = update(url,version,schedule);
+        if(0 == clientNum){
+            // 如果没有接收端收到命令则立即注销频道 
+            subscriber.unregister(channel);
+        }else{
+            adapter.setClientNum(clientNum);
+        }
     }
     /**
      * 设备命令<br>
@@ -783,14 +853,21 @@ public class CmdManager {
     public void idleMessage(String message,Long duration,IAckAdapter<Void> adapter){
         CmdBuilder builder = checkTlsAvailable();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
+        Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
+            .setAdapter(checkNotNull(adapter,"adapter is null"))
+            .setUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
-                new Channel<Ack<Void>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null"))
-                    .setUnregistedListener(new TimeoutCleaner<Void>()),
+                channel,
                 adapter.getExpire(),
                 TimeUnit.MILLISECONDS
                 );
-        adapter.setClientNum(idleMessage(message,duration));
+        long clientNum = idleMessage(message,duration);
+        if(0 == clientNum){
+            // 如果没有接收端收到命令则立即注销频道 
+            subscriber.unregister(channel);
+        }else{
+            adapter.setClientNum(clientNum);
+        }
     }
     /**
      * 设备命令<br>
@@ -843,14 +920,21 @@ public class CmdManager {
     public void personMessage(String message,Integer id,Boolean group,Boolean onceOnly,Long duration,IAckAdapter<Void> adapter){
         CmdBuilder builder = checkTlsAvailable();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
+        Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
+            .setAdapter(checkNotNull(adapter,"adapter is null"))
+            .setUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
-                new Channel<Ack<Void>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null"))
-                    .setUnregistedListener(new TimeoutCleaner<Void>()),
+                channel,
                 adapter.getExpire(),
                 TimeUnit.MILLISECONDS
                 );
-        adapter.setClientNum(personMessage(message,id,group,onceOnly,duration));
+        long clientNum = personMessage(message,id,group,onceOnly,duration);
+        if(0 == clientNum){
+            // 如果没有接收端收到命令则立即注销频道 
+            subscriber.unregister(channel);
+        }else{
+            adapter.setClientNum(clientNum);
+        }
     }
     /**
      * 设备命令<br>
@@ -894,13 +978,20 @@ public class CmdManager {
     public void custom(String cmdName,Map<String,Object> parameters,IAckAdapter<Object> adapter){
         CmdBuilder builder = checkTlsAvailable();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
+        Channel<Ack<Object>> channel = new Channel<Ack<Object>>(builder.ackChannel){}
+            .setAdapter(checkNotNull(adapter,"adapter is null"))
+            .setUnregistedListener(new TimeoutCleaner<Object>());
         subscriber.register(
-                new Channel<Ack<Object>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null"))
-                    .setUnregistedListener(new TimeoutCleaner<Object>()),
+                channel,
                 adapter.getExpire(),
                 TimeUnit.MILLISECONDS
                 );
-        adapter.setClientNum(custom(cmdName,parameters));
+        long clientNum = custom(cmdName,parameters);
+        if(0 == clientNum){
+            // 如果没有接收端收到命令则立即注销频道 
+            subscriber.unregister(channel);
+        }else{
+            adapter.setClientNum(clientNum);
+        }
     }
 }

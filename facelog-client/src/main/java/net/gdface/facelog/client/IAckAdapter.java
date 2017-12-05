@@ -30,21 +30,21 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 	public static final long DEFAULT_DURATION = 60000L;
     /**
      * 命令响应{@link Ack}处理基类,
-     * 应用项目可以继承此类实现自己的业务逻辑 
+     * 应用项目可以继承此类实现自己的业务逻辑 {@link #doOnTimeout()},{@link #doOnSubscribe(Ack)}
      * @author guyadong
      *
      * @param <T>
      */
     public static class BaseAdapter<T> implements IAckAdapter<T> {
     	/** 收到命令的client端数量,初始值-1,只有{@link #setClientNum(long)}被调用后才有效 */
-        protected final AtomicLong clientNum = new AtomicLong(-1L);
+        private final AtomicLong clientNum = new AtomicLong(-1L);
         /**  
          * 命令响应等待有效期时间戳(毫秒), 参见 {@link System#currentTimeMillis()},
-         * 超过这个时间会自动取消频道订阅 
+         * 超过这个时间会自动取消频道订阅,默认为0时无限期。 
          */
-        protected long expire;
+        private long expire = 0L;
         /** 收到的命令响应计数 */
-        protected long ackCount = 0L;
+        private long ackCount = 0L;
         /**
 		 * 构造函数
 		 * @param expire 有效期时间戳
@@ -52,23 +52,35 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 		public BaseAdapter(long expire) {
 			this.expire = expire;
 		}
+		/** 处理超时情况 */
+		protected void doOnTimeout(){}
+		/** 处理接收命令的设备端数量为0的情况 */
+		protected void doOnZeroClient(){}
+		/** 执行正常响应处理业务逻辑 */
+		protected void doOnSubscribe(Ack<T> t){}
+		/** 返回{@link #clientNum}值 */
+		protected final long getClientNum(){
+			return clientNum.get();
+		}
+		/** 返回{@link #ackCount}值 */
+		protected final long getAckCount() {
+			return ackCount;
+		}
 		/**
 		 * 命令响应处理实现,应用项目应重写此方法实现自己的业务逻辑
 		 */
 		@Override
-        public void onSubscribe(Ack<T> t) throws SmqUnsubscribeException {
+        public final void onSubscribe(Ack<T> t) throws SmqUnsubscribeException {
 			if(t.getStatus() == Status.TIMEOUT ){
-				// 发送这个状态的本机线程会自动取消频道订阅
-				if(ackCount !=clientNum.get()){
-					// 超时处理
+				// 收到这个状态时频道已经被取消订阅
+				if(clientNum.get() == 0){
+					doOnZeroClient();
 				}else{
-					// 超时之前已经收到了所有响应，但因为没有及时调用setClientNum造成的延迟
-					// 在设备端响应命令很快时有可能会出现这种情况
-					// 或者收到命令响应的设备端为0,也会引起超时
+					doOnTimeout();
 				}
 			}else{
 				try{
-					// 正常响应处理业务逻辑 。。。
+					doOnSubscribe(t);
 				}finally{
 					if(++ackCount ==clientNum.get()){
 						// 所有收到命令的设备都已经响应则抛出SmqUnsubscribeException异常用于取消当前频道订阅
@@ -83,13 +95,13 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
          * 设备命令发送后，REDIS会返回收到设备命令的设备端数量,{@code clientNum}必须>=0
          */
         @Override
-        public BaseAdapter<T> setClientNum(long clientNum){
+        public final BaseAdapter<T> setClientNum(long clientNum){
         	checkArgument(clientNum >= 0,"INVALID clientNum %s",clientNum);
         	checkState(this.clientNum.compareAndSet(-1L, clientNum),"clientNum can be set once only");    
             return this;
         }
         @Override
-        public long getExpire() {
+        public final long getExpire() {
             return expire;
         }
         public BaseAdapter<T> setExpire(long expire) {
