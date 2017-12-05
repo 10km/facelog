@@ -29,7 +29,8 @@ public class Channel<T> implements IMessageAdapter<Object>, Cloneable {
 
 	/**  频道对应的消息处理器 */
 	private IMessageAdapter<T> adapter;
-	
+	/** 注销侦听器,当前频道被注销时调用 */
+	private IUnregistedListener<T> unregistedListener;
 	public Channel(String name, Class<T> clazz) {
 		this(name,(Type)clazz);
 	}
@@ -96,6 +97,15 @@ public class Channel<T> implements IMessageAdapter<Object>, Cloneable {
 		}
 	}
 	/**
+	 * 当前频道被注销时调用
+	 * @see #setUnregistedListener(IUnregistedListener)
+	 */
+	public void onUnregisted(){
+		if(null != this.unregistedListener){
+			this.unregistedListener.apply(this);
+		}
+	}
+	/**
 	 * @return adapter
 	 */
 	public IMessageAdapter<T> getAdapter() {
@@ -110,6 +120,22 @@ public class Channel<T> implements IMessageAdapter<Object>, Cloneable {
 		return this;
 	}
 	
+	/**
+	 * 返回注销侦听器
+	 * @return
+	 */
+	public IUnregistedListener<T> getUnregistedListener() {
+		return unregistedListener;
+	}
+	/**
+	 * 设置注销侦听器
+	 * @param unregistedListener
+	 * @return 
+	 */
+	public Channel<T> setUnregistedListener(IUnregistedListener<T> unregistedListener) {
+		this.unregistedListener = unregistedListener;
+		return this;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;

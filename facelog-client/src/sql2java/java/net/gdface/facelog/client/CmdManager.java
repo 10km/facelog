@@ -24,7 +24,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
 
-import gu.simplemq.IAfterUnregister;
+import gu.simplemq.IUnregistedListener;
 import gu.simplemq.Channel;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.JedisPoolLazy;
@@ -241,14 +241,14 @@ public class CmdManager {
      *
      * @param <T>
      */
-    private class TimeoutCleaner <T> implements IAfterUnregister<Ack<T>>{
+    private class TimeoutCleaner <T> implements IUnregistedListener<Ack<T>>{
         @Override
         public void apply(Channel<Ack<T>> input) {
             IAckAdapter<T> adapter = (IAckAdapter<T>)input.getAdapter();
             try{
                 // 通知执行器命令超时
                 adapter.onSubscribe(new Ack<T>().setStatus(Ack.Status.TIMEOUT));
-            }catch(SmqUnsubscribeException e){                                
+            }catch(SmqUnsubscribeException e){
             }catch(RuntimeException e){
                 e.printStackTrace();
             }
@@ -298,10 +298,10 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(
                 new Channel<Ack<Void>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null")),
+                    .setAdapter(checkNotNull(adapter,"adapter is null"))
+                    .setUnregistedListener(new TimeoutCleaner<Void>()),
                 adapter.getExpire(),
-                TimeUnit.MILLISECONDS,
-                new TimeoutCleaner<Void>()
+                TimeUnit.MILLISECONDS
                 );
         adapter.setClientNum(parameter(key,value));
     }
@@ -346,10 +346,10 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(
                 new Channel<Ack<Void>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null")),
+                    .setAdapter(checkNotNull(adapter,"adapter is null"))
+                    .setUnregistedListener(new TimeoutCleaner<Void>()),
                 adapter.getExpire(),
-                TimeUnit.MILLISECONDS,
-                new TimeoutCleaner<Void>()
+                TimeUnit.MILLISECONDS
                 );
         adapter.setClientNum(config(properties));
     }
@@ -394,10 +394,10 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(
                 new Channel<Ack<Object>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null")),
+                    .setAdapter(checkNotNull(adapter,"adapter is null"))
+                    .setUnregistedListener(new TimeoutCleaner<Object>()),
                 adapter.getExpire(),
-                TimeUnit.MILLISECONDS,
-                new TimeoutCleaner<Object>()
+                TimeUnit.MILLISECONDS
                 );
         adapter.setClientNum(status(name));
     }
@@ -442,10 +442,10 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(
                 new Channel<Ack<Map<String,Object>>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null")),
+                    .setAdapter(checkNotNull(adapter,"adapter is null"))
+                    .setUnregistedListener(new TimeoutCleaner<Map<String,Object>>()),
                 adapter.getExpire(),
-                TimeUnit.MILLISECONDS,
-                new TimeoutCleaner<Map<String,Object>>()
+                TimeUnit.MILLISECONDS
                 );
         adapter.setClientNum(report(names));
     }
@@ -488,10 +488,10 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(
                 new Channel<Ack<String>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null")),
+                    .setAdapter(checkNotNull(adapter,"adapter is null"))
+                    .setUnregistedListener(new TimeoutCleaner<String>()),
                 adapter.getExpire(),
-                TimeUnit.MILLISECONDS,
-                new TimeoutCleaner<String>()
+                TimeUnit.MILLISECONDS
                 );
         adapter.setClientNum(version());
     }
@@ -536,10 +536,10 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(
                 new Channel<Ack<Void>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null")),
+                    .setAdapter(checkNotNull(adapter,"adapter is null"))
+                    .setUnregistedListener(new TimeoutCleaner<Void>()),
                 adapter.getExpire(),
-                TimeUnit.MILLISECONDS,
-                new TimeoutCleaner<Void>()
+                TimeUnit.MILLISECONDS
                 );
         adapter.setClientNum(enable(enable));
     }
@@ -584,10 +584,10 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(
                 new Channel<Ack<Boolean>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null")),
+                    .setAdapter(checkNotNull(adapter,"adapter is null"))
+                    .setUnregistedListener(new TimeoutCleaner<Boolean>()),
                 adapter.getExpire(),
-                TimeUnit.MILLISECONDS,
-                new TimeoutCleaner<Boolean>()
+                TimeUnit.MILLISECONDS
                 );
         adapter.setClientNum(isEnable(message));
     }
@@ -632,10 +632,10 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(
                 new Channel<Ack<Void>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null")),
+                    .setAdapter(checkNotNull(adapter,"adapter is null"))
+                    .setUnregistedListener(new TimeoutCleaner<Void>()),
                 adapter.getExpire(),
-                TimeUnit.MILLISECONDS,
-                new TimeoutCleaner<Void>()
+                TimeUnit.MILLISECONDS
                 );
         adapter.setClientNum(reset(schedule));
     }
@@ -680,10 +680,10 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(
                 new Channel<Ack<Void>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null")),
+                    .setAdapter(checkNotNull(adapter,"adapter is null"))
+                    .setUnregistedListener(new TimeoutCleaner<Void>()),
                 adapter.getExpire(),
-                TimeUnit.MILLISECONDS,
-                new TimeoutCleaner<Void>()
+                TimeUnit.MILLISECONDS
                 );
         adapter.setClientNum(time(unixTimestamp));
     }
@@ -734,10 +734,10 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(
                 new Channel<Ack<Void>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null")),
+                    .setAdapter(checkNotNull(adapter,"adapter is null"))
+                    .setUnregistedListener(new TimeoutCleaner<Void>()),
                 adapter.getExpire(),
-                TimeUnit.MILLISECONDS,
-                new TimeoutCleaner<Void>()
+                TimeUnit.MILLISECONDS
                 );
         adapter.setClientNum(update(url,version,schedule));
     }
@@ -785,10 +785,10 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(
                 new Channel<Ack<Void>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null")),
+                    .setAdapter(checkNotNull(adapter,"adapter is null"))
+                    .setUnregistedListener(new TimeoutCleaner<Void>()),
                 adapter.getExpire(),
-                TimeUnit.MILLISECONDS,
-                new TimeoutCleaner<Void>()
+                TimeUnit.MILLISECONDS
                 );
         adapter.setClientNum(idleMessage(message,duration));
     }
@@ -845,10 +845,10 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(
                 new Channel<Ack<Void>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null")),
+                    .setAdapter(checkNotNull(adapter,"adapter is null"))
+                    .setUnregistedListener(new TimeoutCleaner<Void>()),
                 adapter.getExpire(),
-                TimeUnit.MILLISECONDS,
-                new TimeoutCleaner<Void>()
+                TimeUnit.MILLISECONDS
                 );
         adapter.setClientNum(personMessage(message,id,group,onceOnly,duration));
     }
@@ -896,10 +896,10 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(
                 new Channel<Ack<Object>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null")),
+                    .setAdapter(checkNotNull(adapter,"adapter is null"))
+                    .setUnregistedListener(new TimeoutCleaner<Object>()),
                 adapter.getExpire(),
-                TimeUnit.MILLISECONDS,
-                new TimeoutCleaner<Object>()
+                TimeUnit.MILLISECONDS
                 );
         adapter.setClientNum(custom(cmdName,parameters));
     }

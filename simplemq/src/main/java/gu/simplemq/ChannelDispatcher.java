@@ -18,9 +18,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.MoreExecutors;
 
 import gu.simplemq.exceptions.SmqTypeException;
@@ -136,13 +133,11 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 	 * @param channel 频道名
 	 * @param duration 频道订阅持续时间
 	 * @param unit 时间单位,不可为{@code null}
-	 * @param afterUnregistered 当频道注册时执行的动作,可为{@code null},忽略返回值
 	 * @see #register(Channel...)
 	 */
 	public <T>void register(final Channel<T>channel,
 			long duration,
-			TimeUnit unit, 
-			final IAfterUnregister<T> afterUnregistered) {
+			TimeUnit unit) {
 		checkArgument(null != unit,"unit is null");
 		checkState(null != this.timerExecutor,"timerExecutor is uninitialized,please call setTimerExecutor firstly");
 		register(checkNotNull(channel,"channel is null"));
@@ -150,10 +145,6 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 			@Override
 			public void run() {
 				unregister(channel.name);
-				if(null != afterUnregistered){
-					// 忽略返回值
-					afterUnregistered.apply(channel);
-				}
 			}}, duration, unit);
 	}
 	
@@ -162,10 +153,15 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 		sync.beginWrite();
 		try {
 			HashSet<String> chSet = new HashSet<String>(CommonUtils.cleanEmptyAsList(channels));
+			// 这里要判断是否为空,因为unsubscribe方法对于空列表参数会清除所有订阅
 			if(!chSet.isEmpty()){
 				unsubscribe(chSet.toArray(new String[0]));
 				for (String ch : chSet) {
-					this.channelSubs.remove(ch);
+					Channel<?> channel = this.channelSubs.get(ch);
+					if(null != channel){
+						this.channelSubs.remove(ch);
+						channel.onUnregisted();
+					}
 				}
 			}
 			return chSet;
@@ -258,35 +254,6 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 			sync.endRead();
 		}
 	}
-	/**
-	 * 注销符合条件{@code removeIfTrue}的的频道
-	 * @param removeIfTrue
-	 */
-	public void unregister(Predicate<Channel<?>> removeIfTrue){
-		sync.beginWrite();
-		try{
-			checkArgument(null != removeIfTrue,"retainIfTrue is null");
-			String[] channels = Maps.filterValues(channelSubs, removeIfTrue).keySet().toArray(new String[0]);
-			unregister(channels);
-		}finally{
-			sync.endWrite();
-		}
-	}
-	/**
-	 * 取消频道订阅符合条件{@code removeIfTrue}的的频道
-	 * @param removeIfTrue
-	 */
-	public void unsubscribe(Predicate<String> removeIfTrue){
-		sync.beginWrite();
-		try{
-			checkArgument(null != removeIfTrue,"retainIfTrue is null");
-			String[] channels = Sets.filter(subChannelSet, removeIfTrue).toArray(new String[0]);
-			unsubscribe(channels);
-		}finally{
-			sync.endWrite();
-		}
-	}
-
 	/**
 	 * 设置线程池对象,如果不指定线程对象,消息分发{@link #dispatch(String, String)}将以单线程工作
 	 * @param executor 线程池对象，不可为{@code null}

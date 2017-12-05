@@ -28,7 +28,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
 
-import gu.simplemq.IAfterUnregister;
+import gu.simplemq.IUnregistedListener;
 import gu.simplemq.Channel;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.JedisPoolLazy;
@@ -245,7 +245,7 @@ public class CmdManager {
      *
      * @param <T>
      */
-    private class TimeoutCleaner <T> implements IAfterUnregister<Ack<T>>{
+    private class TimeoutCleaner <T> implements IUnregistedListener<Ack<T>>{
         @Override
         public void apply(Channel<Ack<T>> input) {
             IAckAdapter<T> adapter = (IAckAdapter<T>)input.getAdapter();
@@ -312,10 +312,10 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         subscriber.register(
                 new Channel<Ack<$returnParamType>>(builder.ackChannel){}
-                    .setAdapter(checkNotNull(adapter,"adapter is null")),
+                    .setAdapter(checkNotNull(adapter,"adapter is null"))
+                    .setUnregistedListener(new TimeoutCleaner<$returnParamType>()),
                 adapter.getExpire(),
-                TimeUnit.MILLISECONDS,
-                new TimeoutCleaner<$returnParamType>()
+                TimeUnit.MILLISECONDS
                 );
         adapter.setClientNum(${key}(#join($params '$e.key' ',')));
     }

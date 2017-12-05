@@ -6,6 +6,6 @@ package gu.simplemq;
  *
  * @param <T>
  */
-public interface IAfterUnregister<T> {
+public interface IUnregistedListener<T> {
 	public void apply(Channel<T> channel);
 }
