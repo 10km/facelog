@@ -10,6 +10,8 @@ package net.gdface.facelog.client;
 import net.gdface.facelog.client.thrift.MQParam;
 import net.gdface.facelog.client.thrift.Token;
 import java.net.URL;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -22,7 +24,6 @@ import static com.google.common.base.Preconditions.checkState;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
 
@@ -37,7 +38,7 @@ import gu.simplemq.redis.RedisSubscriber;
 
 /**
  * 
- * client 端 redis管理模块<br>
+ * 设备命令管理模块<br>
  * 发送设备命令示例:
  * <pre>
  *    String ackChannel = iFaceLogClient.applyAckChannel(myToken); // 向facelog服务申请命令响应通道
@@ -265,7 +266,7 @@ public class CmdManager {
      * @param <T> 设备命令响应返回数据类型
      */
     private class AdapterSync<T> extends IAckAdapter.BaseAdapter<T>{
-        final List<Ack<T>> acks = Lists.newArrayList(); 
+        final List<Ack<T>> acks = Collections.synchronizedList(new LinkedList<Ack<T>>());
         final AtomicBoolean timeout = new AtomicBoolean(false);
         @Override
         protected void doOnTimeout() {
