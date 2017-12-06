@@ -9,6 +9,8 @@
 #set ($thriftPackage = ${codewriter.getDependencyPackage()})
 #set ( $javaClassName = 'CmdManager' )
 $codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
+## 返回泛型的rawType
+#macro(rawTypeOf $value)$value.replaceFirst('(^[\w\.]+).*','$1')#end
 package $extensionPkg;
 
 import ${thriftPackage}.MQParam;
@@ -17,6 +19,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkArgument;
@@ -25,6 +28,7 @@ import static com.google.common.base.Preconditions.checkState;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
 
@@ -50,8 +54,10 @@ import gu.simplemq.redis.RedisSubscriber;
  *        .setAckChannel(ackChannel) // 设置命令响应通道
  *        .build()
  *        .reset(null); // 执行reset命令,立即执行
- *    // 如果同时设置命令响应处理对象,请调用 reset(Long ,IAckAdapter&lt;Void&gt; )
+ *    // 如果同时设置命令响应处理对象,请调用 reset(Long ,IAckAdapter)
  * </pre>
+ * 带{@code IAckAdapter}类型参数的方法为异步执行方法,需要应用项目提供{@code IAckAdapter}实例,
+ * {@code sync}后缀的设备命令方法为同步执行方法,
  * @author guyadong
  *
  */
@@ -243,7 +249,7 @@ public class CmdManager {
      * 向{@link Ack}对象发送超时错误{@link Ack.Status${esc.hash}TIMEOUT}
      * @author guyadong
      *
-     * @param <T>
+     * @param <T> 设备命令响应返回数据类型
      */
     private class TimeoutCleaner <T> implements IUnregistedListener<Ack<T>>{
         @Override
@@ -256,6 +262,25 @@ public class CmdManager {
             }catch(RuntimeException e){
                 e.printStackTrace();
             }
+        }
+    }
+    /**
+     * 用于同步执行设备命令的{@link IAckAdapter}实现
+     * @author guyadong
+     *
+     * @param <T> 设备命令响应返回数据类型
+     */
+    private class AdapterSync<T> extends IAckAdapter.BaseAdapter<T>{
+        final List<Ack<T>> acks = Lists.newArrayList(); 
+        final AtomicBoolean timeout = new AtomicBoolean(false);
+        @Override
+        protected void doOnTimeout() {
+            timeout.set(true);
+        }
+
+        @Override
+        protected void doOnSubscribe(Ack<T> t) {
+            acks.add(t);
         }
     }
 #foreach($entry in $commands.entrySet())
@@ -315,7 +340,7 @@ public class CmdManager {
             .setUnregistedListener(new TimeoutCleaner<$returnParamType>());
         subscriber.register(
                 channel,
-                adapter.getExpire(),
+                adapter.getDuration(),
                 TimeUnit.MILLISECONDS
                 );
         long clientNum = ${key}(#join($params '$e.key' ','));
@@ -325,6 +350,29 @@ public class CmdManager {
         }else{
             adapter.setClientNum(clientNum);
         }
+    }
+    /**
+     * 设备命令(同步调用)<br>
+     * 发送设备命令并等待设备端命令响应返回<br>
+     * #join($params '
+     * @param $e.key $!{e.value[1]}' '')
+
+     * @param throwIfTimeout 当响应超时时，是否抛出{@link AckTimtoutException}异常
+     * @return 设备端返回的所有命令响应对象
+     * @throws InterruptedException
+     * @throws AckTimtoutException 命令响应超时
+     * @see ${esc.hash}${key}(#join($params '#rawTypeOf($e.value[0]),' '')IAckAdapter)
+     */
+    public List<Ack<$returnParamType>> ${key}Sync(#join($params '$e.value[0] $e.key,' '')boolean throwIfTimeout) 
+            throws InterruptedException,AckTimtoutException{
+        AdapterSync<$returnParamType> adapter = new AdapterSync<$returnParamType>();
+        ${key}(#join($params '$e.key,' '')adapter);
+        // 等待命令响应结束
+        adapter.waitFinished();
+        if(adapter.timeout.get() && throwIfTimeout){
+            throw new AckTimtoutException();
+        }
+        return adapter.acks;
     }
 #end
 }

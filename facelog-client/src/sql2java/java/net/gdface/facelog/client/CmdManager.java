@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkArgument;
@@ -21,6 +22,7 @@ import static com.google.common.base.Preconditions.checkState;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
 
@@ -46,8 +48,10 @@ import gu.simplemq.redis.RedisSubscriber;
  *        .setAckChannel(ackChannel) // 设置命令响应通道
  *        .build()
  *        .reset(null); // 执行reset命令,立即执行
- *    // 如果同时设置命令响应处理对象,请调用 reset(Long ,IAckAdapter&lt;Void&gt; )
+ *    // 如果同时设置命令响应处理对象,请调用 reset(Long ,IAckAdapter)
  * </pre>
+ * 带{@code IAckAdapter}类型参数的方法为异步执行方法,需要应用项目提供{@code IAckAdapter}实例,
+ * {@code sync}后缀的设备命令方法为同步执行方法,
  * @author guyadong
  *
  */
@@ -239,7 +243,7 @@ public class CmdManager {
      * 向{@link Ack}对象发送超时错误{@link Ack.Status#TIMEOUT}
      * @author guyadong
      *
-     * @param <T>
+     * @param <T> 设备命令响应返回数据类型
      */
     private class TimeoutCleaner <T> implements IUnregistedListener<Ack<T>>{
         @Override
@@ -252,6 +256,25 @@ public class CmdManager {
             }catch(RuntimeException e){
                 e.printStackTrace();
             }
+        }
+    }
+    /**
+     * 用于同步执行设备命令的{@link IAckAdapter}实现
+     * @author guyadong
+     *
+     * @param <T> 设备命令响应返回数据类型
+     */
+    private class AdapterSync<T> extends IAckAdapter.BaseAdapter<T>{
+        final List<Ack<T>> acks = Lists.newArrayList(); 
+        final AtomicBoolean timeout = new AtomicBoolean(false);
+        @Override
+        protected void doOnTimeout() {
+            timeout.set(true);
+        }
+
+        @Override
+        protected void doOnSubscribe(Ack<T> t) {
+            acks.add(t);
         }
     }
     /**
@@ -301,7 +324,7 @@ public class CmdManager {
             .setUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
                 channel,
-                adapter.getExpire(),
+                adapter.getDuration(),
                 TimeUnit.MILLISECONDS
                 );
         long clientNum = parameter(key,value);
@@ -311,6 +334,29 @@ public class CmdManager {
         }else{
             adapter.setClientNum(clientNum);
         }
+    }
+    /**
+     * 设备命令(同步调用)<br>
+     * 发送设备命令并等待设备端命令响应返回<br>
+     * 
+     * @param key 参数名
+     * @param value 参数值
+     * @param throwIfTimeout 当响应超时时，是否抛出{@link AckTimtoutException}异常
+     * @return 设备端返回的所有命令响应对象
+     * @throws InterruptedException
+     * @throws AckTimtoutException 命令响应超时
+     * @see #parameter(String,String,IAckAdapter)
+     */
+    public List<Ack<Void>> parameterSync(String key,String value,boolean throwIfTimeout) 
+            throws InterruptedException,AckTimtoutException{
+        AdapterSync<Void> adapter = new AdapterSync<Void>();
+        parameter(key,value,adapter);
+        // 等待命令响应结束
+        adapter.waitFinished();
+        if(adapter.timeout.get() && throwIfTimeout){
+            throw new AckTimtoutException();
+        }
+        return adapter.acks;
     }
     /**
      * 设备命令<br>
@@ -356,7 +402,7 @@ public class CmdManager {
             .setUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
                 channel,
-                adapter.getExpire(),
+                adapter.getDuration(),
                 TimeUnit.MILLISECONDS
                 );
         long clientNum = config(properties);
@@ -366,6 +412,28 @@ public class CmdManager {
         }else{
             adapter.setClientNum(clientNum);
         }
+    }
+    /**
+     * 设备命令(同步调用)<br>
+     * 发送设备命令并等待设备端命令响应返回<br>
+     * 
+     * @param properties 参数配置对象, {@code 参数名(key)->参数值(value)映射}
+     * @param throwIfTimeout 当响应超时时，是否抛出{@link AckTimtoutException}异常
+     * @return 设备端返回的所有命令响应对象
+     * @throws InterruptedException
+     * @throws AckTimtoutException 命令响应超时
+     * @see #config(Map,IAckAdapter)
+     */
+    public List<Ack<Void>> configSync(Map<String,String> properties,boolean throwIfTimeout) 
+            throws InterruptedException,AckTimtoutException{
+        AdapterSync<Void> adapter = new AdapterSync<Void>();
+        config(properties,adapter);
+        // 等待命令响应结束
+        adapter.waitFinished();
+        if(adapter.timeout.get() && throwIfTimeout){
+            throw new AckTimtoutException();
+        }
+        return adapter.acks;
     }
     /**
      * 设备命令<br>
@@ -411,7 +479,7 @@ public class CmdManager {
             .setUnregistedListener(new TimeoutCleaner<Object>());
         subscriber.register(
                 channel,
-                adapter.getExpire(),
+                adapter.getDuration(),
                 TimeUnit.MILLISECONDS
                 );
         long clientNum = status(name);
@@ -421,6 +489,28 @@ public class CmdManager {
         }else{
             adapter.setClientNum(clientNum);
         }
+    }
+    /**
+     * 设备命令(同步调用)<br>
+     * 发送设备命令并等待设备端命令响应返回<br>
+     * 
+     * @param name 需要报告状态的参数名
+     * @param throwIfTimeout 当响应超时时，是否抛出{@link AckTimtoutException}异常
+     * @return 设备端返回的所有命令响应对象
+     * @throws InterruptedException
+     * @throws AckTimtoutException 命令响应超时
+     * @see #status(String,IAckAdapter)
+     */
+    public List<Ack<Object>> statusSync(String name,boolean throwIfTimeout) 
+            throws InterruptedException,AckTimtoutException{
+        AdapterSync<Object> adapter = new AdapterSync<Object>();
+        status(name,adapter);
+        // 等待命令响应结束
+        adapter.waitFinished();
+        if(adapter.timeout.get() && throwIfTimeout){
+            throw new AckTimtoutException();
+        }
+        return adapter.acks;
     }
     /**
      * 设备命令<br>
@@ -466,7 +556,7 @@ public class CmdManager {
             .setUnregistedListener(new TimeoutCleaner<Map<String,Object>>());
         subscriber.register(
                 channel,
-                adapter.getExpire(),
+                adapter.getDuration(),
                 TimeUnit.MILLISECONDS
                 );
         long clientNum = report(names);
@@ -476,6 +566,28 @@ public class CmdManager {
         }else{
             adapter.setClientNum(clientNum);
         }
+    }
+    /**
+     * 设备命令(同步调用)<br>
+     * 发送设备命令并等待设备端命令响应返回<br>
+     * 
+     * @param names 需要报告状态的参数名列表
+     * @param throwIfTimeout 当响应超时时，是否抛出{@link AckTimtoutException}异常
+     * @return 设备端返回的所有命令响应对象
+     * @throws InterruptedException
+     * @throws AckTimtoutException 命令响应超时
+     * @see #report(List,IAckAdapter)
+     */
+    public List<Ack<Map<String,Object>>> reportSync(List<String> names,boolean throwIfTimeout) 
+            throws InterruptedException,AckTimtoutException{
+        AdapterSync<Map<String,Object>> adapter = new AdapterSync<Map<String,Object>>();
+        report(names,adapter);
+        // 等待命令响应结束
+        adapter.waitFinished();
+        if(adapter.timeout.get() && throwIfTimeout){
+            throw new AckTimtoutException();
+        }
+        return adapter.acks;
     }
     /**
      * 设备命令<br>
@@ -519,7 +631,7 @@ public class CmdManager {
             .setUnregistedListener(new TimeoutCleaner<String>());
         subscriber.register(
                 channel,
-                adapter.getExpire(),
+                adapter.getDuration(),
                 TimeUnit.MILLISECONDS
                 );
         long clientNum = version();
@@ -529,6 +641,27 @@ public class CmdManager {
         }else{
             adapter.setClientNum(clientNum);
         }
+    }
+    /**
+     * 设备命令(同步调用)<br>
+     * 发送设备命令并等待设备端命令响应返回<br>
+     * 
+     * @param throwIfTimeout 当响应超时时，是否抛出{@link AckTimtoutException}异常
+     * @return 设备端返回的所有命令响应对象
+     * @throws InterruptedException
+     * @throws AckTimtoutException 命令响应超时
+     * @see #version(IAckAdapter)
+     */
+    public List<Ack<String>> versionSync(boolean throwIfTimeout) 
+            throws InterruptedException,AckTimtoutException{
+        AdapterSync<String> adapter = new AdapterSync<String>();
+        version(adapter);
+        // 等待命令响应结束
+        adapter.waitFinished();
+        if(adapter.timeout.get() && throwIfTimeout){
+            throw new AckTimtoutException();
+        }
+        return adapter.acks;
     }
     /**
      * 设备命令<br>
@@ -574,7 +707,7 @@ public class CmdManager {
             .setUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
                 channel,
-                adapter.getExpire(),
+                adapter.getDuration(),
                 TimeUnit.MILLISECONDS
                 );
         long clientNum = enable(enable);
@@ -584,6 +717,28 @@ public class CmdManager {
         }else{
             adapter.setClientNum(clientNum);
         }
+    }
+    /**
+     * 设备命令(同步调用)<br>
+     * 发送设备命令并等待设备端命令响应返回<br>
+     * 
+     * @param enable {@code true}:工作状态,否则为非工作状态
+     * @param throwIfTimeout 当响应超时时，是否抛出{@link AckTimtoutException}异常
+     * @return 设备端返回的所有命令响应对象
+     * @throws InterruptedException
+     * @throws AckTimtoutException 命令响应超时
+     * @see #enable(Boolean,IAckAdapter)
+     */
+    public List<Ack<Void>> enableSync(Boolean enable,boolean throwIfTimeout) 
+            throws InterruptedException,AckTimtoutException{
+        AdapterSync<Void> adapter = new AdapterSync<Void>();
+        enable(enable,adapter);
+        // 等待命令响应结束
+        adapter.waitFinished();
+        if(adapter.timeout.get() && throwIfTimeout){
+            throw new AckTimtoutException();
+        }
+        return adapter.acks;
     }
     /**
      * 设备命令<br>
@@ -629,7 +784,7 @@ public class CmdManager {
             .setUnregistedListener(new TimeoutCleaner<Boolean>());
         subscriber.register(
                 channel,
-                adapter.getExpire(),
+                adapter.getDuration(),
                 TimeUnit.MILLISECONDS
                 );
         long clientNum = isEnable(message);
@@ -639,6 +794,28 @@ public class CmdManager {
         }else{
             adapter.setClientNum(clientNum);
         }
+    }
+    /**
+     * 设备命令(同步调用)<br>
+     * 发送设备命令并等待设备端命令响应返回<br>
+     * 
+     * @param message 工作状态附加消息,比如"设备维修,禁止通行"
+     * @param throwIfTimeout 当响应超时时，是否抛出{@link AckTimtoutException}异常
+     * @return 设备端返回的所有命令响应对象
+     * @throws InterruptedException
+     * @throws AckTimtoutException 命令响应超时
+     * @see #isEnable(String,IAckAdapter)
+     */
+    public List<Ack<Boolean>> isEnableSync(String message,boolean throwIfTimeout) 
+            throws InterruptedException,AckTimtoutException{
+        AdapterSync<Boolean> adapter = new AdapterSync<Boolean>();
+        isEnable(message,adapter);
+        // 等待命令响应结束
+        adapter.waitFinished();
+        if(adapter.timeout.get() && throwIfTimeout){
+            throw new AckTimtoutException();
+        }
+        return adapter.acks;
     }
     /**
      * 设备命令<br>
@@ -684,7 +861,7 @@ public class CmdManager {
             .setUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
                 channel,
-                adapter.getExpire(),
+                adapter.getDuration(),
                 TimeUnit.MILLISECONDS
                 );
         long clientNum = reset(schedule);
@@ -694,6 +871,28 @@ public class CmdManager {
         }else{
             adapter.setClientNum(clientNum);
         }
+    }
+    /**
+     * 设备命令(同步调用)<br>
+     * 发送设备命令并等待设备端命令响应返回<br>
+     * 
+     * @param schedule 指定执行时间(unix time[秒]),为{@code null}立即执行
+     * @param throwIfTimeout 当响应超时时，是否抛出{@link AckTimtoutException}异常
+     * @return 设备端返回的所有命令响应对象
+     * @throws InterruptedException
+     * @throws AckTimtoutException 命令响应超时
+     * @see #reset(Long,IAckAdapter)
+     */
+    public List<Ack<Void>> resetSync(Long schedule,boolean throwIfTimeout) 
+            throws InterruptedException,AckTimtoutException{
+        AdapterSync<Void> adapter = new AdapterSync<Void>();
+        reset(schedule,adapter);
+        // 等待命令响应结束
+        adapter.waitFinished();
+        if(adapter.timeout.get() && throwIfTimeout){
+            throw new AckTimtoutException();
+        }
+        return adapter.acks;
     }
     /**
      * 设备命令<br>
@@ -739,7 +938,7 @@ public class CmdManager {
             .setUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
                 channel,
-                adapter.getExpire(),
+                adapter.getDuration(),
                 TimeUnit.MILLISECONDS
                 );
         long clientNum = time(unixTimestamp);
@@ -749,6 +948,28 @@ public class CmdManager {
         }else{
             adapter.setClientNum(clientNum);
         }
+    }
+    /**
+     * 设备命令(同步调用)<br>
+     * 发送设备命令并等待设备端命令响应返回<br>
+     * 
+     * @param unixTimestamp 服务器 unix 时间[秒],参见<a href = "https://en.wikipedia.org/wiki/Unix_time">Unix time</a>
+     * @param throwIfTimeout 当响应超时时，是否抛出{@link AckTimtoutException}异常
+     * @return 设备端返回的所有命令响应对象
+     * @throws InterruptedException
+     * @throws AckTimtoutException 命令响应超时
+     * @see #time(Long,IAckAdapter)
+     */
+    public List<Ack<Void>> timeSync(Long unixTimestamp,boolean throwIfTimeout) 
+            throws InterruptedException,AckTimtoutException{
+        AdapterSync<Void> adapter = new AdapterSync<Void>();
+        time(unixTimestamp,adapter);
+        // 等待命令响应结束
+        adapter.waitFinished();
+        if(adapter.timeout.get() && throwIfTimeout){
+            throw new AckTimtoutException();
+        }
+        return adapter.acks;
     }
     /**
      * 设备命令<br>
@@ -800,7 +1021,7 @@ public class CmdManager {
             .setUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
                 channel,
-                adapter.getExpire(),
+                adapter.getDuration(),
                 TimeUnit.MILLISECONDS
                 );
         long clientNum = update(url,version,schedule);
@@ -810,6 +1031,30 @@ public class CmdManager {
         }else{
             adapter.setClientNum(clientNum);
         }
+    }
+    /**
+     * 设备命令(同步调用)<br>
+     * 发送设备命令并等待设备端命令响应返回<br>
+     * 
+     * @param url 更新版本的位置
+     * @param version 版本号
+     * @param schedule 指定执行时间(unix time[秒]),为{@code null}立即执行
+     * @param throwIfTimeout 当响应超时时，是否抛出{@link AckTimtoutException}异常
+     * @return 设备端返回的所有命令响应对象
+     * @throws InterruptedException
+     * @throws AckTimtoutException 命令响应超时
+     * @see #update(URL,String,Long,IAckAdapter)
+     */
+    public List<Ack<Void>> updateSync(URL url,String version,Long schedule,boolean throwIfTimeout) 
+            throws InterruptedException,AckTimtoutException{
+        AdapterSync<Void> adapter = new AdapterSync<Void>();
+        update(url,version,schedule,adapter);
+        // 等待命令响应结束
+        adapter.waitFinished();
+        if(adapter.timeout.get() && throwIfTimeout){
+            throw new AckTimtoutException();
+        }
+        return adapter.acks;
     }
     /**
      * 设备命令<br>
@@ -858,7 +1103,7 @@ public class CmdManager {
             .setUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
                 channel,
-                adapter.getExpire(),
+                adapter.getDuration(),
                 TimeUnit.MILLISECONDS
                 );
         long clientNum = idleMessage(message,duration);
@@ -868,6 +1113,29 @@ public class CmdManager {
         }else{
             adapter.setClientNum(clientNum);
         }
+    }
+    /**
+     * 设备命令(同步调用)<br>
+     * 发送设备命令并等待设备端命令响应返回<br>
+     * 
+     * @param message 发送到设备的消息
+     * @param duration 持续时间[分钟],为{@code null}一直显示
+     * @param throwIfTimeout 当响应超时时，是否抛出{@link AckTimtoutException}异常
+     * @return 设备端返回的所有命令响应对象
+     * @throws InterruptedException
+     * @throws AckTimtoutException 命令响应超时
+     * @see #idleMessage(String,Long,IAckAdapter)
+     */
+    public List<Ack<Void>> idleMessageSync(String message,Long duration,boolean throwIfTimeout) 
+            throws InterruptedException,AckTimtoutException{
+        AdapterSync<Void> adapter = new AdapterSync<Void>();
+        idleMessage(message,duration,adapter);
+        // 等待命令响应结束
+        adapter.waitFinished();
+        if(adapter.timeout.get() && throwIfTimeout){
+            throw new AckTimtoutException();
+        }
+        return adapter.acks;
     }
     /**
      * 设备命令<br>
@@ -925,7 +1193,7 @@ public class CmdManager {
             .setUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
                 channel,
-                adapter.getExpire(),
+                adapter.getDuration(),
                 TimeUnit.MILLISECONDS
                 );
         long clientNum = personMessage(message,id,group,onceOnly,duration);
@@ -935,6 +1203,32 @@ public class CmdManager {
         }else{
             adapter.setClientNum(clientNum);
         }
+    }
+    /**
+     * 设备命令(同步调用)<br>
+     * 发送设备命令并等待设备端命令响应返回<br>
+     * 
+     * @param message 发送到设备的消息
+     * @param id 人员/人员组ID
+     * @param group 为{@code true}时{@code id}参数为人员组ID
+     * @param onceOnly 为{@code true}时只显示一次
+     * @param duration 持续时间[分钟],为{@code null}一直显示
+     * @param throwIfTimeout 当响应超时时，是否抛出{@link AckTimtoutException}异常
+     * @return 设备端返回的所有命令响应对象
+     * @throws InterruptedException
+     * @throws AckTimtoutException 命令响应超时
+     * @see #personMessage(String,Integer,Boolean,Boolean,Long,IAckAdapter)
+     */
+    public List<Ack<Void>> personMessageSync(String message,Integer id,Boolean group,Boolean onceOnly,Long duration,boolean throwIfTimeout) 
+            throws InterruptedException,AckTimtoutException{
+        AdapterSync<Void> adapter = new AdapterSync<Void>();
+        personMessage(message,id,group,onceOnly,duration,adapter);
+        // 等待命令响应结束
+        adapter.waitFinished();
+        if(adapter.timeout.get() && throwIfTimeout){
+            throw new AckTimtoutException();
+        }
+        return adapter.acks;
     }
     /**
      * 设备命令<br>
@@ -983,7 +1277,7 @@ public class CmdManager {
             .setUnregistedListener(new TimeoutCleaner<Object>());
         subscriber.register(
                 channel,
-                adapter.getExpire(),
+                adapter.getDuration(),
                 TimeUnit.MILLISECONDS
                 );
         long clientNum = custom(cmdName,parameters);
@@ -993,5 +1287,28 @@ public class CmdManager {
         }else{
             adapter.setClientNum(clientNum);
         }
+    }
+    /**
+     * 设备命令(同步调用)<br>
+     * 发送设备命令并等待设备端命令响应返回<br>
+     * 
+     * @param cmdName 自定义命令名称
+     * @param parameters 自定义参数表
+     * @param throwIfTimeout 当响应超时时，是否抛出{@link AckTimtoutException}异常
+     * @return 设备端返回的所有命令响应对象
+     * @throws InterruptedException
+     * @throws AckTimtoutException 命令响应超时
+     * @see #custom(String,Map,IAckAdapter)
+     */
+    public List<Ack<Object>> customSync(String cmdName,Map<String,Object> parameters,boolean throwIfTimeout) 
+            throws InterruptedException,AckTimtoutException{
+        AdapterSync<Object> adapter = new AdapterSync<Object>();
+        custom(cmdName,parameters,adapter);
+        // 等待命令响应结束
+        adapter.waitFinished();
+        if(adapter.timeout.get() && throwIfTimeout){
+            throw new AckTimtoutException();
+        }
+        return adapter.acks;
     }
 }

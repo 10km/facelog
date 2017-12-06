@@ -1,10 +1,12 @@
 package net.gdface.facelog.client;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
-
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import gu.simplemq.IMessageAdapter;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
@@ -19,7 +21,7 @@ import net.gdface.facelog.client.Ack.Status;
  * 因为设备命令发送功能可以支持同时向多个设备或设备组发送命令,所以一条设备命令发送会收到多个设备端的响应,
  * 虽然发送方可以知道知道收到命令的设备端数量(参见{@link CmdManager}的设备命令方法)，但系统并不能保证所有收到命令的设备都会返回命令响应,
  * 所以{@link #setExpire(long)}用于指定超时参数,超过指定时间还没有收到所有命令响应,
- * 本机的命令响应监控线程{@link AckMonitor}也会产生一个虚拟的{@link Ack}消息,送给{@code IAckAdapter}接口,
+ * 本机会产生一个虚拟的{@link Ack}消息,送给{@code IAckAdapter}接口,
  * 参见{@link BaseAdapter#onSubscribe(Ack)},{@link Ack.Status#TIMEOUT}
  * @author guyadong
  *
@@ -30,7 +32,7 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 	public static final long DEFAULT_DURATION = 60000L;
     /**
      * 命令响应{@link Ack}处理基类,
-     * 应用项目可以继承此类实现自己的业务逻辑 {@link #doOnTimeout()},{@link #doOnSubscribe(Ack)}
+     * 应用项目可以继承此类的方法({@link #doOnTimeout()},{@link #doOnSubscribe(Ack)},{@link #doOnZeroClient()})实现自己的业务逻辑 
      * @author guyadong
      *
      * @param <T>
@@ -39,24 +41,35 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
     	/** 收到命令的client端数量,初始值-1,只有{@link #setClientNum(long)}被调用后才有效 */
         private final AtomicLong clientNum = new AtomicLong(-1L);
         /**  
-         * 命令响应等待有效期时间戳(毫秒), 参见 {@link System#currentTimeMillis()},
-         * 超过这个时间会自动取消频道订阅,默认为0时无限期。 
+         * 命令响应等待时间(毫秒),
+         * 超过这个时间会自动取消频道订阅,>0有效,默认为0时无限期。 
          */
-        private long expire = 0L;
+        private long duration = 0L;
         /** 收到的命令响应计数 */
         private long ackCount = 0L;
+        /** 当前对象频道订阅生命期是否结束标志 */
+        private final AtomicBoolean isFinished = new AtomicBoolean(false);
         /**
-		 * 构造函数
-		 * @param expire 有效期时间戳
-		 */
-		public BaseAdapter(long expire) {
-			this.expire = expire;
+         * 默认构造函数<br>
+         * 有效期使用默认值{@link #DEFAULT_DURATION}
+         * @see #setDuration(long)
+         */
+        public BaseAdapter() {
+			this.setDuration(DEFAULT_DURATION);
 		}
-		/** 处理超时情况 */
+		/**
+		 * 构造函数
+		 * @param duration 命令响应等待时间
+		 * @param unit 时间单位
+		 */
+		public BaseAdapter(long duration,TimeUnit unit) {
+			this.setDuration(duration, unit);
+		}
+		/** 处理超时情况,应用项目应重写此方法实现自己的业务逻辑 */
 		protected void doOnTimeout(){}
-		/** 处理接收命令的设备端数量为0的情况 */
+		/** 处理接收命令的设备端数量为0的情况,应用项目应重写此方法实现自己的业务逻辑 */
 		protected void doOnZeroClient(){}
-		/** 执行正常响应处理业务逻辑 */
+		/** 执行正常响应处理业务逻辑,应用项目应重写此方法实现自己的业务逻辑 */
 		protected void doOnSubscribe(Ack<T> t){}
 		/** 返回{@link #clientNum}值 */
 		protected final long getClientNum(){
@@ -66,8 +79,15 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 		protected final long getAckCount() {
 			return ackCount;
 		}
+		/** 通知等待的线程 */
+		private final void doOnFinished(){
+			synchronized(this){
+				checkState(!this.isFinished.compareAndSet(false, true),"invalid status of isFinished");
+				this.notifyAll();
+			}
+		}
 		/**
-		 * 命令响应处理实现,应用项目应重写此方法实现自己的业务逻辑
+		 * 命令响应处理实现
 		 */
 		@Override
         public final void onSubscribe(Ack<T> t) throws SmqUnsubscribeException {
@@ -78,11 +98,13 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 				}else{
 					doOnTimeout();
 				}
+				doOnFinished();
 			}else{
 				try{
 					doOnSubscribe(t);
 				}finally{
 					if(++ackCount ==clientNum.get()){
+						doOnFinished();
 						// 所有收到命令的设备都已经响应则抛出SmqUnsubscribeException异常用于取消当前频道订阅
 						throw new SmqUnsubscribeException(true);
 					}
@@ -95,36 +117,68 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
          * 设备命令发送后，REDIS会返回收到设备命令的设备端数量,{@code clientNum}必须>=0
          */
         @Override
-        public final BaseAdapter<T> setClientNum(long clientNum){
+        public BaseAdapter<T> setClientNum(long clientNum){
         	checkArgument(clientNum >= 0,"INVALID clientNum %s",clientNum);
         	checkState(this.clientNum.compareAndSet(-1L, clientNum),"clientNum can be set once only");    
             return this;
         }
         @Override
-        public final long getExpire() {
-            return expire;
-        }
-        public BaseAdapter<T> setExpire(long expire) {
-            this.expire = expire;
-            return this;
+        public final long getDuration() {
+            return duration;
         }
         /**
-         * 设置超时时间
-         * @param duration
-         * @param unit 时间单位
-         * @return
-         */
-        public BaseAdapter<T> setDuration(long duration,TimeUnit unit) {
-            return setDuration(TimeUnit.MILLISECONDS.convert(duration, unit));
+		 * 设置超时时间(毫秒)
+		 * @param duration >0有效
+		 * @return
+		 */
+		public BaseAdapter<T> setDuration(long duration) {
+		    this.duration = duration;
+			return this;
+		}
+		/**
+		 * 设置超时时间
+		 * @param duration
+		 * @param unit 时间单位
+		 * @return
+		 */
+		public BaseAdapter<T> setDuration(long duration,TimeUnit unit) {
+		    return setDuration(TimeUnit.MILLISECONDS.convert(duration, checkNotNull(unit,"unit is null")));
+		}
+		/**
+		 * 设置有效期时间戳(毫秒)
+		 * @param expire
+		 * @return
+		 */
+		public BaseAdapter<T> setExpire(long expire) {
+            return setDuration(expire - System.currentTimeMillis());
         }
-        /**
-         * 设置超时时间(毫秒)
-         * @param duration
-         * @return
-         */
-        public BaseAdapter<T> setDuration(long duration) {
-            return setExpire(System.currentTimeMillis() +duration);
+		/**
+		 * @param expire
+		 * @return
+		 * @see #setExpire(long)
+		 */
+		public BaseAdapter<T> setExpire(Date expire) {
+            return setDuration(expire.getTime() - System.currentTimeMillis());
         }
+		/**
+		 * 等待命令响应订阅结束
+		 * @throws InterruptedException
+		 */
+		public void waitFinished() throws InterruptedException{
+			synchronized(this){
+				while(!isFinished.get()){
+					this.wait();
+				}
+			}
+		}
+		/** 复位所有成员变量到初始状态,以便于对象下次复用 */
+		public synchronized BaseAdapter<T> reset(){
+			this.clientNum.set(-1L);
+			this.duration = 0L;
+			this.ackCount = 0L;
+			this.isFinished.set(false);
+			return this;
+		}
 	}
 	/**
 	 * 设置收到命令的client端数量<br>
@@ -135,8 +189,8 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 	 */
 	public IAckAdapter<T> setClientNum(long clientNum);
     /**
-     * 返回命令响应等待有效期时间戳(毫秒),参见 {@link #setExpire(long)}
+     * 返回命令响应等待持续时间(毫秒)
      * @return
      */
-    public long getExpire();
+    public long getDuration();
 }

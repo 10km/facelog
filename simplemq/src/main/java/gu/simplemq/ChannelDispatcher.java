@@ -142,11 +142,14 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 		register(checkNotNull(channel,"channel is null"));
 		if(duration > 0){
 			checkArgument(null != unit,"unit is null");
+			// 定时执行频道注销
 			this.timerExecutor.schedule(new Runnable(){
 				@Override
 				public void run() {
 					unregister(channel.name);
-				}}, duration, unit);
+				}}, 
+				duration, 
+				unit);
 		}
 	}
 	
