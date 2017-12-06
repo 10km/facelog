@@ -293,7 +293,7 @@ public class CmdManager {
 #set($returnParamType =$entry.value['return'])
 #end
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * $value['desc']<br>#join($params '
      * @param $e.key $!{e.value[1]}' '')
 
@@ -322,7 +322,7 @@ public class CmdManager {
         }
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * $value['desc']<br>
      * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
      * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>

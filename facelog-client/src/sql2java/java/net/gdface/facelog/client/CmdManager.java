@@ -278,7 +278,7 @@ public class CmdManager {
         }
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 设置参数,可用于运行时修改参数<br>
      * @param key 参数名
      * @param value 参数值
@@ -306,7 +306,7 @@ public class CmdManager {
         }
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 设置参数,可用于运行时修改参数<br>
      * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
      * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
@@ -359,7 +359,7 @@ public class CmdManager {
         return adapter.acks;
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 设置一组参数,可用于需要重启有效的参数<br>
      * @param properties 参数配置对象, {@code 参数名(key)->参数值(value)映射}
      * @return 收到命令的客户端数目
@@ -385,7 +385,7 @@ public class CmdManager {
         }
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 设置一组参数,可用于需要重启有效的参数<br>
      * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
      * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
@@ -436,7 +436,7 @@ public class CmdManager {
         return adapter.acks;
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 读取设备状态参数<br>
      * @param name 需要报告状态的参数名
      * @return 收到命令的客户端数目
@@ -462,7 +462,7 @@ public class CmdManager {
         }
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 读取设备状态参数<br>
      * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
      * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
@@ -513,7 +513,7 @@ public class CmdManager {
         return adapter.acks;
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 设备状态报告,返回一组状态参数<br>
      * @param names 需要报告状态的参数名列表
      * @return 收到命令的客户端数目
@@ -539,7 +539,7 @@ public class CmdManager {
         }
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 设备状态报告,返回一组状态参数<br>
      * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
      * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
@@ -590,7 +590,7 @@ public class CmdManager {
         return adapter.acks;
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 获取设备版本号<br>
      * @return 收到命令的客户端数目
      *
@@ -615,7 +615,7 @@ public class CmdManager {
         }
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 获取设备版本号<br>
      * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
      * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
@@ -664,7 +664,7 @@ public class CmdManager {
         return adapter.acks;
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 设置设备工作状态<br>
      * @param enable {@code true}:工作状态,否则为非工作状态
      * @return 收到命令的客户端数目
@@ -690,7 +690,7 @@ public class CmdManager {
         }
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 设置设备工作状态<br>
      * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
      * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
@@ -741,7 +741,7 @@ public class CmdManager {
         return adapter.acks;
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 返回设备工作状态<br>
      * @param message 工作状态附加消息,比如"设备维修,禁止通行"
      * @return 收到命令的客户端数目
@@ -767,7 +767,7 @@ public class CmdManager {
         }
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 返回设备工作状态<br>
      * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
      * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
@@ -818,7 +818,7 @@ public class CmdManager {
         return adapter.acks;
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 设备重启<br>
      * @param schedule 指定执行时间(unix time[秒]),为{@code null}立即执行
      * @return 收到命令的客户端数目
@@ -844,7 +844,7 @@ public class CmdManager {
         }
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 设备重启<br>
      * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
      * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
@@ -895,7 +895,7 @@ public class CmdManager {
         return adapter.acks;
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 设备与服务器时间同步<br>
      * @param unixTimestamp 服务器 unix 时间[秒],参见<a href = "https://en.wikipedia.org/wiki/Unix_time">Unix time</a>
      * @return 收到命令的客户端数目
@@ -921,7 +921,7 @@ public class CmdManager {
         }
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 设备与服务器时间同步<br>
      * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
      * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
@@ -972,7 +972,7 @@ public class CmdManager {
         return adapter.acks;
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 更新版本<br>
      * @param url 更新版本的位置
      * @param version 版本号
@@ -1002,7 +1002,7 @@ public class CmdManager {
         }
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 更新版本<br>
      * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
      * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
@@ -1057,7 +1057,7 @@ public class CmdManager {
         return adapter.acks;
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 设置空闲时显示的消息<br>
      * @param message 发送到设备的消息
      * @param duration 持续时间[分钟],为{@code null}一直显示
@@ -1085,7 +1085,7 @@ public class CmdManager {
         }
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 设置空闲时显示的消息<br>
      * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
      * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
@@ -1138,7 +1138,7 @@ public class CmdManager {
         return adapter.acks;
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 为指定人员通过时显示的临时消息<br>
      * @param message 发送到设备的消息
      * @param id 人员/人员组ID
@@ -1172,7 +1172,7 @@ public class CmdManager {
         }
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 为指定人员通过时显示的临时消息<br>
      * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
      * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
@@ -1231,7 +1231,7 @@ public class CmdManager {
         return adapter.acks;
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 自定义命令,命令名及命令参数类型由应用项目自定义,因为Map中没有定义每一个自定义命令参数的类型,设备端需要自行将命令参数转为项目约定的参数类型,参见{@link Cmd#cast(Object,Type)}<br>
      * @param cmdName 自定义命令名称
      * @param parameters 自定义参数表
@@ -1259,7 +1259,7 @@ public class CmdManager {
         }
     }
     /**
-     * 设备命令<br>
+     * 设备命令(异步调用)<br>
      * 自定义命令,命令名及命令参数类型由应用项目自定义,因为Map中没有定义每一个自定义命令参数的类型,设备端需要自行将命令参数转为项目约定的参数类型,参见{@link Cmd#cast(Object,Type)}<br>
      * 该方法会自动将命令响应通道名({@link CmdBuilder#setAckChannel(String)})
      * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
