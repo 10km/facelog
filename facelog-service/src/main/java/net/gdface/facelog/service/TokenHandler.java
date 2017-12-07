@@ -9,8 +9,8 @@ import com.facebook.swift.service.ThriftEventHandler;
  * @author guyadong
  *
  */
-class TlsTokenHandler extends ThriftEventHandler {
-	static final TlsTokenHandler INSTANCE = new TlsTokenHandler();
+class TokenHandler extends ThriftEventHandler {
+	static final TokenHandler INSTANCE = new TokenHandler();
 	/** 保存当前服务方法调用中{@link Token}参数的TLS变量 */
 	private static InheritableThreadLocal<Token> tlsToken = new InheritableThreadLocal<Token>(){
 		@Override
@@ -20,7 +20,7 @@ class TlsTokenHandler extends ThriftEventHandler {
 		}
 	};
 
-	private TlsTokenHandler() {
+	private TokenHandler() {
 	}
 	
 	/**

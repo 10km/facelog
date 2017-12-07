@@ -28,14 +28,14 @@ import net.gdface.facelog.service.Token.TokenType;
  * @author guyadong
  *
  */
-abstract class BaseSecurityValidatorListener<B extends BaseBean<B>> extends TableListener.Adapter<B> implements ServiceConstant {
+abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableListener.Adapter<B> implements ServiceConstant {
 	protected final Dao dao;
-	protected final TlsTokenHandler tlsToken = TlsTokenHandler.INSTANCE;
+	protected final TokenHandler tlsToken = TokenHandler.INSTANCE;
 	private final Set<WriteOp> operatorAllow;
 	private final Set<WriteOp> deviceAllow;
 	private final Class<B> type;
 	@SuppressWarnings("unchecked")
-	protected BaseSecurityValidatorListener(Dao dao) {
+	protected BaseTokenValidatorListener(Dao dao) {
 		this.dao = checkNotNull(dao,"dao is null");
 		operatorAllow = getAllowFromConfig(getOperatorAllowKey());
 		deviceAllow = getAllowFromConfig(getDeviceAllowKey());

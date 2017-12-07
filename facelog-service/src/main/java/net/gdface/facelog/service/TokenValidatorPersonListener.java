@@ -10,8 +10,8 @@ import net.gdface.facelog.service.Token.TokenType;
  * @author guyadong
  *
  */
-class SecurityValidatorPersonListener extends BaseSecurityValidatorListener<PersonBean> {
-	SecurityValidatorPersonListener(Dao dao) {
+class TokenValidatorPersonListener extends BaseTokenValidatorListener<PersonBean> {
+	TokenValidatorPersonListener(Dao dao) {
 		super(dao);
 	}
 	private void checkForPersonToken(PersonBean bean){
