@@ -93,6 +93,7 @@
 				<version>2.9.1</version>
 				<configuration>
 				<sourcepath>src/main/java;src/orm/java;src/general/java</sourcepath>
+				<show>package</show>
 				</configuration>
 				<!-- 绑定javadoc插件到Maven的生命周期,并在生命周期后执行绑定的javadoc的goal -->
 				<executions>
