@@ -92,7 +92,7 @@
 				</device>
 				<devicegroup>
 				<allow description ="允许设备端对设备组表执行的操作(insert,delete,update)"></allow>
-				</devicegroup>				
+				</devicegroup>
 			</table>
 		</device>
 	</security>
