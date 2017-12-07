@@ -16,7 +16,8 @@ public final class Token{
 	public static enum TokenType{
 		/** 未初始化 */UNINITIALIZED,
 		/** 设备令牌 */DEVICE,
-		/** 人员令牌 */PERSON
+		/** 人员令牌 */PERSON,
+		/** root令牌 */ROOT
 	}
 	/** 持有令牌的设备/人员ID */
 	private int id;

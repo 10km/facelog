@@ -16,6 +16,7 @@ public class Main implements ServiceConstant {
 		try{
 			Server server = Server.bulider()
 					.withServices(new FaceLogImpl())
+					.setEventHandlers(TlsTokenHandler.INSTANCE)
 					.setThriftServerConfig(GlobalConfig.makeThriftServerConfig())
 					.build();
 			// 设置slf4j记录日志,否则会有警告

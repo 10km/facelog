@@ -44,6 +44,9 @@ class Server implements ServiceConstant{
 			this.eventHandlers = checkNotNull(eventHandlers);
 			return this;
 		}
+		public Builder setEventHandlers(ThriftEventHandler...eventHandlers){
+			return setEventHandlers(ImmutableList.copyOf(eventHandlers));
+		}
 		/**
 		 * 设置服务端口
 		 * @param servicePort
@@ -78,6 +81,14 @@ class Server implements ServiceConstant{
 	private final ThriftServiceProcessor processor;
 	private final ThriftServerConfig thriftServerConfig;
 
+	/**
+	 * 构造函数<br>
+	 * @param services 服务对象列表
+	 * @param eventHandlers 事件侦听器列表
+	 * @param thriftServerConfig 服务配置对象
+	 * @see ThriftServiceProcessor#ThriftServiceProcessor(ThriftCodecManager, List, List)
+	 * @see ThriftServer#ThriftServer(com.facebook.nifty.processor.NiftyProcessor, ThriftServerConfig)
+	 */
 	public Server(final List<?> services, 
 			List<ThriftEventHandler> eventHandlers, 
 			ThriftServerConfig thriftServerConfig) {

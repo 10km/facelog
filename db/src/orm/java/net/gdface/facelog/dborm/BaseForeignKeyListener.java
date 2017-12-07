@@ -46,7 +46,7 @@ public abstract class BaseForeignKeyListener<FB extends BaseBean<FB>,B extends B
                 onRemove(beans);
             }
         }finally{
-            importedBeans.set(null);
+            importedBeans.remove();
         }
     }
 }
