@@ -38,7 +38,7 @@ class SecurityValidatorPersonListener extends BaseSecurityValidatorListener<Pers
 	}
 	@Override
 	public void beforeInsert(PersonBean bean) throws RuntimeDaoException {
-		super.beforeUpdate(bean);
+		super.beforeInsert(bean);
 		checkForPersonToken(bean);
 		checkInsertForDeviceToken(bean);
 	}
