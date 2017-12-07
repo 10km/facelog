@@ -4,9 +4,12 @@ import java.io.File;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
@@ -301,5 +304,16 @@ public class GlobalConfig implements ServiceConstant{
 		}finally{
 			sync.endRead();
 		}
+	}
+	public static List<String> getExplodedStringAsList(String value) {
+		ArrayList<String> al = new ArrayList<String>();
+		if (value == null) {
+			return al;
+		}
+		StringTokenizer st = new StringTokenizer(value, " ,;\t \t\n\r\f");
+		while (st.hasMoreTokens()) {
+			al.add(st.nextToken().trim());
+		}
+		return al;
 	}
 }

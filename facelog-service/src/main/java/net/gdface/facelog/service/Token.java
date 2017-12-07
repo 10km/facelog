@@ -71,6 +71,11 @@ public final class Token{
 		this.setType(TokenType.PERSON);
 		return this;
 	}
+	Token asRootToken(){
+		this.setId(-1);
+		this.setType(TokenType.ROOT);
+		return this;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;

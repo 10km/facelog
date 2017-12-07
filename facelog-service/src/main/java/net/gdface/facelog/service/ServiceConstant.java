@@ -70,6 +70,25 @@ public interface ServiceConstant extends CommonConstant{
 	/** jedis pool 最大线程数 */
 	public static final String REDIS_POOL_MAXTOTAL = "redis.pool.maxTotal";
 	
+	/** 操作员对person表允许的操作 */
+	public static final String SECURITY_OPERATOR_TABLE_PERSON_ALLOW = "security.operator.table.person.allow";
+	/** 操作员对person_group表允许的操作 */
+	public static final String SECURITY_OPERATOR_TABLE_PERSON_GROUP_ALLOW = "security.operator.table.persongroup.allow";
+	/** 操作员对person表允许的操作 */
+	public static final String SECURITY_OPERATOR_TABLE_DEVICE_ALLOW = "security.operator.table.device.allow";
+	/** 操作员对person_group表允许的操作 */
+	public static final String SECURITY_OPERATOR_TABLE_DEVICE_GROUP_ALLOW = "security.operator.table.devicegroup.allow";
+
+	/** 设备端对person表允许的操作 */
+	public static final String SECURITY_DEVICE_TABLE_PERSON_ALLOW = "security.device.table.person.allow";
+	/** 设备端对person_group表允许的操作 */
+	public static final String SECURITY_DEVICE_TABLE_PERSON_GROUP_ALLOW = "security.device.table.persongroup.allow";
+	/** 设备端对person表允许的操作 */
+	public static final String SECURITY_DEVICE_TABLE_DEVICE_ALLOW = "security.device.table.device.allow";
+	/** 设备端对person_group表允许的操作 */
+	public static final String SECURITY_DEVICE_TABLE_DEVICE_GROUP_ALLOW = "security.device.table.devicegroup.allow";
+
+	
 	/** database 配置属性前缀 */
 	public static final String PREFIX_DATABASE = "database.";
 	

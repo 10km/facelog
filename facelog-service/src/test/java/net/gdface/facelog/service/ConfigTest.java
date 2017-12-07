@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.apache.commons.configuration2.CombinedConfiguration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
@@ -197,5 +199,22 @@ public class ConfigTest implements ServiceConstant{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+	}
+	public static List<String> getExplodedStringAsList(String value) {
+		ArrayList<String> al = new ArrayList<String>();
+		if (value == null) {
+			return al;
+		}
+		StringTokenizer st = new StringTokenizer(value, " ,;\t \t\n\r\f");
+		while (st.hasMoreTokens()) {
+			al.add(st.nextToken().trim());
+		}
+		return al;
+	}
+	@Test
+	public void test8(){
+		String value = CONFIG.getString(SECURITY_OPERATOR_TABLE_PERSON_ALLOW);
+		List<String> list = getExplodedStringAsList(value);
+		System.out.println(Joiner.on(";").join(list));
 	}
 }

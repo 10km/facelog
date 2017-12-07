@@ -157,11 +157,11 @@ class Dao implements CommonConstant {
      * @see {@link Lists$${esc.hash}transform(List, Function)
      */
     $!{modifier}List<$primaryKey.javaType> daoToPrimaryKeyListFrom${coreClass}s(List<$beanClass> beans){
-    	if(null == beans){
-    		return ImmutableList.of();
-    	}else{
-    		return Lists.transform(beans,daoCast${coreClass}ToPk);
-    	}
+        if(null == beans){
+            return ImmutableList.of();
+        }else{
+            return Lists.transform(beans,daoCast${coreClass}ToPk);
+        }
     }
 #end
     //4
@@ -788,6 +788,55 @@ $defineLoadByTimestamp
     protected static void daoRunAsTransaction(Runnable fun)
                     throws RuntimeDaoException{
         getPersonManager().runAsTransaction(checkNotNull(fun));
+    }
+    /**
+     * 用户等级类型定义,参见表结构定义
+     * @author guyadong 
+     */
+    protected enum PersonRank{
+        /** 普通用户 */person(0),
+        /** 操作员 */operator(2),
+        /** 管理员 */admin(3),
+        /** root */root(4);
+        /** 用户等级 */
+        public final int rank;
+        PersonRank(int rank){
+            this.rank = rank;
+        }
+        /** 
+         * 根据用户等级值返回{@link PersonRank}对象,
+         * @return  {@code rank}为{@code null}时返回{@link #person},{@code rank}为无效值时返回{@code null}
+         */
+        static PersonRank fromRank(Integer rank){
+            if(null == rank){
+                return person;
+            }
+            for(PersonRank r : PersonRank.values()){
+                if(r.rank == rank){
+                    return r;
+                }
+            }
+            return null;
+        }
+        /**
+         * 参见{@link #fromRank(Integer)}
+         * @param rank
+         * @return 
+         * @throws NullPointerException 当{@code rank}为无效值时
+         */
+        static PersonRank fromRankChecked(Integer rank){
+            return checkNotNull(fromRank(rank),"INVALID rank %s",rank);
+        }
+    }
+    /**
+     * 数据写操作类型
+     * @author guyadong
+     *
+     */
+    protected enum WriteOp{
+        /** 增加记录 */insert,
+        /** 更新记录 */update,
+        /** 删除记录 */delete
     }
 ##join($tables '#defineMethod($e false)' '')
 #foreach($tname in ['fl_device','fl_device_group','fl_person','fl_person_group'])

@@ -15,6 +15,7 @@ import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisTable;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.service.ServiceSecurityException.SecurityExceptionType;
+import net.gdface.facelog.service.Token.TokenType;
 import net.gdface.utils.FaceUtilits;
 
 /**
@@ -139,6 +140,9 @@ class TokenMangement implements ServiceConstant {
 			return true;
 		}
 	}
+	private boolean isValidRootToken(Token token){
+		return isValidPersonToken(token) && TokenType.ROOT.equals(token.getType());
+	}
 	/** 检查数据库是否存在指定的设备记录,没有则抛出异常{@link ServiceSecurityException} */
 	protected void checkValidDeviceId(Integer deviceId) throws ServiceSecurityException{
 		if(!this.dao.daoExistsDevice(deviceId)){
@@ -180,6 +184,9 @@ class TokenMangement implements ServiceConstant {
 		ByteBuffer buffer = ByteBuffer.wrap(new byte[8]);
 		buffer.asLongBuffer().put(personId);
 		return makeToken(buffer.array()).asPersonToken(personId);
+	}
+	private static Token makeRootToken(String password){
+		return makeToken(password.getBytes()).asRootToken();
 	}
 	/**
 	 * 从{@link #deviceTokenTable}删除指定设备的令牌
@@ -290,8 +297,25 @@ class TokenMangement implements ServiceConstant {
 		}
 		Token token = makePersonTokenOf(personId);
 		String key = Integer.toString(personId);
-		deviceTokenTable.set(key, token, false);
-		deviceTokenTable.expire(token);
+		personTokenTable.set(key, token, false);
+		personTokenTable.expire(token);
+		return token;
+	}
+	/**
+	 * 申请root访问令牌
+	 * @param password root密码MD校验码
+	 * @return
+	 * @throws ServiceSecurityException
+	 */
+	protected Token applyRootToken(String password)
+			throws ServiceSecurityException{
+		if(!FaceUtilits.getMD5String(CONFIG.getString(ROOT_PASSWORD).getBytes()).equals(password)){
+			throw new ServiceSecurityException(SecurityExceptionType.INVALID_ROOT_PASSWORD);
+		}
+		Token token = makeRootToken(password);
+		String key = Integer.toString(token.getId());
+		personTokenTable.set(key, token, false);
+		personTokenTable.expire(token);
 		return token;
 	}
 	/**

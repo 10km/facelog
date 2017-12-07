@@ -111,6 +111,55 @@ class Dao implements CommonConstant {
                     throws RuntimeDaoException{
         getPersonManager().runAsTransaction(checkNotNull(fun));
     }
+    /**
+     * 用户等级类型定义,参见表结构定义
+     * @author guyadong 
+     */
+    protected enum PersonRank{
+        /** 普通用户 */person(0),
+        /** 操作员 */operator(2),
+        /** 管理员 */admin(3),
+        /** root */root(4);
+        /** 用户等级 */
+        public final int rank;
+        PersonRank(int rank){
+            this.rank = rank;
+        }
+        /** 
+         * 根据用户等级值返回{@link PersonRank}对象,
+         * @return  {@code rank}为{@code null}时返回{@link #person},{@code rank}为无效值时返回{@code null}
+         */
+        static PersonRank fromRank(Integer rank){
+            if(null == rank){
+                return person;
+            }
+            for(PersonRank r : PersonRank.values()){
+                if(r.rank == rank){
+                    return r;
+                }
+            }
+            return null;
+        }
+        /**
+         * 参见{@link #fromRank(Integer)}
+         * @param rank
+         * @return 
+         * @throws NullPointerException 当{@code rank}为无效值时
+         */
+        static PersonRank fromRankChecked(Integer rank){
+            return checkNotNull(fromRank(rank),"INVALID rank %s",rank);
+        }
+    }
+    /**
+     * 数据写操作类型
+     * @author guyadong
+     *
+     */
+    protected enum WriteOp{
+        /** 增加记录 */insert,
+        /** 更新记录 */update,
+        /** 删除记录 */delete
+    }
     //////////// FL_DEVICE /////////
     //1
     /** 
@@ -209,11 +258,11 @@ class Dao implements CommonConstant {
      * @see {@link Lists$#transform(List, Function)
      */
     protected List<Integer> daoToPrimaryKeyListFromDevices(List<DeviceBean> beans){
-    	if(null == beans){
-    		return ImmutableList.of();
-    	}else{
-    		return Lists.transform(beans,daoCastDeviceToPk);
-    	}
+        if(null == beans){
+            return ImmutableList.of();
+        }else{
+            return Lists.transform(beans,daoCastDeviceToPk);
+        }
     }
     //4
     /** 
@@ -736,11 +785,11 @@ class Dao implements CommonConstant {
      * @see {@link Lists$#transform(List, Function)
      */
     protected List<Integer> daoToPrimaryKeyListFromDeviceGroups(List<DeviceGroupBean> beans){
-    	if(null == beans){
-    		return ImmutableList.of();
-    	}else{
-    		return Lists.transform(beans,daoCastDeviceGroupToPk);
-    	}
+        if(null == beans){
+            return ImmutableList.of();
+        }else{
+            return Lists.transform(beans,daoCastDeviceGroupToPk);
+        }
     }
     //4
     /** 
@@ -1194,11 +1243,11 @@ class Dao implements CommonConstant {
      * @see {@link Lists$#transform(List, Function)
      */
     protected List<Integer> daoToPrimaryKeyListFromPersons(List<PersonBean> beans){
-    	if(null == beans){
-    		return ImmutableList.of();
-    	}else{
-    		return Lists.transform(beans,daoCastPersonToPk);
-    	}
+        if(null == beans){
+            return ImmutableList.of();
+        }else{
+            return Lists.transform(beans,daoCastPersonToPk);
+        }
     }
     //4
     /** 
@@ -1763,11 +1812,11 @@ class Dao implements CommonConstant {
      * @see {@link Lists$#transform(List, Function)
      */
     protected List<Integer> daoToPrimaryKeyListFromPersonGroups(List<PersonGroupBean> beans){
-    	if(null == beans){
-    		return ImmutableList.of();
-    	}else{
-    		return Lists.transform(beans,daoCastPersonGroupToPk);
-    	}
+        if(null == beans){
+            return ImmutableList.of();
+        }else{
+            return Lists.transform(beans,daoCastPersonGroupToPk);
+        }
     }
     //4
     /** 
@@ -2221,11 +2270,11 @@ class Dao implements CommonConstant {
      * @see {@link Lists$#transform(List, Function)
      */
     protected List<Integer> daoToPrimaryKeyListFromFaces(List<FaceBean> beans){
-    	if(null == beans){
-    		return ImmutableList.of();
-    	}else{
-    		return Lists.transform(beans,daoCastFaceToPk);
-    	}
+        if(null == beans){
+            return ImmutableList.of();
+        }else{
+            return Lists.transform(beans,daoCastFaceToPk);
+        }
     }
     //4
     /** 
@@ -2683,11 +2732,11 @@ class Dao implements CommonConstant {
      * @see {@link Lists$#transform(List, Function)
      */
     protected List<String> daoToPrimaryKeyListFromFeatures(List<FeatureBean> beans){
-    	if(null == beans){
-    		return ImmutableList.of();
-    	}else{
-    		return Lists.transform(beans,daoCastFeatureToPk);
-    	}
+        if(null == beans){
+            return ImmutableList.of();
+        }else{
+            return Lists.transform(beans,daoCastFeatureToPk);
+        }
     }
     //4
     /** 
@@ -3129,11 +3178,11 @@ class Dao implements CommonConstant {
      * @see {@link Lists$#transform(List, Function)
      */
     protected List<String> daoToPrimaryKeyListFromImages(List<ImageBean> beans){
-    	if(null == beans){
-    		return ImmutableList.of();
-    	}else{
-    		return Lists.transform(beans,daoCastImageToPk);
-    	}
+        if(null == beans){
+            return ImmutableList.of();
+        }else{
+            return Lists.transform(beans,daoCastImageToPk);
+        }
     }
     //4
     /** 
@@ -3532,11 +3581,11 @@ class Dao implements CommonConstant {
      * @see {@link Lists$#transform(List, Function)
      */
     protected List<Integer> daoToPrimaryKeyListFromLogs(List<LogBean> beans){
-    	if(null == beans){
-    		return ImmutableList.of();
-    	}else{
-    		return Lists.transform(beans,daoCastLogToPk);
-    	}
+        if(null == beans){
+            return ImmutableList.of();
+        }else{
+            return Lists.transform(beans,daoCastLogToPk);
+        }
     }
     //4
     /** 
@@ -4470,11 +4519,11 @@ class Dao implements CommonConstant {
      * @see {@link Lists$#transform(List, Function)
      */
     protected List<String> daoToPrimaryKeyListFromStores(List<StoreBean> beans){
-    	if(null == beans){
-    		return ImmutableList.of();
-    	}else{
-    		return Lists.transform(beans,daoCastStoreToPk);
-    	}
+        if(null == beans){
+            return ImmutableList.of();
+        }else{
+            return Lists.transform(beans,daoCastStoreToPk);
+        }
     }
     //4
     /** 
