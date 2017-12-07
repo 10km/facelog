@@ -39,13 +39,13 @@ public  class FlPersonBean
     /** comments:姓名 */
     private String name;
 
-    /** comments:性别,0:女,1:男 */
+    /** comments:性别,0:女,1:男,其他:未定义 */
     private Integer sex;
 
-    /** comments:是否为管理员,0:否,1:是 */
-    private Integer admin;
+    /** comments:用户级别,NULL,0:普通用户,2:操作员,3:管理员,其他:未定义 */
+    private Integer rank;
 
-    /** comments:管理员密码,MD5 */
+    /** comments:用户密码,MD5 */
     private String password;
 
     /** comments:出生日期 */
@@ -367,7 +367,7 @@ public  class FlPersonBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.sex</li>
-     * <li>comments: 性别,0:女,1:男</li>
+     * <li>comments: 性别,0:女,1:男,其他:未定义</li>
      * <li>column size: 3</li>
      * <li>JDBC type returned by the driver: Types.TINYINT</li>
      * </ul>
@@ -428,76 +428,76 @@ public  class FlPersonBean
         return 0L !=  (initialized & FL_PERSON_ID_SEX_MASK);
     }
     /**
-     * Getter method for {@link #admin}.<br>
+     * Getter method for {@link #rank}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_person.admin</li>
-     * <li>comments: 是否为管理员,0:否,1:是</li>
+     * <li>full name: fl_person.rank</li>
+     * <li>comments: 用户级别,NULL,0:普通用户,2:操作员,3:管理员,其他:未定义</li>
      * <li>column size: 3</li>
      * <li>JDBC type returned by the driver: Types.TINYINT</li>
      * </ul>
      *
-     * @return the value of admin
+     * @return the value of rank
      */
-    public Integer getAdmin(){
-        return admin;
+    public Integer getRank(){
+        return rank;
     }
     /**
-     * Setter method for {@link #admin}.<br>
+     * Setter method for {@link #rank}.<br>
      * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to admin
+     * @param newVal the new value to be assigned to rank
      */
-    public void setAdmin(Integer newVal)
+    public void setRank(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, admin) && checkAdminInitialized()) {
+        if (Objects.equals(newVal, rank) && checkRankInitialized()) {
             return;
         }
-        admin = newVal;
+        rank = newVal;
 
-        modified |= FL_PERSON_ID_ADMIN_MASK;
-        initialized |= FL_PERSON_ID_ADMIN_MASK;
+        modified |= FL_PERSON_ID_RANK_MASK;
+        initialized |= FL_PERSON_ID_RANK_MASK;
     }
     /**
-     * Setter method for {@link #admin}.<br>
+     * Setter method for {@link #rank}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to admin
+     * @param newVal the new value to be assigned to rank
      */
-    public void setAdmin(int newVal)
+    public void setRank(int newVal)
     {
-        setAdmin(new Integer(newVal));
+        setRank(new Integer(newVal));
     }
     /**
-     * Determines if the admin has been modified.
+     * Determines if the rank has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean checkAdminModified()
+    public boolean checkRankModified()
     {
-        return 0L !=  (modified & FL_PERSON_ID_ADMIN_MASK);
+        return 0L !=  (modified & FL_PERSON_ID_RANK_MASK);
     }
 
     /**
-     * Determines if the admin has been initialized.<br>
+     * Determines if the rank has been initialized.<br>
      *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean checkAdminInitialized()
+    public boolean checkRankInitialized()
     {
-        return 0L !=  (initialized & FL_PERSON_ID_ADMIN_MASK);
+        return 0L !=  (initialized & FL_PERSON_ID_RANK_MASK);
     }
     /**
      * Getter method for {@link #password}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.password</li>
-     * <li>comments: 管理员密码,MD5</li>
+     * <li>comments: 用户密码,MD5</li>
      * <li>column size: 32</li>
      * <li>JDBC type returned by the driver: Types.CHAR</li>
      * </ul>
@@ -1143,8 +1143,8 @@ public  class FlPersonBean
             return checkNameModified();
         case FL_PERSON_ID_SEX:
             return checkSexModified();
-        case FL_PERSON_ID_ADMIN:
-            return checkAdminModified();
+        case FL_PERSON_ID_RANK:
+            return checkRankModified();
         case FL_PERSON_ID_PASSWORD:
             return checkPasswordModified();
         case FL_PERSON_ID_BIRTHDATE:
@@ -1181,8 +1181,8 @@ public  class FlPersonBean
             return checkNameInitialized();
         case FL_PERSON_ID_SEX:
             return checkSexInitialized();
-        case FL_PERSON_ID_ADMIN:
-            return checkAdminInitialized();
+        case FL_PERSON_ID_RANK:
+            return checkRankInitialized();
         case FL_PERSON_ID_PASSWORD:
             return checkPasswordInitialized();
         case FL_PERSON_ID_BIRTHDATE:
@@ -1238,7 +1238,7 @@ public  class FlPersonBean
         modified &= (~(FL_PERSON_ID_GROUP_ID_MASK |
             FL_PERSON_ID_NAME_MASK |
             FL_PERSON_ID_SEX_MASK |
-            FL_PERSON_ID_ADMIN_MASK |
+            FL_PERSON_ID_RANK_MASK |
             FL_PERSON_ID_PASSWORD_MASK |
             FL_PERSON_ID_BIRTHDATE_MASK |
             FL_PERSON_ID_MOBILE_PHONE_MASK |
@@ -1265,7 +1265,7 @@ public  class FlPersonBean
         this.groupId = new Integer(1);
         this.name = null;
         this.sex = null;
-        this.admin = null;
+        this.rank = null;
         this.password = null;
         this.birthdate = null;
         this.mobilePhone = null;
@@ -1296,7 +1296,7 @@ public  class FlPersonBean
             .append(getGroupId(), obj.getGroupId())
             .append(getName(), obj.getName())
             .append(getSex(), obj.getSex())
-            .append(getAdmin(), obj.getAdmin())
+            .append(getRank(), obj.getRank())
             .append(getPassword(), obj.getPassword())
             .append(getBirthdate(), obj.getBirthdate())
             .append(getMobilePhone(), obj.getMobilePhone())
@@ -1347,11 +1347,11 @@ public  class FlPersonBean
             }
             builder.append("sex=").append(getSex());
         }
-        if(checkAdminInitialized()){
+        if(checkRankInitialized()){
             if(count++ >0){
                 builder.append(",");
             }
-            builder.append("admin=").append(getAdmin());
+            builder.append("rank=").append(getRank());
         }
         if(checkPasswordInitialized()){
             if(count++ >0){
@@ -1424,7 +1424,7 @@ public  class FlPersonBean
             .append(getGroupId(), object.getGroupId())
             .append(getName(), object.getName())
             .append(getSex(), object.getSex())
-            .append(getAdmin(), object.getAdmin())
+            .append(getRank(), object.getRank())
             .append(getPassword(), object.getPassword())
             .append(getBirthdate(), object.getBirthdate())
             .append(getMobilePhone(), object.getMobilePhone())
@@ -1459,7 +1459,7 @@ public  class FlPersonBean
         setGroupId(null);
         setName(null);
         setSex(null);
-        setAdmin(null);
+        setRank(null);
         setPassword(null);
         setBirthdate(null);
         setMobilePhone(null);
@@ -1565,8 +1565,8 @@ public  class FlPersonBean
             return (T)getName();        
         case FL_PERSON_ID_SEX: 
             return (T)getSex();        
-        case FL_PERSON_ID_ADMIN: 
-            return (T)getAdmin();        
+        case FL_PERSON_ID_RANK: 
+            return (T)getRank();        
         case FL_PERSON_ID_PASSWORD: 
             return (T)getPassword();        
         case FL_PERSON_ID_BIRTHDATE: 
@@ -1608,8 +1608,8 @@ public  class FlPersonBean
         case FL_PERSON_ID_SEX:
             setSex((Integer)value);
             break;
-        case FL_PERSON_ID_ADMIN:
-            setAdmin((Integer)value);
+        case FL_PERSON_ID_RANK:
+            setRank((Integer)value);
             break;
         case FL_PERSON_ID_PASSWORD:
             setPassword((String)value);
@@ -1741,7 +1741,7 @@ public  class FlPersonBean
         }
         /** 
          * fill the field : fl_person.sex
-         * @param sex 性别,0:女,1:男
+         * @param sex 性别,0:女,1:男,其他:未定义
          * @see {@link FlPersonBean#getSex()}
          * @see {@link FlPersonBean#setSex(Integer)}
          */
@@ -1750,18 +1750,18 @@ public  class FlPersonBean
             return this;
         }
         /** 
-         * fill the field : fl_person.admin
-         * @param admin 是否为管理员,0:否,1:是
-         * @see {@link FlPersonBean#getAdmin()}
-         * @see {@link FlPersonBean#setAdmin(Integer)}
+         * fill the field : fl_person.rank
+         * @param rank 用户级别,NULL,0:普通用户,2:操作员,3:管理员,其他:未定义
+         * @see {@link FlPersonBean#getRank()}
+         * @see {@link FlPersonBean#setRank(Integer)}
          */
-        public Builder admin(Integer admin){
-            TEMPLATE.get().setAdmin(admin);
+        public Builder rank(Integer rank){
+            TEMPLATE.get().setRank(rank);
             return this;
         }
         /** 
          * fill the field : fl_person.password
-         * @param password 管理员密码,MD5
+         * @param password 用户密码,MD5
          * @see {@link FlPersonBean#getPassword()}
          * @see {@link FlPersonBean#setPassword(String)}
          */

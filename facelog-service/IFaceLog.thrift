@@ -145,7 +145,7 @@ struct PersonBean {
   5:  i32 groupId;
   6:  string name;
   7:  i32 sex;
-  8:  i32 admin;
+  8:  i32 rank;
   9:  string password;
   10:  i64 birthdate;
   11:  string mobilePhone;

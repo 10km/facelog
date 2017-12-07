@@ -539,8 +539,8 @@ public class ThriftConverter implements Constant{
             if(0L !=  (initialized & FL_PERSON_ID_SEX_MASK)){
                 left.setSex(right.getSex());
             }
-            if(0L !=  (initialized & FL_PERSON_ID_ADMIN_MASK)){
-                left.setAdmin(right.getAdmin());
+            if(0L !=  (initialized & FL_PERSON_ID_RANK_MASK)){
+                left.setRank(right.getRank());
             }
             if(0L !=  (initialized & FL_PERSON_ID_PASSWORD_MASK)){
                 left.setPassword(right.getPassword());
@@ -590,8 +590,8 @@ public class ThriftConverter implements Constant{
             if(left.checkSexInitialized() ){
                 right.setSex(left.getSex());
             }
-            if(left.checkAdminInitialized() ){
-                right.setAdmin(left.getAdmin());
+            if(left.checkRankInitialized() ){
+                right.setRank(left.getRank());
             }
             if(left.checkPasswordInitialized() ){
                 right.setPassword(left.getPassword());

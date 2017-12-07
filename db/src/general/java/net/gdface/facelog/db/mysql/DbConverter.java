@@ -538,8 +538,8 @@ public class DbConverter implements IDbConverter<
             if(right.checkSexInitialized()){
                 left.setSex(right.getSex());
             }
-            if(right.checkAdminInitialized()){
-                left.setAdmin(right.getAdmin());
+            if(right.checkRankInitialized()){
+                left.setRank(right.getRank());
             }
             if(right.checkPasswordInitialized()){
                 left.setPassword(right.getPassword());
@@ -589,8 +589,8 @@ public class DbConverter implements IDbConverter<
             if(left.checkSexInitialized() ){
                 right.setSex(left.getSex());
             }
-            if(left.checkAdminInitialized() ){
-                right.setAdmin(left.getAdmin());
+            if(left.checkRankInitialized() ){
+                right.setRank(left.getRank());
             }
             if(left.checkPasswordInitialized() ){
                 right.setPassword(left.getPassword());

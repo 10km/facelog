@@ -2447,7 +2447,7 @@ public class BeanConverterUtils implements Constant {
             groupId("getGroupId","setGroupId"),
             name("getName","setName"),
             sex("getSex","setSex"),
-            admin("getAdmin","setAdmin"),
+            rank("getRank","setRank"),
             password("getPassword","setPassword"),
             birthdate("getBirthdate","setBirthdate"),
             mobilePhone("getMobilePhone","setMobilePhone"),
@@ -2564,8 +2564,8 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.name.setter,String.class); 
             getGetter(Column.sex.getter);
             getSetterNoThrow(Column.sex.setter,Integer.class,int.class);                    
-            getGetter(Column.admin.getter);
-            getSetterNoThrow(Column.admin.setter,Integer.class,int.class);                    
+            getGetter(Column.rank.getter);
+            getSetterNoThrow(Column.rank.setter,Integer.class,int.class);                    
             getGetter(Column.password.getter);
             getSetterNoThrow(Column.password.setter,String.class); 
             getGetter(Column.birthdate.getter);
@@ -2626,10 +2626,10 @@ public class BeanConverterUtils implements Constant {
                         selfModified |= FL_PERSON_ID_SEX_MASK;
                     }
                 }
-                if( bitCheck(Column.admin.name(),initialized) && (null != (getterMethod = methods.get(Column.admin.getter)))){
-                    left.setAdmin(cast(Integer.class,getterMethod.invoke(right)));
-                    if(bitCheck(Column.admin.name(),modified)){
-                        selfModified |= FL_PERSON_ID_ADMIN_MASK;
+                if( bitCheck(Column.rank.name(),initialized) && (null != (getterMethod = methods.get(Column.rank.getter)))){
+                    left.setRank(cast(Integer.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.rank.name(),modified)){
+                        selfModified |= FL_PERSON_ID_RANK_MASK;
                     }
                 }
                 if( bitCheck(Column.password.name(),initialized) && (null != (getterMethod = methods.get(Column.password.getter)))){
@@ -2745,12 +2745,12 @@ public class BeanConverterUtils implements Constant {
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get(Column.admin.setter)) && left.checkAdminInitialized()){
+                if(null != (setterMethod = methods.get(Column.rank.setter)) && left.checkRankInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get(Column.admin.setter),left.getAdmin()));
-                        bitOR(Column.admin.name(),initialized);
-                        if(left.checkAdminModified()){
-                            bitOR(Column.admin.name(),modified);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.rank.setter),left.getRank()));
+                        bitOR(Column.rank.name(),initialized);
+                        if(left.checkRankModified()){
+                            bitOR(Column.rank.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }

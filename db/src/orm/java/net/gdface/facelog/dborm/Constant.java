@@ -389,9 +389,9 @@ public interface Constant {
     /** Identify the fl_person.sex field (ordinal:4). */
     public static final int FL_PERSON_ID_SEX = 3;
     public static final long FL_PERSON_ID_SEX_MASK = 1L << 3;
-    /** Identify the fl_person.admin field (ordinal:5). */
-    public static final int FL_PERSON_ID_ADMIN = 4;
-    public static final long FL_PERSON_ID_ADMIN_MASK = 1L << 4;
+    /** Identify the fl_person.rank field (ordinal:5). */
+    public static final int FL_PERSON_ID_RANK = 4;
+    public static final long FL_PERSON_ID_RANK_MASK = 1L << 4;
     /** Identify the fl_person.password field (ordinal:6). */
     public static final int FL_PERSON_ID_PASSWORD = 5;
     public static final long FL_PERSON_ID_PASSWORD_MASK = 1L << 5;
@@ -710,7 +710,7 @@ public interface Constant {
                             + ",fl_person.group_id"
                             + ",fl_person.name"
                             + ",fl_person.sex"
-                            + ",fl_person.admin"
+                            + ",fl_person.rank"
                             + ",fl_person.password"
                             + ",fl_person.birthdate"
                             + ",fl_person.mobile_phone"
@@ -726,7 +726,7 @@ public interface Constant {
                             + ",group_id"
                             + ",name"
                             + ",sex"
-                            + ",admin"
+                            + ",rank"
                             + ",password"
                             + ",birthdate"
                             + ",mobile_phone"
@@ -743,7 +743,7 @@ public interface Constant {
                             + ",groupId"
                             + ",name"
                             + ",sex"
-                            + ",admin"
+                            + ",rank"
                             + ",password"
                             + ",birthdate"
                             + ",mobilePhone"

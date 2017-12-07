@@ -650,7 +650,7 @@ public interface DaoConstant {
                             + ",fl_person.group_id"
                             + ",fl_person.name"
                             + ",fl_person.sex"
-                            + ",fl_person.admin"
+                            + ",fl_person.rank"
                             + ",fl_person.password"
                             + ",fl_person.birthdate"
                             + ",fl_person.mobile_phone"
@@ -666,7 +666,7 @@ public interface DaoConstant {
                             + ",group_id"
                             + ",name"
                             + ",sex"
-                            + ",admin"
+                            + ",rank"
                             + ",password"
                             + ",birthdate"
                             + ",mobile_phone"
@@ -684,7 +684,7 @@ public interface DaoConstant {
                             + ",groupId"
                             + ",name"
                             + ",sex"
-                            + ",admin"
+                            + ",rank"
                             + ",password"
                             + ",birthdate"
                             + ",mobilePhone"
@@ -721,8 +721,8 @@ public interface DaoConstant {
             name("fl_person","name",3,"getName","setName"),
             /** constant for fl_person.sex  */
             sex("fl_person","sex",4,"getSex","setSex"),
-            /** constant for fl_person.admin  */
-            admin("fl_person","admin",5,"getAdmin","setAdmin"),
+            /** constant for fl_person.rank  */
+            rank("fl_person","rank",5,"getRank","setRank"),
             /** constant for fl_person.password  */
             password("fl_person","password",6,"getPassword","setPassword"),
             /** constant for fl_person.birthdate  */

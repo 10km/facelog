@@ -68,13 +68,13 @@ public final class PersonBean
     @ThriftField
     public void setSex(final int sex) { this.sex = sex; }
 
-    private int admin;
+    private int rank;
 
-    @ThriftField(value=8, name="admin", requiredness=Requiredness.NONE)
-    public int getAdmin() { return admin; }
+    @ThriftField(value=8, name="rank", requiredness=Requiredness.NONE)
+    public int getRank() { return rank; }
 
     @ThriftField
-    public void setAdmin(final int admin) { this.admin = admin; }
+    public void setRank(final int rank) { this.rank = rank; }
 
     private String password;
 
@@ -167,7 +167,7 @@ public final class PersonBean
             .add("groupId", groupId)
             .add("name", name)
             .add("sex", sex)
-            .add("admin", admin)
+            .add("rank", rank)
             .add("password", password)
             .add("birthdate", birthdate)
             .add("mobilePhone", mobilePhone)

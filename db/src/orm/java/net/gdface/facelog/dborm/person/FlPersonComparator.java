@@ -41,7 +41,7 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
      *   <li>{@link Constant#FL_PERSON_ID_GROUP_ID}
      *   <li>{@link Constant#FL_PERSON_ID_NAME}
      *   <li>{@link Constant#FL_PERSON_ID_SEX}
-     *   <li>{@link Constant#FL_PERSON_ID_ADMIN}
+     *   <li>{@link Constant#FL_PERSON_ID_RANK}
      *   <li>{@link Constant#FL_PERSON_ID_PASSWORD}
      *   <li>{@link Constant#FL_PERSON_ID_BIRTHDATE}
      *   <li>{@link Constant#FL_PERSON_ID_MOBILE_PHONE}
@@ -74,7 +74,7 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
      *   <li>{@link Constant#FL_PERSON_ID_GROUP_ID})
      *   <li>{@link Constant#FL_PERSON_ID_NAME})
      *   <li>{@link Constant#FL_PERSON_ID_SEX})
-     *   <li>{@link Constant#FL_PERSON_ID_ADMIN})
+     *   <li>{@link Constant#FL_PERSON_ID_RANK})
      *   <li>{@link Constant#FL_PERSON_ID_PASSWORD})
      *   <li>{@link Constant#FL_PERSON_ID_BIRTHDATE})
      *   <li>{@link Constant#FL_PERSON_ID_MOBILE_PHONE})
@@ -145,15 +145,15 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
                     iReturn = b1.getSex().compareTo(b2.getSex());
                 }
                 break;
-            case FL_PERSON_ID_ADMIN:
-                if (b1.getAdmin() == null && b2.getAdmin() != null) {
+            case FL_PERSON_ID_RANK:
+                if (b1.getRank() == null && b2.getRank() != null) {
                     iReturn = -1;
-                } else if (b1.getAdmin() == null && b2.getAdmin() == null) {
+                } else if (b1.getRank() == null && b2.getRank() == null) {
                     iReturn = 0;
-                } else if (b1.getAdmin() != null && b2.getAdmin() == null) {
+                } else if (b1.getRank() != null && b2.getRank() == null) {
                     iReturn = 1;
                 } else {
-                    iReturn = b1.getAdmin().compareTo(b2.getAdmin());
+                    iReturn = b1.getRank().compareTo(b2.getRank());
                 }
                 break;
             case FL_PERSON_ID_PASSWORD:

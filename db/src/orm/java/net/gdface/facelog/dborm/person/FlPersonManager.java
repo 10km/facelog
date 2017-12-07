@@ -1131,11 +1131,11 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                 dirtyCount++;
             }
 
-            if (bean.checkAdminModified()) {
+            if (bean.checkRankModified()) {
                 if (dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("admin");
+                sql.append("rank");
                 dirtyCount++;
             }
 
@@ -1334,13 +1334,13 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                 sql.append("sex=?");
             }
 
-            if (bean.checkAdminModified()) {
+            if (bean.checkRankModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("admin=?");
+                sql.append("rank=?");
             }
 
             if (bean.checkPasswordModified()) {
@@ -2221,12 +2221,12 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("sex = ?");
                 }
             }
-            if (bean.checkAdminModified()) {
+            if (bean.checkRankModified()) {
                 dirtyCount ++;
-                if (bean.getAdmin() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("admin IS NULL");
+                if (bean.getRank() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("rank IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("admin = ?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("rank = ?");
                 }
             }
             if (bean.checkPasswordModified()) {
@@ -2367,9 +2367,9 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                 // System.out.println("Setting for " + dirtyCount + " [" + bean.getSex() + "]");
                 if (bean.getSex() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TINYINT);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getSex()); }
             }
-            if (bean.checkAdminModified()) {
-                // System.out.println("Setting for " + dirtyCount + " [" + bean.getAdmin() + "]");
-                if (bean.getAdmin() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TINYINT);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getAdmin()); }
+            if (bean.checkRankModified()) {
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getRank() + "]");
+                if (bean.getRank() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TINYINT);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getRank()); }
             }
             if (bean.checkPasswordModified()) {
                 switch (searchType) {
@@ -2622,7 +2622,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
             bean.setGroupId(Manager.getInteger(rs, 2));
             bean.setName(rs.getString(3));
             bean.setSex(Manager.getInteger(rs, 4));
-            bean.setAdmin(Manager.getInteger(rs, 5));
+            bean.setRank(Manager.getInteger(rs, 5));
             bean.setPassword(rs.getString(6));
             bean.setBirthdate(rs.getDate(7));
             bean.setMobilePhone(rs.getString(8));
@@ -2681,9 +2681,9 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                         ++pos;
                         bean.setSex(Manager.getInteger(rs, pos));
                         break;
-                    case FL_PERSON_ID_ADMIN:
+                    case FL_PERSON_ID_RANK:
                         ++pos;
-                        bean.setAdmin(Manager.getInteger(rs, pos));
+                        bean.setRank(Manager.getInteger(rs, pos));
                         break;
                     case FL_PERSON_ID_PASSWORD:
                         ++pos;
@@ -2757,7 +2757,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
             bean.setGroupId(Manager.getInteger(rs, "group_id"));
             bean.setName(rs.getString("name"));
             bean.setSex(Manager.getInteger(rs, "sex"));
-            bean.setAdmin(Manager.getInteger(rs, "admin"));
+            bean.setRank(Manager.getInteger(rs, "rank"));
             bean.setPassword(rs.getString("password"));
             bean.setBirthdate(rs.getDate("birthdate"));
             bean.setMobilePhone(rs.getString("mobile_phone"));
