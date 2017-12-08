@@ -7,7 +7,7 @@ import net.gdface.facelog.service.Dao.WriteOp;
 import net.gdface.facelog.service.Token.TokenType;
 
 /**
- * fl_person表权限验证侦听器实现
+ * 基于{@link BaseTokenValidatorListener}的fl_person表权限验证侦听器实现
  * @author guyadong
  *
  */

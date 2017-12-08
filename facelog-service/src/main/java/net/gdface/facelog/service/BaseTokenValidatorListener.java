@@ -29,7 +29,7 @@ import net.gdface.facelog.service.Token.TokenType;
  */
 abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableListener.Adapter<B> implements ServiceConstant {
 	protected final Dao dao;
-	protected final TokenHandler tlsToken = TokenHandler.INSTANCE;
+	protected final TlsHandler tlsToken = TlsHandler.INSTANCE;
 	private final ImmutableSet<WriteOp> operatorAllow;
 	private final ImmutableSet<WriteOp> deviceAllow;
 	private final Class<B> type;

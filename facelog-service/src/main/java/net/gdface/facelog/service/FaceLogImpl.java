@@ -53,8 +53,13 @@ import redis.clients.jedis.exceptions.JedisException;
 public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	/** redis 服务器管理模块负责初始化全局连接池对象，要放在redis lisetner对象初始化关完成初始化 */
 	private final RedisManagement rm = new RedisManagement();
-	///////////////// TOKEN MANAGEMENT///////	
+	///////////////// TOKEN MANAGEMENT///////
 	private final TokenMangement tm = new TokenMangement(this);
+	private final TokenValidatorPersonListener tokenValidatorPersonListener = new TokenValidatorPersonListener(this);
+	private final TokenValidatorPersonGroupListener tokenValidatorPersonGroupListener = new TokenValidatorPersonGroupListener(this);
+	private final TokenValidatorDeviceListener tokenValidatorDeviceListener = new TokenValidatorDeviceListener(this);
+	private final TokenValidatorDeviceGroupListener tokenValidatorDeviceGroupListener = new TokenValidatorDeviceGroupListener(this);
+
 	private final RedisPersonListener redisPersonListener = new RedisPersonListener();
 	private final RedisImageListener redisImageListener = new RedisImageListener(redisPersonListener,this);
 	private final RedisFeatureListener redisFeatureListener = new RedisFeatureListener();
@@ -65,6 +70,13 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		initListener();
 	}
 	private void initListener(){
+		// 注册安全验证侦听器
+		getPersonManager().registerListener(tokenValidatorPersonListener);
+		getPersonGroupManager().registerListener(tokenValidatorPersonGroupListener);
+		getDeviceManager().registerListener(tokenValidatorDeviceListener);
+		getDeviceGroupManager().registerListener(tokenValidatorDeviceGroupListener);
+
+		// 注册REDIS侦听器
 		getPersonManager().registerListener(redisPersonListener);
 		getImageManager().registerListener(redisImageListener);
 		getFeatureManager().registerListener(redisFeatureListener);
