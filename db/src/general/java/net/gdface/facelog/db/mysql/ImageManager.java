@@ -1147,6 +1147,11 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
                 @Override
                 public void afterDelete(net.gdface.facelog.dborm.image.FlImageBean bean) throws DaoException {
                     listener.afterDelete(ImageManager.this.beanConverter.fromRight(bean));
+                }
+                
+                @Override
+                public void done() throws DaoException {
+                    listener.done();
                 }};
         }
 
@@ -1179,6 +1184,11 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         public void afterDelete(ImageBean bean) {
             listener.afterDelete(bean);
         }        
+        
+        @Override
+        public void done() {
+            listener.done();
+        }
     }
 
     //_____________________________________________________________________

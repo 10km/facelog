@@ -369,6 +369,8 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         }
         finally
         {
+            // listener callback
+            this.listenerContainer.done();
             this.getManager().close(ps);
             this.freeConnection(c);
         }
@@ -1266,6 +1268,8 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         }
         finally
         {
+            // listener callback
+            this.listenerContainer.done();
             sql = null;
             this.getManager().close(ps);
             this.freeConnection(c);
@@ -1460,6 +1464,8 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         }
         finally
         {
+            // listener callback
+            this.listenerContainer.done();
             sql = null;
             this.getManager().close(ps);
             this.freeConnection(c);

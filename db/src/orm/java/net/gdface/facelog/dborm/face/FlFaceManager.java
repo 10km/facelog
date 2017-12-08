@@ -364,6 +364,8 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
         }
         finally
         {
+            // listener callback
+            this.listenerContainer.done();
             this.getManager().close(ps);
             this.freeConnection(c);
         }
@@ -1167,6 +1169,8 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
         }
         finally
         {
+            // listener callback
+            this.listenerContainer.done();
             sql = null;
             this.getManager().close(ps);
             this.freeConnection(c);
@@ -1406,6 +1410,8 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
         }
         finally
         {
+            // listener callback
+            this.listenerContainer.done();
             sql = null;
             this.getManager().close(ps);
             this.freeConnection(c);

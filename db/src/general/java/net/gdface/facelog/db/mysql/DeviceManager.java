@@ -1349,6 +1349,11 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
                 @Override
                 public void afterDelete(net.gdface.facelog.dborm.device.FlDeviceBean bean) throws DaoException {
                     listener.afterDelete(DeviceManager.this.beanConverter.fromRight(bean));
+                }
+                
+                @Override
+                public void done() throws DaoException {
+                    listener.done();
                 }};
         }
 
@@ -1381,6 +1386,11 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         public void afterDelete(DeviceBean bean) {
             listener.afterDelete(bean);
         }        
+        
+        @Override
+        public void done() {
+            listener.done();
+        }
     }
 
     //_____________________________________________________________________

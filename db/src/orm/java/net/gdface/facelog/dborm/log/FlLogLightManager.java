@@ -246,6 +246,8 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
         }
         finally
         {
+            // listener callback
+            this.listenerContainer.done();
             sql = null;
             this.getManager().close(ps);
             this.freeConnection(c);
@@ -358,6 +360,8 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
         }
         finally
         {
+            // listener callback
+            this.listenerContainer.done();
             sql = null;
             this.getManager().close(ps);
             this.freeConnection(c);

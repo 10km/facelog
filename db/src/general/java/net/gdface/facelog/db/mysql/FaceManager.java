@@ -1132,6 +1132,11 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
                 @Override
                 public void afterDelete(net.gdface.facelog.dborm.face.FlFaceBean bean) throws DaoException {
                     listener.afterDelete(FaceManager.this.beanConverter.fromRight(bean));
+                }
+                
+                @Override
+                public void done() throws DaoException {
+                    listener.done();
                 }};
         }
 
@@ -1164,6 +1169,11 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         public void afterDelete(FaceBean bean) {
             listener.afterDelete(bean);
         }        
+        
+        @Override
+        public void done() {
+            listener.done();
+        }
     }
 
     //_____________________________________________________________________

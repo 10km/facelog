@@ -1103,6 +1103,11 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
                 @Override
                 public void afterDelete(net.gdface.facelog.dborm.log.FlLogBean bean) throws DaoException {
                     listener.afterDelete(LogManager.this.beanConverter.fromRight(bean));
+                }
+                
+                @Override
+                public void done() throws DaoException {
+                    listener.done();
                 }};
         }
 
@@ -1135,6 +1140,11 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         public void afterDelete(LogBean bean) {
             listener.afterDelete(bean);
         }        
+        
+        @Override
+        public void done() {
+            listener.done();
+        }
     }
 
     //_____________________________________________________________________

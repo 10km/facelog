@@ -351,6 +351,8 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         }
         finally
         {
+            // listener callback
+            this.listenerContainer.done();
             this.getManager().close(ps);
             this.freeConnection(c);
         }
@@ -510,6 +512,8 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         }
         finally
         {
+            // listener callback
+            this.listenerContainer.done();
             sql = null;
             this.getManager().close(ps);
             this.freeConnection(c);
@@ -596,6 +600,8 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
         }
         finally
         {
+            // listener callback
+            this.listenerContainer.done();
             sql = null;
             this.getManager().close(ps);
             this.freeConnection(c);

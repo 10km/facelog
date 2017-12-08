@@ -588,6 +588,11 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
                 @Override
                 public void afterDelete(net.gdface.facelog.dborm.image.FlStoreBean bean) throws DaoException {
                     listener.afterDelete(StoreManager.this.beanConverter.fromRight(bean));
+                }
+                
+                @Override
+                public void done() throws DaoException {
+                    listener.done();
                 }};
         }
 
@@ -620,6 +625,11 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         public void afterDelete(StoreBean bean) {
             listener.afterDelete(bean);
         }        
+        
+        @Override
+        public void done() {
+            listener.done();
+        }
     }
 
     //_____________________________________________________________________

@@ -371,6 +371,8 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
         }
         finally
         {
+            // listener callback
+            this.listenerContainer.done();
             this.getManager().close(ps);
             this.freeConnection(c);
         }
@@ -957,6 +959,8 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
         }
         finally
         {
+            // listener callback
+            this.listenerContainer.done();
             sql = null;
             this.getManager().close(ps);
             this.freeConnection(c);
@@ -1097,6 +1101,8 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
         }
         finally
         {
+            // listener callback
+            this.listenerContainer.done();
             sql = null;
             this.getManager().close(ps);
             this.freeConnection(c);

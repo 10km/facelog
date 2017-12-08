@@ -345,6 +345,11 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
                 @Override
                 public void afterDelete(net.gdface.facelog.dborm.log.FlLogLightBean bean) throws DaoException {
                     listener.afterDelete(LogLightManager.this.beanConverter.fromRight(bean));
+                }
+                
+                @Override
+                public void done() throws DaoException {
+                    listener.done();
                 }};
         }
 
@@ -377,6 +382,11 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         public void afterDelete(LogLightBean bean) {
             listener.afterDelete(bean);
         }        
+        
+        @Override
+        public void done() {
+            listener.done();
+        }
     }
 
     //_____________________________________________________________________

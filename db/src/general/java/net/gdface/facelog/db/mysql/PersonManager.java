@@ -1439,6 +1439,11 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
                 @Override
                 public void afterDelete(net.gdface.facelog.dborm.person.FlPersonBean bean) throws DaoException {
                     listener.afterDelete(PersonManager.this.beanConverter.fromRight(bean));
+                }
+                
+                @Override
+                public void done() throws DaoException {
+                    listener.done();
                 }};
         }
 
@@ -1471,6 +1476,11 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         public void afterDelete(PersonBean bean) {
             listener.afterDelete(bean);
         }        
+        
+        @Override
+        public void done() {
+            listener.done();
+        }
     }
 
     //_____________________________________________________________________

@@ -367,6 +367,8 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
         }
         finally
         {
+            // listener callback
+            this.listenerContainer.done();
             this.getManager().close(ps);
             this.freeConnection(c);
         }
@@ -1274,6 +1276,8 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
         }
         finally
         {
+            // listener callback
+            this.listenerContainer.done();
             sql = null;
             this.getManager().close(ps);
             this.freeConnection(c);
@@ -1396,6 +1400,8 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
         }
         finally
         {
+            // listener callback
+            this.listenerContainer.done();
             sql = null;
             this.getManager().close(ps);
             this.freeConnection(c);

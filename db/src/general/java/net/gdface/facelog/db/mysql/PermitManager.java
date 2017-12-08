@@ -750,6 +750,11 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
                 @Override
                 public void afterDelete(net.gdface.facelog.dborm.permit.FlPermitBean bean) throws DaoException {
                     listener.afterDelete(PermitManager.this.beanConverter.fromRight(bean));
+                }
+                
+                @Override
+                public void done() throws DaoException {
+                    listener.done();
                 }};
         }
 
@@ -782,6 +787,11 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         public void afterDelete(PermitBean bean) {
             listener.afterDelete(bean);
         }        
+        
+        @Override
+        public void done() {
+            listener.done();
+        }
     }
 
     //_____________________________________________________________________

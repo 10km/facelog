@@ -1147,6 +1147,11 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
                 @Override
                 public void afterDelete(net.gdface.facelog.dborm.face.FlFeatureBean bean) throws DaoException {
                     listener.afterDelete(FeatureManager.this.beanConverter.fromRight(bean));
+                }
+                
+                @Override
+                public void done() throws DaoException {
+                    listener.done();
                 }};
         }
 
@@ -1179,6 +1184,11 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         public void afterDelete(FeatureBean bean) {
             listener.afterDelete(bean);
         }        
+        
+        @Override
+        public void done() {
+            listener.done();
+        }
     }
 
     //_____________________________________________________________________

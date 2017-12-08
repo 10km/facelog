@@ -7,7 +7,10 @@
 // ______________________________________________________
 package net.gdface.facelog.dborm;
 
+import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.Set;
+
 import net.gdface.facelog.dborm.exception.DaoException;
 
 /**
@@ -40,6 +43,9 @@ public interface TableListener<B>{
 
         @Override
         public void afterDelete(B bean)throws DaoException {}
+        
+        @Override
+        public void done()throws DaoException {}
     }
     /**
      * Invoked just before inserting a B record into the database.
@@ -95,6 +101,13 @@ public interface TableListener<B>{
     public void afterDelete(B bean)throws DaoException;
 
     /**
+     * Invoked in finally block, just after insert,update,delete.
+     *
+     * @throws DaoException
+     */
+    public void done()throws DaoException;
+
+    /**
      * listener event
      * {@code INSERT} insert a bean<br>
      * {@code UPDATE} update a bean<br>
@@ -136,9 +149,12 @@ public interface TableListener<B>{
             manager.fire(this, bean);
         }
     }
-    /** container for manager multiple listener */
+    /** 
+     * container for multiple listener management
+     * @author guyadong 
+     */
     public static class ListenerContainer <B> implements TableListener<B> {
-        private final LinkedHashSet<TableListener<B>> listeners = new LinkedHashSet<TableListener<B>>();
+        private final Set<TableListener<B>> listeners = Collections.synchronizedSet(new LinkedHashSet<TableListener<B>>(16));
         public ListenerContainer() {
         }
     
@@ -183,27 +199,45 @@ public interface TableListener<B>{
                 listener.afterDelete(bean);
             }
         }
-    
+
+        @Override
+        public void done()throws DaoException{
+            for(TableListener<B> listener:listeners){
+                listener.done();
+            }
+        }
+        /**
+         * determine if the container is empty.
+         * @return 
+         */
         public boolean isEmpty() {
             return listeners.isEmpty();
         }
-    
-        public boolean contains(TableListener<B> o) {
-            return listeners.contains(o);
+        /**
+         * determine if the {@code listener} be added.
+         * @param listener
+         * @return {@code true} if {@code listener} exists in container
+         */
+        public boolean contains(TableListener<B> listener) {
+            return listeners.contains(listener);
         }
-    
-        public synchronized boolean add(TableListener<B> e) {
-            if(null == e){
-                throw new NullPointerException();
-            }
-            return listeners.add(e);
+        /**
+         * add {@code listener} into container
+         * @return {@code true} if add successfully.
+         */
+        public boolean add(TableListener<B> listener) {
+            return null == listener ? false : listeners.add(listener);
         }
-    
-        public synchronized boolean remove(TableListener<B> o) {
-            return null == o? false : listeners.remove(o);
+        /**
+         * remove {@code listener} from container
+         * @param listener instance that will be removed.
+         * @return {@code true} if remove successfully.
+         */
+        public boolean remove(TableListener<B> listener) {
+            return null == listener? false : listeners.remove(listener);
         }
-    
-        public synchronized void clear() {
+        /** remove all listeners in container */
+        public void clear() {
             listeners.clear();
         }
     }
