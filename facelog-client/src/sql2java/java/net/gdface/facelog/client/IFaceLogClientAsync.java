@@ -1806,7 +1806,16 @@ public class IFaceLogClientAsync implements Constant{
     public ListenableFuture<net.gdface.facelog.client.thrift.Token> applyPersonToken(int personId){
         return service.applyPersonToken(personId);
     }
-    // 100 SERIVCE PORT : releasePersonToken
+    // 100 SERIVCE PORT : applyRootToken
+    /**
+     * 申请root访问令牌
+     * @param passwordMD5 root用户密码,非明文(MD5校验码)
+     * @return 
+     */
+    public ListenableFuture<net.gdface.facelog.client.thrift.Token> applyRootToken(String passwordMD5){
+        return service.applyRootToken(passwordMD5);
+    }
+    // 101 SERIVCE PORT : releasePersonToken
     /**
      * 释放人员访问令牌
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
@@ -1815,7 +1824,7 @@ public class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Void> releasePersonToken(net.gdface.facelog.client.thrift.Token token){
         return service.releasePersonToken(token);
     }
-    // 101 SERIVCE PORT : applyAckChannel
+    // 102 SERIVCE PORT : applyAckChannel
     /**
      * 申请一个唯一的命令响应通道
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
@@ -1825,7 +1834,7 @@ public class IFaceLogClientAsync implements Constant{
     public ListenableFuture<String> applyAckChannel(net.gdface.facelog.client.thrift.Token token){
         return service.applyAckChannel(token);
     }
-    // 102 SERIVCE PORT : applyCmdSn
+    // 103 SERIVCE PORT : applyCmdSn
     /**
      * 申请一个唯一的命令序列号
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
@@ -1835,7 +1844,7 @@ public class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Long> applyCmdSn(net.gdface.facelog.client.thrift.Token token){
         return service.applyCmdSn(token);
     }
-    // 103 SERIVCE PORT : getRedisParameters
+    // 104 SERIVCE PORT : getRedisParameters
     /**
      * 返回redis访问基本参数:<br>
      * <ul>
@@ -1853,7 +1862,7 @@ public class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Map<net.gdface.facelog.client.thrift.MQParam, String>> getRedisParameters(net.gdface.facelog.client.thrift.Token token){
         return service.getRedisParameters(token);
     }
-    // 104 SERIVCE PORT : getServiceConfig
+    // 105 SERIVCE PORT : getServiceConfig
     /**
      * 获取服务的所有配置参数
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
@@ -1863,7 +1872,7 @@ public class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Map<String, String>> getServiceConfig(net.gdface.facelog.client.thrift.Token token){
         return service.getServiceConfig(token);
     }
-    // 105 SERIVCE PORT : setProperty
+    // 106 SERIVCE PORT : setProperty
     /**
      * 修改/增加指定的配置参数
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
@@ -1880,7 +1889,7 @@ public class IFaceLogClientAsync implements Constant{
                     value,
                     token);
     }
-    // 106 SERIVCE PORT : setProperties
+    // 107 SERIVCE PORT : setProperties
     /**
      * 修改一组配置参数
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
@@ -1894,7 +1903,7 @@ public class IFaceLogClientAsync implements Constant{
                     config,
                     token);
     }
-    // 107 SERIVCE PORT : saveServiceConfig
+    // 108 SERIVCE PORT : saveServiceConfig
     /**
      * 配置参数持久化<br>
      * 保存修改的配置到自定义配置文件

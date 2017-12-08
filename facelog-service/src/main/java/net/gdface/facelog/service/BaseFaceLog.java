@@ -1257,6 +1257,21 @@ public abstract class BaseFaceLog extends Dao{
 				return null;		
 	}
 	/**
+	 * 申请root访问令牌
+	 * @param passwordMD5 root用户密码,非明文(MD5校验码)
+	 * @return
+	 * @throws ServiceRuntimeException
+	 * @throws ServiceSecurityException
+	 */
+	@ThriftMethod(exception = {
+            @ThriftException(type=ServiceRuntimeException.class, id=1),
+            @ThriftException(type=ServiceSecurityException.class, id=2)
+			})
+	public Token applyRootToken(String passwordMD5)
+			throws ServiceRuntimeException, ServiceSecurityException{
+				return null;
+	}
+	/**
 	 * 释放人员访问令牌
 	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param token 当前持有的令牌

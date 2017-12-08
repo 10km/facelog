@@ -84,15 +84,19 @@ class TokenMangement implements ServiceConstant {
 	enum Enable{
 		/** 允许所有令牌类型 */ALL,
 		/** 只允许人员令牌 */PERSON_ONLY,
-		/** 只允许设备令牌 */DEVICE_ONLY;
+		/** 只允许设备令牌 */DEVICE_ONLY,
+		/** 只允许root令牌 */ROOT_ONLY;
+		
 		boolean isValid(TokenMangement tm,Token token){
 			switch(this){
 			case PERSON_ONLY:
 				return tm.isValidPersonToken(token);
 			case DEVICE_ONLY:
 				return tm.isValidDeviceToken(token);
+			case ROOT_ONLY:
+				return tm.isValidRootToken(token);
 			case ALL:
-				return tm.isValidPersonToken(token) || tm.isValidDeviceToken(token);
+				return tm.isValidPersonToken(token) || tm.isValidDeviceToken(token) || tm.isValidRootToken(token);
 			default:
 				return false;
 			}
@@ -113,6 +117,9 @@ class TokenMangement implements ServiceConstant {
 					break;
 				case DEVICE_ONLY:
 					message.append(",Device Token required");
+					break;
+				case ROOT_ONLY:
+					message.append(",root Token required");
 					break;
 				default:
 					break;
@@ -303,16 +310,17 @@ class TokenMangement implements ServiceConstant {
 	}
 	/**
 	 * 申请root访问令牌
-	 * @param password root密码MD校验码
+	 * @param passwordMD5 root密码MD校验码
 	 * @return
 	 * @throws ServiceSecurityException
 	 */
-	protected Token applyRootToken(String password)
+	protected Token applyRootToken(String passwordMD5)
 			throws ServiceSecurityException{
-		if(!FaceUtilits.getMD5String(CONFIG.getString(ROOT_PASSWORD).getBytes()).equals(password)){
+		// 从配置文件中读取root密码算出MD5与输入的密码比较
+		if(!FaceUtilits.getMD5String(CONFIG.getString(ROOT_PASSWORD).getBytes()).equals(passwordMD5)){
 			throw new ServiceSecurityException(SecurityExceptionType.INVALID_ROOT_PASSWORD);
 		}
-		Token token = makeRootToken(password);
+		Token token = makeRootToken(passwordMD5);
 		String key = Integer.toString(token.getId());
 		personTokenTable.set(key, token, false);
 		personTokenTable.expire(token);

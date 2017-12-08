@@ -33,8 +33,8 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 	private final ImmutableSet<WriteOp> operatorAllow;
 	private final ImmutableSet<WriteOp> deviceAllow;
 	private final Class<B> type;
-	private final boolean validateDeviceToken;
-	private final boolean validatePersonToken;
+	protected final boolean validateDeviceToken;
+	protected final boolean validatePersonToken;
 	@SuppressWarnings("unchecked")
 	protected BaseTokenValidatorListener(Dao dao) {
 		this.dao = checkNotNull(dao,"dao is null");

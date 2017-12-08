@@ -5,11 +5,11 @@ namespace cpp gdface
 
 
 enum TokenType {
-  UNINITIALIZED, DEVICE, PERSON
+  UNINITIALIZED, DEVICE, PERSON, ROOT
 }
 
 enum SecurityExceptionType {
-  UNCLASSIFIED, INVALID_MAC, INVALID_SN, OCCUPIED_SN, INVALID_TOKEN, INVALID_DEVICE_ID, INVALID_PERSON_ID
+  UNCLASSIFIED, INVALID_MAC, INVALID_SN, OCCUPIED_SN, INVALID_TOKEN, INVALID_DEVICE_ID, INVALID_PERSON_ID, INVALID_ROOT_PASSWORD
 }
 
 enum MQParam {
@@ -209,6 +209,7 @@ service IFaceLog {
   string applyAckChannel(1:  Token token) throws (1: ServiceRuntimeException ex1);
   i64 applyCmdSn(1:  Token token) throws (1: ServiceRuntimeException ex1);
   Token applyPersonToken(1:  i32 personId) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
+  Token applyRootToken(1:  string passwordMD5) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
   i32 countDeviceByWhere(1:  string where) throws (1: ServiceRuntimeException ex1);
   i32 countDeviceGroupByWhere(1:  string where) throws (1: ServiceRuntimeException ex1);
   i32 countLogByWhere(1:  string where) throws (1: ServiceRuntimeException ex1);

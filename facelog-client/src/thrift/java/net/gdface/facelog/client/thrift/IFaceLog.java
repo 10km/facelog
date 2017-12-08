@@ -116,6 +116,15 @@ public interface IFaceLog
             @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
         );
 
+        @ThriftMethod(value = "applyRootToken",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1),
+                          @ThriftException(type=ServiceSecurityException.class, id=2)
+                      })
+        ListenableFuture<Token> applyRootToken(
+            @ThriftField(value=1, name="passwordMD5", requiredness=Requiredness.NONE) final String passwordMD5
+        );
+
         @ThriftMethod(value = "countDeviceByWhere",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1071,6 +1080,15 @@ public interface IFaceLog
                   })
     Token applyPersonToken(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
+    ) throws ServiceRuntimeException, ServiceSecurityException;
+
+    @ThriftMethod(value = "applyRootToken",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1),
+                      @ThriftException(type=ServiceSecurityException.class, id=2)
+                  })
+    Token applyRootToken(
+        @ThriftField(value=1, name="passwordMD5", requiredness=Requiredness.NONE) final String passwordMD5
     ) throws ServiceRuntimeException, ServiceSecurityException;
 
     @ThriftMethod(value = "countDeviceByWhere",

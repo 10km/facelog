@@ -4,7 +4,7 @@ import com.facebook.swift.codec.*;
 
 public enum TokenType
 {
-    UNINITIALIZED(0), DEVICE(1), PERSON(2);
+    UNINITIALIZED(0), DEVICE(1), PERSON(2), ROOT(3);
 
     private final int value;
 

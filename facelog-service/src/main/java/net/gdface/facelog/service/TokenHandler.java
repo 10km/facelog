@@ -1,10 +1,8 @@
 package net.gdface.facelog.service;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import com.facebook.swift.service.ThriftEventHandler;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 
 /**
@@ -24,12 +22,13 @@ class TokenHandler extends ThriftEventHandler {
 			return new Token();
 		}
 	};
-	private Set<ThreadLocal<?>> tlsVariables = Sets.newConcurrentHashSet();
+	/** 注册到当前对象的TLS变量集合,当RPC调用结束时调用{@link ThreadLocal#remove()}释放TLS变量 */
+	private final Set<ThreadLocal<?>> tlsVariables = Sets.newConcurrentHashSet();
 	private TokenHandler() {
 	}
 	
 	/**
-	 * 服务方法被调用前从方法参数中查找{@link Token}参数对象存入TLS变量 {@link #tlsToken}
+	 * 服务方法被调用前从方法参数中查找最后一个类型为{@link Token}的参数对象存入TLS变量 {@link #tlsToken}
 	 */
 	@Override
 	public void postRead(Object context, String methodName, Object[] args) {
@@ -54,10 +53,22 @@ class TokenHandler extends ThriftEventHandler {
 	Token get(){
 		return tlsToken.get();
 	}
-	public void registTls(ThreadLocal<?> tls){
-		this.tlsVariables.add(Preconditions.checkNotNull(tls,"tls is null"));
+	/**
+	 * {@link Set#add(Object)}代理方法<br>
+	 * 将{@code tls}交给当前对象管理,当前对象会在RPC调用结束时释放TLS变量
+	 * @param tls
+	 * @return
+	 */
+	public boolean registerTls(ThreadLocal<?> tls){		
+		return null == tls ? false : this.tlsVariables.add(tls);
 	}
-	public void unregistTls(ThreadLocal<?> tls){
-		this.tlsVariables.remove(Preconditions.checkNotNull(tls,"tls is null"));
+	/**
+	 * {@link Set#remove(Object)}代理方法<br>
+	 * 解除当前对象对{@code tls}的管理
+	 * @param tls
+	 * @return
+	 */
+	public boolean unregisterTls(ThreadLocal<?> tls){
+		return null == tls ? false : this.tlsVariables.remove(tls);
 	}
 }
