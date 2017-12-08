@@ -3,9 +3,8 @@ package net.gdface.facelog.service;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Set;
+import com.google.common.collect.ImmutableSet;
 
-import com.google.common.collect.Sets;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 
@@ -31,8 +30,8 @@ import net.gdface.facelog.service.Token.TokenType;
 abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableListener.Adapter<B> implements ServiceConstant {
 	protected final Dao dao;
 	protected final TokenHandler tlsToken = TokenHandler.INSTANCE;
-	private final Set<WriteOp> operatorAllow;
-	private final Set<WriteOp> deviceAllow;
+	private final ImmutableSet<WriteOp> operatorAllow;
+	private final ImmutableSet<WriteOp> deviceAllow;
 	private final Class<B> type;
 	private final boolean validateDeviceToken;
 	private final boolean validatePersonToken;
@@ -76,7 +75,7 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 		}
 		return null;
 	}
-	protected static final Set<WriteOp> getAllowFromConfig(String key){
+	protected static final ImmutableSet<WriteOp> getAllowFromConfig(String key){
 		List<String> list = GlobalConfig.getExplodedStringAsList(CONFIG.getString(key,""));
 		List<WriteOp> opList = Lists.transform(list, new Function<String,Dao.WriteOp>(){
 			@Override
@@ -87,7 +86,7 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 					return null;
 				}
 			}});
-		return Sets.newHashSet(Iterators.filter(opList.iterator(), Predicates.notNull()));
+		return ImmutableSet.copyOf(Iterators.filter(opList.iterator(), Predicates.notNull()));
 	}
 	/**
 	 * 根据配置文件中的设置检查是否允许{@code opRank}级别的用户操作执行{@code writeOp}指定的操作
