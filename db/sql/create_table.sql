@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS fl_store (
   `md5`      char(32) NOT NULL PRIMARY KEY COMMENT '主键,md5检验码',
   `encoding` varchar(16) DEFAULT NULL COMMENT '编码类型,GBK,UTF8...',
   `data`     blob COMMENT '二进制数据'
-) COMMENT '二进制数据存储表' ;
+) COMMENT '二进制数据存储表' DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS fl_device_group (
   `id`          int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '设备组id',
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS fl_device_group (
   `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段',
   `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段',
   FOREIGN KEY (parent)  REFERENCES fl_device_group(id) ON DELETE SET NULL
-) COMMENT '设备组信息' ;
+) COMMENT '设备组信息' DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS fl_person_group (
   `id`          int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '用户组id',
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS fl_person_group (
   `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段',
   `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段',
   FOREIGN KEY (parent)  REFERENCES fl_person_group(id) ON DELETE SET NULL
-) COMMENT '用户组信息' ;
+) COMMENT '用户组信息' DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS fl_permit (
   `device_group_id`   int(11) NOT NULL COMMENT '外键,设备组id',
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS fl_permit (
   PRIMARY KEY (`device_group_id`, `person_group_id`),
   FOREIGN KEY (device_group_id)  REFERENCES fl_device_group(id) ON DELETE CASCADE,
   FOREIGN KEY (person_group_id)  REFERENCES fl_person_group(id) ON DELETE CASCADE
-) COMMENT '通行权限关联表' ;
+) COMMENT '通行权限关联表' DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS fl_device (
   `id`          int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '设备id',
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS fl_device (
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (group_id)  REFERENCES fl_device_group(id) ON DELETE SET NULL,
   INDEX `group_id` (`group_id` ASC)
-) COMMENT '前端设备基本信息' ;
+) COMMENT '前端设备基本信息' DEFAULT CHARSET=utf8;
 
 /*
  md5外键引用fl_store(md5),所以删除 fl_store 中对应的md5,会导致 fl_image 中的记录同步删除(ON DELETE CASCADE),
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS fl_image (
   `thumb_md5`   char(32)   DEFAULT NULL COMMENT '缩略图md5,图像数据存储在 fl_imae_store(md5)',
   `device_id`   int(11)    DEFAULT NULL COMMENT '外键,图像来源设备',
   FOREIGN KEY (device_id)  REFERENCES fl_device(id) ON DELETE SET NULL
-) COMMENT '图像信息存储表,用于存储系统中所有用到的图像数据,表中只包含图像基本信息,图像二进制源数据存在在fl_store中(md5对应)' ;
+) COMMENT '图像信息存储表,用于存储系统中所有用到的图像数据,表中只包含图像基本信息,图像二进制源数据存在在fl_store中(md5对应)' DEFAULT CHARSET=utf8;
 
 /* 
  删除 fl_person 中记录时会同步级联删除 fl_log 中 person_id 关联的所有记录以及 fl_feature 中 person_id 关联的所有记录
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS fl_person (
   CHECK(sex>=0 AND sex<=1),
   # 验证 rank 字段有效性
   CHECK(rank = 0 OR rank= 2 OR rank = 3)
-) COMMENT '人员基本描述信息' ;
+) COMMENT '人员基本描述信息' DEFAULT CHARSET=utf8;
 
 /* 
  允许多个fl_face记录对应一个 fl_feature记录,以适应红外算法的特殊需要,同时满足服务器端负责对比计算的要求
@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS fl_feature (
   `feature`     blob     NOT NULL COMMENT '二进制特征数据',
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (person_id)  REFERENCES fl_person(id) ON DELETE CASCADE
-) COMMENT '用于验证身份的人脸特征数据表' ;
+) COMMENT '用于验证身份的人脸特征数据表' DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE IF NOT EXISTS fl_face (
@@ -165,7 +165,7 @@ CREATE TABLE IF NOT EXISTS fl_face (
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (image_md5)       REFERENCES fl_image(md5)   ON DELETE CASCADE,
   FOREIGN KEY (feature_md5)     REFERENCES fl_feature(md5) ON DELETE SET NULL
-) COMMENT '人脸检测信息数据表,用于保存检测到的人脸的所有信息(特征数据除外)' ;
+) COMMENT '人脸检测信息数据表,用于保存检测到的人脸的所有信息(特征数据除外)' DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE IF NOT EXISTS fl_log (
@@ -182,7 +182,7 @@ CREATE TABLE IF NOT EXISTS fl_log (
   FOREIGN KEY (device_id)       REFERENCES fl_device(id)   ON DELETE SET NULL,
   FOREIGN KEY (verify_feature)  REFERENCES fl_feature(md5) ON DELETE SET NULL,
   FOREIGN KEY (compare_face)    REFERENCES fl_face(id)     ON DELETE SET NULL
-) COMMENT '人脸验证日志,记录所有通过验证的人员' ;
+) COMMENT '人脸验证日志,记录所有通过验证的人员' DEFAULT CHARSET=utf8;
 
 # 创建简单日志 view
 CREATE VIEW fl_log_light AS SELECT log.id,
@@ -192,3 +192,9 @@ CREATE VIEW fl_log_light AS SELECT log.id,
     person.papers_num,
     log.verify_time 
     FROM fl_log AS log JOIN fl_person AS person ON log.person_id = person.id;
+
+# 创建默认的设备组和人员组
+INSERT INTO fl_person_group (name) values ('DEFAULT GROUP(默认用户组)');
+INSERT INTO fl_person_group (name) values ('OPERATOR_GROUP(操作员组)');
+INSERT INTO fl_person_group (name) values ('ADMIN_GROUP(管理员组)');
+INSERT INTO fl_device_group (name) values ('DEFAULT_GROUP(默认设备组)');
