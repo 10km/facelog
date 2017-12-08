@@ -287,7 +287,7 @@ public class GlobalConfig implements ServiceConstant{
 		} 
 	}
 	/**
-	 * 将指定的{@link Configuration}转为map
+	 * 将指定的{@link Configuration}转为{@code Map<String,String>}
 	 * @param config
 	 * @return
 	 */
@@ -296,11 +296,10 @@ public class GlobalConfig implements ServiceConstant{
 		sync.beginRead();
 		try{
 			return Maps.asMap(ImmutableSet.copyOf(config.getKeys()),new Function<String,String>(){
-
-			@Override
-			public String apply(String input) {
-				return config.getString(input);
-			}});
+				@Override
+				public String apply(String input) {
+					return config.getString(input);
+				}});
 		}finally{
 			sync.endRead();
 		}
