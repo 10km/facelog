@@ -44,9 +44,10 @@ import net.gdface.facelog.service.RedisManagement.MQParam;
  * 所以请在执行save时特别注意{@code isNew()}状态</li>
  * <li>对于以add为前缀的添加记录方法,在添加记录前会检查数据库中是否有(主键)相同记录,
  * 如果有则会抛出异常{@link DuplicateRecordException}</li>
- * <li>所有带{@link Token}参数的方法都需要提供访问令牌,访问令牌分为人员令牌和设备令牌,
+ * <li>所有带{@link Token}参数的方法都需要提供访问令牌,访问令牌分为人员令牌,设备令牌和root令牌(仅用于root帐户),
  * 注释中标注为{@code PERSON_ONLY}的方法只接受人员令牌,
  * 注释中标注为{@code DEVICE_ONLY}的方法只接受设备令牌,
+ * 注释中标注为{@code ROOT_ONLY}的方法只接受root令牌,
  * 关于令牌申请和释放参见{@link #applyPersonToken(int)},{@link #releasePersonToken(Token)},{@link #online(DeviceBean)},{@link #offline(Token)}</li>
  * </ul>
  * @author guyadong
@@ -1257,21 +1258,6 @@ public abstract class BaseFaceLog extends Dao{
 				return null;		
 	}
 	/**
-	 * 申请root访问令牌
-	 * @param passwordMD5 root用户密码,非明文(MD5校验码)
-	 * @return
-	 * @throws ServiceRuntimeException
-	 * @throws ServiceSecurityException
-	 */
-	@ThriftMethod(exception = {
-            @ThriftException(type=ServiceRuntimeException.class, id=1),
-            @ThriftException(type=ServiceSecurityException.class, id=2)
-			})
-	public Token applyRootToken(String passwordMD5)
-			throws ServiceRuntimeException, ServiceSecurityException{
-				return null;
-	}
-	/**
 	 * 释放人员访问令牌
 	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param token 当前持有的令牌
@@ -1283,6 +1269,36 @@ public abstract class BaseFaceLog extends Dao{
             @ThriftException(type=ServiceSecurityException.class, id=2)
 			})
 	public void releasePersonToken(Token token)
+			throws ServiceRuntimeException, ServiceSecurityException{
+	}
+	/**
+	 * 申请root访问令牌
+	 * @param passwordMD5 root用户密码,非明文(MD5校验码)
+	 * @return
+	 * @throws ServiceRuntimeException
+	 * @throws ServiceSecurityException
+	 */
+	@ThriftMethod(exception = {
+	        @ThriftException(type=ServiceRuntimeException.class, id=1),
+	        @ThriftException(type=ServiceSecurityException.class, id=2)
+			})
+	public Token applyRootToken(String passwordMD5)
+			throws ServiceRuntimeException, ServiceSecurityException{
+				return null;
+	}
+
+	/**
+	 * 释放root访问令牌
+	 * <br>{@link TokenMangement.Enable#ROOT_ONLY}
+	 * @param token 当前持有的令牌
+	 * @throws ServiceRuntimeException
+	 * @throws ServiceSecurityException
+	 */
+	@ThriftMethod(exception = {
+            @ThriftException(type=ServiceRuntimeException.class, id=1),
+            @ThriftException(type=ServiceSecurityException.class, id=2)
+			})
+	public void releaseRootToken(Token token)
 			throws ServiceRuntimeException, ServiceSecurityException{
 	}
 	/**
@@ -1328,7 +1344,7 @@ public abstract class BaseFaceLog extends Dao{
     }
 	/**
 	 * 获取服务的所有配置参数
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@link TokenMangement.Enable#ROOT_ONLY}
 	 * @param token 访问令牌
 	 * @return
 	 * @throws ServiceRuntimeException
@@ -1339,7 +1355,7 @@ public abstract class BaseFaceLog extends Dao{
 	}
 	/**
 	 * 修改/增加指定的配置参数
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@link TokenMangement.Enable#ROOT_ONLY}
 	 * @param key 参数名
 	 * @param value 参数值
 	 * @param token 访问令牌
@@ -1350,7 +1366,7 @@ public abstract class BaseFaceLog extends Dao{
     }
     /**
      * 修改一组配置参数
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@link TokenMangement.Enable#ROOT_ONLY}
      * @param config 参数名-参数值对
      * @param token 访问令牌
      * @throws ServiceRuntimeException
@@ -1362,7 +1378,7 @@ public abstract class BaseFaceLog extends Dao{
 	/**
 	 * 配置参数持久化<br>
 	 * 保存修改的配置到自定义配置文件
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@link TokenMangement.Enable#ROOT_ONLY}
 	 * @param token 访问令牌
 	 * @throws ServiceRuntimeException
 	 */

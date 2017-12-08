@@ -1608,10 +1608,10 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
 	}
     @Override
-	public Token applyRootToken(String passwordMD5)
+	public void releasePersonToken(Token token)
 			throws ServiceRuntimeException, ServiceSecurityException{
     	try{
-    		return tm.applyRootToken(passwordMD5);
+    		tm.releasePersonToken(token);
     	} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
@@ -1619,10 +1619,21 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
 	}
     @Override
-	public void releasePersonToken(Token token)
+	public Token applyRootToken(String passwordMD5)
+			throws ServiceRuntimeException, ServiceSecurityException{
+		try{
+			return tm.applyRootToken(passwordMD5);
+		} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
+			throw new ServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public void releaseRootToken(Token token)
 			throws ServiceRuntimeException, ServiceSecurityException{
     	try{
-    		tm.releasePersonToken(token);
+    		tm.releaseRootToken(token);
     	} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
@@ -1671,7 +1682,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
     @Override
     public Map<String,String> getServiceConfig(Token token)throws ServiceRuntimeException{
     	try {
-			Enable.PERSON_ONLY.check(tm, token);
+			Enable.ROOT_ONLY.check(tm, token);
 			return GlobalConfig.toMap(CONFIG);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
@@ -1682,7 +1693,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
     @Override
     public void setProperty(String key,String value,Token token)throws ServiceRuntimeException{
     	try {
-			Enable.PERSON_ONLY.check(tm, token);
+			Enable.ROOT_ONLY.check(tm, token);
 			GlobalConfig.setProperty(key,value);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
@@ -1693,7 +1704,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
     @Override
     public void setProperties(Map<String,String> config,Token token)throws ServiceRuntimeException{
     	try {
-			Enable.PERSON_ONLY.check(tm, token);
+			Enable.ROOT_ONLY.check(tm, token);
 			GlobalConfig.setProperties(config);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);
@@ -1704,7 +1715,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
     @Override
     public void saveServiceConfig(Token token)throws ServiceRuntimeException{
     	try {
-			Enable.PERSON_ONLY.check(tm, token);
+			Enable.ROOT_ONLY.check(tm, token);
 			GlobalConfig.persistence();
 		} catch (RuntimeException e) {
 			throw new ServiceRuntimeException(e);

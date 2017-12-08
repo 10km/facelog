@@ -776,6 +776,15 @@ public interface IFaceLog
             @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
+        @ThriftMethod(value = "releaseRootToken",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1),
+                          @ThriftException(type=ServiceSecurityException.class, id=2)
+                      })
+        ListenableFuture<Void> releaseRootToken(
+            @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
+        );
+
         @ThriftMethod(value = "replaceFeature",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1739,6 +1748,15 @@ public interface IFaceLog
                       @ThriftException(type=ServiceSecurityException.class, id=2)
                   })
     void releasePersonToken(
+        @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
+    ) throws ServiceRuntimeException, ServiceSecurityException;
+
+    @ThriftMethod(value = "releaseRootToken",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1),
+                      @ThriftException(type=ServiceSecurityException.class, id=2)
+                  })
+    void releaseRootToken(
         @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException, ServiceSecurityException;
 

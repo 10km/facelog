@@ -287,6 +287,7 @@ service IFaceLog {
   Token online(1:  DeviceBean device) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
   DeviceBean registerDevice(1:  DeviceBean newDevice) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
   void releasePersonToken(1:  Token token) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
+  void releaseRootToken(1:  Token token) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
   void replaceFeature(1:  i32 personId, 2:  string featureMd5, 3:  bool deleteOldFeatureImage, 4:  Token token) throws (1: ServiceRuntimeException ex1);
   DeviceBean saveDevice(1:  DeviceBean deviceBean, 2:  Token token) throws (1: ServiceRuntimeException ex1);
   DeviceGroupBean saveDeviceGroup(1:  DeviceGroupBean deviceGroupBean, 2:  Token token) throws (1: ServiceRuntimeException ex1);

@@ -147,8 +147,13 @@ class TokenMangement implements ServiceConstant {
 			return true;
 		}
 	}
+	/** 验证root令牌是否有效 */
 	private boolean isValidRootToken(Token token){
-		return isValidPersonToken(token) && TokenType.ROOT.equals(token.getType());
+		if(validatePersonToken){
+			return isValidPersonToken(token) && TokenType.ROOT.equals(token.getType());
+		}else{
+			return true;
+		}
 	}
 	/** 检查数据库是否存在指定的设备记录,没有则抛出异常{@link ServiceSecurityException} */
 	protected void checkValidDeviceId(Integer deviceId) throws ServiceSecurityException{
@@ -193,7 +198,9 @@ class TokenMangement implements ServiceConstant {
 		return makeToken(buffer.array()).asPersonToken(personId);
 	}
 	private static Token makeRootToken(String password){
-		return makeToken(password.getBytes()).asRootToken();
+		ByteBuffer buffer = ByteBuffer.wrap(new byte[8]);
+		buffer.asLongBuffer().put(System.currentTimeMillis());
+		return makeToken(Bytes.concat(password.getBytes(),buffer.array())).asRootToken();
 	}
 	/**
 	 * 从{@link #deviceTokenTable}删除指定设备的令牌
@@ -309,6 +316,16 @@ class TokenMangement implements ServiceConstant {
 		return token;
 	}
 	/**
+	 * 释放人员访问令牌
+	 * @param token 当前持有的令牌
+	 * @throws ServiceSecurityException
+	 */
+	protected void releasePersonToken(Token token)
+			throws ServiceSecurityException{
+		Enable.PERSON_ONLY.check(this, token);
+		removePersonTokenOf(token.getId());
+	}
+	/**
 	 * 申请root访问令牌
 	 * @param passwordMD5 root密码MD校验码
 	 * @return
@@ -327,13 +344,13 @@ class TokenMangement implements ServiceConstant {
 		return token;
 	}
 	/**
-	 * 释放人员访问令牌
+	 * 释放root访问令牌
 	 * @param token 当前持有的令牌
 	 * @throws ServiceSecurityException
 	 */
-	protected void releasePersonToken(Token token)
+	protected void releaseRootToken(Token token)
 			throws ServiceSecurityException{
-		Enable.PERSON_ONLY.check(this, token);
+		Enable.ROOT_ONLY.check(this, token);
 		removePersonTokenOf(token.getId());
 	}
 }

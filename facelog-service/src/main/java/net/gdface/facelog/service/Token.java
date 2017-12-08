@@ -11,6 +11,7 @@ import com.google.common.base.Function;
  */
 @ThriftStruct
 public final class Token{
+	static final int FAKE_ROOT_ID = -1;
 	/** 令牌类型 */
 	@ThriftStruct
 	public static enum TokenType{
@@ -72,7 +73,7 @@ public final class Token{
 		return this;
 	}
 	Token asRootToken(){
-		this.setId(-1);
+		this.setId(FAKE_ROOT_ID);
 		this.setType(TokenType.ROOT);
 		return this;
 	}
