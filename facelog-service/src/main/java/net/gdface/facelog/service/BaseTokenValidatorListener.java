@@ -34,13 +34,17 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 	private final Set<WriteOp> operatorAllow;
 	private final Set<WriteOp> deviceAllow;
 	private final Class<B> type;
+	private final boolean validateDeviceToken;
+	private final boolean validatePersonToken;
 	@SuppressWarnings("unchecked")
 	protected BaseTokenValidatorListener(Dao dao) {
 		this.dao = checkNotNull(dao,"dao is null");
-		operatorAllow = getAllowFromConfig(getOperatorAllowKey());
-		deviceAllow = getAllowFromConfig(getDeviceAllowKey());
+		this.operatorAllow = getAllowFromConfig(getOperatorAllowKey());
+		this.deviceAllow = getAllowFromConfig(getDeviceAllowKey());
         Type superClass = getClass().getGenericSuperclass();
         this.type = (Class<B>) ((ParameterizedType) superClass).getActualTypeArguments()[0];
+		this.validateDeviceToken = CONFIG.getBoolean(TOKEN_DEVICE_VALIDATE);
+		this.validatePersonToken = CONFIG.getBoolean(TOKEN_PERSON_VALIDATE);
 	}
 	/**
 	 * 返回读取配置文件中允许操作员操作的KEY
@@ -120,7 +124,7 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 		}
 	}
 	/**
-	 * 检查当前令牌是否有写指定的写操作权限
+	 * 检查当前令牌是否有指定的写操作权限
 	 * @param bean
 	 * @param writeOp
 	 */
@@ -129,11 +133,15 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 		checkState(null !=tokenType,"typeToken is null");
 		switch(tokenType){
 		case DEVICE:{
-			checkWriteOpForDeviceToken(writeOp);
+			if(validateDeviceToken){
+				checkWriteOpForDeviceToken(writeOp);
+			}
 			break;
 		}
 		case PERSON:{
-			checkWriteOpForPersonToken(writeOp);
+			if(validatePersonToken){
+				checkWriteOpForPersonToken(writeOp);
+			}
 			break;
 		}
 		case ROOT:

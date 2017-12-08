@@ -1,6 +1,11 @@
 package net.gdface.facelog.service;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.facebook.swift.service.ThriftEventHandler;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Sets;
 
 /**
  * 用于捕获服务方法中的{@link Token}参数,存入TLS变量,供后续读取,
@@ -19,7 +24,7 @@ class TokenHandler extends ThriftEventHandler {
 			return new Token();
 		}
 	};
-
+	private Set<ThreadLocal<?>> tlsVariables = Sets.newConcurrentHashSet();
 	private TokenHandler() {
 	}
 	
@@ -40,9 +45,19 @@ class TokenHandler extends ThriftEventHandler {
 	public void done(Object context, String methodName) {
 		// 服务方法调用结束时释放TLS
 		tlsToken.remove();
+		// 释放所有注册的tls变量
+		for(ThreadLocal<?> tls:this.tlsVariables){
+			tls.remove();
+		}
 	}
 	/** 返回TLS变量存储的{@link Token}对象 */
 	Token get(){
 		return tlsToken.get();
+	}
+	public void registTls(ThreadLocal<?> tls){
+		this.tlsVariables.add(Preconditions.checkNotNull(tls,"tls is null"));
+	}
+	public void unregistTls(ThreadLocal<?> tls){
+		this.tlsVariables.remove(Preconditions.checkNotNull(tls,"tls is null"));
 	}
 }
