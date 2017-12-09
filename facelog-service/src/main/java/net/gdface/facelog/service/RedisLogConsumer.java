@@ -1,8 +1,6 @@
 package net.gdface.facelog.service;
 
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import gu.simplemq.IMessageAdapter;
