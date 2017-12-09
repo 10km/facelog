@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -26,6 +25,7 @@ import org.weakref.jmx.com.google.common.collect.Lists;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 
 import net.gdface.facelog.db.Constant.JdbcProperty;
 import net.gdface.facelog.service.GlobalConfig;
@@ -200,21 +200,21 @@ public class ConfigTest implements ServiceConstant{
 			e.printStackTrace();
 		}
 	}
-	public static List<String> getExplodedStringAsList(String value) {
-		ArrayList<String> al = new ArrayList<String>();
-		if (value == null) {
-			return al;
+	public static ImmutableList<String> getExplodedStringAsList(String value) {
+		Builder<String> builder = ImmutableList.builder();
+		if (value != null) {
+			StringTokenizer st = new StringTokenizer(value, " ,;\t\n\r\f");
+			while (st.hasMoreTokens()) {
+				builder.add(st.nextToken());
+			}
 		}
-		StringTokenizer st = new StringTokenizer(value, " ,;\t \t\n\r\f");
-		while (st.hasMoreTokens()) {
-			al.add(st.nextToken().trim());
-		}
-		return al;
+		return builder.build();
 	}
 	@Test
 	public void test8(){
 		String value = CONFIG.getString(SECURITY_OPERATOR_TABLE_PERSON_ALLOW);
 		List<String> list = getExplodedStringAsList(value);
+		System.out.println(list.size());
 		System.out.println(Joiner.on(";").join(list));
 	}
 }

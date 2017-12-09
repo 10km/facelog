@@ -4,10 +4,8 @@ import java.io.File;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Map.Entry;
@@ -25,10 +23,11 @@ import org.apache.commons.configuration2.sync.Synchronizer;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngine;
 import org.apache.commons.configuration2.tree.DefaultExpressionEngineSymbols;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
-
+import com.google.common.collect.ImmutableList.Builder;
 import com.facebook.swift.service.ThriftServerConfig;
 import com.google.common.base.Function;
 import com.google.common.base.Predicates;
@@ -304,15 +303,19 @@ public class GlobalConfig implements ServiceConstant{
 			sync.endRead();
 		}
 	}
-	public static List<String> getExplodedStringAsList(String value) {
-		ArrayList<String> al = new ArrayList<String>();
-		if (value == null) {
-			return al;
+	/**
+	 * 将{@code value}用分隔符{@code ;,\t\r\f\n}切分为不含空格和分隔符的一组字符串
+	 * @param value
+	 * @return {@code value}为{@code null}时返回空表
+	 */
+	public static ImmutableList<String> getExplodedStringAsList(String value) {
+		Builder<String> builder = ImmutableList.builder();
+		if (value != null) {
+			StringTokenizer st = new StringTokenizer(value, " ,;\t\n\r\f");
+			while (st.hasMoreTokens()) {
+				builder.add(st.nextToken());
+			}
 		}
-		StringTokenizer st = new StringTokenizer(value, " ,;\t \t\n\r\f");
-		while (st.hasMoreTokens()) {
-			al.add(st.nextToken().trim());
-		}
-		return al;
+		return builder.build();
 	}
 }

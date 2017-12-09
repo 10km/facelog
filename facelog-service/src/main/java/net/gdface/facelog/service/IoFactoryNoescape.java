@@ -12,7 +12,7 @@ import org.apache.commons.configuration2.convert.ValueTransformer;
  * 
  * 提供unicode字符不转义(escape)直接输出的{@code PropertiesWriter}实例的{@code IOFactory}实现<br>
  * properties 是java标准支持的配置文件格式,默认编码ISO 8859-1,unicode字符会被转义(Unicode escapes)<br>
- * 本类的作用就不避免unicode字符被转义直接输出
+ * 本类的作用就是避免unicode字符被转义直接输出
  * @author guyadong
  *
  */
