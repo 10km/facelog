@@ -1285,9 +1285,9 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
 
             if (bean.getId() == null) { ps.setNull(++dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++dirtyCount, bean.getId()); }
             ps.executeUpdate();
-            bean.resetIsModified();
             // listener callback
             this.listenerContainer.afterUpdate(bean); 
+            bean.resetIsModified();
 
             return bean;
         }
@@ -2616,6 +2616,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                     for(FlDeviceBean bean:effectBeans){
                         bean.setGroupId(null);
                         Event.UPDATE.fire(listenerContainer, bean);
+                        bean.resetIsModified();
                     }
                 }};
 

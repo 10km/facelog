@@ -1183,9 +1183,9 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
 
             if (bean.getMd5() == null) { ps.setNull(++dirtyCount, Types.CHAR); } else { ps.setString(++dirtyCount, bean.getMd5()); }
             ps.executeUpdate();
-            bean.resetIsModified();
             // listener callback
             this.listenerContainer.afterUpdate(bean); 
+            bean.resetIsModified();
 
             return bean;
         }

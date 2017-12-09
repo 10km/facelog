@@ -16,7 +16,7 @@ public class HeartbeatTest {
 	@Test
 	public void test() {
 		byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
-		Heartbeat.startHeartbeat(address, 12345, JedisPoolLazy.getDefaultInstance());
+		Heartbeat.makeHeartbeat(address, 12345, JedisPoolLazy.getDefaultInstance(), null);
 		System.out.println("Heartbeat thead start");
 	}
 

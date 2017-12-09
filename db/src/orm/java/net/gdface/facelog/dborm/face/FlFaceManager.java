@@ -1398,9 +1398,9 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
 
             if (bean.getId() == null) { ps.setNull(++dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++dirtyCount, bean.getId()); }
             ps.executeUpdate();
-            bean.resetIsModified();
             // listener callback
             this.listenerContainer.afterUpdate(bean); 
+            bean.resetIsModified();
 
             return bean;
         }
@@ -2649,6 +2649,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
                     for(FlFaceBean bean:effectBeans){
                         bean.setFeatureMd5(null);
                         Event.UPDATE.fire(listenerContainer, bean);
+                        bean.resetIsModified();
                     }
                 }};
 

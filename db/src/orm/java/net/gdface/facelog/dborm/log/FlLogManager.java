@@ -1089,9 +1089,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
 
             if (bean.getId() == null) { ps.setNull(++dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++dirtyCount, bean.getId()); }
             ps.executeUpdate();
-            bean.resetIsModified();
             // listener callback
             this.listenerContainer.afterUpdate(bean); 
+            bean.resetIsModified();
 
             return bean;
         }
@@ -2244,6 +2244,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                     for(FlLogBean bean:effectBeans){
                         bean.setDeviceId(null);
                         Event.UPDATE.fire(listenerContainer, bean);
+                        bean.resetIsModified();
                     }
                 }};
 
@@ -2261,6 +2262,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                     for(FlLogBean bean:effectBeans){
                         bean.setVerifyFeature(null);
                         Event.UPDATE.fire(listenerContainer, bean);
+                        bean.resetIsModified();
                     }
                 }};
 
@@ -2278,6 +2280,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                     for(FlLogBean bean:effectBeans){
                         bean.setCompareFace(null);
                         Event.UPDATE.fire(listenerContainer, bean);
+                        bean.resetIsModified();
                     }
                 }};
 

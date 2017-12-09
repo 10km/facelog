@@ -901,9 +901,9 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
             if (bean.getDeviceGroupId() == null) { ps.setNull(++dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++dirtyCount, bean.getDeviceGroupId()); }
             if (bean.getPersonGroupId() == null) { ps.setNull(++dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++dirtyCount, bean.getPersonGroupId()); }
             ps.executeUpdate();
-            bean.resetIsModified();
             // listener callback
             this.listenerContainer.afterUpdate(bean); 
+            bean.resetIsModified();
 
             return bean;
         }

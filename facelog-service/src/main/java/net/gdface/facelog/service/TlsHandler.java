@@ -53,7 +53,7 @@ public class TlsHandler extends ThriftEventHandler {
 		}
 	}
 	/** 返回TLS变量存储的{@link Token}对象 */
-	Token get(){
+	Token getToken(){
 		return tlsToken.get();
 	}
 	/**

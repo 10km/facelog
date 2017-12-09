@@ -348,9 +348,9 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
             }
 
             ps.executeUpdate();
-            bean.resetIsModified();
             // listener callback
             this.listenerContainer.afterUpdate(bean); 
+            bean.resetIsModified();
 
             return bean;
         }

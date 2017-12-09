@@ -10,6 +10,7 @@ import gu.simplemq.IMessageAdapter;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.RedisPublisher;
 import gu.simplemq.redis.JedisPoolLazy;
+import gu.simplemq.redis.RedisFactory;
 
 /**
  * 设备命令分发器,实现{@link IMessageAdapter}接口,将redis操作与业务逻辑隔离<br>
@@ -22,7 +23,7 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>{
 	private CommandAdapter cmdAdapter;
 	private final int deviceId;
 	private Supplier<Integer> groupIdSupplier;
-	private RedisPublisher redisPublisher = new RedisPublisher(JedisPoolLazy.getDefaultInstance());
+	private RedisPublisher redisPublisher = RedisFactory.getPublisher(JedisPoolLazy.getDefaultInstance());
 	/**
 	 * 构造方法<br>
 	 *  设备所属的组可能是可以变化的,所以这里需要用{@code Supplier} 接口来动态获取当前设备的设备组

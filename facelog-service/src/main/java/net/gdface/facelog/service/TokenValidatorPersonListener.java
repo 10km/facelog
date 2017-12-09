@@ -15,17 +15,24 @@ class TokenValidatorPersonListener extends BaseTokenValidatorListener<PersonBean
 	TokenValidatorPersonListener(Dao dao) {
 		super(dao);
 	}
+	/**
+	 * 检查当前令牌的用户是否有权对{@code bean}执行{@code writeOp}操作
+	 * @param bean
+	 * @param writeOp
+	 */
 	private void checkForPersonToken(PersonBean bean, WriteOp writeOp){
 		if(validatePersonToken){
-			Token token = tlsToken.get();
-			if(token.getType() == TokenType.PERSON){
+			Token token = tlsHandler.getToken();
+			if(token.getType() == TokenType.PERSON){				
 				PersonRank opRank =  rankFromToken();
-				PersonRank rank = PersonRank.fromRank(bean.getRank());
-				if( null != rank && opRank.rank <= rank.rank ){
+				PersonRank beanRank = originalRankOf(bean);
+				// opRank 在这里不会为null,因为调用本方法时父类方法已经做了不为null的检查
+				if( null != beanRank && opRank.rank <= beanRank.rank ){
 					// 不可修改同级或高级用户
 					throw new RuntimeDaoException(new ServiceSecurityException(
-							String.format("NO PERMISSION to %s adminstroator account ",writeOp)));
+							String.format("RANK %s NO PERMISSION to %s adminstroator account ",opRank,writeOp)));
 				}
+				// null == beanRank 也不合法，但这个错误交给数据库来检查
 			}
 		}
 	}
@@ -36,10 +43,10 @@ class TokenValidatorPersonListener extends BaseTokenValidatorListener<PersonBean
 	 */
 	private void checkInsertForDeviceToken(PersonBean bean, WriteOp writeOp){
 		if(validateDeviceToken){
-			Token token = tlsToken.get();
+			Token token = tlsHandler.getToken();
 			if(token.getType() == TokenType.DEVICE){
-				PersonRank rank = PersonRank.fromRank(bean.getRank());
-				if(!PersonRank.person.equals(rank)){
+				PersonRank beanRank = PersonRank.fromRank(bean.getRank());
+				if(!PersonRank.person.equals(beanRank)){
 					// 不允许从设备端创建管理员/操作员用户
 					throw new RuntimeDaoException(
 							new ServiceSecurityException(

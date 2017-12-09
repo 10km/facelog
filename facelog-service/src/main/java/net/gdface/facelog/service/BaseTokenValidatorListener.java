@@ -1,16 +1,16 @@
 package net.gdface.facelog.service;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
-import com.google.common.collect.ImmutableSet;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
-
 import com.google.common.base.Function;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 import com.google.common.base.Predicates;
 
 import net.gdface.facelog.db.BaseBean;
@@ -29,7 +29,7 @@ import net.gdface.facelog.service.Token.TokenType;
  */
 abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableListener.Adapter<B> implements ServiceConstant {
 	protected final Dao dao;
-	protected final TlsHandler tlsToken = TlsHandler.INSTANCE;
+	protected final TlsHandler tlsHandler = TlsHandler.INSTANCE;
 	private final ImmutableSet<WriteOp> operatorAllow;
 	private final ImmutableSet<WriteOp> deviceAllow;
 	private final Class<B> type;
@@ -60,13 +60,13 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 	 * @return
 	 */
 	protected PersonRank rankFromToken(){
-		switch(tlsToken.get().getType()){
+		switch(tlsHandler.getToken().getType()){
 		case ROOT:
 			return PersonRank.root;
 		case DEVICE:
 			return null;
 		case PERSON:{
-			PersonBean bean = dao.daoGetPerson(tlsToken.get().getId());
+			PersonBean bean = dao.daoGetPerson(tlsHandler.getToken().getId());
 			if(null != bean){
 				return PersonRank.fromRank(bean.getRank());
 			}
@@ -74,6 +74,21 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 		default:
 		}
 		return null;
+	}
+	/**
+	 * 返回{@code bean}原有用户等级
+	 * @param bean
+	 * @return
+	 */
+	protected final PersonRank originalRankOf(PersonBean bean){
+		PersonBean b = dao.daoGetPerson(bean.getId());
+		if(null != b){
+			// on update, delete时使用数据库中原有记录
+			return PersonRank.fromRank(b.getRank());
+		}else{
+			// on insert时，使用新记录中的rank字段
+			return PersonRank.fromRank(bean.getRank());
+		}
 	}
 	protected static final ImmutableSet<WriteOp> getAllowFromConfig(String key){
 		List<String> list = GlobalConfig.getExplodedStringAsList(CONFIG.getString(key,""));
@@ -89,7 +104,7 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 		return ImmutableSet.copyOf(Iterators.filter(opList.iterator(), Predicates.notNull()));
 	}
 	/**
-	 * 根据配置文件中的设置检查是否允许{@code opRank}级别的用户操作执行{@code writeOp}指定的操作
+	 * 检查是否允许{@code opRank}级别的用户操作执行{@code writeOp}指定的操作
 	 * @param writeOp
 	 */
 	protected final void checkWriteOpForPersonToken(WriteOp writeOp){
@@ -105,7 +120,7 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 		if(deny){
 			throw new RuntimeDaoException(
 					new ServiceSecurityException(
-							String.format("%s no  %s permission for %s",
+							String.format("RANK %s no %s permission for %s",
 									opRank,writeOp,type.getSimpleName())));
 		}
 	}
@@ -119,7 +134,7 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 					new ServiceSecurityException(
 						String.format("device no %s permission for %s"
 								,writeOp,type.getSimpleName()))
-						.setDeviceID(tlsToken.get().getId()));
+						.setDeviceID(tlsHandler.getToken().getId()));
 		}
 	}
 	/**
@@ -128,7 +143,7 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 	 * @param writeOp
 	 */
 	protected final void checkWriteOp(B bean, WriteOp writeOp){
-		TokenType tokenType = tlsToken.get().getType();
+		TokenType tokenType = tlsHandler.getToken().getType();
 		checkState(null !=tokenType,"typeToken is null");
 		switch(tokenType){
 		case DEVICE:{

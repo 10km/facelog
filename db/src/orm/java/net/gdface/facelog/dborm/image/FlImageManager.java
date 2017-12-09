@@ -1253,9 +1253,9 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
 
             if (bean.getMd5() == null) { ps.setNull(++dirtyCount, Types.CHAR); } else { ps.setString(++dirtyCount, bean.getMd5()); }
             ps.executeUpdate();
-            bean.resetIsModified();
             // listener callback
             this.listenerContainer.afterUpdate(bean); 
+            bean.resetIsModified();
 
             return bean;
         }
@@ -2230,6 +2230,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
                     for(FlImageBean bean:effectBeans){
                         bean.setDeviceId(null);
                         Event.UPDATE.fire(listenerContainer, bean);
+                        bean.resetIsModified();
                     }
                 }};
 
