@@ -88,6 +88,10 @@ public interface ServiceConstant extends CommonConstant{
 	/** 设备端对person_group表允许的操作 */
 	public static final String SECURITY_DEVICE_TABLE_DEVICE_GROUP_ALLOW = "security.device.table.devicegroup.allow";
 
+	/** 服务端是否主动向人员验证实时监控通道发送log日志 */
+	public static final String MONITOR_LOG = "monitor.log";
+	
+	/////////////////////////////////////////////////
 	
 	/** database 配置属性前缀 */
 	public static final String PREFIX_DATABASE = "database.";

@@ -1,5 +1,7 @@
 package net.gdface.facelog.service;
 
+import com.google.common.base.Preconditions;
+
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisPublisher;
@@ -18,10 +20,10 @@ class RedisPermitListener extends TableListener.Adapter<PermitBean> implements C
 	private final RedisPublisher publisher;
 	
 	public RedisPermitListener() {
-		this(null);
+		this(JedisPoolLazy.getDefaultInstance());
 	}
 	public RedisPermitListener(JedisPoolLazy jedisPoolLazy) {
-		publisher = RedisFactory.getPublisher(null ==jedisPoolLazy ?JedisPoolLazy.getDefaultInstance():jedisPoolLazy);
+		this.publisher = RedisFactory.getPublisher(Preconditions.checkNotNull(jedisPoolLazy,"jedisPoolLazy is null"));
 	}
 	@Override
 	public void afterInsert(PermitBean bean) {

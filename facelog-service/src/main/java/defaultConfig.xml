@@ -96,4 +96,7 @@
 			</table>
 		</device>
 	</security>
+	<monitor>
+		<log description = "服务端是否主动向人员验证实时监控通道发送log日志">false</log>
+	</monitor>
 </configuration>

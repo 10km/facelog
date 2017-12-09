@@ -63,6 +63,8 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	private final RedisPersonListener redisPersonListener = new RedisPersonListener();
 	private final RedisFeatureListener redisFeatureListener = new RedisFeatureListener();
 	private final RedisPermitListener redisPermitListener = new RedisPermitListener();
+	private final RedisLogListener redisLogListener = new RedisLogListener(rm.getRedisParameters().get(MQParam.HB_MONITOR_CHANNEL));
+
 	//private final RedisLogConsumer redisLogConsumer  = new RedisLogConsumer(this);
 
 	public FaceLogImpl() {
@@ -79,6 +81,9 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		getPersonManager().registerListener(redisPersonListener);
 		getFeatureManager().registerListener(redisFeatureListener);
 		getPermitManager().registerListener(redisPermitListener);
+		if(CONFIG.getBoolean(MONITOR_LOG)){
+			getLogManager().registerListener(redisLogListener);
+		}
 	}
 	/** 检查姓名是否有效,不允许使用保留字{@code root} ,无效抛出{@link IllegalArgumentException} 异常 */
 	protected static void checkPersonName(PersonBean personBean){
