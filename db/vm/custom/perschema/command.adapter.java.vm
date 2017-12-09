@@ -17,7 +17,7 @@ import java.util.Map;
 
 /**
  * 设备命令执行基类,应用项目根据需要继承此类,实现命令方法<br>
- * 没有override的方法会抛出{@link UnsupportCmdExeption}异常,
+ * 没有override的方法会抛出{@link UnsupportCmdException}异常,
  * 命令响应端收到的对应命令执行状态是{@link Ack.Status#UNSUPPORTED}
  * @author guyadong
  *
@@ -46,8 +46,8 @@ public class CommandAdapter {
     }
     /** 当前命令设备端未实现时抛出此异常 */
     @SuppressWarnings("serial")
-    protected class UnsupportCmdExeption extends RuntimeException {
-        private UnsupportCmdExeption() {}
+    protected class UnsupportCmdException extends RuntimeException {
+        private UnsupportCmdException() {}
     }
 #foreach($entry in $commands.entrySet())
 #set($key = $entry.key)
@@ -64,7 +64,7 @@ public class CommandAdapter {
      *
      */
     public $value['return'] ${key}(#join($params '$e.value[0] $e.key' ','))throws DeviceCmdException{
-        throw new UnsupportCmdExeption();
+        throw new UnsupportCmdException();
     }
 #end
 }

@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * 设备命令执行基类,应用项目根据需要继承此类,实现命令方法<br>
- * 没有override的方法会抛出{@link UnsupportCmdExeption}异常,
+ * 没有override的方法会抛出{@link UnsupportCmdException}异常,
  * 命令响应端收到的对应命令执行状态是{@link Ack.Status#UNSUPPORTED}
  * @author guyadong
  *
@@ -43,8 +43,8 @@ public class CommandAdapter {
     }
     /** 当前命令设备端未实现时抛出此异常 */
     @SuppressWarnings("serial")
-    protected class UnsupportCmdExeption extends RuntimeException {
-        private UnsupportCmdExeption() {}
+    protected class UnsupportCmdException extends RuntimeException {
+        private UnsupportCmdException() {}
     }
     /**
      * 设备命令 <br>
@@ -54,7 +54,7 @@ public class CommandAdapter {
      *
      */
     public void parameter(String key,String value)throws DeviceCmdException{
-        throw new UnsupportCmdExeption();
+        throw new UnsupportCmdException();
     }
     /**
      * 设备命令 <br>
@@ -63,7 +63,7 @@ public class CommandAdapter {
      *
      */
     public void config(Map<String,String> properties)throws DeviceCmdException{
-        throw new UnsupportCmdExeption();
+        throw new UnsupportCmdException();
     }
     /**
      * 设备命令 <br>
@@ -73,7 +73,7 @@ public class CommandAdapter {
      *
      */
     public Object status(String name)throws DeviceCmdException{
-        throw new UnsupportCmdExeption();
+        throw new UnsupportCmdException();
     }
     /**
      * 设备命令 <br>
@@ -83,7 +83,7 @@ public class CommandAdapter {
      *
      */
     public Map<String,Object> report(List<String> names)throws DeviceCmdException{
-        throw new UnsupportCmdExeption();
+        throw new UnsupportCmdException();
     }
     /**
      * 设备命令 <br>
@@ -92,7 +92,7 @@ public class CommandAdapter {
      *
      */
     public String version()throws DeviceCmdException{
-        throw new UnsupportCmdExeption();
+        throw new UnsupportCmdException();
     }
     /**
      * 设备命令 <br>
@@ -101,7 +101,7 @@ public class CommandAdapter {
      *
      */
     public void enable(Boolean enable)throws DeviceCmdException{
-        throw new UnsupportCmdExeption();
+        throw new UnsupportCmdException();
     }
     /**
      * 设备命令 <br>
@@ -111,7 +111,7 @@ public class CommandAdapter {
      *
      */
     public Boolean isEnable(String message)throws DeviceCmdException{
-        throw new UnsupportCmdExeption();
+        throw new UnsupportCmdException();
     }
     /**
      * 设备命令 <br>
@@ -120,7 +120,7 @@ public class CommandAdapter {
      *
      */
     public void reset(Long schedule)throws DeviceCmdException{
-        throw new UnsupportCmdExeption();
+        throw new UnsupportCmdException();
     }
     /**
      * 设备命令 <br>
@@ -129,7 +129,7 @@ public class CommandAdapter {
      *
      */
     public void time(Long unixTimestamp)throws DeviceCmdException{
-        throw new UnsupportCmdExeption();
+        throw new UnsupportCmdException();
     }
     /**
      * 设备命令 <br>
@@ -140,7 +140,7 @@ public class CommandAdapter {
      *
      */
     public void update(URL url,String version,Long schedule)throws DeviceCmdException{
-        throw new UnsupportCmdExeption();
+        throw new UnsupportCmdException();
     }
     /**
      * 设备命令 <br>
@@ -150,7 +150,7 @@ public class CommandAdapter {
      *
      */
     public void idleMessage(String message,Long duration)throws DeviceCmdException{
-        throw new UnsupportCmdExeption();
+        throw new UnsupportCmdException();
     }
     /**
      * 设备命令 <br>
@@ -163,7 +163,7 @@ public class CommandAdapter {
      *
      */
     public void personMessage(String message,Integer id,Boolean group,Boolean onceOnly,Long duration)throws DeviceCmdException{
-        throw new UnsupportCmdExeption();
+        throw new UnsupportCmdException();
     }
     /**
      * 设备命令 <br>
@@ -174,6 +174,6 @@ public class CommandAdapter {
      *
      */
     public Object custom(String cmdName,Map<String,Object> parameters)throws DeviceCmdException{
-        throw new UnsupportCmdExeption();
+        throw new UnsupportCmdException();
     }
 }

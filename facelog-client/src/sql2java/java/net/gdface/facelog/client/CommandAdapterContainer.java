@@ -83,7 +83,7 @@ public class CommandAdapterContainer extends CommandAdapter{
     }
     /** 
      * 调用注册的 {@code parameter} 命令执行器<br>
-     * 如果没有为 {@code parameter} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 如果没有为 {@code parameter} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdException}异常
      */
     @Override
     public void parameter(String key,String value)throws DeviceCmdException{
@@ -96,7 +96,7 @@ public class CommandAdapterContainer extends CommandAdapter{
     }
     /** 
      * 调用注册的 {@code config} 命令执行器<br>
-     * 如果没有为 {@code config} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 如果没有为 {@code config} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdException}异常
      */
     @Override
     public void config(Map<String,String> properties)throws DeviceCmdException{
@@ -109,7 +109,7 @@ public class CommandAdapterContainer extends CommandAdapter{
     }
     /** 
      * 调用注册的 {@code status} 命令执行器<br>
-     * 如果没有为 {@code status} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 如果没有为 {@code status} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdException}异常
      */
     @Override
     public Object status(String name)throws DeviceCmdException{
@@ -122,7 +122,7 @@ public class CommandAdapterContainer extends CommandAdapter{
     }
     /** 
      * 调用注册的 {@code report} 命令执行器<br>
-     * 如果没有为 {@code report} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 如果没有为 {@code report} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdException}异常
      */
     @Override
     public Map<String,Object> report(List<String> names)throws DeviceCmdException{
@@ -135,7 +135,7 @@ public class CommandAdapterContainer extends CommandAdapter{
     }
     /** 
      * 调用注册的 {@code version} 命令执行器<br>
-     * 如果没有为 {@code version} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 如果没有为 {@code version} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdException}异常
      */
     @Override
     public String version()throws DeviceCmdException{
@@ -148,7 +148,7 @@ public class CommandAdapterContainer extends CommandAdapter{
     }
     /** 
      * 调用注册的 {@code enable} 命令执行器<br>
-     * 如果没有为 {@code enable} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 如果没有为 {@code enable} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdException}异常
      */
     @Override
     public void enable(Boolean enable)throws DeviceCmdException{
@@ -161,7 +161,7 @@ public class CommandAdapterContainer extends CommandAdapter{
     }
     /** 
      * 调用注册的 {@code isEnable} 命令执行器<br>
-     * 如果没有为 {@code isEnable} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 如果没有为 {@code isEnable} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdException}异常
      */
     @Override
     public Boolean isEnable(String message)throws DeviceCmdException{
@@ -174,7 +174,7 @@ public class CommandAdapterContainer extends CommandAdapter{
     }
     /** 
      * 调用注册的 {@code reset} 命令执行器<br>
-     * 如果没有为 {@code reset} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 如果没有为 {@code reset} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdException}异常
      */
     @Override
     public void reset(Long schedule)throws DeviceCmdException{
@@ -187,7 +187,7 @@ public class CommandAdapterContainer extends CommandAdapter{
     }
     /** 
      * 调用注册的 {@code time} 命令执行器<br>
-     * 如果没有为 {@code time} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 如果没有为 {@code time} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdException}异常
      */
     @Override
     public void time(Long unixTimestamp)throws DeviceCmdException{
@@ -200,7 +200,7 @@ public class CommandAdapterContainer extends CommandAdapter{
     }
     /** 
      * 调用注册的 {@code update} 命令执行器<br>
-     * 如果没有为 {@code update} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 如果没有为 {@code update} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdException}异常
      */
     @Override
     public void update(URL url,String version,Long schedule)throws DeviceCmdException{
@@ -213,7 +213,7 @@ public class CommandAdapterContainer extends CommandAdapter{
     }
     /** 
      * 调用注册的 {@code idleMessage} 命令执行器<br>
-     * 如果没有为 {@code idleMessage} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 如果没有为 {@code idleMessage} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdException}异常
      */
     @Override
     public void idleMessage(String message,Long duration)throws DeviceCmdException{
@@ -226,7 +226,7 @@ public class CommandAdapterContainer extends CommandAdapter{
     }
     /** 
      * 调用注册的 {@code personMessage} 命令执行器<br>
-     * 如果没有为 {@code personMessage} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 如果没有为 {@code personMessage} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdException}异常
      */
     @Override
     public void personMessage(String message,Integer id,Boolean group,Boolean onceOnly,Long duration)throws DeviceCmdException{
@@ -239,7 +239,7 @@ public class CommandAdapterContainer extends CommandAdapter{
     }
     /** 
      * 调用注册的 {@code custom} 命令执行器<br>
-     * 如果没有为 {@code custom} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 如果没有为 {@code custom} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdException}异常
      */
     @Override
     public Object custom(String cmdName,Map<String,Object> parameters)throws DeviceCmdException{

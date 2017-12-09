@@ -91,7 +91,7 @@ public class CommandAdapterContainer extends CommandAdapter{
 #set($adapterVar = "${key}Adapter")
     /** 
      * 调用注册的 {@code ${key}} 命令执行器<br>
-     * 如果没有为 {@code ${key}} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdExeption}异常
+     * 如果没有为 {@code ${key}} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdException}异常
      */
     @Override
     public $value['return'] ${key}(#join($params '$e.value[0] $e.key' ','))throws DeviceCmdException{
