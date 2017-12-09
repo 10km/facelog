@@ -3,12 +3,17 @@ package net.gdface.facelog.device;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.weakref.jmx.com.google.common.base.Strings;
+import com.google.common.base.Strings;
+
+import com.google.common.util.concurrent.MoreExecutors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 
 import gu.simplemq.Channel;
 import gu.simplemq.redis.JedisPoolLazy;
@@ -22,60 +27,92 @@ import net.gdface.facelog.client.NetworkUtil;
  * 设备心跳包redis实现<br>
  * 以{@link #intervalMills}指定的间隔向redis表({@link CommonConstant#TABLE_HEARTBEAT})写入当前设备序列号及报道时间.<br>
  * 如果指定了心跳实时监控通道({@link #setMonitorChannel(String)}),还会向该通道(频道)发布订阅消息, 以便于应用实时显示人员验证信息.<br>
- * 心跳包线程为守护线程无需停止
+ * 应用程序结束时心跳包线程自动停止
  * @author guyadong
  *
  */
 public class Heartbeat implements CommonConstant{
+	/**  单实例 */
 	private static Heartbeat heartbeat;
 	/** 心跳间隔(毫秒) */
 	private long intervalMills = TimeUnit.MILLISECONDS.convert(DEFAULT_HEARTBEAT_INTERVAL,TimeUnit.SECONDS);
+	/** 心跳报告表 */
 	private final RedisTable<HeadbeatPackage> table;
-	/** MAC 地址 */
-	private final String hardwareAddress;
-	private final HeartbeatThread heartBeatThread;
-	private final HeadbeatPackage heartBeatPackage;
-	private final RedisPublisher publisher;
-	/** 设备心跳实时监控通道名,如果指定了通道名,
+	/** 
+	 * 设备心跳实时监控通道名,如果指定了通道名,
 	 * 每次心跳都不仅会向{@link TABLE_HEARTBEAT} 写入心跳报告,还会向该频道发布订阅消息
 	 */
 	private Channel<HeadbeatPackage> monitorChannel;
+	/** MAC 地址 */
+	private final String hardwareAddress;
+	private final HeadbeatPackage heartBeatPackage;
+	private final RedisPublisher publisher;
+	/** 执行定时任务的线程池对象 */
 	private final ScheduledExecutorService timerExecutor;
-	private Heartbeat(byte[] hardwareAddress,int deviceID, JedisPoolLazy pool, ScheduledExecutorService timerExecutor) {
-		this.heartBeatPackage = new HeadbeatPackage().setDeviceId(deviceID);
-		this.publisher = RedisFactory.getPublisher(checkNotNull(pool,"pool is null"));
-		this.timerExecutor = checkNotNull(timerExecutor,"timerExecutor is null");
-		this.hardwareAddress = NetworkUtil.formatMac(validateMac(hardwareAddress), null);
-		this.table =  RedisFactory.getTable(TABLE_HEARTBEAT, pool);
-		this.table.setExpire(DEFAULT_HEARTBEAT_EXPIRE, TimeUnit.SECONDS);
-		this.heartBeatThread = new HeartbeatThread();
-		// 设置为守护线程
-		this.heartBeatThread.setDaemon(true);
-		this.heartBeatThread.setName(TABLE_HEARTBEAT.name);
-	}
-	/** 心跳包线程 */
-	private final class HeartbeatThread extends Thread{
+	/** 执行定时任务的线程池对象 */
+	private final ScheduledThreadPoolExecutor scheduledExecutor;
+	private ScheduledFuture<?> future;
+	/** 定时任务 */
+	private final Runnable timeTask = new Runnable(){
 		@Override
 		public void run() {
-			while(true){
-				try {
-					heartBeatPackage.setHostAddress(getHostAddress());
-					table.set(hardwareAddress,heartBeatPackage, false);
-					table.expire(hardwareAddress);
-					if(null != monitorChannel){
-						publisher.publish(monitorChannel, heartBeatPackage);
-					}
-					Thread.sleep(intervalMills);
-				} catch(InterruptedException e){
-					// do nothing
-				} catch(RuntimeException e){
-					logger.warn(e.getMessage());
-				}
+			heartBeatPackage.setHostAddress(getHostAddress());
+			table.set(hardwareAddress,heartBeatPackage, false);
+			table.expire(hardwareAddress);
+			if(null != monitorChannel){
+				publisher.publish(monitorChannel, heartBeatPackage);
 			}
-		}
-	};
+		}};
 	/**
-	 * 设置设备心跳包发送间隔
+	 * 构造方法
+	 * @param hardwareAddress 当前设备物理地址(MAC)
+	 * @param deviceID 当前设备ID
+	 * @param poolLazy redis 连接池对象
+	 */
+	private Heartbeat(byte[] hardwareAddress,int deviceID, JedisPoolLazy poolLazy) {
+		this.heartBeatPackage = new HeadbeatPackage().setDeviceId(deviceID);
+		this.scheduledExecutor = new ScheduledThreadPoolExecutor(1);
+		this.scheduledExecutor.setRemoveOnCancelPolicy(true);
+	
+		this.publisher = RedisFactory.getPublisher(checkNotNull(poolLazy,"pool is null"));
+		this.timerExecutor = MoreExecutors.getExitingScheduledExecutorService(
+				scheduledExecutor);
+		this.hardwareAddress = NetworkUtil.formatMac(validateMac(hardwareAddress), null);
+		this.table =  RedisFactory.getTable(TABLE_HEARTBEAT, poolLazy);
+		this.table.setExpire(DEFAULT_HEARTBEAT_EXPIRE, TimeUnit.SECONDS);
+	}
+
+	/**
+	 * 创建{@link Heartbeat}实例<br>
+	 * {@link Heartbeat}为单实例,该方法只能调用一次。
+	 * @param hardwareAddress 网卡物理地址(MAC)
+	 * @param deviceID 设备ID
+	 * @param pool
+	 * @return
+	 * @throws IllegalStateException 实例已经创建
+	 */
+	public static synchronized final Heartbeat makeHeartbeat(
+			byte[] hardwareAddress,
+			int deviceID, 
+			JedisPoolLazy pool){
+		checkState(null == heartbeat,"singleton instance created");
+		heartbeat = new Heartbeat(hardwareAddress,deviceID, pool);
+		return heartbeat;
+	}
+
+	/**
+	 * 返回已经创建的{@link Heartbeat}实例,如果实例还没有创建则抛出异常
+	 * @return
+	 * @throws IllegalStateException 实例还没有创建
+	 */
+	public static final Heartbeat getInstance(){
+		checkState(null !=heartbeat,"singleton instance be  not yet created,call makeHeartbeat method firstly");
+		return heartbeat;
+	}
+
+	/**
+	 * 设置设备心跳包发送间隔<br>
+	 * 须调用{@link #startTimer()}才能生效
 	 * @param time
 	 * @param timeUnit
 	 * @return
@@ -119,22 +156,6 @@ public class Heartbeat implements CommonConstant{
 		return mac;
 	}
 
-	/**
-	 * 启动设备心跳线程
-	 * @param hardwareAddress 网卡物理地址(MAC)
-	 * @param deviceID 设备ID
-	 * @param pool
-	 * @param timerExecurot TODO
-	 * @return
-	 */
-	public static synchronized Heartbeat makeHeartbeat(
-			byte[] hardwareAddress,
-			int deviceID, 
-			JedisPoolLazy pool, ScheduledExecutorService timerExecurot){
-		heartbeat = new Heartbeat(hardwareAddress,deviceID, pool, timerExecurot);
-		heartbeat.startTimer();
-		return heartbeat;
-	}
 	/** 返回本机IP地址,如果获取IP地址不正确,请重写此方法 */
 	protected String getHostAddress(){
 		try {
@@ -143,16 +164,14 @@ public class Heartbeat implements CommonConstant{
 			throw new RuntimeException(e);
 		}
 	}
-	public void startTimer(){
-		timerExecutor.scheduleAtFixedRate(new Runnable(){
-			@Override
-			public void run() {
-				heartBeatPackage.setHostAddress(getHostAddress());
-				table.set(hardwareAddress,heartBeatPackage, false);
-				table.expire(hardwareAddress);
-				if(null != monitorChannel){
-					publisher.publish(monitorChannel, heartBeatPackage);
-				}
-			}}, intervalMills, intervalMills, TimeUnit.MILLISECONDS);
+	/**
+	 * 启动心跳包报告定时任务<p>
+	 * 如果定时任务已经启动则先取消当前的定时任务再启动一个新的定时任务,确保只有一个定时任务在执行
+	 */
+	public synchronized void startTimer(){
+		if(null != future){
+			this.scheduledExecutor.remove((Runnable) future);
+		}
+		future = this.timerExecutor.scheduleAtFixedRate(timeTask, intervalMills, intervalMills, TimeUnit.MILLISECONDS);
 	}
 }
