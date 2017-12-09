@@ -36,7 +36,7 @@ class RedisLogListener extends TableListener.Adapter<LogBean> implements CommonC
 	 * @param jedisPoolLazy
 	 */
 	public RedisLogListener(String logMonitorChannel,JedisPoolLazy jedisPoolLazy) {
-		Preconditions.checkArgument(Strings.isNullOrEmpty(logMonitorChannel),"INVALID logMonitorChannel %s",logMonitorChannel);
+		Preconditions.checkArgument(!Strings.isNullOrEmpty(logMonitorChannel),"INVALID logMonitorChannel %s",logMonitorChannel);
 		this.channel = new Channel<LogBean>(logMonitorChannel){};
 		this.publisher = RedisFactory.getPublisher(Preconditions.checkNotNull(jedisPoolLazy,"jedisPoolLazy is null"));
 	}
