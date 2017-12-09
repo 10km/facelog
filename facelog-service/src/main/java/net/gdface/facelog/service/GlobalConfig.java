@@ -91,7 +91,7 @@ public class GlobalConfig implements ServiceConstant{
 		}
 		// 设置同步器
 		userConfig.setSynchronizer(new ReadWriteSynchronizer());
-		userConfig.setIOFactory(IOFactoryNoescape.INSTANCE);
+		userConfig.setIOFactory(IoFactoryNoescape.INSTANCE);
 		return userConfig;
 	}
 	/**

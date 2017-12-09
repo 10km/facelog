@@ -77,7 +77,7 @@ public final class ServiceSecurityException extends BaseServiceException {
 	
 	@Override
 	public String jsonOfDeclaredFields(){
-		HashMap<String,Object> fields = new HashMap<String,Object>();
+		HashMap<String,Object> fields = new HashMap<String,Object>(16);
 		fields.put("type", getType());
 		fields.put("deviceID", getDeviceID());
 		int features=SerializerFeature.config(

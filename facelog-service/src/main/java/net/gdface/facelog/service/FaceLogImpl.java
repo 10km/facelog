@@ -54,6 +54,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	/** redis 服务器管理模块负责初始化全局连接池对象，要放在redis lisetner对象初始化前完成初始化 */
 	private final RedisManagement rm = new RedisManagement();
 	///////////////// TOKEN MANAGEMENT///////
+	
 	private final TokenMangement tm = new TokenMangement(this);
 	private final TokenValidatorPersonListener tokenValidatorPersonListener = new TokenValidatorPersonListener(this);
 	private final TokenValidatorPersonGroupListener tokenValidatorPersonGroupListener = new TokenValidatorPersonGroupListener(this);

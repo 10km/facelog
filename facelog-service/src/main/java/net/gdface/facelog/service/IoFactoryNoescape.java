@@ -16,9 +16,9 @@ import org.apache.commons.configuration2.convert.ValueTransformer;
  * @author guyadong
  *
  */
-public class IOFactoryNoescape extends DefaultIOFactory {
-	public static final IOFactoryNoescape INSTANCE = new IOFactoryNoescape();
-	private IOFactoryNoescape() {
+public class IoFactoryNoescape extends DefaultIOFactory {
+	public static final IoFactoryNoescape INSTANCE = new IoFactoryNoescape();
+	private IoFactoryNoescape() {
 	}
 	@Override
 	public PropertiesWriterNoescape createPropertiesWriter(Writer out, ListDelimiterHandler handler) {

@@ -29,7 +29,7 @@ import com.google.common.collect.ImmutableList;
 
 import net.gdface.facelog.db.Constant.JdbcProperty;
 import net.gdface.facelog.service.GlobalConfig;
-import net.gdface.facelog.service.IOFactoryNoescape;
+import net.gdface.facelog.service.IoFactoryNoescape;
 import net.gdface.facelog.service.ServiceConstant;
 
 /**
@@ -154,7 +154,7 @@ public class ConfigTest implements ServiceConstant{
 			System.out.println(name);
 		}
 		PropertiesConfiguration firstConfig = (PropertiesConfiguration) config.getConfiguration(0);
-		firstConfig.setIOFactory(IOFactoryNoescape.INSTANCE);
+		firstConfig.setIOFactory(IoFactoryNoescape.INSTANCE);
 		firstConfig.setProperty(JdbcProperty.JDBC_USERNAME.withPrefix(PREFIX_DATABASE), "中文测试");
 		OutputStreamWriter wirter = new OutputStreamWriter(
 				new FileOutputStream(new File("d:\\tmp\\test.properties")), "UTF-8");

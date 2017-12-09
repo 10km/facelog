@@ -44,7 +44,7 @@ public class CloneTest {
 		}
 	}
 	public String toJsonString(ServiceSecurityException exp){
-		HashMap<String,Object> fields = new HashMap<String,Object>();
+		HashMap<String,Object> fields = new HashMap<String,Object>(16);
 		fields.put("type", exp.getType());
 		fields.put("deviceID", exp.getDeviceID());
 		return JSON.toJSONString(fields);
