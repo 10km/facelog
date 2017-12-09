@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.base.Strings;
 
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -48,9 +49,9 @@ public class Heartbeat implements CommonConstant{
 	private final HeadbeatPackage heartBeatPackage;
 	private final RedisPublisher publisher;
 	/** 执行定时任务的线程池对象 */
-	private final ScheduledExecutorService timerExecutor;
-	/** 执行定时任务的线程池对象 */
 	private final ScheduledThreadPoolExecutor scheduledExecutor;
+	/** {@link #scheduledExecutor}的自动退出封装 */
+	private final ScheduledExecutorService timerExecutor;
 	private ScheduledFuture<?> future;
 	/** 定时任务 */
 	private final Runnable timeTask = new Runnable(){
@@ -71,9 +72,8 @@ public class Heartbeat implements CommonConstant{
 	 */
 	private Heartbeat(byte[] hardwareAddress,int deviceID, JedisPoolLazy poolLazy) {
 		this.heartBeatPackage = new HeadbeatPackage().setDeviceId(deviceID);
-		this.scheduledExecutor = new ScheduledThreadPoolExecutor(1);
-		this.scheduledExecutor.setRemoveOnCancelPolicy(true);
-	
+		this.scheduledExecutor =new ScheduledThreadPoolExecutor(1,
+				new ThreadFactoryBuilder().setNameFormat("heartbeat-pool-%d").build());	
 		this.publisher = RedisFactory.getPublisher(checkNotNull(poolLazy,"pool is null"));
 		this.timerExecutor = MoreExecutors.getExitingScheduledExecutorService(
 				scheduledExecutor);

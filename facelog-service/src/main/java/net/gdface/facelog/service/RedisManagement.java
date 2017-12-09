@@ -119,7 +119,6 @@ class RedisManagement implements ServiceConstant{
 				if(selfBind){
 					// 如果 redis服务器指定为本地启动则尝试启动服务器
 					if( CONFIG.containsKey(REDIS_HOME) && !localServerStarted){
-						logger.info("try start redis server");
 						startLocalServer(parameters);
 						localServerStarted = true;	
 					}else {
