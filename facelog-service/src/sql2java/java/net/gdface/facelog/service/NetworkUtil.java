@@ -184,14 +184,14 @@ public class NetworkUtil {
         return format(getMacAddress(address),separator, Radix.HEX);        
     }
     private static byte invalidMacs[][] = {
-            /** VMWare */{0x00, 0x05, 0x69},
+            /** VMWare */{0x00, 0x05, 0x69},             
             /** VMWare */{0x00, 0x1C, 0x14},             
             /** VMWare */{0x00, 0x0C, 0x29},             
             /** VMWare */{0x00, 0x50, 0x56},             
-            /** Virtualbox */{0x08, 0x00, 0x27},            
-            /** Virtualbox */{0x0A, 0x00, 0x27},           
-            /** Virtual-PC */{0x00, 0x03, (byte)0xFF},  
-            /** Hyper-V */{0x00, 0x15, 0x5D} 
+            /** Virtualbox */{0x08, 0x00, 0x27},         
+            /** Virtualbox */{0x0A, 0x00, 0x27},         
+            /** Virtual-PC */{0x00, 0x03, (byte)0xFF},   
+            /** Hyper-V */{0x00, 0x15, 0x5D}             
     };
     private static boolean isVMMac(byte[] mac) {
         if(null == mac) {

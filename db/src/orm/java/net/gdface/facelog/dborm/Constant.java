@@ -50,7 +50,9 @@ public interface Constant {
          */
         public static final JdbcProperty fromKey(String key){
             for(JdbcProperty p: values()){
-                if(p.key.equals(key))return p;
+                if(p.key.equals(key)){
+                    return p;
+                }
             }
             return null;
         }
