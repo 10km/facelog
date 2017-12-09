@@ -12,7 +12,7 @@ import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.service.CommonConstant;
 
 /**
- * 验证日志表({@code fl_log})变动侦听器<br>
+ * 验证日志表({@code fl_log})增加侦听器<br>
  * 当{@code fl_log}记录增加时发布 redis 订阅消息
  * @author guyadong
  *
