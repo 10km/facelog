@@ -19,7 +19,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 class ExecutorProvider implements ServiceConstant {
 	/** 全局线程池(自动退出封装) */
 	private static final ExecutorService GLOBAL_EXCEUTOR = createCachedPool();
-	/** 创建通用任务线程池对象 */
+	/** 根据配置文件指定的参数创建通用任务线程池对象 */
 	private static final ExecutorService createCachedPool(){
 		int corePoolSize = CONFIG.getInt(EXECUTOR_CACHEDPOOL_COREPOOLSIZE,Runtime.getRuntime().availableProcessors());
 		int maximumPoolSize = CONFIG.getInt(EXECUTOR_CACHEDPOOL_MAXIMUMPOOLSIZE);
@@ -27,7 +27,9 @@ class ExecutorProvider implements ServiceConstant {
 		int queueCapacity = CONFIG.getInt(EXECUTOR_CACHEDPOOL_QUEUECAPACITY);
 		String nameFormat = CONFIG.getString(EXECUTOR_CACHEDPOOL_NAMEFORMAT);
 		ExecutorService executor = MoreExecutors.getExitingExecutorService(
-				new ThreadPoolExecutor(corePoolSize, maximumPoolSize,
+				new ThreadPoolExecutor(
+						corePoolSize, 
+						maximumPoolSize,
 						keepAliveTime, TimeUnit.SECONDS,
 	                    new LinkedBlockingQueue<Runnable>(queueCapacity),
 	                    new ThreadFactoryBuilder().setNameFormat(nameFormat).build())
@@ -36,13 +38,14 @@ class ExecutorProvider implements ServiceConstant {
 	}
 	/** 定时任务线程池对象(自动退出封装) */
 	private static final ScheduledExecutorService TIMER_EXECUTOR = createScheduledPool();
-	/** 创建定时任务线程池对象 */
+	/** 根据配置文件指定的参数创建定时任务线程池对象 */
 	private static final ScheduledExecutorService createScheduledPool(){
 		int corePoolSize = CONFIG.getInt(EXECUTOR_TIMERPOOL_COREPOOLSIZE);
 		String nameFormat = CONFIG.getString(EXECUTOR_TIMERPOOL_NAMEFORMAT);
-		ScheduledThreadPoolExecutor scheduledExecutor = new ScheduledThreadPoolExecutor(corePoolSize,
-				new ThreadFactoryBuilder().setNameFormat(nameFormat).build());
-		ScheduledExecutorService timerExecutor = MoreExecutors.getExitingScheduledExecutorService(scheduledExecutor);
+		ScheduledExecutorService timerExecutor = MoreExecutors.getExitingScheduledExecutorService(
+				new ScheduledThreadPoolExecutor(
+					corePoolSize,
+					new ThreadFactoryBuilder().setNameFormat(nameFormat).build()));
 		return timerExecutor;
 	}
 	ExecutorProvider() {
