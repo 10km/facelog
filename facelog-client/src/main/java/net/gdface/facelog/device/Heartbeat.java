@@ -74,12 +74,12 @@ public class Heartbeat implements CommonConstant{
 	 * @throws IllegalArgumentException {@code hardwareAddress}无效
 	 */
 	private Heartbeat(byte[] hardwareAddress,int deviceID, JedisPoolLazy poolLazy) {
+		this.hardwareAddress = NetworkUtil.formatMac(validateMac(hardwareAddress), null);
 		this.heartBeatPackage = new HeadbeatPackage().setDeviceId(deviceID);
+		this.publisher = RedisFactory.getPublisher(checkNotNull(poolLazy,"pool is null"));
 		this.scheduledExecutor =new ScheduledThreadPoolExecutor(1,
 				new ThreadFactoryBuilder().setNameFormat("heartbeat-pool-%d").build());	
-		this.publisher = RedisFactory.getPublisher(checkNotNull(poolLazy,"pool is null"));
 		this.timerExecutor = MoreExecutors.getExitingScheduledExecutorService(	scheduledExecutor);
-		this.hardwareAddress = NetworkUtil.formatMac(validateMac(hardwareAddress), null);
 		this.table =  RedisFactory.getTable(TABLE_HEARTBEAT, poolLazy);
 		this.table.setExpire(DEFAULT_HEARTBEAT_EXPIRE, TimeUnit.SECONDS);
 	}

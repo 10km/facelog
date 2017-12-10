@@ -91,6 +91,26 @@ public interface ServiceConstant extends CommonConstant{
 	/** 服务端是否主动向人员验证实时监控通道发送log日志 */
 	public static final String MONITOR_LOG = "monitor.log";
 	
+	/** 通用线程池:最小线程数量,默认为CPU逻辑核数 */
+	public static final String EXECUTOR_CACHEDPOOL_COREPOOLSIZE = "executor.cachedPool.corePoolSize";
+
+	/** 通用线程池:最大线程数量 */
+	public static final String EXECUTOR_CACHEDPOOL_MAXIMUMPOOLSIZE = "executor.cachedPool.maximumPoolSize";
+
+	/** 通用线程池:空闲线程保留时间(秒) */
+	public static final String EXECUTOR_CACHEDPOOL_KEEPALIVETIME = "executor.cachedPool.keepAliveTime";
+
+	/** 通用线程池:任务队列容量 */
+	public static final String EXECUTOR_CACHEDPOOL_QUEUECAPACITY = "executor.cachedPool.queueCapacity";
+
+	/** 通用线程池:线程命名格式 */
+	public static final String EXECUTOR_CACHEDPOOL_NAMEFORMAT = "executor.cachedPool.nameFormat";
+	
+	/** 定时任务线程池:线程数量,默认值:1 */
+	public static final String EXECUTOR_TIMERPOOL_COREPOOLSIZE = "executor.timerPool.corePoolSize";
+
+	/** 定时任务线程池:线程命名格式 */
+	public static final String EXECUTOR_TIMERPOOL_NAMEFORMAT = "executor.timerPool.nameFormat";
 	/////////////////////////////////////////////////
 	
 	/** database 配置属性前缀 */
@@ -98,6 +118,5 @@ public interface ServiceConstant extends CommonConstant{
 	
 	/** 全局配置参数对象 */
 	public static final CombinedConfiguration CONFIG = GlobalConfig.getConfig();
-
 
 }

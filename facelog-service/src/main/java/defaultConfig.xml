@@ -66,37 +66,50 @@
 		<operator>
 			<table>
 				<person>
-				<allow description ="允许操作员对人员表执行的操作(insert,delete,update)">insert,delete,update</allow>
+					<allow description="允许操作员对人员表执行的操作(insert,delete,update)">insert,delete,update</allow>
 				</person>
 				<persongroup>
-				<allow description ="允许操作员对人员组表执行的操作(insert,delete,update)"></allow>
+					<allow description="允许操作员对人员组表执行的操作(insert,delete,update)"></allow>
 				</persongroup>
 				<device>
-				<allow description ="允许操作员对设备表执行的操作(insert,delete,update)"></allow>
+					<allow description="允许操作员对设备表执行的操作(insert,delete,update)"></allow>
 				</device>
 				<devicegroup>
-				<allow description ="允许操作员对设备组表执行的操作(insert,delete,update)"></allow>
-				</devicegroup>				
+					<allow description="允许操作员对设备组表执行的操作(insert,delete,update)"></allow>
+				</devicegroup>
 			</table>
 		</operator>
 		<device>
 			<table>
 				<person>
-				<allow description ="允许设备端对人员表执行的操作(insert,delete,update)">insert</allow>
+					<allow description="允许设备端对人员表执行的操作(insert,delete,update)">insert</allow>
 				</person>
 				<persongroup>
-				<allow description ="允许设备端对人员组表执行的操作(insert,delete,update)"></allow>
+					<allow description="允许设备端对人员组表执行的操作(insert,delete,update)"></allow>
 				</persongroup>
 				<device>
-				<allow description ="允许设备端对设备表执行的操作(insert,delete,update)">insert,delete,update</allow>
+					<allow description="允许设备端对设备表执行的操作(insert,delete,update)">insert,delete,update</allow>
 				</device>
 				<devicegroup>
-				<allow description ="允许设备端对设备组表执行的操作(insert,delete,update)"></allow>
+					<allow description="允许设备端对设备组表执行的操作(insert,delete,update)"></allow>
 				</devicegroup>
 			</table>
 		</device>
 	</security>
 	<monitor>
-		<log description = "服务端是否主动向人员验证实时监控通道发送log日志">false</log>
+		<log description="服务端是否主动向人员验证实时监控通道发送log日志">false</log>
 	</monitor>
+	<executor description="服务端线程池配置">
+		<cachedPool description="通用线程池配置">
+			<corePoolSize description="最小线程数量,默认为CPU逻辑核数"></corePoolSize>
+			<maximumPoolSize description="最大线程数量">128</maximumPoolSize>
+			<keepAliveTime description="空闲线程保留时间(秒)">60</keepAliveTime>
+			<queueCapacity description="任务队列容量">1024</queueCapacity>
+			<nameFormat description="线程命名格式">cached-pool-%d</nameFormat>
+		</cachedPool>
+		<timerPool description="定时任务线程池配置">
+			<corePoolSize description="线程数量,默认值:1"></corePoolSize>
+			<nameFormat description="线程命名格式">timer-pool-%d</nameFormat>
+		</timerPool>
+	</executor>
 </configuration>
