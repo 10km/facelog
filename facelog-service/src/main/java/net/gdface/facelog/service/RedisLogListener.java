@@ -41,11 +41,11 @@ class RedisLogListener extends TableListener.Adapter<LogBean> implements CommonC
 		this.publisher = RedisFactory.getPublisher(Preconditions.checkNotNull(jedisPoolLazy,"jedisPoolLazy is null"));
 	}
 	@Override
-	public void afterInsert(LogBean bean) {
-		try{
-			publisher.publish(channel, bean);
-		}catch (Exception e){
-			logger.error(e.getMessage(),e);
-		}
+	public void afterInsert(final LogBean bean) {
+		new RedisPublishTask<LogBean>(
+				channel, 
+				bean, 
+				publisher)
+		.execute();		
 	}
 }

@@ -16,9 +16,9 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
  * @author guyadong
  *
  */
-public class ExecutorProvider implements ServiceConstant {
+class ExecutorProvider implements ServiceConstant {
 	/** 全局线程池(自动退出封装) */
-	public static final ExecutorService GLOBAL_EXCEUTOR = cachedPoolCreate();
+	private static final ExecutorService GLOBAL_EXCEUTOR = cachedPoolCreate();
 	/** 创建通用任务线程池对象 */
 	private static final ExecutorService cachedPoolCreate(){
 		int corePoolSize = CONFIG.getInt(EXECUTOR_CACHEDPOOL_COREPOOLSIZE,Runtime.getRuntime().availableProcessors());
@@ -35,10 +35,10 @@ public class ExecutorProvider implements ServiceConstant {
 		return executor;
 	}
 	/** 定时任务线程池对象(自动退出封装) */
-	public static final ScheduledExecutorService TIMER_EXECUTOR = scheduledPoolCreate();
+	private static final ScheduledExecutorService TIMER_EXECUTOR = scheduledPoolCreate();
 	/** 创建定时任务线程池对象 */
 	private static final ScheduledExecutorService scheduledPoolCreate(){
-		int corePoolSize = CONFIG.getInt(EXECUTOR_TIMERPOOL_COREPOOLSIZE,1);
+		int corePoolSize = CONFIG.getInt(EXECUTOR_TIMERPOOL_COREPOOLSIZE);
 		String nameFormat = CONFIG.getString(EXECUTOR_TIMERPOOL_NAMEFORMAT);
 		ScheduledThreadPoolExecutor scheduledExecutor = new ScheduledThreadPoolExecutor(corePoolSize,
 				new ThreadFactoryBuilder().setNameFormat(nameFormat).build());	
@@ -46,6 +46,12 @@ public class ExecutorProvider implements ServiceConstant {
 		return timerExecutor;
 	}
 	public ExecutorProvider() {
+	}
+	public static ExecutorService getGlobalExceutor() {
+		return GLOBAL_EXCEUTOR;
+	}
+	public static ScheduledExecutorService getTimerExecutor() {
+		return TIMER_EXECUTOR;
 	}
 
 }

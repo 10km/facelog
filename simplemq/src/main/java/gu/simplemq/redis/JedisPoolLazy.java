@@ -9,12 +9,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.base.Predicates;
 import com.google.common.collect.Maps;
 
+import gu.simplemq.Constant;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -28,8 +26,7 @@ import redis.clients.jedis.Protocol;
  * @author guyadong
  *
  */
-public class JedisPoolLazy {
-	private static final Logger logger = LoggerFactory.getLogger(JedisPoolLazy.class);
+public class JedisPoolLazy implements Constant{
 	private static final Set<JedisPoolLazy> POOL_SET = Collections.synchronizedSet(new LinkedHashSet<JedisPoolLazy>());
 	static {
 		// 程序退出时自动销毁连接池对象

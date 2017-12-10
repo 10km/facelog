@@ -3,9 +3,6 @@ package gu.simplemq;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 
@@ -20,8 +17,7 @@ import gu.simplemq.exceptions.SmqUnsubscribeException;
  *
  * @param <T> 频道消息数据类型
  */
-public class Channel<T> implements IMessageAdapter<Object>, Cloneable {
-	protected static final Logger logger = LoggerFactory.getLogger(Channel.class);
+public class Channel<T> implements IMessageAdapter<Object>, Cloneable,Constant {
 	/**  频道名(消息来源) */
 	public final String name;
 	/**  频道对应的消息数据类型 */

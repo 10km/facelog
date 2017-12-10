@@ -108,7 +108,7 @@
 			<nameFormat description="线程命名格式">cached-pool-%d</nameFormat>
 		</cachedPool>
 		<timerPool description="定时任务线程池配置">
-			<corePoolSize description="线程数量,默认值:1"></corePoolSize>
+			<corePoolSize description="线程数量,默认值:1">1</corePoolSize>
 			<nameFormat description="线程命名格式">timer-pool-%d</nameFormat>
 		</timerPool>
 	</executor>

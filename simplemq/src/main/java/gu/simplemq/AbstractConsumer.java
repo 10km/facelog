@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public abstract class AbstractConsumer implements AutoCloseable,Constant{
-	protected static final Logger logger = LoggerFactory.getLogger(AbstractConsumer.class);
 
 	public AbstractConsumer() {
 	}

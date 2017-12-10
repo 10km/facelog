@@ -34,8 +34,7 @@ import gu.simplemq.utils.Synchronizer.ReadWriteSynchronizer;;
  * @author guyadong
  *
  */
-public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
-	protected static final Logger logger = LoggerFactory.getLogger(ChannelDispatcher.class);
+public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister,Constant {
 	private BaseJsonEncoder encoder = BaseJsonEncoder.getEncoder();
 
 	/** 注册的频道对象 */

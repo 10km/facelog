@@ -1,5 +1,8 @@
 package net.gdface.facelog.service;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
+
 import org.apache.commons.configuration2.CombinedConfiguration;
 
 import gu.simplemq.Channel;
@@ -118,5 +121,9 @@ public interface ServiceConstant extends CommonConstant{
 	
 	/** 全局配置参数对象 */
 	public static final CombinedConfiguration CONFIG = GlobalConfig.getConfig();
-
+	
+	/** 全局线程池(自动退出封装) */
+	public static final ExecutorService GLOBAL_EXCEUTOR = ExecutorProvider.getGlobalExceutor();
+	/** 定时任务线程池对象(自动退出封装) */
+	public static final ScheduledExecutorService TIMER_EXECUTOR = ExecutorProvider.getTimerExecutor();
 }

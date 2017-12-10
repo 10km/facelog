@@ -27,29 +27,29 @@ class RedisPersonListener extends TableListener.Adapter<PersonBean> implements C
 	}
 	@Override
 	public void afterInsert(PersonBean bean) {
-		try{
-			publisher.publish(PUBSUB_PERSON_INSERT, bean.getId());
-		}catch (Exception e){
-			logger.error(e.getMessage(),e);
-		}
+		new RedisPublishTask<Integer>(
+				PUBSUB_PERSON_INSERT, 
+				bean.getId(), 
+				publisher)
+		.execute();
 	}
 
 	@Override
 	public void afterUpdate(PersonBean bean) {
-		try{
-			publisher.publish(PUBSUB_PERSON_UPDATE, bean.getId());
-		}catch (Exception e){
-			logger.error(e.getMessage(),e);
-		}
+		new RedisPublishTask<Integer>(
+				PUBSUB_PERSON_UPDATE, 
+				bean.getId(), 
+				publisher)
+		.execute();
 	}
 
 	@Override
 	public void afterDelete(PersonBean bean) {
-		try{
-			publisher.publish(PUBSUB_PERSON_DELETE, bean.getId());
-		}catch (Exception e){
-			logger.error(e.getMessage(),e);
-		}
+		new RedisPublishTask<Integer>(
+				PUBSUB_PERSON_DELETE, 
+				bean.getId(), 
+				publisher)
+		.execute();
 	}			
 
 }

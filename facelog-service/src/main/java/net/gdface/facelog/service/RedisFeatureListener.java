@@ -27,29 +27,30 @@ class RedisFeatureListener extends TableListener.Adapter<FeatureBean> implements
 	}
 	@Override
 	public void afterInsert(FeatureBean bean) {
-		try{
-			publisher.publish(PUBSUB_FEATURE_INSERT, bean.getMd5());
-		}catch (Exception e){
-			logger.error(e.getMessage(),e);
-		}
+		new RedisPublishTask<String>(
+				PUBSUB_FEATURE_INSERT, 
+				bean.getMd5(), 
+				publisher)
+		.execute();
 	}
 
 	@Override
 	public void afterUpdate(FeatureBean bean) {
-		try{
-			publisher.publish(PUBSUB_FEATURE_UPDATE, bean.getMd5());
-		}catch (Exception e){
-			logger.error(e.getMessage(),e);
-		}
+		new RedisPublishTask<String>(
+				PUBSUB_FEATURE_UPDATE, 
+				bean.getMd5(), 
+				publisher)
+		.execute();
 	}
 
 	@Override
 	public void afterDelete(FeatureBean bean) {
-		try{
-			publisher.publish(PUBSUB_FEATURE_DELETE, bean.getMd5());
-		}catch (Exception e){
-			logger.error(e.getMessage(),e);
-		}
+		new RedisPublishTask<String>(
+				PUBSUB_FEATURE_DELETE, 
+				bean.getMd5(), 
+				publisher)
+		.execute();
+		
 	}			
 
 }
