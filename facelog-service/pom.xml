@@ -161,7 +161,7 @@
 				<executions>
 					<execution>
 						<!-- 绑定javadoc插件到Maven的生命周期 -->
-						<phase>package</phase>
+						<phase>install</phase>
 						<!--在生命周期后执行绑定的javadoc插件的goals -->
 						<goals>
 							<goal>jar</goal>
