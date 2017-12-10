@@ -20,7 +20,7 @@ import net.gdface.facelog.client.Ack.Status;
  * 应用项目只需要重写{@link BaseAdapter#onSubscribe(Ack)}方法就可以了<br>
  * 因为设备命令发送功能可以支持同时向多个设备或设备组发送命令,所以一条设备命令发送会收到多个设备端的响应,
  * 虽然发送方可以知道知道收到命令的设备端数量(参见{@link CmdManager}的设备命令方法)，但系统并不能保证所有收到命令的设备都会返回命令响应,
- * 所以{@link #setExpire(long)}用于指定超时参数,超过指定时间还没有收到所有命令响应,
+ * 所以{@link BaseAdapter#setDuration(long)}用于指定超时参数,超过指定时间还没有收到所有命令响应,
  * 本机会产生一个虚拟的{@link Ack}消息,送给{@code IAckAdapter}接口,
  * 参见{@link BaseAdapter#onSubscribe(Ack)},{@link Ack.Status#TIMEOUT}
  * @author guyadong
@@ -37,7 +37,7 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
      *
      * @param <T>
      */
-    public static class BaseAdapter<T> implements IAckAdapter<T> {
+    public static abstract class BaseAdapter<T> implements IAckAdapter<T> {
     	/** 收到命令的client端数量,初始值-1,只有{@link #setClientNum(long)}被调用后才有效 */
         private final AtomicLong clientNum = new AtomicLong(-1L);
         /**  
@@ -52,10 +52,10 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
         /**
          * 默认构造函数<br>
          * 有效期使用默认值{@link #DEFAULT_DURATION}
-         * @see #setDuration(long)
+         * @see #BaseAdapter(long, TimeUnit)
          */
         public BaseAdapter() {
-			this.setDuration(DEFAULT_DURATION);
+        	this(DEFAULT_DURATION,TimeUnit.MILLISECONDS);
 		}
 		/**
 		 * 构造函数
@@ -132,7 +132,7 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 		 * @return
 		 */
 		public BaseAdapter<T> setDuration(long duration) {
-		    this.duration = duration;
+			this.duration = duration;
 			return this;
 		}
 		/**
@@ -161,7 +161,7 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
             return setDuration(expire.getTime() - System.currentTimeMillis());
         }
 		/**
-		 * 等待命令响应订阅结束
+		 * 等待命令响应订阅结束,用于同步接收命令响应
 		 * @throws InterruptedException
 		 */
 		public void waitFinished() throws InterruptedException{

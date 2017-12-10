@@ -21,11 +21,11 @@ public class KeyExpire {
 	
 	/**
 	 * 设置过期时间
-	 * @param time
-	 * @param timeUnit
+	 * @param duration
+	 * @param unit
 	 */
-	public final void setExpire(long time,TimeUnit timeUnit){
-		setExpire(false,TimeUnit.MILLISECONDS.convert(time, timeUnit));
+	public final void setExpire(long duration,TimeUnit unit){
+		setExpire(false,TimeUnit.MILLISECONDS.convert(duration, unit));
 	}
 	/**
 	 * 设置过期时间戳
@@ -48,8 +48,8 @@ public class KeyExpire {
 			doExpire(key,timeMills,timestamp);
 		}
 	}
-	public final void expire(String key,long time,TimeUnit timeUnit){
-		expire(key,TimeUnit.MILLISECONDS.convert(time, timeUnit),false);
+	public final void expire(String key,long duration,TimeUnit unit){
+		expire(key,TimeUnit.MILLISECONDS.convert(duration, unit),false);
 	}
 	public final void expire(String key,Date date){
 		expire(key,date.getTime(),true);

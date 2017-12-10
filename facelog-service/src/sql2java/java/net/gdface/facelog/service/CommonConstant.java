@@ -29,7 +29,7 @@ public interface CommonConstant {
     /** 设备心跳包表 {@code 设备MAC地址 -> HeadbeatPackage} */
     public static final Channel<HeadbeatPackage> TABLE_HEARTBEAT = new Channel<HeadbeatPackage>("DeviceHeartbeat"){} ;
     /** 默认心跳包间隔(秒) */
-    public static final int DEFAULT_HEARTBEAT_INTERVAL = 8;
+    public static final int DEFAULT_HEARTBEAT_PERIOD = 8;
     /** 默认心跳包失效时间(秒) */
     public static final int DEFAULT_HEARTBEAT_EXPIRE = 60;
     /** 心跳包报道数据 */

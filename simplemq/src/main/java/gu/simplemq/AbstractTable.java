@@ -501,8 +501,8 @@ public abstract class AbstractTable<V>{
 		return filedNames.get();
 	}
 
-	public void setExpire(long time, TimeUnit timeUnit) {
-		keyExpire.setExpire(time, timeUnit);
+	public void setExpire(long duration, TimeUnit unit) {
+		keyExpire.setExpire(duration, unit);
 	}
 
 	public void setExpire(java.util.Date date) {
@@ -517,8 +517,8 @@ public abstract class AbstractTable<V>{
 		keyExpire.expire(key, timeMills, timestamp);
 	}
 
-	public void expire(String key, long time, TimeUnit timeUnit) {
-		keyExpire.expire(key, time, timeUnit);
+	public void expire(String key, long duration, TimeUnit unit) {
+		keyExpire.expire(key, duration, unit);
 	}
 
 	public void expire(String key, java.util.Date date) {
@@ -533,8 +533,8 @@ public abstract class AbstractTable<V>{
 		keyExpire.expire(keyHelper(value), timeMills, timestamp);
 	}
 
-	public void expire(V value, long time, TimeUnit timeUnit) {
-		keyExpire.expire(keyHelper(value), time, timeUnit);
+	public void expire(V value, long duration, TimeUnit unit) {
+		keyExpire.expire(keyHelper(value), duration, unit);
 	}
 
 	public void expire(V value, java.util.Date date) {

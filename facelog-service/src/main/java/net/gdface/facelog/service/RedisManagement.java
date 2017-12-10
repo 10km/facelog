@@ -69,7 +69,7 @@ class RedisManagement implements ServiceConstant{
 			.put(MQParam.CMD_CHANNEL, createCmdChannel())
 			.put(MQParam.LOG_MONITOR_CHANNEL, createLogMonitorChannel())
 			.put(MQParam.HB_MONITOR_CHANNEL, createHeartbeatMonitorChannel())
-			.put(MQParam.HB_INTERVAL, CONFIG.getInteger(HEARTBEAT_INTERVAL, DEFAULT_HEARTBEAT_INTERVAL).toString())
+			.put(MQParam.HB_INTERVAL, CONFIG.getInteger(HEARTBEAT_INTERVAL, DEFAULT_HEARTBEAT_PERIOD).toString())
 			.put(MQParam.HB_EXPIRE, CONFIG.getInteger(HEARTBEAT_EXPIRE, DEFAULT_HEARTBEAT_EXPIRE).toString())
 			.build();
 		GlobalConfig.logRedisParameters(JedisPoolLazy.getDefaultInstance().getParameters());

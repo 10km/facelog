@@ -19,9 +19,9 @@ public class HeartbeatTest {
 	public void test() {
 		byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
 		Heartbeat hb = Heartbeat.makeHeartbeat(address, 12345, JedisPoolLazy.getDefaultInstance()).setMonitorChannel("hb_monitor");
-		hb.startTimer();
+		hb.start();
 		System.out.println("Heartbeat thead start");
-		hb.setInterval(2, TimeUnit.SECONDS).startTimer();
+		hb.setInterval(2, TimeUnit.SECONDS).start();
 	}
 
 }
