@@ -20,7 +20,7 @@ public interface ServiceConstant extends CommonConstant{
     /////////////  REDIS KEYS ////////////////////////////
 	/** redis 全局变量 : 设备命令序列号, 调用{@link RedisManagement#applyCmdSn()}时每次加1,保证序列号在全网络唯一 */
 	String KEY_CMD_SN = "CMD_SN";
-	/** redis 全局变量 : 设备响应通道序列号, 调用{@link RedisManagement#applyCmdSn()}时每次加1,保证序列号在全网络唯一 */
+	/** redis 全局变量 : 设备响应通道序列号, 调用{@link RedisManagement#applyAckChannel()}时每次加1,保证序列号在全网络唯一 */
 	String KEY_ACK_SN = "ACK_CHANNEL";
 	/** redis 全局常量 : 设备命令通道 */
 	String KEY_CMD_CHANNEL = "CMD_CHANNEL";
@@ -124,6 +124,7 @@ public interface ServiceConstant extends CommonConstant{
 	
 	/** 全局线程池(自动退出封装) */
 	public static final ExecutorService GLOBAL_EXCEUTOR = ExecutorProvider.getGlobalExceutor();
+
 	/** 定时任务线程池对象(自动退出封装) */
 	public static final ScheduledExecutorService TIMER_EXECUTOR = ExecutorProvider.getTimerExecutor();
 }

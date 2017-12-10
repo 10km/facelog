@@ -49,8 +49,7 @@ class RedisFeatureListener extends TableListener.Adapter<FeatureBean> implements
 				PUBSUB_FEATURE_DELETE, 
 				bean.getMd5(), 
 				publisher)
-		.execute();
-		
+		.execute();		
 	}			
 
 }

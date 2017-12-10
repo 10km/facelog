@@ -18,9 +18,9 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
  */
 class ExecutorProvider implements ServiceConstant {
 	/** 全局线程池(自动退出封装) */
-	private static final ExecutorService GLOBAL_EXCEUTOR = cachedPoolCreate();
+	private static final ExecutorService GLOBAL_EXCEUTOR = createCachedPool();
 	/** 创建通用任务线程池对象 */
-	private static final ExecutorService cachedPoolCreate(){
+	private static final ExecutorService createCachedPool(){
 		int corePoolSize = CONFIG.getInt(EXECUTOR_CACHEDPOOL_COREPOOLSIZE,Runtime.getRuntime().availableProcessors());
 		int maximumPoolSize = CONFIG.getInt(EXECUTOR_CACHEDPOOL_MAXIMUMPOOLSIZE);
 		long keepAliveTime = CONFIG.getLong(EXECUTOR_CACHEDPOOL_KEEPALIVETIME);
@@ -35,22 +35,24 @@ class ExecutorProvider implements ServiceConstant {
 		return executor;
 	}
 	/** 定时任务线程池对象(自动退出封装) */
-	private static final ScheduledExecutorService TIMER_EXECUTOR = scheduledPoolCreate();
+	private static final ScheduledExecutorService TIMER_EXECUTOR = createScheduledPool();
 	/** 创建定时任务线程池对象 */
-	private static final ScheduledExecutorService scheduledPoolCreate(){
+	private static final ScheduledExecutorService createScheduledPool(){
 		int corePoolSize = CONFIG.getInt(EXECUTOR_TIMERPOOL_COREPOOLSIZE);
 		String nameFormat = CONFIG.getString(EXECUTOR_TIMERPOOL_NAMEFORMAT);
 		ScheduledThreadPoolExecutor scheduledExecutor = new ScheduledThreadPoolExecutor(corePoolSize,
-				new ThreadFactoryBuilder().setNameFormat(nameFormat).build());	
+				new ThreadFactoryBuilder().setNameFormat(nameFormat).build());
 		ScheduledExecutorService timerExecutor = MoreExecutors.getExitingScheduledExecutorService(scheduledExecutor);
 		return timerExecutor;
 	}
-	public ExecutorProvider() {
+	ExecutorProvider() {
 	}
-	public static ExecutorService getGlobalExceutor() {
+	/** 返回全局线程池 */
+	static ExecutorService getGlobalExceutor() {
 		return GLOBAL_EXCEUTOR;
 	}
-	public static ScheduledExecutorService getTimerExecutor() {
+	/** 返回定时任务线程池 */
+	static ScheduledExecutorService getTimerExecutor() {
 		return TIMER_EXECUTOR;
 	}
 
