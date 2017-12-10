@@ -31,7 +31,7 @@ class RedisPermitListener extends TableListener.Adapter<PermitBean> implements C
 				PUBSUB_PERMIT_INSERT, 
 				bean, 
 				publisher)
-		.execute();		
+		.execute();
 	}
 
 	@Override
@@ -40,7 +40,7 @@ class RedisPermitListener extends TableListener.Adapter<PermitBean> implements C
 				PUBSUB_PERMIT_DELETE, 
 				bean, 
 				publisher)
-		.execute();		
+		.execute();
 	}			
 
 }

@@ -1,6 +1,5 @@
 package net.gdface.facelog.service;
 
-import java.util.concurrent.Executor;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import gu.simplemq.IMessageAdapter;
@@ -9,7 +8,6 @@ import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisConsumer;
 import gu.simplemq.redis.RedisFactory;
 import net.gdface.facelog.db.LogBean;
-import net.gdface.facelog.service.CommonConstant;
 import net.gdface.facelog.service.Dao;
 
 /**
@@ -17,18 +15,19 @@ import net.gdface.facelog.service.Dao;
  * @author guyadong
  *
  */
-class RedisLogConsumer implements CommonConstant {
+class RedisLogConsumer implements ServiceConstant {
 	private final RedisConsumer consumer;
 	private final Dao dao;
-	private final Executor executor;
-	public RedisLogConsumer(Dao dao,final Executor executor){
+	public RedisLogConsumer(Dao dao){
+		this(dao,JedisPoolLazy.getDefaultInstance());
+	}
+	public RedisLogConsumer(Dao dao,JedisPoolLazy poolLazy){
 		this.dao = checkNotNull(dao);
-		this.executor = checkNotNull(executor,"executor is null");
-		this.consumer = RedisFactory.getConsumer(JedisPoolLazy.getDefaultInstance());
+		this.consumer = RedisFactory.getConsumer(checkNotNull(poolLazy));
 		this.consumer.register(QUEUE_LOG.clone().setAdapter(new IMessageAdapter<LogBean>(){
 			@Override
 			public void onSubscribe(final LogBean t) throws SmqUnsubscribeException {
-				RedisLogConsumer.this.executor.execute(new Runnable(){
+				GLOBAL_EXCEUTOR.execute(new Runnable(){
 					@Override
 					public void run() {
 						try{
