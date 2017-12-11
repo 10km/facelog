@@ -408,31 +408,42 @@ public  class FlStoreBean
 
     @Override
     public String toString() {
+        return toString(false);
+    }
+    /**
+     * @param notNull output not null field only if {@code true}
+     */
+    public String toString(boolean notNull) {
         // only output initialized field
         StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
         int count = 0;        
         if(checkMd5Initialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getMd5()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("md5=").append(getMd5());
             }
-            builder.append("md5=").append(getMd5());
         }
         if(checkEncodingInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getEncoding()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("encoding=").append(getEncoding());
             }
-            builder.append("encoding=").append(getEncoding());
         }
         if(checkDataInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getData()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("data=").append(getData());
             }
-            builder.append("data=").append(getData());
         }
         builder.append("]");
         return builder.toString();
     }
-
     @Override
     public int compareTo(FlStoreBean object){
         return new CompareToBuilder()

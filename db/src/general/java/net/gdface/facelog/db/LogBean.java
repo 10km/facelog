@@ -1061,67 +1061,90 @@ public final class LogBean
 
     @Override
     public String toString() {
+        return toString(false);
+    }
+    /**
+     * @param notNull output not null field only if {@code true}
+     */
+    public String toString(boolean notNull) {
         // only output initialized field
         StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
         int count = 0;        
         if(checkIdInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getId()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("id=").append(getId());
             }
-            builder.append("id=").append(getId());
         }
         if(checkPersonIdInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getPersonId()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("person_id=").append(getPersonId());
             }
-            builder.append("person_id=").append(getPersonId());
         }
         if(checkDeviceIdInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getDeviceId()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("device_id=").append(getDeviceId());
             }
-            builder.append("device_id=").append(getDeviceId());
         }
         if(checkVerifyFeatureInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getVerifyFeature()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("verify_feature=").append(getVerifyFeature());
             }
-            builder.append("verify_feature=").append(getVerifyFeature());
         }
         if(checkCompareFaceInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getCompareFace()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("compare_face=").append(getCompareFace());
             }
-            builder.append("compare_face=").append(getCompareFace());
         }
         if(checkVerifyStatusInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getVerifyStatus()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("verify_status=").append(getVerifyStatus());
             }
-            builder.append("verify_status=").append(getVerifyStatus());
         }
         if(checkSimilartyInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getSimilarty()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("similarty=").append(getSimilarty());
             }
-            builder.append("similarty=").append(getSimilarty());
         }
         if(checkVerifyTimeInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getVerifyTime()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("verify_time=").append(getVerifyTime());
             }
-            builder.append("verify_time=").append(getVerifyTime());
         }
         if(checkCreateTimeInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getCreateTime()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("create_time=").append(getCreateTime());
             }
-            builder.append("create_time=").append(getCreateTime());
         }
         builder.append("]");
         return builder.toString();
     }
-
     @Override
     public int compareTo(LogBean object){
         return new CompareToBuilder()

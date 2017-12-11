@@ -903,61 +903,82 @@ public final class ImageBean
 
     @Override
     public String toString() {
+        return toString(false);
+    }
+    /**
+     * @param notNull output not null field only if {@code true}
+     */
+    public String toString(boolean notNull) {
         // only output initialized field
         StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
         int count = 0;        
         if(checkMd5Initialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getMd5()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("md5=").append(getMd5());
             }
-            builder.append("md5=").append(getMd5());
         }
         if(checkFormatInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getFormat()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("format=").append(getFormat());
             }
-            builder.append("format=").append(getFormat());
         }
         if(checkWidthInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getWidth()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("width=").append(getWidth());
             }
-            builder.append("width=").append(getWidth());
         }
         if(checkHeightInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getHeight()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("height=").append(getHeight());
             }
-            builder.append("height=").append(getHeight());
         }
         if(checkDepthInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getDepth()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("depth=").append(getDepth());
             }
-            builder.append("depth=").append(getDepth());
         }
         if(checkFaceNumInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getFaceNum()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("face_num=").append(getFaceNum());
             }
-            builder.append("face_num=").append(getFaceNum());
         }
         if(checkThumbMd5Initialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getThumbMd5()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("thumb_md5=").append(getThumbMd5());
             }
-            builder.append("thumb_md5=").append(getThumbMd5());
         }
         if(checkDeviceIdInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getDeviceId()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("device_id=").append(getDeviceId());
             }
-            builder.append("device_id=").append(getDeviceId());
         }
         builder.append("]");
         return builder.toString();
     }
-
     @Override
     public int compareTo(ImageBean object){
         return new CompareToBuilder()

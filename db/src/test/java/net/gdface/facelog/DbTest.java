@@ -36,9 +36,12 @@ public class DbTest {
 			deviceGroupManager.save(deviceGroup);
 		}
 		DeviceBean b1 = makeDeviceBean(null,"hello");
-		deviceManager.save(b1);		
+		deviceManager.save(b1);
 		System.out.printf("device id[%d] exists:%b\n",b1.getId(), deviceManager.existsPrimaryKey(b1.getId()));
 		System.out.printf("device id[null] exists:%b\n",deviceManager.existsPrimaryKey((Integer)null));
+		DeviceBean reload = deviceManager.loadByPrimaryKey(b1.getId());
+		System.out.println(reload);
+		System.out.println(reload.toString(true));
 
 	}
 

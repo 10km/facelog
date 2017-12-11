@@ -661,49 +661,66 @@ public  class PermitBean
 
     @Override
     public String toString() {
+        return toString(false);
+    }
+    /**
+     * @param notNull output not null field only if {@code true}
+     */
+    public String toString(boolean notNull) {
         // only output initialized field
         StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
         int count = 0;        
         if(checkDeviceGroupIdInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getDeviceGroupId()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("device_group_id=").append(getDeviceGroupId());
             }
-            builder.append("device_group_id=").append(getDeviceGroupId());
         }
         if(checkPersonGroupIdInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getPersonGroupId()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("person_group_id=").append(getPersonGroupId());
             }
-            builder.append("person_group_id=").append(getPersonGroupId());
         }
         if(checkRemarkInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getRemark()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("remark=").append(getRemark());
             }
-            builder.append("remark=").append(getRemark());
         }
         if(checkExtBinInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getExtBin()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("ext_bin=").append(getExtBin().length).append(" bytes");
             }
-            builder.append("ext_bin=").append(getExtBin().length).append(" bytes");
         }
         if(checkExtTxtInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getExtTxt()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("ext_txt=").append(getExtTxt());
             }
-            builder.append("ext_txt=").append(getExtTxt());
         }
         if(checkCreateTimeInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getCreateTime()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("create_time=").append(getCreateTime());
             }
-            builder.append("create_time=").append(getCreateTime());
         }
         builder.append("]");
         return builder.toString();
     }
-
     @Override
     public int compareTo(PermitBean object){
         return new CompareToBuilder()

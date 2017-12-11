@@ -570,37 +570,50 @@ public final class FeatureBean
 
     @Override
     public String toString() {
+        return toString(false);
+    }
+    /**
+     * @param notNull output not null field only if {@code true}
+     */
+    public String toString(boolean notNull) {
         // only output initialized field
         StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
         int count = 0;        
         if(checkMd5Initialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getMd5()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("md5=").append(getMd5());
             }
-            builder.append("md5=").append(getMd5());
         }
         if(checkPersonIdInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getPersonId()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("person_id=").append(getPersonId());
             }
-            builder.append("person_id=").append(getPersonId());
         }
         if(checkFeatureInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getFeature()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("feature=").append(getFeature());
             }
-            builder.append("feature=").append(getFeature());
         }
         if(checkUpdateTimeInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getUpdateTime()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("update_time=").append(getUpdateTime());
             }
-            builder.append("update_time=").append(getUpdateTime());
         }
         builder.append("]");
         return builder.toString();
     }
-
     @Override
     public int compareTo(FeatureBean object){
         return new CompareToBuilder()

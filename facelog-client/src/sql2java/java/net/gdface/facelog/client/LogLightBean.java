@@ -644,49 +644,66 @@ public  class LogLightBean
 
     @Override
     public String toString() {
+        return toString(false);
+    }
+    /**
+     * @param notNull output not null field only if {@code true}
+     */
+    public String toString(boolean notNull) {
         // only output initialized field
         StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
         int count = 0;        
         if(checkIdInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getId()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("id=").append(getId());
             }
-            builder.append("id=").append(getId());
         }
         if(checkPersonIdInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getPersonId()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("person_id=").append(getPersonId());
             }
-            builder.append("person_id=").append(getPersonId());
         }
         if(checkNameInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getName()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("name=").append(getName());
             }
-            builder.append("name=").append(getName());
         }
         if(checkPapersTypeInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getPapersType()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("papers_type=").append(getPapersType());
             }
-            builder.append("papers_type=").append(getPapersType());
         }
         if(checkPapersNumInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getPapersNum()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("papers_num=").append(getPapersNum());
             }
-            builder.append("papers_num=").append(getPapersNum());
         }
         if(checkVerifyTimeInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getVerifyTime()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("verify_time=").append(getVerifyTime());
             }
-            builder.append("verify_time=").append(getVerifyTime());
         }
         builder.append("]");
         return builder.toString();
     }
-
     @Override
     public int compareTo(LogLightBean object){
         return new CompareToBuilder()

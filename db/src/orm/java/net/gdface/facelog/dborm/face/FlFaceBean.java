@@ -1693,133 +1693,178 @@ public  class FlFaceBean
 
     @Override
     public String toString() {
+        return toString(false);
+    }
+    /**
+     * @param notNull output not null field only if {@code true}
+     */
+    public String toString(boolean notNull) {
         // only output initialized field
         StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
         int count = 0;        
         if(checkIdInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getId()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("id=").append(getId());
             }
-            builder.append("id=").append(getId());
         }
         if(checkImageMd5Initialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getImageMd5()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("image_md5=").append(getImageMd5());
             }
-            builder.append("image_md5=").append(getImageMd5());
         }
         if(checkFaceLeftInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getFaceLeft()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("face_left=").append(getFaceLeft());
             }
-            builder.append("face_left=").append(getFaceLeft());
         }
         if(checkFaceTopInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getFaceTop()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("face_top=").append(getFaceTop());
             }
-            builder.append("face_top=").append(getFaceTop());
         }
         if(checkFaceWidthInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getFaceWidth()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("face_width=").append(getFaceWidth());
             }
-            builder.append("face_width=").append(getFaceWidth());
         }
         if(checkFaceHeightInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getFaceHeight()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("face_height=").append(getFaceHeight());
             }
-            builder.append("face_height=").append(getFaceHeight());
         }
         if(checkEyeLeftxInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getEyeLeftx()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("eye_leftx=").append(getEyeLeftx());
             }
-            builder.append("eye_leftx=").append(getEyeLeftx());
         }
         if(checkEyeLeftyInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getEyeLefty()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("eye_lefty=").append(getEyeLefty());
             }
-            builder.append("eye_lefty=").append(getEyeLefty());
         }
         if(checkEyeRightxInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getEyeRightx()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("eye_rightx=").append(getEyeRightx());
             }
-            builder.append("eye_rightx=").append(getEyeRightx());
         }
         if(checkEyeRightyInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getEyeRighty()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("eye_righty=").append(getEyeRighty());
             }
-            builder.append("eye_righty=").append(getEyeRighty());
         }
         if(checkMouthXInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getMouthX()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("mouth_x=").append(getMouthX());
             }
-            builder.append("mouth_x=").append(getMouthX());
         }
         if(checkMouthYInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getMouthY()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("mouth_y=").append(getMouthY());
             }
-            builder.append("mouth_y=").append(getMouthY());
         }
         if(checkNoseXInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getNoseX()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("nose_x=").append(getNoseX());
             }
-            builder.append("nose_x=").append(getNoseX());
         }
         if(checkNoseYInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getNoseY()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("nose_y=").append(getNoseY());
             }
-            builder.append("nose_y=").append(getNoseY());
         }
         if(checkAngleYawInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getAngleYaw()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("angle_yaw=").append(getAngleYaw());
             }
-            builder.append("angle_yaw=").append(getAngleYaw());
         }
         if(checkAnglePitchInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getAnglePitch()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("angle_pitch=").append(getAnglePitch());
             }
-            builder.append("angle_pitch=").append(getAnglePitch());
         }
         if(checkAngleRollInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getAngleRoll()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("angle_roll=").append(getAngleRoll());
             }
-            builder.append("angle_roll=").append(getAngleRoll());
         }
         if(checkExtInfoInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getExtInfo()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("ext_info=").append(getExtInfo());
             }
-            builder.append("ext_info=").append(getExtInfo());
         }
         if(checkFeatureMd5Initialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getFeatureMd5()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("feature_md5=").append(getFeatureMd5());
             }
-            builder.append("feature_md5=").append(getFeatureMd5());
         }
         if(checkCreateTimeInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getCreateTime()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("create_time=").append(getCreateTime());
             }
-            builder.append("create_time=").append(getCreateTime());
         }
         builder.append("]");
         return builder.toString();
     }
-
     @Override
     public int compareTo(FlFaceBean object){
         return new CompareToBuilder()

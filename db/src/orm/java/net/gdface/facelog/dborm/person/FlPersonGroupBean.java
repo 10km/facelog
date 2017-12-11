@@ -872,67 +872,90 @@ public  class FlPersonGroupBean
 
     @Override
     public String toString() {
+        return toString(false);
+    }
+    /**
+     * @param notNull output not null field only if {@code true}
+     */
+    public String toString(boolean notNull) {
         // only output initialized field
         StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
         int count = 0;        
         if(checkIdInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getId()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("id=").append(getId());
             }
-            builder.append("id=").append(getId());
         }
         if(checkNameInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getName()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("name=").append(getName());
             }
-            builder.append("name=").append(getName());
         }
         if(checkLeafInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getLeaf()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("leaf=").append(getLeaf());
             }
-            builder.append("leaf=").append(getLeaf());
         }
         if(checkParentInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getParent()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("parent=").append(getParent());
             }
-            builder.append("parent=").append(getParent());
         }
         if(checkRemarkInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getRemark()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("remark=").append(getRemark());
             }
-            builder.append("remark=").append(getRemark());
         }
         if(checkExtBinInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getExtBin()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("ext_bin=").append(getExtBin());
             }
-            builder.append("ext_bin=").append(getExtBin());
         }
         if(checkExtTxtInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getExtTxt()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("ext_txt=").append(getExtTxt());
             }
-            builder.append("ext_txt=").append(getExtTxt());
         }
         if(checkCreateTimeInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getCreateTime()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("create_time=").append(getCreateTime());
             }
-            builder.append("create_time=").append(getCreateTime());
         }
         if(checkUpdateTimeInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getUpdateTime()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("update_time=").append(getUpdateTime());
             }
-            builder.append("update_time=").append(getUpdateTime());
         }
         builder.append("]");
         return builder.toString();
     }
-
     @Override
     public int compareTo(FlPersonGroupBean object){
         return new CompareToBuilder()

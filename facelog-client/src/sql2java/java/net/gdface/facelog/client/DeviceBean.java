@@ -857,67 +857,90 @@ public  class DeviceBean
 
     @Override
     public String toString() {
+        return toString(false);
+    }
+    /**
+     * @param notNull output not null field only if {@code true}
+     */
+    public String toString(boolean notNull) {
         // only output initialized field
         StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
         int count = 0;        
         if(checkIdInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getId()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("id=").append(getId());
             }
-            builder.append("id=").append(getId());
         }
         if(checkGroupIdInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getGroupId()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("group_id=").append(getGroupId());
             }
-            builder.append("group_id=").append(getGroupId());
         }
         if(checkNameInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getName()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("name=").append(getName());
             }
-            builder.append("name=").append(getName());
         }
         if(checkVersionInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getVersion()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("version=").append(getVersion());
             }
-            builder.append("version=").append(getVersion());
         }
         if(checkSerialNoInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getSerialNo()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("serial_no=").append(getSerialNo());
             }
-            builder.append("serial_no=").append(getSerialNo());
         }
         if(checkMacInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getMac()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("mac=").append(getMac());
             }
-            builder.append("mac=").append(getMac());
         }
         if(checkRemarkInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getRemark()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("remark=").append(getRemark());
             }
-            builder.append("remark=").append(getRemark());
         }
         if(checkCreateTimeInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getCreateTime()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("create_time=").append(getCreateTime());
             }
-            builder.append("create_time=").append(getCreateTime());
         }
         if(checkUpdateTimeInitialized()){
-            if(count++ >0){
-                builder.append(",");
+            if(!notNull || null != getUpdateTime()){
+                if(count++ >0){
+                    builder.append(",");
+                }            
+                builder.append("update_time=").append(getUpdateTime());
             }
-            builder.append("update_time=").append(getUpdateTime());
         }
         builder.append("]");
         return builder.toString();
     }
-
     @Override
     public int compareTo(DeviceBean object){
         return new CompareToBuilder()
