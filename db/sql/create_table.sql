@@ -166,7 +166,6 @@ CREATE TABLE IF NOT EXISTS fl_face (
   ###### 人脸检测基本信息 >> 
   `ext_info`    blob DEFAULT NULL COMMENT '扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析',
   `feature_md5` char(32) DEFAULT NULL COMMENT '外键,人脸特征数据MD5 id',
-  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (image_md5)       REFERENCES fl_image(md5)   ON DELETE CASCADE,
   FOREIGN KEY (feature_md5)     REFERENCES fl_feature(md5) ON DELETE SET NULL
 ) COMMENT '人脸检测信息数据表,用于保存检测到的人脸的所有信息(特征数据除外)' DEFAULT CHARSET=utf8;
