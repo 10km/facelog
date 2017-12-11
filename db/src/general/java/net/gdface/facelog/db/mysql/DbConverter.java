@@ -135,6 +135,12 @@ public class DbConverter implements IDbConverter<
             if(right.checkExtTxtInitialized()){
                 left.setExtTxt(right.getExtTxt());
             }
+            if(right.checkCreateTimeInitialized()){
+                left.setCreateTime(right.getCreateTime());
+            }
+            if(right.checkUpdateTimeInitialized()){
+                left.setUpdateTime(right.getUpdateTime());
+            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
@@ -162,6 +168,14 @@ public class DbConverter implements IDbConverter<
             if(left.checkExtTxtInitialized() ){
                 right.setExtTxt(left.getExtTxt());
             }
+// IGNORE field fl_device_group.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
+//             if(left.checkCreateTimeInitialized() ){
+//                 right.setCreateTime(left.getCreateTime());
+//             }
+// IGNORE field fl_device_group.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
+//             if(left.checkUpdateTimeInitialized() ){
+//                 right.setUpdateTime(left.getUpdateTime());
+//             }
             right.setNew(left.isNew());
             right.setModified(left.getModified());
         }};
@@ -653,6 +667,12 @@ public class DbConverter implements IDbConverter<
             if(right.checkExtTxtInitialized()){
                 left.setExtTxt(right.getExtTxt());
             }
+            if(right.checkCreateTimeInitialized()){
+                left.setCreateTime(right.getCreateTime());
+            }
+            if(right.checkUpdateTimeInitialized()){
+                left.setUpdateTime(right.getUpdateTime());
+            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
@@ -680,6 +700,14 @@ public class DbConverter implements IDbConverter<
             if(left.checkExtTxtInitialized() ){
                 right.setExtTxt(left.getExtTxt());
             }
+// IGNORE field fl_person_group.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
+//             if(left.checkCreateTimeInitialized() ){
+//                 right.setCreateTime(left.getCreateTime());
+//             }
+// IGNORE field fl_person_group.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
+//             if(left.checkUpdateTimeInitialized() ){
+//                 right.setUpdateTime(left.getUpdateTime());
+//             }
             right.setNew(left.isNew());
             right.setModified(left.getModified());
         }};

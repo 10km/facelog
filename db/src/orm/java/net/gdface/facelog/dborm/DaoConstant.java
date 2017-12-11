@@ -131,7 +131,7 @@ public interface DaoConstant {
     public static interface DeviceGroupConst{
         public static final String TABLENAME = "fl_device_group";
         /** column count for fl_device_group table */
-        public static final int COLUMN_COUNT = 7;
+        public static final int COLUMN_COUNT = 9;
         /** primary keys count for fl_device_group table */
         public static final int PRIMARY_KEY_COUNT = 1;
         /** foreign keys count for fl_device_group table */
@@ -147,7 +147,9 @@ public interface DaoConstant {
                             + ",fl_device_group.parent"
                             + ",fl_device_group.remark"
                             + ",fl_device_group.ext_bin"
-                            + ",fl_device_group.ext_txt";
+                            + ",fl_device_group.ext_txt"
+                            + ",fl_device_group.create_time"
+                            + ",fl_device_group.update_time";
         /** Field that contains the comma separated fields of the fl_device_group table. */
         public static final String FIELDS = "id"
                             + ",name"
@@ -155,7 +157,9 @@ public interface DaoConstant {
                             + ",parent"
                             + ",remark"
                             + ",ext_bin"
-                            + ",ext_txt";
+                            + ",ext_txt"
+                            + ",create_time"
+                            + ",update_time";
         /** immutable list of {@link #FIELDS} */
         public static final java.util.List<String> FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(FIELDS.split(",")));
         /** Field that contains the comma separated java fields of the fl_device_group table. */
@@ -165,7 +169,9 @@ public interface DaoConstant {
                             + ",parent"
                             + ",remark"
                             + ",extBin"
-                            + ",extTxt";
+                            + ",extTxt"
+                            + ",createTime"
+                            + ",updateTime";
         /** immutable list of {@link #JAVA_FIELDS} */
         public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
@@ -194,7 +200,11 @@ public interface DaoConstant {
             /** constant for fl_device_group.ext_bin  */
             extBin("fl_device_group","ext_bin",6,"getExtBin","setExtBin"),
             /** constant for fl_device_group.ext_txt  */
-            extTxt("fl_device_group","ext_txt",7,"getExtTxt","setExtTxt");
+            extTxt("fl_device_group","ext_txt",7,"getExtTxt","setExtTxt"),
+            /** constant for fl_device_group.create_time  */
+            createTime("fl_device_group","create_time",8,"getCreateTime","setCreateTime"),
+            /** constant for fl_device_group.update_time  */
+            updateTime("fl_device_group","update_time",9,"getUpdateTime","setUpdateTime");
             final ColumnMeta meta;
             private Column(String table,String field,int ordinal,String getter,String setter){
                 meta = new ColumnMeta(table,field,ordinal,getter,setter);
@@ -753,7 +763,7 @@ public interface DaoConstant {
     public static interface PersonGroupConst{
         public static final String TABLENAME = "fl_person_group";
         /** column count for fl_person_group table */
-        public static final int COLUMN_COUNT = 7;
+        public static final int COLUMN_COUNT = 9;
         /** primary keys count for fl_person_group table */
         public static final int PRIMARY_KEY_COUNT = 1;
         /** foreign keys count for fl_person_group table */
@@ -769,7 +779,9 @@ public interface DaoConstant {
                             + ",fl_person_group.parent"
                             + ",fl_person_group.remark"
                             + ",fl_person_group.ext_bin"
-                            + ",fl_person_group.ext_txt";
+                            + ",fl_person_group.ext_txt"
+                            + ",fl_person_group.create_time"
+                            + ",fl_person_group.update_time";
         /** Field that contains the comma separated fields of the fl_person_group table. */
         public static final String FIELDS = "id"
                             + ",name"
@@ -777,7 +789,9 @@ public interface DaoConstant {
                             + ",parent"
                             + ",remark"
                             + ",ext_bin"
-                            + ",ext_txt";
+                            + ",ext_txt"
+                            + ",create_time"
+                            + ",update_time";
         /** immutable list of {@link #FIELDS} */
         public static final java.util.List<String> FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(FIELDS.split(",")));
         /** Field that contains the comma separated java fields of the fl_person_group table. */
@@ -787,7 +801,9 @@ public interface DaoConstant {
                             + ",parent"
                             + ",remark"
                             + ",extBin"
-                            + ",extTxt";
+                            + ",extTxt"
+                            + ",createTime"
+                            + ",updateTime";
         /** immutable list of {@link #JAVA_FIELDS} */
         public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
@@ -816,7 +832,11 @@ public interface DaoConstant {
             /** constant for fl_person_group.ext_bin  */
             extBin("fl_person_group","ext_bin",6,"getExtBin","setExtBin"),
             /** constant for fl_person_group.ext_txt  */
-            extTxt("fl_person_group","ext_txt",7,"getExtTxt","setExtTxt");
+            extTxt("fl_person_group","ext_txt",7,"getExtTxt","setExtTxt"),
+            /** constant for fl_person_group.create_time  */
+            createTime("fl_person_group","create_time",8,"getCreateTime","setCreateTime"),
+            /** constant for fl_person_group.update_time  */
+            updateTime("fl_person_group","update_time",9,"getUpdateTime","setUpdateTime");
             final ColumnMeta meta;
             private Column(String table,String field,int ordinal,String getter,String setter){
                 meta = new ColumnMeta(table,field,ordinal,getter,setter);

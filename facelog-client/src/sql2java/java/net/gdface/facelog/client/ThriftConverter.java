@@ -116,6 +116,12 @@ public class ThriftConverter implements Constant{
             if(0L !=  (initialized & FL_DEVICE_GROUP_ID_EXT_TXT_MASK)){
                 left.setExtTxt(right.getExtTxt());
             }
+            if(0L !=  (initialized & FL_DEVICE_GROUP_ID_CREATE_TIME_MASK)){
+                left.setCreateTime(right.getCreateTime());
+            }
+            if(0L !=  (initialized & FL_DEVICE_GROUP_ID_UPDATE_TIME_MASK)){
+                left.setUpdateTime(right.getUpdateTime());
+            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
@@ -143,6 +149,18 @@ public class ThriftConverter implements Constant{
             if(left.checkExtTxtInitialized() ){
                 right.setExtTxt(left.getExtTxt());
             }
+// IGNORE field fl_device_group.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
+/*
+            if(left.checkCreateTimeInitialized() ){
+                right.setCreateTime(left.getCreateTime().getTime());
+            }
+*/
+// IGNORE field fl_device_group.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
+/*
+            if(left.checkUpdateTimeInitialized() ){
+                right.setUpdateTime(left.getUpdateTime().getTime());
+            }
+*/
             right.setNew(left.isNew());
             right.setModified(left.getModified());
             right.setInitialized(left.getInitialized());
@@ -660,6 +678,12 @@ public class ThriftConverter implements Constant{
             if(0L !=  (initialized & FL_PERSON_GROUP_ID_EXT_TXT_MASK)){
                 left.setExtTxt(right.getExtTxt());
             }
+            if(0L !=  (initialized & FL_PERSON_GROUP_ID_CREATE_TIME_MASK)){
+                left.setCreateTime(right.getCreateTime());
+            }
+            if(0L !=  (initialized & FL_PERSON_GROUP_ID_UPDATE_TIME_MASK)){
+                left.setUpdateTime(right.getUpdateTime());
+            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
@@ -687,6 +711,18 @@ public class ThriftConverter implements Constant{
             if(left.checkExtTxtInitialized() ){
                 right.setExtTxt(left.getExtTxt());
             }
+// IGNORE field fl_person_group.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
+/*
+            if(left.checkCreateTimeInitialized() ){
+                right.setCreateTime(left.getCreateTime().getTime());
+            }
+*/
+// IGNORE field fl_person_group.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
+/*
+            if(left.checkUpdateTimeInitialized() ){
+                right.setUpdateTime(left.getUpdateTime().getTime());
+            }
+*/
             right.setNew(left.isNew());
             right.setModified(left.getModified());
             right.setInitialized(left.getInitialized());

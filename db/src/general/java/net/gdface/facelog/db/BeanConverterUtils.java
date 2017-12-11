@@ -487,7 +487,9 @@ public class BeanConverterUtils implements Constant {
             parent("getParent","setParent"),
             remark("getRemark","setRemark"),
             extBin("getExtBin","setExtBin"),
-            extTxt("getExtTxt","setExtTxt");
+            extTxt("getExtTxt","setExtTxt"),
+            createTime("getCreateTime","setCreateTime"),
+            updateTime("getUpdateTime","setUpdateTime");
             final String getter;
             final String setter;
             Column(String getter,String setter){
@@ -600,6 +602,10 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.extBin.setter,java.nio.ByteBuffer.class,byte[].class);                    
             getGetter(Column.extTxt.getter);
             getSetterNoThrow(Column.extTxt.setter,String.class); 
+            getGetter(Column.createTime.getter);
+            getSetterNoThrow(Column.createTime.setter,java.util.Date.class,Long.class,long.class);  
+            getGetter(Column.updateTime.getter);
+            getSetterNoThrow(Column.updateTime.setter,java.util.Date.class,Long.class,long.class);  
         }
         @Override
         protected void doFromRight(DeviceGroupBean left, R_DEVICEGROUP right) {
@@ -656,6 +662,18 @@ public class BeanConverterUtils implements Constant {
                     left.setExtTxt(cast(String.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.extTxt.name(),modified)){
                         selfModified |= FL_DEVICE_GROUP_ID_EXT_TXT_MASK;
+                    }
+                }
+                if( bitCheck(Column.createTime.name(),initialized) && (null != (getterMethod = methods.get(Column.createTime.getter)))){
+                    left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.createTime.name(),modified)){
+                        selfModified |= FL_DEVICE_GROUP_ID_CREATE_TIME_MASK;
+                    }
+                }
+                if( bitCheck(Column.updateTime.name(),initialized) && (null != (getterMethod = methods.get(Column.updateTime.getter)))){
+                    left.setUpdateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.updateTime.name(),modified)){
+                        selfModified |= FL_DEVICE_GROUP_ID_UPDATE_TIME_MASK;
                     }
                 }
                 left.isNew((Boolean)methods.get(IS_NEW).invoke(right));
@@ -738,6 +756,30 @@ public class BeanConverterUtils implements Constant {
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
+// IGNORE field fl_device_group.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
+/*
+                if(null != (setterMethod = methods.get(Column.createTime.setter)) && left.checkCreateTimeInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.createTime.setter),left.getCreateTime()));
+                        bitOR(Column.createTime.name(),initialized);
+                        if(left.checkCreateTimeModified()){
+                            bitOR(Column.createTime.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+*/
+// IGNORE field fl_device_group.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
+/*
+                if(null != (setterMethod = methods.get(Column.updateTime.setter)) && left.checkUpdateTimeInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.updateTime.setter),left.getUpdateTime()));
+                        bitOR(Column.updateTime.name(),initialized);
+                        if(left.checkUpdateTimeModified()){
+                            bitOR(Column.updateTime.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+*/
                 if(null != (setterMethod = methods.get(SET_MODIFIED))){
                     if( initialized.length > 1){
                         setterMethod.invoke(right,cast(setterParams.get(SET_MODIFIED),initialized));
@@ -2888,7 +2930,9 @@ public class BeanConverterUtils implements Constant {
             parent("getParent","setParent"),
             remark("getRemark","setRemark"),
             extBin("getExtBin","setExtBin"),
-            extTxt("getExtTxt","setExtTxt");
+            extTxt("getExtTxt","setExtTxt"),
+            createTime("getCreateTime","setCreateTime"),
+            updateTime("getUpdateTime","setUpdateTime");
             final String getter;
             final String setter;
             Column(String getter,String setter){
@@ -3001,6 +3045,10 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.extBin.setter,java.nio.ByteBuffer.class,byte[].class);                    
             getGetter(Column.extTxt.getter);
             getSetterNoThrow(Column.extTxt.setter,String.class); 
+            getGetter(Column.createTime.getter);
+            getSetterNoThrow(Column.createTime.setter,java.util.Date.class,Long.class,long.class);  
+            getGetter(Column.updateTime.getter);
+            getSetterNoThrow(Column.updateTime.setter,java.util.Date.class,Long.class,long.class);  
         }
         @Override
         protected void doFromRight(PersonGroupBean left, R_PERSONGROUP right) {
@@ -3057,6 +3105,18 @@ public class BeanConverterUtils implements Constant {
                     left.setExtTxt(cast(String.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.extTxt.name(),modified)){
                         selfModified |= FL_PERSON_GROUP_ID_EXT_TXT_MASK;
+                    }
+                }
+                if( bitCheck(Column.createTime.name(),initialized) && (null != (getterMethod = methods.get(Column.createTime.getter)))){
+                    left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.createTime.name(),modified)){
+                        selfModified |= FL_PERSON_GROUP_ID_CREATE_TIME_MASK;
+                    }
+                }
+                if( bitCheck(Column.updateTime.name(),initialized) && (null != (getterMethod = methods.get(Column.updateTime.getter)))){
+                    left.setUpdateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.updateTime.name(),modified)){
+                        selfModified |= FL_PERSON_GROUP_ID_UPDATE_TIME_MASK;
                     }
                 }
                 left.isNew((Boolean)methods.get(IS_NEW).invoke(right));
@@ -3139,6 +3199,30 @@ public class BeanConverterUtils implements Constant {
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
+// IGNORE field fl_person_group.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
+/*
+                if(null != (setterMethod = methods.get(Column.createTime.setter)) && left.checkCreateTimeInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.createTime.setter),left.getCreateTime()));
+                        bitOR(Column.createTime.name(),initialized);
+                        if(left.checkCreateTimeModified()){
+                            bitOR(Column.createTime.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+*/
+// IGNORE field fl_person_group.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
+/*
+                if(null != (setterMethod = methods.get(Column.updateTime.setter)) && left.checkUpdateTimeInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.updateTime.setter),left.getUpdateTime()));
+                        bitOR(Column.updateTime.name(),initialized);
+                        if(left.checkUpdateTimeModified()){
+                            bitOR(Column.updateTime.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+*/
                 if(null != (setterMethod = methods.get(SET_MODIFIED))){
                     if( initialized.length > 1){
                         setterMethod.invoke(right,cast(setterParams.get(SET_MODIFIED),initialized));

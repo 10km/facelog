@@ -50,6 +50,10 @@ public  class FlPersonGroupBean
     /** comments:应用项目自定义文本扩展字段 */
     private String extTxt;
 
+    private java.util.Date createTime;
+
+    private java.util.Date updateTime;
+
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
@@ -569,6 +573,138 @@ public  class FlPersonGroupBean
     {
         return 0L !=  (initialized & FL_PERSON_GROUP_ID_EXT_TXT_MASK);
     }
+    /**
+     * Getter method for {@link #createTime}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_person_group.create_time</li>
+     * <li>default value: 'CURRENT_TIMESTAMP'</li>
+     * <li>NOT NULL</li>
+     * <li>column size: 19</li>
+     * <li>JDBC type returned by the driver: Types.TIMESTAMP</li>
+     * </ul>
+     *
+     * @return the value of createTime
+     */
+    public java.util.Date getCreateTime(){
+        return createTime;
+    }
+    /**
+     * Setter method for {@link #createTime}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value( NOT NULL) to be assigned to createTime
+     */
+    public void setCreateTime(java.util.Date newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, createTime) && checkCreateTimeInitialized()) {
+            return;
+        }
+        createTime = newVal;
+
+        modified |= FL_PERSON_GROUP_ID_CREATE_TIME_MASK;
+        initialized |= FL_PERSON_GROUP_ID_CREATE_TIME_MASK;
+    }
+    /**
+     * Setter method for {@link #createTime}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to createTime
+     */
+    public void setCreateTime(long newVal)
+    {
+        setCreateTime(new java.util.Date(newVal));
+    }
+    /**
+     * Determines if the createTime has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkCreateTimeModified()
+    {
+        return 0L !=  (modified & FL_PERSON_GROUP_ID_CREATE_TIME_MASK);
+    }
+
+    /**
+     * Determines if the createTime has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkCreateTimeInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_GROUP_ID_CREATE_TIME_MASK);
+    }
+    /**
+     * Getter method for {@link #updateTime}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_person_group.update_time</li>
+     * <li>default value: 'CURRENT_TIMESTAMP'</li>
+     * <li>NOT NULL</li>
+     * <li>column size: 19</li>
+     * <li>JDBC type returned by the driver: Types.TIMESTAMP</li>
+     * </ul>
+     *
+     * @return the value of updateTime
+     */
+    public java.util.Date getUpdateTime(){
+        return updateTime;
+    }
+    /**
+     * Setter method for {@link #updateTime}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value( NOT NULL) to be assigned to updateTime
+     */
+    public void setUpdateTime(java.util.Date newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, updateTime) && checkUpdateTimeInitialized()) {
+            return;
+        }
+        updateTime = newVal;
+
+        modified |= FL_PERSON_GROUP_ID_UPDATE_TIME_MASK;
+        initialized |= FL_PERSON_GROUP_ID_UPDATE_TIME_MASK;
+    }
+    /**
+     * Setter method for {@link #updateTime}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to updateTime
+     */
+    public void setUpdateTime(long newVal)
+    {
+        setUpdateTime(new java.util.Date(newVal));
+    }
+    /**
+     * Determines if the updateTime has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkUpdateTimeModified()
+    {
+        return 0L !=  (modified & FL_PERSON_GROUP_ID_UPDATE_TIME_MASK);
+    }
+
+    /**
+     * Determines if the updateTime has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkUpdateTimeInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_GROUP_ID_UPDATE_TIME_MASK);
+    }
     //////////////////////////////////////
     // referenced bean for FOREIGN KEYS
     //////////////////////////////////////
@@ -609,6 +745,10 @@ public  class FlPersonGroupBean
             return checkExtBinModified();
         case FL_PERSON_GROUP_ID_EXT_TXT:
             return checkExtTxtModified();
+        case FL_PERSON_GROUP_ID_CREATE_TIME:
+            return checkCreateTimeModified();
+        case FL_PERSON_GROUP_ID_UPDATE_TIME:
+            return checkUpdateTimeModified();
         default:
             return false;
         }        
@@ -631,6 +771,10 @@ public  class FlPersonGroupBean
             return checkExtBinInitialized();
         case FL_PERSON_GROUP_ID_EXT_TXT:
             return checkExtTxtInitialized();
+        case FL_PERSON_GROUP_ID_CREATE_TIME:
+            return checkCreateTimeInitialized();
+        case FL_PERSON_GROUP_ID_UPDATE_TIME:
+            return checkUpdateTimeInitialized();
         default:
             return false;
         }
@@ -668,7 +812,9 @@ public  class FlPersonGroupBean
             FL_PERSON_GROUP_ID_PARENT_MASK |
             FL_PERSON_GROUP_ID_REMARK_MASK |
             FL_PERSON_GROUP_ID_EXT_BIN_MASK |
-            FL_PERSON_GROUP_ID_EXT_TXT_MASK));
+            FL_PERSON_GROUP_ID_EXT_TXT_MASK |
+            FL_PERSON_GROUP_ID_CREATE_TIME_MASK |
+            FL_PERSON_GROUP_ID_UPDATE_TIME_MASK));
     }
     /**
      * Resets the object initialization status to 'not initialized'.
@@ -687,6 +833,10 @@ public  class FlPersonGroupBean
         this.remark = null;
         this.extBin = null;
         this.extTxt = null;
+        /* DEFAULT:'CURRENT_TIMESTAMP'*/
+        this.createTime = null;
+        /* DEFAULT:'CURRENT_TIMESTAMP'*/
+        this.updateTime = null;
         this.isNew = true;
         this.modified = 0L;
         this.initialized = 0L;
@@ -707,6 +857,8 @@ public  class FlPersonGroupBean
             .append(getRemark(), obj.getRemark())
             .append(getExtBin(), obj.getExtBin())
             .append(getExtTxt(), obj.getExtTxt())
+            .append(getCreateTime(), obj.getCreateTime())
+            .append(getUpdateTime(), obj.getUpdateTime())
             .isEquals();
     }
 
@@ -765,6 +917,18 @@ public  class FlPersonGroupBean
             }
             builder.append("ext_txt=").append(getExtTxt());
         }
+        if(checkCreateTimeInitialized()){
+            if(count++ >0){
+                builder.append(",");
+            }
+            builder.append("create_time=").append(getCreateTime());
+        }
+        if(checkUpdateTimeInitialized()){
+            if(count++ >0){
+                builder.append(",");
+            }
+            builder.append("update_time=").append(getUpdateTime());
+        }
         builder.append("]");
         return builder.toString();
     }
@@ -779,6 +943,8 @@ public  class FlPersonGroupBean
             .append(getRemark(), object.getRemark())
             .append(getExtBin(), object.getExtBin())
             .append(getExtTxt(), object.getExtTxt())
+            .append(getCreateTime(), object.getCreateTime())
+            .append(getUpdateTime(), object.getUpdateTime())
             .toComparison();
     }
     @Override
@@ -806,6 +972,8 @@ public  class FlPersonGroupBean
         setRemark(null);
         setExtBin(null);
         setExtTxt(null);
+        setCreateTime(null);
+        setUpdateTime(null);
         isNew(true);
         resetInitialized();
         resetIsModified();
@@ -907,6 +1075,10 @@ public  class FlPersonGroupBean
             return (T)getExtBin();        
         case FL_PERSON_GROUP_ID_EXT_TXT: 
             return (T)getExtTxt();        
+        case FL_PERSON_GROUP_ID_CREATE_TIME: 
+            return (T)getCreateTime();        
+        case FL_PERSON_GROUP_ID_UPDATE_TIME: 
+            return (T)getUpdateTime();        
         default:
             return null;
         }
@@ -936,6 +1108,12 @@ public  class FlPersonGroupBean
             break;
         case FL_PERSON_GROUP_ID_EXT_TXT:
             setExtTxt((String)value);
+            break;
+        case FL_PERSON_GROUP_ID_CREATE_TIME:
+            setCreateTime((java.util.Date)value);
+            break;
+        case FL_PERSON_GROUP_ID_UPDATE_TIME:
+            setUpdateTime((java.util.Date)value);
             break;
         default:
             break;
@@ -1073,6 +1251,26 @@ public  class FlPersonGroupBean
          */
         public Builder extTxt(String extTxt){
             TEMPLATE.get().setExtTxt(extTxt);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person_group.create_time
+         * @param createTime 
+         * @see {@link FlPersonGroupBean#getCreateTime()}
+         * @see {@link FlPersonGroupBean#setCreateTime(java.util.Date)}
+         */
+        public Builder createTime(java.util.Date createTime){
+            TEMPLATE.get().setCreateTime(createTime);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person_group.update_time
+         * @param updateTime 
+         * @see {@link FlPersonGroupBean#getUpdateTime()}
+         * @see {@link FlPersonGroupBean#setUpdateTime(java.util.Date)}
+         */
+        public Builder updateTime(java.util.Date updateTime){
+            TEMPLATE.get().setUpdateTime(updateTime);
             return this;
         }
     }

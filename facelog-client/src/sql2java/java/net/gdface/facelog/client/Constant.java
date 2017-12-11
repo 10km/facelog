@@ -65,7 +65,7 @@ public interface Constant {
     
     public static final int FL_DEVICE_COLUMN_COUNT = 9;
     public static final int FL_DEVICE_PK_COUNT = 1;
-    public static final int FL_DEVICE_GROUP_COLUMN_COUNT = 7;
+    public static final int FL_DEVICE_GROUP_COLUMN_COUNT = 9;
     public static final int FL_DEVICE_GROUP_PK_COUNT = 1;
     public static final int FL_FACE_COLUMN_COUNT = 20;
     public static final int FL_FACE_PK_COUNT = 1;
@@ -79,7 +79,7 @@ public interface Constant {
     public static final int FL_PERMIT_PK_COUNT = 2;
     public static final int FL_PERSON_COLUMN_COUNT = 15;
     public static final int FL_PERSON_PK_COUNT = 1;
-    public static final int FL_PERSON_GROUP_COLUMN_COUNT = 7;
+    public static final int FL_PERSON_GROUP_COLUMN_COUNT = 9;
     public static final int FL_PERSON_GROUP_PK_COUNT = 1;
     public static final int FL_STORE_COLUMN_COUNT = 3;
     public static final int FL_STORE_PK_COUNT = 1;
@@ -239,6 +239,12 @@ public interface Constant {
     /** Identify the fl_device_group.ext_txt field (ordinal:7). */
     public static final int FL_DEVICE_GROUP_ID_EXT_TXT = 6;
     public static final long FL_DEVICE_GROUP_ID_EXT_TXT_MASK = 1L << 6;
+    /** Identify the fl_device_group.create_time field (ordinal:8). */
+    public static final int FL_DEVICE_GROUP_ID_CREATE_TIME = 7;
+    public static final long FL_DEVICE_GROUP_ID_CREATE_TIME_MASK = 1L << 7;
+    /** Identify the fl_device_group.update_time field (ordinal:9). */
+    public static final int FL_DEVICE_GROUP_ID_UPDATE_TIME = 8;
+    public static final long FL_DEVICE_GROUP_ID_UPDATE_TIME_MASK = 1L << 8;
     /** Identify the fl_face.id field (ordinal:1). */
     public static final int FL_FACE_ID_ID = 0;
     public static final long FL_FACE_ID_ID_MASK = 1L << 0;
@@ -446,6 +452,12 @@ public interface Constant {
     /** Identify the fl_person_group.ext_txt field (ordinal:7). */
     public static final int FL_PERSON_GROUP_ID_EXT_TXT = 6;
     public static final long FL_PERSON_GROUP_ID_EXT_TXT_MASK = 1L << 6;
+    /** Identify the fl_person_group.create_time field (ordinal:8). */
+    public static final int FL_PERSON_GROUP_ID_CREATE_TIME = 7;
+    public static final long FL_PERSON_GROUP_ID_CREATE_TIME_MASK = 1L << 7;
+    /** Identify the fl_person_group.update_time field (ordinal:9). */
+    public static final int FL_PERSON_GROUP_ID_UPDATE_TIME = 8;
+    public static final long FL_PERSON_GROUP_ID_UPDATE_TIME_MASK = 1L << 8;
     /** Identify the fl_store.md5 field (ordinal:1). */
     public static final int FL_STORE_ID_MD5 = 0;
     public static final long FL_STORE_ID_MD5_MASK = 1L << 0;
@@ -517,7 +529,9 @@ public interface Constant {
                             + ",fl_device_group.parent"
                             + ",fl_device_group.remark"
                             + ",fl_device_group.ext_bin"
-                            + ",fl_device_group.ext_txt";
+                            + ",fl_device_group.ext_txt"
+                            + ",fl_device_group.create_time"
+                            + ",fl_device_group.update_time";
     /** Field that contains the comma separated fields of the fl_device_group table. */
     public static final String FL_DEVICE_GROUP_FIELDS = "id"
                             + ",name"
@@ -525,7 +539,9 @@ public interface Constant {
                             + ",parent"
                             + ",remark"
                             + ",ext_bin"
-                            + ",ext_txt";
+                            + ",ext_txt"
+                            + ",create_time"
+                            + ",update_time";
     public static final java.util.List<String> FL_DEVICE_GROUP_FIELDS_LIST = java.util.Arrays.asList(FL_DEVICE_GROUP_FIELDS.split(","));
     /** Field that contains the comma separated java fields of the fl_device_group table. */
     public static final String FL_DEVICE_GROUP_JAVA_FIELDS = "id"
@@ -534,7 +550,9 @@ public interface Constant {
                             + ",parent"
                             + ",remark"
                             + ",extBin"
-                            + ",extTxt";
+                            + ",extTxt"
+                            + ",createTime"
+                            + ",updateTime";
     public static final java.util.List<String> FL_DEVICE_GROUP_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_DEVICE_GROUP_JAVA_FIELDS.split(","));
     /////////////////// fl_face ////////////
     /** Contains all the full fields of the fl_face table.*/
@@ -766,7 +784,9 @@ public interface Constant {
                             + ",fl_person_group.parent"
                             + ",fl_person_group.remark"
                             + ",fl_person_group.ext_bin"
-                            + ",fl_person_group.ext_txt";
+                            + ",fl_person_group.ext_txt"
+                            + ",fl_person_group.create_time"
+                            + ",fl_person_group.update_time";
     /** Field that contains the comma separated fields of the fl_person_group table. */
     public static final String FL_PERSON_GROUP_FIELDS = "id"
                             + ",name"
@@ -774,7 +794,9 @@ public interface Constant {
                             + ",parent"
                             + ",remark"
                             + ",ext_bin"
-                            + ",ext_txt";
+                            + ",ext_txt"
+                            + ",create_time"
+                            + ",update_time";
     public static final java.util.List<String> FL_PERSON_GROUP_FIELDS_LIST = java.util.Arrays.asList(FL_PERSON_GROUP_FIELDS.split(","));
     /** Field that contains the comma separated java fields of the fl_person_group table. */
     public static final String FL_PERSON_GROUP_JAVA_FIELDS = "id"
@@ -783,7 +805,9 @@ public interface Constant {
                             + ",parent"
                             + ",remark"
                             + ",extBin"
-                            + ",extTxt";
+                            + ",extTxt"
+                            + ",createTime"
+                            + ",updateTime";
     public static final java.util.List<String> FL_PERSON_GROUP_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_PERSON_GROUP_JAVA_FIELDS.split(","));
     /////////////////// fl_store ////////////
     /** Contains all the full fields of the fl_store table.*/

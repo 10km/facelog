@@ -1142,7 +1142,93 @@ class Dao implements CommonConstant {
                     throws RuntimeDaoException{
         return daoToPrimaryKeyListFromDeviceGroups(daoLoadDeviceGroupByWhere(where,1,-1));
     }
+    //19
+    /**
+     * (主动更新机制实现)<br>
+     * 返回 fl_device_group.create_time 字段大于指定时间戳({@code timestamp})的所有记录
+     * @see #daoLoadDeviceGroupByWhere(String,int,int)
+     * @throws RuntimeDaoException
+     * @throws IllegalArgumentException {@code timestamp}为{@code null}时
+     */
+    protected List<DeviceGroupBean> daoLoadDeviceGroupByCreateTime(Date timestamp,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return daoLoadDeviceGroupByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
+    }
+    //20
+    /** 
+     * 参见 {@link #daoLoadDeviceGroupByCreateTime(Date,int,int)} 
+     * @throws RuntimeDaoException
+     */
+    protected List<DeviceGroupBean> daoLoadDeviceGroupByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
+        return daoLoadDeviceGroupByCreateTime(timestamp,1,-1);
+    }
+    //20-5
+    /**
+     * 返回fl_device_group.create_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @see #daoCountDeviceGroupByWhere(String)
+     * @throws RuntimeDaoException
+     */
+    protected int daoCountDeviceGroupByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
+        return daoCountDeviceGroupByWhere(makeWhere(timestamp,"create_time"));
+    }
+    //21
+    /** 
+     * (主动更新机制实现)<br>
+     * 返回 fl_device_group.create_time 字段大于指定时间戳({@code timestamp})的所有记录
+     * @return 返回查询结果记录的主键
+     * @see {@link #daoLoadDeviceGroupIdByWhere(String)}
+     * @throws RuntimeDaoException
+     */
+    protected List<Integer> daoLoadDeviceGroupIdByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
+        return daoLoadDeviceGroupIdByWhere(makeWhere(timestamp,"create_time"));
+    }
 
+    //19
+    /**
+     * (主动更新机制实现)<br>
+     * 返回 fl_device_group.update_time 字段大于指定时间戳({@code timestamp})的所有记录
+     * @see #daoLoadDeviceGroupByWhere(String,int,int)
+     * @throws RuntimeDaoException
+     * @throws IllegalArgumentException {@code timestamp}为{@code null}时
+     */
+    protected List<DeviceGroupBean> daoLoadDeviceGroupByUpdateTime(Date timestamp,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return daoLoadDeviceGroupByWhere(makeWhere(timestamp,"update_time"),startRow,numRows);
+    }
+    //20
+    /** 
+     * 参见 {@link #daoLoadDeviceGroupByUpdateTime(Date,int,int)} 
+     * @throws RuntimeDaoException
+     */
+    protected List<DeviceGroupBean> daoLoadDeviceGroupByUpdateTime(Date timestamp)
+                    throws RuntimeDaoException{
+        return daoLoadDeviceGroupByUpdateTime(timestamp,1,-1);
+    }
+    //20-5
+    /**
+     * 返回fl_device_group.update_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @see #daoCountDeviceGroupByWhere(String)
+     * @throws RuntimeDaoException
+     */
+    protected int daoCountDeviceGroupByUpdateTime(Date timestamp)
+                    throws RuntimeDaoException{
+        return daoCountDeviceGroupByWhere(makeWhere(timestamp,"update_time"));
+    }
+    //21
+    /** 
+     * (主动更新机制实现)<br>
+     * 返回 fl_device_group.update_time 字段大于指定时间戳({@code timestamp})的所有记录
+     * @return 返回查询结果记录的主键
+     * @see {@link #daoLoadDeviceGroupIdByWhere(String)}
+     * @throws RuntimeDaoException
+     */
+    protected List<Integer> daoLoadDeviceGroupIdByUpdateTime(Date timestamp)
+                    throws RuntimeDaoException{
+        return daoLoadDeviceGroupIdByWhere(makeWhere(timestamp,"update_time"));
+    }
 
 
     //////////// FL_PERSON /////////
@@ -2169,7 +2255,93 @@ class Dao implements CommonConstant {
                     throws RuntimeDaoException{
         return daoToPrimaryKeyListFromPersonGroups(daoLoadPersonGroupByWhere(where,1,-1));
     }
+    //19
+    /**
+     * (主动更新机制实现)<br>
+     * 返回 fl_person_group.create_time 字段大于指定时间戳({@code timestamp})的所有记录
+     * @see #daoLoadPersonGroupByWhere(String,int,int)
+     * @throws RuntimeDaoException
+     * @throws IllegalArgumentException {@code timestamp}为{@code null}时
+     */
+    protected List<PersonGroupBean> daoLoadPersonGroupByCreateTime(Date timestamp,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return daoLoadPersonGroupByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
+    }
+    //20
+    /** 
+     * 参见 {@link #daoLoadPersonGroupByCreateTime(Date,int,int)} 
+     * @throws RuntimeDaoException
+     */
+    protected List<PersonGroupBean> daoLoadPersonGroupByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
+        return daoLoadPersonGroupByCreateTime(timestamp,1,-1);
+    }
+    //20-5
+    /**
+     * 返回fl_person_group.create_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @see #daoCountPersonGroupByWhere(String)
+     * @throws RuntimeDaoException
+     */
+    protected int daoCountPersonGroupByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
+        return daoCountPersonGroupByWhere(makeWhere(timestamp,"create_time"));
+    }
+    //21
+    /** 
+     * (主动更新机制实现)<br>
+     * 返回 fl_person_group.create_time 字段大于指定时间戳({@code timestamp})的所有记录
+     * @return 返回查询结果记录的主键
+     * @see {@link #daoLoadPersonGroupIdByWhere(String)}
+     * @throws RuntimeDaoException
+     */
+    protected List<Integer> daoLoadPersonGroupIdByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
+        return daoLoadPersonGroupIdByWhere(makeWhere(timestamp,"create_time"));
+    }
 
+    //19
+    /**
+     * (主动更新机制实现)<br>
+     * 返回 fl_person_group.update_time 字段大于指定时间戳({@code timestamp})的所有记录
+     * @see #daoLoadPersonGroupByWhere(String,int,int)
+     * @throws RuntimeDaoException
+     * @throws IllegalArgumentException {@code timestamp}为{@code null}时
+     */
+    protected List<PersonGroupBean> daoLoadPersonGroupByUpdateTime(Date timestamp,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return daoLoadPersonGroupByWhere(makeWhere(timestamp,"update_time"),startRow,numRows);
+    }
+    //20
+    /** 
+     * 参见 {@link #daoLoadPersonGroupByUpdateTime(Date,int,int)} 
+     * @throws RuntimeDaoException
+     */
+    protected List<PersonGroupBean> daoLoadPersonGroupByUpdateTime(Date timestamp)
+                    throws RuntimeDaoException{
+        return daoLoadPersonGroupByUpdateTime(timestamp,1,-1);
+    }
+    //20-5
+    /**
+     * 返回fl_person_group.update_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @see #daoCountPersonGroupByWhere(String)
+     * @throws RuntimeDaoException
+     */
+    protected int daoCountPersonGroupByUpdateTime(Date timestamp)
+                    throws RuntimeDaoException{
+        return daoCountPersonGroupByWhere(makeWhere(timestamp,"update_time"));
+    }
+    //21
+    /** 
+     * (主动更新机制实现)<br>
+     * 返回 fl_person_group.update_time 字段大于指定时间戳({@code timestamp})的所有记录
+     * @return 返回查询结果记录的主键
+     * @see {@link #daoLoadPersonGroupIdByWhere(String)}
+     * @throws RuntimeDaoException
+     */
+    protected List<Integer> daoLoadPersonGroupIdByUpdateTime(Date timestamp)
+                    throws RuntimeDaoException{
+        return daoLoadPersonGroupIdByWhere(makeWhere(timestamp,"update_time"));
+    }
 
 
     //////////// FL_FACE /////////

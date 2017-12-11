@@ -1229,6 +1229,22 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
                 dirtyCount++;
             }
 
+            if (bean.checkCreateTimeModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("create_time");
+                dirtyCount++;
+            }
+
+            if (bean.checkUpdateTimeModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("update_time");
+                dirtyCount++;
+            }
+
             sql.append(") values (");
             if(dirtyCount > 0) {
                 sql.append("?");
@@ -1371,6 +1387,24 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
                     useComma=true;
                 }
                 sql.append("ext_txt=?");
+            }
+
+            if (bean.checkCreateTimeModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("create_time=?");
+            }
+
+            if (bean.checkUpdateTimeModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("update_time=?");
             }
             sql.append(" WHERE ");
             sql.append("id=?");
@@ -1960,6 +1994,22 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_txt ").append(sqlEqualsOperation).append("?");
                 }
             }
+            if (bean.checkCreateTimeModified()) {
+                dirtyCount ++;
+                if (bean.getCreateTime() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time = ?");
+                }
+            }
+            if (bean.checkUpdateTimeModified()) {
+                dirtyCount ++;
+                if (bean.getUpdateTime() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("update_time IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("update_time = ?");
+                }
+            }
         }
         finally
         {
@@ -2065,6 +2115,14 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
                     default:
                         throw new DaoException("Unknown search type " + searchType);
                 }
+            }
+            if (bean.checkCreateTimeModified()) {
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getCreateTime() + "]");
+                if (bean.getCreateTime() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TIMESTAMP);} } else { ps.setTimestamp(++dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
+            }
+            if (bean.checkUpdateTimeModified()) {
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getUpdateTime() + "]");
+                if (bean.getUpdateTime() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TIMESTAMP);} } else { ps.setTimestamp(++dirtyCount, new java.sql.Timestamp(bean.getUpdateTime().getTime())); }
             }
         }
         catch(SQLException e)
@@ -2190,6 +2248,8 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
             bean.setRemark(rs.getString(5));
             bean.setExtBin(Manager.getBytes(rs, 6));
             bean.setExtTxt(rs.getString(7));
+            bean.setCreateTime(rs.getTimestamp(8));
+            bean.setUpdateTime(rs.getTimestamp(9));
         }
         catch(SQLException e)
         {
@@ -2250,6 +2310,14 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
                         ++pos;
                         bean.setExtTxt(rs.getString(pos));
                         break;
+                    case FL_PERSON_GROUP_ID_CREATE_TIME:
+                        ++pos;
+                        bean.setCreateTime(rs.getTimestamp(pos));
+                        break;
+                    case FL_PERSON_GROUP_ID_UPDATE_TIME:
+                        ++pos;
+                        bean.setUpdateTime(rs.getTimestamp(pos));
+                        break;
                     default:
                         throw new DaoException("Unknown field id " + fieldList[i]);
                 }
@@ -2285,6 +2353,8 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
             bean.setRemark(rs.getString("remark"));
             bean.setExtBin(Manager.getBytes(rs, "ext_bin"));
             bean.setExtTxt(rs.getString("ext_txt"));
+            bean.setCreateTime(rs.getTimestamp("create_time"));
+            bean.setUpdateTime(rs.getTimestamp("update_time"));
         }
         catch(SQLException e)
         {

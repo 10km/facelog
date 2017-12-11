@@ -92,6 +92,22 @@ public final class DeviceGroupBean
     @ThriftField
     public void setExtTxt(final String extTxt) { this.extTxt = extTxt; }
 
+    private long createTime;
+
+    @ThriftField(value=11, name="createTime", requiredness=Requiredness.NONE)
+    public long getCreateTime() { return createTime; }
+
+    @ThriftField
+    public void setCreateTime(final long createTime) { this.createTime = createTime; }
+
+    private long updateTime;
+
+    @ThriftField(value=12, name="updateTime", requiredness=Requiredness.NONE)
+    public long getUpdateTime() { return updateTime; }
+
+    @ThriftField
+    public void setUpdateTime(final long updateTime) { this.updateTime = updateTime; }
+
     @Override
     public String toString()
     {
@@ -106,6 +122,8 @@ public final class DeviceGroupBean
             .add("remark", remark)
             .add("extBin", extBin)
             .add("extTxt", extTxt)
+            .add("createTime", createTime)
+            .add("updateTime", updateTime)
             .toString();
     }
 }

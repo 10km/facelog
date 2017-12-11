@@ -107,6 +107,8 @@ struct DeviceGroupBean {
   8:  string remark;
   9:  binary extBin;
   10:  string extTxt;
+  11:  i64 createTime;
+  12:  i64 updateTime;
 }
 
 struct PersonGroupBean {
@@ -120,6 +122,8 @@ struct PersonGroupBean {
   8:  string remark;
   9:  binary extBin;
   10:  string extTxt;
+  11:  i64 createTime;
+  12:  i64 updateTime;
 }
 
 struct DeviceBean {

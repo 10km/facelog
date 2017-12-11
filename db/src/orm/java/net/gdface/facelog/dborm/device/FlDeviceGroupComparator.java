@@ -44,6 +44,8 @@ public class FlDeviceGroupComparator implements Comparator<FlDeviceGroupBean>,Co
      *   <li>{@link Constant#FL_DEVICE_GROUP_ID_REMARK}
      *   <li>{@link Constant#FL_DEVICE_GROUP_ID_EXT_BIN}
      *   <li>{@link Constant#FL_DEVICE_GROUP_ID_EXT_TXT}
+     *   <li>{@link Constant#FL_DEVICE_GROUP_ID_CREATE_TIME}
+     *   <li>{@link Constant#FL_DEVICE_GROUP_ID_UPDATE_TIME}
      * </ul>
      */
     public FlDeviceGroupComparator(int iType)
@@ -69,6 +71,8 @@ public class FlDeviceGroupComparator implements Comparator<FlDeviceGroupBean>,Co
      *   <li>{@link Constant#FL_DEVICE_GROUP_ID_REMARK})
      *   <li>{@link Constant#FL_DEVICE_GROUP_ID_EXT_BIN})
      *   <li>{@link Constant#FL_DEVICE_GROUP_ID_EXT_TXT})
+     *   <li>{@link Constant#FL_DEVICE_GROUP_ID_CREATE_TIME})
+     *   <li>{@link Constant#FL_DEVICE_GROUP_ID_UPDATE_TIME})
      * </ul>
      *
      * @param bReverse set this value to true, if you want to reverse the sorting results
@@ -160,6 +164,28 @@ public class FlDeviceGroupComparator implements Comparator<FlDeviceGroupBean>,Co
                     iReturn = 1;
                 } else {
                     iReturn = b1.getExtTxt().compareTo(b2.getExtTxt());
+                }
+                break;
+            case FL_DEVICE_GROUP_ID_CREATE_TIME:
+                if (b1.getCreateTime() == null && b2.getCreateTime() != null) {
+                    iReturn = -1;
+                } else if (b1.getCreateTime() == null && b2.getCreateTime() == null) {
+                    iReturn = 0;
+                } else if (b1.getCreateTime() != null && b2.getCreateTime() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getCreateTime().compareTo(b2.getCreateTime());
+                }
+                break;
+            case FL_DEVICE_GROUP_ID_UPDATE_TIME:
+                if (b1.getUpdateTime() == null && b2.getUpdateTime() != null) {
+                    iReturn = -1;
+                } else if (b1.getUpdateTime() == null && b2.getUpdateTime() == null) {
+                    iReturn = 0;
+                } else if (b1.getUpdateTime() != null && b2.getUpdateTime() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getUpdateTime().compareTo(b2.getUpdateTime());
                 }
                 break;
             default:
