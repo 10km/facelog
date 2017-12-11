@@ -34,6 +34,8 @@ CREATE TABLE IF NOT EXISTS fl_device_group (
   `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
   `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段',
   `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (parent)  REFERENCES fl_device_group(id) ON DELETE SET NULL
 ) COMMENT '设备组信息' DEFAULT CHARSET=utf8;
 
@@ -45,6 +47,8 @@ CREATE TABLE IF NOT EXISTS fl_person_group (
   `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
   `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段',
   `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (parent)  REFERENCES fl_person_group(id) ON DELETE SET NULL
 ) COMMENT '用户组信息' DEFAULT CHARSET=utf8;
 
