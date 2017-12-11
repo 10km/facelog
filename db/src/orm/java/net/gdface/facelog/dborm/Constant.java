@@ -66,7 +66,7 @@ public interface Constant {
     public static final int FL_DEVICE_PK_COUNT = 1;
     public static final int FL_DEVICE_GROUP_COLUMN_COUNT = 9;
     public static final int FL_DEVICE_GROUP_PK_COUNT = 1;
-    public static final int FL_FACE_COLUMN_COUNT = 20;
+    public static final int FL_FACE_COLUMN_COUNT = 19;
     public static final int FL_FACE_PK_COUNT = 1;
     public static final int FL_FEATURE_COLUMN_COUNT = 4;
     public static final int FL_FEATURE_PK_COUNT = 1;
@@ -301,9 +301,6 @@ public interface Constant {
     /** Identify the fl_face.feature_md5 field (ordinal:19). */
     public static final int FL_FACE_ID_FEATURE_MD5 = 18;
     public static final long FL_FACE_ID_FEATURE_MD5_MASK = 1L << 18;
-    /** Identify the fl_face.create_time field (ordinal:20). */
-    public static final int FL_FACE_ID_CREATE_TIME = 19;
-    public static final long FL_FACE_ID_CREATE_TIME_MASK = 1L << 19;
     /** Identify the fl_feature.md5 field (ordinal:1). */
     public static final int FL_FEATURE_ID_MD5 = 0;
     public static final long FL_FEATURE_ID_MD5_MASK = 1L << 0;
@@ -573,8 +570,7 @@ public interface Constant {
                             + ",fl_face.angle_pitch"
                             + ",fl_face.angle_roll"
                             + ",fl_face.ext_info"
-                            + ",fl_face.feature_md5"
-                            + ",fl_face.create_time";
+                            + ",fl_face.feature_md5";
     /** Field that contains the comma separated fields of the fl_face table. */
     public static final String FL_FACE_FIELDS = "id"
                             + ",image_md5"
@@ -594,8 +590,7 @@ public interface Constant {
                             + ",angle_pitch"
                             + ",angle_roll"
                             + ",ext_info"
-                            + ",feature_md5"
-                            + ",create_time";
+                            + ",feature_md5";
     public static final java.util.List<String> FL_FACE_FIELDS_LIST = java.util.Arrays.asList(FL_FACE_FIELDS.split(","));
     /** Field that contains the comma separated java fields of the fl_face table. */
     public static final String FL_FACE_JAVA_FIELDS = "id"
@@ -616,8 +611,7 @@ public interface Constant {
                             + ",anglePitch"
                             + ",angleRoll"
                             + ",extInfo"
-                            + ",featureMd5"
-                            + ",createTime";
+                            + ",featureMd5";
     public static final java.util.List<String> FL_FACE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_FACE_JAVA_FIELDS.split(","));
     /////////////////// fl_feature ////////////
     /** Contains all the full fields of the fl_feature table.*/

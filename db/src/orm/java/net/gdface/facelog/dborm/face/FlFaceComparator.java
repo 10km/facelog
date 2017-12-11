@@ -56,7 +56,6 @@ public class FlFaceComparator implements Comparator<FlFaceBean>,Constant
      *   <li>{@link Constant#FL_FACE_ID_ANGLE_ROLL}
      *   <li>{@link Constant#FL_FACE_ID_EXT_INFO}
      *   <li>{@link Constant#FL_FACE_ID_FEATURE_MD5}
-     *   <li>{@link Constant#FL_FACE_ID_CREATE_TIME}
      * </ul>
      */
     public FlFaceComparator(int iType)
@@ -94,7 +93,6 @@ public class FlFaceComparator implements Comparator<FlFaceBean>,Constant
      *   <li>{@link Constant#FL_FACE_ID_ANGLE_ROLL})
      *   <li>{@link Constant#FL_FACE_ID_EXT_INFO})
      *   <li>{@link Constant#FL_FACE_ID_FEATURE_MD5})
-     *   <li>{@link Constant#FL_FACE_ID_CREATE_TIME})
      * </ul>
      *
      * @param bReverse set this value to true, if you want to reverse the sorting results
@@ -318,17 +316,6 @@ public class FlFaceComparator implements Comparator<FlFaceBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getFeatureMd5().compareTo(b2.getFeatureMd5());
-                }
-                break;
-            case FL_FACE_ID_CREATE_TIME:
-                if (b1.getCreateTime() == null && b2.getCreateTime() != null) {
-                    iReturn = -1;
-                } else if (b1.getCreateTime() == null && b2.getCreateTime() == null) {
-                    iReturn = 0;
-                } else if (b1.getCreateTime() != null && b2.getCreateTime() == null) {
-                    iReturn = 1;
-                } else {
-                    iReturn = b1.getCreateTime().compareTo(b2.getCreateTime());
                 }
                 break;
             default:

@@ -46,9 +46,9 @@ public class ImageCacheManager extends ImageManager
      * otherwise return {@code instance}.
      * @see {@link ImageCacheManager#ImageCacheManager(UpdateStrategy ,long , long , TimeUnit )}
      */
-    public static synchronized final ImageCacheManager makeInstance(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit){
+    public static synchronized final ImageCacheManager makeInstance(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
-            instance = new ImageCacheManager(updateStragey,maximumSize,duration,unit);
+            instance = new ImageCacheManager(updateStrategy,maximumSize,duration,unit);
         }
         return instance;
     }
@@ -69,8 +69,8 @@ public class ImageCacheManager extends ImageManager
     /** constructor<br>
      * @see {@link ImageCache#ImageCache(UpdateStrategy ,long , long , TimeUnit )}
      */
-    protected ImageCacheManager(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
-        cache = new ImageCache(updateStragey,maximumSize,duration,unit);
+    protected ImageCacheManager(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
+        cache = new ImageCache(updateStrategy,maximumSize,duration,unit);
         cache.registerListener();
     }
     
@@ -159,5 +159,20 @@ public class ImageCacheManager extends ImageManager
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
     }
 
+    //_____________________________________________________________________
+    //
+    // SAVE
+    //_____________________________________________________________________
+    //12
+
+    @Override
+    public ImageBean save(ImageBean bean){
+        boolean modified = bean.isModified();
+        super.save(bean);
+        if( modified && UpdateStrategy.refresh == cache.getUpdateStrategy() ){
+            bean.copy(cache.getBeanUnchecked(bean.getMd5())).resetIsModified();
+        }
+        return bean;
+    }
 
 }

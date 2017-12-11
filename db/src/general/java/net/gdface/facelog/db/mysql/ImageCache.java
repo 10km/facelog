@@ -25,8 +25,8 @@ public class ImageCache extends BaseTableLoadCaching<String, ImageBean> {
     /** constructor<br>
      * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
      */
-    public ImageCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
-        super(updateStragey,maximumSize, duration, unit);
+    public ImageCache(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
+        super(updateStrategy,maximumSize, duration, unit);
         manager.bindForeignKeyListenerForDeleteRule();
     }
     public ImageCache(long maximumSize, long duration, TimeUnit unit) {

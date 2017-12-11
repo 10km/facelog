@@ -25,8 +25,8 @@ public class LogCache extends BaseTableLoadCaching<Integer, LogBean> {
     /** constructor<br>
      * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
      */
-    public LogCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
-        super(updateStragey,maximumSize, duration, unit);
+    public LogCache(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
+        super(updateStrategy,maximumSize, duration, unit);
         manager.bindForeignKeyListenerForDeleteRule();
     }
     public LogCache(long maximumSize, long duration, TimeUnit unit) {

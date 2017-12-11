@@ -228,9 +228,6 @@ public class ThriftConverter implements Constant{
             if(0L !=  (initialized & FL_FACE_ID_FEATURE_MD5_MASK)){
                 left.setFeatureMd5(right.getFeatureMd5());
             }
-            if(0L !=  (initialized & FL_FACE_ID_CREATE_TIME_MASK)){
-                left.setCreateTime(right.getCreateTime());
-            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
@@ -294,12 +291,6 @@ public class ThriftConverter implements Constant{
             if(left.checkFeatureMd5Initialized() ){
                 right.setFeatureMd5(left.getFeatureMd5());
             }
-// IGNORE field fl_face.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-/*
-            if(left.checkCreateTimeInitialized() ){
-                right.setCreateTime(left.getCreateTime().getTime());
-            }
-*/
             right.setNew(left.isNew());
             right.setModified(left.getModified());
             right.setInitialized(left.getInitialized());

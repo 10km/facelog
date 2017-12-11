@@ -830,8 +830,7 @@ public class BeanConverterUtils implements Constant {
             anglePitch("getAnglePitch","setAnglePitch"),
             angleRoll("getAngleRoll","setAngleRoll"),
             extInfo("getExtInfo","setExtInfo"),
-            featureMd5("getFeatureMd5","setFeatureMd5"),
-            createTime("getCreateTime","setCreateTime");
+            featureMd5("getFeatureMd5","setFeatureMd5");
             final String getter;
             final String setter;
             Column(String getter,String setter){
@@ -968,8 +967,6 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.extInfo.setter,java.nio.ByteBuffer.class,byte[].class);                    
             getGetter(Column.featureMd5.getter);
             getSetterNoThrow(Column.featureMd5.setter,String.class); 
-            getGetter(Column.createTime.getter);
-            getSetterNoThrow(Column.createTime.setter,java.util.Date.class,Long.class,long.class);  
         }
         @Override
         protected void doFromRight(FaceBean left, R_FACE right) {
@@ -1098,12 +1095,6 @@ public class BeanConverterUtils implements Constant {
                     left.setFeatureMd5(cast(String.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.featureMd5.name(),modified)){
                         selfModified |= FL_FACE_ID_FEATURE_MD5_MASK;
-                    }
-                }
-                if( bitCheck(Column.createTime.name(),initialized) && (null != (getterMethod = methods.get(Column.createTime.getter)))){
-                    left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                    if(bitCheck(Column.createTime.name(),modified)){
-                        selfModified |= FL_FACE_ID_CREATE_TIME_MASK;
                     }
                 }
                 left.isNew((Boolean)methods.get(IS_NEW).invoke(right));
@@ -1294,18 +1285,6 @@ public class BeanConverterUtils implements Constant {
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-// IGNORE field fl_face.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-/*
-                if(null != (setterMethod = methods.get(Column.createTime.setter)) && left.checkCreateTimeInitialized()){
-                    try{
-                        setterMethod.invoke(right,cast(setterParams.get(Column.createTime.setter),left.getCreateTime()));
-                        bitOR(Column.createTime.name(),initialized);
-                        if(left.checkCreateTimeModified()){
-                            bitOR(Column.createTime.name(),modified);
-                        }
-                    }catch(NullCastPrimitiveException e){}
-                }
-*/
                 if(null != (setterMethod = methods.get(SET_MODIFIED))){
                     if( initialized.length > 1){
                         setterMethod.invoke(right,cast(setterParams.get(SET_MODIFIED),initialized));

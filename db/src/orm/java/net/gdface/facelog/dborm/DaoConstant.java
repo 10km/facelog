@@ -215,7 +215,7 @@ public interface DaoConstant {
     public static interface FaceConst{
         public static final String TABLENAME = "fl_face";
         /** column count for fl_face table */
-        public static final int COLUMN_COUNT = 20;
+        public static final int COLUMN_COUNT = 19;
         /** primary keys count for fl_face table */
         public static final int PRIMARY_KEY_COUNT = 1;
         /** foreign keys count for fl_face table */
@@ -243,8 +243,7 @@ public interface DaoConstant {
                             + ",fl_face.angle_pitch"
                             + ",fl_face.angle_roll"
                             + ",fl_face.ext_info"
-                            + ",fl_face.feature_md5"
-                            + ",fl_face.create_time";
+                            + ",fl_face.feature_md5";
         /** Field that contains the comma separated fields of the fl_face table. */
         public static final String FIELDS = "id"
                             + ",image_md5"
@@ -264,8 +263,7 @@ public interface DaoConstant {
                             + ",angle_pitch"
                             + ",angle_roll"
                             + ",ext_info"
-                            + ",feature_md5"
-                            + ",create_time";
+                            + ",feature_md5";
         /** immutable list of {@link #FIELDS} */
         public static final java.util.List<String> FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(FIELDS.split(",")));
         /** Field that contains the comma separated java fields of the fl_face table. */
@@ -287,8 +285,7 @@ public interface DaoConstant {
                             + ",anglePitch"
                             + ",angleRoll"
                             + ",extInfo"
-                            + ",featureMd5"
-                            + ",createTime";
+                            + ",featureMd5";
         /** immutable list of {@link #JAVA_FIELDS} */
         public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
@@ -341,9 +338,7 @@ public interface DaoConstant {
             /** constant for fl_face.ext_info  */
             extInfo("fl_face","ext_info",18,"getExtInfo","setExtInfo"),
             /** constant for fl_face.feature_md5  */
-            featureMd5("fl_face","feature_md5",19,"getFeatureMd5","setFeatureMd5"),
-            /** constant for fl_face.create_time  */
-            createTime("fl_face","create_time",20,"getCreateTime","setCreateTime");
+            featureMd5("fl_face","feature_md5",19,"getFeatureMd5","setFeatureMd5");
             final ColumnMeta meta;
             private Column(String table,String field,int ordinal,String getter,String setter){
                 meta = new ColumnMeta(table,field,ordinal,getter,setter);

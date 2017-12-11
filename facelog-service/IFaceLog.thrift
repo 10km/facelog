@@ -39,7 +39,6 @@ struct FaceBean {
   20:  i32 angleRoll;
   21:  binary extInfo;
   22:  string featureMd5;
-  23:  i64 createTime;
 }
 
 exception ServiceRuntimeException {

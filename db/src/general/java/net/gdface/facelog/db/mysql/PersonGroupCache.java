@@ -25,8 +25,8 @@ public class PersonGroupCache extends BaseTableLoadCaching<Integer, PersonGroupB
     /** constructor<br>
      * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
      */
-    public PersonGroupCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
-        super(updateStragey,maximumSize, duration, unit);
+    public PersonGroupCache(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
+        super(updateStrategy,maximumSize, duration, unit);
         manager.bindForeignKeyListenerForDeleteRule();
     }
     public PersonGroupCache(long maximumSize, long duration, TimeUnit unit) {

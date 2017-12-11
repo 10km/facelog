@@ -27,11 +27,11 @@ public class PersonCache extends BaseTableLoadCaching<Integer, PersonBean> {
     /** constructor<br>
      * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
      */
-    public PersonCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
-        super(updateStragey,maximumSize, duration, unit);
+    public PersonCache(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
+        super(updateStrategy,maximumSize, duration, unit);
         manager.bindForeignKeyListenerForDeleteRule();
 
-        imageMd5Cacher = new BaseTableLoadCaching<String, PersonBean>(updateStragey, maximumSize, duration, unit){
+        imageMd5Cacher = new BaseTableLoadCaching<String, PersonBean>(updateStrategy, maximumSize, duration, unit){
             @Override
             public void registerListener() {
                 manager.registerListener(this.tableListener);
@@ -49,7 +49,7 @@ public class PersonCache extends BaseTableLoadCaching<Integer, PersonBean> {
                 return manager.loadByIndexImageMd5Checked(key);
             }};
 
-        papersNumCacher = new BaseTableLoadCaching<String, PersonBean>(updateStragey, maximumSize, duration, unit){
+        papersNumCacher = new BaseTableLoadCaching<String, PersonBean>(updateStrategy, maximumSize, duration, unit){
             @Override
             public void registerListener() {
                 manager.registerListener(this.tableListener);

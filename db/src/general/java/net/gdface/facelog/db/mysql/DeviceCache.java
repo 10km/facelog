@@ -27,11 +27,11 @@ public class DeviceCache extends BaseTableLoadCaching<Integer, DeviceBean> {
     /** constructor<br>
      * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
      */
-    public DeviceCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
-        super(updateStragey,maximumSize, duration, unit);
+    public DeviceCache(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
+        super(updateStrategy,maximumSize, duration, unit);
         manager.bindForeignKeyListenerForDeleteRule();
 
-        macCacher = new BaseTableLoadCaching<String, DeviceBean>(updateStragey, maximumSize, duration, unit){
+        macCacher = new BaseTableLoadCaching<String, DeviceBean>(updateStrategy, maximumSize, duration, unit){
             @Override
             public void registerListener() {
                 manager.registerListener(this.tableListener);
@@ -49,7 +49,7 @@ public class DeviceCache extends BaseTableLoadCaching<Integer, DeviceBean> {
                 return manager.loadByIndexMacChecked(key);
             }};
 
-        serialNoCacher = new BaseTableLoadCaching<String, DeviceBean>(updateStragey, maximumSize, duration, unit){
+        serialNoCacher = new BaseTableLoadCaching<String, DeviceBean>(updateStrategy, maximumSize, duration, unit){
             @Override
             public void registerListener() {
                 manager.registerListener(this.tableListener);

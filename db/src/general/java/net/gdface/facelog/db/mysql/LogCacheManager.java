@@ -47,9 +47,9 @@ public class LogCacheManager extends LogManager
      * otherwise return {@code instance}.
      * @see {@link LogCacheManager#LogCacheManager(UpdateStrategy ,long , long , TimeUnit )}
      */
-    public static synchronized final LogCacheManager makeInstance(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit){
+    public static synchronized final LogCacheManager makeInstance(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
-            instance = new LogCacheManager(updateStragey,maximumSize,duration,unit);
+            instance = new LogCacheManager(updateStrategy,maximumSize,duration,unit);
         }
         return instance;
     }
@@ -70,8 +70,8 @@ public class LogCacheManager extends LogManager
     /** constructor<br>
      * @see {@link LogCache#LogCache(UpdateStrategy ,long , long , TimeUnit )}
      */
-    protected LogCacheManager(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
-        cache = new LogCache(updateStragey,maximumSize,duration,unit);
+    protected LogCacheManager(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
+        cache = new LogCache(updateStrategy,maximumSize,duration,unit);
         cache.registerListener();
     }
     
@@ -164,5 +164,20 @@ public class LogCacheManager extends LogManager
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
     }
 
+    //_____________________________________________________________________
+    //
+    // SAVE
+    //_____________________________________________________________________
+    //12
+
+    @Override
+    public LogBean save(LogBean bean){
+        boolean modified = bean.isModified();
+        super.save(bean);
+        if( modified && UpdateStrategy.refresh == cache.getUpdateStrategy() ){
+            bean.copy(cache.getBeanUnchecked(bean.getId())).resetIsModified();
+        }
+        return bean;
+    }
 
 }

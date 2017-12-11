@@ -70,8 +70,6 @@ public final class FaceBean
     /** comments:外键,人脸特征数据MD5 id */
     private String featureMd5;
 
-    private java.util.Date createTime;
-
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
@@ -1584,90 +1582,6 @@ public final class FaceBean
     {
         return 0L !=  (initialized & FL_FACE_ID_FEATURE_MD5_MASK);
     }
-    /**
-     * Getter method for {@link #createTime}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_face.create_time</li>
-     * <li>default value: 'CURRENT_TIMESTAMP'</li>
-     * <li>NOT NULL</li>
-     * <li>column size: 19</li>
-     * <li>JDBC type returned by the driver: Types.TIMESTAMP</li>
-     * </ul>
-     *
-     * @return the value of createTime
-     */
-    public java.util.Date getCreateTime(){
-        return createTime;
-    }
-    /** 
-     * use Long to represent date type for thrift:swift support 
-     * @see #getCreateTime()
-     */
-    @ThriftField(name = "createTime",value = 23)
-    public Long readCreateTime(){
-        return null == createTime ? null:createTime.getTime();
-    }
-    /**
-     * Setter method for {@link #createTime}.<br>
-     * The new value is set only if equals() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value( NOT NULL) to be assigned to createTime
-     */
-    public void setCreateTime(java.util.Date newVal)
-    {
-        checkMutable();
-        if (Objects.equals(newVal, createTime) && checkCreateTimeInitialized()) {
-            return;
-        }
-        createTime = newVal;
-
-        modified |= FL_FACE_ID_CREATE_TIME_MASK;
-        initialized |= FL_FACE_ID_CREATE_TIME_MASK;
-    }
-    /** 
-     * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
-     * <b>NOTE:</b>DO NOT use the method in your code
-     */
-    @ThriftField(name = "createTime")
-    public void writeCreateTime(Long newVal){
-        checkMutable();
-        createTime = null == newVal?null:new java.util.Date(newVal);
-    }
-    /**
-     * Setter method for {@link #createTime}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to createTime
-     */
-    public void setCreateTime(long newVal)
-    {
-        setCreateTime(new java.util.Date(newVal));
-    }
-    /**
-     * Determines if the createTime has been modified.
-     *
-     * @return true if the field has been modified, false if the field has not been modified
-     */
-    public boolean checkCreateTimeModified()
-    {
-        return 0L !=  (modified & FL_FACE_ID_CREATE_TIME_MASK);
-    }
-
-    /**
-     * Determines if the createTime has been initialized.<br>
-     *
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     *
-     * @return true if the field has been initialized, false otherwise
-     */
-    public boolean checkCreateTimeInitialized()
-    {
-        return 0L !=  (initialized & FL_FACE_ID_CREATE_TIME_MASK);
-    }
     //////////////////////////////////////
     // referenced bean for FOREIGN KEYS
     //////////////////////////////////////
@@ -1745,8 +1659,6 @@ public final class FaceBean
             return checkExtInfoModified();
         case FL_FACE_ID_FEATURE_MD5:
             return checkFeatureMd5Modified();
-        case FL_FACE_ID_CREATE_TIME:
-            return checkCreateTimeModified();
         default:
             return false;
         }        
@@ -1793,8 +1705,6 @@ public final class FaceBean
             return checkExtInfoInitialized();
         case FL_FACE_ID_FEATURE_MD5:
             return checkFeatureMd5Initialized();
-        case FL_FACE_ID_CREATE_TIME:
-            return checkCreateTimeInitialized();
         default:
             return false;
         }
@@ -1844,8 +1754,7 @@ public final class FaceBean
             FL_FACE_ID_ANGLE_PITCH_MASK |
             FL_FACE_ID_ANGLE_ROLL_MASK |
             FL_FACE_ID_EXT_INFO_MASK |
-            FL_FACE_ID_FEATURE_MD5_MASK |
-            FL_FACE_ID_CREATE_TIME_MASK));
+            FL_FACE_ID_FEATURE_MD5_MASK));
     }
     /**
      * Resets the object initialization status to 'not initialized'.
@@ -1876,8 +1785,6 @@ public final class FaceBean
         this.angleRoll = null;
         this.extInfo = null;
         this.featureMd5 = null;
-        /* DEFAULT:'CURRENT_TIMESTAMP'*/
-        this.createTime = null;
         this.isNew = true;
         this.modified = 0L;
         this.initialized = 0L;
@@ -1910,7 +1817,6 @@ public final class FaceBean
             .append(getAngleRoll(), obj.getAngleRoll())
             .append(getExtInfo(), obj.getExtInfo())
             .append(getFeatureMd5(), obj.getFeatureMd5())
-            .append(getCreateTime(), obj.getCreateTime())
             .isEquals();
     }
 
@@ -2085,14 +1991,6 @@ public final class FaceBean
                 builder.append("feature_md5=").append(getFeatureMd5());
             }
         }
-        if(checkCreateTimeInitialized()){
-            if(!notNull || null != getCreateTime()){
-                if(count++ >0){
-                    builder.append(",");
-                }            
-                builder.append("create_time=").append(getCreateTime());
-            }
-        }
         builder.append("]");
         return builder.toString();
     }
@@ -2118,7 +2016,6 @@ public final class FaceBean
             .append(getAngleRoll(), object.getAngleRoll())
             .append(getExtInfo(), object.getExtInfo())
             .append(getFeatureMd5(), object.getFeatureMd5())
-            .append(getCreateTime(), object.getCreateTime())
             .toComparison();
     }
     @Override
@@ -2158,7 +2055,6 @@ public final class FaceBean
         setAngleRoll(null);
         setExtInfo(null);
         setFeatureMd5(null);
-        setCreateTime(null);
         isNew(true);
         resetInitialized();
         resetIsModified();
@@ -2284,8 +2180,6 @@ public final class FaceBean
             return (T)getExtInfo();        
         case FL_FACE_ID_FEATURE_MD5: 
             return (T)getFeatureMd5();        
-        case FL_FACE_ID_CREATE_TIME: 
-            return (T)getCreateTime();        
         default:
             return null;
         }
@@ -2351,9 +2245,6 @@ public final class FaceBean
             break;
         case FL_FACE_ID_FEATURE_MD5:
             setFeatureMd5((String)value);
-            break;
-        case FL_FACE_ID_CREATE_TIME:
-            setCreateTime((java.util.Date)value);
             break;
         default:
             break;
@@ -2611,16 +2502,6 @@ public final class FaceBean
          */
         public Builder featureMd5(String featureMd5){
             TEMPLATE.get().setFeatureMd5(featureMd5);
-            return this;
-        }
-        /** 
-         * fill the field : fl_face.create_time
-         * @param createTime 
-         * @see {@link FaceBean#getCreateTime()}
-         * @see {@link FaceBean#setCreateTime(java.util.Date)}
-         */
-        public Builder createTime(java.util.Date createTime){
-            TEMPLATE.get().setCreateTime(createTime);
             return this;
         }
     }

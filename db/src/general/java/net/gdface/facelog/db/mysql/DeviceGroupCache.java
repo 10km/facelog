@@ -25,8 +25,8 @@ public class DeviceGroupCache extends BaseTableLoadCaching<Integer, DeviceGroupB
     /** constructor<br>
      * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
      */
-    public DeviceGroupCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
-        super(updateStragey,maximumSize, duration, unit);
+    public DeviceGroupCache(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
+        super(updateStrategy,maximumSize, duration, unit);
         manager.bindForeignKeyListenerForDeleteRule();
     }
     public DeviceGroupCache(long maximumSize, long duration, TimeUnit unit) {

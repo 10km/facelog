@@ -1114,14 +1114,6 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
                 dirtyCount++;
             }
 
-            if (bean.checkCreateTimeModified()) {
-                if (dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("create_time");
-                dirtyCount++;
-            }
-
             sql.append(") values (");
             if(dirtyCount > 0) {
                 sql.append("?");
@@ -1372,15 +1364,6 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
                     useComma=true;
                 }
                 sql.append("feature_md5=?");
-            }
-
-            if (bean.checkCreateTimeModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("create_time=?");
             }
             sql.append(" WHERE ");
             sql.append("id=?");
@@ -1993,14 +1976,6 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("feature_md5 ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.checkCreateTimeModified()) {
-                dirtyCount ++;
-                if (bean.getCreateTime() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time = ?");
-                }
-            }
         }
         finally
         {
@@ -2136,10 +2111,6 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
                     default:
                         throw new DaoException("Unknown search type " + searchType);
                 }
-            }
-            if (bean.checkCreateTimeModified()) {
-                // System.out.println("Setting for " + dirtyCount + " [" + bean.getCreateTime() + "]");
-                if (bean.getCreateTime() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TIMESTAMP);} } else { ps.setTimestamp(++dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
             }
         }
         catch(SQLException e)
@@ -2277,7 +2248,6 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
             bean.setAngleRoll(Manager.getInteger(rs, 17));
             bean.setExtInfo(Manager.getBytes(rs, 18));
             bean.setFeatureMd5(rs.getString(19));
-            bean.setCreateTime(rs.getTimestamp(20));
         }
         catch(SQLException e)
         {
@@ -2386,10 +2356,6 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
                         ++pos;
                         bean.setFeatureMd5(rs.getString(pos));
                         break;
-                    case FL_FACE_ID_CREATE_TIME:
-                        ++pos;
-                        bean.setCreateTime(rs.getTimestamp(pos));
-                        break;
                     default:
                         throw new DaoException("Unknown field id " + fieldList[i]);
                 }
@@ -2437,7 +2403,6 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
             bean.setAngleRoll(Manager.getInteger(rs, "angle_roll"));
             bean.setExtInfo(Manager.getBytes(rs, "ext_info"));
             bean.setFeatureMd5(rs.getString("feature_md5"));
-            bean.setCreateTime(rs.getTimestamp("create_time"));
         }
         catch(SQLException e)
         {

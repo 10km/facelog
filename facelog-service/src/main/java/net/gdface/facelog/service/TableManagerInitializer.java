@@ -58,17 +58,18 @@ public class TableManagerInitializer {
 	private TableManagerInitializer() {
 		// 配置cache参数
 		// log,log_light 表因为不会被修改，也不会被设备频繁读取，不需要使用cache对象
-		deviceManager = DeviceCacheManager.makeInstance(UpdateStrategy.always,10000,60,TimeUnit.MINUTES);
-		deviceGroupManager = DeviceGroupCacheManager.makeInstance(UpdateStrategy.always,10000,60,TimeUnit.MINUTES);
+		// 有 CURRENT_TIMESTAMP属性的时间戳字段的表要更新策略为refresh,否则为always
+		deviceManager = DeviceCacheManager.makeInstance(UpdateStrategy.refresh,10000,60,TimeUnit.MINUTES);
+		deviceGroupManager = DeviceGroupCacheManager.makeInstance(UpdateStrategy.refresh,10000,60,TimeUnit.MINUTES);
 		faceManager = FaceCacheManager.makeInstance(UpdateStrategy.always,10000,10,TimeUnit.MINUTES);
 		imageManager = ImageCacheManager.makeInstance(UpdateStrategy.always,1000,10,TimeUnit.MINUTES);		 
 		logManager = (ILogManager) TableInstance.getInstance(LogBean.class);
 		logLightManager = (ILogLightManager) TableInstance.getInstance(LogLightBean.class);
-		personManager = PersonCacheManager.makeInstance(UpdateStrategy.always,10000,10,TimeUnit.MINUTES);
-		personGroupManager = PersonGroupCacheManager.makeInstance(UpdateStrategy.always,10000,60,TimeUnit.MINUTES);
+		personManager = PersonCacheManager.makeInstance(UpdateStrategy.refresh,10000,10,TimeUnit.MINUTES);
+		personGroupManager = PersonGroupCacheManager.makeInstance(UpdateStrategy.refresh,10000,60,TimeUnit.MINUTES);
 		storeManager = StoreCacheManager.makeInstance(UpdateStrategy.always,1000,10,TimeUnit.MINUTES);
-		featureManager = FeatureCacheManager.makeInstance(UpdateStrategy.always,10000,10,TimeUnit.MINUTES);
-		permitManager = PermitCacheManager.makeInstance(UpdateStrategy.always,10000,10,TimeUnit.MINUTES);
+		featureManager = FeatureCacheManager.makeInstance(UpdateStrategy.refresh,10000,10,TimeUnit.MINUTES);
+		permitManager = PermitCacheManager.makeInstance(UpdateStrategy.refresh,10000,10,TimeUnit.MINUTES);
 		
 /*		deviceManager = (IDeviceManager) TableInstance.getInstance(DeviceBean.class);
 		faceManager = (IFaceManager) TableInstance.getInstance(FaceBean.class);

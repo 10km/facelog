@@ -2760,49 +2760,6 @@ class Dao implements CommonConstant {
                     throws RuntimeDaoException{
         return daoToPrimaryKeyListFromFaces(daoLoadFaceByWhere(where,1,-1));
     }
-    //19
-    /**
-     * (主动更新机制实现)<br>
-     * 返回 fl_face.create_time 字段大于指定时间戳({@code timestamp})的所有记录
-     * @see #daoLoadFaceByWhere(String,int,int)
-     * @throws RuntimeDaoException
-     * @throws IllegalArgumentException {@code timestamp}为{@code null}时
-     */
-    protected List<FaceBean> daoLoadFaceByCreateTime(Date timestamp,int startRow, int numRows)
-                    throws RuntimeDaoException{
-        return daoLoadFaceByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
-    }
-    //20
-    /** 
-     * 参见 {@link #daoLoadFaceByCreateTime(Date,int,int)} 
-     * @throws RuntimeDaoException
-     */
-    protected List<FaceBean> daoLoadFaceByCreateTime(Date timestamp)
-                    throws RuntimeDaoException{
-        return daoLoadFaceByCreateTime(timestamp,1,-1);
-    }
-    //20-5
-    /**
-     * 返回fl_face.create_time 字段大于指定时间戳({@code timestamp})的记录总数
-     * @see #daoCountFaceByWhere(String)
-     * @throws RuntimeDaoException
-     */
-    protected int daoCountFaceByCreateTime(Date timestamp)
-                    throws RuntimeDaoException{
-        return daoCountFaceByWhere(makeWhere(timestamp,"create_time"));
-    }
-    //21
-    /** 
-     * (主动更新机制实现)<br>
-     * 返回 fl_face.create_time 字段大于指定时间戳({@code timestamp})的所有记录
-     * @return 返回查询结果记录的主键
-     * @see {@link #daoLoadFaceIdByWhere(String)}
-     * @throws RuntimeDaoException
-     */
-    protected List<Integer> daoLoadFaceIdByCreateTime(Date timestamp)
-                    throws RuntimeDaoException{
-        return daoLoadFaceIdByWhere(makeWhere(timestamp,"create_time"));
-    }
 
 
 

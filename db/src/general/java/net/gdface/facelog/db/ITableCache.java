@@ -7,8 +7,11 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
+
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
 /**
  * 数据库对象缓存接口
  * @param <K> 主键类型(Primary or Unique)
@@ -16,28 +19,81 @@ import java.util.concurrent.TimeUnit;
  * @author guyadong
  */
 public interface ITableCache<K, B extends BaseBean<B>> {
+    class ImmutableEntry<K,V> implements Map.Entry<K,V>{
+        private K key;
+        private V value;
+        public ImmutableEntry(K key) {
+            this.key = key;
+        }
+        public ImmutableEntry(K key, V value) {
+            this(key);
+            this.value = value;
+        }
+        @Override
+        public final K getKey() {
+            return key;
+        }
+
+        @Override
+        public final V getValue() {            
+            try {
+                return (V) reload();
+            } catch(ObjectRetrievalException e){
+                return null;
+            }catch (RuntimeException e) {
+                throw e;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        @Override
+        public final V setValue(V value) {
+            throw new UnsupportedOperationException();
+        }
+        protected V reload()throws Exception{
+            return value;
+        }
+    }
     /** 
-     * {@code always} update no matter whether key exists<br>
-     * {@code ifAbsent} update if key not exists<br>
-     * {@code replace} update only key exists 
+     * Update strategy for cache
      */
-    public static enum UpdateStrategy{
+    public static enum UpdateStrategy{        
         /** update no matter whether key exists */
-        always,ifAbsent,replace;
-        public <K,V> void update(ConcurrentMap<K,V> map,K key,V value){
-            if(null == map || null == key || null == value){
+        always,
+        /** update only if key exists */
+        replace,
+        /** remove key  */
+        remove,
+        /** reload data if key exists, need {@code entry } implement the reload method */
+        refresh;
+        /**
+         * update {@code entry} to {@code map},if {code getValue()} return {@code null},remove key.
+         */
+        public <K,V> void update(ConcurrentMap<K,V> map,ImmutableEntry<K,V>entry){
+            if(null == map || null == entry ){
+                return ;
+            }
+            K key = entry.getKey();
+            if( null == key){
+                return;
+            }
+            V value = entry.getValue();
+            if(null == value){
+                map.remove(key);
                 return ;
             }
             switch(this){
             case always:
                 map.put(key, value);
                 break;
-            case ifAbsent:
-                map.putIfAbsent(key, value);
-                break;
             case replace:
                 map.replace(key, value);
                 break;
+            case remove:
+                map.remove(key);
+                break;
+            case refresh:
+                map.replace(key, value);
             default:
                 break;
             }

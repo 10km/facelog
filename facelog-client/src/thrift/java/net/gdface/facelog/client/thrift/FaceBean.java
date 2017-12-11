@@ -188,14 +188,6 @@ public final class FaceBean
     @ThriftField
     public void setFeatureMd5(final String featureMd5) { this.featureMd5 = featureMd5; }
 
-    private long createTime;
-
-    @ThriftField(value=23, name="createTime", requiredness=Requiredness.NONE)
-    public long getCreateTime() { return createTime; }
-
-    @ThriftField
-    public void setCreateTime(final long createTime) { this.createTime = createTime; }
-
     @Override
     public String toString()
     {
@@ -222,7 +214,6 @@ public final class FaceBean
             .add("angleRoll", angleRoll)
             .add("extInfo", extInfo)
             .add("featureMd5", featureMd5)
-            .add("createTime", createTime)
             .toString();
     }
 }

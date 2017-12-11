@@ -13,27 +13,24 @@ import net.gdface.facelog.service.TableManagerInitializer;
  * @author guyadong
  *
  */
-public class DbTest {
+public class DbTest implements ServiceConstant {
 	private static IDeviceManager deviceManager = TableManagerInitializer.INSTANCE.deviceManager;
-	private DeviceBean makeDeviceBean(Integer id,String name){
-		
-		DeviceBean deviceBean = new DeviceBean();
-		if(null !=id){
-			deviceBean.setId(id);
-		}
-		deviceBean.setName(name);
-		return deviceBean;
-	}
 	@Test
 	public void testExistsPrimaryKey() {
-		DeviceBean b1 = makeDeviceBean(null,"hello");
+		
+		DeviceBean b1 = DeviceBean.builder().name("顾亚东").build();
 		DeviceBean saved = deviceManager.save(b1);
+		logger.info(saved.toString(true));
 		//saved.setName("ahha");
 		//deviceManager.save(saved);
-		System.out.println(deviceManager.loadByPrimaryKey(saved.getId()));
-		System.out.printf("device id[%d] exists:%b\n",b1.getId(), deviceManager.existsPrimaryKey(b1.getId()));
-		System.out.printf("device id[null] exists:%b\n",deviceManager.existsPrimaryKey((Integer)null));
-
+		logger.info(deviceManager.loadByPrimaryKey(saved.getId()).toString(true));
+		logger.info("device id[{}] exists:{}",b1.getId(), deviceManager.existsPrimaryKey(b1.getId()));
+		logger.info("device id[null] exists:{}",deviceManager.existsPrimaryKey((Integer)null));
+		DeviceBean reload = deviceManager.loadByPrimaryKey(b1.getId());
+		logger.info(reload.toString(true));
+		reload.setName("大家好");
+		deviceManager.save(reload);
+		logger.info(reload.toString(true));
 	}
 
 }

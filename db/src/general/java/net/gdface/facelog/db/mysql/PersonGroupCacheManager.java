@@ -46,9 +46,9 @@ public class PersonGroupCacheManager extends PersonGroupManager
      * otherwise return {@code instance}.
      * @see {@link PersonGroupCacheManager#PersonGroupCacheManager(UpdateStrategy ,long , long , TimeUnit )}
      */
-    public static synchronized final PersonGroupCacheManager makeInstance(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit){
+    public static synchronized final PersonGroupCacheManager makeInstance(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
-            instance = new PersonGroupCacheManager(updateStragey,maximumSize,duration,unit);
+            instance = new PersonGroupCacheManager(updateStrategy,maximumSize,duration,unit);
         }
         return instance;
     }
@@ -69,8 +69,8 @@ public class PersonGroupCacheManager extends PersonGroupManager
     /** constructor<br>
      * @see {@link PersonGroupCache#PersonGroupCache(UpdateStrategy ,long , long , TimeUnit )}
      */
-    protected PersonGroupCacheManager(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
-        cache = new PersonGroupCache(updateStragey,maximumSize,duration,unit);
+    protected PersonGroupCacheManager(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
+        cache = new PersonGroupCache(updateStrategy,maximumSize,duration,unit);
         cache.registerListener();
     }
     
@@ -168,13 +168,17 @@ public class PersonGroupCacheManager extends PersonGroupManager
     // SAVE
     //_____________________________________________________________________
     //12
-    /**
-     * check cycle for the self-reference field before save
-     */
+
     @Override
     public PersonGroupBean save(PersonGroupBean bean){
+        // check cycle for the self-reference field before save
         checkCycleOfParent(bean);
-        return super.save(bean);
+        boolean modified = bean.isModified();
+        super.save(bean);
+        if( modified && UpdateStrategy.refresh == cache.getUpdateStrategy() ){
+            bean.copy(cache.getBeanUnchecked(bean.getId())).resetIsModified();
+        }
+        return bean;
     }
 
     //_____________________________________________________________________

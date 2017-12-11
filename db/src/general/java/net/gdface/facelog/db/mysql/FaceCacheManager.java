@@ -46,9 +46,9 @@ public class FaceCacheManager extends FaceManager
      * otherwise return {@code instance}.
      * @see {@link FaceCacheManager#FaceCacheManager(UpdateStrategy ,long , long , TimeUnit )}
      */
-    public static synchronized final FaceCacheManager makeInstance(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit){
+    public static synchronized final FaceCacheManager makeInstance(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
-            instance = new FaceCacheManager(updateStragey,maximumSize,duration,unit);
+            instance = new FaceCacheManager(updateStrategy,maximumSize,duration,unit);
         }
         return instance;
     }
@@ -69,8 +69,8 @@ public class FaceCacheManager extends FaceManager
     /** constructor<br>
      * @see {@link FaceCache#FaceCache(UpdateStrategy ,long , long , TimeUnit )}
      */
-    protected FaceCacheManager(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
-        cache = new FaceCache(updateStragey,maximumSize,duration,unit);
+    protected FaceCacheManager(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
+        cache = new FaceCache(updateStrategy,maximumSize,duration,unit);
         cache.registerListener();
     }
     
@@ -159,5 +159,20 @@ public class FaceCacheManager extends FaceManager
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
     }
 
+    //_____________________________________________________________________
+    //
+    // SAVE
+    //_____________________________________________________________________
+    //12
+
+    @Override
+    public FaceBean save(FaceBean bean){
+        boolean modified = bean.isModified();
+        super.save(bean);
+        if( modified && UpdateStrategy.refresh == cache.getUpdateStrategy() ){
+            bean.copy(cache.getBeanUnchecked(bean.getId())).resetIsModified();
+        }
+        return bean;
+    }
 
 }

@@ -241,9 +241,6 @@ public class DbConverter implements IDbConverter<
             if(right.checkFeatureMd5Initialized()){
                 left.setFeatureMd5(right.getFeatureMd5());
             }
-            if(right.checkCreateTimeInitialized()){
-                left.setCreateTime(right.getCreateTime());
-            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
@@ -307,10 +304,6 @@ public class DbConverter implements IDbConverter<
             if(left.checkFeatureMd5Initialized() ){
                 right.setFeatureMd5(left.getFeatureMd5());
             }
-// IGNORE field fl_face.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//             if(left.checkCreateTimeInitialized() ){
-//                 right.setCreateTime(left.getCreateTime());
-//             }
             right.setNew(left.isNew());
             right.setModified(left.getModified());
         }};

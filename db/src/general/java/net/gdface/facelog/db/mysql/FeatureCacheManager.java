@@ -46,9 +46,9 @@ public class FeatureCacheManager extends FeatureManager
      * otherwise return {@code instance}.
      * @see {@link FeatureCacheManager#FeatureCacheManager(UpdateStrategy ,long , long , TimeUnit )}
      */
-    public static synchronized final FeatureCacheManager makeInstance(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit){
+    public static synchronized final FeatureCacheManager makeInstance(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
-            instance = new FeatureCacheManager(updateStragey,maximumSize,duration,unit);
+            instance = new FeatureCacheManager(updateStrategy,maximumSize,duration,unit);
         }
         return instance;
     }
@@ -69,8 +69,8 @@ public class FeatureCacheManager extends FeatureManager
     /** constructor<br>
      * @see {@link FeatureCache#FeatureCache(UpdateStrategy ,long , long , TimeUnit )}
      */
-    protected FeatureCacheManager(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
-        cache = new FeatureCache(updateStragey,maximumSize,duration,unit);
+    protected FeatureCacheManager(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
+        cache = new FeatureCache(updateStrategy,maximumSize,duration,unit);
         cache.registerListener();
     }
     
@@ -159,5 +159,20 @@ public class FeatureCacheManager extends FeatureManager
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
     }
 
+    //_____________________________________________________________________
+    //
+    // SAVE
+    //_____________________________________________________________________
+    //12
+
+    @Override
+    public FeatureBean save(FeatureBean bean){
+        boolean modified = bean.isModified();
+        super.save(bean);
+        if( modified && UpdateStrategy.refresh == cache.getUpdateStrategy() ){
+            bean.copy(cache.getBeanUnchecked(bean.getMd5())).resetIsModified();
+        }
+        return bean;
+    }
 
 }
