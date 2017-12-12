@@ -48,7 +48,7 @@ import net.gdface.facelog.service.RedisManagement.MQParam;
  * 注释中标注为{@code PERSON_ONLY}的方法只接受人员令牌,
  * 注释中标注为{@code DEVICE_ONLY}的方法只接受设备令牌,
  * 注释中标注为{@code ROOT_ONLY}的方法只接受root令牌,
- * 关于令牌申请和释放参见{@link #applyPersonToken(int)},{@link #releasePersonToken(Token)},{@link #online(DeviceBean)},{@link #offline(Token)}</li>
+ * 关于令牌申请和释放参见{@link #applyPersonToken(int, String, boolean)},{@link #releasePersonToken(Token)},{@link #online(DeviceBean)},{@link #offline(Token)}</li>
  * </ul>
  * @author guyadong
  */
@@ -1245,6 +1245,8 @@ public abstract class BaseFaceLog extends Dao{
 	/**
 	 * 申请人员访问令牌
 	 * @param personId
+	 * @param password 密码
+	 * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
 	 * @return
 	 * @throws ServiceRuntimeException
 	 * @throws ServiceSecurityException
@@ -1253,7 +1255,7 @@ public abstract class BaseFaceLog extends Dao{
             @ThriftException(type=ServiceRuntimeException.class, id=1),
             @ThriftException(type=ServiceSecurityException.class, id=2)
 			})
-	public Token applyPersonToken(int personId)
+	public Token applyPersonToken(int personId, String password, boolean isMd5)
 			throws ServiceRuntimeException, ServiceSecurityException{
 				return null;		
 	}
@@ -1300,6 +1302,25 @@ public abstract class BaseFaceLog extends Dao{
 			})
 	public void releaseRootToken(Token token)
 			throws ServiceRuntimeException, ServiceSecurityException{
+	}
+	/**
+	 * 验证用户密码是否匹配
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * @param userId 用户id字符串,root用户id即为{@link CommonConstant#ROOT_NAME}
+	 * @param password 用户密码
+	 * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
+	 * @param token 访问令牌
+	 * @return {@code true}密码匹配
+	 * @throws ServiceRuntimeException
+	 * @throws ServiceSecurityException {@code userId}无效
+	 */
+	@ThriftMethod(exception = {
+            @ThriftException(type=ServiceRuntimeException.class, id=1),
+            @ThriftException(type=ServiceSecurityException.class, id=2)
+			})
+	public boolean isValidPassword(String userId,String password, boolean isMd5, Token token) 
+			throws ServiceRuntimeException, ServiceSecurityException {
+		return false;
 	}
 	/**
 	 * 申请一个唯一的命令响应通道

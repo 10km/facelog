@@ -211,7 +211,7 @@ service IFaceLog {
   void addPermitById(1:  i32 deviceGroupId, 2:  i32 personGroupId, 3:  Token token) throws (1: ServiceRuntimeException ex1);
   string applyAckChannel(1:  Token token) throws (1: ServiceRuntimeException ex1);
   i64 applyCmdSn(1:  Token token) throws (1: ServiceRuntimeException ex1);
-  Token applyPersonToken(1:  i32 personId) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
+  Token applyPersonToken(1:  i32 personId, 2:  string password, 3:  bool isMd5) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
   Token applyRootToken(1:  string passwordMD5) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
   i32 countDeviceByWhere(1:  string where) throws (1: ServiceRuntimeException ex1);
   i32 countDeviceGroupByWhere(1:  string where) throws (1: ServiceRuntimeException ex1);
@@ -268,6 +268,7 @@ service IFaceLog {
   list<i32> getSubDeviceGroup(1:  i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
   list<i32> getSubPersonGroup(1:  i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   bool isDisable(1:  i32 personId) throws (1: ServiceRuntimeException ex1);
+  bool isValidPassword(1:  string userId, 2:  string password, 3:  bool isMd5, 4:  Token token) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
   list<i32> listOfParentForDeviceGroup(1:  i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
   list<i32> listOfParentForPersonGroup(1:  i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   list<i32> loadAllPerson() throws (1: ServiceRuntimeException ex1);

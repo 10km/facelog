@@ -32,7 +32,7 @@ import java.util.*;
  * 注释中标注为{@code PERSON_ONLY}的方法只接受人员令牌,
  * 注释中标注为{@code DEVICE_ONLY}的方法只接受设备令牌,
  * 注释中标注为{@code ROOT_ONLY}的方法只接受root令牌,
- * 关于令牌申请和释放参见{@link #applyPersonToken(int)},{@link #releasePersonToken(Token)},{@link #online(DeviceBean)},{@link #offline(Token)}</li>
+ * 关于令牌申请和释放参见{@link #applyPersonToken(int, String, boolean)},{@link #releasePersonToken(Token)},{@link #online(DeviceBean)},{@link #offline(Token)}</li>
  * </ul>
  * remote implementation of the service IFaceLog<br>
  * all method comments be copied from {@code net.gdface.facelog.service.BaseFaceLog.java}<br>
@@ -2714,13 +2714,21 @@ public class IFaceLogClient implements Constant{
     /**
      * 申请人员访问令牌
      * @param personId
+     * @param password 密码
+     * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
      * @return 
      * @throws ServiceRuntimeException
      * @throws ServiceSecurityException
      */
-    public net.gdface.facelog.client.thrift.Token applyPersonToken(int personId)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
+    public net.gdface.facelog.client.thrift.Token applyPersonToken(
+            int personId,
+            String password,
+            boolean isMd5)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
         try{
-            return service.applyPersonToken(personId);
+            return service.applyPersonToken(
+                    personId,
+                    password,
+                    isMd5);
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -2790,7 +2798,35 @@ public class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 103 SERIVCE PORT : applyAckChannel
+    // 103 SERIVCE PORT : isValidPassword
+    /**
+     * 验证用户密码是否匹配
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * @param userId 用户id字符串,root用户id即为{@link CommonConstant#ROOT_NAME}
+     * @param password 用户密码
+     * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
+     * @param token 访问令牌
+     * @return {@code true}密码匹配
+     * @throws ServiceRuntimeException
+     * @throws ServiceSecurityException {@code userId}无效
+     */
+    public boolean isValidPassword(
+            String userId,
+            String password,
+            boolean isMd5,
+            net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
+        try{
+            return service.isValidPassword(
+                    userId,
+                    password,
+                    isMd5,
+                    token);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    // 104 SERIVCE PORT : applyAckChannel
     /**
      * 申请一个唯一的命令响应通道
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
@@ -2814,7 +2850,7 @@ public class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 104 SERIVCE PORT : applyCmdSn
+    // 105 SERIVCE PORT : applyCmdSn
     /**
      * 申请一个唯一的命令序列号
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
@@ -2830,7 +2866,7 @@ public class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 105 SERIVCE PORT : getRedisParameters
+    // 106 SERIVCE PORT : getRedisParameters
     /**
      * 返回redis访问基本参数:<br>
      * <ul>
@@ -2862,7 +2898,7 @@ public class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 106 SERIVCE PORT : getServiceConfig
+    // 107 SERIVCE PORT : getServiceConfig
     /**
      * 获取服务的所有配置参数
      * <br>{@link TokenMangement.Enable#ROOT_ONLY}
@@ -2886,7 +2922,7 @@ public class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 107 SERIVCE PORT : setProperty
+    // 108 SERIVCE PORT : setProperty
     /**
      * 修改/增加指定的配置参数
      * <br>{@link TokenMangement.Enable#ROOT_ONLY}
@@ -2909,7 +2945,7 @@ public class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 108 SERIVCE PORT : setProperties
+    // 109 SERIVCE PORT : setProperties
     /**
      * 修改一组配置参数
      * <br>{@link TokenMangement.Enable#ROOT_ONLY}
@@ -2929,7 +2965,7 @@ public class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 109 SERIVCE PORT : saveServiceConfig
+    // 110 SERIVCE PORT : saveServiceConfig
     /**
      * 配置参数持久化<br>
      * 保存修改的配置到自定义配置文件

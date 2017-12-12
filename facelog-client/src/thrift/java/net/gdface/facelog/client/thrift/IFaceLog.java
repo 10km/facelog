@@ -113,7 +113,9 @@ public interface IFaceLog
                           @ThriftException(type=ServiceSecurityException.class, id=2)
                       })
         ListenableFuture<Token> applyPersonToken(
-            @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
+            @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
+            @ThriftField(value=2, name="password", requiredness=Requiredness.NONE) final String password,
+            @ThriftField(value=3, name="isMd5", requiredness=Requiredness.NONE) final boolean isMd5
         );
 
         @ThriftMethod(value = "applyRootToken",
@@ -582,6 +584,18 @@ public interface IFaceLog
                       })
         ListenableFuture<Boolean> isDisable(
             @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
+        );
+
+        @ThriftMethod(value = "isValidPassword",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1),
+                          @ThriftException(type=ServiceSecurityException.class, id=2)
+                      })
+        ListenableFuture<Boolean> isValidPassword(
+            @ThriftField(value=1, name="userId", requiredness=Requiredness.NONE) final String userId,
+            @ThriftField(value=2, name="password", requiredness=Requiredness.NONE) final String password,
+            @ThriftField(value=3, name="isMd5", requiredness=Requiredness.NONE) final boolean isMd5,
+            @ThriftField(value=4, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
         @ThriftMethod(value = "listOfParentForDeviceGroup",
@@ -1088,7 +1102,9 @@ public interface IFaceLog
                       @ThriftException(type=ServiceSecurityException.class, id=2)
                   })
     Token applyPersonToken(
-        @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
+        @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
+        @ThriftField(value=2, name="password", requiredness=Requiredness.NONE) final String password,
+        @ThriftField(value=3, name="isMd5", requiredness=Requiredness.NONE) final boolean isMd5
     ) throws ServiceRuntimeException, ServiceSecurityException;
 
     @ThriftMethod(value = "applyRootToken",
@@ -1558,6 +1574,18 @@ public interface IFaceLog
     boolean isDisable(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
     ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "isValidPassword",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1),
+                      @ThriftException(type=ServiceSecurityException.class, id=2)
+                  })
+    boolean isValidPassword(
+        @ThriftField(value=1, name="userId", requiredness=Requiredness.NONE) final String userId,
+        @ThriftField(value=2, name="password", requiredness=Requiredness.NONE) final String password,
+        @ThriftField(value=3, name="isMd5", requiredness=Requiredness.NONE) final boolean isMd5,
+        @ThriftField(value=4, name="token", requiredness=Requiredness.NONE) final Token token
+    ) throws ServiceRuntimeException, ServiceSecurityException;
 
     @ThriftMethod(value = "listOfParentForDeviceGroup",
                   exception = {

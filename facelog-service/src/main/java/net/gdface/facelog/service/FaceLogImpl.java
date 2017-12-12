@@ -14,6 +14,7 @@ import java.util.concurrent.Callable;
 import org.javatuples.Pair;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
 
 import com.google.common.base.Function;
 import com.google.common.base.Strings;
@@ -91,10 +92,19 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		checkArgument(null == personBean || !ROOT_NAME.equals(personBean.getName()),
 				"INVALID person name:%s, reserved word",ROOT_NAME);
 	}
-	/** 增加人员姓名检查,参见 {@link #checkPersonName(PersonBean)}*/
+	/** 
+	 * 增加人员姓名检查,参见 {@link #checkPersonName(PersonBean)}<br>
+	 * 增加 password密文更新
+	 */
 	@Override
 	protected PersonBean daoSavePerson(PersonBean personBean) throws RuntimeDaoException {
 		checkPersonName(personBean);
+		if(personBean.checkPasswordModified()){
+			String password = personBean.getPassword();
+			checkState(FaceUtilits.validMd5(password),"password field must be MD5 string(32 char,lower case)");
+			// 重新生成password密文
+			personBean.setPassword(tm.generate(password, true));
+		}
 		return super.daoSavePerson(personBean);
 	}
 
@@ -1613,10 +1623,10 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
 	}
     @Override
-	public Token applyPersonToken(int personId)
+	public Token applyPersonToken(int personId, String password, boolean isMd5)
 			throws ServiceRuntimeException, ServiceSecurityException{
     	try{
-    		return tm.applyPersonToken(personId);
+    		return tm.applyPersonToken(personId, password, isMd5);
     	} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
@@ -1650,6 +1660,18 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throws ServiceRuntimeException, ServiceSecurityException{
     	try{
     		tm.releaseRootToken(token);
+    	} catch(RuntimeDaoException e){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
+		} catch (RuntimeException e) {
+			throw new ServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public boolean isValidPassword(String userId,String password, boolean isMd5, Token token) 
+			throws ServiceRuntimeException, ServiceSecurityException {
+    	try{
+			Enable.PERSON_ONLY.check(tm, token);
+    		return tm.isValidPassword(userId, password, isMd5);
     	} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {
