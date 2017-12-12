@@ -26,7 +26,7 @@ public final class ServiceSecurityException extends BaseServiceException {
         /** 无效的设备令牌 */INVALID_TOKEN,
         /** 无效设备ID*/INVALID_DEVICE_ID,
         /** 无效人员ID*/INVALID_PERSON_ID,
-        /** 无效root密码*/INVALID_ROOT_PASSWORD
+        /** 无效root密码*/INVALID_PASSWORD
 	}
     private SecurityExceptionType type = SecurityExceptionType.UNCLASSIFIED;
     private Integer deviceID;

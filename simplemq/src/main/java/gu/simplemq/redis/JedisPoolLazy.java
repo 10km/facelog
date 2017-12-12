@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Maps;
 
@@ -27,6 +28,7 @@ import redis.clients.jedis.Protocol;
  *
  */
 public class JedisPoolLazy implements Constant{
+	/** {@link JedisPoolLazy }实例集合 */
 	private static final Set<JedisPoolLazy> POOL_SET = Collections.synchronizedSet(new LinkedHashSet<JedisPoolLazy>());
 	static {
 		// 程序退出时自动销毁连接池对象
@@ -45,8 +47,13 @@ public class JedisPoolLazy implements Constant{
 	}
 	/** {@link JedisPoolLazy} 初始化参数名 */
 	public static enum PropName{
-		/** 线程配置参数对象 */
-		jedisPoolConfig,host,port,password,database,timeout,uri
+		/** 线程配置参数对象 */jedisPoolConfig,
+		/** 主机名 */host,
+		/** 端口号 */port,
+		/** REDIS密码 */password,
+		/** 数据库ID */database,
+		/** 访问超时(毫秒) */timeout,
+		/** 访问地址 */uri
 	}
 	
 	public static final JedisPoolConfig DEFAULT_CONFIG = new JedisPoolConfig() {
@@ -67,8 +74,8 @@ public class JedisPoolLazy implements Constant{
 		}
 	});
 
-	/** 默认实例 */
-	private static JedisPoolLazy defaultInstance;
+	/** 默认连接池实例 */
+	private static volatile JedisPoolLazy defaultInstance;
 	
 	/**
 	 * 返回默认实例,如果 {@link #defaultInstance}为null则创建默认实例
@@ -82,16 +89,30 @@ public class JedisPoolLazy implements Constant{
 	}
 
 	/**
+	 * 设置默认{@link JedisPoolLazy}实例<br>
+	 * 如果默认实例已经初始化,则输出警告日志 
+	 * @param poolLazy
+	 * @throws NullPointerException {@code poolLazy}为{@code null}
+	 */
+	public static void setDefaultInstance(JedisPoolLazy poolLazy) {
+		if(null == defaultInstance){
+			synchronized(JedisPoolLazy.class){
+				if(null == defaultInstance){
+					defaultInstance = Preconditions.checkNotNull(poolLazy);
+					return;
+				}
+			}
+		}
+		logger.warn("INVALID INVOCATION,default instance was initialized already before this invocation");
+	}
+
+	/**
 	 * 根据指定的连接参数创建默认实例,只能被调用一次(线程安全)
 	 * @param props
 	 * @return
 	 */
-	public static synchronized final JedisPoolLazy createDefaultInstance(Map<PropName,Object> props){
-		if(null == defaultInstance){
-			defaultInstance = createInstance(props);
-		}else{
-			logger.warn("default instance was initialized already before this invocation");
-		}
+	public static final JedisPoolLazy createDefaultInstance(Map<PropName,Object> props){
+		setDefaultInstance( createInstance(props ));
 		return defaultInstance;
 	}
 	
@@ -199,10 +220,19 @@ public class JedisPoolLazy implements Constant{
 	private volatile JedisPool pool;
 
 	protected JedisPoolLazy (Map<PropName,Object> props) {
-		POOL_SET.add(this);
 		this.parameters=initParameters(props);
+		POOL_SET.add(this);
 	}
 	
+	/**
+	 * 将当前实例指定为默认实例
+	 * @return
+	 * @see #setDefaultInstance(JedisPoolLazy)
+	 */
+	public JedisPoolLazy asDefaultInstance(){
+		setDefaultInstance(this);
+		return this;
+	}
 	private JedisPool createPool(){
 		JedisPool pool;
 		int timeout = (Integer)parameters.get(PropName.timeout);

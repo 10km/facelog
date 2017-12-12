@@ -161,6 +161,9 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 		case ROOT:
 			break;
 		case UNINITIALIZED:
+			if(!validatePersonToken && !validatePersonToken){
+				break;
+			}
 		default:
 			throw new RuntimeDaoException(
 					new ServiceSecurityException(String.format("INVALID token %s",tokenType)));

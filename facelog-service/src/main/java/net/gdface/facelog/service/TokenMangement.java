@@ -43,7 +43,6 @@ class TokenMangement implements ServiceConstant {
 	TokenMangement(Dao dao) {
 		this.dao = checkNotNull(dao,"dao is null");
 		this.salt = CONFIG.getString(TOKEN_SALT);
-		checkArgument(FaceUtilits.validMd5(salt),"INVALID MD5 string");
 		this.validateDeviceToken = CONFIG.getBoolean(TOKEN_DEVICE_VALIDATE);
 		this.validatePersonToken = CONFIG.getBoolean(TOKEN_PERSON_VALIDATE);
 		this.personTokenExpire =CONFIG.getInt(TOKEN_PERSON_EXPIRE);
@@ -221,12 +220,21 @@ class TokenMangement implements ServiceConstant {
 		personTokenTable.remove(Integer.toString(personId));
 	}
 	
-	private String generate(String password,boolean md5){
+	/**
+	 * 根据盐值生成{@code password}的密文
+	 * @param password
+	 * @param isMd5 {@code password}是否为MD5,
+	 * 						为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为MD5密文
+	 * @return
+	 */
+	protected String generate(String password,boolean isMd5){
+		// 避免 password为null
 		password = String.valueOf(password);
-		String passwordMd5 = md5 && FaceUtilits.validMd5(password) 
+		String passwordMd5 = isMd5 && FaceUtilits.validMd5(password) 
 				? password
 				: FaceUtilits.getMD5String(password.getBytes());
 		StringBuffer buffer = new StringBuffer(passwordMd5.length() + salt.length());
+		// 将盐值和passwrod md5交替掺在一起形成一个新的字符串
 		for(int i = 0,endIndex = Math.max(passwordMd5.length(), salt.length());i<endIndex;++i){
 			try{
 				buffer.append(salt.charAt(i));
@@ -237,21 +245,21 @@ class TokenMangement implements ServiceConstant {
 		}
 		return FaceUtilits.getMD5String(buffer.toString().getBytes());
 	}
-	protected boolean isvalidPassword(String userId,String passwordMd5) {
+	protected boolean isvalidPassword(String userId,String password, boolean isMd5) {
 		checkArgument(!Strings.isNullOrEmpty(userId),"INVALID argument,must not be null or empty");
-		checkArgument(FaceUtilits.validMd5(passwordMd5),"INVALID MD5 string" );
-		// 从配置文件中读取root密码算出MD5与输入的密码比较
 		if(ROOT_NAME.equals(userId)){
-			return FaceUtilits.getMD5String(CONFIG.getString(ROOT_PASSWORD).getBytes()).equals(passwordMd5);
+			// 从配置文件中读取root密码算出MD5与输入的密码比较
+			return generate(CONFIG.getString(ROOT_PASSWORD),false).equals(generate(password,isMd5));
+		}else{
+			// 从数据库中读取用户密码与输入的密码比较,数据库中的密码已经掺盐加密
+			Integer id = Integer.valueOf(userId);
+			String passwordMd5InDb = dao.daoGetPersonChecked(id).getPassword();
+			return generate(password,isMd5).equals(passwordMd5InDb);
 		}
-		Integer id = Integer.valueOf(userId);
-		String password = dao.daoGetPersonChecked(id).getPassword();
-		
-		return true;
 	}
-	protected void checkValidPassword(String userId,String passwordMd5) throws ServiceSecurityException{
-		if(!isvalidPassword(userId, passwordMd5)){
-			throw new ServiceSecurityException(SecurityExceptionType.INVALID_ROOT_PASSWORD);
+	protected void checkValidPassword(String userId,String password, boolean isMd5) throws ServiceSecurityException{
+		if(!isvalidPassword(userId, password, isMd5)){
+			throw new ServiceSecurityException(String.format("INVALID password [%s]for user [%s]",password,userId)).setType(SecurityExceptionType.INVALID_PASSWORD);
 		}
 	}
 	/**
@@ -373,7 +381,7 @@ class TokenMangement implements ServiceConstant {
 			throws ServiceSecurityException{
 		// 从配置文件中读取root密码算出MD5与输入的密码比较
 		if(!FaceUtilits.getMD5String(CONFIG.getString(ROOT_PASSWORD).getBytes()).equals(passwordMD5)){
-			throw new ServiceSecurityException(SecurityExceptionType.INVALID_ROOT_PASSWORD);
+			throw new ServiceSecurityException(SecurityExceptionType.INVALID_PASSWORD);
 		}
 		Token token = makeRootToken(passwordMD5);
 		String key = Integer.toString(token.getId());
