@@ -32,6 +32,8 @@ public interface ServiceConstant extends CommonConstant{
 	
     /** root 用户密码 */
 	public static final String ROOT_PASSWORD = "root.password";
+	/** salt for password */
+	public static final String TOKEN_SALT = "token.salt";
 	/** 是否执行设备令牌验证 */
 	public static final String TOKEN_DEVICE_VALIDATE = "token.device.validate";
 	/** 是否执行人员令牌验证 */

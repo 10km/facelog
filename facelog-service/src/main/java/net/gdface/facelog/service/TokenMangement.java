@@ -14,6 +14,7 @@ import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisTable;
 import net.gdface.facelog.db.DeviceBean;
+import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.service.ServiceSecurityException.SecurityExceptionType;
 import net.gdface.facelog.service.Token.TokenType;
 import net.gdface.utils.FaceUtilits;
@@ -35,11 +36,14 @@ class TokenMangement implements ServiceConstant {
 	private final boolean validatePersonToken;
 	/** 人员令牌失效时间(分钟) */
 	private final int personTokenExpire;
+	private final String salt;
 	/**
 	 * @param dao
 	 */
 	TokenMangement(Dao dao) {
 		this.dao = checkNotNull(dao,"dao is null");
+		this.salt = CONFIG.getString(TOKEN_SALT);
+		checkArgument(FaceUtilits.validMd5(salt),"INVALID MD5 string");
 		this.validateDeviceToken = CONFIG.getBoolean(TOKEN_DEVICE_VALIDATE);
 		this.validatePersonToken = CONFIG.getBoolean(TOKEN_PERSON_VALIDATE);
 		this.personTokenExpire =CONFIG.getInt(TOKEN_PERSON_EXPIRE);
@@ -215,6 +219,40 @@ class TokenMangement implements ServiceConstant {
 	 */
 	private void removePersonTokenOf(int personId){
 		personTokenTable.remove(Integer.toString(personId));
+	}
+	
+	private String generate(String password,boolean md5){
+		password = String.valueOf(password);
+		String passwordMd5 = md5 && FaceUtilits.validMd5(password) 
+				? password
+				: FaceUtilits.getMD5String(password.getBytes());
+		StringBuffer buffer = new StringBuffer(passwordMd5.length() + salt.length());
+		for(int i = 0,endIndex = Math.max(passwordMd5.length(), salt.length());i<endIndex;++i){
+			try{
+				buffer.append(salt.charAt(i));
+			}catch(IndexOutOfBoundsException e){}
+			try{
+				buffer.append(passwordMd5.charAt(i));
+			}catch(IndexOutOfBoundsException e){}
+		}
+		return FaceUtilits.getMD5String(buffer.toString().getBytes());
+	}
+	protected boolean isvalidPassword(String userId,String passwordMd5) {
+		checkArgument(!Strings.isNullOrEmpty(userId),"INVALID argument,must not be null or empty");
+		checkArgument(FaceUtilits.validMd5(passwordMd5),"INVALID MD5 string" );
+		// 从配置文件中读取root密码算出MD5与输入的密码比较
+		if(ROOT_NAME.equals(userId)){
+			return FaceUtilits.getMD5String(CONFIG.getString(ROOT_PASSWORD).getBytes()).equals(passwordMd5);
+		}
+		Integer id = Integer.valueOf(userId);
+		String password = dao.daoGetPersonChecked(id).getPassword();
+		
+		return true;
+	}
+	protected void checkValidPassword(String userId,String passwordMd5) throws ServiceSecurityException{
+		if(!isvalidPassword(userId, passwordMd5)){
+			throw new ServiceSecurityException(SecurityExceptionType.INVALID_ROOT_PASSWORD);
+		}
 	}
 	/**
 	 * 设备注册
