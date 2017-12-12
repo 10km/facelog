@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.google.common.hash.Hashing;
+
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.utils.FaceUtilits;
 
@@ -14,7 +16,7 @@ public class TokenTest implements ServiceConstant{
 		FaceLogImpl instance = new FaceLogImpl();
 		try {
 			String password = CONFIG.getString(ROOT_PASSWORD);
-			String passwordMd5 = FaceUtilits.getMD5String(password.getBytes());
+			String passwordMd5 = Hashing.md5().hashBytes(password.getBytes()).toString();
 			Token token = instance.applyRootToken(passwordMd5);
 			logger.info(token.toString());
 		} catch (ServiceRuntimeException e) {
@@ -30,7 +32,7 @@ public class TokenTest implements ServiceConstant{
 		FaceLogImpl instance = new FaceLogImpl();
 		try {
 			String password = "do you know ?";
-			String passwordMd5 = FaceUtilits.getMD5String(password.getBytes());
+			String passwordMd5 = Hashing.md5().hashBytes(password.getBytes()).toString();
 			PersonBean person = PersonBean.builder().name("顾亚东").password(passwordMd5).build();
 			instance.savePerson(person, null);
 			logger.info(person.toString(true));
