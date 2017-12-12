@@ -101,9 +101,11 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		checkPersonName(personBean);
 		if(personBean.checkPasswordModified()){
 			String password = personBean.getPassword();
-			checkState(FaceUtilits.validMd5(password),"password field must be MD5 string(32 char,lower case)");
-			// 重新生成password密文
-			personBean.setPassword(tm.generate(password, true));
+			if(null != password){
+				checkState(FaceUtilits.validMd5(password),"password field must be MD5 string(32 char,lower case)");
+				// 重新生成password加盐密文
+				personBean.setPassword(tm.generate(password, true));
+			}
 		}
 		return super.daoSavePerson(personBean);
 	}
