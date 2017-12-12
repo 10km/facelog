@@ -4,7 +4,8 @@
 		<password description="root帐户密码">root</password>
 	</root>
 	<token>
-		<salt description ="用于password加密的salt,必须是32MD5字符串(小写)">48c22d7ad7cd2a2166a6f818b6d7ab3e</salt>
+		<!-- <salt description ="用于password加密的salt,必须是32MD5字符串(小写)">48c22d7ad7cd2a2166a6f818b6d7ab3e</salt> -->
+		<salt description ="用于password加密的salt">6AE29B5A44C018611994DD453362F1C73208A84A2FE6D1FF49896AAC9C2B56C0</salt>
 		<device>
 			<validate description="是否执行设备令牌验证">true</validate>
 		</device>
