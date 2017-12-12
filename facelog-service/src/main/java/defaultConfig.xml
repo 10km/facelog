@@ -4,6 +4,7 @@
 		<password description="root帐户密码">root</password>
 	</root>
 	<token>
+		<salt>48C22D7AD7CD2A2166A6F818B6D7AB3E</salt>
 		<device>
 			<validate description="是否执行设备令牌验证">true</validate>
 		</device>
