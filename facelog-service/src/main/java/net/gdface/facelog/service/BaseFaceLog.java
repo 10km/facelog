@@ -1275,7 +1275,8 @@ public abstract class BaseFaceLog extends Dao{
 	}
 	/**
 	 * 申请root访问令牌
-	 * @param passwordMD5 root用户密码,非明文(MD5校验码)
+	 * @param password root用户密码
+	 * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
 	 * @return
 	 * @throws ServiceRuntimeException
 	 * @throws ServiceSecurityException
@@ -1284,7 +1285,7 @@ public abstract class BaseFaceLog extends Dao{
 	        @ThriftException(type=ServiceRuntimeException.class, id=1),
 	        @ThriftException(type=ServiceSecurityException.class, id=2)
 			})
-	public Token applyRootToken(String passwordMD5)
+	public Token applyRootToken(String password, boolean isMd5)
 			throws ServiceRuntimeException, ServiceSecurityException{
 				return null;
 	}

@@ -17,7 +17,7 @@ public class TokenTest implements ServiceConstant{
 		try {
 			String password = CONFIG.getString(ROOT_PASSWORD);
 			String passwordMd5 = Hashing.md5().hashBytes(password.getBytes()).toString();
-			Token token = instance.applyRootToken(passwordMd5);
+			Token token = instance.applyRootToken(passwordMd5, true);
 			logger.info(token.toString());
 		} catch (ServiceRuntimeException e) {
 			// TODO 自动生成的 catch 块

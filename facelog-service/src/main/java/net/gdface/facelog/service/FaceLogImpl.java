@@ -1645,10 +1645,10 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		}
 	}
     @Override
-	public Token applyRootToken(String passwordMD5)
+	public Token applyRootToken(String password, boolean isMd5)
 			throws ServiceRuntimeException, ServiceSecurityException{
 		try{
-			return tm.applyRootToken(passwordMD5);
+			return tm.applyRootToken(password, isMd5);
 		} catch(RuntimeDaoException e){
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e);
 		} catch (RuntimeException e) {

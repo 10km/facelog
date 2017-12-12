@@ -332,14 +332,15 @@ class TokenMangement implements ServiceConstant {
 	}
 	/**
 	 * 申请root访问令牌
-	 * @param passwordMD5 root密码MD校验码(32位小写)
+	 * @param password root密码
+	 * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
 	 * @return
 	 * @throws ServiceSecurityException
 	 */
-	protected Token applyRootToken(String passwordMD5)
+	protected Token applyRootToken(String password, boolean isMd5)
 			throws ServiceSecurityException{
-		checkValidPassword(ROOT_NAME,passwordMD5,true);
-		Token token = makeRootToken(passwordMD5);
+		checkValidPassword(ROOT_NAME,password,isMd5);
+		Token token = makeRootToken(password);
 		String key = Integer.toString(token.getId());
 		personTokenTable.set(key, token, false);
 		personTokenTable.expire(token);

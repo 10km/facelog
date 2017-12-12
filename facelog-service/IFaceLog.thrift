@@ -212,7 +212,7 @@ service IFaceLog {
   string applyAckChannel(1:  Token token) throws (1: ServiceRuntimeException ex1);
   i64 applyCmdSn(1:  Token token) throws (1: ServiceRuntimeException ex1);
   Token applyPersonToken(1:  i32 personId, 2:  string password, 3:  bool isMd5) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
-  Token applyRootToken(1:  string passwordMD5) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
+  Token applyRootToken(1:  string password, 2:  bool isMd5) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
   i32 countDeviceByWhere(1:  string where) throws (1: ServiceRuntimeException ex1);
   i32 countDeviceGroupByWhere(1:  string where) throws (1: ServiceRuntimeException ex1);
   i32 countLogByWhere(1:  string where) throws (1: ServiceRuntimeException ex1);
