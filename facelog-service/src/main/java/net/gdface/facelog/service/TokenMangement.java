@@ -16,6 +16,7 @@ import gu.simplemq.redis.RedisTable;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
+import net.gdface.facelog.service.Dao.PersonRank;
 import net.gdface.facelog.service.ServiceSecurityException.SecurityExceptionType;
 import net.gdface.facelog.service.Token.TokenType;
 import net.gdface.utils.FaceUtilits;
@@ -37,13 +38,17 @@ class TokenMangement implements ServiceConstant {
 	private final boolean validatePersonToken;
 	/** 人员令牌失效时间(分钟) */
 	private final int personTokenExpire;
+	/** password加密盐值 */
 	private final String salt;
+	/** 是否拒绝普通人员申请令牌 */
+	private final boolean rejectZero;
 	/**
 	 * @param dao
 	 */
 	TokenMangement(Dao dao) {
 		this.dao = checkNotNull(dao,"dao is null");
 		this.salt = CONFIG.getString(TOKEN_SALT);
+		this.rejectZero = CONFIG.getBoolean(TOKEN_PERSON_REJECTZERO);
 		this.validateDeviceToken = CONFIG.getBoolean(TOKEN_DEVICE_VALIDATE);
 		this.validatePersonToken = CONFIG.getBoolean(TOKEN_PERSON_VALIDATE);
 		this.personTokenExpire =CONFIG.getInt(TOKEN_PERSON_EXPIRE);
@@ -280,12 +285,14 @@ class TokenMangement implements ServiceConstant {
 		checkValidDeviceId(loginDevice.getId());
 		DeviceBean device = dao.daoGetDevice(loginDevice.getId());
 		if(!Objects.equal(device.getMac(), loginDevice.getMac()) ){
-			throw new ServiceSecurityException(String.format("MISMATCH MAC:%s", device.getMac()))
-			.setType(SecurityExceptionType.INVALID_MAC);
+			throw new ServiceSecurityException(
+					String.format("MISMATCH MAC:%s", device.getMac()))
+				.setType(SecurityExceptionType.INVALID_MAC);
 		}
 		if(!Objects.equal(device.getSerialNo(), loginDevice.getSerialNo())){
-			throw new ServiceSecurityException(String.format("MISMATCH Serial Number:%s", device.getSerialNo()))
-			.setType(SecurityExceptionType.INVALID_SN);
+			throw new ServiceSecurityException(
+					String.format("MISMATCH Serial Number:%s", device.getSerialNo()))
+				.setType(SecurityExceptionType.INVALID_SN);
 		}
 		// 生成一个新令牌
 		Token token = makeDeviceTokenOf(device);
@@ -314,6 +321,13 @@ class TokenMangement implements ServiceConstant {
 	protected Token applyPersonToken(int personId, String password, boolean isMd5)
 			throws ServiceSecurityException{
 		checkValidPassword(Integer.toString(personId), password, isMd5);
+		if(PersonRank.person.equals(PersonRank.fromRank(dao.daoGetPerson(personId).getRank()))
+			&&	rejectZero ){
+			// 当配置参数指定不允许普通人员申请令牌时抛出异常
+			throw new ServiceSecurityException(
+					String.format("REJECTION OF APPLICATION for rank 0 user (id = %d)",personId))
+				.setType(SecurityExceptionType.REJECT_APPLY);
+		}
 		Token token = makePersonTokenOf(personId);
 		String key = Integer.toString(personId);
 		personTokenTable.set(key, token, false);
@@ -370,7 +384,7 @@ class TokenMangement implements ServiceConstant {
 				? password
 				: FaceUtilits.getMD5String(password.getBytes());
 		StringBuffer buffer = new StringBuffer(passwordMd5.length() + salt.length());
-		// 将盐值和passwrod md5交替掺在一起形成一个新的字符串
+		// 将盐值和password md5交替掺在一起形成一个新的字符串
 		for(int i = 0,endIndex = Math.max(passwordMd5.length(), salt.length());i<endIndex;++i){
 			try{
 				buffer.append(salt.charAt(i));
@@ -420,8 +434,8 @@ class TokenMangement implements ServiceConstant {
 	protected void checkValidPassword(String userId,String password, boolean isMd5) throws ServiceSecurityException{
 		if(!isValidPassword(userId, password, isMd5)){
 			throw new ServiceSecurityException(
-					String.format("INVALID password [%s]for user [%s]",password,userId)).
-					setType(SecurityExceptionType.INVALID_PASSWORD);
+					String.format("INVALID password [%s]for user [%s]",password,userId))
+				.setType(SecurityExceptionType.INVALID_PASSWORD);
 		}
 	}
 }

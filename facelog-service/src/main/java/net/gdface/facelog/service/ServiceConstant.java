@@ -40,6 +40,8 @@ public interface ServiceConstant extends CommonConstant{
 	public static final String TOKEN_PERSON_VALIDATE = "token.person.validate";
 	/** 人员令牌失效时间(分钟) */
 	public static final String TOKEN_PERSON_EXPIRE = "token.person.expire";
+	/** 是否允许普通人员申请令牌 */
+	public static final String TOKEN_PERSON_REJECTZERO = "token.person.rejectZero";
 	/** 服务端口号 */
 	public static final String SERVER_PORT = "server.port";
 	/** 最大连接数 */

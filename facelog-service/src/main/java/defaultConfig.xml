@@ -12,6 +12,7 @@
 		<person>
 			<validate description="是否执行人员令牌验证">true</validate>
 			<expire description="人员令牌失效时间[分钟]">60</expire>
+			<rejectZero description = "是否拒绝普通人员申请令牌">true</rejectZero>
 		</person>
 	</token>
 	<server>
