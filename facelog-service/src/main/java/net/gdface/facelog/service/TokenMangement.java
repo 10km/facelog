@@ -234,12 +234,14 @@ class TokenMangement implements ServiceConstant {
 	protected DeviceBean registerDevice(DeviceBean newDevice)
 			throws ServiceSecurityException{
 		checkArgument(null != newDevice,"deviceBean must not be null");
-	    checkArgument(newDevice.isNew() ,
-	    		"for device registeration the 'newDevice' must be a new record,so the _isNew field must be true and id must be null");
-		checkValidMac(newDevice.getMac());
-		long modified = newDevice.getModified();
-		newDevice.setId(null);
-		newDevice.setModified(modified);
+	    // 检查是否为新记录，
+	    checkArgument(newDevice.isNew(),
+	    		"for device registeration the 'newDevice' must be a new record,so the _isNew field must be true ");
+	    // ID为自增长键，新记录id字段不能指定，由数据库分配
+	    checkArgument(
+	    		!newDevice.isModified(net.gdface.facelog.db.Constant.FL_DEVICE_ID_ID) 
+	    		|| Objects.equal(0,newDevice.getId()),
+	    		"for device registeration the 'newDevice' must be a new record,so id field must be not be set or be zero");
 		DeviceBean dmac = this.dao.daoGetDeviceByIndexMac(newDevice.getMac());
 		DeviceBean dsn = this.dao.daoGetDeviceByIndexSerialNo(newDevice.getSerialNo());
 		if(null !=dmac ){
