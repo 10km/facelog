@@ -2628,7 +2628,7 @@ public class IFaceLogClient implements Constant{
     /**
      * 新设备注册,如果设备已经注册则返回注册设备记录<br>
      * 注册时必须提供设备MAC地址,是否提供序列号,根据应用需要选择
-     * @param newDevice
+     * @param newDevice 设备记录,_isNew字段必须为{@code true},{@code id}字段不要指定,数据库会自动分配,保存在返回值中
      * @return 
      * @throws ServiceRuntimeException
      * @throws ServiceSecurityException
