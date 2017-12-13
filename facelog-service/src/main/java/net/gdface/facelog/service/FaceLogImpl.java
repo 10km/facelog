@@ -86,6 +86,13 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		if(CONFIG.getBoolean(MONITOR_LOG)){
 			getLogManager().registerListener(redisLogListener);
 		}
+
+		// 注册系统日志侦听器
+		getPersonManager().registerListener(BaseSysLogLisener.PERSON_LOG_LISTENER);
+		getPersonGroupManager().registerListener(BaseSysLogLisener.PERSON_GROUP_LOG_LISTENER);
+		getDeviceManager().registerListener(BaseSysLogLisener.DEVICE_LOG_LISTENER);
+		getDeviceGroupManager().registerListener(BaseSysLogLisener.DEVICE_GROUP_LOG_LISTENER);
+		getPermitManager().registerListener(BaseSysLogLisener.PERMIT_LOG_LISTENER);
 	}
 	/** 检查姓名是否有效,不允许使用保留字{@code root} ,无效抛出{@link IllegalArgumentException} 异常 */
 	protected static void checkPersonName(PersonBean personBean){

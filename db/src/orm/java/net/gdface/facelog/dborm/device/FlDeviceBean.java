@@ -864,9 +864,7 @@ public  class FlDeviceBean
     public String toString() {
         return toString(false);
     }
-    /**
-     * @param notNull output not null field only if {@code true}
-     */
+    @Override
     public String toString(boolean notNull) {
         // only output initialized field
         StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");

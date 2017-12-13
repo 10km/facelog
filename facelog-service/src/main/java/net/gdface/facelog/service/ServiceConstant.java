@@ -118,6 +118,22 @@ public interface ServiceConstant extends CommonConstant{
 
 	/** 定时任务线程池:线程命名格式 */
 	public static final String EXECUTOR_TIMERPOOL_NAMEFORMAT = "executor.timerPool.nameFormat";
+	
+	/** person 需要记录日志的操作 */
+	public static final String SYSLOG_OP_DAO_PERSON = "syslog.op.dao.person";
+	
+	/** persongroup 表需要记录日志的操作 */
+	public static final String SYSLOG_OP_DAO_PERSONGROUP = "syslog.op.dao.persongroup";
+	
+	/** device 表需要记录日志的操作 */
+	public static final String SYSLOG_OP_DAO_DEVICE = "syslog.op.dao.device";
+	
+	/** devicegroup 表需要记录日志的操作 */
+	public static final String SYSLOG_OP_DAO_DEVICEGROUP = "syslog.op.dao.devicegroup";
+	
+	/** permit 表需要记录日志的操作 */
+	public static final String SYSLOG_OP_DAO_PERMIT = "syslog.op.dao.permit";
+	
 	/////////////////////////////////////////////////
 	
 	/** database 配置属性前缀 */

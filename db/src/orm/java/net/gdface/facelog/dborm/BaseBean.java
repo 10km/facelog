@@ -112,4 +112,9 @@ public interface BaseBean <B> {
      * @param value
      */
     public <T> void setValue(String column,T value);
+    /**
+     * Returns a string representation of the object
+     * @param notNull output not null field only if {@code true}
+     */
+    public String toString(boolean notNull);
 }

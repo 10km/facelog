@@ -115,4 +115,15 @@
 			<nameFormat description="线程命名格式">timer-pool-%d</nameFormat>
 		</timerPool>
 	</executor>
+	<syslog>
+		<op>
+			<dao description="指定每张表需要记录日志的写操作(insert,delete,update)">
+				<person description="person 表需要记录日志的操作">insert,delete,update</person>
+				<persongroup description="persongroup 表需要记录日志的操作">insert,delete,update</persongroup>
+				<device description="device 表需要记录日志的操作">insert,delete,update</device>
+				<devicegroup description="devicegroup 表需要记录日志的操作">insert,delete,update	</devicegroup>
+				<permit description="permit 表需要记录日志的操作">insert,delete,update</permit>
+			</dao>
+		</op>
+	</syslog>
 </configuration>

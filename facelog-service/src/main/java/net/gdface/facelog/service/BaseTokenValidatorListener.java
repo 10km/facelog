@@ -5,14 +5,7 @@ import static com.google.common.base.Preconditions.checkState;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.List;
-
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
-import com.google.common.base.Function;
-import com.google.common.base.Predicates;
-
 import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.TableListener;
@@ -37,8 +30,8 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 	@SuppressWarnings("unchecked")
 	protected BaseTokenValidatorListener(Dao dao) {
 		this.dao = checkNotNull(dao,"dao is null");
-		this.operatorAllow = getAllowFromConfig(getOperatorAllowKey());
-		this.deviceAllow = getAllowFromConfig(getDeviceAllowKey());
+		this.operatorAllow = GlobalConfig.getEnumSet(WriteOp.class, getOperatorAllowKey());
+		this.deviceAllow = GlobalConfig.getEnumSet(WriteOp.class, getDeviceAllowKey());
         Type superClass = getClass().getGenericSuperclass();
         this.type = (Class<B>) ((ParameterizedType) superClass).getActualTypeArguments()[0];
 		this.validateDeviceToken = CONFIG.getBoolean(TOKEN_DEVICE_VALIDATE);
@@ -88,19 +81,6 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 			// on insert时，使用新记录中的rank字段
 			return PersonRank.fromRank(bean.getRank());
 		}
-	}
-	protected static final ImmutableSet<WriteOp> getAllowFromConfig(String key){
-		List<String> list = GlobalConfig.getExplodedStringAsList(CONFIG.getString(key,""));
-		List<WriteOp> opList = Lists.transform(list, new Function<String,Dao.WriteOp>(){
-			@Override
-			public WriteOp apply(String input) {
-				try{
-					return WriteOp.valueOf(input.toLowerCase());
-				}catch(RuntimeException e){
-					return null;
-				}
-			}});
-		return ImmutableSet.copyOf(Iterators.filter(opList.iterator(), Predicates.notNull()));
 	}
 	/**
 	 * 检查是否允许{@code opRank}级别的用户操作执行{@code writeOp}指定的操作

@@ -6,6 +6,7 @@ import java.net.URL;
 import java.nio.file.Paths;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Map.Entry;
@@ -26,6 +27,8 @@ import org.apache.commons.configuration2.tree.DefaultExpressionEngineSymbols;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableList.Builder;
 import com.facebook.swift.service.ThriftServerConfig;
@@ -317,5 +320,38 @@ public class GlobalConfig implements ServiceConstant{
 			}
 		}
 		return builder.build();
+	}
+	/**
+	 * 将{@code key}指定的字符串分割转换为{@code enumType}枚举对象列表
+	 * @param enumType
+	 * @param key
+	 * @return
+	 */
+	public static final <E extends Enum<E>> ImmutableList<E> 
+		getEnumList(final Class<E> enumType,String key){
+		checkArgument(null != enumType,"enumType is null");
+		checkArgument(!Strings.isNullOrEmpty(key),"key is null or empty");
+		List<String> strList = getExplodedStringAsList(CONFIG.getString(key,""));
+		List<E> enumList = Lists.transform(strList, new Function<String,E>(){
+			@Override
+			public E apply(String input) {
+				try{
+					return Enum.valueOf(enumType, input);
+				}catch(RuntimeException e){
+					return null;
+				}
+			}});
+		return ImmutableList.copyOf(Iterators.filter(enumList.iterator(), Predicates.notNull()));
+	}
+	/**
+	 * 将{@code key}指定的字符串分割转换为{@code enumType}枚举对象集
+	 * @param enumType
+	 * @param key
+	 * @return
+	 * @see #getEnumList(Class, String)
+	 */
+	public static final <E extends Enum<E>> ImmutableSet<E> 
+		getEnumSet(final Class<E> enumType,String key){
+		return ImmutableSet.copyOf(getEnumList(enumType, key));
 	}
 }
