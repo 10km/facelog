@@ -58,6 +58,7 @@ public class TokenTest implements CommonConstant {
 			facelogClient.savePerson(newPerson, rootToken);
 			assertTrue("存入密码明文应该抛出异常",false);
 		}catch(ServiceRuntimeException e){
+			logger.error(e.getMessage());
 			ExceptionType type = ExceptionType.values()[e.getType()];
 			assertTrue("异常类型分类错误",type == ExceptionType.UNCLASSIFIED);
 		}
@@ -80,6 +81,7 @@ public class TokenTest implements CommonConstant {
 			assertTrue("数据写入一致性错误",reRead.equals(newPerson));
 			assertTrue("时间戳字段没有更新",null != reRead.getCreateTime());
 			assertTrue("存入密码没有加盐",!md5OfPwd.equals(reRead.getPassword()));
+			// 申请admin令牌
 			Token adminToken = facelogClient.applyPersonToken(newPerson.getId(),adminpwd, false);
 			Token adminToken2 = facelogClient.applyPersonToken(newPerson.getId(),md5OfPwd, true);
 			// 先申请的令牌自动失效
@@ -95,7 +97,7 @@ public class TokenTest implements CommonConstant {
 			e.printServiceStackTrace();
 			assertTrue(e.getMessage(),false);
 		}catch (ServiceSecurityException e) {
-			logger.error("{},{}",e.getMessage(),e.getServiceStackTraceMessage());
+			logger.error(e.getMessage());
 			assertTrue(e.getServiceStackTraceMessage(),false);
 		}
 	}
