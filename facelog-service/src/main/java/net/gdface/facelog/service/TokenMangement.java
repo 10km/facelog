@@ -234,9 +234,12 @@ class TokenMangement implements ServiceConstant {
 	protected DeviceBean registerDevice(DeviceBean newDevice)
 			throws ServiceSecurityException{
 		checkArgument(null != newDevice,"deviceBean must not be null");
-	    checkArgument(newDevice.isNew() && null == newDevice.getId(),
+	    checkArgument(newDevice.isNew() ,
 	    		"for device registeration the 'newDevice' must be a new record,so the _isNew field must be true and id must be null");
 		checkValidMac(newDevice.getMac());
+		long modified = newDevice.getModified();
+		newDevice.setId(null);
+		newDevice.setModified(modified);
 		DeviceBean dmac = this.dao.daoGetDeviceByIndexMac(newDevice.getMac());
 		DeviceBean dsn = this.dao.daoGetDeviceByIndexSerialNo(newDevice.getSerialNo());
 		if(null !=dmac ){
