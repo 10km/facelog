@@ -131,7 +131,7 @@ public class TokenTest implements CommonConstant {
 		try {
 			// 增加一个admin帐户
 			newPerson = facelogClient.savePerson(newPerson,rootToken);
-			logger.info("person = {}", newPerson.toString());
+			logger.error("person = {}", newPerson.toString());
 			PersonBean reRead = facelogClient.getPerson(newPerson.getId());
 			assertTrue("数据写入一致性错误",reRead.equals(newPerson));
 			assertTrue("时间戳字段没有更新",null != reRead.getCreateTime());
@@ -145,6 +145,7 @@ public class TokenTest implements CommonConstant {
 				facelogClient.releasePersonToken(adminToken);
 				assertTrue("无效令牌应该抛出异常",false);
 			}catch(ServiceSecurityException e){
+				logger.error(e.getMessage());
 				assertTrue(true);
 			}
 			facelogClient.releasePersonToken(adminToken2);
@@ -161,7 +162,7 @@ public class TokenTest implements CommonConstant {
 		byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
 		try {
 			DeviceBean device = DeviceBean.builder().mac(NetworkUtil.formatMac(address, null)).serialNo("12322333").build();
-			logger.info(device.toString(true));
+			logger.error(device.toString(true));
 			device = facelogClient.registerDevice(device);
 			Token deviceToken = facelogClient.online(device);
 			facelogClient.unregisterDevice(device.getId(), deviceToken);
