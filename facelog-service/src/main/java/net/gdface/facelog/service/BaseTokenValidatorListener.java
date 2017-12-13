@@ -17,7 +17,6 @@ import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
-import net.gdface.facelog.service.Dao.PersonRank;
 import net.gdface.facelog.service.Dao.WriteOp;
 import net.gdface.facelog.service.Token.TokenType;
 

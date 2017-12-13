@@ -95,4 +95,47 @@ public interface CommonConstant {
         /** 安全异常 ServiceSecurityException */
         SECURITY_ERROR
     }
+    /**
+     * 人员等级类型定义,参见表结构定义
+     * @author guyadong 
+     */
+    public enum PersonRank{
+        /** 普通用户 */person(0),
+        /** 操作员 */operator(2),
+        /** 管理员 */admin(3),
+        /** root */root(4);
+        /** 用户等级 */
+        public final int rank;
+        PersonRank(int rank){
+            this.rank = rank;
+        }
+        /** 
+         * 根据用户等级值返回{@link PersonRank}对象,
+         * @return  {@code rank}为{@code null}时返回{@link #person},{@code rank}为无效值时返回{@code null}
+         */
+        public static final PersonRank fromRank(Integer rank){
+            if(null == rank){
+                return person;
+            }
+            for(PersonRank r : PersonRank.values()){
+                if(r.rank == rank){
+                    return r;
+                }
+            }
+            return null;
+        }
+        /**
+         * 参见{@link #fromRank(Integer)}
+         * @param rank
+         * @return 
+         * @throws NullPointerException 当{@code rank}为无效值时
+         */
+        public static final PersonRank fromRankChecked(Integer rank){
+            PersonRank r = fromRank(rank); 
+            if(null == r){
+                throw new NullPointerException(String.format("INVALID rank %d",rank));
+            }
+            return r;
+        }
+    }
 }

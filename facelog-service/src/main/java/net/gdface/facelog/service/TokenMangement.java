@@ -16,7 +16,6 @@ import gu.simplemq.redis.RedisTable;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
-import net.gdface.facelog.service.Dao.PersonRank;
 import net.gdface.facelog.service.ServiceSecurityException.SecurityExceptionType;
 import net.gdface.facelog.service.Token.TokenType;
 import net.gdface.utils.FaceUtilits;
@@ -321,7 +320,7 @@ class TokenMangement implements ServiceConstant {
 	protected Token applyPersonToken(int personId, String password, boolean isMd5)
 			throws ServiceSecurityException{
 		checkValidPassword(Integer.toString(personId), password, isMd5);
-		if(PersonRank.person.equals(PersonRank.fromRank(dao.daoGetPerson(personId).getRank()))
+		if(CommonConstant.PersonRank.person.equals(CommonConstant.PersonRank.fromRank(dao.daoGetPerson(personId).getRank()))
 			&&	rejectZero ){
 			// 当配置参数指定不允许普通人员申请令牌时抛出异常
 			throw new ServiceSecurityException(

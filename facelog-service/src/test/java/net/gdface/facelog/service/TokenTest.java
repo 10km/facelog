@@ -7,7 +7,6 @@ import org.junit.Test;
 import com.google.common.hash.Hashing;
 
 import net.gdface.facelog.db.PersonBean;
-import net.gdface.utils.FaceUtilits;
 
 public class TokenTest implements ServiceConstant{
 
@@ -20,10 +19,8 @@ public class TokenTest implements ServiceConstant{
 			Token token = instance.applyRootToken(passwordMd5, true);
 			logger.info(token.toString());
 		} catch (ServiceRuntimeException e) {
-			// TODO 自动生成的 catch 块
 			e.printStackTrace();
 		} catch (ServiceSecurityException e) {
-			// TODO 自动生成的 catch 块
 			e.printStackTrace();
 		}
 	}
