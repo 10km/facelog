@@ -88,6 +88,21 @@ class TokenMangement implements ServiceConstant {
 					.setType(SecurityExceptionType.INVALID_SN);
 		}
 	}
+	/** 令牌操作 */
+	public enum TokenOp {
+		/** 未初始化 */UNINITIALIZED,
+		/** 设备注册  */REGISTER,
+		/** 设备注销 */UNREGISTER,
+		/** 申请令牌 */APPLY,
+		/** 释放令牌 */RELEASE,
+		/** 验证令牌 */VALIDATE,
+		/** 验证密码 */VALIDPWD;
+		/** 指定为上下文{@link TokenContext}中的令牌操作类型 */
+		public void asContextTokenOp(){
+			TokenContext.getCurrentTokenContext().setTokenOp(this);
+		}
+	}
+
 	/** 允许的令牌类型 */
 	enum Enable{
 		/** 允许所有令牌类型 */ALL,
@@ -96,6 +111,7 @@ class TokenMangement implements ServiceConstant {
 		/** 只允许root令牌 */ROOT_ONLY;
 		
 		boolean isValid(TokenMangement tm,Token token){
+			TokenOp.VALIDATE.asContextTokenOp();;
 			switch(this){
 			case PERSON_ONLY:
 				return tm.isValidPersonToken(token) || tm.isValidRootToken(token);
@@ -175,7 +191,7 @@ class TokenMangement implements ServiceConstant {
 		buffer.asLongBuffer().put(System.nanoTime());
 		byte[] md5 = FaceUtilits.getMD5(Bytes.concat(checkNotNull(source),buffer.array()));
 		ByteBuffer byteBuffers = ByteBuffer.wrap(md5);
-		return new Token(byteBuffers.getLong(), byteBuffers.getLong());
+		return new Token(byteBuffers.getLong(), byteBuffers.getLong()).asContextToken();
 	}
 	private static Token makeToken(Object ...objs){
 		checkArgument(null != objs && 0 != objs.length,"objs must not be null or empty");
@@ -233,11 +249,12 @@ class TokenMangement implements ServiceConstant {
 	 */
 	protected DeviceBean registerDevice(DeviceBean newDevice)
 			throws ServiceSecurityException{
+		TokenOp.REGISTER.asContextTokenOp();
 		checkArgument(null != newDevice,"deviceBean must not be null");
 	    // 检查是否为新记录，
 	    checkArgument(newDevice.isNew(),
 	    		"for device registeration the 'newDevice' must be a new record,so the _isNew field must be true ");
-	    // ID为自增长键，新记录id字段不能指定，由数据库分配
+	    // ID为自增长键，新记录ID字段不能指定，由数据库分配
 	    checkArgument(
 	    		!newDevice.isModified(net.gdface.facelog.db.Constant.FL_DEVICE_ID_ID) 
 	    		|| Objects.equal(0,newDevice.getId()),
@@ -274,6 +291,7 @@ class TokenMangement implements ServiceConstant {
 	 */
 	protected void unregisterDevice(int deviceId,Token token)
 			throws ServiceSecurityException{
+		TokenOp.UNREGISTER.asContextTokenOp();
 		Enable.DEVICE_ONLY.check(this, token);
 		checkValidDeviceId(deviceId);
 		this.dao.daoDeleteDevice(deviceId);
@@ -286,7 +304,9 @@ class TokenMangement implements ServiceConstant {
 	 */
 	protected Token applyDeviceToken(DeviceBean loginDevice)
 			throws ServiceSecurityException{
+		TokenOp.APPLY.asContextTokenOp();
 		checkValidDeviceId(loginDevice.getId());
+
 		DeviceBean device = dao.daoGetDevice(loginDevice.getId());
 		if(!Objects.equal(device.getMac(), loginDevice.getMac()) ){
 			throw new ServiceSecurityException(
@@ -310,6 +330,7 @@ class TokenMangement implements ServiceConstant {
 	 */
 	protected void releaseDeviceToken(Token token)
 			throws ServiceSecurityException{
+		TokenOp.RELEASE.asContextTokenOp();;
 		Enable.DEVICE_ONLY.check(this, token);
 		removeDeviceTokenOf(token.getId());
 	}
@@ -324,6 +345,7 @@ class TokenMangement implements ServiceConstant {
 	 */
 	protected Token applyPersonToken(int personId, String password, boolean isMd5)
 			throws ServiceSecurityException{
+		TokenOp.APPLY.asContextTokenOp();
 		checkValidPassword(Integer.toString(personId), password, isMd5);
 		if(CommonConstant.PersonRank.person.equals(CommonConstant.PersonRank.fromRank(dao.daoGetPerson(personId).getRank()))
 			&&	rejectZero ){
@@ -345,6 +367,8 @@ class TokenMangement implements ServiceConstant {
 	 */
 	protected void releasePersonToken(Token token)
 			throws ServiceSecurityException{
+		TokenOp.RELEASE.asContextTokenOp();
+
 		Enable.PERSON_ONLY.check(this, token);
 		removePersonTokenOf(token.getId());
 	}
@@ -357,6 +381,7 @@ class TokenMangement implements ServiceConstant {
 	 */
 	protected Token applyRootToken(String password, boolean isMd5)
 			throws ServiceSecurityException{
+		TokenOp.APPLY.asContextTokenOp();
 		checkValidPassword(ROOT_NAME,password,isMd5);
 		Token token = makeRootToken(password);
 		String key = Integer.toString(token.getId());
@@ -371,6 +396,8 @@ class TokenMangement implements ServiceConstant {
 	 */
 	protected void releaseRootToken(Token token)
 			throws ServiceSecurityException{
+		TokenOp.RELEASE.asContextTokenOp();
+
 		Enable.ROOT_ONLY.check(this, token);
 		removePersonTokenOf(token.getId());
 	}
@@ -410,6 +437,7 @@ class TokenMangement implements ServiceConstant {
 	 * @throws IllegalArgumentException {@code userId} 无效
 	 */
 	protected boolean isValidPassword(String userId,String password, boolean isMd5) throws RuntimeDaoException, ServiceSecurityException {
+		TokenOp.VALIDPWD.asContextTokenOp();
 		checkArgument(!Strings.isNullOrEmpty(userId),"INVALID argument,must not be null or empty");
 		if(ROOT_NAME.equals(userId)){
 			// 从配置文件中读取root密码算出MD5与输入的密码比较

@@ -21,7 +21,7 @@ class TokenValidatorPersonListener extends BaseTokenValidatorListener<PersonBean
 	 */
 	private void checkForPersonToken(PersonBean bean, WriteOp writeOp){
 		if(validatePersonToken){
-			Token token = tlsHandler.getToken();
+			Token token = TokenContext.getCurrentTokenContext().getToken();
 			if(token.getType() == TokenType.PERSON){				
 				PersonRank opRank =  rankFromToken();
 				PersonRank beanRank = originalRankOf(bean);
@@ -42,7 +42,7 @@ class TokenValidatorPersonListener extends BaseTokenValidatorListener<PersonBean
 	 */
 	private void checkInsertForDeviceToken(PersonBean bean, WriteOp writeOp){
 		if(validateDeviceToken){
-			Token token = tlsHandler.getToken();
+			Token token = TokenContext.getCurrentTokenContext().getToken();
 			if(token.getType() == TokenType.DEVICE){
 				PersonRank beanRank = PersonRank.fromRank(bean.getRank());
 				if(!PersonRank.person.equals(beanRank)){

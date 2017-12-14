@@ -21,7 +21,6 @@ import net.gdface.facelog.service.Token.TokenType;
  */
 abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableListener.Adapter<B> implements ServiceConstant {
 	protected final Dao dao;
-	protected final TlsHandler tlsHandler = TlsHandler.INSTANCE;
 	private final ImmutableSet<WriteOp> operatorAllow;
 	private final ImmutableSet<WriteOp> deviceAllow;
 	private final Class<B> type;
@@ -48,17 +47,17 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 	 */
 	protected abstract String getDeviceAllowKey();
 	/**
-	 * 返回{@link Token}代表的用户等级
+	 * 返回{@link Token}代表的用户等级,设备令牌返回{@code null}
 	 * @return
 	 */
 	protected PersonRank rankFromToken(){
-		switch(tlsHandler.getToken().getType()){
+		switch(TokenContext.getCurrentTokenContext().getToken().getType()){
 		case ROOT:
 			return PersonRank.root;
 		case DEVICE:
 			return null;
 		case PERSON:{
-			PersonBean bean = dao.daoGetPerson(tlsHandler.getToken().getId());
+			PersonBean bean = dao.daoGetPerson(TokenContext.getCurrentTokenContext().getToken().getId());
 			if(null != bean){
 				return PersonRank.fromRank(bean.getRank());
 			}
@@ -113,7 +112,7 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 					new ServiceSecurityException(
 						String.format("device no %s permission for %s"
 								,writeOp,type.getSimpleName()))
-						.setDeviceID(tlsHandler.getToken().getId()));
+						.setDeviceID(TokenContext.getCurrentTokenContext().getToken().getId()));
 		}
 	}
 	/**
@@ -122,7 +121,7 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 	 * @param writeOp
 	 */
 	protected final void checkWriteOp(B bean, WriteOp writeOp){
-		TokenType tokenType = tlsHandler.getToken().getType();
+		TokenType tokenType = TokenContext.getCurrentTokenContext().getToken().getType();
 		checkState(null !=tokenType,"typeToken is null");
 		switch(tokenType){
 		case DEVICE:{

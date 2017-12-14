@@ -6,6 +6,7 @@ import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.service.Dao.WriteOp;
 import net.gdface.facelog.service.Token.TokenType;
+import net.gdface.facelog.service.TokenMangement.TokenOp;
 
 /**
  * 基于{@link BaseTokenValidatorListener}的fl_device表权限验证侦听器实现
@@ -23,7 +24,7 @@ class TokenValidatorDeviceListener extends BaseTokenValidatorListener<DeviceBean
 	 */
 	private void checkSelftDevice(DeviceBean bean, WriteOp writeOp){
 		if(validateDeviceToken){
-			Token token = tlsHandler.getToken();
+			Token token = TokenContext.getCurrentTokenContext().getToken();
 			if(token.getType() == TokenType.DEVICE  && !Objects.equal(token.getId(), bean.getId())){
 				// 只允许修改本设备的记录
 				throw new RuntimeDaoException(
@@ -35,9 +36,10 @@ class TokenValidatorDeviceListener extends BaseTokenValidatorListener<DeviceBean
 	}
 	@Override
 	public void beforeInsert(DeviceBean bean) throws RuntimeDaoException {
-		Token token = tlsHandler.getToken();
+		Token token = TokenContext.getCurrentTokenContext().getToken();
 		// 设备端新增加设备记录时还没有令牌,不需要检查
-		if(token.getType() != TokenType.UNINITIALIZED){
+		if(token.getType() != TokenType.UNINITIALIZED 
+				|| TokenOp.REGISTER != TokenContext.getCurrentTokenContext().getTokenOp()){
 			super.beforeInsert(bean);
 		}		
 	}

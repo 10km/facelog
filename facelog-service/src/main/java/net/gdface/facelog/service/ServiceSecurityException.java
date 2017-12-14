@@ -32,22 +32,24 @@ public final class ServiceSecurityException extends BaseServiceException {
     private SecurityExceptionType type = SecurityExceptionType.UNCLASSIFIED;
     private Integer deviceID;
 	public ServiceSecurityException() {
+		this(null, null);
 	}
 
 	public ServiceSecurityException(String message) {
-		super(message);
+		this(message,null);
 	}
 
 	public ServiceSecurityException(String message, Throwable cause) {
 		super(message, cause);
+		TokenContext.getCurrentTokenContext().setError(this);
 	}
 
 	public ServiceSecurityException(Throwable cause) {
-		super(cause);
+		this(null,cause);
 	}
 	
 	public ServiceSecurityException(SecurityExceptionType type) {
-		super();
+		this();
 		this.type = checkNotNull(type);
 	}
     /** return exception type */

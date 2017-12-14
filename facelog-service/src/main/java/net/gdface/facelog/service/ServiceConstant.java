@@ -134,6 +134,9 @@ public interface ServiceConstant extends CommonConstant{
 	/** permit 表需要记录日志的操作 */
 	public static final String SYSLOG_OP_DAO_PERMIT = "syslog.op.dao.permit";
 	
+	/** 令牌日志:是否记录详细异常信息 */
+	public static final String SYSLOG_OP_TOKEN_ERRORDETAIL = "syslog.op.token.errorDetail";
+
 	/////////////////////////////////////////////////
 	
 	/** database 配置属性前缀 */

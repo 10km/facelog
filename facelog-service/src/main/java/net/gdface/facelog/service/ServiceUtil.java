@@ -16,12 +16,16 @@ public class ServiceUtil {
 	 * 返回客户端IP地址
 	 * @return
 	 */
-	public static SocketAddress niftyClientAddress(){
+	public static final SocketAddress niftyClientAddress(){
 		RequestContext request = RequestContexts.getCurrentContext();
 		if(null == request){
 			return null;
 		}
 		ConnectionContext connect = request.getConnectionContext();
 		return connect.getRemoteAddress();	
+	}
+	public static final String clientAddressAsString(){
+		SocketAddress address = niftyClientAddress();
+		return null == address ? "unknow" :address.toString();
 	}
 }

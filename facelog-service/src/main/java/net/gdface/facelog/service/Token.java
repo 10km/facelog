@@ -127,9 +127,28 @@ public final class Token{
 		builder.append("]");
 		return builder.toString();
 	}
+	/**
+	 * 返回令牌所有者信息<br>
+	 * 只返回{@link #type}和{@link #id}字段
+	 * @return
+	 */
+	public String owner(){
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(type)
+			.append(". id=").append(id);
+		return buffer.toString();
+	}
+	/**
+	 * 将当前实例设置为当前上下文的令牌
+	 * @return
+	 */
+	Token asContextToken(){
+		TokenContext.getCurrentTokenContext().setToken(this);
+		return this;
+	}
 	static Function<Token,String> KEY_HELPER = new Function<Token,String>(){
 		@Override
 		public String apply(Token input) {
 			return null == input ? null : Integer.toString(input.getId());
-		}};
+		}};	
 }

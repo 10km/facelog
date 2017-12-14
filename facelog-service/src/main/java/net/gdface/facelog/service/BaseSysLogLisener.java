@@ -2,8 +2,6 @@ package net.gdface.facelog.service;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.net.SocketAddress;
-
 import static com.google.common.base.Preconditions.*;
 
 import com.google.common.base.Strings;
@@ -39,7 +37,7 @@ public abstract class BaseSysLogLisener<B extends BaseBean<B>>
 	 * @throws IllegalArgumentException {@code syslogOpDaoKey}为{@code null}或空
 	 */
 	private BaseSysLogLisener(String syslogOpDaoKey) {
-		checkArgument(Strings.isNullOrEmpty(syslogOpDaoKey),"key is null or empty");
+		checkArgument(!Strings.isNullOrEmpty(syslogOpDaoKey),"key is null or empty");
 		// 从配置文件中读取日志记录类型参数
 		logOp = GlobalConfig.getEnumSet(WriteOp.class, syslogOpDaoKey);
         Type superClass = getClass().getGenericSuperclass();
@@ -63,24 +61,13 @@ public abstract class BaseSysLogLisener<B extends BaseBean<B>>
 	}
 	private void log(B bean,WriteOp writeOp){
 		if(logOp.contains(writeOp)){
-			logger.info("OP:{}: FROM:{} BY{}: {}: {}",
+			logger.info("OP:{}: FROM:{} BY:{}: {}: {}",
 					writeOp.name(),
-					clientAddress(),
-					operatorInfo(),
+					ServiceUtil.clientAddressAsString(),
+					TokenContext.getCurrentTokenContext().getToken().owner(),
 					beanName,
 					bean.toString(true));
 		}
-	}
-	private static String operatorInfo(){
-		Token token = TlsHandler.INSTANCE.getToken();
-		StringBuffer buffer = new StringBuffer();
-		buffer.append(token.getType())
-			.append(". id=").append(token.getId());
-		return buffer.toString();
-	}
-	private static String clientAddress(){
-		SocketAddress address = ServiceUtil.niftyClientAddress();
-		return null == address ? "unknow" :address.toString();
 	}
 	public static final BaseSysLogLisener<PersonBean> 
 		PERSON_LOG_LISTENER 
