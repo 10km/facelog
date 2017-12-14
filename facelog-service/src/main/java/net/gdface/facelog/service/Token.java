@@ -135,7 +135,7 @@ public final class Token{
 	public String owner(){
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(type)
-			.append(". id=").append(id);
+			.append(".id=").append(id);
 		return buffer.toString();
 	}
 	/**

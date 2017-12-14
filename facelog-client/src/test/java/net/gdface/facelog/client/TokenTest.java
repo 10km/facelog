@@ -32,7 +32,7 @@ public class TokenTest implements CommonConstant {
 	}
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-
+		facelogClient.releaseRootToken(rootToken);
 	}
 	@Test
 	public void test1CheckPersonName(){

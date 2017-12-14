@@ -4,31 +4,38 @@ import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
+
+import net.gdface.facelog.client.thrift.Token;
 
 /**
  * @author guyadong
  *
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ClientTest implements CommonConstant {
 
 	private static IFaceLogClient facelogClient;
+	private static Token rootToken;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build();
+		rootToken = facelogClient.applyRootToken("guyadong", false);
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-
+		facelogClient.releaseRootToken(rootToken);
 	}
 
 	@Test
 	public void test1SavePerson() {
 		PersonBean newPerson = PersonBean.builder().name("guyadong").build();
 		try {
-			newPerson = facelogClient.savePerson(newPerson,null);
+			newPerson = facelogClient.savePerson(newPerson,rootToken);
 			logger.info("person = {}", newPerson.toString());
 			PersonBean person = facelogClient.getPerson(newPerson.getId());
 			logger.info("person = {}", person.toString());
@@ -55,10 +62,10 @@ public class ClientTest implements CommonConstant {
 	public void test3GetDeviceIdOfFeature(){
 		try{
 			Integer deviceId = facelogClient.getDeviceIdOfFeature(null);
-			System.out.println(deviceId);
+			logger.info("{}",deviceId);
 			List<Integer> devices = facelogClient.loadDeviceIdByWhere(null);
 			for(Integer id:devices){
-				System.out.println(id);
+				logger.info(id.toString());
 			}
 		}catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
