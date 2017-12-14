@@ -903,10 +903,30 @@ public final class ImageBean
 
     @Override
     public String toString() {
-        return toString(false);
+        return toString(false,false);
+    }
+    protected static final StringBuilder append(StringBuilder buffer,boolean full,byte[] value){
+        if(full || null == value){
+            buffer.append(value);
+        }else{
+            buffer.append(value.length).append(" bytes");
+        }
+        return buffer;
+    }
+    private static final int STRING_LIMIT = 64;
+    protected static final StringBuilder append(StringBuilder buffer,boolean full,String value){
+        if(full || null == value || value.length() <= STRING_LIMIT){
+            buffer.append(value);
+        }else{
+            buffer.append(value.substring(0,STRING_LIMIT - 8)).append(" ...").append(value.substring(STRING_LIMIT-4,STRING_LIMIT));
+        }
+        return buffer;
+    }
+    protected static final <T>StringBuilder append(StringBuilder buffer,boolean full,T value){
+        return buffer.append(value);
     }
     @Override
-    public String toString(boolean notNull) {
+    public String toString(boolean notNull, boolean fullIfStringOrBytes) {
         // only output initialized field
         StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
         int count = 0;        
@@ -914,64 +934,72 @@ public final class ImageBean
             if(!notNull || null != getMd5()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("md5=").append(getMd5());
+                }
+                builder.append("md5=");
+                append(builder,fullIfStringOrBytes,getMd5());
             }
         }
         if(checkFormatInitialized()){
             if(!notNull || null != getFormat()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("format=").append(getFormat());
+                }
+                builder.append("format=");
+                append(builder,fullIfStringOrBytes,getFormat());
             }
         }
         if(checkWidthInitialized()){
             if(!notNull || null != getWidth()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("width=").append(getWidth());
+                }
+                builder.append("width=");
+                append(builder,fullIfStringOrBytes,getWidth());
             }
         }
         if(checkHeightInitialized()){
             if(!notNull || null != getHeight()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("height=").append(getHeight());
+                }
+                builder.append("height=");
+                append(builder,fullIfStringOrBytes,getHeight());
             }
         }
         if(checkDepthInitialized()){
             if(!notNull || null != getDepth()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("depth=").append(getDepth());
+                }
+                builder.append("depth=");
+                append(builder,fullIfStringOrBytes,getDepth());
             }
         }
         if(checkFaceNumInitialized()){
             if(!notNull || null != getFaceNum()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("face_num=").append(getFaceNum());
+                }
+                builder.append("face_num=");
+                append(builder,fullIfStringOrBytes,getFaceNum());
             }
         }
         if(checkThumbMd5Initialized()){
             if(!notNull || null != getThumbMd5()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("thumb_md5=").append(getThumbMd5());
+                }
+                builder.append("thumb_md5=");
+                append(builder,fullIfStringOrBytes,getThumbMd5());
             }
         }
         if(checkDeviceIdInitialized()){
             if(!notNull || null != getDeviceId()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("device_id=").append(getDeviceId());
+                }
+                builder.append("device_id=");
+                append(builder,fullIfStringOrBytes,getDeviceId());
             }
         }
         builder.append("]");

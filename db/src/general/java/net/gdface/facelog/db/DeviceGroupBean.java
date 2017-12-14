@@ -990,10 +990,30 @@ public final class DeviceGroupBean
 
     @Override
     public String toString() {
-        return toString(false);
+        return toString(false,false);
+    }
+    protected static final StringBuilder append(StringBuilder buffer,boolean full,byte[] value){
+        if(full || null == value){
+            buffer.append(value);
+        }else{
+            buffer.append(value.length).append(" bytes");
+        }
+        return buffer;
+    }
+    private static final int STRING_LIMIT = 64;
+    protected static final StringBuilder append(StringBuilder buffer,boolean full,String value){
+        if(full || null == value || value.length() <= STRING_LIMIT){
+            buffer.append(value);
+        }else{
+            buffer.append(value.substring(0,STRING_LIMIT - 8)).append(" ...").append(value.substring(STRING_LIMIT-4,STRING_LIMIT));
+        }
+        return buffer;
+    }
+    protected static final <T>StringBuilder append(StringBuilder buffer,boolean full,T value){
+        return buffer.append(value);
     }
     @Override
-    public String toString(boolean notNull) {
+    public String toString(boolean notNull, boolean fullIfStringOrBytes) {
         // only output initialized field
         StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
         int count = 0;        
@@ -1001,72 +1021,81 @@ public final class DeviceGroupBean
             if(!notNull || null != getId()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("id=").append(getId());
+                }
+                builder.append("id=");
+                append(builder,fullIfStringOrBytes,getId());
             }
         }
         if(checkNameInitialized()){
             if(!notNull || null != getName()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("name=").append(getName());
+                }
+                builder.append("name=");
+                append(builder,fullIfStringOrBytes,getName());
             }
         }
         if(checkLeafInitialized()){
             if(!notNull || null != getLeaf()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("leaf=").append(getLeaf());
+                }
+                builder.append("leaf=");
+                append(builder,fullIfStringOrBytes,getLeaf());
             }
         }
         if(checkParentInitialized()){
             if(!notNull || null != getParent()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("parent=").append(getParent());
+                }
+                builder.append("parent=");
+                append(builder,fullIfStringOrBytes,getParent());
             }
         }
         if(checkRemarkInitialized()){
             if(!notNull || null != getRemark()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("remark=").append(getRemark());
+                }
+                builder.append("remark=");
+                append(builder,fullIfStringOrBytes,getRemark());
             }
         }
         if(checkExtBinInitialized()){
             if(!notNull || null != getExtBin()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("ext_bin=").append(getExtBin());
+                }
+                builder.append("ext_bin=");
+                append(builder,fullIfStringOrBytes,getExtBin());
             }
         }
         if(checkExtTxtInitialized()){
             if(!notNull || null != getExtTxt()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("ext_txt=").append(getExtTxt());
+                }
+                builder.append("ext_txt=");
+                append(builder,fullIfStringOrBytes,getExtTxt());
             }
         }
         if(checkCreateTimeInitialized()){
             if(!notNull || null != getCreateTime()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("create_time=").append(getCreateTime());
+                }
+                builder.append("create_time=");
+                append(builder,fullIfStringOrBytes,getCreateTime());
             }
         }
         if(checkUpdateTimeInitialized()){
             if(!notNull || null != getUpdateTime()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("update_time=").append(getUpdateTime());
+                }
+                builder.append("update_time=");
+                append(builder,fullIfStringOrBytes,getUpdateTime());
             }
         }
         builder.append("]");

@@ -162,7 +162,7 @@ public class TokenTest implements CommonConstant {
 		byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
 		try {
 			DeviceBean device = DeviceBean.builder().mac(NetworkUtil.formatMac(address, null)).serialNo("12322333").build();
-			logger.error(device.toString(true));
+			logger.error(device.toString(true,false));
 			device = facelogClient.registerDevice(device);
 			Token deviceToken = facelogClient.online(device);
 			facelogClient.unregisterDevice(device.getId(), deviceToken);

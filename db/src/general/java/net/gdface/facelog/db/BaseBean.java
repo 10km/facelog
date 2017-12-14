@@ -115,6 +115,7 @@ public interface BaseBean <B> {
     /**
      * Returns a string representation of the object
      * @param notNull output not null field only if {@code true}
+     * @param fullIfStringOrBytes for string or bytes field,output full content if {@code true},otherwise output length.
      */
-    public String toString(boolean notNull);
+    public String toString(boolean notNull, boolean fullIfStringOrBytes);
 }

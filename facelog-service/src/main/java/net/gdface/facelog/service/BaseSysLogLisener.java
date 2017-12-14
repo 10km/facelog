@@ -67,7 +67,7 @@ public abstract class BaseSysLogLisener<B extends BaseBean<B>>
 					ServiceUtil.clientAddressAsString(),
 					TokenContext.getCurrentTokenContext().getToken().owner(),
 					beanName,
-					bean.toString(true));
+					bean.toString(true, false));
 		}
 	}
 	public static final BaseSysLogLisener<PersonBean> 

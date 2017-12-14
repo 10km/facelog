@@ -41,7 +41,7 @@ public class DbTest {
 		System.out.printf("device id[null] exists:%b\n",deviceManager.existsPrimaryKey((Integer)null));
 		DeviceBean reload = deviceManager.loadByPrimaryKey(b1.getId());
 		System.out.println(reload);
-		System.out.println(reload.toString(true));
+		System.out.println(reload.toString(true, false));
 
 	}
 

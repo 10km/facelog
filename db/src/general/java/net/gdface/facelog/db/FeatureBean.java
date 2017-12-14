@@ -570,10 +570,30 @@ public final class FeatureBean
 
     @Override
     public String toString() {
-        return toString(false);
+        return toString(false,false);
+    }
+    protected static final StringBuilder append(StringBuilder buffer,boolean full,byte[] value){
+        if(full || null == value){
+            buffer.append(value);
+        }else{
+            buffer.append(value.length).append(" bytes");
+        }
+        return buffer;
+    }
+    private static final int STRING_LIMIT = 64;
+    protected static final StringBuilder append(StringBuilder buffer,boolean full,String value){
+        if(full || null == value || value.length() <= STRING_LIMIT){
+            buffer.append(value);
+        }else{
+            buffer.append(value.substring(0,STRING_LIMIT - 8)).append(" ...").append(value.substring(STRING_LIMIT-4,STRING_LIMIT));
+        }
+        return buffer;
+    }
+    protected static final <T>StringBuilder append(StringBuilder buffer,boolean full,T value){
+        return buffer.append(value);
     }
     @Override
-    public String toString(boolean notNull) {
+    public String toString(boolean notNull, boolean fullIfStringOrBytes) {
         // only output initialized field
         StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
         int count = 0;        
@@ -581,32 +601,36 @@ public final class FeatureBean
             if(!notNull || null != getMd5()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("md5=").append(getMd5());
+                }
+                builder.append("md5=");
+                append(builder,fullIfStringOrBytes,getMd5());
             }
         }
         if(checkPersonIdInitialized()){
             if(!notNull || null != getPersonId()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("person_id=").append(getPersonId());
+                }
+                builder.append("person_id=");
+                append(builder,fullIfStringOrBytes,getPersonId());
             }
         }
         if(checkFeatureInitialized()){
             if(!notNull || null != getFeature()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("feature=").append(getFeature());
+                }
+                builder.append("feature=");
+                append(builder,fullIfStringOrBytes,getFeature());
             }
         }
         if(checkUpdateTimeInitialized()){
             if(!notNull || null != getUpdateTime()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("update_time=").append(getUpdateTime());
+                }
+                builder.append("update_time=");
+                append(builder,fullIfStringOrBytes,getUpdateTime());
             }
         }
         builder.append("]");

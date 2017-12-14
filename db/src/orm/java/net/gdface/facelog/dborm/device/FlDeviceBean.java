@@ -862,10 +862,30 @@ public  class FlDeviceBean
 
     @Override
     public String toString() {
-        return toString(false);
+        return toString(false,false);
+    }
+    protected static final StringBuilder append(StringBuilder buffer,boolean full,byte[] value){
+        if(full || null == value){
+            buffer.append(value);
+        }else{
+            buffer.append(value.length).append(" bytes");
+        }
+        return buffer;
+    }
+    private static final int STRING_LIMIT = 64;
+    protected static final StringBuilder append(StringBuilder buffer,boolean full,String value){
+        if(full || null == value || value.length() <= STRING_LIMIT){
+            buffer.append(value);
+        }else{
+            buffer.append(value.substring(0,STRING_LIMIT - 8)).append(" ...").append(value.substring(STRING_LIMIT-4,STRING_LIMIT));
+        }
+        return buffer;
+    }
+    protected static final <T>StringBuilder append(StringBuilder buffer,boolean full,T value){
+        return buffer.append(value);
     }
     @Override
-    public String toString(boolean notNull) {
+    public String toString(boolean notNull, boolean fullIfStringOrBytes) {
         // only output initialized field
         StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
         int count = 0;        
@@ -873,72 +893,81 @@ public  class FlDeviceBean
             if(!notNull || null != getId()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("id=").append(getId());
+                }
+                builder.append("id=");
+                append(builder,fullIfStringOrBytes,getId());
             }
         }
         if(checkGroupIdInitialized()){
             if(!notNull || null != getGroupId()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("group_id=").append(getGroupId());
+                }
+                builder.append("group_id=");
+                append(builder,fullIfStringOrBytes,getGroupId());
             }
         }
         if(checkNameInitialized()){
             if(!notNull || null != getName()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("name=").append(getName());
+                }
+                builder.append("name=");
+                append(builder,fullIfStringOrBytes,getName());
             }
         }
         if(checkVersionInitialized()){
             if(!notNull || null != getVersion()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("version=").append(getVersion());
+                }
+                builder.append("version=");
+                append(builder,fullIfStringOrBytes,getVersion());
             }
         }
         if(checkSerialNoInitialized()){
             if(!notNull || null != getSerialNo()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("serial_no=").append(getSerialNo());
+                }
+                builder.append("serial_no=");
+                append(builder,fullIfStringOrBytes,getSerialNo());
             }
         }
         if(checkMacInitialized()){
             if(!notNull || null != getMac()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("mac=").append(getMac());
+                }
+                builder.append("mac=");
+                append(builder,fullIfStringOrBytes,getMac());
             }
         }
         if(checkRemarkInitialized()){
             if(!notNull || null != getRemark()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("remark=").append(getRemark());
+                }
+                builder.append("remark=");
+                append(builder,fullIfStringOrBytes,getRemark());
             }
         }
         if(checkCreateTimeInitialized()){
             if(!notNull || null != getCreateTime()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("create_time=").append(getCreateTime());
+                }
+                builder.append("create_time=");
+                append(builder,fullIfStringOrBytes,getCreateTime());
             }
         }
         if(checkUpdateTimeInitialized()){
             if(!notNull || null != getUpdateTime()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("update_time=").append(getUpdateTime());
+                }
+                builder.append("update_time=");
+                append(builder,fullIfStringOrBytes,getUpdateTime());
             }
         }
         builder.append("]");

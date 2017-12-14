@@ -1830,10 +1830,30 @@ public final class FaceBean
 
     @Override
     public String toString() {
-        return toString(false);
+        return toString(false,false);
+    }
+    protected static final StringBuilder append(StringBuilder buffer,boolean full,byte[] value){
+        if(full || null == value){
+            buffer.append(value);
+        }else{
+            buffer.append(value.length).append(" bytes");
+        }
+        return buffer;
+    }
+    private static final int STRING_LIMIT = 64;
+    protected static final StringBuilder append(StringBuilder buffer,boolean full,String value){
+        if(full || null == value || value.length() <= STRING_LIMIT){
+            buffer.append(value);
+        }else{
+            buffer.append(value.substring(0,STRING_LIMIT - 8)).append(" ...").append(value.substring(STRING_LIMIT-4,STRING_LIMIT));
+        }
+        return buffer;
+    }
+    protected static final <T>StringBuilder append(StringBuilder buffer,boolean full,T value){
+        return buffer.append(value);
     }
     @Override
-    public String toString(boolean notNull) {
+    public String toString(boolean notNull, boolean fullIfStringOrBytes) {
         // only output initialized field
         StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
         int count = 0;        
@@ -1841,152 +1861,171 @@ public final class FaceBean
             if(!notNull || null != getId()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("id=").append(getId());
+                }
+                builder.append("id=");
+                append(builder,fullIfStringOrBytes,getId());
             }
         }
         if(checkImageMd5Initialized()){
             if(!notNull || null != getImageMd5()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("image_md5=").append(getImageMd5());
+                }
+                builder.append("image_md5=");
+                append(builder,fullIfStringOrBytes,getImageMd5());
             }
         }
         if(checkFaceLeftInitialized()){
             if(!notNull || null != getFaceLeft()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("face_left=").append(getFaceLeft());
+                }
+                builder.append("face_left=");
+                append(builder,fullIfStringOrBytes,getFaceLeft());
             }
         }
         if(checkFaceTopInitialized()){
             if(!notNull || null != getFaceTop()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("face_top=").append(getFaceTop());
+                }
+                builder.append("face_top=");
+                append(builder,fullIfStringOrBytes,getFaceTop());
             }
         }
         if(checkFaceWidthInitialized()){
             if(!notNull || null != getFaceWidth()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("face_width=").append(getFaceWidth());
+                }
+                builder.append("face_width=");
+                append(builder,fullIfStringOrBytes,getFaceWidth());
             }
         }
         if(checkFaceHeightInitialized()){
             if(!notNull || null != getFaceHeight()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("face_height=").append(getFaceHeight());
+                }
+                builder.append("face_height=");
+                append(builder,fullIfStringOrBytes,getFaceHeight());
             }
         }
         if(checkEyeLeftxInitialized()){
             if(!notNull || null != getEyeLeftx()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("eye_leftx=").append(getEyeLeftx());
+                }
+                builder.append("eye_leftx=");
+                append(builder,fullIfStringOrBytes,getEyeLeftx());
             }
         }
         if(checkEyeLeftyInitialized()){
             if(!notNull || null != getEyeLefty()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("eye_lefty=").append(getEyeLefty());
+                }
+                builder.append("eye_lefty=");
+                append(builder,fullIfStringOrBytes,getEyeLefty());
             }
         }
         if(checkEyeRightxInitialized()){
             if(!notNull || null != getEyeRightx()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("eye_rightx=").append(getEyeRightx());
+                }
+                builder.append("eye_rightx=");
+                append(builder,fullIfStringOrBytes,getEyeRightx());
             }
         }
         if(checkEyeRightyInitialized()){
             if(!notNull || null != getEyeRighty()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("eye_righty=").append(getEyeRighty());
+                }
+                builder.append("eye_righty=");
+                append(builder,fullIfStringOrBytes,getEyeRighty());
             }
         }
         if(checkMouthXInitialized()){
             if(!notNull || null != getMouthX()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("mouth_x=").append(getMouthX());
+                }
+                builder.append("mouth_x=");
+                append(builder,fullIfStringOrBytes,getMouthX());
             }
         }
         if(checkMouthYInitialized()){
             if(!notNull || null != getMouthY()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("mouth_y=").append(getMouthY());
+                }
+                builder.append("mouth_y=");
+                append(builder,fullIfStringOrBytes,getMouthY());
             }
         }
         if(checkNoseXInitialized()){
             if(!notNull || null != getNoseX()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("nose_x=").append(getNoseX());
+                }
+                builder.append("nose_x=");
+                append(builder,fullIfStringOrBytes,getNoseX());
             }
         }
         if(checkNoseYInitialized()){
             if(!notNull || null != getNoseY()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("nose_y=").append(getNoseY());
+                }
+                builder.append("nose_y=");
+                append(builder,fullIfStringOrBytes,getNoseY());
             }
         }
         if(checkAngleYawInitialized()){
             if(!notNull || null != getAngleYaw()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("angle_yaw=").append(getAngleYaw());
+                }
+                builder.append("angle_yaw=");
+                append(builder,fullIfStringOrBytes,getAngleYaw());
             }
         }
         if(checkAnglePitchInitialized()){
             if(!notNull || null != getAnglePitch()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("angle_pitch=").append(getAnglePitch());
+                }
+                builder.append("angle_pitch=");
+                append(builder,fullIfStringOrBytes,getAnglePitch());
             }
         }
         if(checkAngleRollInitialized()){
             if(!notNull || null != getAngleRoll()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("angle_roll=").append(getAngleRoll());
+                }
+                builder.append("angle_roll=");
+                append(builder,fullIfStringOrBytes,getAngleRoll());
             }
         }
         if(checkExtInfoInitialized()){
             if(!notNull || null != getExtInfo()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("ext_info=").append(getExtInfo());
+                }
+                builder.append("ext_info=");
+                append(builder,fullIfStringOrBytes,getExtInfo());
             }
         }
         if(checkFeatureMd5Initialized()){
             if(!notNull || null != getFeatureMd5()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("feature_md5=").append(getFeatureMd5());
+                }
+                builder.append("feature_md5=");
+                append(builder,fullIfStringOrBytes,getFeatureMd5());
             }
         }
         builder.append("]");

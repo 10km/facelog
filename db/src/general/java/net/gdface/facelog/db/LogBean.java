@@ -1061,10 +1061,30 @@ public final class LogBean
 
     @Override
     public String toString() {
-        return toString(false);
+        return toString(false,false);
+    }
+    protected static final StringBuilder append(StringBuilder buffer,boolean full,byte[] value){
+        if(full || null == value){
+            buffer.append(value);
+        }else{
+            buffer.append(value.length).append(" bytes");
+        }
+        return buffer;
+    }
+    private static final int STRING_LIMIT = 64;
+    protected static final StringBuilder append(StringBuilder buffer,boolean full,String value){
+        if(full || null == value || value.length() <= STRING_LIMIT){
+            buffer.append(value);
+        }else{
+            buffer.append(value.substring(0,STRING_LIMIT - 8)).append(" ...").append(value.substring(STRING_LIMIT-4,STRING_LIMIT));
+        }
+        return buffer;
+    }
+    protected static final <T>StringBuilder append(StringBuilder buffer,boolean full,T value){
+        return buffer.append(value);
     }
     @Override
-    public String toString(boolean notNull) {
+    public String toString(boolean notNull, boolean fullIfStringOrBytes) {
         // only output initialized field
         StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
         int count = 0;        
@@ -1072,72 +1092,81 @@ public final class LogBean
             if(!notNull || null != getId()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("id=").append(getId());
+                }
+                builder.append("id=");
+                append(builder,fullIfStringOrBytes,getId());
             }
         }
         if(checkPersonIdInitialized()){
             if(!notNull || null != getPersonId()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("person_id=").append(getPersonId());
+                }
+                builder.append("person_id=");
+                append(builder,fullIfStringOrBytes,getPersonId());
             }
         }
         if(checkDeviceIdInitialized()){
             if(!notNull || null != getDeviceId()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("device_id=").append(getDeviceId());
+                }
+                builder.append("device_id=");
+                append(builder,fullIfStringOrBytes,getDeviceId());
             }
         }
         if(checkVerifyFeatureInitialized()){
             if(!notNull || null != getVerifyFeature()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("verify_feature=").append(getVerifyFeature());
+                }
+                builder.append("verify_feature=");
+                append(builder,fullIfStringOrBytes,getVerifyFeature());
             }
         }
         if(checkCompareFaceInitialized()){
             if(!notNull || null != getCompareFace()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("compare_face=").append(getCompareFace());
+                }
+                builder.append("compare_face=");
+                append(builder,fullIfStringOrBytes,getCompareFace());
             }
         }
         if(checkVerifyStatusInitialized()){
             if(!notNull || null != getVerifyStatus()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("verify_status=").append(getVerifyStatus());
+                }
+                builder.append("verify_status=");
+                append(builder,fullIfStringOrBytes,getVerifyStatus());
             }
         }
         if(checkSimilartyInitialized()){
             if(!notNull || null != getSimilarty()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("similarty=").append(getSimilarty());
+                }
+                builder.append("similarty=");
+                append(builder,fullIfStringOrBytes,getSimilarty());
             }
         }
         if(checkVerifyTimeInitialized()){
             if(!notNull || null != getVerifyTime()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("verify_time=").append(getVerifyTime());
+                }
+                builder.append("verify_time=");
+                append(builder,fullIfStringOrBytes,getVerifyTime());
             }
         }
         if(checkCreateTimeInitialized()){
             if(!notNull || null != getCreateTime()){
                 if(count++ >0){
                     builder.append(",");
-                }            
-                builder.append("create_time=").append(getCreateTime());
+                }
+                builder.append("create_time=");
+                append(builder,fullIfStringOrBytes,getCreateTime());
             }
         }
         builder.append("]");
