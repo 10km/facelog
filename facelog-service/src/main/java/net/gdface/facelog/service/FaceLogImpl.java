@@ -1,12 +1,10 @@
 package net.gdface.facelog.service;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -427,7 +425,8 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 				daoLoadFeatureByUpdateTime(timestamp), 
 				daoCastFeatureToPersonId);
 		// 两个collection 合并去除重复
-		Iterators.addAll(updatedPersons, Iterators.filter(idList.iterator(), Predicates.notNull()));
+		@SuppressWarnings("unused")
+		boolean b = Iterators.addAll(updatedPersons, Iterators.filter(idList.iterator(), Predicates.notNull()));
 		return Lists.newArrayList(updatedPersons);
 	}
 
