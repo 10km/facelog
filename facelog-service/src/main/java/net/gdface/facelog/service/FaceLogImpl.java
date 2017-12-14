@@ -6,12 +6,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import org.javatuples.Pair;
+import com.google.common.base.Predicates;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
@@ -19,9 +22,9 @@ import static com.google.common.base.Preconditions.checkState;
 import com.google.common.base.Function;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
+import com.google.common.collect.Sets;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
@@ -418,17 +421,14 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			}
 		}
 	}
-	protected List<PersonBean> daoLoadUpdatedPersons(Date timestamp) {
-		List<PersonBean> persons =daoLoadPersonByUpdateTime(timestamp);		
-		Map<Integer,PersonBean>m = Maps.uniqueIndex(persons,this.daoCastPersonToPk);
-		Integer refPerson;
-		for(FeatureBean feature:daoLoadFeatureByUpdateTime(timestamp)){
-			refPerson = feature.getPersonId();
-			if(null != refPerson && m.containsKey(refPerson)){
-				m.put(refPerson, daoGetPerson(refPerson));
-			}
-		}
-		return new ArrayList<PersonBean>(m.values());
+	protected List<Integer> daoLoadUpdatedPersons(Date timestamp) {
+		LinkedHashSet<Integer> updatedPersons = Sets.newLinkedHashSet(daoLoadPersonIdByUpdateTime(timestamp));
+		List<Integer> idList = Lists.transform(
+				daoLoadFeatureByUpdateTime(timestamp), 
+				daoCastFeatureToPersonId);
+		// 两个collection 合并去除重复
+		Iterators.addAll(updatedPersons, Iterators.filter(idList.iterator(), Predicates.notNull()));
+		return Lists.newArrayList(updatedPersons);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////
@@ -845,7 +845,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	@Override
 	public List<Integer> loadUpdatedPersons(long timestamp)throws ServiceRuntimeException {
 		try{
-			return daoToPrimaryKeyListFromPersons(daoLoadUpdatedPersons(new Date(timestamp)));
+			return daoLoadUpdatedPersons(new Date(timestamp));
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}

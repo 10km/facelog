@@ -28,7 +28,7 @@ public class TokenContext implements ServiceConstant {
 	private TokenContext() {
 		reset();
 	}
-	public void reset(){
+	void reset(){
 		token = new Token();
 		tokenOp = TokenOp.UNINITIALIZED;
 		ok = true;
@@ -43,7 +43,7 @@ public class TokenContext implements ServiceConstant {
 	 * @param token 不可为{@code null} 
 	 * @return 
 	 */
-	public TokenContext setToken(Token token) {
+	TokenContext setToken(Token token) {
 		this.token = checkNotNull(token);
 		return this;
 	}
@@ -56,7 +56,7 @@ public class TokenContext implements ServiceConstant {
 	 * @param tokenOp 不可为{@code null}
 	 * @return
 	 */
-	public TokenContext setTokenOp(TokenOp tokenOp) {
+	TokenContext setTokenOp(TokenOp tokenOp) {
 		this.tokenOp = checkNotNull(tokenOp);
 		return this;
 	}
@@ -76,7 +76,7 @@ public class TokenContext implements ServiceConstant {
 	 * @param error
 	 * @return
 	 */
-	public TokenContext setError(ServiceSecurityException error) {
+	TokenContext setError(ServiceSecurityException error) {
 		this.error = checkNotNull(error);
 		this.ok = false;
 		return this;
