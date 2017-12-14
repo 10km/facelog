@@ -162,7 +162,7 @@ public  class FlStoreBean
     public void setMd5(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, md5) && checkMd5Initialized()) {
+        if (Objects.equals(newVal, md5)) {
             return;
         }
         md5 = newVal;
@@ -217,7 +217,7 @@ public  class FlStoreBean
     public void setEncoding(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, encoding) && checkEncodingInitialized()) {
+        if (Objects.equals(newVal, encoding)) {
             return;
         }
         encoding = newVal;
@@ -272,7 +272,7 @@ public  class FlStoreBean
     public void setData(java.nio.ByteBuffer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, data) && checkDataInitialized()) {
+        if (Objects.equals(newVal, data)) {
             return;
         }
         data = newVal;

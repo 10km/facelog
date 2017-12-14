@@ -185,7 +185,7 @@ public final class ImageBean
     public void setMd5(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, md5) && checkMd5Initialized()) {
+        if (Objects.equals(newVal, md5)) {
             return;
         }
         md5 = newVal;
@@ -251,7 +251,7 @@ public final class ImageBean
     public void setFormat(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, format) && checkFormatInitialized()) {
+        if (Objects.equals(newVal, format)) {
             return;
         }
         format = newVal;
@@ -318,7 +318,7 @@ public final class ImageBean
     public void setWidth(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, width) && checkWidthInitialized()) {
+        if (Objects.equals(newVal, width)) {
             return;
         }
         width = newVal;
@@ -395,7 +395,7 @@ public final class ImageBean
     public void setHeight(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, height) && checkHeightInitialized()) {
+        if (Objects.equals(newVal, height)) {
             return;
         }
         height = newVal;
@@ -473,7 +473,7 @@ public final class ImageBean
     public void setDepth(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, depth) && checkDepthInitialized()) {
+        if (Objects.equals(newVal, depth)) {
             return;
         }
         depth = newVal;
@@ -551,7 +551,7 @@ public final class ImageBean
     public void setFaceNum(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, faceNum) && checkFaceNumInitialized()) {
+        if (Objects.equals(newVal, faceNum)) {
             return;
         }
         faceNum = newVal;
@@ -627,7 +627,7 @@ public final class ImageBean
     public void setThumbMd5(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, thumbMd5) && checkThumbMd5Initialized()) {
+        if (Objects.equals(newVal, thumbMd5)) {
             return;
         }
         thumbMd5 = newVal;
@@ -694,7 +694,7 @@ public final class ImageBean
     public void setDeviceId(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, deviceId) && checkDeviceIdInitialized()) {
+        if (Objects.equals(newVal, deviceId)) {
             return;
         }
         deviceId = newVal;

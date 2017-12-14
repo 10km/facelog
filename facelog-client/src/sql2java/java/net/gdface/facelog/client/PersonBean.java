@@ -194,7 +194,7 @@ public  class PersonBean
     public void setId(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, id) && checkIdInitialized()) {
+        if (Objects.equals(newVal, id)) {
             return;
         }
         id = newVal;
@@ -261,7 +261,7 @@ public  class PersonBean
     public void setGroupId(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, groupId) && checkGroupIdInitialized()) {
+        if (Objects.equals(newVal, groupId)) {
             return;
         }
         groupId = newVal;
@@ -327,7 +327,7 @@ public  class PersonBean
     public void setName(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, name) && checkNameInitialized()) {
+        if (Objects.equals(newVal, name)) {
             return;
         }
         name = newVal;
@@ -382,7 +382,7 @@ public  class PersonBean
     public void setSex(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, sex) && checkSexInitialized()) {
+        if (Objects.equals(newVal, sex)) {
             return;
         }
         sex = newVal;
@@ -447,7 +447,7 @@ public  class PersonBean
     public void setRank(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, rank) && checkRankInitialized()) {
+        if (Objects.equals(newVal, rank)) {
             return;
         }
         rank = newVal;
@@ -512,7 +512,7 @@ public  class PersonBean
     public void setPassword(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, password) && checkPasswordInitialized()) {
+        if (Objects.equals(newVal, password)) {
             return;
         }
         password = newVal;
@@ -567,7 +567,7 @@ public  class PersonBean
     public void setBirthdate(java.util.Date newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, birthdate) && checkBirthdateInitialized()) {
+        if (Objects.equals(newVal, birthdate)) {
             return;
         }
         birthdate = newVal;
@@ -632,7 +632,7 @@ public  class PersonBean
     public void setMobilePhone(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, mobilePhone) && checkMobilePhoneInitialized()) {
+        if (Objects.equals(newVal, mobilePhone)) {
             return;
         }
         mobilePhone = newVal;
@@ -687,7 +687,7 @@ public  class PersonBean
     public void setPapersType(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, papersType) && checkPapersTypeInitialized()) {
+        if (Objects.equals(newVal, papersType)) {
             return;
         }
         papersType = newVal;
@@ -752,7 +752,7 @@ public  class PersonBean
     public void setPapersNum(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, papersNum) && checkPapersNumInitialized()) {
+        if (Objects.equals(newVal, papersNum)) {
             return;
         }
         papersNum = newVal;
@@ -808,7 +808,7 @@ public  class PersonBean
     public void setImageMd5(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, imageMd5) && checkImageMd5Initialized()) {
+        if (Objects.equals(newVal, imageMd5)) {
             return;
         }
         imageMd5 = newVal;
@@ -864,7 +864,7 @@ public  class PersonBean
     public void setExpiryDate(java.util.Date newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, expiryDate) && checkExpiryDateInitialized()) {
+        if (Objects.equals(newVal, expiryDate)) {
             return;
         }
         expiryDate = newVal;
@@ -929,7 +929,7 @@ public  class PersonBean
     public void setRemark(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, remark) && checkRemarkInitialized()) {
+        if (Objects.equals(newVal, remark)) {
             return;
         }
         remark = newVal;
@@ -985,7 +985,7 @@ public  class PersonBean
     public void setCreateTime(java.util.Date newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, createTime) && checkCreateTimeInitialized()) {
+        if (Objects.equals(newVal, createTime)) {
             return;
         }
         createTime = newVal;
@@ -1051,7 +1051,7 @@ public  class PersonBean
     public void setUpdateTime(java.util.Date newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, updateTime) && checkUpdateTimeInitialized()) {
+        if (Objects.equals(newVal, updateTime)) {
             return;
         }
         updateTime = newVal;

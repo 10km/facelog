@@ -188,7 +188,7 @@ public final class DeviceGroupBean
     public void setId(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, id) && checkIdInitialized()) {
+        if (Objects.equals(newVal, id)) {
             return;
         }
         id = newVal;
@@ -265,7 +265,7 @@ public final class DeviceGroupBean
     public void setName(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, name) && checkNameInitialized()) {
+        if (Objects.equals(newVal, name)) {
             return;
         }
         name = newVal;
@@ -331,7 +331,7 @@ public final class DeviceGroupBean
     public void setLeaf(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, leaf) && checkLeafInitialized()) {
+        if (Objects.equals(newVal, leaf)) {
             return;
         }
         leaf = newVal;
@@ -408,7 +408,7 @@ public final class DeviceGroupBean
     public void setParent(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, parent) && checkParentInitialized()) {
+        if (Objects.equals(newVal, parent)) {
             return;
         }
         parent = newVal;
@@ -484,7 +484,7 @@ public final class DeviceGroupBean
     public void setRemark(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, remark) && checkRemarkInitialized()) {
+        if (Objects.equals(newVal, remark)) {
             return;
         }
         remark = newVal;
@@ -550,7 +550,7 @@ public final class DeviceGroupBean
     public void setExtBin(java.nio.ByteBuffer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, extBin) && checkExtBinInitialized()) {
+        if (Objects.equals(newVal, extBin)) {
             return;
         }
         extBin = newVal;
@@ -616,7 +616,7 @@ public final class DeviceGroupBean
     public void setExtTxt(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, extTxt) && checkExtTxtInitialized()) {
+        if (Objects.equals(newVal, extTxt)) {
             return;
         }
         extTxt = newVal;
@@ -690,7 +690,7 @@ public final class DeviceGroupBean
     public void setCreateTime(java.util.Date newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, createTime) && checkCreateTimeInitialized()) {
+        if (Objects.equals(newVal, createTime)) {
             return;
         }
         createTime = newVal;
@@ -774,7 +774,7 @@ public final class DeviceGroupBean
     public void setUpdateTime(java.util.Date newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, updateTime) && checkUpdateTimeInitialized()) {
+        if (Objects.equals(newVal, updateTime)) {
             return;
         }
         updateTime = newVal;

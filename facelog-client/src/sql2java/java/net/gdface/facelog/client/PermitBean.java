@@ -168,7 +168,7 @@ public  class PermitBean
     public void setDeviceGroupId(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, deviceGroupId) && checkDeviceGroupIdInitialized()) {
+        if (Objects.equals(newVal, deviceGroupId)) {
             return;
         }
         deviceGroupId = newVal;
@@ -236,7 +236,7 @@ public  class PermitBean
     public void setPersonGroupId(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, personGroupId) && checkPersonGroupIdInitialized()) {
+        if (Objects.equals(newVal, personGroupId)) {
             return;
         }
         personGroupId = newVal;
@@ -301,7 +301,7 @@ public  class PermitBean
     public void setRemark(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, remark) && checkRemarkInitialized()) {
+        if (Objects.equals(newVal, remark)) {
             return;
         }
         remark = newVal;
@@ -407,7 +407,7 @@ public  class PermitBean
     public void setExtTxt(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, extTxt) && checkExtTxtInitialized()) {
+        if (Objects.equals(newVal, extTxt)) {
             return;
         }
         extTxt = newVal;
@@ -463,7 +463,7 @@ public  class PermitBean
     public void setCreateTime(java.util.Date newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, createTime) && checkCreateTimeInitialized()) {
+        if (Objects.equals(newVal, createTime)) {
             return;
         }
         createTime = newVal;

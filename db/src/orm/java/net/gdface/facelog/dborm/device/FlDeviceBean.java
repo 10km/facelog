@@ -181,7 +181,7 @@ public  class FlDeviceBean
     public void setId(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, id) && checkIdInitialized()) {
+        if (Objects.equals(newVal, id)) {
             return;
         }
         id = newVal;
@@ -248,7 +248,7 @@ public  class FlDeviceBean
     public void setGroupId(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, groupId) && checkGroupIdInitialized()) {
+        if (Objects.equals(newVal, groupId)) {
             return;
         }
         groupId = newVal;
@@ -313,7 +313,7 @@ public  class FlDeviceBean
     public void setName(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, name) && checkNameInitialized()) {
+        if (Objects.equals(newVal, name)) {
             return;
         }
         name = newVal;
@@ -368,7 +368,7 @@ public  class FlDeviceBean
     public void setVersion(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, version) && checkVersionInitialized()) {
+        if (Objects.equals(newVal, version)) {
             return;
         }
         version = newVal;
@@ -423,7 +423,7 @@ public  class FlDeviceBean
     public void setSerialNo(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, serialNo) && checkSerialNoInitialized()) {
+        if (Objects.equals(newVal, serialNo)) {
             return;
         }
         serialNo = newVal;
@@ -478,7 +478,7 @@ public  class FlDeviceBean
     public void setMac(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, mac) && checkMacInitialized()) {
+        if (Objects.equals(newVal, mac)) {
             return;
         }
         mac = newVal;
@@ -533,7 +533,7 @@ public  class FlDeviceBean
     public void setRemark(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, remark) && checkRemarkInitialized()) {
+        if (Objects.equals(newVal, remark)) {
             return;
         }
         remark = newVal;
@@ -589,7 +589,7 @@ public  class FlDeviceBean
     public void setCreateTime(java.util.Date newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, createTime) && checkCreateTimeInitialized()) {
+        if (Objects.equals(newVal, createTime)) {
             return;
         }
         createTime = newVal;
@@ -655,7 +655,7 @@ public  class FlDeviceBean
     public void setUpdateTime(java.util.Date newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, updateTime) && checkUpdateTimeInitialized()) {
+        if (Objects.equals(newVal, updateTime)) {
             return;
         }
         updateTime = newVal;

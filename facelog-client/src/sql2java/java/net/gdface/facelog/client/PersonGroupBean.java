@@ -177,7 +177,7 @@ public  class PersonGroupBean
     public void setId(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, id) && checkIdInitialized()) {
+        if (Objects.equals(newVal, id)) {
             return;
         }
         id = newVal;
@@ -243,7 +243,7 @@ public  class PersonGroupBean
     public void setName(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, name) && checkNameInitialized()) {
+        if (Objects.equals(newVal, name)) {
             return;
         }
         name = newVal;
@@ -298,7 +298,7 @@ public  class PersonGroupBean
     public void setLeaf(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, leaf) && checkLeafInitialized()) {
+        if (Objects.equals(newVal, leaf)) {
             return;
         }
         leaf = newVal;
@@ -364,7 +364,7 @@ public  class PersonGroupBean
     public void setParent(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, parent) && checkParentInitialized()) {
+        if (Objects.equals(newVal, parent)) {
             return;
         }
         parent = newVal;
@@ -429,7 +429,7 @@ public  class PersonGroupBean
     public void setRemark(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, remark) && checkRemarkInitialized()) {
+        if (Objects.equals(newVal, remark)) {
             return;
         }
         remark = newVal;
@@ -535,7 +535,7 @@ public  class PersonGroupBean
     public void setExtTxt(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, extTxt) && checkExtTxtInitialized()) {
+        if (Objects.equals(newVal, extTxt)) {
             return;
         }
         extTxt = newVal;
@@ -591,7 +591,7 @@ public  class PersonGroupBean
     public void setCreateTime(java.util.Date newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, createTime) && checkCreateTimeInitialized()) {
+        if (Objects.equals(newVal, createTime)) {
             return;
         }
         createTime = newVal;
@@ -657,7 +657,7 @@ public  class PersonGroupBean
     public void setUpdateTime(java.util.Date newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, updateTime) && checkUpdateTimeInitialized()) {
+        if (Objects.equals(newVal, updateTime)) {
             return;
         }
         updateTime = newVal;

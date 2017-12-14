@@ -163,7 +163,7 @@ public  class FlLogLightBean
     public void setId(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, id) && checkIdInitialized()) {
+        if (Objects.equals(newVal, id)) {
             return;
         }
         id = newVal;
@@ -230,7 +230,7 @@ public  class FlLogLightBean
     public void setPersonId(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, personId) && checkPersonIdInitialized()) {
+        if (Objects.equals(newVal, personId)) {
             return;
         }
         personId = newVal;
@@ -296,7 +296,7 @@ public  class FlLogLightBean
     public void setName(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, name) && checkNameInitialized()) {
+        if (Objects.equals(newVal, name)) {
             return;
         }
         name = newVal;
@@ -351,7 +351,7 @@ public  class FlLogLightBean
     public void setPapersType(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, papersType) && checkPapersTypeInitialized()) {
+        if (Objects.equals(newVal, papersType)) {
             return;
         }
         papersType = newVal;
@@ -416,7 +416,7 @@ public  class FlLogLightBean
     public void setPapersNum(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, papersNum) && checkPapersNumInitialized()) {
+        if (Objects.equals(newVal, papersNum)) {
             return;
         }
         papersNum = newVal;
@@ -473,7 +473,7 @@ public  class FlLogLightBean
     public void setVerifyTime(java.util.Date newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, verifyTime) && checkVerifyTimeInitialized()) {
+        if (Objects.equals(newVal, verifyTime)) {
             return;
         }
         verifyTime = newVal;

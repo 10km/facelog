@@ -175,7 +175,7 @@ public  class LogBean
     public void setId(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, id) && checkIdInitialized()) {
+        if (Objects.equals(newVal, id)) {
             return;
         }
         id = newVal;
@@ -242,7 +242,7 @@ public  class LogBean
     public void setPersonId(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, personId) && checkPersonIdInitialized()) {
+        if (Objects.equals(newVal, personId)) {
             return;
         }
         personId = newVal;
@@ -308,7 +308,7 @@ public  class LogBean
     public void setDeviceId(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, deviceId) && checkDeviceIdInitialized()) {
+        if (Objects.equals(newVal, deviceId)) {
             return;
         }
         deviceId = newVal;
@@ -374,7 +374,7 @@ public  class LogBean
     public void setVerifyFeature(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, verifyFeature) && checkVerifyFeatureInitialized()) {
+        if (Objects.equals(newVal, verifyFeature)) {
             return;
         }
         verifyFeature = newVal;
@@ -430,7 +430,7 @@ public  class LogBean
     public void setCompareFace(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, compareFace) && checkCompareFaceInitialized()) {
+        if (Objects.equals(newVal, compareFace)) {
             return;
         }
         compareFace = newVal;
@@ -495,7 +495,7 @@ public  class LogBean
     public void setVerifyStatus(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, verifyStatus) && checkVerifyStatusInitialized()) {
+        if (Objects.equals(newVal, verifyStatus)) {
             return;
         }
         verifyStatus = newVal;
@@ -560,7 +560,7 @@ public  class LogBean
     public void setSimilarty(Double newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, similarty) && checkSimilartyInitialized()) {
+        if (Objects.equals(newVal, similarty)) {
             return;
         }
         similarty = newVal;
@@ -627,7 +627,7 @@ public  class LogBean
     public void setVerifyTime(java.util.Date newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, verifyTime) && checkVerifyTimeInitialized()) {
+        if (Objects.equals(newVal, verifyTime)) {
             return;
         }
         verifyTime = newVal;
@@ -693,7 +693,7 @@ public  class LogBean
     public void setCreateTime(java.util.Date newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, createTime) && checkCreateTimeInitialized()) {
+        if (Objects.equals(newVal, createTime)) {
             return;
         }
         createTime = newVal;

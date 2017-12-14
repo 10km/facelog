@@ -167,7 +167,7 @@ public  class FlFeatureBean
     public void setMd5(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, md5) && checkMd5Initialized()) {
+        if (Objects.equals(newVal, md5)) {
             return;
         }
         md5 = newVal;
@@ -223,7 +223,7 @@ public  class FlFeatureBean
     public void setPersonId(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, personId) && checkPersonIdInitialized()) {
+        if (Objects.equals(newVal, personId)) {
             return;
         }
         personId = newVal;
@@ -289,7 +289,7 @@ public  class FlFeatureBean
     public void setFeature(java.nio.ByteBuffer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, feature) && checkFeatureInitialized()) {
+        if (Objects.equals(newVal, feature)) {
             return;
         }
         feature = newVal;
@@ -345,7 +345,7 @@ public  class FlFeatureBean
     public void setUpdateTime(java.util.Date newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, updateTime) && checkUpdateTimeInitialized()) {
+        if (Objects.equals(newVal, updateTime)) {
             return;
         }
         updateTime = newVal;

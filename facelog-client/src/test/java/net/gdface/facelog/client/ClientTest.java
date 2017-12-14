@@ -25,7 +25,7 @@ public class ClientTest implements CommonConstant {
 	}
 
 	@Test
-	public void test() {
+	public void test1SavePerson() {
 		PersonBean newPerson = PersonBean.builder().name("guyadong").build();
 		try {
 			newPerson = facelogClient.savePerson(newPerson,null);
@@ -39,7 +39,20 @@ public class ClientTest implements CommonConstant {
 		}
 	}
 	@Test
-	public void testGetDeviceIdOfFeature(){
+	public void test2List(){
+		try{
+			List<Integer> persons = facelogClient.loadAllPerson();
+			for(Integer id:persons){
+				System.out.println(facelogClient.getPerson(id).toString(true, false));
+			}
+		}catch(ServiceRuntimeException e){
+			e.printServiceStackTrace();
+		}catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+	@Test
+	public void test3GetDeviceIdOfFeature(){
 		try{
 			Integer deviceId = facelogClient.getDeviceIdOfFeature(null);
 			System.out.println(deviceId);

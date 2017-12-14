@@ -192,7 +192,7 @@ public  class FaceBean
     public void setId(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, id) && checkIdInitialized()) {
+        if (Objects.equals(newVal, id)) {
             return;
         }
         id = newVal;
@@ -259,7 +259,7 @@ public  class FaceBean
     public void setImageMd5(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, imageMd5) && checkImageMd5Initialized()) {
+        if (Objects.equals(newVal, imageMd5)) {
             return;
         }
         imageMd5 = newVal;
@@ -314,7 +314,7 @@ public  class FaceBean
     public void setFaceLeft(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, faceLeft) && checkFaceLeftInitialized()) {
+        if (Objects.equals(newVal, faceLeft)) {
             return;
         }
         faceLeft = newVal;
@@ -379,7 +379,7 @@ public  class FaceBean
     public void setFaceTop(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, faceTop) && checkFaceTopInitialized()) {
+        if (Objects.equals(newVal, faceTop)) {
             return;
         }
         faceTop = newVal;
@@ -444,7 +444,7 @@ public  class FaceBean
     public void setFaceWidth(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, faceWidth) && checkFaceWidthInitialized()) {
+        if (Objects.equals(newVal, faceWidth)) {
             return;
         }
         faceWidth = newVal;
@@ -509,7 +509,7 @@ public  class FaceBean
     public void setFaceHeight(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, faceHeight) && checkFaceHeightInitialized()) {
+        if (Objects.equals(newVal, faceHeight)) {
             return;
         }
         faceHeight = newVal;
@@ -573,7 +573,7 @@ public  class FaceBean
     public void setEyeLeftx(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, eyeLeftx) && checkEyeLeftxInitialized()) {
+        if (Objects.equals(newVal, eyeLeftx)) {
             return;
         }
         eyeLeftx = newVal;
@@ -637,7 +637,7 @@ public  class FaceBean
     public void setEyeLefty(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, eyeLefty) && checkEyeLeftyInitialized()) {
+        if (Objects.equals(newVal, eyeLefty)) {
             return;
         }
         eyeLefty = newVal;
@@ -701,7 +701,7 @@ public  class FaceBean
     public void setEyeRightx(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, eyeRightx) && checkEyeRightxInitialized()) {
+        if (Objects.equals(newVal, eyeRightx)) {
             return;
         }
         eyeRightx = newVal;
@@ -765,7 +765,7 @@ public  class FaceBean
     public void setEyeRighty(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, eyeRighty) && checkEyeRightyInitialized()) {
+        if (Objects.equals(newVal, eyeRighty)) {
             return;
         }
         eyeRighty = newVal;
@@ -829,7 +829,7 @@ public  class FaceBean
     public void setMouthX(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, mouthX) && checkMouthXInitialized()) {
+        if (Objects.equals(newVal, mouthX)) {
             return;
         }
         mouthX = newVal;
@@ -893,7 +893,7 @@ public  class FaceBean
     public void setMouthY(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, mouthY) && checkMouthYInitialized()) {
+        if (Objects.equals(newVal, mouthY)) {
             return;
         }
         mouthY = newVal;
@@ -957,7 +957,7 @@ public  class FaceBean
     public void setNoseX(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, noseX) && checkNoseXInitialized()) {
+        if (Objects.equals(newVal, noseX)) {
             return;
         }
         noseX = newVal;
@@ -1021,7 +1021,7 @@ public  class FaceBean
     public void setNoseY(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, noseY) && checkNoseYInitialized()) {
+        if (Objects.equals(newVal, noseY)) {
             return;
         }
         noseY = newVal;
@@ -1085,7 +1085,7 @@ public  class FaceBean
     public void setAngleYaw(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, angleYaw) && checkAngleYawInitialized()) {
+        if (Objects.equals(newVal, angleYaw)) {
             return;
         }
         angleYaw = newVal;
@@ -1149,7 +1149,7 @@ public  class FaceBean
     public void setAnglePitch(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, anglePitch) && checkAnglePitchInitialized()) {
+        if (Objects.equals(newVal, anglePitch)) {
             return;
         }
         anglePitch = newVal;
@@ -1213,7 +1213,7 @@ public  class FaceBean
     public void setAngleRoll(Integer newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, angleRoll) && checkAngleRollInitialized()) {
+        if (Objects.equals(newVal, angleRoll)) {
             return;
         }
         angleRoll = newVal;
@@ -1330,7 +1330,7 @@ public  class FaceBean
     public void setFeatureMd5(String newVal)
     {
         checkMutable();
-        if (Objects.equals(newVal, featureMd5) && checkFeatureMd5Initialized()) {
+        if (Objects.equals(newVal, featureMd5)) {
             return;
         }
         featureMd5 = newVal;
