@@ -2,6 +2,8 @@ package net.gdface.facelog.service;
 
 import static com.google.common.base.Preconditions.*;
 
+import com.google.common.base.Strings;
+
 import net.gdface.facelog.service.TokenMangement.TokenOp;
 
 
@@ -17,15 +19,12 @@ public class TokenContext implements ServiceConstant {
 			return new TokenContext();
 		}};
 	/**  是否记录详细异常信息  */
-	private static final boolean errorDetail;
-	static{
-		TlsHandler.INSTANCE.registerTls(TOKEN_CONTEXT);
-		errorDetail = CONFIG.getBoolean(SYSLOG_OP_TOKEN_ERRORDETAIL);
-	}
+	private static final boolean errorDetail = CONFIG.getBoolean(SYSLOG_OP_TOKEN_ERRORDETAIL);
 	private Token token;
 	private TokenOp tokenOp;
 	private boolean ok;
 	private ServiceSecurityException error;
+	private String methodName;
 	private TokenContext() {
 		reset();
 	}
@@ -42,9 +41,11 @@ public class TokenContext implements ServiceConstant {
 	/**
 	 * 设置当前令牌
 	 * @param token 不可为{@code null} 
+	 * @return 
 	 */
-	public void setToken(Token token) {
+	public TokenContext setToken(Token token) {
 		this.token = checkNotNull(token);
+		return this;
 	}
 	/** 返回当前令牌操作类型 */
 	public TokenOp getTokenOp() {
@@ -81,9 +82,30 @@ public class TokenContext implements ServiceConstant {
 		return this;
 	}
 	/**
+	 * 返回当前服务方法名
+	 * @return
+	 */
+	public String getMethodName() {
+		return methodName;
+	}
+	/**
+	 * 设置当前方法名
+	 * @param methodName
+	 * @return 
+	 * @throws IllegalStateException {@link #methodName}字段已经初始化
+	 * @throws IllegalArgumentException {@code methodName}为空或{@code null}
+	 */
+	TokenContext setMethodName(String methodName) {
+		checkState(null == this.methodName,"methodName be initialized already");
+		checkArgument(!Strings.isNullOrEmpty(methodName),"methodName is null or empty");
+		this.methodName = methodName;
+		return this;
+	}
+	/**
+	 * 上下文对象生命期结束时调用<br>
 	 * 记录令牌操作日志
 	 */
-	void onPortDone(Object context, String methodName) {
+	void contextDone() {
 		if(TokenOp.UNINITIALIZED != tokenOp){
 			if(this.ok){
 				logger.info("PORT:{} OP:{}: FROM:{} BY:{}: OK",
@@ -92,7 +114,7 @@ public class TokenContext implements ServiceConstant {
 						ServiceUtil.clientAddressAsString(),
 						getToken().owner());
 			}else{
-				logger.error("PORT:{} OP:{}: FROM:{} BY:{}: ERROR:{}",
+				logger.error("PORT:{} OP:{}: FROM:{} BY:{}: MESSAGE:{}",
 						methodName,
 						tokenOp.name(),
 						ServiceUtil.clientAddressAsString(),
@@ -103,6 +125,8 @@ public class TokenContext implements ServiceConstant {
 				}
 			}
 		}
+		// 释放TLS变量
+		TOKEN_CONTEXT.remove();
 	}
 	/**
 	 * 返回当前线程拥有的{@link TokenContext}对象

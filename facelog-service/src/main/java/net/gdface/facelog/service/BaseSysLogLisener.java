@@ -61,7 +61,8 @@ public abstract class BaseSysLogLisener<B extends BaseBean<B>>
 	}
 	private void log(B bean,WriteOp writeOp){
 		if(logOp.contains(writeOp)){
-			logger.info("OP:{}: FROM:{} BY:{}: {}: {}",
+			logger.info("PORT:{} OP:{}: FROM:{} BY:{}: {}: {}",
+					TokenContext.getCurrentTokenContext().getMethodName(),
 					writeOp.name(),
 					ServiceUtil.clientAddressAsString(),
 					TokenContext.getCurrentTokenContext().getToken().owner(),

@@ -28,6 +28,8 @@ public class TlsHandler extends ThriftEventHandler {
 	 */
 	@Override
 	public void postRead(Object context, String methodName, Object[] args) {
+		// 服务方法调用开始前初始化 TokenContext 
+		TokenContext.getCurrentTokenContext().setMethodName(methodName);
 		if(args.length > 0){
 			// 捕获最后一个类型为Token的参数存入TLS
 			Object last = args[args.length-1];
@@ -39,7 +41,8 @@ public class TlsHandler extends ThriftEventHandler {
 	/** called by swift only<br>  */
 	@Override
 	public void done(Object context, String methodName) {
-		TokenContext.getCurrentTokenContext().onPortDone(context, methodName);
+		// 服务方法结束
+		TokenContext.getCurrentTokenContext().contextDone();
 		for( IPortDone done : dones){
 			done.onDone(context, methodName);
 		}
