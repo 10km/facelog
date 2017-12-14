@@ -3,7 +3,7 @@
 	<root>
 		<password description="root帐户密码">root</password>
 	</root>
-	<token>
+	<token description ="令牌(安全)管理参数">
 		<!-- <salt description ="用于password加密的salt,必须是32MD5字符串(小写)">48c22d7ad7cd2a2166a6f818b6d7ab3e</salt> -->
 		<salt description ="用于password加密的salt,创建系统时设定就不可再更改">6AE29B5A44C018611994DD453362F1C73208A84A2FE6D1FF49896AAC9C2B56C0</salt>
 		<device>
@@ -26,7 +26,7 @@
 		<expire description="心跳包失效时间[秒]">60</expire>
 	</heartbeat>
 
-	<redis>
+	<redis description = "redis 参数配置">
 		<home description="redis 安装位置"></home>
 		<waitIfAbsent description="redis 没启动时是否等待"></waitIfAbsent>
 		<tryCount description="redis 等待重试次数">10</tryCount>
@@ -99,7 +99,7 @@
 			</table>
 		</device>
 	</security>
-	<monitor>
+	<monitor description ="监控通道配置">
 		<log description="服务端是否主动向人员验证实时监控通道发送log日志">false</log>
 	</monitor>
 	<executor description="服务端线程池配置">

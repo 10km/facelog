@@ -24,7 +24,7 @@ public class TlsHandler extends ThriftEventHandler {
 	
 	/**
 	 * called by swift only<br>
-	 * 服务方法被调用前从方法参数中查找最后一个类型为{@link Token}的参数对象存入TLS变量 {@link #tlsToken}
+	 * 服务方法被调用前从方法参数中查找最后一个类型为{@link Token}的参数对象存入TLS变量
 	 */
 	@Override
 	public void postRead(Object context, String methodName, Object[] args) {

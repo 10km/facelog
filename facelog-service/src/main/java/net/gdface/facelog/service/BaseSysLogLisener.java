@@ -29,7 +29,7 @@ public abstract class BaseSysLogLisener<B extends BaseBean<B>>
 	extends TableListener.Adapter<B> implements ServiceConstant {
 	/** 表名 */
 	private final String beanName;
-	/** 需要记录日志的操作 */
+	/** 需要记录日志的操作,从配置文件中读取 */
 	private final ImmutableSet<WriteOp> logOp;
 	/**
 	 * 构造函数
@@ -59,6 +59,11 @@ public abstract class BaseSysLogLisener<B extends BaseBean<B>>
 	public void afterDelete(B bean) throws RuntimeDaoException {
 		log(bean,WriteOp.delete);
 	}
+	/**
+	 * 记录日志
+	 * @param bean
+	 * @param writeOp 写操作类型
+	 */
 	private void log(B bean,WriteOp writeOp){
 		if(logOp.contains(writeOp)){
 			logger.info("PORT:{} OP:{}: FROM:{} BY:{}: {}: {}",
@@ -70,18 +75,23 @@ public abstract class BaseSysLogLisener<B extends BaseBean<B>>
 					bean.toString(true, false));
 		}
 	}
+	/** fl_person 表日志记录侦听器实例 */
 	public static final BaseSysLogLisener<PersonBean> 
 		PERSON_LOG_LISTENER 
 		= new BaseSysLogLisener<PersonBean>(SYSLOG_OP_DAO_PERSON){};
+	/** fl_person_group 表日志记录侦听器实例 */
 	public static final BaseSysLogLisener<PersonGroupBean> 
 		PERSON_GROUP_LOG_LISTENER 
 		= new BaseSysLogLisener<PersonGroupBean>(SYSLOG_OP_DAO_PERSONGROUP){};
+	/** fl_device 表日志记录侦听器实例 */
 	public static final BaseSysLogLisener<DeviceBean> 
 		DEVICE_LOG_LISTENER 
-		= new BaseSysLogLisener<DeviceBean>(SYSLOG_OP_DAO_DEVICE){};	
+		= new BaseSysLogLisener<DeviceBean>(SYSLOG_OP_DAO_DEVICE){};
+	/** fl_device_group 表日志记录侦听器实例 */
 	public static final BaseSysLogLisener<DeviceGroupBean> 
 		DEVICE_GROUP_LOG_LISTENER 
-		= new BaseSysLogLisener<DeviceGroupBean>(SYSLOG_OP_DAO_DEVICEGROUP){};	
+		= new BaseSysLogLisener<DeviceGroupBean>(SYSLOG_OP_DAO_DEVICEGROUP){};
+	/** fl_permit 表日志记录侦听器实例 */
 	public static final BaseSysLogLisener<PermitBean> 
 		PERMIT_LOG_LISTENER 
 		= new BaseSysLogLisener<PermitBean>(SYSLOG_OP_DAO_PERMIT){};	
