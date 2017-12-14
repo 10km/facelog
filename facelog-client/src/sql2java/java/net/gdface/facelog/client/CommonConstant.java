@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import gu.simplemq.Channel;
 /**
- * client端和服务端共用的变量定义
+ * client端和服务端共用的常量定义
  * @author guyadong
  *
  */

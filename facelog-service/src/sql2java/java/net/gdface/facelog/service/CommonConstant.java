@@ -14,7 +14,7 @@ import gu.simplemq.Channel;
 import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.LogBean;
 /**
- * client端和服务端共用的变量定义
+ * client端和服务端共用的常量定义
  * @author guyadong
  *
  */
