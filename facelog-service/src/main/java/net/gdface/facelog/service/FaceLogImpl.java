@@ -11,13 +11,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
-import org.javatuples.Pair;
+
+import org.apache.commons.lang3.tuple.Pair;
 import com.google.common.base.Predicates;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Preconditions.*;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
@@ -103,6 +104,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	/** 
 	 * 增加人员姓名检查,参见 {@link #checkPersonName(PersonBean)}<br>
 	 * 增加 password密文更新
+	 * @throws IllegalStateException {@code password}不是有效的MD5字符串
 	 */
 	@Override
 	protected PersonBean daoSavePerson(PersonBean personBean) throws RuntimeDaoException {
@@ -138,26 +140,21 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	
 	protected boolean daoGetGroupPermit(Integer deviceId,Integer personGroupId){
 		PersonGroupBean personGroup;
-		DeviceBean device;
+		final DeviceBean device;
 		if(null == deviceId
 			|| null == personGroupId 
 			|| null ==(device = daoGetDevice(deviceId))
 			|| null == (personGroup = daoGetPersonGroup(personGroupId))){
 			return false;
 		}
-		DeviceGroupBean deviceGroup = daoGetDeviceGroup(device.getGroupId());
-		List<PersonGroupBean> personGroupList = daoListOfParentForPersonGroup(personGroup);
-		
-		if(null == deviceGroup || personGroupList.isEmpty()){
-			return false;
-		}
+		List<PersonGroupBean> personGroupList = daoListOfParentForPersonGroup(personGroup);		
+
 		// person group 及其parent,任何一个在permit表中就返回true
-		for(PersonGroupBean group:personGroupList){
-			if(daoExistsPermit(deviceGroup.getId(), group.getId())){
-				return true;
-			}
-		}
-		return false;
+		return Iterators.tryFind(personGroupList.iterator(), new Predicate<PersonGroupBean>(){
+			@Override
+			public boolean apply(PersonGroupBean input) {
+				return daoExistsPermit(device.getGroupId(), input.getId());
+			}}).isPresent();
 	}
 	protected boolean daoGetPersonPermit(Integer deviceId,Integer personId){
 		PersonBean person;
@@ -210,7 +207,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		imageBean.setHeight(image.getHeight());
 		imageBean.setFormat(image.getSuffix());
 		StoreBean storeBean = makeStoreBean(imageBytes, md5, null);
-		return Pair.with(imageBean, storeBean);
+		return Pair.of(imageBean, storeBean);
 	}
 	protected ImageBean daoAddImage(ByteBuffer imageBytes,DeviceBean refFlDevicebyDeviceId
 	        , Collection<FaceBean> impFlFacebyImgMd5 , Collection<PersonBean> impFlPersonbyImageMd5) throws DuplicateRecordException{
@@ -225,8 +222,8 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		daoAddStore(pair.getValue1());
-		return daoAddImage(pair.getValue0(), refFlDevicebyDeviceId, impFlFacebyImgMd5, impFlPersonbyImageMd5);
+		daoAddStore(pair.getRight());
+		return daoAddImage(pair.getLeft(), refFlDevicebyDeviceId, impFlFacebyImgMd5, impFlPersonbyImageMd5);
 	}
 	/**
 	 * (递归)删除imageMd5指定图像及其缩略图

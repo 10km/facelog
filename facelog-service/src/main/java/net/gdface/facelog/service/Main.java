@@ -13,6 +13,7 @@ public class Main implements ServiceConstant {
 	}
 
 	public static void main(String[] args) {
+		Logo.textLogo();
 		try{
 			Server server = Server.bulider()
 					.withServices(new FaceLogImpl())
