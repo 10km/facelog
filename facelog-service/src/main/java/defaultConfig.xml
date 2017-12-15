@@ -128,7 +128,10 @@
 				<errorDetail description = "是否记录详细异常信息">false</errorDetail>
 			</token>
 		</op>
+		<!-- log4j相关配置参数，不指定则使用log4j.properties中的值 -->
+		<!-- 对应 log4j key :log4j.rootCategory 中的level -->
 		<level description ="系统日志级别 [OFF,FATAL,ERROR,WARN,INFO,DEBUG,ALL]"></level>
+		<!-- 对应的 log4j key :log4j.appender.LOGFILE.File  -->
 		<location description = "系统日志文件位置"></location>
 	</syslog>
 </configuration>

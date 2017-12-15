@@ -174,5 +174,17 @@ public class TokenTest implements CommonConstant {
 			assertTrue(e.getServiceStackTraceMessage(),false);
 		}
 	}
-
+	@Test
+	public void test5SaveServiceConfig(){
+		try{
+			facelogClient.setProperty("do.test.my.key", "芳华", rootToken);
+			facelogClient.saveServiceConfig(rootToken);
+		}catch(ServiceRuntimeException e){
+			e.printServiceStackTrace();
+			assertTrue(e.getMessage(),false);
+		}catch(RuntimeException e){
+			e.printStackTrace();
+			assertTrue(e.getMessage(),false);
+		}
+	}
 }

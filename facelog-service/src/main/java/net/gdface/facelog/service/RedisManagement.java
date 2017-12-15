@@ -122,7 +122,8 @@ class RedisManagement implements ServiceConstant{
 						startLocalServer(parameters);
 						localServerStarted = true;	
 					}else {
-						throw new RuntimeException(String.format("cann't connect redis server(无法连接redis服务器) %s",redisURI),e);
+						throw new RuntimeException(
+								String.format("cann't connect redis server(无法连接redis服务器,请检查redis服务器是否启动以及密码是否正确) %s",redisURI),e);
 					}
 				} else if(waitIfAbsent && tryCountLimit-- > 0){
 					logger.info("waiting for redis server...{}",tryCountLimit);
