@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>net.gdface.facelog</groupId>
 		<artifactId>facelog</artifactId>
-		<version>1.0</version>
+		<version>1.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>facelog-client</artifactId>
 	<name>client</name>
@@ -34,7 +34,7 @@
 		<dependency>
 			<groupId>gu.simplemq</groupId>
 			<artifactId>simplemq</artifactId>
-			<version>1.0</version>
+			<version>1.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>

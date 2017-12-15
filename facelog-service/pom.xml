@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>net.gdface.facelog</groupId>
 		<artifactId>facelog</artifactId>
-		<version>1.0</version>
+		<version>1.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>facelog-service</artifactId>
 	<name>facelog-service</name>
@@ -21,12 +21,12 @@
 		<dependency>
 			<groupId>gu.simplemq</groupId>
 			<artifactId>simplemq</artifactId>
-			<version>1.0</version>
+			<version>1.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>net.gdface.common</groupId>
 			<artifactId>common-base</artifactId>
-			<version>1.0</version>
+			<version>1.1-SNAPSHOT</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
 		<dependency>
