@@ -185,7 +185,9 @@ public class GlobalConfig implements ServiceConstant{
 				logger.info("{}({}):{}", PropName.database,descriptionOf(REDIS_DATABASE),params.get(PropName.database));
 			}
 			if(params.containsKey(PropName.password)){
-				logger.info("{}({}):{}", PropName.password,descriptionOf(REDIS_PASSWORD),params.get(PropName.password));
+				Object password = params.get(PropName.password); 
+				logger.info("{}({}):{}", PropName.password,descriptionOf(REDIS_PASSWORD),
+						null == password ? password :"*****");
 			}
 		}
 		if(params.containsKey(PropName.timeout)){

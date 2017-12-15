@@ -169,8 +169,9 @@ class RedisManagement implements ServiceConstant{
 					args.add("--requirepass " + parameters.get(PropName.password));
 				}
 				try {
+					logger.info("start redis server(启动redis服务器)");
 					String cmd = Joiner.on(' ').join(args);
-					logger.info("start redis server(启动redis服务器): {}",cmd);
+					logger.debug("cmd(启动命令): {}",cmd);
 					Runtime.getRuntime().exec(cmd);
 				} catch (IOException e) {
 					throw new RuntimeException(e);

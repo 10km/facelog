@@ -128,5 +128,7 @@
 				<errorDetail description = "是否记录详细异常信息">false</errorDetail>
 			</token>
 		</op>
+		<level description ="系统日志级别 [OFF,FATAL,ERROR,WARN,INFO,DEBUG,ALL]"></level>
+		<location description = "系统日志文件位置"></location>
 	</syslog>
 </configuration>
