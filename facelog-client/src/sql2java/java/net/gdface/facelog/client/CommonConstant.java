@@ -271,7 +271,7 @@ public interface CommonConstant {
     /** 令牌日志:是否记录详细异常信息 */
     public static final String SYSLOG_OP_TOKEN_ERRORDETAIL = "syslog.op.token.errorDetail";
 
-    /** 系统日志级别 (INFO,DEBUG,ERROR,WARN) */
+    /** 系统日志级别 [OFF,FATAL,ERROR,WARN,INFO,DEBUG,ALL] */
     public static final String SYSLOG_LEVEL = "syslog.level";
 
     /** 系统日志文件位置 */
