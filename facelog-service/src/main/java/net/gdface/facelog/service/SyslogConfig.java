@@ -16,7 +16,7 @@ public class SyslogConfig implements ServiceConstant{
 	private static final String LOG4J_LOGFILE = "log4j.appender.LOGFILE.File";
 	private static final String PROPERTIES_FILE = "/log4j.properties";
 
-	/** log4j log level:  OFF, FATAL, ERROR, WARN, INFO, DEBUG, ALL*/
+	/** log4j log level */
 	private enum LogLevel{
 		/** log4j log level: OFF */OFF,
 		/** log4j log level: FATAL */FATAL,
@@ -39,6 +39,7 @@ public class SyslogConfig implements ServiceConstant{
 			boolean modified = false;
 			Properties properties = new Properties();
 			properties.load(SyslogConfig.class.getResourceAsStream(PROPERTIES_FILE));
+			// 读取日志级别参数，如果没有定义就用log4j.properties中的默认值
 			LogLevel level = CONFIG.get(LogLevel.class, SYSLOG_LEVEL);
 			if(null != level){
 				String rootcategory =properties.getProperty(LOG4J_ROOTCATEGORY).
@@ -48,7 +49,7 @@ public class SyslogConfig implements ServiceConstant{
 			}
 			level = LogLevel.valueOf(properties.getProperty(LOG4J_ROOTCATEGORY).replaceAll("^("+Joiner.on("|").join(LogLevel.values())+").*", "$1"));
 			logger.info("{}({}) = {}",SYSLOG_LEVEL,GlobalConfig.descriptionOf(SYSLOG_LEVEL),level);
-			
+			// 读取日志文件位置参数，如果没有定义就用log4j.properties中的默认值
 			String location = CONFIG.getString(SYSLOG_LOCATION);
 			if(null != location){
 				properties.setProperty(LOG4J_LOGFILE, location.toString());
