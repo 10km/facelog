@@ -53,6 +53,27 @@
 					</execution>
 				</executions>
 			</plugin>
+		    <plugin>  
+		      <groupId>org.apache.maven.plugins</groupId>  
+		        <artifactId>maven-release-plugin</artifactId>  
+		        <version>2.5.3</version>  
+		        <configuration>  
+		          <providerImplementations>  
+		            <git>jgit</git> 
+		          </providerImplementations>  
+		          <username>l0km</username>  
+		          <password>gyd86471910</password>  
+		          <tagBase>${project.artifactId}-${project.version}</tagBase>  
+		          <goals>-f pom.xml deploy</goals>  
+		        </configuration>  
+		        <dependencies>  
+		          <dependency>  
+		            <groupId>org.apache.maven.scm</groupId>  
+		            <artifactId>maven-scm-provider-jgit</artifactId>  
+		            <version>1.9.5</version>
+		          </dependency>  
+		        </dependencies>  
+		    </plugin> 
 		</plugins>
 	</build>
 	<modules>
@@ -62,4 +83,9 @@
 		<module>facelog-service</module>
 		<module>facelog-client</module>
 	</modules>
+	<scm>
+		<connection>scm:git:https://gitee.com/l0km/facelog.git</connection>
+		<developerConnection>scm:git:https://gitee.com/l0km/facelog.git</developerConnection>
+		<url>https://gitee.com/l0km/facelog</url>
+	</scm>
 </project>
