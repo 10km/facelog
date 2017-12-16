@@ -14,6 +14,7 @@ import com.facebook.swift.service.ThriftServer;
 import com.facebook.swift.service.ThriftServerConfig;
 import com.facebook.swift.service.ThriftService;
 import com.facebook.swift.service.ThriftServiceProcessor;
+import com.facebook.swift.service.ThriftServiceProcessorCustom;
 import com.facebook.swift.service.metadata.ThriftServiceMetadata;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
@@ -97,7 +98,7 @@ class Server implements ServiceConstant{
 		int port = this.thriftServerConfig.getPort();
 		checkArgument(port > 0 && port < 65535,  "INVALID service port %d", port);
 
-		this.processor = new ThriftServiceProcessor(
+		this.processor = new ThriftServiceProcessorCustom(
 				new ThriftCodecManager(), 
 				checkNotNull(eventHandlers,"eventHandlers is null"),
 				services);
