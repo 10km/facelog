@@ -162,7 +162,7 @@ public class PermitCacheManager extends PermitManager
 
     @Override
     public PermitBean save(PermitBean bean){
-        boolean modified = bean.isModified();
+        boolean modified = null == bean ? false : bean.isModified();
         super.save(bean);
         if( modified && UpdateStrategy.refresh == cache.getUpdateStrategy() ){
             bean.copy(cache.getBeanUnchecked(bean.getDeviceGroupId(),bean.getPersonGroupId())).resetIsModified();

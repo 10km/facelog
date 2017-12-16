@@ -1246,7 +1246,7 @@ public class IFaceLogClient implements Constant{
      */
     public ImageBean addImage(
             byte[] imageData,
-            int deviceId,
+            Integer deviceId,
             FaceBean faceBean,
             int personId,
             net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.DuplicateRecordException{

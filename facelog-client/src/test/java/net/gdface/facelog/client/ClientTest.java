@@ -92,11 +92,13 @@ public class ClientTest implements CommonConstant {
 			byte[] imgBytes = FaceUtilits.getBytesNotEmpty(new File("d:\\tmp\\guyadong-12.jpg"));
 			String md5 = Hashing.md5().hashBytes(imgBytes).toString();
 			facelogClient.deleteImage(md5, rootToken);
-			facelogClient.addImage(FaceUtilits.getBytesNotEmpty(new File("d:\\tmp\\guyadong-12.jpg")), null, null, 0, rootToken);		
+			facelogClient.addImage(FaceUtilits.getBytesNotEmpty(new File("d:\\tmp\\guyadong-12.jpg")), null, null, 0, rootToken);
+			logger.info("image added");
 		}catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(false);
 		}catch (Exception e) {
+			e.printStackTrace();
 			logger.error(e.getMessage(), e);
 			assertTrue(false);
 		}

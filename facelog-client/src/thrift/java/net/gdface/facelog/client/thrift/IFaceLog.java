@@ -45,7 +45,7 @@ public interface IFaceLog
                       })
         ListenableFuture<ImageBean> addImage(
             @ThriftField(value=1, name="imageData", requiredness=Requiredness.NONE) final byte [] imageData,
-            @ThriftField(value=2, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+            @ThriftField(value=2, name="deviceId", requiredness=Requiredness.OPTIONAL) final Integer deviceId,
             @ThriftField(value=3, name="faceBean", requiredness=Requiredness.NONE) final FaceBean faceBean,
             @ThriftField(value=4, name="personId", requiredness=Requiredness.NONE) final int personId,
             @ThriftField(value=5, name="token", requiredness=Requiredness.NONE) final Token token
@@ -1035,7 +1035,7 @@ public interface IFaceLog
                   })
     ImageBean addImage(
         @ThriftField(value=1, name="imageData", requiredness=Requiredness.NONE) final byte [] imageData,
-        @ThriftField(value=2, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+        @ThriftField(value=2, name="deviceId", requiredness=Requiredness.OPTIONAL) final Integer deviceId,
         @ThriftField(value=3, name="faceBean", requiredness=Requiredness.NONE) final FaceBean faceBean,
         @ThriftField(value=4, name="personId", requiredness=Requiredness.NONE) final int personId,
         @ThriftField(value=5, name="token", requiredness=Requiredness.NONE) final Token token

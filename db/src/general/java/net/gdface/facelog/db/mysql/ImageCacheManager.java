@@ -167,7 +167,7 @@ public class ImageCacheManager extends ImageManager
 
     @Override
     public ImageBean save(ImageBean bean){
-        boolean modified = bean.isModified();
+        boolean modified = null == bean ? false : bean.isModified();
         super.save(bean);
         if( modified && UpdateStrategy.refresh == cache.getUpdateStrategy() ){
             bean.copy(cache.getBeanUnchecked(bean.getMd5())).resetIsModified();

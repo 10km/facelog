@@ -167,7 +167,7 @@ public class FaceCacheManager extends FaceManager
 
     @Override
     public FaceBean save(FaceBean bean){
-        boolean modified = bean.isModified();
+        boolean modified = null == bean ? false : bean.isModified();
         super.save(bean);
         if( modified && UpdateStrategy.refresh == cache.getUpdateStrategy() ){
             bean.copy(cache.getBeanUnchecked(bean.getId())).resetIsModified();
