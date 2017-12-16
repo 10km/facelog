@@ -1,5 +1,6 @@
 package net.gdface.facelog.client;
 
+import java.io.File;
 import java.util.List;
 
 import org.junit.AfterClass;
@@ -11,6 +12,7 @@ import org.junit.runners.MethodSorters;
 import static org.junit.Assert.*;
 
 import net.gdface.facelog.client.thrift.Token;
+import net.gdface.utils.FaceUtilits;
 
 /**
  * @author guyadong
@@ -82,8 +84,21 @@ public class ClientTest implements CommonConstant {
 			assertTrue(false);
 		}
 	}
+/*	@Test
+	public void test5AddImage(){
+		try{
+			facelogClient.addImage(FaceUtilits.getBytesNotEmpty(new File("d:\\tmp\\guyadong-12.jpg")), 0, null, 0, rootToken);		
+		}catch(ServiceRuntimeException e){
+			e.printServiceStackTrace();
+			assertTrue(false);
+		}catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			assertTrue(false);
+		}
+	}*/
+
 	@Test
-	public void test4DeleteAll(){
+	public void test5DeleteAll(){
 		try{
 			List<Integer> persons = facelogClient.loadAllPerson();			
 			facelogClient.deletePersons(persons, rootToken);
