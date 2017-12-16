@@ -1,8 +1,9 @@
 package net.gdface.facelog.service;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import com.facebook.swift.codec.ThriftField;
+import com.facebook.swift.codec.ThriftField.Requiredness;
 import com.facebook.swift.service.ThriftMethod;
 import com.facebook.swift.service.ThriftService;
 
@@ -16,7 +17,7 @@ import net.gdface.facelog.service.ServiceRuntimeException;
 @ThriftService
 public interface TestService {
 	@ThriftMethod
-	public long testLong(String s1,Integer p2);
+	public long testLong(String s1,@ThriftField(requiredness=Requiredness.OPTIONAL)Integer p2);
     @ThriftMethod
     public void fooOne(ByteBuffer input);
     @ThriftMethod
@@ -25,4 +26,6 @@ public interface TestService {
     public TestBean getBean() throws ServiceRuntimeException;
     @ThriftMethod
     public DeviceBean getBean3();
+    @ThriftMethod
+    public Short getChar(short c);
 }

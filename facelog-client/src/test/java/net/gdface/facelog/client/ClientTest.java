@@ -9,6 +9,8 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import com.google.common.hash.Hashing;
+
 import static org.junit.Assert.*;
 
 import net.gdface.facelog.client.thrift.Token;
@@ -84,10 +86,13 @@ public class ClientTest implements CommonConstant {
 			assertTrue(false);
 		}
 	}
-/*	@Test
+	@Test
 	public void test5AddImage(){
 		try{
-			facelogClient.addImage(FaceUtilits.getBytesNotEmpty(new File("d:\\tmp\\guyadong-12.jpg")), 0, null, 0, rootToken);		
+			byte[] imgBytes = FaceUtilits.getBytesNotEmpty(new File("d:\\tmp\\guyadong-12.jpg"));
+			String md5 = Hashing.md5().hashBytes(imgBytes).toString();
+			facelogClient.deleteImage(md5, rootToken);
+			facelogClient.addImage(FaceUtilits.getBytesNotEmpty(new File("d:\\tmp\\guyadong-12.jpg")), null, null, 0, rootToken);		
 		}catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(false);
@@ -95,7 +100,7 @@ public class ClientTest implements CommonConstant {
 			logger.error(e.getMessage(), e);
 			assertTrue(false);
 		}
-	}*/
+	}
 
 	@Test
 	public void test5DeleteAll(){
