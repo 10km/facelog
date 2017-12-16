@@ -8,6 +8,8 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import static org.junit.Assert.*;
+
 import net.gdface.facelog.client.thrift.Token;
 
 /**
@@ -41,8 +43,10 @@ public class ClientTest implements CommonConstant {
 			logger.info("person = {}", person.toString());
 		} catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
+			assertTrue(false);
 		}catch (Exception e) {
 			logger.error(e.getMessage(), e);
+			assertTrue(false);
 		}
 	}
 	@Test
@@ -54,8 +58,11 @@ public class ClientTest implements CommonConstant {
 			}
 		}catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
+			assertTrue(false);
 		}catch (Exception e) {
 			logger.error(e.getMessage(), e);
+			assertTrue(false);
+
 		}
 	}
 	@Test
@@ -69,8 +76,25 @@ public class ClientTest implements CommonConstant {
 			}
 		}catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
+			assertTrue(false);
 		}catch (Exception e) {
 			logger.error(e.getMessage(), e);
+			assertTrue(false);
+		}
+	}
+	@Test
+	public void test4DeleteAll(){
+		try{
+			List<Integer> persons = facelogClient.loadAllPerson();			
+			facelogClient.deletePersons(persons, rootToken);
+			int count = facelogClient.countPersonByWhere(null);
+			assertTrue(0 == count);
+		}catch(ServiceRuntimeException e){
+			e.printServiceStackTrace();
+			assertTrue(false);
+		}catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			assertTrue(false);
 		}
 	}
 }

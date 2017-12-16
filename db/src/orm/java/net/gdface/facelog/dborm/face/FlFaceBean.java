@@ -1617,7 +1617,7 @@ public  class FlFaceBean
 
     @Override
     public String toString() {
-        return toString(false,false);
+        return toString(true,false);
     }
     protected static final StringBuilder append(StringBuilder buffer,boolean full,byte[] value){
         if(full || null == value){

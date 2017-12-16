@@ -1610,7 +1610,9 @@ class Dao implements CommonConstant {
      */
     protected int daoCountPersonByWhere(String where)
                     throws RuntimeDaoException{
-        return getPersonManager().countWhere(where);
+        return null == where 
+        		? getPersonManager().countAll()
+        		: getPersonManager().countWhere(where);
     }
     //18
     /** 

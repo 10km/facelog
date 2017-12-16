@@ -1503,7 +1503,8 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     @Override
     public int countWhere(String where) throws DaoException
     {
-        String sql = "SELECT COUNT(*) AS MCOUNT FROM fl_image " + where;
+        String sql = new StringBuffer("SELECT COUNT(*) AS MCOUNT FROM fl_person ")
+    		    .append(null == where ? "" : where).toString();
         // System.out.println("countWhere: " + sql);
         Connection c = null;
         Statement st = null;

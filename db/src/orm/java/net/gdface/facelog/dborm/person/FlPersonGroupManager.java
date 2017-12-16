@@ -1805,7 +1805,8 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     @Override
     public int countWhere(String where) throws DaoException
     {
-        String sql = "SELECT COUNT(*) AS MCOUNT FROM fl_person_group " + where;
+        String sql = new StringBuffer("SELECT COUNT(*) AS MCOUNT FROM fl_person ")
+    		    .append(null == where ? "" : where).toString();
         // System.out.println("countWhere: " + sql);
         Connection c = null;
         Statement st = null;
