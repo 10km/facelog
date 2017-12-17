@@ -44,13 +44,13 @@ public final class FeatureBean
     @ThriftField
     public void setMd5(final String md5) { this.md5 = md5; }
 
-    private int personId;
+    private Integer personId;
 
-    @ThriftField(value=5, name="personId", requiredness=Requiredness.NONE)
-    public int getPersonId() { return personId; }
+    @ThriftField(value=5, name="personId", requiredness=Requiredness.OPTIONAL)
+    public Integer getPersonId() { return personId; }
 
     @ThriftField
-    public void setPersonId(final int personId) { this.personId = personId; }
+    public void setPersonId(final Integer personId) { this.personId = personId; }
 
     private byte [] feature;
 
@@ -60,13 +60,13 @@ public final class FeatureBean
     @ThriftField
     public void setFeature(final byte [] feature) { this.feature = feature; }
 
-    private long updateTime;
+    private Long updateTime;
 
-    @ThriftField(value=7, name="updateTime", requiredness=Requiredness.NONE)
-    public long getUpdateTime() { return updateTime; }
+    @ThriftField(value=7, name="updateTime", requiredness=Requiredness.OPTIONAL)
+    public Long getUpdateTime() { return updateTime; }
 
     @ThriftField
-    public void setUpdateTime(final long updateTime) { this.updateTime = updateTime; }
+    public void setUpdateTime(final Long updateTime) { this.updateTime = updateTime; }
 
     @Override
     public String toString()

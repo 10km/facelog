@@ -20,7 +20,7 @@ public interface IFaceLog
                       })
         ListenableFuture<FeatureBean> addFeature(
             @ThriftField(value=1, name="feature", requiredness=Requiredness.NONE) final byte [] feature,
-            @ThriftField(value=2, name="personId", requiredness=Requiredness.NONE) final int personId,
+            @ThriftField(value=2, name="personId", requiredness=Requiredness.OPTIONAL) final Integer personId,
             @ThriftField(value=3, name="faecBeans", requiredness=Requiredness.NONE) final List<FaceBean> faecBeans,
             @ThriftField(value=4, name="token", requiredness=Requiredness.NONE) final Token token
         );
@@ -32,9 +32,9 @@ public interface IFaceLog
                       })
         ListenableFuture<FeatureBean> addFeatureMulti(
             @ThriftField(value=1, name="feature", requiredness=Requiredness.NONE) final byte [] feature,
-            @ThriftField(value=2, name="personId", requiredness=Requiredness.NONE) final int personId,
+            @ThriftField(value=2, name="personId", requiredness=Requiredness.OPTIONAL) final Integer personId,
             @ThriftField(value=3, name="faceInfo", requiredness=Requiredness.NONE) final Map<byte [], FaceBean> faceInfo,
-            @ThriftField(value=4, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+            @ThriftField(value=4, name="deviceId", requiredness=Requiredness.OPTIONAL) final Integer deviceId,
             @ThriftField(value=5, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
@@ -47,7 +47,7 @@ public interface IFaceLog
             @ThriftField(value=1, name="imageData", requiredness=Requiredness.NONE) final byte [] imageData,
             @ThriftField(value=2, name="deviceId", requiredness=Requiredness.OPTIONAL) final Integer deviceId,
             @ThriftField(value=3, name="faceBean", requiredness=Requiredness.NONE) final FaceBean faceBean,
-            @ThriftField(value=4, name="personId", requiredness=Requiredness.NONE) final int personId,
+            @ThriftField(value=4, name="personId", requiredness=Requiredness.OPTIONAL) final Integer personId,
             @ThriftField(value=5, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
@@ -86,8 +86,8 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<Void> addPermitById(
-            @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId,
-            @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId,
+            @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId,
+            @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId,
             @ThriftField(value=3, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
@@ -113,9 +113,9 @@ public interface IFaceLog
                           @ThriftException(type=ServiceSecurityException.class, id=2)
                       })
         ListenableFuture<Token> applyPersonToken(
-            @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
+            @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
             @ThriftField(value=2, name="password", requiredness=Requiredness.NONE) final String password,
-            @ThriftField(value=3, name="isMd5", requiredness=Requiredness.NONE) final boolean isMd5
+            @ThriftField(value=3, name="isMd5", requiredness=Requiredness.REQUIRED) final boolean isMd5
         );
 
         @ThriftMethod(value = "applyRootToken",
@@ -125,7 +125,7 @@ public interface IFaceLog
                       })
         ListenableFuture<Token> applyRootToken(
             @ThriftField(value=1, name="password", requiredness=Requiredness.NONE) final String password,
-            @ThriftField(value=2, name="isMd5", requiredness=Requiredness.NONE) final boolean isMd5
+            @ThriftField(value=2, name="isMd5", requiredness=Requiredness.REQUIRED) final boolean isMd5
         );
 
         @ThriftMethod(value = "countDeviceByWhere",
@@ -157,7 +157,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<Integer> countLogLightByVerifyTime(
-            @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
+            @ThriftField(value=1, name="timestamp", requiredness=Requiredness.REQUIRED) final long timestamp
         );
 
         @ThriftMethod(value = "countLogLightByWhere",
@@ -189,8 +189,8 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<Integer> deleteAllFeaturesByPersonId(
-            @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
-            @ThriftField(value=2, name="deleteImage", requiredness=Requiredness.NONE) final boolean deleteImage,
+            @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
+            @ThriftField(value=2, name="deleteImage", requiredness=Requiredness.REQUIRED) final boolean deleteImage,
             @ThriftField(value=3, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
@@ -199,7 +199,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<Integer> deleteDeviceGroup(
-            @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId,
+            @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId,
             @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
@@ -209,7 +209,7 @@ public interface IFaceLog
                       })
         ListenableFuture<List<String>> deleteFeature(
             @ThriftField(value=1, name="featureMd5", requiredness=Requiredness.NONE) final String featureMd5,
-            @ThriftField(value=2, name="deleteImage", requiredness=Requiredness.NONE) final boolean deleteImage,
+            @ThriftField(value=2, name="deleteImage", requiredness=Requiredness.REQUIRED) final boolean deleteImage,
             @ThriftField(value=3, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
@@ -237,7 +237,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<Integer> deletePerson(
-            @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
+            @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
             @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
@@ -255,7 +255,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<Integer> deletePersonGroup(
-            @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId,
+            @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId,
             @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
@@ -282,7 +282,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<Void> disablePerson(
-            @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
+            @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
             @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
@@ -300,7 +300,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<Boolean> existsDevice(
-            @ThriftField(value=1, name="id", requiredness=Requiredness.NONE) final int id
+            @ThriftField(value=1, name="id", requiredness=Requiredness.REQUIRED) final int id
         );
 
         @ThriftMethod(value = "existsFeature",
@@ -324,7 +324,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<Boolean> existsPerson(
-            @ThriftField(value=1, name="persionId", requiredness=Requiredness.NONE) final int persionId
+            @ThriftField(value=1, name="persionId", requiredness=Requiredness.REQUIRED) final int persionId
         );
 
         @ThriftMethod(value = "getDevice",
@@ -332,7 +332,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<DeviceBean> getDevice(
-            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId
+            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId
         );
 
         @ThriftMethod(value = "getDeviceGroup",
@@ -340,7 +340,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<DeviceGroupBean> getDeviceGroup(
-            @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
+            @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId
         );
 
         @ThriftMethod(value = "getDeviceGroups",
@@ -356,7 +356,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<List<Integer>> getDeviceGroupsBelongs(
-            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId
+            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId
         );
 
         @ThriftMethod(value = "getDeviceIdOfFeature",
@@ -380,7 +380,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<List<Integer>> getDevicesOfGroup(
-            @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
+            @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId
         );
 
         @ThriftMethod(value = "getFeature",
@@ -396,7 +396,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<List<String>> getFeatureBeansByPersonId(
-            @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
+            @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
         );
 
         @ThriftMethod(value = "getFeatureBytes",
@@ -420,7 +420,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<List<String>> getFeaturesOfPerson(
-            @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
+            @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
         );
 
         @ThriftMethod(value = "getGroupPermit",
@@ -428,8 +428,8 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<Boolean> getGroupPermit(
-            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
-            @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
+            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
+            @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
         );
 
         @ThriftMethod(value = "getGroupPermits",
@@ -437,7 +437,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<List<Boolean>> getGroupPermits(
-            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
             @ThriftField(value=2, name="personGroupIdList", requiredness=Requiredness.NONE) final List<Integer> personGroupIdList
         );
 
@@ -470,7 +470,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<List<LogBean>> getLogBeansByPersonId(
-            @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
+            @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
         );
 
         @ThriftMethod(value = "getPerson",
@@ -478,7 +478,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<PersonBean> getPerson(
-            @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
+            @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
         );
 
         @ThriftMethod(value = "getPersonByPapersNum",
@@ -494,7 +494,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<PersonGroupBean> getPersonGroup(
-            @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
+            @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
         );
 
         @ThriftMethod(value = "getPersonGroups",
@@ -510,7 +510,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<List<Integer>> getPersonGroupsBelongs(
-            @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
+            @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
         );
 
         @ThriftMethod(value = "getPersonPermit",
@@ -518,8 +518,8 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<Boolean> getPersonPermit(
-            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
-            @ThriftField(value=2, name="personId", requiredness=Requiredness.NONE) final int personId
+            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
+            @ThriftField(value=2, name="personId", requiredness=Requiredness.REQUIRED) final int personId
         );
 
         @ThriftMethod(value = "getPersonPermits",
@@ -527,7 +527,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<List<Boolean>> getPersonPermits(
-            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
             @ThriftField(value=2, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList
         );
 
@@ -544,7 +544,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<List<Integer>> getPersonsOfGroup(
-            @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
+            @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
         );
 
         @ThriftMethod(value = "getRedisParameters",
@@ -568,7 +568,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<List<Integer>> getSubDeviceGroup(
-            @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
+            @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId
         );
 
         @ThriftMethod(value = "getSubPersonGroup",
@@ -576,7 +576,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<List<Integer>> getSubPersonGroup(
-            @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
+            @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
         );
 
         @ThriftMethod(value = "isDisable",
@@ -584,7 +584,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<Boolean> isDisable(
-            @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
+            @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
         );
 
         @ThriftMethod(value = "isValidPassword",
@@ -595,7 +595,7 @@ public interface IFaceLog
         ListenableFuture<Boolean> isValidPassword(
             @ThriftField(value=1, name="userId", requiredness=Requiredness.NONE) final String userId,
             @ThriftField(value=2, name="password", requiredness=Requiredness.NONE) final String password,
-            @ThriftField(value=3, name="isMd5", requiredness=Requiredness.NONE) final boolean isMd5,
+            @ThriftField(value=3, name="isMd5", requiredness=Requiredness.REQUIRED) final boolean isMd5,
             @ThriftField(value=4, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
@@ -604,7 +604,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<List<Integer>> listOfParentForDeviceGroup(
-            @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
+            @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId
         );
 
         @ThriftMethod(value = "listOfParentForPersonGroup",
@@ -612,7 +612,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<List<Integer>> listOfParentForPersonGroup(
-            @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
+            @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
         );
 
         @ThriftMethod(value = "loadAllPerson",
@@ -627,8 +627,8 @@ public interface IFaceLog
                       })
         ListenableFuture<List<DeviceBean>> loadDeviceByWhere(
             @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
-            @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
-            @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
+            @ThriftField(value=2, name="startRow", requiredness=Requiredness.REQUIRED) final int startRow,
+            @ThriftField(value=3, name="numRows", requiredness=Requiredness.REQUIRED) final int numRows
         );
 
         @ThriftMethod(value = "loadDeviceGroupByWhere",
@@ -637,8 +637,8 @@ public interface IFaceLog
                       })
         ListenableFuture<List<Integer>> loadDeviceGroupByWhere(
             @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
-            @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
-            @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
+            @ThriftField(value=2, name="startRow", requiredness=Requiredness.REQUIRED) final int startRow,
+            @ThriftField(value=3, name="numRows", requiredness=Requiredness.REQUIRED) final int numRows
         );
 
         @ThriftMethod(value = "loadDeviceGroupIdByWhere",
@@ -662,7 +662,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<List<String>> loadFeatureMd5ByUpdate(
-            @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
+            @ThriftField(value=1, name="timestamp", requiredness=Requiredness.REQUIRED) final long timestamp
         );
 
         @ThriftMethod(value = "loadLogByWhere",
@@ -671,8 +671,8 @@ public interface IFaceLog
                       })
         ListenableFuture<List<LogBean>> loadLogByWhere(
             @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
-            @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
-            @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
+            @ThriftField(value=2, name="startRow", requiredness=Requiredness.REQUIRED) final int startRow,
+            @ThriftField(value=3, name="numRows", requiredness=Requiredness.REQUIRED) final int numRows
         );
 
         @ThriftMethod(value = "loadLogLightByVerifyTime",
@@ -680,9 +680,9 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<List<LogLightBean>> loadLogLightByVerifyTime(
-            @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp,
-            @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
-            @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
+            @ThriftField(value=1, name="timestamp", requiredness=Requiredness.REQUIRED) final long timestamp,
+            @ThriftField(value=2, name="startRow", requiredness=Requiredness.REQUIRED) final int startRow,
+            @ThriftField(value=3, name="numRows", requiredness=Requiredness.REQUIRED) final int numRows
         );
 
         @ThriftMethod(value = "loadLogLightByWhere",
@@ -691,8 +691,8 @@ public interface IFaceLog
                       })
         ListenableFuture<List<LogLightBean>> loadLogLightByWhere(
             @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
-            @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
-            @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
+            @ThriftField(value=2, name="startRow", requiredness=Requiredness.REQUIRED) final int startRow,
+            @ThriftField(value=3, name="numRows", requiredness=Requiredness.REQUIRED) final int numRows
         );
 
         @ThriftMethod(value = "loadPermitByUpdate",
@@ -700,7 +700,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<List<PermitBean>> loadPermitByUpdate(
-            @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
+            @ThriftField(value=1, name="timestamp", requiredness=Requiredness.REQUIRED) final long timestamp
         );
 
         @ThriftMethod(value = "loadPersonByWhere",
@@ -709,8 +709,8 @@ public interface IFaceLog
                       })
         ListenableFuture<List<PersonBean>> loadPersonByWhere(
             @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
-            @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
-            @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
+            @ThriftField(value=2, name="startRow", requiredness=Requiredness.REQUIRED) final int startRow,
+            @ThriftField(value=3, name="numRows", requiredness=Requiredness.REQUIRED) final int numRows
         );
 
         @ThriftMethod(value = "loadPersonGroupByWhere",
@@ -719,8 +719,8 @@ public interface IFaceLog
                       })
         ListenableFuture<List<Integer>> loadPersonGroupByWhere(
             @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
-            @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
-            @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
+            @ThriftField(value=2, name="startRow", requiredness=Requiredness.REQUIRED) final int startRow,
+            @ThriftField(value=3, name="numRows", requiredness=Requiredness.REQUIRED) final int numRows
         );
 
         @ThriftMethod(value = "loadPersonGroupIdByWhere",
@@ -736,7 +736,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<List<Integer>> loadPersonIdByUpdateTime(
-            @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
+            @ThriftField(value=1, name="timestamp", requiredness=Requiredness.REQUIRED) final long timestamp
         );
 
         @ThriftMethod(value = "loadPersonIdByWhere",
@@ -752,7 +752,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<List<Integer>> loadUpdatedPersons(
-            @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
+            @ThriftField(value=1, name="timestamp", requiredness=Requiredness.REQUIRED) final long timestamp
         );
 
         @ThriftMethod(value = "offline",
@@ -805,9 +805,9 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<Void> replaceFeature(
-            @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
+            @ThriftField(value=1, name="personId", requiredness=Requiredness.OPTIONAL) final Integer personId,
             @ThriftField(value=2, name="featureMd5", requiredness=Requiredness.NONE) final String featureMd5,
-            @ThriftField(value=3, name="deleteOldFeatureImage", requiredness=Requiredness.NONE) final boolean deleteOldFeatureImage,
+            @ThriftField(value=3, name="deleteOldFeatureImage", requiredness=Requiredness.REQUIRED) final boolean deleteOldFeatureImage,
             @ThriftField(value=4, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
@@ -848,7 +848,7 @@ public interface IFaceLog
             @ThriftField(value=3, name="feature", requiredness=Requiredness.NONE) final byte [] feature,
             @ThriftField(value=4, name="featureImage", requiredness=Requiredness.NONE) final byte [] featureImage,
             @ThriftField(value=5, name="featureFaceBean", requiredness=Requiredness.NONE) final FaceBean featureFaceBean,
-            @ThriftField(value=6, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+            @ThriftField(value=6, name="deviceId", requiredness=Requiredness.OPTIONAL) final Integer deviceId,
             @ThriftField(value=7, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
@@ -879,7 +879,7 @@ public interface IFaceLog
             @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final PersonBean bean,
             @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.NONE) final byte [] idPhoto,
             @ThriftField(value=3, name="featureBean", requiredness=Requiredness.NONE) final FeatureBean featureBean,
-            @ThriftField(value=4, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+            @ThriftField(value=4, name="deviceId", requiredness=Requiredness.OPTIONAL) final Integer deviceId,
             @ThriftField(value=5, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
@@ -904,7 +904,7 @@ public interface IFaceLog
             @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.NONE) final byte [] idPhoto,
             @ThriftField(value=3, name="feature", requiredness=Requiredness.NONE) final byte [] feature,
             @ThriftField(value=4, name="faceInfo", requiredness=Requiredness.NONE) final Map<byte [], FaceBean> faceInfo,
-            @ThriftField(value=5, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+            @ThriftField(value=5, name="deviceId", requiredness=Requiredness.OPTIONAL) final Integer deviceId,
             @ThriftField(value=6, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
@@ -950,8 +950,8 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<Void> setPersonExpiryDate(
-            @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
-            @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.NONE) final long expiryDate,
+            @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
+            @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.REQUIRED) final long expiryDate,
             @ThriftField(value=3, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
@@ -961,7 +961,7 @@ public interface IFaceLog
                       })
         ListenableFuture<Void> setPersonExpiryDateList(
             @ThriftField(value=1, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList,
-            @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.NONE) final long expiryDate,
+            @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.REQUIRED) final long expiryDate,
             @ThriftField(value=3, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
@@ -990,7 +990,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceSecurityException.class, id=2)
                       })
         ListenableFuture<Void> unregisterDevice(
-            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
             @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
@@ -1010,7 +1010,7 @@ public interface IFaceLog
                   })
     FeatureBean addFeature(
         @ThriftField(value=1, name="feature", requiredness=Requiredness.NONE) final byte [] feature,
-        @ThriftField(value=2, name="personId", requiredness=Requiredness.NONE) final int personId,
+        @ThriftField(value=2, name="personId", requiredness=Requiredness.OPTIONAL) final Integer personId,
         @ThriftField(value=3, name="faecBeans", requiredness=Requiredness.NONE) final List<FaceBean> faecBeans,
         @ThriftField(value=4, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException, DuplicateRecordException;
@@ -1022,9 +1022,9 @@ public interface IFaceLog
                   })
     FeatureBean addFeatureMulti(
         @ThriftField(value=1, name="feature", requiredness=Requiredness.NONE) final byte [] feature,
-        @ThriftField(value=2, name="personId", requiredness=Requiredness.NONE) final int personId,
+        @ThriftField(value=2, name="personId", requiredness=Requiredness.OPTIONAL) final Integer personId,
         @ThriftField(value=3, name="faceInfo", requiredness=Requiredness.NONE) final Map<byte [], FaceBean> faceInfo,
-        @ThriftField(value=4, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+        @ThriftField(value=4, name="deviceId", requiredness=Requiredness.OPTIONAL) final Integer deviceId,
         @ThriftField(value=5, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException, DuplicateRecordException;
 
@@ -1037,7 +1037,7 @@ public interface IFaceLog
         @ThriftField(value=1, name="imageData", requiredness=Requiredness.NONE) final byte [] imageData,
         @ThriftField(value=2, name="deviceId", requiredness=Requiredness.OPTIONAL) final Integer deviceId,
         @ThriftField(value=3, name="faceBean", requiredness=Requiredness.NONE) final FaceBean faceBean,
-        @ThriftField(value=4, name="personId", requiredness=Requiredness.NONE) final int personId,
+        @ThriftField(value=4, name="personId", requiredness=Requiredness.OPTIONAL) final Integer personId,
         @ThriftField(value=5, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException, DuplicateRecordException;
 
@@ -1076,8 +1076,8 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     void addPermitById(
-        @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId,
-        @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId,
+        @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId,
+        @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId,
         @ThriftField(value=3, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 
@@ -1103,9 +1103,9 @@ public interface IFaceLog
                       @ThriftException(type=ServiceSecurityException.class, id=2)
                   })
     Token applyPersonToken(
-        @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
+        @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
         @ThriftField(value=2, name="password", requiredness=Requiredness.NONE) final String password,
-        @ThriftField(value=3, name="isMd5", requiredness=Requiredness.NONE) final boolean isMd5
+        @ThriftField(value=3, name="isMd5", requiredness=Requiredness.REQUIRED) final boolean isMd5
     ) throws ServiceRuntimeException, ServiceSecurityException;
 
     @ThriftMethod(value = "applyRootToken",
@@ -1115,7 +1115,7 @@ public interface IFaceLog
                   })
     Token applyRootToken(
         @ThriftField(value=1, name="password", requiredness=Requiredness.NONE) final String password,
-        @ThriftField(value=2, name="isMd5", requiredness=Requiredness.NONE) final boolean isMd5
+        @ThriftField(value=2, name="isMd5", requiredness=Requiredness.REQUIRED) final boolean isMd5
     ) throws ServiceRuntimeException, ServiceSecurityException;
 
     @ThriftMethod(value = "countDeviceByWhere",
@@ -1147,7 +1147,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     int countLogLightByVerifyTime(
-        @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
+        @ThriftField(value=1, name="timestamp", requiredness=Requiredness.REQUIRED) final long timestamp
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "countLogLightByWhere",
@@ -1179,8 +1179,8 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     int deleteAllFeaturesByPersonId(
-        @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
-        @ThriftField(value=2, name="deleteImage", requiredness=Requiredness.NONE) final boolean deleteImage,
+        @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
+        @ThriftField(value=2, name="deleteImage", requiredness=Requiredness.REQUIRED) final boolean deleteImage,
         @ThriftField(value=3, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 
@@ -1189,7 +1189,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     int deleteDeviceGroup(
-        @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId,
+        @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId,
         @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 
@@ -1199,7 +1199,7 @@ public interface IFaceLog
                   })
     List<String> deleteFeature(
         @ThriftField(value=1, name="featureMd5", requiredness=Requiredness.NONE) final String featureMd5,
-        @ThriftField(value=2, name="deleteImage", requiredness=Requiredness.NONE) final boolean deleteImage,
+        @ThriftField(value=2, name="deleteImage", requiredness=Requiredness.REQUIRED) final boolean deleteImage,
         @ThriftField(value=3, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 
@@ -1227,7 +1227,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     int deletePerson(
-        @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
+        @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
         @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 
@@ -1245,7 +1245,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     int deletePersonGroup(
-        @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId,
+        @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId,
         @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 
@@ -1272,7 +1272,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     void disablePerson(
-        @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
+        @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
         @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 
@@ -1290,7 +1290,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     boolean existsDevice(
-        @ThriftField(value=1, name="id", requiredness=Requiredness.NONE) final int id
+        @ThriftField(value=1, name="id", requiredness=Requiredness.REQUIRED) final int id
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "existsFeature",
@@ -1314,7 +1314,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     boolean existsPerson(
-        @ThriftField(value=1, name="persionId", requiredness=Requiredness.NONE) final int persionId
+        @ThriftField(value=1, name="persionId", requiredness=Requiredness.REQUIRED) final int persionId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getDevice",
@@ -1322,7 +1322,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     DeviceBean getDevice(
-        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId
+        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getDeviceGroup",
@@ -1330,7 +1330,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     DeviceGroupBean getDeviceGroup(
-        @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
+        @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getDeviceGroups",
@@ -1346,7 +1346,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<Integer> getDeviceGroupsBelongs(
-        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId
+        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getDeviceIdOfFeature",
@@ -1370,7 +1370,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<Integer> getDevicesOfGroup(
-        @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
+        @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getFeature",
@@ -1386,7 +1386,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<String> getFeatureBeansByPersonId(
-        @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
+        @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getFeatureBytes",
@@ -1410,7 +1410,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<String> getFeaturesOfPerson(
-        @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
+        @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getGroupPermit",
@@ -1418,8 +1418,8 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     boolean getGroupPermit(
-        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
-        @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
+        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
+        @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getGroupPermits",
@@ -1427,7 +1427,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<Boolean> getGroupPermits(
-        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
         @ThriftField(value=2, name="personGroupIdList", requiredness=Requiredness.NONE) final List<Integer> personGroupIdList
     ) throws ServiceRuntimeException;
 
@@ -1460,7 +1460,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<LogBean> getLogBeansByPersonId(
-        @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
+        @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getPerson",
@@ -1468,7 +1468,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     PersonBean getPerson(
-        @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
+        @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getPersonByPapersNum",
@@ -1484,7 +1484,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     PersonGroupBean getPersonGroup(
-        @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
+        @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getPersonGroups",
@@ -1500,7 +1500,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<Integer> getPersonGroupsBelongs(
-        @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
+        @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getPersonPermit",
@@ -1508,8 +1508,8 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     boolean getPersonPermit(
-        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
-        @ThriftField(value=2, name="personId", requiredness=Requiredness.NONE) final int personId
+        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
+        @ThriftField(value=2, name="personId", requiredness=Requiredness.REQUIRED) final int personId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getPersonPermits",
@@ -1517,7 +1517,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<Boolean> getPersonPermits(
-        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
         @ThriftField(value=2, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList
     ) throws ServiceRuntimeException;
 
@@ -1534,7 +1534,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<Integer> getPersonsOfGroup(
-        @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
+        @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getRedisParameters",
@@ -1558,7 +1558,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<Integer> getSubDeviceGroup(
-        @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
+        @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getSubPersonGroup",
@@ -1566,7 +1566,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<Integer> getSubPersonGroup(
-        @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
+        @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "isDisable",
@@ -1574,7 +1574,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     boolean isDisable(
-        @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
+        @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "isValidPassword",
@@ -1585,7 +1585,7 @@ public interface IFaceLog
     boolean isValidPassword(
         @ThriftField(value=1, name="userId", requiredness=Requiredness.NONE) final String userId,
         @ThriftField(value=2, name="password", requiredness=Requiredness.NONE) final String password,
-        @ThriftField(value=3, name="isMd5", requiredness=Requiredness.NONE) final boolean isMd5,
+        @ThriftField(value=3, name="isMd5", requiredness=Requiredness.REQUIRED) final boolean isMd5,
         @ThriftField(value=4, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException, ServiceSecurityException;
 
@@ -1594,7 +1594,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<Integer> listOfParentForDeviceGroup(
-        @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
+        @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "listOfParentForPersonGroup",
@@ -1602,7 +1602,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<Integer> listOfParentForPersonGroup(
-        @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
+        @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "loadAllPerson",
@@ -1617,8 +1617,8 @@ public interface IFaceLog
                   })
     List<DeviceBean> loadDeviceByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
-        @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
-        @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
+        @ThriftField(value=2, name="startRow", requiredness=Requiredness.REQUIRED) final int startRow,
+        @ThriftField(value=3, name="numRows", requiredness=Requiredness.REQUIRED) final int numRows
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "loadDeviceGroupByWhere",
@@ -1627,8 +1627,8 @@ public interface IFaceLog
                   })
     List<Integer> loadDeviceGroupByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
-        @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
-        @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
+        @ThriftField(value=2, name="startRow", requiredness=Requiredness.REQUIRED) final int startRow,
+        @ThriftField(value=3, name="numRows", requiredness=Requiredness.REQUIRED) final int numRows
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "loadDeviceGroupIdByWhere",
@@ -1652,7 +1652,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<String> loadFeatureMd5ByUpdate(
-        @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
+        @ThriftField(value=1, name="timestamp", requiredness=Requiredness.REQUIRED) final long timestamp
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "loadLogByWhere",
@@ -1661,8 +1661,8 @@ public interface IFaceLog
                   })
     List<LogBean> loadLogByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
-        @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
-        @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
+        @ThriftField(value=2, name="startRow", requiredness=Requiredness.REQUIRED) final int startRow,
+        @ThriftField(value=3, name="numRows", requiredness=Requiredness.REQUIRED) final int numRows
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "loadLogLightByVerifyTime",
@@ -1670,9 +1670,9 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<LogLightBean> loadLogLightByVerifyTime(
-        @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp,
-        @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
-        @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
+        @ThriftField(value=1, name="timestamp", requiredness=Requiredness.REQUIRED) final long timestamp,
+        @ThriftField(value=2, name="startRow", requiredness=Requiredness.REQUIRED) final int startRow,
+        @ThriftField(value=3, name="numRows", requiredness=Requiredness.REQUIRED) final int numRows
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "loadLogLightByWhere",
@@ -1681,8 +1681,8 @@ public interface IFaceLog
                   })
     List<LogLightBean> loadLogLightByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
-        @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
-        @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
+        @ThriftField(value=2, name="startRow", requiredness=Requiredness.REQUIRED) final int startRow,
+        @ThriftField(value=3, name="numRows", requiredness=Requiredness.REQUIRED) final int numRows
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "loadPermitByUpdate",
@@ -1690,7 +1690,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<PermitBean> loadPermitByUpdate(
-        @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
+        @ThriftField(value=1, name="timestamp", requiredness=Requiredness.REQUIRED) final long timestamp
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "loadPersonByWhere",
@@ -1699,8 +1699,8 @@ public interface IFaceLog
                   })
     List<PersonBean> loadPersonByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
-        @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
-        @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
+        @ThriftField(value=2, name="startRow", requiredness=Requiredness.REQUIRED) final int startRow,
+        @ThriftField(value=3, name="numRows", requiredness=Requiredness.REQUIRED) final int numRows
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "loadPersonGroupByWhere",
@@ -1709,8 +1709,8 @@ public interface IFaceLog
                   })
     List<Integer> loadPersonGroupByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
-        @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
-        @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
+        @ThriftField(value=2, name="startRow", requiredness=Requiredness.REQUIRED) final int startRow,
+        @ThriftField(value=3, name="numRows", requiredness=Requiredness.REQUIRED) final int numRows
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "loadPersonGroupIdByWhere",
@@ -1726,7 +1726,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<Integer> loadPersonIdByUpdateTime(
-        @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
+        @ThriftField(value=1, name="timestamp", requiredness=Requiredness.REQUIRED) final long timestamp
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "loadPersonIdByWhere",
@@ -1742,7 +1742,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<Integer> loadUpdatedPersons(
-        @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
+        @ThriftField(value=1, name="timestamp", requiredness=Requiredness.REQUIRED) final long timestamp
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "offline",
@@ -1795,9 +1795,9 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     void replaceFeature(
-        @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
+        @ThriftField(value=1, name="personId", requiredness=Requiredness.OPTIONAL) final Integer personId,
         @ThriftField(value=2, name="featureMd5", requiredness=Requiredness.NONE) final String featureMd5,
-        @ThriftField(value=3, name="deleteOldFeatureImage", requiredness=Requiredness.NONE) final boolean deleteOldFeatureImage,
+        @ThriftField(value=3, name="deleteOldFeatureImage", requiredness=Requiredness.REQUIRED) final boolean deleteOldFeatureImage,
         @ThriftField(value=4, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 
@@ -1838,7 +1838,7 @@ public interface IFaceLog
         @ThriftField(value=3, name="feature", requiredness=Requiredness.NONE) final byte [] feature,
         @ThriftField(value=4, name="featureImage", requiredness=Requiredness.NONE) final byte [] featureImage,
         @ThriftField(value=5, name="featureFaceBean", requiredness=Requiredness.NONE) final FaceBean featureFaceBean,
-        @ThriftField(value=6, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+        @ThriftField(value=6, name="deviceId", requiredness=Requiredness.OPTIONAL) final Integer deviceId,
         @ThriftField(value=7, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 
@@ -1869,7 +1869,7 @@ public interface IFaceLog
         @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final PersonBean bean,
         @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.NONE) final byte [] idPhoto,
         @ThriftField(value=3, name="featureBean", requiredness=Requiredness.NONE) final FeatureBean featureBean,
-        @ThriftField(value=4, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+        @ThriftField(value=4, name="deviceId", requiredness=Requiredness.OPTIONAL) final Integer deviceId,
         @ThriftField(value=5, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 
@@ -1894,7 +1894,7 @@ public interface IFaceLog
         @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.NONE) final byte [] idPhoto,
         @ThriftField(value=3, name="feature", requiredness=Requiredness.NONE) final byte [] feature,
         @ThriftField(value=4, name="faceInfo", requiredness=Requiredness.NONE) final Map<byte [], FaceBean> faceInfo,
-        @ThriftField(value=5, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+        @ThriftField(value=5, name="deviceId", requiredness=Requiredness.OPTIONAL) final Integer deviceId,
         @ThriftField(value=6, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 
@@ -1940,8 +1940,8 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     void setPersonExpiryDate(
-        @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
-        @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.NONE) final long expiryDate,
+        @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
+        @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.REQUIRED) final long expiryDate,
         @ThriftField(value=3, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 
@@ -1951,7 +1951,7 @@ public interface IFaceLog
                   })
     void setPersonExpiryDateList(
         @ThriftField(value=1, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList,
-        @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.NONE) final long expiryDate,
+        @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.REQUIRED) final long expiryDate,
         @ThriftField(value=3, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 
@@ -1980,7 +1980,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceSecurityException.class, id=2)
                   })
     void unregisterDevice(
-        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
         @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException, ServiceSecurityException;
 

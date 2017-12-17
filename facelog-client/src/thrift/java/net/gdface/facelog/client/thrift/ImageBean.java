@@ -52,37 +52,37 @@ public final class ImageBean
     @ThriftField
     public void setFormat(final String format) { this.format = format; }
 
-    private int width;
+    private Integer width;
 
-    @ThriftField(value=6, name="width", requiredness=Requiredness.NONE)
-    public int getWidth() { return width; }
-
-    @ThriftField
-    public void setWidth(final int width) { this.width = width; }
-
-    private int height;
-
-    @ThriftField(value=7, name="height", requiredness=Requiredness.NONE)
-    public int getHeight() { return height; }
+    @ThriftField(value=6, name="width", requiredness=Requiredness.OPTIONAL)
+    public Integer getWidth() { return width; }
 
     @ThriftField
-    public void setHeight(final int height) { this.height = height; }
+    public void setWidth(final Integer width) { this.width = width; }
 
-    private int depth;
+    private Integer height;
 
-    @ThriftField(value=8, name="depth", requiredness=Requiredness.NONE)
-    public int getDepth() { return depth; }
-
-    @ThriftField
-    public void setDepth(final int depth) { this.depth = depth; }
-
-    private int faceNum;
-
-    @ThriftField(value=9, name="faceNum", requiredness=Requiredness.NONE)
-    public int getFaceNum() { return faceNum; }
+    @ThriftField(value=7, name="height", requiredness=Requiredness.OPTIONAL)
+    public Integer getHeight() { return height; }
 
     @ThriftField
-    public void setFaceNum(final int faceNum) { this.faceNum = faceNum; }
+    public void setHeight(final Integer height) { this.height = height; }
+
+    private Integer depth;
+
+    @ThriftField(value=8, name="depth", requiredness=Requiredness.OPTIONAL)
+    public Integer getDepth() { return depth; }
+
+    @ThriftField
+    public void setDepth(final Integer depth) { this.depth = depth; }
+
+    private Integer faceNum;
+
+    @ThriftField(value=9, name="faceNum", requiredness=Requiredness.OPTIONAL)
+    public Integer getFaceNum() { return faceNum; }
+
+    @ThriftField
+    public void setFaceNum(final Integer faceNum) { this.faceNum = faceNum; }
 
     private String thumbMd5;
 
@@ -92,13 +92,13 @@ public final class ImageBean
     @ThriftField
     public void setThumbMd5(final String thumbMd5) { this.thumbMd5 = thumbMd5; }
 
-    private int deviceId;
+    private Integer deviceId;
 
-    @ThriftField(value=11, name="deviceId", requiredness=Requiredness.NONE)
-    public int getDeviceId() { return deviceId; }
+    @ThriftField(value=11, name="deviceId", requiredness=Requiredness.OPTIONAL)
+    public Integer getDeviceId() { return deviceId; }
 
     @ThriftField
-    public void setDeviceId(final int deviceId) { this.deviceId = deviceId; }
+    public void setDeviceId(final Integer deviceId) { this.deviceId = deviceId; }
 
     @Override
     public String toString()

@@ -36,13 +36,13 @@ public final class FaceBean
     @ThriftField
     public void setInitialized(final long initialized) { this.initialized = initialized; }
 
-    private int id;
+    private Integer id;
 
-    @ThriftField(value=4, name="id", requiredness=Requiredness.NONE)
-    public int getId() { return id; }
+    @ThriftField(value=4, name="id", requiredness=Requiredness.OPTIONAL)
+    public Integer getId() { return id; }
 
     @ThriftField
-    public void setId(final int id) { this.id = id; }
+    public void setId(final Integer id) { this.id = id; }
 
     private String imageMd5;
 
@@ -52,125 +52,125 @@ public final class FaceBean
     @ThriftField
     public void setImageMd5(final String imageMd5) { this.imageMd5 = imageMd5; }
 
-    private int faceLeft;
+    private Integer faceLeft;
 
-    @ThriftField(value=6, name="faceLeft", requiredness=Requiredness.NONE)
-    public int getFaceLeft() { return faceLeft; }
-
-    @ThriftField
-    public void setFaceLeft(final int faceLeft) { this.faceLeft = faceLeft; }
-
-    private int faceTop;
-
-    @ThriftField(value=7, name="faceTop", requiredness=Requiredness.NONE)
-    public int getFaceTop() { return faceTop; }
+    @ThriftField(value=6, name="faceLeft", requiredness=Requiredness.OPTIONAL)
+    public Integer getFaceLeft() { return faceLeft; }
 
     @ThriftField
-    public void setFaceTop(final int faceTop) { this.faceTop = faceTop; }
+    public void setFaceLeft(final Integer faceLeft) { this.faceLeft = faceLeft; }
 
-    private int faceWidth;
+    private Integer faceTop;
 
-    @ThriftField(value=8, name="faceWidth", requiredness=Requiredness.NONE)
-    public int getFaceWidth() { return faceWidth; }
-
-    @ThriftField
-    public void setFaceWidth(final int faceWidth) { this.faceWidth = faceWidth; }
-
-    private int faceHeight;
-
-    @ThriftField(value=9, name="faceHeight", requiredness=Requiredness.NONE)
-    public int getFaceHeight() { return faceHeight; }
+    @ThriftField(value=7, name="faceTop", requiredness=Requiredness.OPTIONAL)
+    public Integer getFaceTop() { return faceTop; }
 
     @ThriftField
-    public void setFaceHeight(final int faceHeight) { this.faceHeight = faceHeight; }
+    public void setFaceTop(final Integer faceTop) { this.faceTop = faceTop; }
 
-    private int eyeLeftx;
+    private Integer faceWidth;
 
-    @ThriftField(value=10, name="eyeLeftx", requiredness=Requiredness.NONE)
-    public int getEyeLeftx() { return eyeLeftx; }
-
-    @ThriftField
-    public void setEyeLeftx(final int eyeLeftx) { this.eyeLeftx = eyeLeftx; }
-
-    private int eyeLefty;
-
-    @ThriftField(value=11, name="eyeLefty", requiredness=Requiredness.NONE)
-    public int getEyeLefty() { return eyeLefty; }
+    @ThriftField(value=8, name="faceWidth", requiredness=Requiredness.OPTIONAL)
+    public Integer getFaceWidth() { return faceWidth; }
 
     @ThriftField
-    public void setEyeLefty(final int eyeLefty) { this.eyeLefty = eyeLefty; }
+    public void setFaceWidth(final Integer faceWidth) { this.faceWidth = faceWidth; }
 
-    private int eyeRightx;
+    private Integer faceHeight;
 
-    @ThriftField(value=12, name="eyeRightx", requiredness=Requiredness.NONE)
-    public int getEyeRightx() { return eyeRightx; }
-
-    @ThriftField
-    public void setEyeRightx(final int eyeRightx) { this.eyeRightx = eyeRightx; }
-
-    private int eyeRighty;
-
-    @ThriftField(value=13, name="eyeRighty", requiredness=Requiredness.NONE)
-    public int getEyeRighty() { return eyeRighty; }
+    @ThriftField(value=9, name="faceHeight", requiredness=Requiredness.OPTIONAL)
+    public Integer getFaceHeight() { return faceHeight; }
 
     @ThriftField
-    public void setEyeRighty(final int eyeRighty) { this.eyeRighty = eyeRighty; }
+    public void setFaceHeight(final Integer faceHeight) { this.faceHeight = faceHeight; }
 
-    private int mouthX;
+    private Integer eyeLeftx;
 
-    @ThriftField(value=14, name="mouthX", requiredness=Requiredness.NONE)
-    public int getMouthX() { return mouthX; }
-
-    @ThriftField
-    public void setMouthX(final int mouthX) { this.mouthX = mouthX; }
-
-    private int mouthY;
-
-    @ThriftField(value=15, name="mouthY", requiredness=Requiredness.NONE)
-    public int getMouthY() { return mouthY; }
+    @ThriftField(value=10, name="eyeLeftx", requiredness=Requiredness.OPTIONAL)
+    public Integer getEyeLeftx() { return eyeLeftx; }
 
     @ThriftField
-    public void setMouthY(final int mouthY) { this.mouthY = mouthY; }
+    public void setEyeLeftx(final Integer eyeLeftx) { this.eyeLeftx = eyeLeftx; }
 
-    private int noseX;
+    private Integer eyeLefty;
 
-    @ThriftField(value=16, name="noseX", requiredness=Requiredness.NONE)
-    public int getNoseX() { return noseX; }
-
-    @ThriftField
-    public void setNoseX(final int noseX) { this.noseX = noseX; }
-
-    private int noseY;
-
-    @ThriftField(value=17, name="noseY", requiredness=Requiredness.NONE)
-    public int getNoseY() { return noseY; }
+    @ThriftField(value=11, name="eyeLefty", requiredness=Requiredness.OPTIONAL)
+    public Integer getEyeLefty() { return eyeLefty; }
 
     @ThriftField
-    public void setNoseY(final int noseY) { this.noseY = noseY; }
+    public void setEyeLefty(final Integer eyeLefty) { this.eyeLefty = eyeLefty; }
 
-    private int angleYaw;
+    private Integer eyeRightx;
 
-    @ThriftField(value=18, name="angleYaw", requiredness=Requiredness.NONE)
-    public int getAngleYaw() { return angleYaw; }
-
-    @ThriftField
-    public void setAngleYaw(final int angleYaw) { this.angleYaw = angleYaw; }
-
-    private int anglePitch;
-
-    @ThriftField(value=19, name="anglePitch", requiredness=Requiredness.NONE)
-    public int getAnglePitch() { return anglePitch; }
+    @ThriftField(value=12, name="eyeRightx", requiredness=Requiredness.OPTIONAL)
+    public Integer getEyeRightx() { return eyeRightx; }
 
     @ThriftField
-    public void setAnglePitch(final int anglePitch) { this.anglePitch = anglePitch; }
+    public void setEyeRightx(final Integer eyeRightx) { this.eyeRightx = eyeRightx; }
 
-    private int angleRoll;
+    private Integer eyeRighty;
 
-    @ThriftField(value=20, name="angleRoll", requiredness=Requiredness.NONE)
-    public int getAngleRoll() { return angleRoll; }
+    @ThriftField(value=13, name="eyeRighty", requiredness=Requiredness.OPTIONAL)
+    public Integer getEyeRighty() { return eyeRighty; }
 
     @ThriftField
-    public void setAngleRoll(final int angleRoll) { this.angleRoll = angleRoll; }
+    public void setEyeRighty(final Integer eyeRighty) { this.eyeRighty = eyeRighty; }
+
+    private Integer mouthX;
+
+    @ThriftField(value=14, name="mouthX", requiredness=Requiredness.OPTIONAL)
+    public Integer getMouthX() { return mouthX; }
+
+    @ThriftField
+    public void setMouthX(final Integer mouthX) { this.mouthX = mouthX; }
+
+    private Integer mouthY;
+
+    @ThriftField(value=15, name="mouthY", requiredness=Requiredness.OPTIONAL)
+    public Integer getMouthY() { return mouthY; }
+
+    @ThriftField
+    public void setMouthY(final Integer mouthY) { this.mouthY = mouthY; }
+
+    private Integer noseX;
+
+    @ThriftField(value=16, name="noseX", requiredness=Requiredness.OPTIONAL)
+    public Integer getNoseX() { return noseX; }
+
+    @ThriftField
+    public void setNoseX(final Integer noseX) { this.noseX = noseX; }
+
+    private Integer noseY;
+
+    @ThriftField(value=17, name="noseY", requiredness=Requiredness.OPTIONAL)
+    public Integer getNoseY() { return noseY; }
+
+    @ThriftField
+    public void setNoseY(final Integer noseY) { this.noseY = noseY; }
+
+    private Integer angleYaw;
+
+    @ThriftField(value=18, name="angleYaw", requiredness=Requiredness.OPTIONAL)
+    public Integer getAngleYaw() { return angleYaw; }
+
+    @ThriftField
+    public void setAngleYaw(final Integer angleYaw) { this.angleYaw = angleYaw; }
+
+    private Integer anglePitch;
+
+    @ThriftField(value=19, name="anglePitch", requiredness=Requiredness.OPTIONAL)
+    public Integer getAnglePitch() { return anglePitch; }
+
+    @ThriftField
+    public void setAnglePitch(final Integer anglePitch) { this.anglePitch = anglePitch; }
+
+    private Integer angleRoll;
+
+    @ThriftField(value=20, name="angleRoll", requiredness=Requiredness.OPTIONAL)
+    public Integer getAngleRoll() { return angleRoll; }
+
+    @ThriftField
+    public void setAngleRoll(final Integer angleRoll) { this.angleRoll = angleRoll; }
 
     private byte [] extInfo;
 

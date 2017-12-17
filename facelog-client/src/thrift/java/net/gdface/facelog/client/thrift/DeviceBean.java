@@ -36,21 +36,21 @@ public final class DeviceBean
     @ThriftField
     public void setInitialized(final long initialized) { this.initialized = initialized; }
 
-    private int id;
+    private Integer id;
 
-    @ThriftField(value=4, name="id", requiredness=Requiredness.NONE)
-    public int getId() { return id; }
-
-    @ThriftField
-    public void setId(final int id) { this.id = id; }
-
-    private int groupId;
-
-    @ThriftField(value=5, name="groupId", requiredness=Requiredness.NONE)
-    public int getGroupId() { return groupId; }
+    @ThriftField(value=4, name="id", requiredness=Requiredness.OPTIONAL)
+    public Integer getId() { return id; }
 
     @ThriftField
-    public void setGroupId(final int groupId) { this.groupId = groupId; }
+    public void setId(final Integer id) { this.id = id; }
+
+    private Integer groupId;
+
+    @ThriftField(value=5, name="groupId", requiredness=Requiredness.OPTIONAL)
+    public Integer getGroupId() { return groupId; }
+
+    @ThriftField
+    public void setGroupId(final Integer groupId) { this.groupId = groupId; }
 
     private String name;
 
@@ -92,21 +92,21 @@ public final class DeviceBean
     @ThriftField
     public void setRemark(final String remark) { this.remark = remark; }
 
-    private long createTime;
+    private Long createTime;
 
-    @ThriftField(value=11, name="createTime", requiredness=Requiredness.NONE)
-    public long getCreateTime() { return createTime; }
-
-    @ThriftField
-    public void setCreateTime(final long createTime) { this.createTime = createTime; }
-
-    private long updateTime;
-
-    @ThriftField(value=12, name="updateTime", requiredness=Requiredness.NONE)
-    public long getUpdateTime() { return updateTime; }
+    @ThriftField(value=11, name="createTime", requiredness=Requiredness.OPTIONAL)
+    public Long getCreateTime() { return createTime; }
 
     @ThriftField
-    public void setUpdateTime(final long updateTime) { this.updateTime = updateTime; }
+    public void setCreateTime(final Long createTime) { this.createTime = createTime; }
+
+    private Long updateTime;
+
+    @ThriftField(value=12, name="updateTime", requiredness=Requiredness.OPTIONAL)
+    public Long getUpdateTime() { return updateTime; }
+
+    @ThriftField
+    public void setUpdateTime(final Long updateTime) { this.updateTime = updateTime; }
 
     @Override
     public String toString()

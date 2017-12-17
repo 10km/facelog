@@ -36,29 +36,29 @@ public final class LogBean
     @ThriftField
     public void setInitialized(final long initialized) { this.initialized = initialized; }
 
-    private int id;
+    private Integer id;
 
-    @ThriftField(value=4, name="id", requiredness=Requiredness.NONE)
-    public int getId() { return id; }
-
-    @ThriftField
-    public void setId(final int id) { this.id = id; }
-
-    private int personId;
-
-    @ThriftField(value=5, name="personId", requiredness=Requiredness.NONE)
-    public int getPersonId() { return personId; }
+    @ThriftField(value=4, name="id", requiredness=Requiredness.OPTIONAL)
+    public Integer getId() { return id; }
 
     @ThriftField
-    public void setPersonId(final int personId) { this.personId = personId; }
+    public void setId(final Integer id) { this.id = id; }
 
-    private int deviceId;
+    private Integer personId;
 
-    @ThriftField(value=6, name="deviceId", requiredness=Requiredness.NONE)
-    public int getDeviceId() { return deviceId; }
+    @ThriftField(value=5, name="personId", requiredness=Requiredness.OPTIONAL)
+    public Integer getPersonId() { return personId; }
 
     @ThriftField
-    public void setDeviceId(final int deviceId) { this.deviceId = deviceId; }
+    public void setPersonId(final Integer personId) { this.personId = personId; }
+
+    private Integer deviceId;
+
+    @ThriftField(value=6, name="deviceId", requiredness=Requiredness.OPTIONAL)
+    public Integer getDeviceId() { return deviceId; }
+
+    @ThriftField
+    public void setDeviceId(final Integer deviceId) { this.deviceId = deviceId; }
 
     private String verifyFeature;
 
@@ -68,45 +68,45 @@ public final class LogBean
     @ThriftField
     public void setVerifyFeature(final String verifyFeature) { this.verifyFeature = verifyFeature; }
 
-    private int compareFace;
+    private Integer compareFace;
 
-    @ThriftField(value=8, name="compareFace", requiredness=Requiredness.NONE)
-    public int getCompareFace() { return compareFace; }
-
-    @ThriftField
-    public void setCompareFace(final int compareFace) { this.compareFace = compareFace; }
-
-    private int verifyStatus;
-
-    @ThriftField(value=9, name="verifyStatus", requiredness=Requiredness.NONE)
-    public int getVerifyStatus() { return verifyStatus; }
+    @ThriftField(value=8, name="compareFace", requiredness=Requiredness.OPTIONAL)
+    public Integer getCompareFace() { return compareFace; }
 
     @ThriftField
-    public void setVerifyStatus(final int verifyStatus) { this.verifyStatus = verifyStatus; }
+    public void setCompareFace(final Integer compareFace) { this.compareFace = compareFace; }
 
-    private double similarty;
+    private Integer verifyStatus;
 
-    @ThriftField(value=10, name="similarty", requiredness=Requiredness.NONE)
-    public double getSimilarty() { return similarty; }
-
-    @ThriftField
-    public void setSimilarty(final double similarty) { this.similarty = similarty; }
-
-    private long verifyTime;
-
-    @ThriftField(value=11, name="verifyTime", requiredness=Requiredness.NONE)
-    public long getVerifyTime() { return verifyTime; }
+    @ThriftField(value=9, name="verifyStatus", requiredness=Requiredness.OPTIONAL)
+    public Integer getVerifyStatus() { return verifyStatus; }
 
     @ThriftField
-    public void setVerifyTime(final long verifyTime) { this.verifyTime = verifyTime; }
+    public void setVerifyStatus(final Integer verifyStatus) { this.verifyStatus = verifyStatus; }
 
-    private long createTime;
+    private Double similarty;
 
-    @ThriftField(value=12, name="createTime", requiredness=Requiredness.NONE)
-    public long getCreateTime() { return createTime; }
+    @ThriftField(value=10, name="similarty", requiredness=Requiredness.OPTIONAL)
+    public Double getSimilarty() { return similarty; }
 
     @ThriftField
-    public void setCreateTime(final long createTime) { this.createTime = createTime; }
+    public void setSimilarty(final Double similarty) { this.similarty = similarty; }
+
+    private Long verifyTime;
+
+    @ThriftField(value=11, name="verifyTime", requiredness=Requiredness.OPTIONAL)
+    public Long getVerifyTime() { return verifyTime; }
+
+    @ThriftField
+    public void setVerifyTime(final Long verifyTime) { this.verifyTime = verifyTime; }
+
+    private Long createTime;
+
+    @ThriftField(value=12, name="createTime", requiredness=Requiredness.OPTIONAL)
+    public Long getCreateTime() { return createTime; }
+
+    @ThriftField
+    public void setCreateTime(final Long createTime) { this.createTime = createTime; }
 
     @Override
     public String toString()

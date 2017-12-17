@@ -14,7 +14,7 @@ public final class Token
 
     private int id;
 
-    @ThriftField(value=1, name="id", requiredness=Requiredness.NONE)
+    @ThriftField(value=1, name="id", requiredness=Requiredness.REQUIRED)
     public int getId() { return id; }
 
     @ThriftField
@@ -22,7 +22,7 @@ public final class Token
 
     private TokenType type;
 
-    @ThriftField(value=2, name="type", requiredness=Requiredness.NONE)
+    @ThriftField(value=2, name="type", requiredness=Requiredness.REQUIRED)
     public TokenType getType() { return type; }
 
     @ThriftField
@@ -30,7 +30,7 @@ public final class Token
 
     private long t1;
 
-    @ThriftField(value=3, name="t1", requiredness=Requiredness.NONE)
+    @ThriftField(value=3, name="t1", requiredness=Requiredness.REQUIRED)
     public long getT1() { return t1; }
 
     @ThriftField
@@ -38,7 +38,7 @@ public final class Token
 
     private long t2;
 
-    @ThriftField(value=4, name="t2", requiredness=Requiredness.NONE)
+    @ThriftField(value=4, name="t2", requiredness=Requiredness.REQUIRED)
     public long getT2() { return t2; }
 
     @ThriftField

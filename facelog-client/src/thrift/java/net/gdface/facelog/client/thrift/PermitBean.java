@@ -36,21 +36,21 @@ public final class PermitBean
     @ThriftField
     public void setInitialized(final long initialized) { this.initialized = initialized; }
 
-    private int deviceGroupId;
+    private Integer deviceGroupId;
 
-    @ThriftField(value=4, name="deviceGroupId", requiredness=Requiredness.NONE)
-    public int getDeviceGroupId() { return deviceGroupId; }
-
-    @ThriftField
-    public void setDeviceGroupId(final int deviceGroupId) { this.deviceGroupId = deviceGroupId; }
-
-    private int personGroupId;
-
-    @ThriftField(value=5, name="personGroupId", requiredness=Requiredness.NONE)
-    public int getPersonGroupId() { return personGroupId; }
+    @ThriftField(value=4, name="deviceGroupId", requiredness=Requiredness.OPTIONAL)
+    public Integer getDeviceGroupId() { return deviceGroupId; }
 
     @ThriftField
-    public void setPersonGroupId(final int personGroupId) { this.personGroupId = personGroupId; }
+    public void setDeviceGroupId(final Integer deviceGroupId) { this.deviceGroupId = deviceGroupId; }
+
+    private Integer personGroupId;
+
+    @ThriftField(value=5, name="personGroupId", requiredness=Requiredness.OPTIONAL)
+    public Integer getPersonGroupId() { return personGroupId; }
+
+    @ThriftField
+    public void setPersonGroupId(final Integer personGroupId) { this.personGroupId = personGroupId; }
 
     private String remark;
 
@@ -76,13 +76,13 @@ public final class PermitBean
     @ThriftField
     public void setExtTxt(final String extTxt) { this.extTxt = extTxt; }
 
-    private long createTime;
+    private Long createTime;
 
-    @ThriftField(value=9, name="createTime", requiredness=Requiredness.NONE)
-    public long getCreateTime() { return createTime; }
+    @ThriftField(value=9, name="createTime", requiredness=Requiredness.OPTIONAL)
+    public Long getCreateTime() { return createTime; }
 
     @ThriftField
-    public void setCreateTime(final long createTime) { this.createTime = createTime; }
+    public void setCreateTime(final Long createTime) { this.createTime = createTime; }
 
     @Override
     public String toString()

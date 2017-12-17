@@ -46,7 +46,7 @@ public final class ServiceRuntimeException extends Exception
 
     private int type;
 
-    @ThriftField(value=5, name="type", requiredness=Requiredness.NONE)
+    @ThriftField(value=5, name="type", requiredness=Requiredness.REQUIRED)
     public int getType() { return type; }
 
     @ThriftField

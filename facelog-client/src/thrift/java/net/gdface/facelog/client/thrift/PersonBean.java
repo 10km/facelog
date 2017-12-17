@@ -36,21 +36,21 @@ public final class PersonBean
     @ThriftField
     public void setInitialized(final long initialized) { this.initialized = initialized; }
 
-    private int id;
+    private Integer id;
 
-    @ThriftField(value=4, name="id", requiredness=Requiredness.NONE)
-    public int getId() { return id; }
-
-    @ThriftField
-    public void setId(final int id) { this.id = id; }
-
-    private int groupId;
-
-    @ThriftField(value=5, name="groupId", requiredness=Requiredness.NONE)
-    public int getGroupId() { return groupId; }
+    @ThriftField(value=4, name="id", requiredness=Requiredness.OPTIONAL)
+    public Integer getId() { return id; }
 
     @ThriftField
-    public void setGroupId(final int groupId) { this.groupId = groupId; }
+    public void setId(final Integer id) { this.id = id; }
+
+    private Integer groupId;
+
+    @ThriftField(value=5, name="groupId", requiredness=Requiredness.OPTIONAL)
+    public Integer getGroupId() { return groupId; }
+
+    @ThriftField
+    public void setGroupId(final Integer groupId) { this.groupId = groupId; }
 
     private String name;
 
@@ -60,21 +60,21 @@ public final class PersonBean
     @ThriftField
     public void setName(final String name) { this.name = name; }
 
-    private int sex;
+    private Integer sex;
 
-    @ThriftField(value=7, name="sex", requiredness=Requiredness.NONE)
-    public int getSex() { return sex; }
-
-    @ThriftField
-    public void setSex(final int sex) { this.sex = sex; }
-
-    private int rank;
-
-    @ThriftField(value=8, name="rank", requiredness=Requiredness.NONE)
-    public int getRank() { return rank; }
+    @ThriftField(value=7, name="sex", requiredness=Requiredness.OPTIONAL)
+    public Integer getSex() { return sex; }
 
     @ThriftField
-    public void setRank(final int rank) { this.rank = rank; }
+    public void setSex(final Integer sex) { this.sex = sex; }
+
+    private Integer rank;
+
+    @ThriftField(value=8, name="rank", requiredness=Requiredness.OPTIONAL)
+    public Integer getRank() { return rank; }
+
+    @ThriftField
+    public void setRank(final Integer rank) { this.rank = rank; }
 
     private String password;
 
@@ -84,13 +84,13 @@ public final class PersonBean
     @ThriftField
     public void setPassword(final String password) { this.password = password; }
 
-    private long birthdate;
+    private Long birthdate;
 
-    @ThriftField(value=10, name="birthdate", requiredness=Requiredness.NONE)
-    public long getBirthdate() { return birthdate; }
+    @ThriftField(value=10, name="birthdate", requiredness=Requiredness.OPTIONAL)
+    public Long getBirthdate() { return birthdate; }
 
     @ThriftField
-    public void setBirthdate(final long birthdate) { this.birthdate = birthdate; }
+    public void setBirthdate(final Long birthdate) { this.birthdate = birthdate; }
 
     private String mobilePhone;
 
@@ -100,13 +100,13 @@ public final class PersonBean
     @ThriftField
     public void setMobilePhone(final String mobilePhone) { this.mobilePhone = mobilePhone; }
 
-    private int papersType;
+    private Integer papersType;
 
-    @ThriftField(value=12, name="papersType", requiredness=Requiredness.NONE)
-    public int getPapersType() { return papersType; }
+    @ThriftField(value=12, name="papersType", requiredness=Requiredness.OPTIONAL)
+    public Integer getPapersType() { return papersType; }
 
     @ThriftField
-    public void setPapersType(final int papersType) { this.papersType = papersType; }
+    public void setPapersType(final Integer papersType) { this.papersType = papersType; }
 
     private String papersNum;
 
@@ -124,13 +124,13 @@ public final class PersonBean
     @ThriftField
     public void setImageMd5(final String imageMd5) { this.imageMd5 = imageMd5; }
 
-    private long expiryDate;
+    private Long expiryDate;
 
-    @ThriftField(value=15, name="expiryDate", requiredness=Requiredness.NONE)
-    public long getExpiryDate() { return expiryDate; }
+    @ThriftField(value=15, name="expiryDate", requiredness=Requiredness.OPTIONAL)
+    public Long getExpiryDate() { return expiryDate; }
 
     @ThriftField
-    public void setExpiryDate(final long expiryDate) { this.expiryDate = expiryDate; }
+    public void setExpiryDate(final Long expiryDate) { this.expiryDate = expiryDate; }
 
     private String remark;
 
@@ -140,21 +140,21 @@ public final class PersonBean
     @ThriftField
     public void setRemark(final String remark) { this.remark = remark; }
 
-    private long createTime;
+    private Long createTime;
 
-    @ThriftField(value=17, name="createTime", requiredness=Requiredness.NONE)
-    public long getCreateTime() { return createTime; }
-
-    @ThriftField
-    public void setCreateTime(final long createTime) { this.createTime = createTime; }
-
-    private long updateTime;
-
-    @ThriftField(value=18, name="updateTime", requiredness=Requiredness.NONE)
-    public long getUpdateTime() { return updateTime; }
+    @ThriftField(value=17, name="createTime", requiredness=Requiredness.OPTIONAL)
+    public Long getCreateTime() { return createTime; }
 
     @ThriftField
-    public void setUpdateTime(final long updateTime) { this.updateTime = updateTime; }
+    public void setCreateTime(final Long createTime) { this.createTime = createTime; }
+
+    private Long updateTime;
+
+    @ThriftField(value=18, name="updateTime", requiredness=Requiredness.OPTIONAL)
+    public Long getUpdateTime() { return updateTime; }
+
+    @ThriftField
+    public void setUpdateTime(final Long updateTime) { this.updateTime = updateTime; }
 
     @Override
     public String toString()
