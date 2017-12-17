@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.facebook.swift.codec.ThriftField;
-import com.facebook.swift.codec.ThriftField.Requiredness;
 import com.facebook.swift.service.ThriftException;
 import com.facebook.swift.service.ThriftMethod;
 import com.facebook.swift.service.ThriftService;
@@ -582,7 +580,7 @@ public abstract class BaseFaceLog extends Dao{
             @ThriftException(type=ServiceRuntimeException.class, id=1),
             @ThriftException(type=DuplicateRecordException.class, id=2)
 			})
-	public ImageBean addImage(ByteBuffer imageData, @ThriftField(requiredness=Requiredness.OPTIONAL)Integer deviceId, FaceBean faceBean, Integer personId, Token token)
+	public ImageBean addImage(ByteBuffer imageData, Integer deviceId, FaceBean faceBean, Integer personId, Token token)
 			throws ServiceRuntimeException, DuplicateRecordException {
 		return null;
 	}
