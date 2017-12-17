@@ -1,6 +1,7 @@
 package net.gdface.facelog.service;
 
 import com.facebook.swift.codec.ThriftField;
+import com.facebook.swift.codec.ThriftField.Requiredness;
 import com.facebook.swift.codec.ThriftStruct;
 import com.google.common.base.Function;
 
@@ -30,7 +31,7 @@ public final class Token{
 		this.t1 = t1;
 		this.t2 = t2;
 	}
-	@ThriftField(1)
+	@ThriftField(value = 1, requiredness = Requiredness.REQUIRED)
 	public int getId() {
 		return id;
 	}
@@ -38,7 +39,7 @@ public final class Token{
 	public void setId(int id) {
 		this.id = id;
 	}
-	@ThriftField(2)
+	@ThriftField(value = 2, requiredness = Requiredness.REQUIRED)
 	public TokenType getType() {
 		return type;
 	}
@@ -46,7 +47,7 @@ public final class Token{
 	public void setType(TokenType type) {
 		this.type = type;
 	}
-	@ThriftField(3)
+	@ThriftField(value = 3, requiredness = Requiredness.REQUIRED)
 	public long getT1() {
 		return t1;
 	}
@@ -54,7 +55,7 @@ public final class Token{
 	public void setT1(long t1) {
 		this.t1 = t1;
 	}
-	@ThriftField(4)
+	@ThriftField(value = 4, requiredness = Requiredness.REQUIRED)
 	public long getT2() {
 		return t2;
 	}
