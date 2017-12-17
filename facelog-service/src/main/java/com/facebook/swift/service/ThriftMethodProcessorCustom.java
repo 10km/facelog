@@ -26,6 +26,7 @@ import org.apache.thrift.protocol.TMessageType;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.protocol.TProtocolException;
 import org.weakref.jmx.Managed;
+import org.weakref.jmx.com.google.common.base.Preconditions;
 
 import javax.annotation.concurrent.ThreadSafe;
 import java.lang.reflect.InvocationTargetException;
@@ -35,6 +36,12 @@ import java.util.Map;
 
 import static org.apache.thrift.TApplicationException.INTERNAL_ERROR;
 
+/**
+ * 定制{@link ThriftMethodProcessor},收到的primitive封装类型(Boolean,Integer...)如果是{@code null}不会被转成default 0.
+ * 通过调用{@link #setUseDefaultValueIfPrimitiveWrap(boolean)}方法设置为{@value true}可以禁用该特性
+ * @author guyadong
+ *
+ */
 @ThreadSafe
 public class ThriftMethodProcessorCustom extends ThriftMethodProcessor
 {
@@ -50,7 +57,8 @@ public class ThriftMethodProcessorCustom extends ThriftMethodProcessor
     private final Map<Short, Short> thriftParameterIdToJavaArgumentListPositionMap;
     private final ThriftCodec<Object> successCodec;
     private final Map<Class<?>, ExceptionProcessor> exceptionCodecs;
-
+    /** 对于primitive wrap类型是否将{@link null}转为default value */
+    private static Boolean useDefaultValueIfPrimitiveWrap= false;
     @SuppressWarnings("unchecked")
 	public ThriftMethodProcessorCustom(
             Object service,
@@ -274,20 +282,21 @@ public class ThriftMethodProcessorCustom extends ThriftMethodProcessor
             // Walk through our list of expected parameters and if no incoming parameters were
             // mapped to a particular expected parameter, fill the expected parameter slow with
             // the default for the parameter type.
-           /* int argumentPosition = 0;
-            for (ThriftFieldMetadata argument : parameters) {
-                if (args[argumentPosition] == null) {
-                    Type argumentType = argument.getThriftType().getJavaType();
+            if(Boolean.TRUE.equals(useDefaultValueIfPrimitiveWrap)){
+            	int argumentPosition = 0;
+            	for (ThriftFieldMetadata argument : parameters) {
+            		if (args[argumentPosition] == null) {
+            			Type argumentType = argument.getThriftType().getJavaType();
 
-                    if (argumentType instanceof Class) {
-                        Class<?> argumentClass = (Class<?>) argumentType;
-                        argumentClass = Primitives.unwrap(argumentClass);
-                        args[argumentPosition] = Defaults.defaultValue(argumentClass);
-                    }
-                }
-                argumentPosition++;
-            }*/
-
+            			if (argumentType instanceof Class) {
+            				Class<?> argumentClass = (Class<?>) argumentType;
+            				argumentClass = Primitives.unwrap(argumentClass);
+            				args[argumentPosition] = Defaults.defaultValue(argumentClass);
+            			}
+            		}
+            		argumentPosition++;
+            	}
+            }
             return args;
         }
         catch (TProtocolException e) {
@@ -339,4 +348,16 @@ public class ThriftMethodProcessorCustom extends ThriftMethodProcessor
             return codec;
         }
     }
+
+	/**
+	 * 设置对于primitive wrap类型是否将{@link null}转为default value，默认为{@link false} <br>
+	 * 该方法只能被调用一次
+	 * @param useDefaultValueIfPrimitiveWrap
+	 * @throws IllegalStateException 该方法已经被调用过
+	 */
+	public static synchronized void setUseDefaultValueIfPrimitiveWrap(boolean useDefaultValueIfPrimitiveWrap) {
+		Preconditions.checkState(null == ThriftMethodProcessorCustom.useDefaultValueIfPrimitiveWrap,
+				"useDefaultValueIfPrimitiveWrap can be initialized only once");
+		ThriftMethodProcessorCustom.useDefaultValueIfPrimitiveWrap = useDefaultValueIfPrimitiveWrap;
+	}
 }

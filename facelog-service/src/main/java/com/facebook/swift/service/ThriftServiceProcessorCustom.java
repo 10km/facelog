@@ -35,9 +35,9 @@ import static org.apache.thrift.TApplicationException.INVALID_MESSAGE_TYPE;
 import static org.apache.thrift.TApplicationException.UNKNOWN_METHOD;
 
 /**
- * Example TProcessor that wraps a Thrift service.  This should only be considered an example, and
- * is not production ready.  For example, this class makes assumptions about the thrift id of
- * method parameters, and does not support Thrift exceptions properly.
+ * {@link ThriftServiceProcessor}子类，代码基本都是从父类复制过来，只是在构造方法{@link #ThriftServiceProcessorCustom(ThriftCodecManager, List, List)}中用{@link ThriftMethodProcessorCustom}替换了{@link ThriftMethodProcessor}
+ * @author guyadong
+ *
  */
 @ThreadSafe
 public class ThriftServiceProcessorCustom extends ThriftServiceProcessor
@@ -68,6 +68,7 @@ public class ThriftServiceProcessorCustom extends ThriftServiceProcessor
             ThriftServiceMetadata serviceMetadata = new ThriftServiceMetadata(service.getClass(), codecManager.getCatalog());
             for (ThriftMethodMetadata methodMetadata : serviceMetadata.getMethods().values()) {
                 String methodName = methodMetadata.getName();
+                // 替换ThriftMethodProcessor
                 ThriftMethodProcessor methodProcessor = new ThriftMethodProcessorCustom(service, serviceMetadata.getName(), methodMetadata, codecManager);
                 if (processorMap.containsKey(methodName)) {
                     throw new IllegalArgumentException("Multiple @ThriftMethod-annotated methods named '" + methodName + "' found in the given services");
