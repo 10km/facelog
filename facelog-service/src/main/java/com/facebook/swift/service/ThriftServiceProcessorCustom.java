@@ -79,7 +79,7 @@ public class ThriftServiceProcessorCustom extends ThriftServiceProcessor
         methods = ImmutableMap.copyOf(processorMap);
         this.eventHandlers = ImmutableList.copyOf(eventHandlers);
     }
-
+    @Override
     public Map<String, ThriftMethodProcessor> getMethods()
     {
         return methods;

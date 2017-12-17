@@ -106,25 +106,26 @@ public class ThriftMethodProcessorCustom extends ThriftMethodProcessor
     }
 
     @Managed
+    @Override
     public String getName()
     {
         return name;
     }
-
+    @Override
     public Class<?> getServiceClass() {
         return service.getClass();
     }
-
+    @Override
     public String getServiceName()
     {
         return serviceName;
     }
-
+    @Override
     public String getQualifiedName()
     {
         return qualifiedName;
     }
-
+    @Override
     public ListenableFuture<Boolean> process(TProtocol in, final TProtocol out, final int sequenceId, final ContextChain contextChain)
             throws Exception
     {
