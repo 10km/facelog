@@ -1,5 +1,5 @@
-java -cp lib\swift2thrift-generator-cli-0.14.2-standalone.jar;target\classes;..\db\target\classes;..\simplemq\target\classes ^
-    com.facebook.swift.generator.swift2thrift.Main ^
+java -cp lib\idl-generator-cli-1.0-standalone.jar;target\classes;..\db\target\classes;..\simplemq\target\classes ^
+    com.facebook.swift.generator.swift2thrift.custom.Main ^
     -namespace py gdface.thrift ^
     -namespace java com.gdface -namespace cpp gdface ^
     -out IFaceLog.thrift ^
