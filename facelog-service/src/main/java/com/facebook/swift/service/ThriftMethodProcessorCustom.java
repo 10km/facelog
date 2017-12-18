@@ -26,7 +26,7 @@ import org.apache.thrift.protocol.TMessageType;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.protocol.TProtocolException;
 import org.weakref.jmx.Managed;
-import org.weakref.jmx.com.google.common.base.Preconditions;
+import com.google.common.base.Preconditions;
 
 import javax.annotation.concurrent.ThreadSafe;
 import java.lang.reflect.InvocationTargetException;
@@ -57,8 +57,11 @@ public class ThriftMethodProcessorCustom extends ThriftMethodProcessor
     private final Map<Short, Short> thriftParameterIdToJavaArgumentListPositionMap;
     private final ThriftCodec<Object> successCodec;
     private final Map<Class<?>, ExceptionProcessor> exceptionCodecs;
-    /** 对于primitive wrap类型是否将{@link null}转为default value */
-    private static Boolean useDefaultValueIfPrimitiveWrap= false;
+    /** 
+     * 全局开关<br>
+     * 为{@code true}时对于primitive wrap类型参数,将{@code null}转为default value 
+     */
+    private static Boolean useDefaultValueIfPrimitiveWrap= null;
     @SuppressWarnings("unchecked")
 	public ThriftMethodProcessorCustom(
             Object service,
@@ -283,6 +286,7 @@ public class ThriftMethodProcessorCustom extends ThriftMethodProcessor
             // Walk through our list of expected parameters and if no incoming parameters were
             // mapped to a particular expected parameter, fill the expected parameter slow with
             // the default for the parameter type.
+            // 根据全局开关判断是否对null替换为default value
             if(Boolean.TRUE.equals(useDefaultValueIfPrimitiveWrap)){
             	int argumentPosition = 0;
             	for (ThriftFieldMetadata argument : parameters) {
@@ -351,7 +355,7 @@ public class ThriftMethodProcessorCustom extends ThriftMethodProcessor
     }
 
 	/**
-	 * 设置对于primitive wrap类型是否将{@link null}转为default value，默认为{@link false} <br>
+	 * 设置对于primitive wrap类型是否将{@link null}转为default value，默认为{@code false} <br>
 	 * 该方法只能被调用一次
 	 * @param useDefaultValueIfPrimitiveWrap
 	 * @throws IllegalStateException 该方法已经被调用过
