@@ -49,34 +49,16 @@
 		</resources>
 		<plugins>
 			<plugin>
-				<!--引入source插件 -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>3.0.0</version>
-				<!-- 绑定source插件到Maven的生命周期,并在生命周期后执行绑定的source的goal -->
-				<executions>
-					<execution>
-						<!-- 绑定source插件到Maven的生命周期 -->
-						<phase>package</phase>
-						<!--在生命周期后执行绑定的source插件的goals -->
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>3.0.0</version>
 				<executions>
 					<!-- 配置thrift,sql2java文件夹,用于保存swift和sql2java生成的client代码 -->
 					<execution>
 						<id>add-source</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
 						<configuration>
 							<sources>
 								<source>src/thrift/java</source>
@@ -90,33 +72,15 @@
 				<!--引入javadoc插件 -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
 				<configuration>
-				<sourcepath>src/main/java;src/sql2java/java</sourcepath>
-				<show>package</show>
+					<sourcepath>src/main/java;src/sql2java/java</sourcepath>
 				</configuration>
-				<!-- 绑定javadoc插件到Maven的生命周期,并在生命周期后执行绑定的javadoc的goal -->
-				<executions>
-					<execution>
-						<!-- 绑定javadoc插件到Maven的生命周期 -->
-						<phase>install</phase>
-						<!--在生命周期后执行绑定的javadoc插件的goals -->
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.4.3</version>
 				<executions>
 					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
 						<configuration>
 							<transformers>
 								<transformer
@@ -135,10 +99,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.18.1</version>
-				<configuration>
-					<skipTests>true</skipTests>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
