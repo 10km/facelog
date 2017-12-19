@@ -3066,7 +3066,7 @@ public class IFaceLogClient implements Constant{
             int deviceId,
             net.gdface.facelog.client.thrift.Token token){
         try{
-            Preconditions.checkArgument(existsDevice(deviceId),"INVALID device ID %s",deviceId);
+            Preconditions.checkArgument((boolean)existsDevice(deviceId),"INVALID device ID %s",deviceId);
             return new CmdManager(
                     Preconditions.checkNotNull(poolLazy),
                     Preconditions.checkNotNull(adapter),
