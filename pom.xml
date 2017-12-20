@@ -14,9 +14,10 @@
 	<packaging>pom</packaging>
 
 	<name>facelog aggregator</name>
-	<url>http://maven.apache.org</url>
+	<url>https://gitee.com/l0km</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<swift.version>0.14.2</swift.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -48,13 +49,13 @@
 			<dependency>
 				<groupId>com.facebook.swift</groupId>
 				<artifactId>swift-annotations</artifactId>
-				<version>0.14.2</version>
+				<version>${swift.version}</version>
 			</dependency>
 			<!-- https://mvnrepository.com/artifact/com.facebook.swift/swift-service -->
 			<dependency>
 				<groupId>com.facebook.swift</groupId>
 				<artifactId>swift-service</artifactId>
-				<version>0.14.2</version>
+				<version>${swift.version}</version>
 			</dependency>
 			<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
 			<dependency>
