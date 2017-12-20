@@ -10,6 +10,7 @@
 	</parent>
 	<artifactId>facelog-service</artifactId>
 	<name>facelog-service</name>
+	<packaging>jar</packaging>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -51,13 +52,13 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-		    <groupId>org.apache.commons</groupId>
-		    <artifactId>commons-lang3</artifactId>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			</dependency>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-configuration2</artifactId>
@@ -154,6 +155,78 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>com.gitee.l0km</groupId>
+				<artifactId>swift2thrift-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<!-- 绑定swift2thrift插件到Maven的生命周期 -->
+						<!-- <phase>compile</phase> -->
+						<!--在生命周期后执行绑定的swift2thrift插件的goals -->
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!-- 生成thrift IDL文件的插件 -->
+				<plugin>
+					<groupId>com.gitee.l0km</groupId>
+					<artifactId>swift2thrift-maven-plugin</artifactId>
+					<version>1.7-SNAPSHOT</version>
+					<configuration>
+						<defaultPackage>net.gdface.facelog.service</defaultPackage>
+						<swiftClassNames>
+							<swiftClassName>BaseFaceLog</swiftClassName>
+						</swiftClassNames>
+						<namespace>
+							<cpp>gdface</cpp>
+							<java>com.gdface</java>
+							<py>gdface.thrift</py>
+						</namespace>
+						<recursive>true</recursive>
+						<out>IFaceLog.thrift</out>
+					</configuration>
+					<dependencies>
+						<!-- 添加当前项目依赖 -->
+						<dependency>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>${project.artifactId}</artifactId>
+							<version>${project.version}</version>
+						</dependency>
+					</dependencies>
+					<!-- <executions> <execution> </execution> </executions> -->
+				</plugin>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>com.gitee.l0km</groupId>
+										<artifactId>swift2thrift-maven-plugin</artifactId>
+										<versionRange>[1.7-SNAPSHOT,)</versionRange>
+										<goals>
+											<goal>generate</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 </project>
