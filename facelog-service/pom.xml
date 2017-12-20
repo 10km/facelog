@@ -11,7 +11,6 @@
 	<artifactId>facelog-service</artifactId>
 	<name>facelog-service</name>
 	<packaging>jar</packaging>
-	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -169,6 +168,10 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>com.facebook.mojo</groupId>
+				<artifactId>swift-maven-plugin</artifactId>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -176,7 +179,7 @@
 				<plugin>
 					<groupId>com.gitee.l0km</groupId>
 					<artifactId>swift2thrift-maven-plugin</artifactId>
-					<version>1.7-SNAPSHOT</version>
+					<version>1.7</version>
 					<configuration>
 						<defaultPackage>net.gdface.facelog.service</defaultPackage>
 						<swiftClassNames>
@@ -198,7 +201,38 @@
 							<version>${project.version}</version>
 						</dependency>
 					</dependencies>
-					<!-- <executions> <execution> </execution> </executions> -->
+				</plugin>
+				<!-- 根据thrift生成client java代码的插件 -->
+				<plugin>
+					<groupId>com.facebook.mojo</groupId>
+					<artifactId>swift-maven-plugin</artifactId>
+					<version>${swift.version}</version>
+					<executions>
+						<execution>
+							<phase>compile</phase>
+							<goals>
+								<goal>generate</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<!-- 指定IDL文件 -->
+						<idlFiles>
+							<directory>${project.basedir}</directory>
+							<includes>
+								<include>IFaceLog.thrift</include>
+							</includes>
+						</idlFiles>
+						<!-- 指定生成标准java bean -->
+						<codeFlavor>java-regular</codeFlavor>
+						<outputFolder>../facelog-client/src/thrift/java</outputFolder>
+						<!-- 指定生成代码的package -->
+						<overridePackage>net.gdface.facelog.client.thrift</overridePackage>
+						<!-- 指定生成的client 代码是否抛出 TException 异常-->
+						<addThriftExceptions>false</addThriftExceptions>
+						<!-- 指定生成的服务端异常是否为继承自RuntimeException -->
+						<extendRuntimeException>false</extendRuntimeException>
+					</configuration>
 				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
 					only. It has no influence on the Maven build itself. -->
@@ -214,6 +248,19 @@
 										<groupId>com.gitee.l0km</groupId>
 										<artifactId>swift2thrift-maven-plugin</artifactId>
 										<versionRange>[1.7-SNAPSHOT,)</versionRange>
+										<goals>
+											<goal>generate</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>com.facebook.mojo</groupId>
+										<artifactId>	swift-maven-plugin</artifactId>
+										<versionRange>[0.14.2,)</versionRange>
 										<goals>
 											<goal>generate</goal>
 										</goals>
