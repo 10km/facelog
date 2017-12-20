@@ -1,7 +1,7 @@
 namespace java.swift net.gdface.facelog.service
-namespace py gdface.thrift
-namespace java com.gdface
 namespace cpp gdface
+namespace java com.gdface
+namespace py gdface.thrift
 
 
 enum TokenType {
