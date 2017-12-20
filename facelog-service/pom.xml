@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.gitee.l0km</groupId>
 		<artifactId>facelog</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>facelog-service</artifactId>
@@ -17,7 +17,7 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>net.gdface.facelog</groupId>
+			<groupId>com.gitee.l0km</groupId>
 			<artifactId>facelog-db</artifactId>
 		</dependency>
 		<dependency>

@@ -10,7 +10,7 @@
 
 	<groupId>com.gitee.l0km</groupId>
 	<artifactId>facelog</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>facelog aggregator</name>
@@ -94,14 +94,14 @@
 				<version>2.1</version>
 			</dependency>
 			<dependency>
-				<groupId>net.gdface.facelog</groupId>
+				<groupId>com.gitee.l0km</groupId>
 				<artifactId>facelog-db</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.gitee.l0km</groupId>
 				<artifactId>simplemq</artifactId>
-				<version>1.0-SNAPSHOT</version>
+				<version>1.0.1</version>
 			</dependency>
 			<dependency>
 				<groupId>net.gdface.common</groupId>
@@ -265,7 +265,7 @@
 	<modules>
 		<module>common-java</module>
 		<module>db</module>
-		<module>simplemq</module>
+		
 		<module>facelog-service</module>
 		<module>facelog-client</module>
 	</modules>
