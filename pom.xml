@@ -8,7 +8,7 @@
 		<version>7</version>
 	</parent>
 
-	<groupId>net.gdface.facelog</groupId>
+	<groupId>com.gitee.l0km</groupId>
 	<artifactId>facelog</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -99,7 +99,7 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>gu.simplemq</groupId>
+				<groupId>com.gitee.l0km</groupId>
 				<artifactId>simplemq</artifactId>
 				<version>1.0-SNAPSHOT</version>
 			</dependency>

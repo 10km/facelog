@@ -4,9 +4,10 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>net.gdface.facelog</groupId>
+		<groupId>com.gitee.l0km</groupId>
 		<artifactId>facelog</artifactId>
 		<version>1.0-SNAPSHOT</version>
+		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>facelog-service</artifactId>
 	<name>facelog-service</name>
@@ -20,7 +21,7 @@
 			<artifactId>facelog-db</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>gu.simplemq</groupId>
+			<groupId>com.gitee.l0km</groupId>
 			<artifactId>simplemq</artifactId>
 		</dependency>
 		<dependency>
