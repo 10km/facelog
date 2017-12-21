@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.gitee.l0km</groupId>
@@ -193,7 +194,7 @@
 						<outputFolder>../facelog-client/src/thrift/java</outputFolder>
 						<!-- 指定生成代码的package -->
 						<overridePackage>net.gdface.facelog.client.thrift</overridePackage>
-						<!-- 指定生成的client 代码是否抛出 TException 异常-->
+						<!-- 指定生成的client 代码是否抛出 TException 异常 -->
 						<addThriftExceptions>false</addThriftExceptions>
 						<!-- 指定生成的服务端异常是否为继承自RuntimeException -->
 						<extendRuntimeException>false</extendRuntimeException>
@@ -224,7 +225,7 @@
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>com.facebook.mojo</groupId>
-										<artifactId>	swift-maven-plugin</artifactId>
+										<artifactId> swift-maven-plugin</artifactId>
 										<versionRange>[0.14.2,)</versionRange>
 										<goals>
 											<goal>generate</goal>
@@ -238,35 +239,36 @@
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<executions>
-					<execution>
-						<configuration>
-							<transformers>
-								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>net.gdface.facelog.service.Main</mainClass>
-								</transformer>
-							</transformers>
-							<minimizeJar>false</minimizeJar>
-							<shadedArtifactAttached>true</shadedArtifactAttached>
-							<!-- 生成依赖包的源码jar包 -->
-							<createSourcesJar>true</createSourcesJar>
-							<shadedClassifierName>standalone</shadedClassifierName>
-							<!-- 强制将log4j打入jar包(log4j不在依赖树上) -->
-							<filters>
-								<filter>
-									<artifact>log4j:log4j</artifact>
-									<includes>
-										<include>**/**</include>
-									</includes>
-								</filter>
-							</filters>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-shade-plugin</artifactId>
+					<executions>
+						<execution>
+							<configuration>
+								<transformers>
+									<transformer
+										implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+										<mainClass>net.gdface.facelog.service.Main</mainClass>
+									</transformer>
+								</transformers>
+								<minimizeJar>false</minimizeJar>
+								<shadedArtifactAttached>true</shadedArtifactAttached>
+								<!-- 生成依赖包的源码jar包 -->
+								<createSourcesJar>true</createSourcesJar>
+								<shadedClassifierName>standalone</shadedClassifierName>
+								<!-- 强制将log4j打入jar包(log4j不在依赖树上) -->
+								<filters>
+									<filter>
+										<artifact>log4j:log4j</artifact>
+										<includes>
+											<include>**/**</include>
+										</includes>
+									</filter>
+								</filters>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
@@ -277,4 +279,25 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+	<profiles>
+		<profile>
+			<id>shade-package</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-shade-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>shade</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
