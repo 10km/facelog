@@ -1,8 +1,8 @@
-set OUT_FOLDER=..\facelog-client\src\thrift\java
-rmdir  %OUT_FOLDER% /s/q
-java -jar lib\swift-generator-cli-0.14.2-standalone.jar ^
-	IFaceLog.thrift ^
-	-generate_beans ^
-	-override_package net.gdface.facelog.client.thrift ^
-	-out %OUT_FOLDER%
- 	
+rem set OUT_FOLDER=..\facelog-client\src\thrift\java
+rem rmdir  %OUT_FOLDER% /s/q
+rem java -jar lib\swift-generator-cli-0.14.2-standalone.jar ^
+rem 	IFaceLog.thrift ^
+rem 	-generate_beans ^
+rem 	-override_package net.gdface.facelog.client.thrift ^
+rem 	-out %OUT_FOLDER% 	
+mvn com.facebook.mojo:swift-maven-plugin:0.14.2:generate
