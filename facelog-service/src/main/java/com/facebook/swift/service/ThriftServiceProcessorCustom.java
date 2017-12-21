@@ -35,14 +35,16 @@ import static org.apache.thrift.TApplicationException.INVALID_MESSAGE_TYPE;
 import static org.apache.thrift.TApplicationException.UNKNOWN_METHOD;
 
 /**
- * {@link ThriftServiceProcessor}子类，代码基本都是从父类复制过来，只是在构造方法{@link #ThriftServiceProcessorCustom(ThriftCodecManager, List, List)}中用{@link ThriftMethodProcessorCustom}替换了{@link ThriftMethodProcessor}
+ * {@link ThriftServiceProcessor}子类，代码基本都是从父类复制过来，
+ * 只是在构造方法{@link #ThriftServiceProcessorCustom(ThriftCodecManager, List, List)}中
+ * 用{@link ThriftMethodProcessorCustom}替换了{@link ThriftMethodProcessor}
  * @author guyadong
  *
  */
 @ThreadSafe
 public class ThriftServiceProcessorCustom extends ThriftServiceProcessor
 {
-    private static final Logger LOG = LoggerFactory.getLogger(ThriftServiceProcessor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ThriftServiceProcessorCustom.class);
 
     private final Map<String, ThriftMethodProcessor> methods;
     private final List<ThriftEventHandler> eventHandlers;

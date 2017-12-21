@@ -4,10 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftStruct;
+import com.google.common.collect.ImmutableMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.util.HashMap;
 
 /**
  * 安全异常
@@ -17,6 +16,9 @@ import java.util.HashMap;
 @ThriftStruct
 public final class ServiceSecurityException extends BaseServiceException {
 	private static final long serialVersionUID = 5298414024971333060L;
+	/** 指定生成的json中field不带引号 */
+	private static final int NO_FIELD_QUOTE_FEATURE=SerializerFeature.config(
+			JSON.DEFAULT_GENERATE_FEATURE, SerializerFeature.QuoteFieldNames, false);
 	@ThriftStruct
 	public static enum SecurityExceptionType{
         /** 其他未分类异常 */UNCLASSIFIED,
@@ -79,12 +81,9 @@ public final class ServiceSecurityException extends BaseServiceException {
 	} 
 	
 	@Override
-	public String jsonOfDeclaredFields(){
-		HashMap<String,Object> fields = new HashMap<String,Object>(16);
-		fields.put("type", getType());
-		fields.put("deviceID", getDeviceID());
-		int features=SerializerFeature.config(
-				JSON.DEFAULT_GENERATE_FEATURE, SerializerFeature.QuoteFieldNames, false);
-		return JSON.toJSONString(fields,features);
+	protected String jsonOfDeclaredFields(){		
+		return JSON.toJSONString(
+				ImmutableMap.of("type", getType(), "deviceID", getDeviceID()),
+				NO_FIELD_QUOTE_FEATURE);
 	}
 }

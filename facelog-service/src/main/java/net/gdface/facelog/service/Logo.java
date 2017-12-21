@@ -10,15 +10,14 @@ import com.google.common.io.LineReader;
  * @author guyadong
  *
  */
-public class Logo implements CommonConstant{
+public class Logo {
 
 	/**
 	 *  显示文本LOGO
 	 */
 	public static final void textLogo(){
-		InputStreamReader reader = new InputStreamReader(Logo.class.getResourceAsStream("/logotext.txt"));
-		LineReader lineReader = new LineReader(reader);
-		try {
+		try(InputStreamReader reader = new InputStreamReader(Logo.class.getResourceAsStream("/logotext.txt"))) {
+			LineReader lineReader = new LineReader(reader);
 			String line ;
 			while(null != (line = lineReader.readLine())){
 				System.out.println(line);
