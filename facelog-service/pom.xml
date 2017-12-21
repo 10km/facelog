@@ -25,7 +25,7 @@
 			<artifactId>simplemq</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.gdface.common</groupId>
+			<groupId>com.gitee.l0km</groupId>
 			<artifactId>common-base</artifactId>
 		</dependency>
 		<dependency>
