@@ -217,7 +217,7 @@
 						<skipTests>true</skipTests>
 					</configuration>
 				</plugin>
-				<plugin>
+<!-- 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
 					<configuration>
@@ -234,7 +234,7 @@
 							<version>1.9.5</version>
 						</dependency>
 					</dependencies>
-				</plugin>
+				</plugin> -->
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -263,7 +263,6 @@
 		</plugins>
 	</build>
 	<modules>
-		<!-- <module>common-java</module> -->
 		<module>db</module>		
 		<module>facelog-service</module>
 		<module>facelog-client</module>
