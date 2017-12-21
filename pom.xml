@@ -264,8 +264,7 @@
 	</build>
 	<modules>
 		<module>common-java</module>
-		<module>db</module>
-		
+		<module>db</module>		
 		<module>facelog-service</module>
 		<module>facelog-client</module>
 	</modules>
