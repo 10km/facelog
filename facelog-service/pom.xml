@@ -97,6 +97,10 @@
 				<artifactId>maven-source-plugin</artifactId>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<executions>
@@ -107,43 +111,6 @@
 							<sources>
 								<source>src/sql2java/java</source>
 							</sources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<!--引入javadoc插件 -->
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<sourcepath>src/main/java;src/sql2java/java</sourcepath>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<executions>
-					<execution>
-						<configuration>
-							<transformers>
-								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>net.gdface.facelog.service.Main</mainClass>
-								</transformer>
-							</transformers>
-							<minimizeJar>false</minimizeJar>
-							<shadedArtifactAttached>true</shadedArtifactAttached>
-							<!-- 生成依赖包的源码jar包 -->
-							<createSourcesJar>true</createSourcesJar>
-							<shadedClassifierName>standalone</shadedClassifierName>
-							<!-- 强制将log4j打入jar包(log4j不在依赖树上) -->
-							<filters>
-								<filter>
-									<artifact>log4j:log4j</artifact>
-									<includes>
-										<include>**/**</include>
-									</includes>
-								</filter>
-							</filters>
 						</configuration>
 					</execution>
 				</executions>
@@ -269,6 +236,42 @@
 								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<executions>
+					<execution>
+						<configuration>
+							<transformers>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>net.gdface.facelog.service.Main</mainClass>
+								</transformer>
+							</transformers>
+							<minimizeJar>false</minimizeJar>
+							<shadedArtifactAttached>true</shadedArtifactAttached>
+							<!-- 生成依赖包的源码jar包 -->
+							<createSourcesJar>true</createSourcesJar>
+							<shadedClassifierName>standalone</shadedClassifierName>
+							<!-- 强制将log4j打入jar包(log4j不在依赖树上) -->
+							<filters>
+								<filter>
+									<artifact>log4j:log4j</artifact>
+									<includes>
+										<include>**/**</include>
+									</includes>
+								</filter>
+							</filters>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<configuration>
+						<sourcepath>src/main/java;src/sql2java/java</sourcepath>
 					</configuration>
 				</plugin>
 			</plugins>

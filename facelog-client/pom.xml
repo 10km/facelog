@@ -48,10 +48,6 @@
 		</resources>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-			</plugin>
-			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<executions>
@@ -68,36 +64,46 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<!--引入javadoc插件 -->
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<sourcepath>src/main/java;src/sql2java/java</sourcepath>
-				</configuration>
+				<artifactId>maven-source-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<executions>
-					<execution>
-						<configuration>
-							<transformers>
-								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-								</transformer>
-							</transformers>
-							<minimizeJar>false</minimizeJar>
-							<shadedArtifactAttached>true</shadedArtifactAttached>
-							<!-- 生成依赖包的源码jar包 -->
-							<createSourcesJar>true</createSourcesJar>
-							<shadedClassifierName>standalone</shadedClassifierName>
-						</configuration>
-					</execution>
-				</executions>
+				<artifactId>maven-javadoc-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-shade-plugin</artifactId>
+					<executions>
+						<execution>
+							<configuration>
+								<transformers>
+									<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									</transformer>
+								</transformers>
+								<minimizeJar>false</minimizeJar>
+								<shadedArtifactAttached>true</shadedArtifactAttached>
+								<createSourcesJar>true</createSourcesJar>
+								<shadedClassifierName>standalone</shadedClassifierName>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<configuration>
+						<sourcepath>src/main/java;src/sql2java/java</sourcepath>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 </project>
