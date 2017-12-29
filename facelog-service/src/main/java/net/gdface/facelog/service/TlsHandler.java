@@ -4,13 +4,14 @@ import java.util.Collections;
 import java.util.Set;
 
 import com.facebook.swift.service.ThriftEventHandler;
+import com.facebook.swift.service.ThriftServerService;
 import com.google.common.collect.Sets;
 
 /**
  * TLS变量管理器<br>
  * 1.用于捕获服务方法中的{@link Token}参数,存入TLS变量,供后续读取<p>
  * 2.提供RPC调用过程中TLS变量的自动释放机制,参见{@link #registerTls(ThreadLocal)},{@link #unregisterTls(ThreadLocal)}.<p>
- * <b>NOTE:</b>服务初始化时加入事件侦听器列表才有效, 参见{@link Server#Server(java.util.List, java.util.List, com.facebook.swift.service.ThriftServerConfig)}.<p>
+ * <b>NOTE:</b>服务初始化时加入事件侦听器列表才有效, 参见{@link ThriftServerService#ThriftServerService(java.util.List, java.util.List, com.facebook.swift.service.ThriftServerConfig)}.<p>
  * @author guyadong
  *
  */

@@ -1,12 +1,16 @@
-package net.gdface.facelog.service;
+package com.facebook.swift.service;
 
+import java.lang.reflect.Constructor;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.weakref.jmx.com.google.common.base.Throwables;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 import com.facebook.swift.codec.ThriftCodecManager;
 import com.facebook.swift.service.ThriftEventHandler;
@@ -14,18 +18,20 @@ import com.facebook.swift.service.ThriftServer;
 import com.facebook.swift.service.ThriftServerConfig;
 import com.facebook.swift.service.ThriftService;
 import com.facebook.swift.service.ThriftServiceProcessor;
-import com.facebook.swift.service.ThriftServiceProcessorCustom;
 import com.facebook.swift.service.metadata.ThriftServiceMetadata;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.AbstractIdleService;
 
 /**
- * 创建thrift服务实例{@link ThriftServer}
+ * 创建thrift服务实例{@link ThriftServer},封装为{@link com.google.common.util.concurrent.Service}
  * @author guyadong
  *
  */
-class Server implements ServiceConstant{
+public class ThriftServerService extends AbstractIdleService{
+    private static final Logger logger = LoggerFactory.getLogger(ThriftServerService.class);
+
 	public static class Builder {
 		private List<?> services = ImmutableList.of();
 		private ThriftServerConfig thriftServerConfig= new ThriftServerConfig();
@@ -69,8 +75,26 @@ class Server implements ServiceConstant{
 			return this;
 		}
 
-		public Server build() {
-			return new Server(services, eventHandlers, thriftServerConfig);
+		/**
+		 * 根据参数构造 {@link ThriftServerService}实例
+		 * @return
+		 */
+		public ThriftServerService build() {
+			return new ThriftServerService(services, eventHandlers, thriftServerConfig);
+		}
+		/**
+		 * 根据参数构造 {@link ThriftServerService}子类实例
+		 * @param subServiceClass
+		 * @return
+		 */
+		public <T extends ThriftServerService> T build(Class<T> subServiceClass) {
+			try {
+				Constructor<T> constructor= checkNotNull(subServiceClass,"clazz is null")
+						.getConstructor(List.class,List.class,ThriftServerConfig.class);
+				return constructor.newInstance(services,eventHandlers,thriftServerConfig);
+			} catch (Exception e) {
+				throw Throwables.propagate(e);
+			}
 		}
 	}
 
@@ -78,10 +102,10 @@ class Server implements ServiceConstant{
 		return new Builder();
 	}
 
-	private final ThriftServer server;
-	private final ThriftServiceProcessor processor;
-	private final ThriftServerConfig thriftServerConfig;
-
+	protected final ThriftServer thriftServer;
+	protected final ThriftServiceProcessor processor;
+	protected final ThriftServerConfig thriftServerConfig;
+	protected final String serviceName;
 	/**
 	 * 构造函数<br>
 	 * @param services 服务对象列表
@@ -90,7 +114,7 @@ class Server implements ServiceConstant{
 	 * @see ThriftServiceProcessor#ThriftServiceProcessor(ThriftCodecManager, List, List)
 	 * @see ThriftServer#ThriftServer(com.facebook.nifty.processor.NiftyProcessor, ThriftServerConfig)
 	 */
-	public Server(final List<?> services, 
+	public ThriftServerService(final List<?> services, 
 			List<ThriftEventHandler> eventHandlers, 
 			ThriftServerConfig thriftServerConfig) {
 		checkArgument(null != services && !services.isEmpty());
@@ -102,35 +126,26 @@ class Server implements ServiceConstant{
 				new ThriftCodecManager(), 
 				checkNotNull(eventHandlers,"eventHandlers is null"),
 				services);
-		this.server =  new ThriftServer(processor,thriftServerConfig);
+		this.thriftServer =  new ThriftServer(processor,thriftServerConfig);
+		this.serviceName = Joiner.on(",").join(Lists.transform(services, new Function<Object,String>(){
+			@Override
+			public String apply(Object input) {
+				return getServiceName(input);
+			}}));
 		// Arrange to stop the server at shutdown
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {
-				logger.info(" {} service shutdown(服务关闭) ",
-						Joiner.on(",").join(Lists.transform(services, new Function<Object,String>(){
-							@Override
-							public String apply(Object input) {
-								return getServiceName(input);
-							}})));
-				server.close();
+				shutDown();
 			}
 		});
-	}
-	/** 返回创建的服务实例{@link ThriftServer}	 */
-	public ThriftServer getServer() {
-		return server;
-	}
-	/** 返回初始化参数对象 */
-	public ThriftServerConfig getThriftServerConfig() {
-		return thriftServerConfig;
 	}
 	
 	/** 
 	 * 返回注释{@link ThriftService}定义的服务名称
 	 * @see  {@link ThriftServiceMetadata#getThriftServiceAnnotation(Class)}
 	 */
-	public static final String getServiceName(Class<?> serviceClass){
+	private static final String getServiceName(Class<?> serviceClass){
 		ThriftService thriftService = ThriftServiceMetadata.getThriftServiceAnnotation(
 				checkNotNull(serviceClass,"serviceClass is null"));
 		return Strings.isNullOrEmpty(thriftService.value())
@@ -138,7 +153,22 @@ class Server implements ServiceConstant{
 				: thriftService.value();
 	}
 	/** @see #getServiceName(Class) */
-	public static final String getServiceName(Object serviceInstance){
+	private static final String getServiceName(Object serviceInstance){
 		return getServiceName(serviceInstance.getClass());
+	}
+	@Override
+	protected String serviceName() {
+		return this.serviceName;
+	}
+
+	@Override
+	protected final void startUp() throws Exception {
+		thriftServer.start();
+		logger.info("{} service is running(服务启动)",serviceName());
+	}
+	@Override
+	protected final void shutDown() {
+		logger.info(" {} service shutdown(服务关闭) ",	serviceName());
+		thriftServer.close();
 	}
 }
