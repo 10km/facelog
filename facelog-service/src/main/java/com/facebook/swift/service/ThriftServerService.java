@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.weakref.jmx.com.google.common.base.Throwables;
+import com.google.common.base.Throwables;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
@@ -93,7 +93,8 @@ public class ThriftServerService extends AbstractIdleService{
 						.getConstructor(List.class,List.class,ThriftServerConfig.class);
 				return constructor.newInstance(services,eventHandlers,thriftServerConfig);
 			} catch (Exception e) {
-				throw Throwables.propagate(e);
+				Throwables.throwIfUnchecked(e);
+				throw new RuntimeException(e);
 			}
 		}
 	}
