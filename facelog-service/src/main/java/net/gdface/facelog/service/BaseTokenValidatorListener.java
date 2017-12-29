@@ -139,7 +139,7 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 		case ROOT:
 			break;
 		case UNINITIALIZED:
-			if(!validatePersonToken && !validatePersonToken){
+			if(!validatePersonToken && !validateDeviceToken){
 				break;
 			}
 		default:
