@@ -438,13 +438,13 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	protected static final ServiceRuntimeException wrapServiceRuntimeException(RuntimeException e){
 		try{
 			throwServiceException(e);
+			// dead code
+			return new ServiceRuntimeException(e); 
 		} catch(ServiceSecurityException se){
 			return new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),se);
 		} catch(ServiceRuntimeException se){
 			return se;
 		}
-		// dead code
-		return new ServiceRuntimeException(e); 
 	}
 	/**
 	 * 将封装在{@link RuntimeException}中的{@link ServiceSecurityException}剥离出来单独抛出<br>
