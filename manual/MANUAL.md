@@ -65,7 +65,7 @@ facelog 只是一个针对人脸识别应用的开发框架，并不针对特定
 ## 数据库
 
 ### 表结构
-facelog 由 mysql提供数据库服务，下图为表关系结构图，图中只画出每表的主要字段，完整的表结构定义参见[database.sql](../face-db/sql/create_table.sql)。
+facelog 由 mysql提供数据库服务，下图为表关系结构图，图中只画出每表的主要字段，完整的表结构定义参见[database.sql](../db/sql/create_table.sql)。
 
 ![表关系结构图](images/database.png)
 
