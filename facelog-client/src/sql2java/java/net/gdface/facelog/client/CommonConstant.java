@@ -58,6 +58,9 @@ public interface CommonConstant {
     /** 超级管理员用户名 */
     public static final String ROOT_NAME = "root";
 
+    //////////////定义数据库实时更新频道/////////
+
+
     public static final Channel<Integer> PUBSUB_PERSON_INSERT = new Channel<Integer>("PersonInsert"){};
     public static final Channel<Integer> PUBSUB_PERSON_UPDATE = new Channel<Integer>("PersonUpdate"){};
     public static final Channel<Integer> PUBSUB_PERSON_DELETE = new Channel<Integer>("PersonDelete"){};

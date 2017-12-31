@@ -60,7 +60,9 @@ public interface CommonConstant {
     public static final String DEFAULT_GROUP_NAME = "DEFAULT_GROUP";
     /** 超级管理员用户名 */
     public static final String ROOT_NAME = "root";
-########定义数据库对象频道
+
+    //////////////定义数据库实时更新频道/////////
+
 #macro(channelDef $tableNames $useBeanType $prefix $suffixList)    
 #foreach($tableName in $tableNames)
 #set ($table = $db.getTable($tableName))
