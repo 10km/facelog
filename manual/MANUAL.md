@@ -1,8 +1,21 @@
-**facelog (分布式人脸识别门禁考勤应用系统)开发手册**
+**facelog (人脸验证日志系统)开发手册**
 
 ----------
 
 # 概述
+## 术语
+
+术语|描述
+:-|:-
+服务端|提供人脸识别基础管理功能的服务
+服务接口|由服务端定义的一组RPC调用方法 
+设备端|具备人脸识别功能的计算机控制设备
+管理端,admin client|以web应用或本地应用方式管理facelog系统的应用
+client端|设备端和管理端的统称
+消息系统|基于redis为client端和服务端提供消息服务的中间件
+设备命令|管理端发送，设备端接受，执行应用程序定义的动作
+命令响应|设备端执行设备命令后返回给命令发送端的执行结果
+
 ## 开发背景
 
 随着人脸识别技术的日益成熟，基于人脸识别技术的应用也越来越被市场接受和普及，让我们认识一些典型的应用场景。
@@ -86,7 +99,7 @@ facelog 由 mysql 提供数据库服务，下图为表关系结构图，图中�
 
 为提高数据库访问效率，facelog 为除 `fl_log，fl_log_light`之外的所有需要频繁读取的表实现缓存能力。
 
-可以从 `net.gdface.facelog.service.TableManagerInitializer`代码为入口查看具体实现。
+可以从 [`net.gdface.facelog.service.TableManagerInitializer`](../facelog-service/src/main/java/net/gdface/facelog/service/TableManagerInitializer.java)代码为入口查看具体实现。
 
 ## 消息系统
 
@@ -98,19 +111,33 @@ service 是被动提供服务，只能由 client 主动向service发起请求。
 
 基于消息系统，当后端数据库中的记录有增加，删除或修改时，facelog 服务会自动向指定的redis频道发布消息。设备端只要订阅了该频道，就会收到相应的通知，实现本地数据更新。
 
-facelog 为 `fl_person，fl_feature，fl_permit` 三张表提供了实时更新发布频道。具体定义参见`net.gdface.facelog.client.CommonConstant` 中所有频道(Channel)的定义。前端设备订阅指定的频道，就可以收到相应的通知。
+facelog 为 `fl_person，fl_feature，fl_permit` 三张表提供了实时更新发布频道。具体定义参见[`net.gdface.facelog.client.CommonConstant`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommonConstant.java) 中所有频道(Channel)的定义。前端设备订阅指定的频道，就可以收到相应的通知。
+
+[`net.gdface.facelog.client.SubAdapters`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/SubAdapters.java) 提供了响应对应上述数据库表数据更新消息的基类。应用项目只需要继承对应的类，重载 `onSubscribe`方法实现自己的业务逻辑。
 
 ### 设备心跳
 
 对于管理端，实时获取所有前端设备的运行状态，是否在线，是设备管理的基本需要。设备端通过定时通过消息系统发送心跳数据，管理端即可通过接收所有设备的心跳数据实时掌握前端设备的运行状态。
 
-参见 `net.gdface.facelog.device.Heartbeat`
+参见 [`net.gdface.facelog.device.Heartbeat`](../facelog-client/src/main/java/net/gdface/facelog/device/Heartbeat.java)
 ### 设备命令
 
-管理可以通过消息系统向指定的设备或设备组发送设备命令,前端设备通过设备命令频道收到设备命令，执行相应的业务逻辑，并向命令发送端返回命令执行结果响应。
+管理端可以通过消息系统向指定的设备或设备组发送设备命令,前端设备通过设备命令频道收到设备命令，执行相应的业务逻辑，并向命令发送端返回命令执行结果响应。
 
-参见 `net.gdface.facelog.client.CmdManager`
+参见  设备命令管理对象：[`net.gdface.facelog.client.CmdManager`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/CmdManager.java)
+
+参见 设备命令响应对象：[`net.gdface.facelog.client.Ack`](../facelog-client/src/main/java/net/gdface/facelog/client/Ack.java)
 
 ## facelog 服务
 
+facelog 服务是一个基于[facebook thrift/swift](https://github.com/facebook/swift "swift") 框架开发的远程调用接口服务。为client端(设备端和管理端)提供数据管理，安全认证等基础服务。
 
+服务接口定义参见
+[`net.gdface.facelog.service.BaseFaceLog`](../facelog-service/src/main/java/net/gdface/facelog/service/BaseFaceLog.java) 
+
+服务接口由[`net.gdface.facelog.service.FaceLogImpl`](../facelog-service/src/main/java/net/gdface/facelog/service/FaceLogImpl.java)实现
+
+服务接口在client端的实现参见[`net.gdface.facelog.client.IFaceLogClient`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/IFaceLogClient.java)(同步实现)，
+[`net.gdface.facelog.client.IFaceLogClientAsync`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/IFaceLogClientAsync.java)(异步实现)
+
+client端服务实例创建参见工厂类：[`net.gdface.facelog.client.ClientFactory`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/ClientFactory.java)
