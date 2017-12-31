@@ -65,11 +65,11 @@ facelog 只是一个针对人脸识别应用的开发框架，并不针对特定
 ## 数据库
 
 ### 表结构
-facelog 由 mysql提供数据库服务，下图为表关系结构图，图中只画出每表的主要字段，完整的表结构定义参见[database.sql](../db/sql/create_table.sql)。
+facelog 由 mysql 提供数据库服务，下图为表关系结构图，图中只画出每表的主要字段，完整的表结构定义参见[database.sql](../db/sql/create_table.sql)。
 
 ![表关系结构图](images/database.png)
 
-箭头连线为外键关系
+**NOTE:**箭头连线为外键关系
 
 1. `fl_device_group`  设备组信息
 2. `fl_person_group`  用户组信息
@@ -83,10 +83,31 @@ facelog 由 mysql提供数据库服务，下图为表关系结构图，图中只
 10. `fl_log_light` 简单日志视图
 
 ### 数据缓存
+
+为提高数据库访问效率，facelog 为除 `fl_log，fl_log_light`之外的所有需要频繁读取的表实现缓存能力。
+
+可以从 `net.gdface.facelog.service.TableManagerInitializer`代码为入口查看具体实现。
+
 ## 消息系统
+
+service 是被动提供服务，只能由 client 主动向service发起请求。对于实现数据下发，设备管理等需求都需要有service或admin client主动向设备发送通知的能力。对前端设备的主动通知，facelog 基于redis提供了一个简单的消息系统(simpleMQ)。使设备端有能力以频道订阅的方式，异步获取来自服务端和管理端的通知消息。
+
+通过消息系统 faelog 实现以下能力：
+
 ### 数据更新
+
+基于消息系统，当后端数据库中的记录有增加，删除或修改时，facelog 服务会自动向指定的redis频道发布消息。设备端只要订阅了该频道，就会收到相应的通知，实现本地数据更新。
+
+facelog 为 `fl_person，fl_feature，fl_permit` 三张表提供了实时更新发布频道。具体定义参见`net.gdface.facelog.client.CommonConstant` 中所有频道(Channel)的定义。前端设备订阅指定的频道，就可以收到相应的通知。
+
 ### 设备心跳
+
+对于管理端，实时获取所有前端设备的运行状态，是否在线，是设备管理的基本需要。设备端通过定时通过消息系统发送心跳数据，管理端即可通过接收所有设备的心跳数据实时掌握前端设备的运行状态。
+
 ### 设备命令
+
+管理可以通过消息系统向指定的设备或设备组发送设备命令,前端设备通过设备命令频道收到设备命令，执行相应的业务逻辑。
+
 ## facelog 服务
 
 
