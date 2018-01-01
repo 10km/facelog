@@ -1,9 +1,7 @@
-**facelog (人脸验证日志系统)开发手册**
+# facelog (人脸验证日志系统)开发手册
 
-----------
-
-# 概述
-## 术语
+## 概述
+### 术语
 
 术语|描述
 :-|:-
@@ -13,18 +11,19 @@
 管理端,admin client|以web应用或本地应用方式管理facelog系统的应用
 client端|设备端和管理端的统称
 消息系统|基于redis为client端和服务端提供消息服务的中间件
+频道,channel|继承 redis 的频道概念，消息系统传递消息时使用的一个有唯一名字和特定数据类型的数据通道，消息发送者将消息发送到指定的频道，该频道的所有消息订阅者就可以及时收到发送者的消息，对于一个频道，消息发送者和订阅者都可以有多个。
 设备命令|管理端发送，设备端接受，执行应用程序定义的动作
 命令响应|设备端执行设备命令后返回给命令发送端的执行结果
 
-## 开发背景
+### 开发背景
 
 随着人脸识别技术的日益成熟，基于人脸识别技术的应用也越来越被市场接受和普及，让我们认识一些典型的应用场景。
 
-### 应用场景1--考勤
+#### 应用场景1--考勤
 
 考虑开发一个基于网络的人脸识别考勤系统，则需要有数据库系统来存储用户数据，人脸特征数据，这就是一个服务器后端，前端设备负责人脸特征建模、与后端数据库中存储的人脸特征进行比对，根据比对结果，将人员的考勤记录存储于后端数据库，不同的OA系统再通过后端数据库获取人员的考勤数据实现自己的业务逻辑。
 
-### 应用场景2--门禁
+#### 应用场景2--门禁
 
 再考虑开发一个基于网络的人脸识别门禁系统，前端是分布于企业/组织的具备人脸识别功能门禁设备，后端同样有一个存储所有具有通行权限的人员信息(包含人脸特征数据)。每个人员通过门禁时，门禁设备识别人脸并与数据库中的人脸特征进行比对，确认人员身份时设备放行，并将通行记录存储到后端数据库备案。
 
@@ -32,11 +31,11 @@ client端|设备端和管理端的统称
 
 门禁系统还应该具备分组管理能力，比如大门的门禁应该允许所有组织人员通行，但部门/住宅单元的门禁则应该只允许本部门/单元的人通行，门禁设备应该具备分组管理能力，人员也应该具备分组管理。
 
-### 应用场景3--VIP识别
+#### 应用场景3--VIP识别
 
 在一些连锁门店销售场景中，人脸识别技术也派上了用场，当一个顾客进入店面时，布置于店门口的摄像头捕捉到人人进行身份识别，如果该顾客在店时进行了消费则在结账付款时，记录顾客的人脸特征，将该顾客纳入VIP识别系统。下次不论顾客再进入全国任何一家连锁店，被VIP识别系统确认身份后，可以通知门店销售人员根据销售策略进行差异化服务。VIP识别系统累积的顾客数据也可以大数据分析提供宝贵的的原始数据源。
 
-### 求同存异
+#### 求同存异
 
 上面几节只是描述了人脸识别技术的几个典型应用场景，这些不同应用场景在技术上都有些共同的需求：
 
@@ -56,7 +55,7 @@ client端|设备端和管理端的统称
 	
 	这是一般网络应用的基本需求，不论是WEB管理端还是设备端要连接后端应用都需要进行安全认证。权限管理也包含在安全认证范围。
 
-## facelog 是什么
+### facelog 是什么
 
 通过上一节的分析，可以发现在开发基于人脸识别网络应用项目的时候，都有一些共同的技术需求，为提高开发效率，避免重复开发，将上面的这些共同需求抽象出来，形成一个开发框架，在此基础上开发的应用系统只需专注于实现具体应用的业务逻辑， 就是本系统设计的初衷。
 
@@ -64,7 +63,7 @@ facelog 是一个用于人脸识别验证的开发框架，其核心是一个基
 
 facelog 只是一个针对人脸识别应用的开发框架，并不针对特定的应用场景，应用项目在 facelog 的基础上根据facelog 提供的服务接口实现具体应用场景下的业务逻辑。
 
-# 系统结构
+## 系统结构
 
 下图为 facelog 的系统结构示意图
 
@@ -72,12 +71,13 @@ facelog 只是一个针对人脸识别应用的开发框架，并不针对特定
 
 从角色来划分，整个框架分为 facelog 、前端设备、 管理端。
 
-- facelog 为前端设备和管理端通过网络提供服务，facelog 框架实现了face log 服务端的核心功能，以及设备前端和管理端与服务端的底层通讯和接口定义。
+- facelog 为前端设备和管理端通过网络提供服务, 所有对 mysql 数据库的操作都由 facelog service 代理,应用系统不直接对数据库进行操作,所有对 redis 数据库的读写操作都通过消息系统中间件代理。facelog 框架实现了face log 服务端的核心功能，以及设备前端和管理端与服务端的底层通讯和接口定义。
 - 前諯设备根据业务需求需要应用自己实现业务逻辑，facelog 框架为前端设备提供了实现业务逻辑的统一接口定义。
-- 管理端用于系统管理人员对系统的管理操作，根据业务需求在这里可以是一个web应用，也可以设计为一个本地应用。 
-## 数据库
+- 管理端用于系统管理人员对系统的管理操作(用户管理，设备管理)，根据业务需求在这里可以是一个web应用，也可以设计为一个本地应用。 
 
-### 表结构
+### 数据库
+
+#### 表结构
 facelog 由 mysql 提供数据库服务，下图为表关系结构图，图中只画出每表的主要字段，完整的表结构定义参见[database.sql](../db/sql/create_table.sql)。
 
 ![表关系结构图](images/database.png)
@@ -95,19 +95,19 @@ facelog 由 mysql 提供数据库服务，下图为表关系结构图，图中�
 9. `fl_log` 人脸验证日志,记录所有人员验证记录
 10. `fl_log_light` 简单日志视图
 
-### 数据缓存
+#### 数据缓存
 
 为提高数据库访问效率，facelog 为除 `fl_log，fl_log_light`之外的所有需要频繁读取的表实现缓存能力。
 
 可以从 [`net.gdface.facelog.service.TableManagerInitializer`](../facelog-service/src/main/java/net/gdface/facelog/service/TableManagerInitializer.java)代码为入口查看具体实现。
 
-## 消息系统
+### 消息系统
 
-service 是被动提供服务，只能由 client 主动向service发起请求。对于实现数据下发，设备管理等需求都需要service或admin client有主动向设备发送通知的能力。对前端设备的主动通知，facelog 基于redis提供了一个简单的消息系统(simpleMQ)。使设备端有能力以频道订阅的方式，异步获取来自服务端和管理端的通知消息。
+service 是被动提供服务，只能由 client 主动向service发起请求。对于实现数据下发，设备管理等需求都需要service或admin client有主动向设备发送通知的能力。对前端设备的主动通知，facelog 基于 redis 提供了一个简单的消息系统(simpleMQ)。使设备端有能力以频道订阅的方式，异步获取来自服务端和管理端的通知消息。
 
 通过消息系统 faelog 实现以下能力：
 
-### 数据更新
+#### 数据更新
 
 基于消息系统，当后端数据库中的记录有增加，删除或修改时，facelog 服务会自动向指定的redis频道发布消息。设备端只要订阅了该频道，就会收到相应的通知，实现本地数据更新。
 
@@ -115,12 +115,13 @@ facelog 为 `fl_person，fl_feature，fl_permit` 三张表提供了实时更新�
 
 [`net.gdface.facelog.client.SubAdapters`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/SubAdapters.java) 提供了响应对应上述数据库表数据更新消息的基类。应用项目只需要继承对应的类，重载 `onSubscribe`方法实现自己的业务逻辑。
 
-### 设备心跳
+#### 设备心跳
 
 对于管理端，实时获取所有前端设备的运行状态，是否在线，是设备管理的基本需要。设备端通过定时通过消息系统发送心跳数据，管理端即可通过接收所有设备的心跳数据实时掌握前端设备的运行状态。
 
 参见 [`net.gdface.facelog.device.Heartbeat`](../facelog-client/src/main/java/net/gdface/facelog/device/Heartbeat.java)
-### 设备命令
+
+#### 设备命令
 
 管理端可以通过消息系统向指定的设备或设备组发送设备命令,前端设备通过设备命令频道收到设备命令，执行相应的业务逻辑，并向命令发送端返回命令执行结果响应。
 
@@ -128,9 +129,9 @@ facelog 为 `fl_person，fl_feature，fl_permit` 三张表提供了实时更新�
 
 参见 设备命令响应对象：[`net.gdface.facelog.client.Ack`](../facelog-client/src/main/java/net/gdface/facelog/client/Ack.java)
 
-## facelog 服务
+### facelog 服务
 
-facelog 服务是一个基于[facebook thrift/swift](https://github.com/facebook/swift "swift") 框架开发的远程调用接口服务。为client端(设备端和管理端)提供数据管理，安全认证等基础服务。
+facelog 服务是一个基于[facebook thrift/swift](https://github.com/facebook/swift "swift") 框架开发的远程调用接口服务。为client端提供数据管理，安全认证等基础服务。
 
 服务接口定义参见
 [`net.gdface.facelog.service.BaseFaceLog`](../facelog-service/src/main/java/net/gdface/facelog/service/BaseFaceLog.java) 
@@ -141,3 +142,43 @@ facelog 服务是一个基于[facebook thrift/swift](https://github.com/facebook
 [`net.gdface.facelog.client.IFaceLogClientAsync`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/IFaceLogClientAsync.java)(异步实现)
 
 client端服务实例创建参见工厂类：[`net.gdface.facelog.client.ClientFactory`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/ClientFactory.java)
+
+## 开发指南
+
+### 分组模型
+
+#### 设备分组
+
+#### 用户分组
+
+### 通行权限
+
+### 安全认证
+
+#### 密码验证
+
+#### 令牌
+
+#### 令牌类型
+
+#### 令牌申请注销
+
+### 消息系统(simpleMQ)
+
+#### 消息频道
+#### 发布消息
+#### 订阅消息
+#### 消息处理
+
+### 数据下发
+
+所谓数据下发，实际就是一个消息发布、订阅、处理的过程，当client端订阅了指定频道的消息，就会收到消息通知。
+
+比如，新入职了一名员工，`fl_person`表中会增加一条该员工的记录，facelog 服务向名为`PersonInsert`的频道(channel)会发布一条消息，该消息的内容很简单，就是该条记录的id(primary key),订阅了该频道的所有client端都会立即收到该消息。client根据收到的id,再通过facelog service向数据库获取该条记录的完整数据。就实现了自动数据下发功能。
+
+client收到消息后，如何处理，这属于具体应用的业务逻辑，应该由应用项目根据实际需求来实现。
+
+### 设备命令
+#### 发送设备命令
+#### 执行设备命令
+#### 命令响应
