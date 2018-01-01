@@ -10,3 +10,4 @@ target/
 .project
 log/
 /facelog-service/dump.rdb
+*.~vdx

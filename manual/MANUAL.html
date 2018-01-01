@@ -468,6 +468,8 @@ document.addEventListener("DOMContentLoaded", function() {
 <p>client端服务实例创建参见工厂类：<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/ClientFactory.java"><code>net.gdface.facelog.client.ClientFactory</code></a></p>
 <h2>开发指南</h2>
 <h3>分组模型</h3>
+<p><img src="images/devicegroup.png" alt="设备组模型" /></p>
+<p><img src="images/persongroup.png" alt="用户组模型" /></p>
 <h4>设备分组</h4>
 <h4>用户分组</h4>
 <h3>通行权限</h3>
@@ -484,7 +486,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <h3>数据下发</h3>
 <p>所谓数据下发，实际就是一个消息发布、订阅、处理的过程，当client端订阅了指定频道的消息，就会收到消息通知。</p>
 <p>比如，新入职了一名员工，<code>fl_person</code>表中会增加一条该员工的记录，facelog 服务向名为<code>PersonInsert</code>的频道(channel)会发布一条消息，该消息的内容很简单，就是该条记录的id(primary key),订阅了该频道的所有client端都会立即收到该消息。client根据收到的id,再通过facelog service向数据库获取该条记录的完整数据。就实现了自动数据下发功能。</p>
-<p>client收到消息后，如何处理，这属于具体应用的业务逻辑，应该由应用项目根据实际需求来实现。</p>
+<p>client收到消息后如何处理，这属于具体应用的业务逻辑，应该由应用项目根据实际需求来实现。</p>
 <h3>设备命令</h3>
 <h4>发送设备命令</h4>
 <h4>执行设备命令</h4>
