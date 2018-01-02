@@ -19,11 +19,13 @@ import net.gdface.facelog.client.SubAdapters.BasePersonInsertSubAdapter;
 public class PersonInsertAdapterTest implements CommonConstant {
 
 	@Test
-	public void test() {		
+	public void test() {
+		final IFaceLogClient serviceClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build();
 		new SubAdapters.BasePersonInsertSubAdapter(){
 			@Override
 			public void onSubscribe(Integer id) throws SmqUnsubscribeException {
 				logger.info("insert person ID:{}",id);
+				logger.info("new recored {}",serviceClient.getPerson(id).toString(true, false));
 			}			
 		}.register(RedisFactory.getSubscriber());
 	}

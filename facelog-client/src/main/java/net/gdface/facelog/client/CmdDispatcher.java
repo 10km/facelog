@@ -89,7 +89,7 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>{
 	/**
 	 * 当前对象注册到指定的频道
 	 * @param poolLazy
-	 * @param channel
+	 * @param channel 设备命令通道名
 	 * @return
 	 */
 	public CmdDispatcher register(JedisPoolLazy poolLazy,String channel){

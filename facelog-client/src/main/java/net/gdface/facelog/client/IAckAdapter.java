@@ -131,7 +131,7 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 		 * @param duration >0有效
 		 * @return
 		 */
-		public BaseAdapter<T> setDuration(long duration) {
+		public final BaseAdapter<T> setDuration(long duration) {
 			this.duration = duration;
 			return this;
 		}
@@ -141,7 +141,7 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 		 * @param unit 时间单位
 		 * @return
 		 */
-		public BaseAdapter<T> setDuration(long duration,TimeUnit unit) {
+		public final BaseAdapter<T> setDuration(long duration,TimeUnit unit) {
 		    return setDuration(TimeUnit.MILLISECONDS.convert(duration, checkNotNull(unit,"unit is null")));
 		}
 		/**
@@ -149,7 +149,7 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 		 * @param expire
 		 * @return
 		 */
-		public BaseAdapter<T> setExpire(long expire) {
+		public final BaseAdapter<T> setExpire(long expire) {
             return setDuration(expire - System.currentTimeMillis());
         }
 		/**
@@ -157,14 +157,14 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 		 * @return
 		 * @see #setExpire(long)
 		 */
-		public BaseAdapter<T> setExpire(Date expire) {
+		public final BaseAdapter<T> setExpire(Date expire) {
             return setDuration(expire.getTime() - System.currentTimeMillis());
         }
 		/**
 		 * 等待命令响应订阅结束,用于同步接收命令响应
 		 * @throws InterruptedException
 		 */
-		public void waitFinished() throws InterruptedException{
+		public final void waitFinished() throws InterruptedException{
 			synchronized(this){
 				while(!isFinished.get()){
 					this.wait();
@@ -172,7 +172,7 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 			}
 		}
 		/** 复位所有成员变量到初始状态,以便于对象下次复用 */
-		public synchronized BaseAdapter<T> reset(){
+		public final synchronized BaseAdapter<T> reset(){
 			this.clientNum.set(-1L);
 			this.duration = 0L;
 			this.ackCount = 0L;
