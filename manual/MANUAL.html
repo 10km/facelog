@@ -306,10 +306,10 @@ document.addEventListener("DOMContentLoaded", function() {
         var level = parseInt(header.tagName.replace('H', ''), 10)-1;
         // 通过两个where循环对栈进行调整,确保stack中标题级数与当前标题级数相同
         while(stack.length < level){
-            stack.push(0);
+        	stack.push(0);
         }
         while(stack.length > level){
-            stack.pop();
+        	stack.pop();
         }
         // 最小一级标题标号步进+1
         stack[stack.length-1]++;
@@ -469,7 +469,21 @@ document.addEventListener("DOMContentLoaded", function() {
 <p>服务接口由<a href="../facelog-service/src/main/java/net/gdface/facelog/service/FaceLogImpl.java"><code>net.gdface.facelog.service.FaceLogImpl</code></a>实现</p>
 <p>服务接口在client端的实现参见<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/IFaceLogClient.java"><code>net.gdface.facelog.client.IFaceLogClient</code></a>(同步实现)，
 <a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/IFaceLogClientAsync.java"><code>net.gdface.facelog.client.IFaceLogClientAsync</code></a>(异步实现)</p>
+<blockquote>
+<p><code>BaseFaceLog</code>中每个接口定义方法的描述与client端 <code>IFaceLogClient</code>和<code>IFaceLogClient</code>保持一致。所以本文中引用接口方法时使用<code>BaseFaceLog</code>或<code>IFaceLogClient</code>和<code>IFaceLogClient</code>都是等价的</p>
+</blockquote>
 <p>client端服务实例创建参见工厂类：<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/ClientFactory.java"><code>net.gdface.facelog.client.ClientFactory</code></a></p>
+<h4>ClientFactory 使用示例</h4>
+<pre><code>// 创建 faceLog 服务同步实例
+IFaceLogClient facelogClient = ClientFactory.builder()
+                                .setHostAndPort(&quot;127.0.0.1&quot;, DEFAULT_PORT) // 指定服务的主机地址和端口号
+                                .build(); // 创建实例(同步)
+// 创建 faceLog 服务异步实例
+IFaceLogClientAsync facelogClientAsync = ClientFactory.builder()
+                                .setHostAndPort(&quot;127.0.0.1&quot;, DEFAULT_PORT) // 指定服务的主机地址和端口号
+                                .buildAsync(); // 创建实例(异步)
+</code></pre>
+
 <h2>开发指南</h2>
 <h3>分组模型</h3>
 <p>facelog 框架中主要管理的就是两类对象：设备和人员。</p>
@@ -540,17 +554,17 @@ document.addEventListener("DOMContentLoaded", function() {
 <blockquote>
 <p>当然可以，虽然上面的通行权限关联表是并没有<code>Persongroup311(1单元)</code>和 <code>DeviceGroup1</code>的记录。但是因为人员组有继承能力，所以<code>Persongroup311(1单元)</code>递归继承了所属的父节点<code>Persongroup21(1幢)</code>和<code>Persongroup1</code>的通行权限。所以<code>Person111黄晓明</code>也可以通行大门。</p>
 </blockquote>
-<h3>安全认证</h3>
+<h3>安全管理</h3>
 <p>facelog 的安全机制分为两个层面：</p>
 <dl>
 <dt>管理端用户验证</dt>
 <dd>管理端用户登录系统的用户验证，目前采用传统的密码验证方式</dd>
 <dt>client端 访问数据库的令牌验证</dt>
-<dd>client端对 facelog 数据库访问时需要提供合法的访问令牌</dd>
+<dd>client端对 facelog 数据库访问时需要提供合法的令牌</dd>
 </dl>
-<p>令牌验证的安全设计原则：</p>
+<p>令牌验证的使用范围：</p>
 <ul>
-<li>对于数据库读取数据操作不需要安全认证</li>
+<li>对于数据库读取数据操作不需要提供令牌验证</li>
 <li>对于数据库写操作及涉及安全管理的操作需要提供令牌验证</li>
 </ul>
 <h4>用户等级</h4>
@@ -577,19 +591,19 @@ document.addEventListener("DOMContentLoaded", function() {
 <tr>
 	<td align="left">管理员</td>
 	<td align="left">3</td>
-	<td align="left">可以管理用户低一级用户，管理设备组用户组，管理通行权限，及应用项目定义的权限</td>
+	<td align="left">可以管理低一级用户，管理设备组用户组，管理通行权限，及应用项目定义的权限</td>
 </tr>
 <tr>
 	<td align="left">root</td>
 	<td align="left">4</td>
-	<td align="left">具有管理员权限外，还可以修改系统配置参数</td>
+	<td align="left">系统内置帐户，拥有所有管理权限，还可以修改系统配置参数</td>
 </tr>
 </tbody>
 </table>
 <ul>
 <li>
 <p>用户级别定义</p>
-<p><code>root</code>为facelog内置用户名，无需指定，其他的级别的用户都是由<code>fl_person</code>表的<code>rank</code>字段来指定。参见表结构定义<a href="../db/sql/create_table.sql">create_table.sql</a>。</p>
+<p><code>root</code>为 facelog 内置用户名，无需指定，其他的级别的用户都是由<code>fl_person</code>表的<code>rank</code>字段来指定。参见表结构定义<a href="../db/sql/create_table.sql">create_table.sql</a>。</p>
 </li>
 <li>
 <p>用户密码</p>
@@ -606,7 +620,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <p>令牌是系统安全设计的关键环节，凡是涉及数据写操作或安全管理的facelog服务接口都需要令牌。</p>
 <p>令牌本身是由facelog服务生成的一个具有一定时效的数据对象。client端在使用facelog服务之前需要向facelog申请令牌，client端程序结束时应该释放令牌。</p>
 <p>一个令牌对象只应由一个cleint使用，可多线程共享，但不可共享给其他client端。</p>
-<p>参见<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/IFaceLogClient.java"><code>net.gdface.facelog.client.IFaceLogClient</code></a>，代码注释中对每一个方法是否需要令牌，需要什么类型的令牌都有明确说明。</p>
+<p>参见服务接口：<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/IFaceLogClient.java"><code>net.gdface.facelog.client.IFaceLogClient</code></a>，代码注释中对每一个方法是否需要令牌，需要什么类型的令牌都有明确说明。</p>
 <h4>令牌类型</h4>
 <table>
 <thead>
@@ -632,18 +646,310 @@ document.addEventListener("DOMContentLoaded", function() {
 </table>
 <p>参见 <a href="../facelog-service/src/main/java/net/gdface/facelog/service/Token.java"><code>net.gdface.facelog.service.Token</code></a></p>
 <h4>令牌申请注销</h4>
+<p>令牌是有时效性的数字凭证，所以client在调用需要令牌难的facelog 服务接口方法前需要申请令牌，然后再用申请到的令牌做为方法参数调用接口方法，当应用程序结束时应该释放令牌，如果不释放令牌，过期令牌也会自动失效并自动从 facelog 令牌数据表中删除。</p>
+<p>申请和释放信息都是通过 facelog 服务的接口方法来完成，管理端和设备端申请和释放令牌使用不同的服务接口方法。</p>
+<table>
+<thead>
+<tr>
+	<th align="left">client类型</th>
+	<th align="left">令牌类型</th>
+	<th align="left">操作</th>
+	<th align="left">facelog 服务接口方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td align="left">设备端</td>
+	<td align="left">设备令牌</td>
+	<td align="left">申请</td>
+	<td align="left"><code>net.gdface.facelog.client.IFaceLogClient.online(DeviceBean)</code></td>
+</tr>
+<tr>
+	<td align="left">设备端</td>
+	<td align="left">设备令牌</td>
+	<td align="left">释放</td>
+	<td align="left"><code>net.gdface.facelog.client.IFaceLogClient.offline(Token)</code></td>
+</tr>
+<tr>
+	<td align="left">管理端</td>
+	<td align="left">人员令牌</td>
+	<td align="left">申请</td>
+	<td align="left"><code>net.gdface.facelog.client.IFaceLogClient.applyPersonToken(int,String,boolean)</code></td>
+</tr>
+<tr>
+	<td align="left">管理端</td>
+	<td align="left">人员令牌</td>
+	<td align="left">释放</td>
+	<td align="left"><code>net.gdface.facelog.client.IFaceLogClient.releasePersonToken(Token)</code></td>
+</tr>
+<tr>
+	<td align="left">管理端</td>
+	<td align="left">root令牌</td>
+	<td align="left">申请</td>
+	<td align="left"><code>net.gdface.facelog.client.IFaceLogClient.applyRootToken(String,boolean)</code></td>
+</tr>
+<tr>
+	<td align="left">管理端</td>
+	<td align="left">root令牌</td>
+	<td align="left">释放</td>
+	<td align="left"><code>net.gdface.facelog.client.IFaceLogClient.releaseRootToken(Token)</code></td>
+</tr>
+</tbody>
+</table>
+<h4>设备注册/注销</h4>
+<p><code>设备注册</code>就是设备端将自己的设备信息向 facelog 服务登记的过程，只有在facelog 数据库设备表(<code>fl_device</code>)有记录的设备，才是facelog 认可的合法设备，才会允许其申请设备令牌。这个动作在设备安装时执行一次就可以了。</p>
+<p><code>设备注销</code>与<code>设备注册</code>作用相反，就是当前设备将自己的设备信息从facelog 数据库中删除的过程，这个动作需要在设备从facelog 系统中删除时执行一次。</p>
+<h4>设备注册及令牌申请示例</h4>
+<p>上一节中介绍了设备令牌的申请方式，要说明的是在设备端申请令片之前，先要有一个设备注册过程。否则申请令牌不会成功。下面的示例说明设备注册/注销及设备令牌申请/释放的顺序过程。</p>
+<pre><code>@Test
+public void test4RegisterDevice(){
+    // 获取当前设备的MAC地址(假设只有一块网卡)
+    byte[] address = NetworkUtil.getPhysicalNICs().iterator().next().getHardwareAddress();
+    try {
+        // 根据MAC地址和设备序列号构造一个DeviceBean数据对象
+        DeviceBean device = DeviceBean.builder()
+                .mac(NetworkUtil.formatMac(address, null)) // 设备当前设备MAC地址
+                .serialNo(&quot;12322333&quot;) // 设置设备序列号
+                .build();
+        logger.info(device.toString(true,false));
+        // 设备注册
+        device = facelogClient.registerDevice(device);
+        // 申请设备令牌
+        Token deviceToken = facelogClient.online(device);
+        // .....
+
+        // 应用结束时通知facelog servcie设备下线，释放设备令牌
+        facelogClient.offline(deviceToken);
+
+        // 设备注销，设备从 facelog系统删除时调用
+        facelogClient.unregisterDevice(device.getId(), deviceToken);
+    } catch(ServiceRuntimeException e){
+        e.printServiceStackTrace();
+        assertTrue(e.getMessage(),false);
+    }catch (ServiceSecurityException e) {
+        logger.error(e.getMessage());
+        assertTrue(e.getServiceStackTraceMessage(),false);
+    }
+}
+</code></pre>
+
 <h3>消息系统(simpleMQ)</h3>
+<p>消息系统(<a href="https://gitee.com/l0km/simplemq"><code>simpleMQ</code></a>)是基于<a href="https://redis.io/"><code>redis</code></a>实现的用于计算机之间通讯的一个中间件jar包。facelog 服务、设备端、管理端使用消息系统的频道(channel)订阅发布功能，进行1对N的通讯.</p>
 <h4>消息频道</h4>
+<p>facelog 中的频道类型：</p>
+<table>
+<thead>
+<tr>
+	<th align="left">频道类型</th>
+	<th align="left">说明</th>
+	<th align="left">定义方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td align="left">数据库实时更新频道</td>
+	<td align="left">用于发布订阅数据库实时更新通知的频道，参见[<code>数据更新</code>]章节</td>
+	<td align="left">公开定义的常量,参见 <a href="../facelog-service/src/sql2java/java/net/gdface/facelog/service/CommonConstant.java"><code>net.gdface.facelog.service.CommonConstant</code></a></td>
+</tr>
+<tr>
+	<td align="left">设备命令频道</td>
+	<td align="left">用于client设备命令发送和接收的频道</td>
+	<td align="left">facelog 服务初始化后才确定的常量,非公开，需要通过令牌方法才能获取,<strong>NOTE1</strong></td>
+</tr>
+<tr>
+	<td align="left">人员验证实时监控通道名</td>
+	<td align="left">用于管理端实时获取设备端人员验证通行消息的频道</td>
+	<td align="left">facelog 服务初始化后才确定的常量,非公开，需要通过令牌方法才能获取，<strong>NOTE1</strong></td>
+</tr>
+<tr>
+	<td align="left">设备心跳实时监控通道名</td>
+	<td align="left">用于管理端实时获取设备端心跳的频道</td>
+	<td align="left">facelog 服务初始化后才确定的常量,非公开，需要通过令牌方法才能获取，<strong>NOTE1</strong></td>
+</tr>
+<tr>
+	<td align="left">设备命令响应频道</td>
+	<td align="left">用于client端接收设备命令响应的频道</td>
+	<td align="left">动态申请，如果管理端发送设备命令时需要获取设备端的命令响应，就需要在每次发送设备命令之前向facelog 申请一个设备命令响应频道名参见<code>设备命令</code>章节,申请命令响应频道名的方法参见 <code>net.gdface.facelog.client.IFaceLogClient.applyAckChannel(Token)</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>NOTE1</strong></p>
+<blockquote>
+<p>参见 <code>net.gdface.facelog.client.IFaceLogClient.getRedisParameters(Token)</code>，<code>net.gdface.facelog.service.RedisManagement.MQParam</code></p>
+</blockquote>
 <h4>发布消息</h4>
+<p>利用消息系统发布消息很简单，只要获取一个<code>IPublisher</code>实例，就可以向指定的频道发布消息。</p>
+<p>消息系统向频道发布消息的接口类为<code>IPublisher</code>,参见 <a href="https://gitee.com/l0km/simplemq/blob/master/src/main/java/gu/simplemq/IPublisher.java"><code>gu.simplemq.IPublisher</code></a></p>
+<p>获取一个<code>IPublisher</code>实例的方式参见<a href="https://gitee.com/l0km/simplemq/blob/master/src/main/java/gu/simplemq/redis/RedisFactory.java"><code>gu.simplemq.redis.RedisFactory#getPublisher</code></a>系列方法</p>
+<p>另外参见 <a href="https://gitee.com/l0km/simplemq/blob/master/src/main/java/gu/simplemq/BasePublishTask.java"><code>gu.simplemq.BasePublishTask</code></a>用于消息发布的线程池执行任务封装</p>
+<h3>发布消息示例</h3>
+<p>使用<code>gu.simplemq.IPublisher</code>的示例代码</p>
+<pre><code>@Test
+public void test() throws InterruptedException {
+     Channel&lt;Date&gt; chat1 = new Channel&lt;Date&gt;(&quot;chat1&quot;,Date.class);
+    // 获取IPublisher接口实例(edisPublisher)
+    IPublisher publisher = RedisFactory.getPublisher(JedisPoolLazy.getDefaultInstance());
+    for(int i=0;i&lt;100;++i){
+        Date date = new Date();
+        // 向频道'chat1'发布消息
+        publisher.publish(chat1, date);
+        logger.info(date.getTime() +&quot; : &quot; +date.toString());
+        Thread.sleep(2000);
+    }
+}
+</code></pre>
+
 <h4>订阅消息</h4>
+<p>消息系统管理消息订阅的实例类为<code>RedisSubscriber</code>,参见 <a href="https://gitee.com/l0km/simplemq/blob/master/src/main/java/gu/simplemq/redis/RedisSubscriber.java"><code>gu.simplemq.redis.RedisSubscriber</code></a></p>
+<p>获取一个<code>RedisSubscriber</code>实例的方式参见<a href="https://gitee.com/l0km/simplemq/blob/master/src/main/java/gu/simplemq/redis/RedisFactory.java"><code>gu.simplemq.redis.RedisFactory#getSubscriber</code></a>系列方法</p>
+<p>订阅消息实际就是一个向redis服务器订阅频道并处理消息的的过程。<code>RedisSubscriber</code>的<code>register</code>方法用于将指定的消息处理代码注册到指定的频道。</p>
 <h4>消息处理</h4>
+<p>消息处理的核心接口为<code>gu.simplemq.IMessageAdapter</code>，参见<a href="https://gitee.com/l0km/simplemq/blob/master/src/main/java/gu/simplemq/Channel.java"><code>gu.simplemq.Channel</code></a>中对<code>IMessageAdapter</code>的调用</p>
+<h4>消息订阅处理示例</h4>
+<p>使用<code>gu.simplemq.redis.RedisSubscriber</code>订阅频道消息示例</p>
+<pre><code>@Test
+public void testRedisSubscriber(){
+    RedisSubscriber consumer = RedisFactory.getSubscriber(JedisPoolLazy.getDefaultInstance());
+    // 频道名 'list1'
+    Channel&lt;String&gt; list1 = new Channel&lt;String&gt;(&quot;list1&quot;,String.class,new IMessageAdapter&lt;String&gt;(){
+
+        @Override
+        public void onSubscribe(String t) throws SmqUnsubscribeException {
+            logger.info(&quot;{}:{}&quot;,&quot;list1&quot;,t);
+        }} );
+    // 订阅消息，用IMessageAdapter实例显示消息
+    consumer.register(list1);
+    // 取消订阅
+    consumer.unregister(list1);
+}
+</code></pre>
+
+<p>使用<code>gu.simplemq.redis.RedisConsumer</code>订阅队列消息示例(队列消息目前没有在facelog 中用到)</p>
+<pre><code>@Test
+public void testRedisConsumer(){
+    // 获取 RedisConsumer 实例
+    RedisConsumer consumer = RedisFactory.getConsumer(JedisPoolLazy.getDefaultInstance());
+    // 定义 list1, list2,list3 三个队列，并提供相应的消息处理实例IMessageAdapter
+    Channel&lt;String&gt; list1 = new Channel&lt;String&gt;(&quot;list1&quot;,String.class,new IMessageAdapter&lt;String&gt;(){
+
+        @Override
+        public void onSubscribe(String t) throws SmqUnsubscribeException {
+            logger.info(&quot;{}:{}&quot;,&quot;list1&quot;,t);
+        }} );
+    Channel&lt;String&gt; list2 = new Channel&lt;String&gt;(&quot;list2&quot;,String.class,new IMessageAdapter&lt;String&gt;(){
+
+        @Override
+        public void onSubscribe(String t) throws SmqUnsubscribeException {
+            logger.info(&quot;{}:{}&quot;,&quot;list2&quot;,t);
+        }} );
+    Channel&lt;String&gt; list3 = new Channel&lt;String&gt;(&quot;list3&quot;,String.class,new IMessageAdapter&lt;String&gt;(){
+
+        @Override
+        public void onSubscribe(String t) throws SmqUnsubscribeException {
+            logger.info(&quot;{}:{}&quot;,&quot;list3&quot;,t);
+        }} );
+    // 订阅消息，用IMessageAdapter实例显示消息
+    consumer.register(list1,list2);
+    consumer.register(list3);
+    // 取消订阅
+    consumer.unregister(list1);
+}
+</code></pre>
+
 <h3>数据下发</h3>
 <p>所谓数据下发，实际就是一个消息发布、订阅、处理的过程，当client端订阅了指定频道的消息，就会收到消息通知。</p>
 <p>比如，新入职了一名员工，<code>fl_person</code>表中会增加一条该员工的记录，facelog 服务向名为<code>PersonInsert</code>的频道(channel)会发布一条消息，该消息的内容很简单，就是该条记录的id(primary key),订阅了该频道的所有client端都会立即收到该消息。client根据收到的id,再通过facelog service向数据库获取该条记录的完整数据。就实现了自动数据下发功能。</p>
 <p>client收到消息后如何处理，这属于具体应用的业务逻辑，应该由应用项目根据实际需求来实现。</p>
+<h4>数据更新消息处理示例</h4>
+<pre><code>public class PersonInsertAdapterTest implements CommonConstant {
+
+    @Test
+    public void test() {        
+        new SubAdapters.BasePersonInsertSubAdapter(){
+            @Override
+            public void onSubscribe(Integer id) throws SmqUnsubscribeException {
+                logger.info(&quot;insert person ID:{}&quot;,id);
+            }           
+        }.register(RedisFactory.getSubscriber());
+    }
+}
+</code></pre>
+
 <h3>设备命令</h3>
+<p>设备命令的发送与接收示意图如下：</p>
+<p><img src="images/devicecmd.png" alt="设备命令" /></p>
+<p>管理端是设备命令的发送端，设备端是设备命令的接收和处理端，设备端执行命令后，将命令执行结果以命令响应的形式返回给管理端。</p>
+<p>以上只是示意图，设备命令的发送与接收都是通过redis的订阅发布功能实现，管理端和设备之间并没有直接的网络通讯。</p>
+<h4>设备命令定义</h4>
+<p>facelog 只是一个开发框架，并不实现具体的设备命令，facelog 根据应用场景的提供一组预定义的设备命令，同时也允许应用项目根据需求自定义设备命令。 </p>
+<p>参见 <a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/Cmd.java"><code>net.gdface.facelog.client.Cmd</code></a></p>
+<p>每个设备命令都有命令参数和返回类型，对于预定义的设备命令，参数类型是已知的，对于自定义命令，参数类型则由应用项目自己解释。</p>
+<p>何为自定义命令？</p>
+<p><code>net.gdface.facelog.client.Cmd</code>中<code>custom</code>代表自定义命令，自定义命令由应用程序自行约定，可以支持任意多参数。返回任意类型的结果。</p>
 <h4>发送设备命令</h4>
+<p>管理端发送的一条设备命令时，可以指定目标执行设备(target)，target可以是一个设备或多个设备，或者是一个或多个设备组。</p>
+<blockquote>
+<p>参见设备命令参数定义：<a href="../facelog-client/src/main/java/net/gdface/facelog/client/DeviceInstruction.java"><code>net.gdface.facelog.client.DeviceInstruction</code></a></p>
+<p>参见设备命令参数构建工具类： <code>net.gdface.facelog.client.CmdManager.CmdBuilder</code></p>
+</blockquote>
+<p>下面的示例代码示例向指定的一组设备发送命令，并以以同步方式接收命令响应。</p>
+<pre><code>public class CmdManagerTest implements CommonConstant{
+
+    @Test
+    public void test() throws ServiceSecurityException {
+        // 创建 facelog 服务实例
+        IFaceLogClient serviceClient = ClientFactory.builder().setHostAndPort(&quot;127.0.0.1&quot;, DEFAULT_PORT).build();
+        // 使用root密码申请 root 令牌
+        Token token = serviceClient.applyRootToken(&quot;12343&quot;, false);
+        // 创建命令发送管理实例 
+        CmdManager cmdManager = serviceClient.makeCmdManager(token);
+
+        try {
+            List&lt;Ack&lt;Void&gt;&gt; ackList = cmdManager.targetBuilder()
+                .setAckChannel(serviceClient.getAckChannelSupplier(token)) // 设置命令响应通道
+                .setDeviceTarget(125,207,122) // 指定设备命令执行接收目标为一组设备(id)
+                .build()
+                .resetSync(null, false); // 同步执行设备复位命令              
+            // 输出命令执行结果
+            for(Ack&lt;Void&gt; ack:ackList){
+                logger.info(&quot;ack :{}&quot;,ack);
+            }
+            // 如果需要异步获取设备命令响应，则上面的resetSync方法改为reset(Long,IAckAdapter&lt;Void&gt;)方法
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }    
+}
+</code></pre>
+
 <h4>执行设备命令</h4>
+<p>设备命令接收与任务分发执行由<a href="../facelog-client/src/main/java/net/gdface/facelog/client/CmdDispatcher.java"><code>net.gdface.facelog.client.CmdDispatcher</code></a>实现。</p>
+<p>设备命令执行由应用项目继承 <a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommandAdapter.java"><code>net.gdface.facelog.client.CommandAdapter</code></a>实现。</p>
+<p>设备命令 reset 执行示例：</p>
+<pre><code>@Test
+public void testCommandAdapter(){
+    IFaceLogClient serviceClient = ClientFactory.builder().setHostAndPort(&quot;127.0.0.1&quot;, DEFAULT_PORT).build();
+    DeviceBean deviceBean = 。。。// 当前设备信息
+    try {
+        // 申请设备令牌
+        Token token = serviceClient.online(deviceBean);
+        // 创建设备命令分发器，并将实现 reset命令的RestAdapter实例加入分发器
+        serviceClient.makeCmdDispatcher(token)
+                .getCmdAdapterContainer()
+                .register(Cmd.reset, new RestAdapter());    
+    } catch (ServiceSecurityException e) {
+        e.printStackTrace();
+    }
+}
+/** reset 命令实现 */
+public class RestAdapter extends CommandAdapter{
+    @Override
+    public void reset(Long schedule) throws DeviceCmdException {
+        logger.info(&quot;device reset...&quot;);
+    }       
+}
+</code></pre>
+
 <h4>命令响应</h4>
 
 </body>
