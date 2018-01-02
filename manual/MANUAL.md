@@ -360,7 +360,7 @@ facelog 中的频道类型：
 
 另外参见 [`gu.simplemq.BasePublishTask`](https://gitee.com/l0km/simplemq/blob/master/src/main/java/gu/simplemq/BasePublishTask.java)用于消息发布的线程池执行任务封装
 
-### 发布消息示例
+##### 发布消息示例
 
 使用`gu.simplemq.IPublisher`的示例代码
 
@@ -444,9 +444,9 @@ facelog 中的频道类型：
 
 ### 数据下发
 
-所谓数据下发，实际就是一个消息发布、订阅、处理的过程，当client端订阅了指定频道的消息，就会收到消息通知。
+所谓数据下发，实际就是一个数据库表更新消息发布、订阅、处理的过程，当client端订阅了指定频道的消息，就会收到数据库更新的消息通知。
 
-比如，新入职了一名员工，`fl_person`表中会增加一条该员工的记录，facelog 服务向名为`PersonInsert`的频道(channel)会发布一条消息，该消息的内容很简单，就是该条记录的id(primary key),订阅了该频道的所有client端都会立即收到该消息。client根据收到的id,再通过facelog service向数据库获取该条记录的完整数据。就实现了自动数据下发功能。
+比如，新入职了一名员工，`fl_person`表中会增加一条该员工的记录，facelog 服务向名为`PersonInsert`的频道(在[`net.gdface.facelog.client.CommonConstant`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommonConstant.java)中定义)会发布一条消息，该消息的内容很简单，就是该条记录的id(primary key),订阅了该频道的所有client端都会立即收到该消息。client根据收到的id,再通过facelog service向数据库获取该条记录的完整数据。就实现了自动数据下发功能。
 
 client收到消息后如何处理，这属于具体应用的业务逻辑，应该由应用项目根据实际需求来实现。
 
@@ -456,10 +456,12 @@ client收到消息后如何处理，这属于具体应用的业务逻辑，应�
 	
 		@Test
 		public void test() {		
+			final IFaceLogClient serviceClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build();
 			new SubAdapters.BasePersonInsertSubAdapter(){
 				@Override
 				public void onSubscribe(Integer id) throws SmqUnsubscribeException {
 					logger.info("insert person ID:{}",id);
+					logger.info("new recored {}",serviceClient.getPerson(id).toString(true, false));
 				}			
 			}.register(RedisFactory.getSubscriber());
 		}
@@ -496,12 +498,13 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
 >
 >参见设备命令参数构建工具类： `net.gdface.facelog.client.CmdManager.CmdBuilder`
 
-下面的示例代码示例向指定的一组设备发送命令，并以以同步方式接收命令响应。
+##### 发送设备命令示例
+下面的示例代码示例向指定的一组设备发送复位(`reset`)命令，并以以同步方式和异步方式接收命令响应。
 
     public class CmdManagerTest implements CommonConstant{
     
     	@Test
-    	public void test() throws ServiceSecurityException {
+    	public void testSendResetSync() throws ServiceSecurityException {
 			// 创建 facelog 服务实例
     		IFaceLogClient serviceClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build();
     		// 使用root密码申请 root 令牌
@@ -519,11 +522,30 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
     			for(Ack<Void> ack:ackList){
     				logger.info("ack :{}",ack);
     			}
-				// 如果需要异步获取设备命令响应，则上面的resetSync方法改为reset(Long,IAckAdapter<Void>)方法
     		} catch (InterruptedException e) {
     			e.printStackTrace();
     		}
-    	}    
+    	}
+		@Test
+		public void testSendResetAsync() throws ServiceSecurityException {
+			IFaceLogClient serviceClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build();
+			// 申请 root 令牌
+			Token token = serviceClient.applyRootToken("12343", false);
+			// 创建命令发送管理实例 
+			CmdManager cmdManager = serviceClient.makeCmdManager(token);
+			
+			cmdManager.targetBuilder()
+				.setAckChannel(serviceClient.getAckChannelSupplier(token)) // 设置命令响应通道
+				.setDeviceTarget(125,207,122) // 指定设备命令执行接收目标为一组设备(id)
+				.build()
+				.reset(null, new IAckAdapter.BaseAdapter<Void>(){
+					@Override
+					protected void doOnSubscribe(Ack<Void> t) {
+						// 输出命令执行结果
+						logger.info("ack :{}",t);
+					}
+				}); // 异步执行设备复位命令
+		}  
     }
     
 
@@ -533,7 +555,9 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
 
 设备命令执行由应用项目继承 [`net.gdface.facelog.client.CommandAdapter`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommandAdapter.java)实现。
 
-设备命令 reset 执行示例：
+##### 执行设备命令示例
+
+设备端执行 `reset` 设备命令示例：
 
     @Test
 	public void testCommandAdapter(){
@@ -555,10 +579,12 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
 		@Override
 		public void reset(Long schedule) throws DeviceCmdException {
 			logger.info("device reset...");
-		}		
+		}
 	}
 
 #### 命令响应
+
+关于设备命令响应参见[`net.gdface.facelog.client.Cmd.run(CommandAdapter,Map)`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/Cmd.java)方法实现。该方法已经根据设备命令的执行结果自动完成了命令响应对象[`net.gdface.facelog.client.Ack`](../facelog-client/src/main/java/net/gdface/facelog/client/Ack.java)的创建，并由`net.gdface.facelog.client.CmdDispatcher.onSubscribe(DeviceInstruction)`方法发布到命令响应频道，不需要应用程序做特别的处理。
 
 
 [1]:https://gitee.com/l0km/simplemq
