@@ -9,7 +9,7 @@ package net.gdface.facelog.client;
 
 import org.apache.thrift.TApplicationException;
 import com.facebook.swift.service.RuntimeTApplicationException;
-import com.google.common.base.Preconditions;
+import static com.google.common.base.Preconditions.*;
 import java.nio.ByteBuffer;
 import java.util.*;
 
@@ -69,7 +69,7 @@ public class IFaceLogClient implements Constant{
      * @param service a instance of net.gdface.facelog.client.thrift.IFaceLog created by Swift, must not be null
      */
     IFaceLogClient(net.gdface.facelog.client.thrift.IFaceLog service){
-        this.service = Preconditions.checkNotNull(service,"service is null");
+        this.service = checkNotNull(service,"service is null");
     }
     // 1 SERIVCE PORT : getPerson
     /**
@@ -3052,11 +3052,11 @@ public class IFaceLogClient implements Constant{
         };
     }
     /**
-     * 创建{@link CmdManager}实例
+     * 设备端创建{@link CmdManager}实例
      * @param poolLazy REDIS 连接池对象
      * @param adapter 设备命令执行器实例
      * @param deviceId 当前设备ID
-     * @param token 访问令牌
+     * @param token 设备令牌
      * @return
      * @throws ServiceRuntimeException
      */
@@ -3066,10 +3066,11 @@ public class IFaceLogClient implements Constant{
             int deviceId,
             net.gdface.facelog.client.thrift.Token token){
         try{
-            Preconditions.checkArgument((boolean)existsDevice(deviceId),"INVALID device ID %s",deviceId);
+            checkArgument(token.getType() == net.gdface.facelog.client.thrift.TokenType.DEVICE,"device token required");
+            checkArgument((boolean)existsDevice(deviceId),"INVALID device ID %s",deviceId);
             return new CmdManager(
-                    Preconditions.checkNotNull(poolLazy),
-                    Preconditions.checkNotNull(adapter),
+                    checkNotNull(poolLazy),
+                    checkNotNull(adapter),
                     getRedisParameters(token),
                     deviceId,
                     getDeviceGroupIdSupplier(deviceId)
@@ -3078,10 +3079,33 @@ public class IFaceLogClient implements Constant{
             throw e;
         }catch(Exception e){
             throw new RuntimeException(e);
-        }   
+        }
     }
     /**
-     * 创建{@link CmdManager}实例<br>
+     * 管理端创建{@link CmdManager}实例
+     * @param poolLazy REDIS 连接池对象
+     * @param token 访问令牌(person Token or root Token)
+     * @return
+     * @throws ServiceRuntimeException
+     */
+    public CmdManager makeCmdManager(
+            gu.simplemq.redis.JedisPoolLazy poolLazy,
+            net.gdface.facelog.client.thrift.Token token){
+        try{
+            checkArgument(token.getType() == net.gdface.facelog.client.thrift.TokenType.PERSON 
+                || token.getType() == net.gdface.facelog.client.thrift.TokenType.ROOT,"person or root token required");
+            
+            return new CmdManager(
+                    checkNotNull(poolLazy),
+                    getRedisParameters(token));
+        }catch(RuntimeException e){
+            throw e;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+    /**
+     * 设备端创建{@link CmdManager}实例<br>
      * 使用默认REDIS连接池,参见 {@link gu.simplemq.redis.JedisPoolLazy#getDefaultInstance()}
      * @param adapter
      * @param deviceId
@@ -3095,6 +3119,18 @@ public class IFaceLogClient implements Constant{
             int deviceId,
             net.gdface.facelog.client.thrift.Token token){
         return makeCmdManager(gu.simplemq.redis.JedisPoolLazy.getDefaultInstance(),adapter,deviceId,token);
+    }
+    /**
+     * 管理端创建{@link CmdManager}实例
+     * 使用默认REDIS连接池,参见 {@link gu.simplemq.redis.JedisPoolLazy#getDefaultInstance()}
+     * @param token 访问令牌(person Token or root Token)
+     * @return
+     * @throws ServiceRuntimeException
+     * @see #makeCmdManager(gu.simplemq.redis.JedisPoolLazy, net.gdface.facelog.client.thrift.Token)
+     */
+    public CmdManager makeCmdManager(
+            net.gdface.facelog.client.thrift.Token token){
+        return makeCmdManager(gu.simplemq.redis.JedisPoolLazy.getDefaultInstance(),token);
     }
     /**
      * 返回一个申请命令响应通道的{@code Supplier}实例
