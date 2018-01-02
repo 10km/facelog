@@ -263,6 +263,7 @@ service IFaceLog {
   list<bool> getPersonPermits(1: required i32 deviceId, 2:  list<i32> personIdList) throws (1: ServiceRuntimeException ex1);
   list<PersonBean> getPersons(1:  list<i32> idList) throws (1: ServiceRuntimeException ex1);
   list<i32> getPersonsOfGroup(1: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
+  string getProperty(1:  string key, 2:  Token token) throws (1: ServiceRuntimeException ex1);
   map<MQParam, string> getRedisParameters(1:  Token token) throws (1: ServiceRuntimeException ex1);
   map<string, string> getServiceConfig(1:  Token token) throws (1: ServiceRuntimeException ex1);
   list<i32> getSubDeviceGroup(1: required i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);

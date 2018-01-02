@@ -1566,6 +1566,17 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 		} 
     }
     @Override
+    public String getProperty(String key,Token token)throws ServiceRuntimeException{
+    	try {
+			Enable.ROOT_ONLY.check(tm, token);
+			return GlobalConfig.getProperty(key);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		} 	
+    }
+    @Override
     public Map<String,String> getServiceConfig(Token token)throws ServiceRuntimeException{
     	try {
 			Enable.ROOT_ONLY.check(tm, token);

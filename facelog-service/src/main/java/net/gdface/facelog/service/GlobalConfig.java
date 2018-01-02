@@ -252,6 +252,12 @@ public class GlobalConfig implements ServiceConstant{
 		}
 	}
 	/**
+	 * 返回指定的参数,如果参数没有定义则返回{@code null}
+	 */
+	static String getProperty(String key){
+		return getConfig().getString(key,null);
+	}
+	/**
 	 * 修改指定的配置参数<br>
 	 * {@link #CONFIG}是组合配置对象,是一组配置文件的镜像视图,不具备持久化能力,对其进行参数修改无效,
 	 * 只有这个方法设置参数才能被正确保存的用户自定义配置文件{@link #USER_CONFIG_FILE}<br>

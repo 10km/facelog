@@ -1365,6 +1365,18 @@ public abstract class BaseFaceLog extends Dao{
 		return null;
     }
 	/**
+	 * 返回指定的参数,如果参数没有定义则返回{@code null}
+	 * <br>{@link TokenMangement.Enable#ROOT_ONLY}
+	 * @param key
+	 * @param token 访问令牌
+	 * @return
+	 * @throws ServiceRuntimeException
+	 */
+	@ThriftMethod
+	public String getProperty(String key,Token token)throws ServiceRuntimeException{
+		return null;
+	}
+	/**
 	 * 获取服务的所有配置参数
 	 * <br>{@link TokenMangement.Enable#ROOT_ONLY}
 	 * @param token 访问令牌
