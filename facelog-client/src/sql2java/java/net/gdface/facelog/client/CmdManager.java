@@ -38,7 +38,7 @@ import gu.simplemq.redis.RedisSubscriber;
 
 /**
  * 
- * 设备命令管理模块<br>
+ * 设备命令发送管理模块<br>
  * 发送设备命令示例:
  * <pre>
  *    String ackChannel = iFaceLogClient.applyAckChannel(myToken); // 向facelog服务申请命令响应通道

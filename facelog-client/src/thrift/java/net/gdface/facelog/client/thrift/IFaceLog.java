@@ -547,6 +547,15 @@ public interface IFaceLog
             @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
         );
 
+        @ThriftMethod(value = "getProperty",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<String> getProperty(
+            @ThriftField(value=1, name="key", requiredness=Requiredness.NONE) final String key,
+            @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
+        );
+
         @ThriftMethod(value = "getRedisParameters",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1535,6 +1544,15 @@ public interface IFaceLog
                   })
     List<Integer> getPersonsOfGroup(
         @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "getProperty",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    String getProperty(
+        @ThriftField(value=1, name="key", requiredness=Requiredness.NONE) final String key,
+        @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getRedisParameters",

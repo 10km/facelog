@@ -1906,7 +1906,22 @@ public class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Map<net.gdface.facelog.client.thrift.MQParam, String>> getRedisParameters(net.gdface.facelog.client.thrift.Token token){
         return service.getRedisParameters(token);
     }
-    // 107 SERIVCE PORT : getServiceConfig
+    // 107 SERIVCE PORT : getProperty
+    /**
+     * 返回指定的参数,如果参数没有定义则返回{@code null}
+     * <br>{@link TokenMangement.Enable#ROOT_ONLY}
+     * @param key
+     * @param token 访问令牌
+     * @return 
+     */
+    public ListenableFuture<String> getProperty(
+            String key,
+            net.gdface.facelog.client.thrift.Token token){
+        return service.getProperty(
+                    key,
+                    token);
+    }
+    // 108 SERIVCE PORT : getServiceConfig
     /**
      * 获取服务的所有配置参数
      * <br>{@link TokenMangement.Enable#ROOT_ONLY}
@@ -1916,7 +1931,7 @@ public class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Map<String, String>> getServiceConfig(net.gdface.facelog.client.thrift.Token token){
         return service.getServiceConfig(token);
     }
-    // 108 SERIVCE PORT : setProperty
+    // 109 SERIVCE PORT : setProperty
     /**
      * 修改/增加指定的配置参数
      * <br>{@link TokenMangement.Enable#ROOT_ONLY}
@@ -1933,7 +1948,7 @@ public class IFaceLogClientAsync implements Constant{
                     value,
                     token);
     }
-    // 109 SERIVCE PORT : setProperties
+    // 110 SERIVCE PORT : setProperties
     /**
      * 修改一组配置参数
      * <br>{@link TokenMangement.Enable#ROOT_ONLY}
@@ -1947,7 +1962,7 @@ public class IFaceLogClientAsync implements Constant{
                     config,
                     token);
     }
-    // 110 SERIVCE PORT : saveServiceConfig
+    // 111 SERIVCE PORT : saveServiceConfig
     /**
      * 配置参数持久化<br>
      * 保存修改的配置到自定义配置文件
@@ -2023,7 +2038,7 @@ public class IFaceLogClientAsync implements Constant{
         };
     }
     /**
-     * 管理端创建{@link CmdManager}实例
+     * (管理端)创建{@link CmdManager}实例
      * @param poolLazy REDIS 连接池对象
      * @param token 访问令牌(person Token or root Token)
      * @return
@@ -2046,7 +2061,7 @@ public class IFaceLogClientAsync implements Constant{
         }
     }
     /**
-     * 管理端创建{@link CmdManager}实例
+     * (管理端)创建{@link CmdManager}实例
      * 使用默认REDIS连接池,参见 {@link gu.simplemq.redis.JedisPoolLazy#getDefaultInstance()}
      * @param token 访问令牌(person Token or root Token)
      * @return
@@ -2084,7 +2099,7 @@ public class IFaceLogClientAsync implements Constant{
      * 使用默认REDIS连接池,参见 {@link gu.simplemq.redis.JedisPoolLazy#getDefaultInstance()}
      * @param token 设备令牌
      * @return
-     * @see #makeCommandContainer(JedisPoolLazy, net.gdface.facelog.client.thrift.Token)
+     * @see #makeCmdDispatcher(JedisPoolLazy, net.gdface.facelog.client.thrift.Token)
      */
     public CmdDispatcher makeCmdDispatcher(
             net.gdface.facelog.client.thrift.Token token){
