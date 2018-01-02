@@ -498,7 +498,7 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
 >
 >参见设备命令参数构建工具类： `net.gdface.facelog.client.CmdManager.CmdBuilder`
 
-##### 发送设备命令示例
+#### 发送设备命令示例
 下面的示例代码示例向指定的一组设备发送复位(`reset`)命令，并以以同步方式和异步方式接收命令响应。
 
     public class CmdManagerTest implements CommonConstant{
@@ -555,7 +555,7 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
 
 设备命令执行由应用项目继承 [`net.gdface.facelog.client.CommandAdapter`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommandAdapter.java)实现。
 
-##### 执行设备命令示例
+#### 执行设备命令示例
 
 设备端执行 `reset` 设备命令示例：
 
@@ -586,6 +586,86 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
 
 关于设备命令响应参见[`net.gdface.facelog.client.Cmd.run(CommandAdapter,Map)`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/Cmd.java)方法实现。该方法已经根据设备命令的执行结果自动完成了命令响应对象[`net.gdface.facelog.client.Ack`](../facelog-client/src/main/java/net/gdface/facelog/client/Ack.java)的创建，并由`net.gdface.facelog.client.CmdDispatcher.onSubscribe(DeviceInstruction)`方法发布到命令响应频道，不需要应用程序做特别的处理。
 
+## 系统设置
+
+faclog 系统配置参数设计如下：
+
+类型|加载顺序|说明
+:-|:-|:-
+`${java.home}/.facelog/config.properties`|1|用户参数
+`face-service-${version}.jar/defaultConfig.xml`|0|默认配置参数
+
+>参见 [root.xml](../facelog-service/src/main/java/root.xml)
+
+facelog 服务启动时先加载[`defaultConfig.xml`][4]再加载`config.properties`，用户参数优先级高于默认参数，所以加载`config.properties`会覆盖`defaultConfig.xml`同名参数。
+
+在`config.properties`中定义参数值可以修改系统参数。
+
+### 修改系统参数
+
+facelog 可修改的系统参数名都定义在[`net.gdface.facelog.client.CommonConstant`][3]中。
+
+查找`// COMMONS PROPERTY KEY DEFINITION`这一行注释,该行以下都是系统参数名定义。
+
+>比如 `ROOT_PASSWORD = "root.password"`为root用户密码的参数名。
+
+[`defaultConfig.xml`][4]中定义的root用户默认密码为`root`，如果要修改root密码，需要在`config.properties`中定义新的密码
+
+    root.password = new_root_password
+
+### mysql数据库连接参数
+
+mysql数据库连接参数的参数名并没有在`CommonConstant.java`中有完整定义。[`defaultConfig.xml`][4]中`database`下的节点都是数据连接的相关参数，数据库连接的主要参数如下：
+
+1. database.host 数据库主机名
+2. database.port 数据库连接端口号
+3. database.schema 数据库schema
+4. database.username 数据库访问用户名
+5. database.password 数据库访问密码
+
+### redis 连接参数
+
+1. redis.host redis服务器主机名
+2. redis.port redis服务器端口号
+3. redis.database redis数据库索引
+4. redis.password redis数据库访问密码
+5. redis.timeout redis 超时参数(秒)
+6. redis.home redis本机安装位置，当指定此值时,facelog启动会自动启动redis 
+
+完整的redis参数名定义参见[`net.gdface.facelog.client.CommonConstant`][3]中 `REDIS_`为前缀的所有参数名定义。
+
+### 系统日志参数
+
+facelog service采用 [log4j](https://logging.apache.org/log4j) 记录日志。
+
+日志相关参数如下
+
+1. syslog.level 系统日志级别，默认INFO,与log4j 中的日志级别定义一致
+2. syslog.location 系统日志文件位置(与lo4j 中`log4j.appender.LOGFILE.File`对应)，默认 `${usr.dir}/log/facelog.log`
+
+更详细的日志参数参见[`net.gdface.facelog.client.CommonConstant`][3]中 `SYSLOG_`为前缀的所有参数名定义。
+
+应用程序也可以直接按传统的修改`log4j.properties`方式配置日志记录参数
+
+关于facelog 对系统日志参数的配置逻辑，参见 [`net.gdface.facelog.service.SyslogConfig`](../facelog-service/src/main/java/net/gdface/facelog/service/SyslogConfig.java)
+
+### 程序修改参数
+
+facelog 服务提供了`getServiceConfig`,`getProperty`,`setProperty`,`saveServiceConfig`接口方法用于修改和保存系统参数。需要有ROOT令牌。
+
+
+## facelog service 启动
+
+命令行启动服务
+
+    java -jar facelog-service-1.0.2-standalone.jar
+
+命令行启动远程调试
+
+    java -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n -jar facelog-service-1.0.2-standalone.jar
+
 
 [1]:https://gitee.com/l0km/simplemq
 [2]:https://redis.io/
+[3]:../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommonConstant.java
+[4]:../facelog-service/src/main/java/defaultConfig.xml
