@@ -67,76 +67,13 @@ public class CmdManager {
      * @param cmdDispatcher 
      * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(Token)}
      */
-    protected CmdManager(JedisPoolLazy poolLazy,
-            CmdDispatcher cmdDispatcher,
+    public CmdManager(JedisPoolLazy poolLazy,
             Map<MQParam, String> redisParameters) {
         this.redisPublisher = RedisFactory.getPublisher(checkNotNull(poolLazy));
         this.subscriber = RedisFactory.getSubscriber(checkNotNull(poolLazy));
         this.redisParameters = checkNotNull(redisParameters);
         this.cmdChannel = new Channel<DeviceInstruction>(
-                this.redisParameters.get(MQParam.CMD_CHANNEL),
-                cmdDispatcher){};
-        if(null != cmdDispatcher ){
-            this.subscriber.register(cmdChannel);
-        }
-    }
-    /**
-     * (设备端)构造方法<br>
-     * 不能发送设备命令，只能接收设备命令
-     * @param poolLazy redis 连接池对象
-     * @param adapter 应用程序执行设备命令的对象
-     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(Token)}
-     * @param deviceId 当前设备ID
-     * @param groupIdSupplier 参见 {@link CmdDispatcher#CmdDispatcher(int, Supplier)}
-     */
-    public CmdManager(JedisPoolLazy poolLazy,
-            CommandAdapter adapter,
-            Map<MQParam, String> redisParameters,
-            int deviceId, 
-            Supplier<Integer> groupIdSupplier) {
-        this(poolLazy,
-                new CmdDispatcher(deviceId, groupIdSupplier).setCmdAdapter(adapter),
-                redisParameters);
-    }
-    /**
-     * (管理端)构造方法<br>
-     * 只能发送设备命令，不接收设备命令
-     * 
-     * @param poolLazy redis 连接池对象
-     * @param adapter 应用程序执行设备命令的对象
-     * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(Token)}
-     */
-    public CmdManager(JedisPoolLazy poolLazy,
-            Map<MQParam, String> redisParameters ) {
-        this(poolLazy, null, redisParameters);
-    }
-    /**
-     * (设备端)构造方法<br>
-     * 使用默认{@link JedisPoolLazy}对象,参见 {@link JedisPoolLazy#getDefaultInstance()}
-     * @param adapter
-     * @param redisParameters
-     * @param groupIdSupplier 
-     * @param deviceId
-     * @see #CmdManager(JedisPoolLazy, CommandAdapter, Map, int, List)
-     */
-    public CmdManager(CommandAdapter adapter,
-            Map<MQParam, String> redisParameters,
-            int deviceId, 
-            Supplier<Integer> groupIdSupplier) {
-        this(JedisPoolLazy.getDefaultInstance(),
-                adapter,
-                redisParameters,
-                deviceId,
-                groupIdSupplier);
-    }
-    /**
-     * (管理端)构造方法<br>
-     * 使用默认{@link JedisPoolLazy}对象,参见 {@link JedisPoolLazy#getDefaultInstance()}
-     * @param redisParameters
-     * @see #CmdManager(JedisPoolLazy, CommandAdapter, Map, int, List)
-     */
-    public CmdManager(Map<MQParam, String> redisParameters) {
-        this(JedisPoolLazy.getDefaultInstance(), redisParameters);
+                this.redisParameters.get(MQParam.CMD_CHANNEL)){};
     }
     /**
      * 发送设备命令
@@ -263,10 +200,6 @@ public class CmdManager {
         return checkNotNull(TLS_BUILDER.get(),
                 "not defined target,please call method targetBuilder() to build parameters");
     }
-    /** 检查当前对象是否为设备端实例，如果是设备端抛出异常 */
-    private void checkNotDeviceClient(){
-        checkState(null == this.cmdChannel.getAdapter(),"device client can't send Device Cmd");
-    }
     /**
      * 用于处理超时等待的{@link Ack}对象<br>
      * 向{@link Ack}对象发送超时错误{@link Ack.Status#TIMEOUT}
@@ -315,7 +248,6 @@ public class CmdManager {
      *
      */
     public long parameter(String key,String value){
-        checkNotDeviceClient();
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
@@ -396,7 +328,6 @@ public class CmdManager {
      *
      */
     public long config(Map<String,String> properties){
-        checkNotDeviceClient();
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
@@ -474,7 +405,6 @@ public class CmdManager {
      *
      */
     public long status(String name){
-        checkNotDeviceClient();
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
@@ -552,7 +482,6 @@ public class CmdManager {
      *
      */
     public long report(List<String> names){
-        checkNotDeviceClient();
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
@@ -629,7 +558,6 @@ public class CmdManager {
      *
      */
     public long version(){
-        checkNotDeviceClient();
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
@@ -705,7 +633,6 @@ public class CmdManager {
      *
      */
     public long enable(Boolean enable){
-        checkNotDeviceClient();
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
@@ -783,7 +710,6 @@ public class CmdManager {
      *
      */
     public long isEnable(String message){
-        checkNotDeviceClient();
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
@@ -861,7 +787,6 @@ public class CmdManager {
      *
      */
     public long reset(Long schedule){
-        checkNotDeviceClient();
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
@@ -939,7 +864,6 @@ public class CmdManager {
      *
      */
     public long time(Long unixTimestamp){
-        checkNotDeviceClient();
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
@@ -1019,7 +943,6 @@ public class CmdManager {
      *
      */
     public long update(URL url,String version,Long schedule){
-        checkNotDeviceClient();
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
@@ -1104,7 +1027,6 @@ public class CmdManager {
      *
      */
     public long idleMessage(String message,Long duration){
-        checkNotDeviceClient();
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
@@ -1189,7 +1111,6 @@ public class CmdManager {
      *
      */
     public long personMessage(String message,Integer id,Boolean group,Boolean onceOnly,Long duration){
-        checkNotDeviceClient();
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map
@@ -1280,7 +1201,6 @@ public class CmdManager {
      *
      */
     public long custom(String cmdName,Map<String,Object> parameters){
-        checkNotDeviceClient();
         CmdBuilder builder = checkTlsAvailable();
         try{
             // 所有的命令参数封装到 Map

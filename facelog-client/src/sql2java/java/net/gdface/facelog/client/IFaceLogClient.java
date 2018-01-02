@@ -3052,36 +3052,6 @@ public class IFaceLogClient implements Constant{
         };
     }
     /**
-     * 设备端创建{@link CmdManager}实例
-     * @param poolLazy REDIS 连接池对象
-     * @param adapter 设备命令执行器实例
-     * @param deviceId 当前设备ID
-     * @param token 设备令牌
-     * @return
-     * @throws ServiceRuntimeException
-     */
-    public CmdManager makeCmdManager(
-            gu.simplemq.redis.JedisPoolLazy poolLazy,
-            CommandAdapter adapter,
-            int deviceId,
-            net.gdface.facelog.client.thrift.Token token){
-        try{
-            checkArgument(token.getType() == net.gdface.facelog.client.thrift.TokenType.DEVICE,"device token required");
-            checkArgument((boolean)existsDevice(deviceId),"INVALID device ID %s",deviceId);
-            return new CmdManager(
-                    checkNotNull(poolLazy),
-                    checkNotNull(adapter),
-                    getRedisParameters(token),
-                    deviceId,
-                    getDeviceGroupIdSupplier(deviceId)
-                    );
-        }catch(RuntimeException e){
-            throw e;
-        }catch(Exception e){
-            throw new RuntimeException(e);
-        }
-    }
-    /**
      * 管理端创建{@link CmdManager}实例
      * @param poolLazy REDIS 连接池对象
      * @param token 访问令牌(person Token or root Token)
@@ -3092,7 +3062,7 @@ public class IFaceLogClient implements Constant{
             gu.simplemq.redis.JedisPoolLazy poolLazy,
             net.gdface.facelog.client.thrift.Token token){
         try{
-            checkArgument(token.getType() == net.gdface.facelog.client.thrift.TokenType.PERSON 
+            checkArgument(checkNotNull(token).getType() == net.gdface.facelog.client.thrift.TokenType.PERSON 
                 || token.getType() == net.gdface.facelog.client.thrift.TokenType.ROOT,"person or root token required");
             
             return new CmdManager(
@@ -3105,22 +3075,6 @@ public class IFaceLogClient implements Constant{
         }
     }
     /**
-     * 设备端创建{@link CmdManager}实例<br>
-     * 使用默认REDIS连接池,参见 {@link gu.simplemq.redis.JedisPoolLazy#getDefaultInstance()}
-     * @param adapter
-     * @param deviceId
-     * @param token
-     * @return
-     * @throws ServiceRuntimeException
-     * @see #makeCmdManager(gu.simplemq.redis.JedisPoolLazy, CommandAdapter, int, net.gdface.facelog.client.thrift.Token)
-     */
-    public CmdManager makeCmdManager(
-            CommandAdapter adapter,
-            int deviceId,
-            net.gdface.facelog.client.thrift.Token token){
-        return makeCmdManager(gu.simplemq.redis.JedisPoolLazy.getDefaultInstance(),adapter,deviceId,token);
-    }
-    /**
      * 管理端创建{@link CmdManager}实例
      * 使用默认REDIS连接池,参见 {@link gu.simplemq.redis.JedisPoolLazy#getDefaultInstance()}
      * @param token 访问令牌(person Token or root Token)
@@ -3131,6 +3085,39 @@ public class IFaceLogClient implements Constant{
     public CmdManager makeCmdManager(
             net.gdface.facelog.client.thrift.Token token){
         return makeCmdManager(gu.simplemq.redis.JedisPoolLazy.getDefaultInstance(),token);
+    }
+    /**
+     * (设备端)创建设备命令分发器<br>
+     * @param poolLazy
+     * @param token 设备令牌
+     * @return
+     */
+    public CmdDispatcher makeCmdDispatcher(
+            gu.simplemq.redis.JedisPoolLazy poolLazy,
+            net.gdface.facelog.client.thrift.Token token){
+        try{
+            checkArgument(checkNotNull(token).getType() == net.gdface.facelog.client.thrift.TokenType.DEVICE,"device token required");
+            CommandAdapterContainer container = new CommandAdapterContainer();
+            int deviceId = token.getId();
+            CmdDispatcher cmdDispatcher = new CmdDispatcher(deviceId,this.getDeviceGroupIdSupplier(deviceId)).setCmdAdapter(container);
+            cmdDispatcher.register(poolLazy, this.getRedisParameters(token).get(net.gdface.facelog.client.thrift.MQParam.CMD_CHANNEL));
+            return cmdDispatcher;
+        }catch(RuntimeException e){
+            throw e;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+    /**
+     * (设备端)创建设备命令分发器<br>
+     * 使用默认REDIS连接池,参见 {@link gu.simplemq.redis.JedisPoolLazy#getDefaultInstance()}
+     * @param token 设备令牌
+     * @return
+     * @see #makeCommandContainer(JedisPoolLazy, net.gdface.facelog.client.thrift.Token)
+     */
+    public CmdDispatcher makeCmdDispatcher(
+            net.gdface.facelog.client.thrift.Token token){
+        return makeCmdDispatcher(gu.simplemq.redis.JedisPoolLazy.getDefaultInstance(),token);
     }
     /**
      * 返回一个申请命令响应通道的{@code Supplier}实例

@@ -1,5 +1,7 @@
 package net.gdface.facelog.client;
 
+import static com.google.common.base.Preconditions.*;
+
 import java.util.List;
 
 import com.google.common.base.Strings;
@@ -24,6 +26,8 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>{
 	private final int deviceId;
 	private Supplier<Integer> groupIdSupplier;
 	private RedisPublisher redisPublisher = RedisFactory.getPublisher(JedisPoolLazy.getDefaultInstance());
+	private volatile Channel<DeviceInstruction> cmdChannel;
+	private volatile JedisPoolLazy poolLazy;
 	/**
 	 * 构造方法<br>
 	 *  设备所属的组可能是可以变化的,所以这里需要用{@code Supplier} 接口来动态获取当前设备的设备组
@@ -73,5 +77,49 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>{
 		this.cmdAdapter = cmdAdapter;
 		return this;
 	}
-
+	
+	public CommandAdapter getCmdAdapter() {
+		return cmdAdapter;
+	}
+	public CommandAdapterContainer getCmdAdapterContainer() {
+		checkState(cmdAdapter instanceof CommandAdapterContainer,"the cmdAdapter is not Container instance");
+		return (CommandAdapterContainer) cmdAdapter;
+	}
+	
+	/**
+	 * 当前对象注册到指定的频道
+	 * @param poolLazy
+	 * @param channel
+	 * @return
+	 */
+	public CmdDispatcher register(JedisPoolLazy poolLazy,String channel){
+		// double check
+		if(null == cmdChannel){
+			synchronized(this){
+				if(null == cmdChannel){
+					cmdChannel = new Channel<DeviceInstruction>(checkNotNull(channel),	this){};
+					RedisFactory.getSubscriber(checkNotNull(poolLazy)).register(cmdChannel);
+					this.poolLazy = poolLazy;
+				}
+			}
+		}
+		return this;
+	}
+	/**
+	 * 当前对象注销频道
+	 * @return
+	 */
+	public CmdDispatcher unregister(){
+		// double check
+		if(null != cmdChannel){
+			synchronized(this){
+				if(null != cmdChannel){
+					RedisFactory.getSubscriber(poolLazy).unregister(cmdChannel);
+					cmdChannel = null;
+					poolLazy = null;
+				}
+			}
+		}
+		return this;
+	}
 }
