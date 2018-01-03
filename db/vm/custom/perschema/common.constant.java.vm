@@ -75,10 +75,10 @@ public interface CommonConstant {
 #set ($constPrefix = "${prefix}_${coreClass}")
 #if($suffixList)
 #foreach($suffix in $suffixList)
-    public static final Channel<$channelType> ${constPrefix.toUpperCase()}_${suffix.toUpperCase()} = new Channel<$channelType>("${coreClass}${suffix}"){};
+    public static final Channel<$channelType> ${constPrefix.toUpperCase()}_${suffix.toUpperCase()} = new Channel<$channelType>("${coreClass}${suffix}"){}.immutable();
 #end
 #else
-    public static final Channel<$channelType> ${constPrefix.toUpperCase()} = new Channel<$channelType>("$prefix.toLowerCase()${coreClass}"){};
+    public static final Channel<$channelType> ${constPrefix.toUpperCase()} = new Channel<$channelType>("$prefix.toLowerCase()${coreClass}"){}.immutable();
 #end
 
 #end

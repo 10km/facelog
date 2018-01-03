@@ -48,7 +48,7 @@ public class SubAdapters implements CommonConstant{
      */
     public static class ${subClass} implements IMessageAdapter<$channelType>{
         /** 订阅频道 */
-        protected final Channel<$channelType> channel = ${channelConst}.clone().setAdapter(this);
+        protected final Channel<$channelType> channel = ${channelConst}.asMutable().setAdapter(this);
         /**
          * 向{@code subscriber}注册,注册后才能收到订阅消息
          * @param subscriber 

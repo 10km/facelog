@@ -136,8 +136,7 @@ public class CmdManager {
          * @see {@link IFaceLogClient#getAckChannelSupplier(Token)}
          */
         public CmdBuilder setCmdSn(Supplier<Long> cmdSnSupplier) {
-            this.cmdSn = cmdSnSupplier.get().longValue();
-            return this;
+            return this.setCmdSn(cmdSnSupplier.get().longValue());
         }
         /** 
          * 指定命令响应通道,参见 {@link DeviceInstruction#setAckChannel(String)} */
@@ -150,8 +149,7 @@ public class CmdManager {
          * @see {@link IFaceLogClient#getAckChannelSupplier(Token)}
          */
         public CmdBuilder setAckChannel(Supplier<String> ackChannelSupplier){
-            this.ackChannel = ackChannelSupplier.get();
-            return this;
+            return this.setAckChannel(ackChannelSupplier.get());
         }
         /** 数据有效性验证 */
         private void validate(){

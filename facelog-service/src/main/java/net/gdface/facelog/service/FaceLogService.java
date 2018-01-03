@@ -39,7 +39,7 @@ public class FaceLogService extends ThriftServerService {
 		return service;
 	}
 	
-	protected FaceLogService(List<?> services, 
+	public FaceLogService(List<?> services, 
 			List<ThriftEventHandler> eventHandlers,
 			ThriftServerConfig thriftServerConfig) {
 		super(services, eventHandlers, thriftServerConfig);

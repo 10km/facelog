@@ -90,7 +90,7 @@ public class ThriftServerService extends AbstractIdleService{
 		public <T extends ThriftServerService> T build(Class<T> subServiceClass) {
 			try {
 				Constructor<T> constructor= checkNotNull(subServiceClass,"subServiceClass is null")
-						.getConstructor(List.class,List.class,ThriftServerConfig.class);
+						.getDeclaredConstructor(List.class,List.class,ThriftServerConfig.class);
 				return constructor.newInstance(services,eventHandlers,thriftServerConfig);
 			} catch (Exception e) {
 				Throwables.throwIfUnchecked(e);

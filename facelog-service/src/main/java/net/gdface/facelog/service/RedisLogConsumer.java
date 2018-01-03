@@ -24,7 +24,7 @@ class RedisLogConsumer implements ServiceConstant {
 	public RedisLogConsumer(Dao dao,JedisPoolLazy poolLazy){
 		this.dao = checkNotNull(dao);
 		this.consumer = RedisFactory.getConsumer(checkNotNull(poolLazy));
-		this.consumer.register(QUEUE_LOG.clone().setAdapter(new IMessageAdapter<LogBean>(){
+		this.consumer.register(QUEUE_LOG.asMutable().setAdapter(new IMessageAdapter<LogBean>(){
 			@Override
 			public void onSubscribe(final LogBean t) throws SmqUnsubscribeException {
 				GLOBAL_EXCEUTOR.execute(new Runnable(){

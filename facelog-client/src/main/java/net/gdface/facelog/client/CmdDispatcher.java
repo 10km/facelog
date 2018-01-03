@@ -4,6 +4,9 @@ import static com.google.common.base.Preconditions.*;
 
 import java.util.List;
 
+import com.google.common.base.Predicates;
+
+import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 
@@ -22,13 +25,19 @@ import gu.simplemq.redis.RedisFactory;
  * @author guyadong
  *
  */
-public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>{
+public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonConstant{
 	private final int deviceId;
 	private final Supplier<Integer> groupIdSupplier;
 	/** 只从{@link JedisPoolLazy}默认实例获取{@link RedisPublisher} */
 	private final IPublisher redisPublisher = RedisFactory.getPublisher();
+	/** 命令执行器 */
 	private CommandAdapter cmdAdapter;
+	/** 设备命令通道 */
 	private volatile Channel<DeviceInstruction> cmdChannel;
+	 /** 设备命令序列号验证器 */
+	private Predicate<Long> cmdSnValidator = Predicates.alwaysTrue();
+	/** 设备命令响应通道验证器 */
+	private Predicate<String> ackChannelValidator = Predicates.alwaysTrue();
 	/**
 	 * 构造方法<br>
 	 *  设备所属的组可能是可以变化的,所以这里需要用{@code Supplier} 接口来动态获取当前设备的设备组
@@ -36,7 +45,8 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>{
 	 * @param groupIdSupplier 用于提供{@code deviceId}所属的设备组,
 	 * 参见默认实现: {@link IFaceLogClient#getDeviceGroupIdSupplier(int)},为{@code null}不响应设备组命令
 	 */
-	public CmdDispatcher(int deviceId, Supplier<Integer> groupIdSupplier) {
+	public CmdDispatcher(int deviceId, 
+			Supplier<Integer> groupIdSupplier) {
 		this.deviceId= deviceId;
 		this.groupIdSupplier = groupIdSupplier;
 	}
@@ -58,13 +68,26 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>{
 	 */
 	@Override
 	public void onSubscribe(DeviceInstruction t) throws SmqUnsubscribeException {
-		if(null != cmdAdapter && null != t.getTarget() && selfIncluded(t.isGroup(),t.getTarget())){
-			// 将设备命令交给命令类型对应的方法执行设备命令
-			Ack<?> ack = t.getCmd().run(cmdAdapter, t.getParameters()).setCmdSn(t.getCmdSn());
-			// 如果指定了响应频道则向指定的频道发送响应消息
-			if(!Strings.isNullOrEmpty(t.getAckChannel())){
-				Channel<Ack<?>> ackChannel = new Channel<Ack<?>>(t.getAckChannel()){};
-				redisPublisher.publish(ackChannel, ack);
+		// 设备命令序列号有效才执行设备命令
+		if(null != cmdAdapter 
+				&& null != t.getTarget() 
+				&& selfIncluded(t.isGroup(),t.getTarget())){
+			long cmdSn = t.getCmdSn();
+			if(cmdSnValidator.apply(cmdSn)){
+				// 将设备命令交给命令类型对应的方法执行设备命令
+				Ack<?> ack = t.getCmd().run(cmdAdapter, t.getParameters()).setCmdSn(cmdSn);
+				// 如果指定了响应频道且频道名有效则向指定的频道发送响应消息
+				if(!Strings.isNullOrEmpty(t.getAckChannel())){
+					String ackChannel = t.getAckChannel();
+					if(ackChannelValidator.apply(ackChannel)){
+						Channel<Ack<?>> channel = new Channel<Ack<?>>(ackChannel){};
+						redisPublisher.publish(channel, ack);
+					}else{
+						logger.warn("INVALID ack channel: {}",ackChannel);
+					}
+				}
+			}else{
+				logger.warn("INVALID cmd serial number: {}",cmdSn);
 			}
 		}
 	}
@@ -144,6 +167,18 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>{
 	 */
 	public CmdDispatcher unregisterAdapter(Cmd cmd){
 		getCommandAdapterContainer().unregister(cmd);
+		return this;
+	}
+	public CmdDispatcher setCmdSnValidator(Predicate<Long> cmdSnValidator) {
+		if(null != cmdSnValidator){
+			this.cmdSnValidator = cmdSnValidator;
+		}
+		return this;
+	}
+	public CmdDispatcher setAckChannelValidator(Predicate<String> ackChannelValidator) {
+		if(null !=ackChannelValidator){
+			this.ackChannelValidator = ackChannelValidator;
+		}
 		return this;
 	}
 }

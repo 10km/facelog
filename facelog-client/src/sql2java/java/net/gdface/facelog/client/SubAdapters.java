@@ -25,7 +25,7 @@ public class SubAdapters implements CommonConstant{
      */
     public static class BasePersonInsertSubAdapter implements IMessageAdapter<Integer>{
         /** 订阅频道 */
-        protected final Channel<Integer> channel = PUBSUB_PERSON_INSERT.clone().setAdapter(this);
+        protected final Channel<Integer> channel = PUBSUB_PERSON_INSERT.asMutable().setAdapter(this);
         /**
          * 向{@code subscriber}注册,注册后才能收到订阅消息
          * @param subscriber 
@@ -62,7 +62,7 @@ public class SubAdapters implements CommonConstant{
      */
     public static class BasePersonUpdateSubAdapter implements IMessageAdapter<Integer>{
         /** 订阅频道 */
-        protected final Channel<Integer> channel = PUBSUB_PERSON_UPDATE.clone().setAdapter(this);
+        protected final Channel<Integer> channel = PUBSUB_PERSON_UPDATE.asMutable().setAdapter(this);
         /**
          * 向{@code subscriber}注册,注册后才能收到订阅消息
          * @param subscriber 
@@ -99,7 +99,7 @@ public class SubAdapters implements CommonConstant{
      */
     public static class BasePersonDeleteSubAdapter implements IMessageAdapter<Integer>{
         /** 订阅频道 */
-        protected final Channel<Integer> channel = PUBSUB_PERSON_DELETE.clone().setAdapter(this);
+        protected final Channel<Integer> channel = PUBSUB_PERSON_DELETE.asMutable().setAdapter(this);
         /**
          * 向{@code subscriber}注册,注册后才能收到订阅消息
          * @param subscriber 
@@ -136,7 +136,7 @@ public class SubAdapters implements CommonConstant{
      */
     public static class BaseFeatureInsertSubAdapter implements IMessageAdapter<String>{
         /** 订阅频道 */
-        protected final Channel<String> channel = PUBSUB_FEATURE_INSERT.clone().setAdapter(this);
+        protected final Channel<String> channel = PUBSUB_FEATURE_INSERT.asMutable().setAdapter(this);
         /**
          * 向{@code subscriber}注册,注册后才能收到订阅消息
          * @param subscriber 
@@ -173,7 +173,7 @@ public class SubAdapters implements CommonConstant{
      */
     public static class BaseFeatureUpdateSubAdapter implements IMessageAdapter<String>{
         /** 订阅频道 */
-        protected final Channel<String> channel = PUBSUB_FEATURE_UPDATE.clone().setAdapter(this);
+        protected final Channel<String> channel = PUBSUB_FEATURE_UPDATE.asMutable().setAdapter(this);
         /**
          * 向{@code subscriber}注册,注册后才能收到订阅消息
          * @param subscriber 
@@ -210,7 +210,7 @@ public class SubAdapters implements CommonConstant{
      */
     public static class BaseFeatureDeleteSubAdapter implements IMessageAdapter<String>{
         /** 订阅频道 */
-        protected final Channel<String> channel = PUBSUB_FEATURE_DELETE.clone().setAdapter(this);
+        protected final Channel<String> channel = PUBSUB_FEATURE_DELETE.asMutable().setAdapter(this);
         /**
          * 向{@code subscriber}注册,注册后才能收到订阅消息
          * @param subscriber 
@@ -247,7 +247,7 @@ public class SubAdapters implements CommonConstant{
      */
     public static class BasePermitInsertSubAdapter implements IMessageAdapter<PermitBean>{
         /** 订阅频道 */
-        protected final Channel<PermitBean> channel = PUBSUB_PERMIT_INSERT.clone().setAdapter(this);
+        protected final Channel<PermitBean> channel = PUBSUB_PERMIT_INSERT.asMutable().setAdapter(this);
         /**
          * 向{@code subscriber}注册,注册后才能收到订阅消息
          * @param subscriber 
@@ -284,7 +284,7 @@ public class SubAdapters implements CommonConstant{
      */
     public static class BasePermitUpdateSubAdapter implements IMessageAdapter<PermitBean>{
         /** 订阅频道 */
-        protected final Channel<PermitBean> channel = PUBSUB_PERMIT_UPDATE.clone().setAdapter(this);
+        protected final Channel<PermitBean> channel = PUBSUB_PERMIT_UPDATE.asMutable().setAdapter(this);
         /**
          * 向{@code subscriber}注册,注册后才能收到订阅消息
          * @param subscriber 
@@ -321,7 +321,7 @@ public class SubAdapters implements CommonConstant{
      */
     public static class BasePermitDeleteSubAdapter implements IMessageAdapter<PermitBean>{
         /** 订阅频道 */
-        protected final Channel<PermitBean> channel = PUBSUB_PERMIT_DELETE.clone().setAdapter(this);
+        protected final Channel<PermitBean> channel = PUBSUB_PERMIT_DELETE.asMutable().setAdapter(this);
         /**
          * 向{@code subscriber}注册,注册后才能收到订阅消息
          * @param subscriber 

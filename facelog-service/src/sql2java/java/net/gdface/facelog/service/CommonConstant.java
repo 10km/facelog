@@ -63,19 +63,19 @@ public interface CommonConstant {
     //////////////定义数据库实时更新频道/////////
 
 
-    public static final Channel<Integer> PUBSUB_PERSON_INSERT = new Channel<Integer>("PersonInsert"){};
-    public static final Channel<Integer> PUBSUB_PERSON_UPDATE = new Channel<Integer>("PersonUpdate"){};
-    public static final Channel<Integer> PUBSUB_PERSON_DELETE = new Channel<Integer>("PersonDelete"){};
+    public static final Channel<Integer> PUBSUB_PERSON_INSERT = new Channel<Integer>("PersonInsert"){}.immutable();
+    public static final Channel<Integer> PUBSUB_PERSON_UPDATE = new Channel<Integer>("PersonUpdate"){}.immutable();
+    public static final Channel<Integer> PUBSUB_PERSON_DELETE = new Channel<Integer>("PersonDelete"){}.immutable();
 
-    public static final Channel<String> PUBSUB_FEATURE_INSERT = new Channel<String>("FeatureInsert"){};
-    public static final Channel<String> PUBSUB_FEATURE_UPDATE = new Channel<String>("FeatureUpdate"){};
-    public static final Channel<String> PUBSUB_FEATURE_DELETE = new Channel<String>("FeatureDelete"){};
+    public static final Channel<String> PUBSUB_FEATURE_INSERT = new Channel<String>("FeatureInsert"){}.immutable();
+    public static final Channel<String> PUBSUB_FEATURE_UPDATE = new Channel<String>("FeatureUpdate"){}.immutable();
+    public static final Channel<String> PUBSUB_FEATURE_DELETE = new Channel<String>("FeatureDelete"){}.immutable();
 
-    public static final Channel<PermitBean> PUBSUB_PERMIT_INSERT = new Channel<PermitBean>("PermitInsert"){};
-    public static final Channel<PermitBean> PUBSUB_PERMIT_UPDATE = new Channel<PermitBean>("PermitUpdate"){};
-    public static final Channel<PermitBean> PUBSUB_PERMIT_DELETE = new Channel<PermitBean>("PermitDelete"){};
+    public static final Channel<PermitBean> PUBSUB_PERMIT_INSERT = new Channel<PermitBean>("PermitInsert"){}.immutable();
+    public static final Channel<PermitBean> PUBSUB_PERMIT_UPDATE = new Channel<PermitBean>("PermitUpdate"){}.immutable();
+    public static final Channel<PermitBean> PUBSUB_PERMIT_DELETE = new Channel<PermitBean>("PermitDelete"){}.immutable();
 
-    public static final Channel<LogBean> QUEUE_LOG = new Channel<LogBean>("queueLog"){};
+    public static final Channel<LogBean> QUEUE_LOG = new Channel<LogBean>("queueLog"){}.immutable();
 
     
     /** 用于SQL语句的时间戳格式转换格式 */
@@ -156,14 +156,14 @@ public interface CommonConstant {
     /** 人员令牌失效时间(分钟) */
     public static final String TOKEN_PERSON_EXPIRE = "token.person.expire";
     
-    /** 是否允许普通人员申请令牌 */
-    public static final String TOKEN_PERSON_REJECTZERO = "token.person.rejectZero";
-    
     /** 设备命令序列号有效时间[秒] */
     public static final String TOKEN_CMD_SERIALNO_EXPIRE = "token.cmd.serialNo.expire";
     
     /** 设备命令响应通道有效时间[秒] */
     public static final String TOKEN_CMD_ACKCHANNEL_EXPIRE= "token.cmd.ackChannel.expire";
+    
+    /** 是否允许普通人员申请令牌 */
+    public static final String TOKEN_PERSON_REJECTZERO = "token.person.rejectZero";
     
     /** 服务端口号 */
     public static final String SERVER_PORT = "server.port";
