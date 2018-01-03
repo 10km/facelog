@@ -568,8 +568,7 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
 			Token token = serviceClient.online(deviceBean);
 			// 创建设备命令分发器，并将实现 reset命令的RestAdapter实例加入分发器
 			serviceClient.makeCmdDispatcher(token)
-					.getCmdAdapterContainer()
-					.register(Cmd.reset, new RestAdapter());	
+				.registerAdapter(Cmd.reset, new RestAdapter());	
 		} catch (ServiceSecurityException e) {
 			e.printStackTrace();
 		}
