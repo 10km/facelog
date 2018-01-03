@@ -501,7 +501,6 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
 -	命令响应通道
 :	如果设备命令发送方需要获取设备命令的执行结果，就必须指定命令响应通道，命令响应通道名不能是任意字符串，它由facelog 服务管理，用于保证通道名的唯一性，参见`applyAckChannel`接口方法，设备端在收到设备命令后，会向facelog 服务验证设备命令是否有效，如果无效则不发送设备命令响应，参见`isValidAckChannel`接口方法。
 
-
 - 有效期
 :	cleint通过`applyCmdSn`和`applyAckChannel`接口方法申请的设备命令序列号和设备命令都有有效期，如果超过有效期，设备端调用`isValidCmdSn`和`isValidAckChannel`接口方法验证就会返回false,显示无效。设备命令序列号和命令响应通道的默认有效期是60秒，该参数可以通过修改系统配置参数修改。`applyAckChannel(Token,long)`接口方法允许指定命令响应通道的有效期。
 
@@ -515,6 +514,7 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
 >关于设备命令序列号和命令响应通道的有效期参数，参见 `CommonConstant.TOKEN_CMD_SERIALNO_EXPIRE`和`CommonConstant.TOKEN_CMD_ACKCHANNEL_EXPIRE`定义
 
 #### 发送设备命令示例
+
 下面的示例代码示例向指定的一组设备发送复位(`reset`)命令，并以以同步方式和异步方式接收命令响应。
 
     public class CmdManagerTest implements CommonConstant{
