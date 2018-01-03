@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftStruct;
-import com.google.common.collect.ImmutableMap;
-
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.Map;
+
+import com.google.common.collect.Maps;
 
 /**
  * 安全异常
@@ -81,9 +83,12 @@ public final class ServiceSecurityException extends BaseServiceException {
 	} 
 	
 	@Override
-	protected String jsonOfDeclaredFields(){		
+	protected String jsonOfDeclaredFields(){
+		Map<String,Object> map = Maps.newHashMap();
+		map.put("type", getType());
+		map.put("deviceID", getDeviceID());
 		return JSON.toJSONString(
-				ImmutableMap.of("type", getType(), "deviceID", getDeviceID()),
+				map,
 				NO_FIELD_QUOTE_FEATURE);
 	}
 }
