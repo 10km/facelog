@@ -56,9 +56,8 @@ public class CmdManagerTest implements CommonConstant{
 		DeviceBean deviceBean =null;
 		try {
 			Token token = serviceClient.online(deviceBean);
-			serviceClient.makeCmdDispatcher(token)
-					.getCmdAdapterContainer()
-					.register(Cmd.reset, new RestAdapter());	
+			serviceClient.makeCmdDispatcher(token)					
+					.registerAdapter(Cmd.reset, new RestAdapter());	
 		} catch (ServiceSecurityException e) {
 			e.printStackTrace();
 		}
