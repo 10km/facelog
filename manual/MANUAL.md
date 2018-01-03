@@ -601,7 +601,20 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
 
 关于设备命令响应参见[`net.gdface.facelog.client.Cmd.run(CommandAdapter,Map)`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/Cmd.java)方法实现。该方法已经根据设备命令的执行结果自动完成了命令响应对象[`net.gdface.facelog.client.Ack`](../facelog-client/src/main/java/net/gdface/facelog/client/Ack.java)的创建，并由`net.gdface.facelog.client.CmdDispatcher.onSubscribe(DeviceInstruction)`方法发布到命令响应频道，不需要应用程序做特别的处理。
 
-## 系统设置
+### 服务异常
+
+调用 facelog 服务时有可能抛出以下异常:
+
+-	ServiceRuntimeException
+
+:	调用facelog 服务时服务端抛出的运行时异常，参见 [`net.gdface.facelog.client.ServiceRuntimeException`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/ServiceRuntimeException.java),当client端抛出ServiceRuntimeException异常时，可以调用`getServiceStackTraceMessage`获取服务端详细的异常堆栈信息。
+
+-	ServiceSecurityException
+
+:	安全异常，当进行令牌申请，密码验证等涉及安全的接口方法调用时抛出，通过调用`getType()`方法可以得到一个`SecurityExceptionType`枚举类型的异常类型。调用 `getServiceStackTraceMessage`可以获取服务端详细的异常堆栈信息。
+
+
+## 服务端系统设置
 
 faclog 系统配置参数设计如下：
 

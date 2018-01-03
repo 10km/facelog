@@ -1006,7 +1006,27 @@ public class RestAdapter extends CommandAdapter{
 
 <h4>命令响应</h4>
 <p>关于设备命令响应参见<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/Cmd.java"><code>net.gdface.facelog.client.Cmd.run(CommandAdapter,Map)</code></a>方法实现。该方法已经根据设备命令的执行结果自动完成了命令响应对象<a href="../facelog-client/src/main/java/net/gdface/facelog/client/Ack.java"><code>net.gdface.facelog.client.Ack</code></a>的创建，并由<code>net.gdface.facelog.client.CmdDispatcher.onSubscribe(DeviceInstruction)</code>方法发布到命令响应频道，不需要应用程序做特别的处理。</p>
-<h2>系统设置</h2>
+<h3>服务异常</h3>
+<p>调用 facelog 服务时有可能抛出以下异常:</p>
+<ul>
+<li>
+<dl>
+<dt>ServiceRuntimeException</dt>
+<dd>
+<p>调用facelog 服务时服务端抛出的运行时异常，参见 <a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/ServiceRuntimeException.java"><code>net.gdface.facelog.client.ServiceRuntimeException</code></a>,当client端抛出ServiceRuntimeException异常时，可以调用<code>getServiceStackTraceMessage</code>获取服务端详细的异常堆栈信息。</p>
+</dd>
+</dl>
+</li>
+<li>
+<dl>
+<dt>ServiceSecurityException</dt>
+<dd>
+<p>安全异常，当进行令牌申请，密码验证等涉及安全的接口方法调用时抛出，通过调用<code>getType()</code>方法可以得到一个<code>SecurityExceptionType</code>枚举类型的异常类型。调用 <code>getServiceStackTraceMessage</code>可以获取服务端详细的异常堆栈信息。</p>
+</dd>
+</dl>
+</li>
+</ul>
+<h2>服务端系统设置</h2>
 <p>faclog 系统配置参数设计如下：</p>
 <table>
 <thead>
