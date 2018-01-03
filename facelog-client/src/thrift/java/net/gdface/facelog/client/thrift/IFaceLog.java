@@ -99,6 +99,15 @@ public interface IFaceLog
             @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
         );
 
+        @ThriftMethod(value = "applyAckChannelWithDuration",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<String> applyAckChannelWithDuration(
+            @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token,
+            @ThriftField(value=2, name="duration", requiredness=Requiredness.REQUIRED) final long duration
+        );
+
         @ThriftMethod(value = "applyCmdSn",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -594,6 +603,22 @@ public interface IFaceLog
                       })
         ListenableFuture<Boolean> isDisable(
             @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
+        );
+
+        @ThriftMethod(value = "isValidAckChannel",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Boolean> isValidAckChannel(
+            @ThriftField(value=1, name="ackChannel", requiredness=Requiredness.NONE) final String ackChannel
+        );
+
+        @ThriftMethod(value = "isValidCmdSn",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Boolean> isValidCmdSn(
+            @ThriftField(value=1, name="cmdSn", requiredness=Requiredness.REQUIRED) final long cmdSn
         );
 
         @ThriftMethod(value = "isValidPassword",
@@ -1098,6 +1123,15 @@ public interface IFaceLog
         @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
 
+    @ThriftMethod(value = "applyAckChannelWithDuration",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    String applyAckChannelWithDuration(
+        @ThriftField(value=1, name="token", requiredness=Requiredness.NONE) final Token token,
+        @ThriftField(value=2, name="duration", requiredness=Requiredness.REQUIRED) final long duration
+    ) throws ServiceRuntimeException;
+
     @ThriftMethod(value = "applyCmdSn",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1593,6 +1627,22 @@ public interface IFaceLog
                   })
     boolean isDisable(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "isValidAckChannel",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    boolean isValidAckChannel(
+        @ThriftField(value=1, name="ackChannel", requiredness=Requiredness.NONE) final String ackChannel
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "isValidCmdSn",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    boolean isValidCmdSn(
+        @ThriftField(value=1, name="cmdSn", requiredness=Requiredness.REQUIRED) final long cmdSn
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "isValidPassword",

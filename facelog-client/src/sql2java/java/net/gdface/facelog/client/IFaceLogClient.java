@@ -2833,7 +2833,7 @@ public class IFaceLogClient implements Constant{
     }
     // 104 SERIVCE PORT : applyAckChannel
     /**
-     * 申请一个唯一的命令响应通道
+     * 申请一个唯一的命令响应通道(默认有效期)<br>
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param token 访问令牌
      * @return 
@@ -2855,7 +2855,36 @@ public class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 105 SERIVCE PORT : applyCmdSn
+    // 105 SERIVCE PORT : applyAckChannelWithDuration
+    /**
+     * 申请一个唯一的命令响应通道<br>
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * @param token 访问令牌
+     * @param duration 通道有效时间(秒) >0有效,否则使用默认的有效期
+     * @return 
+     * @throws ServiceRuntimeException
+     */
+    public String applyAckChannel(
+            net.gdface.facelog.client.thrift.Token token,
+            long duration){
+        try{
+            return service.applyAckChannelWithDuration(
+                    token,
+                    duration);
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    // 106 SERIVCE PORT : applyCmdSn
     /**
      * 申请一个唯一的命令序列号
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
@@ -2871,7 +2900,39 @@ public class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 106 SERIVCE PORT : getRedisParameters
+    // 107 SERIVCE PORT : isValidCmdSn
+    /**
+     * 判断命令序列号是否有效<br>
+     * 序列号过期或不存在都返回{@code false}
+     * @param cmdSn
+     * @return 
+     * @throws ServiceRuntimeException
+     */
+    public boolean isValidCmdSn(long cmdSn){
+        try{
+            return service.isValidCmdSn(cmdSn);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    // 108 SERIVCE PORT : isValidAckChannel
+    /**
+     * 判断命令响应通道是否有效<br>
+     * 通道过期或不存在都返回{@code false}
+     * @param ackChannel
+     * @return 
+     * @throws ServiceRuntimeException
+     */
+    public boolean isValidAckChannel(String ackChannel){
+        try{
+            return service.isValidAckChannel(ackChannel);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    // 109 SERIVCE PORT : getRedisParameters
     /**
      * 返回redis访问基本参数:<br>
      * <ul>
@@ -2903,7 +2964,7 @@ public class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 107 SERIVCE PORT : getProperty
+    // 110 SERIVCE PORT : getProperty
     /**
      * 返回指定的参数,如果参数没有定义则返回{@code null}
      * <br>{@link TokenMangement.Enable#ROOT_ONLY}
@@ -2932,7 +2993,7 @@ public class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 108 SERIVCE PORT : getServiceConfig
+    // 111 SERIVCE PORT : getServiceConfig
     /**
      * 获取服务的所有配置参数
      * <br>{@link TokenMangement.Enable#ROOT_ONLY}
@@ -2956,7 +3017,7 @@ public class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 109 SERIVCE PORT : setProperty
+    // 112 SERIVCE PORT : setProperty
     /**
      * 修改/增加指定的配置参数
      * <br>{@link TokenMangement.Enable#ROOT_ONLY}
@@ -2979,7 +3040,7 @@ public class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 110 SERIVCE PORT : setProperties
+    // 113 SERIVCE PORT : setProperties
     /**
      * 修改一组配置参数
      * <br>{@link TokenMangement.Enable#ROOT_ONLY}
@@ -2999,7 +3060,7 @@ public class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
-    // 111 SERIVCE PORT : saveServiceConfig
+    // 114 SERIVCE PORT : saveServiceConfig
     /**
      * 配置参数持久化<br>
      * 保存修改的配置到自定义配置文件

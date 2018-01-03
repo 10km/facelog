@@ -17,6 +17,11 @@ public interface ServiceConstant extends CommonConstant{
     public static final Channel<Token> TABLE_DEVICE_TOKEN = new Channel<Token>("DeviceToken"){} ;
     /** 人员访问令牌表 {@code 人员ID -> token} */
     public static final Channel<Token> TABLE_PERSON_TOKEN = new Channel<Token>("PersonToken"){} ;
+    /** 设备命令序列号 {@code cmd sn -> 人员ID} */
+    public static final Channel<Integer> TABLE_CMD_SN = new Channel<Integer>("CmdSN"){} ;
+    /** 设备响应通道 {@code channel -> 人员ID} */
+    public static final Channel<Integer> TABLE_ACK_CHANNEL = new Channel<Integer>("AckChannel"){} ;
+
     /////////////  REDIS KEYS ////////////////////////////
 	/** redis 全局变量 : 设备命令序列号, 调用{@link RedisManagement#applyCmdSn()}时每次加1,保证序列号在全网络唯一 */
 	String KEY_CMD_SN = "CMD_SN";

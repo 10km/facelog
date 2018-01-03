@@ -154,6 +154,12 @@ public interface CommonConstant {
     /** 人员令牌失效时间(分钟) */
     public static final String TOKEN_PERSON_EXPIRE = "token.person.expire";
     
+    /** 设备命令序列号有效时间[秒] */
+    public static final String TOKEN_CMD_SERIALNO_EXPIRE = "token.cmd.serialNo.expire";
+    
+    /** 设备命令响应通道有效时间[秒] */
+    public static final String TOKEN_CMD_ACKCHANNEL_EXPIRE= "token.cmd.ackChannel.expire";
+    
     /** 是否允许普通人员申请令牌 */
     public static final String TOKEN_PERSON_REJECTZERO = "token.person.rejectZero";
     

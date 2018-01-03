@@ -1870,7 +1870,7 @@ public class IFaceLogClientAsync implements Constant{
     }
     // 104 SERIVCE PORT : applyAckChannel
     /**
-     * 申请一个唯一的命令响应通道
+     * 申请一个唯一的命令响应通道(默认有效期)<br>
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param token 访问令牌
      * @return 
@@ -1878,7 +1878,22 @@ public class IFaceLogClientAsync implements Constant{
     public ListenableFuture<String> applyAckChannel(net.gdface.facelog.client.thrift.Token token){
         return service.applyAckChannel(token);
     }
-    // 105 SERIVCE PORT : applyCmdSn
+    // 105 SERIVCE PORT : applyAckChannelWithDuration
+    /**
+     * 申请一个唯一的命令响应通道<br>
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * @param token 访问令牌
+     * @param duration 通道有效时间(秒) >0有效,否则使用默认的有效期
+     * @return 
+     */
+    public ListenableFuture<String> applyAckChannel(
+            net.gdface.facelog.client.thrift.Token token,
+            long duration){
+        return service.applyAckChannelWithDuration(
+                    token,
+                    duration);
+    }
+    // 106 SERIVCE PORT : applyCmdSn
     /**
      * 申请一个唯一的命令序列号
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
@@ -1888,7 +1903,27 @@ public class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Long> applyCmdSn(net.gdface.facelog.client.thrift.Token token){
         return service.applyCmdSn(token);
     }
-    // 106 SERIVCE PORT : getRedisParameters
+    // 107 SERIVCE PORT : isValidCmdSn
+    /**
+     * 判断命令序列号是否有效<br>
+     * 序列号过期或不存在都返回{@code false}
+     * @param cmdSn
+     * @return 
+     */
+    public ListenableFuture<Boolean> isValidCmdSn(long cmdSn){
+        return service.isValidCmdSn(cmdSn);
+    }
+    // 108 SERIVCE PORT : isValidAckChannel
+    /**
+     * 判断命令响应通道是否有效<br>
+     * 通道过期或不存在都返回{@code false}
+     * @param ackChannel
+     * @return 
+     */
+    public ListenableFuture<Boolean> isValidAckChannel(String ackChannel){
+        return service.isValidAckChannel(ackChannel);
+    }
+    // 109 SERIVCE PORT : getRedisParameters
     /**
      * 返回redis访问基本参数:<br>
      * <ul>
@@ -1906,7 +1941,7 @@ public class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Map<net.gdface.facelog.client.thrift.MQParam, String>> getRedisParameters(net.gdface.facelog.client.thrift.Token token){
         return service.getRedisParameters(token);
     }
-    // 107 SERIVCE PORT : getProperty
+    // 110 SERIVCE PORT : getProperty
     /**
      * 返回指定的参数,如果参数没有定义则返回{@code null}
      * <br>{@link TokenMangement.Enable#ROOT_ONLY}
@@ -1921,7 +1956,7 @@ public class IFaceLogClientAsync implements Constant{
                     key,
                     token);
     }
-    // 108 SERIVCE PORT : getServiceConfig
+    // 111 SERIVCE PORT : getServiceConfig
     /**
      * 获取服务的所有配置参数
      * <br>{@link TokenMangement.Enable#ROOT_ONLY}
@@ -1931,7 +1966,7 @@ public class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Map<String, String>> getServiceConfig(net.gdface.facelog.client.thrift.Token token){
         return service.getServiceConfig(token);
     }
-    // 109 SERIVCE PORT : setProperty
+    // 112 SERIVCE PORT : setProperty
     /**
      * 修改/增加指定的配置参数
      * <br>{@link TokenMangement.Enable#ROOT_ONLY}
@@ -1948,7 +1983,7 @@ public class IFaceLogClientAsync implements Constant{
                     value,
                     token);
     }
-    // 110 SERIVCE PORT : setProperties
+    // 113 SERIVCE PORT : setProperties
     /**
      * 修改一组配置参数
      * <br>{@link TokenMangement.Enable#ROOT_ONLY}
@@ -1962,7 +1997,7 @@ public class IFaceLogClientAsync implements Constant{
                     config,
                     token);
     }
-    // 111 SERIVCE PORT : saveServiceConfig
+    // 114 SERIVCE PORT : saveServiceConfig
     /**
      * 配置参数持久化<br>
      * 保存修改的配置到自定义配置文件

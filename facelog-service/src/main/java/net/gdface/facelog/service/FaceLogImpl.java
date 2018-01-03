@@ -1534,9 +1534,12 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	}
     @Override
     public String applyAckChannel(Token token) throws ServiceRuntimeException{
+    	return applyAckChannel(token,0L);
+	}
+    @Override
+    public String applyAckChannel(Token token, long duration) throws ServiceRuntimeException{
     	try {
-			Enable.PERSON_ONLY.check(tm, token);
-			return rm.applyAckChannel();
+			return tm.applyAckChannel(token, duration);
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
@@ -1546,12 +1549,27 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
     @Override
     public long applyCmdSn(Token token) throws ServiceRuntimeException{
     	try {
-			Enable.PERSON_ONLY.check(tm, token);
-			return rm.applyCmdSn();
+			return tm.applyCmdSn(token);
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		} 
+	}
+    @Override
+    public boolean isValidCmdSn(long cmdSn) throws ServiceRuntimeException{
+    	try {
+			return tm.isValidCmdSn(cmdSn);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} 
+	}
+    @Override
+    public boolean isValidAckChannel(String ackChannel) throws ServiceRuntimeException{
+    	try {
+			return tm.isValidAckChannel(ackChannel);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} 
 	}
     @Override

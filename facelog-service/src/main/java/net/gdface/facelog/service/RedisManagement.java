@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import com.facebook.swift.codec.ThriftStruct;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
@@ -39,7 +38,6 @@ class RedisManagement implements ServiceConstant{
 		/** 设备心跳包失效时间(秒) */HB_EXPIRE
 	}
 	private static final String CMD_PREFIX = "cmd_";
-	private static final String ACK_PREFIX = "ack_";
 	private static final String LOG_MONITOR_PREFIX = "log_monitor_";
 	private static final String HEARTBEAT_MONITOR_PREFIX = "hb_monitor_";
 
@@ -206,15 +204,5 @@ class RedisManagement implements ServiceConstant{
 	/** 返回redis访问参数 */
 	protected Map<MQParam,String> getRedisParameters(){
 		return this.redisParam;
-	}
-	/** 申请一个唯一的命令序列号 */
-	protected long applyCmdSn(){
-		return JedisUtils.incr(KEY_CMD_SN);
-	}
-	/** 申请一个唯一的命令响应通道 */
-	protected String applyAckChannel(){
-		return new StringBuffer(ACK_PREFIX)
-				.append(JedisUtils.incr(KEY_ACK_SN))
-				.toString();
 	}
 }

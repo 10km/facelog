@@ -11,6 +11,7 @@ import com.google.common.base.Strings;
 import com.google.common.primitives.Bytes;
 
 import gu.simplemq.redis.JedisPoolLazy;
+import gu.simplemq.redis.JedisUtils;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisTable;
 import net.gdface.facelog.db.DeviceBean;
@@ -26,11 +27,16 @@ import net.gdface.utils.FaceUtilits;
  *
  */
 class TokenMangement implements ServiceConstant {
+	private static final String ACK_PREFIX = "ack_";
 	private final Dao dao;
 	/**  {@code 设备ID -> token} 映射表 */
 	private final RedisTable<Token> deviceTokenTable;
 	/**  {@code 人员ID -> token} 映射表 */
 	private final RedisTable<Token> personTokenTable;
+	/** {@code cmd sn -> 人员ID} */
+	private RedisTable<Integer> cmdSnTable;
+	/** {@code channel -> 人员ID} */
+	private RedisTable<Integer> ackChannelTable;
 	/** 是否执行设备令牌验证 */
 	private final boolean validateDeviceToken;
 	/** 是否执行人员令牌验证 */
@@ -56,6 +62,10 @@ class TokenMangement implements ServiceConstant {
 		this.deviceTokenTable.setKeyHelper(Token.KEY_HELPER);
 		this.personTokenTable.setKeyHelper(Token.KEY_HELPER);
 		this.personTokenTable.setExpire(personTokenExpire, TimeUnit.MINUTES);
+		this.cmdSnTable =  RedisFactory.getTable(TABLE_CMD_SN, JedisPoolLazy.getDefaultInstance());
+		this.ackChannelTable =  RedisFactory.getTable(TABLE_ACK_CHANNEL, JedisPoolLazy.getDefaultInstance());
+		this.cmdSnTable.setExpire(CONFIG.getInt(TOKEN_CMD_SERIALNO_EXPIRE), TimeUnit.SECONDS);
+		this.ackChannelTable.setExpire(CONFIG.getInt(TOKEN_CMD_ACKCHANNEL_EXPIRE), TimeUnit.SECONDS);
 		GlobalConfig.logTokenParameters();
 	}
 	/** 验证MAC地址是否有效(HEX格式,12字符,无分隔符,不区分大小写) */
@@ -111,7 +121,7 @@ class TokenMangement implements ServiceConstant {
 		/** 只允许root令牌 */ROOT_ONLY;
 		
 		boolean isValid(TokenMangement tm,Token token){
-			TokenOp.VALIDATE.asContextTokenOp();;
+			TokenOp.VALIDATE.asContextTokenOp();
 			switch(this){
 			case PERSON_ONLY:
 				return tm.isValidPersonToken(token) || tm.isValidRootToken(token);
@@ -469,5 +479,51 @@ class TokenMangement implements ServiceConstant {
 					String.format("INVALID password [%s]for user [%s]",password,userId))
 				.setType(SecurityExceptionType.INVALID_PASSWORD);
 		}
+	}
+	/** 申请一个唯一的命令序列号 
+	 * @throws ServiceSecurityException */
+	protected long applyCmdSn(Token token) throws ServiceSecurityException{
+		Enable.PERSON_ONLY.check(this, token);
+
+		long sn = JedisUtils.incr(KEY_CMD_SN);
+		String key = Long.toString(sn);
+		this.cmdSnTable.set(key, token.getId(), false);
+		this.cmdSnTable.expire(key);
+		return sn;
+	}
+	/** 申请一个唯一的命令响应通道 
+	 * @param token
+	 * @param duration 通道有效时间 >0有效,否则使用默认的有效期
+	 * @throws ServiceSecurityException */
+	protected String applyAckChannel(Token token, long duration) throws ServiceSecurityException{
+		Enable.PERSON_ONLY.check(this, token);
+
+		String channel = new StringBuffer(ACK_PREFIX)
+				.append(JedisUtils.incr(KEY_ACK_SN))
+				.toString();
+		this.ackChannelTable.set(channel, token.getId(), false);
+		if(duration>0){
+			this.ackChannelTable.expire(channel,duration,TimeUnit.SECONDS);
+		}else{
+			this.ackChannelTable.expire(channel);
+		}
+		return channel;
+	}
+	
+	/**
+	 * 判断命令序列号是否有效
+	 * @param cmdSn
+	 * @return
+	 */
+	protected boolean isValidCmdSn(long cmdSn){
+		return this.cmdSnTable.containsKey(Long.toString(cmdSn));
+	}
+	/**
+	 * 判断命令响应通道是否有效
+	 * @param ackChannel
+	 * @return
+	 */
+	protected boolean isValidAckChannel(String ackChannel){
+		return this.ackChannelTable.containsKey(ackChannel);
 	}
 }

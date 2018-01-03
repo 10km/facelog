@@ -14,6 +14,14 @@
 			<expire description="人员令牌失效时间[分钟]">60</expire>
 			<rejectZero description = "是否拒绝普通人员申请令牌">true</rejectZero>
 		</person>
+		<cmd description="设备命令参数">
+			<serialNo>
+				<expire description="设备命令序列号有效时间[秒]">60</expire>
+			</serialNo>
+			<ackChannel>
+				<expire description="设备命令响应通道有效时间[秒]">60</expire>
+			</ackChannel>
+		</cmd>
 	</token>
 	<server>
 		<port description="服务端口号">26411</port>

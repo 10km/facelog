@@ -9,6 +9,7 @@ import com.google.common.base.Supplier;
 
 import gu.simplemq.Channel;
 import gu.simplemq.IMessageAdapter;
+import gu.simplemq.IPublisher;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.RedisPublisher;
 import gu.simplemq.redis.JedisPoolLazy;
@@ -22,12 +23,12 @@ import gu.simplemq.redis.RedisFactory;
  *
  */
 public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>{
-	private CommandAdapter cmdAdapter;
 	private final int deviceId;
-	private Supplier<Integer> groupIdSupplier;
-	private RedisPublisher redisPublisher = RedisFactory.getPublisher(JedisPoolLazy.getDefaultInstance());
+	private final Supplier<Integer> groupIdSupplier;
+	/** 只从{@link JedisPoolLazy}默认实例获取{@link RedisPublisher} */
+	private final IPublisher redisPublisher = RedisFactory.getPublisher();
+	private CommandAdapter cmdAdapter;
 	private volatile Channel<DeviceInstruction> cmdChannel;
-	private volatile JedisPoolLazy poolLazy;
 	/**
 	 * 构造方法<br>
 	 *  设备所属的组可能是可以变化的,所以这里需要用{@code Supplier} 接口来动态获取当前设备的设备组
@@ -81,25 +82,28 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>{
 	public CommandAdapter getCmdAdapter() {
 		return cmdAdapter;
 	}
-	public CommandAdapterContainer getCmdAdapterContainer() {
+	/**
+	 * 返回{@link CommandAdapterContainer}实例
+	 * @return
+	 * @throws IllegalStateException {@link #cmdAdapter}实例类型不是{@link CommandAdapterContainer}
+	 */
+	public CommandAdapterContainer getCommandAdapterContainer() {
 		checkState(cmdAdapter instanceof CommandAdapterContainer,"the cmdAdapter is not Container instance");
 		return (CommandAdapterContainer) cmdAdapter;
 	}
 	
 	/**
-	 * 当前对象注册到指定的频道
-	 * @param poolLazy
+	 * 当前对象注册到指定的频道,重复注册无效
 	 * @param channel 设备命令通道名
 	 * @return
 	 */
-	public CmdDispatcher register(JedisPoolLazy poolLazy,String channel){
+	public CmdDispatcher registerChannel(String channel){
 		// double check
 		if(null == cmdChannel){
 			synchronized(this){
 				if(null == cmdChannel){
 					cmdChannel = new Channel<DeviceInstruction>(checkNotNull(channel),	this){};
-					RedisFactory.getSubscriber(checkNotNull(poolLazy)).register(cmdChannel);
-					this.poolLazy = poolLazy;
+					RedisFactory.getSubscriber().register(cmdChannel);
 				}
 			}
 		}
@@ -109,17 +113,37 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>{
 	 * 当前对象注销频道
 	 * @return
 	 */
-	public CmdDispatcher unregister(){
+	public CmdDispatcher unregisterChannel(){
 		// double check
 		if(null != cmdChannel){
 			synchronized(this){
 				if(null != cmdChannel){
-					RedisFactory.getSubscriber(poolLazy).unregister(cmdChannel);
+					RedisFactory.getSubscriber().unregister(cmdChannel);
 					cmdChannel = null;
-					poolLazy = null;
 				}
 			}
 		}
+		return this;
+	}
+	/**
+	 * {@link CommandAdapterContainer#register(Cmd, CommandAdapter)}代理方法<br>
+	 * @param cmd
+	 * @param adapter
+	 * @return
+	 * @see #getCommandAdapterContainer()
+	 */
+	public CmdDispatcher registerAdapter(Cmd cmd,CommandAdapter adapter){
+		getCommandAdapterContainer().register(cmd, adapter);		
+		return this;
+	}
+	/**
+	 * {@link CommandAdapterContainer#unregister(Cmd)}代理方法<br>
+	 * @param cmd
+	 * @return
+	 * @see #getCommandAdapterContainer()
+	 */
+	public CmdDispatcher unregisterAdapter(Cmd cmd){
+		getCommandAdapterContainer().unregister(cmd);
 		return this;
 	}
 }

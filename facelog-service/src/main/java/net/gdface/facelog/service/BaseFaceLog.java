@@ -1324,7 +1324,7 @@ public abstract class BaseFaceLog extends Dao{
 		return false;
 	}
 	/**
-	 * 申请一个唯一的命令响应通道
+	 * 申请一个唯一的命令响应通道(默认有效期)<br>
 	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param token 访问令牌
 	 * @return
@@ -1332,6 +1332,18 @@ public abstract class BaseFaceLog extends Dao{
 	 */
 	@ThriftMethod
 	public String applyAckChannel(Token token) throws ServiceRuntimeException{
+		return null;
+	}
+	/**
+	 * 申请一个唯一的命令响应通道<br>
+	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * @param token 访问令牌
+	 * @param duration 通道有效时间(秒) >0有效,否则使用默认的有效期
+	 * @return
+	 * @throws ServiceRuntimeException
+	 */
+	@ThriftMethod("applyAckChannelWithDuration")
+	public String applyAckChannel(Token token, long duration) throws ServiceRuntimeException{
 		return null;
 	}
 	/**
@@ -1344,6 +1356,28 @@ public abstract class BaseFaceLog extends Dao{
 	@ThriftMethod
 	public long applyCmdSn(Token token) throws ServiceRuntimeException {
 		return 0;
+	}
+	/**
+	 * 判断命令序列号是否有效<br>
+	 * 序列号过期或不存在都返回{@code false}
+	 * @param cmdSn
+	 * @return
+	 * @throws ServiceRuntimeException
+	 */
+	@ThriftMethod
+	public boolean isValidCmdSn(long cmdSn) throws ServiceRuntimeException{
+		return false;
+	}
+	/**
+	 * 判断命令响应通道是否有效<br>
+	 * 通道过期或不存在都返回{@code false}
+	 * @param ackChannel
+	 * @return
+	 * @throws ServiceRuntimeException
+	 */
+	@ThriftMethod
+	public boolean isValidAckChannel(String ackChannel) throws ServiceRuntimeException{
+		return false;
 	}
     /**
      * 返回redis访问基本参数:<br>
