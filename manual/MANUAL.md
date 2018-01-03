@@ -273,6 +273,12 @@ root令牌|管理端(root)使用的令牌
 
 参见 [`net.gdface.facelog.service.Token`](../facelog-service/src/main/java/net/gdface/facelog/service/Token.java)
 
+#### 令牌有效期
+
+设备令牌目前未定义有效期，所以设备令牌在facelog 服务运行期内一直有效。
+
+人员令牌和root令牌定义了有效期，默认有效期是60分钟。可以通过修改系统参数改变该值，参见`CommonConstant.TOKEN_PERSON_EXPIRE` 。如果令牌过期，要重新申请令牌。
+
 #### 令牌申请注销
 
 令牌是有时效性的数字凭证，所以client在调用需要令牌难的facelog 服务接口方法前需要申请令牌，然后再用申请到的令牌做为方法参数调用接口方法，当应用程序结束时应该释放令牌，如果不释放令牌，过期令牌也会自动失效并自动从 facelog 令牌数据表中删除。
@@ -418,19 +424,16 @@ facelog 中的频道类型：
 		RedisConsumer consumer = RedisFactory.getConsumer(JedisPoolLazy.getDefaultInstance());
 		// 定义 list1, list2,list3 三个队列，并提供相应的消息处理实例IMessageAdapter
 		Channel<String> list1 = new Channel<String>("list1",String.class,new IMessageAdapter<String>(){
-
 			@Override
 			public void onSubscribe(String t) throws SmqUnsubscribeException {
 				logger.info("{}:{}","list1",t);
 			}} );
 		Channel<String> list2 = new Channel<String>("list2",String.class,new IMessageAdapter<String>(){
-
 			@Override
 			public void onSubscribe(String t) throws SmqUnsubscribeException {
 				logger.info("{}:{}","list2",t);
 			}} );
 		Channel<String> list3 = new Channel<String>("list3",String.class,new IMessageAdapter<String>(){
-
 			@Override
 			public void onSubscribe(String t) throws SmqUnsubscribeException {
 				logger.info("{}:{}","list3",t);
@@ -451,19 +454,24 @@ facelog 中的频道类型：
 client收到消息后如何处理，这属于具体应用的业务逻辑，应该由应用项目根据实际需求来实现。
 
 #### 数据更新消息处理示例
+
+[`net.gdface.facelog.client.SubAdapters`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/SubAdapters.java)提供了一组基类，继承对应的基类可以更简单的实现数据更新通知消息处理。
+
+下面以`fl_person`表的`insert`新增记录消息处理为例说明这组基类的使用方法：
+
 	
-	public class PersonInsertAdapterTest implements CommonConstant {
-	
+	public class PersonInsertAdapterTest implements CommonConstant {	
 		@Test
 		public void test() {		
 			final IFaceLogClient serviceClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build();
+			// 重载 onSubscribe 方法
 			new SubAdapters.BasePersonInsertSubAdapter(){
 				@Override
 				public void onSubscribe(Integer id) throws SmqUnsubscribeException {
 					logger.info("insert person ID:{}",id);
 					logger.info("new recored {}",serviceClient.getPerson(id).toString(true, false));
 				}			
-			}.register(RedisFactory.getSubscriber());
+			}.register(RedisFactory.getSubscriber());// 频道订阅
 		}
 	}
 
@@ -502,7 +510,7 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
 :	如果设备命令发送方需要获取设备命令的执行结果，就必须指定命令响应通道，命令响应通道名不能是任意字符串，它由facelog 服务管理，用于保证通道名的唯一性，参见`applyAckChannel`接口方法，设备端在收到设备命令后，会向facelog 服务验证设备命令是否有效，如果无效则不发送设备命令响应，参见`isValidAckChannel`接口方法。
 
 - 有效期
-:	cleint通过`applyCmdSn`和`applyAckChannel`接口方法申请的设备命令序列号和设备命令都有有效期，如果超过有效期，设备端调用`isValidCmdSn`和`isValidAckChannel`接口方法验证就会返回false,显示无效。设备命令序列号和命令响应通道的默认有效期是60秒，该参数可以通过修改系统配置参数修改。`applyAckChannel(Token,long)`接口方法允许指定命令响应通道的有效期。
+:	cleint通过facelog 服务的`applyCmdSn`和`applyAckChannel`接口方法申请的设备命令序列号和设备命令响应通道都有有效期,如果超过有效期，设备端调用`isValidCmdSn`和`isValidAckChannel`接口方法验证就会返回false,显示无效。设备在执行设备命令时会验证设备命令序列号和命令响应通道的有效性，对于无效命令序列号的设备命令，设备端不会执行，对于无效的命令响应通道，设备端不会发送命令响应。设备命令序列号和命令响应通道的默认有效期是60秒，该参数可以通过修改系统配置参数修改。`applyAckChannel(Token,long)`接口方法允许指定命令响应通道的有效期。
 
 - 命令参数
 :	每一种设备命令都可以定义命令参数，命令参数以`Key->Value`键值对形式定义。
@@ -565,6 +573,8 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
     }
     
 
+`CmdManager`是线程安全类，可以作为全局常量保持单实例
+
 #### 执行设备命令
 
 设备命令接收与任务分发执行由[`net.gdface.facelog.client.CmdDispatcher`](../facelog-client/src/main/java/net/gdface/facelog/client/CmdDispatcher.java)实现。
@@ -601,17 +611,17 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
 
 关于设备命令响应参见[`net.gdface.facelog.client.Cmd.run(CommandAdapter,Map)`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/Cmd.java)方法实现。该方法已经根据设备命令的执行结果自动完成了命令响应对象[`net.gdface.facelog.client.Ack`](../facelog-client/src/main/java/net/gdface/facelog/client/Ack.java)的创建，并由`net.gdface.facelog.client.CmdDispatcher.onSubscribe(DeviceInstruction)`方法发布到命令响应频道，不需要应用程序做特别的处理。
 
-### 服务异常
+### 服务端异常
 
 调用 facelog 服务时有可能抛出以下异常:
 
 -	ServiceRuntimeException
 
-:	调用facelog 服务时服务端抛出的运行时异常，参见 [`net.gdface.facelog.client.ServiceRuntimeException`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/ServiceRuntimeException.java),当client端抛出ServiceRuntimeException异常时，可以调用`getServiceStackTraceMessage`获取服务端详细的异常堆栈信息。
+:	调用facelog 服务时服务端抛出的运行时异常，参见 [`net.gdface.facelog.client.ServiceRuntimeException`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/ServiceRuntimeException.java),当client端抛出ServiceRuntimeException异常时，可以调用`getServiceStackTraceMessage`获取服务端详细的异常堆栈信息。`getType()`方法返回`int`型异常类型代码，该值与枚举类型`CommonConstant.ExceptionType`中的定义的枚举对象顺序对应。所有的数据库异常和REDIS服务器异常都被封装在该异常中，`getType()`方法明了导致运行时异常的原因。
 
 -	ServiceSecurityException
 
-:	安全异常，当进行令牌申请，密码验证等涉及安全的接口方法调用时抛出，通过调用`getType()`方法可以得到一个`SecurityExceptionType`枚举类型的异常类型。调用 `getServiceStackTraceMessage`可以获取服务端详细的异常堆栈信息。
+:	安全异常，当进行令牌申请，密码验证等涉及安全的接口方法调用时抛出，通过调用`getType()`方法可以得到`SecurityExceptionType`枚举类型的异常类型。调用 `getServiceStackTraceMessage()`可以获取服务端详细的异常堆栈信息。
 
 
 ## 服务端系统设置
@@ -679,7 +689,7 @@ facelog service采用 [log4j](https://logging.apache.org/log4j) 记录日志。
 
 ### 程序修改参数
 
-facelog 服务提供了`getServiceConfig`,`getProperty`,`setProperty`,`saveServiceConfig`接口方法用于修改和保存系统参数。需要有ROOT令牌。
+facelog 服务提供了`getServiceConfig`,`getProperty`,`setProperty`,`saveServiceConfig`接口方法用于修改和保存系统参数。需要有 ROOT 令牌。
 
 
 ## facelog service 启动

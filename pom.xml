@@ -100,7 +100,7 @@
 			<dependency>
 				<groupId>com.gitee.l0km</groupId>
 				<artifactId>simplemq</artifactId>
-				<version>1.0.4-SNAPSHOT</version>
+				<version>1.0.3</version>
 			</dependency>
 			<dependency>
 				<groupId>com.gitee.l0km</groupId>
