@@ -27,7 +27,7 @@ public final class ImageBean
 {
     private static final long serialVersionUID = -5491214114261088424L;
     /** NULL {@link ImageBean} bean , IMMUTABLE instance */
-    public static final ImageBean NULL = new ImageBean().asNULL().immutable(Boolean.TRUE);
+    public static final ImageBean NULL = new ImageBean().asNULL().asImmutable();
     /** comments:主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key */
     private String md5;
 
@@ -60,31 +60,42 @@ public final class ImageBean
     private long initialized;
     private boolean isNew;        
     /** 
+     * set immutable status
+     * @return {@code this} 
+     */
+    private ImageBean immutable(Boolean immutable) {
+        this.immutable = immutable;
+        return this;
+    }
+    /** 
      * set {@code this} as immutable object
      * @return {@code this} 
      */
-    public synchronized ImageBean immutable(Boolean immutable) {
-        if(this.immutable != immutable){
-            checkMutable();
-            this.immutable = immutable;
-        }
-        return this;
+    public ImageBean asImmutable() {
+        return immutable(Boolean.TRUE);
     }
     /**
      * @return {@code true} if {@code this} is a mutable object  
      */
     public boolean mutable(){
-        return Boolean.TRUE != this.immutable;
+        return !Boolean.TRUE.equals(this.immutable);
     }
     /**
      * @return {@code this}
      * @throws IllegalStateException if {@code this} is a immutable object 
      */
     private ImageBean checkMutable(){
-        if(Boolean.TRUE == this.immutable){
+        if(!mutable()){
             throw new IllegalStateException("this is a immutable object");
         }
         return this;
+    }
+    /**
+     * return a new mutable copy of this object.
+     * @return 
+     */
+    public ImageBean cloneMutable(){
+        return clone().immutable(null);
     }
     @ThriftField(value=1,name="_new",requiredness=Requiredness.REQUIRED)
     @Override
@@ -1043,14 +1054,14 @@ public final class ImageBean
     {   
         checkMutable();
         
-        setMd5(null);
-        setFormat(null);
-        setWidth(null);
-        setHeight(null);
-        setDepth(null);
-        setFaceNum(null);
-        setThumbMd5(null);
-        setDeviceId(null);
+        setMd5((String)null);
+        setFormat((String)null);
+        setWidth((Integer)null);
+        setHeight((Integer)null);
+        setDepth((Integer)null);
+        setFaceNum((Integer)null);
+        setThumbMd5((String)null);
+        setDeviceId((Integer)null);
         isNew(true);
         resetInitialized();
         resetIsModified();
@@ -1233,14 +1244,6 @@ public final class ImageBean
          */
         public Builder reset(){
             TEMPLATE.get().reset();
-            return this;
-        }
-        /** 
-         * set as a immutable object
-         * @see ImageBean#immutable(Boolean)
-         */
-        public Builder immutable(){
-            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

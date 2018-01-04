@@ -27,7 +27,7 @@ public final class StoreBean
 {
     private static final long serialVersionUID = -1684185165668832146L;
     /** NULL {@link StoreBean} bean , IMMUTABLE instance */
-    public static final StoreBean NULL = new StoreBean().asNULL().immutable(Boolean.TRUE);
+    public static final StoreBean NULL = new StoreBean().asNULL().asImmutable();
     /** comments:主键,md5检验码 */
     private String md5;
 
@@ -45,31 +45,42 @@ public final class StoreBean
     private long initialized;
     private boolean isNew;        
     /** 
+     * set immutable status
+     * @return {@code this} 
+     */
+    private StoreBean immutable(Boolean immutable) {
+        this.immutable = immutable;
+        return this;
+    }
+    /** 
      * set {@code this} as immutable object
      * @return {@code this} 
      */
-    public synchronized StoreBean immutable(Boolean immutable) {
-        if(this.immutable != immutable){
-            checkMutable();
-            this.immutable = immutable;
-        }
-        return this;
+    public StoreBean asImmutable() {
+        return immutable(Boolean.TRUE);
     }
     /**
      * @return {@code true} if {@code this} is a mutable object  
      */
     public boolean mutable(){
-        return Boolean.TRUE != this.immutable;
+        return !Boolean.TRUE.equals(this.immutable);
     }
     /**
      * @return {@code this}
      * @throws IllegalStateException if {@code this} is a immutable object 
      */
     private StoreBean checkMutable(){
-        if(Boolean.TRUE == this.immutable){
+        if(!mutable()){
             throw new IllegalStateException("this is a immutable object");
         }
         return this;
+    }
+    /**
+     * return a new mutable copy of this object.
+     * @return 
+     */
+    public StoreBean cloneMutable(){
+        return clone().immutable(null);
     }
     @ThriftField(value=1,name="_new",requiredness=Requiredness.REQUIRED)
     @Override
@@ -536,9 +547,9 @@ public final class StoreBean
     {   
         checkMutable();
         
-        setMd5(null);
-        setEncoding(null);
-        setData(null);
+        setMd5((String)null);
+        setEncoding((String)null);
+        setData((java.nio.ByteBuffer)null);
         isNew(true);
         resetInitialized();
         resetIsModified();
@@ -696,14 +707,6 @@ public final class StoreBean
          */
         public Builder reset(){
             TEMPLATE.get().reset();
-            return this;
-        }
-        /** 
-         * set as a immutable object
-         * @see StoreBean#immutable(Boolean)
-         */
-        public Builder immutable(){
-            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

@@ -27,7 +27,7 @@ public final class PersonBean
 {
     private static final long serialVersionUID = 7741617836285025804L;
     /** NULL {@link PersonBean} bean , IMMUTABLE instance */
-    public static final PersonBean NULL = new PersonBean().asNULL().immutable(Boolean.TRUE);
+    public static final PersonBean NULL = new PersonBean().asNULL().asImmutable();
     /** comments:用户id */
     private Integer id;
 
@@ -79,31 +79,42 @@ public final class PersonBean
     private long initialized;
     private boolean isNew;        
     /** 
+     * set immutable status
+     * @return {@code this} 
+     */
+    private PersonBean immutable(Boolean immutable) {
+        this.immutable = immutable;
+        return this;
+    }
+    /** 
      * set {@code this} as immutable object
      * @return {@code this} 
      */
-    public synchronized PersonBean immutable(Boolean immutable) {
-        if(this.immutable != immutable){
-            checkMutable();
-            this.immutable = immutable;
-        }
-        return this;
+    public PersonBean asImmutable() {
+        return immutable(Boolean.TRUE);
     }
     /**
      * @return {@code true} if {@code this} is a mutable object  
      */
     public boolean mutable(){
-        return Boolean.TRUE != this.immutable;
+        return !Boolean.TRUE.equals(this.immutable);
     }
     /**
      * @return {@code this}
      * @throws IllegalStateException if {@code this} is a immutable object 
      */
     private PersonBean checkMutable(){
-        if(Boolean.TRUE == this.immutable){
+        if(!mutable()){
             throw new IllegalStateException("this is a immutable object");
         }
         return this;
+    }
+    /**
+     * return a new mutable copy of this object.
+     * @return 
+     */
+    public PersonBean cloneMutable(){
+        return clone().immutable(null);
     }
     @ThriftField(value=1,name="_new",requiredness=Requiredness.REQUIRED)
     @Override
@@ -680,6 +691,14 @@ public final class PersonBean
         setBirthdate(new java.util.Date(newVal));
     }
     /**
+     * Setter method for {@link #birthdate}.<br>
+     * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+     */
+    public void setBirthdate(Long newVal)
+    {
+        setBirthdate(null == newVal ? null : new java.util.Date(newVal));
+    }
+    /**
      * Determines if the birthdate has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -1039,6 +1058,14 @@ public final class PersonBean
         setExpiryDate(new java.util.Date(newVal));
     }
     /**
+     * Setter method for {@link #expiryDate}.<br>
+     * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+     */
+    public void setExpiryDate(Long newVal)
+    {
+        setExpiryDate(null == newVal ? null : new java.util.Date(newVal));
+    }
+    /**
      * Determines if the expiryDate has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -1189,6 +1216,14 @@ public final class PersonBean
         setCreateTime(new java.util.Date(newVal));
     }
     /**
+     * Setter method for {@link #createTime}.<br>
+     * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+     */
+    public void setCreateTime(Long newVal)
+    {
+        setCreateTime(null == newVal ? null : new java.util.Date(newVal));
+    }
+    /**
      * Determines if the createTime has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -1271,6 +1306,14 @@ public final class PersonBean
     public void setUpdateTime(long newVal)
     {
         setUpdateTime(new java.util.Date(newVal));
+    }
+    /**
+     * Setter method for {@link #updateTime}.<br>
+     * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+     */
+    public void setUpdateTime(Long newVal)
+    {
+        setUpdateTime(null == newVal ? null : new java.util.Date(newVal));
     }
     /**
      * Determines if the updateTime has been modified.
@@ -1727,21 +1770,21 @@ public final class PersonBean
     {   
         checkMutable();
         
-        setId(null);
-        setGroupId(null);
-        setName(null);
-        setSex(null);
-        setRank(null);
-        setPassword(null);
-        setBirthdate(null);
-        setMobilePhone(null);
-        setPapersType(null);
-        setPapersNum(null);
-        setImageMd5(null);
-        setExpiryDate(null);
-        setRemark(null);
-        setCreateTime(null);
-        setUpdateTime(null);
+        setId((Integer)null);
+        setGroupId((Integer)null);
+        setName((String)null);
+        setSex((Integer)null);
+        setRank((Integer)null);
+        setPassword((String)null);
+        setBirthdate((java.util.Date)null);
+        setMobilePhone((String)null);
+        setPapersType((Integer)null);
+        setPapersNum((String)null);
+        setImageMd5((String)null);
+        setExpiryDate((java.util.Date)null);
+        setRemark((String)null);
+        setCreateTime((java.util.Date)null);
+        setUpdateTime((java.util.Date)null);
         isNew(true);
         resetInitialized();
         resetIsModified();
@@ -1959,14 +2002,6 @@ public final class PersonBean
          */
         public Builder reset(){
             TEMPLATE.get().reset();
-            return this;
-        }
-        /** 
-         * set as a immutable object
-         * @see PersonBean#immutable(Boolean)
-         */
-        public Builder immutable(){
-            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

@@ -28,7 +28,7 @@ public  class FlLogLightBean
 {
     private static final long serialVersionUID = -8629124492169570652L;
     /** NULL {@link FlLogLightBean} bean , IMMUTABLE instance */
-    public static final FlLogLightBean NULL = new FlLogLightBean().asNULL().immutable(Boolean.TRUE);
+    public static final FlLogLightBean NULL = new FlLogLightBean().asNULL().asImmutable();
     /** comments:日志id */
     private Integer id;
 
@@ -55,31 +55,42 @@ public  class FlLogLightBean
     private long initialized;
     private boolean isNew;        
     /** 
+     * set immutable status
+     * @return {@code this} 
+     */
+    private FlLogLightBean immutable(Boolean immutable) {
+        this.immutable = immutable;
+        return this;
+    }
+    /** 
      * set {@code this} as immutable object
      * @return {@code this} 
      */
-    public synchronized FlLogLightBean immutable(Boolean immutable) {
-        if(this.immutable != immutable){
-            checkMutable();
-            this.immutable = immutable;
-        }
-        return this;
+    public FlLogLightBean asImmutable() {
+        return immutable(Boolean.TRUE);
     }
     /**
      * @return {@code true} if {@code this} is a mutable object  
      */
     public boolean mutable(){
-        return Boolean.TRUE != this.immutable;
+        return !Boolean.TRUE.equals(this.immutable);
     }
     /**
      * @return {@code this}
      * @throws IllegalStateException if {@code this} is a immutable object 
      */
     private FlLogLightBean checkMutable(){
-        if(Boolean.TRUE == this.immutable){
+        if(!mutable()){
             throw new IllegalStateException("this is a immutable object");
         }
         return this;
+    }
+    /**
+     * return a new mutable copy of this object.
+     * @return 
+     */
+    public FlLogLightBean cloneMutable(){
+        return clone().immutable(null);
     }
     @Override
     public boolean isNew()
@@ -492,6 +503,14 @@ public  class FlLogLightBean
         setVerifyTime(new java.util.Date(newVal));
     }
     /**
+     * Setter method for {@link #verifyTime}.<br>
+     * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+     */
+    public void setVerifyTime(Long newVal)
+    {
+        setVerifyTime(null == newVal ? null : new java.util.Date(newVal));
+    }
+    /**
      * Determines if the verifyTime has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -769,12 +788,12 @@ public  class FlLogLightBean
     {   
         checkMutable();
         
-        setId(null);
-        setPersonId(null);
-        setName(null);
-        setPapersType(null);
-        setPapersNum(null);
-        setVerifyTime(null);
+        setId((Integer)null);
+        setPersonId((Integer)null);
+        setName((String)null);
+        setPapersType((Integer)null);
+        setPapersNum((String)null);
+        setVerifyTime((java.util.Date)null);
         isNew(true);
         resetInitialized();
         resetIsModified();
@@ -947,14 +966,6 @@ public  class FlLogLightBean
          */
         public Builder reset(){
             TEMPLATE.get().reset();
-            return this;
-        }
-        /** 
-         * set as a immutable object
-         * @see FlLogLightBean#immutable(Boolean)
-         */
-        public Builder immutable(){
-            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

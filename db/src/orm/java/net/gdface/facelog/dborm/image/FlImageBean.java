@@ -29,7 +29,7 @@ public  class FlImageBean
 {
     private static final long serialVersionUID = 646979810912117585L;
     /** NULL {@link FlImageBean} bean , IMMUTABLE instance */
-    public static final FlImageBean NULL = new FlImageBean().asNULL().immutable(Boolean.TRUE);
+    public static final FlImageBean NULL = new FlImageBean().asNULL().asImmutable();
     /** comments:主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key */
     private String md5;
 
@@ -62,31 +62,42 @@ public  class FlImageBean
     private long initialized;
     private boolean isNew;        
     /** 
+     * set immutable status
+     * @return {@code this} 
+     */
+    private FlImageBean immutable(Boolean immutable) {
+        this.immutable = immutable;
+        return this;
+    }
+    /** 
      * set {@code this} as immutable object
      * @return {@code this} 
      */
-    public synchronized FlImageBean immutable(Boolean immutable) {
-        if(this.immutable != immutable){
-            checkMutable();
-            this.immutable = immutable;
-        }
-        return this;
+    public FlImageBean asImmutable() {
+        return immutable(Boolean.TRUE);
     }
     /**
      * @return {@code true} if {@code this} is a mutable object  
      */
     public boolean mutable(){
-        return Boolean.TRUE != this.immutable;
+        return !Boolean.TRUE.equals(this.immutable);
     }
     /**
      * @return {@code this}
      * @throws IllegalStateException if {@code this} is a immutable object 
      */
     private FlImageBean checkMutable(){
-        if(Boolean.TRUE == this.immutable){
+        if(!mutable()){
             throw new IllegalStateException("this is a immutable object");
         }
         return this;
+    }
+    /**
+     * return a new mutable copy of this object.
+     * @return 
+     */
+    public FlImageBean cloneMutable(){
+        return clone().immutable(null);
     }
     @Override
     public boolean isNew()
@@ -951,14 +962,14 @@ public  class FlImageBean
     {   
         checkMutable();
         
-        setMd5(null);
-        setFormat(null);
-        setWidth(null);
-        setHeight(null);
-        setDepth(null);
-        setFaceNum(null);
-        setThumbMd5(null);
-        setDeviceId(null);
+        setMd5((String)null);
+        setFormat((String)null);
+        setWidth((Integer)null);
+        setHeight((Integer)null);
+        setDepth((Integer)null);
+        setFaceNum((Integer)null);
+        setThumbMd5((String)null);
+        setDeviceId((Integer)null);
         isNew(true);
         resetInitialized();
         resetIsModified();
@@ -1141,14 +1152,6 @@ public  class FlImageBean
          */
         public Builder reset(){
             TEMPLATE.get().reset();
-            return this;
-        }
-        /** 
-         * set as a immutable object
-         * @see FlImageBean#immutable(Boolean)
-         */
-        public Builder immutable(){
-            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

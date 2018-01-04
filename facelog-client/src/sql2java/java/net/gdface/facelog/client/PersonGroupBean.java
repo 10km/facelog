@@ -23,7 +23,7 @@ public  class PersonGroupBean
 {
     private static final long serialVersionUID = 3660326998381566389L;
     /** NULL {@link PersonGroupBean} bean , IMMUTABLE instance */
-    public static final PersonGroupBean NULL = new PersonGroupBean().asNULL().immutable(Boolean.TRUE);
+    public static final PersonGroupBean NULL = new PersonGroupBean().asNULL().asImmutable();
     /** comments:用户组id */
     private Integer id;
 
@@ -57,31 +57,42 @@ public  class PersonGroupBean
     private long initialized;
     private boolean isNew;        
     /** 
+     * set immutable status
+     * @return {@code this} 
+     */
+    private PersonGroupBean immutable(Boolean immutable) {
+        this.immutable = immutable;
+        return this;
+    }
+    /** 
      * set {@code this} as immutable object
      * @return {@code this} 
      */
-    public synchronized PersonGroupBean immutable(Boolean immutable) {
-        if(this.immutable != immutable){
-            checkMutable();
-            this.immutable = immutable;
-        }
-        return this;
+    public PersonGroupBean asImmutable() {
+        return immutable(Boolean.TRUE);
     }
     /**
      * @return {@code true} if {@code this} is a mutable object  
      */
     public boolean mutable(){
-        return Boolean.TRUE != this.immutable;
+        return !Boolean.TRUE.equals(this.immutable);
     }
     /**
      * @return {@code this}
      * @throws IllegalStateException if {@code this} is a immutable object 
      */
     private PersonGroupBean checkMutable(){
-        if(Boolean.TRUE == this.immutable){
+        if(!mutable()){
             throw new IllegalStateException("this is a immutable object");
         }
         return this;
+    }
+    /**
+     * return a new mutable copy of this object.
+     * @return 
+     */
+    public PersonGroupBean cloneMutable(){
+        return clone().immutable(null);
     }
     @Override
     public boolean isNew()
@@ -610,6 +621,14 @@ public  class PersonGroupBean
         setCreateTime(new java.util.Date(newVal));
     }
     /**
+     * Setter method for {@link #createTime}.<br>
+     * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+     */
+    public void setCreateTime(Long newVal)
+    {
+        setCreateTime(null == newVal ? null : new java.util.Date(newVal));
+    }
+    /**
      * Determines if the createTime has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -674,6 +693,14 @@ public  class PersonGroupBean
     public void setUpdateTime(long newVal)
     {
         setUpdateTime(new java.util.Date(newVal));
+    }
+    /**
+     * Setter method for {@link #updateTime}.<br>
+     * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+     */
+    public void setUpdateTime(Long newVal)
+    {
+        setUpdateTime(null == newVal ? null : new java.util.Date(newVal));
     }
     /**
      * Determines if the updateTime has been modified.
@@ -1013,15 +1040,15 @@ public  class PersonGroupBean
     {   
         checkMutable();
         
-        setId(null);
-        setName(null);
-        setLeaf(null);
-        setParent(null);
-        setRemark(null);
-        setExtBin(null);
-        setExtTxt(null);
-        setCreateTime(null);
-        setUpdateTime(null);
+        setId((Integer)null);
+        setName((String)null);
+        setLeaf((Integer)null);
+        setParent((Integer)null);
+        setRemark((String)null);
+        setExtBin((byte[])null);
+        setExtTxt((String)null);
+        setCreateTime((java.util.Date)null);
+        setUpdateTime((java.util.Date)null);
         isNew(true);
         resetInitialized();
         resetIsModified();
@@ -1209,14 +1236,6 @@ public  class PersonGroupBean
          */
         public Builder reset(){
             TEMPLATE.get().reset();
-            return this;
-        }
-        /** 
-         * set as a immutable object
-         * @see PersonGroupBean#immutable(Boolean)
-         */
-        public Builder immutable(){
-            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

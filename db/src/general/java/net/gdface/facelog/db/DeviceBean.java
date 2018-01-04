@@ -27,7 +27,7 @@ public final class DeviceBean
 {
     private static final long serialVersionUID = -1983784566394161565L;
     /** NULL {@link DeviceBean} bean , IMMUTABLE instance */
-    public static final DeviceBean NULL = new DeviceBean().asNULL().immutable(Boolean.TRUE);
+    public static final DeviceBean NULL = new DeviceBean().asNULL().asImmutable();
     /** comments:设备id */
     private Integer id;
 
@@ -61,31 +61,42 @@ public final class DeviceBean
     private long initialized;
     private boolean isNew;        
     /** 
+     * set immutable status
+     * @return {@code this} 
+     */
+    private DeviceBean immutable(Boolean immutable) {
+        this.immutable = immutable;
+        return this;
+    }
+    /** 
      * set {@code this} as immutable object
      * @return {@code this} 
      */
-    public synchronized DeviceBean immutable(Boolean immutable) {
-        if(this.immutable != immutable){
-            checkMutable();
-            this.immutable = immutable;
-        }
-        return this;
+    public DeviceBean asImmutable() {
+        return immutable(Boolean.TRUE);
     }
     /**
      * @return {@code true} if {@code this} is a mutable object  
      */
     public boolean mutable(){
-        return Boolean.TRUE != this.immutable;
+        return !Boolean.TRUE.equals(this.immutable);
     }
     /**
      * @return {@code this}
      * @throws IllegalStateException if {@code this} is a immutable object 
      */
     private DeviceBean checkMutable(){
-        if(Boolean.TRUE == this.immutable){
+        if(!mutable()){
             throw new IllegalStateException("this is a immutable object");
         }
         return this;
+    }
+    /**
+     * return a new mutable copy of this object.
+     * @return 
+     */
+    public DeviceBean cloneMutable(){
+        return clone().immutable(null);
     }
     @ThriftField(value=1,name="_new",requiredness=Requiredness.REQUIRED)
     @Override
@@ -708,6 +719,14 @@ public final class DeviceBean
         setCreateTime(new java.util.Date(newVal));
     }
     /**
+     * Setter method for {@link #createTime}.<br>
+     * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+     */
+    public void setCreateTime(Long newVal)
+    {
+        setCreateTime(null == newVal ? null : new java.util.Date(newVal));
+    }
+    /**
      * Determines if the createTime has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -790,6 +809,14 @@ public final class DeviceBean
     public void setUpdateTime(long newVal)
     {
         setUpdateTime(new java.util.Date(newVal));
+    }
+    /**
+     * Setter method for {@link #updateTime}.<br>
+     * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+     */
+    public void setUpdateTime(Long newVal)
+    {
+        setUpdateTime(null == newVal ? null : new java.util.Date(newVal));
     }
     /**
      * Determines if the updateTime has been modified.
@@ -1130,15 +1157,15 @@ public final class DeviceBean
     {   
         checkMutable();
         
-        setId(null);
-        setGroupId(null);
-        setName(null);
-        setVersion(null);
-        setSerialNo(null);
-        setMac(null);
-        setRemark(null);
-        setCreateTime(null);
-        setUpdateTime(null);
+        setId((Integer)null);
+        setGroupId((Integer)null);
+        setName((String)null);
+        setVersion((String)null);
+        setSerialNo((String)null);
+        setMac((String)null);
+        setRemark((String)null);
+        setCreateTime((java.util.Date)null);
+        setUpdateTime((java.util.Date)null);
         isNew(true);
         resetInitialized();
         resetIsModified();
@@ -1326,14 +1353,6 @@ public final class DeviceBean
          */
         public Builder reset(){
             TEMPLATE.get().reset();
-            return this;
-        }
-        /** 
-         * set as a immutable object
-         * @see DeviceBean#immutable(Boolean)
-         */
-        public Builder immutable(){
-            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

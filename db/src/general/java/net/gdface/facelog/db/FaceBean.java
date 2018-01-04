@@ -27,7 +27,7 @@ public final class FaceBean
 {
     private static final long serialVersionUID = -1428389659131258505L;
     /** NULL {@link FaceBean} bean , IMMUTABLE instance */
-    public static final FaceBean NULL = new FaceBean().asNULL().immutable(Boolean.TRUE);
+    public static final FaceBean NULL = new FaceBean().asNULL().asImmutable();
     /** comments:主键 */
     private Integer id;
 
@@ -78,31 +78,42 @@ public final class FaceBean
     private long initialized;
     private boolean isNew;        
     /** 
+     * set immutable status
+     * @return {@code this} 
+     */
+    private FaceBean immutable(Boolean immutable) {
+        this.immutable = immutable;
+        return this;
+    }
+    /** 
      * set {@code this} as immutable object
      * @return {@code this} 
      */
-    public synchronized FaceBean immutable(Boolean immutable) {
-        if(this.immutable != immutable){
-            checkMutable();
-            this.immutable = immutable;
-        }
-        return this;
+    public FaceBean asImmutable() {
+        return immutable(Boolean.TRUE);
     }
     /**
      * @return {@code true} if {@code this} is a mutable object  
      */
     public boolean mutable(){
-        return Boolean.TRUE != this.immutable;
+        return !Boolean.TRUE.equals(this.immutable);
     }
     /**
      * @return {@code this}
      * @throws IllegalStateException if {@code this} is a immutable object 
      */
     private FaceBean checkMutable(){
-        if(Boolean.TRUE == this.immutable){
+        if(!mutable()){
             throw new IllegalStateException("this is a immutable object");
         }
         return this;
+    }
+    /**
+     * return a new mutable copy of this object.
+     * @return 
+     */
+    public FaceBean cloneMutable(){
+        return clone().immutable(null);
     }
     @ThriftField(value=1,name="_new",requiredness=Requiredness.REQUIRED)
     @Override
@@ -2080,25 +2091,25 @@ public final class FaceBean
     {   
         checkMutable();
         
-        setId(null);
-        setImageMd5(null);
-        setFaceLeft(null);
-        setFaceTop(null);
-        setFaceWidth(null);
-        setFaceHeight(null);
-        setEyeLeftx(null);
-        setEyeLefty(null);
-        setEyeRightx(null);
-        setEyeRighty(null);
-        setMouthX(null);
-        setMouthY(null);
-        setNoseX(null);
-        setNoseY(null);
-        setAngleYaw(null);
-        setAnglePitch(null);
-        setAngleRoll(null);
-        setExtInfo(null);
-        setFeatureMd5(null);
+        setId((Integer)null);
+        setImageMd5((String)null);
+        setFaceLeft((Integer)null);
+        setFaceTop((Integer)null);
+        setFaceWidth((Integer)null);
+        setFaceHeight((Integer)null);
+        setEyeLeftx((Integer)null);
+        setEyeLefty((Integer)null);
+        setEyeRightx((Integer)null);
+        setEyeRighty((Integer)null);
+        setMouthX((Integer)null);
+        setMouthY((Integer)null);
+        setNoseX((Integer)null);
+        setNoseY((Integer)null);
+        setAngleYaw((Integer)null);
+        setAnglePitch((Integer)null);
+        setAngleRoll((Integer)null);
+        setExtInfo((java.nio.ByteBuffer)null);
+        setFeatureMd5((String)null);
         isNew(true);
         resetInitialized();
         resetIsModified();
@@ -2336,14 +2347,6 @@ public final class FaceBean
          */
         public Builder reset(){
             TEMPLATE.get().reset();
-            return this;
-        }
-        /** 
-         * set as a immutable object
-         * @see FaceBean#immutable(Boolean)
-         */
-        public Builder immutable(){
-            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

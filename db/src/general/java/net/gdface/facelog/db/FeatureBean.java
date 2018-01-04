@@ -27,7 +27,7 @@ public final class FeatureBean
 {
     private static final long serialVersionUID = -2191238184879882524L;
     /** NULL {@link FeatureBean} bean , IMMUTABLE instance */
-    public static final FeatureBean NULL = new FeatureBean().asNULL().immutable(Boolean.TRUE);
+    public static final FeatureBean NULL = new FeatureBean().asNULL().asImmutable();
     /** comments:主键,特征码md5校验码 */
     private String md5;
 
@@ -47,31 +47,42 @@ public final class FeatureBean
     private long initialized;
     private boolean isNew;        
     /** 
+     * set immutable status
+     * @return {@code this} 
+     */
+    private FeatureBean immutable(Boolean immutable) {
+        this.immutable = immutable;
+        return this;
+    }
+    /** 
      * set {@code this} as immutable object
      * @return {@code this} 
      */
-    public synchronized FeatureBean immutable(Boolean immutable) {
-        if(this.immutable != immutable){
-            checkMutable();
-            this.immutable = immutable;
-        }
-        return this;
+    public FeatureBean asImmutable() {
+        return immutable(Boolean.TRUE);
     }
     /**
      * @return {@code true} if {@code this} is a mutable object  
      */
     public boolean mutable(){
-        return Boolean.TRUE != this.immutable;
+        return !Boolean.TRUE.equals(this.immutable);
     }
     /**
      * @return {@code this}
      * @throws IllegalStateException if {@code this} is a immutable object 
      */
     private FeatureBean checkMutable(){
-        if(Boolean.TRUE == this.immutable){
+        if(!mutable()){
             throw new IllegalStateException("this is a immutable object");
         }
         return this;
+    }
+    /**
+     * return a new mutable copy of this object.
+     * @return 
+     */
+    public FeatureBean cloneMutable(){
+        return clone().immutable(null);
     }
     @ThriftField(value=1,name="_new",requiredness=Requiredness.REQUIRED)
     @Override
@@ -419,6 +430,14 @@ public final class FeatureBean
         setUpdateTime(new java.util.Date(newVal));
     }
     /**
+     * Setter method for {@link #updateTime}.<br>
+     * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+     */
+    public void setUpdateTime(Long newVal)
+    {
+        setUpdateTime(null == newVal ? null : new java.util.Date(newVal));
+    }
+    /**
      * Determines if the updateTime has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -670,10 +689,10 @@ public final class FeatureBean
     {   
         checkMutable();
         
-        setMd5(null);
-        setPersonId(null);
-        setFeature(null);
-        setUpdateTime(null);
+        setMd5((String)null);
+        setPersonId((Integer)null);
+        setFeature((java.nio.ByteBuffer)null);
+        setUpdateTime((java.util.Date)null);
         isNew(true);
         resetInitialized();
         resetIsModified();
@@ -836,14 +855,6 @@ public final class FeatureBean
          */
         public Builder reset(){
             TEMPLATE.get().reset();
-            return this;
-        }
-        /** 
-         * set as a immutable object
-         * @see FeatureBean#immutable(Boolean)
-         */
-        public Builder immutable(){
-            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

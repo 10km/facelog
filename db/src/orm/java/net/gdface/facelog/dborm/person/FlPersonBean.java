@@ -29,7 +29,7 @@ public  class FlPersonBean
 {
     private static final long serialVersionUID = -4314407042657759584L;
     /** NULL {@link FlPersonBean} bean , IMMUTABLE instance */
-    public static final FlPersonBean NULL = new FlPersonBean().asNULL().immutable(Boolean.TRUE);
+    public static final FlPersonBean NULL = new FlPersonBean().asNULL().asImmutable();
     /** comments:用户id */
     private Integer id;
 
@@ -81,31 +81,42 @@ public  class FlPersonBean
     private long initialized;
     private boolean isNew;        
     /** 
+     * set immutable status
+     * @return {@code this} 
+     */
+    private FlPersonBean immutable(Boolean immutable) {
+        this.immutable = immutable;
+        return this;
+    }
+    /** 
      * set {@code this} as immutable object
      * @return {@code this} 
      */
-    public synchronized FlPersonBean immutable(Boolean immutable) {
-        if(this.immutable != immutable){
-            checkMutable();
-            this.immutable = immutable;
-        }
-        return this;
+    public FlPersonBean asImmutable() {
+        return immutable(Boolean.TRUE);
     }
     /**
      * @return {@code true} if {@code this} is a mutable object  
      */
     public boolean mutable(){
-        return Boolean.TRUE != this.immutable;
+        return !Boolean.TRUE.equals(this.immutable);
     }
     /**
      * @return {@code this}
      * @throws IllegalStateException if {@code this} is a immutable object 
      */
     private FlPersonBean checkMutable(){
-        if(Boolean.TRUE == this.immutable){
+        if(!mutable()){
             throw new IllegalStateException("this is a immutable object");
         }
         return this;
+    }
+    /**
+     * return a new mutable copy of this object.
+     * @return 
+     */
+    public FlPersonBean cloneMutable(){
+        return clone().immutable(null);
     }
     @Override
     public boolean isNew()
@@ -592,6 +603,14 @@ public  class FlPersonBean
         setBirthdate(new java.util.Date(newVal));
     }
     /**
+     * Setter method for {@link #birthdate}.<br>
+     * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+     */
+    public void setBirthdate(Long newVal)
+    {
+        setBirthdate(null == newVal ? null : new java.util.Date(newVal));
+    }
+    /**
      * Determines if the birthdate has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -889,6 +908,14 @@ public  class FlPersonBean
         setExpiryDate(new java.util.Date(newVal));
     }
     /**
+     * Setter method for {@link #expiryDate}.<br>
+     * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+     */
+    public void setExpiryDate(Long newVal)
+    {
+        setExpiryDate(null == newVal ? null : new java.util.Date(newVal));
+    }
+    /**
      * Determines if the expiryDate has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -1010,6 +1037,14 @@ public  class FlPersonBean
         setCreateTime(new java.util.Date(newVal));
     }
     /**
+     * Setter method for {@link #createTime}.<br>
+     * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+     */
+    public void setCreateTime(Long newVal)
+    {
+        setCreateTime(null == newVal ? null : new java.util.Date(newVal));
+    }
+    /**
      * Determines if the createTime has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -1074,6 +1109,14 @@ public  class FlPersonBean
     public void setUpdateTime(long newVal)
     {
         setUpdateTime(new java.util.Date(newVal));
+    }
+    /**
+     * Setter method for {@link #updateTime}.<br>
+     * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+     */
+    public void setUpdateTime(Long newVal)
+    {
+        setUpdateTime(null == newVal ? null : new java.util.Date(newVal));
     }
     /**
      * Determines if the updateTime has been modified.
@@ -1530,21 +1573,21 @@ public  class FlPersonBean
     {   
         checkMutable();
         
-        setId(null);
-        setGroupId(null);
-        setName(null);
-        setSex(null);
-        setRank(null);
-        setPassword(null);
-        setBirthdate(null);
-        setMobilePhone(null);
-        setPapersType(null);
-        setPapersNum(null);
-        setImageMd5(null);
-        setExpiryDate(null);
-        setRemark(null);
-        setCreateTime(null);
-        setUpdateTime(null);
+        setId((Integer)null);
+        setGroupId((Integer)null);
+        setName((String)null);
+        setSex((Integer)null);
+        setRank((Integer)null);
+        setPassword((String)null);
+        setBirthdate((java.util.Date)null);
+        setMobilePhone((String)null);
+        setPapersType((Integer)null);
+        setPapersNum((String)null);
+        setImageMd5((String)null);
+        setExpiryDate((java.util.Date)null);
+        setRemark((String)null);
+        setCreateTime((java.util.Date)null);
+        setUpdateTime((java.util.Date)null);
         isNew(true);
         resetInitialized();
         resetIsModified();
@@ -1762,14 +1805,6 @@ public  class FlPersonBean
          */
         public Builder reset(){
             TEMPLATE.get().reset();
-            return this;
-        }
-        /** 
-         * set as a immutable object
-         * @see FlPersonBean#immutable(Boolean)
-         */
-        public Builder immutable(){
-            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

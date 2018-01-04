@@ -32,7 +32,7 @@ public  class FlLogBean
 {
     private static final long serialVersionUID = 7869683986300606649L;
     /** NULL {@link FlLogBean} bean , IMMUTABLE instance */
-    public static final FlLogBean NULL = new FlLogBean().asNULL().immutable(Boolean.TRUE);
+    public static final FlLogBean NULL = new FlLogBean().asNULL().asImmutable();
     /** comments:日志id */
     private Integer id;
 
@@ -67,31 +67,42 @@ public  class FlLogBean
     private long initialized;
     private boolean isNew;        
     /** 
+     * set immutable status
+     * @return {@code this} 
+     */
+    private FlLogBean immutable(Boolean immutable) {
+        this.immutable = immutable;
+        return this;
+    }
+    /** 
      * set {@code this} as immutable object
      * @return {@code this} 
      */
-    public synchronized FlLogBean immutable(Boolean immutable) {
-        if(this.immutable != immutable){
-            checkMutable();
-            this.immutable = immutable;
-        }
-        return this;
+    public FlLogBean asImmutable() {
+        return immutable(Boolean.TRUE);
     }
     /**
      * @return {@code true} if {@code this} is a mutable object  
      */
     public boolean mutable(){
-        return Boolean.TRUE != this.immutable;
+        return !Boolean.TRUE.equals(this.immutable);
     }
     /**
      * @return {@code this}
      * @throws IllegalStateException if {@code this} is a immutable object 
      */
     private FlLogBean checkMutable(){
-        if(Boolean.TRUE == this.immutable){
+        if(!mutable()){
             throw new IllegalStateException("this is a immutable object");
         }
         return this;
+    }
+    /**
+     * return a new mutable copy of this object.
+     * @return 
+     */
+    public FlLogBean cloneMutable(){
+        return clone().immutable(null);
     }
     @Override
     public boolean isNew()
@@ -655,6 +666,14 @@ public  class FlLogBean
         setVerifyTime(new java.util.Date(newVal));
     }
     /**
+     * Setter method for {@link #verifyTime}.<br>
+     * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+     */
+    public void setVerifyTime(Long newVal)
+    {
+        setVerifyTime(null == newVal ? null : new java.util.Date(newVal));
+    }
+    /**
      * Determines if the verifyTime has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -719,6 +738,14 @@ public  class FlLogBean
     public void setCreateTime(long newVal)
     {
         setCreateTime(new java.util.Date(newVal));
+    }
+    /**
+     * Setter method for {@link #createTime}.<br>
+     * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+     */
+    public void setCreateTime(Long newVal)
+    {
+        setCreateTime(null == newVal ? null : new java.util.Date(newVal));
     }
     /**
      * Determines if the createTime has been modified.
@@ -1097,15 +1124,15 @@ public  class FlLogBean
     {   
         checkMutable();
         
-        setId(null);
-        setPersonId(null);
-        setDeviceId(null);
-        setVerifyFeature(null);
-        setCompareFace(null);
-        setVerifyStatus(null);
-        setSimilarty(null);
-        setVerifyTime(null);
-        setCreateTime(null);
+        setId((Integer)null);
+        setPersonId((Integer)null);
+        setDeviceId((Integer)null);
+        setVerifyFeature((String)null);
+        setCompareFace((Integer)null);
+        setVerifyStatus((Integer)null);
+        setSimilarty((Double)null);
+        setVerifyTime((java.util.Date)null);
+        setCreateTime((java.util.Date)null);
         isNew(true);
         resetInitialized();
         resetIsModified();
@@ -1293,14 +1320,6 @@ public  class FlLogBean
          */
         public Builder reset(){
             TEMPLATE.get().reset();
-            return this;
-        }
-        /** 
-         * set as a immutable object
-         * @see FlLogBean#immutable(Boolean)
-         */
-        public Builder immutable(){
-            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */
