@@ -829,10 +829,8 @@ public class CmdManager {
     public void reset(Long schedule,IAckAdapter<Void> adapter){
         CmdBuilder builder = checkTlsAvailable();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
-        checkArgument(null != adapter,"adapter is null");
-        checkState(!adapter.isFinished(),"INVALID STATE of adapter isFinsihed = %s",adapter.isFinished());
         Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
-            .setAdapter(adapter)
+            .setAdapter(checkNotNull(adapter,"adapter is null"))
             .setUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
                 channel,

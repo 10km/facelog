@@ -2,6 +2,7 @@ package net.gdface.facelog.client;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
 import java.util.Map;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -11,12 +12,13 @@ import org.junit.runners.MethodSorters;
 import com.google.common.collect.ImmutableMap;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.JedisPoolLazy.PropName;
+import net.gdface.facelog.client.CmdManager.CmdBuilder;
 import net.gdface.facelog.client.thrift.MQParam;
 import net.gdface.facelog.client.thrift.Token;
 import redis.clients.jedis.Protocol;
 
 /**
- * 心跳包测试
+ * 设备命令发送接收测试
  * @author guyadong
  *
  */
@@ -41,7 +43,7 @@ public class DeviceCmdTest implements ChannelConstant{
 		JedisPoolLazy.createDefaultInstance( redisParam);
 		// 创建服务实例
 		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build();
-		// 申请令牌
+		// 申请root令牌
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 		// 从facelog service 获取设备命令频道名 
 		cmdChannelName = facelogClient.getRedisParameters(rootToken).get(MQParam.CMD_CHANNEL);
@@ -49,8 +51,10 @@ public class DeviceCmdTest implements ChannelConstant{
 		byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
 		device = DeviceBean.builder().mac(NetworkUtil.formatMac(address, null)).serialNo("12322333").build();
 		logger.info(device.toString(true,false));
+		// 注册设备 
 		device = facelogClient.registerDevice(device);
 		logger.info("registered device {}",device.toString(true, false));
+		// 申请设备令牌
 		deviceToken = facelogClient.online(device);
 		logger.info("device token = {}",deviceToken);
 	}
@@ -60,29 +64,33 @@ public class DeviceCmdTest implements ChannelConstant{
 		facelogClient.releaseRootToken(rootToken);
 	}
 	/**
-	 * 设备端发送心跳包测试
+	 * reset 命令执行器
+	 * @author guyadong
+	 *
+	 */
+	public class RestAdapter extends CommandAdapter{
+		@Override
+		public void reset(Long schedule)  {
+			logger.info("DEVICE client : do device reset...(执行设备RESET)");
+		}		
+	}
+	/**
+	 * 模拟设备端响应设备命令
 	 * @throws InterruptedException 
 	 */
 	@Test
-	public void test1CommandAdapter() throws InterruptedException{
-		
+	public void test1CommandAdapter(){		
 		try {
 			facelogClient.makeCmdDispatcher(deviceToken)
-				.setExecutor(DefaultExecutorProvider.getGlobalExceutor())
+				/** 注册命令执行器 */
 				.registerAdapter(Cmd.reset, new RestAdapter());	
 		} catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(e.getMessage(),false);
 		}
 	}
-	public class RestAdapter extends CommandAdapter{
-		@Override
-		public void reset(Long schedule) throws DeviceCmdException {
-			logger.info("do device reset...");
-		}		
-	}
 	/**
-	 * 发送设备复位命令
+	 * 模拟设备端发送设备复位命令
 	 * @throws InterruptedException 
 	 */
 	@Test
@@ -98,14 +106,20 @@ public class DeviceCmdTest implements ChannelConstant{
 			// 设置命令响应通道
 			.setAckChannel(facelogClient.getAckChannelSupplier(rootToken))
 			// 指定设备命令执行接收目标为一组设备(id)
-			.setDeviceTarget(device.getId()) 
-			.build()
-			.reset(null, new IAckAdapter.BaseAdapter<Void>(){
+			.setDeviceTarget(device.getId()) ;
+		cmdManager.reset(null, new IAckAdapter.BaseAdapter<Void>(){
 				@Override
 				protected void doOnSubscribe(Ack<Void> t) {
-					logger.info("{}",t);
+					logger.info("ADMIN client : 设备命令响应 {}",t);
 				}
-			}); // 执行设备复位命令
-		Thread.sleep(20*1000);
+			}); // 异步执行设备复位命令
+//		List<Ack<Void>> receivedAcks = cmdManager.resetSync(null, false);
+//		logger.info("同步接收命令响应:");
+//		for(Ack<Void> ack:receivedAcks){
+//			logger.info("ADMIN client : 设备命令响应 {}",ack);
+//		}
+		/** 10 秒后结束测试 */
+		Thread.sleep(10*1000);
+		logger.info("测试结束");
 	}
 }

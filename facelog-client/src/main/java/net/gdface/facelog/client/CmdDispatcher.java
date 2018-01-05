@@ -4,12 +4,17 @@ import static com.google.common.base.Preconditions.*;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Predicates;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import gu.simplemq.Channel;
 import gu.simplemq.IMessageAdapter;
@@ -23,7 +28,8 @@ import gu.simplemq.redis.RedisFactory;
 /**
  * 设备命令分发器,实现{@link IMessageAdapter}接口,将redis操作与业务逻辑隔离<br>
  * 从订阅频道得到设备指令{@link DeviceInstruction},并将交给{@link CommandAdapter}执行<br>
- * 如果是与当前设备无关的命令则跳过
+ * 如果是与当前设备无关的命令则跳过<br>
+ * 收到的设备命令将按收到命令的在线程池中顺序执行
  * @author guyadong
  *
  */
@@ -40,7 +46,12 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 	private Predicate<Long> cmdSnValidator = Predicates.alwaysTrue();
 	/** 设备命令响应通道验证器 */
 	private Predicate<String> ackChannelValidator = Predicates.alwaysTrue();
-	private ExecutorService executor ;
+	/** 固定为1的线程池，确保所有的命令按收到的顺序执行 */
+	private final ExecutorService executor = MoreExecutors.getExitingExecutorService(
+			new ThreadPoolExecutor(1, 1,
+	                0L, TimeUnit.MILLISECONDS,
+	                new LinkedBlockingQueue<Runnable>(),
+	                new ThreadFactoryBuilder().setNameFormat("subscribe-%d").build()));;
 	/**
 	 * 构造方法<br>
 	 *  设备所属的组可能是可以变化的,所以这里需要用{@code Supplier} 接口来动态获取当前设备的设备组
@@ -83,7 +94,7 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 				if(!Strings.isNullOrEmpty(t.getAckChannel())){
 					final String ackChannel = t.getAckChannel();
 					if(ackChannelValidator.apply(ackChannel)){
-						checkNotNull(executor,"please call setExecutor to initialize executor ").execute(new Runnable(){
+						executor.execute(new Runnable(){
 							@Override
 							public void run() {
 								Channel<Ack<?>> channel = new Channel<Ack<?>>(ackChannel){};
@@ -190,10 +201,6 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 		if(null !=ackChannelValidator){
 			this.ackChannelValidator = ackChannelValidator;
 		}
-		return this;
-	}
-	public CmdDispatcher setExecutor(ExecutorService executor) {
-		this.executor = checkNotNull(executor);
 		return this;
 	}
 }
