@@ -47,6 +47,16 @@ public interface CommonConstant {
             this.hostAddress = hostAddress;
             return this;
         }
+        @Override
+        public String toString() {
+            StringBuilder builder = new StringBuilder();
+            builder.append("HeadbeatPackage [deviceId=");
+            builder.append(deviceId);
+            builder.append(", hostAddress=");
+            builder.append(hostAddress);
+            builder.append("]");
+            return builder.toString();
+        }
     }
     /** 默认(设备/人员)组id */
     public static final int DEFAULT_GROUP_ID = 1;

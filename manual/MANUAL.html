@@ -306,10 +306,10 @@ document.addEventListener("DOMContentLoaded", function() {
         var level = parseInt(header.tagName.replace('H', ''), 10)-1;
         // 通过两个where循环对栈进行调整,确保stack中标题级数与当前标题级数相同
         while(stack.length < level){
-            stack.push(0);
+        	stack.push(0);
         }
         while(stack.length > level){
-            stack.pop();
+        	stack.pop();
         }
         // 最小一级标题标号步进+1
         stack[stack.length-1]++;
@@ -453,7 +453,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <p>通过消息系统 faelog 实现以下能力：</p>
 <h4>数据更新</h4>
 <p>基于消息系统，当后端数据库中的记录有增加，删除或修改时，facelog 服务会自动向指定的redis频道发布消息。设备端只要订阅了该频道，就会收到相应的通知，实现本地数据更新。</p>
-<p>facelog 为 <code>fl_person，fl_feature，fl_permit</code> 三张表提供了实时更新发布频道。具体定义参见<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommonConstant.java"><code>net.gdface.facelog.client.CommonConstant</code></a> 中所有频道(Channel)的定义。前端设备订阅指定的频道，就可以收到相应的通知。</p>
+<p>facelog 为 <code>fl_person，fl_feature，fl_permit</code> 三张表提供了实时更新发布频道。具体定义参见<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/ChannelConstant.java"><code>net.gdface.facelog.client.ChannelConstant</code></a> 中所有频道(Channel)的定义。前端设备订阅指定的频道，就可以收到相应的通知。</p>
 <p><a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/SubAdapters.java"><code>net.gdface.facelog.client.SubAdapters</code></a> 提供了响应对应上述数据库表数据更新消息的基类。应用项目只需要继承对应的类，重载 <code>onSubscribe</code>方法实现自己的业务逻辑。</p>
 <h4>设备心跳</h4>
 <p>对于管理端，实时获取所有前端设备的运行状态，是否在线，是设备管理的基本需要。设备端通过定时通过消息系统发送心跳数据，管理端即可通过接收所有设备的心跳数据实时掌握前端设备的运行状态。</p>
@@ -780,6 +780,21 @@ public void test4RegisterDevice(){
 <blockquote>
 <p>参见 <code>net.gdface.facelog.client.IFaceLogClient.getRedisParameters(Token)</code>，<code>net.gdface.facelog.service.RedisManagement.MQParam</code></p>
 </blockquote>
+<h4>连接消息系统(redis)</h4>
+<p>消息系统是基于redis平台的中间件，不论是发送还是接收消息，都需要连接redis.以下为连接redis的示例，在应用程序初始化时执行一次。</p>
+<pre><code>/** redis 连接参数 */
+private static final Map&lt;PropName, Object&gt; redisParam = 
+        ImmutableMap.&lt;PropName, Object&gt;of(
+                /** redis 主机名 */PropName.host,Protocol.DEFAULT_HOST,
+                /** redis 端口号 */PropName.port,Protocol.DEFAULT_PORT,
+                /** redis 连接密码 */PropName.password, &quot;password&quot;
+                );
+///.....
+/** 根据连接参数创建默认实例 */
+JedisPoolLazy.createDefaultInstance( redisParam);
+// 默认实例创建后，后续可以调用 JedisPoolLazy.getDefaultInstance() 获取并使用这个默认实例
+</code></pre>
+
 <h4>发布消息</h4>
 <p>利用消息系统发布消息很简单，只要获取一个<code>IPublisher</code>实例，就可以向指定的频道发布消息。</p>
 <p>消息系统向频道发布消息的接口类为<code>IPublisher</code>,参见 <a href="https://gitee.com/l0km/simplemq/blob/master/src/main/java/gu/simplemq/IPublisher.java"><code>gu.simplemq.IPublisher</code></a></p>
@@ -879,6 +894,82 @@ public void testRedisConsumer(){
 }
 </code></pre>
 
+<h3>设备心跳监控</h3>
+<p>管理端可以通过设备心跳监控频道实时获取所有设备的心跳包，示例如下:</p>
+<pre><code>/**
+ * 心跳包测试
+ * @author guyadong
+ *
+ */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class HeartbeatTest implements ChannelConstant{
+    private static IFaceLogClient facelogClient;
+    private static Token rootToken;
+    /** redis 连接参数 */
+    private static final Map&lt;PropName, Object&gt; redisParam = 
+            ImmutableMap.&lt;PropName, Object&gt;of(
+                    /** redis 主机名 */PropName.host,Protocol.DEFAULT_HOST,
+                    /** redis 端口号 */PropName.port,Protocol.DEFAULT_PORT,
+                    /** redis 连接密码 */PropName.password, &quot;hello&quot;
+                    );
+    /** 设备心跳监控频道 */
+    private static String monitorChannelName;
+    @BeforeClass
+    public static void setUpBeforeClass() throws Exception {
+        // 根据连接参数创建默认实例
+        JedisPoolLazy.createDefaultInstance( redisParam);
+        // 创建服务实例
+        facelogClient = ClientFactory.builder().setHostAndPort(&quot;127.0.0.1&quot;, DEFAULT_PORT).build();
+        // 申请令牌
+        rootToken = facelogClient.applyRootToken(&quot;guyadong&quot;, false);
+        // 从facelog service 获取心跳监控频道名
+        monitorChannelName = facelogClient.getRedisParameters(rootToken).get(MQParam.HB_MONITOR_CHANNEL);
+        logger.info(&quot;monitorChannelName = {}&quot;,monitorChannelName);
+    }
+    @AfterClass
+    public static void tearDownAfterClass() throws Exception {
+        facelogClient.releaseRootToken(rootToken);
+    }
+    /**
+     * 发送心跳包测试
+     */
+    @Test
+    public void test1SendHB() {
+        byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
+        Heartbeat hb = Heartbeat.makeHeartbeat(address, 12345, JedisPoolLazy.getDefaultInstance())
+                /** 将设备心跳包数据发送到指定的设备心跳监控通道名,否则监控端无法收到设备心跳包 */
+                .setMonitorChannel(monitorChannelName);
+        /** 以默认间隔启动定时任务 */
+        hb.start();
+        System.out.println(&quot;Heartbeat thead start&quot;);
+        /** 间隔2秒发送心跳，重新启动定时任务 */
+        hb.setInterval(2, TimeUnit.SECONDS).start();
+    }
+    /**
+     * 心跳包监控测试
+     * @throws InterruptedException 
+     */
+    @Test
+    public void test2HBMonitor() throws InterruptedException{
+        Channel&lt;HeadbeatPackage&gt; hbMonitorChannel = new Channel&lt;HeadbeatPackage&gt;(monitorChannelName,
+                new IMessageAdapter&lt;HeadbeatPackage&gt;(){
+            @Override
+            public void onSubscribe(HeadbeatPackage t) throws SmqUnsubscribeException {
+                // 显示收到的心跳包
+                logger.info(t.toString());
+            }}){};
+        // 注册，订阅设备心跳监控频道消息
+        RedisFactory.getSubscriber().register(hbMonitorChannel);
+
+        /** 20秒后结束测试 */
+        Thread.sleep(20*1000);
+    }
+}
+</code></pre>
+
+<blockquote>
+<p>完整测试代码参见 <a href="../facelog-client/src/test/java/net/gdface/facelog/client/HeartbeatTest.java"><code>net.gdface.facelog.client.HeartbeatTest</code></a></p>
+</blockquote>
 <h3>设备命令</h3>
 <p>设备命令的发送与接收示意图如下：</p>
 <p><img src="images/devicecmd.png" alt="设备命令" /></p>
