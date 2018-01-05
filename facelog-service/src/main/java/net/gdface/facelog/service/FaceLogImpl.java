@@ -38,7 +38,6 @@ import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.service.DuplicateRecordException;
 import net.gdface.facelog.service.ServiceRuntimeException;
-import net.gdface.facelog.service.RedisManagement.MQParam;
 import net.gdface.facelog.service.TokenMangement.Enable;
 import net.gdface.image.LazyImage;
 import net.gdface.image.NotImage;

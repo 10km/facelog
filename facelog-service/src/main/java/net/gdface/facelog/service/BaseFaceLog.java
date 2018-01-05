@@ -23,7 +23,6 @@ import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.service.Dao;
 import net.gdface.facelog.service.CommonConstant.ExceptionType;
-import net.gdface.facelog.service.RedisManagement.MQParam;
 
 // 由于Java语言的限制,导致swift无法从interface中获取参数名信息，所以采用interface定义生成的thrift IDL文件中service中的方法
 // 无法生成正确的参数名称(只能是无意义的arg0,arg1...)<br>

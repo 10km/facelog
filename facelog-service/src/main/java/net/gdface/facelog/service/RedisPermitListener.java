@@ -7,7 +7,6 @@ import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisPublisher;
 import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.service.CommonConstant;
 
 /**
  * 通行权限关联表({@code fl_permit})变动侦听器<br>
@@ -15,7 +14,7 @@ import net.gdface.facelog.service.CommonConstant;
  * @author guyadong
  *
  */
-class RedisPermitListener extends TableListener.Adapter<PermitBean> implements CommonConstant{
+class RedisPermitListener extends TableListener.Adapter<PermitBean> implements ChannelConstant{
 
 	private final RedisPublisher publisher;
 	

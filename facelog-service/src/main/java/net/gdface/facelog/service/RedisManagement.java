@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import com.facebook.swift.codec.ThriftStruct;
+
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -23,20 +23,6 @@ import redis.clients.jedis.exceptions.JedisDataException;
  *
  */
 class RedisManagement implements ServiceConstant{
-	/**
-	 * 消息系统(redis)基本参数名
-	 * @author guyadong
-	 *
-	 */
-	@ThriftStruct
-	public enum MQParam {
-		/** redis服务器地址 */REDIS_URI,
-		/** 设备命令通道名 */CMD_CHANNEL,
-		/** 人员验证实时监控通道名 */LOG_MONITOR_CHANNEL,
-		/** 设备心跳实时监控通道名 */HB_MONITOR_CHANNEL,
-		/** 设备心跳包间隔时间(秒) */HB_INTERVAL,
-		/** 设备心跳包失效时间(秒) */HB_EXPIRE
-	}
 	private static final String CMD_PREFIX = "cmd_";
 	private static final String LOG_MONITOR_PREFIX = "log_monitor_";
 	private static final String HEARTBEAT_MONITOR_PREFIX = "hb_monitor_";

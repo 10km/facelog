@@ -10,9 +10,8 @@ package net.gdface.facelog.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gu.simplemq.Channel;
 /**
- * client端和服务端共用的常量定义
+ * client端和服务端共用的基本类型常量定义
  * @author guyadong
  *
  */
@@ -24,8 +23,6 @@ public interface CommonConstant {
     public static final String NULL_ID_STRING = "";
     /** 默认服务端口号 */
     public static final int DEFAULT_PORT = 26411;
-    /** 设备心跳包表 {@code 设备MAC地址 -> HeadbeatPackage} */
-    public static final Channel<HeadbeatPackage> TABLE_HEARTBEAT = new Channel<HeadbeatPackage>("DeviceHeartbeat"){} ;
     /** 默认心跳包间隔(秒) */
     public static final int DEFAULT_HEARTBEAT_PERIOD = 8;
     /** 默认心跳包失效时间(秒) */
@@ -57,24 +54,6 @@ public interface CommonConstant {
     public static final String DEFAULT_GROUP_NAME = "DEFAULT_GROUP";
     /** 超级管理员用户名 */
     public static final String ROOT_NAME = "root";
-
-    //////////////定义数据库实时更新频道/////////
-
-
-    public static final Channel<Integer> PUBSUB_PERSON_INSERT = new Channel<Integer>("PersonInsert"){}.immutable();
-    public static final Channel<Integer> PUBSUB_PERSON_UPDATE = new Channel<Integer>("PersonUpdate"){}.immutable();
-    public static final Channel<Integer> PUBSUB_PERSON_DELETE = new Channel<Integer>("PersonDelete"){}.immutable();
-
-    public static final Channel<String> PUBSUB_FEATURE_INSERT = new Channel<String>("FeatureInsert"){}.immutable();
-    public static final Channel<String> PUBSUB_FEATURE_UPDATE = new Channel<String>("FeatureUpdate"){}.immutable();
-    public static final Channel<String> PUBSUB_FEATURE_DELETE = new Channel<String>("FeatureDelete"){}.immutable();
-
-    public static final Channel<PermitBean> PUBSUB_PERMIT_INSERT = new Channel<PermitBean>("PermitInsert"){}.immutable();
-    public static final Channel<PermitBean> PUBSUB_PERMIT_UPDATE = new Channel<PermitBean>("PermitUpdate"){}.immutable();
-    public static final Channel<PermitBean> PUBSUB_PERMIT_DELETE = new Channel<PermitBean>("PermitDelete"){}.immutable();
-
-    public static final Channel<LogBean> QUEUE_LOG = new Channel<LogBean>("queueLog"){}.immutable();
-
     
     /** 用于SQL语句的时间戳格式转换格式 */
     public static final String TIMESTAMP_FORMATTER_STR = "yyyy-MM-dd HH:mm:ss";

@@ -21,19 +21,19 @@ import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisPublisher;
 import gu.simplemq.redis.RedisTable;
-import net.gdface.facelog.client.CommonConstant;
+import net.gdface.facelog.client.ChannelConstant;
 import net.gdface.facelog.client.NetworkUtil;
 
 /**
  * 设备心跳包redis实现<br>
- * 以{@link #intervalMills}指定的周期向redis表({@link CommonConstant#TABLE_HEARTBEAT})写入当前设备序列号及报道时间.<br>
+ * 以{@link #intervalMills}指定的周期向redis表({@link ChannelConstant#TABLE_HEARTBEAT})写入当前设备序列号及报道时间.<br>
  * 如果指定了心跳实时监控通道({@link #setMonitorChannel(String)}),还会向该通道(频道)发布订阅消息, 以便于应用实时显示人员验证信息.<br>
  * 调用{@link #start()}心跳开始<br>
  * 应用程序结束时心跳包线程自动停止
  * @author guyadong
  *
  */
-public class Heartbeat implements CommonConstant{
+public class Heartbeat implements ChannelConstant{
 	/**  单实例 */
 	private static Heartbeat heartbeat;
 	/** 心跳周期(毫秒) */

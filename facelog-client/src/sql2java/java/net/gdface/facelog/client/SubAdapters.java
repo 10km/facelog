@@ -17,7 +17,7 @@ import gu.simplemq.Channel;
  * @author guyadong
  *
  */
-public class SubAdapters implements CommonConstant{    
+public class SubAdapters implements ChannelConstant{    
     /**
      * 订阅 fl_person 表的 Insert 消息,当表数据变化时执行相应的业务逻辑
      * @author guyadong
