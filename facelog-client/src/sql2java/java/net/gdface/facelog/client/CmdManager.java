@@ -14,6 +14,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -75,6 +77,14 @@ public class CmdManager {
         this.redisParameters = checkNotNull(redisParameters);
         this.cmdChannel = new Channel<DeviceInstruction>(
                 this.redisParameters.get(MQParam.CMD_CHANNEL)){};
+    }
+    public CmdManager setExecutor(ExecutorService executor) {
+        subscriber.setExecutor(executor);
+        return this;
+    }
+    public CmdManager setTimerExecutor(ScheduledExecutorService timerExecutor) {
+        subscriber.setTimerExecutor(timerExecutor);
+        return this;
     }
     /**
      * 发送设备命令

@@ -82,7 +82,7 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 		/** 通知等待的线程 */
 		private final void doOnFinished(){
 			synchronized(this){
-				checkState(!this.isFinished.compareAndSet(false, true),"invalid status of isFinished");
+				checkState(this.isFinished.compareAndSet(false, true),"invalid status of isFinished");
 				this.notifyAll();
 			}
 		}

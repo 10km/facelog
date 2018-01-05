@@ -504,7 +504,7 @@ client收到消息后如何处理，这属于具体应用的业务逻辑，应�
 		private static IFaceLogClient facelogClient;
 		private static Token rootToken;
 		/** redis 连接参数 */
-		private static final Map<PropName, Object> redisParam = 
+		private static Map<PropName, Object> redisParam = 
 				ImmutableMap.<PropName, Object>of(
 						/** redis 主机名 */PropName.host,Protocol.DEFAULT_HOST,
 						/** redis 端口号 */PropName.port,Protocol.DEFAULT_PORT,

@@ -12,9 +12,7 @@ import com.google.common.base.Strings;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Preconditions.*;
 
 import gu.simplemq.Channel;
 import gu.simplemq.redis.JedisPoolLazy;

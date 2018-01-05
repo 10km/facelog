@@ -95,4 +95,20 @@ public class Ack<T> {
 		this.errorMessage = errorMessage;
 		return this;
 	}
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Ack [cmdSn=");
+		builder.append(cmdSn);
+		builder.append(", deviceId=");
+		builder.append(deviceId);
+		builder.append(", value=");
+		builder.append(value);
+		builder.append(", status=");
+		builder.append(status);
+		builder.append(", errorMessage=");
+		builder.append(errorMessage);
+		builder.append("]");
+		return builder.toString();
+	}
 }

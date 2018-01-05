@@ -3,6 +3,7 @@ package net.gdface.facelog.client;
 import static com.google.common.base.Preconditions.*;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 import com.google.common.base.Predicates;
 
@@ -15,6 +16,7 @@ import gu.simplemq.IMessageAdapter;
 import gu.simplemq.IPublisher;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.RedisPublisher;
+import redis.clients.jedis.exceptions.JedisException;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 
@@ -38,6 +40,7 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 	private Predicate<Long> cmdSnValidator = Predicates.alwaysTrue();
 	/** 设备命令响应通道验证器 */
 	private Predicate<String> ackChannelValidator = Predicates.alwaysTrue();
+	private ExecutorService executor ;
 	/**
 	 * 构造方法<br>
 	 *  设备所属的组可能是可以变化的,所以这里需要用{@code Supplier} 接口来动态获取当前设备的设备组
@@ -75,13 +78,21 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 			long cmdSn = t.getCmdSn();
 			if(cmdSnValidator.apply(cmdSn)){
 				// 将设备命令交给命令类型对应的方法执行设备命令
-				Ack<?> ack = t.getCmd().run(cmdAdapter, t.getParameters()).setCmdSn(cmdSn);
+				final Ack<?> ack = t.getCmd().run(cmdAdapter, t.getParameters()).setCmdSn(cmdSn);
 				// 如果指定了响应频道且频道名有效则向指定的频道发送响应消息
 				if(!Strings.isNullOrEmpty(t.getAckChannel())){
-					String ackChannel = t.getAckChannel();
+					final String ackChannel = t.getAckChannel();
 					if(ackChannelValidator.apply(ackChannel)){
-						Channel<Ack<?>> channel = new Channel<Ack<?>>(ackChannel){};
-						redisPublisher.publish(channel, ack);
+						checkNotNull(executor,"please call setExecutor to initialize executor ").execute(new Runnable(){
+							@Override
+							public void run() {
+								Channel<Ack<?>> channel = new Channel<Ack<?>>(ackChannel){};
+								try{
+									redisPublisher.publish(channel, ack);
+								}catch(JedisException e){
+									logger.error(e.getMessage());
+								}
+							}});
 					}else{
 						logger.warn("INVALID ack channel: {}",ackChannel);
 					}
@@ -179,6 +190,10 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 		if(null !=ackChannelValidator){
 			this.ackChannelValidator = ackChannelValidator;
 		}
+		return this;
+	}
+	public CmdDispatcher setExecutor(ExecutorService executor) {
+		this.executor = checkNotNull(executor);
 		return this;
 	}
 }
