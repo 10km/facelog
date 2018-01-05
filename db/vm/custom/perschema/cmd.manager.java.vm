@@ -227,8 +227,10 @@ public class CmdManager {
         public void apply(Channel<Ack<T>> input) {
             IAckAdapter<T> adapter = (IAckAdapter<T>)input.getAdapter();
             try{
-                // 通知执行器命令超时
-                adapter.onSubscribe(new Ack<T>().setStatus(Ack.Status.TIMEOUT));
+                if(!adapter.isFinished()){
+                    // 通知执行器命令超时
+                    adapter.onSubscribe(new Ack<T>().setStatus(Ack.Status.TIMEOUT));
+                }
             }catch(SmqUnsubscribeException e){
             }catch(RuntimeException e){
                 e.printStackTrace();

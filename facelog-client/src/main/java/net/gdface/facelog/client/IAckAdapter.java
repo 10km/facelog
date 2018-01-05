@@ -48,7 +48,7 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
         /** 收到的命令响应计数 */
         private long ackCount = 0L;
         /** 当前对象频道订阅生命期是否结束标志 */
-        private final AtomicBoolean isFinished = new AtomicBoolean(false);
+        private final AtomicBoolean isFinished = new AtomicBoolean(Boolean.FALSE);
         /**
          * 默认构造函数<br>
          * 有效期使用默认值{@link #DEFAULT_DURATION}
@@ -82,7 +82,7 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 		/** 通知等待的线程 */
 		private final void doOnFinished(){
 			synchronized(this){
-				checkState(this.isFinished.compareAndSet(false, true),"invalid status of isFinished");
+				checkState(this.isFinished.compareAndSet(Boolean.FALSE, Boolean.TRUE),"invalid status of isFinished");
 				this.notifyAll();
 			}
 		}
@@ -126,7 +126,11 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
         public final long getDuration() {
             return duration;
         }
-        /**
+        @Override
+		public boolean isFinished() {
+			return this.isFinished.get();
+		}
+		/**
 		 * 设置超时时间(毫秒)
 		 * @param duration >0有效
 		 * @return
@@ -193,4 +197,9 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
      * @return
      */
     public long getDuration();
+    /**
+     * 返回当前响应任务是否结束
+     * @return
+     */
+    public boolean isFinished();
 }

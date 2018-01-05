@@ -221,8 +221,10 @@ public class CmdManager {
         public void apply(Channel<Ack<T>> input) {
             IAckAdapter<T> adapter = (IAckAdapter<T>)input.getAdapter();
             try{
-                // 通知执行器命令超时
-                adapter.onSubscribe(new Ack<T>().setStatus(Ack.Status.TIMEOUT));
+                if(!adapter.isFinished()){
+                    // 通知执行器命令超时
+                    adapter.onSubscribe(new Ack<T>().setStatus(Ack.Status.TIMEOUT));
+                }
             }catch(SmqUnsubscribeException e){
             }catch(RuntimeException e){
                 e.printStackTrace();
@@ -827,8 +829,10 @@ public class CmdManager {
     public void reset(Long schedule,IAckAdapter<Void> adapter){
         CmdBuilder builder = checkTlsAvailable();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
+        checkArgument(null != adapter,"adapter is null");
+        checkState(!adapter.isFinished(),"INVALID STATE of adapter isFinsihed = %s",adapter.isFinished());
         Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
-            .setAdapter(checkNotNull(adapter,"adapter is null"))
+            .setAdapter(adapter)
             .setUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
                 channel,
