@@ -1,0 +1,48 @@
+#parse( "header.include.vm" )
+#parse( "schema.include.vm" )
+#set ( $javaClassName = 'ChannelConstant' )
+$codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
+package $extensionPkg;
+
+import gu.simplemq.Channel;
+#foreach($tableName in ['fl_permit','fl_log'])
+#set ($table = $db.getTable($tableName))
+#if($table.getPackage(true) != $extensionPkg)
+import ${table.getPackage(true)}.$table.asBeanClassNSP();
+#end
+#end
+/**
+ * 消息频道常量定义
+ * @author guyadong
+ *
+ */
+public interface ChannelConstant extends CommonConstant{
+   /** 设备心跳包表 {@code 设备MAC地址 -> HeadbeatPackage} */
+    public static final Channel<HeadbeatPackage> TABLE_HEARTBEAT = new Channel<HeadbeatPackage>("DeviceHeartbeat"){}.immutable();
+
+    //////////////定义数据库实时更新频道/////////
+#macro(channelDef $tableNames $useBeanType $prefix $suffixList)    
+#foreach($tableName in $tableNames)
+#set ($table = $db.getTable($tableName))
+#if($useBeanType)
+#set ($channelType = $table.asBeanClassNSP())
+#else
+#set ($channelType = $table.primaryKey.javaType)
+#end
+#set ($coreClass = $table.asCoreClassNSP())
+#set ($constPrefix = "${prefix}_${coreClass}")
+#if($suffixList)
+#foreach($suffix in $suffixList)
+    public static final Channel<$channelType> ${constPrefix.toUpperCase()}_${suffix.toUpperCase()} = new Channel<$channelType>("${coreClass}${suffix}"){}.immutable();
+#end
+#else
+    public static final Channel<$channelType> ${constPrefix.toUpperCase()} = new Channel<$channelType>("$prefix.toLowerCase()${coreClass}"){}.immutable();
+#end
+
+#end###foreach($tableName in $tableNames)
+#end###macro
+
+#channelDef(['fl_person','fl_feature'] false 'Pubsub' ['Insert','Update','Delete'])
+#channelDef(['fl_permit'] true 'Pubsub' ['Insert','Update','Delete'] )
+#channelDef(['fl_log'] true 'Queue' $null )    
+}

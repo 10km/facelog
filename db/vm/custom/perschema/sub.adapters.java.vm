@@ -21,7 +21,7 @@ import gu.simplemq.Channel;
  * @author guyadong
  *
  */
-public class SubAdapters implements CommonConstant{    
+public class SubAdapters implements ChannelConstant{    
 ########定义数据库对象频道
 #macro(subscriberDef $tableNames $useBeanType $prefix $suffixList)    
 #foreach($tableName in $tableNames)

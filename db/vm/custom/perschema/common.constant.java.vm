@@ -7,15 +7,8 @@ package $extensionPkg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gu.simplemq.Channel;
-#foreach($tableName in ['fl_permit','fl_log'])
-#set ($table = $db.getTable($tableName))
-#if($table.getPackage(true) != $extensionPkg)
-import ${table.getPackage(true)}.$table.asBeanClassNSP();
-#end
-#end
 /**
- * client端和服务端共用的常量定义
+ * client端和服务端共用的基本类型常量定义
  * @author guyadong
  *
  */
@@ -27,8 +20,6 @@ public interface CommonConstant {
     public static final String NULL_ID_STRING = "";
     /** 默认服务端口号 */
     public static final int DEFAULT_PORT = 26411;
-    /** 设备心跳包表 {@code 设备MAC地址 -> HeadbeatPackage} */
-    public static final Channel<HeadbeatPackage> TABLE_HEARTBEAT = new Channel<HeadbeatPackage>("DeviceHeartbeat"){} ;
     /** 默认心跳包间隔(秒) */
     public static final int DEFAULT_HEARTBEAT_PERIOD = 8;
     /** 默认心跳包失效时间(秒) */
@@ -60,33 +51,6 @@ public interface CommonConstant {
     public static final String DEFAULT_GROUP_NAME = "DEFAULT_GROUP";
     /** 超级管理员用户名 */
     public static final String ROOT_NAME = "root";
-
-    //////////////定义数据库实时更新频道/////////
-
-#macro(channelDef $tableNames $useBeanType $prefix $suffixList)    
-#foreach($tableName in $tableNames)
-#set ($table = $db.getTable($tableName))
-#if($useBeanType)
-#set ($channelType = $table.asBeanClassNSP())
-#else
-#set ($channelType = $table.primaryKey.javaType)
-#end
-#set ($coreClass = $table.asCoreClassNSP())
-#set ($constPrefix = "${prefix}_${coreClass}")
-#if($suffixList)
-#foreach($suffix in $suffixList)
-    public static final Channel<$channelType> ${constPrefix.toUpperCase()}_${suffix.toUpperCase()} = new Channel<$channelType>("${coreClass}${suffix}"){}.immutable();
-#end
-#else
-    public static final Channel<$channelType> ${constPrefix.toUpperCase()} = new Channel<$channelType>("$prefix.toLowerCase()${coreClass}"){}.immutable();
-#end
-
-#end
-#end###foreach($tableName in $tableNames)
-
-#channelDef(['fl_person','fl_feature'] false 'Pubsub' ['Insert','Update','Delete'])
-#channelDef(['fl_permit'] true 'Pubsub' ['Insert','Update','Delete'] )
-#channelDef(['fl_log'] true 'Queue' $null )
     
     /** 用于SQL语句的时间戳格式转换格式 */
     public static final String TIMESTAMP_FORMATTER_STR = "yyyy-MM-dd HH:mm:ss";
