@@ -62,6 +62,10 @@ public class DeviceCmdTest implements ChannelConstant{
 	public static void tearDownAfterClass() throws Exception {
 		facelogClient.unregisterDevice(device.getId(), deviceToken);
 		facelogClient.releaseRootToken(rootToken);
+		if(null != cmdDispatcher){
+			// 注销频道，否则因为还有subscribe线程运行导致程序无法退出
+			cmdDispatcher.unregisterChannel();
+		}
 	}
 	/**
 	 * reset 命令执行器
@@ -147,11 +151,5 @@ public class DeviceCmdTest implements ChannelConstant{
 		}
 		logger.info("同步命令响应结束");
 		logger.info("测试结束");
-	}
-	@Test
-	public void test4Done(){
-		if(null != cmdDispatcher){
-			cmdDispatcher.unregisterChannel();
-		}
 	}
 }
