@@ -29,7 +29,7 @@ public class  DefaultExecutorProvider{
     private static final int CACHE_MAXIMUMPOOLSIZE = Runtime.getRuntime().availableProcessors()*4;
     private static final long CACHE_KEEPALIVETIME = 60L;
     private static final int CACHE_QUEUECAPACITY = 1024;
-    private static final String CACHE_CACHE_NAMEFORMAT = "cached-pool-%d";
+    private static final String CACHE_NAMEFORMAT = "cached-pool-%d";
     private static final int CACHE_TIMER_COREPOOLSIZE = 1;
     private static final String TIMER_NAMEFORMAT = "timer-pool-%d";
 
@@ -55,7 +55,7 @@ public class  DefaultExecutorProvider{
                         TimeUnit.SECONDS,
                         new LinkedBlockingQueue<Runnable>(MoreObjects.firstNonNull(queueCapacity,CACHE_QUEUECAPACITY)),
                         new ThreadFactoryBuilder()
-                            .setNameFormat(MoreObjects.firstNonNull(nameFormat,CACHE_CACHE_NAMEFORMAT))
+                            .setNameFormat(MoreObjects.firstNonNull(nameFormat,CACHE_NAMEFORMAT))
                             .build())
                 );
         return executor;
