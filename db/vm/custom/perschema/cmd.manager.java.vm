@@ -305,6 +305,7 @@ public class CmdManager {
             Map<String, Object> params = Maps.newHashMap();
             #join($params 'params.put("$e.key", $e.key);' '
             ')
+
             DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.${key})
                     .setCmdSn(builder.cmdSn)
