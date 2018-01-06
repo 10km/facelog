@@ -702,6 +702,160 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
 
 关于设备命令响应参见[`net.gdface.facelog.client.Cmd.run(CommandAdapter,Map)`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/Cmd.java)方法实现。该方法已经根据设备命令的执行结果自动完成了命令响应对象[`net.gdface.facelog.client.Ack`](../facelog-client/src/main/java/net/gdface/facelog/client/Ack.java)的创建，并由`net.gdface.facelog.client.CmdDispatcher.onSubscribe(DeviceInstruction)`方法发布到命令响应频道，不需要应用程序做特别的处理。
 
+#### 设备命令应用完整示例
+
+下面的示例在一个JUnit测试代码中实现了模拟设备命令发送和接收。
+
+    /**
+     * 设备命令发送接收测试
+     * @author guyadong
+     *
+     */
+    @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+    public class DeviceCmdTest implements ChannelConstant{
+    	private static IFaceLogClient facelogClient;
+    	private static Token rootToken;
+    	/** redis 连接参数 */
+    	private static Map<PropName, Object> redisParam = 
+    			ImmutableMap.<PropName, Object>of(
+    					/** redis 主机名 */PropName.host,Protocol.DEFAULT_HOST,
+    					/** redis 端口号 */PropName.port,Protocol.DEFAULT_PORT,
+    					/** redis 连接密码 */PropName.password, "hello"
+    					);
+    	private static DeviceBean device;
+    	private static Token deviceToken;
+    	@BeforeClass
+    	public static void setUpBeforeClass() throws Exception {
+    		// 根据连接参数创建默认实例 
+    		JedisPoolLazy.createDefaultInstance( redisParam);
+    		// 创建服务实例
+    		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build();
+    		// 申请root令牌
+    		rootToken = facelogClient.applyRootToken("guyadong", false);
+    		byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
+    		device = DeviceBean.builder().mac(NetworkUtil.formatMac(address, null)).serialNo("12322333").build();
+    		logger.info(device.toString(true,false));
+    		// 注册设备 
+    		device = facelogClient.registerDevice(device);
+    		logger.info("registered device {}",device.toString(true, false));
+    		// 申请设备令牌
+    		deviceToken = facelogClient.online(device);
+    		logger.info("device token = {}",deviceToken);
+    	}
+    	@AfterClass
+    	public static void tearDownAfterClass() throws Exception {
+    		facelogClient.unregisterDevice(device.getId(), deviceToken);
+    		facelogClient.releaseRootToken(rootToken);
+    	}
+    	/**
+    	 * reset 命令执行器
+    	 * @author guyadong
+    	 *
+    	 */
+    	public class RestAdapter extends CommandAdapter{
+    		@Override
+    		public void reset(Long schedule)  {
+    			logger.info("DEVICE client : do device reset...(执行设备RESET)");
+    		}		
+    	}
+    	/**
+    	 * isEnable 命令执行器
+    	 * @author guyadong
+    	 *
+    	 */
+    	public class IsEnableAdapter extends CommandAdapter{
+    
+    		@Override
+    		public Boolean isEnable() {
+    			logger.info("DEVICE client : return enable status...(返回设备enable状态)");
+    			return false;
+    		}		
+    	}
+    	/**
+    	 * 模拟设备端响应设备命令
+    	 * @throws InterruptedException 
+    	 */
+    	@Test
+    	public void test1CommandAdapter(){		
+    		try {
+    			facelogClient.makeCmdDispatcher(deviceToken)
+    				/** 注册命令执行器 */
+    				.registerAdapter(Cmd.reset, new RestAdapter())
+    				.registerAdapter(Cmd.isEnable, new IsEnableAdapter())
+    				/** 程序退出时自动注销设备命令频道 */
+    				.autoUnregister();	
+    		} catch(ServiceRuntimeException e){
+    			e.printServiceStackTrace();
+    			assertTrue(e.getMessage(),false);
+    		}
+    	}
+    	/**
+    	 * 模拟设备端发送设备复位(异步执行)和isEnable命令(同步执行)
+    	 * @throws InterruptedException 
+    	 */
+    	@Test
+    	public void test2SendCmd() throws InterruptedException{
+    		// 创建命令发送管理实例 
+    		CmdManager cmdManager = facelogClient.makeCmdManager(rootToken)
+    				.setExecutor(DefaultExecutorProvider.getGlobalExceutor())
+    				.setTimerExecutor(DefaultExecutorProvider.getTimerExecutor());
+    		
+    		cmdManager.targetBuilder()
+    			// 设置命令序列号
+    			.setCmdSn(facelogClient.getCmdSnSupplier(rootToken))
+    			// 设置命令响应通道
+    			.setAckChannel(facelogClient.getAckChannelSupplier(rootToken))
+    			// 指定设备命令执行接收目标为一组设备(id)
+    			.setDeviceTarget(device.getId()).autoRemove(false);
+    		logger.info("异步接收命令响应:");
+    		cmdManager.reset(null, new IAckAdapter.BaseAdapter<Void>(){
+    				@Override
+    				protected void doOnSubscribe(Ack<Void> t) {
+    					logger.info("ADMIN client : 设备命令响应 {}",t);
+    				}
+    			}); // 异步执行设备复位命令
+    		 /** 5 秒后结束测试 */
+    		 Thread.sleep(5*1000);
+    		 logger.info("reset异步命令响应结束");
+    		 
+    		 // 复用CmdBuilder对象同步执行 isEnable 命令
+    		 cmdManager.targetBuilder().resetApply();
+    		 List<Ack<Boolean>> receivedAcks = cmdManager.isEnableSync(false);
+    		 logger.info("同步接收命令响应:");
+    		 for(Ack<Boolean> ack:receivedAcks){
+    			 logger.info("ADMIN client : 设备命令响应 {}",ack);
+    		 }
+    		 logger.info("isEnable同步命令响应结束");
+    	}
+    	/**
+    	 * 模拟设备端发送设备复位(同步执行)
+    	 * @throws InterruptedException
+    	 */
+    	@Test
+    	public void test3SendCmdSync() throws InterruptedException{
+    		// 创建命令发送管理实例 
+    		CmdManager cmdManager = facelogClient.makeCmdManager(rootToken)
+    				.setExecutor(DefaultExecutorProvider.getGlobalExceutor())
+    				.setTimerExecutor(DefaultExecutorProvider.getTimerExecutor());
+    		cmdManager.targetBuilder()
+    			// 设置命令序列号
+    			.setCmdSn(facelogClient.getCmdSnSupplier(rootToken))
+    			// 设置命令响应通道
+    			.setAckChannel(facelogClient.getAckChannelSupplier(rootToken))
+    			// 指定设备命令执行接收目标为一组设备(id)
+    			.setDeviceTarget(device.getId()) ;
+    		List<Ack<Void>> receivedAcks = cmdManager.resetSync(null, false);
+    		logger.info("同步接收命令响应:");
+    		for(Ack<Void> ack:receivedAcks){
+    			logger.info("ADMIN client : 设备命令响应 {}",ack);
+    		}
+    		logger.info("reset同步命令响应结束");
+    		logger.info("测试结束");
+    	}
+    }
+
+
+测试代码位置:[`net.gdface.facelog.client.DeviceCmdTest`](../facelog-client/src/test/java/net/gdface/facelog/client/DeviceCmdTest.java)
 ### 服务端异常
 
 调用 facelog 服务时有可能抛出以下异常:
@@ -714,7 +868,12 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
 
 :	安全异常，当进行令牌申请，密码验证等涉及安全的接口方法调用时抛出，通过调用`getType()`方法可以得到`SecurityExceptionType`枚举类型的异常类型。调用 `getServiceStackTraceMessage()`可以获取服务端详细的异常堆栈信息。
 
+### 全局线程池
 
+`facelog-client`和`facelog-service`jar包都提供了全局线程池类，用于提供全局的线程池常量对象。
+参见[`net.gdface.facelog.client.DefaultExecutorProvider`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/DefaultExecutorProvider.java)，`DefaultExecutorProvider`的`getGlobalExceutor()`返回一个线程池对象，`getTimerExecutor()`方法返回执行定时任务的`ScheduledExecutorService`线程池对象。`DefaultExecutorProvider`提供的线程池对象都不需要调用者来关闭`shutdown`，会在应用程序结束时自动关闭。
+
+应用程序也可以重载`createExitingCachedPool`和`createExitingScheduledPool`方法用不同的参数创建自己的全局线程池对象，参见[`net.gdface.facelog.service.ExecutorProvider`](../facelog-service/src/main/java/net/gdface/facelog/service/ExecutorProvider.java)实现
 ## 服务端系统设置
 
 faclog 系统配置参数设计如下：
