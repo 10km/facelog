@@ -19,12 +19,11 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Preconditions.*;
 
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
@@ -107,13 +106,39 @@ public class CmdManager {
     public class CmdBuilder{       
         private List<Integer> target;
         private boolean group;
-        private Long cmdSn;
-        private String ackChannel;
+        private Supplier<Long> cmdSnSupplier;
+        private Supplier<String> ackChannelSupplier = Suppliers.ofInstance(null);
+        private Long cmdSn = null;
+        private String ackChannel = null;
         private final CmdManager parent;
         /** 命令发送后是否自动清除TLS变量 */
         private boolean autoRemove = true;
         private CmdBuilder(CmdManager parent){
             this.parent = parent;
+        }
+        /**
+         * 调用{@link Supplier}实例获取当前设备命令需要的序列号和响应通道
+         * @return
+         */
+        private CmdBuilder apply(){
+            if(null == cmdSn){
+                cmdSn = cmdSnSupplier.get();
+            }
+            if(null == ackChannel){
+                ackChannel = ackChannelSupplier.get();
+            }
+            return this;
+        }
+        /**
+         * 将 {@link #apply()}获取的命令序列号和响应通道值清除，
+         * 当需要反复使用当前builder实例发送设备命令时需要调用此方法重置状态，
+         * 以便下次发送设备命令时，apply 方法重新申请新的设备命令和序列号
+         * @return
+         */
+        public CmdBuilder resetApply(){
+            cmdSn = null;
+            ackChannel  = null;
+            return this;
         }
         /** 指定目标ID(设备/设备组)列表,参见 {@link DeviceInstruction#setTarget(List, boolean)} */
         public CmdBuilder setTarget(List<Integer> target,boolean group){
@@ -139,43 +164,43 @@ public class CmdManager {
         }
         /** 指定命令序列号,参见 {@link DeviceInstruction#setCmdSn(long)} */
         public CmdBuilder setCmdSn(long cmdSn) {
-            this.cmdSn = cmdSn;
-            return this;
+            return setCmdSn(Suppliers.ofInstance(cmdSn));
         }
         /** 
          * 指定提供命令序列号的{@code Supplier}实例
          * @see {@link IFaceLogClient#getAckChannelSupplier(Token)}
          */
         public CmdBuilder setCmdSn(Supplier<Long> cmdSnSupplier) {
-            return this.setCmdSn(cmdSnSupplier.get().longValue());
+            this.cmdSnSupplier = checkNotNull(cmdSnSupplier);
+            this.cmdSn = null;
+            return this;
         }
         /** 
          * 指定命令响应通道,参见 {@link DeviceInstruction#setAckChannel(String)} */
         public CmdBuilder setAckChannel(String ackChannel){
-            this.ackChannel = ackChannel;
-            return this;
+            checkArgument(!Strings.isNullOrEmpty(ackChannel),"ackChannel is null or empty");
+            return this.setAckChannel(Suppliers.ofInstance(ackChannel));
         }
         /** 
          * 指定提供命令响应通道的{@code Supplier}实例,
          * @see {@link IFaceLogClient#getAckChannelSupplier(Token)}
          */
         public CmdBuilder setAckChannel(Supplier<String> ackChannelSupplier){
-            return this.setAckChannel(ackChannelSupplier.get());
+            this.ackChannelSupplier = checkNotNull(ackChannelSupplier);
+            this.ackChannel = null;
+            return this;
+        }
+        /**
+         * @param autoRemove 为{@code true}时,完成设备命令发送后自动清除Thread Local Storage变量{@link CmdManager#TLS_BUILDER},
+         *                                    默认值为{@code true}
+         */
+        public CmdBuilder autoRemove(boolean autoRemove){
+            this.autoRemove = autoRemove;
+            return this;
         }
         /** 数据有效性验证 */
         private void validate(){
-            checkState(null != cmdSn,"cmdSn is uninitialized");
-        }
-        /**
-         * 完成build,返回 {@link CmdManager}对象<br> 
-         * @param autoRemove 为{@code true}时,完成设备命令发送后自动清除Thread Local Storage变量{@link CmdManager#TLS_BUILDER},
-         *                                    默认值为{@code true}
-         * @return
-         */
-        public CmdManager build(boolean autoRemove){
-            validate();
-            this.autoRemove = autoRemove;
-            return this.parent;
+            checkState(null != cmdSnSupplier,"cmdSn is uninitialized");
         }
         /** 完成build,返回 {@link CmdManager}对象 */
         public CmdManager build(){
@@ -259,13 +284,12 @@ public class CmdManager {
      *
      */
     public long parameter(String key,String value){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
             params.put("key", key);
-            params.put("value", value);
-            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("value", value);            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.parameter)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -290,7 +314,7 @@ public class CmdManager {
      * @param adapter 命令响应处理对象,不可为{@code null}
      */
     public void parameter(String key,String value,IAckAdapter<Void> adapter){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
@@ -339,12 +363,11 @@ public class CmdManager {
      *
      */
     public long config(Map<String,String> properties){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
-            params.put("properties", properties);
-            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("properties", properties);            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.config)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -368,7 +391,7 @@ public class CmdManager {
      * @param adapter 命令响应处理对象,不可为{@code null}
      */
     public void config(Map<String,String> properties,IAckAdapter<Void> adapter){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
@@ -416,12 +439,11 @@ public class CmdManager {
      *
      */
     public long status(String name){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
-            params.put("name", name);
-            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("name", name);            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.status)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -445,7 +467,7 @@ public class CmdManager {
      * @param adapter 命令响应处理对象,不可为{@code null}
      */
     public void status(String name,IAckAdapter<Object> adapter){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Object>> channel = new Channel<Ack<Object>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
@@ -493,12 +515,11 @@ public class CmdManager {
      *
      */
     public long report(List<String> names){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
-            params.put("names", names);
-            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("names", names);            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.report)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -522,7 +543,7 @@ public class CmdManager {
      * @param adapter 命令响应处理对象,不可为{@code null}
      */
     public void report(List<String> names,IAckAdapter<Map<String,Object>> adapter){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Map<String,Object>>> channel = new Channel<Ack<Map<String,Object>>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
@@ -569,12 +590,11 @@ public class CmdManager {
      *
      */
     public long version(){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
-            
-            DeviceInstruction deviceInstruction = new DeviceInstruction()
+                        DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.version)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -597,7 +617,7 @@ public class CmdManager {
      * @param adapter 命令响应处理对象,不可为{@code null}
      */
     public void version(IAckAdapter<String> adapter){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<String>> channel = new Channel<Ack<String>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
@@ -644,12 +664,11 @@ public class CmdManager {
      *
      */
     public long enable(Boolean enable){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
-            params.put("enable", enable);
-            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("enable", enable);            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.enable)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -673,7 +692,7 @@ public class CmdManager {
      * @param adapter 命令响应处理对象,不可为{@code null}
      */
     public void enable(Boolean enable,IAckAdapter<Void> adapter){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
@@ -721,12 +740,11 @@ public class CmdManager {
      *
      */
     public long isEnable(String message){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
-            params.put("message", message);
-            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("message", message);            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.isEnable)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -750,7 +768,7 @@ public class CmdManager {
      * @param adapter 命令响应处理对象,不可为{@code null}
      */
     public void isEnable(String message,IAckAdapter<Boolean> adapter){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Boolean>> channel = new Channel<Ack<Boolean>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
@@ -798,12 +816,11 @@ public class CmdManager {
      *
      */
     public long reset(Long schedule){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
-            params.put("schedule", schedule);
-            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("schedule", schedule);            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.reset)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -827,7 +844,7 @@ public class CmdManager {
      * @param adapter 命令响应处理对象,不可为{@code null}
      */
     public void reset(Long schedule,IAckAdapter<Void> adapter){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
@@ -875,12 +892,11 @@ public class CmdManager {
      *
      */
     public long time(Long unixTimestamp){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
-            params.put("unixTimestamp", unixTimestamp);
-            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("unixTimestamp", unixTimestamp);            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.time)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -904,7 +920,7 @@ public class CmdManager {
      * @param adapter 命令响应处理对象,不可为{@code null}
      */
     public void time(Long unixTimestamp,IAckAdapter<Void> adapter){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
@@ -954,14 +970,13 @@ public class CmdManager {
      *
      */
     public long update(URL url,String version,Long schedule){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
             params.put("url", url);
             params.put("version", version);
-            params.put("schedule", schedule);
-            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("schedule", schedule);            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.update)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -987,7 +1002,7 @@ public class CmdManager {
      * @param adapter 命令响应处理对象,不可为{@code null}
      */
     public void update(URL url,String version,Long schedule,IAckAdapter<Void> adapter){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
@@ -1038,13 +1053,12 @@ public class CmdManager {
      *
      */
     public long idleMessage(String message,Long duration){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
             params.put("message", message);
-            params.put("duration", duration);
-            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("duration", duration);            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.idleMessage)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -1069,7 +1083,7 @@ public class CmdManager {
      * @param adapter 命令响应处理对象,不可为{@code null}
      */
     public void idleMessage(String message,Long duration,IAckAdapter<Void> adapter){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
@@ -1122,7 +1136,7 @@ public class CmdManager {
      *
      */
     public long personMessage(String message,Integer id,Boolean group,Boolean onceOnly,Long duration){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
@@ -1130,8 +1144,7 @@ public class CmdManager {
             params.put("id", id);
             params.put("group", group);
             params.put("onceOnly", onceOnly);
-            params.put("duration", duration);
-            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("duration", duration);            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.personMessage)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -1159,7 +1172,7 @@ public class CmdManager {
      * @param adapter 命令响应处理对象,不可为{@code null}
      */
     public void personMessage(String message,Integer id,Boolean group,Boolean onceOnly,Long duration,IAckAdapter<Void> adapter){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
@@ -1212,13 +1225,12 @@ public class CmdManager {
      *
      */
     public long custom(String cmdName,Map<String,Object> parameters){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
             params.put("cmdName", cmdName);
-            params.put("parameters", parameters);
-            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("parameters", parameters);            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.custom)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -1243,7 +1255,7 @@ public class CmdManager {
      * @param adapter 命令响应处理对象,不可为{@code null}
      */
     public void custom(String cmdName,Map<String,Object> parameters,IAckAdapter<Object> adapter){
-        CmdBuilder builder = checkTlsAvailable();
+        CmdBuilder builder = checkTlsAvailable().apply();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Object>> channel = new Channel<Ack<Object>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))

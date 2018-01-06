@@ -106,7 +106,7 @@ public class DeviceCmdTest implements ChannelConstant{
 			// 设置命令响应通道
 			.setAckChannel(facelogClient.getAckChannelSupplier(rootToken))
 			// 指定设备命令执行接收目标为一组设备(id)
-			.setDeviceTarget(device.getId()) ;
+			.setDeviceTarget(device.getId()).autoRemove(false);
 		logger.info("异步接收命令响应:");
 		cmdManager.reset(null, new IAckAdapter.BaseAdapter<Void>(){
 				@Override
@@ -117,6 +117,15 @@ public class DeviceCmdTest implements ChannelConstant{
 		 /** 5 秒后结束测试 */
 		 Thread.sleep(5*1000);
 		 logger.info("异步命令响应结束");
+		 
+		 cmdManager.targetBuilder().resetApply();
+		 List<Ack<Void>> receivedAcks = cmdManager.resetSync(null, false);
+		 logger.info("同步接收命令响应:");
+		 for(Ack<Void> ack:receivedAcks){
+			 logger.info("ADMIN client : 设备命令响应 {}",ack);
+		 }
+		 logger.info("同步命令响应结束");
+		 logger.info("测试结束");
 	}
 	@Test
 	public void test3SendCmdSync() throws InterruptedException{
@@ -124,7 +133,6 @@ public class DeviceCmdTest implements ChannelConstant{
 		CmdManager cmdManager = facelogClient.makeCmdManager(rootToken)
 				.setExecutor(DefaultExecutorProvider.getGlobalExceutor())
 				.setTimerExecutor(DefaultExecutorProvider.getTimerExecutor());
-		
 		cmdManager.targetBuilder()
 			// 设置命令序列号
 			.setCmdSn(facelogClient.getCmdSnSupplier(rootToken))
