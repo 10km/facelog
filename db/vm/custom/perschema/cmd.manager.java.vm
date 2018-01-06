@@ -310,7 +310,7 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<$returnParamType>> channel = new Channel<Ack<$returnParamType>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
-            .setUnregistedListener(new TimeoutCleaner<$returnParamType>());
+            .addUnregistedListener(new TimeoutCleaner<$returnParamType>());
         subscriber.register(
                 channel,
                 adapter.getDuration(),
