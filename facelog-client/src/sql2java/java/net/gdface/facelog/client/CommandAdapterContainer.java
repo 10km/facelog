@@ -151,12 +151,12 @@ public class CommandAdapterContainer extends CommandAdapter{
      * 如果没有为 {@code enable} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdException}异常
      */
     @Override
-    public void enable(Boolean enable)throws DeviceCmdException{
+    public void enable(Boolean enable,String message)throws DeviceCmdException{
         CommandAdapter adapter = this.adapters.get(Cmd.enable);
         if(null != adapter){
-            adapter.enable(enable);
+            adapter.enable(enable,message);
         }else{
-            super.enable(enable);
+            super.enable(enable,message);
         }
     }
     /** 
@@ -164,12 +164,12 @@ public class CommandAdapterContainer extends CommandAdapter{
      * 如果没有为 {@code isEnable} 注册命令执行器,则调用父类方法抛出{@link UnsupportCmdException}异常
      */
     @Override
-    public Boolean isEnable(String message)throws DeviceCmdException{
+    public Boolean isEnable()throws DeviceCmdException{
         CommandAdapter adapter = this.adapters.get(Cmd.isEnable);
         if(null != adapter){
-            return adapter.isEnable(message);
+            return adapter.isEnable();
         }else{
-            return super.isEnable(message);
+            return super.isEnable();
         }
     }
     /** 

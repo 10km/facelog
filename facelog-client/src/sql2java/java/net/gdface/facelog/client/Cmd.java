@@ -142,7 +142,8 @@ public enum Cmd{
                 Ack<Void> ack = new Ack<Void>().setStatus(Ack.Status.OK);
                 try{
                     adapter.enable(
-                            cast(parameters.get("enable"),new TypeToken<Boolean>(){}));
+                            cast(parameters.get("enable"),new TypeToken<Boolean>(){}),
+                            cast(parameters.get("message"),new TypeToken<String>(){}));
                 }catch(CommandAdapter.UnsupportCmdException e){
                     // 该命令设备端未实现
                     ack.setStatus(Ack.Status.UNSUPPORTED);
@@ -155,8 +156,7 @@ public enum Cmd{
         case isEnable:{
                 Ack<Boolean> ack = new Ack<Boolean>().setStatus(Ack.Status.OK);
                 try{
-                    Boolean res = adapter.isEnable(
-                            cast(parameters.get("message"),new TypeToken<String>(){}));
+                    Boolean res = adapter.isEnable();
                     // 填入返回值
                     ack.setValue(res);
                 }catch(CommandAdapter.UnsupportCmdException e){

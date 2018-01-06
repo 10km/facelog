@@ -289,7 +289,8 @@ public class CmdManager {
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
             params.put("key", key);
-            params.put("value", value);            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("value", value);
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.parameter)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -367,7 +368,8 @@ public class CmdManager {
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
-            params.put("properties", properties);            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("properties", properties);
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.config)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -443,7 +445,8 @@ public class CmdManager {
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
-            params.put("name", name);            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("name", name);
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.status)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -519,7 +522,8 @@ public class CmdManager {
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
-            params.put("names", names);            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("names", names);
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.report)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -594,7 +598,8 @@ public class CmdManager {
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
-                        DeviceInstruction deviceInstruction = new DeviceInstruction()
+            
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.version)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -660,15 +665,18 @@ public class CmdManager {
      * 设备命令(异步调用)<br>
      * 设置设备工作状态<br>
      * @param enable {@code true}:工作状态,否则为非工作状态
+     * @param message 工作状态附加消息,比如"设备维修,禁止通行"
      * @return 收到命令的客户端数目
      *
      */
-    public long enable(Boolean enable){
+    public long enable(Boolean enable,String message){
         CmdBuilder builder = checkTlsAvailable().apply();
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
-            params.put("enable", enable);            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("enable", enable);
+            params.put("message", message);
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.enable)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -689,9 +697,10 @@ public class CmdManager {
      * 该方法要求必须指定命令响应通道,参见{@link CmdBuilder#setAckChannel(String)},{@link CmdBuilder#setAckChannel(Supplier)}
      * 
      * @param enable {@code true}:工作状态,否则为非工作状态
+     * @param message 工作状态附加消息,比如"设备维修,禁止通行"
      * @param adapter 命令响应处理对象,不可为{@code null}
      */
-    public void enable(Boolean enable,IAckAdapter<Void> adapter){
+    public void enable(Boolean enable,String message,IAckAdapter<Void> adapter){
         CmdBuilder builder = checkTlsAvailable().apply();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
@@ -702,7 +711,7 @@ public class CmdManager {
                 adapter.getDuration(),
                 TimeUnit.MILLISECONDS
                 );
-        long clientNum = enable(enable);
+        long clientNum = enable(enable,message);
         if(0 == clientNum){
             // 如果没有接收端收到命令则立即注销频道 
             subscriber.unregister(channel);
@@ -715,16 +724,17 @@ public class CmdManager {
      * 发送设备命令并等待设备端命令响应返回<br>
      * 
      * @param enable {@code true}:工作状态,否则为非工作状态
+     * @param message 工作状态附加消息,比如"设备维修,禁止通行"
      * @param throwIfTimeout 当响应超时时，是否抛出{@link AckTimtoutException}异常
      * @return 设备端返回的所有命令响应对象
      * @throws InterruptedException
      * @throws AckTimtoutException 命令响应超时
-     * @see #enable(Boolean,IAckAdapter)
+     * @see #enable(Boolean,String,IAckAdapter)
      */
-    public List<Ack<Void>> enableSync(Boolean enable,boolean throwIfTimeout) 
+    public List<Ack<Void>> enableSync(Boolean enable,String message,boolean throwIfTimeout) 
             throws InterruptedException,AckTimtoutException{
         AdapterSync<Void> adapter = new AdapterSync<Void>();
-        enable(enable,adapter);
+        enable(enable,message,adapter);
         // 等待命令响应结束
         adapter.waitFinished();
         if(adapter.timeout.get() && throwIfTimeout){
@@ -735,16 +745,16 @@ public class CmdManager {
     /**
      * 设备命令(异步调用)<br>
      * 返回设备工作状态<br>
-     * @param message 工作状态附加消息,比如"设备维修,禁止通行"
      * @return 收到命令的客户端数目
      *
      */
-    public long isEnable(String message){
+    public long isEnable(){
         CmdBuilder builder = checkTlsAvailable().apply();
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
-            params.put("message", message);            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.isEnable)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -764,10 +774,9 @@ public class CmdManager {
      * 关联命令处理对象({@code adapter})注册到REDIS订阅频道,当有收到设备命令响应时自动交由{@code adapter}处理<br>
      * 该方法要求必须指定命令响应通道,参见{@link CmdBuilder#setAckChannel(String)},{@link CmdBuilder#setAckChannel(Supplier)}
      * 
-     * @param message 工作状态附加消息,比如"设备维修,禁止通行"
      * @param adapter 命令响应处理对象,不可为{@code null}
      */
-    public void isEnable(String message,IAckAdapter<Boolean> adapter){
+    public void isEnable(IAckAdapter<Boolean> adapter){
         CmdBuilder builder = checkTlsAvailable().apply();
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Boolean>> channel = new Channel<Ack<Boolean>>(builder.ackChannel){}
@@ -778,7 +787,7 @@ public class CmdManager {
                 adapter.getDuration(),
                 TimeUnit.MILLISECONDS
                 );
-        long clientNum = isEnable(message);
+        long clientNum = isEnable();
         if(0 == clientNum){
             // 如果没有接收端收到命令则立即注销频道 
             subscriber.unregister(channel);
@@ -790,17 +799,16 @@ public class CmdManager {
      * 设备命令(同步调用)<br>
      * 发送设备命令并等待设备端命令响应返回<br>
      * 
-     * @param message 工作状态附加消息,比如"设备维修,禁止通行"
      * @param throwIfTimeout 当响应超时时，是否抛出{@link AckTimtoutException}异常
      * @return 设备端返回的所有命令响应对象
      * @throws InterruptedException
      * @throws AckTimtoutException 命令响应超时
-     * @see #isEnable(String,IAckAdapter)
+     * @see #isEnable(IAckAdapter)
      */
-    public List<Ack<Boolean>> isEnableSync(String message,boolean throwIfTimeout) 
+    public List<Ack<Boolean>> isEnableSync(boolean throwIfTimeout) 
             throws InterruptedException,AckTimtoutException{
         AdapterSync<Boolean> adapter = new AdapterSync<Boolean>();
-        isEnable(message,adapter);
+        isEnable(adapter);
         // 等待命令响应结束
         adapter.waitFinished();
         if(adapter.timeout.get() && throwIfTimeout){
@@ -820,7 +828,8 @@ public class CmdManager {
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
-            params.put("schedule", schedule);            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("schedule", schedule);
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.reset)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -896,7 +905,8 @@ public class CmdManager {
         try{
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
-            params.put("unixTimestamp", unixTimestamp);            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("unixTimestamp", unixTimestamp);
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.time)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -976,7 +986,8 @@ public class CmdManager {
             Map<String, Object> params = Maps.newHashMap();
             params.put("url", url);
             params.put("version", version);
-            params.put("schedule", schedule);            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("schedule", schedule);
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.update)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -1058,7 +1069,8 @@ public class CmdManager {
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
             params.put("message", message);
-            params.put("duration", duration);            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("duration", duration);
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.idleMessage)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -1144,7 +1156,8 @@ public class CmdManager {
             params.put("id", id);
             params.put("group", group);
             params.put("onceOnly", onceOnly);
-            params.put("duration", duration);            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("duration", duration);
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.personMessage)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)
@@ -1230,7 +1243,8 @@ public class CmdManager {
             // 所有的命令参数封装到 Map
             Map<String, Object> params = Maps.newHashMap();
             params.put("cmdName", cmdName);
-            params.put("parameters", parameters);            DeviceInstruction deviceInstruction = new DeviceInstruction()
+            params.put("parameters", parameters);
+            DeviceInstruction deviceInstruction = new DeviceInstruction()
                     .setCmd(Cmd.custom)
                     .setCmdSn(builder.cmdSn)
                     .setTarget(builder.target, builder.group)

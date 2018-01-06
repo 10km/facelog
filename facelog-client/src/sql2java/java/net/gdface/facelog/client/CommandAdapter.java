@@ -98,19 +98,19 @@ public class CommandAdapter {
      * 设备命令 <br>
      * 设置设备工作状态<br>
      * @param enable {@code true}:工作状态,否则为非工作状态
+     * @param message 工作状态附加消息,比如"设备维修,禁止通行"
      *
      */
-    public void enable(Boolean enable)throws DeviceCmdException{
+    public void enable(Boolean enable,String message)throws DeviceCmdException{
         throw new UnsupportCmdException();
     }
     /**
      * 设备命令 <br>
      * 返回设备工作状态<br>
-     * @param message 工作状态附加消息,比如"设备维修,禁止通行"
      * @return 为{@code true}:工作状态,{@code false}:非工作状态
      *
      */
-    public Boolean isEnable(String message)throws DeviceCmdException{
+    public Boolean isEnable()throws DeviceCmdException{
         throw new UnsupportCmdException();
     }
     /**
