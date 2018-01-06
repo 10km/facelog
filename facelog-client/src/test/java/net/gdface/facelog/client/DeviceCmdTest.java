@@ -107,17 +107,17 @@ public class DeviceCmdTest implements ChannelConstant{
 			.setAckChannel(facelogClient.getAckChannelSupplier(rootToken))
 			// 指定设备命令执行接收目标为一组设备(id)
 			.setDeviceTarget(device.getId()) ;
-		cmdManager.reset(null, new IAckAdapter.BaseAdapter<Void>(){
-				@Override
-				protected void doOnSubscribe(Ack<Void> t) {
-					logger.info("ADMIN client : 设备命令响应 {}",t);
-				}
-			}); // 异步执行设备复位命令
-//		List<Ack<Void>> receivedAcks = cmdManager.resetSync(null, false);
-//		logger.info("同步接收命令响应:");
-//		for(Ack<Void> ack:receivedAcks){
-//			logger.info("ADMIN client : 设备命令响应 {}",ack);
-//		}
+//		cmdManager.reset(null, new IAckAdapter.BaseAdapter<Void>(){
+//				@Override
+//				protected void doOnSubscribe(Ack<Void> t) {
+//					logger.info("ADMIN client : 设备命令响应 {}",t);
+//				}
+//			}); // 异步执行设备复位命令
+		List<Ack<Void>> receivedAcks = cmdManager.resetSync(null, false);
+		logger.info("同步接收命令响应:");
+		for(Ack<Void> ack:receivedAcks){
+			logger.info("ADMIN client : 设备命令响应 {}",ack);
+		}
 		/** 10 秒后结束测试 */
 		Thread.sleep(10*1000);
 		logger.info("测试结束");
