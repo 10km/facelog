@@ -36,7 +36,6 @@ public class DeviceCmdTest implements ChannelConstant{
 	private static String cmdChannelName;
 	private static DeviceBean device;
 	private static Token deviceToken;
-	private static CmdDispatcher cmdDispatcher;
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		// 根据连接参数创建默认实例 
@@ -62,10 +61,6 @@ public class DeviceCmdTest implements ChannelConstant{
 	public static void tearDownAfterClass() throws Exception {
 		facelogClient.unregisterDevice(device.getId(), deviceToken);
 		facelogClient.releaseRootToken(rootToken);
-		if(null != cmdDispatcher){
-			// 注销频道，否则因为还有subscribe线程运行导致程序无法退出
-			cmdDispatcher.unregisterChannel();
-		}
 	}
 	/**
 	 * reset 命令执行器
@@ -85,9 +80,11 @@ public class DeviceCmdTest implements ChannelConstant{
 	@Test
 	public void test1CommandAdapter(){		
 		try {
-			cmdDispatcher = facelogClient.makeCmdDispatcher(deviceToken)
+			facelogClient.makeCmdDispatcher(deviceToken)
 				/** 注册命令执行器 */
-				.registerAdapter(Cmd.reset, new RestAdapter());	
+				.registerAdapter(Cmd.reset, new RestAdapter())
+				/** 程序退出时自动注销设备命令频道 */
+				.autoUnregister();	
 		} catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(e.getMessage(),false);

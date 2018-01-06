@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.google.common.base.Predicates;
 
@@ -38,6 +39,14 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 	private final Supplier<Integer> groupIdSupplier;
 	/** 只从{@link JedisPoolLazy}默认实例获取{@link RedisPublisher} */
 	private final IPublisher redisPublisher = RedisFactory.getPublisher();
+	/**  是否自动注销标志 */
+	private final AtomicBoolean autoUnregister = new AtomicBoolean(false);
+	/** 固定为1的线程池，确保所有的命令按收到的顺序执行 */
+	private final ExecutorService executor = MoreExecutors.getExitingExecutorService(
+			new ThreadPoolExecutor(1, 1,
+	                0L, TimeUnit.MILLISECONDS,
+	                new LinkedBlockingQueue<Runnable>(),
+	                new ThreadFactoryBuilder().setNameFormat("subscribe-%d").build()));
 	/** 命令执行器 */
 	private CommandAdapter cmdAdapter;
 	/** 设备命令通道 */
@@ -46,12 +55,6 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 	private Predicate<Long> cmdSnValidator = Predicates.alwaysTrue();
 	/** 设备命令响应通道验证器 */
 	private Predicate<String> ackChannelValidator = Predicates.alwaysTrue();
-	/** 固定为1的线程池，确保所有的命令按收到的顺序执行 */
-	private final ExecutorService executor = MoreExecutors.getExitingExecutorService(
-			new ThreadPoolExecutor(1, 1,
-	                0L, TimeUnit.MILLISECONDS,
-	                new LinkedBlockingQueue<Runnable>(),
-	                new ThreadFactoryBuilder().setNameFormat("subscribe-%d").build()));;
 	/**
 	 * 构造方法<br>
 	 *  设备所属的组可能是可以变化的,所以这里需要用{@code Supplier} 接口来动态获取当前设备的设备组
@@ -155,7 +158,7 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 		return this;
 	}
 	/**
-	 * 当前对象注销频道
+	 * 当前对象注销设备命令频道
 	 * @return
 	 */
 	public CmdDispatcher unregisterChannel(){
@@ -164,6 +167,7 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 			synchronized(this){
 				if(null != cmdChannel){
 					RedisFactory.getSubscriber().unregister(cmdChannel);
+					logger.debug("unregister cmd channel {}",cmdChannel);
 					cmdChannel = null;
 				}
 			}
@@ -200,6 +204,21 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 	public CmdDispatcher setAckChannelValidator(Predicate<String> ackChannelValidator) {
 		if(null !=ackChannelValidator){
 			this.ackChannelValidator = ackChannelValidator;
+		}
+		return this;
+	}
+	/**
+	 * 设置程序退出时自动执行{@link #unregisterChannel()}
+	 * @return
+	 */
+	public CmdDispatcher autoUnregister(){
+		if(this.autoUnregister.compareAndSet(false, true)){
+			Runtime.getRuntime().addShutdownHook(new Thread(){
+				@Override
+				public void run() {
+					unregisterChannel();
+				}
+			});
 		}
 		return this;
 	}
