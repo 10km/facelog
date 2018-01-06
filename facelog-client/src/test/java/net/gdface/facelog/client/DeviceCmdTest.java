@@ -12,7 +12,6 @@ import org.junit.runners.MethodSorters;
 import com.google.common.collect.ImmutableMap;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.JedisPoolLazy.PropName;
-import net.gdface.facelog.client.CmdManager.CmdBuilder;
 import net.gdface.facelog.client.thrift.MQParam;
 import net.gdface.facelog.client.thrift.Token;
 import redis.clients.jedis.Protocol;
@@ -37,6 +36,7 @@ public class DeviceCmdTest implements ChannelConstant{
 	private static String cmdChannelName;
 	private static DeviceBean device;
 	private static Token deviceToken;
+	private static CmdDispatcher cmdDispatcher;
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		// 根据连接参数创建默认实例 
@@ -81,7 +81,7 @@ public class DeviceCmdTest implements ChannelConstant{
 	@Test
 	public void test1CommandAdapter(){		
 		try {
-			facelogClient.makeCmdDispatcher(deviceToken)
+			cmdDispatcher = facelogClient.makeCmdDispatcher(deviceToken)
 				/** 注册命令执行器 */
 				.registerAdapter(Cmd.reset, new RestAdapter());	
 		} catch(ServiceRuntimeException e){
@@ -107,19 +107,43 @@ public class DeviceCmdTest implements ChannelConstant{
 			.setAckChannel(facelogClient.getAckChannelSupplier(rootToken))
 			// 指定设备命令执行接收目标为一组设备(id)
 			.setDeviceTarget(device.getId()) ;
-//		cmdManager.reset(null, new IAckAdapter.BaseAdapter<Void>(){
-//				@Override
-//				protected void doOnSubscribe(Ack<Void> t) {
-//					logger.info("ADMIN client : 设备命令响应 {}",t);
-//				}
-//			}); // 异步执行设备复位命令
+		logger.info("异步接收命令响应:");
+		cmdManager.reset(null, new IAckAdapter.BaseAdapter<Void>(){
+				@Override
+				protected void doOnSubscribe(Ack<Void> t) {
+					logger.info("ADMIN client : 设备命令响应 {}",t);
+				}
+			}); // 异步执行设备复位命令
+		 /** 5 秒后结束测试 */
+		 Thread.sleep(5*1000);
+		 logger.info("异步命令响应结束");
+	}
+	@Test
+	public void test3SendCmdSync() throws InterruptedException{
+		// 创建命令发送管理实例 
+		CmdManager cmdManager = facelogClient.makeCmdManager(rootToken)
+				.setExecutor(DefaultExecutorProvider.getGlobalExceutor())
+				.setTimerExecutor(DefaultExecutorProvider.getTimerExecutor());
+		
+		cmdManager.targetBuilder()
+			// 设置命令序列号
+			.setCmdSn(facelogClient.getCmdSnSupplier(rootToken))
+			// 设置命令响应通道
+			.setAckChannel(facelogClient.getAckChannelSupplier(rootToken))
+			// 指定设备命令执行接收目标为一组设备(id)
+			.setDeviceTarget(device.getId()) ;
 		List<Ack<Void>> receivedAcks = cmdManager.resetSync(null, false);
 		logger.info("同步接收命令响应:");
 		for(Ack<Void> ack:receivedAcks){
 			logger.info("ADMIN client : 设备命令响应 {}",ack);
 		}
-		/** 10 秒后结束测试 */
-		Thread.sleep(10*1000);
+		logger.info("同步命令响应结束");
 		logger.info("测试结束");
+	}
+	@Test
+	public void test4Done(){
+		if(null != cmdDispatcher){
+			cmdDispatcher.unregisterChannel();
+		}
 	}
 }

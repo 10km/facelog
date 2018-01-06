@@ -294,7 +294,7 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
-            .setUnregistedListener(new TimeoutCleaner<Void>());
+            .addUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
                 channel,
                 adapter.getDuration(),
@@ -372,7 +372,7 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
-            .setUnregistedListener(new TimeoutCleaner<Void>());
+            .addUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
                 channel,
                 adapter.getDuration(),
@@ -449,7 +449,7 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Object>> channel = new Channel<Ack<Object>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
-            .setUnregistedListener(new TimeoutCleaner<Object>());
+            .addUnregistedListener(new TimeoutCleaner<Object>());
         subscriber.register(
                 channel,
                 adapter.getDuration(),
@@ -526,7 +526,7 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Map<String,Object>>> channel = new Channel<Ack<Map<String,Object>>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
-            .setUnregistedListener(new TimeoutCleaner<Map<String,Object>>());
+            .addUnregistedListener(new TimeoutCleaner<Map<String,Object>>());
         subscriber.register(
                 channel,
                 adapter.getDuration(),
@@ -601,7 +601,7 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<String>> channel = new Channel<Ack<String>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
-            .setUnregistedListener(new TimeoutCleaner<String>());
+            .addUnregistedListener(new TimeoutCleaner<String>());
         subscriber.register(
                 channel,
                 adapter.getDuration(),
@@ -677,7 +677,7 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
-            .setUnregistedListener(new TimeoutCleaner<Void>());
+            .addUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
                 channel,
                 adapter.getDuration(),
@@ -754,7 +754,7 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Boolean>> channel = new Channel<Ack<Boolean>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
-            .setUnregistedListener(new TimeoutCleaner<Boolean>());
+            .addUnregistedListener(new TimeoutCleaner<Boolean>());
         subscriber.register(
                 channel,
                 adapter.getDuration(),
@@ -831,7 +831,7 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
-            .setUnregistedListener(new TimeoutCleaner<Void>());
+            .addUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
                 channel,
                 adapter.getDuration(),
@@ -908,7 +908,7 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
-            .setUnregistedListener(new TimeoutCleaner<Void>());
+            .addUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
                 channel,
                 adapter.getDuration(),
@@ -991,7 +991,7 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
-            .setUnregistedListener(new TimeoutCleaner<Void>());
+            .addUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
                 channel,
                 adapter.getDuration(),
@@ -1073,7 +1073,7 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
-            .setUnregistedListener(new TimeoutCleaner<Void>());
+            .addUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
                 channel,
                 adapter.getDuration(),
@@ -1163,7 +1163,7 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Void>> channel = new Channel<Ack<Void>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
-            .setUnregistedListener(new TimeoutCleaner<Void>());
+            .addUnregistedListener(new TimeoutCleaner<Void>());
         subscriber.register(
                 channel,
                 adapter.getDuration(),
@@ -1247,7 +1247,7 @@ public class CmdManager {
         checkArgument(!Strings.isNullOrEmpty(builder.ackChannel),"INVALID ackChannel");
         Channel<Ack<Object>> channel = new Channel<Ack<Object>>(builder.ackChannel){}
             .setAdapter(checkNotNull(adapter,"adapter is null"))
-            .setUnregistedListener(new TimeoutCleaner<Object>());
+            .addUnregistedListener(new TimeoutCleaner<Object>());
         subscriber.register(
                 channel,
                 adapter.getDuration(),
