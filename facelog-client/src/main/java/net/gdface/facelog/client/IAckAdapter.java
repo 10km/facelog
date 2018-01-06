@@ -128,7 +128,7 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
         }
         @Override
 		public boolean isFinished() {
-			return this.isFinished.get();
+			return this.isFinished.get() || ackCount == this.clientNum.get();
 		}
 		/**
 		 * 设置超时时间(毫秒)
@@ -170,8 +170,8 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 		 */
 		public final void waitFinished() throws InterruptedException{
 			synchronized(this){
-				while(!isFinished.get()){
-					this.wait();
+				while(!isFinished()){
+					this.wait(200);
 				}
 			}
 		}
