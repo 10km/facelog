@@ -14,6 +14,7 @@ import com.facebook.swift.service.metadata.ThriftMethodMetadata;
 import com.google.common.base.Defaults;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
 import com.google.common.primitives.Primitives;
 import com.google.common.reflect.TypeToken;
 import com.google.common.util.concurrent.FutureCallback;
@@ -85,7 +86,8 @@ public class ThriftMethodProcessorCustom extends ThriftMethodProcessor
 
         ImmutableMap.Builder<Short, ThriftCodec<?>> builder = ImmutableMap.builder();
         for (ThriftFieldMetadata fieldMetadata : methodMetadata.getParameters()) {
-            builder.put(fieldMetadata.getId(), codecManager.getCodec(fieldMetadata.getThriftType()));
+            @SuppressWarnings("unused")
+			Builder<Short, ThriftCodec<?>> p = builder.put(fieldMetadata.getId(), codecManager.getCodec(fieldMetadata.getThriftType()));
         }
         parameterCodecs = builder.build();
 
@@ -93,7 +95,8 @@ public class ThriftMethodProcessorCustom extends ThriftMethodProcessor
         ImmutableMap.Builder<Short, Short> parameterOrderingBuilder = ImmutableMap.builder();
         short javaArgumentPosition = 0;
         for (ThriftFieldMetadata fieldMetadata : methodMetadata.getParameters()) {
-            parameterOrderingBuilder.put(fieldMetadata.getId(), javaArgumentPosition++);
+            @SuppressWarnings("unused")
+			Builder<Short, Short> p = parameterOrderingBuilder.put(fieldMetadata.getId(), javaArgumentPosition++);
         }
         thriftParameterIdToJavaArgumentListPositionMap = parameterOrderingBuilder.build();
 
@@ -101,7 +104,8 @@ public class ThriftMethodProcessorCustom extends ThriftMethodProcessor
         for (Map.Entry<Short, ThriftType> entry : methodMetadata.getExceptions().entrySet()) {
             Class<?> type = TypeToken.of(entry.getValue().getJavaType()).getRawType();
             ExceptionProcessor processor = new ExceptionProcessor(entry.getKey(), codecManager.getCodec(entry.getValue()));
-            exceptions.put(type, processor);
+            @SuppressWarnings("unused")
+			Builder<Class<?>, ExceptionProcessor> p = exceptions.put(type, processor);
         }
         exceptionCodecs = exceptions.build();
 
@@ -150,7 +154,8 @@ public class ThriftMethodProcessorCustom extends ThriftMethodProcessor
             public void onSuccess(Object result)
             {
                 if (oneway) {
-                    resultFuture.set(true);
+                    @SuppressWarnings("unused")
+					boolean s = resultFuture.set(true);
                 }
                 else {
                     RequestContext oldRequestContext = RequestContexts.getCurrentContext();
@@ -170,11 +175,13 @@ public class ThriftMethodProcessorCustom extends ThriftMethodProcessor
 
                         contextChain.postWrite(result);
 
-                        resultFuture.set(true);
+                        @SuppressWarnings("unused")
+						boolean s = resultFuture.set(true);
                     }
                     catch (Exception e) {
                         // An exception occurred trying to serialize a return value onto the output protocol
-                        resultFuture.setException(e);
+                        @SuppressWarnings("unused")
+						boolean b = resultFuture.setException(e);
                     }
                     finally {
                         RequestContexts.setCurrentContext(oldRequestContext);
@@ -218,11 +225,13 @@ public class ThriftMethodProcessorCustom extends ThriftMethodProcessor
                         }
                     }
 
-                    resultFuture.set(true);
+                    @SuppressWarnings("unused")
+					boolean b = resultFuture.set(true);
                 }
                 catch (Exception e) {
                     // An exception occurred trying to serialize an exception onto the output protocol
-                    resultFuture.setException(e);
+                    @SuppressWarnings("unused")
+					boolean b = resultFuture.setException(e);
                 }
                 finally {
                     RequestContexts.setCurrentContext(oldRequestContext);

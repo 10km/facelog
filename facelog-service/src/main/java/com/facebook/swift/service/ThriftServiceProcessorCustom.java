@@ -61,8 +61,8 @@ public class ThriftServiceProcessorCustom extends ThriftServiceProcessor
     public ThriftServiceProcessorCustom(ThriftCodecManager codecManager, List<? extends ThriftEventHandler> eventHandlers, List<?> services)
     {
     	super(codecManager, eventHandlers, services);
-        Preconditions.checkNotNull(codecManager, "codecManager is null");
-        Preconditions.checkNotNull(services, "service is null");
+        Preconditions.checkArgument(null != codecManager, "codecManager is null");
+        Preconditions.checkArgument(null != services, "services is null");
         Preconditions.checkArgument(!services.isEmpty(), "services is empty");
 
         Map<String, ThriftMethodProcessor> processorMap = newHashMap();
@@ -133,14 +133,16 @@ public class ThriftServiceProcessorCustom extends ThriftServiceProcessor
                         public void onSuccess(Boolean result)
                         {
                             context.done();
-                            resultFuture.set(result);
+                            @SuppressWarnings("unused")
+							boolean b = resultFuture.set(result);
                         }
 
                         @Override
                         public void onFailure(Throwable t)
                         {
                             context.done();
-                            resultFuture.setException(t);
+                            @SuppressWarnings("unused")
+							boolean b = resultFuture.setException(t);
                         }
                     });
 

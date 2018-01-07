@@ -324,7 +324,7 @@ public class GlobalConfig implements ServiceConstant{
 		if (value != null) {
 			StringTokenizer st = new StringTokenizer(value, " ,;\t\n\r\f");
 			while (st.hasMoreTokens()) {
-				builder.add(st.nextToken());
+				builder = builder.add(st.nextToken());
 			}
 		}
 		return builder.build();
