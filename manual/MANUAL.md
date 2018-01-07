@@ -876,7 +876,7 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
 
 -	ServiceRuntimeException
 
-:	调用facelog 服务时服务端抛出的运行时异常，参见 [`net.gdface.facelog.client.ServiceRuntimeException`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/ServiceRuntimeException.java),当client端抛出ServiceRuntimeException异常时，可以调用`getServiceStackTraceMessage`获取服务端详细的异常堆栈信息。`getType()`方法返回`int`型异常类型代码，该值与枚举类型`CommonConstant.ExceptionType`中的定义的枚举对象顺序对应。所有的数据库异常和REDIS服务器异常都被封装在该异常中，`getType()`方法明了导致运行时异常的原因。
+:	调用facelog 服务时服务端抛出的运行时异常，参见 [`net.gdface.facelog.client.ServiceRuntimeException`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/ServiceRuntimeException.java),当client端抛出ServiceRuntimeException异常时，可以调用`getServiceStackTraceMessage`获取服务端详细的异常堆栈信息。`getType()`方法返回`int`型异常类型代码，该值与枚举类型`CommonConstant.ExceptionType`中的定义的枚举对象顺序对应。所有的数据库异常和REDIS服务器异常都被封装在该异常中，`getType()`方法返回导致运行时异常的原因。
 
 -	ServiceSecurityException
 

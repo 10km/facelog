@@ -1072,9 +1072,12 @@ public class HeartbeatTest implements ChannelConstant{
 <p><code>CmdManager</code>是线程安全类，可以作为全局常量保持单实例</p>
 <h4>执行设备命令</h4>
 <p>设备命令接收与任务分发执行由<a href="../facelog-client/src/main/java/net/gdface/facelog/client/CmdDispatcher.java"><code>net.gdface.facelog.client.CmdDispatcher</code></a>实现。</p>
-<h4>设备命令分发流程</h4>
+<hr />
+<p>设备命令分发流程</p>
 <p><img src="images/cmddispatcher.png" alt="设备命令分发流程" /></p>
+<hr />
 <p>设备命令执行由应用项目继承 <a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommandAdapter.java"><code>net.gdface.facelog.client.CommandAdapter</code></a>实现。</p>
+<p>为便于分模块实现设备命令，建议使用命令窗口类<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommandAdapterContainer.java"><code>net.gdface.facelog.client.CommandAdapterContainer</code></a>来管理设备命令执行模块。</p>
 <h4>执行设备命令示例</h4>
 <p>设备端执行 <code>reset</code> 设备命令示例：</p>
 <pre><code>@Test
@@ -1261,7 +1264,7 @@ public class DeviceCmdTest implements ChannelConstant{
 <dl>
 <dt>ServiceRuntimeException</dt>
 <dd>
-<p>调用facelog 服务时服务端抛出的运行时异常，参见 <a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/ServiceRuntimeException.java"><code>net.gdface.facelog.client.ServiceRuntimeException</code></a>,当client端抛出ServiceRuntimeException异常时，可以调用<code>getServiceStackTraceMessage</code>获取服务端详细的异常堆栈信息。<code>getType()</code>方法返回<code>int</code>型异常类型代码，该值与枚举类型<code>CommonConstant.ExceptionType</code>中的定义的枚举对象顺序对应。所有的数据库异常和REDIS服务器异常都被封装在该异常中，<code>getType()</code>方法明了导致运行时异常的原因。</p>
+<p>调用facelog 服务时服务端抛出的运行时异常，参见 <a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/ServiceRuntimeException.java"><code>net.gdface.facelog.client.ServiceRuntimeException</code></a>,当client端抛出ServiceRuntimeException异常时，可以调用<code>getServiceStackTraceMessage</code>获取服务端详细的异常堆栈信息。<code>getType()</code>方法返回<code>int</code>型异常类型代码，该值与枚举类型<code>CommonConstant.ExceptionType</code>中的定义的枚举对象顺序对应。所有的数据库异常和REDIS服务器异常都被封装在该异常中，<code>getType()</code>方法返回导致运行时异常的原因。</p>
 </dd>
 </dl>
 </li>
