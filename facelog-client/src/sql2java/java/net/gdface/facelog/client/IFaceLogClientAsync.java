@@ -2020,11 +2020,10 @@ public class IFaceLogClientAsync implements Constant{
             try{
                 DeviceBean device = getDevice(input).get();
                 return null == device ? null : device.getGroupId();
-            }catch(RuntimeException e){
-                throw e;
             }catch(Exception e){
+                com.google.common.base.Throwables.throwIfUnchecked(e);
                 throw new RuntimeException(e);
-            }   
+            }
         }};
     /**
      * 根据设备ID返回一个获取设备组ID的{@code Supplier}实例
@@ -2051,11 +2050,10 @@ public class IFaceLogClientAsync implements Constant{
         public List<Integer> apply(Integer personId) {
             try{
                 return getPersonGroupsBelongs(personId).get();
-            }catch(RuntimeException e){
-                throw e;
             }catch(Exception e){
+                com.google.common.base.Throwables.throwIfUnchecked(e);
                 throw new RuntimeException(e);
-            }   
+            }
         }};
     /**
      * 根据人员ID返回一个获取所属组ID列表的{@code Supplier}实例
@@ -2087,9 +2085,8 @@ public class IFaceLogClientAsync implements Constant{
             return new CmdManager(
                     gu.simplemq.redis.JedisPoolLazy.getDefaultInstance(),
                     getRedisParameters(token).get());
-        }catch(RuntimeException e){
-            throw e;
         }catch(Exception e){
+            com.google.common.base.Throwables.throwIfUnchecked(e);
             throw new RuntimeException(e);
         }
     }
@@ -2109,11 +2106,10 @@ public class IFaceLogClientAsync implements Constant{
                 .setAckChannelValidator(ackChannelValidator)
                 .setCmdAdapter(new CommandAdapterContainer())
                 .registerChannel(this.getRedisParameters(token).get().get(net.gdface.facelog.client.thrift.MQParam.CMD_CHANNEL));
-        }catch(RuntimeException e){
-            throw e;
-        }catch(Exception e){
-            throw new RuntimeException(e);
-        }
+          }catch(Exception e){
+              com.google.common.base.Throwables.throwIfUnchecked(e);
+              throw new RuntimeException(e);
+          }
     }
     /**
      * 返回一个申请命令响应通道的{@link com.google.common.base.Supplier}实例
@@ -2128,9 +2124,8 @@ public class IFaceLogClientAsync implements Constant{
             public String get() {
                 try{
                     return applyAckChannel(token,duration).get();
-                }catch(RuntimeException e){
-                    throw e;
                 }catch(Exception e){
+                    com.google.common.base.Throwables.throwIfUnchecked(e);
                     throw new RuntimeException(e);
                 }
             }
@@ -2157,9 +2152,8 @@ public class IFaceLogClientAsync implements Constant{
             public Long get() {
                 try{
                     return applyCmdSn(token).get();
-                }catch(RuntimeException e){
-                    throw e;
                 }catch(Exception e){
+                    com.google.common.base.Throwables.throwIfUnchecked(e);
                     throw new RuntimeException(e);
                 }
             }
@@ -2172,9 +2166,8 @@ public class IFaceLogClientAsync implements Constant{
             public boolean apply(Long input) {
                 try{
                     return null == input ? false : isValidCmdSn(input).get();
-                }catch(RuntimeException e){
-                    throw e;
                 }catch(Exception e){
+                    com.google.common.base.Throwables.throwIfUnchecked(e);
                     throw new RuntimeException(e);
                 }
             }};
@@ -2185,9 +2178,8 @@ public class IFaceLogClientAsync implements Constant{
             public boolean apply(String input) {
                 try{
                     return null == input || input.isEmpty() ? false : isValidAckChannel(input).get();
-                }catch(RuntimeException e){
-                    throw e;
                 }catch(Exception e){
+                    com.google.common.base.Throwables.throwIfUnchecked(e);
                     throw new RuntimeException(e);
                 }
             }};
