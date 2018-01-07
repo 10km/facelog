@@ -22,7 +22,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.net.HostAndPort;
 import static com.google.common.net.HostAndPort.fromParts;
 import static com.google.common.net.HostAndPort.fromString;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 import io.airlift.units.Duration;
 /**
@@ -53,10 +53,8 @@ public class ClientFactory {
         final Class<?> clazz;
         final HostAndPort hostAndPort;
         HostPortClass(HostAndPort hostAndPort,Class<?> clazz){
-            checkNotNull(hostAndPort, "hostAndPort is null");
-            checkNotNull(clazz, "clazz is null");
-            this.clazz = clazz;
-            this.hostAndPort = hostAndPort;
+            this.hostAndPort = checkNotNull(hostAndPort, "hostAndPort is null");
+            this.clazz = checkNotNull(clazz, "clazz is null");
         }
 
         @Override
@@ -178,8 +176,7 @@ public class ClientFactory {
         return this;
     }
     private HostAndPort getHostAndPort(){
-        checkNotNull(this.hostAndPort,"hostAndPort is null");
-        return this.hostAndPort;
+        return checkNotNull(this.hostAndPort,"hostAndPort is null");
     }
     private NiftyClientConnector<? extends NiftyClientChannel> getConnector(){
         if(null == this.connector){

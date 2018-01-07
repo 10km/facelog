@@ -412,9 +412,26 @@ public  class StoreBean
     public String toString() {
         return toString(true,false);
     }
+    /**
+     * cast byte array to HEX string
+     * 
+     * @param input
+     * @return {@code null} if {@code input} is null
+     */
+    private static final String toHex(byte[] input) {
+        if (null == input){
+            return null;
+        }
+        StringBuffer sb = new StringBuffer(input.length * 2);
+        for (int i = 0; i < input.length; i++) {
+            sb.append(Character.forDigit((input[i] & 240) >> 4, 16));
+            sb.append(Character.forDigit(input[i] & 15, 16));
+        }
+        return sb.toString();
+    }
     protected static final StringBuilder append(StringBuilder buffer,boolean full,byte[] value){
         if(full || null == value){
-            buffer.append(value);
+            buffer.append(toHex(value));
         }else{
             buffer.append(value.length).append(" bytes");
         }

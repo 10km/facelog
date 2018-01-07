@@ -35,7 +35,7 @@ import com.google.common.collect.Maps.EntryTransformer;
 
 import net.gdface.facelog.client.CollectionUtils.DualTransformer;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * @author guyadong
@@ -236,9 +236,8 @@ public class GenericUtils {
         private Constructor<D> constructor;
 
         DateDualTransformer(Class<D>clazz){
-            checkNotNull(clazz);
             try {
-                constructor = clazz.getConstructor(long.class);
+                constructor = checkNotNull(clazz,"clazz is null").getConstructor(long.class);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -275,7 +274,7 @@ public class GenericUtils {
         if(null == source){
             return null;
         }
-        checkNotNull(clazz);
+        checkArgument(null != clazz,"clzzz is null");
         return CollectionUtils.tranformKeys(source, DATE_TRANSFORMER_CACHE.getUnchecked(clazz));
     }
 
@@ -296,7 +295,7 @@ public class GenericUtils {
         if(null == source){
             return null;
         }
-        checkNotNull(clazz);
+        checkArgument(null != clazz,"clzzz is null");
         @SuppressWarnings("unchecked")
         final DateDualTransformer<D> trans = DATE_TRANSFORMER_CACHE.getUnchecked(clazz);
         Map<Long, D> m = CollectionUtils.tranformKeys(source, trans);
@@ -325,7 +324,7 @@ public class GenericUtils {
         if(null == source){
             return null;
         }
-        checkNotNull(clazz);
+        checkArgument(null != clazz,"clzzz is null");
         return CollectionUtils.transform(source, DATE_TRANSFORMER_CACHE.getUnchecked(clazz));
     }
     /** get a view of {@code Collection<Date>} with {@code Long} type */
@@ -341,7 +340,7 @@ public class GenericUtils {
         if(null == source){
             return null;
         }
-        checkNotNull(clazz);
+        checkArgument(null != clazz,"clzzz is null");
         return (D) DATE_TRANSFORMER_CACHE.getUnchecked(clazz).fromRight(source);
     }
     /** get a view of {@code Map<Long,V>} with {@code Date} key type */
@@ -349,7 +348,7 @@ public class GenericUtils {
         if(null == source){
             return null;
         }
-        checkNotNull(clazz);
+        checkArgument(null != clazz,"clzzz is null");
         return CollectionUtils.tranformKeys(source, new CollectionUtils.DualTransformer<Long,D>(){            
             @SuppressWarnings("unchecked")
             DateDualTransformer<D> trans = DATE_TRANSFORMER_CACHE.getUnchecked(clazz);
@@ -367,7 +366,7 @@ public class GenericUtils {
         if(null == source){
             return null;
         }
-        checkNotNull(clazz);
+        checkArgument(null != clazz,"clzzz is null");
         return Maps.transformEntries(source, new EntryTransformer<K,Long,D>(){
             @SuppressWarnings("unchecked")
             DateDualTransformer<D> trans = DATE_TRANSFORMER_CACHE.getUnchecked(clazz); 
@@ -381,7 +380,7 @@ public class GenericUtils {
         if(null == source){
             return null;
         }
-        checkNotNull(clazz);
+        checkArgument(null != clazz,"clzzz is null");
         final DualTransformer<Long, D> trans2 = new CollectionUtils.DualTransformer<Long,D>(){            
             @SuppressWarnings("unchecked")
             DateDualTransformer<D> trans =DATE_TRANSFORMER_CACHE.getUnchecked(clazz);
@@ -405,7 +404,7 @@ public class GenericUtils {
         if(null == source){
             return null;
         }
-        checkNotNull(clazz);
+        checkArgument(null != clazz,"clzzz is null");
         return Lists.transform(source, new Function<Long,D>(){
             @SuppressWarnings("unchecked")
             DateDualTransformer<D> trans = DATE_TRANSFORMER_CACHE.getUnchecked(clazz);
@@ -419,7 +418,7 @@ public class GenericUtils {
         if(null == source){
             return null;
         }
-        checkNotNull(clazz);
+        checkArgument(null != clazz,"clzzz is null");
         final DualTransformer<Long, D> trans2 = new CollectionUtils.DualTransformer<Long,D>(){ 
             @SuppressWarnings("unchecked")
             DateDualTransformer<D> trans = DATE_TRANSFORMER_CACHE.getUnchecked(clazz);
@@ -438,7 +437,7 @@ public class GenericUtils {
         if(null == source){
             return null;
         }
-        checkNotNull(clazz);
+        checkArgument(null != clazz,"clzzz is null");
         return Collections2.transform(source, new Function<Long,D>(){
             @SuppressWarnings("unchecked")
             DateDualTransformer<D> trans = DATE_TRANSFORMER_CACHE.getUnchecked(clazz);

@@ -195,12 +195,22 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 		getCommandAdapterContainer().unregister(cmd);
 		return this;
 	}
+	/**
+	 * 设置命令序列号验证器
+	 * @param cmdSnValidator 为{@code null}无效
+	 * @return
+	 */
 	public CmdDispatcher setCmdSnValidator(Predicate<Long> cmdSnValidator) {
 		if(null != cmdSnValidator){
 			this.cmdSnValidator = cmdSnValidator;
 		}
 		return this;
 	}
+	/**
+	 * 设备命令响应通道验证器
+	 * @param ackChannelValidator 为{@code null}无效
+	 * @return
+	 */
 	public CmdDispatcher setAckChannelValidator(Predicate<String> ackChannelValidator) {
 		if(null !=ackChannelValidator){
 			this.ackChannelValidator = ackChannelValidator;
