@@ -572,6 +572,7 @@ client收到消息后如何处理，这属于具体应用的业务逻辑，应�
 
 ![设备命令](images/devicecmd.png)
 
+
 管理端是设备命令的发送端，设备端是设备命令的接收和处理端，设备端执行命令后，将命令执行结果以命令响应的形式返回给管理端。
 
 以上只是示意图，设备命令的发送与接收都是通过redis的订阅发布功能实现，管理端和设备之间并没有直接的网络通讯。
@@ -670,7 +671,20 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
 
 设备命令接收与任务分发执行由[`net.gdface.facelog.client.CmdDispatcher`](../facelog-client/src/main/java/net/gdface/facelog/client/CmdDispatcher.java)实现。
 
+
+
+----------
+设备命令分发流程
+
+![设备命令分发流程](images/cmddispatcher.png)
+
+
+----------
+
 设备命令执行由应用项目继承 [`net.gdface.facelog.client.CommandAdapter`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommandAdapter.java)实现。
+
+为便于分模块实现设备命令，建议使用命令窗口类[`net.gdface.facelog.client.CommandAdapterContainer`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommandAdapterContainer.java)来管理设备命令执行模块。
+
 
 #### 执行设备命令示例
 
@@ -783,7 +797,7 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
     				.registerAdapter(Cmd.reset, new RestAdapter())
     				.registerAdapter(Cmd.isEnable, new IsEnableAdapter())
     				/** 程序退出时自动注销设备命令频道 */
-    				.autoUnregister();	
+    				.autoUnregisterChannel();	
     		} catch(ServiceRuntimeException e){
     			e.printServiceStackTrace();
     			assertTrue(e.getMessage(),false);

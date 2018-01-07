@@ -40,7 +40,7 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 	/** 只从{@link JedisPoolLazy}默认实例获取{@link RedisPublisher} */
 	private final IPublisher redisPublisher = RedisFactory.getPublisher();
 	/**  是否自动注销标志 */
-	private final AtomicBoolean autoUnregister = new AtomicBoolean(false);
+	private final AtomicBoolean autoUnregisterCmdChannel = new AtomicBoolean(false);
 	/** 固定为1的线程池，确保所有的命令按收到的顺序执行 */
 	private final ExecutorService executor = MoreExecutors.getExitingExecutorService(
 			new ThreadPoolExecutor(1, 1,
@@ -48,7 +48,7 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 	                new LinkedBlockingQueue<Runnable>(),
 	                new ThreadFactoryBuilder().setNameFormat("subscribe-%d").build()));
 	/** 命令执行器 */
-	private CommandAdapter cmdAdapter;
+	private CommandAdapter cmdAdapter = CommandAdapter.NULL_ADAPTER;
 	/** 设备命令通道 */
 	private volatile Channel<DeviceInstruction> cmdChannel;
 	 /** 设备命令序列号验证器 */
@@ -86,8 +86,7 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 	@Override
 	public void onSubscribe(DeviceInstruction t) throws SmqUnsubscribeException {
 		// 设备命令序列号有效才执行设备命令
-		if(null != cmdAdapter 
-				&& null != t.getTarget() 
+		if(null != t.getTarget() 
 				&& selfIncluded(t.isGroup(),t.getTarget())){
 			long cmdSn = t.getCmdSn();
 			if(cmdSnValidator.apply(cmdSn)){
@@ -120,10 +119,11 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 	 * 设置应用程序执行设备命令的对象<br>
 	 * 创建{@link CmdDispatcher}对象时如果不调用本方法,设备不会响应任何设备命令
 	 * @param cmdAdapter
+	 * @throws NullPointerException {@code cmdAdapter} 为 {@code null}
 	 * @return
 	 */
 	public CmdDispatcher setCmdAdapter(CommandAdapter cmdAdapter) {
-		this.cmdAdapter = cmdAdapter;
+		this.cmdAdapter = checkNotNull(cmdAdapter,"cmdAdapter is null");
 		return this;
 	}
 	
@@ -146,11 +146,12 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 	 * @return
 	 */
 	public CmdDispatcher registerChannel(String channel){
-		// double check
+		checkArgument(!Strings.isNullOrEmpty(channel),"channel is null or empty");
+		// double checked lock
 		if(null == cmdChannel){
 			synchronized(this){
 				if(null == cmdChannel){
-					cmdChannel = new Channel<DeviceInstruction>(checkNotNull(channel),	this){};
+					cmdChannel = new Channel<DeviceInstruction>(channel,this){};
 					RedisFactory.getSubscriber().register(cmdChannel);
 				}
 			}
@@ -211,8 +212,8 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 	 * 设置程序退出时自动执行{@link #unregisterChannel()}
 	 * @return
 	 */
-	public CmdDispatcher autoUnregister(){
-		if(this.autoUnregister.compareAndSet(false, true)){
+	public CmdDispatcher autoUnregisterChannel(){
+		if(this.autoUnregisterCmdChannel.compareAndSet(false, true)){
 			Runtime.getRuntime().addShutdownHook(new Thread(){
 				@Override
 				public void run() {

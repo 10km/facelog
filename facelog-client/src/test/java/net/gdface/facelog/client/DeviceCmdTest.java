@@ -92,7 +92,7 @@ public class DeviceCmdTest implements ChannelConstant{
 				.registerAdapter(Cmd.reset, new RestAdapter())
 				.registerAdapter(Cmd.isEnable, new IsEnableAdapter())
 				/** 程序退出时自动注销设备命令频道 */
-				.autoUnregister();	
+				.autoUnregisterChannel();	
 		} catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(e.getMessage(),false);

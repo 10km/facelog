@@ -20,6 +20,8 @@ import java.util.Map;
  *
  */
 public class CommandAdapter {
+    /** 不执行任何设备命令的空实例 */
+    public static final CommandAdapter NULL_ADAPTER = new CommandAdapter();
     /** 
      * 发送给命令响应接收端的异常,
      * 如果希望命令响应端收到设备命令执行的异常信息,
