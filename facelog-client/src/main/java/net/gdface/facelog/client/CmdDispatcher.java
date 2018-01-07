@@ -20,7 +20,6 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import gu.simplemq.Channel;
 import gu.simplemq.IMessageAdapter;
 import gu.simplemq.IPublisher;
-import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.RedisPublisher;
 import redis.clients.jedis.exceptions.JedisException;
 import gu.simplemq.redis.JedisPoolLazy;
@@ -84,32 +83,32 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 	 * 执行指定的设备命令并向命令响应频道返回命令结果
 	 */
 	@Override
-	public void onSubscribe(DeviceInstruction t) throws SmqUnsubscribeException {
+	public void onSubscribe(final DeviceInstruction t) {
 		// 设备命令序列号有效才执行设备命令
-		if(null != t.getTarget() 
-				&& selfIncluded(t.isGroup(),t.getTarget())){
-			long cmdSn = t.getCmdSn();
+		if(null != t.getTarget() && selfIncluded(t.isGroup(),t.getTarget())){
+			final long cmdSn = t.getCmdSn();
 			if(cmdSnValidator.apply(cmdSn)){
-				// 将设备命令交给命令类型对应的方法执行设备命令
-				final Ack<?> ack = t.getCmd().run(cmdAdapter, t.getParameters()).setCmdSn(cmdSn);
-				// 如果指定了响应频道且频道名有效则向指定的频道发送响应消息
-				if(!Strings.isNullOrEmpty(t.getAckChannel())){
-					final String ackChannel = t.getAckChannel();
-					if(ackChannelValidator.apply(ackChannel)){
-						executor.execute(new Runnable(){
-							@Override
-							public void run() {
+				// 设备命令提交线程池执行
+				executor.execute(new Runnable(){
+					@Override
+					public void run() {
+						// 将设备命令交给命令类型对应的方法执行设备命令
+						Ack<?> ack = t.getCmd().run(cmdAdapter, t.getParameters()).setCmdSn(cmdSn);
+						// 如果指定了响应频道且频道名有效则向指定的频道发送响应消息
+						if(!Strings.isNullOrEmpty(t.getAckChannel())){
+							String ackChannel = t.getAckChannel();
+							if(ackChannelValidator.apply(ackChannel)){
 								Channel<Ack<?>> channel = new Channel<Ack<?>>(ackChannel){};
 								try{
 									redisPublisher.publish(channel, ack);
 								}catch(JedisException e){
 									logger.error(e.getMessage());
 								}
-							}});
-					}else{
-						logger.warn("INVALID ack channel: {}",ackChannel);
-					}
-				}
+							}else{
+								logger.warn("INVALID ack channel: {}",ackChannel);
+							}
+						}
+					}});
 			}else{
 				logger.warn("INVALID cmd serial number: {}",cmdSn);
 			}
