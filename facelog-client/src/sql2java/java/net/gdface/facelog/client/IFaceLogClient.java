@@ -3076,6 +3076,47 @@ public class IFaceLogClient implements Constant{
             throw new ServiceRuntimeException(e);
         }
     }
+    // 115 SERIVCE PORT : version
+    /**
+     * 返回服务版本号 {@link Version#VERSION}
+     * @return 
+     */
+    public String version(){
+        try{
+            return service.version();
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+    }
+    // 116 SERIVCE PORT : versionInfo
+    /**
+     * 返回服务版本详细信息<br>
+     * <ul>
+     * <li>{@code VERSION} {@link Version#VERSION}</li>
+     * <li>{@code SCM_REVISION} {@link Version#SCM_REVISION}</li>
+     * <li>{@code TIMESTAMP} {@link Version#TIMESTAMP}</li>
+     * </ul>
+     * @return 
+     */
+    public Map<String, String> versionInfo(){
+        try{
+            return service.versionInfo();
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+    }
     ///////////////// CLIENT EXTENSIVE CONVENIENCE TOOLS /////////////
     
     /**

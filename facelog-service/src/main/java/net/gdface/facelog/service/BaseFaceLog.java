@@ -1452,6 +1452,26 @@ public abstract class BaseFaceLog extends Dao{
 	@ThriftMethod
     public void saveServiceConfig(Token token)throws ServiceRuntimeException{
     }
-
-    	
+	/**
+	 * 返回服务版本号 {@link Version#VERSION}
+	 * @return
+	 */
+	@ThriftMethod
+	public String version(){
+		return null;
+	}
+	/**
+	 * 返回服务版本的详细信息<br>
+	 * <ul>
+	 * <li>{@code VERSION} {@link Version#VERSION}</li>
+	 * <li>{@code SCM_REVISION} {@link Version#SCM_REVISION}</li>
+	 * <li>{@code TIMESTAMP} {@link Version#TIMESTAMP}</li>
+	 * </ul>
+	 * 
+	 * @return
+	 */
+	@ThriftMethod
+	public Map<String, String> versionInfo(){
+		return null;
+	}
 }

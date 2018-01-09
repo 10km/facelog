@@ -1,6 +1,7 @@
 package net.gdface.facelog.client;
 
 import java.io.File;
+import java.net.URL;
 import java.util.List;
 
 import org.junit.AfterClass;
@@ -10,6 +11,8 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import com.google.common.hash.Hashing;
+
+import junit.framework.Assert;
 
 import static org.junit.Assert.*;
 
@@ -89,10 +92,11 @@ public class ClientTest implements CommonConstant {
 	@Test
 	public void test5AddImage(){
 		try{
-			byte[] imgBytes = FaceUtilits.getBytesNotEmpty(new File("d:\\tmp\\guyadong-12.jpg"));
+			URL url = this.getClass().getResource("/images/guyadong-3.jpg");
+			byte[] imgBytes = FaceUtilits.getBytesNotEmpty(url);
 			String md5 = Hashing.md5().hashBytes(imgBytes).toString();
 			facelogClient.deleteImage(md5, rootToken);
-			facelogClient.addImage(FaceUtilits.getBytesNotEmpty(new File("d:\\tmp\\guyadong-12.jpg")), null, null, 0, rootToken);
+			facelogClient.addImage(FaceUtilits.getBytesNotEmpty(url), null, null, 0, rootToken);
 			logger.info("image added");
 		}catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
@@ -118,5 +122,11 @@ public class ClientTest implements CommonConstant {
 			logger.error(e.getMessage(), e);
 			assertTrue(false);
 		}
+	}
+	@Test
+	public void test6Version(){
+		logger.info("service version:{}",facelogClient.version());
+		logger.info("version detail:{}",facelogClient.versionInfo().toString());
+		assertTrue("version ok",true);
 	}
 }

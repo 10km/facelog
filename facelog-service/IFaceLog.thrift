@@ -316,4 +316,6 @@ service IFaceLog {
   void setProperty(1:  string key, 2:  string value, 3:  Token token) throws (1: ServiceRuntimeException ex1);
   void unregisterDevice(1: required i32 deviceId, 2:  Token token) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
   DeviceBean updateDevice(1:  DeviceBean deviceBean, 2:  Token token) throws (1: ServiceRuntimeException ex1);
+  string version();
+  map<string, string> versionInfo();
 }

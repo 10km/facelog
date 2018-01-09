@@ -2007,6 +2007,27 @@ public class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Void> saveServiceConfig(net.gdface.facelog.client.thrift.Token token){
         return service.saveServiceConfig(token);
     }
+    // 115 SERIVCE PORT : version
+    /**
+     * 返回服务版本号 {@link Version#VERSION}
+     * @return 
+     */
+    public ListenableFuture<String> version(){
+        return service.version();
+    }
+    // 116 SERIVCE PORT : versionInfo
+    /**
+     * 返回服务版本详细信息<br>
+     * <ul>
+     * <li>{@code VERSION} {@link Version#VERSION}</li>
+     * <li>{@code SCM_REVISION} {@link Version#SCM_REVISION}</li>
+     * <li>{@code TIMESTAMP} {@link Version#TIMESTAMP}</li>
+     * </ul>
+     * @return 
+     */
+    public ListenableFuture<Map<String, String>> versionInfo(){
+        return service.versionInfo();
+    }
     ///////////////// CLIENT EXTENSIVE CONVENIENCE TOOLS /////////////
     
     /**

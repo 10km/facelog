@@ -223,11 +223,50 @@
 						</dependency>
 					</dependencies>
 				</plugin> -->
+				<plugin>
+				    <groupId>org.codehaus.mojo</groupId>
+				    <artifactId>buildnumber-maven-plugin</artifactId>
+				    <version>1.2</version>
+				    <executions>
+				        <execution>
+				            <goals>
+				                <goal>create</goal>
+				            </goals>
+				        </execution>
+				    </executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.0.2</version>
+					<configuration>
+						<archive>
+							<manifestEntries>
+								<Project-Version>${project.version}</Project-Version>
+								<Scm-Version>${buildNumber}</Scm-Version>
+								<Timestamp>${maven.build.timestamp}</Timestamp>
+							</manifestEntries>
+						</archive>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>templating-maven-plugin</artifactId>
+					<version>1.0.0</version>
+					<executions>
+						<execution>
+							<id>filter-src</id>
+							<goals>
+								<goal>filter-sources</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
 	<modules>
-		<module>db</module>		
+		<module>db</module>
 		<module>facelog-service</module>
 		<module>facelog-client</module>
 	</modules>

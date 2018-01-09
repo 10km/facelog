@@ -142,6 +142,7 @@ public class GlobalConfig implements ServiceConstant{
 	}
 	/** log 输出{@code config}中的关键参数 */
 	static final void logThriftServerConfig(ThriftServerConfig config){
+		logger.info("Service Version(服务版本):{}",Version.VERSION);
 		logger.info("RPC Service Parameters(服务运行参数):");
 		logger.info("port({}): {}", descriptionOf(SERVER_PORT),config.getPort());
 		logger.info("connectionLimit({}): {}", descriptionOf(SERVER_CONNECTION_LIMIT),config.getConnectionLimit());

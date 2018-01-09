@@ -1637,4 +1637,12 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
     }
+    @Override
+	public String version(){
+		return Version.VERSION;
+	}
+    @Override
+    public Map<String, String> versionInfo(){
+		return Version.INFO;
+	}
 }

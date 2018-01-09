@@ -1036,6 +1036,12 @@ public interface IFaceLog
             @ThriftField(value=1, name="deviceBean", requiredness=Requiredness.NONE) final DeviceBean deviceBean,
             @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
         );
+
+        @ThriftMethod(value = "version")
+        ListenableFuture<String> version();
+
+        @ThriftMethod(value = "versionInfo")
+        ListenableFuture<Map<String, String>> versionInfo();
     }
     @ThriftMethod(value = "addFeature",
                   exception = {
@@ -2060,4 +2066,12 @@ public interface IFaceLog
         @ThriftField(value=1, name="deviceBean", requiredness=Requiredness.NONE) final DeviceBean deviceBean,
         @ThriftField(value=2, name="token", requiredness=Requiredness.NONE) final Token token
     ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "version")
+    String version();
+
+
+    @ThriftMethod(value = "versionInfo")
+    Map<String, String> versionInfo();
+
 }
