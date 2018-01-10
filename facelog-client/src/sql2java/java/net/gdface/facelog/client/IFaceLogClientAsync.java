@@ -2017,11 +2017,12 @@ public class IFaceLogClientAsync implements Constant{
     }
     // 116 SERIVCE PORT : versionInfo
     /**
-     * 返回服务版本详细信息<br>
+     * 返回服务版本的详细信息<br>
      * <ul>
-     * <li>{@code VERSION} {@link Version#VERSION}</li>
-     * <li>{@code SCM_REVISION} {@link Version#SCM_REVISION}</li>
-     * <li>{@code TIMESTAMP} {@link Version#TIMESTAMP}</li>
+     * <li>{@code VERSION} -- {@link Version#VERSION}</li>
+     * <li>{@code SCM_REVISION} -- {@link Version#SCM_REVISION}</li>
+     * <li>{@code SCM_BRANCH} -- {@link Version#SCM_BRANCH}</li>
+     * <li>{@code TIMESTAMP} -- {@link Version#TIMESTAMP}</li>
      * </ul>
      * @return 
      */

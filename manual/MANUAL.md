@@ -887,7 +887,16 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
 `facelog-client`和`facelog-service`jar包都提供了全局线程池类，用于提供全局的线程池常量对象。
 参见[`net.gdface.facelog.client.DefaultExecutorProvider`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/DefaultExecutorProvider.java)，`DefaultExecutorProvider`的`getGlobalExceutor()`返回一个线程池对象，`getTimerExecutor()`方法返回执行定时任务的`ScheduledExecutorService`线程池对象。`DefaultExecutorProvider`提供的线程池对象都不需要调用者来关闭`shutdown`，会在应用程序结束时自动关闭。
 
-应用程序也可以重载`createExitingCachedPool`和`createExitingScheduledPool`方法用不同的参数创建自己的全局线程池对象，参见[`net.gdface.facelog.service.ExecutorProvider`](../facelog-service/src/main/java/net/gdface/facelog/service/ExecutorProvider.java)实现
+应用程序也可以重载`createExitingCachedPool`和`createExitingScheduledPool`方法用不同的参数创建自己的全局线程池对象，参见[`net.gdface.facelog.service.ExecutorProvider`](../facelog-service/src/main/java/net/gdface/facelog/service/ExecutorProvider.java)实现.
+
+
+### 版本信息 
+
+facelog client和service端jar包中都有名为Version的类，用于保存当前版本信息,分别是:
+`net.gdface.facelog.service.Version`和`net.gdface.facelog.client.Version`,
+facelog 服务端也提供`version,versionInfo`接口方法用于获取服务端的版本号，应用项目可以根据此接口方法判断当前client端版本是否与service端版本一致。
+
+
 ## 服务端系统设置
 
 faclog 系统配置参数设计如下：

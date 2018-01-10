@@ -1280,7 +1280,11 @@ public class DeviceCmdTest implements ChannelConstant{
 <h3>全局线程池</h3>
 <p><code>facelog-client</code>和<code>facelog-service</code>jar包都提供了全局线程池类，用于提供全局的线程池常量对象。
 参见<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/DefaultExecutorProvider.java"><code>net.gdface.facelog.client.DefaultExecutorProvider</code></a>，<code>DefaultExecutorProvider</code>的<code>getGlobalExceutor()</code>返回一个线程池对象，<code>getTimerExecutor()</code>方法返回执行定时任务的<code>ScheduledExecutorService</code>线程池对象。<code>DefaultExecutorProvider</code>提供的线程池对象都不需要调用者来关闭<code>shutdown</code>，会在应用程序结束时自动关闭。</p>
-<p>应用程序也可以重载<code>createExitingCachedPool</code>和<code>createExitingScheduledPool</code>方法用不同的参数创建自己的全局线程池对象，参见<a href="../facelog-service/src/main/java/net/gdface/facelog/service/ExecutorProvider.java"><code>net.gdface.facelog.service.ExecutorProvider</code></a>实现</p>
+<p>应用程序也可以重载<code>createExitingCachedPool</code>和<code>createExitingScheduledPool</code>方法用不同的参数创建自己的全局线程池对象，参见<a href="../facelog-service/src/main/java/net/gdface/facelog/service/ExecutorProvider.java"><code>net.gdface.facelog.service.ExecutorProvider</code></a>实现.</p>
+<h3>版本信息</h3>
+<p>facelog client和service端jar包中都有名为Version的类，用于保存当前版本信息,分别是:
+<code>net.gdface.facelog.service.Version</code>和<code>net.gdface.facelog.client.Version</code>,
+facelog 服务端也提供<code>version,versionInfo</code>接口方法用于获取服务端的版本号，应用项目可以根据此接口方法判断当前client端版本是否与service端版本一致。</p>
 <h2>服务端系统设置</h2>
 <p>faclog 系统配置参数设计如下：</p>
 <table>
