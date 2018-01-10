@@ -224,32 +224,6 @@
 					</dependencies>
 				</plugin> -->
 				<plugin>
-				    <groupId>org.codehaus.mojo</groupId>
-				    <artifactId>buildnumber-maven-plugin</artifactId>
-				    <version>1.2</version>
-				    <executions>
-				        <execution>
-				            <goals>
-				                <goal>create</goal>
-				            </goals>
-				        </execution>
-				    </executions>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jar-plugin</artifactId>
-					<version>3.0.2</version>
-					<configuration>
-						<archive>
-							<manifestEntries>
-								<Project-Version>${project.version}</Project-Version>
-								<Scm-Version>${buildNumber}</Scm-Version>
-								<Timestamp>${maven.build.timestamp}</Timestamp>
-							</manifestEntries>
-						</archive>
-					</configuration>
-				</plugin>
-				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>templating-maven-plugin</artifactId>
 					<version>1.0.0</version>
@@ -264,6 +238,39 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<plugins>
+			<plugin>
+				<!-- 
+						生成统一的buildNumber,时间戳变量,
+						子项目调用template插件时只是引用该变量 
+				-->
+			    <groupId>org.codehaus.mojo</groupId>
+			    <artifactId>buildnumber-maven-plugin</artifactId>
+			    <version>1.4</version>
+			    <executions>
+			        <execution>
+			        	<id>bn1</id>
+			            <goals>
+			            	<!-- 创建${buildNumber} -->
+			            	<goal>create</goal>
+			            </goals>
+			        </execution>
+			        <execution>
+			        	<id>bn2</id>
+			            <goals>
+			            	<!-- 创建时间戳${buildtimestamp} -->
+			                <goal>create-timestamp</goal>
+			            </goals>
+					    <configuration>
+					    	<!-- 指定时间戳变量名 -->
+					    	<timestampPropertyName>buildtimestamp</timestampPropertyName>
+					    	<!-- 指定日期格式 -->
+					        <timestampFormat>yyyy-MM-dd HH:mm:ss</timestampFormat>
+					    </configuration>
+			        </execution>
+			    </executions>
+			</plugin>
+		</plugins>
 	</build>
 	<modules>
 		<module>db</module>

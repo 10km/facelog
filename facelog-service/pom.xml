@@ -138,10 +138,6 @@
 				<artifactId>swift-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-			    <groupId>org.codehaus.mojo</groupId>  
-			    <artifactId>buildnumber-maven-plugin</artifactId>  
-			</plugin>
-			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>templating-maven-plugin</artifactId>
 			</plugin>

@@ -12,7 +12,7 @@ public final class Version {
     /** SCM(git) revision */
     public static final String SCM_REVISION= "${buildNumber}";
     /** build timestamp */
-    public static final String TIMESTAMP ="${timestamp}";
+    public static final String TIMESTAMP ="${buildtimestamp}";
     /** map of version fields */
     public static final ImmutableMap<String,String> INFO = ImmutableMap.of(
     		"VERSION", VERSION, 
