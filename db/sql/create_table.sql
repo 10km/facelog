@@ -1,3 +1,5 @@
+set character set utf8;
+SET NAMES 'utf8';
 ############################
 # delete all table/view  ###
 ############################
