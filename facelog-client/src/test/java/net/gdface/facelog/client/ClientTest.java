@@ -1,6 +1,5 @@
 package net.gdface.facelog.client;
 
-import java.io.File;
 import java.net.URL;
 import java.util.List;
 
@@ -11,8 +10,6 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import com.google.common.hash.Hashing;
-
-import junit.framework.Assert;
 
 import static org.junit.Assert.*;
 
@@ -31,6 +28,8 @@ public class ClientTest implements CommonConstant {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+		// docker test
+		//facelogClient = ClientFactory.builder().setHostAndPort("192.168.99.100", DEFAULT_PORT).build();
 		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build();
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 	}
