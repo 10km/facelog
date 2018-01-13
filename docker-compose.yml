@@ -4,13 +4,16 @@ services:
         image: redis:4.0.6
         ports:
             - "6379:6379"
-# 指定 redis 访问密码，要与后面REDIS_PASSWORD定义一致
+# 指定 redis 访问密码，要与后面 REDIS_PASSWORD 定义一致
         command: redis-server --requirepass hello
 #        volumes:
 #            - /data
     db:
         build: db
-        environment :
+# 不需要对外发布数据库端口
+#        ports:
+#            - "3306:3306"
+        environment:
 #            MYSQL_ROOT_PASSWORD: root
 # 数据库访问用户名/密码
 #             MYSQL_USER: gdface
