@@ -4,6 +4,8 @@ services:
         image: redis:4.0.6
         ports:
             - "6379:6379"
+# 指定 redis 访问密码，要与后面REDIS_PASSWORD定义一致
+        command: redis-server --requirepass hello
 #        volumes:
 #            - /data
     db:
@@ -15,14 +17,13 @@ services:
 #             MYSQL_PASSWORD: gdface
             MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
             MYSQL_DATABASE: gdface
-        expose:
-            - "3306"
 #        volumes:
 #            - /data
     service:
         build: facelog-service
         environment :
             REDIS_HOST: redis
+            REDIS_PASSWORD: hello
             DATABASE_HOST: db
             DATABASE_SCHEMA: gdface
 # 数据库访问用户名/密码
@@ -42,5 +43,3 @@ services:
             - redis
 #        volumes:
 #            - /data
-
-    
