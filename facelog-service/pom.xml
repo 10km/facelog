@@ -298,6 +298,26 @@
 							</execution>
 						</executions>
 					</plugin>
+	            <plugin>
+	                <artifactId>maven-assembly-plugin</artifactId>
+	                <version>2.4.1</version>
+	                <executions>
+	                    <execution>
+	                        <id>make-zip</id>
+	                        <!-- 绑定到package生命周期阶段上 -->
+	                        <phase>package</phase>
+	                        <goals>
+	                            <!-- 绑定到package生命周期阶段上 -->
+	                            <goal>single</goal>
+	                        </goals>
+	                        <configuration>
+	                            <descriptors> <!--描述文件路径-->
+	                                <descriptor>${project.basedir}/docker.xml</descriptor>
+	                            </descriptors>
+	                        </configuration>
+	                    </execution>
+	                </executions>
+	            </plugin>
 				</plugins>
 			</build>
 		</profile>

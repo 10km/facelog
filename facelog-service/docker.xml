@@ -1,0 +1,41 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+	<!-- 将docker部署相关文件打包成zip -->
+	<id>docker-distribution</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<fileSets>
+		<fileSet>
+			<directory>${project.parent.basedir}</directory>
+			<includes>
+				<include>docker-compose.yml</include>
+				<include>README-docker.md</include>
+			</includes>
+			<outputDirectory>/</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/db</directory>
+			<includes>
+				<include>Dockerfile</include>
+				<include>sql/create_table.sql</include>
+			</includes>
+			<outputDirectory>/db</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}</directory>
+			<includes>
+				<include>Dockerfile</include>
+			</includes>
+			<outputDirectory>/facelog-service</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>${project.build.directory}</directory>
+			<includes>
+				<include>*-standalone.jar</include>
+			</includes>
+			<outputDirectory>/facelog-service/target</outputDirectory>
+		</fileSet>
+	</fileSets>
+</assembly>
