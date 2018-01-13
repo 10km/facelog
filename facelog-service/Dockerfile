@@ -1,3 +1,6 @@
+# docker image of facelog service
+# version 1.0.0
+# author guyadong
 FROM java:7
 MAINTAINER guyadong(10km0811@sohu.com)
 #RUN groupadd -r facelog && useradd -r -d /home/facelog -g facelog facelog

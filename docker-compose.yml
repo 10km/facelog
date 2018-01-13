@@ -1,0 +1,46 @@
+version: "2"
+services:
+    redis:
+        image: redis:4.0.6
+        ports:
+            - "6379:6379"
+#        volumes:
+#            - /data
+    db:
+        build: db
+        environment :
+#            MYSQL_ROOT_PASSWORD: root
+# 数据库访问用户名/密码
+#             MYSQL_USER: gdface
+#             MYSQL_PASSWORD: gdface
+            MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+            MYSQL_DATABASE: gdface
+        expose:
+            - "3306"
+#        volumes:
+#            - /data
+    service:
+        build: facelog-service
+        environment :
+            REDIS_HOST: redis
+            DATABASE_HOST: db
+            DATABASE_SCHEMA: gdface
+# 数据库访问用户名/密码
+#            DATABASE_USER: gdface
+#            DATABASE_PASSWORD: gdface
+# service远程调试开关,设置为true同时打开8000端口才有效
+#            FACELOG_DEBUG: true
+        ports: 
+            - "26411:26411"
+# debug 调试需要
+#            - "8000:8000"
+        links:
+            - redis
+            - db
+        depends_on:
+            - db
+            - redis
+#        volumes:
+#            - /data
+
+    
