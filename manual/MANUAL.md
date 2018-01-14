@@ -975,6 +975,10 @@ facelog 服务提供了`getServiceConfig`,`getProperty`,`setProperty`,`saveServi
 
     java -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n -jar facelog-service-1.0.2-standalone.jar
 
+## docker 部署
+
+docker 部署参见 [REDME-docker.md](../README-docker.md)
+
 
 [1]:https://gitee.com/l0km/simplemq
 [2]:https://redis.io/
