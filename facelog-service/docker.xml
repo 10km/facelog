@@ -27,6 +27,7 @@
 			<directory>${project.basedir}</directory>
 			<includes>
 				<include>Dockerfile</include>
+				<include>docker-entrypoint.sh</include>
 			</includes>
 			<outputDirectory>/facelog-service</outputDirectory>
 		</fileSet>
