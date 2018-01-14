@@ -1,6 +1,5 @@
 # docker image of facelog service
-# version 1.0.0
-# author guyadong
+# version 1.0.1
 FROM java:7
 MAINTAINER guyadong(10km0811@sohu.com)
 #RUN groupadd -r facelog && useradd -r -d /home/facelog -g facelog facelog
@@ -19,23 +18,15 @@ ENV FACELOG_VERSION=1.0.4-SNAPSHOT \
     DATABASE_PASSWORD="" 
 ENV SERVICE_JAR facelog-service-${FACELOG_VERSION}-standalone.jar
 COPY ./target/$SERVICE_JAR /usr/local/facelog/$SERVICE_JAR
+COPY docker-entrypoint.sh /usr/bin
+RUN chmod +x /usr/bin/docker-entrypoint.sh
 #USER facelog
 RUN  mkdir -p /usr/local/facelog /var/lib/facelog/log ~/.facelog 
 WORKDIR /usr/local/facelog
 EXPOSE $SERVICE_PORT $FACELOG_DEBUG_PORT
 VOLUME /var/lib/facelog
-CMD set -x; {\
-		echo "redis.host=$REDIS_HOST" ;\
-		echo "redis.port=$REDIS_PORT" ;\
-		echo "redis.password=$REDIS_PASSWORD" ;\
-		echo "database.jdbc.host=$DATABASE_HOST" ;\
-		echo "database.jdbc.port=$DATABASE_PORT" ;\
-		echo "database.jdbc.schema=$DATABASE_SCHEMA" ;\
-		echo "database.jdbc.user=$DATABASE_USER" ;\
-		echo "database.jdbc.password=$DATABASE_PASSWORD" ;\
-		echo "syslog.location=/var/lib/facelog/log/facelog.log" ;\
-		} > ~/.facelog/config.properties \
-		; if $FACELOG_DEBUG ; then \
+CMD set -x; \
+		if [ $FACELOG_DEBUG ] ; then \
 			debug="-Xrunjdwp:transport=dt_socket,server=y,address=$FACELOG_DEBUG_PORT,suspend=n"; \
 		else \
 			debug=''; \
