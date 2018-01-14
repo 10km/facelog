@@ -29,9 +29,10 @@ public class ClientTest implements CommonConstant {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		// docker test
-		//facelogClient = ClientFactory.builder().setHostAndPort("192.168.99.100", DEFAULT_PORT).build();
-		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build();
-		rootToken = facelogClient.applyRootToken("guyadong", false);
+		facelogClient = ClientFactory.builder().setHostAndPort("192.168.99.100", DEFAULT_PORT).build();
+		rootToken = facelogClient.applyRootToken("root", false);
+//		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build();
+//		rootToken = facelogClient.applyRootToken("guyadong", false);
 	}
 
 	@AfterClass
@@ -95,8 +96,8 @@ public class ClientTest implements CommonConstant {
 			byte[] imgBytes = FaceUtilits.getBytesNotEmpty(url);
 			String md5 = Hashing.md5().hashBytes(imgBytes).toString();
 			facelogClient.deleteImage(md5, rootToken);
-			facelogClient.addImage(FaceUtilits.getBytesNotEmpty(url), null, null, 0, rootToken);
-			logger.info("image added");
+			ImageBean imageBean = facelogClient.addImage(FaceUtilits.getBytesNotEmpty(url), null, null, 0, rootToken);
+			logger.info("image added {}",imageBean.toString(true, false));
 		}catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(false);
