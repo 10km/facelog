@@ -22,7 +22,7 @@ services:
             MYSQL_DATABASE: gdface
 #        volumes:
 #            - /data
-    service:
+    facelog:
         build: facelog-service
         environment :
             REDIS_HOST: redis

@@ -1,8 +1,8 @@
-#!/bin/sh
+#! /bin/sh
 set -ex
-workdir=/usr/local/facelog
-config_file = $workdir/config.properties
-if [ ! -f $config_file] ; then
+workdir=/data
+config_file=$workdir/config.properties
+if [ ! -f "$config_file" ] ; then
 # 生成基本配置文件
 		cat > $config_file <<EOF 
 redis.host=$REDIS_HOST
@@ -15,7 +15,9 @@ database.jdbc.user=$DATABASE_USER
 database.jdbc.password=$DATABASE_PASSWORD
 syslog.location=$workdir/log/facelog.log
 EOF
+		mkdir -p $workdir/log ~/.facelog
 		ln -s $config_file ~/.facelog/config.properties
+		
 fi
 
 exec "$@"

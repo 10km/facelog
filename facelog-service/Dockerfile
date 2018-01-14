@@ -2,7 +2,7 @@
 # version 1.0.1
 FROM java:7
 MAINTAINER guyadong(10km0811@sohu.com)
-#RUN groupadd -r facelog && useradd -r -d /home/facelog -g facelog facelog
+RUN groupadd -r facelog && useradd -r -m -g facelog facelog
 LABEL version="1.0.0" description="facelog docker"
 ENV FACELOG_VERSION=1.0.4-SNAPSHOT \
 		FACELOG_DEBUG=false \
@@ -18,15 +18,15 @@ ENV FACELOG_VERSION=1.0.4-SNAPSHOT \
     DATABASE_PASSWORD="" 
 ENV SERVICE_JAR facelog-service-${FACELOG_VERSION}-standalone.jar
 COPY ./target/$SERVICE_JAR /usr/local/facelog/$SERVICE_JAR
-COPY docker-entrypoint.sh /usr/bin
-RUN chmod +x /usr/bin/docker-entrypoint.sh
-#USER facelog
-RUN  mkdir -p /usr/local/facelog /var/lib/facelog/log ~/.facelog 
-WORKDIR /usr/local/facelog
+COPY docker-entrypoint.sh /usr/local/bin
+ENTRYPOINT ["docker-entrypoint.sh"]
+RUN  mkdir /data && chown facelog:facelog /data
+VOLUME /data
+WORKDIR /data
 EXPOSE $SERVICE_PORT $FACELOG_DEBUG_PORT
-VOLUME /var/lib/facelog
+USER facelog
 CMD set -x; \
-		if [ $FACELOG_DEBUG ] ; then \
+		if [ "$FACELOG_DEBUG" = true ] ; then \
 			debug="-Xrunjdwp:transport=dt_socket,server=y,address=$FACELOG_DEBUG_PORT,suspend=n"; \
 		else \
 			debug=''; \
