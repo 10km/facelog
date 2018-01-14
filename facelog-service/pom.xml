@@ -141,6 +141,25 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>templating-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<!-- 替换Dockerfile中的版本号 -->
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>replacer</artifactId>
+				<version>1.5.3</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+						<configuration>
+							<file>${project.basedir}/Dockerfile</file>
+							<regex>true</regex>
+							<token>(FACELOG_VERSION)\s*=\s*[\w\.-]+</token>
+							<value>$1=${project.version}</value>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -238,6 +257,25 @@
 										<ignore />
 									</action>
 								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											com.google.code.maven-replacer-plugin
+										</groupId>
+										<artifactId>
+											replacer
+										</artifactId>
+										<versionRange>
+											[1.5.3,)
+										</versionRange>
+										<goals>
+											<goal>replace</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
@@ -297,27 +335,27 @@
 								</goals>
 							</execution>
 						</executions>
-					</plugin>
-	            <plugin>
-	                <artifactId>maven-assembly-plugin</artifactId>
-	                <version>2.4.1</version>
-	                <executions>
-	                    <execution>
-	                        <id>make-zip</id>
-	                        <!-- 绑定到package生命周期阶段上 -->
-	                        <phase>package</phase>
-	                        <goals>
-	                            <!-- 绑定到package生命周期阶段上 -->
-	                            <goal>single</goal>
-	                        </goals>
-	                        <configuration>
-	                            <descriptors> <!--描述文件路径-->
-	                                <descriptor>${project.basedir}/docker.xml</descriptor>
-	                            </descriptors>
-	                        </configuration>
-	                    </execution>
-	                </executions>
-	            </plugin>
+						</plugin>
+			            <plugin>
+			                <artifactId>maven-assembly-plugin</artifactId>
+			                <version>2.4.1</version>
+			                <executions>
+			                    <execution>
+			                        <id>make-zip</id>
+			                        <!-- 绑定到package生命周期阶段上 -->
+			                        <phase>package</phase>
+			                        <goals>
+			                            <!-- 绑定到package生命周期阶段上 -->
+			                            <goal>single</goal>
+			                        </goals>
+			                        <configuration>
+			                            <descriptors> <!--描述文件路径-->
+			                                <descriptor>${project.basedir}/docker.xml</descriptor>
+			                            </descriptors>
+			                        </configuration>
+			                    </execution>
+			                </executions>
+			            </plugin>
 				</plugins>
 			</build>
 		</profile>
