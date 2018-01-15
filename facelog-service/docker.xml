@@ -24,17 +24,11 @@
 			<outputDirectory>/db</outputDirectory>
 		</fileSet>
 		<fileSet>
-			<directory>${project.basedir}</directory>
+			<directory>${project.build.directory}</directory>
 			<includes>
 				<include>Dockerfile</include>
 				<include>docker-entrypoint.sh</include>
-			</includes>
-			<outputDirectory>/facelog-service</outputDirectory>
-		</fileSet>
-		<fileSet>
-			<directory>${project.build.directory}</directory>
-			<includes>
-				<include>*-standalone.jar</include>
+				<include>${project.build.finalName}-standalone.jar</include>
 			</includes>
 			<outputDirectory>/facelog-service/target</outputDirectory>
 		</fileSet>

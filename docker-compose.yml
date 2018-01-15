@@ -23,7 +23,7 @@ services:
 #        volumes:
 #            - /facelog_data:/var/lib/mysql
     facelog:
-        build: facelog-service
+        build: facelog-service/target
         environment :
             REDIS_HOST: redis
             REDIS_PASSWORD: hello

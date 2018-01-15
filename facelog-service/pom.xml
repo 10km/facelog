@@ -142,20 +142,26 @@
 				<artifactId>templating-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-				<!-- 替换Dockerfile中的版本号 -->
+				<!-- 替换Dockerfile中的版本号,输出到target -->
 				<groupId>com.google.code.maven-replacer-plugin</groupId>
 				<artifactId>replacer</artifactId>
 				<version>1.5.3</version>
 				<executions>
 					<execution>
+						<id>replace-dockerfile</id>
 						<goals>
 							<goal>replace</goal>
 						</goals>
 						<configuration>
-							<file>${project.basedir}/Dockerfile</file>
-							<regex>true</regex>
-							<token>(FACELOG_VERSION)\s*=\s*[\w\.-]+</token>
-							<value>$1=${project.version}</value>
+							<basedir>src/main/docker</basedir>
+							<filesToInclude>*.in</filesToInclude>
+							<regex>false</regex>
+							<token>$VERSION$</token>
+							<value>${project.version}</value>
+							<outputDir>.</outputDir>
+							<outputBasedir>${project.build.directory}</outputBasedir>
+							<inputFilePattern>(.*)in$</inputFilePattern>
+							<outputFilePattern>$1</outputFilePattern>
 						</configuration>
 					</execution>
 				</executions>
