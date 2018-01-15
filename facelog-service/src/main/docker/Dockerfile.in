@@ -8,14 +8,14 @@ ENV FACELOG_VERSION=$VERSION$ \
 		FACELOG_DEBUG=false \
 		FACELOG_DEBUG_PORT=8000 \
 		SERVICE_PORT=26411 \
-    REDIS_HOST=localhost \
-    REDIS_PORT=6379 \
-    REDIS_PASSWORD="" \
-    DATABASE_HOST=localhost \
-    DATABASE_PORT=3306 \
-    DATABASE_SCHEMA=test \
-    DATABASE_USER=root \
-    DATABASE_PASSWORD="" 
+		REDIS_HOST=localhost \
+		REDIS_PORT=6379 \
+		REDIS_PASSWORD="" \
+		DATABASE_HOST=localhost \
+		DATABASE_PORT=3306 \
+		DATABASE_SCHEMA=test \
+		DATABASE_USER=root \
+		DATABASE_PASSWORD="" 
 ENV SERVICE_JAR facelog-service-${FACELOG_VERSION}-standalone.jar
 COPY ./$SERVICE_JAR /usr/local/facelog/$SERVICE_JAR
 COPY docker-entrypoint.sh /usr/local/bin
