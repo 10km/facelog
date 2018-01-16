@@ -23,7 +23,9 @@ services:
 #        volumes:
 #            - /facelog_data:/var/lib/mysql
     facelog:
-        build: facelog-service/target
+        build: 
+            context: facelog-service/target
+            dockerfile: Dockerfile_maven
         environment :
             REDIS_HOST: redis
             REDIS_PASSWORD: hello
