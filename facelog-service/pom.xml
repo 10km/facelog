@@ -15,15 +15,15 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>com.gitee.l0km</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>facelog-db</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.gitee.l0km</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>simplemq</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.gitee.l0km</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>common-base</artifactId>
 		</dependency>
 		<dependency>
@@ -120,7 +120,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 			</plugin>
 			<plugin>
-				<groupId>com.gitee.l0km</groupId>
+				<groupId>${project.groupId}</groupId>
 				<artifactId>swift2thrift-maven-plugin</artifactId>
 				<executions>
 					<execution>

@@ -23,11 +23,11 @@
 			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.gitee.l0km</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>simplemq</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.gitee.l0km</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>common-base</artifactId>
 			<scope>test</scope>
 		</dependency>

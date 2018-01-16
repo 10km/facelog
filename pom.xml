@@ -93,17 +93,17 @@
 				<version>2.1</version>
 			</dependency>
 			<dependency>
-				<groupId>com.gitee.l0km</groupId>
+				<groupId>${project.groupId}</groupId>
 				<artifactId>facelog-db</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.gitee.l0km</groupId>
+				<groupId>${project.groupId}</groupId>
 				<artifactId>simplemq</artifactId>
 				<version>1.0.4</version>
 			</dependency>
 			<dependency>
-				<groupId>com.gitee.l0km</groupId>
+				<groupId>${project.groupId}</groupId>
 				<artifactId>common-base</artifactId>
 				<version>1.0.0</version>
 			</dependency>
@@ -135,7 +135,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore />
+										<ignore/>
 									</action>
 								</pluginExecution>
 								<pluginExecution>
@@ -156,7 +156,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore />
+										<ignore/>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
@@ -297,6 +297,7 @@
 		<module>db</module>
 		<module>facelog-service</module>
 		<module>facelog-client</module>
+		<module>facelogservice-maven-plugin</module>
 	</modules>
 	<licenses>
 		<license>
