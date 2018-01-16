@@ -1,8 +1,8 @@
 # docker image of facelog service
-# version 1.0.2
+# version 1.0.3
 FROM maven:3.5.2-jdk-7
 MAINTAINER guyadong(10km0811@sohu.com)
-#RUN groupadd -r facelog && useradd -r -m -g facelog facelog
+RUN groupadd -r facelog && useradd -r -m -g facelog facelog
 LABEL version="$VERSION$" description="facelog docker"
 ENV FACELOG_VERSION=$VERSION$ \
 		FACELOG_DEBUG=false \
@@ -17,15 +17,13 @@ ENV FACELOG_VERSION=$VERSION$ \
 		DATABASE_USER=root \
 		DATABASE_PASSWORD="" 
 COPY docker-entrypoint.sh /usr/local/bin
-COPY /usr/share/maven/ref/settings-docker.xml ~/root/.m2/settings.xml
 ENTRYPOINT ["docker-entrypoint.sh"]
-RUN  mkdir /data 
-#		&& chown facelog:facelog /data \
-#		&& mvn com.gitee.l0km:facelogservice-maven-plugin:${FACELOG_VERSION}:docker-init
+RUN  mkdir /data && chown facelog:facelog /data 
+USER facelog
+RUN mvn com.gitee.l0km:facelogservice-maven-plugin:${FACELOG_VERSION}:docker-init
 VOLUME /data
 WORKDIR /data
 EXPOSE $SERVICE_PORT $FACELOG_DEBUG_PORT
-#USER facelog
 CMD set -x; \
 		if [ "$FACELOG_DEBUG" = true ] ; then \
 			MAVEN_OPTS="-Xrunjdwp:transport=dt_socket,server=y,address=$FACELOG_DEBUG_PORT,suspend=n"; \
