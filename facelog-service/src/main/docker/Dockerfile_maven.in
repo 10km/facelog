@@ -16,8 +16,8 @@ ENV FACELOG_VERSION=$VERSION$ \
 		DATABASE_SCHEMA=test \
 		DATABASE_USER=root \
 		DATABASE_PASSWORD="" 
-COPY docker-entrypoint.sh /usr/local/bin
-ENTRYPOINT ["docker-entrypoint.sh"]
+COPY facelog-entrypoint.sh /usr/local/bin
+ENTRYPOINT ["facelog-entrypoint.sh"]
 RUN  mkdir /data && chown facelog:facelog /data 
 USER facelog
 RUN mvn com.gitee.l0km:facelogservice-maven-plugin:${FACELOG_VERSION}:docker-init

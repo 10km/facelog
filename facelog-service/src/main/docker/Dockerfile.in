@@ -18,8 +18,8 @@ ENV FACELOG_VERSION=$VERSION$ \
 		DATABASE_PASSWORD="" 
 ENV SERVICE_JAR facelog-service-${FACELOG_VERSION}-standalone.jar
 COPY ./$SERVICE_JAR /usr/local/facelog/$SERVICE_JAR
-COPY docker-entrypoint.sh /usr/local/bin
-ENTRYPOINT ["docker-entrypoint.sh"]
+COPY facelog-entrypoint.sh /usr/local/bin
+ENTRYPOINT ["facelog-entrypoint.sh"]
 RUN  mkdir /data && chown facelog:facelog /data
 VOLUME /data
 WORKDIR /data
