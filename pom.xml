@@ -9,7 +9,7 @@
 
 	<groupId>com.gitee.l0km</groupId>
 	<artifactId>facelog</artifactId>
-	<version>1.0.6-SNAPSHOT</version>
+	<version>1.0.6</version>
 	<packaging>pom</packaging>
 
 	<name>facelog aggregator</name>
@@ -135,7 +135,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore/>
+										<ignore />
 									</action>
 								</pluginExecution>
 								<pluginExecution>
@@ -156,7 +156,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore/>
+										<ignore />
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
