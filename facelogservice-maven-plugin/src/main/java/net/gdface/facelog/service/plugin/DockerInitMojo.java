@@ -12,7 +12,7 @@ import org.apache.maven.plugins.annotations.Mojo;
  * @author guyadong
  *
  */
-@Mojo(name = "docker-init")
+@Mojo(name = "docker-init", requiresProject = false)
 public class DockerInitMojo extends AbstractMojo {
 
 	public DockerInitMojo() {
