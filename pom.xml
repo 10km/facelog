@@ -9,7 +9,7 @@
 
 	<groupId>com.gitee.l0km</groupId>
 	<artifactId>facelog</artifactId>
-	<version>1.0.7-SNAPSHOT</version>
+	<version>1.0.8-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>facelog aggregator</name>
