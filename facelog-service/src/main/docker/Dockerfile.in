@@ -19,6 +19,8 @@ ENV FACELOG_VERSION=$VERSION$ \
 ENV SERVICE_JAR facelog-service-${FACELOG_VERSION}-standalone.jar
 COPY ./$SERVICE_JAR /usr/local/facelog/$SERVICE_JAR
 COPY facelog-entrypoint.sh /usr/local/bin
+# dos to unix
+RUN sed -i 's/\r$//g' /usr/local/bin/facelog-entrypoint.sh
 ENTRYPOINT ["facelog-entrypoint.sh"]
 RUN  mkdir /data && chown facelog:facelog /data
 VOLUME /data

@@ -17,6 +17,8 @@ ENV FACELOG_VERSION=$VERSION$ \
 		DATABASE_USER=root \
 		DATABASE_PASSWORD="" 
 COPY facelog-entrypoint.sh /usr/local/bin
+# dos to unix
+RUN sed -i 's/\r$//g' /usr/local/bin/facelog-entrypoint.sh
 ENTRYPOINT ["facelog-entrypoint.sh"]
 RUN  mkdir /data && chown facelog:facelog /data 
 USER facelog
