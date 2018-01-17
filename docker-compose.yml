@@ -25,7 +25,7 @@ services:
     facelog:
         build: 
             context: facelog-service/target
-            dockerfile: Dockerfile_maven
+            dockerfile: Dockerfile
         environment :
             REDIS_HOST: redis
             REDIS_PASSWORD: hello

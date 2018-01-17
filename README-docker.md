@@ -2,7 +2,7 @@
 
 facelog支持docker容器部署,facelog docker 服务由三个容器组成:`redis`,`mysql`,`facelog service`,
 
- `facelog-service-${version}-distribution.zip`压缩包包含docker容器部署所有文件，解压缩后，在解压缩后的文件夹下执行相应的docker命令，即可完成容器部署操作。
+ `facelog-service-${version}-docker-maven-distribution.zip`压缩包包含docker容器部署所有文件，解压缩后，在解压缩后的文件夹下执行相应的docker命令，即可完成容器部署操作。
 
 **注意：**
 
