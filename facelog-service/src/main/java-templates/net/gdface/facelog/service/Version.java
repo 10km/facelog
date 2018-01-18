@@ -3,7 +3,7 @@ package net.gdface.facelog.service;
 import com.google.common.collect.ImmutableMap;
 
 /**
- * version information for project
+ * version information for project ${project.groupId}:${project.artifactId}
  * @author guyadong
  */
 public final class Version {
