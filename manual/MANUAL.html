@@ -306,10 +306,10 @@ document.addEventListener("DOMContentLoaded", function() {
         var level = parseInt(header.tagName.replace('H', ''), 10)-1;
         // 通过两个where循环对栈进行调整,确保stack中标题级数与当前标题级数相同
         while(stack.length < level){
-        	stack.push(0);
+            stack.push(0);
         }
         while(stack.length > level){
-        	stack.pop();
+            stack.pop();
         }
         // 最小一级标题标号步进+1
         stack[stack.length-1]++;
@@ -1363,6 +1363,8 @@ facelog 服务端也提供<code>version,versionInfo</code>接口方法用于获�
 <pre><code>java -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n -jar facelog-service-1.0.2-standalone.jar
 </code></pre>
 
+<h2>docker 部署</h2>
+<p>docker 部署参见 <a href="../README-docker.md">REDME-docker.md</a></p>
 
 </body>
 </html>
