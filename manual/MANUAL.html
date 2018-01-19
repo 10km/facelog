@@ -306,10 +306,10 @@ document.addEventListener("DOMContentLoaded", function() {
         var level = parseInt(header.tagName.replace('H', ''), 10)-1;
         // 通过两个where循环对栈进行调整,确保stack中标题级数与当前标题级数相同
         while(stack.length < level){
-            stack.push(0);
+        	stack.push(0);
         }
         while(stack.length > level){
-            stack.pop();
+        	stack.pop();
         }
         // 最小一级标题标号步进+1
         stack[stack.length-1]++;
@@ -703,7 +703,7 @@ IFaceLogClientAsync facelogClientAsync = ClientFactory.builder()
 <p><code>设备注册</code>就是设备端将自己的设备信息向 facelog 服务登记的过程，只有在facelog 数据库设备表(<code>fl_device</code>)有记录的设备，才是facelog 认可的合法设备，才会允许其申请设备令牌。这个动作在设备安装时执行一次就可以了。</p>
 <p><code>设备注销</code>与<code>设备注册</code>作用相反，就是当前设备将自己的设备信息从facelog 数据库中删除的过程，这个动作需要在设备从facelog 系统中删除时执行一次。</p>
 <h4>设备注册及令牌申请示例</h4>
-<p>上一节中介绍了设备令牌的申请方式，要说明的是在设备端申请令片之前，先要有一个设备注册过程。否则申请令牌不会成功。下面的示例说明设备注册/注销及设备令牌申请/释放的顺序过程。</p>
+<p>上一节中介绍了设备令牌的申请方式，要说明的是在设备端申请令牌之前，先要有一个设备注册过程。否则申请令牌不会成功。下面的示例说明设备注册/注销及设备令牌申请/释放的顺序过程。</p>
 <pre><code>@Test
 public void test4RegisterDevice(){
     // 获取当前设备的MAC地址(假设只有一块网卡)
@@ -1132,7 +1132,7 @@ public class DeviceCmdTest implements ChannelConstant{
         // 创建服务实例
         facelogClient = ClientFactory.builder().setHostAndPort(&quot;127.0.0.1&quot;, DEFAULT_PORT).build();
         // 申请root令牌
-        rootToken = facelogClient.applyRootToken(&quot;guyadong&quot;, false);
+        rootToken = facelogClient.applyRootToken(&quot;${root_password}&quot;, false);
         byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
         device = DeviceBean.builder().mac(NetworkUtil.formatMac(address, null)).serialNo(&quot;12322333&quot;).build();
         logger.info(device.toString(true,false));
@@ -1355,16 +1355,27 @@ facelog 服务端也提供<code>version,versionInfo</code>接口方法用于获�
 <h3>程序修改参数</h3>
 <p>facelog 服务提供了<code>getServiceConfig</code>,<code>getProperty</code>,<code>setProperty</code>,<code>saveServiceConfig</code>接口方法用于修改和保存系统参数。需要有 ROOT 令牌。</p>
 <h2>facelog service 启动</h2>
+<p>maven 插件启动 (since version 1.0.8)</p>
+<pre><code>mvn com.gitee.l0km:facelogservice-maven-plugin:${facelog_version}:run
+</code></pre>
+
 <p>命令行启动服务</p>
-<pre><code>java -jar facelog-service-1.0.2-standalone.jar
+<pre><code>java -jar facelog-service-${facelog_version}-standalone.jar
 </code></pre>
 
 <p>命令行启动远程调试</p>
-<pre><code>java -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n -jar facelog-service-1.0.2-standalone.jar
+<pre><code>java -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n -jar facelog-service-${facelog_version}-standalone.jar
 </code></pre>
 
 <h2>docker 部署</h2>
-<p>docker 部署参见 <a href="../README-docker.md">REDME-docker.md</a></p>
+<p>从 1.0.8版本以后facelog支持docker部署，提供了docker镜像生成脚本，方便应用项目快速部署facelog 服务。  </p>
+<p>执行下面的maven命令下载指定版本<code>${facelog_version}</code>的docker部署zip包到<code>/you/path</code></p>
+<pre><code>mvn dependency:get \ 
+    -Dartifact=com.gitee.l0km:facelog-service:${facelog_version}:zip:docker-maven-distribution 
+    -Ddest=/you/path
+</code></pre>
+
+<p>解压Zip包后，参见其中的docker 部署说明文档： <a href="../README-docker.md">REDME-docker.md</a> </p>
 
 </body>
 </html>
