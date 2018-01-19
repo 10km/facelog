@@ -303,7 +303,7 @@ client类型|令牌类型|操作|facelog 服务接口方法
 #### 设备注册及令牌申请示例
 
 
-上一节中介绍了设备令牌的申请方式，要说明的是在设备端申请令片之前，先要有一个设备注册过程。否则申请令牌不会成功。下面的示例说明设备注册/注销及设备令牌申请/释放的顺序过程。
+上一节中介绍了设备令牌的申请方式，要说明的是在设备端申请令牌之前，先要有一个设备注册过程。否则申请令牌不会成功。下面的示例说明设备注册/注销及设备令牌申请/释放的顺序过程。
 
     @Test
 	public void test4RegisterDevice(){
@@ -745,7 +745,7 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
     		// 创建服务实例
     		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build();
     		// 申请root令牌
-    		rootToken = facelogClient.applyRootToken("guyadong", false);
+    		rootToken = facelogClient.applyRootToken("${root_password}", false);
     		byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
     		device = DeviceBean.builder().mac(NetworkUtil.formatMac(address, null)).serialNo("12322333").build();
     		logger.info(device.toString(true,false));
@@ -967,17 +967,29 @@ facelog 服务提供了`getServiceConfig`,`getProperty`,`setProperty`,`saveServi
 
 ## facelog service 启动
 
+maven 插件启动 (since version 1.0.8)
+
+	mvn com.gitee.l0km:facelogservice-maven-plugin:${facelog_version}:run
+
 命令行启动服务
 
-    java -jar facelog-service-1.0.2-standalone.jar
+    java -jar facelog-service-${facelog_version}-standalone.jar
 
 命令行启动远程调试
 
-    java -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n -jar facelog-service-1.0.2-standalone.jar
+    java -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n -jar facelog-service-${facelog_version}-standalone.jar
 
 ## docker 部署
 
-docker 部署参见 [REDME-docker.md](../README-docker.md)
+从 1.0.8版本以后facelog支持docker部署，提供了docker镜像生成脚本，方便应用项目快速部署facelog 服务。  
+
+执行下面的maven命令下载指定版本`${facelog_version}`的docker部署zip包到`/you/path`
+
+	mvn dependency:get \ 
+		-Dartifact=com.gitee.l0km:facelog-service:${facelog_version}:zip:docker-maven-distribution 
+		-Ddest=/you/path
+
+解压Zip包后，参见其中的docker 部署说明文档： [REDME-docker.md](../README-docker.md) 
 
 
 [1]:https://gitee.com/l0km/simplemq
