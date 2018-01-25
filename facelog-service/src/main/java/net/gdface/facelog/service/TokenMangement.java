@@ -28,7 +28,7 @@ import net.gdface.utils.FaceUtilits;
  */
 class TokenMangement implements ServiceConstant {
 	private static final String ACK_PREFIX = "ack_";
-	private final Dao dao;
+	private final BaseDao dao;
 	/**  {@code 设备ID -> token} 映射表 */
 	private final RedisTable<Token> deviceTokenTable;
 	/**  {@code 人员ID -> token} 映射表 */
@@ -50,7 +50,7 @@ class TokenMangement implements ServiceConstant {
 	/**
 	 * @param dao
 	 */
-	TokenMangement(Dao dao) {
+	TokenMangement(BaseDao dao) {
 		this.dao = checkNotNull(dao,"dao is null");
 		this.salt = CONFIG.getString(TOKEN_SALT);
 		this.rejectZero = CONFIG.getBoolean(TOKEN_PERSON_REJECTZERO);

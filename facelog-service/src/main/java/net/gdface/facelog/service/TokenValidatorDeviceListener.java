@@ -4,7 +4,7 @@ import com.google.common.base.Objects;
 
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
-import net.gdface.facelog.service.Dao.WriteOp;
+import net.gdface.facelog.service.BaseDao.WriteOp;
 import net.gdface.facelog.service.Token.TokenType;
 import net.gdface.facelog.service.TokenMangement.TokenOp;
 
@@ -14,7 +14,7 @@ import net.gdface.facelog.service.TokenMangement.TokenOp;
  *
  */
 class TokenValidatorDeviceListener extends BaseTokenValidatorListener<DeviceBean> {
-	TokenValidatorDeviceListener(Dao dao) {
+	TokenValidatorDeviceListener(BaseDao dao) {
 		super(dao);
 	}
 	/**

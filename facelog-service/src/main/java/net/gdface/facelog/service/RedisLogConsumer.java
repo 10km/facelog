@@ -8,7 +8,7 @@ import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisConsumer;
 import gu.simplemq.redis.RedisFactory;
 import net.gdface.facelog.db.LogBean;
-import net.gdface.facelog.service.Dao;
+import net.gdface.facelog.service.BaseDao;
 
 /**
  * 负责验证日志服务端统一保存的消费实现(未完成)
@@ -17,11 +17,11 @@ import net.gdface.facelog.service.Dao;
  */
 class RedisLogConsumer implements ServiceConstant {
 	private final RedisConsumer consumer;
-	private final Dao dao;
-	public RedisLogConsumer(Dao dao){
+	private final BaseDao dao;
+	public RedisLogConsumer(BaseDao dao){
 		this(dao,JedisPoolLazy.getDefaultInstance());
 	}
-	public RedisLogConsumer(Dao dao,JedisPoolLazy poolLazy){
+	public RedisLogConsumer(BaseDao dao,JedisPoolLazy poolLazy){
 		this.dao = checkNotNull(dao);
 		this.consumer = RedisFactory.getConsumer(checkNotNull(poolLazy));
 		this.consumer.register(ChannelConstant.QUEUE_LOG.asMutable().setAdapter(new IMessageAdapter<LogBean>(){

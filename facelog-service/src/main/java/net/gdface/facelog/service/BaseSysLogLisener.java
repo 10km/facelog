@@ -16,7 +16,7 @@ import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
-import net.gdface.facelog.service.Dao.WriteOp;
+import net.gdface.facelog.service.BaseDao.WriteOp;
 
 /**
  * 用于生成系统日志的侦听器抽象类<br>

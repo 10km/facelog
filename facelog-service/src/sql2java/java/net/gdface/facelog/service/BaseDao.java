@@ -3,12 +3,11 @@
 // modified by guyadong from
 // sql2java original version https://sourceforge.net/projects/sql2java/ 
 // JDBC driver used at code generation time: com.mysql.jdbc.Driver
-// template: dao.java.vm
+// template: base.dao.java.vm
 // ______________________________________________________
 package net.gdface.facelog.service;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -52,7 +51,7 @@ import net.gdface.facelog.db.exception.RuntimeDaoException;
  * @author guyadong
  *
  */
-class Dao implements CommonConstant {
+class BaseDao implements CommonConstant {
     
     static final IDeviceManager getDeviceManager(){
         return TableManagerInitializer.INSTANCE.deviceManager;

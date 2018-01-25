@@ -2,7 +2,7 @@ package net.gdface.facelog.service;
 
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
-import net.gdface.facelog.service.Dao.WriteOp;
+import net.gdface.facelog.service.BaseDao.WriteOp;
 import net.gdface.facelog.service.Token.TokenType;
 
 /**
@@ -11,7 +11,7 @@ import net.gdface.facelog.service.Token.TokenType;
  *
  */
 class TokenValidatorPersonListener extends BaseTokenValidatorListener<PersonBean> {
-	TokenValidatorPersonListener(Dao dao) {
+	TokenValidatorPersonListener(BaseDao dao) {
 		super(dao);
 	}
 	/**

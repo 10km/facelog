@@ -10,7 +10,7 @@ import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
-import net.gdface.facelog.service.Dao.WriteOp;
+import net.gdface.facelog.service.BaseDao.WriteOp;
 import net.gdface.facelog.service.Token.TokenType;
 
 /**
@@ -20,14 +20,14 @@ import net.gdface.facelog.service.Token.TokenType;
  *
  */
 abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableListener.Adapter<B> implements ServiceConstant {
-	protected final Dao dao;
+	protected final BaseDao dao;
 	private final ImmutableSet<WriteOp> operatorAllow;
 	private final ImmutableSet<WriteOp> deviceAllow;
 	private final Class<B> type;
 	protected final boolean validateDeviceToken;
 	protected final boolean validatePersonToken;
 	@SuppressWarnings("unchecked")
-	protected BaseTokenValidatorListener(Dao dao) {
+	protected BaseTokenValidatorListener(BaseDao dao) {
 		this.dao = checkNotNull(dao,"dao is null");
 		this.operatorAllow = GlobalConfig.getEnumSet(WriteOp.class, getOperatorAllowKey());
 		this.deviceAllow = GlobalConfig.getEnumSet(WriteOp.class, getDeviceAllowKey());

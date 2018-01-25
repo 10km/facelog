@@ -2,12 +2,11 @@
 #parse( "schema.include.vm" )
 #parse( "macros.include.vm" )
 #set ( $modifier = 'protected ')
-#set ( $javaClassName = 'Dao' )
+#set ( $javaClassName = 'BaseDao' )
 $codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
 package $extensionPkg;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -32,7 +31,7 @@ import ${schemaPkg}.exception.RuntimeDaoException;
  * @author guyadong
  *
  */
-class Dao implements CommonConstant {
+class BaseDao implements CommonConstant {
     #join($tables '
     static final $e.asManagerInterfaceNSP() $e.getGetManagerMethod()(){
         return TableManagerInitializer.INSTANCE.${e.asVarManager()};

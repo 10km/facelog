@@ -8,7 +8,7 @@ import net.gdface.facelog.db.PersonGroupBean;
  *
  */
 class TokenValidatorPersonGroupListener extends BaseTokenValidatorListener<PersonGroupBean> {
-	TokenValidatorPersonGroupListener(Dao dao) {
+	TokenValidatorPersonGroupListener(BaseDao dao) {
 		super(dao);
 	}
 	@Override
