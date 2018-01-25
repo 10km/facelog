@@ -21,7 +21,6 @@ import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
-import net.gdface.facelog.service.BaseDao;
 import net.gdface.facelog.service.CommonConstant.ExceptionType;
 
 // 由于Java语言的限制,导致swift无法从interface中获取参数名信息，所以采用interface定义生成的thrift IDL文件中service中的方法
@@ -52,7 +51,7 @@ import net.gdface.facelog.service.CommonConstant.ExceptionType;
  * @author guyadong
  */
 @ThriftService("IFaceLog")
-public abstract class BaseFaceLog extends BaseDao{
+public abstract class BaseFaceLog{
 
 	/**
 	 * 返回personId指定的人员记录
