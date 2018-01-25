@@ -29,10 +29,10 @@ public class ClientTest implements CommonConstant {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		// docker test
-		facelogClient = ClientFactory.builder().setHostAndPort("192.168.99.100", DEFAULT_PORT).build();
-		rootToken = facelogClient.applyRootToken("root", false);
-//		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build();
-//		rootToken = facelogClient.applyRootToken("guyadong", false);
+//		facelogClient = ClientFactory.builder().setHostAndPort("192.168.99.100", DEFAULT_PORT).build();
+//		rootToken = facelogClient.applyRootToken("root", false);
+		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build();
+		rootToken = facelogClient.applyRootToken("guyadong", false);
 	}
 
 	@AfterClass
