@@ -28,7 +28,8 @@ import net.gdface.utils.FaceUtilits;
  */
 class TokenMangement implements ServiceConstant {
 	private static final String ACK_PREFIX = "ack_";
-	private final BaseDao dao;
+	private final DaoManagement dao;
+	private final CryptographGenerator cg;
 	/**  {@code 设备ID -> token} 映射表 */
 	private final RedisTable<Token> deviceTokenTable;
 	/**  {@code 人员ID -> token} 映射表 */
@@ -43,16 +44,14 @@ class TokenMangement implements ServiceConstant {
 	private final boolean validatePersonToken;
 	/** 人员令牌失效时间(分钟) */
 	private final int personTokenExpire;
-	/** password加密盐值 */
-	private final String salt;
 	/** 是否拒绝普通人员申请令牌 */
 	private final boolean rejectZero;
 	/**
 	 * @param dao
 	 */
-	TokenMangement(BaseDao dao) {
+	TokenMangement(DaoManagement dao) {
 		this.dao = checkNotNull(dao,"dao is null");
-		this.salt = CONFIG.getString(TOKEN_SALT);
+		this.cg = this.dao.getCryptographGenerator();
 		this.rejectZero = CONFIG.getBoolean(TOKEN_PERSON_REJECTZERO);
 		this.validateDeviceToken = CONFIG.getBoolean(TOKEN_DEVICE_VALIDATE);
 		this.validatePersonToken = CONFIG.getBoolean(TOKEN_PERSON_VALIDATE);
@@ -412,31 +411,6 @@ class TokenMangement implements ServiceConstant {
 		removePersonTokenOf(token.getId());
 	}
 	/**
-	 * 根据盐值生成{@code password}的密文
-	 * @param password
-	 * @param isMd5 {@code password}是否为MD5,
-	 * 						为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为MD5密文
-	 * @return
-	 */
-	protected String generate(String password,boolean isMd5){
-		// 避免 password为null
-		password = String.valueOf(password);
-		String passwordMd5 = isMd5 && FaceUtilits.validMd5(password) 
-				? password
-				: FaceUtilits.getMD5String(password.getBytes());
-		StringBuffer buffer = new StringBuffer(passwordMd5.length() + salt.length());
-		// 将盐值和password md5交替掺在一起形成一个新的字符串
-		for(int i = 0,endIndex = Math.max(passwordMd5.length(), salt.length());i<endIndex;++i){
-			try{
-				buffer.append(salt.charAt(i));
-			}catch(IndexOutOfBoundsException e){}
-			try{
-				buffer.append(passwordMd5.charAt(i));
-			}catch(IndexOutOfBoundsException e){}
-		}
-		return FaceUtilits.getMD5String(buffer.toString().getBytes());
-	}
-	/**
 	 * 验证用户密码是否匹配
 	 * @param userId 用户id字符串,root用户id即为{@link CommonConstant#ROOT_NAME}
 	 * @param password 用户密码
@@ -451,13 +425,13 @@ class TokenMangement implements ServiceConstant {
 		checkArgument(!Strings.isNullOrEmpty(userId),"INVALID argument,must not be null or empty");
 		if(ROOT_NAME.equals(userId)){
 			// 从配置文件中读取root密码算出MD5与输入的密码比较
-			return generate(CONFIG.getString(ROOT_PASSWORD),false).equals(generate(password,isMd5));
+			return cg.cryptograph(CONFIG.getString(ROOT_PASSWORD),false).equals(cg.cryptograph(password,isMd5));
 		}else{
 			// 从数据库中读取用户密码(已经掺盐加密)与输入的密码比较
 			try{
 				Integer id = Integer.valueOf(userId);
 				String passwordMd5InDb = dao.daoGetPersonChecked(id).getPassword();
-				return generate(password,isMd5).equals(passwordMd5InDb);
+				return cg.cryptograph(password,isMd5).equals(passwordMd5InDb);
 			}catch(ObjectRetrievalException e){
 				throw new ServiceSecurityException(SecurityExceptionType.INVALID_PERSON_ID);
 			}catch(NumberFormatException e){

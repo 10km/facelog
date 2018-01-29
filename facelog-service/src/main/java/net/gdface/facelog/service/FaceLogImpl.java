@@ -40,7 +40,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	/** 数据库操作对象，提供所有数据库访问 */
 	private final DaoManagement dm = new DaoManagement();
 	/** 令牌管理模块对象 */
-	private final TokenMangement tm = dm.getTokenMangement();
+	private final TokenMangement tm = new TokenMangement(dm);
 	private final TokenValidatorPersonListener tokenValidatorPersonListener = new TokenValidatorPersonListener(dm);
 	private final TokenValidatorPersonGroupListener tokenValidatorPersonGroupListener = new TokenValidatorPersonGroupListener(dm);
 	private final TokenValidatorDeviceListener tokenValidatorDeviceListener = new TokenValidatorDeviceListener(dm);

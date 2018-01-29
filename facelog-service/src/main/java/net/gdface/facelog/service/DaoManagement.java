@@ -44,29 +44,18 @@ import net.gdface.utils.Judge;
  * @author guyadong
  *
  */
-class DaoManagement extends BaseDao {
-	private volatile TokenMangement tm ;
+public class DaoManagement extends BaseDao {
+	private final CryptographGenerator cg;
+	public DaoManagement(CryptographGenerator cg) {
+		this.cg = checkNotNull(cg,"cg is null");
+	}
 	public DaoManagement() {
+		this(CryptographBySalt.INSTANCE);
+	}
+	public CryptographGenerator getCryptographGenerator() {
+		return cg;
 	}
 
-	public DaoManagement setTokenMangement(TokenMangement tm) {
-		this.tm = checkNotNull(tm,"tm is null");
-		return this;
-	}
-
-	public TokenMangement getTokenMangement() {
-		// double checked lock
-		TokenMangement result = tm;
-		if(null == result){
-			synchronized (this) {
-				result = tm;
-				if(null == result){
-					tm = result = new TokenMangement(this);
-				}
-			}
-		}
-		return result;
-	}
 	/** 检查姓名是否有效,不允许使用保留字{@code root} ,无效抛出{@link IllegalArgumentException} 异常 */
 	protected static void checkPersonName(PersonBean personBean){
 		checkArgument(null == personBean || !ROOT_NAME.equals(personBean.getName()),
@@ -85,7 +74,7 @@ class DaoManagement extends BaseDao {
 			if(null != password){
 				checkState(FaceUtilits.validMd5(password),"password field must be MD5 string(32 char,lower case)");
 				// 重新生成password加盐密文
-				personBean.setPassword(getTokenMangement().generate(password, true));
+				personBean.setPassword(cg.cryptograph(password, true));
 			}
 		}
 		return super.daoSavePerson(personBean);
