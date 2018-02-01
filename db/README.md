@@ -1,8 +1,8 @@
-#说明
+# 说明
 
 本文件夹 sql2java 用于生成数据库访问代码(ORM)
 
-#建表语句
+# 建表语句
 sql/create_table.sql MySQL数据库建表脚本
 
 gen-sql.xml Maven脚本执行 create_table.sql
@@ -12,7 +12,7 @@ gen-sql.xml Maven脚本执行 create_table.sql
 	mvn -f gen-sql.xml sql:execute -Ddb.url=jdbc:mysql://localhost:3306/test
 
 
-#生成数据库层代码
+# 生成数据库层代码
 
 gen-mysql.properties sql2java生成ORM代码的配置文件
 
@@ -22,7 +22,7 @@ gen-mysql.sh gen-mysql.bat 用于生成ORM代码的简单脚本
 
 	gen-mysql.bat
 
-#生成接口层代码
+# 生成接口层代码
 
 gen-mysql-g.properties sql2java生成接口层代码的配置文件
 
