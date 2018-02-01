@@ -6,7 +6,7 @@ facelog 只是一个针对人脸识别应用的开发框架，并不针对特定
 
 ![系统结构图](https://i.imgur.com/S5lt7NO.png)
 
-关于 facelog 更详细的说明参见 [《facelog 开发手册》](manual/MANUAL.html)
+关于 facelog 更详细的说明参见 [《facelog 开发手册》](manual/MANUAL.md)
 
 
 
