@@ -17,7 +17,7 @@ facelog 只是一个针对人脸识别应用的开发框架，并不针对特定
 	#--recursive参数用于下载sql2java子项目，如果不需要修改表结构，可不加--recursive参数
 ## 数据库初始化
 
-参照 [facelog-client/README.md](facelog-client/README.md)完成数据库建表，并生成数据库操作代码。
+参照 [db/README.md](db/README.md)完成数据库建表，并生成数据库操作代码。
 
 	# 数据库建表
 	mvn -f gen-sql.xml sql:execute -Ddb.url=jdbc:mysql://localhost:3306/test?characterEncoding=utf8
