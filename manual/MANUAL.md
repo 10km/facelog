@@ -979,9 +979,13 @@ maven 插件启动 (since version 1.0.8)
 
     java -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n -jar facelog-service-${facelog_version}-standalone.jar
 
+**注意：**
+
+facelog服务启动前请确保mysql,redis已经启动
+
 ## docker 部署
 
-从 1.0.8版本以后facelog支持docker部署，提供了docker镜像生成脚本，方便应用项目快速部署facelog 服务。  
+从 1.0.8版本以后facelog支持docker部署，提供了docker镜像生成脚本，方便应用项目快速部署facelog 服务。
 
 执行下面的maven命令下载指定版本`${facelog_version}`的docker部署zip包到`/you/path`
 

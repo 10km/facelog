@@ -1367,8 +1367,10 @@ facelog 服务端也提供<code>version,versionInfo</code>接口方法用于获�
 <pre><code>java -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n -jar facelog-service-${facelog_version}-standalone.jar
 </code></pre>
 
+<p><strong>注意：</strong></p>
+<p>facelog服务启动前请确保mysql,redis已经启动</p>
 <h2>docker 部署</h2>
-<p>从 1.0.8版本以后facelog支持docker部署，提供了docker镜像生成脚本，方便应用项目快速部署facelog 服务。  </p>
+<p>从 1.0.8版本以后facelog支持docker部署，提供了docker镜像生成脚本，方便应用项目快速部署facelog 服务。</p>
 <p>执行下面的maven命令下载指定版本<code>${facelog_version}</code>的docker部署zip包到<code>/you/path</code></p>
 <pre><code>mvn dependency:get \ 
     -Dartifact=com.gitee.l0km:facelog-service:${facelog_version}:zip:docker-maven-distribution 

@@ -11,11 +11,38 @@ facelog 只是一个针对人脸识别应用的开发框架，并不针对特定
 
 # 编译说明
 
-1.	下载代码	`git clone --recursive https://gitee.com/l0km/facelog.git`	
-	>--recursive参数用于下载sql2java子项目，如果不需要修改表结构，可不加--recursive参数
-2.	参照 [facelog-client/README.md](facelog-client/README.md)完成数据库建表，并生成数据库操作代码（如果没有修改表结构，此步骤可省略）。
-3.	在facelog根目录下执行`mvn install`完成所有项目编译及本地安装
-4.	在`facelog-service`下执行`mvn package -Pshade-package`可以生成FatJar(uber-jar):`facelog-service-${project.version}-standalone.jar`
+## 下载代码	
 
+	git clone --recursive https://gitee.com/l0km/facelog.git	
+	#--recursive参数用于下载sql2java子项目，如果不需要修改表结构，可不加--recursive参数
+## 数据库初始化
 
+参照 [facelog-client/README.md](facelog-client/README.md)完成数据库建表，并生成数据库操作代码。
 
+	# 数据库建表
+	mvn -f gen-sql.xml sql:execute -Ddb.url=jdbc:mysql://localhost:3306/test?characterEncoding=utf8
+	# 生成数据库操作代码,如果没有修改表结构可省略此步
+	# gen-mysql.bat
+	# gen-mysql-g.bat
+
+## 编译
+
+在facelog根目录下执行`mvn install`完成所有项目编译及本地安装
+
+## 生成FatJar
+
+在[facelog-service](facelog-service)下执行`mvn package -Pshade-package`可以生成FatJar(uber-jar):`facelog-service-${project.version}-standalone.jar`
+
+# 初始测试
+
+facelog本身并不是一个实际应用项目，但可以通过运行facelog提供的测试程序了解facelog的运行机制。
+
+## 启动facelog 服务
+
+facelog服务可以手工启动，也提供docker快速部署。参见[《facelog 开发手册》](manual/MANUAL.md) `facelog service 启动`一节
+
+>另请参见 [facelog-service/start_facelog_server.bat](facelog-service/start_facelog_server.bat), [facelog-service/start_facelog_server_debug.bat](facelog-service/start_facelog_server_debug.bat)
+
+## 执行JUnit测试
+
+facelog服务正常启动后，就可以执行[facelog-client/src/test/java/net/gdface/facelog/client](facelog-client/src/test/java/net/gdface/facelog/client)下的测试程序(如`ClientTest`，`HeartbeatTest`，`TokenTest`)
