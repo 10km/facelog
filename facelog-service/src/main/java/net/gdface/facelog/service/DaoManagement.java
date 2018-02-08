@@ -33,8 +33,8 @@ import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.image.LazyImage;
-import net.gdface.image.NotImage;
-import net.gdface.image.UnsupportedFormat;
+import net.gdface.image.NotImageException;
+import net.gdface.image.UnsupportedFormatException;
 import net.gdface.utils.Assert;
 import net.gdface.utils.FaceUtilits;
 import net.gdface.utils.Judge;
@@ -150,10 +150,10 @@ public class DaoManagement extends BaseDao {
 	 * @param imageBytes
 	 * @param md5
 	 * @return 返回 {@link ImageBean}和{@link StoreBean}对象
-	 * @throws NotImage
-	 * @throws UnsupportedFormat
+	 * @throws NotImageException
+	 * @throws UnsupportedFormatException
 	 */
-	protected static Pair<ImageBean, StoreBean> makeImageBean(ByteBuffer imageBytes,String md5) throws NotImage, UnsupportedFormat{
+	protected static Pair<ImageBean, StoreBean> makeImageBean(ByteBuffer imageBytes,String md5) throws NotImageException, UnsupportedFormatException{
 		if(Judge.isEmpty(imageBytes)){
 			return null;
 		}
