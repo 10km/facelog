@@ -10,7 +10,7 @@ import com.google.common.util.concurrent.Service;
  * @author guyadong
  *
  */
-public class Main implements ServiceConstant {	
+public class Main {	
 	public Main() {
 	}
 
