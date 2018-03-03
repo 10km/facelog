@@ -63,13 +63,17 @@ public class IFaceLogClient implements Constant{
     /** bean converter between {@link LogLightBean} and corresponding thrift bean */
     private IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> converterLogLightBean = ThriftConverter.CONVERTER_LOGLIGHTBEAN;
 
-    private final net.gdface.facelog.client.thrift.IFaceLog service;
+    private final ClientFactory factory;
     /**
      * constructor 
      * @param service a instance of net.gdface.facelog.client.thrift.IFaceLog created by Swift, must not be null
      */
-    IFaceLogClient(net.gdface.facelog.client.thrift.IFaceLog service){
-        this.service = checkNotNull(service,"service is null");
+    IFaceLogClient(ClientFactory factory){
+        this.factory = checkNotNull(factory,"factory is null");
+    }
+    
+    private net.gdface.facelog.client.thrift.IFaceLog delegate(){
+    	return factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLog.class);
     }
     // 1 SERIVCE PORT : getPerson
     /**
@@ -79,6 +83,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public PersonBean getPerson(int personId){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterPersonBean.fromRight(service.getPerson(personId));
         }
@@ -93,6 +98,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 2 SERIVCE PORT : getPersons
     /**
@@ -102,6 +111,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<PersonBean> getPersons(List<Integer> idList){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return PersonBean.replaceNullInstance(converterPersonBean.fromRight(service.getPersons(CollectionUtils.checkNotNullElement(idList))));
         }
@@ -116,6 +126,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 3 SERIVCE PORT : getPersonByPapersNum
     /**
@@ -125,6 +139,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public PersonBean getPersonByPapersNum(String papersNum){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterPersonBean.fromRight(service.getPersonByPapersNum(papersNum));
         }
@@ -139,6 +154,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 4 SERIVCE PORT : getFeatureBeansByPersonId
     /**
@@ -148,6 +167,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<String> getFeatureBeansByPersonId(int personId){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.getFeatureBeansByPersonId(personId);
         }
@@ -162,6 +182,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 5 SERIVCE PORT : deletePerson
     /**
@@ -175,6 +199,7 @@ public class IFaceLogClient implements Constant{
     public int deletePerson(
             int personId,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.deletePerson(
                     personId,
@@ -183,6 +208,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 6 SERIVCE PORT : deletePersons
     /**
@@ -196,6 +225,7 @@ public class IFaceLogClient implements Constant{
     public int deletePersons(
             List<Integer> personIdList,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.deletePersons(
                     CollectionUtils.checkNotNullElement(personIdList),
@@ -204,6 +234,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 7 SERIVCE PORT : deletePersonByPapersNum
     /**
@@ -218,6 +252,7 @@ public class IFaceLogClient implements Constant{
     public int deletePersonByPapersNum(
             String papersNum,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.deletePersonByPapersNum(
                     papersNum,
@@ -226,6 +261,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 8 SERIVCE PORT : deletePersonsByPapersNum
     /**
@@ -239,6 +278,7 @@ public class IFaceLogClient implements Constant{
     public int deletePersonsByPapersNum(
             List<String> papersNumlist,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.deletePersonsByPapersNum(
                     CollectionUtils.checkNotNullElement(papersNumlist),
@@ -247,6 +287,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 9 SERIVCE PORT : existsPerson
     /**
@@ -256,12 +300,17 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public boolean existsPerson(int persionId){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.existsPerson(persionId);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 10 SERIVCE PORT : isDisable
     /**
@@ -271,12 +320,17 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public boolean isDisable(int personId){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.isDisable(personId);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 11 SERIVCE PORT : disablePerson
     /**
@@ -290,6 +344,7 @@ public class IFaceLogClient implements Constant{
     public void disablePerson(
             int personId,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             service.disablePerson(
                     personId,
@@ -298,6 +353,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 12 SERIVCE PORT : setPersonExpiryDate
     /**
@@ -312,6 +371,7 @@ public class IFaceLogClient implements Constant{
             int personId,
             Date expiryDate,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             service.setPersonExpiryDate(
                     personId,
@@ -321,6 +381,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 13 SERIVCE PORT : setPersonExpiryDateList
     /**
@@ -335,6 +399,7 @@ public class IFaceLogClient implements Constant{
             List<Integer> personIdList,
             Date expiryDate,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             service.setPersonExpiryDateList(
                     CollectionUtils.checkNotNullElement(personIdList),
@@ -344,6 +409,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 14 SERIVCE PORT : disablePersonList
     /**
@@ -356,6 +425,7 @@ public class IFaceLogClient implements Constant{
     public void disablePerson(
             List<Integer> personIdList,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             service.disablePersonList(
                     CollectionUtils.checkNotNullElement(personIdList),
@@ -364,6 +434,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 15 SERIVCE PORT : getLogBeansByPersonId
     /**
@@ -373,6 +447,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<LogBean> getLogBeansByPersonId(int personId){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return LogBean.replaceNullInstance(converterLogBean.fromRight(service.getLogBeansByPersonId(personId)));
         }
@@ -387,6 +462,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 16 SERIVCE PORT : loadAllPerson
     /**
@@ -395,6 +474,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<Integer> loadAllPerson(){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.loadAllPerson();
         }
@@ -409,6 +489,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 17 SERIVCE PORT : loadPersonIdByWhere
     /**
@@ -418,6 +502,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<Integer> loadPersonIdByWhere(String where){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.loadPersonIdByWhere(where);
         }
@@ -432,6 +517,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 18 SERIVCE PORT : loadPersonByWhere
     /**
@@ -446,6 +535,7 @@ public class IFaceLogClient implements Constant{
             String where,
             int startRow,
             int numRows){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return PersonBean.replaceNullInstance(converterPersonBean.fromRight(service.loadPersonByWhere(
                     where,
@@ -463,6 +553,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 19 SERIVCE PORT : countPersonByWhere
     /**
@@ -472,12 +566,17 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public int countPersonByWhere(String where){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.countPersonByWhere(where);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 20 SERIVCE PORT : savePerson
     /**
@@ -490,6 +589,7 @@ public class IFaceLogClient implements Constant{
     public PersonBean savePerson(
             PersonBean bean,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterPersonBean.fromRight(service.savePerson(
                     converterPersonBean.toRight(bean),
@@ -506,6 +606,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 21 SERIVCE PORT : savePersons
     /**
@@ -518,6 +622,7 @@ public class IFaceLogClient implements Constant{
     public void savePersons(
             List<PersonBean> beans,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             service.savePersons(
                     converterPersonBean.toRight(CollectionUtils.checkNotNullElement(beans)),
@@ -526,6 +631,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 22 SERIVCE PORT : savePersonWithPhoto
     /**
@@ -540,6 +649,7 @@ public class IFaceLogClient implements Constant{
             PersonBean bean,
             byte[] idPhoto,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterPersonBean.fromRight(service.savePersonWithPhoto(
                     converterPersonBean.toRight(bean),
@@ -557,6 +667,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 22 GENERIC
     /** 
@@ -569,6 +683,7 @@ public class IFaceLogClient implements Constant{
             PersonBean bean,
             Object idPhoto,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterPersonBean.fromRight(service.savePersonWithPhoto(
                     converterPersonBean.toRight(bean),
@@ -586,6 +701,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 23 SERIVCE PORT : savePersonsWithPhoto
     /**
@@ -599,6 +718,7 @@ public class IFaceLogClient implements Constant{
     public int savePerson(
             Map<ByteBuffer, PersonBean> persons,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.savePersonsWithPhoto(
                     GenericUtils.toBytesKey(converterPersonBean.toRightValue(persons)),
@@ -607,6 +727,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 24 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
     /**
@@ -623,6 +747,7 @@ public class IFaceLogClient implements Constant{
             String idPhotoMd5,
             String featureMd5,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureSaved(
                     converterPersonBean.toRight(bean),
@@ -641,6 +766,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 25 SERIVCE PORT : savePersonWithPhotoAndFeature
     /**
@@ -660,6 +789,7 @@ public class IFaceLogClient implements Constant{
             FeatureBean featureBean,
             Integer deviceId,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeature(
                     converterPersonBean.toRight(bean),
@@ -679,6 +809,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 25 GENERIC
     /** 
@@ -693,6 +827,7 @@ public class IFaceLogClient implements Constant{
             FeatureBean featureBean,
             Integer deviceId,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeature(
                     converterPersonBean.toRight(bean),
@@ -712,6 +847,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 26 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
     /**
@@ -731,6 +870,7 @@ public class IFaceLogClient implements Constant{
             byte[] feature,
             List<FaceBean> faceBeans,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiFaces(
                     converterPersonBean.toRight(bean),
@@ -750,6 +890,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 26 GENERIC
     /** 
@@ -764,6 +908,7 @@ public class IFaceLogClient implements Constant{
             Object feature,
             List<FaceBean> faceBeans,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiFaces(
                     converterPersonBean.toRight(bean),
@@ -783,6 +928,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 27 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
     /**
@@ -804,6 +953,7 @@ public class IFaceLogClient implements Constant{
             Map<ByteBuffer, FaceBean> faceInfo,
             Integer deviceId,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiImage(
                     converterPersonBean.toRight(bean),
@@ -824,6 +974,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 27 GENERIC
     /** 
@@ -839,6 +993,7 @@ public class IFaceLogClient implements Constant{
             Map<ByteBuffer, FaceBean> faceInfo,
             Integer deviceId,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiImage(
                     converterPersonBean.toRight(bean),
@@ -859,6 +1014,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 28 SERIVCE PORT : savePersonFull
     /**
@@ -880,6 +1039,7 @@ public class IFaceLogClient implements Constant{
             FaceBean featureFaceBean,
             Integer deviceId,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterPersonBean.fromRight(service.savePersonFull(
                     converterPersonBean.toRight(bean),
@@ -901,6 +1061,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 28 GENERIC
     /** 
@@ -917,6 +1081,7 @@ public class IFaceLogClient implements Constant{
             FaceBean featureFaceBean,
             Integer deviceId,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterPersonBean.fromRight(service.savePersonFull(
                     converterPersonBean.toRight(bean),
@@ -938,6 +1103,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 29 SERIVCE PORT : replaceFeature
     /**
@@ -953,6 +1122,7 @@ public class IFaceLogClient implements Constant{
             String featureMd5,
             boolean deleteOldFeatureImage,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             service.replaceFeature(
                     personId,
@@ -963,6 +1133,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 30 SERIVCE PORT : loadUpdatedPersons
     /**
@@ -974,6 +1148,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<Integer> loadUpdatedPersons(Date timestamp){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.loadUpdatedPersons(GenericUtils.toLong(timestamp,Date.class));
         }
@@ -988,6 +1163,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 31 SERIVCE PORT : loadPersonIdByUpdateTime
     /**
@@ -998,6 +1177,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<Integer> loadPersonIdByUpdateTime(Date timestamp){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.loadPersonIdByUpdateTime(GenericUtils.toLong(timestamp,Date.class));
         }
@@ -1012,6 +1192,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 32 SERIVCE PORT : loadFeatureMd5ByUpdate
     /**
@@ -1022,6 +1206,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<String> loadFeatureMd5ByUpdate(Date timestamp){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.loadFeatureMd5ByUpdate(GenericUtils.toLong(timestamp,Date.class));
         }
@@ -1036,6 +1221,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 33 SERIVCE PORT : addLog
     /**
@@ -1049,6 +1238,7 @@ public class IFaceLogClient implements Constant{
     public void addLog(
             LogBean bean,
             net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.DuplicateRecordException{
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             service.addLog(
                     converterLogBean.toRight(bean),
@@ -1057,6 +1247,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 34 SERIVCE PORT : addLogs
     /**
@@ -1070,6 +1264,7 @@ public class IFaceLogClient implements Constant{
     public void addLogs(
             List<LogBean> beans,
             net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.DuplicateRecordException{
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             service.addLogs(
                     converterLogBean.toRight(CollectionUtils.checkNotNullElement(beans)),
@@ -1078,6 +1273,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 35 SERIVCE PORT : loadLogByWhere
     /**
@@ -1093,6 +1292,7 @@ public class IFaceLogClient implements Constant{
             String where,
             int startRow,
             int numRows){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return LogBean.replaceNullInstance(converterLogBean.fromRight(service.loadLogByWhere(
                     where,
@@ -1110,6 +1310,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 36 SERIVCE PORT : loadLogLightByWhere
     /**
@@ -1125,6 +1329,7 @@ public class IFaceLogClient implements Constant{
             String where,
             int startRow,
             int numRows){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return LogLightBean.replaceNullInstance(converterLogLightBean.fromRight(service.loadLogLightByWhere(
                     where,
@@ -1142,6 +1347,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 37 SERIVCE PORT : countLogLightByWhere
     /**
@@ -1151,12 +1360,17 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public int countLogLightByWhere(String where){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.countLogLightByWhere(where);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 38 SERIVCE PORT : countLogByWhere
     /**
@@ -1166,12 +1380,17 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public int countLogByWhere(String where){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.countLogByWhere(where);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 39 SERIVCE PORT : loadLogLightByVerifyTime
     /**
@@ -1185,6 +1404,7 @@ public class IFaceLogClient implements Constant{
             Date timestamp,
             int startRow,
             int numRows){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return LogLightBean.replaceNullInstance(converterLogLightBean.fromRight(service.loadLogLightByVerifyTime(
                     GenericUtils.toLong(timestamp,Date.class),
@@ -1202,6 +1422,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 40 SERIVCE PORT : countLogLightByVerifyTime
     /**
@@ -1210,12 +1434,17 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public int countLogLightByVerifyTime(Date timestamp){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.countLogLightByVerifyTime(GenericUtils.toLong(timestamp,Date.class));
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 41 SERIVCE PORT : existsImage
     /**
@@ -1225,12 +1454,17 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public boolean existsImage(String md5){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.existsImage(md5);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 42 SERIVCE PORT : addImage
     /**
@@ -1250,6 +1484,7 @@ public class IFaceLogClient implements Constant{
             FaceBean faceBean,
             Integer personId,
             net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.DuplicateRecordException{
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterImageBean.fromRight(service.addImage(
                     imageData,
@@ -1269,6 +1504,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 42 GENERIC
     /** 
@@ -1283,6 +1522,7 @@ public class IFaceLogClient implements Constant{
             FaceBean faceBean,
             Integer personId,
             net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.DuplicateRecordException{
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterImageBean.fromRight(service.addImage(
                     GenericUtils.toBytes(imageData),
@@ -1302,6 +1542,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 43 SERIVCE PORT : existsFeature
     /**
@@ -1311,12 +1555,17 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public boolean existsFeature(String md5){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.existsFeature(md5);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 44 SERIVCE PORT : addFeature
     /**
@@ -1335,6 +1584,7 @@ public class IFaceLogClient implements Constant{
             Integer personId,
             List<FaceBean> faecBeans,
             net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.DuplicateRecordException{
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterFeatureBean.fromRight(service.addFeature(
                     feature,
@@ -1353,6 +1603,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 44 GENERIC
     /** 
@@ -1366,6 +1620,7 @@ public class IFaceLogClient implements Constant{
             Integer personId,
             List<FaceBean> faecBeans,
             net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.DuplicateRecordException{
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterFeatureBean.fromRight(service.addFeature(
                     GenericUtils.toBytes(feature),
@@ -1384,6 +1639,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 45 SERIVCE PORT : addFeatureMulti
     /**
@@ -1404,6 +1663,7 @@ public class IFaceLogClient implements Constant{
             Map<ByteBuffer, FaceBean> faceInfo,
             Integer deviceId,
             net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.DuplicateRecordException{
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterFeatureBean.fromRight(service.addFeatureMulti(
                     feature,
@@ -1423,6 +1683,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 45 GENERIC
     /** 
@@ -1437,6 +1701,7 @@ public class IFaceLogClient implements Constant{
             Map<ByteBuffer, FaceBean> faceInfo,
             Integer deviceId,
             net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.DuplicateRecordException{
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterFeatureBean.fromRight(service.addFeatureMulti(
                     GenericUtils.toBytes(feature),
@@ -1456,6 +1721,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 46 SERIVCE PORT : deleteFeature
     /**
@@ -1471,6 +1740,7 @@ public class IFaceLogClient implements Constant{
             String featureMd5,
             boolean deleteImage,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.deleteFeature(
                     featureMd5,
@@ -1488,6 +1758,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 47 SERIVCE PORT : deleteAllFeaturesByPersonId
     /**
@@ -1503,6 +1777,7 @@ public class IFaceLogClient implements Constant{
             int personId,
             boolean deleteImage,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.deleteAllFeaturesByPersonId(
                     personId,
@@ -1512,6 +1787,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 48 SERIVCE PORT : getFeature
     /**
@@ -1521,6 +1800,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public FeatureBean getFeature(String md5){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterFeatureBean.fromRight(service.getFeature(md5));
         }
@@ -1535,6 +1815,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 49 SERIVCE PORT : getFeatures
     /**
@@ -1544,6 +1828,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<FeatureBean> getFeatures(List<String> md5){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return FeatureBean.replaceNullInstance(converterFeatureBean.fromRight(service.getFeatures(CollectionUtils.checkNotNullElement(md5))));
         }
@@ -1558,6 +1843,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 50 SERIVCE PORT : getFeaturesOfPerson
     /**
@@ -1567,6 +1856,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<String> getFeaturesOfPerson(int personId){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.getFeaturesOfPerson(personId);
         }
@@ -1581,6 +1871,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 51 SERIVCE PORT : getFeatureBytes
     /**
@@ -1590,6 +1884,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public byte[] getFeatureBytes(String md5){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.getFeatureBytes(md5);
         }
@@ -1604,6 +1899,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 52 SERIVCE PORT : getImageBytes
     /**
@@ -1614,6 +1913,7 @@ public class IFaceLogClient implements Constant{
      * @see {@link #getBinary(String)}
      */
     public byte[] getImageBytes(String imageMD5){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.getImageBytes(imageMD5);
         }
@@ -1628,6 +1928,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 53 SERIVCE PORT : getImage
     /**
@@ -1637,6 +1941,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public ImageBean getImage(String imageMD5){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterImageBean.fromRight(service.getImage(imageMD5));
         }
@@ -1651,6 +1956,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 54 SERIVCE PORT : getImagesAssociatedByFeature
     /**
@@ -1660,6 +1969,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<String> getImagesAssociatedByFeature(String featureMd5){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.getImagesAssociatedByFeature(featureMd5);
         }
@@ -1674,6 +1984,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 55 SERIVCE PORT : getDeviceIdOfFeature
     /**
@@ -1683,6 +1997,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public Integer getDeviceIdOfFeature(String featureMd5){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.getDeviceIdOfFeature(featureMd5);
         }
@@ -1697,6 +2012,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 56 SERIVCE PORT : deleteImage
     /**
@@ -1709,6 +2028,7 @@ public class IFaceLogClient implements Constant{
     public int deleteImage(
             String imageMd5,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.deleteImage(
                     imageMd5,
@@ -1717,6 +2037,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 57 SERIVCE PORT : existsDevice
     /**
@@ -1726,12 +2050,17 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public boolean existsDevice(int id){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.existsDevice(id);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 58 SERIVCE PORT : saveDevice
     /**
@@ -1745,6 +2074,7 @@ public class IFaceLogClient implements Constant{
     public DeviceBean saveDevice(
             DeviceBean deviceBean,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterDeviceBean.fromRight(service.saveDevice(
                     converterDeviceBean.toRight(deviceBean),
@@ -1761,6 +2091,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 59 SERIVCE PORT : updateDevice
     /**
@@ -1773,6 +2107,7 @@ public class IFaceLogClient implements Constant{
     public DeviceBean updateDevice(
             DeviceBean deviceBean,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterDeviceBean.fromRight(service.updateDevice(
                     converterDeviceBean.toRight(deviceBean),
@@ -1789,6 +2124,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 60 SERIVCE PORT : getDevice
     /**
@@ -1798,6 +2137,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public DeviceBean getDevice(int deviceId){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterDeviceBean.fromRight(service.getDevice(deviceId));
         }
@@ -1812,6 +2152,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 61 SERIVCE PORT : getDevices
     /**
@@ -1821,6 +2165,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<DeviceBean> getDevices(List<Integer> idList){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return DeviceBean.replaceNullInstance(converterDeviceBean.fromRight(service.getDevices(CollectionUtils.checkNotNullElement(idList))));
         }
@@ -1835,6 +2180,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 62 SERIVCE PORT : loadDeviceByWhere
     /**
@@ -1849,6 +2198,7 @@ public class IFaceLogClient implements Constant{
             String where,
             int startRow,
             int numRows){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return DeviceBean.replaceNullInstance(converterDeviceBean.fromRight(service.loadDeviceByWhere(
                     where,
@@ -1866,6 +2216,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 63 SERIVCE PORT : countDeviceByWhere
     /**
@@ -1875,12 +2229,17 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public int countDeviceByWhere(String where){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.countDeviceByWhere(where);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 64 SERIVCE PORT : loadDeviceIdByWhere
     /**
@@ -1890,6 +2249,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<Integer> loadDeviceIdByWhere(String where){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.loadDeviceIdByWhere(where);
         }
@@ -1904,6 +2264,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 65 SERIVCE PORT : saveDeviceGroup
     /**
@@ -1918,6 +2282,7 @@ public class IFaceLogClient implements Constant{
     public DeviceGroupBean saveDeviceGroup(
             DeviceGroupBean deviceGroupBean,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterDeviceGroupBean.fromRight(service.saveDeviceGroup(
                     converterDeviceGroupBean.toRight(deviceGroupBean),
@@ -1934,6 +2299,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 66 SERIVCE PORT : getDeviceGroup
     /**
@@ -1944,6 +2313,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public DeviceGroupBean getDeviceGroup(int deviceGroupId){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterDeviceGroupBean.fromRight(service.getDeviceGroup(deviceGroupId));
         }
@@ -1958,6 +2328,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 67 SERIVCE PORT : getDeviceGroups
     /**
@@ -1968,6 +2342,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<DeviceGroupBean> getDeviceGroups(List<Integer> groupIdList){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return DeviceGroupBean.replaceNullInstance(converterDeviceGroupBean.fromRight(service.getDeviceGroups(CollectionUtils.checkNotNullElement(groupIdList))));
         }
@@ -1982,6 +2357,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 68 SERIVCE PORT : deleteDeviceGroup
     /**
@@ -1997,6 +2376,7 @@ public class IFaceLogClient implements Constant{
     public int deleteDeviceGroup(
             int deviceGroupId,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.deleteDeviceGroup(
                     deviceGroupId,
@@ -2005,6 +2385,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 69 SERIVCE PORT : getSubDeviceGroup
     /**
@@ -2016,6 +2400,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<Integer> getSubDeviceGroup(int deviceGroupId){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.getSubDeviceGroup(deviceGroupId);
         }
@@ -2030,6 +2415,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 70 SERIVCE PORT : getDevicesOfGroup
     /**
@@ -2041,6 +2430,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<Integer> getDevicesOfGroup(int deviceGroupId){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.getDevicesOfGroup(deviceGroupId);
         }
@@ -2055,6 +2445,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 71 SERIVCE PORT : listOfParentForDeviceGroup
     /**
@@ -2065,6 +2459,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<Integer> listOfParentForDeviceGroup(int deviceGroupId){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.listOfParentForDeviceGroup(deviceGroupId);
         }
@@ -2079,6 +2474,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 72 SERIVCE PORT : getDeviceGroupsBelongs
     /**
@@ -2089,6 +2488,7 @@ public class IFaceLogClient implements Constant{
      * @see {@link #listOfParentForDeviceGroup(int)}
      */
     public List<Integer> getDeviceGroupsBelongs(int deviceId){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.getDeviceGroupsBelongs(deviceId);
         }
@@ -2103,6 +2503,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 73 SERIVCE PORT : savePersonGroup
     /**
@@ -2117,6 +2521,7 @@ public class IFaceLogClient implements Constant{
     public PersonGroupBean savePersonGroup(
             PersonGroupBean personGroupBean,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterPersonGroupBean.fromRight(service.savePersonGroup(
                     converterPersonGroupBean.toRight(personGroupBean),
@@ -2133,6 +2538,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 74 SERIVCE PORT : getPersonGroup
     /**
@@ -2143,6 +2552,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public PersonGroupBean getPersonGroup(int personGroupId){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterPersonGroupBean.fromRight(service.getPersonGroup(personGroupId));
         }
@@ -2157,6 +2567,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 75 SERIVCE PORT : getPersonGroups
     /**
@@ -2167,6 +2581,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<PersonGroupBean> getPersonGroups(List<Integer> groupIdList){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return PersonGroupBean.replaceNullInstance(converterPersonGroupBean.fromRight(service.getPersonGroups(CollectionUtils.checkNotNullElement(groupIdList))));
         }
@@ -2181,6 +2596,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 76 SERIVCE PORT : deletePersonGroup
     /**
@@ -2196,6 +2615,7 @@ public class IFaceLogClient implements Constant{
     public int deletePersonGroup(
             int personGroupId,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.deletePersonGroup(
                     personGroupId,
@@ -2204,6 +2624,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 77 SERIVCE PORT : getSubPersonGroup
     /**
@@ -2215,6 +2639,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<Integer> getSubPersonGroup(int personGroupId){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.getSubPersonGroup(personGroupId);
         }
@@ -2229,6 +2654,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 78 SERIVCE PORT : getPersonsOfGroup
     /**
@@ -2240,6 +2669,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<Integer> getPersonsOfGroup(int personGroupId){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.getPersonsOfGroup(personGroupId);
         }
@@ -2254,6 +2684,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 79 SERIVCE PORT : listOfParentForPersonGroup
     /**
@@ -2264,6 +2698,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<Integer> listOfParentForPersonGroup(int personGroupId){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.listOfParentForPersonGroup(personGroupId);
         }
@@ -2278,6 +2713,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 80 SERIVCE PORT : getPersonGroupsBelongs
     /**
@@ -2288,6 +2727,7 @@ public class IFaceLogClient implements Constant{
      * @see {@link #listOfParentForPersonGroup(int)}
      */
     public List<Integer> getPersonGroupsBelongs(int personId){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.getPersonGroupsBelongs(personId);
         }
@@ -2302,6 +2742,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 81 SERIVCE PORT : loadDeviceGroupByWhere
     /**
@@ -2315,6 +2759,7 @@ public class IFaceLogClient implements Constant{
             String where,
             int startRow,
             int numRows){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.loadDeviceGroupByWhere(
                     where,
@@ -2332,18 +2777,27 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 82 SERIVCE PORT : countDeviceGroupByWhere
     /**
      * 返回满足{@code where} SQL条件语句的fl_device_group记录总数
      */
     public int countDeviceGroupByWhere(String where){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.countDeviceGroupByWhere(where);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 83 SERIVCE PORT : loadDeviceGroupIdByWhere
     /**
@@ -2352,6 +2806,7 @@ public class IFaceLogClient implements Constant{
      * @see #loadDeviceGroupByWhere(String,int,int)
      */
     public List<Integer> loadDeviceGroupIdByWhere(String where){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.loadDeviceGroupIdByWhere(where);
         }
@@ -2366,6 +2821,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 84 SERIVCE PORT : addPermit
     /**
@@ -2382,6 +2841,7 @@ public class IFaceLogClient implements Constant{
             DeviceGroupBean deviceGroup,
             PersonGroupBean personGroup,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             service.addPermit(
                     converterDeviceGroupBean.toRight(deviceGroup),
@@ -2391,6 +2851,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 85 SERIVCE PORT : addPermitById
     /**
@@ -2406,6 +2870,7 @@ public class IFaceLogClient implements Constant{
             int deviceGroupId,
             int personGroupId,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             service.addPermitById(
                     deviceGroupId,
@@ -2415,6 +2880,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 86 SERIVCE PORT : deletePermit
     /**
@@ -2431,6 +2900,7 @@ public class IFaceLogClient implements Constant{
             DeviceGroupBean deviceGroup,
             PersonGroupBean personGroup,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.deletePermit(
                     converterDeviceGroupBean.toRight(deviceGroup),
@@ -2440,6 +2910,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 87 SERIVCE PORT : getGroupPermit
     /**
@@ -2454,6 +2928,7 @@ public class IFaceLogClient implements Constant{
     public boolean getGroupPermit(
             int deviceId,
             int personGroupId){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.getGroupPermit(
                     deviceId,
@@ -2462,6 +2937,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 88 SERIVCE PORT : getPersonPermit
     /**
@@ -2476,6 +2955,7 @@ public class IFaceLogClient implements Constant{
     public boolean getPersonPermit(
             int deviceId,
             int personId){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.getPersonPermit(
                     deviceId,
@@ -2484,6 +2964,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 89 SERIVCE PORT : getGroupPermits
     /**
@@ -2492,6 +2976,7 @@ public class IFaceLogClient implements Constant{
     public List<Boolean> getGroupPermits(
             int deviceId,
             List<Integer> personGroupIdList){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.getGroupPermits(
                     deviceId,
@@ -2508,6 +2993,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 90 SERIVCE PORT : getPersonPermits
     /**
@@ -2516,6 +3005,7 @@ public class IFaceLogClient implements Constant{
     public List<Boolean> getPersonPermits(
             int deviceId,
             List<Integer> personIdList){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.getPersonPermits(
                     deviceId,
@@ -2532,6 +3022,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 91 SERIVCE PORT : loadPermitByUpdate
     /**
@@ -2543,6 +3037,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<PermitBean> loadPermitByUpdate(Date timestamp){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return PermitBean.replaceNullInstance(converterPermitBean.fromRight(service.loadPermitByUpdate(GenericUtils.toLong(timestamp,Date.class))));
         }
@@ -2557,6 +3052,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 92 SERIVCE PORT : loadPersonGroupByWhere
     /**
@@ -2570,6 +3069,7 @@ public class IFaceLogClient implements Constant{
             String where,
             int startRow,
             int numRows){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.loadPersonGroupByWhere(
                     where,
@@ -2587,6 +3087,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 93 SERIVCE PORT : countPersonGroupByWhere
     /**
@@ -2594,12 +3098,17 @@ public class IFaceLogClient implements Constant{
      * @see {@link IPersonGroupManager#Where(String)}
      */
     public int countPersonGroupByWhere(String where){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.countPersonGroupByWhere(where);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 94 SERIVCE PORT : loadPersonGroupIdByWhere
     /**
@@ -2609,6 +3118,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public List<Integer> loadPersonGroupIdByWhere(String where){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.loadPersonGroupIdByWhere(where);
         }
@@ -2623,6 +3133,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 95 SERIVCE PORT : registerDevice
     /**
@@ -2634,6 +3148,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceSecurityException
      */
     public DeviceBean registerDevice(DeviceBean newDevice)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return converterDeviceBean.fromRight(service.registerDevice(converterDeviceBean.toRight(newDevice)));
         }
@@ -2648,6 +3163,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 96 SERIVCE PORT : unregisterDevice
     /**
@@ -2661,6 +3180,7 @@ public class IFaceLogClient implements Constant{
     public void unregisterDevice(
             int deviceId,
             net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             service.unregisterDevice(
                     deviceId,
@@ -2669,6 +3189,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 97 SERIVCE PORT : online
     /**
@@ -2679,6 +3203,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceSecurityException
      */
     public net.gdface.facelog.client.thrift.Token online(DeviceBean device)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.online(converterDeviceBean.toRight(device));
         }
@@ -2693,6 +3218,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 98 SERIVCE PORT : offline
     /**
@@ -2703,12 +3232,17 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceSecurityException
      */
     public void offline(net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             service.offline(token);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 99 SERIVCE PORT : applyPersonToken
     /**
@@ -2724,6 +3258,7 @@ public class IFaceLogClient implements Constant{
             int personId,
             String password,
             boolean isMd5)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.applyPersonToken(
                     personId,
@@ -2741,6 +3276,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 100 SERIVCE PORT : releasePersonToken
     /**
@@ -2751,12 +3290,17 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceSecurityException
      */
     public void releasePersonToken(net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             service.releasePersonToken(token);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 101 SERIVCE PORT : applyRootToken
     /**
@@ -2770,6 +3314,7 @@ public class IFaceLogClient implements Constant{
     public net.gdface.facelog.client.thrift.Token applyRootToken(
             String password,
             boolean isMd5)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.applyRootToken(
                     password,
@@ -2786,6 +3331,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 102 SERIVCE PORT : releaseRootToken
     /**
@@ -2796,12 +3345,17 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceSecurityException
      */
     public void releaseRootToken(net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             service.releaseRootToken(token);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 103 SERIVCE PORT : isValidPassword
     /**
@@ -2820,6 +3374,7 @@ public class IFaceLogClient implements Constant{
             String password,
             boolean isMd5,
             net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.ServiceSecurityException{
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.isValidPassword(
                     userId,
@@ -2830,6 +3385,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 104 SERIVCE PORT : applyAckChannel
     /**
@@ -2840,6 +3399,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public String applyAckChannel(net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.applyAckChannel(token);
         }
@@ -2854,6 +3414,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 105 SERIVCE PORT : applyAckChannelWithDuration
     /**
@@ -2867,6 +3431,7 @@ public class IFaceLogClient implements Constant{
     public String applyAckChannel(
             net.gdface.facelog.client.thrift.Token token,
             long duration){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.applyAckChannelWithDuration(
                     token,
@@ -2883,6 +3448,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 106 SERIVCE PORT : applyCmdSn
     /**
@@ -2893,12 +3462,17 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public long applyCmdSn(net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.applyCmdSn(token);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 107 SERIVCE PORT : isValidCmdSn
     /**
@@ -2909,12 +3483,17 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public boolean isValidCmdSn(long cmdSn){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.isValidCmdSn(cmdSn);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 108 SERIVCE PORT : isValidAckChannel
     /**
@@ -2925,12 +3504,17 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public boolean isValidAckChannel(String ackChannel){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.isValidAckChannel(ackChannel);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 109 SERIVCE PORT : getRedisParameters
     /**
@@ -2949,6 +3533,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public Map<net.gdface.facelog.client.thrift.MQParam, String> getRedisParameters(net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.getRedisParameters(token);
         }
@@ -2963,6 +3548,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 110 SERIVCE PORT : getProperty
     /**
@@ -2976,6 +3565,7 @@ public class IFaceLogClient implements Constant{
     public String getProperty(
             String key,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.getProperty(
                     key,
@@ -2992,6 +3582,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 111 SERIVCE PORT : getServiceConfig
     /**
@@ -3002,6 +3596,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public Map<String, String> getServiceConfig(net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.getServiceConfig(token);
         }
@@ -3016,6 +3611,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 112 SERIVCE PORT : setProperty
     /**
@@ -3030,6 +3629,7 @@ public class IFaceLogClient implements Constant{
             String key,
             String value,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             service.setProperty(
                     key,
@@ -3039,6 +3639,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 113 SERIVCE PORT : setProperties
     /**
@@ -3051,6 +3655,7 @@ public class IFaceLogClient implements Constant{
     public void setProperties(
             Map<String, String> config,
             net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             service.setProperties(
                     config,
@@ -3059,6 +3664,10 @@ public class IFaceLogClient implements Constant{
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 114 SERIVCE PORT : saveServiceConfig
     /**
@@ -3069,12 +3678,17 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public void saveServiceConfig(net.gdface.facelog.client.thrift.Token token){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             service.saveServiceConfig(token);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 115 SERIVCE PORT : version
     /**
@@ -3082,6 +3696,7 @@ public class IFaceLogClient implements Constant{
      * @return 
      */
     public String version(){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.version();
         }
@@ -3093,6 +3708,10 @@ public class IFaceLogClient implements Constant{
             }
             throw e;
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     // 116 SERIVCE PORT : versionInfo
     /**
@@ -3106,6 +3725,7 @@ public class IFaceLogClient implements Constant{
      * @return 
      */
     public Map<String, String> versionInfo(){
+        final net.gdface.facelog.client.thrift.IFaceLog service = delegate();
         try{
             return service.versionInfo();
         }
@@ -3117,6 +3737,10 @@ public class IFaceLogClient implements Constant{
             }
             throw e;
         }
+        finally{
+            factory.releaseInstance(service);
+        }
+
     }
     ///////////////// CLIENT EXTENSIVE CONVENIENCE TOOLS /////////////
     
