@@ -2,6 +2,10 @@ package net.gdface.facelog.client;
 
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -10,6 +14,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import com.google.common.hash.Hashing;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import static org.junit.Assert.*;
 
@@ -128,5 +133,45 @@ public class ClientTest implements CommonConstant {
 		logger.info("service version:{}",facelogClient.version());
 		logger.info("version detail:{}",facelogClient.versionInfo().toString());
 		assertTrue("version ok",true);
+	}
+	@Test
+	public void testMultiThread() throws InterruptedException{
+        ExecutorService executor = new ThreadPoolExecutor(
+                1, 
+                1,
+                0,
+                TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(),
+                new ThreadFactoryBuilder()
+                    .setNameFormat("cached-pool-%d")
+                    .build());
+		PersonBean newPerson = PersonBean.builder().name("guyadong").build();
+		try {
+			newPerson = facelogClient.savePerson(newPerson,rootToken);
+			logger.info("person = {}", newPerson.toString());
+		} catch(ServiceRuntimeException e){
+			e.printServiceStackTrace();
+			assertTrue(false);
+		}catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			assertTrue(false);
+		}
+		final Integer id = newPerson.getId();
+		for(int i=0;i<200;++i){
+			executor.execute(new Runnable(){
+				@Override
+				public void run() {
+					try {
+						PersonBean person = facelogClient.getPerson(id);
+						logger.info("person = {}", person.toString());
+					} catch (Exception e) {
+						e.printStackTrace();
+					} 
+				}});
+		}
+		executor.shutdown();
+		while(!executor.isTerminated()){
+			executor.awaitTermination(10, TimeUnit.SECONDS);
+		}
 	}
 }
