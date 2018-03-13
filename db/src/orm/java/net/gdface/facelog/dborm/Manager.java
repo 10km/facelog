@@ -26,7 +26,6 @@ import javax.sql.DataSource;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.mchange.v2.c3p0.DataSources;
 
-import net.gdface.facelog.dborm.Constant.JdbcProperty;
 import net.gdface.facelog.dborm.exception.DaoException;
 
 /**
