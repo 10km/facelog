@@ -83,15 +83,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<PersonBean> getPerson(int personId){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<PersonBean> future = Futures.transform(
                 service.getPerson(personId), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        factory.releaseInstance(service);
                         return converterPersonBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
     // 2 SERIVCE PORT : getPersons
@@ -102,15 +102,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<PersonBean>> getPersons(List<Integer> idList){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<PersonBean>> future = Futures.transform(
                 service.getPersons(CollectionUtils.checkNotNullElement(idList)), 
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>(){
                     @Override
                     public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
-                        factory.releaseInstance(service);
                         return PersonBean.replaceNullInstance(converterPersonBean.fromRight(input));
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<PersonBean>>(service,future);
 
     }
     // 3 SERIVCE PORT : getPersonByPapersNum
@@ -121,15 +121,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<PersonBean> getPersonByPapersNum(String papersNum){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<PersonBean> future = Futures.transform(
                 service.getPersonByPapersNum(papersNum), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        factory.releaseInstance(service);
                         return converterPersonBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
     // 4 SERIVCE PORT : getFeatureBeansByPersonId
@@ -140,15 +140,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<String>> getFeatureBeansByPersonId(int personId){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<String>> future = Futures.transform(
                 service.getFeatureBeansByPersonId(personId), 
                 new com.google.common.base.Function<List<String>,List<String>>(){
                     @Override
                     public List<String> apply(List<String> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<String>>(service,future);
 
     }
     // 5 SERIVCE PORT : deletePerson
@@ -163,17 +163,17 @@ public class IFaceLogClientAsync implements Constant{
             int personId,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Integer> future = Futures.transform(
                 service.deletePerson(
                     personId,
                     token), 
                 new com.google.common.base.Function<Integer,Integer>(){
                     @Override
                     public Integer apply(Integer input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
     // 6 SERIVCE PORT : deletePersons
@@ -188,17 +188,17 @@ public class IFaceLogClientAsync implements Constant{
             List<Integer> personIdList,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Integer> future = Futures.transform(
                 service.deletePersons(
                     CollectionUtils.checkNotNullElement(personIdList),
                     token), 
                 new com.google.common.base.Function<Integer,Integer>(){
                     @Override
                     public Integer apply(Integer input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
     // 7 SERIVCE PORT : deletePersonByPapersNum
@@ -214,17 +214,17 @@ public class IFaceLogClientAsync implements Constant{
             String papersNum,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Integer> future = Futures.transform(
                 service.deletePersonByPapersNum(
                     papersNum,
                     token), 
                 new com.google.common.base.Function<Integer,Integer>(){
                     @Override
                     public Integer apply(Integer input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
     // 8 SERIVCE PORT : deletePersonsByPapersNum
@@ -239,17 +239,17 @@ public class IFaceLogClientAsync implements Constant{
             List<String> papersNumlist,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Integer> future = Futures.transform(
                 service.deletePersonsByPapersNum(
                     CollectionUtils.checkNotNullElement(papersNumlist),
                     token), 
                 new com.google.common.base.Function<Integer,Integer>(){
                     @Override
                     public Integer apply(Integer input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
     // 9 SERIVCE PORT : existsPerson
@@ -260,15 +260,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Boolean> existsPerson(int persionId){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Boolean> future = Futures.transform(
                 service.existsPerson(persionId), 
                 new com.google.common.base.Function<Boolean,Boolean>(){
                     @Override
                     public Boolean apply(Boolean input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
     // 10 SERIVCE PORT : isDisable
@@ -279,15 +279,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Boolean> isDisable(int personId){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Boolean> future = Futures.transform(
                 service.isDisable(personId), 
                 new com.google.common.base.Function<Boolean,Boolean>(){
                     @Override
                     public Boolean apply(Boolean input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
     // 11 SERIVCE PORT : disablePerson
@@ -302,17 +302,17 @@ public class IFaceLogClientAsync implements Constant{
             int personId,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Void> future = Futures.transform(
                 service.disablePerson(
                     personId,
                     token), 
                 new com.google.common.base.Function<Void,Void>(){
                     @Override
                     public Void apply(Void input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
     // 12 SERIVCE PORT : setPersonExpiryDate
@@ -328,7 +328,7 @@ public class IFaceLogClientAsync implements Constant{
             Date expiryDate,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Void> future = Futures.transform(
                 service.setPersonExpiryDate(
                     personId,
                     GenericUtils.toLong(expiryDate,Date.class),
@@ -336,10 +336,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<Void,Void>(){
                     @Override
                     public Void apply(Void input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
     // 13 SERIVCE PORT : setPersonExpiryDateList
@@ -355,7 +355,7 @@ public class IFaceLogClientAsync implements Constant{
             Date expiryDate,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Void> future = Futures.transform(
                 service.setPersonExpiryDateList(
                     CollectionUtils.checkNotNullElement(personIdList),
                     GenericUtils.toLong(expiryDate,Date.class),
@@ -363,10 +363,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<Void,Void>(){
                     @Override
                     public Void apply(Void input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
     // 14 SERIVCE PORT : disablePersonList
@@ -380,17 +380,17 @@ public class IFaceLogClientAsync implements Constant{
             List<Integer> personIdList,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Void> future = Futures.transform(
                 service.disablePersonList(
                     CollectionUtils.checkNotNullElement(personIdList),
                     token), 
                 new com.google.common.base.Function<Void,Void>(){
                     @Override
                     public Void apply(Void input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
     // 15 SERIVCE PORT : getLogBeansByPersonId
@@ -401,15 +401,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<LogBean>> getLogBeansByPersonId(int personId){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<LogBean>> future = Futures.transform(
                 service.getLogBeansByPersonId(personId), 
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.LogBean>,List<LogBean>>(){
                     @Override
                     public List<LogBean> apply(List<net.gdface.facelog.client.thrift.LogBean> input) {
-                        factory.releaseInstance(service);
                         return LogBean.replaceNullInstance(converterLogBean.fromRight(input));
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<LogBean>>(service,future);
 
     }
     // 16 SERIVCE PORT : loadAllPerson
@@ -419,15 +419,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<Integer>> loadAllPerson(){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<Integer>> future = Futures.transform(
                 service.loadAllPerson(), 
                 new com.google.common.base.Function<List<Integer>,List<Integer>>(){
                     @Override
                     public List<Integer> apply(List<Integer> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
     // 17 SERIVCE PORT : loadPersonIdByWhere
@@ -438,15 +438,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<Integer>> loadPersonIdByWhere(String where){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<Integer>> future = Futures.transform(
                 service.loadPersonIdByWhere(where), 
                 new com.google.common.base.Function<List<Integer>,List<Integer>>(){
                     @Override
                     public List<Integer> apply(List<Integer> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
     // 18 SERIVCE PORT : loadPersonByWhere
@@ -462,7 +462,7 @@ public class IFaceLogClientAsync implements Constant{
             int startRow,
             int numRows){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<PersonBean>> future = Futures.transform(
                 service.loadPersonByWhere(
                     where,
                     startRow,
@@ -470,10 +470,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>(){
                     @Override
                     public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
-                        factory.releaseInstance(service);
                         return PersonBean.replaceNullInstance(converterPersonBean.fromRight(input));
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<PersonBean>>(service,future);
 
     }
     // 19 SERIVCE PORT : countPersonByWhere
@@ -484,15 +484,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Integer> countPersonByWhere(String where){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Integer> future = Futures.transform(
                 service.countPersonByWhere(where), 
                 new com.google.common.base.Function<Integer,Integer>(){
                     @Override
                     public Integer apply(Integer input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
     // 20 SERIVCE PORT : savePerson
@@ -506,17 +506,17 @@ public class IFaceLogClientAsync implements Constant{
             PersonBean bean,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<PersonBean> future = Futures.transform(
                 service.savePerson(
                     converterPersonBean.toRight(bean),
                     token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        factory.releaseInstance(service);
                         return converterPersonBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
     // 21 SERIVCE PORT : savePersons
@@ -530,17 +530,17 @@ public class IFaceLogClientAsync implements Constant{
             List<PersonBean> beans,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Void> future = Futures.transform(
                 service.savePersons(
                     converterPersonBean.toRight(CollectionUtils.checkNotNullElement(beans)),
                     token), 
                 new com.google.common.base.Function<Void,Void>(){
                     @Override
                     public Void apply(Void input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
     // 22 SERIVCE PORT : savePersonWithPhoto
@@ -556,7 +556,7 @@ public class IFaceLogClientAsync implements Constant{
             byte[] idPhoto,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<PersonBean> future = Futures.transform(
                 service.savePersonWithPhoto(
                     converterPersonBean.toRight(bean),
                     idPhoto,
@@ -564,10 +564,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        factory.releaseInstance(service);
                         return converterPersonBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
     // 22 GENERIC
@@ -582,7 +582,7 @@ public class IFaceLogClientAsync implements Constant{
             Object idPhoto,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<PersonBean> future = Futures.transform(
                 service.savePersonWithPhoto(
                     converterPersonBean.toRight(bean),
                     GenericUtils.toBytes(idPhoto),
@@ -590,10 +590,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        factory.releaseInstance(service);
                         return converterPersonBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
     // 23 SERIVCE PORT : savePersonsWithPhoto
@@ -608,17 +608,17 @@ public class IFaceLogClientAsync implements Constant{
             Map<ByteBuffer, PersonBean> persons,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Integer> future = Futures.transform(
                 service.savePersonsWithPhoto(
                     GenericUtils.toBytesKey(converterPersonBean.toRightValue(persons)),
                     token), 
                 new com.google.common.base.Function<Integer,Integer>(){
                     @Override
                     public Integer apply(Integer input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
     // 24 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
@@ -636,7 +636,7 @@ public class IFaceLogClientAsync implements Constant{
             String featureMd5,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<PersonBean> future = Futures.transform(
                 service.savePersonWithPhotoAndFeatureSaved(
                     converterPersonBean.toRight(bean),
                     idPhotoMd5,
@@ -645,10 +645,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        factory.releaseInstance(service);
                         return converterPersonBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
     // 25 SERIVCE PORT : savePersonWithPhotoAndFeature
@@ -669,7 +669,7 @@ public class IFaceLogClientAsync implements Constant{
             Integer deviceId,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<PersonBean> future = Futures.transform(
                 service.savePersonWithPhotoAndFeature(
                     converterPersonBean.toRight(bean),
                     idPhoto,
@@ -679,10 +679,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        factory.releaseInstance(service);
                         return converterPersonBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
     // 25 GENERIC
@@ -699,7 +699,7 @@ public class IFaceLogClientAsync implements Constant{
             Integer deviceId,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<PersonBean> future = Futures.transform(
                 service.savePersonWithPhotoAndFeature(
                     converterPersonBean.toRight(bean),
                     GenericUtils.toBytes(idPhoto),
@@ -709,10 +709,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        factory.releaseInstance(service);
                         return converterPersonBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
     // 26 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
@@ -733,7 +733,7 @@ public class IFaceLogClientAsync implements Constant{
             List<FaceBean> faceBeans,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<PersonBean> future = Futures.transform(
                 service.savePersonWithPhotoAndFeatureMultiFaces(
                     converterPersonBean.toRight(bean),
                     idPhoto,
@@ -743,10 +743,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        factory.releaseInstance(service);
                         return converterPersonBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
     // 26 GENERIC
@@ -763,7 +763,7 @@ public class IFaceLogClientAsync implements Constant{
             List<FaceBean> faceBeans,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<PersonBean> future = Futures.transform(
                 service.savePersonWithPhotoAndFeatureMultiFaces(
                     converterPersonBean.toRight(bean),
                     GenericUtils.toBytes(idPhoto),
@@ -773,10 +773,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        factory.releaseInstance(service);
                         return converterPersonBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
     // 27 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
@@ -799,7 +799,7 @@ public class IFaceLogClientAsync implements Constant{
             Integer deviceId,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<PersonBean> future = Futures.transform(
                 service.savePersonWithPhotoAndFeatureMultiImage(
                     converterPersonBean.toRight(bean),
                     idPhoto,
@@ -810,10 +810,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        factory.releaseInstance(service);
                         return converterPersonBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
     // 27 GENERIC
@@ -831,7 +831,7 @@ public class IFaceLogClientAsync implements Constant{
             Integer deviceId,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<PersonBean> future = Futures.transform(
                 service.savePersonWithPhotoAndFeatureMultiImage(
                     converterPersonBean.toRight(bean),
                     GenericUtils.toBytes(idPhoto),
@@ -842,10 +842,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        factory.releaseInstance(service);
                         return converterPersonBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
     // 28 SERIVCE PORT : savePersonFull
@@ -869,7 +869,7 @@ public class IFaceLogClientAsync implements Constant{
             Integer deviceId,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<PersonBean> future = Futures.transform(
                 service.savePersonFull(
                     converterPersonBean.toRight(bean),
                     idPhoto,
@@ -881,10 +881,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        factory.releaseInstance(service);
                         return converterPersonBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
     // 28 GENERIC
@@ -903,7 +903,7 @@ public class IFaceLogClientAsync implements Constant{
             Integer deviceId,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<PersonBean> future = Futures.transform(
                 service.savePersonFull(
                     converterPersonBean.toRight(bean),
                     GenericUtils.toBytes(idPhoto),
@@ -915,10 +915,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        factory.releaseInstance(service);
                         return converterPersonBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
     // 29 SERIVCE PORT : replaceFeature
@@ -935,7 +935,7 @@ public class IFaceLogClientAsync implements Constant{
             boolean deleteOldFeatureImage,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Void> future = Futures.transform(
                 service.replaceFeature(
                     personId,
                     featureMd5,
@@ -944,10 +944,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<Void,Void>(){
                     @Override
                     public Void apply(Void input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
     // 30 SERIVCE PORT : loadUpdatedPersons
@@ -960,15 +960,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<Integer>> loadUpdatedPersons(Date timestamp){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<Integer>> future = Futures.transform(
                 service.loadUpdatedPersons(GenericUtils.toLong(timestamp,Date.class)), 
                 new com.google.common.base.Function<List<Integer>,List<Integer>>(){
                     @Override
                     public List<Integer> apply(List<Integer> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
     // 31 SERIVCE PORT : loadPersonIdByUpdateTime
@@ -980,15 +980,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<Integer>> loadPersonIdByUpdateTime(Date timestamp){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<Integer>> future = Futures.transform(
                 service.loadPersonIdByUpdateTime(GenericUtils.toLong(timestamp,Date.class)), 
                 new com.google.common.base.Function<List<Integer>,List<Integer>>(){
                     @Override
                     public List<Integer> apply(List<Integer> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
     // 32 SERIVCE PORT : loadFeatureMd5ByUpdate
@@ -1000,15 +1000,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<String>> loadFeatureMd5ByUpdate(Date timestamp){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<String>> future = Futures.transform(
                 service.loadFeatureMd5ByUpdate(GenericUtils.toLong(timestamp,Date.class)), 
                 new com.google.common.base.Function<List<String>,List<String>>(){
                     @Override
                     public List<String> apply(List<String> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<String>>(service,future);
 
     }
     // 33 SERIVCE PORT : addLog
@@ -1022,17 +1022,17 @@ public class IFaceLogClientAsync implements Constant{
             LogBean bean,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Void> future = Futures.transform(
                 service.addLog(
                     converterLogBean.toRight(bean),
                     token), 
                 new com.google.common.base.Function<Void,Void>(){
                     @Override
                     public Void apply(Void input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
     // 34 SERIVCE PORT : addLogs
@@ -1046,17 +1046,17 @@ public class IFaceLogClientAsync implements Constant{
             List<LogBean> beans,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Void> future = Futures.transform(
                 service.addLogs(
                     converterLogBean.toRight(CollectionUtils.checkNotNullElement(beans)),
                     token), 
                 new com.google.common.base.Function<Void,Void>(){
                     @Override
                     public Void apply(Void input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
     // 35 SERIVCE PORT : loadLogByWhere
@@ -1073,7 +1073,7 @@ public class IFaceLogClientAsync implements Constant{
             int startRow,
             int numRows){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<LogBean>> future = Futures.transform(
                 service.loadLogByWhere(
                     where,
                     startRow,
@@ -1081,10 +1081,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.LogBean>,List<LogBean>>(){
                     @Override
                     public List<LogBean> apply(List<net.gdface.facelog.client.thrift.LogBean> input) {
-                        factory.releaseInstance(service);
                         return LogBean.replaceNullInstance(converterLogBean.fromRight(input));
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<LogBean>>(service,future);
 
     }
     // 36 SERIVCE PORT : loadLogLightByWhere
@@ -1101,7 +1101,7 @@ public class IFaceLogClientAsync implements Constant{
             int startRow,
             int numRows){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<LogLightBean>> future = Futures.transform(
                 service.loadLogLightByWhere(
                     where,
                     startRow,
@@ -1109,10 +1109,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.LogLightBean>,List<LogLightBean>>(){
                     @Override
                     public List<LogLightBean> apply(List<net.gdface.facelog.client.thrift.LogLightBean> input) {
-                        factory.releaseInstance(service);
                         return LogLightBean.replaceNullInstance(converterLogLightBean.fromRight(input));
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<LogLightBean>>(service,future);
 
     }
     // 37 SERIVCE PORT : countLogLightByWhere
@@ -1123,15 +1123,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Integer> countLogLightByWhere(String where){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Integer> future = Futures.transform(
                 service.countLogLightByWhere(where), 
                 new com.google.common.base.Function<Integer,Integer>(){
                     @Override
                     public Integer apply(Integer input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
     // 38 SERIVCE PORT : countLogByWhere
@@ -1142,15 +1142,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Integer> countLogByWhere(String where){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Integer> future = Futures.transform(
                 service.countLogByWhere(where), 
                 new com.google.common.base.Function<Integer,Integer>(){
                     @Override
                     public Integer apply(Integer input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
     // 39 SERIVCE PORT : loadLogLightByVerifyTime
@@ -1164,7 +1164,7 @@ public class IFaceLogClientAsync implements Constant{
             int startRow,
             int numRows){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<LogLightBean>> future = Futures.transform(
                 service.loadLogLightByVerifyTime(
                     GenericUtils.toLong(timestamp,Date.class),
                     startRow,
@@ -1172,10 +1172,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.LogLightBean>,List<LogLightBean>>(){
                     @Override
                     public List<LogLightBean> apply(List<net.gdface.facelog.client.thrift.LogLightBean> input) {
-                        factory.releaseInstance(service);
                         return LogLightBean.replaceNullInstance(converterLogLightBean.fromRight(input));
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<LogLightBean>>(service,future);
 
     }
     // 40 SERIVCE PORT : countLogLightByVerifyTime
@@ -1185,15 +1185,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Integer> countLogLightByVerifyTime(Date timestamp){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Integer> future = Futures.transform(
                 service.countLogLightByVerifyTime(GenericUtils.toLong(timestamp,Date.class)), 
                 new com.google.common.base.Function<Integer,Integer>(){
                     @Override
                     public Integer apply(Integer input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
     // 41 SERIVCE PORT : existsImage
@@ -1204,15 +1204,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Boolean> existsImage(String md5){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Boolean> future = Futures.transform(
                 service.existsImage(md5), 
                 new com.google.common.base.Function<Boolean,Boolean>(){
                     @Override
                     public Boolean apply(Boolean input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
     // 42 SERIVCE PORT : addImage
@@ -1232,7 +1232,7 @@ public class IFaceLogClientAsync implements Constant{
             Integer personId,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<ImageBean> future = Futures.transform(
                 service.addImage(
                     imageData,
                     deviceId,
@@ -1242,10 +1242,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
                     @Override
                     public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
-                        factory.releaseInstance(service);
                         return converterImageBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,ImageBean>(service,future);
 
     }
     // 42 GENERIC
@@ -1262,7 +1262,7 @@ public class IFaceLogClientAsync implements Constant{
             Integer personId,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<ImageBean> future = Futures.transform(
                 service.addImage(
                     GenericUtils.toBytes(imageData),
                     deviceId,
@@ -1272,10 +1272,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
                     @Override
                     public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
-                        factory.releaseInstance(service);
                         return converterImageBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,ImageBean>(service,future);
 
     }
     // 43 SERIVCE PORT : existsFeature
@@ -1286,15 +1286,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Boolean> existsFeature(String md5){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Boolean> future = Futures.transform(
                 service.existsFeature(md5), 
                 new com.google.common.base.Function<Boolean,Boolean>(){
                     @Override
                     public Boolean apply(Boolean input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
     // 44 SERIVCE PORT : addFeature
@@ -1313,7 +1313,7 @@ public class IFaceLogClientAsync implements Constant{
             List<FaceBean> faecBeans,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<FeatureBean> future = Futures.transform(
                 service.addFeature(
                     feature,
                     personId,
@@ -1322,10 +1322,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
                     @Override
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                        factory.releaseInstance(service);
                         return converterFeatureBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,FeatureBean>(service,future);
 
     }
     // 44 GENERIC
@@ -1341,7 +1341,7 @@ public class IFaceLogClientAsync implements Constant{
             List<FaceBean> faecBeans,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<FeatureBean> future = Futures.transform(
                 service.addFeature(
                     GenericUtils.toBytes(feature),
                     personId,
@@ -1350,10 +1350,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
                     @Override
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                        factory.releaseInstance(service);
                         return converterFeatureBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,FeatureBean>(service,future);
 
     }
     // 45 SERIVCE PORT : addFeatureMulti
@@ -1374,7 +1374,7 @@ public class IFaceLogClientAsync implements Constant{
             Integer deviceId,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<FeatureBean> future = Futures.transform(
                 service.addFeatureMulti(
                     feature,
                     personId,
@@ -1384,10 +1384,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
                     @Override
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                        factory.releaseInstance(service);
                         return converterFeatureBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,FeatureBean>(service,future);
 
     }
     // 45 GENERIC
@@ -1404,7 +1404,7 @@ public class IFaceLogClientAsync implements Constant{
             Integer deviceId,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<FeatureBean> future = Futures.transform(
                 service.addFeatureMulti(
                     GenericUtils.toBytes(feature),
                     personId,
@@ -1414,10 +1414,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
                     @Override
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                        factory.releaseInstance(service);
                         return converterFeatureBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,FeatureBean>(service,future);
 
     }
     // 46 SERIVCE PORT : deleteFeature
@@ -1434,7 +1434,7 @@ public class IFaceLogClientAsync implements Constant{
             boolean deleteImage,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<String>> future = Futures.transform(
                 service.deleteFeature(
                     featureMd5,
                     deleteImage,
@@ -1442,10 +1442,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<String>,List<String>>(){
                     @Override
                     public List<String> apply(List<String> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<String>>(service,future);
 
     }
     // 47 SERIVCE PORT : deleteAllFeaturesByPersonId
@@ -1462,7 +1462,7 @@ public class IFaceLogClientAsync implements Constant{
             boolean deleteImage,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Integer> future = Futures.transform(
                 service.deleteAllFeaturesByPersonId(
                     personId,
                     deleteImage,
@@ -1470,10 +1470,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<Integer,Integer>(){
                     @Override
                     public Integer apply(Integer input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
     // 48 SERIVCE PORT : getFeature
@@ -1484,15 +1484,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<FeatureBean> getFeature(String md5){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<FeatureBean> future = Futures.transform(
                 service.getFeature(md5), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
                     @Override
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                        factory.releaseInstance(service);
                         return converterFeatureBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,FeatureBean>(service,future);
 
     }
     // 49 SERIVCE PORT : getFeatures
@@ -1503,15 +1503,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<FeatureBean>> getFeatures(List<String> md5){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<FeatureBean>> future = Futures.transform(
                 service.getFeatures(CollectionUtils.checkNotNullElement(md5)), 
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.FeatureBean>,List<FeatureBean>>(){
                     @Override
                     public List<FeatureBean> apply(List<net.gdface.facelog.client.thrift.FeatureBean> input) {
-                        factory.releaseInstance(service);
                         return FeatureBean.replaceNullInstance(converterFeatureBean.fromRight(input));
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<FeatureBean>>(service,future);
 
     }
     // 50 SERIVCE PORT : getFeaturesOfPerson
@@ -1522,15 +1522,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<String>> getFeaturesOfPerson(int personId){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<String>> future = Futures.transform(
                 service.getFeaturesOfPerson(personId), 
                 new com.google.common.base.Function<List<String>,List<String>>(){
                     @Override
                     public List<String> apply(List<String> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<String>>(service,future);
 
     }
     // 51 SERIVCE PORT : getFeatureBytes
@@ -1541,15 +1541,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<byte[]> getFeatureBytes(String md5){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<byte[]> future = Futures.transform(
                 service.getFeatureBytes(md5), 
                 new com.google.common.base.Function<byte[],byte[]>(){
                     @Override
                     public byte[] apply(byte[] input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,byte[]>(service,future);
 
     }
     // 52 SERIVCE PORT : getImageBytes
@@ -1561,15 +1561,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<byte[]> getImageBytes(String imageMD5){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<byte[]> future = Futures.transform(
                 service.getImageBytes(imageMD5), 
                 new com.google.common.base.Function<byte[],byte[]>(){
                     @Override
                     public byte[] apply(byte[] input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,byte[]>(service,future);
 
     }
     // 53 SERIVCE PORT : getImage
@@ -1580,15 +1580,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<ImageBean> getImage(String imageMD5){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<ImageBean> future = Futures.transform(
                 service.getImage(imageMD5), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
                     @Override
                     public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
-                        factory.releaseInstance(service);
                         return converterImageBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,ImageBean>(service,future);
 
     }
     // 54 SERIVCE PORT : getImagesAssociatedByFeature
@@ -1599,15 +1599,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<String>> getImagesAssociatedByFeature(String featureMd5){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<String>> future = Futures.transform(
                 service.getImagesAssociatedByFeature(featureMd5), 
                 new com.google.common.base.Function<List<String>,List<String>>(){
                     @Override
                     public List<String> apply(List<String> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<String>>(service,future);
 
     }
     // 55 SERIVCE PORT : getDeviceIdOfFeature
@@ -1618,15 +1618,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Integer> getDeviceIdOfFeature(String featureMd5){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Integer> future = Futures.transform(
                 service.getDeviceIdOfFeature(featureMd5), 
                 new com.google.common.base.Function<Integer,Integer>(){
                     @Override
                     public Integer apply(Integer input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
     // 56 SERIVCE PORT : deleteImage
@@ -1640,17 +1640,17 @@ public class IFaceLogClientAsync implements Constant{
             String imageMd5,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Integer> future = Futures.transform(
                 service.deleteImage(
                     imageMd5,
                     token), 
                 new com.google.common.base.Function<Integer,Integer>(){
                     @Override
                     public Integer apply(Integer input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
     // 57 SERIVCE PORT : existsDevice
@@ -1661,15 +1661,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Boolean> existsDevice(int id){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Boolean> future = Futures.transform(
                 service.existsDevice(id), 
                 new com.google.common.base.Function<Boolean,Boolean>(){
                     @Override
                     public Boolean apply(Boolean input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
     // 58 SERIVCE PORT : saveDevice
@@ -1684,17 +1684,17 @@ public class IFaceLogClientAsync implements Constant{
             DeviceBean deviceBean,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<DeviceBean> future = Futures.transform(
                 service.saveDevice(
                     converterDeviceBean.toRight(deviceBean),
                     token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
                     @Override
                     public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
-                        factory.releaseInstance(service);
                         return converterDeviceBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,DeviceBean>(service,future);
 
     }
     // 59 SERIVCE PORT : updateDevice
@@ -1708,17 +1708,17 @@ public class IFaceLogClientAsync implements Constant{
             DeviceBean deviceBean,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<DeviceBean> future = Futures.transform(
                 service.updateDevice(
                     converterDeviceBean.toRight(deviceBean),
                     token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
                     @Override
                     public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
-                        factory.releaseInstance(service);
                         return converterDeviceBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,DeviceBean>(service,future);
 
     }
     // 60 SERIVCE PORT : getDevice
@@ -1729,15 +1729,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<DeviceBean> getDevice(int deviceId){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<DeviceBean> future = Futures.transform(
                 service.getDevice(deviceId), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
                     @Override
                     public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
-                        factory.releaseInstance(service);
                         return converterDeviceBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,DeviceBean>(service,future);
 
     }
     // 61 SERIVCE PORT : getDevices
@@ -1748,15 +1748,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<DeviceBean>> getDevices(List<Integer> idList){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<DeviceBean>> future = Futures.transform(
                 service.getDevices(CollectionUtils.checkNotNullElement(idList)), 
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.DeviceBean>,List<DeviceBean>>(){
                     @Override
                     public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
-                        factory.releaseInstance(service);
                         return DeviceBean.replaceNullInstance(converterDeviceBean.fromRight(input));
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<DeviceBean>>(service,future);
 
     }
     // 62 SERIVCE PORT : loadDeviceByWhere
@@ -1772,7 +1772,7 @@ public class IFaceLogClientAsync implements Constant{
             int startRow,
             int numRows){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<DeviceBean>> future = Futures.transform(
                 service.loadDeviceByWhere(
                     where,
                     startRow,
@@ -1780,10 +1780,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.DeviceBean>,List<DeviceBean>>(){
                     @Override
                     public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
-                        factory.releaseInstance(service);
                         return DeviceBean.replaceNullInstance(converterDeviceBean.fromRight(input));
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<DeviceBean>>(service,future);
 
     }
     // 63 SERIVCE PORT : countDeviceByWhere
@@ -1794,15 +1794,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Integer> countDeviceByWhere(String where){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Integer> future = Futures.transform(
                 service.countDeviceByWhere(where), 
                 new com.google.common.base.Function<Integer,Integer>(){
                     @Override
                     public Integer apply(Integer input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
     // 64 SERIVCE PORT : loadDeviceIdByWhere
@@ -1813,15 +1813,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<Integer>> loadDeviceIdByWhere(String where){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<Integer>> future = Futures.transform(
                 service.loadDeviceIdByWhere(where), 
                 new com.google.common.base.Function<List<Integer>,List<Integer>>(){
                     @Override
                     public List<Integer> apply(List<Integer> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
     // 65 SERIVCE PORT : saveDeviceGroup
@@ -1836,17 +1836,17 @@ public class IFaceLogClientAsync implements Constant{
             DeviceGroupBean deviceGroupBean,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<DeviceGroupBean> future = Futures.transform(
                 service.saveDeviceGroup(
                     converterDeviceGroupBean.toRight(deviceGroupBean),
                     token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.DeviceGroupBean,DeviceGroupBean>(){
                     @Override
                     public DeviceGroupBean apply(net.gdface.facelog.client.thrift.DeviceGroupBean input) {
-                        factory.releaseInstance(service);
                         return converterDeviceGroupBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,DeviceGroupBean>(service,future);
 
     }
     // 66 SERIVCE PORT : getDeviceGroup
@@ -1857,15 +1857,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<DeviceGroupBean> getDeviceGroup(int deviceGroupId){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<DeviceGroupBean> future = Futures.transform(
                 service.getDeviceGroup(deviceGroupId), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.DeviceGroupBean,DeviceGroupBean>(){
                     @Override
                     public DeviceGroupBean apply(net.gdface.facelog.client.thrift.DeviceGroupBean input) {
-                        factory.releaseInstance(service);
                         return converterDeviceGroupBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,DeviceGroupBean>(service,future);
 
     }
     // 67 SERIVCE PORT : getDeviceGroups
@@ -1876,15 +1876,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<DeviceGroupBean>> getDeviceGroups(List<Integer> groupIdList){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<DeviceGroupBean>> future = Futures.transform(
                 service.getDeviceGroups(CollectionUtils.checkNotNullElement(groupIdList)), 
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.DeviceGroupBean>,List<DeviceGroupBean>>(){
                     @Override
                     public List<DeviceGroupBean> apply(List<net.gdface.facelog.client.thrift.DeviceGroupBean> input) {
-                        factory.releaseInstance(service);
                         return DeviceGroupBean.replaceNullInstance(converterDeviceGroupBean.fromRight(input));
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<DeviceGroupBean>>(service,future);
 
     }
     // 68 SERIVCE PORT : deleteDeviceGroup
@@ -1900,17 +1900,17 @@ public class IFaceLogClientAsync implements Constant{
             int deviceGroupId,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Integer> future = Futures.transform(
                 service.deleteDeviceGroup(
                     deviceGroupId,
                     token), 
                 new com.google.common.base.Function<Integer,Integer>(){
                     @Override
                     public Integer apply(Integer input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
     // 69 SERIVCE PORT : getSubDeviceGroup
@@ -1922,15 +1922,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<Integer>> getSubDeviceGroup(int deviceGroupId){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<Integer>> future = Futures.transform(
                 service.getSubDeviceGroup(deviceGroupId), 
                 new com.google.common.base.Function<List<Integer>,List<Integer>>(){
                     @Override
                     public List<Integer> apply(List<Integer> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
     // 70 SERIVCE PORT : getDevicesOfGroup
@@ -1942,15 +1942,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<Integer>> getDevicesOfGroup(int deviceGroupId){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<Integer>> future = Futures.transform(
                 service.getDevicesOfGroup(deviceGroupId), 
                 new com.google.common.base.Function<List<Integer>,List<Integer>>(){
                     @Override
                     public List<Integer> apply(List<Integer> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
     // 71 SERIVCE PORT : listOfParentForDeviceGroup
@@ -1962,15 +1962,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<Integer>> listOfParentForDeviceGroup(int deviceGroupId){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<Integer>> future = Futures.transform(
                 service.listOfParentForDeviceGroup(deviceGroupId), 
                 new com.google.common.base.Function<List<Integer>,List<Integer>>(){
                     @Override
                     public List<Integer> apply(List<Integer> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
     // 72 SERIVCE PORT : getDeviceGroupsBelongs
@@ -1982,15 +1982,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<Integer>> getDeviceGroupsBelongs(int deviceId){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<Integer>> future = Futures.transform(
                 service.getDeviceGroupsBelongs(deviceId), 
                 new com.google.common.base.Function<List<Integer>,List<Integer>>(){
                     @Override
                     public List<Integer> apply(List<Integer> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
     // 73 SERIVCE PORT : savePersonGroup
@@ -2005,17 +2005,17 @@ public class IFaceLogClientAsync implements Constant{
             PersonGroupBean personGroupBean,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<PersonGroupBean> future = Futures.transform(
                 service.savePersonGroup(
                     converterPersonGroupBean.toRight(personGroupBean),
                     token), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonGroupBean,PersonGroupBean>(){
                     @Override
                     public PersonGroupBean apply(net.gdface.facelog.client.thrift.PersonGroupBean input) {
-                        factory.releaseInstance(service);
                         return converterPersonGroupBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonGroupBean>(service,future);
 
     }
     // 74 SERIVCE PORT : getPersonGroup
@@ -2026,15 +2026,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<PersonGroupBean> getPersonGroup(int personGroupId){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<PersonGroupBean> future = Futures.transform(
                 service.getPersonGroup(personGroupId), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonGroupBean,PersonGroupBean>(){
                     @Override
                     public PersonGroupBean apply(net.gdface.facelog.client.thrift.PersonGroupBean input) {
-                        factory.releaseInstance(service);
                         return converterPersonGroupBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonGroupBean>(service,future);
 
     }
     // 75 SERIVCE PORT : getPersonGroups
@@ -2045,15 +2045,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<PersonGroupBean>> getPersonGroups(List<Integer> groupIdList){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<PersonGroupBean>> future = Futures.transform(
                 service.getPersonGroups(CollectionUtils.checkNotNullElement(groupIdList)), 
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PersonGroupBean>,List<PersonGroupBean>>(){
                     @Override
                     public List<PersonGroupBean> apply(List<net.gdface.facelog.client.thrift.PersonGroupBean> input) {
-                        factory.releaseInstance(service);
                         return PersonGroupBean.replaceNullInstance(converterPersonGroupBean.fromRight(input));
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<PersonGroupBean>>(service,future);
 
     }
     // 76 SERIVCE PORT : deletePersonGroup
@@ -2069,17 +2069,17 @@ public class IFaceLogClientAsync implements Constant{
             int personGroupId,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Integer> future = Futures.transform(
                 service.deletePersonGroup(
                     personGroupId,
                     token), 
                 new com.google.common.base.Function<Integer,Integer>(){
                     @Override
                     public Integer apply(Integer input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
     // 77 SERIVCE PORT : getSubPersonGroup
@@ -2091,15 +2091,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<Integer>> getSubPersonGroup(int personGroupId){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<Integer>> future = Futures.transform(
                 service.getSubPersonGroup(personGroupId), 
                 new com.google.common.base.Function<List<Integer>,List<Integer>>(){
                     @Override
                     public List<Integer> apply(List<Integer> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
     // 78 SERIVCE PORT : getPersonsOfGroup
@@ -2111,15 +2111,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<Integer>> getPersonsOfGroup(int personGroupId){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<Integer>> future = Futures.transform(
                 service.getPersonsOfGroup(personGroupId), 
                 new com.google.common.base.Function<List<Integer>,List<Integer>>(){
                     @Override
                     public List<Integer> apply(List<Integer> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
     // 79 SERIVCE PORT : listOfParentForPersonGroup
@@ -2131,15 +2131,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<Integer>> listOfParentForPersonGroup(int personGroupId){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<Integer>> future = Futures.transform(
                 service.listOfParentForPersonGroup(personGroupId), 
                 new com.google.common.base.Function<List<Integer>,List<Integer>>(){
                     @Override
                     public List<Integer> apply(List<Integer> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
     // 80 SERIVCE PORT : getPersonGroupsBelongs
@@ -2151,15 +2151,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<Integer>> getPersonGroupsBelongs(int personId){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<Integer>> future = Futures.transform(
                 service.getPersonGroupsBelongs(personId), 
                 new com.google.common.base.Function<List<Integer>,List<Integer>>(){
                     @Override
                     public List<Integer> apply(List<Integer> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
     // 81 SERIVCE PORT : loadDeviceGroupByWhere
@@ -2175,7 +2175,7 @@ public class IFaceLogClientAsync implements Constant{
             int startRow,
             int numRows){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<Integer>> future = Futures.transform(
                 service.loadDeviceGroupByWhere(
                     where,
                     startRow,
@@ -2183,10 +2183,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<Integer>,List<Integer>>(){
                     @Override
                     public List<Integer> apply(List<Integer> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
     // 82 SERIVCE PORT : countDeviceGroupByWhere
@@ -2195,15 +2195,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Integer> countDeviceGroupByWhere(String where){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Integer> future = Futures.transform(
                 service.countDeviceGroupByWhere(where), 
                 new com.google.common.base.Function<Integer,Integer>(){
                     @Override
                     public Integer apply(Integer input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
     // 83 SERIVCE PORT : loadDeviceGroupIdByWhere
@@ -2214,15 +2214,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<Integer>> loadDeviceGroupIdByWhere(String where){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<Integer>> future = Futures.transform(
                 service.loadDeviceGroupIdByWhere(where), 
                 new com.google.common.base.Function<List<Integer>,List<Integer>>(){
                     @Override
                     public List<Integer> apply(List<Integer> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
     // 84 SERIVCE PORT : addPermit
@@ -2239,7 +2239,7 @@ public class IFaceLogClientAsync implements Constant{
             PersonGroupBean personGroup,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Void> future = Futures.transform(
                 service.addPermit(
                     converterDeviceGroupBean.toRight(deviceGroup),
                     converterPersonGroupBean.toRight(personGroup),
@@ -2247,10 +2247,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<Void,Void>(){
                     @Override
                     public Void apply(Void input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
     // 85 SERIVCE PORT : addPermitById
@@ -2268,7 +2268,7 @@ public class IFaceLogClientAsync implements Constant{
             int personGroupId,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Void> future = Futures.transform(
                 service.addPermitById(
                     deviceGroupId,
                     personGroupId,
@@ -2276,10 +2276,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<Void,Void>(){
                     @Override
                     public Void apply(Void input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
     // 86 SERIVCE PORT : deletePermit
@@ -2296,7 +2296,7 @@ public class IFaceLogClientAsync implements Constant{
             PersonGroupBean personGroup,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Integer> future = Futures.transform(
                 service.deletePermit(
                     converterDeviceGroupBean.toRight(deviceGroup),
                     converterPersonGroupBean.toRight(personGroup),
@@ -2304,10 +2304,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<Integer,Integer>(){
                     @Override
                     public Integer apply(Integer input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
     // 87 SERIVCE PORT : getGroupPermit
@@ -2322,17 +2322,17 @@ public class IFaceLogClientAsync implements Constant{
             int deviceId,
             int personGroupId){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Boolean> future = Futures.transform(
                 service.getGroupPermit(
                     deviceId,
                     personGroupId), 
                 new com.google.common.base.Function<Boolean,Boolean>(){
                     @Override
                     public Boolean apply(Boolean input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
     // 88 SERIVCE PORT : getPersonPermit
@@ -2347,17 +2347,17 @@ public class IFaceLogClientAsync implements Constant{
             int deviceId,
             int personId){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Boolean> future = Futures.transform(
                 service.getPersonPermit(
                     deviceId,
                     personId), 
                 new com.google.common.base.Function<Boolean,Boolean>(){
                     @Override
                     public Boolean apply(Boolean input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
     // 89 SERIVCE PORT : getGroupPermits
@@ -2368,17 +2368,17 @@ public class IFaceLogClientAsync implements Constant{
             int deviceId,
             List<Integer> personGroupIdList){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<Boolean>> future = Futures.transform(
                 service.getGroupPermits(
                     deviceId,
                     CollectionUtils.checkNotNullElement(personGroupIdList)), 
                 new com.google.common.base.Function<List<Boolean>,List<Boolean>>(){
                     @Override
                     public List<Boolean> apply(List<Boolean> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Boolean>>(service,future);
 
     }
     // 90 SERIVCE PORT : getPersonPermits
@@ -2389,17 +2389,17 @@ public class IFaceLogClientAsync implements Constant{
             int deviceId,
             List<Integer> personIdList){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<Boolean>> future = Futures.transform(
                 service.getPersonPermits(
                     deviceId,
                     CollectionUtils.checkNotNullElement(personIdList)), 
                 new com.google.common.base.Function<List<Boolean>,List<Boolean>>(){
                     @Override
                     public List<Boolean> apply(List<Boolean> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Boolean>>(service,future);
 
     }
     // 91 SERIVCE PORT : loadPermitByUpdate
@@ -2411,15 +2411,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<PermitBean>> loadPermitByUpdate(Date timestamp){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<PermitBean>> future = Futures.transform(
                 service.loadPermitByUpdate(GenericUtils.toLong(timestamp,Date.class)), 
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PermitBean>,List<PermitBean>>(){
                     @Override
                     public List<PermitBean> apply(List<net.gdface.facelog.client.thrift.PermitBean> input) {
-                        factory.releaseInstance(service);
                         return PermitBean.replaceNullInstance(converterPermitBean.fromRight(input));
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<PermitBean>>(service,future);
 
     }
     // 92 SERIVCE PORT : loadPersonGroupByWhere
@@ -2435,7 +2435,7 @@ public class IFaceLogClientAsync implements Constant{
             int startRow,
             int numRows){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<Integer>> future = Futures.transform(
                 service.loadPersonGroupByWhere(
                     where,
                     startRow,
@@ -2443,10 +2443,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<Integer>,List<Integer>>(){
                     @Override
                     public List<Integer> apply(List<Integer> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
     // 93 SERIVCE PORT : countPersonGroupByWhere
@@ -2456,15 +2456,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Integer> countPersonGroupByWhere(String where){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Integer> future = Futures.transform(
                 service.countPersonGroupByWhere(where), 
                 new com.google.common.base.Function<Integer,Integer>(){
                     @Override
                     public Integer apply(Integer input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
     // 94 SERIVCE PORT : loadPersonGroupIdByWhere
@@ -2475,15 +2475,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<List<Integer>> loadPersonGroupIdByWhere(String where){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<List<Integer>> future = Futures.transform(
                 service.loadPersonGroupIdByWhere(where), 
                 new com.google.common.base.Function<List<Integer>,List<Integer>>(){
                     @Override
                     public List<Integer> apply(List<Integer> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
     // 95 SERIVCE PORT : registerDevice
@@ -2495,15 +2495,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<DeviceBean> registerDevice(DeviceBean newDevice){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<DeviceBean> future = Futures.transform(
                 service.registerDevice(converterDeviceBean.toRight(newDevice)), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
                     @Override
                     public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
-                        factory.releaseInstance(service);
                         return converterDeviceBean.fromRight(input);
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,DeviceBean>(service,future);
 
     }
     // 96 SERIVCE PORT : unregisterDevice
@@ -2517,17 +2517,17 @@ public class IFaceLogClientAsync implements Constant{
             int deviceId,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Void> future = Futures.transform(
                 service.unregisterDevice(
                     deviceId,
                     token), 
                 new com.google.common.base.Function<Void,Void>(){
                     @Override
                     public Void apply(Void input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
     // 97 SERIVCE PORT : online
@@ -2538,15 +2538,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<net.gdface.facelog.client.thrift.Token> online(DeviceBean device){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<net.gdface.facelog.client.thrift.Token> future = Futures.transform(
                 service.online(converterDeviceBean.toRight(device)), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.Token,net.gdface.facelog.client.thrift.Token>(){
                     @Override
                     public net.gdface.facelog.client.thrift.Token apply(net.gdface.facelog.client.thrift.Token input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,net.gdface.facelog.client.thrift.Token>(service,future);
 
     }
     // 98 SERIVCE PORT : offline
@@ -2557,15 +2557,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Void> offline(net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Void> future = Futures.transform(
                 service.offline(token), 
                 new com.google.common.base.Function<Void,Void>(){
                     @Override
                     public Void apply(Void input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
     // 99 SERIVCE PORT : applyPersonToken
@@ -2581,7 +2581,7 @@ public class IFaceLogClientAsync implements Constant{
             String password,
             boolean isMd5){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<net.gdface.facelog.client.thrift.Token> future = Futures.transform(
                 service.applyPersonToken(
                     personId,
                     password,
@@ -2589,10 +2589,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.Token,net.gdface.facelog.client.thrift.Token>(){
                     @Override
                     public net.gdface.facelog.client.thrift.Token apply(net.gdface.facelog.client.thrift.Token input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,net.gdface.facelog.client.thrift.Token>(service,future);
 
     }
     // 100 SERIVCE PORT : releasePersonToken
@@ -2603,15 +2603,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Void> releasePersonToken(net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Void> future = Futures.transform(
                 service.releasePersonToken(token), 
                 new com.google.common.base.Function<Void,Void>(){
                     @Override
                     public Void apply(Void input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
     // 101 SERIVCE PORT : applyRootToken
@@ -2625,17 +2625,17 @@ public class IFaceLogClientAsync implements Constant{
             String password,
             boolean isMd5){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<net.gdface.facelog.client.thrift.Token> future = Futures.transform(
                 service.applyRootToken(
                     password,
                     isMd5), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.Token,net.gdface.facelog.client.thrift.Token>(){
                     @Override
                     public net.gdface.facelog.client.thrift.Token apply(net.gdface.facelog.client.thrift.Token input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,net.gdface.facelog.client.thrift.Token>(service,future);
 
     }
     // 102 SERIVCE PORT : releaseRootToken
@@ -2646,15 +2646,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Void> releaseRootToken(net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Void> future = Futures.transform(
                 service.releaseRootToken(token), 
                 new com.google.common.base.Function<Void,Void>(){
                     @Override
                     public Void apply(Void input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
     // 103 SERIVCE PORT : isValidPassword
@@ -2673,7 +2673,7 @@ public class IFaceLogClientAsync implements Constant{
             boolean isMd5,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Boolean> future = Futures.transform(
                 service.isValidPassword(
                     userId,
                     password,
@@ -2682,10 +2682,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<Boolean,Boolean>(){
                     @Override
                     public Boolean apply(Boolean input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
     // 104 SERIVCE PORT : applyAckChannel
@@ -2697,15 +2697,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<String> applyAckChannel(net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<String> future = Futures.transform(
                 service.applyAckChannel(token), 
                 new com.google.common.base.Function<String,String>(){
                     @Override
                     public String apply(String input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,String>(service,future);
 
     }
     // 105 SERIVCE PORT : applyAckChannelWithDuration
@@ -2720,17 +2720,17 @@ public class IFaceLogClientAsync implements Constant{
             net.gdface.facelog.client.thrift.Token token,
             long duration){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<String> future = Futures.transform(
                 service.applyAckChannelWithDuration(
                     token,
                     duration), 
                 new com.google.common.base.Function<String,String>(){
                     @Override
                     public String apply(String input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,String>(service,future);
 
     }
     // 106 SERIVCE PORT : applyCmdSn
@@ -2742,15 +2742,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Long> applyCmdSn(net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Long> future = Futures.transform(
                 service.applyCmdSn(token), 
                 new com.google.common.base.Function<Long,Long>(){
                     @Override
                     public Long apply(Long input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Long>(service,future);
 
     }
     // 107 SERIVCE PORT : isValidCmdSn
@@ -2762,15 +2762,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Boolean> isValidCmdSn(long cmdSn){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Boolean> future = Futures.transform(
                 service.isValidCmdSn(cmdSn), 
                 new com.google.common.base.Function<Boolean,Boolean>(){
                     @Override
                     public Boolean apply(Boolean input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
     // 108 SERIVCE PORT : isValidAckChannel
@@ -2782,15 +2782,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Boolean> isValidAckChannel(String ackChannel){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Boolean> future = Futures.transform(
                 service.isValidAckChannel(ackChannel), 
                 new com.google.common.base.Function<Boolean,Boolean>(){
                     @Override
                     public Boolean apply(Boolean input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
     // 109 SERIVCE PORT : getRedisParameters
@@ -2810,15 +2810,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Map<net.gdface.facelog.client.thrift.MQParam, String>> getRedisParameters(net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Map<net.gdface.facelog.client.thrift.MQParam, String>> future = Futures.transform(
                 service.getRedisParameters(token), 
                 new com.google.common.base.Function<Map<net.gdface.facelog.client.thrift.MQParam, String>,Map<net.gdface.facelog.client.thrift.MQParam, String>>(){
                     @Override
                     public Map<net.gdface.facelog.client.thrift.MQParam, String> apply(Map<net.gdface.facelog.client.thrift.MQParam, String> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Map<net.gdface.facelog.client.thrift.MQParam, String>>(service,future);
 
     }
     // 110 SERIVCE PORT : getProperty
@@ -2833,17 +2833,17 @@ public class IFaceLogClientAsync implements Constant{
             String key,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<String> future = Futures.transform(
                 service.getProperty(
                     key,
                     token), 
                 new com.google.common.base.Function<String,String>(){
                     @Override
                     public String apply(String input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,String>(service,future);
 
     }
     // 111 SERIVCE PORT : getServiceConfig
@@ -2855,15 +2855,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Map<String, String>> getServiceConfig(net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Map<String, String>> future = Futures.transform(
                 service.getServiceConfig(token), 
                 new com.google.common.base.Function<Map<String, String>,Map<String, String>>(){
                     @Override
                     public Map<String, String> apply(Map<String, String> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Map<String, String>>(service,future);
 
     }
     // 112 SERIVCE PORT : setProperty
@@ -2879,7 +2879,7 @@ public class IFaceLogClientAsync implements Constant{
             String value,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Void> future = Futures.transform(
                 service.setProperty(
                     key,
                     value,
@@ -2887,10 +2887,10 @@ public class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<Void,Void>(){
                     @Override
                     public Void apply(Void input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
     // 113 SERIVCE PORT : setProperties
@@ -2904,17 +2904,17 @@ public class IFaceLogClientAsync implements Constant{
             Map<String, String> config,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Void> future = Futures.transform(
                 service.setProperties(
                     config,
                     token), 
                 new com.google.common.base.Function<Void,Void>(){
                     @Override
                     public Void apply(Void input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
     // 114 SERIVCE PORT : saveServiceConfig
@@ -2926,15 +2926,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Void> saveServiceConfig(net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Void> future = Futures.transform(
                 service.saveServiceConfig(token), 
                 new com.google.common.base.Function<Void,Void>(){
                     @Override
                     public Void apply(Void input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
     // 115 SERIVCE PORT : version
@@ -2944,15 +2944,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<String> version(){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<String> future = Futures.transform(
                 service.version(), 
                 new com.google.common.base.Function<String,String>(){
                     @Override
                     public String apply(String input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,String>(service,future);
 
     }
     // 116 SERIVCE PORT : versionInfo
@@ -2968,15 +2968,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<Map<String, String>> versionInfo(){
         final net.gdface.facelog.client.thrift.IFaceLog.Async service = delegate();
-        return Futures.transform(
+        ListenableFuture<Map<String, String>> future = Futures.transform(
                 service.versionInfo(), 
                 new com.google.common.base.Function<Map<String, String>,Map<String, String>>(){
                     @Override
                     public Map<String, String> apply(Map<String, String> input) {
-                        factory.releaseInstance(service);
                         return input;
                     }
                 });
+        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Map<String, String>>(service,future);
 
     }
     ///////////////// CLIENT EXTENSIVE CONVENIENCE TOOLS /////////////

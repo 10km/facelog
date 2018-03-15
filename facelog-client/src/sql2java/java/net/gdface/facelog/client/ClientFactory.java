@@ -8,7 +8,11 @@
 package net.gdface.facelog.client;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
 import org.apache.commons.pool2.PooledObject;
@@ -27,6 +31,8 @@ import com.google.common.base.Throwables;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.net.HostAndPort;
+import com.google.common.util.concurrent.ListenableFuture;
+
 import static com.google.common.net.HostAndPort.fromParts;
 import static com.google.common.net.HostAndPort.fromString;
 import static com.google.common.base.Preconditions.*;
@@ -149,11 +155,6 @@ public class ClientFactory {
         this.clientName = clientName;
         return this;
     }
-    /**
-     * ����channel pool ���ò���
-     * @param channelPoolConfig
-     * @return
-     */
     public ClientFactory setChannelPoolConfig(GenericObjectPoolConfig channelPoolConfig) {
         if(null != channelPoolConfig){
             this.channelPoolConfig = channelPoolConfig;
@@ -214,7 +215,7 @@ public class ClientFactory {
         }
     }
     /**
-     * ����{@code interfaceClass}��ʵ��
+     * return instance of {@code interfaceClass}
      * @param interfaceClass
      * @return
      */
@@ -227,8 +228,7 @@ public class ClientFactory {
         }
     }
     /**
-     * �ͷ�{@code instance}ʵ��,������{@link #applyInstance(Class)}���ʹ��
-     * ����Դ�ع黹{@link NiftyClientChannel}
+     * release instance of {@code instance} that be applied by {@link #applyInstance(Class)}
      * @param instance
      */
     public <T>void releaseInstance(T instance){
@@ -289,4 +289,54 @@ public class ClientFactory {
                 net.gdface.facelog.client.thrift.IFaceLog.class,
                 IFaceLogClient.class);
     }
-}
+    public class ListenableFutureDecorator<A,V> implements ListenableFuture<V>{
+        private final A async;
+        private final ListenableFuture<V> future;
+        private final AtomicBoolean released = new AtomicBoolean(false);
+        public ListenableFutureDecorator(A async, ListenableFuture<V> future) {
+            this.async = checkNotNull(async,"async is null");
+            this.future = checkNotNull(future,"future is null");
+        }
+        private void releaseAsync(){
+            if(released.compareAndSet(false, true)){
+                releaseInstance(async);    
+            }
+        }
+        @Override
+        public boolean cancel(boolean mayInterruptIfRunning) {
+            return future.cancel(mayInterruptIfRunning);
+        }
+
+        @Override
+        public V get() throws InterruptedException, ExecutionException {
+            try{
+                return future.get();
+            }finally{
+                releaseAsync();                
+            }
+        }
+
+        @Override
+        public V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+            try{
+                return future.get(timeout, unit);
+            }finally{
+                releaseAsync();
+            }
+        }
+
+        @Override
+        public boolean isCancelled() {
+            return future.isCancelled();
+        }
+
+        @Override
+        public boolean isDone() {
+            return future.isDone();
+        }
+
+        @Override
+        public void addListener(Runnable listener, Executor executor) {
+            future.addListener(listener, executor);            
+        }        
+    }}
