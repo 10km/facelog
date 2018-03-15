@@ -8,8 +8,12 @@
 package net.gdface.facelog.db.mysql;
 
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import net.gdface.facelog.dborm.Manager;
+import net.gdface.facelog.db.exception.RuntimeDaoException;
+import net.gdface.facelog.dborm.exception.DaoException;
+
 /**
  * static method delegation of native manager {@link Manager}
  * @author guyadong
@@ -22,5 +26,19 @@ public class ManagerUtil {
      */
     public static final void injectProperties(Map<String,String> properties){
         Manager.injectProperties(properties);
+    }
+    public static void runAsTransaction(Runnable fun)throws RuntimeDaoException{
+        try {
+            Manager.getInstance().runAsTransaction(fun);
+        } catch (DaoException e){ 
+            throw new RuntimeDaoException(e);
+        }
+    }
+    public static <T>T runAsTransaction(Callable<T> fun)throws RuntimeDaoException{
+        try {
+            return Manager.getInstance().runAsTransaction(fun);
+        } catch (DaoException e){ 
+            throw new RuntimeDaoException(e);
+        }
     }
 }
