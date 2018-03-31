@@ -631,7 +631,8 @@ public final class Manager implements Constant
      */
     public static java.nio.ByteBuffer getBytes(ResultSet rs, int pos) throws SQLException
     {
-        return rs.wasNull()?(java.nio.ByteBuffer)null:java.nio.ByteBuffer.wrap(rs.getBytes(pos));
+        byte[] bytes = rs.getBytes(pos);
+        return rs.wasNull()?(java.nio.ByteBuffer)null:java.nio.ByteBuffer.wrap(bytes);
     }
 
     /**
@@ -639,7 +640,8 @@ public final class Manager implements Constant
      */
     public static java.nio.ByteBuffer getBytes(ResultSet rs, String column) throws SQLException
     {
-        return rs.wasNull()?(java.nio.ByteBuffer)null:java.nio.ByteBuffer.wrap(rs.getBytes(column));
+        byte[] bytes = rs.getBytes(column);
+        return rs.wasNull()?(java.nio.ByteBuffer)null:java.nio.ByteBuffer.wrap(bytes);
     }
 
     /**
