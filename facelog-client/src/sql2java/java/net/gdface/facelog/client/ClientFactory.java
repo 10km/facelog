@@ -66,6 +66,7 @@ public class ClientFactory {
     }    
     private static final Cache<Class<?>, ThriftClient<?>> THRIFT_CLIENT_CACHE = CacheBuilder.newBuilder().softValues().build();
     private static final Cache<Class<?>, Object> CLIENT_CACHE = CacheBuilder.newBuilder().softValues().build();
+    private static final boolean jmxEnable = isJmxEnable();
     private ThriftClientManager clientManager; 
     private ThriftClientConfig thriftClientConfig = new ThriftClientConfig();
     private HostAndPort hostAndPort;
@@ -73,6 +74,19 @@ public class ClientFactory {
     private String clientName = ThriftClientManager.DEFAULT_NAME;
     private volatile GenericObjectPoolConfig channelPoolConfig = new GenericObjectPoolConfig();
     private volatile GenericObjectPool<NiftyClientChannel> channelPool;
+
+    /**
+     * determines if JMX be supported by JVM,return {@code false} on Android
+     * @return 
+     */
+    private static boolean isJmxEnable(){
+        try{
+            Class.forName("java.lang.management.ManagementFactory");
+            return true;
+        }catch(ClassNotFoundException e){
+            return false;
+        }
+    }
 
     protected ClientFactory() {
     }
@@ -190,6 +204,7 @@ public class ClientFactory {
         if(null == channelPool){
             synchronized(this){
                 if(null == channelPool){
+                    channelPoolConfig.setJmxEnabled(jmxEnable);
                     channelPool = new GenericObjectPool<NiftyClientChannel>(new ThriftClientPoolFactory(),channelPoolConfig);
                 }
             }
