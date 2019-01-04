@@ -130,7 +130,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore />
+										<ignore/>
 									</action>
 								</pluginExecution>
 								<pluginExecution>
@@ -151,7 +151,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore />
+										<ignore/>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
@@ -286,6 +286,16 @@
 			        </execution>
 			    </executions>
 			</plugin>
+			<!-- 指定JDK版本 -->
+			<plugin>  
+                <groupId>org.apache.maven.plugins</groupId>  
+                <artifactId>maven-compiler-plugin</artifactId>  
+                <version>3.1</version>  
+                <configuration>  
+                    <source>1.7</source>  
+                    <target>1.7</target>  
+                </configuration>  
+            </plugin>
 		</plugins>
 	</build>
 	<modules>
@@ -293,6 +303,7 @@
 		<module>facelog-service</module>
 		<module>facelog-client</module>
 		<module>facelogservice-maven-plugin</module>
+		<module>facelog-client-android</module>
 	</modules>
 	<licenses>
 		<license>
