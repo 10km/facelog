@@ -197,7 +197,7 @@
 						</swiftClassNames>
 						<namespace>
 							<cpp>gdface</cpp>
-							<java>com.gdface</java>
+							<java>net.gdface.facelog.client.thrift</java>
 							<py>gdface.thrift</py>
 						</namespace>
 						<recursive>true</recursive>

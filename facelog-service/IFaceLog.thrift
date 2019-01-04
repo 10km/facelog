@@ -1,6 +1,6 @@
 namespace java.swift net.gdface.facelog.service
 namespace cpp gdface
-namespace java com.gdface
+namespace java net.gdface.facelog.client.thrift
 namespace py gdface.thrift
 
 
