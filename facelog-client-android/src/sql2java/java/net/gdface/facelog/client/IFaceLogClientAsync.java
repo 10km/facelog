@@ -74,7 +74,7 @@ public class IFaceLogClientAsync implements Constant{
     }
     
     private net.gdface.facelog.client.thrift.IFaceLog.Async delegate(){
-    	return factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLog.Async.class);
+    	return factory.applyInstance();
     }
     // 1 SERIVCE PORT : getPerson
     /**
