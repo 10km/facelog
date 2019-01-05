@@ -24,6 +24,10 @@
 	    <artifactId>thrifty-compiler</artifactId>
 	    <version>1.0.0</version>
 	</dependency>    
+	<dependency>
+		<groupId>${project.groupId}</groupId>
+		<artifactId>simplemq</artifactId>
+	</dependency>	
   </dependencies>
   <build>
   		<!-- properties 配置文件打入jar包 -->
@@ -46,6 +50,7 @@
 						<configuration>
 							<sources>
 								<source>src/thrifty/java</source>
+								<source>src/sql2java/java</source>
 							</sources>
 						</configuration>
 					</execution>
