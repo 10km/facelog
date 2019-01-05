@@ -12,14 +12,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
-
-import org.apache.commons.pool2.PooledObject;
-import org.apache.commons.pool2.PooledObjectFactory;
-import org.apache.commons.pool2.impl.DefaultPooledObject;
-import org.apache.commons.pool2.impl.GenericObjectPool;
-import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 import com.google.common.base.Throwables;
 import com.google.common.cache.Cache;
@@ -49,21 +42,23 @@ import com.microsoft.thrifty.transport.SocketTransport;
  *
  */
 public class ClientFactory {
-    private static final Logger logger = Logger.getLogger(ClientFactory.class.getSimpleName());
-    
-    private static final Cache<Class<?>, Object> CLIENT_CACHE = CacheBuilder.newBuilder().softValues().build();
-    private static final AsyncClientBase.Listener DEFAULT_LISTENER = new AsyncClientBase.Listener(){
+    //private static final Logger logger = Logger.getLogger(ClientFactory.class.getSimpleName());
+    private static final Cache<HostAndPort, net.gdface.facelog.client.thrift.IFaceLogClient> THRIFTY_CLIENT_CACHE = CacheBuilder.newBuilder().softValues().build();
+    private final AsyncClientBase.Listener DEFAULT_CLOSE_LISTENER = new AsyncClientBase.Listener(){
         @Override
-        public void onTransportClosed() {}
+        public void onTransportClosed() {
+            THRIFTY_CLIENT_CACHE.asMap().remove(hostAndPort);
+        }
         @Override
-        public void onError(Throwable error) {}
+        public void onError(Throwable error) {
+            THRIFTY_CLIENT_CACHE.asMap().remove(hostAndPort);
+        }
     };
-    private volatile GenericObjectPoolConfig channelPoolConfig = new GenericObjectPoolConfig();
-    private volatile GenericObjectPool<net.gdface.facelog.client.thrift.IFaceLogClient> channelPool;
     private HostAndPort hostAndPort;
     private long readTimeout;
     private long connectTimeout;
-    private AsyncClientBase.Listener listener = DEFAULT_LISTENER;
+    private volatile IFaceLogClientAsync asyncClientInstance;
+    private volatile IFaceLogClient clientInstance;
     protected ClientFactory() {
     }
 
@@ -106,116 +101,57 @@ public class ClientFactory {
     public ClientFactory setHostAndPort(String host) {
         return setHostAndPort(fromString(host));
     }
-    public ClientFactory setListener(AsyncClientBase.Listener listener) {
-          if(null != listener){
-                this.listener = listener;
-          }
-          return this;
-    }    
-
-    private GenericObjectPool<net.gdface.facelog.client.thrift.IFaceLogClient> getChannelPool() {
-        if(null == channelPool){
-            synchronized(this){
-                if(null == channelPool){
-                    channelPool = new GenericObjectPool<net.gdface.facelog.client.thrift.IFaceLogClient>(new ThriftClientPoolFactory(),channelPoolConfig);
-                }
-            }
-        }
-        return channelPool;
-    }
     /**
      * return instance of {@link net.gdface.facelog.client.thrift.IFaceLogClient}
      * @return
      */
     public net.gdface.facelog.client.thrift.IFaceLogClient applyInstance() {
         try {
-            return getChannelPool().borrowObject();
+            return THRIFTY_CLIENT_CACHE.get(hostAndPort, new Callable<net.gdface.facelog.client.thrift.IFaceLogClient>(){
+                @Override
+                public net.gdface.facelog.client.thrift.IFaceLogClient call() throws Exception {
+				            SocketTransport transport = 
+				                    new SocketTransport.Builder(hostAndPort.getHost(),hostAndPort.getPort())
+				                        .connectTimeout((int) connectTimeout)
+				                        .readTimeout((int) readTimeout).build();
+				            transport.connect();
+				            Protocol protocol = new BinaryProtocol(transport);
+                    return new net.gdface.facelog.client.thrift.IFaceLogClient(protocol,DEFAULT_CLOSE_LISTENER);
+                }});
         } catch (Exception e) {
             Throwables.throwIfUnchecked(e);
             throw new RuntimeException(e);
         }
     }
-    /**
-     * release instance of {@code instance} that be applied by {@link #applyInstance(Class)}
-     * @param instance
-     */
-    public void releaseInstance(net.gdface.facelog.client.thrift.IFaceLog instance){
-        if(instance instanceof net.gdface.facelog.client.thrift.IFaceLogClient){
-            getChannelPool().returnObject((net.gdface.facelog.client.thrift.IFaceLogClient)instance);
-        }
-    }
-    private class ThriftClientPoolFactory implements PooledObjectFactory<net.gdface.facelog.client.thrift.IFaceLogClient> {
-
-        @Override
-        public PooledObject<net.gdface.facelog.client.thrift.IFaceLogClient> makeObject() throws Exception {
-            SocketTransport transport = 
-                    new SocketTransport.Builder(hostAndPort.getHost(),hostAndPort.getPort())
-                        .connectTimeout((int) connectTimeout)
-                        .readTimeout((int) readTimeout).build();
-            transport.connect();
-            Protocol protocol = new BinaryProtocol(transport);
-            return new DefaultPooledObject<net.gdface.facelog.client.thrift.IFaceLogClient>(new net.gdface.facelog.client.thrift.IFaceLogClient(protocol,listener));
-        }
-
-        @Override
-        public void destroyObject(PooledObject<net.gdface.facelog.client.thrift.IFaceLogClient> p) throws Exception {
-            logger.info("destroyObject");
-            p.getObject().close();
-        }
-
-        @Override
-        public boolean validateObject(PooledObject<net.gdface.facelog.client.thrift.IFaceLogClient> p) {
-           
-            return true;
-        }
-
-        @Override
-        public void activateObject(PooledObject<net.gdface.facelog.client.thrift.IFaceLogClient> p) throws Exception {
-        }
-
-        @Override
-        public void passivateObject(PooledObject<net.gdface.facelog.client.thrift.IFaceLogClient> p) throws Exception {
-        }
-    }
     public static ClientFactory builder() {
         return new ClientFactory();
     }
-    @SuppressWarnings("unchecked")
-    protected<I,O> O  build(Class<I> interfaceClass,final Class<O> destClass){
-        try {
-            return (O) CLIENT_CACHE.get(interfaceClass, new Callable<Object>(){
-                @Override
-                public Object call() throws Exception {
-                    return destClass.getDeclaredConstructor(ClientFactory.class).newInstance(ClientFactory.this);
-                }});
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
     /** get asynchronous instance of IFaceLog */ 
     public IFaceLogClientAsync  buildAsync(){
-        return build(
-                net.gdface.facelog.client.thrift.IFaceLog.class,
-                IFaceLogClientAsync.class);
+        if(null == asyncClientInstance){
+            synchronized(this){
+                if(null == asyncClientInstance){
+                    asyncClientInstance = new IFaceLogClientAsync(this);
+                }
+            }
+        }
+        return asyncClientInstance;
     }
     /** get synchronized instance of IFaceLog */ 
     public IFaceLogClient build(){
-        return build(
-                net.gdface.facelog.client.thrift.IFaceLog.class,
-                IFaceLogClient.class);
+        if(null == clientInstance){
+            synchronized(this){
+                if(null == clientInstance){
+                    clientInstance = new IFaceLogClient(this);
+                }
+            }
+        }
+        return clientInstance;
     }
     public class ListenableFutureDecorator<A,V> implements ListenableFuture<V>{
-        private final net.gdface.facelog.client.thrift.IFaceLogClient async;
         private final ListenableFuture<V> future;
-        private final AtomicBoolean released = new AtomicBoolean(false);
         public ListenableFutureDecorator(net.gdface.facelog.client.thrift.IFaceLogClient async, ListenableFuture<V> future) {
-            this.async = checkNotNull(async,"async is null");
             this.future = checkNotNull(future,"future is null");
-        }
-        private void releaseAsync(){
-            if(released.compareAndSet(false, true)){
-                releaseInstance(async);    
-            }
         }
         @Override
         public boolean cancel(boolean mayInterruptIfRunning) {
@@ -224,20 +160,12 @@ public class ClientFactory {
 
         @Override
         public V get() throws InterruptedException, ExecutionException {
-            try{
-                return future.get();
-            }finally{
-                releaseAsync();                
-            }
+            return future.get();
         }
 
         @Override
         public V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-            try{
-                return future.get(timeout, unit);
-            }finally{
-                releaseAsync();
-            }
+            return future.get(timeout, unit);
         }
 
         @Override
