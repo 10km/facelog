@@ -7,8 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.client;
 
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
+import com.microsoft.thrifty.service.ServiceMethodCallback;
 import com.google.common.util.concurrent.MoreExecutors;
 import static com.google.common.base.Preconditions.*;
 import java.nio.ByteBuffer;
@@ -79,17 +78,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param personId
      * @return 
      */
-    public ListenableFuture<PersonBean> getPerson(int personId){
+    public void getPerson(int personId,final ServiceMethodCallback<PersonBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<PersonBean> future = Futures.transform(
-                service.getPerson(personId), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                    @Override
-                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return converterPersonBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,PersonBean>(service,future);
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.PersonBean result) {
+                callback.onSuccess(converterPersonBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getPerson(personId,nativeCallback);
 
     }
     // 2 SERIVCE PORT : getPersons
@@ -98,17 +99,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param idList 人员id列表
      * @return 
      */
-    public ListenableFuture<List<PersonBean>> getPersons(List<Integer> idList){
+    public void getPersons(List<Integer> idList,final ServiceMethodCallback<List<PersonBean>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<PersonBean>> future = Futures.transform(
-                service.getPersons(CollectionUtils.checkNotNullElement(idList)), 
-                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>(){
-                    @Override
-                    public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
-                        return PersonBean.replaceNullInstance(converterPersonBean.fromRight(input));
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<PersonBean>>(service,future);
+        ServiceMethodCallback<List<net.gdface.facelog.client.thrift.PersonBean>> nativeCallback = 
+            new ServiceMethodCallback<List<net.gdface.facelog.client.thrift.PersonBean>>(){
+            @Override
+            public void onSuccess(List<net.gdface.facelog.client.thrift.PersonBean> result) {
+                callback.onSuccess(PersonBean.replaceNullInstance(converterPersonBean.fromRight(result)));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getPersons(CollectionUtils.checkNotNullElement(idList),nativeCallback);
 
     }
     // 3 SERIVCE PORT : getPersonByPapersNum
@@ -117,17 +120,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param papersNum
      * @return 
      */
-    public ListenableFuture<PersonBean> getPersonByPapersNum(String papersNum){
+    public void getPersonByPapersNum(String papersNum,final ServiceMethodCallback<PersonBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<PersonBean> future = Futures.transform(
-                service.getPersonByPapersNum(papersNum), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                    @Override
-                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return converterPersonBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,PersonBean>(service,future);
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.PersonBean result) {
+                callback.onSuccess(converterPersonBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getPersonByPapersNum(papersNum,nativeCallback);
 
     }
     // 4 SERIVCE PORT : getFeatureBeansByPersonId
@@ -136,17 +141,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param personId fl_person.id
      * @return 返回 fl_feature.md5  列表
      */
-    public ListenableFuture<List<String>> getFeatureBeansByPersonId(int personId){
+    public void getFeatureBeansByPersonId(int personId,final ServiceMethodCallback<List<String>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<String>> future = Futures.transform(
-                service.getFeatureBeansByPersonId(personId), 
-                new com.google.common.base.Function<List<String>,List<String>>(){
-                    @Override
-                    public List<String> apply(List<String> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<String>>(service,future);
+        ServiceMethodCallback<List<String>> nativeCallback = 
+            new ServiceMethodCallback<List<String>>(){
+            @Override
+            public void onSuccess(List<String> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getFeatureBeansByPersonId(personId,nativeCallback);
 
     }
     // 5 SERIVCE PORT : deletePerson
@@ -157,21 +164,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<Integer> deletePerson(
+    public void deletePerson(
             int personId,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Integer> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Integer> future = Futures.transform(
-                service.deletePerson(
+        ServiceMethodCallback<Integer> nativeCallback = 
+            new ServiceMethodCallback<Integer>(){
+            @Override
+            public void onSuccess(Integer result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.deletePerson(
                     personId,
-                    token), 
-                new com.google.common.base.Function<Integer,Integer>(){
-                    @Override
-                    public Integer apply(Integer input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Integer>(service,future);
+                    token,nativeCallback);
 
     }
     // 6 SERIVCE PORT : deletePersons
@@ -182,21 +191,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 返回删除的 person 记录数量
      */
-    public ListenableFuture<Integer> deletePersons(
+    public void deletePersons(
             List<Integer> personIdList,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Integer> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Integer> future = Futures.transform(
-                service.deletePersons(
+        ServiceMethodCallback<Integer> nativeCallback = 
+            new ServiceMethodCallback<Integer>(){
+            @Override
+            public void onSuccess(Integer result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.deletePersons(
                     CollectionUtils.checkNotNullElement(personIdList),
-                    token), 
-                new com.google.common.base.Function<Integer,Integer>(){
-                    @Override
-                    public Integer apply(Integer input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Integer>(service,future);
+                    token,nativeCallback);
 
     }
     // 7 SERIVCE PORT : deletePersonByPapersNum
@@ -208,21 +219,23 @@ public class IFaceLogClientAsync implements Constant{
      * @return 返回删除的 person 记录数量
      * @see {@link #deletePerson(int, Token)}
      */
-    public ListenableFuture<Integer> deletePersonByPapersNum(
+    public void deletePersonByPapersNum(
             String papersNum,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Integer> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Integer> future = Futures.transform(
-                service.deletePersonByPapersNum(
+        ServiceMethodCallback<Integer> nativeCallback = 
+            new ServiceMethodCallback<Integer>(){
+            @Override
+            public void onSuccess(Integer result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.deletePersonByPapersNum(
                     papersNum,
-                    token), 
-                new com.google.common.base.Function<Integer,Integer>(){
-                    @Override
-                    public Integer apply(Integer input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Integer>(service,future);
+                    token,nativeCallback);
 
     }
     // 8 SERIVCE PORT : deletePersonsByPapersNum
@@ -233,21 +246,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 返回删除的 person 记录数量
      */
-    public ListenableFuture<Integer> deletePersonsByPapersNum(
+    public void deletePersonsByPapersNum(
             List<String> papersNumlist,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Integer> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Integer> future = Futures.transform(
-                service.deletePersonsByPapersNum(
+        ServiceMethodCallback<Integer> nativeCallback = 
+            new ServiceMethodCallback<Integer>(){
+            @Override
+            public void onSuccess(Integer result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.deletePersonsByPapersNum(
                     CollectionUtils.checkNotNullElement(papersNumlist),
-                    token), 
-                new com.google.common.base.Function<Integer,Integer>(){
-                    @Override
-                    public Integer apply(Integer input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Integer>(service,future);
+                    token,nativeCallback);
 
     }
     // 9 SERIVCE PORT : existsPerson
@@ -256,17 +271,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param persionId
      * @return 
      */
-    public ListenableFuture<Boolean> existsPerson(int persionId){
+    public void existsPerson(int persionId,final ServiceMethodCallback<Boolean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Boolean> future = Futures.transform(
-                service.existsPerson(persionId), 
-                new com.google.common.base.Function<Boolean,Boolean>(){
-                    @Override
-                    public Boolean apply(Boolean input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Boolean>(service,future);
+        ServiceMethodCallback<Boolean> nativeCallback = 
+            new ServiceMethodCallback<Boolean>(){
+            @Override
+            public void onSuccess(Boolean result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.existsPerson(persionId,nativeCallback);
 
     }
     // 10 SERIVCE PORT : isDisable
@@ -275,17 +292,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param personId
      * @return 
      */
-    public ListenableFuture<Boolean> isDisable(int personId){
+    public void isDisable(int personId,final ServiceMethodCallback<Boolean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Boolean> future = Futures.transform(
-                service.isDisable(personId), 
-                new com.google.common.base.Function<Boolean,Boolean>(){
-                    @Override
-                    public Boolean apply(Boolean input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Boolean>(service,future);
+        ServiceMethodCallback<Boolean> nativeCallback = 
+            new ServiceMethodCallback<Boolean>(){
+            @Override
+            public void onSuccess(Boolean result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.isDisable(personId,nativeCallback);
 
     }
     // 11 SERIVCE PORT : disablePerson
@@ -296,21 +315,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @see #setPersonExpiryDate(int, long, Token)
      */
-    public ListenableFuture<Void> disablePerson(
+    public void disablePerson(
             int personId,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Void> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Void> future = Futures.transform(
-                service.disablePerson(
+        ServiceMethodCallback<Void> nativeCallback = 
+            new ServiceMethodCallback<Void>(){
+            @Override
+            public void onSuccess(Void result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.disablePerson(
                     personId,
-                    token), 
-                new com.google.common.base.Function<Void,Void>(){
-                    @Override
-                    public Void apply(Void input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Void>(service,future);
+                    token,nativeCallback);
 
     }
     // 12 SERIVCE PORT : setPersonExpiryDate
@@ -321,23 +342,25 @@ public class IFaceLogClientAsync implements Constant{
      * @param expiryDate 失效日期
      * @param token 访问令牌
      */
-    public ListenableFuture<Void> setPersonExpiryDate(
+    public void setPersonExpiryDate(
             int personId,
             Date expiryDate,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Void> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Void> future = Futures.transform(
-                service.setPersonExpiryDate(
+        ServiceMethodCallback<Void> nativeCallback = 
+            new ServiceMethodCallback<Void>(){
+            @Override
+            public void onSuccess(Void result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.setPersonExpiryDate(
                     personId,
                     GenericUtils.toLong(expiryDate,Date.class),
-                    token), 
-                new com.google.common.base.Function<Void,Void>(){
-                    @Override
-                    public Void apply(Void input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Void>(service,future);
+                    token,nativeCallback);
 
     }
     // 13 SERIVCE PORT : setPersonExpiryDateList
@@ -348,23 +371,25 @@ public class IFaceLogClientAsync implements Constant{
      * @param expiryDate 失效日期
      * @param token 访问令牌
      */
-    public ListenableFuture<Void> setPersonExpiryDate(
+    public void setPersonExpiryDate(
             List<Integer> personIdList,
             Date expiryDate,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Void> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Void> future = Futures.transform(
-                service.setPersonExpiryDateList(
+        ServiceMethodCallback<Void> nativeCallback = 
+            new ServiceMethodCallback<Void>(){
+            @Override
+            public void onSuccess(Void result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.setPersonExpiryDateList(
                     CollectionUtils.checkNotNullElement(personIdList),
                     GenericUtils.toLong(expiryDate,Date.class),
-                    token), 
-                new com.google.common.base.Function<Void,Void>(){
-                    @Override
-                    public Void apply(Void input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Void>(service,future);
+                    token,nativeCallback);
 
     }
     // 14 SERIVCE PORT : disablePersonList
@@ -374,21 +399,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param personIdList 人员id列表
      * @param token 访问令牌
      */
-    public ListenableFuture<Void> disablePerson(
+    public void disablePerson(
             List<Integer> personIdList,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Void> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Void> future = Futures.transform(
-                service.disablePersonList(
+        ServiceMethodCallback<Void> nativeCallback = 
+            new ServiceMethodCallback<Void>(){
+            @Override
+            public void onSuccess(Void result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.disablePersonList(
                     CollectionUtils.checkNotNullElement(personIdList),
-                    token), 
-                new com.google.common.base.Function<Void,Void>(){
-                    @Override
-                    public Void apply(Void input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Void>(service,future);
+                    token,nativeCallback);
 
     }
     // 15 SERIVCE PORT : getLogBeansByPersonId
@@ -397,17 +424,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param personId fl_person.id
      * @return 
      */
-    public ListenableFuture<List<LogBean>> getLogBeansByPersonId(int personId){
+    public void getLogBeansByPersonId(int personId,final ServiceMethodCallback<List<LogBean>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<LogBean>> future = Futures.transform(
-                service.getLogBeansByPersonId(personId), 
-                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.LogBean>,List<LogBean>>(){
-                    @Override
-                    public List<LogBean> apply(List<net.gdface.facelog.client.thrift.LogBean> input) {
-                        return LogBean.replaceNullInstance(converterLogBean.fromRight(input));
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<LogBean>>(service,future);
+        ServiceMethodCallback<List<net.gdface.facelog.client.thrift.LogBean>> nativeCallback = 
+            new ServiceMethodCallback<List<net.gdface.facelog.client.thrift.LogBean>>(){
+            @Override
+            public void onSuccess(List<net.gdface.facelog.client.thrift.LogBean> result) {
+                callback.onSuccess(LogBean.replaceNullInstance(converterLogBean.fromRight(result)));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getLogBeansByPersonId(personId,nativeCallback);
 
     }
     // 16 SERIVCE PORT : loadAllPerson
@@ -415,17 +444,19 @@ public class IFaceLogClientAsync implements Constant{
      * 返回所有人员记录
      * @return 
      */
-    public ListenableFuture<List<Integer>> loadAllPerson(){
+    public void loadAllPerson(final ServiceMethodCallback<List<Integer>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<Integer>> future = Futures.transform(
-                service.loadAllPerson(), 
-                new com.google.common.base.Function<List<Integer>,List<Integer>>(){
-                    @Override
-                    public List<Integer> apply(List<Integer> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<Integer>>(service,future);
+        ServiceMethodCallback<List<Integer>> nativeCallback = 
+            new ServiceMethodCallback<List<Integer>>(){
+            @Override
+            public void onSuccess(List<Integer> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.loadAllPerson(nativeCallback);
 
     }
     // 17 SERIVCE PORT : loadPersonIdByWhere
@@ -434,17 +465,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param where SQL条件语句
      * @return 返回 fl_person.id 列表
      */
-    public ListenableFuture<List<Integer>> loadPersonIdByWhere(String where){
+    public void loadPersonIdByWhere(String where,final ServiceMethodCallback<List<Integer>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<Integer>> future = Futures.transform(
-                service.loadPersonIdByWhere(where), 
-                new com.google.common.base.Function<List<Integer>,List<Integer>>(){
-                    @Override
-                    public List<Integer> apply(List<Integer> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<Integer>>(service,future);
+        ServiceMethodCallback<List<Integer>> nativeCallback = 
+            new ServiceMethodCallback<List<Integer>>(){
+            @Override
+            public void onSuccess(List<Integer> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.loadPersonIdByWhere(where,nativeCallback);
 
     }
     // 18 SERIVCE PORT : loadPersonByWhere
@@ -455,23 +488,25 @@ public class IFaceLogClientAsync implements Constant{
      * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
      * @return 
      */
-    public ListenableFuture<List<PersonBean>> loadPersonByWhere(
+    public void loadPersonByWhere(
             String where,
             int startRow,
-            int numRows){
+            int numRows,final ServiceMethodCallback<List<PersonBean>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<PersonBean>> future = Futures.transform(
-                service.loadPersonByWhere(
+        ServiceMethodCallback<List<net.gdface.facelog.client.thrift.PersonBean>> nativeCallback = 
+            new ServiceMethodCallback<List<net.gdface.facelog.client.thrift.PersonBean>>(){
+            @Override
+            public void onSuccess(List<net.gdface.facelog.client.thrift.PersonBean> result) {
+                callback.onSuccess(PersonBean.replaceNullInstance(converterPersonBean.fromRight(result)));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.loadPersonByWhere(
                     where,
                     startRow,
-                    numRows), 
-                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>(){
-                    @Override
-                    public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
-                        return PersonBean.replaceNullInstance(converterPersonBean.fromRight(input));
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<PersonBean>>(service,future);
+                    numRows,nativeCallback);
 
     }
     // 19 SERIVCE PORT : countPersonByWhere
@@ -480,17 +515,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param where 为{@code null}时返回所有记录
      * @return 
      */
-    public ListenableFuture<Integer> countPersonByWhere(String where){
+    public void countPersonByWhere(String where,final ServiceMethodCallback<Integer> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Integer> future = Futures.transform(
-                service.countPersonByWhere(where), 
-                new com.google.common.base.Function<Integer,Integer>(){
-                    @Override
-                    public Integer apply(Integer input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Integer>(service,future);
+        ServiceMethodCallback<Integer> nativeCallback = 
+            new ServiceMethodCallback<Integer>(){
+            @Override
+            public void onSuccess(Integer result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.countPersonByWhere(where,nativeCallback);
 
     }
     // 20 SERIVCE PORT : savePerson
@@ -500,21 +537,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<PersonBean> savePerson(
+    public void savePerson(
             PersonBean bean,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<PersonBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<PersonBean> future = Futures.transform(
-                service.savePerson(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.PersonBean result) {
+                callback.onSuccess(converterPersonBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.savePerson(
                     converterPersonBean.toRight(bean),
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                    @Override
-                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return converterPersonBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,PersonBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 21 SERIVCE PORT : savePersons
@@ -524,21 +563,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param beans
      * @param token 访问令牌
      */
-    public ListenableFuture<Void> savePersons(
+    public void savePersons(
             List<PersonBean> beans,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Void> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Void> future = Futures.transform(
-                service.savePersons(
+        ServiceMethodCallback<Void> nativeCallback = 
+            new ServiceMethodCallback<Void>(){
+            @Override
+            public void onSuccess(Void result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.savePersons(
                     converterPersonBean.toRight(CollectionUtils.checkNotNullElement(beans)),
-                    token), 
-                new com.google.common.base.Function<Void,Void>(){
-                    @Override
-                    public Void apply(Void input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Void>(service,future);
+                    token,nativeCallback);
 
     }
     // 22 SERIVCE PORT : savePersonWithPhoto
@@ -549,23 +590,25 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<PersonBean> savePerson(
+    public void savePerson(
             PersonBean bean,
             byte[] idPhoto,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<PersonBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<PersonBean> future = Futures.transform(
-                service.savePersonWithPhoto(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.PersonBean result) {
+                callback.onSuccess(converterPersonBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.savePersonWithPhoto(
                     converterPersonBean.toRight(bean),
                     idPhoto,
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                    @Override
-                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return converterPersonBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,PersonBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 22 GENERIC
@@ -575,23 +618,25 @@ public class IFaceLogClientAsync implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    public ListenableFuture<PersonBean> savePersonGeneric(
+    public void savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<PersonBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<PersonBean> future = Futures.transform(
-                service.savePersonWithPhoto(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.PersonBean result) {
+                callback.onSuccess(converterPersonBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.savePersonWithPhoto(
                     converterPersonBean.toRight(bean),
                     GenericUtils.toBytes(idPhoto),
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                    @Override
-                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return converterPersonBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,PersonBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 23 SERIVCE PORT : savePersonsWithPhoto
@@ -602,21 +647,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<Integer> savePerson(
+    public void savePerson(
             Map<ByteBuffer, PersonBean> persons,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Integer> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Integer> future = Futures.transform(
-                service.savePersonsWithPhoto(
+        ServiceMethodCallback<Integer> nativeCallback = 
+            new ServiceMethodCallback<Integer>(){
+            @Override
+            public void onSuccess(Integer result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.savePersonsWithPhoto(
                     GenericUtils.toBytesKey(converterPersonBean.toRightValue(persons)),
-                    token), 
-                new com.google.common.base.Function<Integer,Integer>(){
-                    @Override
-                    public Integer apply(Integer input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Integer>(service,future);
+                    token,nativeCallback);
 
     }
     // 24 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
@@ -628,25 +675,27 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<PersonBean> savePerson(
+    public void savePerson(
             PersonBean bean,
             String idPhotoMd5,
             String featureMd5,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<PersonBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<PersonBean> future = Futures.transform(
-                service.savePersonWithPhotoAndFeatureSaved(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.PersonBean result) {
+                callback.onSuccess(converterPersonBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.savePersonWithPhotoAndFeatureSaved(
                     converterPersonBean.toRight(bean),
                     idPhotoMd5,
                     featureMd5,
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                    @Override
-                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return converterPersonBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,PersonBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 25 SERIVCE PORT : savePersonWithPhotoAndFeature
@@ -660,27 +709,29 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<PersonBean> savePerson(
+    public void savePerson(
             PersonBean bean,
             byte[] idPhoto,
             FeatureBean featureBean,
             Integer deviceId,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<PersonBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<PersonBean> future = Futures.transform(
-                service.savePersonWithPhotoAndFeature(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.PersonBean result) {
+                callback.onSuccess(converterPersonBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.savePersonWithPhotoAndFeature(
                     converterPersonBean.toRight(bean),
                     idPhoto,
                     converterFeatureBean.toRight(featureBean),
                     deviceId,
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                    @Override
-                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return converterPersonBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,PersonBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 25 GENERIC
@@ -690,27 +741,29 @@ public class IFaceLogClientAsync implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    public ListenableFuture<PersonBean> savePersonGeneric(
+    public void savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
             FeatureBean featureBean,
             Integer deviceId,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<PersonBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<PersonBean> future = Futures.transform(
-                service.savePersonWithPhotoAndFeature(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.PersonBean result) {
+                callback.onSuccess(converterPersonBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.savePersonWithPhotoAndFeature(
                     converterPersonBean.toRight(bean),
                     GenericUtils.toBytes(idPhoto),
                     converterFeatureBean.toRight(featureBean),
                     deviceId,
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                    @Override
-                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return converterPersonBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,PersonBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 26 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
@@ -724,27 +777,29 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<PersonBean> savePerson(
+    public void savePerson(
             PersonBean bean,
             byte[] idPhoto,
             byte[] feature,
             List<FaceBean> faceBeans,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<PersonBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<PersonBean> future = Futures.transform(
-                service.savePersonWithPhotoAndFeatureMultiFaces(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.PersonBean result) {
+                callback.onSuccess(converterPersonBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.savePersonWithPhotoAndFeatureMultiFaces(
                     converterPersonBean.toRight(bean),
                     idPhoto,
                     feature,
                     converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faceBeans)),
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                    @Override
-                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return converterPersonBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,PersonBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 26 GENERIC
@@ -754,27 +809,29 @@ public class IFaceLogClientAsync implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    public ListenableFuture<PersonBean> savePersonGeneric(
+    public void savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
             Object feature,
             List<FaceBean> faceBeans,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<PersonBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<PersonBean> future = Futures.transform(
-                service.savePersonWithPhotoAndFeatureMultiFaces(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.PersonBean result) {
+                callback.onSuccess(converterPersonBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.savePersonWithPhotoAndFeatureMultiFaces(
                     converterPersonBean.toRight(bean),
                     GenericUtils.toBytes(idPhoto),
                     GenericUtils.toBytes(feature),
                     converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faceBeans)),
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                    @Override
-                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return converterPersonBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,PersonBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 27 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
@@ -789,29 +846,31 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return bean 保存的{@link PersonBean}对象
      */
-    public ListenableFuture<PersonBean> savePerson(
+    public void savePerson(
             PersonBean bean,
             byte[] idPhoto,
             byte[] feature,
             Map<ByteBuffer, FaceBean> faceInfo,
             Integer deviceId,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<PersonBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<PersonBean> future = Futures.transform(
-                service.savePersonWithPhotoAndFeatureMultiImage(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.PersonBean result) {
+                callback.onSuccess(converterPersonBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.savePersonWithPhotoAndFeatureMultiImage(
                     converterPersonBean.toRight(bean),
                     idPhoto,
                     feature,
                     GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                     deviceId,
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                    @Override
-                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return converterPersonBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,PersonBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 27 GENERIC
@@ -821,29 +880,31 @@ public class IFaceLogClientAsync implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    public ListenableFuture<PersonBean> savePersonGeneric(
+    public void savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
             Object feature,
             Map<ByteBuffer, FaceBean> faceInfo,
             Integer deviceId,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<PersonBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<PersonBean> future = Futures.transform(
-                service.savePersonWithPhotoAndFeatureMultiImage(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.PersonBean result) {
+                callback.onSuccess(converterPersonBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.savePersonWithPhotoAndFeatureMultiImage(
                     converterPersonBean.toRight(bean),
                     GenericUtils.toBytes(idPhoto),
                     GenericUtils.toBytes(feature),
                     GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                     deviceId,
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                    @Override
-                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return converterPersonBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,PersonBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 28 SERIVCE PORT : savePersonFull
@@ -858,31 +919,33 @@ public class IFaceLogClientAsync implements Constant{
      * @param deviceBean featureImage来源设备对象
      * @return 
      */
-    public ListenableFuture<PersonBean> savePerson(
+    public void savePerson(
             PersonBean bean,
             byte[] idPhoto,
             byte[] feature,
             byte[] featureImage,
             FaceBean featureFaceBean,
             Integer deviceId,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<PersonBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<PersonBean> future = Futures.transform(
-                service.savePersonFull(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.PersonBean result) {
+                callback.onSuccess(converterPersonBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.savePersonFull(
                     converterPersonBean.toRight(bean),
                     idPhoto,
                     feature,
                     featureImage,
                     converterFaceBean.toRight(featureFaceBean),
                     deviceId,
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                    @Override
-                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return converterPersonBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,PersonBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 28 GENERIC
@@ -892,31 +955,33 @@ public class IFaceLogClientAsync implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    public ListenableFuture<PersonBean> savePersonGeneric(
+    public void savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
             Object feature,
             Object featureImage,
             FaceBean featureFaceBean,
             Integer deviceId,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<PersonBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<PersonBean> future = Futures.transform(
-                service.savePersonFull(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.PersonBean result) {
+                callback.onSuccess(converterPersonBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.savePersonFull(
                     converterPersonBean.toRight(bean),
                     GenericUtils.toBytes(idPhoto),
                     GenericUtils.toBytes(feature),
                     GenericUtils.toBytes(featureImage),
                     converterFaceBean.toRight(featureFaceBean),
                     deviceId,
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                    @Override
-                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return converterPersonBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,PersonBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 29 SERIVCE PORT : replaceFeature
@@ -927,25 +992,27 @@ public class IFaceLogClientAsync implements Constant{
      * @param deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
      * @param token 访问令牌
      */
-    public ListenableFuture<Void> replaceFeature(
+    public void replaceFeature(
             Integer personId,
             String featureMd5,
             boolean deleteOldFeatureImage,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Void> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Void> future = Futures.transform(
-                service.replaceFeature(
+        ServiceMethodCallback<Void> nativeCallback = 
+            new ServiceMethodCallback<Void>(){
+            @Override
+            public void onSuccess(Void result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.replaceFeature(
                     personId,
                     featureMd5,
                     deleteOldFeatureImage,
-                    token), 
-                new com.google.common.base.Function<Void,Void>(){
-                    @Override
-                    public Void apply(Void input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Void>(service,future);
+                    token,nativeCallback);
 
     }
     // 30 SERIVCE PORT : loadUpdatedPersons
@@ -956,17 +1023,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param timestamp
      * @return 返回fl_person.id 列表
      */
-    public ListenableFuture<List<Integer>> loadUpdatedPersons(Date timestamp){
+    public void loadUpdatedPersons(Date timestamp,final ServiceMethodCallback<List<Integer>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<Integer>> future = Futures.transform(
-                service.loadUpdatedPersons(GenericUtils.toLong(timestamp,Date.class)), 
-                new com.google.common.base.Function<List<Integer>,List<Integer>>(){
-                    @Override
-                    public List<Integer> apply(List<Integer> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<Integer>>(service,future);
+        ServiceMethodCallback<List<Integer>> nativeCallback = 
+            new ServiceMethodCallback<List<Integer>>(){
+            @Override
+            public void onSuccess(List<Integer> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.loadUpdatedPersons(GenericUtils.toLong(timestamp,Date.class),nativeCallback);
 
     }
     // 31 SERIVCE PORT : loadPersonIdByUpdateTime
@@ -976,17 +1045,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param timestamp
      * @return 返回fl_person.id 列表
      */
-    public ListenableFuture<List<Integer>> loadPersonIdByUpdateTime(Date timestamp){
+    public void loadPersonIdByUpdateTime(Date timestamp,final ServiceMethodCallback<List<Integer>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<Integer>> future = Futures.transform(
-                service.loadPersonIdByUpdateTime(GenericUtils.toLong(timestamp,Date.class)), 
-                new com.google.common.base.Function<List<Integer>,List<Integer>>(){
-                    @Override
-                    public List<Integer> apply(List<Integer> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<Integer>>(service,future);
+        ServiceMethodCallback<List<Integer>> nativeCallback = 
+            new ServiceMethodCallback<List<Integer>>(){
+            @Override
+            public void onSuccess(List<Integer> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.loadPersonIdByUpdateTime(GenericUtils.toLong(timestamp,Date.class),nativeCallback);
 
     }
     // 32 SERIVCE PORT : loadFeatureMd5ByUpdate
@@ -996,17 +1067,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param timestamp
      * @return 返回 fl_feature.md5 列表
      */
-    public ListenableFuture<List<String>> loadFeatureMd5ByUpdate(Date timestamp){
+    public void loadFeatureMd5ByUpdate(Date timestamp,final ServiceMethodCallback<List<String>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<String>> future = Futures.transform(
-                service.loadFeatureMd5ByUpdate(GenericUtils.toLong(timestamp,Date.class)), 
-                new com.google.common.base.Function<List<String>,List<String>>(){
-                    @Override
-                    public List<String> apply(List<String> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<String>>(service,future);
+        ServiceMethodCallback<List<String>> nativeCallback = 
+            new ServiceMethodCallback<List<String>>(){
+            @Override
+            public void onSuccess(List<String> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.loadFeatureMd5ByUpdate(GenericUtils.toLong(timestamp,Date.class),nativeCallback);
 
     }
     // 33 SERIVCE PORT : addLog
@@ -1016,21 +1089,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param bean
      * @param token 访问令牌
      */
-    public ListenableFuture<Void> addLog(
+    public void addLog(
             LogBean bean,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Void> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Void> future = Futures.transform(
-                service.addLog(
+        ServiceMethodCallback<Void> nativeCallback = 
+            new ServiceMethodCallback<Void>(){
+            @Override
+            public void onSuccess(Void result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.addLog(
                     converterLogBean.toRight(bean),
-                    token), 
-                new com.google.common.base.Function<Void,Void>(){
-                    @Override
-                    public Void apply(Void input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Void>(service,future);
+                    token,nativeCallback);
 
     }
     // 34 SERIVCE PORT : addLogs
@@ -1040,21 +1115,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param beans
      * @param token 访问令牌
      */
-    public ListenableFuture<Void> addLogs(
+    public void addLogs(
             List<LogBean> beans,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Void> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Void> future = Futures.transform(
-                service.addLogs(
+        ServiceMethodCallback<Void> nativeCallback = 
+            new ServiceMethodCallback<Void>(){
+            @Override
+            public void onSuccess(Void result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.addLogs(
                     converterLogBean.toRight(CollectionUtils.checkNotNullElement(beans)),
-                    token), 
-                new com.google.common.base.Function<Void,Void>(){
-                    @Override
-                    public Void apply(Void input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Void>(service,future);
+                    token,nativeCallback);
 
     }
     // 35 SERIVCE PORT : loadLogByWhere
@@ -1066,23 +1143,25 @@ public class IFaceLogClientAsync implements Constant{
      * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
      * @return 
      */
-    public ListenableFuture<List<LogBean>> loadLogByWhere(
+    public void loadLogByWhere(
             String where,
             int startRow,
-            int numRows){
+            int numRows,final ServiceMethodCallback<List<LogBean>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<LogBean>> future = Futures.transform(
-                service.loadLogByWhere(
+        ServiceMethodCallback<List<net.gdface.facelog.client.thrift.LogBean>> nativeCallback = 
+            new ServiceMethodCallback<List<net.gdface.facelog.client.thrift.LogBean>>(){
+            @Override
+            public void onSuccess(List<net.gdface.facelog.client.thrift.LogBean> result) {
+                callback.onSuccess(LogBean.replaceNullInstance(converterLogBean.fromRight(result)));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.loadLogByWhere(
                     where,
                     startRow,
-                    numRows), 
-                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.LogBean>,List<LogBean>>(){
-                    @Override
-                    public List<LogBean> apply(List<net.gdface.facelog.client.thrift.LogBean> input) {
-                        return LogBean.replaceNullInstance(converterLogBean.fromRight(input));
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<LogBean>>(service,future);
+                    numRows,nativeCallback);
 
     }
     // 36 SERIVCE PORT : loadLogLightByWhere
@@ -1094,23 +1173,25 @@ public class IFaceLogClientAsync implements Constant{
      * @param numRows
      * @return 
      */
-    public ListenableFuture<List<LogLightBean>> loadLogLightByWhere(
+    public void loadLogLightByWhere(
             String where,
             int startRow,
-            int numRows){
+            int numRows,final ServiceMethodCallback<List<LogLightBean>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<LogLightBean>> future = Futures.transform(
-                service.loadLogLightByWhere(
+        ServiceMethodCallback<List<net.gdface.facelog.client.thrift.LogLightBean>> nativeCallback = 
+            new ServiceMethodCallback<List<net.gdface.facelog.client.thrift.LogLightBean>>(){
+            @Override
+            public void onSuccess(List<net.gdface.facelog.client.thrift.LogLightBean> result) {
+                callback.onSuccess(LogLightBean.replaceNullInstance(converterLogLightBean.fromRight(result)));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.loadLogLightByWhere(
                     where,
                     startRow,
-                    numRows), 
-                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.LogLightBean>,List<LogLightBean>>(){
-                    @Override
-                    public List<LogLightBean> apply(List<net.gdface.facelog.client.thrift.LogLightBean> input) {
-                        return LogLightBean.replaceNullInstance(converterLogLightBean.fromRight(input));
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<LogLightBean>>(service,future);
+                    numRows,nativeCallback);
 
     }
     // 37 SERIVCE PORT : countLogLightByWhere
@@ -1119,17 +1200,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param where
      * @return 
      */
-    public ListenableFuture<Integer> countLogLightByWhere(String where){
+    public void countLogLightByWhere(String where,final ServiceMethodCallback<Integer> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Integer> future = Futures.transform(
-                service.countLogLightByWhere(where), 
-                new com.google.common.base.Function<Integer,Integer>(){
-                    @Override
-                    public Integer apply(Integer input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Integer>(service,future);
+        ServiceMethodCallback<Integer> nativeCallback = 
+            new ServiceMethodCallback<Integer>(){
+            @Override
+            public void onSuccess(Integer result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.countLogLightByWhere(where,nativeCallback);
 
     }
     // 38 SERIVCE PORT : countLogByWhere
@@ -1138,17 +1221,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param where 为{@code null}时返回所有记录
      * @return 
      */
-    public ListenableFuture<Integer> countLogByWhere(String where){
+    public void countLogByWhere(String where,final ServiceMethodCallback<Integer> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Integer> future = Futures.transform(
-                service.countLogByWhere(where), 
-                new com.google.common.base.Function<Integer,Integer>(){
-                    @Override
-                    public Integer apply(Integer input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Integer>(service,future);
+        ServiceMethodCallback<Integer> nativeCallback = 
+            new ServiceMethodCallback<Integer>(){
+            @Override
+            public void onSuccess(Integer result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.countLogByWhere(where,nativeCallback);
 
     }
     // 39 SERIVCE PORT : loadLogLightByVerifyTime
@@ -1157,23 +1242,25 @@ public class IFaceLogClientAsync implements Constant{
      * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @see #loadLogLightByWhere(String,int,int)
      */
-    public ListenableFuture<List<LogLightBean>> loadLogLightByVerifyTime(
+    public void loadLogLightByVerifyTime(
             Date timestamp,
             int startRow,
-            int numRows){
+            int numRows,final ServiceMethodCallback<List<LogLightBean>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<LogLightBean>> future = Futures.transform(
-                service.loadLogLightByVerifyTime(
+        ServiceMethodCallback<List<net.gdface.facelog.client.thrift.LogLightBean>> nativeCallback = 
+            new ServiceMethodCallback<List<net.gdface.facelog.client.thrift.LogLightBean>>(){
+            @Override
+            public void onSuccess(List<net.gdface.facelog.client.thrift.LogLightBean> result) {
+                callback.onSuccess(LogLightBean.replaceNullInstance(converterLogLightBean.fromRight(result)));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.loadLogLightByVerifyTime(
                     GenericUtils.toLong(timestamp,Date.class),
                     startRow,
-                    numRows), 
-                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.LogLightBean>,List<LogLightBean>>(){
-                    @Override
-                    public List<LogLightBean> apply(List<net.gdface.facelog.client.thrift.LogLightBean> input) {
-                        return LogLightBean.replaceNullInstance(converterLogLightBean.fromRight(input));
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<LogLightBean>>(service,future);
+                    numRows,nativeCallback);
 
     }
     // 40 SERIVCE PORT : countLogLightByVerifyTime
@@ -1181,17 +1268,19 @@ public class IFaceLogClientAsync implements Constant{
      * 返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
      * @see #countLogLightByWhere(String)
      */
-    public ListenableFuture<Integer> countLogLightByVerifyTime(Date timestamp){
+    public void countLogLightByVerifyTime(Date timestamp,final ServiceMethodCallback<Integer> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Integer> future = Futures.transform(
-                service.countLogLightByVerifyTime(GenericUtils.toLong(timestamp,Date.class)), 
-                new com.google.common.base.Function<Integer,Integer>(){
-                    @Override
-                    public Integer apply(Integer input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Integer>(service,future);
+        ServiceMethodCallback<Integer> nativeCallback = 
+            new ServiceMethodCallback<Integer>(){
+            @Override
+            public void onSuccess(Integer result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.countLogLightByVerifyTime(GenericUtils.toLong(timestamp,Date.class),nativeCallback);
 
     }
     // 41 SERIVCE PORT : existsImage
@@ -1200,17 +1289,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param md5
      * @return 
      */
-    public ListenableFuture<Boolean> existsImage(String md5){
+    public void existsImage(String md5,final ServiceMethodCallback<Boolean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Boolean> future = Futures.transform(
-                service.existsImage(md5), 
-                new com.google.common.base.Function<Boolean,Boolean>(){
-                    @Override
-                    public Boolean apply(Boolean input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Boolean>(service,future);
+        ServiceMethodCallback<Boolean> nativeCallback = 
+            new ServiceMethodCallback<Boolean>(){
+            @Override
+            public void onSuccess(Boolean result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.existsImage(md5,nativeCallback);
 
     }
     // 42 SERIVCE PORT : addImage
@@ -1223,27 +1314,29 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<ImageBean> addImage(
+    public void addImage(
             byte[] imageData,
             Integer deviceId,
             FaceBean faceBean,
             Integer personId,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<ImageBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<ImageBean> future = Futures.transform(
-                service.addImage(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.ImageBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.ImageBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.ImageBean result) {
+                callback.onSuccess(converterImageBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.addImage(
                     imageData,
                     deviceId,
                     converterFaceBean.toRight(faceBean),
                     personId,
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
-                    @Override
-                    public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
-                        return converterImageBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,ImageBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 42 GENERIC
@@ -1253,27 +1346,29 @@ public class IFaceLogClientAsync implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    public ListenableFuture<ImageBean> addImageGeneric(
+    public void addImageGeneric(
             Object imageData,
             Integer deviceId,
             FaceBean faceBean,
             Integer personId,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<ImageBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<ImageBean> future = Futures.transform(
-                service.addImage(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.ImageBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.ImageBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.ImageBean result) {
+                callback.onSuccess(converterImageBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.addImage(
                     GenericUtils.toBytes(imageData),
                     deviceId,
                     converterFaceBean.toRight(faceBean),
                     personId,
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
-                    @Override
-                    public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
-                        return converterImageBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,ImageBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 43 SERIVCE PORT : existsFeature
@@ -1282,17 +1377,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param md5
      * @return 
      */
-    public ListenableFuture<Boolean> existsFeature(String md5){
+    public void existsFeature(String md5,final ServiceMethodCallback<Boolean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Boolean> future = Futures.transform(
-                service.existsFeature(md5), 
-                new com.google.common.base.Function<Boolean,Boolean>(){
-                    @Override
-                    public Boolean apply(Boolean input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Boolean>(service,future);
+        ServiceMethodCallback<Boolean> nativeCallback = 
+            new ServiceMethodCallback<Boolean>(){
+            @Override
+            public void onSuccess(Boolean result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.existsFeature(md5,nativeCallback);
 
     }
     // 44 SERIVCE PORT : addFeature
@@ -1305,25 +1402,27 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 保存的人脸特征记录{@link FeatureBean}
      */
-    public ListenableFuture<FeatureBean> addFeature(
+    public void addFeature(
             byte[] feature,
             Integer personId,
             List<FaceBean> faecBeans,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<FeatureBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<FeatureBean> future = Futures.transform(
-                service.addFeature(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.FeatureBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.FeatureBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.FeatureBean result) {
+                callback.onSuccess(converterFeatureBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.addFeature(
                     feature,
                     personId,
                     converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faecBeans)),
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
-                    @Override
-                    public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                        return converterFeatureBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,FeatureBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 44 GENERIC
@@ -1333,25 +1432,27 @@ public class IFaceLogClientAsync implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    public ListenableFuture<FeatureBean> addFeatureGeneric(
+    public void addFeatureGeneric(
             Object feature,
             Integer personId,
             List<FaceBean> faecBeans,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<FeatureBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<FeatureBean> future = Futures.transform(
-                service.addFeature(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.FeatureBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.FeatureBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.FeatureBean result) {
+                callback.onSuccess(converterFeatureBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.addFeature(
                     GenericUtils.toBytes(feature),
                     personId,
                     converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faecBeans)),
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
-                    @Override
-                    public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                        return converterFeatureBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,FeatureBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 45 SERIVCE PORT : addFeatureMulti
@@ -1365,27 +1466,29 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 保存的人脸特征记录{@link FeatureBean}
      */
-    public ListenableFuture<FeatureBean> addFeature(
+    public void addFeature(
             byte[] feature,
             Integer personId,
             Map<ByteBuffer, FaceBean> faceInfo,
             Integer deviceId,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<FeatureBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<FeatureBean> future = Futures.transform(
-                service.addFeatureMulti(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.FeatureBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.FeatureBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.FeatureBean result) {
+                callback.onSuccess(converterFeatureBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.addFeatureMulti(
                     feature,
                     personId,
                     GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                     deviceId,
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
-                    @Override
-                    public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                        return converterFeatureBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,FeatureBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 45 GENERIC
@@ -1395,27 +1498,29 @@ public class IFaceLogClientAsync implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    public ListenableFuture<FeatureBean> addFeatureGeneric(
+    public void addFeatureGeneric(
             Object feature,
             Integer personId,
             Map<ByteBuffer, FaceBean> faceInfo,
             Integer deviceId,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<FeatureBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<FeatureBean> future = Futures.transform(
-                service.addFeatureMulti(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.FeatureBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.FeatureBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.FeatureBean result) {
+                callback.onSuccess(converterFeatureBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.addFeatureMulti(
                     GenericUtils.toBytes(feature),
                     personId,
                     GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                     deviceId,
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
-                    @Override
-                    public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                        return converterFeatureBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,FeatureBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 46 SERIVCE PORT : deleteFeature
@@ -1427,23 +1532,25 @@ public class IFaceLogClientAsync implements Constant{
      * @return 返回删除的特征记录关联的图像(image)记录的MD5<br>
      * {@code deleteImage}为{@code true}时返回空表
      */
-    public ListenableFuture<List<String>> deleteFeature(
+    public void deleteFeature(
             String featureMd5,
             boolean deleteImage,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<List<String>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<String>> future = Futures.transform(
-                service.deleteFeature(
+        ServiceMethodCallback<List<String>> nativeCallback = 
+            new ServiceMethodCallback<List<String>>(){
+            @Override
+            public void onSuccess(List<String> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.deleteFeature(
                     featureMd5,
                     deleteImage,
-                    token), 
-                new com.google.common.base.Function<List<String>,List<String>>(){
-                    @Override
-                    public List<String> apply(List<String> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<String>>(service,future);
+                    token,nativeCallback);
 
     }
     // 47 SERIVCE PORT : deleteAllFeaturesByPersonId
@@ -1455,23 +1562,25 @@ public class IFaceLogClientAsync implements Constant{
      * @return 
      * @see #deleteFeature(String, boolean, Token)
      */
-    public ListenableFuture<Integer> deleteAllFeaturesByPersonId(
+    public void deleteAllFeaturesByPersonId(
             int personId,
             boolean deleteImage,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Integer> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Integer> future = Futures.transform(
-                service.deleteAllFeaturesByPersonId(
+        ServiceMethodCallback<Integer> nativeCallback = 
+            new ServiceMethodCallback<Integer>(){
+            @Override
+            public void onSuccess(Integer result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.deleteAllFeaturesByPersonId(
                     personId,
                     deleteImage,
-                    token), 
-                new com.google.common.base.Function<Integer,Integer>(){
-                    @Override
-                    public Integer apply(Integer input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Integer>(service,future);
+                    token,nativeCallback);
 
     }
     // 48 SERIVCE PORT : getFeature
@@ -1480,17 +1589,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param md5
      * @return 如果数据库中没有对应的数据则返回null
      */
-    public ListenableFuture<FeatureBean> getFeature(String md5){
+    public void getFeature(String md5,final ServiceMethodCallback<FeatureBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<FeatureBean> future = Futures.transform(
-                service.getFeature(md5), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
-                    @Override
-                    public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                        return converterFeatureBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,FeatureBean>(service,future);
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.FeatureBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.FeatureBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.FeatureBean result) {
+                callback.onSuccess(converterFeatureBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getFeature(md5,nativeCallback);
 
     }
     // 49 SERIVCE PORT : getFeatures
@@ -1499,17 +1610,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param md5 md5列表
      * @return {@link FeatureBean}列表
      */
-    public ListenableFuture<List<FeatureBean>> getFeatures(List<String> md5){
+    public void getFeatures(List<String> md5,final ServiceMethodCallback<List<FeatureBean>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<FeatureBean>> future = Futures.transform(
-                service.getFeatures(CollectionUtils.checkNotNullElement(md5)), 
-                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.FeatureBean>,List<FeatureBean>>(){
-                    @Override
-                    public List<FeatureBean> apply(List<net.gdface.facelog.client.thrift.FeatureBean> input) {
-                        return FeatureBean.replaceNullInstance(converterFeatureBean.fromRight(input));
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<FeatureBean>>(service,future);
+        ServiceMethodCallback<List<net.gdface.facelog.client.thrift.FeatureBean>> nativeCallback = 
+            new ServiceMethodCallback<List<net.gdface.facelog.client.thrift.FeatureBean>>(){
+            @Override
+            public void onSuccess(List<net.gdface.facelog.client.thrift.FeatureBean> result) {
+                callback.onSuccess(FeatureBean.replaceNullInstance(converterFeatureBean.fromRight(result)));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getFeatures(CollectionUtils.checkNotNullElement(md5),nativeCallback);
 
     }
     // 50 SERIVCE PORT : getFeaturesOfPerson
@@ -1518,17 +1631,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param personId
      * @return 
      */
-    public ListenableFuture<List<String>> getFeaturesOfPerson(int personId){
+    public void getFeaturesOfPerson(int personId,final ServiceMethodCallback<List<String>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<String>> future = Futures.transform(
-                service.getFeaturesOfPerson(personId), 
-                new com.google.common.base.Function<List<String>,List<String>>(){
-                    @Override
-                    public List<String> apply(List<String> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<String>>(service,future);
+        ServiceMethodCallback<List<String>> nativeCallback = 
+            new ServiceMethodCallback<List<String>>(){
+            @Override
+            public void onSuccess(List<String> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getFeaturesOfPerson(personId,nativeCallback);
 
     }
     // 51 SERIVCE PORT : getFeatureBytes
@@ -1537,17 +1652,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param md5
      * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
      */
-    public ListenableFuture<byte[]> getFeatureBytes(String md5){
+    public void getFeatureBytes(String md5,final ServiceMethodCallback<byte[]> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<byte[]> future = Futures.transform(
-                service.getFeatureBytes(md5), 
-                new com.google.common.base.Function<byte[],byte[]>(){
-                    @Override
-                    public byte[] apply(byte[] input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,byte[]>(service,future);
+        ServiceMethodCallback<byte[]> nativeCallback = 
+            new ServiceMethodCallback<byte[]>(){
+            @Override
+            public void onSuccess(byte[] result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getFeatureBytes(md5,nativeCallback);
 
     }
     // 52 SERIVCE PORT : getImageBytes
@@ -1557,17 +1674,19 @@ public class IFaceLogClientAsync implements Constant{
      * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
      * @see {@link #getBinary(String)}
      */
-    public ListenableFuture<byte[]> getImageBytes(String imageMD5){
+    public void getImageBytes(String imageMD5,final ServiceMethodCallback<byte[]> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<byte[]> future = Futures.transform(
-                service.getImageBytes(imageMD5), 
-                new com.google.common.base.Function<byte[],byte[]>(){
-                    @Override
-                    public byte[] apply(byte[] input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,byte[]>(service,future);
+        ServiceMethodCallback<byte[]> nativeCallback = 
+            new ServiceMethodCallback<byte[]>(){
+            @Override
+            public void onSuccess(byte[] result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getImageBytes(imageMD5,nativeCallback);
 
     }
     // 53 SERIVCE PORT : getImage
@@ -1576,17 +1695,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param imageMD5
      * @return {@link ImageBean} ,如果没有对应记录则返回null
      */
-    public ListenableFuture<ImageBean> getImage(String imageMD5){
+    public void getImage(String imageMD5,final ServiceMethodCallback<ImageBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<ImageBean> future = Futures.transform(
-                service.getImage(imageMD5), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
-                    @Override
-                    public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
-                        return converterImageBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,ImageBean>(service,future);
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.ImageBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.ImageBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.ImageBean result) {
+                callback.onSuccess(converterImageBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getImage(imageMD5,nativeCallback);
 
     }
     // 54 SERIVCE PORT : getImagesAssociatedByFeature
@@ -1595,17 +1716,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param featureMd5 人脸特征id(MD5)
      * @return 
      */
-    public ListenableFuture<List<String>> getImagesAssociatedByFeature(String featureMd5){
+    public void getImagesAssociatedByFeature(String featureMd5,final ServiceMethodCallback<List<String>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<String>> future = Futures.transform(
-                service.getImagesAssociatedByFeature(featureMd5), 
-                new com.google.common.base.Function<List<String>,List<String>>(){
-                    @Override
-                    public List<String> apply(List<String> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<String>>(service,future);
+        ServiceMethodCallback<List<String>> nativeCallback = 
+            new ServiceMethodCallback<List<String>>(){
+            @Override
+            public void onSuccess(List<String> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getImagesAssociatedByFeature(featureMd5,nativeCallback);
 
     }
     // 55 SERIVCE PORT : getDeviceIdOfFeature
@@ -1614,17 +1737,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param featureMd5
      * @return 如果没有关联的设备则返回{@code null}
      */
-    public ListenableFuture<Integer> getDeviceIdOfFeature(String featureMd5){
+    public void getDeviceIdOfFeature(String featureMd5,final ServiceMethodCallback<Integer> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Integer> future = Futures.transform(
-                service.getDeviceIdOfFeature(featureMd5), 
-                new com.google.common.base.Function<Integer,Integer>(){
-                    @Override
-                    public Integer apply(Integer input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Integer>(service,future);
+        ServiceMethodCallback<Integer> nativeCallback = 
+            new ServiceMethodCallback<Integer>(){
+            @Override
+            public void onSuccess(Integer result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getDeviceIdOfFeature(featureMd5,nativeCallback);
 
     }
     // 56 SERIVCE PORT : deleteImage
@@ -1634,21 +1759,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 删除成功返回1,否则返回0
      */
-    public ListenableFuture<Integer> deleteImage(
+    public void deleteImage(
             String imageMd5,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Integer> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Integer> future = Futures.transform(
-                service.deleteImage(
+        ServiceMethodCallback<Integer> nativeCallback = 
+            new ServiceMethodCallback<Integer>(){
+            @Override
+            public void onSuccess(Integer result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.deleteImage(
                     imageMd5,
-                    token), 
-                new com.google.common.base.Function<Integer,Integer>(){
-                    @Override
-                    public Integer apply(Integer input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Integer>(service,future);
+                    token,nativeCallback);
 
     }
     // 57 SERIVCE PORT : existsDevice
@@ -1657,17 +1784,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param id
      * @return 
      */
-    public ListenableFuture<Boolean> existsDevice(int id){
+    public void existsDevice(int id,final ServiceMethodCallback<Boolean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Boolean> future = Futures.transform(
-                service.existsDevice(id), 
-                new com.google.common.base.Function<Boolean,Boolean>(){
-                    @Override
-                    public Boolean apply(Boolean input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Boolean>(service,future);
+        ServiceMethodCallback<Boolean> nativeCallback = 
+            new ServiceMethodCallback<Boolean>(){
+            @Override
+            public void onSuccess(Boolean result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.existsDevice(id,nativeCallback);
 
     }
     // 58 SERIVCE PORT : saveDevice
@@ -1678,21 +1807,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<DeviceBean> saveDevice(
+    public void saveDevice(
             DeviceBean deviceBean,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<DeviceBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<DeviceBean> future = Futures.transform(
-                service.saveDevice(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.DeviceBean result) {
+                callback.onSuccess(converterDeviceBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.saveDevice(
                     converterDeviceBean.toRight(deviceBean),
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
-                    @Override
-                    public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
-                        return converterDeviceBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,DeviceBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 59 SERIVCE PORT : updateDevice
@@ -1702,21 +1833,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<DeviceBean> updateDevice(
+    public void updateDevice(
             DeviceBean deviceBean,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<DeviceBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<DeviceBean> future = Futures.transform(
-                service.updateDevice(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.DeviceBean result) {
+                callback.onSuccess(converterDeviceBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.updateDevice(
                     converterDeviceBean.toRight(deviceBean),
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
-                    @Override
-                    public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
-                        return converterDeviceBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,DeviceBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 60 SERIVCE PORT : getDevice
@@ -1725,17 +1858,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param deviceId
      * @return 
      */
-    public ListenableFuture<DeviceBean> getDevice(int deviceId){
+    public void getDevice(int deviceId,final ServiceMethodCallback<DeviceBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<DeviceBean> future = Futures.transform(
-                service.getDevice(deviceId), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
-                    @Override
-                    public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
-                        return converterDeviceBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,DeviceBean>(service,future);
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.DeviceBean result) {
+                callback.onSuccess(converterDeviceBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getDevice(deviceId,nativeCallback);
 
     }
     // 61 SERIVCE PORT : getDevices
@@ -1744,17 +1879,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param idList
      * @return 
      */
-    public ListenableFuture<List<DeviceBean>> getDevices(List<Integer> idList){
+    public void getDevices(List<Integer> idList,final ServiceMethodCallback<List<DeviceBean>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<DeviceBean>> future = Futures.transform(
-                service.getDevices(CollectionUtils.checkNotNullElement(idList)), 
-                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.DeviceBean>,List<DeviceBean>>(){
-                    @Override
-                    public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
-                        return DeviceBean.replaceNullInstance(converterDeviceBean.fromRight(input));
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<DeviceBean>>(service,future);
+        ServiceMethodCallback<List<net.gdface.facelog.client.thrift.DeviceBean>> nativeCallback = 
+            new ServiceMethodCallback<List<net.gdface.facelog.client.thrift.DeviceBean>>(){
+            @Override
+            public void onSuccess(List<net.gdface.facelog.client.thrift.DeviceBean> result) {
+                callback.onSuccess(DeviceBean.replaceNullInstance(converterDeviceBean.fromRight(result)));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getDevices(CollectionUtils.checkNotNullElement(idList),nativeCallback);
 
     }
     // 62 SERIVCE PORT : loadDeviceByWhere
@@ -1765,23 +1902,25 @@ public class IFaceLogClientAsync implements Constant{
      * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
      * @return 
      */
-    public ListenableFuture<List<DeviceBean>> loadDeviceByWhere(
+    public void loadDeviceByWhere(
             String where,
             int startRow,
-            int numRows){
+            int numRows,final ServiceMethodCallback<List<DeviceBean>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<DeviceBean>> future = Futures.transform(
-                service.loadDeviceByWhere(
+        ServiceMethodCallback<List<net.gdface.facelog.client.thrift.DeviceBean>> nativeCallback = 
+            new ServiceMethodCallback<List<net.gdface.facelog.client.thrift.DeviceBean>>(){
+            @Override
+            public void onSuccess(List<net.gdface.facelog.client.thrift.DeviceBean> result) {
+                callback.onSuccess(DeviceBean.replaceNullInstance(converterDeviceBean.fromRight(result)));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.loadDeviceByWhere(
                     where,
                     startRow,
-                    numRows), 
-                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.DeviceBean>,List<DeviceBean>>(){
-                    @Override
-                    public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
-                        return DeviceBean.replaceNullInstance(converterDeviceBean.fromRight(input));
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<DeviceBean>>(service,future);
+                    numRows,nativeCallback);
 
     }
     // 63 SERIVCE PORT : countDeviceByWhere
@@ -1790,17 +1929,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param where
      * @return 
      */
-    public ListenableFuture<Integer> countDeviceByWhere(String where){
+    public void countDeviceByWhere(String where,final ServiceMethodCallback<Integer> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Integer> future = Futures.transform(
-                service.countDeviceByWhere(where), 
-                new com.google.common.base.Function<Integer,Integer>(){
-                    @Override
-                    public Integer apply(Integer input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Integer>(service,future);
+        ServiceMethodCallback<Integer> nativeCallback = 
+            new ServiceMethodCallback<Integer>(){
+            @Override
+            public void onSuccess(Integer result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.countDeviceByWhere(where,nativeCallback);
 
     }
     // 64 SERIVCE PORT : loadDeviceIdByWhere
@@ -1809,17 +1950,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param where
      * @return 返回设备ID列表
      */
-    public ListenableFuture<List<Integer>> loadDeviceIdByWhere(String where){
+    public void loadDeviceIdByWhere(String where,final ServiceMethodCallback<List<Integer>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<Integer>> future = Futures.transform(
-                service.loadDeviceIdByWhere(where), 
-                new com.google.common.base.Function<List<Integer>,List<Integer>>(){
-                    @Override
-                    public List<Integer> apply(List<Integer> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<Integer>>(service,future);
+        ServiceMethodCallback<List<Integer>> nativeCallback = 
+            new ServiceMethodCallback<List<Integer>>(){
+            @Override
+            public void onSuccess(List<Integer> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.loadDeviceIdByWhere(where,nativeCallback);
 
     }
     // 65 SERIVCE PORT : saveDeviceGroup
@@ -1830,21 +1973,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<DeviceGroupBean> saveDeviceGroup(
+    public void saveDeviceGroup(
             DeviceGroupBean deviceGroupBean,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<DeviceGroupBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<DeviceGroupBean> future = Futures.transform(
-                service.saveDeviceGroup(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceGroupBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceGroupBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.DeviceGroupBean result) {
+                callback.onSuccess(converterDeviceGroupBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.saveDeviceGroup(
                     converterDeviceGroupBean.toRight(deviceGroupBean),
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.DeviceGroupBean,DeviceGroupBean>(){
-                    @Override
-                    public DeviceGroupBean apply(net.gdface.facelog.client.thrift.DeviceGroupBean input) {
-                        return converterDeviceGroupBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,DeviceGroupBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 66 SERIVCE PORT : getDeviceGroup
@@ -1853,17 +1998,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param deviceGroupId
      * @return 
      */
-    public ListenableFuture<DeviceGroupBean> getDeviceGroup(int deviceGroupId){
+    public void getDeviceGroup(int deviceGroupId,final ServiceMethodCallback<DeviceGroupBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<DeviceGroupBean> future = Futures.transform(
-                service.getDeviceGroup(deviceGroupId), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.DeviceGroupBean,DeviceGroupBean>(){
-                    @Override
-                    public DeviceGroupBean apply(net.gdface.facelog.client.thrift.DeviceGroupBean input) {
-                        return converterDeviceGroupBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,DeviceGroupBean>(service,future);
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceGroupBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceGroupBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.DeviceGroupBean result) {
+                callback.onSuccess(converterDeviceGroupBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getDeviceGroup(deviceGroupId,nativeCallback);
 
     }
     // 67 SERIVCE PORT : getDeviceGroups
@@ -1872,17 +2019,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param groupIdList
      * @return 
      */
-    public ListenableFuture<List<DeviceGroupBean>> getDeviceGroups(List<Integer> groupIdList){
+    public void getDeviceGroups(List<Integer> groupIdList,final ServiceMethodCallback<List<DeviceGroupBean>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<DeviceGroupBean>> future = Futures.transform(
-                service.getDeviceGroups(CollectionUtils.checkNotNullElement(groupIdList)), 
-                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.DeviceGroupBean>,List<DeviceGroupBean>>(){
-                    @Override
-                    public List<DeviceGroupBean> apply(List<net.gdface.facelog.client.thrift.DeviceGroupBean> input) {
-                        return DeviceGroupBean.replaceNullInstance(converterDeviceGroupBean.fromRight(input));
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<DeviceGroupBean>>(service,future);
+        ServiceMethodCallback<List<net.gdface.facelog.client.thrift.DeviceGroupBean>> nativeCallback = 
+            new ServiceMethodCallback<List<net.gdface.facelog.client.thrift.DeviceGroupBean>>(){
+            @Override
+            public void onSuccess(List<net.gdface.facelog.client.thrift.DeviceGroupBean> result) {
+                callback.onSuccess(DeviceGroupBean.replaceNullInstance(converterDeviceGroupBean.fromRight(result)));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getDeviceGroups(CollectionUtils.checkNotNullElement(groupIdList),nativeCallback);
 
     }
     // 68 SERIVCE PORT : deleteDeviceGroup
@@ -1894,21 +2043,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 返回删除的记录条数
      */
-    public ListenableFuture<Integer> deleteDeviceGroup(
+    public void deleteDeviceGroup(
             int deviceGroupId,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Integer> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Integer> future = Futures.transform(
-                service.deleteDeviceGroup(
+        ServiceMethodCallback<Integer> nativeCallback = 
+            new ServiceMethodCallback<Integer>(){
+            @Override
+            public void onSuccess(Integer result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.deleteDeviceGroup(
                     deviceGroupId,
-                    token), 
-                new com.google.common.base.Function<Integer,Integer>(){
-                    @Override
-                    public Integer apply(Integer input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Integer>(service,future);
+                    token,nativeCallback);
 
     }
     // 69 SERIVCE PORT : getSubDeviceGroup
@@ -1918,17 +2069,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param deviceGroupId
      * @return 设备组ID列表
      */
-    public ListenableFuture<List<Integer>> getSubDeviceGroup(int deviceGroupId){
+    public void getSubDeviceGroup(int deviceGroupId,final ServiceMethodCallback<List<Integer>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<Integer>> future = Futures.transform(
-                service.getSubDeviceGroup(deviceGroupId), 
-                new com.google.common.base.Function<List<Integer>,List<Integer>>(){
-                    @Override
-                    public List<Integer> apply(List<Integer> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<Integer>>(service,future);
+        ServiceMethodCallback<List<Integer>> nativeCallback = 
+            new ServiceMethodCallback<List<Integer>>(){
+            @Override
+            public void onSuccess(List<Integer> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getSubDeviceGroup(deviceGroupId,nativeCallback);
 
     }
     // 70 SERIVCE PORT : getDevicesOfGroup
@@ -1938,17 +2091,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param deviceGroupId
      * @return 
      */
-    public ListenableFuture<List<Integer>> getDevicesOfGroup(int deviceGroupId){
+    public void getDevicesOfGroup(int deviceGroupId,final ServiceMethodCallback<List<Integer>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<Integer>> future = Futures.transform(
-                service.getDevicesOfGroup(deviceGroupId), 
-                new com.google.common.base.Function<List<Integer>,List<Integer>>(){
-                    @Override
-                    public List<Integer> apply(List<Integer> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<Integer>>(service,future);
+        ServiceMethodCallback<List<Integer>> nativeCallback = 
+            new ServiceMethodCallback<List<Integer>>(){
+            @Override
+            public void onSuccess(List<Integer> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getDevicesOfGroup(deviceGroupId,nativeCallback);
 
     }
     // 71 SERIVCE PORT : listOfParentForDeviceGroup
@@ -1958,17 +2113,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param deviceGroupId
      * @return 如果{@code deviceGroupId}无效则返回空表
      */
-    public ListenableFuture<List<Integer>> listOfParentForDeviceGroup(int deviceGroupId){
+    public void listOfParentForDeviceGroup(int deviceGroupId,final ServiceMethodCallback<List<Integer>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<Integer>> future = Futures.transform(
-                service.listOfParentForDeviceGroup(deviceGroupId), 
-                new com.google.common.base.Function<List<Integer>,List<Integer>>(){
-                    @Override
-                    public List<Integer> apply(List<Integer> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<Integer>>(service,future);
+        ServiceMethodCallback<List<Integer>> nativeCallback = 
+            new ServiceMethodCallback<List<Integer>>(){
+            @Override
+            public void onSuccess(List<Integer> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.listOfParentForDeviceGroup(deviceGroupId,nativeCallback);
 
     }
     // 72 SERIVCE PORT : getDeviceGroupsBelongs
@@ -1978,17 +2135,19 @@ public class IFaceLogClientAsync implements Constant{
      * @return 如果{@code deviceId}无效则返回空表
      * @see {@link #listOfParentForDeviceGroup(int)}
      */
-    public ListenableFuture<List<Integer>> getDeviceGroupsBelongs(int deviceId){
+    public void getDeviceGroupsBelongs(int deviceId,final ServiceMethodCallback<List<Integer>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<Integer>> future = Futures.transform(
-                service.getDeviceGroupsBelongs(deviceId), 
-                new com.google.common.base.Function<List<Integer>,List<Integer>>(){
-                    @Override
-                    public List<Integer> apply(List<Integer> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<Integer>>(service,future);
+        ServiceMethodCallback<List<Integer>> nativeCallback = 
+            new ServiceMethodCallback<List<Integer>>(){
+            @Override
+            public void onSuccess(List<Integer> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getDeviceGroupsBelongs(deviceId,nativeCallback);
 
     }
     // 73 SERIVCE PORT : savePersonGroup
@@ -1999,21 +2158,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<PersonGroupBean> savePersonGroup(
+    public void savePersonGroup(
             PersonGroupBean personGroupBean,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<PersonGroupBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<PersonGroupBean> future = Futures.transform(
-                service.savePersonGroup(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonGroupBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonGroupBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.PersonGroupBean result) {
+                callback.onSuccess(converterPersonGroupBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.savePersonGroup(
                     converterPersonGroupBean.toRight(personGroupBean),
-                    token), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonGroupBean,PersonGroupBean>(){
-                    @Override
-                    public PersonGroupBean apply(net.gdface.facelog.client.thrift.PersonGroupBean input) {
-                        return converterPersonGroupBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,PersonGroupBean>(service,future);
+                    token,nativeCallback);
 
     }
     // 74 SERIVCE PORT : getPersonGroup
@@ -2022,17 +2183,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param personGroupId
      * @return 
      */
-    public ListenableFuture<PersonGroupBean> getPersonGroup(int personGroupId){
+    public void getPersonGroup(int personGroupId,final ServiceMethodCallback<PersonGroupBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<PersonGroupBean> future = Futures.transform(
-                service.getPersonGroup(personGroupId), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonGroupBean,PersonGroupBean>(){
-                    @Override
-                    public PersonGroupBean apply(net.gdface.facelog.client.thrift.PersonGroupBean input) {
-                        return converterPersonGroupBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,PersonGroupBean>(service,future);
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonGroupBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonGroupBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.PersonGroupBean result) {
+                callback.onSuccess(converterPersonGroupBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getPersonGroup(personGroupId,nativeCallback);
 
     }
     // 75 SERIVCE PORT : getPersonGroups
@@ -2041,17 +2204,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param groupIdList
      * @return 
      */
-    public ListenableFuture<List<PersonGroupBean>> getPersonGroups(List<Integer> groupIdList){
+    public void getPersonGroups(List<Integer> groupIdList,final ServiceMethodCallback<List<PersonGroupBean>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<PersonGroupBean>> future = Futures.transform(
-                service.getPersonGroups(CollectionUtils.checkNotNullElement(groupIdList)), 
-                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PersonGroupBean>,List<PersonGroupBean>>(){
-                    @Override
-                    public List<PersonGroupBean> apply(List<net.gdface.facelog.client.thrift.PersonGroupBean> input) {
-                        return PersonGroupBean.replaceNullInstance(converterPersonGroupBean.fromRight(input));
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<PersonGroupBean>>(service,future);
+        ServiceMethodCallback<List<net.gdface.facelog.client.thrift.PersonGroupBean>> nativeCallback = 
+            new ServiceMethodCallback<List<net.gdface.facelog.client.thrift.PersonGroupBean>>(){
+            @Override
+            public void onSuccess(List<net.gdface.facelog.client.thrift.PersonGroupBean> result) {
+                callback.onSuccess(PersonGroupBean.replaceNullInstance(converterPersonGroupBean.fromRight(result)));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getPersonGroups(CollectionUtils.checkNotNullElement(groupIdList),nativeCallback);
 
     }
     // 76 SERIVCE PORT : deletePersonGroup
@@ -2063,21 +2228,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<Integer> deletePersonGroup(
+    public void deletePersonGroup(
             int personGroupId,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Integer> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Integer> future = Futures.transform(
-                service.deletePersonGroup(
+        ServiceMethodCallback<Integer> nativeCallback = 
+            new ServiceMethodCallback<Integer>(){
+            @Override
+            public void onSuccess(Integer result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.deletePersonGroup(
                     personGroupId,
-                    token), 
-                new com.google.common.base.Function<Integer,Integer>(){
-                    @Override
-                    public Integer apply(Integer input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Integer>(service,future);
+                    token,nativeCallback);
 
     }
     // 77 SERIVCE PORT : getSubPersonGroup
@@ -2087,17 +2254,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param personGroupId
      * @return 人员组ID列表
      */
-    public ListenableFuture<List<Integer>> getSubPersonGroup(int personGroupId){
+    public void getSubPersonGroup(int personGroupId,final ServiceMethodCallback<List<Integer>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<Integer>> future = Futures.transform(
-                service.getSubPersonGroup(personGroupId), 
-                new com.google.common.base.Function<List<Integer>,List<Integer>>(){
-                    @Override
-                    public List<Integer> apply(List<Integer> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<Integer>>(service,future);
+        ServiceMethodCallback<List<Integer>> nativeCallback = 
+            new ServiceMethodCallback<List<Integer>>(){
+            @Override
+            public void onSuccess(List<Integer> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getSubPersonGroup(personGroupId,nativeCallback);
 
     }
     // 78 SERIVCE PORT : getPersonsOfGroup
@@ -2107,17 +2276,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param deviceGroupId
      * @return 人员ID列表
      */
-    public ListenableFuture<List<Integer>> getPersonsOfGroup(int personGroupId){
+    public void getPersonsOfGroup(int personGroupId,final ServiceMethodCallback<List<Integer>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<Integer>> future = Futures.transform(
-                service.getPersonsOfGroup(personGroupId), 
-                new com.google.common.base.Function<List<Integer>,List<Integer>>(){
-                    @Override
-                    public List<Integer> apply(List<Integer> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<Integer>>(service,future);
+        ServiceMethodCallback<List<Integer>> nativeCallback = 
+            new ServiceMethodCallback<List<Integer>>(){
+            @Override
+            public void onSuccess(List<Integer> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getPersonsOfGroup(personGroupId,nativeCallback);
 
     }
     // 79 SERIVCE PORT : listOfParentForPersonGroup
@@ -2127,17 +2298,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param personGroupId
      * @return 如果{@code personGroupId}无效则返回空表
      */
-    public ListenableFuture<List<Integer>> listOfParentForPersonGroup(int personGroupId){
+    public void listOfParentForPersonGroup(int personGroupId,final ServiceMethodCallback<List<Integer>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<Integer>> future = Futures.transform(
-                service.listOfParentForPersonGroup(personGroupId), 
-                new com.google.common.base.Function<List<Integer>,List<Integer>>(){
-                    @Override
-                    public List<Integer> apply(List<Integer> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<Integer>>(service,future);
+        ServiceMethodCallback<List<Integer>> nativeCallback = 
+            new ServiceMethodCallback<List<Integer>>(){
+            @Override
+            public void onSuccess(List<Integer> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.listOfParentForPersonGroup(personGroupId,nativeCallback);
 
     }
     // 80 SERIVCE PORT : getPersonGroupsBelongs
@@ -2147,17 +2320,19 @@ public class IFaceLogClientAsync implements Constant{
      * @return 如果{@code personId}无效则返回空表
      * @see {@link #listOfParentForPersonGroup(int)}
      */
-    public ListenableFuture<List<Integer>> getPersonGroupsBelongs(int personId){
+    public void getPersonGroupsBelongs(int personId,final ServiceMethodCallback<List<Integer>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<Integer>> future = Futures.transform(
-                service.getPersonGroupsBelongs(personId), 
-                new com.google.common.base.Function<List<Integer>,List<Integer>>(){
-                    @Override
-                    public List<Integer> apply(List<Integer> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<Integer>>(service,future);
+        ServiceMethodCallback<List<Integer>> nativeCallback = 
+            new ServiceMethodCallback<List<Integer>>(){
+            @Override
+            public void onSuccess(List<Integer> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getPersonGroupsBelongs(personId,nativeCallback);
 
     }
     // 81 SERIVCE PORT : loadDeviceGroupByWhere
@@ -2168,40 +2343,44 @@ public class IFaceLogClientAsync implements Constant{
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @return 设备组ID列表
      */
-    public ListenableFuture<List<Integer>> loadDeviceGroupByWhere(
+    public void loadDeviceGroupByWhere(
             String where,
             int startRow,
-            int numRows){
+            int numRows,final ServiceMethodCallback<List<Integer>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<Integer>> future = Futures.transform(
-                service.loadDeviceGroupByWhere(
+        ServiceMethodCallback<List<Integer>> nativeCallback = 
+            new ServiceMethodCallback<List<Integer>>(){
+            @Override
+            public void onSuccess(List<Integer> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.loadDeviceGroupByWhere(
                     where,
                     startRow,
-                    numRows), 
-                new com.google.common.base.Function<List<Integer>,List<Integer>>(){
-                    @Override
-                    public List<Integer> apply(List<Integer> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<Integer>>(service,future);
+                    numRows,nativeCallback);
 
     }
     // 82 SERIVCE PORT : countDeviceGroupByWhere
     /**
      * 返回满足{@code where} SQL条件语句的fl_device_group记录总数
      */
-    public ListenableFuture<Integer> countDeviceGroupByWhere(String where){
+    public void countDeviceGroupByWhere(String where,final ServiceMethodCallback<Integer> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Integer> future = Futures.transform(
-                service.countDeviceGroupByWhere(where), 
-                new com.google.common.base.Function<Integer,Integer>(){
-                    @Override
-                    public Integer apply(Integer input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Integer>(service,future);
+        ServiceMethodCallback<Integer> nativeCallback = 
+            new ServiceMethodCallback<Integer>(){
+            @Override
+            public void onSuccess(Integer result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.countDeviceGroupByWhere(where,nativeCallback);
 
     }
     // 83 SERIVCE PORT : loadDeviceGroupIdByWhere
@@ -2210,17 +2389,19 @@ public class IFaceLogClientAsync implements Constant{
      * @return 返回查询结果记录的主键
      * @see #loadDeviceGroupByWhere(String,int,int)
      */
-    public ListenableFuture<List<Integer>> loadDeviceGroupIdByWhere(String where){
+    public void loadDeviceGroupIdByWhere(String where,final ServiceMethodCallback<List<Integer>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<Integer>> future = Futures.transform(
-                service.loadDeviceGroupIdByWhere(where), 
-                new com.google.common.base.Function<List<Integer>,List<Integer>>(){
-                    @Override
-                    public List<Integer> apply(List<Integer> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<Integer>>(service,future);
+        ServiceMethodCallback<List<Integer>> nativeCallback = 
+            new ServiceMethodCallback<List<Integer>>(){
+            @Override
+            public void onSuccess(List<Integer> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.loadDeviceGroupIdByWhere(where,nativeCallback);
 
     }
     // 84 SERIVCE PORT : addPermit
@@ -2232,23 +2413,25 @@ public class IFaceLogClientAsync implements Constant{
      * @param personGroup
      * @param token 访问令牌
      */
-    public ListenableFuture<Void> addPermit(
+    public void addPermit(
             DeviceGroupBean deviceGroup,
             PersonGroupBean personGroup,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Void> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Void> future = Futures.transform(
-                service.addPermit(
+        ServiceMethodCallback<Void> nativeCallback = 
+            new ServiceMethodCallback<Void>(){
+            @Override
+            public void onSuccess(Void result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.addPermit(
                     converterDeviceGroupBean.toRight(deviceGroup),
                     converterPersonGroupBean.toRight(personGroup),
-                    token), 
-                new com.google.common.base.Function<Void,Void>(){
-                    @Override
-                    public Void apply(Void input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Void>(service,future);
+                    token,nativeCallback);
 
     }
     // 85 SERIVCE PORT : addPermitById
@@ -2261,23 +2444,25 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @see #addPermit(DeviceGroupBean,PersonGroupBean, Token)
      */
-    public ListenableFuture<Void> addPermit(
+    public void addPermit(
             int deviceGroupId,
             int personGroupId,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Void> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Void> future = Futures.transform(
-                service.addPermitById(
+        ServiceMethodCallback<Void> nativeCallback = 
+            new ServiceMethodCallback<Void>(){
+            @Override
+            public void onSuccess(Void result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.addPermitById(
                     deviceGroupId,
                     personGroupId,
-                    token), 
-                new com.google.common.base.Function<Void,Void>(){
-                    @Override
-                    public Void apply(Void input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Void>(service,future);
+                    token,nativeCallback);
 
     }
     // 86 SERIVCE PORT : deletePermit
@@ -2289,23 +2474,25 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 删除成功返回1,否则返回0
      */
-    public ListenableFuture<Integer> deletePermit(
+    public void deletePermit(
             DeviceGroupBean deviceGroup,
             PersonGroupBean personGroup,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Integer> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Integer> future = Futures.transform(
-                service.deletePermit(
+        ServiceMethodCallback<Integer> nativeCallback = 
+            new ServiceMethodCallback<Integer>(){
+            @Override
+            public void onSuccess(Integer result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.deletePermit(
                     converterDeviceGroupBean.toRight(deviceGroup),
                     converterPersonGroupBean.toRight(personGroup),
-                    token), 
-                new com.google.common.base.Function<Integer,Integer>(){
-                    @Override
-                    public Integer apply(Integer input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Integer>(service,future);
+                    token,nativeCallback);
 
     }
     // 87 SERIVCE PORT : getGroupPermit
@@ -2316,21 +2503,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param personGroupId
      * @return 
      */
-    public ListenableFuture<Boolean> getGroupPermit(
+    public void getGroupPermit(
             int deviceId,
-            int personGroupId){
+            int personGroupId,final ServiceMethodCallback<Boolean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Boolean> future = Futures.transform(
-                service.getGroupPermit(
+        ServiceMethodCallback<Boolean> nativeCallback = 
+            new ServiceMethodCallback<Boolean>(){
+            @Override
+            public void onSuccess(Boolean result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getGroupPermit(
                     deviceId,
-                    personGroupId), 
-                new com.google.common.base.Function<Boolean,Boolean>(){
-                    @Override
-                    public Boolean apply(Boolean input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Boolean>(service,future);
+                    personGroupId,nativeCallback);
 
     }
     // 88 SERIVCE PORT : getPersonPermit
@@ -2341,63 +2530,69 @@ public class IFaceLogClientAsync implements Constant{
      * @param personId
      * @return 
      */
-    public ListenableFuture<Boolean> getPersonPermit(
+    public void getPersonPermit(
             int deviceId,
-            int personId){
+            int personId,final ServiceMethodCallback<Boolean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Boolean> future = Futures.transform(
-                service.getPersonPermit(
+        ServiceMethodCallback<Boolean> nativeCallback = 
+            new ServiceMethodCallback<Boolean>(){
+            @Override
+            public void onSuccess(Boolean result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getPersonPermit(
                     deviceId,
-                    personId), 
-                new com.google.common.base.Function<Boolean,Boolean>(){
-                    @Override
-                    public Boolean apply(Boolean input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Boolean>(service,future);
+                    personId,nativeCallback);
 
     }
     // 89 SERIVCE PORT : getGroupPermits
     /**
      * 参见 {@link #getGroupPermit(Integer, Integer) }
      */
-    public ListenableFuture<List<Boolean>> getGroupPermits(
+    public void getGroupPermits(
             int deviceId,
-            List<Integer> personGroupIdList){
+            List<Integer> personGroupIdList,final ServiceMethodCallback<List<Boolean>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<Boolean>> future = Futures.transform(
-                service.getGroupPermits(
+        ServiceMethodCallback<List<Boolean>> nativeCallback = 
+            new ServiceMethodCallback<List<Boolean>>(){
+            @Override
+            public void onSuccess(List<Boolean> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getGroupPermits(
                     deviceId,
-                    CollectionUtils.checkNotNullElement(personGroupIdList)), 
-                new com.google.common.base.Function<List<Boolean>,List<Boolean>>(){
-                    @Override
-                    public List<Boolean> apply(List<Boolean> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<Boolean>>(service,future);
+                    CollectionUtils.checkNotNullElement(personGroupIdList),nativeCallback);
 
     }
     // 90 SERIVCE PORT : getPersonPermits
     /**
      * 参见 {@link #getPersonPermit(Integer, Integer) }
      */
-    public ListenableFuture<List<Boolean>> getPersonPermits(
+    public void getPersonPermits(
             int deviceId,
-            List<Integer> personIdList){
+            List<Integer> personIdList,final ServiceMethodCallback<List<Boolean>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<Boolean>> future = Futures.transform(
-                service.getPersonPermits(
+        ServiceMethodCallback<List<Boolean>> nativeCallback = 
+            new ServiceMethodCallback<List<Boolean>>(){
+            @Override
+            public void onSuccess(List<Boolean> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getPersonPermits(
                     deviceId,
-                    CollectionUtils.checkNotNullElement(personIdList)), 
-                new com.google.common.base.Function<List<Boolean>,List<Boolean>>(){
-                    @Override
-                    public List<Boolean> apply(List<Boolean> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<Boolean>>(service,future);
+                    CollectionUtils.checkNotNullElement(personIdList),nativeCallback);
 
     }
     // 91 SERIVCE PORT : loadPermitByUpdate
@@ -2407,17 +2602,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param timestamp
      * @return 
      */
-    public ListenableFuture<List<PermitBean>> loadPermitByUpdate(Date timestamp){
+    public void loadPermitByUpdate(Date timestamp,final ServiceMethodCallback<List<PermitBean>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<PermitBean>> future = Futures.transform(
-                service.loadPermitByUpdate(GenericUtils.toLong(timestamp,Date.class)), 
-                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PermitBean>,List<PermitBean>>(){
-                    @Override
-                    public List<PermitBean> apply(List<net.gdface.facelog.client.thrift.PermitBean> input) {
-                        return PermitBean.replaceNullInstance(converterPermitBean.fromRight(input));
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<PermitBean>>(service,future);
+        ServiceMethodCallback<List<net.gdface.facelog.client.thrift.PermitBean>> nativeCallback = 
+            new ServiceMethodCallback<List<net.gdface.facelog.client.thrift.PermitBean>>(){
+            @Override
+            public void onSuccess(List<net.gdface.facelog.client.thrift.PermitBean> result) {
+                callback.onSuccess(PermitBean.replaceNullInstance(converterPermitBean.fromRight(result)));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.loadPermitByUpdate(GenericUtils.toLong(timestamp,Date.class),nativeCallback);
 
     }
     // 92 SERIVCE PORT : loadPersonGroupByWhere
@@ -2428,23 +2625,25 @@ public class IFaceLogClientAsync implements Constant{
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @return 人员组ID列表
      */
-    public ListenableFuture<List<Integer>> loadPersonGroupByWhere(
+    public void loadPersonGroupByWhere(
             String where,
             int startRow,
-            int numRows){
+            int numRows,final ServiceMethodCallback<List<Integer>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<Integer>> future = Futures.transform(
-                service.loadPersonGroupByWhere(
+        ServiceMethodCallback<List<Integer>> nativeCallback = 
+            new ServiceMethodCallback<List<Integer>>(){
+            @Override
+            public void onSuccess(List<Integer> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.loadPersonGroupByWhere(
                     where,
                     startRow,
-                    numRows), 
-                new com.google.common.base.Function<List<Integer>,List<Integer>>(){
-                    @Override
-                    public List<Integer> apply(List<Integer> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<Integer>>(service,future);
+                    numRows,nativeCallback);
 
     }
     // 93 SERIVCE PORT : countPersonGroupByWhere
@@ -2452,17 +2651,19 @@ public class IFaceLogClientAsync implements Constant{
      * 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
      * @see {@link IPersonGroupManager#Where(String)}
      */
-    public ListenableFuture<Integer> countPersonGroupByWhere(String where){
+    public void countPersonGroupByWhere(String where,final ServiceMethodCallback<Integer> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Integer> future = Futures.transform(
-                service.countPersonGroupByWhere(where), 
-                new com.google.common.base.Function<Integer,Integer>(){
-                    @Override
-                    public Integer apply(Integer input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Integer>(service,future);
+        ServiceMethodCallback<Integer> nativeCallback = 
+            new ServiceMethodCallback<Integer>(){
+            @Override
+            public void onSuccess(Integer result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.countPersonGroupByWhere(where,nativeCallback);
 
     }
     // 94 SERIVCE PORT : loadPersonGroupIdByWhere
@@ -2471,17 +2672,19 @@ public class IFaceLogClientAsync implements Constant{
      * @return 返回查询结果记录的主键
      * @see #loadPersonGroupByWhere(String,int,int)
      */
-    public ListenableFuture<List<Integer>> loadPersonGroupIdByWhere(String where){
+    public void loadPersonGroupIdByWhere(String where,final ServiceMethodCallback<List<Integer>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<List<Integer>> future = Futures.transform(
-                service.loadPersonGroupIdByWhere(where), 
-                new com.google.common.base.Function<List<Integer>,List<Integer>>(){
-                    @Override
-                    public List<Integer> apply(List<Integer> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,List<Integer>>(service,future);
+        ServiceMethodCallback<List<Integer>> nativeCallback = 
+            new ServiceMethodCallback<List<Integer>>(){
+            @Override
+            public void onSuccess(List<Integer> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.loadPersonGroupIdByWhere(where,nativeCallback);
 
     }
     // 95 SERIVCE PORT : registerDevice
@@ -2491,17 +2694,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param newDevice 设备记录,_isNew字段必须为{@code true},{@code id}字段不要指定,数据库会自动分配,保存在返回值中
      * @return 
      */
-    public ListenableFuture<DeviceBean> registerDevice(DeviceBean newDevice){
+    public void registerDevice(DeviceBean newDevice,final ServiceMethodCallback<DeviceBean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<DeviceBean> future = Futures.transform(
-                service.registerDevice(converterDeviceBean.toRight(newDevice)), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
-                    @Override
-                    public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
-                        return converterDeviceBean.fromRight(input);
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,DeviceBean>(service,future);
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceBean> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceBean>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.DeviceBean result) {
+                callback.onSuccess(converterDeviceBean.fromRight(result));
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.registerDevice(converterDeviceBean.toRight(newDevice),nativeCallback);
 
     }
     // 96 SERIVCE PORT : unregisterDevice
@@ -2511,21 +2716,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param deviceId
      * @param token 设备验证令牌
      */
-    public ListenableFuture<Void> unregisterDevice(
+    public void unregisterDevice(
             int deviceId,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Void> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Void> future = Futures.transform(
-                service.unregisterDevice(
+        ServiceMethodCallback<Void> nativeCallback = 
+            new ServiceMethodCallback<Void>(){
+            @Override
+            public void onSuccess(Void result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.unregisterDevice(
                     deviceId,
-                    token), 
-                new com.google.common.base.Function<Void,Void>(){
-                    @Override
-                    public Void apply(Void input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Void>(service,future);
+                    token,nativeCallback);
 
     }
     // 97 SERIVCE PORT : online
@@ -2534,17 +2741,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param device 上线设备信息，必须提供{@code id, mac, serialNo}字段
      * @return 设备访问令牌
      */
-    public ListenableFuture<net.gdface.facelog.client.thrift.Token> online(DeviceBean device){
+    public void online(DeviceBean device,final ServiceMethodCallback<net.gdface.facelog.client.thrift.Token> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<net.gdface.facelog.client.thrift.Token> future = Futures.transform(
-                service.online(converterDeviceBean.toRight(device)), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.Token,net.gdface.facelog.client.thrift.Token>(){
-                    @Override
-                    public net.gdface.facelog.client.thrift.Token apply(net.gdface.facelog.client.thrift.Token input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,net.gdface.facelog.client.thrift.Token>(service,future);
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.Token> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.Token>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.Token result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.online(converterDeviceBean.toRight(device),nativeCallback);
 
     }
     // 98 SERIVCE PORT : offline
@@ -2553,17 +2762,19 @@ public class IFaceLogClientAsync implements Constant{
      * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param token 当前持有的令牌
      */
-    public ListenableFuture<Void> offline(net.gdface.facelog.client.thrift.Token token){
+    public void offline(net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Void> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Void> future = Futures.transform(
-                service.offline(token), 
-                new com.google.common.base.Function<Void,Void>(){
-                    @Override
-                    public Void apply(Void input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Void>(service,future);
+        ServiceMethodCallback<Void> nativeCallback = 
+            new ServiceMethodCallback<Void>(){
+            @Override
+            public void onSuccess(Void result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.offline(token,nativeCallback);
 
     }
     // 99 SERIVCE PORT : applyPersonToken
@@ -2574,23 +2785,25 @@ public class IFaceLogClientAsync implements Constant{
      * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
      * @return 
      */
-    public ListenableFuture<net.gdface.facelog.client.thrift.Token> applyPersonToken(
+    public void applyPersonToken(
             int personId,
             String password,
-            boolean isMd5){
+            boolean isMd5,final ServiceMethodCallback<net.gdface.facelog.client.thrift.Token> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<net.gdface.facelog.client.thrift.Token> future = Futures.transform(
-                service.applyPersonToken(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.Token> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.Token>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.Token result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.applyPersonToken(
                     personId,
                     password,
-                    isMd5), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.Token,net.gdface.facelog.client.thrift.Token>(){
-                    @Override
-                    public net.gdface.facelog.client.thrift.Token apply(net.gdface.facelog.client.thrift.Token input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,net.gdface.facelog.client.thrift.Token>(service,future);
+                    isMd5,nativeCallback);
 
     }
     // 100 SERIVCE PORT : releasePersonToken
@@ -2599,17 +2812,19 @@ public class IFaceLogClientAsync implements Constant{
      * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param token 当前持有的令牌
      */
-    public ListenableFuture<Void> releasePersonToken(net.gdface.facelog.client.thrift.Token token){
+    public void releasePersonToken(net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Void> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Void> future = Futures.transform(
-                service.releasePersonToken(token), 
-                new com.google.common.base.Function<Void,Void>(){
-                    @Override
-                    public Void apply(Void input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Void>(service,future);
+        ServiceMethodCallback<Void> nativeCallback = 
+            new ServiceMethodCallback<Void>(){
+            @Override
+            public void onSuccess(Void result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.releasePersonToken(token,nativeCallback);
 
     }
     // 101 SERIVCE PORT : applyRootToken
@@ -2619,21 +2834,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
      * @return 
      */
-    public ListenableFuture<net.gdface.facelog.client.thrift.Token> applyRootToken(
+    public void applyRootToken(
             String password,
-            boolean isMd5){
+            boolean isMd5,final ServiceMethodCallback<net.gdface.facelog.client.thrift.Token> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<net.gdface.facelog.client.thrift.Token> future = Futures.transform(
-                service.applyRootToken(
+        ServiceMethodCallback<net.gdface.facelog.client.thrift.Token> nativeCallback = 
+            new ServiceMethodCallback<net.gdface.facelog.client.thrift.Token>(){
+            @Override
+            public void onSuccess(net.gdface.facelog.client.thrift.Token result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.applyRootToken(
                     password,
-                    isMd5), 
-                new com.google.common.base.Function<net.gdface.facelog.client.thrift.Token,net.gdface.facelog.client.thrift.Token>(){
-                    @Override
-                    public net.gdface.facelog.client.thrift.Token apply(net.gdface.facelog.client.thrift.Token input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,net.gdface.facelog.client.thrift.Token>(service,future);
+                    isMd5,nativeCallback);
 
     }
     // 102 SERIVCE PORT : releaseRootToken
@@ -2642,17 +2859,19 @@ public class IFaceLogClientAsync implements Constant{
      * <br>{@link TokenMangement.Enable#ROOT_ONLY}
      * @param token 当前持有的令牌
      */
-    public ListenableFuture<Void> releaseRootToken(net.gdface.facelog.client.thrift.Token token){
+    public void releaseRootToken(net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Void> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Void> future = Futures.transform(
-                service.releaseRootToken(token), 
-                new com.google.common.base.Function<Void,Void>(){
-                    @Override
-                    public Void apply(Void input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Void>(service,future);
+        ServiceMethodCallback<Void> nativeCallback = 
+            new ServiceMethodCallback<Void>(){
+            @Override
+            public void onSuccess(Void result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.releaseRootToken(token,nativeCallback);
 
     }
     // 103 SERIVCE PORT : isValidPassword
@@ -2665,25 +2884,27 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return {@code true}密码匹配
      */
-    public ListenableFuture<Boolean> isValidPassword(
+    public void isValidPassword(
             String userId,
             String password,
             boolean isMd5,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Boolean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Boolean> future = Futures.transform(
-                service.isValidPassword(
+        ServiceMethodCallback<Boolean> nativeCallback = 
+            new ServiceMethodCallback<Boolean>(){
+            @Override
+            public void onSuccess(Boolean result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.isValidPassword(
                     userId,
                     password,
                     isMd5,
-                    token), 
-                new com.google.common.base.Function<Boolean,Boolean>(){
-                    @Override
-                    public Boolean apply(Boolean input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Boolean>(service,future);
+                    token,nativeCallback);
 
     }
     // 104 SERIVCE PORT : applyAckChannel
@@ -2693,17 +2914,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<String> applyAckChannel(net.gdface.facelog.client.thrift.Token token){
+    public void applyAckChannel(net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<String> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<String> future = Futures.transform(
-                service.applyAckChannel(token), 
-                new com.google.common.base.Function<String,String>(){
-                    @Override
-                    public String apply(String input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,String>(service,future);
+        ServiceMethodCallback<String> nativeCallback = 
+            new ServiceMethodCallback<String>(){
+            @Override
+            public void onSuccess(String result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.applyAckChannel(token,nativeCallback);
 
     }
     // 105 SERIVCE PORT : applyAckChannelWithDuration
@@ -2714,21 +2937,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param duration 通道有效时间(秒) >0有效,否则使用默认的有效期
      * @return 
      */
-    public ListenableFuture<String> applyAckChannel(
+    public void applyAckChannel(
             net.gdface.facelog.client.thrift.Token token,
-            long duration){
+            long duration,final ServiceMethodCallback<String> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<String> future = Futures.transform(
-                service.applyAckChannelWithDuration(
+        ServiceMethodCallback<String> nativeCallback = 
+            new ServiceMethodCallback<String>(){
+            @Override
+            public void onSuccess(String result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.applyAckChannelWithDuration(
                     token,
-                    duration), 
-                new com.google.common.base.Function<String,String>(){
-                    @Override
-                    public String apply(String input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,String>(service,future);
+                    duration,nativeCallback);
 
     }
     // 106 SERIVCE PORT : applyCmdSn
@@ -2738,17 +2963,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<Long> applyCmdSn(net.gdface.facelog.client.thrift.Token token){
+    public void applyCmdSn(net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Long> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Long> future = Futures.transform(
-                service.applyCmdSn(token), 
-                new com.google.common.base.Function<Long,Long>(){
-                    @Override
-                    public Long apply(Long input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Long>(service,future);
+        ServiceMethodCallback<Long> nativeCallback = 
+            new ServiceMethodCallback<Long>(){
+            @Override
+            public void onSuccess(Long result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.applyCmdSn(token,nativeCallback);
 
     }
     // 107 SERIVCE PORT : isValidCmdSn
@@ -2758,17 +2985,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param cmdSn
      * @return 
      */
-    public ListenableFuture<Boolean> isValidCmdSn(long cmdSn){
+    public void isValidCmdSn(long cmdSn,final ServiceMethodCallback<Boolean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Boolean> future = Futures.transform(
-                service.isValidCmdSn(cmdSn), 
-                new com.google.common.base.Function<Boolean,Boolean>(){
-                    @Override
-                    public Boolean apply(Boolean input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Boolean>(service,future);
+        ServiceMethodCallback<Boolean> nativeCallback = 
+            new ServiceMethodCallback<Boolean>(){
+            @Override
+            public void onSuccess(Boolean result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.isValidCmdSn(cmdSn,nativeCallback);
 
     }
     // 108 SERIVCE PORT : isValidAckChannel
@@ -2778,17 +3007,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param ackChannel
      * @return 
      */
-    public ListenableFuture<Boolean> isValidAckChannel(String ackChannel){
+    public void isValidAckChannel(String ackChannel,final ServiceMethodCallback<Boolean> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Boolean> future = Futures.transform(
-                service.isValidAckChannel(ackChannel), 
-                new com.google.common.base.Function<Boolean,Boolean>(){
-                    @Override
-                    public Boolean apply(Boolean input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Boolean>(service,future);
+        ServiceMethodCallback<Boolean> nativeCallback = 
+            new ServiceMethodCallback<Boolean>(){
+            @Override
+            public void onSuccess(Boolean result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.isValidAckChannel(ackChannel,nativeCallback);
 
     }
     // 109 SERIVCE PORT : getRedisParameters
@@ -2806,17 +3037,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<Map<net.gdface.facelog.client.thrift.MQParam, String>> getRedisParameters(net.gdface.facelog.client.thrift.Token token){
+    public void getRedisParameters(net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Map<net.gdface.facelog.client.thrift.MQParam, String>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Map<net.gdface.facelog.client.thrift.MQParam, String>> future = Futures.transform(
-                service.getRedisParameters(token), 
-                new com.google.common.base.Function<Map<net.gdface.facelog.client.thrift.MQParam, String>,Map<net.gdface.facelog.client.thrift.MQParam, String>>(){
-                    @Override
-                    public Map<net.gdface.facelog.client.thrift.MQParam, String> apply(Map<net.gdface.facelog.client.thrift.MQParam, String> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Map<net.gdface.facelog.client.thrift.MQParam, String>>(service,future);
+        ServiceMethodCallback<Map<net.gdface.facelog.client.thrift.MQParam, String>> nativeCallback = 
+            new ServiceMethodCallback<Map<net.gdface.facelog.client.thrift.MQParam, String>>(){
+            @Override
+            public void onSuccess(Map<net.gdface.facelog.client.thrift.MQParam, String> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getRedisParameters(token,nativeCallback);
 
     }
     // 110 SERIVCE PORT : getProperty
@@ -2827,21 +3060,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<String> getProperty(
+    public void getProperty(
             String key,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<String> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<String> future = Futures.transform(
-                service.getProperty(
+        ServiceMethodCallback<String> nativeCallback = 
+            new ServiceMethodCallback<String>(){
+            @Override
+            public void onSuccess(String result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getProperty(
                     key,
-                    token), 
-                new com.google.common.base.Function<String,String>(){
-                    @Override
-                    public String apply(String input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,String>(service,future);
+                    token,nativeCallback);
 
     }
     // 111 SERIVCE PORT : getServiceConfig
@@ -2851,17 +3086,19 @@ public class IFaceLogClientAsync implements Constant{
      * @param token 访问令牌
      * @return 
      */
-    public ListenableFuture<Map<String, String>> getServiceConfig(net.gdface.facelog.client.thrift.Token token){
+    public void getServiceConfig(net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Map<String, String>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Map<String, String>> future = Futures.transform(
-                service.getServiceConfig(token), 
-                new com.google.common.base.Function<Map<String, String>,Map<String, String>>(){
-                    @Override
-                    public Map<String, String> apply(Map<String, String> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Map<String, String>>(service,future);
+        ServiceMethodCallback<Map<String, String>> nativeCallback = 
+            new ServiceMethodCallback<Map<String, String>>(){
+            @Override
+            public void onSuccess(Map<String, String> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.getServiceConfig(token,nativeCallback);
 
     }
     // 112 SERIVCE PORT : setProperty
@@ -2872,23 +3109,25 @@ public class IFaceLogClientAsync implements Constant{
      * @param value 参数值
      * @param token 访问令牌
      */
-    public ListenableFuture<Void> setProperty(
+    public void setProperty(
             String key,
             String value,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Void> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Void> future = Futures.transform(
-                service.setProperty(
+        ServiceMethodCallback<Void> nativeCallback = 
+            new ServiceMethodCallback<Void>(){
+            @Override
+            public void onSuccess(Void result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.setProperty(
                     key,
                     value,
-                    token), 
-                new com.google.common.base.Function<Void,Void>(){
-                    @Override
-                    public Void apply(Void input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Void>(service,future);
+                    token,nativeCallback);
 
     }
     // 113 SERIVCE PORT : setProperties
@@ -2898,21 +3137,23 @@ public class IFaceLogClientAsync implements Constant{
      * @param config 参数名-参数值对
      * @param token 访问令牌
      */
-    public ListenableFuture<Void> setProperties(
+    public void setProperties(
             Map<String, String> config,
-            net.gdface.facelog.client.thrift.Token token){
+            net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Void> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Void> future = Futures.transform(
-                service.setProperties(
+        ServiceMethodCallback<Void> nativeCallback = 
+            new ServiceMethodCallback<Void>(){
+            @Override
+            public void onSuccess(Void result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.setProperties(
                     config,
-                    token), 
-                new com.google.common.base.Function<Void,Void>(){
-                    @Override
-                    public Void apply(Void input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Void>(service,future);
+                    token,nativeCallback);
 
     }
     // 114 SERIVCE PORT : saveServiceConfig
@@ -2922,17 +3163,19 @@ public class IFaceLogClientAsync implements Constant{
      * <br>{@link TokenMangement.Enable#ROOT_ONLY}
      * @param token 访问令牌
      */
-    public ListenableFuture<Void> saveServiceConfig(net.gdface.facelog.client.thrift.Token token){
+    public void saveServiceConfig(net.gdface.facelog.client.thrift.Token token,final ServiceMethodCallback<Void> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Void> future = Futures.transform(
-                service.saveServiceConfig(token), 
-                new com.google.common.base.Function<Void,Void>(){
-                    @Override
-                    public Void apply(Void input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Void>(service,future);
+        ServiceMethodCallback<Void> nativeCallback = 
+            new ServiceMethodCallback<Void>(){
+            @Override
+            public void onSuccess(Void result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.saveServiceConfig(token,nativeCallback);
 
     }
     // 115 SERIVCE PORT : version
@@ -2940,17 +3183,19 @@ public class IFaceLogClientAsync implements Constant{
      * 返回服务版本号 {@link Version#VERSION}
      * @return 
      */
-    public ListenableFuture<String> version(){
+    public void version(final ServiceMethodCallback<String> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<String> future = Futures.transform(
-                service.version(), 
-                new com.google.common.base.Function<String,String>(){
-                    @Override
-                    public String apply(String input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,String>(service,future);
+        ServiceMethodCallback<String> nativeCallback = 
+            new ServiceMethodCallback<String>(){
+            @Override
+            public void onSuccess(String result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.version(nativeCallback);
 
     }
     // 116 SERIVCE PORT : versionInfo
@@ -2964,17 +3209,19 @@ public class IFaceLogClientAsync implements Constant{
      * </ul>
      * @return 
      */
-    public ListenableFuture<Map<String, String>> versionInfo(){
+    public void versionInfo(final ServiceMethodCallback<Map<String, String>> callback){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
-        ListenableFuture<Map<String, String>> future = Futures.transform(
-                service.versionInfo(), 
-                new com.google.common.base.Function<Map<String, String>,Map<String, String>>(){
-                    @Override
-                    public Map<String, String> apply(Map<String, String> input) {
-                        return input;
-                    }
-                },MoreExecutors.directExecutor());
-        return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog,Map<String, String>>(service,future);
+        ServiceMethodCallback<Map<String, String>> nativeCallback = 
+            new ServiceMethodCallback<Map<String, String>>(){
+            @Override
+            public void onSuccess(Map<String, String> result) {
+                callback.onSuccess(result);
+            }
+            @Override
+            public void onError(Throwable error) {
+                callback.onError(error);
+            }};
+        service.versionInfo(nativeCallback);
 
     }
     ///////////////// CLIENT EXTENSIVE CONVENIENCE TOOLS /////////////
