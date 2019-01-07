@@ -71,7 +71,25 @@ public class IFaceLogClient implements Constant{
     IFaceLogClient(ClientFactory factory){
         this.factory = checkNotNull(factory,"factory is null");
     }
-    
+    private class MethodCallback<L,R> implements ServiceMethodCallback<R>{
+    	final SettableFuture<L> feature = SettableFuture.create();
+    	final Function<R,L> transformer;
+
+    	MethodCallback(Function<R, L> transformer) {
+    		this.transformer = transformer;
+    	}
+
+    	@Override
+    	public void onSuccess(R result) {
+    		feature.set(transformer.apply(result));
+    	}
+
+    	@Override 
+    	public void onError(Throwable error) {
+    		feature.setException(error);
+    	}
+
+    }
     // 1 SERIVCE PORT : getPerson
     /**
      * 返回personId指定的人员记录
