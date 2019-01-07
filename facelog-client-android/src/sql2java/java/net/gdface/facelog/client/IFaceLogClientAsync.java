@@ -92,7 +92,6 @@ public class IFaceLogClientAsync implements Constant{
     	public void onError(Throwable error) {
     		feature.setException(error);
     	}
-
     }
     // 1 SERIVCE PORT : getPerson
     /**
