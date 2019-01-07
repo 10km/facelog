@@ -580,13 +580,13 @@ public class IFaceLogClient implements Constant{
      */
     public PersonBean savePerson(
             PersonBean bean,
-            byte[] idPhoto,
+            ByteBuffer idPhoto,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
         try{
             return converterPersonBean.fromRight(service.savePersonWithPhoto(
                     converterPersonBean.toRight(bean),
-                    idPhoto,
+                    GenericUtils.toBytes(idPhoto),
                     token));
         }
         catch(RuntimeTApplicationException e){
@@ -604,7 +604,7 @@ public class IFaceLogClient implements Constant{
     }
     // 22 GENERIC
     /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[],net.gdface.facelog.client.thrift.Token)}<br>
+     * Generic version of {@link #savePerson(PersonBean,ByteBuffer,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -706,7 +706,7 @@ public class IFaceLogClient implements Constant{
      */
     public PersonBean savePerson(
             PersonBean bean,
-            byte[] idPhoto,
+            ByteBuffer idPhoto,
             FeatureBean featureBean,
             Integer deviceId,
             net.gdface.facelog.client.thrift.Token token){
@@ -714,7 +714,7 @@ public class IFaceLogClient implements Constant{
         try{
             return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeature(
                     converterPersonBean.toRight(bean),
-                    idPhoto,
+                    GenericUtils.toBytes(idPhoto),
                     converterFeatureBean.toRight(featureBean),
                     deviceId,
                     token));
@@ -734,7 +734,7 @@ public class IFaceLogClient implements Constant{
     }
     // 25 GENERIC
     /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[],FeatureBean,Integer,net.gdface.facelog.client.thrift.Token)}<br>
+     * Generic version of {@link #savePerson(PersonBean,ByteBuffer,FeatureBean,Integer,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -781,16 +781,16 @@ public class IFaceLogClient implements Constant{
      */
     public PersonBean savePerson(
             PersonBean bean,
-            byte[] idPhoto,
-            byte[] feature,
+            ByteBuffer idPhoto,
+            ByteBuffer feature,
             List<FaceBean> faceBeans,
             net.gdface.facelog.client.thrift.Token token){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
         try{
             return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiFaces(
                     converterPersonBean.toRight(bean),
-                    idPhoto,
-                    feature,
+                    GenericUtils.toBytes(idPhoto),
+                    GenericUtils.toBytes(feature),
                     converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faceBeans)),
                     token));
         }
@@ -809,7 +809,7 @@ public class IFaceLogClient implements Constant{
     }
     // 26 GENERIC
     /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],List,net.gdface.facelog.client.thrift.Token)}<br>
+     * Generic version of {@link #savePerson(PersonBean,ByteBuffer,ByteBuffer,List,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -857,8 +857,8 @@ public class IFaceLogClient implements Constant{
      */
     public PersonBean savePerson(
             PersonBean bean,
-            byte[] idPhoto,
-            byte[] feature,
+            ByteBuffer idPhoto,
+            ByteBuffer feature,
             Map<ByteBuffer, FaceBean> faceInfo,
             Integer deviceId,
             net.gdface.facelog.client.thrift.Token token){
@@ -866,8 +866,8 @@ public class IFaceLogClient implements Constant{
         try{
             return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiImage(
                     converterPersonBean.toRight(bean),
-                    idPhoto,
-                    feature,
+                    GenericUtils.toBytes(idPhoto),
+                    GenericUtils.toBytes(feature),
                     GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                     deviceId,
                     token));
@@ -887,7 +887,7 @@ public class IFaceLogClient implements Constant{
     }
     // 27 GENERIC
     /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],Map,Integer,net.gdface.facelog.client.thrift.Token)}<br>
+     * Generic version of {@link #savePerson(PersonBean,ByteBuffer,ByteBuffer,Map,Integer,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -936,9 +936,9 @@ public class IFaceLogClient implements Constant{
      */
     public PersonBean savePerson(
             PersonBean bean,
-            byte[] idPhoto,
-            byte[] feature,
-            byte[] featureImage,
+            ByteBuffer idPhoto,
+            ByteBuffer feature,
+            ByteBuffer featureImage,
             FaceBean featureFaceBean,
             Integer deviceId,
             net.gdface.facelog.client.thrift.Token token){
@@ -946,9 +946,9 @@ public class IFaceLogClient implements Constant{
         try{
             return converterPersonBean.fromRight(service.savePersonFull(
                     converterPersonBean.toRight(bean),
-                    idPhoto,
-                    feature,
-                    featureImage,
+                    GenericUtils.toBytes(idPhoto),
+                    GenericUtils.toBytes(feature),
+                    GenericUtils.toBytes(featureImage),
                     converterFaceBean.toRight(featureFaceBean),
                     deviceId,
                     token));
@@ -968,7 +968,7 @@ public class IFaceLogClient implements Constant{
     }
     // 28 GENERIC
     /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],byte[],FaceBean,Integer,net.gdface.facelog.client.thrift.Token)}<br>
+     * Generic version of {@link #savePerson(PersonBean,ByteBuffer,ByteBuffer,ByteBuffer,FaceBean,Integer,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -1337,7 +1337,7 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      */
     public ImageBean addImage(
-            byte[] imageData,
+            ByteBuffer imageData,
             Integer deviceId,
             FaceBean faceBean,
             Integer personId,
@@ -1345,7 +1345,7 @@ public class IFaceLogClient implements Constant{
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
         try{
             return converterImageBean.fromRight(service.addImage(
-                    imageData,
+                    GenericUtils.toBytes(imageData),
                     deviceId,
                     converterFaceBean.toRight(faceBean),
                     personId,
@@ -1366,7 +1366,7 @@ public class IFaceLogClient implements Constant{
     }
     // 42 GENERIC
     /** 
-     * Generic version of {@link #addImage(byte[],Integer,FaceBean,Integer,net.gdface.facelog.client.thrift.Token)}<br>
+     * Generic version of {@link #addImage(ByteBuffer,Integer,FaceBean,Integer,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -1429,14 +1429,14 @@ public class IFaceLogClient implements Constant{
      * @throws DuplicateRecordException
      */
     public FeatureBean addFeature(
-            byte[] feature,
+            ByteBuffer feature,
             Integer personId,
             List<FaceBean> faecBeans,
             net.gdface.facelog.client.thrift.Token token)throws net.gdface.facelog.client.thrift.DuplicateRecordException{
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
         try{
             return converterFeatureBean.fromRight(service.addFeature(
-                    feature,
+                    GenericUtils.toBytes(feature),
                     personId,
                     converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faecBeans)),
                     token));
@@ -1456,7 +1456,7 @@ public class IFaceLogClient implements Constant{
     }
     // 44 GENERIC
     /** 
-     * Generic version of {@link #addFeature(byte[],Integer,List,net.gdface.facelog.client.thrift.Token)}<br>
+     * Generic version of {@link #addFeature(ByteBuffer,Integer,List,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -1501,7 +1501,7 @@ public class IFaceLogClient implements Constant{
      * @throws DuplicateRecordException
      */
     public FeatureBean addFeature(
-            byte[] feature,
+            ByteBuffer feature,
             Integer personId,
             Map<ByteBuffer, FaceBean> faceInfo,
             Integer deviceId,
@@ -1509,7 +1509,7 @@ public class IFaceLogClient implements Constant{
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
         try{
             return converterFeatureBean.fromRight(service.addFeatureMulti(
-                    feature,
+                    GenericUtils.toBytes(feature),
                     personId,
                     GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                     deviceId,
@@ -1530,7 +1530,7 @@ public class IFaceLogClient implements Constant{
     }
     // 45 GENERIC
     /** 
-     * Generic version of {@link #addFeature(byte[],Integer,Map,Integer,net.gdface.facelog.client.thrift.Token)}<br>
+     * Generic version of {@link #addFeature(ByteBuffer,Integer,Map,Integer,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -1705,10 +1705,10 @@ public class IFaceLogClient implements Constant{
      * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
      * @throws ServiceRuntimeException
      */
-    public byte[] getFeatureBytes(String md5){
+    public ByteBuffer getFeatureBytes(String md5){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
         try{
-            return service.getFeatureBytes(md5);
+            return GenericUtils.toBytes(service.getFeatureBytes(md5));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1731,10 +1731,10 @@ public class IFaceLogClient implements Constant{
      * @throws ServiceRuntimeException
      * @see {@link #getBinary(String)}
      */
-    public byte[] getImageBytes(String imageMD5){
+    public ByteBuffer getImageBytes(String imageMD5){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
         try{
-            return service.getImageBytes(imageMD5);
+            return GenericUtils.toBytes(service.getImageBytes(imageMD5));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
