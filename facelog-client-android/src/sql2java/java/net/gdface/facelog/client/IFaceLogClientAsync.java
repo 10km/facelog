@@ -108,7 +108,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getPerson(personId,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 2 SERIVCE PORT : getPersons
     /**
@@ -127,7 +126,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getPersons(CollectionUtils.checkNotNullElement(idList),nativeCallback);
         return nativeCallback.feature;
-
     }
     // 3 SERIVCE PORT : getPersonByPapersNum
     /**
@@ -146,7 +144,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getPersonByPapersNum(papersNum,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 4 SERIVCE PORT : getFeatureBeansByPersonId
     /**
@@ -165,7 +162,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getFeatureBeansByPersonId(personId,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 5 SERIVCE PORT : deletePerson
     /**
@@ -190,7 +186,6 @@ public class IFaceLogClientAsync implements Constant{
                     personId,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 6 SERIVCE PORT : deletePersons
     /**
@@ -215,7 +210,6 @@ public class IFaceLogClientAsync implements Constant{
                     CollectionUtils.checkNotNullElement(personIdList),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 7 SERIVCE PORT : deletePersonByPapersNum
     /**
@@ -241,7 +235,6 @@ public class IFaceLogClientAsync implements Constant{
                     papersNum,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 8 SERIVCE PORT : deletePersonsByPapersNum
     /**
@@ -266,7 +259,6 @@ public class IFaceLogClientAsync implements Constant{
                     CollectionUtils.checkNotNullElement(papersNumlist),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 9 SERIVCE PORT : existsPerson
     /**
@@ -285,7 +277,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.existsPerson(persionId,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 10 SERIVCE PORT : isDisable
     /**
@@ -304,7 +295,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.isDisable(personId,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 11 SERIVCE PORT : disablePerson
     /**
@@ -329,7 +319,6 @@ public class IFaceLogClientAsync implements Constant{
                     personId,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 12 SERIVCE PORT : setPersonExpiryDate
     /**
@@ -356,7 +345,6 @@ public class IFaceLogClientAsync implements Constant{
                     GenericUtils.toLong(expiryDate,Date.class),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 13 SERIVCE PORT : setPersonExpiryDateList
     /**
@@ -383,7 +371,6 @@ public class IFaceLogClientAsync implements Constant{
                     GenericUtils.toLong(expiryDate,Date.class),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 14 SERIVCE PORT : disablePersonList
     /**
@@ -407,7 +394,6 @@ public class IFaceLogClientAsync implements Constant{
                     CollectionUtils.checkNotNullElement(personIdList),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 15 SERIVCE PORT : getLogBeansByPersonId
     /**
@@ -426,7 +412,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getLogBeansByPersonId(personId,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 16 SERIVCE PORT : loadAllPerson
     /**
@@ -444,7 +429,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.loadAllPerson(nativeCallback);
         return nativeCallback.feature;
-
     }
     // 17 SERIVCE PORT : loadPersonIdByWhere
     /**
@@ -463,7 +447,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.loadPersonIdByWhere(where,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 18 SERIVCE PORT : loadPersonByWhere
     /**
@@ -490,7 +473,6 @@ public class IFaceLogClientAsync implements Constant{
                     startRow,
                     numRows,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 19 SERIVCE PORT : countPersonByWhere
     /**
@@ -509,7 +491,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.countPersonByWhere(where,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 20 SERIVCE PORT : savePerson
     /**
@@ -533,7 +514,6 @@ public class IFaceLogClientAsync implements Constant{
                     converterPersonBean.toRight(bean),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 21 SERIVCE PORT : savePersons
     /**
@@ -557,7 +537,6 @@ public class IFaceLogClientAsync implements Constant{
                     converterPersonBean.toRight(CollectionUtils.checkNotNullElement(beans)),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 22 SERIVCE PORT : savePersonWithPhoto
     /**
@@ -584,7 +563,6 @@ public class IFaceLogClientAsync implements Constant{
                     GenericUtils.toBytes(idPhoto),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 22 GENERIC
     /** 
@@ -610,7 +588,6 @@ public class IFaceLogClientAsync implements Constant{
                     GenericUtils.toBytes(idPhoto),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 23 SERIVCE PORT : savePersonsWithPhoto
     /**
@@ -635,7 +612,6 @@ public class IFaceLogClientAsync implements Constant{
                     GenericUtils.toBytesKey(converterPersonBean.toRightValue(persons)),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 24 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
     /**
@@ -665,7 +641,6 @@ public class IFaceLogClientAsync implements Constant{
                     featureMd5,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 25 SERIVCE PORT : savePersonWithPhotoAndFeature
     /**
@@ -699,7 +674,6 @@ public class IFaceLogClientAsync implements Constant{
                     deviceId,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 25 GENERIC
     /** 
@@ -729,7 +703,6 @@ public class IFaceLogClientAsync implements Constant{
                     deviceId,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 26 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
     /**
@@ -763,7 +736,6 @@ public class IFaceLogClientAsync implements Constant{
                     converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faceBeans)),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 26 GENERIC
     /** 
@@ -793,7 +765,6 @@ public class IFaceLogClientAsync implements Constant{
                     converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faceBeans)),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 27 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
     /**
@@ -830,7 +801,6 @@ public class IFaceLogClientAsync implements Constant{
                     deviceId,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 27 GENERIC
     /** 
@@ -862,7 +832,6 @@ public class IFaceLogClientAsync implements Constant{
                     deviceId,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 28 SERIVCE PORT : savePersonFull
     /**
@@ -901,7 +870,6 @@ public class IFaceLogClientAsync implements Constant{
                     deviceId,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 28 GENERIC
     /** 
@@ -935,7 +903,6 @@ public class IFaceLogClientAsync implements Constant{
                     deviceId,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 29 SERIVCE PORT : replaceFeature
     /**
@@ -964,7 +931,6 @@ public class IFaceLogClientAsync implements Constant{
                     deleteOldFeatureImage,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 30 SERIVCE PORT : loadUpdatedPersons
     /**
@@ -985,7 +951,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.loadUpdatedPersons(GenericUtils.toLong(timestamp,Date.class),nativeCallback);
         return nativeCallback.feature;
-
     }
     // 31 SERIVCE PORT : loadPersonIdByUpdateTime
     /**
@@ -1005,7 +970,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.loadPersonIdByUpdateTime(GenericUtils.toLong(timestamp,Date.class),nativeCallback);
         return nativeCallback.feature;
-
     }
     // 32 SERIVCE PORT : loadFeatureMd5ByUpdate
     /**
@@ -1025,7 +989,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.loadFeatureMd5ByUpdate(GenericUtils.toLong(timestamp,Date.class),nativeCallback);
         return nativeCallback.feature;
-
     }
     // 33 SERIVCE PORT : addLog
     /**
@@ -1049,7 +1012,6 @@ public class IFaceLogClientAsync implements Constant{
                     converterLogBean.toRight(bean),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 34 SERIVCE PORT : addLogs
     /**
@@ -1073,7 +1035,6 @@ public class IFaceLogClientAsync implements Constant{
                     converterLogBean.toRight(CollectionUtils.checkNotNullElement(beans)),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 35 SERIVCE PORT : loadLogByWhere
     /**
@@ -1101,7 +1062,6 @@ public class IFaceLogClientAsync implements Constant{
                     startRow,
                     numRows,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 36 SERIVCE PORT : loadLogLightByWhere
     /**
@@ -1129,7 +1089,6 @@ public class IFaceLogClientAsync implements Constant{
                     startRow,
                     numRows,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 37 SERIVCE PORT : countLogLightByWhere
     /**
@@ -1148,7 +1107,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.countLogLightByWhere(where,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 38 SERIVCE PORT : countLogByWhere
     /**
@@ -1167,7 +1125,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.countLogByWhere(where,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 39 SERIVCE PORT : loadLogLightByVerifyTime
     /**
@@ -1192,7 +1149,6 @@ public class IFaceLogClientAsync implements Constant{
                     startRow,
                     numRows,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 40 SERIVCE PORT : countLogLightByVerifyTime
     /**
@@ -1210,7 +1166,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.countLogLightByVerifyTime(GenericUtils.toLong(timestamp,Date.class),nativeCallback);
         return nativeCallback.feature;
-
     }
     // 41 SERIVCE PORT : existsImage
     /**
@@ -1229,7 +1184,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.existsImage(md5,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 42 SERIVCE PORT : addImage
     /**
@@ -1262,7 +1216,6 @@ public class IFaceLogClientAsync implements Constant{
                     personId,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 42 GENERIC
     /** 
@@ -1292,7 +1245,6 @@ public class IFaceLogClientAsync implements Constant{
                     personId,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 43 SERIVCE PORT : existsFeature
     /**
@@ -1311,7 +1263,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.existsFeature(md5,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 44 SERIVCE PORT : addFeature
     /**
@@ -1342,7 +1293,6 @@ public class IFaceLogClientAsync implements Constant{
                     converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faecBeans)),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 44 GENERIC
     /** 
@@ -1370,7 +1320,6 @@ public class IFaceLogClientAsync implements Constant{
                     converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faecBeans)),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 45 SERIVCE PORT : addFeatureMulti
     /**
@@ -1404,7 +1353,6 @@ public class IFaceLogClientAsync implements Constant{
                     deviceId,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 45 GENERIC
     /** 
@@ -1434,7 +1382,6 @@ public class IFaceLogClientAsync implements Constant{
                     deviceId,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 46 SERIVCE PORT : deleteFeature
     /**
@@ -1462,7 +1409,6 @@ public class IFaceLogClientAsync implements Constant{
                     deleteImage,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 47 SERIVCE PORT : deleteAllFeaturesByPersonId
     /**
@@ -1490,7 +1436,6 @@ public class IFaceLogClientAsync implements Constant{
                     deleteImage,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 48 SERIVCE PORT : getFeature
     /**
@@ -1509,7 +1454,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getFeature(md5,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 49 SERIVCE PORT : getFeatures
     /**
@@ -1528,7 +1472,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getFeatures(CollectionUtils.checkNotNullElement(md5),nativeCallback);
         return nativeCallback.feature;
-
     }
     // 50 SERIVCE PORT : getFeaturesOfPerson
     /**
@@ -1547,7 +1490,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getFeaturesOfPerson(personId,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 51 SERIVCE PORT : getFeatureBytes
     /**
@@ -1566,7 +1508,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getFeatureBytes(md5,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 52 SERIVCE PORT : getImageBytes
     /**
@@ -1586,7 +1527,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getImageBytes(imageMD5,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 53 SERIVCE PORT : getImage
     /**
@@ -1605,7 +1545,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getImage(imageMD5,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 54 SERIVCE PORT : getImagesAssociatedByFeature
     /**
@@ -1624,7 +1563,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getImagesAssociatedByFeature(featureMd5,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 55 SERIVCE PORT : getDeviceIdOfFeature
     /**
@@ -1643,7 +1581,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getDeviceIdOfFeature(featureMd5,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 56 SERIVCE PORT : deleteImage
     /**
@@ -1667,7 +1604,6 @@ public class IFaceLogClientAsync implements Constant{
                     imageMd5,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 57 SERIVCE PORT : existsDevice
     /**
@@ -1686,7 +1622,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.existsDevice(id,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 58 SERIVCE PORT : saveDevice
     /**
@@ -1711,7 +1646,6 @@ public class IFaceLogClientAsync implements Constant{
                     converterDeviceBean.toRight(deviceBean),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 59 SERIVCE PORT : updateDevice
     /**
@@ -1735,7 +1669,6 @@ public class IFaceLogClientAsync implements Constant{
                     converterDeviceBean.toRight(deviceBean),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 60 SERIVCE PORT : getDevice
     /**
@@ -1754,7 +1687,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getDevice(deviceId,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 61 SERIVCE PORT : getDevices
     /**
@@ -1773,7 +1705,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getDevices(CollectionUtils.checkNotNullElement(idList),nativeCallback);
         return nativeCallback.feature;
-
     }
     // 62 SERIVCE PORT : loadDeviceByWhere
     /**
@@ -1800,7 +1731,6 @@ public class IFaceLogClientAsync implements Constant{
                     startRow,
                     numRows,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 63 SERIVCE PORT : countDeviceByWhere
     /**
@@ -1819,7 +1749,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.countDeviceByWhere(where,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 64 SERIVCE PORT : loadDeviceIdByWhere
     /**
@@ -1838,7 +1767,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.loadDeviceIdByWhere(where,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 65 SERIVCE PORT : saveDeviceGroup
     /**
@@ -1863,7 +1791,6 @@ public class IFaceLogClientAsync implements Constant{
                     converterDeviceGroupBean.toRight(deviceGroupBean),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 66 SERIVCE PORT : getDeviceGroup
     /**
@@ -1882,7 +1809,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getDeviceGroup(deviceGroupId,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 67 SERIVCE PORT : getDeviceGroups
     /**
@@ -1901,7 +1827,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getDeviceGroups(CollectionUtils.checkNotNullElement(groupIdList),nativeCallback);
         return nativeCallback.feature;
-
     }
     // 68 SERIVCE PORT : deleteDeviceGroup
     /**
@@ -1927,7 +1852,6 @@ public class IFaceLogClientAsync implements Constant{
                     deviceGroupId,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 69 SERIVCE PORT : getSubDeviceGroup
     /**
@@ -1947,7 +1871,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getSubDeviceGroup(deviceGroupId,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 70 SERIVCE PORT : getDevicesOfGroup
     /**
@@ -1967,7 +1890,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getDevicesOfGroup(deviceGroupId,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 71 SERIVCE PORT : listOfParentForDeviceGroup
     /**
@@ -1987,7 +1909,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.listOfParentForDeviceGroup(deviceGroupId,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 72 SERIVCE PORT : getDeviceGroupsBelongs
     /**
@@ -2007,7 +1928,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getDeviceGroupsBelongs(deviceId,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 73 SERIVCE PORT : savePersonGroup
     /**
@@ -2032,7 +1952,6 @@ public class IFaceLogClientAsync implements Constant{
                     converterPersonGroupBean.toRight(personGroupBean),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 74 SERIVCE PORT : getPersonGroup
     /**
@@ -2051,7 +1970,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getPersonGroup(personGroupId,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 75 SERIVCE PORT : getPersonGroups
     /**
@@ -2070,7 +1988,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getPersonGroups(CollectionUtils.checkNotNullElement(groupIdList),nativeCallback);
         return nativeCallback.feature;
-
     }
     // 76 SERIVCE PORT : deletePersonGroup
     /**
@@ -2096,7 +2013,6 @@ public class IFaceLogClientAsync implements Constant{
                     personGroupId,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 77 SERIVCE PORT : getSubPersonGroup
     /**
@@ -2116,7 +2032,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getSubPersonGroup(personGroupId,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 78 SERIVCE PORT : getPersonsOfGroup
     /**
@@ -2136,7 +2051,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getPersonsOfGroup(personGroupId,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 79 SERIVCE PORT : listOfParentForPersonGroup
     /**
@@ -2156,7 +2070,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.listOfParentForPersonGroup(personGroupId,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 80 SERIVCE PORT : getPersonGroupsBelongs
     /**
@@ -2176,7 +2089,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getPersonGroupsBelongs(personId,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 81 SERIVCE PORT : loadDeviceGroupByWhere
     /**
@@ -2203,7 +2115,6 @@ public class IFaceLogClientAsync implements Constant{
                     startRow,
                     numRows,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 82 SERIVCE PORT : countDeviceGroupByWhere
     /**
@@ -2220,7 +2131,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.countDeviceGroupByWhere(where,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 83 SERIVCE PORT : loadDeviceGroupIdByWhere
     /**
@@ -2239,7 +2149,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.loadDeviceGroupIdByWhere(where,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 84 SERIVCE PORT : addPermit
     /**
@@ -2267,7 +2176,6 @@ public class IFaceLogClientAsync implements Constant{
                     converterPersonGroupBean.toRight(personGroup),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 85 SERIVCE PORT : addPermitById
     /**
@@ -2296,7 +2204,6 @@ public class IFaceLogClientAsync implements Constant{
                     personGroupId,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 86 SERIVCE PORT : deletePermit
     /**
@@ -2324,7 +2231,6 @@ public class IFaceLogClientAsync implements Constant{
                     converterPersonGroupBean.toRight(personGroup),
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 87 SERIVCE PORT : getGroupPermit
     /**
@@ -2349,7 +2255,6 @@ public class IFaceLogClientAsync implements Constant{
                     deviceId,
                     personGroupId,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 88 SERIVCE PORT : getPersonPermit
     /**
@@ -2374,7 +2279,6 @@ public class IFaceLogClientAsync implements Constant{
                     deviceId,
                     personId,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 89 SERIVCE PORT : getGroupPermits
     /**
@@ -2395,7 +2299,6 @@ public class IFaceLogClientAsync implements Constant{
                     deviceId,
                     CollectionUtils.checkNotNullElement(personGroupIdList),nativeCallback);
         return nativeCallback.feature;
-
     }
     // 90 SERIVCE PORT : getPersonPermits
     /**
@@ -2416,7 +2319,6 @@ public class IFaceLogClientAsync implements Constant{
                     deviceId,
                     CollectionUtils.checkNotNullElement(personIdList),nativeCallback);
         return nativeCallback.feature;
-
     }
     // 91 SERIVCE PORT : loadPermitByUpdate
     /**
@@ -2436,7 +2338,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.loadPermitByUpdate(GenericUtils.toLong(timestamp,Date.class),nativeCallback);
         return nativeCallback.feature;
-
     }
     // 92 SERIVCE PORT : loadPersonGroupByWhere
     /**
@@ -2463,7 +2364,6 @@ public class IFaceLogClientAsync implements Constant{
                     startRow,
                     numRows,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 93 SERIVCE PORT : countPersonGroupByWhere
     /**
@@ -2481,7 +2381,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.countPersonGroupByWhere(where,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 94 SERIVCE PORT : loadPersonGroupIdByWhere
     /**
@@ -2500,7 +2399,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.loadPersonGroupIdByWhere(where,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 95 SERIVCE PORT : registerDevice
     /**
@@ -2520,7 +2418,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.registerDevice(converterDeviceBean.toRight(newDevice),nativeCallback);
         return nativeCallback.feature;
-
     }
     // 96 SERIVCE PORT : unregisterDevice
     /**
@@ -2544,7 +2441,6 @@ public class IFaceLogClientAsync implements Constant{
                     deviceId,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 97 SERIVCE PORT : online
     /**
@@ -2563,7 +2459,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.online(converterDeviceBean.toRight(device),nativeCallback);
         return nativeCallback.feature;
-
     }
     // 98 SERIVCE PORT : offline
     /**
@@ -2582,7 +2477,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.offline(token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 99 SERIVCE PORT : applyPersonToken
     /**
@@ -2609,7 +2503,6 @@ public class IFaceLogClientAsync implements Constant{
                     password,
                     isMd5,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 100 SERIVCE PORT : releasePersonToken
     /**
@@ -2628,7 +2521,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.releasePersonToken(token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 101 SERIVCE PORT : applyRootToken
     /**
@@ -2652,7 +2544,6 @@ public class IFaceLogClientAsync implements Constant{
                     password,
                     isMd5,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 102 SERIVCE PORT : releaseRootToken
     /**
@@ -2671,7 +2562,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.releaseRootToken(token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 103 SERIVCE PORT : isValidPassword
     /**
@@ -2702,7 +2592,6 @@ public class IFaceLogClientAsync implements Constant{
                     isMd5,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 104 SERIVCE PORT : applyAckChannel
     /**
@@ -2722,7 +2611,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.applyAckChannel(token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 105 SERIVCE PORT : applyAckChannelWithDuration
     /**
@@ -2747,7 +2635,6 @@ public class IFaceLogClientAsync implements Constant{
                     token,
                     duration,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 106 SERIVCE PORT : applyCmdSn
     /**
@@ -2767,7 +2654,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.applyCmdSn(token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 107 SERIVCE PORT : isValidCmdSn
     /**
@@ -2787,7 +2673,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.isValidCmdSn(cmdSn,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 108 SERIVCE PORT : isValidAckChannel
     /**
@@ -2807,7 +2692,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.isValidAckChannel(ackChannel,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 109 SERIVCE PORT : getRedisParameters
     /**
@@ -2835,7 +2719,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getRedisParameters(token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 110 SERIVCE PORT : getProperty
     /**
@@ -2860,7 +2743,6 @@ public class IFaceLogClientAsync implements Constant{
                     key,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 111 SERIVCE PORT : getServiceConfig
     /**
@@ -2880,7 +2762,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.getServiceConfig(token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 112 SERIVCE PORT : setProperty
     /**
@@ -2907,7 +2788,6 @@ public class IFaceLogClientAsync implements Constant{
                     value,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 113 SERIVCE PORT : setProperties
     /**
@@ -2931,7 +2811,6 @@ public class IFaceLogClientAsync implements Constant{
                     config,
                     token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 114 SERIVCE PORT : saveServiceConfig
     /**
@@ -2951,7 +2830,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.saveServiceConfig(token,nativeCallback);
         return nativeCallback.feature;
-
     }
     // 115 SERIVCE PORT : version
     /**
@@ -2969,7 +2847,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.version(nativeCallback);
         return nativeCallback.feature;
-
     }
     // 116 SERIVCE PORT : versionInfo
     /**
@@ -2993,7 +2870,6 @@ public class IFaceLogClientAsync implements Constant{
                 }});
         service.versionInfo(nativeCallback);
         return nativeCallback.feature;
-
     }
     ///////////////// CLIENT EXTENSIVE CONVENIENCE TOOLS /////////////
     
