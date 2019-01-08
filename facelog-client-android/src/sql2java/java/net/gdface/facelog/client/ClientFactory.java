@@ -7,12 +7,12 @@
 // ______________________________________________________
 package net.gdface.facelog.client;
 
+import java.lang.reflect.Field;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.logging.Logger;
 
 import com.google.common.base.Throwables;
 import com.google.common.cache.Cache;
@@ -116,6 +116,10 @@ public class ClientFactory {
 				                        .readTimeout((int) readTimeout).build();
 				            transport.connect();
 				            Protocol protocol = new BinaryProtocol(transport);
+				            /* force set private field 'strictWrite' to true */
+				            Field field = BinaryProtocol.class.getDeclaredField("strictWrite");
+				            field.setAccessible(true);
+				            field.set(protocol, true);
                     return new net.gdface.facelog.client.thrift.IFaceLogClient(protocol,DEFAULT_CLOSE_LISTENER);
                 }});
         } catch (Exception e) {
