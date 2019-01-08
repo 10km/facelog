@@ -75,8 +75,8 @@
      */
     public CmdManager makeCmdManager(net.gdface.facelog.client.thrift.Token token){
         try{
-            checkArgument(checkNotNull(token).getType() == net.gdface.facelog.client.thrift.TokenType.PERSON 
-                || token.getType() == net.gdface.facelog.client.thrift.TokenType.ROOT,"person or root token required");
+            checkArgument(checkNotNull(token).type == net.gdface.facelog.client.thrift.TokenType.PERSON 
+                || token.type == net.gdface.facelog.client.thrift.TokenType.ROOT,"person or root token required");
             
             return new CmdManager(
                     gu.simplemq.redis.JedisPoolLazy.getDefaultInstance(),
@@ -94,8 +94,8 @@
      */
     public CmdDispatcher makeCmdDispatcher(net.gdface.facelog.client.thrift.Token token){
         try{
-            checkArgument(checkNotNull(token).getType() == net.gdface.facelog.client.thrift.TokenType.DEVICE,"device token required");
-            int deviceId = token.getId();
+            checkArgument(checkNotNull(token).type == net.gdface.facelog.client.thrift.TokenType.DEVICE,"device token required");
+            int deviceId = token.id;
             return new CmdDispatcher(deviceId,
                     this.getDeviceGroupIdSupplier(deviceId))
                 .setCmdSnValidator(cmdSnValidator)

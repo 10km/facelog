@@ -1708,7 +1708,7 @@ public class IFaceLogClient implements Constant{
     public ByteBuffer getFeatureBytes(String md5){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
         try{
-            return GenericUtils.toBytes(service.getFeatureBytes(md5));
+            return GenericUtils.toBuffer(service.getFeatureBytes(md5));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1734,7 +1734,7 @@ public class IFaceLogClient implements Constant{
     public ByteBuffer getImageBytes(String imageMD5){
         final net.gdface.facelog.client.thrift.IFaceLog service = factory.applyInstance();
         try{
-            return GenericUtils.toBytes(service.getImageBytes(imageMD5));
+            return GenericUtils.toBuffer(service.getImageBytes(imageMD5));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -3438,8 +3438,8 @@ public class IFaceLogClient implements Constant{
      */
     public CmdManager makeCmdManager(net.gdface.facelog.client.thrift.Token token){
         try{
-            checkArgument(checkNotNull(token).getType() == net.gdface.facelog.client.thrift.TokenType.PERSON 
-                || token.getType() == net.gdface.facelog.client.thrift.TokenType.ROOT,"person or root token required");
+            checkArgument(checkNotNull(token).type == net.gdface.facelog.client.thrift.TokenType.PERSON 
+                || token.type == net.gdface.facelog.client.thrift.TokenType.ROOT,"person or root token required");
             
             return new CmdManager(
                     gu.simplemq.redis.JedisPoolLazy.getDefaultInstance(),
@@ -3457,8 +3457,8 @@ public class IFaceLogClient implements Constant{
      */
     public CmdDispatcher makeCmdDispatcher(net.gdface.facelog.client.thrift.Token token){
         try{
-            checkArgument(checkNotNull(token).getType() == net.gdface.facelog.client.thrift.TokenType.DEVICE,"device token required");
-            int deviceId = token.getId();
+            checkArgument(checkNotNull(token).type == net.gdface.facelog.client.thrift.TokenType.DEVICE,"device token required");
+            int deviceId = token.id;
             return new CmdDispatcher(deviceId,
                     this.getDeviceGroupIdSupplier(deviceId))
                 .setCmdSnValidator(cmdSnValidator)
