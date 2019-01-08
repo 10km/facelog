@@ -9,6 +9,7 @@ package net.gdface.facelog.client;
 
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.MoreExecutors;
 import static com.google.common.base.Preconditions.*;
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -90,7 +91,7 @@ public class IFaceLogClientAsync implements Constant{
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
@@ -109,7 +110,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
                         return PersonBean.replaceNullInstance(converterPersonBean.fromRight(input));
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<PersonBean>>(service,future);
 
     }
@@ -128,7 +129,7 @@ public class IFaceLogClientAsync implements Constant{
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
@@ -147,7 +148,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<String> apply(List<String> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<String>>(service,future);
 
     }
@@ -172,7 +173,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Integer apply(Integer input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
@@ -197,7 +198,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Integer apply(Integer input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
@@ -223,7 +224,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Integer apply(Integer input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
@@ -248,7 +249,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Integer apply(Integer input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
@@ -267,7 +268,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Boolean apply(Boolean input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
@@ -286,7 +287,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Boolean apply(Boolean input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
@@ -311,7 +312,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Void apply(Void input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
@@ -338,7 +339,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Void apply(Void input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
@@ -365,7 +366,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Void apply(Void input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
@@ -389,7 +390,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Void apply(Void input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
@@ -408,7 +409,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<LogBean> apply(List<net.gdface.facelog.client.thrift.LogBean> input) {
                         return LogBean.replaceNullInstance(converterLogBean.fromRight(input));
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<LogBean>>(service,future);
 
     }
@@ -426,7 +427,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<Integer> apply(List<Integer> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
@@ -445,7 +446,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<Integer> apply(List<Integer> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
@@ -472,7 +473,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
                         return PersonBean.replaceNullInstance(converterPersonBean.fromRight(input));
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<PersonBean>>(service,future);
 
     }
@@ -491,7 +492,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Integer apply(Integer input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
@@ -515,7 +516,7 @@ public class IFaceLogClientAsync implements Constant{
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
@@ -539,7 +540,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Void apply(Void input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
@@ -566,7 +567,7 @@ public class IFaceLogClientAsync implements Constant{
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
@@ -592,7 +593,7 @@ public class IFaceLogClientAsync implements Constant{
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
@@ -617,7 +618,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Integer apply(Integer input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
@@ -647,7 +648,7 @@ public class IFaceLogClientAsync implements Constant{
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
@@ -681,7 +682,7 @@ public class IFaceLogClientAsync implements Constant{
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
@@ -711,7 +712,7 @@ public class IFaceLogClientAsync implements Constant{
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
@@ -745,7 +746,7 @@ public class IFaceLogClientAsync implements Constant{
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
@@ -775,7 +776,7 @@ public class IFaceLogClientAsync implements Constant{
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
@@ -812,7 +813,7 @@ public class IFaceLogClientAsync implements Constant{
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
@@ -844,7 +845,7 @@ public class IFaceLogClientAsync implements Constant{
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
@@ -883,7 +884,7 @@ public class IFaceLogClientAsync implements Constant{
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
@@ -917,7 +918,7 @@ public class IFaceLogClientAsync implements Constant{
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonBean>(service,future);
 
     }
@@ -946,7 +947,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Void apply(Void input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
@@ -967,7 +968,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<Integer> apply(List<Integer> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
@@ -987,7 +988,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<Integer> apply(List<Integer> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
@@ -1007,7 +1008,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<String> apply(List<String> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<String>>(service,future);
 
     }
@@ -1031,7 +1032,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Void apply(Void input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
@@ -1055,7 +1056,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Void apply(Void input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
@@ -1083,7 +1084,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<LogBean> apply(List<net.gdface.facelog.client.thrift.LogBean> input) {
                         return LogBean.replaceNullInstance(converterLogBean.fromRight(input));
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<LogBean>>(service,future);
 
     }
@@ -1111,7 +1112,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<LogLightBean> apply(List<net.gdface.facelog.client.thrift.LogLightBean> input) {
                         return LogLightBean.replaceNullInstance(converterLogLightBean.fromRight(input));
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<LogLightBean>>(service,future);
 
     }
@@ -1130,7 +1131,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Integer apply(Integer input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
@@ -1149,7 +1150,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Integer apply(Integer input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
@@ -1174,7 +1175,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<LogLightBean> apply(List<net.gdface.facelog.client.thrift.LogLightBean> input) {
                         return LogLightBean.replaceNullInstance(converterLogLightBean.fromRight(input));
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<LogLightBean>>(service,future);
 
     }
@@ -1192,7 +1193,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Integer apply(Integer input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
@@ -1211,7 +1212,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Boolean apply(Boolean input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
@@ -1244,7 +1245,7 @@ public class IFaceLogClientAsync implements Constant{
                     public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
                         return converterImageBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,ImageBean>(service,future);
 
     }
@@ -1274,7 +1275,7 @@ public class IFaceLogClientAsync implements Constant{
                     public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
                         return converterImageBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,ImageBean>(service,future);
 
     }
@@ -1293,7 +1294,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Boolean apply(Boolean input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
@@ -1324,7 +1325,7 @@ public class IFaceLogClientAsync implements Constant{
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
                         return converterFeatureBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,FeatureBean>(service,future);
 
     }
@@ -1352,7 +1353,7 @@ public class IFaceLogClientAsync implements Constant{
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
                         return converterFeatureBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,FeatureBean>(service,future);
 
     }
@@ -1386,7 +1387,7 @@ public class IFaceLogClientAsync implements Constant{
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
                         return converterFeatureBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,FeatureBean>(service,future);
 
     }
@@ -1416,7 +1417,7 @@ public class IFaceLogClientAsync implements Constant{
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
                         return converterFeatureBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,FeatureBean>(service,future);
 
     }
@@ -1444,7 +1445,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<String> apply(List<String> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<String>>(service,future);
 
     }
@@ -1472,7 +1473,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Integer apply(Integer input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
@@ -1491,7 +1492,7 @@ public class IFaceLogClientAsync implements Constant{
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
                         return converterFeatureBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,FeatureBean>(service,future);
 
     }
@@ -1510,7 +1511,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<FeatureBean> apply(List<net.gdface.facelog.client.thrift.FeatureBean> input) {
                         return FeatureBean.replaceNullInstance(converterFeatureBean.fromRight(input));
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<FeatureBean>>(service,future);
 
     }
@@ -1529,7 +1530,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<String> apply(List<String> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<String>>(service,future);
 
     }
@@ -1548,7 +1549,7 @@ public class IFaceLogClientAsync implements Constant{
                     public byte[] apply(byte[] input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,byte[]>(service,future);
 
     }
@@ -1568,7 +1569,7 @@ public class IFaceLogClientAsync implements Constant{
                     public byte[] apply(byte[] input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,byte[]>(service,future);
 
     }
@@ -1587,7 +1588,7 @@ public class IFaceLogClientAsync implements Constant{
                     public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
                         return converterImageBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,ImageBean>(service,future);
 
     }
@@ -1606,7 +1607,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<String> apply(List<String> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<String>>(service,future);
 
     }
@@ -1625,7 +1626,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Integer apply(Integer input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
@@ -1649,7 +1650,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Integer apply(Integer input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
@@ -1668,7 +1669,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Boolean apply(Boolean input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
@@ -1693,7 +1694,7 @@ public class IFaceLogClientAsync implements Constant{
                     public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
                         return converterDeviceBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,DeviceBean>(service,future);
 
     }
@@ -1717,7 +1718,7 @@ public class IFaceLogClientAsync implements Constant{
                     public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
                         return converterDeviceBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,DeviceBean>(service,future);
 
     }
@@ -1736,7 +1737,7 @@ public class IFaceLogClientAsync implements Constant{
                     public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
                         return converterDeviceBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,DeviceBean>(service,future);
 
     }
@@ -1755,7 +1756,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
                         return DeviceBean.replaceNullInstance(converterDeviceBean.fromRight(input));
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<DeviceBean>>(service,future);
 
     }
@@ -1782,7 +1783,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
                         return DeviceBean.replaceNullInstance(converterDeviceBean.fromRight(input));
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<DeviceBean>>(service,future);
 
     }
@@ -1801,7 +1802,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Integer apply(Integer input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
@@ -1820,7 +1821,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<Integer> apply(List<Integer> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
@@ -1845,7 +1846,7 @@ public class IFaceLogClientAsync implements Constant{
                     public DeviceGroupBean apply(net.gdface.facelog.client.thrift.DeviceGroupBean input) {
                         return converterDeviceGroupBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,DeviceGroupBean>(service,future);
 
     }
@@ -1864,7 +1865,7 @@ public class IFaceLogClientAsync implements Constant{
                     public DeviceGroupBean apply(net.gdface.facelog.client.thrift.DeviceGroupBean input) {
                         return converterDeviceGroupBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,DeviceGroupBean>(service,future);
 
     }
@@ -1883,7 +1884,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<DeviceGroupBean> apply(List<net.gdface.facelog.client.thrift.DeviceGroupBean> input) {
                         return DeviceGroupBean.replaceNullInstance(converterDeviceGroupBean.fromRight(input));
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<DeviceGroupBean>>(service,future);
 
     }
@@ -1909,7 +1910,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Integer apply(Integer input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
@@ -1929,7 +1930,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<Integer> apply(List<Integer> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
@@ -1949,7 +1950,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<Integer> apply(List<Integer> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
@@ -1969,7 +1970,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<Integer> apply(List<Integer> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
@@ -1989,7 +1990,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<Integer> apply(List<Integer> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
@@ -2014,7 +2015,7 @@ public class IFaceLogClientAsync implements Constant{
                     public PersonGroupBean apply(net.gdface.facelog.client.thrift.PersonGroupBean input) {
                         return converterPersonGroupBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonGroupBean>(service,future);
 
     }
@@ -2033,7 +2034,7 @@ public class IFaceLogClientAsync implements Constant{
                     public PersonGroupBean apply(net.gdface.facelog.client.thrift.PersonGroupBean input) {
                         return converterPersonGroupBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,PersonGroupBean>(service,future);
 
     }
@@ -2052,7 +2053,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<PersonGroupBean> apply(List<net.gdface.facelog.client.thrift.PersonGroupBean> input) {
                         return PersonGroupBean.replaceNullInstance(converterPersonGroupBean.fromRight(input));
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<PersonGroupBean>>(service,future);
 
     }
@@ -2078,7 +2079,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Integer apply(Integer input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
@@ -2098,7 +2099,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<Integer> apply(List<Integer> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
@@ -2118,7 +2119,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<Integer> apply(List<Integer> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
@@ -2138,7 +2139,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<Integer> apply(List<Integer> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
@@ -2158,7 +2159,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<Integer> apply(List<Integer> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
@@ -2185,7 +2186,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<Integer> apply(List<Integer> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
@@ -2202,7 +2203,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Integer apply(Integer input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
@@ -2221,7 +2222,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<Integer> apply(List<Integer> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
@@ -2249,7 +2250,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Void apply(Void input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
@@ -2278,7 +2279,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Void apply(Void input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
@@ -2306,7 +2307,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Integer apply(Integer input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
@@ -2331,7 +2332,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Boolean apply(Boolean input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
@@ -2356,7 +2357,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Boolean apply(Boolean input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
@@ -2377,7 +2378,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<Boolean> apply(List<Boolean> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Boolean>>(service,future);
 
     }
@@ -2398,7 +2399,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<Boolean> apply(List<Boolean> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Boolean>>(service,future);
 
     }
@@ -2418,7 +2419,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<PermitBean> apply(List<net.gdface.facelog.client.thrift.PermitBean> input) {
                         return PermitBean.replaceNullInstance(converterPermitBean.fromRight(input));
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<PermitBean>>(service,future);
 
     }
@@ -2445,7 +2446,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<Integer> apply(List<Integer> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
@@ -2463,7 +2464,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Integer apply(Integer input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Integer>(service,future);
 
     }
@@ -2482,7 +2483,7 @@ public class IFaceLogClientAsync implements Constant{
                     public List<Integer> apply(List<Integer> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,List<Integer>>(service,future);
 
     }
@@ -2502,7 +2503,7 @@ public class IFaceLogClientAsync implements Constant{
                     public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
                         return converterDeviceBean.fromRight(input);
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,DeviceBean>(service,future);
 
     }
@@ -2526,7 +2527,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Void apply(Void input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
@@ -2545,7 +2546,7 @@ public class IFaceLogClientAsync implements Constant{
                     public net.gdface.facelog.client.thrift.Token apply(net.gdface.facelog.client.thrift.Token input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,net.gdface.facelog.client.thrift.Token>(service,future);
 
     }
@@ -2564,7 +2565,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Void apply(Void input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
@@ -2591,7 +2592,7 @@ public class IFaceLogClientAsync implements Constant{
                     public net.gdface.facelog.client.thrift.Token apply(net.gdface.facelog.client.thrift.Token input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,net.gdface.facelog.client.thrift.Token>(service,future);
 
     }
@@ -2610,7 +2611,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Void apply(Void input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
@@ -2634,7 +2635,7 @@ public class IFaceLogClientAsync implements Constant{
                     public net.gdface.facelog.client.thrift.Token apply(net.gdface.facelog.client.thrift.Token input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,net.gdface.facelog.client.thrift.Token>(service,future);
 
     }
@@ -2653,7 +2654,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Void apply(Void input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
@@ -2684,7 +2685,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Boolean apply(Boolean input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
@@ -2704,7 +2705,7 @@ public class IFaceLogClientAsync implements Constant{
                     public String apply(String input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,String>(service,future);
 
     }
@@ -2729,7 +2730,7 @@ public class IFaceLogClientAsync implements Constant{
                     public String apply(String input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,String>(service,future);
 
     }
@@ -2749,7 +2750,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Long apply(Long input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Long>(service,future);
 
     }
@@ -2769,7 +2770,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Boolean apply(Boolean input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
@@ -2789,7 +2790,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Boolean apply(Boolean input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Boolean>(service,future);
 
     }
@@ -2817,7 +2818,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Map<net.gdface.facelog.client.thrift.MQParam, String> apply(Map<net.gdface.facelog.client.thrift.MQParam, String> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Map<net.gdface.facelog.client.thrift.MQParam, String>>(service,future);
 
     }
@@ -2842,7 +2843,7 @@ public class IFaceLogClientAsync implements Constant{
                     public String apply(String input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,String>(service,future);
 
     }
@@ -2862,7 +2863,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Map<String, String> apply(Map<String, String> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Map<String, String>>(service,future);
 
     }
@@ -2889,7 +2890,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Void apply(Void input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
@@ -2913,7 +2914,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Void apply(Void input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
@@ -2933,7 +2934,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Void apply(Void input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Void>(service,future);
 
     }
@@ -2951,7 +2952,7 @@ public class IFaceLogClientAsync implements Constant{
                     public String apply(String input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,String>(service,future);
 
     }
@@ -2975,7 +2976,7 @@ public class IFaceLogClientAsync implements Constant{
                     public Map<String, String> apply(Map<String, String> input) {
                         return input;
                     }
-                });
+                },MoreExecutors.directExecutor());
         return factory.new ListenableFutureDecorator<net.gdface.facelog.client.thrift.IFaceLog.Async,Map<String, String>>(service,future);
 
     }
