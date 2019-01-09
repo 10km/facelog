@@ -10,6 +10,7 @@ package net.gdface.facelog.client;
 import java.util.concurrent.atomic.AtomicReference;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
+import com.microsoft.thrifty.ThriftException;
 import com.microsoft.thrifty.service.ServiceMethodCallback;
 import static com.google.common.base.Preconditions.*;
 import java.nio.ByteBuffer;
@@ -117,7 +118,13 @@ public class IFaceLogClient implements Constant{
                 throw err.get();
             }catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
                 throw new ServiceRuntimeException(e);
-            }catch (Throwable e) {
+            }
+            catch(ThriftException e){
+                if(e.kind == ThriftException.Kind.MISSING_RESULT  ){
+                    return null;
+                }
+            }
+            catch (Throwable e) {
                 Throwables.throwIfUnchecked(e);
                 throw new RuntimeException(e);                
             }

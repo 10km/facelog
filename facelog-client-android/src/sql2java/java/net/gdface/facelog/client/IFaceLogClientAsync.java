@@ -10,6 +10,7 @@ package net.gdface.facelog.client;
 import com.google.common.base.Function;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
+import com.microsoft.thrifty.ThriftException;
 import com.microsoft.thrifty.service.ServiceMethodCallback;
 import static com.google.common.base.Preconditions.*;
 import java.nio.ByteBuffer;
