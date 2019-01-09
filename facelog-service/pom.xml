@@ -189,7 +189,7 @@
 				<plugin>
 					<groupId>com.gitee.l0km</groupId>
 					<artifactId>swift2thrift-maven-plugin</artifactId>
-					<version>1.7</version>
+					<version>1.8-SNAPSHOT</version>
 					<configuration>
 						<defaultPackage>net.gdface.facelog.service</defaultPackage>
 						<swiftClassNames>
