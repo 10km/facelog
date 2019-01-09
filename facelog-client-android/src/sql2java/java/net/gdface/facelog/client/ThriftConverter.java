@@ -7,7 +7,6 @@
 // ______________________________________________________
 package net.gdface.facelog.client;
 
-import java.lang.reflect.Field;
 import okio.ByteString;
 
 /**
@@ -16,21 +15,24 @@ import okio.ByteString;
  *
  */
 public class ThriftConverter implements Constant{
-        private static void setField(Object obj,String name,Object value)
-        {
-            try {
-                Field field = obj.getClass().getField(name);
-                field.setAccessible(true);
-                field.set(obj, value);
-            } catch ( IllegalAccessException | NoSuchFieldException  e) {
-                throw new RuntimeException(e);
-            }
+    private static class ThriftyBaseHandle <L,R> extends IBeanConverter.AbstractHandle <L,R>{
+
+        @Override
+        protected void doFromRight(L left, R right) {
+            throw new UnsupportedOperationException();            
         }
+
+        @Override
+        protected void doToRight(L left, R right) {
+            throw new UnsupportedOperationException();            
+        }        
+    }
     /** {@link IBeanConverter} implementation for convert between {@link DeviceBean} and thrift beans {@link net.gdface.facelog.client.thrift.DeviceBean} */
     public static final IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> CONVERTER_DEVICEBEAN
-            = new IBeanConverter.AbstractHandle<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean>(){
+            = new ThriftyBaseHandle<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean>(){
         @Override
-        protected void doFromRight(DeviceBean left, net.gdface.facelog.client.thrift.DeviceBean right) {
+        public DeviceBean fromRight(net.gdface.facelog.client.thrift.DeviceBean right) {
+            DeviceBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_DEVICE_ID_ID_MASK)){
                 left.setId(right.id);
@@ -61,53 +63,57 @@ public class ThriftConverter implements Constant{
             }
             left.setNew(right._new);
             left.setModified(right.modified);
+            return left;
         }
 
         @Override
-        protected void doToRight(DeviceBean left, net.gdface.facelog.client.thrift.DeviceBean right) {
+        public net.gdface.facelog.client.thrift.DeviceBean toRight(DeviceBean left) {
+           	net.gdface.facelog.client.thrift.DeviceBean.Builder builder = new net.gdface.facelog.client.thrift.DeviceBean.Builder();
+
             if(left.checkIdInitialized() ){
-                setField(right, "id", left.getId());                
+                builder.id(left.getId());
             }
             if(left.checkGroupIdInitialized() ){
-                setField(right, "groupId", left.getGroupId());                
+                builder.groupId(left.getGroupId());
             }
             if(left.checkNameInitialized() ){
-                setField(right, "name", left.getName());                
+                builder.name(left.getName());
             }
             if(left.checkVersionInitialized() ){
-                setField(right, "version", left.getVersion());                
+                builder.version(left.getVersion());
             }
             if(left.checkSerialNoInitialized() ){
-                setField(right, "serialNo", left.getSerialNo());                
+                builder.serialNo(left.getSerialNo());
             }
             if(left.checkMacInitialized() ){
-                setField(right, "mac", left.getMac());                
+                builder.mac(left.getMac());
             }
             if(left.checkRemarkInitialized() ){
-                setField(right, "remark", left.getRemark());                
+                builder.remark(left.getRemark());
             }
 // IGNORE field fl_device.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
             if(left.checkCreateTimeInitialized() ){
-                setField(right, "createTime", left.getCreateTime().getTime());
+                builder.createTime(left.getCreateTime().getTime());
             }
 */
 // IGNORE field fl_device.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
             if(left.checkUpdateTimeInitialized() ){
-                setField(right, "updateTime", left.getUpdateTime().getTime());
+                builder.updateTime(left.getUpdateTime().getTime());
             }
 */
-            setField(right,"_new",left.isNew());
-            setField(right,"modified",left.getModified());
-            setField(right,"initialized",left.getInitialized());
-
+            builder._new(left.isNew());
+            builder.modified(left.getModified());
+            builder.initialized(left.getInitialized());
+            return builder.build();
         }};
     /** {@link IBeanConverter} implementation for convert between {@link DeviceGroupBean} and thrift beans {@link net.gdface.facelog.client.thrift.DeviceGroupBean} */
     public static final IBeanConverter<DeviceGroupBean,net.gdface.facelog.client.thrift.DeviceGroupBean> CONVERTER_DEVICEGROUPBEAN
-            = new IBeanConverter.AbstractHandle<DeviceGroupBean,net.gdface.facelog.client.thrift.DeviceGroupBean>(){
+            = new ThriftyBaseHandle<DeviceGroupBean,net.gdface.facelog.client.thrift.DeviceGroupBean>(){
         @Override
-        protected void doFromRight(DeviceGroupBean left, net.gdface.facelog.client.thrift.DeviceGroupBean right) {
+        public DeviceGroupBean fromRight(net.gdface.facelog.client.thrift.DeviceGroupBean right) {
+            DeviceGroupBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_DEVICE_GROUP_ID_ID_MASK)){
                 left.setId(right.id);
@@ -138,53 +144,57 @@ public class ThriftConverter implements Constant{
             }
             left.setNew(right._new);
             left.setModified(right.modified);
+            return left;
         }
 
         @Override
-        protected void doToRight(DeviceGroupBean left, net.gdface.facelog.client.thrift.DeviceGroupBean right) {
+        public net.gdface.facelog.client.thrift.DeviceGroupBean toRight(DeviceGroupBean left) {
+           	net.gdface.facelog.client.thrift.DeviceGroupBean.Builder builder = new net.gdface.facelog.client.thrift.DeviceGroupBean.Builder();
+
             if(left.checkIdInitialized() ){
-                setField(right, "id", left.getId());                
+                builder.id(left.getId());
             }
             if(left.checkNameInitialized() ){
-                setField(right, "name", left.getName());                
+                builder.name(left.getName());
             }
             if(left.checkLeafInitialized() ){
-                setField(right, "leaf", left.getLeaf());                
+                builder.leaf(left.getLeaf());
             }
             if(left.checkParentInitialized() ){
-                setField(right, "parent", left.getParent());                
+                builder.parent(left.getParent());
             }
             if(left.checkRemarkInitialized() ){
-                setField(right, "remark", left.getRemark());                
+                builder.remark(left.getRemark());
             }
             if(left.checkExtBinInitialized() ){
-                setField(right, "extBin", ByteString.of(left.getExtBin()));
+                builder.extBin(ByteString.of(left.getExtBin()));
             }
             if(left.checkExtTxtInitialized() ){
-                setField(right, "extTxt", left.getExtTxt());                
+                builder.extTxt(left.getExtTxt());
             }
 // IGNORE field fl_device_group.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
             if(left.checkCreateTimeInitialized() ){
-                setField(right, "createTime", left.getCreateTime().getTime());
+                builder.createTime(left.getCreateTime().getTime());
             }
 */
 // IGNORE field fl_device_group.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
             if(left.checkUpdateTimeInitialized() ){
-                setField(right, "updateTime", left.getUpdateTime().getTime());
+                builder.updateTime(left.getUpdateTime().getTime());
             }
 */
-            setField(right,"_new",left.isNew());
-            setField(right,"modified",left.getModified());
-            setField(right,"initialized",left.getInitialized());
-
+            builder._new(left.isNew());
+            builder.modified(left.getModified());
+            builder.initialized(left.getInitialized());
+            return builder.build();
         }};
     /** {@link IBeanConverter} implementation for convert between {@link FaceBean} and thrift beans {@link net.gdface.facelog.client.thrift.FaceBean} */
     public static final IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> CONVERTER_FACEBEAN
-            = new IBeanConverter.AbstractHandle<FaceBean,net.gdface.facelog.client.thrift.FaceBean>(){
+            = new ThriftyBaseHandle<FaceBean,net.gdface.facelog.client.thrift.FaceBean>(){
         @Override
-        protected void doFromRight(FaceBean left, net.gdface.facelog.client.thrift.FaceBean right) {
+        public FaceBean fromRight(net.gdface.facelog.client.thrift.FaceBean right) {
+            FaceBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_FACE_ID_ID_MASK)){
                 left.setId(right.id);
@@ -245,77 +255,81 @@ public class ThriftConverter implements Constant{
             }
             left.setNew(right._new);
             left.setModified(right.modified);
+            return left;
         }
 
         @Override
-        protected void doToRight(FaceBean left, net.gdface.facelog.client.thrift.FaceBean right) {
+        public net.gdface.facelog.client.thrift.FaceBean toRight(FaceBean left) {
+           	net.gdface.facelog.client.thrift.FaceBean.Builder builder = new net.gdface.facelog.client.thrift.FaceBean.Builder();
+
             if(left.checkIdInitialized() ){
-                setField(right, "id", left.getId());                
+                builder.id(left.getId());
             }
             if(left.checkImageMd5Initialized() ){
-                setField(right, "imageMd5", left.getImageMd5());                
+                builder.imageMd5(left.getImageMd5());
             }
             if(left.checkFaceLeftInitialized() ){
-                setField(right, "faceLeft", left.getFaceLeft());                
+                builder.faceLeft(left.getFaceLeft());
             }
             if(left.checkFaceTopInitialized() ){
-                setField(right, "faceTop", left.getFaceTop());                
+                builder.faceTop(left.getFaceTop());
             }
             if(left.checkFaceWidthInitialized() ){
-                setField(right, "faceWidth", left.getFaceWidth());                
+                builder.faceWidth(left.getFaceWidth());
             }
             if(left.checkFaceHeightInitialized() ){
-                setField(right, "faceHeight", left.getFaceHeight());                
+                builder.faceHeight(left.getFaceHeight());
             }
             if(left.checkEyeLeftxInitialized() ){
-                setField(right, "eyeLeftx", left.getEyeLeftx());                
+                builder.eyeLeftx(left.getEyeLeftx());
             }
             if(left.checkEyeLeftyInitialized() ){
-                setField(right, "eyeLefty", left.getEyeLefty());                
+                builder.eyeLefty(left.getEyeLefty());
             }
             if(left.checkEyeRightxInitialized() ){
-                setField(right, "eyeRightx", left.getEyeRightx());                
+                builder.eyeRightx(left.getEyeRightx());
             }
             if(left.checkEyeRightyInitialized() ){
-                setField(right, "eyeRighty", left.getEyeRighty());                
+                builder.eyeRighty(left.getEyeRighty());
             }
             if(left.checkMouthXInitialized() ){
-                setField(right, "mouthX", left.getMouthX());                
+                builder.mouthX(left.getMouthX());
             }
             if(left.checkMouthYInitialized() ){
-                setField(right, "mouthY", left.getMouthY());                
+                builder.mouthY(left.getMouthY());
             }
             if(left.checkNoseXInitialized() ){
-                setField(right, "noseX", left.getNoseX());                
+                builder.noseX(left.getNoseX());
             }
             if(left.checkNoseYInitialized() ){
-                setField(right, "noseY", left.getNoseY());                
+                builder.noseY(left.getNoseY());
             }
             if(left.checkAngleYawInitialized() ){
-                setField(right, "angleYaw", left.getAngleYaw());                
+                builder.angleYaw(left.getAngleYaw());
             }
             if(left.checkAnglePitchInitialized() ){
-                setField(right, "anglePitch", left.getAnglePitch());                
+                builder.anglePitch(left.getAnglePitch());
             }
             if(left.checkAngleRollInitialized() ){
-                setField(right, "angleRoll", left.getAngleRoll());                
+                builder.angleRoll(left.getAngleRoll());
             }
             if(left.checkExtInfoInitialized() ){
-                setField(right, "extInfo", ByteString.of(left.getExtInfo()));
+                builder.extInfo(ByteString.of(left.getExtInfo()));
             }
             if(left.checkFeatureMd5Initialized() ){
-                setField(right, "featureMd5", left.getFeatureMd5());                
+                builder.featureMd5(left.getFeatureMd5());
             }
-            setField(right,"_new",left.isNew());
-            setField(right,"modified",left.getModified());
-            setField(right,"initialized",left.getInitialized());
-
+            builder._new(left.isNew());
+            builder.modified(left.getModified());
+            builder.initialized(left.getInitialized());
+            return builder.build();
         }};
     /** {@link IBeanConverter} implementation for convert between {@link FeatureBean} and thrift beans {@link net.gdface.facelog.client.thrift.FeatureBean} */
     public static final IBeanConverter<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> CONVERTER_FEATUREBEAN
-            = new IBeanConverter.AbstractHandle<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean>(){
+            = new ThriftyBaseHandle<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean>(){
         @Override
-        protected void doFromRight(FeatureBean left, net.gdface.facelog.client.thrift.FeatureBean right) {
+        public FeatureBean fromRight(net.gdface.facelog.client.thrift.FeatureBean right) {
+            FeatureBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_FEATURE_ID_MD5_MASK)){
                 left.setMd5(right.md5);
@@ -331,35 +345,39 @@ public class ThriftConverter implements Constant{
             }
             left.setNew(right._new);
             left.setModified(right.modified);
+            return left;
         }
 
         @Override
-        protected void doToRight(FeatureBean left, net.gdface.facelog.client.thrift.FeatureBean right) {
+        public net.gdface.facelog.client.thrift.FeatureBean toRight(FeatureBean left) {
+           	net.gdface.facelog.client.thrift.FeatureBean.Builder builder = new net.gdface.facelog.client.thrift.FeatureBean.Builder();
+
             if(left.checkMd5Initialized() ){
-                setField(right, "md5", left.getMd5());                
+                builder.md5(left.getMd5());
             }
             if(left.checkPersonIdInitialized() ){
-                setField(right, "personId", left.getPersonId());                
+                builder.personId(left.getPersonId());
             }
             if(left.checkFeatureInitialized() ){
-                setField(right, "feature", ByteString.of(left.getFeature()));
+                builder.feature(ByteString.of(left.getFeature()));
             }
 // IGNORE field fl_feature.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
             if(left.checkUpdateTimeInitialized() ){
-                setField(right, "updateTime", left.getUpdateTime().getTime());
+                builder.updateTime(left.getUpdateTime().getTime());
             }
 */
-            setField(right,"_new",left.isNew());
-            setField(right,"modified",left.getModified());
-            setField(right,"initialized",left.getInitialized());
-
+            builder._new(left.isNew());
+            builder.modified(left.getModified());
+            builder.initialized(left.getInitialized());
+            return builder.build();
         }};
     /** {@link IBeanConverter} implementation for convert between {@link ImageBean} and thrift beans {@link net.gdface.facelog.client.thrift.ImageBean} */
     public static final IBeanConverter<ImageBean,net.gdface.facelog.client.thrift.ImageBean> CONVERTER_IMAGEBEAN
-            = new IBeanConverter.AbstractHandle<ImageBean,net.gdface.facelog.client.thrift.ImageBean>(){
+            = new ThriftyBaseHandle<ImageBean,net.gdface.facelog.client.thrift.ImageBean>(){
         @Override
-        protected void doFromRight(ImageBean left, net.gdface.facelog.client.thrift.ImageBean right) {
+        public ImageBean fromRight(net.gdface.facelog.client.thrift.ImageBean right) {
+            ImageBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_IMAGE_ID_MD5_MASK)){
                 left.setMd5(right.md5);
@@ -387,44 +405,48 @@ public class ThriftConverter implements Constant{
             }
             left.setNew(right._new);
             left.setModified(right.modified);
+            return left;
         }
 
         @Override
-        protected void doToRight(ImageBean left, net.gdface.facelog.client.thrift.ImageBean right) {
+        public net.gdface.facelog.client.thrift.ImageBean toRight(ImageBean left) {
+           	net.gdface.facelog.client.thrift.ImageBean.Builder builder = new net.gdface.facelog.client.thrift.ImageBean.Builder();
+
             if(left.checkMd5Initialized() ){
-                setField(right, "md5", left.getMd5());                
+                builder.md5(left.getMd5());
             }
             if(left.checkFormatInitialized() ){
-                setField(right, "format", left.getFormat());                
+                builder.format(left.getFormat());
             }
             if(left.checkWidthInitialized() ){
-                setField(right, "width", left.getWidth());                
+                builder.width(left.getWidth());
             }
             if(left.checkHeightInitialized() ){
-                setField(right, "height", left.getHeight());                
+                builder.height(left.getHeight());
             }
             if(left.checkDepthInitialized() ){
-                setField(right, "depth", left.getDepth());                
+                builder.depth(left.getDepth());
             }
             if(left.checkFaceNumInitialized() ){
-                setField(right, "faceNum", left.getFaceNum());                
+                builder.faceNum(left.getFaceNum());
             }
             if(left.checkThumbMd5Initialized() ){
-                setField(right, "thumbMd5", left.getThumbMd5());                
+                builder.thumbMd5(left.getThumbMd5());
             }
             if(left.checkDeviceIdInitialized() ){
-                setField(right, "deviceId", left.getDeviceId());                
+                builder.deviceId(left.getDeviceId());
             }
-            setField(right,"_new",left.isNew());
-            setField(right,"modified",left.getModified());
-            setField(right,"initialized",left.getInitialized());
-
+            builder._new(left.isNew());
+            builder.modified(left.getModified());
+            builder.initialized(left.getInitialized());
+            return builder.build();
         }};
     /** {@link IBeanConverter} implementation for convert between {@link LogBean} and thrift beans {@link net.gdface.facelog.client.thrift.LogBean} */
     public static final IBeanConverter<LogBean,net.gdface.facelog.client.thrift.LogBean> CONVERTER_LOGBEAN
-            = new IBeanConverter.AbstractHandle<LogBean,net.gdface.facelog.client.thrift.LogBean>(){
+            = new ThriftyBaseHandle<LogBean,net.gdface.facelog.client.thrift.LogBean>(){
         @Override
-        protected void doFromRight(LogBean left, net.gdface.facelog.client.thrift.LogBean right) {
+        public LogBean fromRight(net.gdface.facelog.client.thrift.LogBean right) {
+            LogBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_LOG_ID_ID_MASK)){
                 left.setId(right.id);
@@ -455,50 +477,54 @@ public class ThriftConverter implements Constant{
             }
             left.setNew(right._new);
             left.setModified(right.modified);
+            return left;
         }
 
         @Override
-        protected void doToRight(LogBean left, net.gdface.facelog.client.thrift.LogBean right) {
+        public net.gdface.facelog.client.thrift.LogBean toRight(LogBean left) {
+           	net.gdface.facelog.client.thrift.LogBean.Builder builder = new net.gdface.facelog.client.thrift.LogBean.Builder();
+
             if(left.checkIdInitialized() ){
-                setField(right, "id", left.getId());                
+                builder.id(left.getId());
             }
             if(left.checkPersonIdInitialized() ){
-                setField(right, "personId", left.getPersonId());                
+                builder.personId(left.getPersonId());
             }
             if(left.checkDeviceIdInitialized() ){
-                setField(right, "deviceId", left.getDeviceId());                
+                builder.deviceId(left.getDeviceId());
             }
             if(left.checkVerifyFeatureInitialized() ){
-                setField(right, "verifyFeature", left.getVerifyFeature());                
+                builder.verifyFeature(left.getVerifyFeature());
             }
             if(left.checkCompareFaceInitialized() ){
-                setField(right, "compareFace", left.getCompareFace());                
+                builder.compareFace(left.getCompareFace());
             }
             if(left.checkVerifyStatusInitialized() ){
-                setField(right, "verifyStatus", left.getVerifyStatus());                
+                builder.verifyStatus(left.getVerifyStatus());
             }
             if(left.checkSimilartyInitialized() ){
-                setField(right, "similarty", left.getSimilarty());                
+                builder.similarty(left.getSimilarty());
             }
             if(left.checkVerifyTimeInitialized() ){
-                setField(right, "verifyTime", left.getVerifyTime().getTime());
+                builder.verifyTime(left.getVerifyTime().getTime());
             }
 // IGNORE field fl_log.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
             if(left.checkCreateTimeInitialized() ){
-                setField(right, "createTime", left.getCreateTime().getTime());
+                builder.createTime(left.getCreateTime().getTime());
             }
 */
-            setField(right,"_new",left.isNew());
-            setField(right,"modified",left.getModified());
-            setField(right,"initialized",left.getInitialized());
-
+            builder._new(left.isNew());
+            builder.modified(left.getModified());
+            builder.initialized(left.getInitialized());
+            return builder.build();
         }};
     /** {@link IBeanConverter} implementation for convert between {@link PermitBean} and thrift beans {@link net.gdface.facelog.client.thrift.PermitBean} */
     public static final IBeanConverter<PermitBean,net.gdface.facelog.client.thrift.PermitBean> CONVERTER_PERMITBEAN
-            = new IBeanConverter.AbstractHandle<PermitBean,net.gdface.facelog.client.thrift.PermitBean>(){
+            = new ThriftyBaseHandle<PermitBean,net.gdface.facelog.client.thrift.PermitBean>(){
         @Override
-        protected void doFromRight(PermitBean left, net.gdface.facelog.client.thrift.PermitBean right) {
+        public PermitBean fromRight(net.gdface.facelog.client.thrift.PermitBean right) {
+            PermitBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_PERMIT_ID_DEVICE_GROUP_ID_MASK)){
                 left.setDeviceGroupId(right.deviceGroupId);
@@ -520,41 +546,45 @@ public class ThriftConverter implements Constant{
             }
             left.setNew(right._new);
             left.setModified(right.modified);
+            return left;
         }
 
         @Override
-        protected void doToRight(PermitBean left, net.gdface.facelog.client.thrift.PermitBean right) {
+        public net.gdface.facelog.client.thrift.PermitBean toRight(PermitBean left) {
+           	net.gdface.facelog.client.thrift.PermitBean.Builder builder = new net.gdface.facelog.client.thrift.PermitBean.Builder();
+
             if(left.checkDeviceGroupIdInitialized() ){
-                setField(right, "deviceGroupId", left.getDeviceGroupId());                
+                builder.deviceGroupId(left.getDeviceGroupId());
             }
             if(left.checkPersonGroupIdInitialized() ){
-                setField(right, "personGroupId", left.getPersonGroupId());                
+                builder.personGroupId(left.getPersonGroupId());
             }
             if(left.checkRemarkInitialized() ){
-                setField(right, "remark", left.getRemark());                
+                builder.remark(left.getRemark());
             }
             if(left.checkExtBinInitialized() ){
-                setField(right, "extBin", ByteString.of(left.getExtBin()));
+                builder.extBin(ByteString.of(left.getExtBin()));
             }
             if(left.checkExtTxtInitialized() ){
-                setField(right, "extTxt", left.getExtTxt());                
+                builder.extTxt(left.getExtTxt());
             }
 // IGNORE field fl_permit.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
             if(left.checkCreateTimeInitialized() ){
-                setField(right, "createTime", left.getCreateTime().getTime());
+                builder.createTime(left.getCreateTime().getTime());
             }
 */
-            setField(right,"_new",left.isNew());
-            setField(right,"modified",left.getModified());
-            setField(right,"initialized",left.getInitialized());
-
+            builder._new(left.isNew());
+            builder.modified(left.getModified());
+            builder.initialized(left.getInitialized());
+            return builder.build();
         }};
     /** {@link IBeanConverter} implementation for convert between {@link PersonBean} and thrift beans {@link net.gdface.facelog.client.thrift.PersonBean} */
     public static final IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> CONVERTER_PERSONBEAN
-            = new IBeanConverter.AbstractHandle<PersonBean,net.gdface.facelog.client.thrift.PersonBean>(){
+            = new ThriftyBaseHandle<PersonBean,net.gdface.facelog.client.thrift.PersonBean>(){
         @Override
-        protected void doFromRight(PersonBean left, net.gdface.facelog.client.thrift.PersonBean right) {
+        public PersonBean fromRight(net.gdface.facelog.client.thrift.PersonBean right) {
+            PersonBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_PERSON_ID_ID_MASK)){
                 left.setId(right.id);
@@ -603,71 +633,75 @@ public class ThriftConverter implements Constant{
             }
             left.setNew(right._new);
             left.setModified(right.modified);
+            return left;
         }
 
         @Override
-        protected void doToRight(PersonBean left, net.gdface.facelog.client.thrift.PersonBean right) {
+        public net.gdface.facelog.client.thrift.PersonBean toRight(PersonBean left) {
+           	net.gdface.facelog.client.thrift.PersonBean.Builder builder = new net.gdface.facelog.client.thrift.PersonBean.Builder();
+
             if(left.checkIdInitialized() ){
-                setField(right, "id", left.getId());                
+                builder.id(left.getId());
             }
             if(left.checkGroupIdInitialized() ){
-                setField(right, "groupId", left.getGroupId());                
+                builder.groupId(left.getGroupId());
             }
             if(left.checkNameInitialized() ){
-                setField(right, "name", left.getName());                
+                builder.name(left.getName());
             }
             if(left.checkSexInitialized() ){
-                setField(right, "sex", left.getSex());                
+                builder.sex(left.getSex());
             }
             if(left.checkRankInitialized() ){
-                setField(right, "rank", left.getRank());                
+                builder.rank(left.getRank());
             }
             if(left.checkPasswordInitialized() ){
-                setField(right, "password", left.getPassword());                
+                builder.password(left.getPassword());
             }
             if(left.checkBirthdateInitialized() ){
-                setField(right, "birthdate", left.getBirthdate().getTime());
+                builder.birthdate(left.getBirthdate().getTime());
             }
             if(left.checkMobilePhoneInitialized() ){
-                setField(right, "mobilePhone", left.getMobilePhone());                
+                builder.mobilePhone(left.getMobilePhone());
             }
             if(left.checkPapersTypeInitialized() ){
-                setField(right, "papersType", left.getPapersType());                
+                builder.papersType(left.getPapersType());
             }
             if(left.checkPapersNumInitialized() ){
-                setField(right, "papersNum", left.getPapersNum());                
+                builder.papersNum(left.getPapersNum());
             }
             if(left.checkImageMd5Initialized() ){
-                setField(right, "imageMd5", left.getImageMd5());                
+                builder.imageMd5(left.getImageMd5());
             }
             if(left.checkExpiryDateInitialized() ){
-                setField(right, "expiryDate", left.getExpiryDate().getTime());
+                builder.expiryDate(left.getExpiryDate().getTime());
             }
             if(left.checkRemarkInitialized() ){
-                setField(right, "remark", left.getRemark());                
+                builder.remark(left.getRemark());
             }
 // IGNORE field fl_person.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
             if(left.checkCreateTimeInitialized() ){
-                setField(right, "createTime", left.getCreateTime().getTime());
+                builder.createTime(left.getCreateTime().getTime());
             }
 */
 // IGNORE field fl_person.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
             if(left.checkUpdateTimeInitialized() ){
-                setField(right, "updateTime", left.getUpdateTime().getTime());
+                builder.updateTime(left.getUpdateTime().getTime());
             }
 */
-            setField(right,"_new",left.isNew());
-            setField(right,"modified",left.getModified());
-            setField(right,"initialized",left.getInitialized());
-
+            builder._new(left.isNew());
+            builder.modified(left.getModified());
+            builder.initialized(left.getInitialized());
+            return builder.build();
         }};
     /** {@link IBeanConverter} implementation for convert between {@link PersonGroupBean} and thrift beans {@link net.gdface.facelog.client.thrift.PersonGroupBean} */
     public static final IBeanConverter<PersonGroupBean,net.gdface.facelog.client.thrift.PersonGroupBean> CONVERTER_PERSONGROUPBEAN
-            = new IBeanConverter.AbstractHandle<PersonGroupBean,net.gdface.facelog.client.thrift.PersonGroupBean>(){
+            = new ThriftyBaseHandle<PersonGroupBean,net.gdface.facelog.client.thrift.PersonGroupBean>(){
         @Override
-        protected void doFromRight(PersonGroupBean left, net.gdface.facelog.client.thrift.PersonGroupBean right) {
+        public PersonGroupBean fromRight(net.gdface.facelog.client.thrift.PersonGroupBean right) {
+            PersonGroupBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_PERSON_GROUP_ID_ID_MASK)){
                 left.setId(right.id);
@@ -698,53 +732,57 @@ public class ThriftConverter implements Constant{
             }
             left.setNew(right._new);
             left.setModified(right.modified);
+            return left;
         }
 
         @Override
-        protected void doToRight(PersonGroupBean left, net.gdface.facelog.client.thrift.PersonGroupBean right) {
+        public net.gdface.facelog.client.thrift.PersonGroupBean toRight(PersonGroupBean left) {
+           	net.gdface.facelog.client.thrift.PersonGroupBean.Builder builder = new net.gdface.facelog.client.thrift.PersonGroupBean.Builder();
+
             if(left.checkIdInitialized() ){
-                setField(right, "id", left.getId());                
+                builder.id(left.getId());
             }
             if(left.checkNameInitialized() ){
-                setField(right, "name", left.getName());                
+                builder.name(left.getName());
             }
             if(left.checkLeafInitialized() ){
-                setField(right, "leaf", left.getLeaf());                
+                builder.leaf(left.getLeaf());
             }
             if(left.checkParentInitialized() ){
-                setField(right, "parent", left.getParent());                
+                builder.parent(left.getParent());
             }
             if(left.checkRemarkInitialized() ){
-                setField(right, "remark", left.getRemark());                
+                builder.remark(left.getRemark());
             }
             if(left.checkExtBinInitialized() ){
-                setField(right, "extBin", ByteString.of(left.getExtBin()));
+                builder.extBin(ByteString.of(left.getExtBin()));
             }
             if(left.checkExtTxtInitialized() ){
-                setField(right, "extTxt", left.getExtTxt());                
+                builder.extTxt(left.getExtTxt());
             }
 // IGNORE field fl_person_group.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
             if(left.checkCreateTimeInitialized() ){
-                setField(right, "createTime", left.getCreateTime().getTime());
+                builder.createTime(left.getCreateTime().getTime());
             }
 */
 // IGNORE field fl_person_group.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 /*
             if(left.checkUpdateTimeInitialized() ){
-                setField(right, "updateTime", left.getUpdateTime().getTime());
+                builder.updateTime(left.getUpdateTime().getTime());
             }
 */
-            setField(right,"_new",left.isNew());
-            setField(right,"modified",left.getModified());
-            setField(right,"initialized",left.getInitialized());
-
+            builder._new(left.isNew());
+            builder.modified(left.getModified());
+            builder.initialized(left.getInitialized());
+            return builder.build();
         }};
     /** {@link IBeanConverter} implementation for convert between {@link LogLightBean} and thrift beans {@link net.gdface.facelog.client.thrift.LogLightBean} */
     public static final IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> CONVERTER_LOGLIGHTBEAN
-            = new IBeanConverter.AbstractHandle<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean>(){
+            = new ThriftyBaseHandle<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean>(){
         @Override
-        protected void doFromRight(LogLightBean left, net.gdface.facelog.client.thrift.LogLightBean right) {
+        public LogLightBean fromRight(net.gdface.facelog.client.thrift.LogLightBean right) {
+            LogLightBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_LOG_LIGHT_ID_ID_MASK)){
                 left.setId(right.id);
@@ -766,31 +804,34 @@ public class ThriftConverter implements Constant{
             }
             left.setNew(right._new);
             left.setModified(right.modified);
+            return left;
         }
 
         @Override
-        protected void doToRight(LogLightBean left, net.gdface.facelog.client.thrift.LogLightBean right) {
+        public net.gdface.facelog.client.thrift.LogLightBean toRight(LogLightBean left) {
+           	net.gdface.facelog.client.thrift.LogLightBean.Builder builder = new net.gdface.facelog.client.thrift.LogLightBean.Builder();
+
             if(left.checkIdInitialized() ){
-                setField(right, "id", left.getId());                
+                builder.id(left.getId());
             }
             if(left.checkPersonIdInitialized() ){
-                setField(right, "personId", left.getPersonId());                
+                builder.personId(left.getPersonId());
             }
             if(left.checkNameInitialized() ){
-                setField(right, "name", left.getName());                
+                builder.name(left.getName());
             }
             if(left.checkPapersTypeInitialized() ){
-                setField(right, "papersType", left.getPapersType());                
+                builder.papersType(left.getPapersType());
             }
             if(left.checkPapersNumInitialized() ){
-                setField(right, "papersNum", left.getPapersNum());                
+                builder.papersNum(left.getPapersNum());
             }
             if(left.checkVerifyTimeInitialized() ){
-                setField(right, "verifyTime", left.getVerifyTime().getTime());
+                builder.verifyTime(left.getVerifyTime().getTime());
             }
-            setField(right,"_new",left.isNew());
-            setField(right,"modified",left.getModified());
-            setField(right,"initialized",left.getInitialized());
-
+            builder._new(left.isNew());
+            builder.modified(left.getModified());
+            builder.initialized(left.getInitialized());
+            return builder.build();
         }};
 }
