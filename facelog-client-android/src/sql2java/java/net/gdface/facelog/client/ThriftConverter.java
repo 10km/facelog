@@ -32,6 +32,7 @@ public class ThriftConverter implements Constant{
             = new ThriftyBaseHandle<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean>(){
         @Override
         public DeviceBean fromRight(net.gdface.facelog.client.thrift.DeviceBean right) {
+            if(null == right){return null;}
             DeviceBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_DEVICE_ID_ID_MASK)){
@@ -68,6 +69,7 @@ public class ThriftConverter implements Constant{
 
         @Override
         public net.gdface.facelog.client.thrift.DeviceBean toRight(DeviceBean left) {
+            if(null == left){return null;}
            	net.gdface.facelog.client.thrift.DeviceBean.Builder builder = new net.gdface.facelog.client.thrift.DeviceBean.Builder();
 
             if(left.checkIdInitialized() ){
@@ -113,6 +115,7 @@ public class ThriftConverter implements Constant{
             = new ThriftyBaseHandle<DeviceGroupBean,net.gdface.facelog.client.thrift.DeviceGroupBean>(){
         @Override
         public DeviceGroupBean fromRight(net.gdface.facelog.client.thrift.DeviceGroupBean right) {
+            if(null == right){return null;}
             DeviceGroupBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_DEVICE_GROUP_ID_ID_MASK)){
@@ -149,6 +152,7 @@ public class ThriftConverter implements Constant{
 
         @Override
         public net.gdface.facelog.client.thrift.DeviceGroupBean toRight(DeviceGroupBean left) {
+            if(null == left){return null;}
            	net.gdface.facelog.client.thrift.DeviceGroupBean.Builder builder = new net.gdface.facelog.client.thrift.DeviceGroupBean.Builder();
 
             if(left.checkIdInitialized() ){
@@ -194,6 +198,7 @@ public class ThriftConverter implements Constant{
             = new ThriftyBaseHandle<FaceBean,net.gdface.facelog.client.thrift.FaceBean>(){
         @Override
         public FaceBean fromRight(net.gdface.facelog.client.thrift.FaceBean right) {
+            if(null == right){return null;}
             FaceBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_FACE_ID_ID_MASK)){
@@ -260,6 +265,7 @@ public class ThriftConverter implements Constant{
 
         @Override
         public net.gdface.facelog.client.thrift.FaceBean toRight(FaceBean left) {
+            if(null == left){return null;}
            	net.gdface.facelog.client.thrift.FaceBean.Builder builder = new net.gdface.facelog.client.thrift.FaceBean.Builder();
 
             if(left.checkIdInitialized() ){
@@ -329,6 +335,7 @@ public class ThriftConverter implements Constant{
             = new ThriftyBaseHandle<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean>(){
         @Override
         public FeatureBean fromRight(net.gdface.facelog.client.thrift.FeatureBean right) {
+            if(null == right){return null;}
             FeatureBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_FEATURE_ID_MD5_MASK)){
@@ -350,6 +357,7 @@ public class ThriftConverter implements Constant{
 
         @Override
         public net.gdface.facelog.client.thrift.FeatureBean toRight(FeatureBean left) {
+            if(null == left){return null;}
            	net.gdface.facelog.client.thrift.FeatureBean.Builder builder = new net.gdface.facelog.client.thrift.FeatureBean.Builder();
 
             if(left.checkMd5Initialized() ){
@@ -377,6 +385,7 @@ public class ThriftConverter implements Constant{
             = new ThriftyBaseHandle<ImageBean,net.gdface.facelog.client.thrift.ImageBean>(){
         @Override
         public ImageBean fromRight(net.gdface.facelog.client.thrift.ImageBean right) {
+            if(null == right){return null;}
             ImageBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_IMAGE_ID_MD5_MASK)){
@@ -410,6 +419,7 @@ public class ThriftConverter implements Constant{
 
         @Override
         public net.gdface.facelog.client.thrift.ImageBean toRight(ImageBean left) {
+            if(null == left){return null;}
            	net.gdface.facelog.client.thrift.ImageBean.Builder builder = new net.gdface.facelog.client.thrift.ImageBean.Builder();
 
             if(left.checkMd5Initialized() ){
@@ -446,6 +456,7 @@ public class ThriftConverter implements Constant{
             = new ThriftyBaseHandle<LogBean,net.gdface.facelog.client.thrift.LogBean>(){
         @Override
         public LogBean fromRight(net.gdface.facelog.client.thrift.LogBean right) {
+            if(null == right){return null;}
             LogBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_LOG_ID_ID_MASK)){
@@ -482,6 +493,7 @@ public class ThriftConverter implements Constant{
 
         @Override
         public net.gdface.facelog.client.thrift.LogBean toRight(LogBean left) {
+            if(null == left){return null;}
            	net.gdface.facelog.client.thrift.LogBean.Builder builder = new net.gdface.facelog.client.thrift.LogBean.Builder();
 
             if(left.checkIdInitialized() ){
@@ -524,6 +536,7 @@ public class ThriftConverter implements Constant{
             = new ThriftyBaseHandle<PermitBean,net.gdface.facelog.client.thrift.PermitBean>(){
         @Override
         public PermitBean fromRight(net.gdface.facelog.client.thrift.PermitBean right) {
+            if(null == right){return null;}
             PermitBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_PERMIT_ID_DEVICE_GROUP_ID_MASK)){
@@ -551,6 +564,7 @@ public class ThriftConverter implements Constant{
 
         @Override
         public net.gdface.facelog.client.thrift.PermitBean toRight(PermitBean left) {
+            if(null == left){return null;}
            	net.gdface.facelog.client.thrift.PermitBean.Builder builder = new net.gdface.facelog.client.thrift.PermitBean.Builder();
 
             if(left.checkDeviceGroupIdInitialized() ){
@@ -584,6 +598,7 @@ public class ThriftConverter implements Constant{
             = new ThriftyBaseHandle<PersonBean,net.gdface.facelog.client.thrift.PersonBean>(){
         @Override
         public PersonBean fromRight(net.gdface.facelog.client.thrift.PersonBean right) {
+            if(null == right){return null;}
             PersonBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_PERSON_ID_ID_MASK)){
@@ -638,6 +653,7 @@ public class ThriftConverter implements Constant{
 
         @Override
         public net.gdface.facelog.client.thrift.PersonBean toRight(PersonBean left) {
+            if(null == left){return null;}
            	net.gdface.facelog.client.thrift.PersonBean.Builder builder = new net.gdface.facelog.client.thrift.PersonBean.Builder();
 
             if(left.checkIdInitialized() ){
@@ -701,6 +717,7 @@ public class ThriftConverter implements Constant{
             = new ThriftyBaseHandle<PersonGroupBean,net.gdface.facelog.client.thrift.PersonGroupBean>(){
         @Override
         public PersonGroupBean fromRight(net.gdface.facelog.client.thrift.PersonGroupBean right) {
+            if(null == right){return null;}
             PersonGroupBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_PERSON_GROUP_ID_ID_MASK)){
@@ -737,6 +754,7 @@ public class ThriftConverter implements Constant{
 
         @Override
         public net.gdface.facelog.client.thrift.PersonGroupBean toRight(PersonGroupBean left) {
+            if(null == left){return null;}
            	net.gdface.facelog.client.thrift.PersonGroupBean.Builder builder = new net.gdface.facelog.client.thrift.PersonGroupBean.Builder();
 
             if(left.checkIdInitialized() ){
@@ -782,6 +800,7 @@ public class ThriftConverter implements Constant{
             = new ThriftyBaseHandle<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean>(){
         @Override
         public LogLightBean fromRight(net.gdface.facelog.client.thrift.LogLightBean right) {
+            if(null == right){return null;}
             LogLightBean left = newInstanceL();
             long initialized = right.initialized;
             if(0L !=  (initialized & FL_LOG_LIGHT_ID_ID_MASK)){
@@ -809,6 +828,7 @@ public class ThriftConverter implements Constant{
 
         @Override
         public net.gdface.facelog.client.thrift.LogLightBean toRight(LogLightBean left) {
+            if(null == left){return null;}
            	net.gdface.facelog.client.thrift.LogLightBean.Builder builder = new net.gdface.facelog.client.thrift.LogLightBean.Builder();
 
             if(left.checkIdInitialized() ){

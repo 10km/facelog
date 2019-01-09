@@ -43,6 +43,14 @@ import static com.google.common.base.Preconditions.*;
  *
  */
 public class GenericUtils {
+	/**
+	 * 返回{@link ByteBuffer}
+	 * @param input
+	 * @return {@code input}null时返回null
+	 */
+	public static ByteBuffer toBuffer(ByteString input){
+		return null == input ? null : input.asByteBuffer();
+	}
     /**
      * 从{@link InputStream}返回{@link ByteString}<br>
      * 当{@code in}为{@link FileInputStream}时，调用{@link #toBytes(FileInputStream)}(NIO方式)读取<br>
@@ -52,7 +60,7 @@ public class GenericUtils {
      * @throws IOException
      * @throws IllegalArgumentException {@code in}为{@code null}
      */
-    private static ByteString toBytes(InputStream in) throws IOException, IllegalArgumentException {
+    public static ByteString toBytes(InputStream in) throws IOException, IllegalArgumentException {
         if(null == in){
             return null;
         }
@@ -73,12 +81,12 @@ public class GenericUtils {
         }
     }
 	/**
-	 * 返回{@link ByteBuffer}
+	 * 返回{@link ByteString}
 	 * @param input
 	 * @return {@code input}null时返回null
 	 */
-	public static ByteBuffer toBuffer(ByteString input){
-		return null == input ? null : input.asByteBuffer();
+	public static ByteString toBytes(ByteBuffer input){
+		return null == input ? null : ByteString.of(input);
 	}
     /**
      * NIO方式从{@link FileInputStream}返回{@link ByteString}<br>
@@ -87,7 +95,7 @@ public class GenericUtils {
      * @return 返回{@link ByteString} 当{@code fin}为null时返回null;
      * @throws IOException
      */
-    private static ByteString toBytes(FileInputStream fin) throws IOException {
+    public static ByteString toBytes(FileInputStream fin) throws IOException {
         if(null == fin){
             return null;
         }
