@@ -8,15 +8,12 @@
 package net.gdface.facelog.client;
 
 import java.lang.reflect.Field;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import com.google.common.base.Throwables;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.google.common.net.HostAndPort;
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -42,18 +39,6 @@ import com.microsoft.thrifty.transport.SocketTransport;
  *
  */
 public class ClientFactory {
-    //private static final Logger logger = Logger.getLogger(ClientFactory.class.getSimpleName());
-    private static final Cache<HostAndPort, net.gdface.facelog.client.thrift.IFaceLogClient> THRIFTY_CLIENT_CACHE = CacheBuilder.newBuilder().softValues().build();
-    private final AsyncClientBase.Listener DEFAULT_CLOSE_LISTENER = new AsyncClientBase.Listener(){
-        @Override
-        public void onTransportClosed() {
-            THRIFTY_CLIENT_CACHE.asMap().remove(hostAndPort);
-        }
-        @Override
-        public void onError(Throwable error) {
-            THRIFTY_CLIENT_CACHE.asMap().remove(hostAndPort);
-        }
-    };
     private HostAndPort hostAndPort;
     private long readTimeout;
     private long connectTimeout;
@@ -105,23 +90,19 @@ public class ClientFactory {
      * return instance of {@link net.gdface.facelog.client.thrift.IFaceLogClient}
      * @return
      */
-    public net.gdface.facelog.client.thrift.IFaceLogClient applyInstance() {
+    net.gdface.facelog.client.thrift.IFaceLogClient applyInstance(AsyncClientBase.Listener closeListener) {
         try {
-            return THRIFTY_CLIENT_CACHE.get(hostAndPort, new Callable<net.gdface.facelog.client.thrift.IFaceLogClient>(){
-                @Override
-                public net.gdface.facelog.client.thrift.IFaceLogClient call() throws Exception {
-				            SocketTransport transport = 
-				                    new SocketTransport.Builder(hostAndPort.getHost(),hostAndPort.getPort())
-				                        .connectTimeout((int) connectTimeout)
-				                        .readTimeout((int) readTimeout).build();
-				            transport.connect();
-				            Protocol protocol = new BinaryProtocol(transport);
-				            /* force set private field 'strictWrite' to true */
-				            Field field = BinaryProtocol.class.getDeclaredField("strictWrite");
-				            field.setAccessible(true);
-				            field.set(protocol, true);
-                    return new net.gdface.facelog.client.thrift.IFaceLogClient(protocol,DEFAULT_CLOSE_LISTENER);
-                }});
+            SocketTransport transport = 
+                    new SocketTransport.Builder(hostAndPort.getHost(),hostAndPort.getPort())
+                        .connectTimeout((int) connectTimeout)
+                        .readTimeout((int) readTimeout).build();
+            transport.connect();
+            Protocol protocol = new BinaryProtocol(transport);
+            /* force set private field 'strictWrite' to true */
+            Field field = BinaryProtocol.class.getDeclaredField("strictWrite");
+            field.setAccessible(true);
+            field.set(protocol, true);
+            return new net.gdface.facelog.client.thrift.IFaceLogClient(protocol,closeListener);
         } catch (Exception e) {
             Throwables.throwIfUnchecked(e);
             throw new RuntimeException(e);
