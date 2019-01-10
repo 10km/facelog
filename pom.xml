@@ -302,8 +302,8 @@
 		<module>db</module>
 		<module>facelog-service</module>
 		<module>facelog-client</module>
-		<module>facelogservice-maven-plugin</module>
 		<module>facelog-client-android</module>
+		<module>facelogservice-maven-plugin</module>
 	</modules>
 	<licenses>
 		<license>
