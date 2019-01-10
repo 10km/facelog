@@ -201,6 +201,7 @@
 							<py>gdface.thrift</py>
 						</namespace>
 						<recursive>true</recursive>
+						<objectOptional>true</objectOptional>
 						<out>IFaceLog.thrift</out>
 					</configuration>
 					<dependencies>
