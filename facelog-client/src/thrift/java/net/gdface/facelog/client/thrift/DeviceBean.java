@@ -54,7 +54,7 @@ public final class DeviceBean
 
     private String name;
 
-    @ThriftField(value=6, name="name", requiredness=Requiredness.NONE)
+    @ThriftField(value=6, name="name", requiredness=Requiredness.OPTIONAL)
     public String getName() { return name; }
 
     @ThriftField
@@ -62,7 +62,7 @@ public final class DeviceBean
 
     private String version;
 
-    @ThriftField(value=7, name="version", requiredness=Requiredness.NONE)
+    @ThriftField(value=7, name="version", requiredness=Requiredness.OPTIONAL)
     public String getVersion() { return version; }
 
     @ThriftField
@@ -70,7 +70,7 @@ public final class DeviceBean
 
     private String serialNo;
 
-    @ThriftField(value=8, name="serialNo", requiredness=Requiredness.NONE)
+    @ThriftField(value=8, name="serialNo", requiredness=Requiredness.OPTIONAL)
     public String getSerialNo() { return serialNo; }
 
     @ThriftField
@@ -78,7 +78,7 @@ public final class DeviceBean
 
     private String mac;
 
-    @ThriftField(value=9, name="mac", requiredness=Requiredness.NONE)
+    @ThriftField(value=9, name="mac", requiredness=Requiredness.OPTIONAL)
     public String getMac() { return mac; }
 
     @ThriftField
@@ -86,7 +86,7 @@ public final class DeviceBean
 
     private String remark;
 
-    @ThriftField(value=10, name="remark", requiredness=Requiredness.NONE)
+    @ThriftField(value=10, name="remark", requiredness=Requiredness.OPTIONAL)
     public String getRemark() { return remark; }
 
     @ThriftField

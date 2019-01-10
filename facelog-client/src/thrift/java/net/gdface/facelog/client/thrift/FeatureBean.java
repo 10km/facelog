@@ -38,7 +38,7 @@ public final class FeatureBean
 
     private String md5;
 
-    @ThriftField(value=4, name="md5", requiredness=Requiredness.NONE)
+    @ThriftField(value=4, name="md5", requiredness=Requiredness.OPTIONAL)
     public String getMd5() { return md5; }
 
     @ThriftField
@@ -54,7 +54,7 @@ public final class FeatureBean
 
     private byte [] feature;
 
-    @ThriftField(value=6, name="feature", requiredness=Requiredness.NONE)
+    @ThriftField(value=6, name="feature", requiredness=Requiredness.OPTIONAL)
     public byte [] getFeature() { return feature; }
 
     @ThriftField

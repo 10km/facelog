@@ -54,7 +54,7 @@ public final class LogLightBean
 
     private String name;
 
-    @ThriftField(value=6, name="name", requiredness=Requiredness.NONE)
+    @ThriftField(value=6, name="name", requiredness=Requiredness.OPTIONAL)
     public String getName() { return name; }
 
     @ThriftField
@@ -70,7 +70,7 @@ public final class LogLightBean
 
     private String papersNum;
 
-    @ThriftField(value=8, name="papersNum", requiredness=Requiredness.NONE)
+    @ThriftField(value=8, name="papersNum", requiredness=Requiredness.OPTIONAL)
     public String getPapersNum() { return papersNum; }
 
     @ThriftField

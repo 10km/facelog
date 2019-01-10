@@ -54,7 +54,7 @@ public final class PersonBean
 
     private String name;
 
-    @ThriftField(value=6, name="name", requiredness=Requiredness.NONE)
+    @ThriftField(value=6, name="name", requiredness=Requiredness.OPTIONAL)
     public String getName() { return name; }
 
     @ThriftField
@@ -78,7 +78,7 @@ public final class PersonBean
 
     private String password;
 
-    @ThriftField(value=9, name="password", requiredness=Requiredness.NONE)
+    @ThriftField(value=9, name="password", requiredness=Requiredness.OPTIONAL)
     public String getPassword() { return password; }
 
     @ThriftField
@@ -94,7 +94,7 @@ public final class PersonBean
 
     private String mobilePhone;
 
-    @ThriftField(value=11, name="mobilePhone", requiredness=Requiredness.NONE)
+    @ThriftField(value=11, name="mobilePhone", requiredness=Requiredness.OPTIONAL)
     public String getMobilePhone() { return mobilePhone; }
 
     @ThriftField
@@ -110,7 +110,7 @@ public final class PersonBean
 
     private String papersNum;
 
-    @ThriftField(value=13, name="papersNum", requiredness=Requiredness.NONE)
+    @ThriftField(value=13, name="papersNum", requiredness=Requiredness.OPTIONAL)
     public String getPapersNum() { return papersNum; }
 
     @ThriftField
@@ -118,7 +118,7 @@ public final class PersonBean
 
     private String imageMd5;
 
-    @ThriftField(value=14, name="imageMd5", requiredness=Requiredness.NONE)
+    @ThriftField(value=14, name="imageMd5", requiredness=Requiredness.OPTIONAL)
     public String getImageMd5() { return imageMd5; }
 
     @ThriftField
@@ -134,7 +134,7 @@ public final class PersonBean
 
     private String remark;
 
-    @ThriftField(value=16, name="remark", requiredness=Requiredness.NONE)
+    @ThriftField(value=16, name="remark", requiredness=Requiredness.OPTIONAL)
     public String getRemark() { return remark; }
 
     @ThriftField

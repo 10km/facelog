@@ -38,7 +38,7 @@ public final class ImageBean
 
     private String md5;
 
-    @ThriftField(value=4, name="md5", requiredness=Requiredness.NONE)
+    @ThriftField(value=4, name="md5", requiredness=Requiredness.OPTIONAL)
     public String getMd5() { return md5; }
 
     @ThriftField
@@ -46,7 +46,7 @@ public final class ImageBean
 
     private String format;
 
-    @ThriftField(value=5, name="format", requiredness=Requiredness.NONE)
+    @ThriftField(value=5, name="format", requiredness=Requiredness.OPTIONAL)
     public String getFormat() { return format; }
 
     @ThriftField
@@ -86,7 +86,7 @@ public final class ImageBean
 
     private String thumbMd5;
 
-    @ThriftField(value=10, name="thumbMd5", requiredness=Requiredness.NONE)
+    @ThriftField(value=10, name="thumbMd5", requiredness=Requiredness.OPTIONAL)
     public String getThumbMd5() { return thumbMd5; }
 
     @ThriftField

@@ -14,7 +14,7 @@ public final class ServiceRuntimeException extends Exception
 
     private String message;
 
-    @ThriftField(value=1, name="message", requiredness=Requiredness.NONE)
+    @ThriftField(value=1, name="message", requiredness=Requiredness.OPTIONAL)
     public String getMessage() { return message; }
 
     @ThriftField
@@ -22,7 +22,7 @@ public final class ServiceRuntimeException extends Exception
 
     private String causeClass;
 
-    @ThriftField(value=2, name="causeClass", requiredness=Requiredness.NONE)
+    @ThriftField(value=2, name="causeClass", requiredness=Requiredness.OPTIONAL)
     public String getCauseClass() { return causeClass; }
 
     @ThriftField
@@ -30,7 +30,7 @@ public final class ServiceRuntimeException extends Exception
 
     private String serviceStackTraceMessage;
 
-    @ThriftField(value=3, name="serviceStackTraceMessage", requiredness=Requiredness.NONE)
+    @ThriftField(value=3, name="serviceStackTraceMessage", requiredness=Requiredness.OPTIONAL)
     public String getServiceStackTraceMessage() { return serviceStackTraceMessage; }
 
     @ThriftField
@@ -38,7 +38,7 @@ public final class ServiceRuntimeException extends Exception
 
     private String causeFields;
 
-    @ThriftField(value=4, name="causeFields", requiredness=Requiredness.NONE)
+    @ThriftField(value=4, name="causeFields", requiredness=Requiredness.OPTIONAL)
     public String getCauseFields() { return causeFields; }
 
     @ThriftField

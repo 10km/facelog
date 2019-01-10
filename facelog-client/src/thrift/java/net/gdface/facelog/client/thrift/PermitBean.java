@@ -54,7 +54,7 @@ public final class PermitBean
 
     private String remark;
 
-    @ThriftField(value=6, name="remark", requiredness=Requiredness.NONE)
+    @ThriftField(value=6, name="remark", requiredness=Requiredness.OPTIONAL)
     public String getRemark() { return remark; }
 
     @ThriftField
@@ -62,7 +62,7 @@ public final class PermitBean
 
     private byte [] extBin;
 
-    @ThriftField(value=7, name="extBin", requiredness=Requiredness.NONE)
+    @ThriftField(value=7, name="extBin", requiredness=Requiredness.OPTIONAL)
     public byte [] getExtBin() { return extBin; }
 
     @ThriftField
@@ -70,7 +70,7 @@ public final class PermitBean
 
     private String extTxt;
 
-    @ThriftField(value=8, name="extTxt", requiredness=Requiredness.NONE)
+    @ThriftField(value=8, name="extTxt", requiredness=Requiredness.OPTIONAL)
     public String getExtTxt() { return extTxt; }
 
     @ThriftField
