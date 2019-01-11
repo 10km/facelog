@@ -1310,7 +1310,7 @@ public  class PersonBean
         this.papersNum = null;
         this.imageMd5 = null;
         /* DEFAULT:'2050-12-31'*/
-        this.expiryDate = java.text.DateFormat.getDateInstance().parse("2050-12-31",new java.text.ParsePosition(0));
+        this.expiryDate = new java.text.SimpleDateFormat("yyyy-MM-dd").parse("2050-12-31",new java.text.ParsePosition(0));
         this.remark = null;
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
         this.createTime = null;
