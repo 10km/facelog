@@ -59,7 +59,7 @@ public final class Manager implements Constant
      * inject properties to {@link #databaseProperties}<br>
      * be effected only while called before initializing singleton instance 
      * @param properties
-     * @see {@link JdbcProperty}
+     * @see JdbcProperty
      */
     public static final void injectProperties(Map<String,String> properties){
         if(null != properties){

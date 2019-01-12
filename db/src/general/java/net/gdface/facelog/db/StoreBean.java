@@ -580,6 +580,7 @@ public final class StoreBean
         return 0L == getInitialized();
     }
     /** 
+     * @param source source list
      * @return {@code source} replace {@code null} element with null instance({@link #NULL})
      */
     public static final List<StoreBean> replaceNull(List<StoreBean> source){

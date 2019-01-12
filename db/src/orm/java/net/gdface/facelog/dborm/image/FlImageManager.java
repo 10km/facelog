@@ -740,7 +740,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     //3.6 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlImageBean , FlDeviceBean , FlFaceBean[] , FlPersonBean[] )}
+     * @see #save(FlImageBean , FlDeviceBean , FlFaceBean[] , FlPersonBean[] )
      */
     public FlImageBean saveAsTransaction(final FlImageBean bean
         ,final FlDeviceBean refDeviceByDeviceId 
@@ -782,7 +782,8 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     //3.8 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlImageBean , FlDeviceBean , java.util.Collection , java.util.Collection )}
+     * @see #save(FlImageBean , FlDeviceBean , java.util.Collection , java.util.Collection )
+     * @throws DaoException
      */
     public FlImageBean saveAsTransaction(final FlImageBean bean
         ,final FlDeviceBean refDeviceByDeviceId 

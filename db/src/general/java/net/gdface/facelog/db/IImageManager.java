@@ -45,7 +45,6 @@ public interface IImageManager extends TableManager<ImageBean>
     /**
      * Returns true if this fl_image contains row with primary key fields.
      * @param md5 String - PK# 1
-     * @see #loadByPrimaryKey($keys)
      * @return
      * @throws RuntimeDaoException
      */

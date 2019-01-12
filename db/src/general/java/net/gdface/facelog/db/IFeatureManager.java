@@ -45,7 +45,6 @@ public interface IFeatureManager extends TableManager<FeatureBean>
     /**
      * Returns true if this fl_feature contains row with primary key fields.
      * @param md5 String - PK# 1
-     * @see #loadByPrimaryKey($keys)
      * @return
      * @throws RuntimeDaoException
      */

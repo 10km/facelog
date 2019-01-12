@@ -747,7 +747,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     //3.6 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlPersonBean , FlImageBean , FlPersonGroupBean , FlFeatureBean[] , FlLogBean[] )}
+     * @see #save(FlPersonBean , FlImageBean , FlPersonGroupBean , FlFeatureBean[] , FlLogBean[] )
      */
     public FlPersonBean saveAsTransaction(final FlPersonBean bean
         ,final FlImageBean refImageByImageMd5 ,final FlPersonGroupBean refPersongroupByGroupId 
@@ -791,7 +791,8 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     //3.8 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlPersonBean , FlImageBean , FlPersonGroupBean , java.util.Collection , java.util.Collection )}
+     * @see #save(FlPersonBean , FlImageBean , FlPersonGroupBean , java.util.Collection , java.util.Collection )
+     * @throws DaoException
      */
     public FlPersonBean saveAsTransaction(final FlPersonBean bean
         ,final FlImageBean refImageByImageMd5 ,final FlPersonGroupBean refPersongroupByGroupId 

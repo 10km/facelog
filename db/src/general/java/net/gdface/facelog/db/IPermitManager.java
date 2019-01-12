@@ -48,7 +48,6 @@ public interface IPermitManager extends TableManager<PermitBean>
      * Returns true if this fl_permit contains row with primary key fields.
      * @param deviceGroupId Integer - PK# 1
      * @param personGroupId Integer - PK# 2
-     * @see #loadByPrimaryKey($keys)
      * @return
      * @throws RuntimeDaoException
      */

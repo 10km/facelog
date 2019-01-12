@@ -45,7 +45,6 @@ public interface IFaceManager extends TableManager<FaceBean>
     /**
      * Returns true if this fl_face contains row with primary key fields.
      * @param id Integer - PK# 1
-     * @see #loadByPrimaryKey($keys)
      * @return
      * @throws RuntimeDaoException
      */

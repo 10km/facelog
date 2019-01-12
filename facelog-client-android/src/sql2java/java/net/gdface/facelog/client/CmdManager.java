@@ -168,7 +168,7 @@ public class CmdManager {
         }
         /** 
          * 指定提供命令序列号的{@code Supplier}实例
-         * @see {@link IFaceLogClient#getAckChannelSupplier(Token)}
+         * @see IFaceLogClient#getAckChannelSupplier(Token)
          */
         public CmdBuilder setCmdSn(Supplier<Long> cmdSnSupplier) {
             this.cmdSnSupplier = checkNotNull(cmdSnSupplier);
@@ -183,7 +183,7 @@ public class CmdManager {
         }
         /** 
          * 指定提供命令响应通道的{@code Supplier}实例,
-         * @see {@link IFaceLogClient#getAckChannelSupplier(Token)}
+         * @see IFaceLogClient#getAckChannelSupplier(Token)
          */
         public CmdBuilder setAckChannel(Supplier<String> ackChannelSupplier){
             this.ackChannelSupplier = checkNotNull(ackChannelSupplier);
@@ -223,7 +223,7 @@ public class CmdManager {
     }
     /** 
      * 清除TLS变量 {@link #TLS_BUILDER}
-     * @see {@link ThreadLocal#remove()}
+     * @see ThreadLocal#remove()
      */
     public CmdManager removeTlsTarget(){
         TLS_BUILDER.remove();

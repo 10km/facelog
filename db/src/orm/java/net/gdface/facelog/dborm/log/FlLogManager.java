@@ -440,7 +440,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     //3.6 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlLogBean , FlDeviceBean , FlFaceBean , FlFeatureBean , FlPersonBean )}
+     * @see #save(FlLogBean , FlDeviceBean , FlFaceBean , FlFeatureBean , FlPersonBean )
      */
     public FlLogBean saveAsTransaction(final FlLogBean bean
         ,final FlDeviceBean refDeviceByDeviceId ,final FlFaceBean refFaceByCompareFace ,final FlFeatureBean refFeatureByVerifyFeature ,final FlPersonBean refPersonByPersonId 

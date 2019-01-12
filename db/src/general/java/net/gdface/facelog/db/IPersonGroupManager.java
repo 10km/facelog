@@ -45,7 +45,6 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
     /**
      * Returns true if this fl_person_group contains row with primary key fields.
      * @param id Integer - PK# 1
-     * @see #loadByPrimaryKey($keys)
      * @return
      * @throws RuntimeDaoException
      */

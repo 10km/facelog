@@ -824,6 +824,7 @@ public  class FlLogLightBean
         return 0L == getInitialized();
     }
     /** 
+     * @param source source list
      * @return {@code source} replace {@code null} element with null instance({@link #NULL})
      */
     public static final List<FlLogLightBean> replaceNull(List<FlLogLightBean> source){

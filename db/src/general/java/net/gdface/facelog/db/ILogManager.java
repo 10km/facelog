@@ -45,7 +45,6 @@ public interface ILogManager extends TableManager<LogBean>
     /**
      * Returns true if this fl_log contains row with primary key fields.
      * @param id Integer - PK# 1
-     * @see #loadByPrimaryKey($keys)
      * @return
      * @throws RuntimeDaoException
      */

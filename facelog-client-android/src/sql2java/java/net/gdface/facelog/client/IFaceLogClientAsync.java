@@ -580,7 +580,7 @@ public class IFaceLogClientAsync implements Constant{
      * Generic version of {@link #savePerson(PersonBean,ByteBuffer,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
-     * @see {@link GenericUtils#toBytes(Object)}
+     * @see GenericUtils#toBytes(Object)
      */
     public ListenableFuture<PersonBean> savePersonGeneric(
             final PersonBean bean,
@@ -687,7 +687,7 @@ public class IFaceLogClientAsync implements Constant{
      * Generic version of {@link #savePerson(PersonBean,ByteBuffer,FeatureBean,Integer,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
-     * @see {@link GenericUtils#toBytes(Object)}
+     * @see GenericUtils#toBytes(Object)
      */
     public ListenableFuture<PersonBean> savePersonGeneric(
             final PersonBean bean,
@@ -747,7 +747,7 @@ public class IFaceLogClientAsync implements Constant{
      * Generic version of {@link #savePerson(PersonBean,ByteBuffer,ByteBuffer,List,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
-     * @see {@link GenericUtils#toBytes(Object)}
+     * @see GenericUtils#toBytes(Object)
      */
     public ListenableFuture<PersonBean> savePersonGeneric(
             final PersonBean bean,
@@ -810,7 +810,7 @@ public class IFaceLogClientAsync implements Constant{
      * Generic version of {@link #savePerson(PersonBean,ByteBuffer,ByteBuffer,Map,Integer,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
-     * @see {@link GenericUtils#toBytes(Object)}
+     * @see GenericUtils#toBytes(Object)
      */
     public ListenableFuture<PersonBean> savePersonGeneric(
             final PersonBean bean,
@@ -877,7 +877,7 @@ public class IFaceLogClientAsync implements Constant{
      * Generic version of {@link #savePerson(PersonBean,ByteBuffer,ByteBuffer,ByteBuffer,FaceBean,Integer,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
-     * @see {@link GenericUtils#toBytes(Object)}
+     * @see GenericUtils#toBytes(Object)
      */
     public ListenableFuture<PersonBean> savePersonGeneric(
             final PersonBean bean,
@@ -1208,7 +1208,7 @@ public class IFaceLogClientAsync implements Constant{
      * Generic version of {@link #addImage(ByteBuffer,Integer,FaceBean,Integer,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
-     * @see {@link GenericUtils#toBytes(Object)}
+     * @see GenericUtils#toBytes(Object)
      */
     public ListenableFuture<ImageBean> addImageGeneric(
             final Object imageData,
@@ -1282,7 +1282,7 @@ public class IFaceLogClientAsync implements Constant{
      * Generic version of {@link #addFeature(ByteBuffer,Integer,List,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
-     * @see {@link GenericUtils#toBytes(Object)}
+     * @see GenericUtils#toBytes(Object)
      */
     public ListenableFuture<FeatureBean> addFeatureGeneric(
             final Object feature,
@@ -1340,7 +1340,7 @@ public class IFaceLogClientAsync implements Constant{
      * Generic version of {@link #addFeature(ByteBuffer,Integer,Map,Integer,net.gdface.facelog.client.thrift.Token)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
-     * @see {@link GenericUtils#toBytes(Object)}
+     * @see GenericUtils#toBytes(Object)
      */
     public ListenableFuture<FeatureBean> addFeatureGeneric(
             final Object feature,

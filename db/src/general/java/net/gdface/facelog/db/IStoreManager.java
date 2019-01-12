@@ -45,7 +45,6 @@ public interface IStoreManager extends TableManager<StoreBean>
     /**
      * Returns true if this fl_store contains row with primary key fields.
      * @param md5 String - PK# 1
-     * @see #loadByPrimaryKey($keys)
      * @return
      * @throws RuntimeDaoException
      */

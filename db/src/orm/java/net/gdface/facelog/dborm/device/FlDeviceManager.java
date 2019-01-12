@@ -738,7 +738,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
     //3.6 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlDeviceBean , FlDeviceGroupBean , FlImageBean[] , FlLogBean[] )}
+     * @see #save(FlDeviceBean , FlDeviceGroupBean , FlImageBean[] , FlLogBean[] )
      */
     public FlDeviceBean saveAsTransaction(final FlDeviceBean bean
         ,final FlDeviceGroupBean refDevicegroupByGroupId 
@@ -780,7 +780,8 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
     //3.8 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlDeviceBean , FlDeviceGroupBean , java.util.Collection , java.util.Collection )}
+     * @see #save(FlDeviceBean , FlDeviceGroupBean , java.util.Collection , java.util.Collection )
+     * @throws DaoException
      */
     public FlDeviceBean saveAsTransaction(final FlDeviceBean bean
         ,final FlDeviceGroupBean refDevicegroupByGroupId 

@@ -673,7 +673,7 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
     
     //1.2.2
     /**
-     * see also {@link loadByPrimaryKey(B)}
+     * see also {@link #loadByPrimaryKey(BaseBean)} 
      * @param bean
      * @return a unique B ,otherwise throw exception
      * @throws ObjectRetrievalException not found
@@ -736,7 +736,7 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
      * when you don't know which is primary key of table,you can use the method.
      * @param bean the B bean with primary key fields
      * @return 
-     * @see #loadByPrimaryKey(B bean)
+     * @see #loadByPrimaryKey(BaseBean)
      * @throws DaoException
      */
     public boolean existsByPrimaryKey(B bean)throws DaoException;
@@ -745,7 +745,7 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
      * Check duplicated row by primary keys,if row exists throw exception
      * @param bean the B bean with primary key fields
      * @return always bean
-     * @see #existsPrimaryKey(B bean)
+     * @see #existsByPrimaryKey(BaseBean)
      * @throws ObjectRetrievalException has duplicated record
      * @throws DaoException
      */
@@ -1152,7 +1152,7 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
      *
      * @param beans the B bean table to be saved
      * @return alwarys beans saved
-     * @see #save(B[])
+     * @see #save(BaseBean[])
      * @throws DaoException
      */
     public B[] saveAsTransaction(B[] beans)throws DaoException;
@@ -1228,7 +1228,7 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
     //3.11 SYNC SAVE 
     /**
      *  Transaction version for sync save
-     * @see #save(B ,Object ...)
+     * @see #save(BaseBean ,Object ...)
      * @param bean the B bean to be saved
      * @param args referenced beans or imported beans<br>
      * @return the inserted or updated B bean
@@ -1239,7 +1239,7 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
     //3.12 SYNC SAVE 
     /**
      *  Transaction version for sync save
-     * @see #saveCollection(B ,Object ...)
+     * @see #saveCollection(BaseBean ,Object ...)
      * @param bean the B bean to be saved
      * @param args referenced beans or imported beans<br>
      * @return the inserted or updated B bean
@@ -1370,10 +1370,10 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
     
     /**
      * Associates the B object to the T object by fkName field.<br>
-     * @param <T> see also {@link #getReferencedBean(B, int)}
+     * @param <T> see also {@link #getReferencedBean(BaseBean, int)}
      * @param bean the B object to use
      * @param beanToSet the T object to associate to the B bean
-     * @param fkIndex see also {@link #getReferencedBean(B, int)}
+     * @param fkIndex see also {@link #getReferencedBean(BaseBean, int)}
      * @return always beanToSet saved
      * @throws DaoException
      */
@@ -1441,9 +1441,9 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
     
     /**
      * Retrieves imported T objects by ikIndex.<br>
-     * @param <T> see also {@link #getImportedBeans(B, int)}
+     * @param <T> see also {@link #getImportedBeans(BaseBean, int)}
      * @param bean the B object to use
-     * @param ikIndex foreign key name.see also {@link #getImportedBeans(B, int)}
+     * @param ikIndex foreign key name.see also {@link #getImportedBeans(BaseBean, int)}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DaoException
      */
@@ -1452,10 +1452,10 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
     /**
      * Set the importedBeans associates to the bean by {@code ikIndex}<br>
      * 
-     * @param <T> see also {@link #getImportedBeans(B, int)}
+     * @param <T> see also {@link #getImportedBeans(BaseBean, int)}
      * @param bean the bean object to use
      * @param importedBeans the T object to associate to bean
-     * @param ikIndex foreign key name.see also {@link #getImportedBeans(B, int)}
+     * @param ikIndex foreign key name.see also {@link #getImportedBeans(BaseBean, int)}
      * @return importedBeans always
      * @throws DaoException
      */
@@ -1464,10 +1464,10 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
     /**
      * Set the importedBeans associates to the bean by fkIndex<br>
      * 
-     * @param <T> see also {@link #getImportedBeans(B, int)}
+     * @param <T> see also {@link #getImportedBeans(BaseBean, int)}
      * @param bean the bean object to use
      * @param importedBeans the T object to associate to bean
-     * @param ikIndex foreign key name. see also {@link #getImportedBeans(B, int)}
+     * @param ikIndex foreign key name. see also {@link #getImportedBeans(BaseBean, int)}
      * @return importedBeans always
      * @throws DaoException
      */

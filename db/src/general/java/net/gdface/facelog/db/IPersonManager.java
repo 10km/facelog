@@ -45,7 +45,6 @@ public interface IPersonManager extends TableManager<PersonBean>
     /**
      * Returns true if this fl_person contains row with primary key fields.
      * @param id Integer - PK# 1
-     * @see #loadByPrimaryKey($keys)
      * @return
      * @throws RuntimeDaoException
      */

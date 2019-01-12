@@ -1000,6 +1000,7 @@ public  class ImageBean
         return 0L == getInitialized();
     }
     /** 
+     * @param source source list
      * @return {@code source} replace {@code null} element with null instance({@link #NULL})
      */
     public static final List<ImageBean> replaceNull(List<ImageBean> source){
@@ -1270,7 +1271,7 @@ public  class ImageBean
     /////// FOR THRIFT //////
     /** 
      * cast {@code this} to {@link net.gdface.facelog.client.thrift.ImageBean}
-     * @see {@link ThriftConverter#converterImageBean}
+     * @see ThriftConverter#converterImageBean
      */
     public net.gdface.facelog.client.thrift.ImageBean toThrift(){
         return ThriftConverter.CONVERTER_IMAGEBEAN.toRight(this);
@@ -1278,7 +1279,7 @@ public  class ImageBean
     /** 
      * copy all fields from {@link net.gdface.facelog.client.thrift.ImageBean},do nothing if {@code thriftBean} is null
      * @return current object {@code this}
-     * @see {@link ThriftConverter#converterImageBean}
+     * @see ThriftConverter#converterImageBean
      */
     public ImageBean fromThrift(net.gdface.facelog.client.thrift.ImageBean thriftBean){
         if(null != thriftBean){
@@ -1290,7 +1291,7 @@ public  class ImageBean
     /** 
      * construct new instance from {@link net.gdface.facelog.client.thrift.ImageBean}
      * @param thriftBean must not be null
-     * @see {@link ThriftConverter#converterImageBean}
+     * @see ThriftConverter#converterImageBean
      */
     public ImageBean(net.gdface.facelog.client.thrift.ImageBean thriftBean){
         if(null != thriftBean){

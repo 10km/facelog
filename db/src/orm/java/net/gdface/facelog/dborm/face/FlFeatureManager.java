@@ -738,7 +738,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     //3.6 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlFeatureBean , FlPersonBean , FlFaceBean[] , FlLogBean[] )}
+     * @see #save(FlFeatureBean , FlPersonBean , FlFaceBean[] , FlLogBean[] )
      */
     public FlFeatureBean saveAsTransaction(final FlFeatureBean bean
         ,final FlPersonBean refPersonByPersonId 
@@ -780,7 +780,8 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     //3.8 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlFeatureBean , FlPersonBean , java.util.Collection , java.util.Collection )}
+     * @see #save(FlFeatureBean , FlPersonBean , java.util.Collection , java.util.Collection )
+     * @throws DaoException
      */
     public FlFeatureBean saveAsTransaction(final FlFeatureBean bean
         ,final FlPersonBean refPersonByPersonId 

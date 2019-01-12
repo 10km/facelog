@@ -620,7 +620,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
     //3.6 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlFaceBean , FlFeatureBean , FlImageBean , FlLogBean[] )}
+     * @see #save(FlFaceBean , FlFeatureBean , FlImageBean , FlLogBean[] )
      */
     public FlFaceBean saveAsTransaction(final FlFaceBean bean
         ,final FlFeatureBean refFeatureByFeatureMd5 ,final FlImageBean refImageByImageMd5 
@@ -661,7 +661,8 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
     //3.8 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlFaceBean , FlFeatureBean , FlImageBean , java.util.Collection )}
+     * @see #save(FlFaceBean , FlFeatureBean , FlImageBean , java.util.Collection )
+     * @throws DaoException
      */
     public FlFaceBean saveAsTransaction(final FlFaceBean bean
         ,final FlFeatureBean refFeatureByFeatureMd5 ,final FlImageBean refImageByImageMd5 

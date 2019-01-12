@@ -28,7 +28,7 @@ public class RemovalListenerContainer<K,V> implements RemovalListener<K, V> {
     /**
      * @param e
      * @return
-     * @see java.util.HashSet{esc.hash}add(java.lang.Object)
+     * @see java.util.HashSet#add(java.lang.Object)
      */
     public boolean add(RemovalListener<K, V> e) {
         return listeners.add(Preconditions.checkNotNull(e));
@@ -37,7 +37,7 @@ public class RemovalListenerContainer<K,V> implements RemovalListener<K, V> {
     /**
      * @param o
      * @return
-     * @see java.util.HashSet{esc.hash}remove(java.lang.Object)
+     * @see java.util.HashSet#remove(java.lang.Object)
      */
     public boolean remove(RemovalListener<K, V> o) {
         return listeners.remove(o);
@@ -45,7 +45,7 @@ public class RemovalListenerContainer<K,V> implements RemovalListener<K, V> {
 
     /**
      * 
-     * @see java.util.HashSet{esc.hash}clear()
+     * @see java.util.HashSet#clear()
      */
     public void clear() {
         listeners.clear();

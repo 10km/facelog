@@ -863,7 +863,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     //3.6 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlPersonGroupBean , FlPersonGroupBean , FlPermitBean[] , FlPersonBean[] , FlPersonGroupBean[] )}
+     * @see #save(FlPersonGroupBean , FlPersonGroupBean , FlPermitBean[] , FlPersonBean[] , FlPersonGroupBean[] )
      */
     public FlPersonGroupBean saveAsTransaction(final FlPersonGroupBean bean
         ,final FlPersonGroupBean refPersongroupByParent 
@@ -908,7 +908,8 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     //3.8 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlPersonGroupBean , FlPersonGroupBean , java.util.Collection , java.util.Collection , java.util.Collection )}
+     * @see #save(FlPersonGroupBean , FlPersonGroupBean , java.util.Collection , java.util.Collection , java.util.Collection )
+     * @throws DaoException
      */
     public FlPersonGroupBean saveAsTransaction(final FlPersonGroupBean bean
         ,final FlPersonGroupBean refPersongroupByParent 
@@ -1666,7 +1667,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     //_____________________________________________________________________
     //22 MANY TO MANY
     /**
-     * @see #loadViaPermitAsList(FlPersonGroupBean,int,int)
+     * @see #loadViaPermitAsList(FlDeviceGroupBean,int,int)
      */
     public List<FlPersonGroupBean> loadViaPermitAsList(FlDeviceGroupBean bean) throws DaoException
     {

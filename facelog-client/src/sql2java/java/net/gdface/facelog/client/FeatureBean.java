@@ -664,6 +664,7 @@ public  class FeatureBean
         return 0L == getInitialized();
     }
     /** 
+     * @param source source list
      * @return {@code source} replace {@code null} element with null instance({@link #NULL})
      */
     public static final List<FeatureBean> replaceNull(List<FeatureBean> source){
@@ -874,7 +875,7 @@ public  class FeatureBean
     /////// FOR THRIFT //////
     /** 
      * cast {@code this} to {@link net.gdface.facelog.client.thrift.FeatureBean}
-     * @see {@link ThriftConverter#converterFeatureBean}
+     * @see ThriftConverter#converterFeatureBean
      */
     public net.gdface.facelog.client.thrift.FeatureBean toThrift(){
         return ThriftConverter.CONVERTER_FEATUREBEAN.toRight(this);
@@ -882,7 +883,7 @@ public  class FeatureBean
     /** 
      * copy all fields from {@link net.gdface.facelog.client.thrift.FeatureBean},do nothing if {@code thriftBean} is null
      * @return current object {@code this}
-     * @see {@link ThriftConverter#converterFeatureBean}
+     * @see ThriftConverter#converterFeatureBean
      */
     public FeatureBean fromThrift(net.gdface.facelog.client.thrift.FeatureBean thriftBean){
         if(null != thriftBean){
@@ -894,7 +895,7 @@ public  class FeatureBean
     /** 
      * construct new instance from {@link net.gdface.facelog.client.thrift.FeatureBean}
      * @param thriftBean must not be null
-     * @see {@link ThriftConverter#converterFeatureBean}
+     * @see ThriftConverter#converterFeatureBean
      */
     public FeatureBean(net.gdface.facelog.client.thrift.FeatureBean thriftBean){
         if(null != thriftBean){

@@ -859,6 +859,7 @@ public  class FlPermitBean
         return 0L == getInitialized();
     }
     /** 
+     * @param source source list
      * @return {@code source} replace {@code null} element with null instance({@link #NULL})
      */
     public static final List<FlPermitBean> replaceNull(List<FlPermitBean> source){

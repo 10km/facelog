@@ -203,7 +203,7 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
     }
     /** 
      * 返回数据库中匹配{@code k1}的所有记录,没有结果返回则抛出异常 
-     * @see {@link com.google.common.cache.LoadingCache#get(Object)}
+     * @see com.google.common.cache.LoadingCache#get(Object)
      * @throws ObjectRetrievalException not found
      * @throws ExecutionException
      */
@@ -221,14 +221,14 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
     }
     /** 
      * 返回内存cache中匹配{@code k1}的所有记录,没有结果返回则返回empty Set
-     * @see {@link com.google.common.cache.LoadingCache#getIfPresent(Object)}
+     * @see com.google.common.cache.LoadingCache#getIfPresent(Object)
      */
     public Set<B> getBeansByK1IfPresent(K1 k1){
         return filter(k1,funReturnK1);
     }
     /** 
      * 返回数据库中匹配{@code k1}的所有记录,没有结果返回则返回empty Set
-     * @see {@link com.google.common.cache.LoadingCache#getUnchecked(Object)}
+     * @see com.google.common.cache.LoadingCache#getUnchecked(Object)
      * @throws UncheckedExecutionException
      */
     public Set<B> getBeansByK1Unchecked(K1 k1){
@@ -243,7 +243,7 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
             throw e;
         }
     }
-    /** see also {@link #getBeansByK1(K1)}*/
+    /** see also {@link #getBeansByK1(Object)}*/
     public Set<B> getBeansByK2(K2 k2)throws ExecutionException{
         try{
             cache.get(asTmpKey(null,k2));
@@ -256,11 +256,11 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
             throw e;
         }
     }
-    /** see also {@link #getBeansByK1IfPresent(K1)} */
+    /** see also {@link #getBeansByK1IfPresent(Object)} */
     public Set<B> getBeansByK2IfPresent(K2 k2){
         return filter(k2,funReturnK2);
     }
-    /** see also {@link #getBeansByK1Unchecked(K1)} */
+    /** see also {@link #getBeansByK1Unchecked(Object)} */
     public Set<B> getBeansByK2Unchecked(K2 k2){
         try{
             cache.getUnchecked(asTmpKey(null,k2));
@@ -275,7 +275,7 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
     }
     /** 返回数据库中与{@code k1,k2}(不可为{@code null})匹配的记录<br>
      *  如果没找到记录则抛出异常
-     * @see {@link com.google.common.cache.LoadingCache#get(Object)}
+     * @see com.google.common.cache.LoadingCache#get(Object)
      * @throws ObjectRetrievalException not found
      * @throws ExecutionException
      */
@@ -293,7 +293,7 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
     /** 
      * 返回数据库中与{@code k1,k2}匹配的记录<br>
      * 如果没找到记录则返回{@code null}
-     * @see {@link com.google.common.cache.LoadingCache#getUnchecked(Object)}
+     * @see com.google.common.cache.LoadingCache#getUnchecked(Object)
      */
     public B getBeanUnchecked(K1 k1,K2 k2){
         try{
@@ -317,7 +317,6 @@ public abstract class BaseJunctionTableCache<K1 ,K2,B extends BaseBean<B>> {
     /**
      * 更新{@code bean}到指定的缓存对象{@code cacheMap}
      * @param bean
-     * @param cacheMap
      */
     public void update(B bean){
         K1 k1 = returnK1(bean);

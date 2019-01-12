@@ -1085,6 +1085,7 @@ public  class PersonGroupBean
         return 0L == getInitialized();
     }
     /** 
+     * @param source source list
      * @return {@code source} replace {@code null} element with null instance({@link #NULL})
      */
     public static final List<PersonGroupBean> replaceNull(List<PersonGroupBean> source){
@@ -1370,7 +1371,7 @@ public  class PersonGroupBean
     /////// FOR THRIFT //////
     /** 
      * cast {@code this} to {@link net.gdface.facelog.client.thrift.PersonGroupBean}
-     * @see {@link ThriftConverter#converterPersonGroupBean}
+     * @see ThriftConverter#converterPersonGroupBean
      */
     public net.gdface.facelog.client.thrift.PersonGroupBean toThrift(){
         return ThriftConverter.CONVERTER_PERSONGROUPBEAN.toRight(this);
@@ -1378,7 +1379,7 @@ public  class PersonGroupBean
     /** 
      * copy all fields from {@link net.gdface.facelog.client.thrift.PersonGroupBean},do nothing if {@code thriftBean} is null
      * @return current object {@code this}
-     * @see {@link ThriftConverter#converterPersonGroupBean}
+     * @see ThriftConverter#converterPersonGroupBean
      */
     public PersonGroupBean fromThrift(net.gdface.facelog.client.thrift.PersonGroupBean thriftBean){
         if(null != thriftBean){
@@ -1390,7 +1391,7 @@ public  class PersonGroupBean
     /** 
      * construct new instance from {@link net.gdface.facelog.client.thrift.PersonGroupBean}
      * @param thriftBean must not be null
-     * @see {@link ThriftConverter#converterPersonGroupBean}
+     * @see ThriftConverter#converterPersonGroupBean
      */
     public PersonGroupBean(net.gdface.facelog.client.thrift.PersonGroupBean thriftBean){
         if(null != thriftBean){

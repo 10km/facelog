@@ -427,7 +427,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     //3.6 SYNC SAVE AS TRANSACTION
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlPermitBean , FlDeviceGroupBean , FlPersonGroupBean )}
+     * @see #save(FlPermitBean , FlDeviceGroupBean , FlPersonGroupBean )
      */
     public FlPermitBean saveAsTransaction(final FlPermitBean bean
         ,final FlDeviceGroupBean refDevicegroupByDeviceGroupId ,final FlPersonGroupBean refPersongroupByPersonGroupId 

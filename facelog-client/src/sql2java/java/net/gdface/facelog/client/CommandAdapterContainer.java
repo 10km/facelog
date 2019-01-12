@@ -54,7 +54,7 @@ public class CommandAdapterContainer extends CommandAdapter{
      * @param cmd 设备命令类型,不可为{@code null}
      * @param adapter  命令执行器,不可为{@code null},也不可为容器对象{@link CommandAdapterContainer}
      * @return
-     * @see {@link EnumMap#put(Enum, Object)}
+     * @see EnumMap#put(Enum, Object)
      */
     public CommandAdapterContainer register(Cmd cmd, CommandAdapter adapter) {
         checkArgument(null != cmd && null != adapter,"key or adapter is null");
@@ -66,7 +66,7 @@ public class CommandAdapterContainer extends CommandAdapter{
      * 注销{@code cmd}指定的命令执行器
      * @param cmd
      * @return 返回被删除的命令执行器
-     * @see {@link EnumMap#remove(Object)}
+     * @see EnumMap#remove(Object)
      */
     public CommandAdapterContainer unregister(Cmd cmd) {
         adapters.remove(cmd);
@@ -75,7 +75,7 @@ public class CommandAdapterContainer extends CommandAdapter{
     
     /**
      * 删除所有命令执行器
-     * @see {@link EnumMap#clear()}
+     * @see EnumMap#clear()
      */
     public CommandAdapterContainer clear() {
         adapters.clear();

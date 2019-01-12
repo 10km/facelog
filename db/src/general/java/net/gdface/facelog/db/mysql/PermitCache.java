@@ -30,7 +30,7 @@ import net.gdface.facelog.db.PermitBean;
 public class PermitCache extends BaseJunctionTableCache<Integer,Integer, PermitBean> {
     private final PermitManager manager = PermitManager.getInstance();
     /** constructor<br>
-     * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     * @see BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )
      */
     public PermitCache(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
         super(updateStrategy,maximumSize, duration, unit);
@@ -87,37 +87,37 @@ public class PermitCache extends BaseJunctionTableCache<Integer,Integer, PermitB
     }
     /** 
      * return all matched beans on field fl_permit(device_group_id) with deviceGroupId 
-     * @see BaseJunctionTableCache#getBeansByK1(Integer)
+     * @see BaseJunctionTableCache#getBeansByK1(Object)
      */
     public Set<PermitBean> getBeanByDeviceGroupId(Integer deviceGroupId) throws ExecutionException{
         return getBeansByK1(deviceGroupId);
     }
     /** 
      * return all matched beans on field fl_permit(device_group_id) with deviceGroupId 
-     * @see BaseJunctionTableCache#getBeansByK1Unchecked(Integer)
+     * @see BaseJunctionTableCache#getBeansByK1Unchecked(Object)
      */
     public Set<PermitBean> getBeanByDeviceGroupIdUnchecked(Integer deviceGroupId){
         return getBeansByK1Unchecked(deviceGroupId);
     }
     /** 
      * return all matched beans on field fl_permit(person_group_id) with personGroupId 
-     * @see BaseJunctionTableCache#getBeansByK2(Integer)
+     * @see BaseJunctionTableCache#getBeansByK2(Object)
      */
     public Set<PermitBean> getBeanByPersonGroupId(Integer personGroupId) throws ExecutionException{
         return getBeansByK2(personGroupId);
     }
     /** 
      * return all matched beans on field fl_permit(person_group_id) with personGroupId 
-     * @see BaseJunctionTableCache#getBeansByK2Unchecked(Integer)
+     * @see BaseJunctionTableCache#getBeansByK2Unchecked(Object)
      */
     public Set<PermitBean> getBeanByPersonGroupIdUnchecked(Integer personGroupId){
         return getBeansByK2Unchecked(personGroupId);
     }
-    /** see also {@link BaseJunctionTableCache#getBean(Integer,Integer)} */
+    /** see also {@link BaseJunctionTableCache#getBean(Object,Object)} */
     public PermitBean getBeanByPrimaryKey(Integer deviceGroupId,Integer personGroupId) throws ExecutionException{
         return getBean(deviceGroupId,personGroupId);
     }
-    /** see also {@link BaseJunctionTableCache#getBeanUnchecked(Integer,Integer)} */
+    /** see also {@link BaseJunctionTableCache#getBeanUnchecked(Object,Object)} */
     public PermitBean getBeanByPrimaryKeyUnchecked(Integer deviceGroupId,Integer personGroupId){
         return getBeanUnchecked(deviceGroupId,personGroupId);
     }

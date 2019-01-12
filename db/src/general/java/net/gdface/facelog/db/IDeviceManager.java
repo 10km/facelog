@@ -45,7 +45,6 @@ public interface IDeviceManager extends TableManager<DeviceBean>
     /**
      * Returns true if this fl_device contains row with primary key fields.
      * @param id Integer - PK# 1
-     * @see #loadByPrimaryKey($keys)
      * @return
      * @throws RuntimeDaoException
      */

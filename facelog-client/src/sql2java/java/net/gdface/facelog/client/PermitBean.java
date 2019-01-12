@@ -848,6 +848,7 @@ public  class PermitBean
         return 0L == getInitialized();
     }
     /** 
+     * @param source source list
      * @return {@code source} replace {@code null} element with null instance({@link #NULL})
      */
     public static final List<PermitBean> replaceNull(List<PermitBean> source){
@@ -1088,7 +1089,7 @@ public  class PermitBean
     /////// FOR THRIFT //////
     /** 
      * cast {@code this} to {@link net.gdface.facelog.client.thrift.PermitBean}
-     * @see {@link ThriftConverter#converterPermitBean}
+     * @see ThriftConverter#converterPermitBean
      */
     public net.gdface.facelog.client.thrift.PermitBean toThrift(){
         return ThriftConverter.CONVERTER_PERMITBEAN.toRight(this);
@@ -1096,7 +1097,7 @@ public  class PermitBean
     /** 
      * copy all fields from {@link net.gdface.facelog.client.thrift.PermitBean},do nothing if {@code thriftBean} is null
      * @return current object {@code this}
-     * @see {@link ThriftConverter#converterPermitBean}
+     * @see ThriftConverter#converterPermitBean
      */
     public PermitBean fromThrift(net.gdface.facelog.client.thrift.PermitBean thriftBean){
         if(null != thriftBean){
@@ -1108,7 +1109,7 @@ public  class PermitBean
     /** 
      * construct new instance from {@link net.gdface.facelog.client.thrift.PermitBean}
      * @param thriftBean must not be null
-     * @see {@link ThriftConverter#converterPermitBean}
+     * @see ThriftConverter#converterPermitBean
      */
     public PermitBean(net.gdface.facelog.client.thrift.PermitBean thriftBean){
         if(null != thriftBean){

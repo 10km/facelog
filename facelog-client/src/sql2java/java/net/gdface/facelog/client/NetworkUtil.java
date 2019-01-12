@@ -151,8 +151,8 @@ public class NetworkUtil {
      * 返回指定{@code address}绑定的网卡的物理地址(MAC)
      * @param address
      * @return 指定的{@code address}没有绑定在任何网卡上返回{@code null}
-     * @see {@link NetworkInterface#getByInetAddress(InetAddress)}
-     * @see {@link NetworkInterface#getHardwareAddress()}
+     * @see NetworkInterface#getByInetAddress(InetAddress)
+     * @see NetworkInterface#getHardwareAddress()
      */
     public static byte[] getMacAddress(InetAddress address) {
         try {

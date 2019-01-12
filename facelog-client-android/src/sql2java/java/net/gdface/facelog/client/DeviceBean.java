@@ -1079,6 +1079,7 @@ public  class DeviceBean
         return 0L == getInitialized();
     }
     /** 
+     * @param source source list
      * @return {@code source} replace {@code null} element with null instance({@link #NULL})
      */
     public static final List<DeviceBean> replaceNull(List<DeviceBean> source){
@@ -1364,7 +1365,7 @@ public  class DeviceBean
     /////// FOR THRIFT //////
     /** 
      * cast {@code this} to {@link net.gdface.facelog.client.thrift.DeviceBean}
-     * @see {@link ThriftConverter#converterDeviceBean}
+     * @see ThriftConverter#converterDeviceBean
      */
     public net.gdface.facelog.client.thrift.DeviceBean toThrift(){
         return ThriftConverter.CONVERTER_DEVICEBEAN.toRight(this);
@@ -1372,7 +1373,7 @@ public  class DeviceBean
     /** 
      * copy all fields from {@link net.gdface.facelog.client.thrift.DeviceBean},do nothing if {@code thriftBean} is null
      * @return current object {@code this}
-     * @see {@link ThriftConverter#converterDeviceBean}
+     * @see ThriftConverter#converterDeviceBean
      */
     public DeviceBean fromThrift(net.gdface.facelog.client.thrift.DeviceBean thriftBean){
         if(null != thriftBean){
@@ -1384,7 +1385,7 @@ public  class DeviceBean
     /** 
      * construct new instance from {@link net.gdface.facelog.client.thrift.DeviceBean}
      * @param thriftBean must not be null
-     * @see {@link ThriftConverter#converterDeviceBean}
+     * @see ThriftConverter#converterDeviceBean
      */
     public DeviceBean(net.gdface.facelog.client.thrift.DeviceBean thriftBean){
         if(null != thriftBean){
