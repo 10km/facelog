@@ -64,7 +64,7 @@ class BaseDao implements CommonConstant {
      * 根据主键从数据库读取记录,没有找到记录返回{@code null}<br>
      * $paramComments
      * @return 
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadByPrimaryKey($varTypes)}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}loadByPrimaryKey($varTypes)
      * @throws RuntimeDaoException
      */
     $!{modifier}$beanClass daoGet${coreClass}($params)throws RuntimeDaoException{
@@ -75,7 +75,7 @@ class BaseDao implements CommonConstant {
      * 根据主键从数据库读取记录,没有找到记录抛出异常<br>
      * $paramComments
      * @return 
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadByPrimaryKeyChecked($varTypes)}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}loadByPrimaryKeyChecked($varTypes)
      * @throws RuntimeDaoException
      * @throws ObjectRetrievalException 没有找到记录
      */
@@ -87,7 +87,7 @@ class BaseDao implements CommonConstant {
     /** 
      * 根据主键从数据库读取记录
      * @return 返回与输入参数下标对应的 ${beanClass} 列表,没有查到记录的返回{@link ${beanClass}${esc.hash}NULL}
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadByPrimaryKey(Collection)}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}loadByPrimaryKey(Collection)
      * @see ${beanClass}${esc.hash}replaceNull(List)
      * @throws RuntimeDaoException
      */
@@ -99,7 +99,7 @@ class BaseDao implements CommonConstant {
     /** 
      * 删除主键列表({@code ${primaryKey.varName}Collection})指定的记录
      * @return 返回删除的记录条数
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}deleteByPrimaryKey(Collection)}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}deleteByPrimaryKey(Collection)
      * @throws RuntimeDaoException
      */
     $!{modifier}int daoDelete${coreClass}sByPrimaryKey(Collection<$primaryKey.javaType> ${primaryKey.varName}Collection)
@@ -132,9 +132,9 @@ class BaseDao implements CommonConstant {
      * unwrap primary key from {@link $beanClass}<br>
      * if {@code beans} is {@code null},return a empty list(immutable)
      *
-     * @param {@link $beanClass} collection
+     * @param beans {@link $beanClass} collection
      * @return primary key list
-     * @see {@link ${table.asManagerInterfaceNSP()}${esc.hash}toPrimaryKeyList(Collection)}
+     * @see ${table.asManagerInterfaceNSP()}${esc.hash}toPrimaryKeyList(Collection)
      */
     $!{modifier}List<$primaryKey.javaType> daoToPrimaryKeyListFrom${coreClass}s(Collection<$beanClass> beans){
         if (null == beans){
@@ -153,7 +153,7 @@ class BaseDao implements CommonConstant {
      * if {@code beans} is {@code null},return a empty list(immutable)
      * @param {@link $beanClass} list
      * @return primary key list 
-     * @see {@link Lists$${esc.hash}transform(List, Function)
+     * @see Lists$${esc.hash}transform(List, Function)
      */
     $!{modifier}List<$primaryKey.javaType> daoToPrimaryKeyListFrom${coreClass}s(List<$beanClass> beans){
         if(null == beans){
@@ -167,7 +167,7 @@ class BaseDao implements CommonConstant {
     /** 
      *　判断主键指定的记录是否存在
      * $paramComments
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}existsPrimaryKey($varTypes)}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}existsPrimaryKey($varTypes)
      * @throws RuntimeDaoException
      */
     $!{modifier}boolean daoExists${coreClass}($params)
@@ -177,7 +177,7 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}existsPrimaryKey($beanClass)}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}existsPrimaryKey($beanClass)
      * @throws RuntimeDaoException
      */
     $!{modifier}boolean daoExists${coreClass}($beanClass bean)
@@ -189,7 +189,7 @@ class BaseDao implements CommonConstant {
      * 删除主键指定的记录
      * $paramComments 
      * @return 返回删除的记录条数(1),如果记录不存在返回0
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}deleteByPrimaryKey($varTypes)}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}deleteByPrimaryKey($varTypes)
      * @throws RuntimeDaoException
      */
     $!{modifier}int daoDelete${coreClass}($params)
@@ -229,7 +229,7 @@ class BaseDao implements CommonConstant {
     //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      */
@@ -253,7 +253,7 @@ class BaseDao implements CommonConstant {
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * $paramComments
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)
      * @throws DuplicateRecordException if exists duplicated row
      * $!checkReturnComment
      * @throws RuntimeDaoException
@@ -309,7 +309,7 @@ class BaseDao implements CommonConstant {
     /**
      * 删除外键($fullVarNames))引用指定记录(#join($primaryKeys '$e.fullName' ','))的所有{@code $importedTable.name}记录
      * $fullParamComments
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}${importedTable.getImportedBeansDelMethod($fkName)}($varTypes)}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}${importedTable.getImportedBeansDelMethod($fkName)}($varTypes)
      * @throws RuntimeDaoException
      */
     $!{modifier}int ${importedTable.getImportedBeansDelMethod($fkName).replaceFirst('delete','daoDelete')}On${coreClass}($fullParams)
@@ -327,7 +327,7 @@ class BaseDao implements CommonConstant {
     /**
      * 返回外键(#join($fkObj.columns '$e.fullName' ','))引用的 $foreignTable.name 记录
      * @param bean
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}$table.getReferencedVarGetMethod($fkName)($beanClass)}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}$table.getReferencedVarGetMethod($fkName)($beanClass)
      * @throws RuntimeDaoException
      */
     $!{modifier}$foreignClass $table.getReferencedVarGetMethod($fkName).replaceFirst('get','daoGet')On${coreClass}($beanClass bean)
@@ -340,7 +340,7 @@ class BaseDao implements CommonConstant {
      * 如果{@code beanToSet}没有保存则先save
      * @param bean
      * @param beanToSet 被引用的记录
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}$table.getReferencedVarSetMethod($fkName)($beanClass,$foreignClass)}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}$table.getReferencedVarSetMethod($fkName)($beanClass,$foreignClass)
      * @throws RuntimeDaoException
      */
     $!{modifier}$foreignClass $table.getReferencedVarSetMethod($fkName).replaceFirst('set','daoSet')On${coreClass}($beanClass bean,$foreignClass beanToSet)
@@ -448,8 +448,8 @@ class BaseDao implements CommonConstant {
      * 添加新记录<br>
      * $table.name 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link $beanClass${esc.hash}isNew()}返回{@code false},则抛出异常
      * @param $table.asVarBean() 要添加的新记录
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}save($beanClass)}
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}save($beanClass)
+     * @see $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code ${table.asVarBean()}.isNew()} is {@code false}
@@ -531,7 +531,7 @@ class BaseDao implements CommonConstant {
      * 添加新记录(同步保存)<br>
      * $table.name 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link $beanClass${esc.hash}isNew()}返回{@code false},则抛出异常
      * see also {@link $table.asManagerInterfaceNSP()${esc.hash}save($beanClass #foreachForeignTables('native' $table  ", $m_foreignClass" '' '') #foreachImportedTables('native' $table  ", Collection" '' '') )}<br>
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code ${table.asVarBean()}.isNew()} is {@code false}
@@ -634,7 +634,7 @@ class BaseDao implements CommonConstant {
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadByWhereAsList(String,int[],int,int)}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}loadByWhereAsList(String,int[],int,int)
      * @throws RuntimeDaoException
      */
     $!{modifier}List<$beanClass> daoLoad${coreClass}ByWhere(String where,int startRow, int numRows)
@@ -644,7 +644,7 @@ class BaseDao implements CommonConstant {
     //17
     /**
      * 返回 $table.name 表的所有记录
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadAllAsList()}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}loadAllAsList()
      * @throws RuntimeDaoException
      */
     $!{modifier}List<$beanClass> daoLoad${coreClass}All()
@@ -654,7 +654,7 @@ class BaseDao implements CommonConstant {
     //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 $table.name 记录总数
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}Where(String)}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}Where(String)
      * @throws RuntimeDaoException
      */
     $!{modifier}int daoCount${coreClass}ByWhere(String where)
@@ -683,7 +683,7 @@ class BaseDao implements CommonConstant {
      * #join($indexColumns '
      * @param $e.varName $e.remarks' '')
 
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadBy${index.asCamelCaseName()}(#join($indexColumns '$e.javaType' ','))}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}loadBy${index.asCamelCaseName()}(#join($indexColumns '$e.javaType' ','))
      * @throws RuntimeDaoException
      */
     $!{modifier}$beanClass daoGet${coreClass}By${index.asCamelCaseName()}(#join($indexColumns '$e.javaType $e.varName' ','))
@@ -696,7 +696,7 @@ class BaseDao implements CommonConstant {
      * #join($indexColumns '
      * @param $e.varName $e.remarks' '')
 
-     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadBy${index.asCamelCaseName()}Checked(#join($indexColumns '$e.javaType' ','))}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}loadBy${index.asCamelCaseName()}Checked(#join($indexColumns '$e.javaType' ','))
      * @throws RuntimeDaoException
      * @throws ObjectRetrievalException 没有找到记录
      */
@@ -747,7 +747,7 @@ class BaseDao implements CommonConstant {
      * (主动更新机制实现)<br>
      * 返回 ${table.name}.$timestampColumn 字段大于指定时间戳({@code timestamp})的所有记录
      * @return 返回查询结果记录的主键
-     * @see {@link ${esc.hash}daoLoad${coreClass}${pkName}ByWhere(String)}
+     * @see ${esc.hash}daoLoad${coreClass}${pkName}ByWhere(String)
      * @throws RuntimeDaoException
      */
     $!{modifier}List<$primaryKey.javaType> daoLoad${coreClass}${pkName}By${m_suffix}(Date timestamp)
