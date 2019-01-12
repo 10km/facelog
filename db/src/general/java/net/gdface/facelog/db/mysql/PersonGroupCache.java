@@ -23,7 +23,7 @@ public class PersonGroupCache extends BaseTableLoadCaching<Integer, PersonGroupB
     private final PersonGroupManager manager = PersonGroupManager.getInstance();
     
     /** constructor<br>
-     * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     * @see BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )
      */
     public PersonGroupCache(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
         super(updateStrategy,maximumSize, duration, unit);

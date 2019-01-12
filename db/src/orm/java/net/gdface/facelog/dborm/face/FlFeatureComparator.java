@@ -31,7 +31,7 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>,Constant
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlFeatureComparator(Constant.FL_FEATURE_ID_MD5, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlFeatureComparator(Constant.FL_FEATURE_ID_MD5, bReverse));</code>
      *
      * @param iType the field from which you want to sort
      * <br>
@@ -53,7 +53,7 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>,Constant
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlFeatureComparator(Constant.FL_FEATURE_ID_MD5, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlFeatureComparator(Constant.FL_FEATURE_ID_MD5, bReverse));</code>
      *
      * @param iType the field from which you want to sort.
      * <br>

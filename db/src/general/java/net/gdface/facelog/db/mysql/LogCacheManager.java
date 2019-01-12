@@ -45,7 +45,7 @@ public class LogCacheManager extends LogManager
     /**
      * create a instance of LogCacheManager and assign to {@link #instance} if {@code instance} is not initialized.<br>
      * otherwise return {@code instance}.
-     * @see {@link LogCacheManager#LogCacheManager(UpdateStrategy ,long , long , TimeUnit )}
+     * @see LogCacheManager#LogCacheManager(UpdateStrategy ,long , long , TimeUnit )
      */
     public static synchronized final LogCacheManager makeInstance(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
@@ -68,7 +68,7 @@ public class LogCacheManager extends LogManager
     /** instance of {@link LogCache} */
     private final LogCache cache;
     /** constructor<br>
-     * @see {@link LogCache#LogCache(UpdateStrategy ,long , long , TimeUnit )}
+     * @see LogCache#LogCache(UpdateStrategy ,long , long , TimeUnit )
      */
     protected LogCacheManager(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
         cache = new LogCache(updateStrategy,maximumSize,duration,unit);

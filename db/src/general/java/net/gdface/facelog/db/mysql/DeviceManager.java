@@ -357,8 +357,8 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link ImageBean}</li>
-     *     <li> {@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} TO {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID} TO {@link LogBean}</li>
      * </ul>
      * @param bean the {@link DeviceBean} object to use
      * @param ikIndex valid values: {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID},{@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID}
@@ -381,8 +381,8 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link ImageBean}</li>
-     *     <li> {@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} TO {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID} TO {@link LogBean}</li>
      * </ul>
      * @param bean the {@link DeviceBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link DeviceBean}
@@ -405,11 +405,11 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link ImageBean}</li>
-     *     <li> {@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} TO {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID} TO {@link LogBean}</li>
      * </ul>
      * @param bean the {@link DeviceBean} object to use
-     * @param importedBeans the <T> object to associate to the {@link DeviceBean}
+     * @param importedBeans the T object to associate to the {@link DeviceBean}
      * @param ikIndex valid values: {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID},{@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID}
      * @return importedBeans always
      */
@@ -666,7 +666,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
      * Save the {@link DeviceBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link DeviceBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(DeviceBean , DeviceGroupBean , ImageBean[] , LogBean[] )}
      * @return the inserted or updated {@link DeviceBean} bean
      */
@@ -701,7 +701,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
      * Save the {@link DeviceBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link DeviceBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(DeviceBean , DeviceGroupBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link DeviceBean} bean
      */
@@ -740,12 +740,12 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_DEVICE_FK_GROUP_ID} -> {@link DeviceGroupBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_FK_GROUP_ID} TO {@link DeviceGroupBean}</li>
      * </ul>
      * @param bean the {@link DeviceBean} object to use
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_DEVICE_FK_GROUP_ID}
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return the associated T bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -762,7 +762,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
      * 
      * @param <T> see also {@link #getReferencedBean(DeviceBean,int)}
      * @param bean the {@link DeviceBean} object to use
-     * @param beanToSet the <T> object to associate to the {@link DeviceBean}
+     * @param beanToSet the T object to associate to the {@link DeviceBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(DeviceBean,int)}
      * @return always beanToSet saved
      */

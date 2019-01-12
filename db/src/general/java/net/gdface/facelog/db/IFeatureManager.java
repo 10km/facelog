@@ -193,7 +193,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param bean the referenced {@link FeatureBean}
      * @param importedBeans imported beans from fl_face
      * @return importedBeans always
-     * @see {@link FaceManager#setReferencedByFeatureMd5(FaceBean, FeatureBean)
+     * @see IFaceManager#setReferencedByFeatureMd5(FaceBean, FeatureBean)
      * @throws RuntimeDaoException
      */
     public FaceBean[] setFaceBeansByFeatureMd5(FeatureBean bean , FaceBean[] importedBeans)throws RuntimeDaoException;
@@ -205,7 +205,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param bean the referenced {@link FeatureBean} 
      * @param importedBeans imported beans from fl_face 
      * @return importedBeans always
-     * @see {@link FaceManager#setReferencedByFeatureMd5(FaceBean, FeatureBean)
+     * @see IFaceManager#setReferencedByFeatureMd5(FaceBean, FeatureBean)
      * @throws RuntimeDaoException
      */
     public <C extends java.util.Collection<FaceBean>> C setFaceBeansByFeatureMd5(FeatureBean bean , C importedBeans)throws RuntimeDaoException;
@@ -275,7 +275,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param bean the referenced {@link FeatureBean}
      * @param importedBeans imported beans from fl_log
      * @return importedBeans always
-     * @see {@link LogManager#setReferencedByVerifyFeature(LogBean, FeatureBean)
+     * @see ILogManager#setReferencedByVerifyFeature(LogBean, FeatureBean)
      * @throws RuntimeDaoException
      */
     public LogBean[] setLogBeansByVerifyFeature(FeatureBean bean , LogBean[] importedBeans)throws RuntimeDaoException;
@@ -287,7 +287,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param bean the referenced {@link FeatureBean} 
      * @param importedBeans imported beans from fl_log 
      * @return importedBeans always
-     * @see {@link LogManager#setReferencedByVerifyFeature(LogBean, FeatureBean)
+     * @see ILogManager#setReferencedByVerifyFeature(LogBean, FeatureBean)
      * @throws RuntimeDaoException
      */
     public <C extends java.util.Collection<LogBean>> C setLogBeansByVerifyFeature(FeatureBean bean , C importedBeans)throws RuntimeDaoException;

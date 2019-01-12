@@ -684,6 +684,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
      * @param ps the PreparedStatement that will be filled
      * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
+     * @param fillNull wether fill null for null field
      * @return the number of clauses returned
      * @throws DaoException
      */

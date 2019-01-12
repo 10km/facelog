@@ -193,7 +193,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param bean the referenced {@link DeviceGroupBean}
      * @param importedBeans imported beans from fl_device
      * @return importedBeans always
-     * @see {@link DeviceManager#setReferencedByGroupId(DeviceBean, DeviceGroupBean)
+     * @see IDeviceManager#setReferencedByGroupId(DeviceBean, DeviceGroupBean)
      * @throws RuntimeDaoException
      */
     public DeviceBean[] setDeviceBeansByGroupId(DeviceGroupBean bean , DeviceBean[] importedBeans)throws RuntimeDaoException;
@@ -205,7 +205,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param bean the referenced {@link DeviceGroupBean} 
      * @param importedBeans imported beans from fl_device 
      * @return importedBeans always
-     * @see {@link DeviceManager#setReferencedByGroupId(DeviceBean, DeviceGroupBean)
+     * @see IDeviceManager#setReferencedByGroupId(DeviceBean, DeviceGroupBean)
      * @throws RuntimeDaoException
      */
     public <C extends java.util.Collection<DeviceBean>> C setDeviceBeansByGroupId(DeviceGroupBean bean , C importedBeans)throws RuntimeDaoException;
@@ -275,7 +275,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param bean the referenced {@link DeviceGroupBean}
      * @param importedBeans imported beans from fl_device_group
      * @return importedBeans always
-     * @see {@link DeviceGroupManager#setReferencedByParent(DeviceGroupBean, DeviceGroupBean)
+     * @see IDeviceGroupManager#setReferencedByParent(DeviceGroupBean, DeviceGroupBean)
      * @throws RuntimeDaoException
      */
     public DeviceGroupBean[] setDeviceGroupBeansByParent(DeviceGroupBean bean , DeviceGroupBean[] importedBeans)throws RuntimeDaoException;
@@ -287,7 +287,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param bean the referenced {@link DeviceGroupBean} 
      * @param importedBeans imported beans from fl_device_group 
      * @return importedBeans always
-     * @see {@link DeviceGroupManager#setReferencedByParent(DeviceGroupBean, DeviceGroupBean)
+     * @see IDeviceGroupManager#setReferencedByParent(DeviceGroupBean, DeviceGroupBean)
      * @throws RuntimeDaoException
      */
     public <C extends java.util.Collection<DeviceGroupBean>> C setDeviceGroupBeansByParent(DeviceGroupBean bean , C importedBeans)throws RuntimeDaoException;
@@ -357,7 +357,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param bean the referenced {@link DeviceGroupBean}
      * @param importedBeans imported beans from fl_permit
      * @return importedBeans always
-     * @see {@link PermitManager#setReferencedByDeviceGroupId(PermitBean, DeviceGroupBean)
+     * @see IPermitManager#setReferencedByDeviceGroupId(PermitBean, DeviceGroupBean)
      * @throws RuntimeDaoException
      */
     public PermitBean[] setPermitBeansByDeviceGroupId(DeviceGroupBean bean , PermitBean[] importedBeans)throws RuntimeDaoException;
@@ -369,7 +369,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param bean the referenced {@link DeviceGroupBean} 
      * @param importedBeans imported beans from fl_permit 
      * @return importedBeans always
-     * @see {@link PermitManager#setReferencedByDeviceGroupId(PermitBean, DeviceGroupBean)
+     * @see IPermitManager#setReferencedByDeviceGroupId(PermitBean, DeviceGroupBean)
      * @throws RuntimeDaoException
      */
     public <C extends java.util.Collection<PermitBean>> C setPermitBeansByDeviceGroupId(DeviceGroupBean bean , C importedBeans)throws RuntimeDaoException;

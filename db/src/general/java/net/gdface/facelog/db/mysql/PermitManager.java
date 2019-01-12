@@ -316,7 +316,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
      * Save the {@link PermitBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link PermitBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(PermitBean , DeviceGroupBean , PersonGroupBean )}
      * @return the inserted or updated {@link PermitBean} bean
      */
@@ -347,7 +347,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
      * Save the {@link PermitBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link PermitBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(PermitBean , DeviceGroupBean , PersonGroupBean )}
      * @return the inserted or updated {@link PermitBean} bean
      */
@@ -382,13 +382,13 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_PERMIT_FK_DEVICE_GROUP_ID} -> {@link DeviceGroupBean}</li>
-     *     <li> {@link Constant#FL_PERMIT_FK_PERSON_GROUP_ID} -> {@link PersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERMIT_FK_DEVICE_GROUP_ID} TO {@link DeviceGroupBean}</li>
+     *     <li> {@link Constant#FL_PERMIT_FK_PERSON_GROUP_ID} TO {@link PersonGroupBean}</li>
      * </ul>
      * @param bean the {@link PermitBean} object to use
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_PERMIT_FK_DEVICE_GROUP_ID},{@link Constant#FL_PERMIT_FK_PERSON_GROUP_ID}
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return the associated T bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -407,7 +407,7 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
      * 
      * @param <T> see also {@link #getReferencedBean(PermitBean,int)}
      * @param bean the {@link PermitBean} object to use
-     * @param beanToSet the <T> object to associate to the {@link PermitBean}
+     * @param beanToSet the T object to associate to the {@link PermitBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(PermitBean,int)}
      * @return always beanToSet saved
      */

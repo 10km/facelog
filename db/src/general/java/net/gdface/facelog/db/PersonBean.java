@@ -110,8 +110,7 @@ public final class PersonBean
         return this;
     }
     /**
-     * return a new mutable copy of this object.
-     * @return 
+     * @return return a new mutable copy of this object.
      */
     public PersonBean cloneMutable(){
         return clone().immutable(null);
@@ -226,7 +225,7 @@ public final class PersonBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "id")
@@ -304,7 +303,7 @@ public final class PersonBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "groupId")
@@ -381,7 +380,7 @@ public final class PersonBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "name")
@@ -447,7 +446,7 @@ public final class PersonBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "sex")
@@ -523,7 +522,7 @@ public final class PersonBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "rank")
@@ -599,7 +598,7 @@ public final class PersonBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "password")
@@ -672,7 +671,7 @@ public final class PersonBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "birthdate")
@@ -756,7 +755,7 @@ public final class PersonBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "mobilePhone")
@@ -822,7 +821,7 @@ public final class PersonBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "papersType")
@@ -898,7 +897,7 @@ public final class PersonBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "papersNum")
@@ -965,7 +964,7 @@ public final class PersonBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "imageMd5")
@@ -1039,7 +1038,7 @@ public final class PersonBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "expiryDate")
@@ -1123,7 +1122,7 @@ public final class PersonBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "remark")
@@ -1197,7 +1196,7 @@ public final class PersonBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "createTime")
@@ -1289,7 +1288,7 @@ public final class PersonBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "updateTime")
@@ -1344,11 +1343,17 @@ public final class PersonBean
      * FOREIGN KEY (image_md5) REFERENCES fl_image(md5)
      */
     private ImageBean referencedByImageMd5;
-    /** Getter method for {@link #referencedByImageMd5}. */
+    /**
+     * Getter method for {@link #referencedByImageMd5}.
+     * @return ImageBean
+     */
     public ImageBean getReferencedByImageMd5() {
         return this.referencedByImageMd5;
     }
-    /** Setter method for {@link #referencedByImageMd5}. */
+    /**
+     * Setter method for {@link #referencedByImageMd5}.
+     * @param reference ImageBean
+     */
     public void setReferencedByImageMd5(ImageBean reference) {
         this.referencedByImageMd5 = reference;
     }
@@ -1357,11 +1362,17 @@ public final class PersonBean
      * FOREIGN KEY (group_id) REFERENCES fl_person_group(id)
      */
     private PersonGroupBean referencedByGroupId;
-    /** Getter method for {@link #referencedByGroupId}. */
+    /**
+     * Getter method for {@link #referencedByGroupId}.
+     * @return PersonGroupBean
+     */
     public PersonGroupBean getReferencedByGroupId() {
         return this.referencedByGroupId;
     }
-    /** Setter method for {@link #referencedByGroupId}. */
+    /**
+     * Setter method for {@link #referencedByGroupId}.
+     * @param reference PersonGroupBean
+     */
     public void setReferencedByGroupId(PersonGroupBean reference) {
         this.referencedByGroupId = reference;
     }
@@ -1809,7 +1820,7 @@ public final class PersonBean
     }
     /**
      * check whether this bean is a NULL bean 
-     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @return {@code true} if {@link #initialized} be set to zero
      * @see #asNULL()
      */
     public boolean checkNULL(){
@@ -1829,8 +1840,9 @@ public final class PersonBean
         return source;
     }
     /** 
+     * @param source input list
      * @return replace null instance element with {@code null}
-     * @see {@link #checkNULL()} 
+     * @see #checkNULL()
      */
     public static final List<PersonBean> replaceNullInstance(List<PersonBean> source){
         if(null != source){
@@ -1990,7 +2002,10 @@ public final class PersonBean
         setValue(columnIDOf(column),value);
     }
     
-    /** return column id for the given field name or negative if {@code column} is invalid name */
+    /**
+     * @param column column name
+     * @return column id for the given field name or negative if {@code column} is invalid name 
+     */
     public static int columnIDOf(String column){
         int index = FL_PERSON_FIELDS_LIST.indexOf(column);
         return  index < 0 
@@ -2036,8 +2051,8 @@ public final class PersonBean
         /** 
          * fill the field : fl_person.id
          * @param id 用户id
-         * @see {@link PersonBean#getId()}
-         * @see {@link PersonBean#setId(Integer)}
+         * @see PersonBean#getId()
+         * @see PersonBean#setId(Integer)
          */
         public Builder id(Integer id){
             TEMPLATE.get().setId(id);
@@ -2046,8 +2061,8 @@ public final class PersonBean
         /** 
          * fill the field : fl_person.group_id
          * @param groupId 所属用户组id
-         * @see {@link PersonBean#getGroupId()}
-         * @see {@link PersonBean#setGroupId(Integer)}
+         * @see PersonBean#getGroupId()
+         * @see PersonBean#setGroupId(Integer)
          */
         public Builder groupId(Integer groupId){
             TEMPLATE.get().setGroupId(groupId);
@@ -2056,8 +2071,8 @@ public final class PersonBean
         /** 
          * fill the field : fl_person.name
          * @param name 姓名
-         * @see {@link PersonBean#getName()}
-         * @see {@link PersonBean#setName(String)}
+         * @see PersonBean#getName()
+         * @see PersonBean#setName(String)
          */
         public Builder name(String name){
             TEMPLATE.get().setName(name);
@@ -2066,8 +2081,8 @@ public final class PersonBean
         /** 
          * fill the field : fl_person.sex
          * @param sex 性别,0:女,1:男,其他:未定义
-         * @see {@link PersonBean#getSex()}
-         * @see {@link PersonBean#setSex(Integer)}
+         * @see PersonBean#getSex()
+         * @see PersonBean#setSex(Integer)
          */
         public Builder sex(Integer sex){
             TEMPLATE.get().setSex(sex);
@@ -2076,8 +2091,8 @@ public final class PersonBean
         /** 
          * fill the field : fl_person.rank
          * @param rank 用户级别,NULL,0:普通用户,2:操作员,3:管理员,其他:未定义
-         * @see {@link PersonBean#getRank()}
-         * @see {@link PersonBean#setRank(Integer)}
+         * @see PersonBean#getRank()
+         * @see PersonBean#setRank(Integer)
          */
         public Builder rank(Integer rank){
             TEMPLATE.get().setRank(rank);
@@ -2086,8 +2101,8 @@ public final class PersonBean
         /** 
          * fill the field : fl_person.password
          * @param password 用户密码,MD5
-         * @see {@link PersonBean#getPassword()}
-         * @see {@link PersonBean#setPassword(String)}
+         * @see PersonBean#getPassword()
+         * @see PersonBean#setPassword(String)
          */
         public Builder password(String password){
             TEMPLATE.get().setPassword(password);
@@ -2096,8 +2111,8 @@ public final class PersonBean
         /** 
          * fill the field : fl_person.birthdate
          * @param birthdate 出生日期
-         * @see {@link PersonBean#getBirthdate()}
-         * @see {@link PersonBean#setBirthdate(java.util.Date)}
+         * @see PersonBean#getBirthdate()
+         * @see PersonBean#setBirthdate(java.util.Date)
          */
         public Builder birthdate(java.util.Date birthdate){
             TEMPLATE.get().setBirthdate(birthdate);
@@ -2106,8 +2121,8 @@ public final class PersonBean
         /** 
          * fill the field : fl_person.mobile_phone
          * @param mobilePhone 手机号码
-         * @see {@link PersonBean#getMobilePhone()}
-         * @see {@link PersonBean#setMobilePhone(String)}
+         * @see PersonBean#getMobilePhone()
+         * @see PersonBean#setMobilePhone(String)
          */
         public Builder mobilePhone(String mobilePhone){
             TEMPLATE.get().setMobilePhone(mobilePhone);
@@ -2116,8 +2131,8 @@ public final class PersonBean
         /** 
          * fill the field : fl_person.papers_type
          * @param papersType 证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他
-         * @see {@link PersonBean#getPapersType()}
-         * @see {@link PersonBean#setPapersType(Integer)}
+         * @see PersonBean#getPapersType()
+         * @see PersonBean#setPapersType(Integer)
          */
         public Builder papersType(Integer papersType){
             TEMPLATE.get().setPapersType(papersType);
@@ -2126,8 +2141,8 @@ public final class PersonBean
         /** 
          * fill the field : fl_person.papers_num
          * @param papersNum 证件号码
-         * @see {@link PersonBean#getPapersNum()}
-         * @see {@link PersonBean#setPapersNum(String)}
+         * @see PersonBean#getPapersNum()
+         * @see PersonBean#setPapersNum(String)
          */
         public Builder papersNum(String papersNum){
             TEMPLATE.get().setPapersNum(papersNum);
@@ -2136,8 +2151,8 @@ public final class PersonBean
         /** 
          * fill the field : fl_person.image_md5
          * @param imageMd5 用户默认照片(证件照,标准照)的md5校验码,外键
-         * @see {@link PersonBean#getImageMd5()}
-         * @see {@link PersonBean#setImageMd5(String)}
+         * @see PersonBean#getImageMd5()
+         * @see PersonBean#setImageMd5(String)
          */
         public Builder imageMd5(String imageMd5){
             TEMPLATE.get().setImageMd5(imageMd5);
@@ -2146,8 +2161,8 @@ public final class PersonBean
         /** 
          * fill the field : fl_person.expiry_date
          * @param expiryDate 验证有效期限(超过期限不能通过验证),为NULL永久有效
-         * @see {@link PersonBean#getExpiryDate()}
-         * @see {@link PersonBean#setExpiryDate(java.util.Date)}
+         * @see PersonBean#getExpiryDate()
+         * @see PersonBean#setExpiryDate(java.util.Date)
          */
         public Builder expiryDate(java.util.Date expiryDate){
             TEMPLATE.get().setExpiryDate(expiryDate);
@@ -2156,8 +2171,8 @@ public final class PersonBean
         /** 
          * fill the field : fl_person.remark
          * @param remark 备注
-         * @see {@link PersonBean#getRemark()}
-         * @see {@link PersonBean#setRemark(String)}
+         * @see PersonBean#getRemark()
+         * @see PersonBean#setRemark(String)
          */
         public Builder remark(String remark){
             TEMPLATE.get().setRemark(remark);
@@ -2166,8 +2181,8 @@ public final class PersonBean
         /** 
          * fill the field : fl_person.create_time
          * @param createTime 
-         * @see {@link PersonBean#getCreateTime()}
-         * @see {@link PersonBean#setCreateTime(java.util.Date)}
+         * @see PersonBean#getCreateTime()
+         * @see PersonBean#setCreateTime(java.util.Date)
          */
         public Builder createTime(java.util.Date createTime){
             TEMPLATE.get().setCreateTime(createTime);
@@ -2176,8 +2191,8 @@ public final class PersonBean
         /** 
          * fill the field : fl_person.update_time
          * @param updateTime 
-         * @see {@link PersonBean#getUpdateTime()}
-         * @see {@link PersonBean#setUpdateTime(java.util.Date)}
+         * @see PersonBean#getUpdateTime()
+         * @see PersonBean#setUpdateTime(java.util.Date)
          */
         public Builder updateTime(java.util.Date updateTime){
             TEMPLATE.get().setUpdateTime(updateTime);

@@ -44,7 +44,7 @@ public class FeatureCacheManager extends FeatureManager
     /**
      * create a instance of FeatureCacheManager and assign to {@link #instance} if {@code instance} is not initialized.<br>
      * otherwise return {@code instance}.
-     * @see {@link FeatureCacheManager#FeatureCacheManager(UpdateStrategy ,long , long , TimeUnit )}
+     * @see FeatureCacheManager#FeatureCacheManager(UpdateStrategy ,long , long , TimeUnit )
      */
     public static synchronized final FeatureCacheManager makeInstance(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
@@ -67,7 +67,7 @@ public class FeatureCacheManager extends FeatureManager
     /** instance of {@link FeatureCache} */
     private final FeatureCache cache;
     /** constructor<br>
-     * @see {@link FeatureCache#FeatureCache(UpdateStrategy ,long , long , TimeUnit )}
+     * @see FeatureCache#FeatureCache(UpdateStrategy ,long , long , TimeUnit )
      */
     protected FeatureCacheManager(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
         cache = new FeatureCache(updateStrategy,maximumSize,duration,unit);

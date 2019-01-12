@@ -44,7 +44,7 @@ public class FaceCacheManager extends FaceManager
     /**
      * create a instance of FaceCacheManager and assign to {@link #instance} if {@code instance} is not initialized.<br>
      * otherwise return {@code instance}.
-     * @see {@link FaceCacheManager#FaceCacheManager(UpdateStrategy ,long , long , TimeUnit )}
+     * @see FaceCacheManager#FaceCacheManager(UpdateStrategy ,long , long , TimeUnit )
      */
     public static synchronized final FaceCacheManager makeInstance(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
@@ -67,7 +67,7 @@ public class FaceCacheManager extends FaceManager
     /** instance of {@link FaceCache} */
     private final FaceCache cache;
     /** constructor<br>
-     * @see {@link FaceCache#FaceCache(UpdateStrategy ,long , long , TimeUnit )}
+     * @see FaceCache#FaceCache(UpdateStrategy ,long , long , TimeUnit )
      */
     protected FaceCacheManager(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
         cache = new FaceCache(updateStrategy,maximumSize,duration,unit);

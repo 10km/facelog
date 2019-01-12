@@ -112,8 +112,7 @@ public  class FlPersonBean
         return this;
     }
     /**
-     * return a new mutable copy of this object.
-     * @return 
+     * @return return a new mutable copy of this object.
      */
     public FlPersonBean cloneMutable(){
         return clone().immutable(null);
@@ -1147,11 +1146,17 @@ public  class FlPersonBean
      * FOREIGN KEY (image_md5) REFERENCES fl_image(md5)
      */
     private FlImageBean referencedByImageMd5;
-    /** Getter method for {@link #referencedByImageMd5}. */
+    /**
+     * Getter method for {@link #referencedByImageMd5}.
+     * @return FlImageBean
+     */
     public FlImageBean getReferencedByImageMd5() {
         return this.referencedByImageMd5;
     }
-    /** Setter method for {@link #referencedByImageMd5}. */
+    /**
+     * Setter method for {@link #referencedByImageMd5}.
+     * @param reference FlImageBean
+     */
     public void setReferencedByImageMd5(FlImageBean reference) {
         this.referencedByImageMd5 = reference;
     }
@@ -1160,11 +1165,17 @@ public  class FlPersonBean
      * FOREIGN KEY (group_id) REFERENCES fl_person_group(id)
      */
     private FlPersonGroupBean referencedByGroupId;
-    /** Getter method for {@link #referencedByGroupId}. */
+    /**
+     * Getter method for {@link #referencedByGroupId}.
+     * @return FlPersonGroupBean
+     */
     public FlPersonGroupBean getReferencedByGroupId() {
         return this.referencedByGroupId;
     }
-    /** Setter method for {@link #referencedByGroupId}. */
+    /**
+     * Setter method for {@link #referencedByGroupId}.
+     * @param reference FlPersonGroupBean
+     */
     public void setReferencedByGroupId(FlPersonGroupBean reference) {
         this.referencedByGroupId = reference;
     }
@@ -1612,7 +1623,7 @@ public  class FlPersonBean
     }
     /**
      * check whether this bean is a NULL bean 
-     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @return {@code true} if {@link #initialized} be set to zero
      * @see #asNULL()
      */
     public boolean checkNULL(){
@@ -1632,8 +1643,9 @@ public  class FlPersonBean
         return source;
     }
     /** 
+     * @param source input list
      * @return replace null instance element with {@code null}
-     * @see {@link #checkNULL()} 
+     * @see #checkNULL()
      */
     public static final List<FlPersonBean> replaceNullInstance(List<FlPersonBean> source){
         if(null != source){
@@ -1793,7 +1805,10 @@ public  class FlPersonBean
         setValue(columnIDOf(column),value);
     }
     
-    /** return column id for the given field name or negative if {@code column} is invalid name */
+    /**
+     * @param column column name
+     * @return column id for the given field name or negative if {@code column} is invalid name 
+     */
     public static int columnIDOf(String column){
         int index = FL_PERSON_FIELDS_LIST.indexOf(column);
         return  index < 0 
@@ -1839,8 +1854,8 @@ public  class FlPersonBean
         /** 
          * fill the field : fl_person.id
          * @param id 用户id
-         * @see {@link FlPersonBean#getId()}
-         * @see {@link FlPersonBean#setId(Integer)}
+         * @see FlPersonBean#getId()
+         * @see FlPersonBean#setId(Integer)
          */
         public Builder id(Integer id){
             TEMPLATE.get().setId(id);
@@ -1849,8 +1864,8 @@ public  class FlPersonBean
         /** 
          * fill the field : fl_person.group_id
          * @param groupId 所属用户组id
-         * @see {@link FlPersonBean#getGroupId()}
-         * @see {@link FlPersonBean#setGroupId(Integer)}
+         * @see FlPersonBean#getGroupId()
+         * @see FlPersonBean#setGroupId(Integer)
          */
         public Builder groupId(Integer groupId){
             TEMPLATE.get().setGroupId(groupId);
@@ -1859,8 +1874,8 @@ public  class FlPersonBean
         /** 
          * fill the field : fl_person.name
          * @param name 姓名
-         * @see {@link FlPersonBean#getName()}
-         * @see {@link FlPersonBean#setName(String)}
+         * @see FlPersonBean#getName()
+         * @see FlPersonBean#setName(String)
          */
         public Builder name(String name){
             TEMPLATE.get().setName(name);
@@ -1869,8 +1884,8 @@ public  class FlPersonBean
         /** 
          * fill the field : fl_person.sex
          * @param sex 性别,0:女,1:男,其他:未定义
-         * @see {@link FlPersonBean#getSex()}
-         * @see {@link FlPersonBean#setSex(Integer)}
+         * @see FlPersonBean#getSex()
+         * @see FlPersonBean#setSex(Integer)
          */
         public Builder sex(Integer sex){
             TEMPLATE.get().setSex(sex);
@@ -1879,8 +1894,8 @@ public  class FlPersonBean
         /** 
          * fill the field : fl_person.rank
          * @param rank 用户级别,NULL,0:普通用户,2:操作员,3:管理员,其他:未定义
-         * @see {@link FlPersonBean#getRank()}
-         * @see {@link FlPersonBean#setRank(Integer)}
+         * @see FlPersonBean#getRank()
+         * @see FlPersonBean#setRank(Integer)
          */
         public Builder rank(Integer rank){
             TEMPLATE.get().setRank(rank);
@@ -1889,8 +1904,8 @@ public  class FlPersonBean
         /** 
          * fill the field : fl_person.password
          * @param password 用户密码,MD5
-         * @see {@link FlPersonBean#getPassword()}
-         * @see {@link FlPersonBean#setPassword(String)}
+         * @see FlPersonBean#getPassword()
+         * @see FlPersonBean#setPassword(String)
          */
         public Builder password(String password){
             TEMPLATE.get().setPassword(password);
@@ -1899,8 +1914,8 @@ public  class FlPersonBean
         /** 
          * fill the field : fl_person.birthdate
          * @param birthdate 出生日期
-         * @see {@link FlPersonBean#getBirthdate()}
-         * @see {@link FlPersonBean#setBirthdate(java.util.Date)}
+         * @see FlPersonBean#getBirthdate()
+         * @see FlPersonBean#setBirthdate(java.util.Date)
          */
         public Builder birthdate(java.util.Date birthdate){
             TEMPLATE.get().setBirthdate(birthdate);
@@ -1909,8 +1924,8 @@ public  class FlPersonBean
         /** 
          * fill the field : fl_person.mobile_phone
          * @param mobilePhone 手机号码
-         * @see {@link FlPersonBean#getMobilePhone()}
-         * @see {@link FlPersonBean#setMobilePhone(String)}
+         * @see FlPersonBean#getMobilePhone()
+         * @see FlPersonBean#setMobilePhone(String)
          */
         public Builder mobilePhone(String mobilePhone){
             TEMPLATE.get().setMobilePhone(mobilePhone);
@@ -1919,8 +1934,8 @@ public  class FlPersonBean
         /** 
          * fill the field : fl_person.papers_type
          * @param papersType 证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他
-         * @see {@link FlPersonBean#getPapersType()}
-         * @see {@link FlPersonBean#setPapersType(Integer)}
+         * @see FlPersonBean#getPapersType()
+         * @see FlPersonBean#setPapersType(Integer)
          */
         public Builder papersType(Integer papersType){
             TEMPLATE.get().setPapersType(papersType);
@@ -1929,8 +1944,8 @@ public  class FlPersonBean
         /** 
          * fill the field : fl_person.papers_num
          * @param papersNum 证件号码
-         * @see {@link FlPersonBean#getPapersNum()}
-         * @see {@link FlPersonBean#setPapersNum(String)}
+         * @see FlPersonBean#getPapersNum()
+         * @see FlPersonBean#setPapersNum(String)
          */
         public Builder papersNum(String papersNum){
             TEMPLATE.get().setPapersNum(papersNum);
@@ -1939,8 +1954,8 @@ public  class FlPersonBean
         /** 
          * fill the field : fl_person.image_md5
          * @param imageMd5 用户默认照片(证件照,标准照)的md5校验码,外键
-         * @see {@link FlPersonBean#getImageMd5()}
-         * @see {@link FlPersonBean#setImageMd5(String)}
+         * @see FlPersonBean#getImageMd5()
+         * @see FlPersonBean#setImageMd5(String)
          */
         public Builder imageMd5(String imageMd5){
             TEMPLATE.get().setImageMd5(imageMd5);
@@ -1949,8 +1964,8 @@ public  class FlPersonBean
         /** 
          * fill the field : fl_person.expiry_date
          * @param expiryDate 验证有效期限(超过期限不能通过验证),为NULL永久有效
-         * @see {@link FlPersonBean#getExpiryDate()}
-         * @see {@link FlPersonBean#setExpiryDate(java.util.Date)}
+         * @see FlPersonBean#getExpiryDate()
+         * @see FlPersonBean#setExpiryDate(java.util.Date)
          */
         public Builder expiryDate(java.util.Date expiryDate){
             TEMPLATE.get().setExpiryDate(expiryDate);
@@ -1959,8 +1974,8 @@ public  class FlPersonBean
         /** 
          * fill the field : fl_person.remark
          * @param remark 备注
-         * @see {@link FlPersonBean#getRemark()}
-         * @see {@link FlPersonBean#setRemark(String)}
+         * @see FlPersonBean#getRemark()
+         * @see FlPersonBean#setRemark(String)
          */
         public Builder remark(String remark){
             TEMPLATE.get().setRemark(remark);
@@ -1969,8 +1984,8 @@ public  class FlPersonBean
         /** 
          * fill the field : fl_person.create_time
          * @param createTime 
-         * @see {@link FlPersonBean#getCreateTime()}
-         * @see {@link FlPersonBean#setCreateTime(java.util.Date)}
+         * @see FlPersonBean#getCreateTime()
+         * @see FlPersonBean#setCreateTime(java.util.Date)
          */
         public Builder createTime(java.util.Date createTime){
             TEMPLATE.get().setCreateTime(createTime);
@@ -1979,8 +1994,8 @@ public  class FlPersonBean
         /** 
          * fill the field : fl_person.update_time
          * @param updateTime 
-         * @see {@link FlPersonBean#getUpdateTime()}
-         * @see {@link FlPersonBean#setUpdateTime(java.util.Date)}
+         * @see FlPersonBean#getUpdateTime()
+         * @see FlPersonBean#setUpdateTime(java.util.Date)
          */
         public Builder updateTime(java.util.Date updateTime){
             TEMPLATE.get().setUpdateTime(updateTime);

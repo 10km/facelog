@@ -77,8 +77,7 @@ public  class FlStoreBean
         return this;
     }
     /**
-     * return a new mutable copy of this object.
-     * @return 
+     * @return return a new mutable copy of this object.
      */
     public FlStoreBean cloneMutable(){
         return clone().immutable(null);
@@ -536,7 +535,7 @@ public  class FlStoreBean
     }
     /**
      * check whether this bean is a NULL bean 
-     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @return {@code true} if {@link #initialized} be set to zero
      * @see #asNULL()
      */
     public boolean checkNULL(){
@@ -556,8 +555,9 @@ public  class FlStoreBean
         return source;
     }
     /** 
+     * @param source input list
      * @return replace null instance element with {@code null}
-     * @see {@link #checkNULL()} 
+     * @see #checkNULL()
      */
     public static final List<FlStoreBean> replaceNullInstance(List<FlStoreBean> source){
         if(null != source){
@@ -657,7 +657,10 @@ public  class FlStoreBean
         setValue(columnIDOf(column),value);
     }
     
-    /** return column id for the given field name or negative if {@code column} is invalid name */
+    /**
+     * @param column column name
+     * @return column id for the given field name or negative if {@code column} is invalid name 
+     */
     public static int columnIDOf(String column){
         int index = FL_STORE_FIELDS_LIST.indexOf(column);
         return  index < 0 
@@ -703,8 +706,8 @@ public  class FlStoreBean
         /** 
          * fill the field : fl_store.md5
          * @param md5 主键,md5检验码
-         * @see {@link FlStoreBean#getMd5()}
-         * @see {@link FlStoreBean#setMd5(String)}
+         * @see FlStoreBean#getMd5()
+         * @see FlStoreBean#setMd5(String)
          */
         public Builder md5(String md5){
             TEMPLATE.get().setMd5(md5);
@@ -713,8 +716,8 @@ public  class FlStoreBean
         /** 
          * fill the field : fl_store.encoding
          * @param encoding 编码类型,GBK,UTF8...
-         * @see {@link FlStoreBean#getEncoding()}
-         * @see {@link FlStoreBean#setEncoding(String)}
+         * @see FlStoreBean#getEncoding()
+         * @see FlStoreBean#setEncoding(String)
          */
         public Builder encoding(String encoding){
             TEMPLATE.get().setEncoding(encoding);
@@ -723,8 +726,8 @@ public  class FlStoreBean
         /** 
          * fill the field : fl_store.data
          * @param data 二进制数据
-         * @see {@link FlStoreBean#getData()}
-         * @see {@link FlStoreBean#setData(java.nio.ByteBuffer)}
+         * @see FlStoreBean#getData()
+         * @see FlStoreBean#setData(java.nio.ByteBuffer)
          */
         public Builder data(java.nio.ByteBuffer data){
             TEMPLATE.get().setData(data);

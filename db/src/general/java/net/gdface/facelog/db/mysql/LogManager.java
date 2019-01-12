@@ -395,7 +395,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
      * Save the {@link LogBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link LogBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(LogBean , DeviceBean , FaceBean , FeatureBean , PersonBean )}
      * @return the inserted or updated {@link LogBean} bean
      */
@@ -434,7 +434,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
      * Save the {@link LogBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link LogBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(LogBean , DeviceBean , FaceBean , FeatureBean , PersonBean )}
      * @return the inserted or updated {@link LogBean} bean
      */
@@ -477,15 +477,15 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_LOG_FK_DEVICE_ID} -> {@link DeviceBean}</li>
-     *     <li> {@link Constant#FL_LOG_FK_COMPARE_FACE} -> {@link FaceBean}</li>
-     *     <li> {@link Constant#FL_LOG_FK_VERIFY_FEATURE} -> {@link FeatureBean}</li>
-     *     <li> {@link Constant#FL_LOG_FK_PERSON_ID} -> {@link PersonBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_DEVICE_ID} TO {@link DeviceBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_COMPARE_FACE} TO {@link FaceBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_VERIFY_FEATURE} TO {@link FeatureBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_PERSON_ID} TO {@link PersonBean}</li>
      * </ul>
      * @param bean the {@link LogBean} object to use
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_LOG_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_COMPARE_FACE},{@link Constant#FL_LOG_FK_VERIFY_FEATURE},{@link Constant#FL_LOG_FK_PERSON_ID}
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return the associated T bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -508,7 +508,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
      * 
      * @param <T> see also {@link #getReferencedBean(LogBean,int)}
      * @param bean the {@link LogBean} object to use
-     * @param beanToSet the <T> object to associate to the {@link LogBean}
+     * @param beanToSet the T object to associate to the {@link LogBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(LogBean,int)}
      * @return always beanToSet saved
      */

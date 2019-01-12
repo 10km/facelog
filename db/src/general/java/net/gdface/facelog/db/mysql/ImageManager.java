@@ -357,8 +357,8 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_IMAGE_IK_FL_FACE_IMAGE_MD5} -> {@link FaceBean}</li>
-     *     <li> {@link Constant#FL_IMAGE_IK_FL_PERSON_IMAGE_MD5} -> {@link PersonBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_FACE_IMAGE_MD5} TO {@link FaceBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_PERSON_IMAGE_MD5} TO {@link PersonBean}</li>
      * </ul>
      * @param bean the {@link ImageBean} object to use
      * @param ikIndex valid values: {@link Constant#FL_IMAGE_IK_FL_FACE_IMAGE_MD5},{@link Constant#FL_IMAGE_IK_FL_PERSON_IMAGE_MD5}
@@ -381,8 +381,8 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link Constant#FL_IMAGE_IK_FL_FACE_IMAGE_MD5} -> {@link FaceBean}</li>
-     *     <li> {@link Constant#FL_IMAGE_IK_FL_PERSON_IMAGE_MD5} -> {@link PersonBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_FACE_IMAGE_MD5} TO {@link FaceBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_PERSON_IMAGE_MD5} TO {@link PersonBean}</li>
      * </ul>
      * @param bean the {@link ImageBean} object to use
      * @param importedBeans the FlPersonBean array to associate to the {@link ImageBean}
@@ -405,11 +405,11 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_IMAGE_IK_FL_FACE_IMAGE_MD5} -> {@link FaceBean}</li>
-     *     <li> {@link Constant#FL_IMAGE_IK_FL_PERSON_IMAGE_MD5} -> {@link PersonBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_FACE_IMAGE_MD5} TO {@link FaceBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_PERSON_IMAGE_MD5} TO {@link PersonBean}</li>
      * </ul>
      * @param bean the {@link ImageBean} object to use
-     * @param importedBeans the <T> object to associate to the {@link ImageBean}
+     * @param importedBeans the T object to associate to the {@link ImageBean}
      * @param ikIndex valid values: {@link Constant#FL_IMAGE_IK_FL_FACE_IMAGE_MD5},{@link Constant#FL_IMAGE_IK_FL_PERSON_IMAGE_MD5}
      * @return importedBeans always
      */
@@ -666,7 +666,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
      * Save the {@link ImageBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link ImageBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(ImageBean , DeviceBean , FaceBean[] , PersonBean[] )}
      * @return the inserted or updated {@link ImageBean} bean
      */
@@ -701,7 +701,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
      * Save the {@link ImageBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link ImageBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(ImageBean , DeviceBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link ImageBean} bean
      */
@@ -740,12 +740,12 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_IMAGE_FK_DEVICE_ID} -> {@link DeviceBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_FK_DEVICE_ID} TO {@link DeviceBean}</li>
      * </ul>
      * @param bean the {@link ImageBean} object to use
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_IMAGE_FK_DEVICE_ID}
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return the associated T bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -762,7 +762,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
      * 
      * @param <T> see also {@link #getReferencedBean(ImageBean,int)}
      * @param bean the {@link ImageBean} object to use
-     * @param beanToSet the <T> object to associate to the {@link ImageBean}
+     * @param beanToSet the T object to associate to the {@link ImageBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(ImageBean,int)}
      * @return always beanToSet saved
      */

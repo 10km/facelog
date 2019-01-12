@@ -44,7 +44,7 @@ public class DeviceCacheManager extends DeviceManager
     /**
      * create a instance of DeviceCacheManager and assign to {@link #instance} if {@code instance} is not initialized.<br>
      * otherwise return {@code instance}.
-     * @see {@link DeviceCacheManager#DeviceCacheManager(UpdateStrategy ,long , long , TimeUnit )}
+     * @see DeviceCacheManager#DeviceCacheManager(UpdateStrategy ,long , long , TimeUnit )
      */
     public static synchronized final DeviceCacheManager makeInstance(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
@@ -67,7 +67,7 @@ public class DeviceCacheManager extends DeviceManager
     /** instance of {@link DeviceCache} */
     private final DeviceCache cache;
     /** constructor<br>
-     * @see {@link DeviceCache#DeviceCache(UpdateStrategy ,long , long , TimeUnit )}
+     * @see DeviceCache#DeviceCache(UpdateStrategy ,long , long , TimeUnit )
      */
     protected DeviceCacheManager(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
         cache = new DeviceCache(updateStrategy,maximumSize,duration,unit);

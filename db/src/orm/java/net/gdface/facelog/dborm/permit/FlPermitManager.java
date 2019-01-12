@@ -201,7 +201,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * Loads a {@link FlPermitBean} from the fl_permit using primary key fields.
      * @param keys primary keys value:<br> 
      * @return a unique {@link FlPermitBean} or {@code null} if not found
-     * @see {@link #loadByPrimaryKey(Integer deviceGroupId,Integer personGroupId)}
+     * @see #loadByPrimaryKey(Integer deviceGroupId,Integer personGroupId)
      */
     @Override
     public FlPermitBean loadByPrimaryKey(Object ...keys) throws DaoException{
@@ -277,7 +277,6 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @param bean  
      * @throws DaoException
      * @return false if primary kes has null
-     * @see #countUsingTemplate(FlPermitBean)
      */
     @Override
     public boolean existsByPrimaryKey(FlPermitBean bean) throws DaoException
@@ -311,7 +310,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @param personGroupId Integer - PK# 2
      * @return the number of deleted rows
      * @throws DaoException
-     * @see {@link #delete(FlPermitBean)}
+     * @see #delete(FlPermitBean)
      */
     public int deleteByPrimaryKey(Integer deviceGroupId,Integer personGroupId) throws DaoException
     {
@@ -375,7 +374,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      *
      * @param keys primary keys value:<br> 
      * @return the number of deleted rows
-     * @see {@link #delete(FlPermitBean)}
+     * @see #delete(FlPermitBean)
      */   
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DaoException{
@@ -449,7 +448,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * Save the FlPermitBean bean and referenced beans and imported beans (array) into the database.
      *
      * @param bean the {@link FlPermitBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FlPermitBean , FlDeviceGroupBean , FlPersonGroupBean )}
      * @return the inserted or updated {@link FlPermitBean} bean
      * @throws DaoException
@@ -481,7 +480,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * Save the FlPermitBean bean and referenced beans and imported beans (collection) into the database.
      *
      * @param bean the {@link FlPermitBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FlPermitBean , FlDeviceGroupBean , FlPersonGroupBean )}
      * @return the inserted or updated {@link FlPermitBean} bean
      * @throws DaoException
@@ -516,13 +515,13 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_PERMIT_FK_DEVICE_GROUP_ID} -> {@link FlDeviceGroupBean}</li>
-     *     <li> {@link Constant#FL_PERMIT_FK_PERSON_GROUP_ID} -> {@link FlPersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERMIT_FK_DEVICE_GROUP_ID} - {@link FlDeviceGroupBean}</li>
+     *     <li> {@link Constant#FL_PERMIT_FK_PERSON_GROUP_ID} - {@link FlPersonGroupBean}</li>
      * </ul>
      * @param bean the {@link FlPermitBean} object to use
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_PERMIT_FK_DEVICE_GROUP_ID},{@link Constant#FL_PERMIT_FK_PERSON_GROUP_ID}
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return the associated T bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DaoException
      */
     @SuppressWarnings("unchecked")
@@ -543,7 +542,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * 
      * @param <T> see also {@link #getReferencedBean(FlPermitBean,int)}
      * @param bean the {@link FlPermitBean} object to use
-     * @param beanToSet the <T> object to associate to the {@link FlPermitBean}
+     * @param beanToSet the T object to associate to the {@link FlPermitBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(FlPermitBean,int)}
      * @return always beanToSet saved
      * @throws DaoException
@@ -590,7 +589,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @param bean the {@link FlPermitBean} object to use
      * @param beanToSet the {@link FlDeviceGroupBean} object to associate to the {@link FlPermitBean} (NOT NULL).
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws DaoException
      */
     public FlDeviceGroupBean setReferencedByDeviceGroupId(FlPermitBean bean, FlDeviceGroupBean beanToSet) throws DaoException
     {
@@ -630,7 +629,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @param bean the {@link FlPermitBean} object to use
      * @param beanToSet the {@link FlPersonGroupBean} object to associate to the {@link FlPermitBean} (NOT NULL).
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws DaoException
      */
     public FlPersonGroupBean setReferencedByPersonGroupId(FlPermitBean bean, FlPersonGroupBean beanToSet) throws DaoException
     {
@@ -1240,6 +1239,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
      * @param ps the PreparedStatement that will be filled
      * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
+     * @param fillNull wether fill null for null field
      * @return the number of clauses returned
      * @throws DaoException
      */
@@ -1740,8 +1740,8 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     //37-2
     /**
      * bind foreign key listener to foreign table: <br>
-     * DELETE RULE : CASCADE {@code fl_permit(device_group_id)-> fl_device_group(id)} <br>
-     * DELETE RULE : CASCADE {@code fl_permit(person_group_id)-> fl_person_group(id)} <br>
+     * DELETE RULE : CASCADE {@code fl_permit(device_group_id)- fl_device_group(id)} <br>
+     * DELETE RULE : CASCADE {@code fl_permit(person_group_id)- fl_person_group(id)} <br>
      */
     public void bindForeignKeyListenerForDeleteRule(){
         instanceOfFlDeviceGroupManager().registerListener(foreignKeyListenerByDeviceGroupId);

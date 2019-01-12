@@ -88,8 +88,7 @@ public  class DeviceGroupBean
         return this;
     }
     /**
-     * return a new mutable copy of this object.
-     * @return 
+     * @return return a new mutable copy of this object.
      */
     public DeviceGroupBean cloneMutable(){
         return clone().immutable(null);
@@ -731,11 +730,17 @@ public  class DeviceGroupBean
      * FOREIGN KEY (parent) REFERENCES fl_device_group(id)
      */
     private DeviceGroupBean referencedByParent;
-    /** Getter method for {@link #referencedByParent}. */
+    /**
+     * Getter method for {@link #referencedByParent}.
+     * @return DeviceGroupBean
+     */
     public DeviceGroupBean getReferencedByParent() {
         return this.referencedByParent;
     }
-    /** Setter method for {@link #referencedByParent}. */
+    /**
+     * Setter method for {@link #referencedByParent}.
+     * @param reference DeviceGroupBean
+     */
     public void setReferencedByParent(DeviceGroupBean reference) {
         this.referencedByParent = reference;
     }
@@ -1073,7 +1078,7 @@ public  class DeviceGroupBean
     }
     /**
      * check whether this bean is a NULL bean 
-     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @return {@code true} if {@link #initialized} be set to zero
      * @see #asNULL()
      */
     public boolean checkNULL(){
@@ -1093,8 +1098,9 @@ public  class DeviceGroupBean
         return source;
     }
     /** 
+     * @param source input list
      * @return replace null instance element with {@code null}
-     * @see {@link #checkNULL()} 
+     * @see #checkNULL()
      */
     public static final List<DeviceGroupBean> replaceNullInstance(List<DeviceGroupBean> source){
         if(null != source){
@@ -1224,7 +1230,10 @@ public  class DeviceGroupBean
         setValue(columnIDOf(column),value);
     }
     
-    /** return column id for the given field name or negative if {@code column} is invalid name */
+    /**
+     * @param column column name
+     * @return column id for the given field name or negative if {@code column} is invalid name 
+     */
     public static int columnIDOf(String column){
         int index = FL_DEVICE_GROUP_FIELDS_LIST.indexOf(column);
         return  index < 0 
@@ -1270,8 +1279,8 @@ public  class DeviceGroupBean
         /** 
          * fill the field : fl_device_group.id
          * @param id 设备组id
-         * @see {@link DeviceGroupBean#getId()}
-         * @see {@link DeviceGroupBean#setId(Integer)}
+         * @see DeviceGroupBean#getId()
+         * @see DeviceGroupBean#setId(Integer)
          */
         public Builder id(Integer id){
             TEMPLATE.get().setId(id);
@@ -1280,8 +1289,8 @@ public  class DeviceGroupBean
         /** 
          * fill the field : fl_device_group.name
          * @param name 设备组名
-         * @see {@link DeviceGroupBean#getName()}
-         * @see {@link DeviceGroupBean#setName(String)}
+         * @see DeviceGroupBean#getName()
+         * @see DeviceGroupBean#setName(String)
          */
         public Builder name(String name){
             TEMPLATE.get().setName(name);
@@ -1290,8 +1299,8 @@ public  class DeviceGroupBean
         /** 
          * fill the field : fl_device_group.leaf
          * @param leaf 是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可
-         * @see {@link DeviceGroupBean#getLeaf()}
-         * @see {@link DeviceGroupBean#setLeaf(Integer)}
+         * @see DeviceGroupBean#getLeaf()
+         * @see DeviceGroupBean#setLeaf(Integer)
          */
         public Builder leaf(Integer leaf){
             TEMPLATE.get().setLeaf(leaf);
@@ -1300,8 +1309,8 @@ public  class DeviceGroupBean
         /** 
          * fill the field : fl_device_group.parent
          * @param parent 上一级设备组id
-         * @see {@link DeviceGroupBean#getParent()}
-         * @see {@link DeviceGroupBean#setParent(Integer)}
+         * @see DeviceGroupBean#getParent()
+         * @see DeviceGroupBean#setParent(Integer)
          */
         public Builder parent(Integer parent){
             TEMPLATE.get().setParent(parent);
@@ -1310,8 +1319,8 @@ public  class DeviceGroupBean
         /** 
          * fill the field : fl_device_group.remark
          * @param remark 备注
-         * @see {@link DeviceGroupBean#getRemark()}
-         * @see {@link DeviceGroupBean#setRemark(String)}
+         * @see DeviceGroupBean#getRemark()
+         * @see DeviceGroupBean#setRemark(String)
          */
         public Builder remark(String remark){
             TEMPLATE.get().setRemark(remark);
@@ -1320,8 +1329,8 @@ public  class DeviceGroupBean
         /** 
          * fill the field : fl_device_group.ext_bin
          * @param extBin 应用项目自定义二进制扩展字段
-         * @see {@link DeviceGroupBean#getExtBin()}
-         * @see {@link DeviceGroupBean#setExtBin(byte[])}
+         * @see DeviceGroupBean#getExtBin()
+         * @see DeviceGroupBean#setExtBin(byte[])
          */
         public Builder extBin(byte[] extBin){
             TEMPLATE.get().setExtBin(extBin);
@@ -1330,8 +1339,8 @@ public  class DeviceGroupBean
         /** 
          * fill the field : fl_device_group.ext_txt
          * @param extTxt 应用项目自定义文本扩展字段
-         * @see {@link DeviceGroupBean#getExtTxt()}
-         * @see {@link DeviceGroupBean#setExtTxt(String)}
+         * @see DeviceGroupBean#getExtTxt()
+         * @see DeviceGroupBean#setExtTxt(String)
          */
         public Builder extTxt(String extTxt){
             TEMPLATE.get().setExtTxt(extTxt);
@@ -1340,8 +1349,8 @@ public  class DeviceGroupBean
         /** 
          * fill the field : fl_device_group.create_time
          * @param createTime 
-         * @see {@link DeviceGroupBean#getCreateTime()}
-         * @see {@link DeviceGroupBean#setCreateTime(java.util.Date)}
+         * @see DeviceGroupBean#getCreateTime()
+         * @see DeviceGroupBean#setCreateTime(java.util.Date)
          */
         public Builder createTime(java.util.Date createTime){
             TEMPLATE.get().setCreateTime(createTime);
@@ -1350,8 +1359,8 @@ public  class DeviceGroupBean
         /** 
          * fill the field : fl_device_group.update_time
          * @param updateTime 
-         * @see {@link DeviceGroupBean#getUpdateTime()}
-         * @see {@link DeviceGroupBean#setUpdateTime(java.util.Date)}
+         * @see DeviceGroupBean#getUpdateTime()
+         * @see DeviceGroupBean#setUpdateTime(java.util.Date)
          */
         public Builder updateTime(java.util.Date updateTime){
             TEMPLATE.get().setUpdateTime(updateTime);

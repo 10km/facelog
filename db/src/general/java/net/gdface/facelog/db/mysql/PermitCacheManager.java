@@ -43,7 +43,7 @@ public class PermitCacheManager extends PermitManager
     /**
      * create a instance of PermitCacheManager and assign to {@link #instance} if {@code instance} is not initialized.<br>
      * otherwise return {@code instance}.
-     * @see {@link PermitCacheManager#PermitCacheManager(UpdateStrategy ,long , long , TimeUnit )}
+     * @see PermitCacheManager#PermitCacheManager(UpdateStrategy ,long , long , TimeUnit )
      */
     public static synchronized final PermitCacheManager makeInstance(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
@@ -66,7 +66,7 @@ public class PermitCacheManager extends PermitManager
     /** instance of {@link PermitCache} */
     private final PermitCache cache;
     /** constructor<br>
-     * @see {@link PermitCache#PermitCache(UpdateStrategy ,long , long , TimeUnit )}
+     * @see PermitCache#PermitCache(UpdateStrategy ,long , long , TimeUnit )
      */
     protected PermitCacheManager(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
         cache = new PermitCache(updateStrategy,maximumSize,duration,unit);

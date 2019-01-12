@@ -23,7 +23,7 @@ public class StoreCache extends BaseTableLoadCaching<String, StoreBean> {
     private final StoreManager manager = StoreManager.getInstance();
     
     /** constructor<br>
-     * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     * @see BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )
      */
     public StoreCache(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
         super(updateStrategy,maximumSize, duration, unit);

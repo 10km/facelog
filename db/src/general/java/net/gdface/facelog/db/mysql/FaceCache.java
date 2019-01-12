@@ -23,7 +23,7 @@ public class FaceCache extends BaseTableLoadCaching<Integer, FaceBean> {
     private final FaceManager manager = FaceManager.getInstance();
     
     /** constructor<br>
-     * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     * @see BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )
      */
     public FaceCache(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
         super(updateStrategy,maximumSize, duration, unit);

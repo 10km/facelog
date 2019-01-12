@@ -193,7 +193,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @param bean the referenced {@link PersonBean}
      * @param importedBeans imported beans from fl_feature
      * @return importedBeans always
-     * @see {@link FeatureManager#setReferencedByPersonId(FeatureBean, PersonBean)
+     * @see IFeatureManager#setReferencedByPersonId(FeatureBean, PersonBean)
      * @throws RuntimeDaoException
      */
     public FeatureBean[] setFeatureBeansByPersonId(PersonBean bean , FeatureBean[] importedBeans)throws RuntimeDaoException;
@@ -205,7 +205,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @param bean the referenced {@link PersonBean} 
      * @param importedBeans imported beans from fl_feature 
      * @return importedBeans always
-     * @see {@link FeatureManager#setReferencedByPersonId(FeatureBean, PersonBean)
+     * @see IFeatureManager#setReferencedByPersonId(FeatureBean, PersonBean)
      * @throws RuntimeDaoException
      */
     public <C extends java.util.Collection<FeatureBean>> C setFeatureBeansByPersonId(PersonBean bean , C importedBeans)throws RuntimeDaoException;
@@ -275,7 +275,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @param bean the referenced {@link PersonBean}
      * @param importedBeans imported beans from fl_log
      * @return importedBeans always
-     * @see {@link LogManager#setReferencedByPersonId(LogBean, PersonBean)
+     * @see ILogManager#setReferencedByPersonId(LogBean, PersonBean)
      * @throws RuntimeDaoException
      */
     public LogBean[] setLogBeansByPersonId(PersonBean bean , LogBean[] importedBeans)throws RuntimeDaoException;
@@ -287,7 +287,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @param bean the referenced {@link PersonBean} 
      * @param importedBeans imported beans from fl_log 
      * @return importedBeans always
-     * @see {@link LogManager#setReferencedByPersonId(LogBean, PersonBean)
+     * @see ILogManager#setReferencedByPersonId(LogBean, PersonBean)
      * @throws RuntimeDaoException
      */
     public <C extends java.util.Collection<LogBean>> C setLogBeansByPersonId(PersonBean bean , C importedBeans)throws RuntimeDaoException;

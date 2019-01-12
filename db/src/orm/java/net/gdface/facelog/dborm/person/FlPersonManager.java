@@ -205,7 +205,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * Loads a {@link FlPersonBean} from the fl_person using primary key fields.
      * @param keys primary keys value:<br> 
      * @return a unique {@link FlPersonBean} or {@code null} if not found
-     * @see {@link #loadByPrimaryKey(Integer id)}
+     * @see #loadByPrimaryKey(Integer id)
      */
     @Override
     public FlPersonBean loadByPrimaryKey(Object ...keys) throws DaoException{
@@ -273,7 +273,6 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @param bean  
      * @throws DaoException
      * @return false if primary kes has null
-     * @see #countUsingTemplate(FlPersonBean)
      */
     @Override
     public boolean existsByPrimaryKey(FlPersonBean bean) throws DaoException
@@ -320,7 +319,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @param id Integer - PK# 1
      * @return the number of deleted rows
      * @throws DaoException
-     * @see {@link #delete(FlPersonBean)}
+     * @see #delete(FlPersonBean)
      */
     public int deleteByPrimaryKey(Integer id) throws DaoException
     {
@@ -382,7 +381,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      *
      * @param keys primary keys value:<br> 
      * @return the number of deleted rows
-     * @see {@link #delete(FlPersonBean)}
+     * @see #delete(FlPersonBean)
      */   
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DaoException{
@@ -420,8 +419,8 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID} -> {@link FlFeatureBean}</li>
-     *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean}</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID} - {@link FlFeatureBean}</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} - {@link FlLogBean}</li>
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
      * @param ikIndex valid values: {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID},{@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID}
@@ -466,7 +465,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T> see also {@link #getImportedBeansAsList(FlPersonBean,int)}
      * @param bean the {@link FlPersonBean} object to use
-     * @param importedBeans the <T> object to associate to the {@link FlPersonBean}
+     * @param importedBeans the T object to associate to the {@link FlPersonBean}
      * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlPersonBean,int)}
 
      * @return importedBeans always
@@ -504,7 +503,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     /**
      * Retrieves the {@link FlFeatureBean} object from the fl_feature.person_id field.<BR>
      * FK_NAME : fl_feature_ibfk_1 
-     * @param id Integer - PK# 1
+     * @param idOfPerson Integer - PK# 1
      * @return the associated {@link FlFeatureBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DaoException
      */
@@ -530,7 +529,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     /**
      * Retrieves the {@link FlFeatureBean} object from fl_feature.person_id field.<BR>
      * FK_NAME:fl_feature_ibfk_1
-     * @param id Integer - PK# 1
+     * @param idOfPerson Integer - PK# 1
      * @return the associated {@link FlFeatureBean} beans 
      * @throws DaoException
      */
@@ -568,7 +567,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @param importedBeans imported beans from fl_feature
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlFeatureManager#setReferencedByPersonId(FlFeatureBean, FlPersonBean)
+     * @see FlFeatureManager#setReferencedByPersonId(FlFeatureBean, FlPersonBean)
      */
     public FlFeatureBean[] setFeatureBeansByPersonId(FlPersonBean bean , FlFeatureBean[] importedBeans) throws DaoException
     {
@@ -588,7 +587,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @param importedBeans imported beans from fl_feature 
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlFeatureManager#setReferencedByPersonId(FlFeatureBean, FlPersonBean)
+     * @see FlFeatureManager#setReferencedByPersonId(FlFeatureBean, FlPersonBean)
      */
     public <C extends java.util.Collection<FlFeatureBean>> C setFeatureBeansByPersonId(FlPersonBean bean , C importedBeans) throws DaoException
     {
@@ -616,7 +615,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     /**
      * Retrieves the {@link FlLogBean} object from the fl_log.person_id field.<BR>
      * FK_NAME : fl_log_ibfk_1 
-     * @param id Integer - PK# 1
+     * @param idOfPerson Integer - PK# 1
      * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DaoException
      */
@@ -642,7 +641,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     /**
      * Retrieves the {@link FlLogBean} object from fl_log.person_id field.<BR>
      * FK_NAME:fl_log_ibfk_1
-     * @param id Integer - PK# 1
+     * @param idOfPerson Integer - PK# 1
      * @return the associated {@link FlLogBean} beans 
      * @throws DaoException
      */
@@ -680,7 +679,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @param importedBeans imported beans from fl_log
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlLogManager#setReferencedByPersonId(FlLogBean, FlPersonBean)
+     * @see FlLogManager#setReferencedByPersonId(FlLogBean, FlPersonBean)
      */
     public FlLogBean[] setLogBeansByPersonId(FlPersonBean bean , FlLogBean[] importedBeans) throws DaoException
     {
@@ -700,7 +699,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @param importedBeans imported beans from fl_log 
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlLogManager#setReferencedByPersonId(FlLogBean, FlPersonBean)
+     * @see FlLogManager#setReferencedByPersonId(FlLogBean, FlPersonBean)
      */
     public <C extends java.util.Collection<FlLogBean>> C setLogBeansByPersonId(FlPersonBean bean , C importedBeans) throws DaoException
     {
@@ -815,7 +814,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * Save the FlPersonBean bean and referenced beans and imported beans (array) into the database.
      *
      * @param bean the {@link FlPersonBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FlPersonBean , FlImageBean , FlPersonGroupBean , FlFeatureBean[] , FlLogBean[] )}
      * @return the inserted or updated {@link FlPersonBean} bean
      * @throws DaoException
@@ -855,7 +854,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * Save the FlPersonBean bean and referenced beans and imported beans (collection) into the database.
      *
      * @param bean the {@link FlPersonBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FlPersonBean , FlImageBean , FlPersonGroupBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link FlPersonBean} bean
      * @throws DaoException
@@ -898,13 +897,13 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_PERSON_FK_IMAGE_MD5} -> {@link FlImageBean}</li>
-     *     <li> {@link Constant#FL_PERSON_FK_GROUP_ID} -> {@link FlPersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERSON_FK_IMAGE_MD5} - {@link FlImageBean}</li>
+     *     <li> {@link Constant#FL_PERSON_FK_GROUP_ID} - {@link FlPersonGroupBean}</li>
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_PERSON_FK_IMAGE_MD5},{@link Constant#FL_PERSON_FK_GROUP_ID}
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return the associated T bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DaoException
      */
     @SuppressWarnings("unchecked")
@@ -925,7 +924,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * 
      * @param <T> see also {@link #getReferencedBean(FlPersonBean,int)}
      * @param bean the {@link FlPersonBean} object to use
-     * @param beanToSet the <T> object to associate to the {@link FlPersonBean}
+     * @param beanToSet the T object to associate to the {@link FlPersonBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(FlPersonBean,int)}
      * @return always beanToSet saved
      * @throws DaoException
@@ -972,7 +971,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @param bean the {@link FlPersonBean} object to use
      * @param beanToSet the {@link FlImageBean} object to associate to the {@link FlPersonBean} .
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws DaoException
      */
     public FlImageBean setReferencedByImageMd5(FlPersonBean bean, FlImageBean beanToSet) throws DaoException
     {
@@ -1012,7 +1011,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @param bean the {@link FlPersonBean} object to use
      * @param beanToSet the {@link FlPersonGroupBean} object to associate to the {@link FlPersonBean} .
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws DaoException
      */
     public FlPersonGroupBean setReferencedByGroupId(FlPersonBean bean, FlPersonGroupBean beanToSet) throws DaoException
     {
@@ -2329,6 +2328,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
      * @param ps the PreparedStatement that will be filled
      * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
+     * @param fillNull wether fill null for null field
      * @return the number of clauses returned
      * @throws DaoException
      */
@@ -2995,8 +2995,8 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     //37-2
     /**
      * bind foreign key listener to foreign table: <br>
-     * DELETE RULE : SET_NULL {@code fl_person(group_id)-> fl_person_group(id)} <br>
-     * DELETE RULE : SET_NULL {@code fl_person(image_md5)-> fl_image(md5)} <br>
+     * DELETE RULE : SET_NULL {@code fl_person(group_id)- fl_person_group(id)} <br>
+     * DELETE RULE : SET_NULL {@code fl_person(image_md5)- fl_image(md5)} <br>
      */
     public void bindForeignKeyListenerForDeleteRule(){
         instanceOfFlPersonGroupManager().registerListener(foreignKeyListenerByGroupId);
@@ -3149,7 +3149,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     //46
     /**
      * return a primary key list from {@link FlPersonBean} collection
-     * @param array
+     * @param collection
      */
     public List<Integer> toPrimaryKeyList(java.util.Collection<FlPersonBean> collection){        
         if(null == collection){

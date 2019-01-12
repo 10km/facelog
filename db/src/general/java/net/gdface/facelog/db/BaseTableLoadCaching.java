@@ -113,21 +113,21 @@ public abstract class BaseTableLoadCaching<K ,B extends BaseBean<B>> implements 
             }};
     }
     /**
-     * @see {@link com.google.common.cache.LoadingCache#get(Object)}
+     * @see com.google.common.cache.LoadingCache#get(Object)
      */
     @Override
     public B getBean(K key)throws ExecutionException{
         return cache.get(key);
     }
     /**
-     * @see {@link com.google.common.cache.LoadingCache#getIfPresent(Object)}
+     * @see com.google.common.cache.LoadingCache#getIfPresent(Object)
      */
     @Override
     public B getBeanIfPresent(K key){
         return null == key ? null : cache.getIfPresent(key);
     }
     /**
-     * @see {@link com.google.common.cache.LoadingCache#getUnchecked(Object)}
+     * @see com.google.common.cache.LoadingCache#getUnchecked(Object)
      */
     @Override
     public B getBeanUnchecked(K key){

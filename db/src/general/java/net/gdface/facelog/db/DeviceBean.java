@@ -92,8 +92,7 @@ public final class DeviceBean
         return this;
     }
     /**
-     * return a new mutable copy of this object.
-     * @return 
+     * @return return a new mutable copy of this object.
      */
     public DeviceBean cloneMutable(){
         return clone().immutable(null);
@@ -208,7 +207,7 @@ public final class DeviceBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "id")
@@ -286,7 +285,7 @@ public final class DeviceBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "groupId")
@@ -362,7 +361,7 @@ public final class DeviceBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "name")
@@ -428,7 +427,7 @@ public final class DeviceBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "version")
@@ -494,7 +493,7 @@ public final class DeviceBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "serialNo")
@@ -560,7 +559,7 @@ public final class DeviceBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "mac")
@@ -626,7 +625,7 @@ public final class DeviceBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "remark")
@@ -700,7 +699,7 @@ public final class DeviceBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "createTime")
@@ -792,7 +791,7 @@ public final class DeviceBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "updateTime")
@@ -847,11 +846,17 @@ public final class DeviceBean
      * FOREIGN KEY (group_id) REFERENCES fl_device_group(id)
      */
     private DeviceGroupBean referencedByGroupId;
-    /** Getter method for {@link #referencedByGroupId}. */
+    /**
+     * Getter method for {@link #referencedByGroupId}.
+     * @return DeviceGroupBean
+     */
     public DeviceGroupBean getReferencedByGroupId() {
         return this.referencedByGroupId;
     }
-    /** Setter method for {@link #referencedByGroupId}. */
+    /**
+     * Setter method for {@link #referencedByGroupId}.
+     * @param reference DeviceGroupBean
+     */
     public void setReferencedByGroupId(DeviceGroupBean reference) {
         this.referencedByGroupId = reference;
     }
@@ -1190,7 +1195,7 @@ public final class DeviceBean
     }
     /**
      * check whether this bean is a NULL bean 
-     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @return {@code true} if {@link #initialized} be set to zero
      * @see #asNULL()
      */
     public boolean checkNULL(){
@@ -1210,8 +1215,9 @@ public final class DeviceBean
         return source;
     }
     /** 
+     * @param source input list
      * @return replace null instance element with {@code null}
-     * @see {@link #checkNULL()} 
+     * @see #checkNULL()
      */
     public static final List<DeviceBean> replaceNullInstance(List<DeviceBean> source){
         if(null != source){
@@ -1341,7 +1347,10 @@ public final class DeviceBean
         setValue(columnIDOf(column),value);
     }
     
-    /** return column id for the given field name or negative if {@code column} is invalid name */
+    /**
+     * @param column column name
+     * @return column id for the given field name or negative if {@code column} is invalid name 
+     */
     public static int columnIDOf(String column){
         int index = FL_DEVICE_FIELDS_LIST.indexOf(column);
         return  index < 0 
@@ -1387,8 +1396,8 @@ public final class DeviceBean
         /** 
          * fill the field : fl_device.id
          * @param id 设备id
-         * @see {@link DeviceBean#getId()}
-         * @see {@link DeviceBean#setId(Integer)}
+         * @see DeviceBean#getId()
+         * @see DeviceBean#setId(Integer)
          */
         public Builder id(Integer id){
             TEMPLATE.get().setId(id);
@@ -1397,8 +1406,8 @@ public final class DeviceBean
         /** 
          * fill the field : fl_device.group_id
          * @param groupId 所属设备组id
-         * @see {@link DeviceBean#getGroupId()}
-         * @see {@link DeviceBean#setGroupId(Integer)}
+         * @see DeviceBean#getGroupId()
+         * @see DeviceBean#setGroupId(Integer)
          */
         public Builder groupId(Integer groupId){
             TEMPLATE.get().setGroupId(groupId);
@@ -1407,8 +1416,8 @@ public final class DeviceBean
         /** 
          * fill the field : fl_device.name
          * @param name 设备名称
-         * @see {@link DeviceBean#getName()}
-         * @see {@link DeviceBean#setName(String)}
+         * @see DeviceBean#getName()
+         * @see DeviceBean#setName(String)
          */
         public Builder name(String name){
             TEMPLATE.get().setName(name);
@@ -1417,8 +1426,8 @@ public final class DeviceBean
         /** 
          * fill the field : fl_device.version
          * @param version 设备版本号
-         * @see {@link DeviceBean#getVersion()}
-         * @see {@link DeviceBean#setVersion(String)}
+         * @see DeviceBean#getVersion()
+         * @see DeviceBean#setVersion(String)
          */
         public Builder version(String version){
             TEMPLATE.get().setVersion(version);
@@ -1427,8 +1436,8 @@ public final class DeviceBean
         /** 
          * fill the field : fl_device.serial_no
          * @param serialNo 设备序列号
-         * @see {@link DeviceBean#getSerialNo()}
-         * @see {@link DeviceBean#setSerialNo(String)}
+         * @see DeviceBean#getSerialNo()
+         * @see DeviceBean#setSerialNo(String)
          */
         public Builder serialNo(String serialNo){
             TEMPLATE.get().setSerialNo(serialNo);
@@ -1437,8 +1446,8 @@ public final class DeviceBean
         /** 
          * fill the field : fl_device.mac
          * @param mac 6字节MAC地址(HEX)
-         * @see {@link DeviceBean#getMac()}
-         * @see {@link DeviceBean#setMac(String)}
+         * @see DeviceBean#getMac()
+         * @see DeviceBean#setMac(String)
          */
         public Builder mac(String mac){
             TEMPLATE.get().setMac(mac);
@@ -1447,8 +1456,8 @@ public final class DeviceBean
         /** 
          * fill the field : fl_device.remark
          * @param remark 备注
-         * @see {@link DeviceBean#getRemark()}
-         * @see {@link DeviceBean#setRemark(String)}
+         * @see DeviceBean#getRemark()
+         * @see DeviceBean#setRemark(String)
          */
         public Builder remark(String remark){
             TEMPLATE.get().setRemark(remark);
@@ -1457,8 +1466,8 @@ public final class DeviceBean
         /** 
          * fill the field : fl_device.create_time
          * @param createTime 
-         * @see {@link DeviceBean#getCreateTime()}
-         * @see {@link DeviceBean#setCreateTime(java.util.Date)}
+         * @see DeviceBean#getCreateTime()
+         * @see DeviceBean#setCreateTime(java.util.Date)
          */
         public Builder createTime(java.util.Date createTime){
             TEMPLATE.get().setCreateTime(createTime);
@@ -1467,8 +1476,8 @@ public final class DeviceBean
         /** 
          * fill the field : fl_device.update_time
          * @param updateTime 
-         * @see {@link DeviceBean#getUpdateTime()}
-         * @see {@link DeviceBean#setUpdateTime(java.util.Date)}
+         * @see DeviceBean#getUpdateTime()
+         * @see DeviceBean#setUpdateTime(java.util.Date)
          */
         public Builder updateTime(java.util.Date updateTime){
             TEMPLATE.get().setUpdateTime(updateTime);

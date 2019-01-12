@@ -506,8 +506,6 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * count the number of elements of a specific bean given the search type
      *
      * @param bean the template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param searchType exact ?  like ? starting like ? ending link ? <br>
      *                {@value Constant#SEARCH_EXACT}   {@link Constant#SEARCH_EXACT} <br>
      *                {@value Constant#SEARCH_LIKE}   {@link Constant#SEARCH_LIKE} <br>
@@ -585,7 +583,6 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *      for fl_store table<br>
      *          PK# 1 fl_store.md5 type String<br>
      * @return the number of deleted rows
-     * @see #delete(B)
      * @throws RuntimeDaoException
      */   
     public int deleteByPrimaryKey(Object ...keys)throws RuntimeDaoException;
@@ -739,7 +736,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * when you don't know which is primary key of table,you can use the method.
      * @param bean the B bean with primary key fields
      * @return 
-     * @see {@link #loadByPrimaryKey(B bean)}
+     * @see #loadByPrimaryKey(B bean)
      * @throws RuntimeDaoException
      */
     public boolean existsByPrimaryKey(B bean)throws RuntimeDaoException;
@@ -748,7 +745,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * Check duplicated row by primary keys,if row exists throw exception
      * @param bean the B bean with primary key fields
      * @return always bean
-     * @see {@link #existsPrimaryKey(B bean)}
+     * @see #existsPrimaryKey(B bean)
      * @throws ObjectRetrievalException has duplicated record
      * @throws RuntimeDaoException
      */
@@ -1296,7 +1293,6 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
     /**
      * Run {@code Runnable} as a transaction.no return
      * @param fun
-     * @
      * @see #runAsTransaction(Runnable)
      * @throws RuntimeDaoException
      */
@@ -1307,45 +1303,45 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param <T>
      * <ul>
      *     <li> for fl_device:
-     *     <li> {@link Constant#FL_DEVICE_FK_GROUP_ID} -> {@link DeviceGroupBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_FK_GROUP_ID} - DeviceGroupBean</li>
      * </ul>
      * <ul>
      *     <li> for fl_device_group:
-     *     <li> {@link Constant#FL_DEVICE_GROUP_FK_PARENT} -> {@link DeviceGroupBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_FK_PARENT} - DeviceGroupBean</li>
      * </ul>
      * <ul>
      *     <li> for fl_face:
-     *     <li> {@link Constant#FL_FACE_FK_FEATURE_MD5} -> {@link FeatureBean}</li>
-     *     <li> {@link Constant#FL_FACE_FK_IMAGE_MD5} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_FACE_FK_FEATURE_MD5} - FeatureBean</li>
+     *     <li> {@link Constant#FL_FACE_FK_IMAGE_MD5} - ImageBean</li>
      * </ul>
      * <ul>
      *     <li> for fl_feature:
-     *     <li> {@link Constant#FL_FEATURE_FK_PERSON_ID} -> {@link PersonBean}</li>
+     *     <li> {@link Constant#FL_FEATURE_FK_PERSON_ID} - PersonBean</li>
      * </ul>
      * <ul>
      *     <li> for fl_image:
-     *     <li> {@link Constant#FL_IMAGE_FK_DEVICE_ID} -> {@link DeviceBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_FK_DEVICE_ID} - DeviceBean</li>
      * </ul>
      * <ul>
      *     <li> for fl_log:
-     *     <li> {@link Constant#FL_LOG_FK_DEVICE_ID} -> {@link DeviceBean}</li>
-     *     <li> {@link Constant#FL_LOG_FK_COMPARE_FACE} -> {@link FaceBean}</li>
-     *     <li> {@link Constant#FL_LOG_FK_VERIFY_FEATURE} -> {@link FeatureBean}</li>
-     *     <li> {@link Constant#FL_LOG_FK_PERSON_ID} -> {@link PersonBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_DEVICE_ID} - DeviceBean</li>
+     *     <li> {@link Constant#FL_LOG_FK_COMPARE_FACE} - FaceBean</li>
+     *     <li> {@link Constant#FL_LOG_FK_VERIFY_FEATURE} - FeatureBean</li>
+     *     <li> {@link Constant#FL_LOG_FK_PERSON_ID} - PersonBean</li>
      * </ul>
      * <ul>
      *     <li> for fl_permit:
-     *     <li> {@link Constant#FL_PERMIT_FK_DEVICE_GROUP_ID} -> {@link DeviceGroupBean}</li>
-     *     <li> {@link Constant#FL_PERMIT_FK_PERSON_GROUP_ID} -> {@link PersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERMIT_FK_DEVICE_GROUP_ID} - DeviceGroupBean</li>
+     *     <li> {@link Constant#FL_PERMIT_FK_PERSON_GROUP_ID} - PersonGroupBean</li>
      * </ul>
      * <ul>
      *     <li> for fl_person:
-     *     <li> {@link Constant#FL_PERSON_FK_IMAGE_MD5} -> {@link ImageBean}</li>
-     *     <li> {@link Constant#FL_PERSON_FK_GROUP_ID} -> {@link PersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERSON_FK_IMAGE_MD5} - ImageBean</li>
+     *     <li> {@link Constant#FL_PERSON_FK_GROUP_ID} - PersonGroupBean</li>
      * </ul>
      * <ul>
      *     <li> for fl_person_group:
-     *     <li> {@link Constant#FL_PERSON_GROUP_FK_PARENT} -> {@link PersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_FK_PARENT} - PersonGroupBean</li>
      * </ul>
      * @param bean the B object to use
      * @param fkIndex foreign key name.<br>
@@ -1367,7 +1363,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *        {@link Constant#FL_PERSON_FK_IMAGE_MD5},{@link Constant#FL_PERSON_FK_GROUP_ID}<br>
      *        for for fl_person_group table:<br>
      *        {@link Constant#FL_PERSON_GROUP_FK_PARENT}<br>
-     * @return the associated <T> bean or {@code null} if {@code bean}  is {@code null}
+     * @return the associated T bean or {@code null} if {@code bean}  is {@code null}
      * @throws RuntimeDaoException
      */
     public <T extends BaseBean<T>> T getReferencedBean(B bean,int fkIndex)throws RuntimeDaoException;
@@ -1388,39 +1384,39 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param <T>
      * <ul>
      *     <li> for fl_device table:
-     *     <li> {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link PersonGroupBean}</li>
-     *     <li> {@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link PersonGroupBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} - PersonGroupBean</li>
+     *     <li> {@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID} - PersonGroupBean</li>
      * </ul>
      * <ul>
      *     <li> for fl_device_group table:
-     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID} -> {@link PersonGroupBean}</li>
-     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT} -> {@link PersonGroupBean}</li>
-     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID} -> {@link PersonGroupBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID} - PersonGroupBean</li>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT} - PersonGroupBean</li>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID} - PersonGroupBean</li>
      * </ul>
      * <ul>
      *     <li> for fl_face table:
-     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link PersonGroupBean}</li>
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} - PersonGroupBean</li>
      * </ul>
      * <ul>
      *     <li> for fl_feature table:
-     *     <li> {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5} -> {@link PersonGroupBean}</li>
-     *     <li> {@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE} -> {@link PersonGroupBean}</li>
+     *     <li> {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5} - PersonGroupBean</li>
+     *     <li> {@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE} - PersonGroupBean</li>
      * </ul>
      * <ul>
      *     <li> for fl_image table:
-     *     <li> {@link Constant#FL_IMAGE_IK_FL_FACE_IMAGE_MD5} -> {@link PersonGroupBean}</li>
-     *     <li> {@link Constant#FL_IMAGE_IK_FL_PERSON_IMAGE_MD5} -> {@link PersonGroupBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_FACE_IMAGE_MD5} - PersonGroupBean</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_PERSON_IMAGE_MD5} - PersonGroupBean</li>
      * </ul>
      * <ul>
      *     <li> for fl_person table:
-     *     <li> {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID} -> {@link PersonGroupBean}</li>
-     *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link PersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID} - PersonGroupBean</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} - PersonGroupBean</li>
      * </ul>
      * <ul>
      *     <li> for fl_person_group table:
-     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID} -> {@link PersonGroupBean}</li>
-     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID} -> {@link PersonGroupBean}</li>
-     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT} -> {@link PersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID} - PersonGroupBean</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID} - PersonGroupBean</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT} - PersonGroupBean</li>
      * </ul>
      * @param bean the B object to use
      * @param ikIndex foreign key name.<br>

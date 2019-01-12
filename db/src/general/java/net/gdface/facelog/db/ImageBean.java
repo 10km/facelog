@@ -91,8 +91,7 @@ public final class ImageBean
         return this;
     }
     /**
-     * return a new mutable copy of this object.
-     * @return 
+     * @return return a new mutable copy of this object.
      */
     public ImageBean cloneMutable(){
         return clone().immutable(null);
@@ -206,7 +205,7 @@ public final class ImageBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "md5")
@@ -272,7 +271,7 @@ public final class ImageBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "format")
@@ -339,7 +338,7 @@ public final class ImageBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "width")
@@ -416,7 +415,7 @@ public final class ImageBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "height")
@@ -494,7 +493,7 @@ public final class ImageBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "depth")
@@ -572,7 +571,7 @@ public final class ImageBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "faceNum")
@@ -648,7 +647,7 @@ public final class ImageBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "thumbMd5")
@@ -715,7 +714,7 @@ public final class ImageBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "deviceId")
@@ -762,11 +761,17 @@ public final class ImageBean
      * FOREIGN KEY (device_id) REFERENCES fl_device(id)
      */
     private DeviceBean referencedByDeviceId;
-    /** Getter method for {@link #referencedByDeviceId}. */
+    /**
+     * Getter method for {@link #referencedByDeviceId}.
+     * @return DeviceBean
+     */
     public DeviceBean getReferencedByDeviceId() {
         return this.referencedByDeviceId;
     }
-    /** Setter method for {@link #referencedByDeviceId}. */
+    /**
+     * Setter method for {@link #referencedByDeviceId}.
+     * @param reference DeviceBean
+     */
     public void setReferencedByDeviceId(DeviceBean reference) {
         this.referencedByDeviceId = reference;
     }
@@ -1086,7 +1091,7 @@ public final class ImageBean
     }
     /**
      * check whether this bean is a NULL bean 
-     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @return {@code true} if {@link #initialized} be set to zero
      * @see #asNULL()
      */
     public boolean checkNULL(){
@@ -1106,8 +1111,9 @@ public final class ImageBean
         return source;
     }
     /** 
+     * @param source input list
      * @return replace null instance element with {@code null}
-     * @see {@link #checkNULL()} 
+     * @see #checkNULL()
      */
     public static final List<ImageBean> replaceNullInstance(List<ImageBean> source){
         if(null != source){
@@ -1232,7 +1238,10 @@ public final class ImageBean
         setValue(columnIDOf(column),value);
     }
     
-    /** return column id for the given field name or negative if {@code column} is invalid name */
+    /**
+     * @param column column name
+     * @return column id for the given field name or negative if {@code column} is invalid name 
+     */
     public static int columnIDOf(String column){
         int index = FL_IMAGE_FIELDS_LIST.indexOf(column);
         return  index < 0 
@@ -1278,8 +1287,8 @@ public final class ImageBean
         /** 
          * fill the field : fl_image.md5
          * @param md5 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key
-         * @see {@link ImageBean#getMd5()}
-         * @see {@link ImageBean#setMd5(String)}
+         * @see ImageBean#getMd5()
+         * @see ImageBean#setMd5(String)
          */
         public Builder md5(String md5){
             TEMPLATE.get().setMd5(md5);
@@ -1288,8 +1297,8 @@ public final class ImageBean
         /** 
          * fill the field : fl_image.format
          * @param format 图像格式
-         * @see {@link ImageBean#getFormat()}
-         * @see {@link ImageBean#setFormat(String)}
+         * @see ImageBean#getFormat()
+         * @see ImageBean#setFormat(String)
          */
         public Builder format(String format){
             TEMPLATE.get().setFormat(format);
@@ -1298,8 +1307,8 @@ public final class ImageBean
         /** 
          * fill the field : fl_image.width
          * @param width 图像宽度
-         * @see {@link ImageBean#getWidth()}
-         * @see {@link ImageBean#setWidth(Integer)}
+         * @see ImageBean#getWidth()
+         * @see ImageBean#setWidth(Integer)
          */
         public Builder width(Integer width){
             TEMPLATE.get().setWidth(width);
@@ -1308,8 +1317,8 @@ public final class ImageBean
         /** 
          * fill the field : fl_image.height
          * @param height 图像高度
-         * @see {@link ImageBean#getHeight()}
-         * @see {@link ImageBean#setHeight(Integer)}
+         * @see ImageBean#getHeight()
+         * @see ImageBean#setHeight(Integer)
          */
         public Builder height(Integer height){
             TEMPLATE.get().setHeight(height);
@@ -1318,8 +1327,8 @@ public final class ImageBean
         /** 
          * fill the field : fl_image.depth
          * @param depth 通道数
-         * @see {@link ImageBean#getDepth()}
-         * @see {@link ImageBean#setDepth(Integer)}
+         * @see ImageBean#getDepth()
+         * @see ImageBean#setDepth(Integer)
          */
         public Builder depth(Integer depth){
             TEMPLATE.get().setDepth(depth);
@@ -1328,8 +1337,8 @@ public final class ImageBean
         /** 
          * fill the field : fl_image.face_num
          * @param faceNum 图像中的人脸数目
-         * @see {@link ImageBean#getFaceNum()}
-         * @see {@link ImageBean#setFaceNum(Integer)}
+         * @see ImageBean#getFaceNum()
+         * @see ImageBean#setFaceNum(Integer)
          */
         public Builder faceNum(Integer faceNum){
             TEMPLATE.get().setFaceNum(faceNum);
@@ -1338,8 +1347,8 @@ public final class ImageBean
         /** 
          * fill the field : fl_image.thumb_md5
          * @param thumbMd5 缩略图md5,图像数据存储在 fl_imae_store(md5)
-         * @see {@link ImageBean#getThumbMd5()}
-         * @see {@link ImageBean#setThumbMd5(String)}
+         * @see ImageBean#getThumbMd5()
+         * @see ImageBean#setThumbMd5(String)
          */
         public Builder thumbMd5(String thumbMd5){
             TEMPLATE.get().setThumbMd5(thumbMd5);
@@ -1348,8 +1357,8 @@ public final class ImageBean
         /** 
          * fill the field : fl_image.device_id
          * @param deviceId 外键,图像来源设备
-         * @see {@link ImageBean#getDeviceId()}
-         * @see {@link ImageBean#setDeviceId(Integer)}
+         * @see ImageBean#getDeviceId()
+         * @see ImageBean#setDeviceId(Integer)
          */
         public Builder deviceId(Integer deviceId){
             TEMPLATE.get().setDeviceId(deviceId);

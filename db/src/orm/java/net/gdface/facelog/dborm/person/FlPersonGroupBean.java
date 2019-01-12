@@ -93,8 +93,7 @@ public  class FlPersonGroupBean
         return this;
     }
     /**
-     * return a new mutable copy of this object.
-     * @return 
+     * @return return a new mutable copy of this object.
      */
     public FlPersonGroupBean cloneMutable(){
         return clone().immutable(null);
@@ -740,11 +739,17 @@ public  class FlPersonGroupBean
      * FOREIGN KEY (parent) REFERENCES fl_person_group(id)
      */
     private FlPersonGroupBean referencedByParent;
-    /** Getter method for {@link #referencedByParent}. */
+    /**
+     * Getter method for {@link #referencedByParent}.
+     * @return FlPersonGroupBean
+     */
     public FlPersonGroupBean getReferencedByParent() {
         return this.referencedByParent;
     }
-    /** Setter method for {@link #referencedByParent}. */
+    /**
+     * Setter method for {@link #referencedByParent}.
+     * @param reference FlPersonGroupBean
+     */
     public void setReferencedByParent(FlPersonGroupBean reference) {
         this.referencedByParent = reference;
     }
@@ -1082,7 +1087,7 @@ public  class FlPersonGroupBean
     }
     /**
      * check whether this bean is a NULL bean 
-     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @return {@code true} if {@link #initialized} be set to zero
      * @see #asNULL()
      */
     public boolean checkNULL(){
@@ -1102,8 +1107,9 @@ public  class FlPersonGroupBean
         return source;
     }
     /** 
+     * @param source input list
      * @return replace null instance element with {@code null}
-     * @see {@link #checkNULL()} 
+     * @see #checkNULL()
      */
     public static final List<FlPersonGroupBean> replaceNullInstance(List<FlPersonGroupBean> source){
         if(null != source){
@@ -1233,7 +1239,10 @@ public  class FlPersonGroupBean
         setValue(columnIDOf(column),value);
     }
     
-    /** return column id for the given field name or negative if {@code column} is invalid name */
+    /**
+     * @param column column name
+     * @return column id for the given field name or negative if {@code column} is invalid name 
+     */
     public static int columnIDOf(String column){
         int index = FL_PERSON_GROUP_FIELDS_LIST.indexOf(column);
         return  index < 0 
@@ -1279,8 +1288,8 @@ public  class FlPersonGroupBean
         /** 
          * fill the field : fl_person_group.id
          * @param id 用户组id
-         * @see {@link FlPersonGroupBean#getId()}
-         * @see {@link FlPersonGroupBean#setId(Integer)}
+         * @see FlPersonGroupBean#getId()
+         * @see FlPersonGroupBean#setId(Integer)
          */
         public Builder id(Integer id){
             TEMPLATE.get().setId(id);
@@ -1289,8 +1298,8 @@ public  class FlPersonGroupBean
         /** 
          * fill the field : fl_person_group.name
          * @param name 用户组名
-         * @see {@link FlPersonGroupBean#getName()}
-         * @see {@link FlPersonGroupBean#setName(String)}
+         * @see FlPersonGroupBean#getName()
+         * @see FlPersonGroupBean#setName(String)
          */
         public Builder name(String name){
             TEMPLATE.get().setName(name);
@@ -1299,8 +1308,8 @@ public  class FlPersonGroupBean
         /** 
          * fill the field : fl_person_group.leaf
          * @param leaf 是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可
-         * @see {@link FlPersonGroupBean#getLeaf()}
-         * @see {@link FlPersonGroupBean#setLeaf(Integer)}
+         * @see FlPersonGroupBean#getLeaf()
+         * @see FlPersonGroupBean#setLeaf(Integer)
          */
         public Builder leaf(Integer leaf){
             TEMPLATE.get().setLeaf(leaf);
@@ -1309,8 +1318,8 @@ public  class FlPersonGroupBean
         /** 
          * fill the field : fl_person_group.parent
          * @param parent 上一级用户组id
-         * @see {@link FlPersonGroupBean#getParent()}
-         * @see {@link FlPersonGroupBean#setParent(Integer)}
+         * @see FlPersonGroupBean#getParent()
+         * @see FlPersonGroupBean#setParent(Integer)
          */
         public Builder parent(Integer parent){
             TEMPLATE.get().setParent(parent);
@@ -1319,8 +1328,8 @@ public  class FlPersonGroupBean
         /** 
          * fill the field : fl_person_group.remark
          * @param remark 备注
-         * @see {@link FlPersonGroupBean#getRemark()}
-         * @see {@link FlPersonGroupBean#setRemark(String)}
+         * @see FlPersonGroupBean#getRemark()
+         * @see FlPersonGroupBean#setRemark(String)
          */
         public Builder remark(String remark){
             TEMPLATE.get().setRemark(remark);
@@ -1329,8 +1338,8 @@ public  class FlPersonGroupBean
         /** 
          * fill the field : fl_person_group.ext_bin
          * @param extBin 应用项目自定义二进制扩展字段
-         * @see {@link FlPersonGroupBean#getExtBin()}
-         * @see {@link FlPersonGroupBean#setExtBin(java.nio.ByteBuffer)}
+         * @see FlPersonGroupBean#getExtBin()
+         * @see FlPersonGroupBean#setExtBin(java.nio.ByteBuffer)
          */
         public Builder extBin(java.nio.ByteBuffer extBin){
             TEMPLATE.get().setExtBin(extBin);
@@ -1339,8 +1348,8 @@ public  class FlPersonGroupBean
         /** 
          * fill the field : fl_person_group.ext_txt
          * @param extTxt 应用项目自定义文本扩展字段
-         * @see {@link FlPersonGroupBean#getExtTxt()}
-         * @see {@link FlPersonGroupBean#setExtTxt(String)}
+         * @see FlPersonGroupBean#getExtTxt()
+         * @see FlPersonGroupBean#setExtTxt(String)
          */
         public Builder extTxt(String extTxt){
             TEMPLATE.get().setExtTxt(extTxt);
@@ -1349,8 +1358,8 @@ public  class FlPersonGroupBean
         /** 
          * fill the field : fl_person_group.create_time
          * @param createTime 
-         * @see {@link FlPersonGroupBean#getCreateTime()}
-         * @see {@link FlPersonGroupBean#setCreateTime(java.util.Date)}
+         * @see FlPersonGroupBean#getCreateTime()
+         * @see FlPersonGroupBean#setCreateTime(java.util.Date)
          */
         public Builder createTime(java.util.Date createTime){
             TEMPLATE.get().setCreateTime(createTime);
@@ -1359,8 +1368,8 @@ public  class FlPersonGroupBean
         /** 
          * fill the field : fl_person_group.update_time
          * @param updateTime 
-         * @see {@link FlPersonGroupBean#getUpdateTime()}
-         * @see {@link FlPersonGroupBean#setUpdateTime(java.util.Date)}
+         * @see FlPersonGroupBean#getUpdateTime()
+         * @see FlPersonGroupBean#setUpdateTime(java.util.Date)
          */
         public Builder updateTime(java.util.Date updateTime){
             TEMPLATE.get().setUpdateTime(updateTime);

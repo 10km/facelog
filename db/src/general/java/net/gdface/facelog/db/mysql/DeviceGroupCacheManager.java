@@ -44,7 +44,7 @@ public class DeviceGroupCacheManager extends DeviceGroupManager
     /**
      * create a instance of DeviceGroupCacheManager and assign to {@link #instance} if {@code instance} is not initialized.<br>
      * otherwise return {@code instance}.
-     * @see {@link DeviceGroupCacheManager#DeviceGroupCacheManager(UpdateStrategy ,long , long , TimeUnit )}
+     * @see DeviceGroupCacheManager#DeviceGroupCacheManager(UpdateStrategy ,long , long , TimeUnit )
      */
     public static synchronized final DeviceGroupCacheManager makeInstance(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
@@ -67,7 +67,7 @@ public class DeviceGroupCacheManager extends DeviceGroupManager
     /** instance of {@link DeviceGroupCache} */
     private final DeviceGroupCache cache;
     /** constructor<br>
-     * @see {@link DeviceGroupCache#DeviceGroupCache(UpdateStrategy ,long , long , TimeUnit )}
+     * @see DeviceGroupCache#DeviceGroupCache(UpdateStrategy ,long , long , TimeUnit )
      */
     protected DeviceGroupCacheManager(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
         cache = new DeviceGroupCache(updateStrategy,maximumSize,duration,unit);

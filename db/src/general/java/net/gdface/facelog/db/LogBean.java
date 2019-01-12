@@ -93,8 +93,7 @@ public final class LogBean
         return this;
     }
     /**
-     * return a new mutable copy of this object.
-     * @return 
+     * @return return a new mutable copy of this object.
      */
     public LogBean cloneMutable(){
         return clone().immutable(null);
@@ -207,7 +206,7 @@ public final class LogBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "id")
@@ -285,7 +284,7 @@ public final class LogBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "personId")
@@ -362,7 +361,7 @@ public final class LogBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "deviceId")
@@ -439,7 +438,7 @@ public final class LogBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "verifyFeature")
@@ -506,7 +505,7 @@ public final class LogBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "compareFace")
@@ -582,7 +581,7 @@ public final class LogBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "verifyStatus")
@@ -658,7 +657,7 @@ public final class LogBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "similarty")
@@ -743,7 +742,7 @@ public final class LogBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "verifyTime")
@@ -835,7 +834,7 @@ public final class LogBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "createTime")
@@ -890,11 +889,17 @@ public final class LogBean
      * FOREIGN KEY (device_id) REFERENCES fl_device(id)
      */
     private DeviceBean referencedByDeviceId;
-    /** Getter method for {@link #referencedByDeviceId}. */
+    /**
+     * Getter method for {@link #referencedByDeviceId}.
+     * @return DeviceBean
+     */
     public DeviceBean getReferencedByDeviceId() {
         return this.referencedByDeviceId;
     }
-    /** Setter method for {@link #referencedByDeviceId}. */
+    /**
+     * Setter method for {@link #referencedByDeviceId}.
+     * @param reference DeviceBean
+     */
     public void setReferencedByDeviceId(DeviceBean reference) {
         this.referencedByDeviceId = reference;
     }
@@ -903,11 +908,17 @@ public final class LogBean
      * FOREIGN KEY (compare_face) REFERENCES fl_face(id)
      */
     private FaceBean referencedByCompareFace;
-    /** Getter method for {@link #referencedByCompareFace}. */
+    /**
+     * Getter method for {@link #referencedByCompareFace}.
+     * @return FaceBean
+     */
     public FaceBean getReferencedByCompareFace() {
         return this.referencedByCompareFace;
     }
-    /** Setter method for {@link #referencedByCompareFace}. */
+    /**
+     * Setter method for {@link #referencedByCompareFace}.
+     * @param reference FaceBean
+     */
     public void setReferencedByCompareFace(FaceBean reference) {
         this.referencedByCompareFace = reference;
     }
@@ -916,11 +927,17 @@ public final class LogBean
      * FOREIGN KEY (verify_feature) REFERENCES fl_feature(md5)
      */
     private FeatureBean referencedByVerifyFeature;
-    /** Getter method for {@link #referencedByVerifyFeature}. */
+    /**
+     * Getter method for {@link #referencedByVerifyFeature}.
+     * @return FeatureBean
+     */
     public FeatureBean getReferencedByVerifyFeature() {
         return this.referencedByVerifyFeature;
     }
-    /** Setter method for {@link #referencedByVerifyFeature}. */
+    /**
+     * Setter method for {@link #referencedByVerifyFeature}.
+     * @param reference FeatureBean
+     */
     public void setReferencedByVerifyFeature(FeatureBean reference) {
         this.referencedByVerifyFeature = reference;
     }
@@ -929,11 +946,17 @@ public final class LogBean
      * FOREIGN KEY (person_id) REFERENCES fl_person(id)
      */
     private PersonBean referencedByPersonId;
-    /** Getter method for {@link #referencedByPersonId}. */
+    /**
+     * Getter method for {@link #referencedByPersonId}.
+     * @return PersonBean
+     */
     public PersonBean getReferencedByPersonId() {
         return this.referencedByPersonId;
     }
-    /** Setter method for {@link #referencedByPersonId}. */
+    /**
+     * Setter method for {@link #referencedByPersonId}.
+     * @param reference PersonBean
+     */
     public void setReferencedByPersonId(PersonBean reference) {
         this.referencedByPersonId = reference;
     }
@@ -1271,7 +1294,7 @@ public final class LogBean
     }
     /**
      * check whether this bean is a NULL bean 
-     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @return {@code true} if {@link #initialized} be set to zero
      * @see #asNULL()
      */
     public boolean checkNULL(){
@@ -1291,8 +1314,9 @@ public final class LogBean
         return source;
     }
     /** 
+     * @param source input list
      * @return replace null instance element with {@code null}
-     * @see {@link #checkNULL()} 
+     * @see #checkNULL()
      */
     public static final List<LogBean> replaceNullInstance(List<LogBean> source){
         if(null != source){
@@ -1422,7 +1446,10 @@ public final class LogBean
         setValue(columnIDOf(column),value);
     }
     
-    /** return column id for the given field name or negative if {@code column} is invalid name */
+    /**
+     * @param column column name
+     * @return column id for the given field name or negative if {@code column} is invalid name 
+     */
     public static int columnIDOf(String column){
         int index = FL_LOG_FIELDS_LIST.indexOf(column);
         return  index < 0 
@@ -1468,8 +1495,8 @@ public final class LogBean
         /** 
          * fill the field : fl_log.id
          * @param id 日志id
-         * @see {@link LogBean#getId()}
-         * @see {@link LogBean#setId(Integer)}
+         * @see LogBean#getId()
+         * @see LogBean#setId(Integer)
          */
         public Builder id(Integer id){
             TEMPLATE.get().setId(id);
@@ -1478,8 +1505,8 @@ public final class LogBean
         /** 
          * fill the field : fl_log.person_id
          * @param personId 外键,用户id
-         * @see {@link LogBean#getPersonId()}
-         * @see {@link LogBean#setPersonId(Integer)}
+         * @see LogBean#getPersonId()
+         * @see LogBean#setPersonId(Integer)
          */
         public Builder personId(Integer personId){
             TEMPLATE.get().setPersonId(personId);
@@ -1488,8 +1515,8 @@ public final class LogBean
         /** 
          * fill the field : fl_log.device_id
          * @param deviceId 外键,日志来源设备id
-         * @see {@link LogBean#getDeviceId()}
-         * @see {@link LogBean#setDeviceId(Integer)}
+         * @see LogBean#getDeviceId()
+         * @see LogBean#setDeviceId(Integer)
          */
         public Builder deviceId(Integer deviceId){
             TEMPLATE.get().setDeviceId(deviceId);
@@ -1498,8 +1525,8 @@ public final class LogBean
         /** 
          * fill the field : fl_log.verify_feature
          * @param verifyFeature 外键,用于验证身份的人脸特征数据MD5 id
-         * @see {@link LogBean#getVerifyFeature()}
-         * @see {@link LogBean#setVerifyFeature(String)}
+         * @see LogBean#getVerifyFeature()
+         * @see LogBean#setVerifyFeature(String)
          */
         public Builder verifyFeature(String verifyFeature){
             TEMPLATE.get().setVerifyFeature(verifyFeature);
@@ -1508,8 +1535,8 @@ public final class LogBean
         /** 
          * fill the field : fl_log.compare_face
          * @param compareFace 外键,数据库中相似度最高的人脸 id
-         * @see {@link LogBean#getCompareFace()}
-         * @see {@link LogBean#setCompareFace(Integer)}
+         * @see LogBean#getCompareFace()
+         * @see LogBean#setCompareFace(Integer)
          */
         public Builder compareFace(Integer compareFace){
             TEMPLATE.get().setCompareFace(compareFace);
@@ -1518,8 +1545,8 @@ public final class LogBean
         /** 
          * fill the field : fl_log.verify_status
          * @param verifyStatus 验证状态,NULL,0:允许通过,其他:拒绝
-         * @see {@link LogBean#getVerifyStatus()}
-         * @see {@link LogBean#setVerifyStatus(Integer)}
+         * @see LogBean#getVerifyStatus()
+         * @see LogBean#setVerifyStatus(Integer)
          */
         public Builder verifyStatus(Integer verifyStatus){
             TEMPLATE.get().setVerifyStatus(verifyStatus);
@@ -1528,8 +1555,8 @@ public final class LogBean
         /** 
          * fill the field : fl_log.similarty
          * @param similarty 验证相似度
-         * @see {@link LogBean#getSimilarty()}
-         * @see {@link LogBean#setSimilarty(Double)}
+         * @see LogBean#getSimilarty()
+         * @see LogBean#setSimilarty(Double)
          */
         public Builder similarty(Double similarty){
             TEMPLATE.get().setSimilarty(similarty);
@@ -1538,8 +1565,8 @@ public final class LogBean
         /** 
          * fill the field : fl_log.verify_time
          * @param verifyTime 验证时间(可能由前端设备提供时间)
-         * @see {@link LogBean#getVerifyTime()}
-         * @see {@link LogBean#setVerifyTime(java.util.Date)}
+         * @see LogBean#getVerifyTime()
+         * @see LogBean#setVerifyTime(java.util.Date)
          */
         public Builder verifyTime(java.util.Date verifyTime){
             TEMPLATE.get().setVerifyTime(verifyTime);
@@ -1548,8 +1575,8 @@ public final class LogBean
         /** 
          * fill the field : fl_log.create_time
          * @param createTime 
-         * @see {@link LogBean#getCreateTime()}
-         * @see {@link LogBean#setCreateTime(java.util.Date)}
+         * @see LogBean#getCreateTime()
+         * @see LogBean#setCreateTime(java.util.Date)
          */
         public Builder createTime(java.util.Date createTime){
             TEMPLATE.get().setCreateTime(createTime);

@@ -200,7 +200,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * Loads a {@link FlFeatureBean} from the fl_feature using primary key fields.
      * @param keys primary keys value:<br> 
      * @return a unique {@link FlFeatureBean} or {@code null} if not found
-     * @see {@link #loadByPrimaryKey(String md5)}
+     * @see #loadByPrimaryKey(String md5)
      */
     @Override
     public FlFeatureBean loadByPrimaryKey(Object ...keys) throws DaoException{
@@ -268,7 +268,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @param bean  
      * @throws DaoException
      * @return false if primary kes has null
-     * @see #countUsingTemplate(FlFeatureBean)
      */
     @Override
     public boolean existsByPrimaryKey(FlFeatureBean bean) throws DaoException
@@ -315,7 +314,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @param md5 String - PK# 1
      * @return the number of deleted rows
      * @throws DaoException
-     * @see {@link #delete(FlFeatureBean)}
+     * @see #delete(FlFeatureBean)
      */
     public int deleteByPrimaryKey(String md5) throws DaoException
     {
@@ -377,7 +376,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      *
      * @param keys primary keys value:<br> 
      * @return the number of deleted rows
-     * @see {@link #delete(FlFeatureBean)}
+     * @see #delete(FlFeatureBean)
      */   
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DaoException{
@@ -415,8 +414,8 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5} -> {@link FlFaceBean}</li>
-     *     <li> {@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE} -> {@link FlLogBean}</li>
+     *     <li> {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5} - {@link FlFaceBean}</li>
+     *     <li> {@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE} - {@link FlLogBean}</li>
      * </ul>
      * @param bean the {@link FlFeatureBean} object to use
      * @param ikIndex valid values: {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5},{@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE}
@@ -461,7 +460,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T> see also {@link #getImportedBeansAsList(FlFeatureBean,int)}
      * @param bean the {@link FlFeatureBean} object to use
-     * @param importedBeans the <T> object to associate to the {@link FlFeatureBean}
+     * @param importedBeans the T object to associate to the {@link FlFeatureBean}
      * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlFeatureBean,int)}
 
      * @return importedBeans always
@@ -499,7 +498,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     /**
      * Retrieves the {@link FlFaceBean} object from the fl_face.feature_md5 field.<BR>
      * FK_NAME : fl_face_ibfk_2 
-     * @param md5 String - PK# 1
+     * @param md5OfFeature String - PK# 1
      * @return the associated {@link FlFaceBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DaoException
      */
@@ -525,7 +524,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     /**
      * Retrieves the {@link FlFaceBean} object from fl_face.feature_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_2
-     * @param md5 String - PK# 1
+     * @param md5OfFeature String - PK# 1
      * @return the associated {@link FlFaceBean} beans 
      * @throws DaoException
      */
@@ -563,7 +562,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @param importedBeans imported beans from fl_face
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlFaceManager#setReferencedByFeatureMd5(FlFaceBean, FlFeatureBean)
+     * @see FlFaceManager#setReferencedByFeatureMd5(FlFaceBean, FlFeatureBean)
      */
     public FlFaceBean[] setFaceBeansByFeatureMd5(FlFeatureBean bean , FlFaceBean[] importedBeans) throws DaoException
     {
@@ -583,7 +582,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @param importedBeans imported beans from fl_face 
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlFaceManager#setReferencedByFeatureMd5(FlFaceBean, FlFeatureBean)
+     * @see FlFaceManager#setReferencedByFeatureMd5(FlFaceBean, FlFeatureBean)
      */
     public <C extends java.util.Collection<FlFaceBean>> C setFaceBeansByFeatureMd5(FlFeatureBean bean , C importedBeans) throws DaoException
     {
@@ -611,7 +610,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     /**
      * Retrieves the {@link FlLogBean} object from the fl_log.verify_feature field.<BR>
      * FK_NAME : fl_log_ibfk_3 
-     * @param md5 String - PK# 1
+     * @param md5OfFeature String - PK# 1
      * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DaoException
      */
@@ -637,7 +636,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     /**
      * Retrieves the {@link FlLogBean} object from fl_log.verify_feature field.<BR>
      * FK_NAME:fl_log_ibfk_3
-     * @param md5 String - PK# 1
+     * @param md5OfFeature String - PK# 1
      * @return the associated {@link FlLogBean} beans 
      * @throws DaoException
      */
@@ -675,7 +674,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @param importedBeans imported beans from fl_log
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlLogManager#setReferencedByVerifyFeature(FlLogBean, FlFeatureBean)
+     * @see FlLogManager#setReferencedByVerifyFeature(FlLogBean, FlFeatureBean)
      */
     public FlLogBean[] setLogBeansByVerifyFeature(FlFeatureBean bean , FlLogBean[] importedBeans) throws DaoException
     {
@@ -695,7 +694,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @param importedBeans imported beans from fl_log 
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlLogManager#setReferencedByVerifyFeature(FlLogBean, FlFeatureBean)
+     * @see FlLogManager#setReferencedByVerifyFeature(FlLogBean, FlFeatureBean)
      */
     public <C extends java.util.Collection<FlLogBean>> C setLogBeansByVerifyFeature(FlFeatureBean bean , C importedBeans) throws DaoException
     {
@@ -803,7 +802,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * Save the FlFeatureBean bean and referenced beans and imported beans (array) into the database.
      *
      * @param bean the {@link FlFeatureBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FlFeatureBean , FlPersonBean , FlFaceBean[] , FlLogBean[] )}
      * @return the inserted or updated {@link FlFeatureBean} bean
      * @throws DaoException
@@ -839,7 +838,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * Save the FlFeatureBean bean and referenced beans and imported beans (collection) into the database.
      *
      * @param bean the {@link FlFeatureBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FlFeatureBean , FlPersonBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link FlFeatureBean} bean
      * @throws DaoException
@@ -878,12 +877,12 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_FEATURE_FK_PERSON_ID} -> {@link FlPersonBean}</li>
+     *     <li> {@link Constant#FL_FEATURE_FK_PERSON_ID} - {@link FlPersonBean}</li>
      * </ul>
      * @param bean the {@link FlFeatureBean} object to use
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_FEATURE_FK_PERSON_ID}
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return the associated T bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DaoException
      */
     @SuppressWarnings("unchecked")
@@ -902,7 +901,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * 
      * @param <T> see also {@link #getReferencedBean(FlFeatureBean,int)}
      * @param bean the {@link FlFeatureBean} object to use
-     * @param beanToSet the <T> object to associate to the {@link FlFeatureBean}
+     * @param beanToSet the T object to associate to the {@link FlFeatureBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(FlFeatureBean,int)}
      * @return always beanToSet saved
      * @throws DaoException
@@ -947,7 +946,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @param bean the {@link FlFeatureBean} object to use
      * @param beanToSet the {@link FlPersonBean} object to associate to the {@link FlFeatureBean} .
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws DaoException
      */
     public FlPersonBean setReferencedByPersonId(FlFeatureBean bean, FlPersonBean beanToSet) throws DaoException
     {
@@ -1612,6 +1611,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
      * @param ps the PreparedStatement that will be filled
      * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
+     * @param fillNull wether fill null for null field
      * @return the number of clauses returned
      * @throws DaoException
      */
@@ -2058,7 +2058,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     //37-2
     /**
      * bind foreign key listener to foreign table: <br>
-     * DELETE RULE : CASCADE {@code fl_feature(person_id)-> fl_person(id)} <br>
+     * DELETE RULE : CASCADE {@code fl_feature(person_id)- fl_person(id)} <br>
      */
     public void bindForeignKeyListenerForDeleteRule(){
         instanceOfFlPersonManager().registerListener(foreignKeyListenerByPersonId);
@@ -2209,7 +2209,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     //46
     /**
      * return a primary key list from {@link FlFeatureBean} collection
-     * @param array
+     * @param collection
      */
     public List<String> toPrimaryKeyList(java.util.Collection<FlFeatureBean> collection){        
         if(null == collection){

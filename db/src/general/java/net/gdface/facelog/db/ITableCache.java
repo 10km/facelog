@@ -132,8 +132,7 @@ public interface ITableCache<K, B extends BaseBean<B>> {
     /**
      * 向cache中更新数据
      * @param bean
-     * @return
-     * @see {@link UpdateStrategy}
+     * @see UpdateStrategy
      */
     public void update(B bean);
     /** 注册侦听器 */

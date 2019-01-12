@@ -25,7 +25,7 @@ public class PersonCache extends BaseTableLoadCaching<Integer, PersonBean> {
     private final BaseTableLoadCaching<String, PersonBean> imageMd5Cacher;
     private final BaseTableLoadCaching<String, PersonBean> papersNumCacher;
     /** constructor<br>
-     * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     * @see BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )
      */
     public PersonCache(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
         super(updateStrategy,maximumSize, duration, unit);

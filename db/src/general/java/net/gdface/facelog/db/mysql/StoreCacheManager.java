@@ -41,7 +41,7 @@ public class StoreCacheManager extends StoreManager
     /**
      * create a instance of StoreCacheManager and assign to {@link #instance} if {@code instance} is not initialized.<br>
      * otherwise return {@code instance}.
-     * @see {@link StoreCacheManager#StoreCacheManager(UpdateStrategy ,long , long , TimeUnit )}
+     * @see StoreCacheManager#StoreCacheManager(UpdateStrategy ,long , long , TimeUnit )
      */
     public static synchronized final StoreCacheManager makeInstance(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
@@ -64,7 +64,7 @@ public class StoreCacheManager extends StoreManager
     /** instance of {@link StoreCache} */
     private final StoreCache cache;
     /** constructor<br>
-     * @see {@link StoreCache#StoreCache(UpdateStrategy ,long , long , TimeUnit )}
+     * @see StoreCache#StoreCache(UpdateStrategy ,long , long , TimeUnit )
      */
     protected StoreCacheManager(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
         cache = new StoreCache(updateStrategy,maximumSize,duration,unit);

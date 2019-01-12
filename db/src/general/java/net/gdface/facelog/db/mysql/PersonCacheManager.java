@@ -45,7 +45,7 @@ public class PersonCacheManager extends PersonManager
     /**
      * create a instance of PersonCacheManager and assign to {@link #instance} if {@code instance} is not initialized.<br>
      * otherwise return {@code instance}.
-     * @see {@link PersonCacheManager#PersonCacheManager(UpdateStrategy ,long , long , TimeUnit )}
+     * @see PersonCacheManager#PersonCacheManager(UpdateStrategy ,long , long , TimeUnit )
      */
     public static synchronized final PersonCacheManager makeInstance(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
@@ -68,7 +68,7 @@ public class PersonCacheManager extends PersonManager
     /** instance of {@link PersonCache} */
     private final PersonCache cache;
     /** constructor<br>
-     * @see {@link PersonCache#PersonCache(UpdateStrategy ,long , long , TimeUnit )}
+     * @see PersonCache#PersonCache(UpdateStrategy ,long , long , TimeUnit )
      */
     protected PersonCacheManager(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
         cache = new PersonCache(updateStrategy,maximumSize,duration,unit);

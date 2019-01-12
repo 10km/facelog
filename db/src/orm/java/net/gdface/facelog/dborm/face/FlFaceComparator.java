@@ -31,7 +31,7 @@ public class FlFaceComparator implements Comparator<FlFaceBean>,Constant
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlFaceComparator(Constant.FL_FACE_ID_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlFaceComparator(Constant.FL_FACE_ID_ID, bReverse));</code>
      *
      * @param iType the field from which you want to sort
      * <br>
@@ -68,7 +68,7 @@ public class FlFaceComparator implements Comparator<FlFaceBean>,Constant
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlFaceComparator(Constant.FL_FACE_ID_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlFaceComparator(Constant.FL_FACE_ID_ID, bReverse));</code>
      *
      * @param iType the field from which you want to sort.
      * <br>

@@ -202,7 +202,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * Loads a {@link FlImageBean} from the fl_image using primary key fields.
      * @param keys primary keys value:<br> 
      * @return a unique {@link FlImageBean} or {@code null} if not found
-     * @see {@link #loadByPrimaryKey(String md5)}
+     * @see #loadByPrimaryKey(String md5)
      */
     @Override
     public FlImageBean loadByPrimaryKey(Object ...keys) throws DaoException{
@@ -270,7 +270,6 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param bean  
      * @throws DaoException
      * @return false if primary kes has null
-     * @see #countUsingTemplate(FlImageBean)
      */
     @Override
     public boolean existsByPrimaryKey(FlImageBean bean) throws DaoException
@@ -317,7 +316,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param md5 String - PK# 1
      * @return the number of deleted rows
      * @throws DaoException
-     * @see {@link #delete(FlImageBean)}
+     * @see #delete(FlImageBean)
      */
     public int deleteByPrimaryKey(String md5) throws DaoException
     {
@@ -379,7 +378,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      *
      * @param keys primary keys value:<br> 
      * @return the number of deleted rows
-     * @see {@link #delete(FlImageBean)}
+     * @see #delete(FlImageBean)
      */   
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DaoException{
@@ -417,8 +416,8 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_IMAGE_IK_FL_FACE_IMAGE_MD5} -> {@link FlFaceBean}</li>
-     *     <li> {@link Constant#FL_IMAGE_IK_FL_PERSON_IMAGE_MD5} -> {@link FlPersonBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_FACE_IMAGE_MD5} - {@link FlFaceBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_PERSON_IMAGE_MD5} - {@link FlPersonBean}</li>
      * </ul>
      * @param bean the {@link FlImageBean} object to use
      * @param ikIndex valid values: {@link Constant#FL_IMAGE_IK_FL_FACE_IMAGE_MD5},{@link Constant#FL_IMAGE_IK_FL_PERSON_IMAGE_MD5}
@@ -463,7 +462,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T> see also {@link #getImportedBeansAsList(FlImageBean,int)}
      * @param bean the {@link FlImageBean} object to use
-     * @param importedBeans the <T> object to associate to the {@link FlImageBean}
+     * @param importedBeans the T object to associate to the {@link FlImageBean}
      * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlImageBean,int)}
 
      * @return importedBeans always
@@ -501,7 +500,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     /**
      * Retrieves the {@link FlFaceBean} object from the fl_face.image_md5 field.<BR>
      * FK_NAME : fl_face_ibfk_1 
-     * @param md5 String - PK# 1
+     * @param md5OfImage String - PK# 1
      * @return the associated {@link FlFaceBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DaoException
      */
@@ -527,7 +526,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     /**
      * Retrieves the {@link FlFaceBean} object from fl_face.image_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_1
-     * @param md5 String - PK# 1
+     * @param md5OfImage String - PK# 1
      * @return the associated {@link FlFaceBean} beans 
      * @throws DaoException
      */
@@ -565,7 +564,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param importedBeans imported beans from fl_face
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlFaceManager#setReferencedByImageMd5(FlFaceBean, FlImageBean)
+     * @see FlFaceManager#setReferencedByImageMd5(FlFaceBean, FlImageBean)
      */
     public FlFaceBean[] setFaceBeansByImageMd5(FlImageBean bean , FlFaceBean[] importedBeans) throws DaoException
     {
@@ -585,7 +584,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param importedBeans imported beans from fl_face 
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlFaceManager#setReferencedByImageMd5(FlFaceBean, FlImageBean)
+     * @see FlFaceManager#setReferencedByImageMd5(FlFaceBean, FlImageBean)
      */
     public <C extends java.util.Collection<FlFaceBean>> C setFaceBeansByImageMd5(FlImageBean bean , C importedBeans) throws DaoException
     {
@@ -613,7 +612,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     /**
      * Retrieves the {@link FlPersonBean} object from the fl_person.image_md5 field.<BR>
      * FK_NAME : fl_person_ibfk_2 
-     * @param md5 String - PK# 1
+     * @param md5OfImage String - PK# 1
      * @return the associated {@link FlPersonBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DaoException
      */
@@ -639,7 +638,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     /**
      * Retrieves the {@link FlPersonBean} object from fl_person.image_md5 field.<BR>
      * FK_NAME:fl_person_ibfk_2
-     * @param md5 String - PK# 1
+     * @param md5OfImage String - PK# 1
      * @return the associated {@link FlPersonBean} beans 
      * @throws DaoException
      */
@@ -677,7 +676,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param importedBeans imported beans from fl_person
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlPersonManager#setReferencedByImageMd5(FlPersonBean, FlImageBean)
+     * @see FlPersonManager#setReferencedByImageMd5(FlPersonBean, FlImageBean)
      */
     public FlPersonBean[] setPersonBeansByImageMd5(FlImageBean bean , FlPersonBean[] importedBeans) throws DaoException
     {
@@ -697,7 +696,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param importedBeans imported beans from fl_person 
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlPersonManager#setReferencedByImageMd5(FlPersonBean, FlImageBean)
+     * @see FlPersonManager#setReferencedByImageMd5(FlPersonBean, FlImageBean)
      */
     public <C extends java.util.Collection<FlPersonBean>> C setPersonBeansByImageMd5(FlImageBean bean , C importedBeans) throws DaoException
     {
@@ -805,7 +804,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * Save the FlImageBean bean and referenced beans and imported beans (array) into the database.
      *
      * @param bean the {@link FlImageBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FlImageBean , FlDeviceBean , FlFaceBean[] , FlPersonBean[] )}
      * @return the inserted or updated {@link FlImageBean} bean
      * @throws DaoException
@@ -841,7 +840,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * Save the FlImageBean bean and referenced beans and imported beans (collection) into the database.
      *
      * @param bean the {@link FlImageBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FlImageBean , FlDeviceBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link FlImageBean} bean
      * @throws DaoException
@@ -880,12 +879,12 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_IMAGE_FK_DEVICE_ID} -> {@link FlDeviceBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_FK_DEVICE_ID} - {@link FlDeviceBean}</li>
      * </ul>
      * @param bean the {@link FlImageBean} object to use
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_IMAGE_FK_DEVICE_ID}
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return the associated T bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DaoException
      */
     @SuppressWarnings("unchecked")
@@ -904,7 +903,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * 
      * @param <T> see also {@link #getReferencedBean(FlImageBean,int)}
      * @param bean the {@link FlImageBean} object to use
-     * @param beanToSet the <T> object to associate to the {@link FlImageBean}
+     * @param beanToSet the T object to associate to the {@link FlImageBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(FlImageBean,int)}
      * @return always beanToSet saved
      * @throws DaoException
@@ -949,7 +948,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param bean the {@link FlImageBean} object to use
      * @param beanToSet the {@link FlDeviceBean} object to associate to the {@link FlImageBean} .
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws DaoException
      */
     public FlDeviceBean setReferencedByDeviceId(FlImageBean bean, FlDeviceBean beanToSet) throws DaoException
     {
@@ -1714,6 +1713,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
      * @param ps the PreparedStatement that will be filled
      * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
+     * @param fillNull wether fill null for null field
      * @return the number of clauses returned
      * @throws DaoException
      */
@@ -2238,7 +2238,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     //37-2
     /**
      * bind foreign key listener to foreign table: <br>
-     * DELETE RULE : SET_NULL {@code fl_image(device_id)-> fl_device(id)} <br>
+     * DELETE RULE : SET_NULL {@code fl_image(device_id)- fl_device(id)} <br>
      */
     public void bindForeignKeyListenerForDeleteRule(){
         instanceOfFlDeviceManager().registerListener(foreignKeyListenerByDeviceId);
@@ -2389,7 +2389,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     //46
     /**
      * return a primary key list from {@link FlImageBean} collection
-     * @param array
+     * @param collection
      */
     public List<String> toPrimaryKeyList(java.util.Collection<FlImageBean> collection){        
         if(null == collection){

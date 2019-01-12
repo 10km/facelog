@@ -357,7 +357,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} TO {@link LogBean}</li>
      * </ul>
      * @param bean the {@link FaceBean} object to use
      * @param ikIndex valid values: {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE}
@@ -378,7 +378,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} TO {@link LogBean}</li>
      * </ul>
      * @param bean the {@link FaceBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link FaceBean}
@@ -399,10 +399,10 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} TO {@link LogBean}</li>
      * </ul>
      * @param bean the {@link FaceBean} object to use
-     * @param importedBeans the <T> object to associate to the {@link FaceBean}
+     * @param importedBeans the T object to associate to the {@link FaceBean}
      * @param ikIndex valid values: {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE}
      * @return importedBeans always
      */
@@ -578,7 +578,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
      * Save the {@link FaceBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FaceBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FaceBean , FeatureBean , ImageBean , LogBean[] )}
      * @return the inserted or updated {@link FaceBean} bean
      */
@@ -613,7 +613,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
      * Save the {@link FaceBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FaceBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FaceBean , FeatureBean , ImageBean , java.util.Collection )}
      * @return the inserted or updated {@link FaceBean} bean
      */
@@ -652,13 +652,13 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_FACE_FK_FEATURE_MD5} -> {@link FeatureBean}</li>
-     *     <li> {@link Constant#FL_FACE_FK_IMAGE_MD5} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_FACE_FK_FEATURE_MD5} TO {@link FeatureBean}</li>
+     *     <li> {@link Constant#FL_FACE_FK_IMAGE_MD5} TO {@link ImageBean}</li>
      * </ul>
      * @param bean the {@link FaceBean} object to use
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_FACE_FK_FEATURE_MD5},{@link Constant#FL_FACE_FK_IMAGE_MD5}
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return the associated T bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -677,7 +677,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
      * 
      * @param <T> see also {@link #getReferencedBean(FaceBean,int)}
      * @param bean the {@link FaceBean} object to use
-     * @param beanToSet the <T> object to associate to the {@link FaceBean}
+     * @param beanToSet the T object to associate to the {@link FaceBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(FaceBean,int)}
      * @return always beanToSet saved
      */

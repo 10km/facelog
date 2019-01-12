@@ -200,7 +200,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
      * Loads a {@link FlDeviceBean} from the fl_device using primary key fields.
      * @param keys primary keys value:<br> 
      * @return a unique {@link FlDeviceBean} or {@code null} if not found
-     * @see {@link #loadByPrimaryKey(Integer id)}
+     * @see #loadByPrimaryKey(Integer id)
      */
     @Override
     public FlDeviceBean loadByPrimaryKey(Object ...keys) throws DaoException{
@@ -268,7 +268,6 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
      * @param bean  
      * @throws DaoException
      * @return false if primary kes has null
-     * @see #countUsingTemplate(FlDeviceBean)
      */
     @Override
     public boolean existsByPrimaryKey(FlDeviceBean bean) throws DaoException
@@ -315,7 +314,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
      * @param id Integer - PK# 1
      * @return the number of deleted rows
      * @throws DaoException
-     * @see {@link #delete(FlDeviceBean)}
+     * @see #delete(FlDeviceBean)
      */
     public int deleteByPrimaryKey(Integer id) throws DaoException
     {
@@ -377,7 +376,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
      *
      * @param keys primary keys value:<br> 
      * @return the number of deleted rows
-     * @see {@link #delete(FlDeviceBean)}
+     * @see #delete(FlDeviceBean)
      */   
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DaoException{
@@ -415,8 +414,8 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link FlImageBean}</li>
-     *     <li> {@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link FlLogBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} - {@link FlImageBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID} - {@link FlLogBean}</li>
      * </ul>
      * @param bean the {@link FlDeviceBean} object to use
      * @param ikIndex valid values: {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID},{@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID}
@@ -461,7 +460,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T> see also {@link #getImportedBeansAsList(FlDeviceBean,int)}
      * @param bean the {@link FlDeviceBean} object to use
-     * @param importedBeans the <T> object to associate to the {@link FlDeviceBean}
+     * @param importedBeans the T object to associate to the {@link FlDeviceBean}
      * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlDeviceBean,int)}
 
      * @return importedBeans always
@@ -499,7 +498,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
     /**
      * Retrieves the {@link FlImageBean} object from the fl_image.device_id field.<BR>
      * FK_NAME : fl_image_ibfk_1 
-     * @param id Integer - PK# 1
+     * @param idOfDevice Integer - PK# 1
      * @return the associated {@link FlImageBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DaoException
      */
@@ -525,7 +524,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
     /**
      * Retrieves the {@link FlImageBean} object from fl_image.device_id field.<BR>
      * FK_NAME:fl_image_ibfk_1
-     * @param id Integer - PK# 1
+     * @param idOfDevice Integer - PK# 1
      * @return the associated {@link FlImageBean} beans 
      * @throws DaoException
      */
@@ -563,7 +562,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
      * @param importedBeans imported beans from fl_image
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlImageManager#setReferencedByDeviceId(FlImageBean, FlDeviceBean)
+     * @see FlImageManager#setReferencedByDeviceId(FlImageBean, FlDeviceBean)
      */
     public FlImageBean[] setImageBeansByDeviceId(FlDeviceBean bean , FlImageBean[] importedBeans) throws DaoException
     {
@@ -583,7 +582,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
      * @param importedBeans imported beans from fl_image 
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlImageManager#setReferencedByDeviceId(FlImageBean, FlDeviceBean)
+     * @see FlImageManager#setReferencedByDeviceId(FlImageBean, FlDeviceBean)
      */
     public <C extends java.util.Collection<FlImageBean>> C setImageBeansByDeviceId(FlDeviceBean bean , C importedBeans) throws DaoException
     {
@@ -611,7 +610,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
     /**
      * Retrieves the {@link FlLogBean} object from the fl_log.device_id field.<BR>
      * FK_NAME : fl_log_ibfk_2 
-     * @param id Integer - PK# 1
+     * @param idOfDevice Integer - PK# 1
      * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DaoException
      */
@@ -637,7 +636,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
     /**
      * Retrieves the {@link FlLogBean} object from fl_log.device_id field.<BR>
      * FK_NAME:fl_log_ibfk_2
-     * @param id Integer - PK# 1
+     * @param idOfDevice Integer - PK# 1
      * @return the associated {@link FlLogBean} beans 
      * @throws DaoException
      */
@@ -675,7 +674,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
      * @param importedBeans imported beans from fl_log
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlLogManager#setReferencedByDeviceId(FlLogBean, FlDeviceBean)
+     * @see FlLogManager#setReferencedByDeviceId(FlLogBean, FlDeviceBean)
      */
     public FlLogBean[] setLogBeansByDeviceId(FlDeviceBean bean , FlLogBean[] importedBeans) throws DaoException
     {
@@ -695,7 +694,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
      * @param importedBeans imported beans from fl_log 
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlLogManager#setReferencedByDeviceId(FlLogBean, FlDeviceBean)
+     * @see FlLogManager#setReferencedByDeviceId(FlLogBean, FlDeviceBean)
      */
     public <C extends java.util.Collection<FlLogBean>> C setLogBeansByDeviceId(FlDeviceBean bean , C importedBeans) throws DaoException
     {
@@ -803,7 +802,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
      * Save the FlDeviceBean bean and referenced beans and imported beans (array) into the database.
      *
      * @param bean the {@link FlDeviceBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FlDeviceBean , FlDeviceGroupBean , FlImageBean[] , FlLogBean[] )}
      * @return the inserted or updated {@link FlDeviceBean} bean
      * @throws DaoException
@@ -839,7 +838,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
      * Save the FlDeviceBean bean and referenced beans and imported beans (collection) into the database.
      *
      * @param bean the {@link FlDeviceBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FlDeviceBean , FlDeviceGroupBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link FlDeviceBean} bean
      * @throws DaoException
@@ -878,12 +877,12 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_DEVICE_FK_GROUP_ID} -> {@link FlDeviceGroupBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_FK_GROUP_ID} - {@link FlDeviceGroupBean}</li>
      * </ul>
      * @param bean the {@link FlDeviceBean} object to use
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_DEVICE_FK_GROUP_ID}
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return the associated T bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DaoException
      */
     @SuppressWarnings("unchecked")
@@ -902,7 +901,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
      * 
      * @param <T> see also {@link #getReferencedBean(FlDeviceBean,int)}
      * @param bean the {@link FlDeviceBean} object to use
-     * @param beanToSet the <T> object to associate to the {@link FlDeviceBean}
+     * @param beanToSet the T object to associate to the {@link FlDeviceBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(FlDeviceBean,int)}
      * @return always beanToSet saved
      * @throws DaoException
@@ -947,7 +946,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
      * @param bean the {@link FlDeviceBean} object to use
      * @param beanToSet the {@link FlDeviceGroupBean} object to associate to the {@link FlDeviceBean} .
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws DaoException
      */
     public FlDeviceGroupBean setReferencedByGroupId(FlDeviceBean bean, FlDeviceGroupBean beanToSet) throws DaoException
     {
@@ -2054,6 +2053,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
      * @param ps the PreparedStatement that will be filled
      * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
+     * @param fillNull wether fill null for null field
      * @return the number of clauses returned
      * @throws DaoException
      */
@@ -2624,7 +2624,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
     //37-2
     /**
      * bind foreign key listener to foreign table: <br>
-     * DELETE RULE : SET_NULL {@code fl_device(group_id)-> fl_device_group(id)} <br>
+     * DELETE RULE : SET_NULL {@code fl_device(group_id)- fl_device_group(id)} <br>
      */
     public void bindForeignKeyListenerForDeleteRule(){
         instanceOfFlDeviceGroupManager().registerListener(foreignKeyListenerByGroupId);
@@ -2775,7 +2775,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
     //46
     /**
      * return a primary key list from {@link FlDeviceBean} collection
-     * @param array
+     * @param collection
      */
     public List<Integer> toPrimaryKeyList(java.util.Collection<FlDeviceBean> collection){        
         if(null == collection){

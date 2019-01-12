@@ -193,7 +193,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param bean the referenced {@link PersonGroupBean}
      * @param importedBeans imported beans from fl_permit
      * @return importedBeans always
-     * @see {@link PermitManager#setReferencedByPersonGroupId(PermitBean, PersonGroupBean)
+     * @see IPermitManager#setReferencedByPersonGroupId(PermitBean, PersonGroupBean)
      * @throws RuntimeDaoException
      */
     public PermitBean[] setPermitBeansByPersonGroupId(PersonGroupBean bean , PermitBean[] importedBeans)throws RuntimeDaoException;
@@ -205,7 +205,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param bean the referenced {@link PersonGroupBean} 
      * @param importedBeans imported beans from fl_permit 
      * @return importedBeans always
-     * @see {@link PermitManager#setReferencedByPersonGroupId(PermitBean, PersonGroupBean)
+     * @see IPermitManager#setReferencedByPersonGroupId(PermitBean, PersonGroupBean)
      * @throws RuntimeDaoException
      */
     public <C extends java.util.Collection<PermitBean>> C setPermitBeansByPersonGroupId(PersonGroupBean bean , C importedBeans)throws RuntimeDaoException;
@@ -275,7 +275,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param bean the referenced {@link PersonGroupBean}
      * @param importedBeans imported beans from fl_person
      * @return importedBeans always
-     * @see {@link PersonManager#setReferencedByGroupId(PersonBean, PersonGroupBean)
+     * @see IPersonManager#setReferencedByGroupId(PersonBean, PersonGroupBean)
      * @throws RuntimeDaoException
      */
     public PersonBean[] setPersonBeansByGroupId(PersonGroupBean bean , PersonBean[] importedBeans)throws RuntimeDaoException;
@@ -287,7 +287,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param bean the referenced {@link PersonGroupBean} 
      * @param importedBeans imported beans from fl_person 
      * @return importedBeans always
-     * @see {@link PersonManager#setReferencedByGroupId(PersonBean, PersonGroupBean)
+     * @see IPersonManager#setReferencedByGroupId(PersonBean, PersonGroupBean)
      * @throws RuntimeDaoException
      */
     public <C extends java.util.Collection<PersonBean>> C setPersonBeansByGroupId(PersonGroupBean bean , C importedBeans)throws RuntimeDaoException;
@@ -357,7 +357,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param bean the referenced {@link PersonGroupBean}
      * @param importedBeans imported beans from fl_person_group
      * @return importedBeans always
-     * @see {@link PersonGroupManager#setReferencedByParent(PersonGroupBean, PersonGroupBean)
+     * @see IPersonGroupManager#setReferencedByParent(PersonGroupBean, PersonGroupBean)
      * @throws RuntimeDaoException
      */
     public PersonGroupBean[] setPersonGroupBeansByParent(PersonGroupBean bean , PersonGroupBean[] importedBeans)throws RuntimeDaoException;
@@ -369,7 +369,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param bean the referenced {@link PersonGroupBean} 
      * @param importedBeans imported beans from fl_person_group 
      * @return importedBeans always
-     * @see {@link PersonGroupManager#setReferencedByParent(PersonGroupBean, PersonGroupBean)
+     * @see IPersonGroupManager#setReferencedByParent(PersonGroupBean, PersonGroupBean)
      * @throws RuntimeDaoException
      */
     public <C extends java.util.Collection<PersonGroupBean>> C setPersonGroupBeansByParent(PersonGroupBean bean , C importedBeans)throws RuntimeDaoException;

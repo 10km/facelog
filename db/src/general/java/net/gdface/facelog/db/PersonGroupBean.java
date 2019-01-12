@@ -92,8 +92,7 @@ public final class PersonGroupBean
         return this;
     }
     /**
-     * return a new mutable copy of this object.
-     * @return 
+     * @return return a new mutable copy of this object.
      */
     public PersonGroupBean cloneMutable(){
         return clone().immutable(null);
@@ -209,7 +208,7 @@ public final class PersonGroupBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "id")
@@ -286,7 +285,7 @@ public final class PersonGroupBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "name")
@@ -352,7 +351,7 @@ public final class PersonGroupBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "leaf")
@@ -429,7 +428,7 @@ public final class PersonGroupBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "parent")
@@ -505,7 +504,7 @@ public final class PersonGroupBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "remark")
@@ -571,7 +570,7 @@ public final class PersonGroupBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "extBin")
@@ -637,7 +636,7 @@ public final class PersonGroupBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "extTxt")
@@ -711,7 +710,7 @@ public final class PersonGroupBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "createTime")
@@ -803,7 +802,7 @@ public final class PersonGroupBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "updateTime")
@@ -858,11 +857,17 @@ public final class PersonGroupBean
      * FOREIGN KEY (parent) REFERENCES fl_person_group(id)
      */
     private PersonGroupBean referencedByParent;
-    /** Getter method for {@link #referencedByParent}. */
+    /**
+     * Getter method for {@link #referencedByParent}.
+     * @return PersonGroupBean
+     */
     public PersonGroupBean getReferencedByParent() {
         return this.referencedByParent;
     }
-    /** Setter method for {@link #referencedByParent}. */
+    /**
+     * Setter method for {@link #referencedByParent}.
+     * @param reference PersonGroupBean
+     */
     public void setReferencedByParent(PersonGroupBean reference) {
         this.referencedByParent = reference;
     }
@@ -1200,7 +1205,7 @@ public final class PersonGroupBean
     }
     /**
      * check whether this bean is a NULL bean 
-     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @return {@code true} if {@link #initialized} be set to zero
      * @see #asNULL()
      */
     public boolean checkNULL(){
@@ -1220,8 +1225,9 @@ public final class PersonGroupBean
         return source;
     }
     /** 
+     * @param source input list
      * @return replace null instance element with {@code null}
-     * @see {@link #checkNULL()} 
+     * @see #checkNULL()
      */
     public static final List<PersonGroupBean> replaceNullInstance(List<PersonGroupBean> source){
         if(null != source){
@@ -1351,7 +1357,10 @@ public final class PersonGroupBean
         setValue(columnIDOf(column),value);
     }
     
-    /** return column id for the given field name or negative if {@code column} is invalid name */
+    /**
+     * @param column column name
+     * @return column id for the given field name or negative if {@code column} is invalid name 
+     */
     public static int columnIDOf(String column){
         int index = FL_PERSON_GROUP_FIELDS_LIST.indexOf(column);
         return  index < 0 
@@ -1397,8 +1406,8 @@ public final class PersonGroupBean
         /** 
          * fill the field : fl_person_group.id
          * @param id 用户组id
-         * @see {@link PersonGroupBean#getId()}
-         * @see {@link PersonGroupBean#setId(Integer)}
+         * @see PersonGroupBean#getId()
+         * @see PersonGroupBean#setId(Integer)
          */
         public Builder id(Integer id){
             TEMPLATE.get().setId(id);
@@ -1407,8 +1416,8 @@ public final class PersonGroupBean
         /** 
          * fill the field : fl_person_group.name
          * @param name 用户组名
-         * @see {@link PersonGroupBean#getName()}
-         * @see {@link PersonGroupBean#setName(String)}
+         * @see PersonGroupBean#getName()
+         * @see PersonGroupBean#setName(String)
          */
         public Builder name(String name){
             TEMPLATE.get().setName(name);
@@ -1417,8 +1426,8 @@ public final class PersonGroupBean
         /** 
          * fill the field : fl_person_group.leaf
          * @param leaf 是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可
-         * @see {@link PersonGroupBean#getLeaf()}
-         * @see {@link PersonGroupBean#setLeaf(Integer)}
+         * @see PersonGroupBean#getLeaf()
+         * @see PersonGroupBean#setLeaf(Integer)
          */
         public Builder leaf(Integer leaf){
             TEMPLATE.get().setLeaf(leaf);
@@ -1427,8 +1436,8 @@ public final class PersonGroupBean
         /** 
          * fill the field : fl_person_group.parent
          * @param parent 上一级用户组id
-         * @see {@link PersonGroupBean#getParent()}
-         * @see {@link PersonGroupBean#setParent(Integer)}
+         * @see PersonGroupBean#getParent()
+         * @see PersonGroupBean#setParent(Integer)
          */
         public Builder parent(Integer parent){
             TEMPLATE.get().setParent(parent);
@@ -1437,8 +1446,8 @@ public final class PersonGroupBean
         /** 
          * fill the field : fl_person_group.remark
          * @param remark 备注
-         * @see {@link PersonGroupBean#getRemark()}
-         * @see {@link PersonGroupBean#setRemark(String)}
+         * @see PersonGroupBean#getRemark()
+         * @see PersonGroupBean#setRemark(String)
          */
         public Builder remark(String remark){
             TEMPLATE.get().setRemark(remark);
@@ -1447,8 +1456,8 @@ public final class PersonGroupBean
         /** 
          * fill the field : fl_person_group.ext_bin
          * @param extBin 应用项目自定义二进制扩展字段
-         * @see {@link PersonGroupBean#getExtBin()}
-         * @see {@link PersonGroupBean#setExtBin(java.nio.ByteBuffer)}
+         * @see PersonGroupBean#getExtBin()
+         * @see PersonGroupBean#setExtBin(java.nio.ByteBuffer)
          */
         public Builder extBin(java.nio.ByteBuffer extBin){
             TEMPLATE.get().setExtBin(extBin);
@@ -1457,8 +1466,8 @@ public final class PersonGroupBean
         /** 
          * fill the field : fl_person_group.ext_txt
          * @param extTxt 应用项目自定义文本扩展字段
-         * @see {@link PersonGroupBean#getExtTxt()}
-         * @see {@link PersonGroupBean#setExtTxt(String)}
+         * @see PersonGroupBean#getExtTxt()
+         * @see PersonGroupBean#setExtTxt(String)
          */
         public Builder extTxt(String extTxt){
             TEMPLATE.get().setExtTxt(extTxt);
@@ -1467,8 +1476,8 @@ public final class PersonGroupBean
         /** 
          * fill the field : fl_person_group.create_time
          * @param createTime 
-         * @see {@link PersonGroupBean#getCreateTime()}
-         * @see {@link PersonGroupBean#setCreateTime(java.util.Date)}
+         * @see PersonGroupBean#getCreateTime()
+         * @see PersonGroupBean#setCreateTime(java.util.Date)
          */
         public Builder createTime(java.util.Date createTime){
             TEMPLATE.get().setCreateTime(createTime);
@@ -1477,8 +1486,8 @@ public final class PersonGroupBean
         /** 
          * fill the field : fl_person_group.update_time
          * @param updateTime 
-         * @see {@link PersonGroupBean#getUpdateTime()}
-         * @see {@link PersonGroupBean#setUpdateTime(java.util.Date)}
+         * @see PersonGroupBean#getUpdateTime()
+         * @see PersonGroupBean#setUpdateTime(java.util.Date)
          */
         public Builder updateTime(java.util.Date updateTime){
             TEMPLATE.get().setUpdateTime(updateTime);

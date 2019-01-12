@@ -187,7 +187,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * Loads a {@link FlStoreBean} from the fl_store using primary key fields.
      * @param keys primary keys value:<br> 
      * @return a unique {@link FlStoreBean} or {@code null} if not found
-     * @see {@link #loadByPrimaryKey(String md5)}
+     * @see #loadByPrimaryKey(String md5)
      */
     @Override
     public FlStoreBean loadByPrimaryKey(Object ...keys) throws DaoException{
@@ -255,7 +255,6 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @param bean  
      * @throws DaoException
      * @return false if primary kes has null
-     * @see #countUsingTemplate(FlStoreBean)
      */
     @Override
     public boolean existsByPrimaryKey(FlStoreBean bean) throws DaoException
@@ -302,7 +301,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @param md5 String - PK# 1
      * @return the number of deleted rows
      * @throws DaoException
-     * @see {@link #delete(FlStoreBean)}
+     * @see #delete(FlStoreBean)
      */
     public int deleteByPrimaryKey(String md5) throws DaoException
     {
@@ -364,7 +363,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      *
      * @param keys primary keys value:<br> 
      * @return the number of deleted rows
-     * @see {@link #delete(FlStoreBean)}
+     * @see #delete(FlStoreBean)
      */   
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DaoException{
@@ -903,6 +902,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
      * @param ps the PreparedStatement that will be filled
      * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
+     * @param fillNull wether fill null for null field
      * @return the number of clauses returned
      * @throws DaoException
      */
@@ -1489,7 +1489,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     //46
     /**
      * return a primary key list from {@link FlStoreBean} collection
-     * @param array
+     * @param collection
      */
     public List<String> toPrimaryKeyList(java.util.Collection<FlStoreBean> collection){        
         if(null == collection){

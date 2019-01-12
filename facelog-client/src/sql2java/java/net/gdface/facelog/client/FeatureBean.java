@@ -74,8 +74,7 @@ public  class FeatureBean
         return this;
     }
     /**
-     * return a new mutable copy of this object.
-     * @return 
+     * @return return a new mutable copy of this object.
      */
     public FeatureBean cloneMutable(){
         return clone().immutable(null);
@@ -401,11 +400,17 @@ public  class FeatureBean
      * FOREIGN KEY (person_id) REFERENCES fl_person(id)
      */
     private PersonBean referencedByPersonId;
-    /** Getter method for {@link #referencedByPersonId}. */
+    /**
+     * Getter method for {@link #referencedByPersonId}.
+     * @return PersonBean
+     */
     public PersonBean getReferencedByPersonId() {
         return this.referencedByPersonId;
     }
-    /** Setter method for {@link #referencedByPersonId}. */
+    /**
+     * Setter method for {@link #referencedByPersonId}.
+     * @param reference PersonBean
+     */
     public void setReferencedByPersonId(PersonBean reference) {
         this.referencedByPersonId = reference;
     }
@@ -652,7 +657,7 @@ public  class FeatureBean
     }
     /**
      * check whether this bean is a NULL bean 
-     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @return {@code true} if {@link #initialized} be set to zero
      * @see #asNULL()
      */
     public boolean checkNULL(){
@@ -672,8 +677,9 @@ public  class FeatureBean
         return source;
     }
     /** 
+     * @param source input list
      * @return replace null instance element with {@code null}
-     * @see {@link #checkNULL()} 
+     * @see #checkNULL()
      */
     public static final List<FeatureBean> replaceNullInstance(List<FeatureBean> source){
         if(null != source){
@@ -778,7 +784,10 @@ public  class FeatureBean
         setValue(columnIDOf(column),value);
     }
     
-    /** return column id for the given field name or negative if {@code column} is invalid name */
+    /**
+     * @param column column name
+     * @return column id for the given field name or negative if {@code column} is invalid name 
+     */
     public static int columnIDOf(String column){
         int index = FL_FEATURE_FIELDS_LIST.indexOf(column);
         return  index < 0 
@@ -824,8 +833,8 @@ public  class FeatureBean
         /** 
          * fill the field : fl_feature.md5
          * @param md5 主键,特征码md5校验码
-         * @see {@link FeatureBean#getMd5()}
-         * @see {@link FeatureBean#setMd5(String)}
+         * @see FeatureBean#getMd5()
+         * @see FeatureBean#setMd5(String)
          */
         public Builder md5(String md5){
             TEMPLATE.get().setMd5(md5);
@@ -834,8 +843,8 @@ public  class FeatureBean
         /** 
          * fill the field : fl_feature.person_id
          * @param personId 外键,所属用户id
-         * @see {@link FeatureBean#getPersonId()}
-         * @see {@link FeatureBean#setPersonId(Integer)}
+         * @see FeatureBean#getPersonId()
+         * @see FeatureBean#setPersonId(Integer)
          */
         public Builder personId(Integer personId){
             TEMPLATE.get().setPersonId(personId);
@@ -844,8 +853,8 @@ public  class FeatureBean
         /** 
          * fill the field : fl_feature.feature
          * @param feature 二进制特征数据
-         * @see {@link FeatureBean#getFeature()}
-         * @see {@link FeatureBean#setFeature(byte[])}
+         * @see FeatureBean#getFeature()
+         * @see FeatureBean#setFeature(byte[])
          */
         public Builder feature(byte[] feature){
             TEMPLATE.get().setFeature(feature);
@@ -854,8 +863,8 @@ public  class FeatureBean
         /** 
          * fill the field : fl_feature.update_time
          * @param updateTime 
-         * @see {@link FeatureBean#getUpdateTime()}
-         * @see {@link FeatureBean#setUpdateTime(java.util.Date)}
+         * @see FeatureBean#getUpdateTime()
+         * @see FeatureBean#setUpdateTime(java.util.Date)
          */
         public Builder updateTime(java.util.Date updateTime){
             TEMPLATE.get().setUpdateTime(updateTime);

@@ -31,7 +31,7 @@ public class FlImageComparator implements Comparator<FlImageBean>,Constant
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlImageComparator(Constant.FL_IMAGE_ID_MD5, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlImageComparator(Constant.FL_IMAGE_ID_MD5, bReverse));</code>
      *
      * @param iType the field from which you want to sort
      * <br>
@@ -57,7 +57,7 @@ public class FlImageComparator implements Comparator<FlImageBean>,Constant
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlImageComparator(Constant.FL_IMAGE_ID_MD5, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlImageComparator(Constant.FL_IMAGE_ID_MD5, bReverse));</code>
      *
      * @param iType the field from which you want to sort.
      * <br>

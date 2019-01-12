@@ -203,7 +203,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * Loads a {@link FlPersonGroupBean} from the fl_person_group using primary key fields.
      * @param keys primary keys value:<br> 
      * @return a unique {@link FlPersonGroupBean} or {@code null} if not found
-     * @see {@link #loadByPrimaryKey(Integer id)}
+     * @see #loadByPrimaryKey(Integer id)
      */
     @Override
     public FlPersonGroupBean loadByPrimaryKey(Object ...keys) throws DaoException{
@@ -271,7 +271,6 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param bean  
      * @throws DaoException
      * @return false if primary kes has null
-     * @see #countUsingTemplate(FlPersonGroupBean)
      */
     @Override
     public boolean existsByPrimaryKey(FlPersonGroupBean bean) throws DaoException
@@ -318,7 +317,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param id Integer - PK# 1
      * @return the number of deleted rows
      * @throws DaoException
-     * @see {@link #delete(FlPersonGroupBean)}
+     * @see #delete(FlPersonGroupBean)
      */
     public int deleteByPrimaryKey(Integer id) throws DaoException
     {
@@ -380,7 +379,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      *
      * @param keys primary keys value:<br> 
      * @return the number of deleted rows
-     * @see {@link #delete(FlPersonGroupBean)}
+     * @see #delete(FlPersonGroupBean)
      */   
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DaoException{
@@ -418,9 +417,9 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID} -> {@link FlPermitBean}</li>
-     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID} -> {@link FlPersonBean}</li>
-     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT} -> {@link FlPersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID} - {@link FlPermitBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID} - {@link FlPersonBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT} - {@link FlPersonGroupBean}</li>
      * </ul>
      * @param bean the {@link FlPersonGroupBean} object to use
      * @param ikIndex valid values: {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID},{@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID},{@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT}
@@ -469,7 +468,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T> see also {@link #getImportedBeansAsList(FlPersonGroupBean,int)}
      * @param bean the {@link FlPersonGroupBean} object to use
-     * @param importedBeans the <T> object to associate to the {@link FlPersonGroupBean}
+     * @param importedBeans the T object to associate to the {@link FlPersonGroupBean}
      * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlPersonGroupBean,int)}
 
      * @return importedBeans always
@@ -509,7 +508,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     /**
      * Retrieves the {@link FlPermitBean} object from the fl_permit.person_group_id field.<BR>
      * FK_NAME : fl_permit_ibfk_2 
-     * @param id Integer - PK# 1
+     * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link FlPermitBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DaoException
      */
@@ -535,7 +534,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     /**
      * Retrieves the {@link FlPermitBean} object from fl_permit.person_group_id field.<BR>
      * FK_NAME:fl_permit_ibfk_2
-     * @param id Integer - PK# 1
+     * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link FlPermitBean} beans 
      * @throws DaoException
      */
@@ -573,7 +572,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param importedBeans imported beans from fl_permit
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlPermitManager#setReferencedByPersonGroupId(FlPermitBean, FlPersonGroupBean)
+     * @see FlPermitManager#setReferencedByPersonGroupId(FlPermitBean, FlPersonGroupBean)
      */
     public FlPermitBean[] setPermitBeansByPersonGroupId(FlPersonGroupBean bean , FlPermitBean[] importedBeans) throws DaoException
     {
@@ -593,7 +592,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param importedBeans imported beans from fl_permit 
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlPermitManager#setReferencedByPersonGroupId(FlPermitBean, FlPersonGroupBean)
+     * @see FlPermitManager#setReferencedByPersonGroupId(FlPermitBean, FlPersonGroupBean)
      */
     public <C extends java.util.Collection<FlPermitBean>> C setPermitBeansByPersonGroupId(FlPersonGroupBean bean , C importedBeans) throws DaoException
     {
@@ -621,7 +620,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     /**
      * Retrieves the {@link FlPersonBean} object from the fl_person.group_id field.<BR>
      * FK_NAME : fl_person_ibfk_1 
-     * @param id Integer - PK# 1
+     * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link FlPersonBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DaoException
      */
@@ -647,7 +646,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     /**
      * Retrieves the {@link FlPersonBean} object from fl_person.group_id field.<BR>
      * FK_NAME:fl_person_ibfk_1
-     * @param id Integer - PK# 1
+     * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link FlPersonBean} beans 
      * @throws DaoException
      */
@@ -685,7 +684,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param importedBeans imported beans from fl_person
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlPersonManager#setReferencedByGroupId(FlPersonBean, FlPersonGroupBean)
+     * @see FlPersonManager#setReferencedByGroupId(FlPersonBean, FlPersonGroupBean)
      */
     public FlPersonBean[] setPersonBeansByGroupId(FlPersonGroupBean bean , FlPersonBean[] importedBeans) throws DaoException
     {
@@ -705,7 +704,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param importedBeans imported beans from fl_person 
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlPersonManager#setReferencedByGroupId(FlPersonBean, FlPersonGroupBean)
+     * @see FlPersonManager#setReferencedByGroupId(FlPersonBean, FlPersonGroupBean)
      */
     public <C extends java.util.Collection<FlPersonBean>> C setPersonBeansByGroupId(FlPersonGroupBean bean , C importedBeans) throws DaoException
     {
@@ -733,7 +732,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     /**
      * Retrieves the {@link FlPersonGroupBean} object from the fl_person_group.parent field.<BR>
      * FK_NAME : fl_person_group_ibfk_1 
-     * @param id Integer - PK# 1
+     * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link FlPersonGroupBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DaoException
      */
@@ -759,7 +758,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     /**
      * Retrieves the {@link FlPersonGroupBean} object from fl_person_group.parent field.<BR>
      * FK_NAME:fl_person_group_ibfk_1
-     * @param id Integer - PK# 1
+     * @param idOfPersonGroup Integer - PK# 1
      * @return the associated {@link FlPersonGroupBean} beans 
      * @throws DaoException
      */
@@ -797,7 +796,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param importedBeans imported beans from fl_person_group
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlPersonGroupManager#setReferencedByParent(FlPersonGroupBean, FlPersonGroupBean)
+     * @see FlPersonGroupManager#setReferencedByParent(FlPersonGroupBean, FlPersonGroupBean)
      */
     public FlPersonGroupBean[] setPersonGroupBeansByParent(FlPersonGroupBean bean , FlPersonGroupBean[] importedBeans) throws DaoException
     {
@@ -817,7 +816,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param importedBeans imported beans from fl_person_group 
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlPersonGroupManager#setReferencedByParent(FlPersonGroupBean, FlPersonGroupBean)
+     * @see FlPersonGroupManager#setReferencedByParent(FlPersonGroupBean, FlPersonGroupBean)
      */
     public <C extends java.util.Collection<FlPersonGroupBean>> C setPersonGroupBeansByParent(FlPersonGroupBean bean , C importedBeans) throws DaoException
     {
@@ -932,7 +931,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * Save the FlPersonGroupBean bean and referenced beans and imported beans (array) into the database.
      *
      * @param bean the {@link FlPersonGroupBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FlPersonGroupBean , FlPersonGroupBean , FlPermitBean[] , FlPersonBean[] , FlPersonGroupBean[] )}
      * @return the inserted or updated {@link FlPersonGroupBean} bean
      * @throws DaoException
@@ -972,7 +971,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * Save the FlPersonGroupBean bean and referenced beans and imported beans (collection) into the database.
      *
      * @param bean the {@link FlPersonGroupBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FlPersonGroupBean , FlPersonGroupBean , java.util.Collection , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link FlPersonGroupBean} bean
      * @throws DaoException
@@ -1015,12 +1014,12 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_PERSON_GROUP_FK_PARENT} -> {@link FlPersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_FK_PARENT} - {@link FlPersonGroupBean}</li>
      * </ul>
      * @param bean the {@link FlPersonGroupBean} object to use
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_PERSON_GROUP_FK_PARENT}
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return the associated T bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DaoException
      */
     @SuppressWarnings("unchecked")
@@ -1039,7 +1038,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * 
      * @param <T> see also {@link #getReferencedBean(FlPersonGroupBean,int)}
      * @param bean the {@link FlPersonGroupBean} object to use
-     * @param beanToSet the <T> object to associate to the {@link FlPersonGroupBean}
+     * @param beanToSet the T object to associate to the {@link FlPersonGroupBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(FlPersonGroupBean,int)}
      * @return always beanToSet saved
      * @throws DaoException
@@ -1084,7 +1083,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param bean the {@link FlPersonGroupBean} object to use
      * @param beanToSet the {@link FlPersonGroupBean} object to associate to the {@link FlPersonGroupBean} .
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws DaoException
      */
     public FlPersonGroupBean setReferencedByParent(FlPersonGroupBean bean, FlPersonGroupBean beanToSet) throws DaoException
     {
@@ -2024,6 +2023,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @param ps the PreparedStatement that will be filled
      * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
+     * @param fillNull wether fill null for null field
      * @return the number of clauses returned
      * @throws DaoException
      */
@@ -2558,7 +2558,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     //37-2
     /**
      * bind foreign key listener to foreign table: <br>
-     * DELETE RULE : SET_NULL {@code fl_person_group(parent)-> fl_person_group(id)} <br>
+     * DELETE RULE : SET_NULL {@code fl_person_group(parent)- fl_person_group(id)} <br>
      */
     public void bindForeignKeyListenerForDeleteRule(){
         instanceOfFlPersonGroupManager().registerListener(foreignKeyListenerByParent);
@@ -2709,7 +2709,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     //46
     /**
      * return a primary key list from {@link FlPersonGroupBean} collection
-     * @param array
+     * @param collection
      */
     public List<Integer> toPrimaryKeyList(java.util.Collection<FlPersonGroupBean> collection){        
         if(null == collection){

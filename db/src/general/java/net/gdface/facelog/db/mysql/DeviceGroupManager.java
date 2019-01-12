@@ -360,9 +360,9 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID} -> {@link DeviceBean}</li>
-     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT} -> {@link DeviceGroupBean}</li>
-     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID} -> {@link PermitBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID} TO {@link DeviceBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT} TO {@link DeviceGroupBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID} TO {@link PermitBean}</li>
      * </ul>
      * @param bean the {@link DeviceGroupBean} object to use
      * @param ikIndex valid values: {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID},{@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT},{@link Constant#FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID}
@@ -387,9 +387,9 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID} -> {@link DeviceBean}</li>
-     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT} -> {@link DeviceGroupBean}</li>
-     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID} -> {@link PermitBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID} TO {@link DeviceBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT} TO {@link DeviceGroupBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID} TO {@link PermitBean}</li>
      * </ul>
      * @param bean the {@link DeviceGroupBean} object to use
      * @param importedBeans the FlPermitBean array to associate to the {@link DeviceGroupBean}
@@ -414,12 +414,12 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID} -> {@link DeviceBean}</li>
-     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT} -> {@link DeviceGroupBean}</li>
-     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID} -> {@link PermitBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID} TO {@link DeviceBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT} TO {@link DeviceGroupBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID} TO {@link PermitBean}</li>
      * </ul>
      * @param bean the {@link DeviceGroupBean} object to use
-     * @param importedBeans the <T> object to associate to the {@link DeviceGroupBean}
+     * @param importedBeans the T object to associate to the {@link DeviceGroupBean}
      * @param ikIndex valid values: {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID},{@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT},{@link Constant#FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID}
      * @return importedBeans always
      */
@@ -762,7 +762,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
      * Save the {@link DeviceGroupBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link DeviceGroupBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(DeviceGroupBean , DeviceGroupBean , DeviceBean[] , DeviceGroupBean[] , PermitBean[] )}
      * @return the inserted or updated {@link DeviceGroupBean} bean
      */
@@ -801,7 +801,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
      * Save the {@link DeviceGroupBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link DeviceGroupBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(DeviceGroupBean , DeviceGroupBean , java.util.Collection , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link DeviceGroupBean} bean
      */
@@ -844,12 +844,12 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_DEVICE_GROUP_FK_PARENT} -> {@link DeviceGroupBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_FK_PARENT} TO {@link DeviceGroupBean}</li>
      * </ul>
      * @param bean the {@link DeviceGroupBean} object to use
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_DEVICE_GROUP_FK_PARENT}
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return the associated T bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -866,7 +866,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
      * 
      * @param <T> see also {@link #getReferencedBean(DeviceGroupBean,int)}
      * @param bean the {@link DeviceGroupBean} object to use
-     * @param beanToSet the <T> object to associate to the {@link DeviceGroupBean}
+     * @param beanToSet the T object to associate to the {@link DeviceGroupBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(DeviceGroupBean,int)}
      * @return always beanToSet saved
      */

@@ -44,7 +44,7 @@ public class ImageCacheManager extends ImageManager
     /**
      * create a instance of ImageCacheManager and assign to {@link #instance} if {@code instance} is not initialized.<br>
      * otherwise return {@code instance}.
-     * @see {@link ImageCacheManager#ImageCacheManager(UpdateStrategy ,long , long , TimeUnit )}
+     * @see ImageCacheManager#ImageCacheManager(UpdateStrategy ,long , long , TimeUnit )
      */
     public static synchronized final ImageCacheManager makeInstance(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
@@ -67,7 +67,7 @@ public class ImageCacheManager extends ImageManager
     /** instance of {@link ImageCache} */
     private final ImageCache cache;
     /** constructor<br>
-     * @see {@link ImageCache#ImageCache(UpdateStrategy ,long , long , TimeUnit )}
+     * @see ImageCache#ImageCache(UpdateStrategy ,long , long , TimeUnit )
      */
     protected ImageCacheManager(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
         cache = new ImageCache(updateStrategy,maximumSize,duration,unit);

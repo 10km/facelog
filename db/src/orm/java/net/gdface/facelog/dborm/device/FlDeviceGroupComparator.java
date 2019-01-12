@@ -31,7 +31,7 @@ public class FlDeviceGroupComparator implements Comparator<FlDeviceGroupBean>,Co
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlDeviceGroupComparator(Constant.FL_DEVICE_GROUP_ID_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlDeviceGroupComparator(Constant.FL_DEVICE_GROUP_ID_ID, bReverse));</code>
      *
      * @param iType the field from which you want to sort
      * <br>
@@ -58,7 +58,7 @@ public class FlDeviceGroupComparator implements Comparator<FlDeviceGroupBean>,Co
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlDeviceGroupComparator(Constant.FL_DEVICE_GROUP_ID_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlDeviceGroupComparator(Constant.FL_DEVICE_GROUP_ID_ID, bReverse));</code>
      *
      * @param iType the field from which you want to sort.
      * <br>

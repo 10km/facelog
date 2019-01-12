@@ -93,8 +93,7 @@ public  class FlDeviceGroupBean
         return this;
     }
     /**
-     * return a new mutable copy of this object.
-     * @return 
+     * @return return a new mutable copy of this object.
      */
     public FlDeviceGroupBean cloneMutable(){
         return clone().immutable(null);
@@ -740,11 +739,17 @@ public  class FlDeviceGroupBean
      * FOREIGN KEY (parent) REFERENCES fl_device_group(id)
      */
     private FlDeviceGroupBean referencedByParent;
-    /** Getter method for {@link #referencedByParent}. */
+    /**
+     * Getter method for {@link #referencedByParent}.
+     * @return FlDeviceGroupBean
+     */
     public FlDeviceGroupBean getReferencedByParent() {
         return this.referencedByParent;
     }
-    /** Setter method for {@link #referencedByParent}. */
+    /**
+     * Setter method for {@link #referencedByParent}.
+     * @param reference FlDeviceGroupBean
+     */
     public void setReferencedByParent(FlDeviceGroupBean reference) {
         this.referencedByParent = reference;
     }
@@ -1082,7 +1087,7 @@ public  class FlDeviceGroupBean
     }
     /**
      * check whether this bean is a NULL bean 
-     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @return {@code true} if {@link #initialized} be set to zero
      * @see #asNULL()
      */
     public boolean checkNULL(){
@@ -1102,8 +1107,9 @@ public  class FlDeviceGroupBean
         return source;
     }
     /** 
+     * @param source input list
      * @return replace null instance element with {@code null}
-     * @see {@link #checkNULL()} 
+     * @see #checkNULL()
      */
     public static final List<FlDeviceGroupBean> replaceNullInstance(List<FlDeviceGroupBean> source){
         if(null != source){
@@ -1233,7 +1239,10 @@ public  class FlDeviceGroupBean
         setValue(columnIDOf(column),value);
     }
     
-    /** return column id for the given field name or negative if {@code column} is invalid name */
+    /**
+     * @param column column name
+     * @return column id for the given field name or negative if {@code column} is invalid name 
+     */
     public static int columnIDOf(String column){
         int index = FL_DEVICE_GROUP_FIELDS_LIST.indexOf(column);
         return  index < 0 
@@ -1279,8 +1288,8 @@ public  class FlDeviceGroupBean
         /** 
          * fill the field : fl_device_group.id
          * @param id 设备组id
-         * @see {@link FlDeviceGroupBean#getId()}
-         * @see {@link FlDeviceGroupBean#setId(Integer)}
+         * @see FlDeviceGroupBean#getId()
+         * @see FlDeviceGroupBean#setId(Integer)
          */
         public Builder id(Integer id){
             TEMPLATE.get().setId(id);
@@ -1289,8 +1298,8 @@ public  class FlDeviceGroupBean
         /** 
          * fill the field : fl_device_group.name
          * @param name 设备组名
-         * @see {@link FlDeviceGroupBean#getName()}
-         * @see {@link FlDeviceGroupBean#setName(String)}
+         * @see FlDeviceGroupBean#getName()
+         * @see FlDeviceGroupBean#setName(String)
          */
         public Builder name(String name){
             TEMPLATE.get().setName(name);
@@ -1299,8 +1308,8 @@ public  class FlDeviceGroupBean
         /** 
          * fill the field : fl_device_group.leaf
          * @param leaf 是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可
-         * @see {@link FlDeviceGroupBean#getLeaf()}
-         * @see {@link FlDeviceGroupBean#setLeaf(Integer)}
+         * @see FlDeviceGroupBean#getLeaf()
+         * @see FlDeviceGroupBean#setLeaf(Integer)
          */
         public Builder leaf(Integer leaf){
             TEMPLATE.get().setLeaf(leaf);
@@ -1309,8 +1318,8 @@ public  class FlDeviceGroupBean
         /** 
          * fill the field : fl_device_group.parent
          * @param parent 上一级设备组id
-         * @see {@link FlDeviceGroupBean#getParent()}
-         * @see {@link FlDeviceGroupBean#setParent(Integer)}
+         * @see FlDeviceGroupBean#getParent()
+         * @see FlDeviceGroupBean#setParent(Integer)
          */
         public Builder parent(Integer parent){
             TEMPLATE.get().setParent(parent);
@@ -1319,8 +1328,8 @@ public  class FlDeviceGroupBean
         /** 
          * fill the field : fl_device_group.remark
          * @param remark 备注
-         * @see {@link FlDeviceGroupBean#getRemark()}
-         * @see {@link FlDeviceGroupBean#setRemark(String)}
+         * @see FlDeviceGroupBean#getRemark()
+         * @see FlDeviceGroupBean#setRemark(String)
          */
         public Builder remark(String remark){
             TEMPLATE.get().setRemark(remark);
@@ -1329,8 +1338,8 @@ public  class FlDeviceGroupBean
         /** 
          * fill the field : fl_device_group.ext_bin
          * @param extBin 应用项目自定义二进制扩展字段
-         * @see {@link FlDeviceGroupBean#getExtBin()}
-         * @see {@link FlDeviceGroupBean#setExtBin(java.nio.ByteBuffer)}
+         * @see FlDeviceGroupBean#getExtBin()
+         * @see FlDeviceGroupBean#setExtBin(java.nio.ByteBuffer)
          */
         public Builder extBin(java.nio.ByteBuffer extBin){
             TEMPLATE.get().setExtBin(extBin);
@@ -1339,8 +1348,8 @@ public  class FlDeviceGroupBean
         /** 
          * fill the field : fl_device_group.ext_txt
          * @param extTxt 应用项目自定义文本扩展字段
-         * @see {@link FlDeviceGroupBean#getExtTxt()}
-         * @see {@link FlDeviceGroupBean#setExtTxt(String)}
+         * @see FlDeviceGroupBean#getExtTxt()
+         * @see FlDeviceGroupBean#setExtTxt(String)
          */
         public Builder extTxt(String extTxt){
             TEMPLATE.get().setExtTxt(extTxt);
@@ -1349,8 +1358,8 @@ public  class FlDeviceGroupBean
         /** 
          * fill the field : fl_device_group.create_time
          * @param createTime 
-         * @see {@link FlDeviceGroupBean#getCreateTime()}
-         * @see {@link FlDeviceGroupBean#setCreateTime(java.util.Date)}
+         * @see FlDeviceGroupBean#getCreateTime()
+         * @see FlDeviceGroupBean#setCreateTime(java.util.Date)
          */
         public Builder createTime(java.util.Date createTime){
             TEMPLATE.get().setCreateTime(createTime);
@@ -1359,8 +1368,8 @@ public  class FlDeviceGroupBean
         /** 
          * fill the field : fl_device_group.update_time
          * @param updateTime 
-         * @see {@link FlDeviceGroupBean#getUpdateTime()}
-         * @see {@link FlDeviceGroupBean#setUpdateTime(java.util.Date)}
+         * @see FlDeviceGroupBean#getUpdateTime()
+         * @see FlDeviceGroupBean#setUpdateTime(java.util.Date)
          */
         public Builder updateTime(java.util.Date updateTime){
             TEMPLATE.get().setUpdateTime(updateTime);

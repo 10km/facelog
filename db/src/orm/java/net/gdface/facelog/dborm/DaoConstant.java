@@ -90,11 +90,11 @@ public interface DaoConstant {
         /** immutable list of {@link #JAVA_FIELDS} */
         public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
-            /** foreign key fl_device(group_id) -> fl_device_group */groupId
+            /** foreign key fl_device(group_id) TO fl_device_group */groupId
         }
         public static enum Ik{
-            /** imported key fl_image(device_id) -> fl_device */deviceIdOfImage,
-            /** imported key fl_log(device_id) -> fl_device */deviceIdOfLog
+            /** imported key fl_image(device_id) TO fl_device */deviceIdOfImage,
+            /** imported key fl_log(device_id) TO fl_device */deviceIdOfLog
         }
         public static enum Index{
             /** fl_device index (mac) */indexMac,
@@ -175,12 +175,12 @@ public interface DaoConstant {
         /** immutable list of {@link #JAVA_FIELDS} */
         public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
-            /** foreign key fl_device_group(parent) -> fl_device_group */parent
+            /** foreign key fl_device_group(parent) TO fl_device_group */parent
         }
         public static enum Ik{
-            /** imported key fl_device(group_id) -> fl_device_group */groupIdOfDevice,
-            /** imported key fl_device_group(parent) -> fl_device_group */parentOfDeviceGroup,
-            /** imported key fl_permit(device_group_id) -> fl_device_group */deviceGroupIdOfPermit
+            /** imported key fl_device(group_id) TO fl_device_group */groupIdOfDevice,
+            /** imported key fl_device_group(parent) TO fl_device_group */parentOfDeviceGroup,
+            /** imported key fl_permit(device_group_id) TO fl_device_group */deviceGroupIdOfPermit
         }
         public static enum Index{
             /** fl_device_group index (parent) */indexParent
@@ -289,11 +289,11 @@ public interface DaoConstant {
         /** immutable list of {@link #JAVA_FIELDS} */
         public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
-            /** foreign key fl_face(feature_md5) -> fl_feature */featureMd5,
-            /** foreign key fl_face(image_md5) -> fl_image */imageMd5
+            /** foreign key fl_face(feature_md5) TO fl_feature */featureMd5,
+            /** foreign key fl_face(image_md5) TO fl_image */imageMd5
         }
         public static enum Ik{
-            /** imported key fl_log(compare_face) -> fl_face */compareFaceOfLog
+            /** imported key fl_log(compare_face) TO fl_face */compareFaceOfLog
         }
         public static enum Index{
             /** fl_face index (feature_md5) */indexFeatureMd5,
@@ -378,11 +378,11 @@ public interface DaoConstant {
         /** immutable list of {@link #JAVA_FIELDS} */
         public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
-            /** foreign key fl_feature(person_id) -> fl_person */personId
+            /** foreign key fl_feature(person_id) TO fl_person */personId
         }
         public static enum Ik{
-            /** imported key fl_face(feature_md5) -> fl_feature */featureMd5OfFace,
-            /** imported key fl_log(verify_feature) -> fl_feature */verifyFeatureOfLog
+            /** imported key fl_face(feature_md5) TO fl_feature */featureMd5OfFace,
+            /** imported key fl_log(verify_feature) TO fl_feature */verifyFeatureOfLog
         }
         public static enum Index{
             /** fl_feature index (person_id) */indexPersonId
@@ -448,11 +448,11 @@ public interface DaoConstant {
         /** immutable list of {@link #JAVA_FIELDS} */
         public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
-            /** foreign key fl_image(device_id) -> fl_device */deviceId
+            /** foreign key fl_image(device_id) TO fl_device */deviceId
         }
         public static enum Ik{
-            /** imported key fl_face(image_md5) -> fl_image */imageMd5OfFace,
-            /** imported key fl_person(image_md5) -> fl_image */imageMd5OfPerson
+            /** imported key fl_face(image_md5) TO fl_image */imageMd5OfFace,
+            /** imported key fl_person(image_md5) TO fl_image */imageMd5OfPerson
         }
         public static enum Index{
             /** fl_image index (device_id) */indexDeviceId
@@ -529,10 +529,10 @@ public interface DaoConstant {
         /** immutable list of {@link #JAVA_FIELDS} */
         public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
-            /** foreign key fl_log(device_id) -> fl_device */deviceId,
-            /** foreign key fl_log(compare_face) -> fl_face */compareFace,
-            /** foreign key fl_log(verify_feature) -> fl_feature */verifyFeature,
-            /** foreign key fl_log(person_id) -> fl_person */personId
+            /** foreign key fl_log(device_id) TO fl_device */deviceId,
+            /** foreign key fl_log(compare_face) TO fl_face */compareFace,
+            /** foreign key fl_log(verify_feature) TO fl_feature */verifyFeature,
+            /** foreign key fl_log(person_id) TO fl_person */personId
         }
         public static enum Ik{
 
@@ -608,8 +608,8 @@ public interface DaoConstant {
         /** immutable list of {@link #JAVA_FIELDS} */
         public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
-            /** foreign key fl_permit(device_group_id) -> fl_device_group */deviceGroupId,
-            /** foreign key fl_permit(person_group_id) -> fl_person_group */personGroupId
+            /** foreign key fl_permit(device_group_id) TO fl_device_group */deviceGroupId,
+            /** foreign key fl_permit(person_group_id) TO fl_person_group */personGroupId
         }
         public static enum Ik{
 
@@ -703,12 +703,12 @@ public interface DaoConstant {
         /** immutable list of {@link #JAVA_FIELDS} */
         public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
-            /** foreign key fl_person(image_md5) -> fl_image */imageMd5,
-            /** foreign key fl_person(group_id) -> fl_person_group */groupId
+            /** foreign key fl_person(image_md5) TO fl_image */imageMd5,
+            /** foreign key fl_person(group_id) TO fl_person_group */groupId
         }
         public static enum Ik{
-            /** imported key fl_feature(person_id) -> fl_person */personIdOfFeature,
-            /** imported key fl_log(person_id) -> fl_person */personIdOfLog
+            /** imported key fl_feature(person_id) TO fl_person */personIdOfFeature,
+            /** imported key fl_log(person_id) TO fl_person */personIdOfLog
         }
         public static enum Index{
             /** fl_person index (image_md5) */indexImageMd5,
@@ -802,12 +802,12 @@ public interface DaoConstant {
         /** immutable list of {@link #JAVA_FIELDS} */
         public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
-            /** foreign key fl_person_group(parent) -> fl_person_group */parent
+            /** foreign key fl_person_group(parent) TO fl_person_group */parent
         }
         public static enum Ik{
-            /** imported key fl_permit(person_group_id) -> fl_person_group */personGroupIdOfPermit,
-            /** imported key fl_person(group_id) -> fl_person_group */groupIdOfPerson,
-            /** imported key fl_person_group(parent) -> fl_person_group */parentOfPersonGroup
+            /** imported key fl_permit(person_group_id) TO fl_person_group */personGroupIdOfPermit,
+            /** imported key fl_person(group_id) TO fl_person_group */groupIdOfPerson,
+            /** imported key fl_person_group(parent) TO fl_person_group */parentOfPersonGroup
         }
         public static enum Index{
             /** fl_person_group index (parent) */indexParent

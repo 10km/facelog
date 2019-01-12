@@ -81,8 +81,7 @@ public  class LogLightBean
         return this;
     }
     /**
-     * return a new mutable copy of this object.
-     * @return 
+     * @return return a new mutable copy of this object.
      */
     public LogLightBean cloneMutable(){
         return clone().immutable(null);
@@ -813,7 +812,7 @@ public  class LogLightBean
     }
     /**
      * check whether this bean is a NULL bean 
-     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @return {@code true} if {@link #initialized} be set to zero
      * @see #asNULL()
      */
     public boolean checkNULL(){
@@ -833,8 +832,9 @@ public  class LogLightBean
         return source;
     }
     /** 
+     * @param source input list
      * @return replace null instance element with {@code null}
-     * @see {@link #checkNULL()} 
+     * @see #checkNULL()
      */
     public static final List<LogLightBean> replaceNullInstance(List<LogLightBean> source){
         if(null != source){
@@ -949,7 +949,10 @@ public  class LogLightBean
         setValue(columnIDOf(column),value);
     }
     
-    /** return column id for the given field name or negative if {@code column} is invalid name */
+    /**
+     * @param column column name
+     * @return column id for the given field name or negative if {@code column} is invalid name 
+     */
     public static int columnIDOf(String column){
         int index = FL_LOG_LIGHT_FIELDS_LIST.indexOf(column);
         return  index < 0 
@@ -995,8 +998,8 @@ public  class LogLightBean
         /** 
          * fill the field : fl_log_light.id
          * @param id 日志id
-         * @see {@link LogLightBean#getId()}
-         * @see {@link LogLightBean#setId(Integer)}
+         * @see LogLightBean#getId()
+         * @see LogLightBean#setId(Integer)
          */
         public Builder id(Integer id){
             TEMPLATE.get().setId(id);
@@ -1005,8 +1008,8 @@ public  class LogLightBean
         /** 
          * fill the field : fl_log_light.person_id
          * @param personId 用户id
-         * @see {@link LogLightBean#getPersonId()}
-         * @see {@link LogLightBean#setPersonId(Integer)}
+         * @see LogLightBean#getPersonId()
+         * @see LogLightBean#setPersonId(Integer)
          */
         public Builder personId(Integer personId){
             TEMPLATE.get().setPersonId(personId);
@@ -1015,8 +1018,8 @@ public  class LogLightBean
         /** 
          * fill the field : fl_log_light.name
          * @param name 姓名
-         * @see {@link LogLightBean#getName()}
-         * @see {@link LogLightBean#setName(String)}
+         * @see LogLightBean#getName()
+         * @see LogLightBean#setName(String)
          */
         public Builder name(String name){
             TEMPLATE.get().setName(name);
@@ -1025,8 +1028,8 @@ public  class LogLightBean
         /** 
          * fill the field : fl_log_light.papers_type
          * @param papersType 证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他
-         * @see {@link LogLightBean#getPapersType()}
-         * @see {@link LogLightBean#setPapersType(Integer)}
+         * @see LogLightBean#getPapersType()
+         * @see LogLightBean#setPapersType(Integer)
          */
         public Builder papersType(Integer papersType){
             TEMPLATE.get().setPapersType(papersType);
@@ -1035,8 +1038,8 @@ public  class LogLightBean
         /** 
          * fill the field : fl_log_light.papers_num
          * @param papersNum 证件号码
-         * @see {@link LogLightBean#getPapersNum()}
-         * @see {@link LogLightBean#setPapersNum(String)}
+         * @see LogLightBean#getPapersNum()
+         * @see LogLightBean#setPapersNum(String)
          */
         public Builder papersNum(String papersNum){
             TEMPLATE.get().setPapersNum(papersNum);
@@ -1045,8 +1048,8 @@ public  class LogLightBean
         /** 
          * fill the field : fl_log_light.verify_time
          * @param verifyTime 验证时间(可能由前端设备提供时间)
-         * @see {@link LogLightBean#getVerifyTime()}
-         * @see {@link LogLightBean#setVerifyTime(java.util.Date)}
+         * @see LogLightBean#getVerifyTime()
+         * @see LogLightBean#setVerifyTime(java.util.Date)
          */
         public Builder verifyTime(java.util.Date verifyTime){
             TEMPLATE.get().setVerifyTime(verifyTime);

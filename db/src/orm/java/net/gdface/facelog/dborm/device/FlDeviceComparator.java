@@ -31,7 +31,7 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlDeviceComparator(Constant.FL_DEVICE_ID_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlDeviceComparator(Constant.FL_DEVICE_ID_ID, bReverse));</code>
      *
      * @param iType the field from which you want to sort
      * <br>
@@ -58,7 +58,7 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlDeviceComparator(Constant.FL_DEVICE_ID_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlDeviceComparator(Constant.FL_DEVICE_ID_ID, bReverse));</code>
      *
      * @param iType the field from which you want to sort.
      * <br>

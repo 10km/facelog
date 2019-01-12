@@ -88,68 +88,68 @@ public interface Constant {
     //////////////////////////////////////
     // FOREIGN KEY INDEX DECLARE
     //////////////////////////////////////    
-    /** foreign key fl_device(group_id) -> fl_device_group */
+    /** foreign key fl_device(group_id) TO fl_device_group */
     public static final int FL_DEVICE_FK_GROUP_ID = 0;
-    /** foreign key fl_device_group(parent) -> fl_device_group */
+    /** foreign key fl_device_group(parent) TO fl_device_group */
     public static final int FL_DEVICE_GROUP_FK_PARENT = 0;
-    /** foreign key fl_face(feature_md5) -> fl_feature */
+    /** foreign key fl_face(feature_md5) TO fl_feature */
     public static final int FL_FACE_FK_FEATURE_MD5 = 0;
-    /** foreign key fl_face(image_md5) -> fl_image */
+    /** foreign key fl_face(image_md5) TO fl_image */
     public static final int FL_FACE_FK_IMAGE_MD5 = 1;
-    /** foreign key fl_feature(person_id) -> fl_person */
+    /** foreign key fl_feature(person_id) TO fl_person */
     public static final int FL_FEATURE_FK_PERSON_ID = 0;
-    /** foreign key fl_image(device_id) -> fl_device */
+    /** foreign key fl_image(device_id) TO fl_device */
     public static final int FL_IMAGE_FK_DEVICE_ID = 0;
-    /** foreign key fl_log(device_id) -> fl_device */
+    /** foreign key fl_log(device_id) TO fl_device */
     public static final int FL_LOG_FK_DEVICE_ID = 0;
-    /** foreign key fl_log(compare_face) -> fl_face */
+    /** foreign key fl_log(compare_face) TO fl_face */
     public static final int FL_LOG_FK_COMPARE_FACE = 1;
-    /** foreign key fl_log(verify_feature) -> fl_feature */
+    /** foreign key fl_log(verify_feature) TO fl_feature */
     public static final int FL_LOG_FK_VERIFY_FEATURE = 2;
-    /** foreign key fl_log(person_id) -> fl_person */
+    /** foreign key fl_log(person_id) TO fl_person */
     public static final int FL_LOG_FK_PERSON_ID = 3;
-    /** foreign key fl_permit(device_group_id) -> fl_device_group */
+    /** foreign key fl_permit(device_group_id) TO fl_device_group */
     public static final int FL_PERMIT_FK_DEVICE_GROUP_ID = 0;
-    /** foreign key fl_permit(person_group_id) -> fl_person_group */
+    /** foreign key fl_permit(person_group_id) TO fl_person_group */
     public static final int FL_PERMIT_FK_PERSON_GROUP_ID = 1;
-    /** foreign key fl_person(image_md5) -> fl_image */
+    /** foreign key fl_person(image_md5) TO fl_image */
     public static final int FL_PERSON_FK_IMAGE_MD5 = 0;
-    /** foreign key fl_person(group_id) -> fl_person_group */
+    /** foreign key fl_person(group_id) TO fl_person_group */
     public static final int FL_PERSON_FK_GROUP_ID = 1;
-    /** foreign key fl_person_group(parent) -> fl_person_group */
+    /** foreign key fl_person_group(parent) TO fl_person_group */
     public static final int FL_PERSON_GROUP_FK_PARENT = 0;
     //////////////////////////////////////
     // IMPORTED KEY INDEX DECLARE
     //////////////////////////////////////    
-    /** imported key fl_image(device_id) -> fl_device */
+    /** imported key fl_image(device_id) TO fl_device */
     public static final int FL_DEVICE_IK_FL_IMAGE_DEVICE_ID = 0;
-    /** imported key fl_log(device_id) -> fl_device */
+    /** imported key fl_log(device_id) TO fl_device */
     public static final int FL_DEVICE_IK_FL_LOG_DEVICE_ID = 1;
-    /** imported key fl_device(group_id) -> fl_device_group */
+    /** imported key fl_device(group_id) TO fl_device_group */
     public static final int FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID = 0;
-    /** imported key fl_device_group(parent) -> fl_device_group */
+    /** imported key fl_device_group(parent) TO fl_device_group */
     public static final int FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT = 1;
-    /** imported key fl_permit(device_group_id) -> fl_device_group */
+    /** imported key fl_permit(device_group_id) TO fl_device_group */
     public static final int FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID = 2;
-    /** imported key fl_log(compare_face) -> fl_face */
+    /** imported key fl_log(compare_face) TO fl_face */
     public static final int FL_FACE_IK_FL_LOG_COMPARE_FACE = 0;
-    /** imported key fl_face(feature_md5) -> fl_feature */
+    /** imported key fl_face(feature_md5) TO fl_feature */
     public static final int FL_FEATURE_IK_FL_FACE_FEATURE_MD5 = 0;
-    /** imported key fl_log(verify_feature) -> fl_feature */
+    /** imported key fl_log(verify_feature) TO fl_feature */
     public static final int FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE = 1;
-    /** imported key fl_face(image_md5) -> fl_image */
+    /** imported key fl_face(image_md5) TO fl_image */
     public static final int FL_IMAGE_IK_FL_FACE_IMAGE_MD5 = 0;
-    /** imported key fl_person(image_md5) -> fl_image */
+    /** imported key fl_person(image_md5) TO fl_image */
     public static final int FL_IMAGE_IK_FL_PERSON_IMAGE_MD5 = 1;
-    /** imported key fl_feature(person_id) -> fl_person */
+    /** imported key fl_feature(person_id) TO fl_person */
     public static final int FL_PERSON_IK_FL_FEATURE_PERSON_ID = 0;
-    /** imported key fl_log(person_id) -> fl_person */
+    /** imported key fl_log(person_id) TO fl_person */
     public static final int FL_PERSON_IK_FL_LOG_PERSON_ID = 1;
-    /** imported key fl_permit(person_group_id) -> fl_person_group */
+    /** imported key fl_permit(person_group_id) TO fl_person_group */
     public static final int FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID = 0;
-    /** imported key fl_person(group_id) -> fl_person_group */
+    /** imported key fl_person(group_id) TO fl_person_group */
     public static final int FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID = 1;
-    /** imported key fl_person_group(parent) -> fl_person_group */
+    /** imported key fl_person_group(parent) TO fl_person_group */
     public static final int FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT = 2;
     //////////////////////////////////////
     // INDEX INDEX DECLARE

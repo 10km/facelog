@@ -56,13 +56,13 @@ public interface IBeanConverter<L,R> {
             this.rightType = rightClass;
         }
         /** 
-         * copy right -> left, left and right must not be null
+         * copy right TO left, left and right must not be null
          * @param left
          * @param right
          */
         protected abstract void doFromRight(L left, R right);
         /** 
-         * copy left -> right, left and right must not be null 
+         * copy left TO right, left and right must not be null 
          * @param left
          * @param right
          */
@@ -311,7 +311,7 @@ public interface IBeanConverter<L,R> {
     }
 
     /**
-     * copy right -> left
+     * copy right TO left
      * @param left
      * @param right
      * @return left,or new instance if left is null
@@ -319,7 +319,7 @@ public interface IBeanConverter<L,R> {
     public L fromRight(L left, R right);
     
     /**
-     * copy left -> right
+     * copy left TO right
      * @param left
      * @param right
      * @return right,or new instance if right is null
@@ -338,14 +338,14 @@ public interface IBeanConverter<L,R> {
      */
     public R toRight( L bean);
     /**
-     * copy rights -> lefts
+     * copy rights TO lefts
      * @param lefts
      * @param rights
      * @return lefts,or new array if lefts is null
      */
     public L[] fromRight(L[] lefts,R[] rights);
     /**
-     * copy lefts -> rights
+     * copy lefts TO rights
      * @param lefts
      * @param rights
      * @return rights,or new array if rights is null
@@ -364,14 +364,14 @@ public interface IBeanConverter<L,R> {
      */
     public R[] toRight(L[] beans);
     /**
-     * copy rights -> lefts
+     * copy rights TO lefts
      * @param lefts
      * @param rights
      * @return lefts,or new array if lefts is null
      */
     public List<L> fromRight(List<L> lefts,List<R> rights);
     /**
-     * copy lefts -> rights
+     * copy lefts TO rights
      * @param lefts
      * @param rights
      * @return rights,or new array if rights is null
@@ -429,13 +429,13 @@ public interface IBeanConverter<L,R> {
     /**
      * an new map with R key and  R value converted from map with L key and L value
      * @param lmap
-     * @return Map with R key & value
+     * @return Map with R key and value
      */
     public Map<R,R> toRight(Map<L,L> lmap);
     /**
      * return an new map with L key and  L value converted from map with R key and R value
      * @param rmap
-     * @return Map with L key & value
+     * @return Map with L key and value
      */
     public Map<L,L> fromRight(Map<R,R> rmap);
 }

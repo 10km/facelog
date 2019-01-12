@@ -80,8 +80,7 @@ public  class PermitBean
         return this;
     }
     /**
-     * return a new mutable copy of this object.
-     * @return 
+     * @return return a new mutable copy of this object.
      */
     public PermitBean cloneMutable(){
         return clone().immutable(null);
@@ -529,11 +528,17 @@ public  class PermitBean
      * FOREIGN KEY (device_group_id) REFERENCES fl_device_group(id)
      */
     private DeviceGroupBean referencedByDeviceGroupId;
-    /** Getter method for {@link #referencedByDeviceGroupId}. */
+    /**
+     * Getter method for {@link #referencedByDeviceGroupId}.
+     * @return DeviceGroupBean
+     */
     public DeviceGroupBean getReferencedByDeviceGroupId() {
         return this.referencedByDeviceGroupId;
     }
-    /** Setter method for {@link #referencedByDeviceGroupId}. */
+    /**
+     * Setter method for {@link #referencedByDeviceGroupId}.
+     * @param reference DeviceGroupBean
+     */
     public void setReferencedByDeviceGroupId(DeviceGroupBean reference) {
         this.referencedByDeviceGroupId = reference;
     }
@@ -542,11 +547,17 @@ public  class PermitBean
      * FOREIGN KEY (person_group_id) REFERENCES fl_person_group(id)
      */
     private PersonGroupBean referencedByPersonGroupId;
-    /** Getter method for {@link #referencedByPersonGroupId}. */
+    /**
+     * Getter method for {@link #referencedByPersonGroupId}.
+     * @return PersonGroupBean
+     */
     public PersonGroupBean getReferencedByPersonGroupId() {
         return this.referencedByPersonGroupId;
     }
-    /** Setter method for {@link #referencedByPersonGroupId}. */
+    /**
+     * Setter method for {@link #referencedByPersonGroupId}.
+     * @param reference PersonGroupBean
+     */
     public void setReferencedByPersonGroupId(PersonGroupBean reference) {
         this.referencedByPersonGroupId = reference;
     }
@@ -830,7 +841,7 @@ public  class PermitBean
     }
     /**
      * check whether this bean is a NULL bean 
-     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @return {@code true} if {@link #initialized} be set to zero
      * @see #asNULL()
      */
     public boolean checkNULL(){
@@ -850,8 +861,9 @@ public  class PermitBean
         return source;
     }
     /** 
+     * @param source input list
      * @return replace null instance element with {@code null}
-     * @see {@link #checkNULL()} 
+     * @see #checkNULL()
      */
     public static final List<PermitBean> replaceNullInstance(List<PermitBean> source){
         if(null != source){
@@ -966,7 +978,10 @@ public  class PermitBean
         setValue(columnIDOf(column),value);
     }
     
-    /** return column id for the given field name or negative if {@code column} is invalid name */
+    /**
+     * @param column column name
+     * @return column id for the given field name or negative if {@code column} is invalid name 
+     */
     public static int columnIDOf(String column){
         int index = FL_PERMIT_FIELDS_LIST.indexOf(column);
         return  index < 0 
@@ -1012,8 +1027,8 @@ public  class PermitBean
         /** 
          * fill the field : fl_permit.device_group_id
          * @param deviceGroupId 外键,设备组id
-         * @see {@link PermitBean#getDeviceGroupId()}
-         * @see {@link PermitBean#setDeviceGroupId(Integer)}
+         * @see PermitBean#getDeviceGroupId()
+         * @see PermitBean#setDeviceGroupId(Integer)
          */
         public Builder deviceGroupId(Integer deviceGroupId){
             TEMPLATE.get().setDeviceGroupId(deviceGroupId);
@@ -1022,8 +1037,8 @@ public  class PermitBean
         /** 
          * fill the field : fl_permit.person_group_id
          * @param personGroupId 外键,人员组id
-         * @see {@link PermitBean#getPersonGroupId()}
-         * @see {@link PermitBean#setPersonGroupId(Integer)}
+         * @see PermitBean#getPersonGroupId()
+         * @see PermitBean#setPersonGroupId(Integer)
          */
         public Builder personGroupId(Integer personGroupId){
             TEMPLATE.get().setPersonGroupId(personGroupId);
@@ -1032,8 +1047,8 @@ public  class PermitBean
         /** 
          * fill the field : fl_permit.remark
          * @param remark 备注
-         * @see {@link PermitBean#getRemark()}
-         * @see {@link PermitBean#setRemark(String)}
+         * @see PermitBean#getRemark()
+         * @see PermitBean#setRemark(String)
          */
         public Builder remark(String remark){
             TEMPLATE.get().setRemark(remark);
@@ -1042,8 +1057,8 @@ public  class PermitBean
         /** 
          * fill the field : fl_permit.ext_bin
          * @param extBin 应用项目自定义二进制扩展字段
-         * @see {@link PermitBean#getExtBin()}
-         * @see {@link PermitBean#setExtBin(byte[])}
+         * @see PermitBean#getExtBin()
+         * @see PermitBean#setExtBin(byte[])
          */
         public Builder extBin(byte[] extBin){
             TEMPLATE.get().setExtBin(extBin);
@@ -1052,8 +1067,8 @@ public  class PermitBean
         /** 
          * fill the field : fl_permit.ext_txt
          * @param extTxt 应用项目自定义文本扩展字段
-         * @see {@link PermitBean#getExtTxt()}
-         * @see {@link PermitBean#setExtTxt(String)}
+         * @see PermitBean#getExtTxt()
+         * @see PermitBean#setExtTxt(String)
          */
         public Builder extTxt(String extTxt){
             TEMPLATE.get().setExtTxt(extTxt);
@@ -1062,8 +1077,8 @@ public  class PermitBean
         /** 
          * fill the field : fl_permit.create_time
          * @param createTime 
-         * @see {@link PermitBean#getCreateTime()}
-         * @see {@link PermitBean#setCreateTime(java.util.Date)}
+         * @see PermitBean#getCreateTime()
+         * @see PermitBean#setCreateTime(java.util.Date)
          */
         public Builder createTime(java.util.Date createTime){
             TEMPLATE.get().setCreateTime(createTime);

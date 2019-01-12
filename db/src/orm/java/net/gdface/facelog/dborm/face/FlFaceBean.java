@@ -111,8 +111,7 @@ public  class FlFaceBean
         return this;
     }
     /**
-     * return a new mutable copy of this object.
-     * @return 
+     * @return return a new mutable copy of this object.
      */
     public FlFaceBean cloneMutable(){
         return clone().immutable(null);
@@ -1388,11 +1387,17 @@ public  class FlFaceBean
      * FOREIGN KEY (feature_md5) REFERENCES fl_feature(md5)
      */
     private FlFeatureBean referencedByFeatureMd5;
-    /** Getter method for {@link #referencedByFeatureMd5}. */
+    /**
+     * Getter method for {@link #referencedByFeatureMd5}.
+     * @return FlFeatureBean
+     */
     public FlFeatureBean getReferencedByFeatureMd5() {
         return this.referencedByFeatureMd5;
     }
-    /** Setter method for {@link #referencedByFeatureMd5}. */
+    /**
+     * Setter method for {@link #referencedByFeatureMd5}.
+     * @param reference FlFeatureBean
+     */
     public void setReferencedByFeatureMd5(FlFeatureBean reference) {
         this.referencedByFeatureMd5 = reference;
     }
@@ -1401,11 +1406,17 @@ public  class FlFaceBean
      * FOREIGN KEY (image_md5) REFERENCES fl_image(md5)
      */
     private FlImageBean referencedByImageMd5;
-    /** Getter method for {@link #referencedByImageMd5}. */
+    /**
+     * Getter method for {@link #referencedByImageMd5}.
+     * @return FlImageBean
+     */
     public FlImageBean getReferencedByImageMd5() {
         return this.referencedByImageMd5;
     }
-    /** Setter method for {@link #referencedByImageMd5}. */
+    /**
+     * Setter method for {@link #referencedByImageMd5}.
+     * @param reference FlImageBean
+     */
     public void setReferencedByImageMd5(FlImageBean reference) {
         this.referencedByImageMd5 = reference;
     }
@@ -1921,7 +1932,7 @@ public  class FlFaceBean
     }
     /**
      * check whether this bean is a NULL bean 
-     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @return {@code true} if {@link #initialized} be set to zero
      * @see #asNULL()
      */
     public boolean checkNULL(){
@@ -1941,8 +1952,9 @@ public  class FlFaceBean
         return source;
     }
     /** 
+     * @param source input list
      * @return replace null instance element with {@code null}
-     * @see {@link #checkNULL()} 
+     * @see #checkNULL()
      */
     public static final List<FlFaceBean> replaceNullInstance(List<FlFaceBean> source){
         if(null != source){
@@ -2122,7 +2134,10 @@ public  class FlFaceBean
         setValue(columnIDOf(column),value);
     }
     
-    /** return column id for the given field name or negative if {@code column} is invalid name */
+    /**
+     * @param column column name
+     * @return column id for the given field name or negative if {@code column} is invalid name 
+     */
     public static int columnIDOf(String column){
         int index = FL_FACE_FIELDS_LIST.indexOf(column);
         return  index < 0 
@@ -2168,8 +2183,8 @@ public  class FlFaceBean
         /** 
          * fill the field : fl_face.id
          * @param id 主键
-         * @see {@link FlFaceBean#getId()}
-         * @see {@link FlFaceBean#setId(Integer)}
+         * @see FlFaceBean#getId()
+         * @see FlFaceBean#setId(Integer)
          */
         public Builder id(Integer id){
             TEMPLATE.get().setId(id);
@@ -2178,8 +2193,8 @@ public  class FlFaceBean
         /** 
          * fill the field : fl_face.image_md5
          * @param imageMd5 外键,所属图像id
-         * @see {@link FlFaceBean#getImageMd5()}
-         * @see {@link FlFaceBean#setImageMd5(String)}
+         * @see FlFaceBean#getImageMd5()
+         * @see FlFaceBean#setImageMd5(String)
          */
         public Builder imageMd5(String imageMd5){
             TEMPLATE.get().setImageMd5(imageMd5);
@@ -2188,8 +2203,8 @@ public  class FlFaceBean
         /** 
          * fill the field : fl_face.face_left
          * @param faceLeft 
-         * @see {@link FlFaceBean#getFaceLeft()}
-         * @see {@link FlFaceBean#setFaceLeft(Integer)}
+         * @see FlFaceBean#getFaceLeft()
+         * @see FlFaceBean#setFaceLeft(Integer)
          */
         public Builder faceLeft(Integer faceLeft){
             TEMPLATE.get().setFaceLeft(faceLeft);
@@ -2198,8 +2213,8 @@ public  class FlFaceBean
         /** 
          * fill the field : fl_face.face_top
          * @param faceTop 
-         * @see {@link FlFaceBean#getFaceTop()}
-         * @see {@link FlFaceBean#setFaceTop(Integer)}
+         * @see FlFaceBean#getFaceTop()
+         * @see FlFaceBean#setFaceTop(Integer)
          */
         public Builder faceTop(Integer faceTop){
             TEMPLATE.get().setFaceTop(faceTop);
@@ -2208,8 +2223,8 @@ public  class FlFaceBean
         /** 
          * fill the field : fl_face.face_width
          * @param faceWidth 
-         * @see {@link FlFaceBean#getFaceWidth()}
-         * @see {@link FlFaceBean#setFaceWidth(Integer)}
+         * @see FlFaceBean#getFaceWidth()
+         * @see FlFaceBean#setFaceWidth(Integer)
          */
         public Builder faceWidth(Integer faceWidth){
             TEMPLATE.get().setFaceWidth(faceWidth);
@@ -2218,8 +2233,8 @@ public  class FlFaceBean
         /** 
          * fill the field : fl_face.face_height
          * @param faceHeight 
-         * @see {@link FlFaceBean#getFaceHeight()}
-         * @see {@link FlFaceBean#setFaceHeight(Integer)}
+         * @see FlFaceBean#getFaceHeight()
+         * @see FlFaceBean#setFaceHeight(Integer)
          */
         public Builder faceHeight(Integer faceHeight){
             TEMPLATE.get().setFaceHeight(faceHeight);
@@ -2228,8 +2243,8 @@ public  class FlFaceBean
         /** 
          * fill the field : fl_face.eye_leftx
          * @param eyeLeftx 
-         * @see {@link FlFaceBean#getEyeLeftx()}
-         * @see {@link FlFaceBean#setEyeLeftx(Integer)}
+         * @see FlFaceBean#getEyeLeftx()
+         * @see FlFaceBean#setEyeLeftx(Integer)
          */
         public Builder eyeLeftx(Integer eyeLeftx){
             TEMPLATE.get().setEyeLeftx(eyeLeftx);
@@ -2238,8 +2253,8 @@ public  class FlFaceBean
         /** 
          * fill the field : fl_face.eye_lefty
          * @param eyeLefty 
-         * @see {@link FlFaceBean#getEyeLefty()}
-         * @see {@link FlFaceBean#setEyeLefty(Integer)}
+         * @see FlFaceBean#getEyeLefty()
+         * @see FlFaceBean#setEyeLefty(Integer)
          */
         public Builder eyeLefty(Integer eyeLefty){
             TEMPLATE.get().setEyeLefty(eyeLefty);
@@ -2248,8 +2263,8 @@ public  class FlFaceBean
         /** 
          * fill the field : fl_face.eye_rightx
          * @param eyeRightx 
-         * @see {@link FlFaceBean#getEyeRightx()}
-         * @see {@link FlFaceBean#setEyeRightx(Integer)}
+         * @see FlFaceBean#getEyeRightx()
+         * @see FlFaceBean#setEyeRightx(Integer)
          */
         public Builder eyeRightx(Integer eyeRightx){
             TEMPLATE.get().setEyeRightx(eyeRightx);
@@ -2258,8 +2273,8 @@ public  class FlFaceBean
         /** 
          * fill the field : fl_face.eye_righty
          * @param eyeRighty 
-         * @see {@link FlFaceBean#getEyeRighty()}
-         * @see {@link FlFaceBean#setEyeRighty(Integer)}
+         * @see FlFaceBean#getEyeRighty()
+         * @see FlFaceBean#setEyeRighty(Integer)
          */
         public Builder eyeRighty(Integer eyeRighty){
             TEMPLATE.get().setEyeRighty(eyeRighty);
@@ -2268,8 +2283,8 @@ public  class FlFaceBean
         /** 
          * fill the field : fl_face.mouth_x
          * @param mouthX 
-         * @see {@link FlFaceBean#getMouthX()}
-         * @see {@link FlFaceBean#setMouthX(Integer)}
+         * @see FlFaceBean#getMouthX()
+         * @see FlFaceBean#setMouthX(Integer)
          */
         public Builder mouthX(Integer mouthX){
             TEMPLATE.get().setMouthX(mouthX);
@@ -2278,8 +2293,8 @@ public  class FlFaceBean
         /** 
          * fill the field : fl_face.mouth_y
          * @param mouthY 
-         * @see {@link FlFaceBean#getMouthY()}
-         * @see {@link FlFaceBean#setMouthY(Integer)}
+         * @see FlFaceBean#getMouthY()
+         * @see FlFaceBean#setMouthY(Integer)
          */
         public Builder mouthY(Integer mouthY){
             TEMPLATE.get().setMouthY(mouthY);
@@ -2288,8 +2303,8 @@ public  class FlFaceBean
         /** 
          * fill the field : fl_face.nose_x
          * @param noseX 
-         * @see {@link FlFaceBean#getNoseX()}
-         * @see {@link FlFaceBean#setNoseX(Integer)}
+         * @see FlFaceBean#getNoseX()
+         * @see FlFaceBean#setNoseX(Integer)
          */
         public Builder noseX(Integer noseX){
             TEMPLATE.get().setNoseX(noseX);
@@ -2298,8 +2313,8 @@ public  class FlFaceBean
         /** 
          * fill the field : fl_face.nose_y
          * @param noseY 
-         * @see {@link FlFaceBean#getNoseY()}
-         * @see {@link FlFaceBean#setNoseY(Integer)}
+         * @see FlFaceBean#getNoseY()
+         * @see FlFaceBean#setNoseY(Integer)
          */
         public Builder noseY(Integer noseY){
             TEMPLATE.get().setNoseY(noseY);
@@ -2308,8 +2323,8 @@ public  class FlFaceBean
         /** 
          * fill the field : fl_face.angle_yaw
          * @param angleYaw 
-         * @see {@link FlFaceBean#getAngleYaw()}
-         * @see {@link FlFaceBean#setAngleYaw(Integer)}
+         * @see FlFaceBean#getAngleYaw()
+         * @see FlFaceBean#setAngleYaw(Integer)
          */
         public Builder angleYaw(Integer angleYaw){
             TEMPLATE.get().setAngleYaw(angleYaw);
@@ -2318,8 +2333,8 @@ public  class FlFaceBean
         /** 
          * fill the field : fl_face.angle_pitch
          * @param anglePitch 
-         * @see {@link FlFaceBean#getAnglePitch()}
-         * @see {@link FlFaceBean#setAnglePitch(Integer)}
+         * @see FlFaceBean#getAnglePitch()
+         * @see FlFaceBean#setAnglePitch(Integer)
          */
         public Builder anglePitch(Integer anglePitch){
             TEMPLATE.get().setAnglePitch(anglePitch);
@@ -2328,8 +2343,8 @@ public  class FlFaceBean
         /** 
          * fill the field : fl_face.angle_roll
          * @param angleRoll 
-         * @see {@link FlFaceBean#getAngleRoll()}
-         * @see {@link FlFaceBean#setAngleRoll(Integer)}
+         * @see FlFaceBean#getAngleRoll()
+         * @see FlFaceBean#setAngleRoll(Integer)
          */
         public Builder angleRoll(Integer angleRoll){
             TEMPLATE.get().setAngleRoll(angleRoll);
@@ -2338,8 +2353,8 @@ public  class FlFaceBean
         /** 
          * fill the field : fl_face.ext_info
          * @param extInfo 扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析
-         * @see {@link FlFaceBean#getExtInfo()}
-         * @see {@link FlFaceBean#setExtInfo(java.nio.ByteBuffer)}
+         * @see FlFaceBean#getExtInfo()
+         * @see FlFaceBean#setExtInfo(java.nio.ByteBuffer)
          */
         public Builder extInfo(java.nio.ByteBuffer extInfo){
             TEMPLATE.get().setExtInfo(extInfo);
@@ -2348,8 +2363,8 @@ public  class FlFaceBean
         /** 
          * fill the field : fl_face.feature_md5
          * @param featureMd5 外键,人脸特征数据MD5 id
-         * @see {@link FlFaceBean#getFeatureMd5()}
-         * @see {@link FlFaceBean#setFeatureMd5(String)}
+         * @see FlFaceBean#getFeatureMd5()
+         * @see FlFaceBean#setFeatureMd5(String)
          */
         public Builder featureMd5(String featureMd5){
             TEMPLATE.get().setFeatureMd5(featureMd5);

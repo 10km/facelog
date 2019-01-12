@@ -31,7 +31,7 @@ public class FlLogComparator implements Comparator<FlLogBean>,Constant
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlLogComparator(Constant.FL_LOG_ID_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlLogComparator(Constant.FL_LOG_ID_ID, bReverse));</code>
      *
      * @param iType the field from which you want to sort
      * <br>
@@ -58,7 +58,7 @@ public class FlLogComparator implements Comparator<FlLogBean>,Constant
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlLogComparator(Constant.FL_LOG_ID_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlLogComparator(Constant.FL_LOG_ID_ID, bReverse));</code>
      *
      * @param iType the field from which you want to sort.
      * <br>

@@ -23,7 +23,7 @@ public class LogCache extends BaseTableLoadCaching<Integer, LogBean> {
     private final LogManager manager = LogManager.getInstance();
     
     /** constructor<br>
-     * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     * @see BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )
      */
     public LogCache(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
         super(updateStrategy,maximumSize, duration, unit);

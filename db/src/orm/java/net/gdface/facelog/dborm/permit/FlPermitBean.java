@@ -87,8 +87,7 @@ public  class FlPermitBean
         return this;
     }
     /**
-     * return a new mutable copy of this object.
-     * @return 
+     * @return return a new mutable copy of this object.
      */
     public FlPermitBean cloneMutable(){
         return clone().immutable(null);
@@ -540,11 +539,17 @@ public  class FlPermitBean
      * FOREIGN KEY (device_group_id) REFERENCES fl_device_group(id)
      */
     private FlDeviceGroupBean referencedByDeviceGroupId;
-    /** Getter method for {@link #referencedByDeviceGroupId}. */
+    /**
+     * Getter method for {@link #referencedByDeviceGroupId}.
+     * @return FlDeviceGroupBean
+     */
     public FlDeviceGroupBean getReferencedByDeviceGroupId() {
         return this.referencedByDeviceGroupId;
     }
-    /** Setter method for {@link #referencedByDeviceGroupId}. */
+    /**
+     * Setter method for {@link #referencedByDeviceGroupId}.
+     * @param reference FlDeviceGroupBean
+     */
     public void setReferencedByDeviceGroupId(FlDeviceGroupBean reference) {
         this.referencedByDeviceGroupId = reference;
     }
@@ -553,11 +558,17 @@ public  class FlPermitBean
      * FOREIGN KEY (person_group_id) REFERENCES fl_person_group(id)
      */
     private FlPersonGroupBean referencedByPersonGroupId;
-    /** Getter method for {@link #referencedByPersonGroupId}. */
+    /**
+     * Getter method for {@link #referencedByPersonGroupId}.
+     * @return FlPersonGroupBean
+     */
     public FlPersonGroupBean getReferencedByPersonGroupId() {
         return this.referencedByPersonGroupId;
     }
-    /** Setter method for {@link #referencedByPersonGroupId}. */
+    /**
+     * Setter method for {@link #referencedByPersonGroupId}.
+     * @param reference FlPersonGroupBean
+     */
     public void setReferencedByPersonGroupId(FlPersonGroupBean reference) {
         this.referencedByPersonGroupId = reference;
     }
@@ -841,7 +852,7 @@ public  class FlPermitBean
     }
     /**
      * check whether this bean is a NULL bean 
-     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @return {@code true} if {@link #initialized} be set to zero
      * @see #asNULL()
      */
     public boolean checkNULL(){
@@ -861,8 +872,9 @@ public  class FlPermitBean
         return source;
     }
     /** 
+     * @param source input list
      * @return replace null instance element with {@code null}
-     * @see {@link #checkNULL()} 
+     * @see #checkNULL()
      */
     public static final List<FlPermitBean> replaceNullInstance(List<FlPermitBean> source){
         if(null != source){
@@ -977,7 +989,10 @@ public  class FlPermitBean
         setValue(columnIDOf(column),value);
     }
     
-    /** return column id for the given field name or negative if {@code column} is invalid name */
+    /**
+     * @param column column name
+     * @return column id for the given field name or negative if {@code column} is invalid name 
+     */
     public static int columnIDOf(String column){
         int index = FL_PERMIT_FIELDS_LIST.indexOf(column);
         return  index < 0 
@@ -1023,8 +1038,8 @@ public  class FlPermitBean
         /** 
          * fill the field : fl_permit.device_group_id
          * @param deviceGroupId 外键,设备组id
-         * @see {@link FlPermitBean#getDeviceGroupId()}
-         * @see {@link FlPermitBean#setDeviceGroupId(Integer)}
+         * @see FlPermitBean#getDeviceGroupId()
+         * @see FlPermitBean#setDeviceGroupId(Integer)
          */
         public Builder deviceGroupId(Integer deviceGroupId){
             TEMPLATE.get().setDeviceGroupId(deviceGroupId);
@@ -1033,8 +1048,8 @@ public  class FlPermitBean
         /** 
          * fill the field : fl_permit.person_group_id
          * @param personGroupId 外键,人员组id
-         * @see {@link FlPermitBean#getPersonGroupId()}
-         * @see {@link FlPermitBean#setPersonGroupId(Integer)}
+         * @see FlPermitBean#getPersonGroupId()
+         * @see FlPermitBean#setPersonGroupId(Integer)
          */
         public Builder personGroupId(Integer personGroupId){
             TEMPLATE.get().setPersonGroupId(personGroupId);
@@ -1043,8 +1058,8 @@ public  class FlPermitBean
         /** 
          * fill the field : fl_permit.remark
          * @param remark 备注
-         * @see {@link FlPermitBean#getRemark()}
-         * @see {@link FlPermitBean#setRemark(String)}
+         * @see FlPermitBean#getRemark()
+         * @see FlPermitBean#setRemark(String)
          */
         public Builder remark(String remark){
             TEMPLATE.get().setRemark(remark);
@@ -1053,8 +1068,8 @@ public  class FlPermitBean
         /** 
          * fill the field : fl_permit.ext_bin
          * @param extBin 应用项目自定义二进制扩展字段
-         * @see {@link FlPermitBean#getExtBin()}
-         * @see {@link FlPermitBean#setExtBin(java.nio.ByteBuffer)}
+         * @see FlPermitBean#getExtBin()
+         * @see FlPermitBean#setExtBin(java.nio.ByteBuffer)
          */
         public Builder extBin(java.nio.ByteBuffer extBin){
             TEMPLATE.get().setExtBin(extBin);
@@ -1063,8 +1078,8 @@ public  class FlPermitBean
         /** 
          * fill the field : fl_permit.ext_txt
          * @param extTxt 应用项目自定义文本扩展字段
-         * @see {@link FlPermitBean#getExtTxt()}
-         * @see {@link FlPermitBean#setExtTxt(String)}
+         * @see FlPermitBean#getExtTxt()
+         * @see FlPermitBean#setExtTxt(String)
          */
         public Builder extTxt(String extTxt){
             TEMPLATE.get().setExtTxt(extTxt);
@@ -1073,8 +1088,8 @@ public  class FlPermitBean
         /** 
          * fill the field : fl_permit.create_time
          * @param createTime 
-         * @see {@link FlPermitBean#getCreateTime()}
-         * @see {@link FlPermitBean#setCreateTime(java.util.Date)}
+         * @see FlPermitBean#getCreateTime()
+         * @see FlPermitBean#setCreateTime(java.util.Date)
          */
         public Builder createTime(java.util.Date createTime){
             TEMPLATE.get().setCreateTime(createTime);

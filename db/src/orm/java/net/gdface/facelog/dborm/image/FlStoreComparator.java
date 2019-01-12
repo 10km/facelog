@@ -31,7 +31,7 @@ public class FlStoreComparator implements Comparator<FlStoreBean>,Constant
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlStoreComparator(Constant.FL_STORE_ID_MD5, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlStoreComparator(Constant.FL_STORE_ID_MD5, bReverse));</code>
      *
      * @param iType the field from which you want to sort
      * <br>
@@ -52,7 +52,7 @@ public class FlStoreComparator implements Comparator<FlStoreBean>,Constant
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlStoreComparator(Constant.FL_STORE_ID_MD5, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlStoreComparator(Constant.FL_STORE_ID_MD5, bReverse));</code>
      *
      * @param iType the field from which you want to sort.
      * <br>

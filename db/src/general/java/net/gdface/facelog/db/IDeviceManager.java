@@ -193,7 +193,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param bean the referenced {@link DeviceBean}
      * @param importedBeans imported beans from fl_image
      * @return importedBeans always
-     * @see {@link ImageManager#setReferencedByDeviceId(ImageBean, DeviceBean)
+     * @see IImageManager#setReferencedByDeviceId(ImageBean, DeviceBean)
      * @throws RuntimeDaoException
      */
     public ImageBean[] setImageBeansByDeviceId(DeviceBean bean , ImageBean[] importedBeans)throws RuntimeDaoException;
@@ -205,7 +205,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param bean the referenced {@link DeviceBean} 
      * @param importedBeans imported beans from fl_image 
      * @return importedBeans always
-     * @see {@link ImageManager#setReferencedByDeviceId(ImageBean, DeviceBean)
+     * @see IImageManager#setReferencedByDeviceId(ImageBean, DeviceBean)
      * @throws RuntimeDaoException
      */
     public <C extends java.util.Collection<ImageBean>> C setImageBeansByDeviceId(DeviceBean bean , C importedBeans)throws RuntimeDaoException;
@@ -275,7 +275,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param bean the referenced {@link DeviceBean}
      * @param importedBeans imported beans from fl_log
      * @return importedBeans always
-     * @see {@link LogManager#setReferencedByDeviceId(LogBean, DeviceBean)
+     * @see ILogManager#setReferencedByDeviceId(LogBean, DeviceBean)
      * @throws RuntimeDaoException
      */
     public LogBean[] setLogBeansByDeviceId(DeviceBean bean , LogBean[] importedBeans)throws RuntimeDaoException;
@@ -287,7 +287,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param bean the referenced {@link DeviceBean} 
      * @param importedBeans imported beans from fl_log 
      * @return importedBeans always
-     * @see {@link LogManager#setReferencedByDeviceId(LogBean, DeviceBean)
+     * @see ILogManager#setReferencedByDeviceId(LogBean, DeviceBean)
      * @throws RuntimeDaoException
      */
     public <C extends java.util.Collection<LogBean>> C setLogBeansByDeviceId(DeviceBean bean , C importedBeans)throws RuntimeDaoException;

@@ -193,7 +193,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param bean the referenced {@link FaceBean}
      * @param importedBeans imported beans from fl_log
      * @return importedBeans always
-     * @see {@link LogManager#setReferencedByCompareFace(LogBean, FaceBean)
+     * @see ILogManager#setReferencedByCompareFace(LogBean, FaceBean)
      * @throws RuntimeDaoException
      */
     public LogBean[] setLogBeansByCompareFace(FaceBean bean , LogBean[] importedBeans)throws RuntimeDaoException;
@@ -205,7 +205,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param bean the referenced {@link FaceBean} 
      * @param importedBeans imported beans from fl_log 
      * @return importedBeans always
-     * @see {@link LogManager#setReferencedByCompareFace(LogBean, FaceBean)
+     * @see ILogManager#setReferencedByCompareFace(LogBean, FaceBean)
      * @throws RuntimeDaoException
      */
     public <C extends java.util.Collection<LogBean>> C setLogBeansByCompareFace(FaceBean bean , C importedBeans)throws RuntimeDaoException;

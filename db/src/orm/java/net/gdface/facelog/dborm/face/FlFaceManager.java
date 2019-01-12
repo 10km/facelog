@@ -200,7 +200,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
      * Loads a {@link FlFaceBean} from the fl_face using primary key fields.
      * @param keys primary keys value:<br> 
      * @return a unique {@link FlFaceBean} or {@code null} if not found
-     * @see {@link #loadByPrimaryKey(Integer id)}
+     * @see #loadByPrimaryKey(Integer id)
      */
     @Override
     public FlFaceBean loadByPrimaryKey(Object ...keys) throws DaoException{
@@ -268,7 +268,6 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
      * @param bean  
      * @throws DaoException
      * @return false if primary kes has null
-     * @see #countUsingTemplate(FlFaceBean)
      */
     @Override
     public boolean existsByPrimaryKey(FlFaceBean bean) throws DaoException
@@ -315,7 +314,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
      * @param id Integer - PK# 1
      * @return the number of deleted rows
      * @throws DaoException
-     * @see {@link #delete(FlFaceBean)}
+     * @see #delete(FlFaceBean)
      */
     public int deleteByPrimaryKey(Integer id) throws DaoException
     {
@@ -377,7 +376,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
      *
      * @param keys primary keys value:<br> 
      * @return the number of deleted rows
-     * @see {@link #delete(FlFaceBean)}
+     * @see #delete(FlFaceBean)
      */   
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DaoException{
@@ -415,7 +414,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link FlLogBean}</li>
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} - {@link FlLogBean}</li>
      * </ul>
      * @param bean the {@link FlFaceBean} object to use
      * @param ikIndex valid values: {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE}
@@ -456,7 +455,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T> see also {@link #getImportedBeansAsList(FlFaceBean,int)}
      * @param bean the {@link FlFaceBean} object to use
-     * @param importedBeans the <T> object to associate to the {@link FlFaceBean}
+     * @param importedBeans the T object to associate to the {@link FlFaceBean}
      * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlFaceBean,int)}
 
      * @return importedBeans always
@@ -492,7 +491,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
     /**
      * Retrieves the {@link FlLogBean} object from the fl_log.compare_face field.<BR>
      * FK_NAME : fl_log_ibfk_4 
-     * @param id Integer - PK# 1
+     * @param idOfFace Integer - PK# 1
      * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DaoException
      */
@@ -518,7 +517,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
     /**
      * Retrieves the {@link FlLogBean} object from fl_log.compare_face field.<BR>
      * FK_NAME:fl_log_ibfk_4
-     * @param id Integer - PK# 1
+     * @param idOfFace Integer - PK# 1
      * @return the associated {@link FlLogBean} beans 
      * @throws DaoException
      */
@@ -556,7 +555,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
      * @param importedBeans imported beans from fl_log
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlLogManager#setReferencedByCompareFace(FlLogBean, FlFaceBean)
+     * @see FlLogManager#setReferencedByCompareFace(FlLogBean, FlFaceBean)
      */
     public FlLogBean[] setLogBeansByCompareFace(FlFaceBean bean , FlLogBean[] importedBeans) throws DaoException
     {
@@ -576,7 +575,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
      * @param importedBeans imported beans from fl_log 
      * @return importedBeans always
      * @throws DaoException
-     * @see {@link FlLogManager#setReferencedByCompareFace(FlLogBean, FlFaceBean)
+     * @see FlLogManager#setReferencedByCompareFace(FlLogBean, FlFaceBean)
      */
     public <C extends java.util.Collection<FlLogBean>> C setLogBeansByCompareFace(FlFaceBean bean , C importedBeans) throws DaoException
     {
@@ -684,7 +683,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
      * Save the FlFaceBean bean and referenced beans and imported beans (array) into the database.
      *
      * @param bean the {@link FlFaceBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FlFaceBean , FlFeatureBean , FlImageBean , FlLogBean[] )}
      * @return the inserted or updated {@link FlFaceBean} bean
      * @throws DaoException
@@ -720,7 +719,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
      * Save the FlFaceBean bean and referenced beans and imported beans (collection) into the database.
      *
      * @param bean the {@link FlFaceBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FlFaceBean , FlFeatureBean , FlImageBean , java.util.Collection )}
      * @return the inserted or updated {@link FlFaceBean} bean
      * @throws DaoException
@@ -759,13 +758,13 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_FACE_FK_FEATURE_MD5} -> {@link FlFeatureBean}</li>
-     *     <li> {@link Constant#FL_FACE_FK_IMAGE_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link Constant#FL_FACE_FK_FEATURE_MD5} - {@link FlFeatureBean}</li>
+     *     <li> {@link Constant#FL_FACE_FK_IMAGE_MD5} - {@link FlImageBean}</li>
      * </ul>
      * @param bean the {@link FlFaceBean} object to use
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_FACE_FK_FEATURE_MD5},{@link Constant#FL_FACE_FK_IMAGE_MD5}
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return the associated T bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DaoException
      */
     @SuppressWarnings("unchecked")
@@ -786,7 +785,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
      * 
      * @param <T> see also {@link #getReferencedBean(FlFaceBean,int)}
      * @param bean the {@link FlFaceBean} object to use
-     * @param beanToSet the <T> object to associate to the {@link FlFaceBean}
+     * @param beanToSet the T object to associate to the {@link FlFaceBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(FlFaceBean,int)}
      * @return always beanToSet saved
      * @throws DaoException
@@ -833,7 +832,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
      * @param bean the {@link FlFaceBean} object to use
      * @param beanToSet the {@link FlFeatureBean} object to associate to the {@link FlFaceBean} .
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws DaoException
      */
     public FlFeatureBean setReferencedByFeatureMd5(FlFaceBean bean, FlFeatureBean beanToSet) throws DaoException
     {
@@ -873,7 +872,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
      * @param bean the {@link FlFaceBean} object to use
      * @param beanToSet the {@link FlImageBean} object to associate to the {@link FlFaceBean} (NOT NULL).
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws DaoException
      */
     public FlImageBean setReferencedByImageMd5(FlFaceBean bean, FlImageBean beanToSet) throws DaoException
     {
@@ -1990,6 +1989,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
      * @param ps the PreparedStatement that will be filled
      * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
+     * @param fillNull wether fill null for null field
      * @return the number of clauses returned
      * @throws DaoException
      */
@@ -2622,8 +2622,8 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
     //37-2
     /**
      * bind foreign key listener to foreign table: <br>
-     * DELETE RULE : CASCADE {@code fl_face(image_md5)-> fl_image(md5)} <br>
-     * DELETE RULE : SET_NULL {@code fl_face(feature_md5)-> fl_feature(md5)} <br>
+     * DELETE RULE : CASCADE {@code fl_face(image_md5)- fl_image(md5)} <br>
+     * DELETE RULE : SET_NULL {@code fl_face(feature_md5)- fl_feature(md5)} <br>
      */
     public void bindForeignKeyListenerForDeleteRule(){
         instanceOfFlImageManager().registerListener(foreignKeyListenerByImageMd5);
@@ -2776,7 +2776,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
     //46
     /**
      * return a primary key list from {@link FlFaceBean} collection
-     * @param array
+     * @param collection
      */
     public List<Integer> toPrimaryKeyList(java.util.Collection<FlFaceBean> collection){        
         if(null == collection){

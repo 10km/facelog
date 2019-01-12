@@ -93,8 +93,7 @@ public  class FlDeviceBean
         return this;
     }
     /**
-     * return a new mutable copy of this object.
-     * @return 
+     * @return return a new mutable copy of this object.
      */
     public FlDeviceBean cloneMutable(){
         return clone().immutable(null);
@@ -729,11 +728,17 @@ public  class FlDeviceBean
      * FOREIGN KEY (group_id) REFERENCES fl_device_group(id)
      */
     private FlDeviceGroupBean referencedByGroupId;
-    /** Getter method for {@link #referencedByGroupId}. */
+    /**
+     * Getter method for {@link #referencedByGroupId}.
+     * @return FlDeviceGroupBean
+     */
     public FlDeviceGroupBean getReferencedByGroupId() {
         return this.referencedByGroupId;
     }
-    /** Setter method for {@link #referencedByGroupId}. */
+    /**
+     * Setter method for {@link #referencedByGroupId}.
+     * @param reference FlDeviceGroupBean
+     */
     public void setReferencedByGroupId(FlDeviceGroupBean reference) {
         this.referencedByGroupId = reference;
     }
@@ -1072,7 +1077,7 @@ public  class FlDeviceBean
     }
     /**
      * check whether this bean is a NULL bean 
-     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @return {@code true} if {@link #initialized} be set to zero
      * @see #asNULL()
      */
     public boolean checkNULL(){
@@ -1092,8 +1097,9 @@ public  class FlDeviceBean
         return source;
     }
     /** 
+     * @param source input list
      * @return replace null instance element with {@code null}
-     * @see {@link #checkNULL()} 
+     * @see #checkNULL()
      */
     public static final List<FlDeviceBean> replaceNullInstance(List<FlDeviceBean> source){
         if(null != source){
@@ -1223,7 +1229,10 @@ public  class FlDeviceBean
         setValue(columnIDOf(column),value);
     }
     
-    /** return column id for the given field name or negative if {@code column} is invalid name */
+    /**
+     * @param column column name
+     * @return column id for the given field name or negative if {@code column} is invalid name 
+     */
     public static int columnIDOf(String column){
         int index = FL_DEVICE_FIELDS_LIST.indexOf(column);
         return  index < 0 
@@ -1269,8 +1278,8 @@ public  class FlDeviceBean
         /** 
          * fill the field : fl_device.id
          * @param id 设备id
-         * @see {@link FlDeviceBean#getId()}
-         * @see {@link FlDeviceBean#setId(Integer)}
+         * @see FlDeviceBean#getId()
+         * @see FlDeviceBean#setId(Integer)
          */
         public Builder id(Integer id){
             TEMPLATE.get().setId(id);
@@ -1279,8 +1288,8 @@ public  class FlDeviceBean
         /** 
          * fill the field : fl_device.group_id
          * @param groupId 所属设备组id
-         * @see {@link FlDeviceBean#getGroupId()}
-         * @see {@link FlDeviceBean#setGroupId(Integer)}
+         * @see FlDeviceBean#getGroupId()
+         * @see FlDeviceBean#setGroupId(Integer)
          */
         public Builder groupId(Integer groupId){
             TEMPLATE.get().setGroupId(groupId);
@@ -1289,8 +1298,8 @@ public  class FlDeviceBean
         /** 
          * fill the field : fl_device.name
          * @param name 设备名称
-         * @see {@link FlDeviceBean#getName()}
-         * @see {@link FlDeviceBean#setName(String)}
+         * @see FlDeviceBean#getName()
+         * @see FlDeviceBean#setName(String)
          */
         public Builder name(String name){
             TEMPLATE.get().setName(name);
@@ -1299,8 +1308,8 @@ public  class FlDeviceBean
         /** 
          * fill the field : fl_device.version
          * @param version 设备版本号
-         * @see {@link FlDeviceBean#getVersion()}
-         * @see {@link FlDeviceBean#setVersion(String)}
+         * @see FlDeviceBean#getVersion()
+         * @see FlDeviceBean#setVersion(String)
          */
         public Builder version(String version){
             TEMPLATE.get().setVersion(version);
@@ -1309,8 +1318,8 @@ public  class FlDeviceBean
         /** 
          * fill the field : fl_device.serial_no
          * @param serialNo 设备序列号
-         * @see {@link FlDeviceBean#getSerialNo()}
-         * @see {@link FlDeviceBean#setSerialNo(String)}
+         * @see FlDeviceBean#getSerialNo()
+         * @see FlDeviceBean#setSerialNo(String)
          */
         public Builder serialNo(String serialNo){
             TEMPLATE.get().setSerialNo(serialNo);
@@ -1319,8 +1328,8 @@ public  class FlDeviceBean
         /** 
          * fill the field : fl_device.mac
          * @param mac 6字节MAC地址(HEX)
-         * @see {@link FlDeviceBean#getMac()}
-         * @see {@link FlDeviceBean#setMac(String)}
+         * @see FlDeviceBean#getMac()
+         * @see FlDeviceBean#setMac(String)
          */
         public Builder mac(String mac){
             TEMPLATE.get().setMac(mac);
@@ -1329,8 +1338,8 @@ public  class FlDeviceBean
         /** 
          * fill the field : fl_device.remark
          * @param remark 备注
-         * @see {@link FlDeviceBean#getRemark()}
-         * @see {@link FlDeviceBean#setRemark(String)}
+         * @see FlDeviceBean#getRemark()
+         * @see FlDeviceBean#setRemark(String)
          */
         public Builder remark(String remark){
             TEMPLATE.get().setRemark(remark);
@@ -1339,8 +1348,8 @@ public  class FlDeviceBean
         /** 
          * fill the field : fl_device.create_time
          * @param createTime 
-         * @see {@link FlDeviceBean#getCreateTime()}
-         * @see {@link FlDeviceBean#setCreateTime(java.util.Date)}
+         * @see FlDeviceBean#getCreateTime()
+         * @see FlDeviceBean#setCreateTime(java.util.Date)
          */
         public Builder createTime(java.util.Date createTime){
             TEMPLATE.get().setCreateTime(createTime);
@@ -1349,8 +1358,8 @@ public  class FlDeviceBean
         /** 
          * fill the field : fl_device.update_time
          * @param updateTime 
-         * @see {@link FlDeviceBean#getUpdateTime()}
-         * @see {@link FlDeviceBean#setUpdateTime(java.util.Date)}
+         * @see FlDeviceBean#getUpdateTime()
+         * @see FlDeviceBean#setUpdateTime(java.util.Date)
          */
         public Builder updateTime(java.util.Date updateTime){
             TEMPLATE.get().setUpdateTime(updateTime);

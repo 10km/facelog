@@ -361,8 +361,8 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID} -> {@link FeatureBean}</li>
-     *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID} TO {@link FeatureBean}</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} TO {@link LogBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
      * @param ikIndex valid values: {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID},{@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID}
@@ -385,8 +385,8 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID} -> {@link FeatureBean}</li>
-     *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID} TO {@link FeatureBean}</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} TO {@link LogBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link PersonBean}
@@ -409,11 +409,11 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID} -> {@link FeatureBean}</li>
-     *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID} TO {@link FeatureBean}</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} TO {@link LogBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
-     * @param importedBeans the <T> object to associate to the {@link PersonBean}
+     * @param importedBeans the T object to associate to the {@link PersonBean}
      * @param ikIndex valid values: {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID},{@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID}
      * @return importedBeans always
      */
@@ -675,7 +675,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
      * Save the {@link PersonBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link PersonBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(PersonBean , ImageBean , PersonGroupBean , FeatureBean[] , LogBean[] )}
      * @return the inserted or updated {@link PersonBean} bean
      */
@@ -714,7 +714,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
      * Save the {@link PersonBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link PersonBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(PersonBean , ImageBean , PersonGroupBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link PersonBean} bean
      */
@@ -757,13 +757,13 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_PERSON_FK_IMAGE_MD5} -> {@link ImageBean}</li>
-     *     <li> {@link Constant#FL_PERSON_FK_GROUP_ID} -> {@link PersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERSON_FK_IMAGE_MD5} TO {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_PERSON_FK_GROUP_ID} TO {@link PersonGroupBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_PERSON_FK_IMAGE_MD5},{@link Constant#FL_PERSON_FK_GROUP_ID}
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return the associated T bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -782,7 +782,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
      * 
      * @param <T> see also {@link #getReferencedBean(PersonBean,int)}
      * @param bean the {@link PersonBean} object to use
-     * @param beanToSet the <T> object to associate to the {@link PersonBean}
+     * @param beanToSet the T object to associate to the {@link PersonBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(PersonBean,int)}
      * @return always beanToSet saved
      */

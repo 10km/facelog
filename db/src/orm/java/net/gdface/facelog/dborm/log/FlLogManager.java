@@ -207,7 +207,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * Loads a {@link FlLogBean} from the fl_log using primary key fields.
      * @param keys primary keys value:<br> 
      * @return a unique {@link FlLogBean} or {@code null} if not found
-     * @see {@link #loadByPrimaryKey(Integer id)}
+     * @see #loadByPrimaryKey(Integer id)
      */
     @Override
     public FlLogBean loadByPrimaryKey(Object ...keys) throws DaoException{
@@ -275,7 +275,6 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param bean  
      * @throws DaoException
      * @return false if primary kes has null
-     * @see #countUsingTemplate(FlLogBean)
      */
     @Override
     public boolean existsByPrimaryKey(FlLogBean bean) throws DaoException
@@ -322,7 +321,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param id Integer - PK# 1
      * @return the number of deleted rows
      * @throws DaoException
-     * @see {@link #delete(FlLogBean)}
+     * @see #delete(FlLogBean)
      */
     public int deleteByPrimaryKey(Integer id) throws DaoException
     {
@@ -384,7 +383,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      *
      * @param keys primary keys value:<br> 
      * @return the number of deleted rows
-     * @see {@link #delete(FlLogBean)}
+     * @see #delete(FlLogBean)
      */   
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DaoException{
@@ -464,7 +463,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * Save the FlLogBean bean and referenced beans and imported beans (array) into the database.
      *
      * @param bean the {@link FlLogBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FlLogBean , FlDeviceBean , FlFaceBean , FlFeatureBean , FlPersonBean )}
      * @return the inserted or updated {@link FlLogBean} bean
      * @throws DaoException
@@ -504,7 +503,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * Save the FlLogBean bean and referenced beans and imported beans (collection) into the database.
      *
      * @param bean the {@link FlLogBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FlLogBean , FlDeviceBean , FlFaceBean , FlFeatureBean , FlPersonBean )}
      * @return the inserted or updated {@link FlLogBean} bean
      * @throws DaoException
@@ -547,15 +546,15 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_LOG_FK_DEVICE_ID} -> {@link FlDeviceBean}</li>
-     *     <li> {@link Constant#FL_LOG_FK_COMPARE_FACE} -> {@link FlFaceBean}</li>
-     *     <li> {@link Constant#FL_LOG_FK_VERIFY_FEATURE} -> {@link FlFeatureBean}</li>
-     *     <li> {@link Constant#FL_LOG_FK_PERSON_ID} -> {@link FlPersonBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_DEVICE_ID} - {@link FlDeviceBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_COMPARE_FACE} - {@link FlFaceBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_VERIFY_FEATURE} - {@link FlFeatureBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_PERSON_ID} - {@link FlPersonBean}</li>
      * </ul>
      * @param bean the {@link FlLogBean} object to use
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_LOG_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_COMPARE_FACE},{@link Constant#FL_LOG_FK_VERIFY_FEATURE},{@link Constant#FL_LOG_FK_PERSON_ID}
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return the associated T bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DaoException
      */
     @SuppressWarnings("unchecked")
@@ -580,7 +579,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * 
      * @param <T> see also {@link #getReferencedBean(FlLogBean,int)}
      * @param bean the {@link FlLogBean} object to use
-     * @param beanToSet the <T> object to associate to the {@link FlLogBean}
+     * @param beanToSet the T object to associate to the {@link FlLogBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(FlLogBean,int)}
      * @return always beanToSet saved
      * @throws DaoException
@@ -631,7 +630,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param bean the {@link FlLogBean} object to use
      * @param beanToSet the {@link FlDeviceBean} object to associate to the {@link FlLogBean} .
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws DaoException
      */
     public FlDeviceBean setReferencedByDeviceId(FlLogBean bean, FlDeviceBean beanToSet) throws DaoException
     {
@@ -671,7 +670,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param bean the {@link FlLogBean} object to use
      * @param beanToSet the {@link FlFaceBean} object to associate to the {@link FlLogBean} .
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws DaoException
      */
     public FlFaceBean setReferencedByCompareFace(FlLogBean bean, FlFaceBean beanToSet) throws DaoException
     {
@@ -711,7 +710,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param bean the {@link FlLogBean} object to use
      * @param beanToSet the {@link FlFeatureBean} object to associate to the {@link FlLogBean} .
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws DaoException
      */
     public FlFeatureBean setReferencedByVerifyFeature(FlLogBean bean, FlFeatureBean beanToSet) throws DaoException
     {
@@ -751,7 +750,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param bean the {@link FlLogBean} object to use
      * @param beanToSet the {@link FlPersonBean} object to associate to the {@link FlLogBean} (NOT NULL).
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws DaoException
      */
     public FlPersonBean setReferencedByPersonId(FlLogBean bean, FlPersonBean beanToSet) throws DaoException
     {
@@ -1738,6 +1737,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
      * @param ps the PreparedStatement that will be filled
      * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
+     * @param fillNull wether fill null for null field
      * @return the number of clauses returned
      * @throws DaoException
      */
@@ -2288,10 +2288,10 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     //37-2
     /**
      * bind foreign key listener to foreign table: <br>
-     * DELETE RULE : CASCADE {@code fl_log(person_id)-> fl_person(id)} <br>
-     * DELETE RULE : SET_NULL {@code fl_log(device_id)-> fl_device(id)} <br>
-     * DELETE RULE : SET_NULL {@code fl_log(verify_feature)-> fl_feature(md5)} <br>
-     * DELETE RULE : SET_NULL {@code fl_log(compare_face)-> fl_face(id)} <br>
+     * DELETE RULE : CASCADE {@code fl_log(person_id)- fl_person(id)} <br>
+     * DELETE RULE : SET_NULL {@code fl_log(device_id)- fl_device(id)} <br>
+     * DELETE RULE : SET_NULL {@code fl_log(verify_feature)- fl_feature(md5)} <br>
+     * DELETE RULE : SET_NULL {@code fl_log(compare_face)- fl_face(id)} <br>
      */
     public void bindForeignKeyListenerForDeleteRule(){
         instanceOfFlPersonManager().registerListener(foreignKeyListenerByPersonId);
@@ -2448,7 +2448,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     //46
     /**
      * return a primary key list from {@link FlLogBean} collection
-     * @param array
+     * @param collection
      */
     public List<Integer> toPrimaryKeyList(java.util.Collection<FlLogBean> collection){        
         if(null == collection){

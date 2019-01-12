@@ -360,9 +360,9 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID} -> {@link PermitBean}</li>
-     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID} -> {@link PersonBean}</li>
-     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT} -> {@link PersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID} TO {@link PermitBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID} TO {@link PersonBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT} TO {@link PersonGroupBean}</li>
      * </ul>
      * @param bean the {@link PersonGroupBean} object to use
      * @param ikIndex valid values: {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID},{@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID},{@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT}
@@ -387,9 +387,9 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID} -> {@link PermitBean}</li>
-     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID} -> {@link PersonBean}</li>
-     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT} -> {@link PersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID} TO {@link PermitBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID} TO {@link PersonBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT} TO {@link PersonGroupBean}</li>
      * </ul>
      * @param bean the {@link PersonGroupBean} object to use
      * @param importedBeans the FlPersonGroupBean array to associate to the {@link PersonGroupBean}
@@ -414,12 +414,12 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID} -> {@link PermitBean}</li>
-     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID} -> {@link PersonBean}</li>
-     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT} -> {@link PersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID} TO {@link PermitBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID} TO {@link PersonBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT} TO {@link PersonGroupBean}</li>
      * </ul>
      * @param bean the {@link PersonGroupBean} object to use
-     * @param importedBeans the <T> object to associate to the {@link PersonGroupBean}
+     * @param importedBeans the T object to associate to the {@link PersonGroupBean}
      * @param ikIndex valid values: {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID},{@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID},{@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT}
      * @return importedBeans always
      */
@@ -762,7 +762,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
      * Save the {@link PersonGroupBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link PersonGroupBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(PersonGroupBean , PersonGroupBean , PermitBean[] , PersonBean[] , PersonGroupBean[] )}
      * @return the inserted or updated {@link PersonGroupBean} bean
      */
@@ -801,7 +801,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
      * Save the {@link PersonGroupBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link PersonGroupBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(PersonGroupBean , PersonGroupBean , java.util.Collection , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link PersonGroupBean} bean
      */
@@ -844,12 +844,12 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_PERSON_GROUP_FK_PARENT} -> {@link PersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_FK_PARENT} TO {@link PersonGroupBean}</li>
      * </ul>
      * @param bean the {@link PersonGroupBean} object to use
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_PERSON_GROUP_FK_PARENT}
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return the associated T bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -866,7 +866,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
      * 
      * @param <T> see also {@link #getReferencedBean(PersonGroupBean,int)}
      * @param bean the {@link PersonGroupBean} object to use
-     * @param beanToSet the <T> object to associate to the {@link PersonGroupBean}
+     * @param beanToSet the T object to associate to the {@link PersonGroupBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(PersonGroupBean,int)}
      * @return always beanToSet saved
      */

@@ -193,7 +193,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @param bean the referenced {@link ImageBean}
      * @param importedBeans imported beans from fl_face
      * @return importedBeans always
-     * @see {@link FaceManager#setReferencedByImageMd5(FaceBean, ImageBean)
+     * @see IFaceManager#setReferencedByImageMd5(FaceBean, ImageBean)
      * @throws RuntimeDaoException
      */
     public FaceBean[] setFaceBeansByImageMd5(ImageBean bean , FaceBean[] importedBeans)throws RuntimeDaoException;
@@ -205,7 +205,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @param bean the referenced {@link ImageBean} 
      * @param importedBeans imported beans from fl_face 
      * @return importedBeans always
-     * @see {@link FaceManager#setReferencedByImageMd5(FaceBean, ImageBean)
+     * @see IFaceManager#setReferencedByImageMd5(FaceBean, ImageBean)
      * @throws RuntimeDaoException
      */
     public <C extends java.util.Collection<FaceBean>> C setFaceBeansByImageMd5(ImageBean bean , C importedBeans)throws RuntimeDaoException;
@@ -275,7 +275,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @param bean the referenced {@link ImageBean}
      * @param importedBeans imported beans from fl_person
      * @return importedBeans always
-     * @see {@link PersonManager#setReferencedByImageMd5(PersonBean, ImageBean)
+     * @see IPersonManager#setReferencedByImageMd5(PersonBean, ImageBean)
      * @throws RuntimeDaoException
      */
     public PersonBean[] setPersonBeansByImageMd5(ImageBean bean , PersonBean[] importedBeans)throws RuntimeDaoException;
@@ -287,7 +287,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @param bean the referenced {@link ImageBean} 
      * @param importedBeans imported beans from fl_person 
      * @return importedBeans always
-     * @see {@link PersonManager#setReferencedByImageMd5(PersonBean, ImageBean)
+     * @see IPersonManager#setReferencedByImageMd5(PersonBean, ImageBean)
      * @throws RuntimeDaoException
      */
     public <C extends java.util.Collection<PersonBean>> C setPersonBeansByImageMd5(ImageBean bean , C importedBeans)throws RuntimeDaoException;

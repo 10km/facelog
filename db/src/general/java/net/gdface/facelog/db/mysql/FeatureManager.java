@@ -357,8 +357,8 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5} -> {@link FaceBean}</li>
-     *     <li> {@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5} TO {@link FaceBean}</li>
+     *     <li> {@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE} TO {@link LogBean}</li>
      * </ul>
      * @param bean the {@link FeatureBean} object to use
      * @param ikIndex valid values: {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5},{@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE}
@@ -381,8 +381,8 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5} -> {@link FaceBean}</li>
-     *     <li> {@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5} TO {@link FaceBean}</li>
+     *     <li> {@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE} TO {@link LogBean}</li>
      * </ul>
      * @param bean the {@link FeatureBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link FeatureBean}
@@ -405,11 +405,11 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5} -> {@link FaceBean}</li>
-     *     <li> {@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5} TO {@link FaceBean}</li>
+     *     <li> {@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE} TO {@link LogBean}</li>
      * </ul>
      * @param bean the {@link FeatureBean} object to use
-     * @param importedBeans the <T> object to associate to the {@link FeatureBean}
+     * @param importedBeans the T object to associate to the {@link FeatureBean}
      * @param ikIndex valid values: {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5},{@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE}
      * @return importedBeans always
      */
@@ -666,7 +666,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
      * Save the {@link FeatureBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FeatureBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FeatureBean , PersonBean , FaceBean[] , LogBean[] )}
      * @return the inserted or updated {@link FeatureBean} bean
      */
@@ -701,7 +701,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
      * Save the {@link FeatureBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FeatureBean} bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param inputs referenced beans or imported beans<br>
      *      see also {@link #save(FeatureBean , PersonBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link FeatureBean} bean
      */
@@ -740,12 +740,12 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_FEATURE_FK_PERSON_ID} -> {@link PersonBean}</li>
+     *     <li> {@link Constant#FL_FEATURE_FK_PERSON_ID} TO {@link PersonBean}</li>
      * </ul>
      * @param bean the {@link FeatureBean} object to use
      * @param fkIndex valid values: <br>
      *        {@link Constant#FL_FEATURE_FK_PERSON_ID}
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return the associated T bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -762,7 +762,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
      * 
      * @param <T> see also {@link #getReferencedBean(FeatureBean,int)}
      * @param bean the {@link FeatureBean} object to use
-     * @param beanToSet the <T> object to associate to the {@link FeatureBean}
+     * @param beanToSet the T object to associate to the {@link FeatureBean}
      * @param fkIndex valid values: see also {@link #getReferencedBean(FeatureBean,int)}
      * @return always beanToSet saved
      */

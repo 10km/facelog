@@ -76,8 +76,7 @@ public final class StoreBean
         return this;
     }
     /**
-     * return a new mutable copy of this object.
-     * @return 
+     * @return return a new mutable copy of this object.
      */
     public StoreBean cloneMutable(){
         return clone().immutable(null);
@@ -189,7 +188,7 @@ public final class StoreBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "md5")
@@ -255,7 +254,7 @@ public final class StoreBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "encoding")
@@ -321,7 +320,7 @@ public final class StoreBean
     }
     /** 
      * setter for thrift:swift support<br>
-     * without modification for {@link #modified and {@link #initialized}<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
     @ThriftField(name = "data")
@@ -574,7 +573,7 @@ public final class StoreBean
     }
     /**
      * check whether this bean is a NULL bean 
-     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @return {@code true} if {@link #initialized} be set to zero
      * @see #asNULL()
      */
     public boolean checkNULL(){
@@ -594,8 +593,9 @@ public final class StoreBean
         return source;
     }
     /** 
+     * @param source input list
      * @return replace null instance element with {@code null}
-     * @see {@link #checkNULL()} 
+     * @see #checkNULL()
      */
     public static final List<StoreBean> replaceNullInstance(List<StoreBean> source){
         if(null != source){
@@ -695,7 +695,10 @@ public final class StoreBean
         setValue(columnIDOf(column),value);
     }
     
-    /** return column id for the given field name or negative if {@code column} is invalid name */
+    /**
+     * @param column column name
+     * @return column id for the given field name or negative if {@code column} is invalid name 
+     */
     public static int columnIDOf(String column){
         int index = FL_STORE_FIELDS_LIST.indexOf(column);
         return  index < 0 
@@ -741,8 +744,8 @@ public final class StoreBean
         /** 
          * fill the field : fl_store.md5
          * @param md5 主键,md5检验码
-         * @see {@link StoreBean#getMd5()}
-         * @see {@link StoreBean#setMd5(String)}
+         * @see StoreBean#getMd5()
+         * @see StoreBean#setMd5(String)
          */
         public Builder md5(String md5){
             TEMPLATE.get().setMd5(md5);
@@ -751,8 +754,8 @@ public final class StoreBean
         /** 
          * fill the field : fl_store.encoding
          * @param encoding 编码类型,GBK,UTF8...
-         * @see {@link StoreBean#getEncoding()}
-         * @see {@link StoreBean#setEncoding(String)}
+         * @see StoreBean#getEncoding()
+         * @see StoreBean#setEncoding(String)
          */
         public Builder encoding(String encoding){
             TEMPLATE.get().setEncoding(encoding);
@@ -761,8 +764,8 @@ public final class StoreBean
         /** 
          * fill the field : fl_store.data
          * @param data 二进制数据
-         * @see {@link StoreBean#getData()}
-         * @see {@link StoreBean#setData(java.nio.ByteBuffer)}
+         * @see StoreBean#getData()
+         * @see StoreBean#setData(java.nio.ByteBuffer)
          */
         public Builder data(java.nio.ByteBuffer data){
             TEMPLATE.get().setData(data);

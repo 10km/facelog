@@ -25,7 +25,7 @@ public class DeviceCache extends BaseTableLoadCaching<Integer, DeviceBean> {
     private final BaseTableLoadCaching<String, DeviceBean> macCacher;
     private final BaseTableLoadCaching<String, DeviceBean> serialNoCacher;
     /** constructor<br>
-     * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     * @see BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )
      */
     public DeviceCache(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
         super(updateStrategy,maximumSize, duration, unit);

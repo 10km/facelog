@@ -98,8 +98,7 @@ public  class FlLogBean
         return this;
     }
     /**
-     * return a new mutable copy of this object.
-     * @return 
+     * @return return a new mutable copy of this object.
      */
     public FlLogBean cloneMutable(){
         return clone().immutable(null);
@@ -776,11 +775,17 @@ public  class FlLogBean
      * FOREIGN KEY (device_id) REFERENCES fl_device(id)
      */
     private FlDeviceBean referencedByDeviceId;
-    /** Getter method for {@link #referencedByDeviceId}. */
+    /**
+     * Getter method for {@link #referencedByDeviceId}.
+     * @return FlDeviceBean
+     */
     public FlDeviceBean getReferencedByDeviceId() {
         return this.referencedByDeviceId;
     }
-    /** Setter method for {@link #referencedByDeviceId}. */
+    /**
+     * Setter method for {@link #referencedByDeviceId}.
+     * @param reference FlDeviceBean
+     */
     public void setReferencedByDeviceId(FlDeviceBean reference) {
         this.referencedByDeviceId = reference;
     }
@@ -789,11 +794,17 @@ public  class FlLogBean
      * FOREIGN KEY (compare_face) REFERENCES fl_face(id)
      */
     private FlFaceBean referencedByCompareFace;
-    /** Getter method for {@link #referencedByCompareFace}. */
+    /**
+     * Getter method for {@link #referencedByCompareFace}.
+     * @return FlFaceBean
+     */
     public FlFaceBean getReferencedByCompareFace() {
         return this.referencedByCompareFace;
     }
-    /** Setter method for {@link #referencedByCompareFace}. */
+    /**
+     * Setter method for {@link #referencedByCompareFace}.
+     * @param reference FlFaceBean
+     */
     public void setReferencedByCompareFace(FlFaceBean reference) {
         this.referencedByCompareFace = reference;
     }
@@ -802,11 +813,17 @@ public  class FlLogBean
      * FOREIGN KEY (verify_feature) REFERENCES fl_feature(md5)
      */
     private FlFeatureBean referencedByVerifyFeature;
-    /** Getter method for {@link #referencedByVerifyFeature}. */
+    /**
+     * Getter method for {@link #referencedByVerifyFeature}.
+     * @return FlFeatureBean
+     */
     public FlFeatureBean getReferencedByVerifyFeature() {
         return this.referencedByVerifyFeature;
     }
-    /** Setter method for {@link #referencedByVerifyFeature}. */
+    /**
+     * Setter method for {@link #referencedByVerifyFeature}.
+     * @param reference FlFeatureBean
+     */
     public void setReferencedByVerifyFeature(FlFeatureBean reference) {
         this.referencedByVerifyFeature = reference;
     }
@@ -815,11 +832,17 @@ public  class FlLogBean
      * FOREIGN KEY (person_id) REFERENCES fl_person(id)
      */
     private FlPersonBean referencedByPersonId;
-    /** Getter method for {@link #referencedByPersonId}. */
+    /**
+     * Getter method for {@link #referencedByPersonId}.
+     * @return FlPersonBean
+     */
     public FlPersonBean getReferencedByPersonId() {
         return this.referencedByPersonId;
     }
-    /** Setter method for {@link #referencedByPersonId}. */
+    /**
+     * Setter method for {@link #referencedByPersonId}.
+     * @param reference FlPersonBean
+     */
     public void setReferencedByPersonId(FlPersonBean reference) {
         this.referencedByPersonId = reference;
     }
@@ -1157,7 +1180,7 @@ public  class FlLogBean
     }
     /**
      * check whether this bean is a NULL bean 
-     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @return {@code true} if {@link #initialized} be set to zero
      * @see #asNULL()
      */
     public boolean checkNULL(){
@@ -1177,8 +1200,9 @@ public  class FlLogBean
         return source;
     }
     /** 
+     * @param source input list
      * @return replace null instance element with {@code null}
-     * @see {@link #checkNULL()} 
+     * @see #checkNULL()
      */
     public static final List<FlLogBean> replaceNullInstance(List<FlLogBean> source){
         if(null != source){
@@ -1308,7 +1332,10 @@ public  class FlLogBean
         setValue(columnIDOf(column),value);
     }
     
-    /** return column id for the given field name or negative if {@code column} is invalid name */
+    /**
+     * @param column column name
+     * @return column id for the given field name or negative if {@code column} is invalid name 
+     */
     public static int columnIDOf(String column){
         int index = FL_LOG_FIELDS_LIST.indexOf(column);
         return  index < 0 
@@ -1354,8 +1381,8 @@ public  class FlLogBean
         /** 
          * fill the field : fl_log.id
          * @param id 日志id
-         * @see {@link FlLogBean#getId()}
-         * @see {@link FlLogBean#setId(Integer)}
+         * @see FlLogBean#getId()
+         * @see FlLogBean#setId(Integer)
          */
         public Builder id(Integer id){
             TEMPLATE.get().setId(id);
@@ -1364,8 +1391,8 @@ public  class FlLogBean
         /** 
          * fill the field : fl_log.person_id
          * @param personId 外键,用户id
-         * @see {@link FlLogBean#getPersonId()}
-         * @see {@link FlLogBean#setPersonId(Integer)}
+         * @see FlLogBean#getPersonId()
+         * @see FlLogBean#setPersonId(Integer)
          */
         public Builder personId(Integer personId){
             TEMPLATE.get().setPersonId(personId);
@@ -1374,8 +1401,8 @@ public  class FlLogBean
         /** 
          * fill the field : fl_log.device_id
          * @param deviceId 外键,日志来源设备id
-         * @see {@link FlLogBean#getDeviceId()}
-         * @see {@link FlLogBean#setDeviceId(Integer)}
+         * @see FlLogBean#getDeviceId()
+         * @see FlLogBean#setDeviceId(Integer)
          */
         public Builder deviceId(Integer deviceId){
             TEMPLATE.get().setDeviceId(deviceId);
@@ -1384,8 +1411,8 @@ public  class FlLogBean
         /** 
          * fill the field : fl_log.verify_feature
          * @param verifyFeature 外键,用于验证身份的人脸特征数据MD5 id
-         * @see {@link FlLogBean#getVerifyFeature()}
-         * @see {@link FlLogBean#setVerifyFeature(String)}
+         * @see FlLogBean#getVerifyFeature()
+         * @see FlLogBean#setVerifyFeature(String)
          */
         public Builder verifyFeature(String verifyFeature){
             TEMPLATE.get().setVerifyFeature(verifyFeature);
@@ -1394,8 +1421,8 @@ public  class FlLogBean
         /** 
          * fill the field : fl_log.compare_face
          * @param compareFace 外键,数据库中相似度最高的人脸 id
-         * @see {@link FlLogBean#getCompareFace()}
-         * @see {@link FlLogBean#setCompareFace(Integer)}
+         * @see FlLogBean#getCompareFace()
+         * @see FlLogBean#setCompareFace(Integer)
          */
         public Builder compareFace(Integer compareFace){
             TEMPLATE.get().setCompareFace(compareFace);
@@ -1404,8 +1431,8 @@ public  class FlLogBean
         /** 
          * fill the field : fl_log.verify_status
          * @param verifyStatus 验证状态,NULL,0:允许通过,其他:拒绝
-         * @see {@link FlLogBean#getVerifyStatus()}
-         * @see {@link FlLogBean#setVerifyStatus(Integer)}
+         * @see FlLogBean#getVerifyStatus()
+         * @see FlLogBean#setVerifyStatus(Integer)
          */
         public Builder verifyStatus(Integer verifyStatus){
             TEMPLATE.get().setVerifyStatus(verifyStatus);
@@ -1414,8 +1441,8 @@ public  class FlLogBean
         /** 
          * fill the field : fl_log.similarty
          * @param similarty 验证相似度
-         * @see {@link FlLogBean#getSimilarty()}
-         * @see {@link FlLogBean#setSimilarty(Double)}
+         * @see FlLogBean#getSimilarty()
+         * @see FlLogBean#setSimilarty(Double)
          */
         public Builder similarty(Double similarty){
             TEMPLATE.get().setSimilarty(similarty);
@@ -1424,8 +1451,8 @@ public  class FlLogBean
         /** 
          * fill the field : fl_log.verify_time
          * @param verifyTime 验证时间(可能由前端设备提供时间)
-         * @see {@link FlLogBean#getVerifyTime()}
-         * @see {@link FlLogBean#setVerifyTime(java.util.Date)}
+         * @see FlLogBean#getVerifyTime()
+         * @see FlLogBean#setVerifyTime(java.util.Date)
          */
         public Builder verifyTime(java.util.Date verifyTime){
             TEMPLATE.get().setVerifyTime(verifyTime);
@@ -1434,8 +1461,8 @@ public  class FlLogBean
         /** 
          * fill the field : fl_log.create_time
          * @param createTime 
-         * @see {@link FlLogBean#getCreateTime()}
-         * @see {@link FlLogBean#setCreateTime(java.util.Date)}
+         * @see FlLogBean#getCreateTime()
+         * @see FlLogBean#setCreateTime(java.util.Date)
          */
         public Builder createTime(java.util.Date createTime){
             TEMPLATE.get().setCreateTime(createTime);

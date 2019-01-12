@@ -23,7 +23,7 @@ public class DeviceGroupCache extends BaseTableLoadCaching<Integer, DeviceGroupB
     private final DeviceGroupManager manager = DeviceGroupManager.getInstance();
     
     /** constructor<br>
-     * @see {@link BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     * @see BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )
      */
     public DeviceGroupCache(UpdateStrategy updateStrategy,long maximumSize, long duration, TimeUnit unit) {
         super(updateStrategy,maximumSize, duration, unit);

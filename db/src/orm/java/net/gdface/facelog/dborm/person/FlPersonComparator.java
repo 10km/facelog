@@ -31,7 +31,7 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlPersonComparator(Constant.FL_PERSON_ID_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlPersonComparator(Constant.FL_PERSON_ID_ID, bReverse));</code>
      *
      * @param iType the field from which you want to sort
      * <br>
@@ -64,7 +64,7 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlPersonComparator(Constant.FL_PERSON_ID_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlPersonComparator(Constant.FL_PERSON_ID_ID, bReverse));</code>
      *
      * @param iType the field from which you want to sort.
      * <br>
