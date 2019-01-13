@@ -155,7 +155,7 @@ public class IFaceLogClientAsync implements Constant{
     // 5 SERIVCE PORT : deletePerson
     /**
      * 删除personId指定的人员(person)记录及关联的所有记录
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param personId
      * @param token 访问令牌
      * @return 
@@ -180,7 +180,7 @@ public class IFaceLogClientAsync implements Constant{
     // 6 SERIVCE PORT : deletePersons
     /**
      * 删除personIdList指定的人员(person)记录及关联的所有记录
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param personIdList 人员id列表
      * @param token 访问令牌
      * @return 返回删除的 person 记录数量
@@ -205,7 +205,7 @@ public class IFaceLogClientAsync implements Constant{
     // 7 SERIVCE PORT : deletePersonByPapersNum
     /**
      * 删除papersNum指定的人员(person)记录及关联的所有记录
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param papersNum 证件号码
      * @param token 访问令牌
      * @return 返回删除的 person 记录数量
@@ -231,7 +231,7 @@ public class IFaceLogClientAsync implements Constant{
     // 8 SERIVCE PORT : deletePersonsByPapersNum
     /**
      * 删除papersNum指定的人员(person)记录及关联的所有记录
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param papersNumlist 证件号码列表
      * @param token 访问令牌
      * @return 返回删除的 person 记录数量
@@ -294,7 +294,7 @@ public class IFaceLogClientAsync implements Constant{
     // 11 SERIVCE PORT : disablePerson
     /**
      * 设置 personId 指定的人员为禁止状态
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param personId
      * @param token 访问令牌
      * @see #setPersonExpiryDate(int, long, Token)
@@ -319,7 +319,7 @@ public class IFaceLogClientAsync implements Constant{
     // 12 SERIVCE PORT : setPersonExpiryDate
     /**
      * 修改 personId 指定的人员记录的有效期
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param personId
      * @param expiryDate 失效日期
      * @param token 访问令牌
@@ -373,7 +373,7 @@ public class IFaceLogClientAsync implements Constant{
     // 14 SERIVCE PORT : disablePersonList
     /**
      * 设置 personIdList 指定的人员为禁止状态
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param personIdList 人员id列表
      * @param token 访问令牌
      */
@@ -523,7 +523,7 @@ public class IFaceLogClientAsync implements Constant{
     // 21 SERIVCE PORT : savePersons
     /**
      * 保存人员(person)记录
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param beans
      * @param token 访问令牌
      */
@@ -600,7 +600,7 @@ public class IFaceLogClientAsync implements Constant{
     // 23 SERIVCE PORT : savePersonsWithPhoto
     /**
      * 保存人员信息记录(包含标准照)
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param persons
      * @param token 访问令牌
      * @return 
@@ -655,7 +655,7 @@ public class IFaceLogClientAsync implements Constant{
     // 25 SERIVCE PORT : savePersonWithPhotoAndFeature
     /**
      * 保存人员信息记录
-     * <br>TokenMangement.Enable#DEVICE_ONLY
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param bean
      * @param idPhoto 标准照图像,可为null
      * @param featureBean 用于验证的人脸特征数据对象,可为null
@@ -719,7 +719,7 @@ public class IFaceLogClientAsync implements Constant{
     // 26 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
     /**
      * 保存人员信息记录
-     * <br>TokenMangement.Enable#DEVICE_ONLY
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param bean
      * @param idPhoto 标准照图像,可为null
      * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(ByteBuffer, Integer, List, Token)}
@@ -783,7 +783,7 @@ public class IFaceLogClientAsync implements Constant{
     // 27 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
     /**
      * 保存人员信息记录
-     * <br>TokenMangement.Enable#DEVICE_ONLY
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param bean
      * @param idPhoto 标准照图像,可为null
      * @param feature 用于验证的人脸特征数据,可为null
@@ -851,7 +851,7 @@ public class IFaceLogClientAsync implements Constant{
     }
     // 28 SERIVCE PORT : savePersonFull
     /**
-     * <br>TokenMangement.Enable#DEVICE_ONLY
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param bean 人员信息对象
      * @param idPhoto 标准照图像
      * @param feature 人脸特征数据
@@ -1015,7 +1015,7 @@ public class IFaceLogClientAsync implements Constant{
     // 33 SERIVCE PORT : addLog
     /**
      * 添加一条验证日志记录
-     * <br>TokenMangement.Enable#DEVICE_ONLY
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param bean
      * @param token 访问令牌
      */
@@ -1039,7 +1039,7 @@ public class IFaceLogClientAsync implements Constant{
     // 34 SERIVCE PORT : addLogs
     /**
      * 添加一组验证日志记录(事务存储)
-     * <br>TokenMangement.Enable#DEVICE_ONLY
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param beans
      * @param token 访问令牌
      */
@@ -1301,7 +1301,7 @@ public class IFaceLogClientAsync implements Constant{
     // 44 SERIVCE PORT : addFeature
     /**
      * 增加一个人脸特征记录，如果记录已经存在则抛出异常
-     * <br>TokenMangement.Enable#DEVICE_ONLY
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param feature 特征数据
      * @param personId 关联的人员id(fl_person.id),可为null
      * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
@@ -1360,7 +1360,7 @@ public class IFaceLogClientAsync implements Constant{
     // 45 SERIVCE PORT : addFeatureMulti
     /**
      * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
-     * <br>TokenMangement.Enable#DEVICE_ONLY
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param feature 特征数据
      * @param personId 关联的人员id(fl_person.id),可为null
      * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
@@ -1675,7 +1675,7 @@ public class IFaceLogClientAsync implements Constant{
     // 58 SERIVCE PORT : saveDevice
     /**
      * 保存设备记录
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param deviceBean
      * @param token 访问令牌
      * @return 
@@ -1827,7 +1827,7 @@ public class IFaceLogClientAsync implements Constant{
     // 65 SERIVCE PORT : saveDeviceGroup
     /**
      * 保存设备组记录
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param deviceGroupBean
      * @param token 访问令牌
      * @return 
@@ -1891,7 +1891,7 @@ public class IFaceLogClientAsync implements Constant{
     /**
      * 删除{@code deviceGroupId}指定的设备组<br>
      * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param deviceGroupId
      * @param token 访问令牌
      * @return 返回删除的记录条数
@@ -1996,7 +1996,7 @@ public class IFaceLogClientAsync implements Constant{
     // 73 SERIVCE PORT : savePersonGroup
     /**
      * 保存人员组记录
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param personGroupBean
      * @param token 访问令牌
      * @return 
@@ -2060,7 +2060,7 @@ public class IFaceLogClientAsync implements Constant{
     /**
      * 删除{@code personGroupId}指定的人员组<br>
      * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param personGroupId
      * @param token 访问令牌
      * @return 
@@ -2229,7 +2229,7 @@ public class IFaceLogClientAsync implements Constant{
     /**
      * 添加一个(允许)通行关联记录:允许{@code personGroup}指定的人员组在
      * {@code deviceGroup}指定的设备组下属的所有设备通行
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param deviceGroup
      * @param personGroup
      * @param token 访问令牌
@@ -2257,7 +2257,7 @@ public class IFaceLogClientAsync implements Constant{
     /**
      * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
      * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param deviceGroupId 外键,设备组id
      * @param personGroupId 外键,人员组id
      * @param token 访问令牌
@@ -2285,7 +2285,7 @@ public class IFaceLogClientAsync implements Constant{
     // 86 SERIVCE PORT : deletePermit
     /**
      * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean, Token)}
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param deviceGroup
      * @param personGroup
      * @param token 访问令牌
@@ -2509,7 +2509,7 @@ public class IFaceLogClientAsync implements Constant{
     // 96 SERIVCE PORT : unregisterDevice
     /**
      * (设备端)设备删除
-     * <br>TokenMangement.Enable#DEVICE_ONLY
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param deviceId
      * @param token 设备验证令牌
      */
@@ -2552,7 +2552,7 @@ public class IFaceLogClientAsync implements Constant{
     // 98 SERIVCE PORT : offline
     /**
      * 设备申请离线,删除设备令牌
-     * <br>TokenMangement.Enable#DEVICE_ONLY
+     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
      * @param token 当前持有的令牌
      */
     public ListenableFuture<Void> offline(net.gdface.facelog.client.thrift.Token token){
@@ -2598,7 +2598,7 @@ public class IFaceLogClientAsync implements Constant{
     // 100 SERIVCE PORT : releasePersonToken
     /**
      * 释放人员访问令牌
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param token 当前持有的令牌
      */
     public ListenableFuture<Void> releasePersonToken(net.gdface.facelog.client.thrift.Token token){
@@ -2641,7 +2641,7 @@ public class IFaceLogClientAsync implements Constant{
     // 102 SERIVCE PORT : releaseRootToken
     /**
      * 释放root访问令牌
-     * <br>TokenMangement.Enable#ROOT_ONLY
+     * <br>{@link TokenMangement.Enable#ROOT_ONLY}
      * @param token 当前持有的令牌
      */
     public ListenableFuture<Void> releaseRootToken(net.gdface.facelog.client.thrift.Token token){
@@ -2660,7 +2660,7 @@ public class IFaceLogClientAsync implements Constant{
     // 103 SERIVCE PORT : isValidPassword
     /**
      * 验证用户密码是否匹配
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param userId 用户id字符串,root用户id即为{@link CommonConstant#ROOT_NAME}
      * @param password 用户密码
      * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
@@ -2691,7 +2691,7 @@ public class IFaceLogClientAsync implements Constant{
     // 104 SERIVCE PORT : applyAckChannel
     /**
      * 申请一个唯一的命令响应通道(默认有效期)<br>
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param token 访问令牌
      * @return 
      */
@@ -2711,7 +2711,7 @@ public class IFaceLogClientAsync implements Constant{
     // 105 SERIVCE PORT : applyAckChannelWithDuration
     /**
      * 申请一个唯一的命令响应通道<br>
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param token 访问令牌
      * @param duration 通道有效时间(秒) 大于0有效,否则使用默认的有效期
      * @return 
@@ -2736,7 +2736,7 @@ public class IFaceLogClientAsync implements Constant{
     // 106 SERIVCE PORT : applyCmdSn
     /**
      * 申请一个唯一的命令序列号
-     * <br>TokenMangement.Enable#PERSON_ONLY
+     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
      * @param token 访问令牌
      * @return 
      */
@@ -2824,7 +2824,7 @@ public class IFaceLogClientAsync implements Constant{
     // 110 SERIVCE PORT : getProperty
     /**
      * 返回指定的参数,如果参数没有定义则返回{@code null}
-     * <br>TokenMangement.Enable#ROOT_ONLY
+     * <br>{@link TokenMangement.Enable#ROOT_ONLY}
      * @param key
      * @param token 访问令牌
      * @return 
@@ -2849,7 +2849,7 @@ public class IFaceLogClientAsync implements Constant{
     // 111 SERIVCE PORT : getServiceConfig
     /**
      * 获取服务的所有配置参数
-     * <br>TokenMangement.Enable#ROOT_ONLY
+     * <br>{@link TokenMangement.Enable#ROOT_ONLY}
      * @param token 访问令牌
      * @return 
      */
@@ -2869,7 +2869,7 @@ public class IFaceLogClientAsync implements Constant{
     // 112 SERIVCE PORT : setProperty
     /**
      * 修改/增加指定的配置参数
-     * <br>TokenMangement.Enable#ROOT_ONLY
+     * <br>{@link TokenMangement.Enable#ROOT_ONLY}
      * @param key 参数名
      * @param value 参数值
      * @param token 访问令牌
@@ -2896,7 +2896,7 @@ public class IFaceLogClientAsync implements Constant{
     // 113 SERIVCE PORT : setProperties
     /**
      * 修改一组配置参数
-     * <br>TokenMangement.Enable#ROOT_ONLY
+     * <br>{@link TokenMangement.Enable#ROOT_ONLY}
      * @param config 参数名-参数值对
      * @param token 访问令牌
      */
@@ -2921,7 +2921,7 @@ public class IFaceLogClientAsync implements Constant{
     /**
      * 配置参数持久化<br>
      * 保存修改的配置到自定义配置文件
-     * <br>TokenMangement.Enable#ROOT_ONLY
+     * <br>{@link TokenMangement.Enable#ROOT_ONLY}
      * @param token 访问令牌
      */
     public ListenableFuture<Void> saveServiceConfig(net.gdface.facelog.client.thrift.Token token){
