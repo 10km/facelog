@@ -88,7 +88,7 @@ public class FaceLogImpl extends BaseFaceLog implements ServiceConstant {
 	 * 将封装在{@link RuntimeException}中的{@link ServiceSecurityException}剥离出来封装到{@link ServiceRuntimeException}
 	 * @param e
 	 * @return
-	 * @see {@link #throwServiceException(RuntimeDaoException)}
+	 * @see #throwServiceException(RuntimeException)
 	 */
 	protected static final ServiceRuntimeException wrapServiceRuntimeException(RuntimeException e){
 		try{

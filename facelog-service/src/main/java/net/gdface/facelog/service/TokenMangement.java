@@ -350,7 +350,7 @@ class TokenMangement implements ServiceConstant {
 	 * @param isMd5 
 	 * @return
 	 * @throws ServiceSecurityException
-	 * @see {@link #checkValidPassword(String, String, boolean)}
+	 * @see #checkValidPassword(String, String, boolean)
 	 */
 	protected Token applyPersonToken(int personId, String password, boolean isMd5)
 			throws ServiceSecurityException{
@@ -445,7 +445,7 @@ class TokenMangement implements ServiceConstant {
 	 * @param password
 	 * @param isMd5
 	 * @throws ServiceSecurityException 密码不匹配,{@code userId}无效
-	 * @see {@link #isValidPassword(String, String, boolean)}
+	 * @see #isValidPassword(String, String, boolean)
 	 */
 	protected void checkValidPassword(String userId,String password, boolean isMd5) throws ServiceSecurityException{
 		if(!isValidPassword(userId, password, isMd5)){
@@ -467,7 +467,7 @@ class TokenMangement implements ServiceConstant {
 	}
 	/** 申请一个唯一的命令响应通道 
 	 * @param token
-	 * @param duration 通道有效时间 >0有效,否则使用默认的有效期
+	 * @param duration 通道有效时间 大于0有效,否则使用默认的有效期
 	 * @throws ServiceSecurityException */
 	protected String applyAckChannel(Token token, long duration) throws ServiceSecurityException{
 		Enable.PERSON_ONLY.check(this, token);

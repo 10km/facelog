@@ -13,7 +13,7 @@ import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
-import net.gdface.facelog.db.IPersonGroupManager;
+import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.LogLightBean;
@@ -130,7 +130,7 @@ public abstract class BaseFaceLog{
 	 * @param token 访问令牌
 	 * @return 返回删除的 person 记录数量
 	 * @throws ServiceRuntimeException
-	 * @see {@link #deletePerson(int, Token)}
+	 * @see #deletePerson(int, Token)
 	 */
 	@ThriftMethod
 	public int deletePersonByPapersNum(String papersNum, Token token) throws ServiceRuntimeException {
@@ -396,8 +396,8 @@ public abstract class BaseFaceLog{
 	 * @param feature 人脸特征数据
 	 * @param featureImage 提取特征源图像,为null 时,默认使用idPhoto
 	 * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
+	 * @param deviceId 设备ID
 	 * @param token 访问令牌
-	 * @param deviceBean featureImage来源设备对象
 	 * @return
 	 */
 	@ThriftMethod("savePersonFull")
@@ -712,7 +712,6 @@ public abstract class BaseFaceLog{
 	 * @param imageMD5
 	 * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
 	 * @throws ServiceRuntimeException
-	 * @see {@link #getBinary(String)}
 	 */
 	@ThriftMethod
 	public ByteBuffer getImageBytes(String imageMD5) throws ServiceRuntimeException {
@@ -938,7 +937,7 @@ public abstract class BaseFaceLog{
 	 * @param deviceId
 	 * @return 如果{@code deviceId}无效则返回空表
 	 * @throws ServiceRuntimeException
-	 * @see {@link #listOfParentForDeviceGroup(int)}
+	 * @see #listOfParentForDeviceGroup(int)
 	 */
 	@ThriftMethod
 	public List<Integer> getDeviceGroupsBelongs(int deviceId)throws ServiceRuntimeException{
@@ -1009,7 +1008,7 @@ public abstract class BaseFaceLog{
 	/**
 	 * 返回{@code deviceGroupId}指定的人员组下属的所有人员记录<br>
 	 * 如果没有下属人员记录则返回空表
-	 * @param deviceGroupId
+	 * @param personGroupId
 	 * @return 人员ID列表
 	 * @throws RuntimeDaoException
 	 * @throws ServiceRuntimeException
@@ -1034,7 +1033,7 @@ public abstract class BaseFaceLog{
 	 * @param personId
 	 * @return 如果{@code personId}无效则返回空表
 	 * @throws ServiceRuntimeException
-	 * @see {@link #listOfParentForPersonGroup(int)}
+	 * @see #listOfParentForPersonGroup(int)
 	 */
 	@ThriftMethod
 	public List<Integer> getPersonGroupsBelongs(int personId)throws ServiceRuntimeException{
@@ -1043,7 +1042,7 @@ public abstract class BaseFaceLog{
      * 查询{@code where} SQL条件语句指定的记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
-     * @param numRows 返回记录条数(<0时返回所有记录)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
      * @return 设备组ID列表
      */
 	@ThriftMethod
@@ -1130,12 +1129,12 @@ public abstract class BaseFaceLog{
 	public boolean getPersonPermit(int deviceId,int personId)throws ServiceRuntimeException {
 		return false;
 	}
-	/** 参见 {@link #getGroupPermit(Integer, Integer) } */
+	/** 参见 {@link #getGroupPermit(int, int)} */
 	@ThriftMethod
 	public List<Boolean> getGroupPermits(int deviceId,List<Integer> personGroupIdList)throws ServiceRuntimeException {
 		return null;		
 	}
-	/** 参见 {@link #getPersonPermit(Integer, Integer) } */
+	/** 参见 {@link #getPersonPermit(int, int) } */
 	@ThriftMethod
 	public List<Boolean> getPersonPermits(int deviceId,List<Integer> personIdList)throws ServiceRuntimeException {
 		return null;
@@ -1156,7 +1155,7 @@ public abstract class BaseFaceLog{
      * 查询{@code where} SQL条件语句指定的记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
-     * @param numRows 返回记录条数(<0时返回所有记录)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
      * @return 人员组ID列表
      */
 	@ThriftMethod
@@ -1165,7 +1164,7 @@ public abstract class BaseFaceLog{
     }
     /**
      * 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
-     * @see {@link IPersonGroupManager#Where(String)}
+     * @see TableManager#countWhere(String)
      */
 	@ThriftMethod
     public int countPersonGroupByWhere(String where)throws ServiceRuntimeException{
@@ -1336,7 +1335,7 @@ public abstract class BaseFaceLog{
 	 * 申请一个唯一的命令响应通道<br>
 	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param token 访问令牌
-	 * @param duration 通道有效时间(秒) >0有效,否则使用默认的有效期
+	 * @param duration 通道有效时间(秒) 大于0有效,否则使用默认的有效期
 	 * @return
 	 * @throws ServiceRuntimeException
 	 */

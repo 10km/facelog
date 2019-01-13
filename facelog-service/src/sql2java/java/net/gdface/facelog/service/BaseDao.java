@@ -20,6 +20,8 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import net.gdface.facelog.db.TableManager;
+import net.gdface.facelog.db.BaseBean;
 
 import net.gdface.facelog.db.IDeviceManager;
 import net.gdface.facelog.db.DeviceBean;
@@ -195,7 +197,7 @@ class BaseDao implements CommonConstant {
      * unwrap primary key from {@link DeviceBean}<br>
      * if {@code beans} is {@code null},return a empty list(immutable)
      *
-     * @param {@link DeviceBean} collection
+     * @param beans {@link DeviceBean} collection
      * @return primary key list
      * @see IDeviceManager#toPrimaryKeyList(Collection)
      */
@@ -214,9 +216,9 @@ class BaseDao implements CommonConstant {
      * changes to {@code beans} will be reflected in the returned list and vice versa. 
      *
      * if {@code beans} is {@code null},return a empty list(immutable)
-     * @param {@link DeviceBean} list
+     * @param beans {@link DeviceBean} list
      * @return primary key list 
-     * @see Lists$#transform(List, Function)
+     * @see Lists#transform(List, Function)
      */
     protected List<Integer> daoToPrimaryKeyListFromDevices(List<DeviceBean> beans){
         if(null == beans){
@@ -240,7 +242,7 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see IDeviceManager#existsPrimaryKey(DeviceBean)
+     * @see IDeviceManager#existsPrimaryKey(Object...)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsDevice(DeviceBean bean)
@@ -292,7 +294,7 @@ class BaseDao implements CommonConstant {
     //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
-     * @see IDeviceManager#checkDuplicate(DeviceBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      */
@@ -309,7 +311,7 @@ class BaseDao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
      * @param id 设备id 
-     * @see IDeviceManager#checkDuplicate(DeviceBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code idOfDevice} 
      * @throws RuntimeDaoException
@@ -327,7 +329,7 @@ class BaseDao implements CommonConstant {
      * 返回外键(fl_image.device_id)引用指定记录(fl_device.id)的所有{@code fl_image}记录
      * 
      * @param idOfDevice 设备id 
-     * @see {@link IDeviceManager#getImageBeansByDeviceIdAsList(Integer)}
+     * @see IDeviceManager#getImageBeansByDeviceIdAsList(Integer)
      * @throws RuntimeDaoException
      */
     protected List<ImageBean> daoGetImageBeansByDeviceIdOnDevice(Integer idOfDevice)
@@ -351,7 +353,7 @@ class BaseDao implements CommonConstant {
      * 返回外键(fl_log.device_id)引用指定记录(fl_device.id)的所有{@code fl_log}记录
      * 
      * @param idOfDevice 设备id 
-     * @see {@link IDeviceManager#getLogBeansByDeviceIdAsList(Integer)}
+     * @see IDeviceManager#getLogBeansByDeviceIdAsList(Integer)
      * @throws RuntimeDaoException
      */
     protected List<LogBean> daoGetLogBeansByDeviceIdOnDevice(Integer idOfDevice)
@@ -412,7 +414,7 @@ class BaseDao implements CommonConstant {
             }};
     //14
     /** 
-     * 参见 {@link IDeviceManager#save(DeviceBean)}
+     * 参见 {@link TableManager#save(BaseBean)}
      * @throws RuntimeDaoException
      */
     protected DeviceBean daoSaveDevice(DeviceBean deviceBean)
@@ -454,7 +456,7 @@ class BaseDao implements CommonConstant {
     }
     //12-3-5
     /** 
-     * {@link #daoSaveDevice(Collection)}的事务化版本
+     * {@link #daoSaveDevices(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
     protected Collection<DeviceBean> daoSaveDevicesAsTransaction(final Collection<DeviceBean> beans)
@@ -470,7 +472,7 @@ class BaseDao implements CommonConstant {
      * 查询{@code where} SQL条件语句指定的 fl_device 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
-     * @param numRows 返回记录条数(<0时返回所有记录)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
      * @see IDeviceManager#loadByWhereAsList(String,int[],int,int)
      * @throws RuntimeDaoException
      */
@@ -491,7 +493,7 @@ class BaseDao implements CommonConstant {
     //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_device 记录总数
-     * @see IDeviceManager#Where(String)
+     * @see TableManager#countWhere(String)
      * @throws RuntimeDaoException
      */
     protected int daoCountDeviceByWhere(String where)
@@ -722,7 +724,7 @@ class BaseDao implements CommonConstant {
      * unwrap primary key from {@link DeviceGroupBean}<br>
      * if {@code beans} is {@code null},return a empty list(immutable)
      *
-     * @param {@link DeviceGroupBean} collection
+     * @param beans {@link DeviceGroupBean} collection
      * @return primary key list
      * @see IDeviceGroupManager#toPrimaryKeyList(Collection)
      */
@@ -741,9 +743,9 @@ class BaseDao implements CommonConstant {
      * changes to {@code beans} will be reflected in the returned list and vice versa. 
      *
      * if {@code beans} is {@code null},return a empty list(immutable)
-     * @param {@link DeviceGroupBean} list
+     * @param beans {@link DeviceGroupBean} list
      * @return primary key list 
-     * @see Lists$#transform(List, Function)
+     * @see Lists#transform(List, Function)
      */
     protected List<Integer> daoToPrimaryKeyListFromDeviceGroups(List<DeviceGroupBean> beans){
         if(null == beans){
@@ -767,7 +769,7 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see IDeviceGroupManager#existsPrimaryKey(DeviceGroupBean)
+     * @see IDeviceGroupManager#existsPrimaryKey(Object...)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsDeviceGroup(DeviceGroupBean bean)
@@ -819,7 +821,7 @@ class BaseDao implements CommonConstant {
     //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
-     * @see IDeviceGroupManager#checkDuplicate(DeviceGroupBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      */
@@ -836,7 +838,7 @@ class BaseDao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
      * @param id 设备组id 
-     * @see IDeviceGroupManager#checkDuplicate(DeviceGroupBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code idOfDeviceGroup} 
      * @throws RuntimeDaoException
@@ -854,7 +856,7 @@ class BaseDao implements CommonConstant {
      * 返回属于{@code idOfDeviceGroup}指定组的所有{@code fl_device}记录
      * 
      * @param idOfDeviceGroup 设备组id 
-     * @see {@link IDeviceGroupManager#getDeviceBeansByGroupIdAsList(Integer)}
+     * @see IDeviceGroupManager#getDeviceBeansByGroupIdAsList(Integer)
      * @throws RuntimeDaoException
      */
     protected List<DeviceBean> daoGetDevicesOfGroup(Integer idOfDeviceGroup)
@@ -878,7 +880,7 @@ class BaseDao implements CommonConstant {
      * 返回{@code idOfDeviceGroup)}指定的组下的所有子节点,如果没有子节点则返回空表
      * 
      * @param idOfDeviceGroup 设备组id 
-     * @see {@link IDeviceGroupManager#getDeviceGroupBeansByParentAsList(Integer)}
+     * @see IDeviceGroupManager#getDeviceGroupBeansByParentAsList(Integer)
      * @throws RuntimeDaoException
      */
     protected List<DeviceGroupBean> daoGetSubDeviceGroup(Integer idOfDeviceGroup)
@@ -902,7 +904,7 @@ class BaseDao implements CommonConstant {
      * 返回外键(fl_permit.device_group_id)引用指定记录(fl_device_group.id)的所有{@code fl_permit}记录
      * 
      * @param idOfDeviceGroup 设备组id 
-     * @see {@link IDeviceGroupManager#getPermitBeansByDeviceGroupIdAsList(Integer)}
+     * @see IDeviceGroupManager#getPermitBeansByDeviceGroupIdAsList(Integer)
      * @throws RuntimeDaoException
      */
     protected List<PermitBean> daoGetPermitBeansByDeviceGroupIdOnDeviceGroup(Integer idOfDeviceGroup)
@@ -1006,7 +1008,7 @@ class BaseDao implements CommonConstant {
     }
     //14
     /** 
-     * 参见 {@link IDeviceGroupManager#save(DeviceGroupBean)}
+     * 参见 {@link TableManager#save(BaseBean)}
      * @throws RuntimeDaoException
      */
     protected DeviceGroupBean daoSaveDeviceGroup(DeviceGroupBean deviceGroupBean)
@@ -1048,7 +1050,7 @@ class BaseDao implements CommonConstant {
     }
     //12-3-5
     /** 
-     * {@link #daoSaveDeviceGroup(Collection)}的事务化版本
+     * {@link #daoSaveDeviceGroups(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
     protected Collection<DeviceGroupBean> daoSaveDeviceGroupsAsTransaction(final Collection<DeviceGroupBean> beans)
@@ -1064,7 +1066,7 @@ class BaseDao implements CommonConstant {
      * 查询{@code where} SQL条件语句指定的 fl_device_group 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
-     * @param numRows 返回记录条数(<0时返回所有记录)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
      * @see IDeviceGroupManager#loadByWhereAsList(String,int[],int,int)
      * @throws RuntimeDaoException
      */
@@ -1085,7 +1087,7 @@ class BaseDao implements CommonConstant {
     //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_device_group 记录总数
-     * @see IDeviceGroupManager#Where(String)
+     * @see TableManager#countWhere(String)
      * @throws RuntimeDaoException
      */
     protected int daoCountDeviceGroupByWhere(String where)
@@ -1266,7 +1268,7 @@ class BaseDao implements CommonConstant {
      * unwrap primary key from {@link PersonBean}<br>
      * if {@code beans} is {@code null},return a empty list(immutable)
      *
-     * @param {@link PersonBean} collection
+     * @param beans {@link PersonBean} collection
      * @return primary key list
      * @see IPersonManager#toPrimaryKeyList(Collection)
      */
@@ -1285,9 +1287,9 @@ class BaseDao implements CommonConstant {
      * changes to {@code beans} will be reflected in the returned list and vice versa. 
      *
      * if {@code beans} is {@code null},return a empty list(immutable)
-     * @param {@link PersonBean} list
+     * @param beans {@link PersonBean} list
      * @return primary key list 
-     * @see Lists$#transform(List, Function)
+     * @see Lists#transform(List, Function)
      */
     protected List<Integer> daoToPrimaryKeyListFromPersons(List<PersonBean> beans){
         if(null == beans){
@@ -1311,7 +1313,7 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see IPersonManager#existsPrimaryKey(PersonBean)
+     * @see IPersonManager#existsPrimaryKey(Object...)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsPerson(PersonBean bean)
@@ -1363,7 +1365,7 @@ class BaseDao implements CommonConstant {
     //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
-     * @see IPersonManager#checkDuplicate(PersonBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      */
@@ -1380,7 +1382,7 @@ class BaseDao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
      * @param id 用户id 
-     * @see IPersonManager#checkDuplicate(PersonBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code idOfPerson} 
      * @throws RuntimeDaoException
@@ -1398,7 +1400,7 @@ class BaseDao implements CommonConstant {
      * 返回外键(fl_feature.person_id)引用指定记录(fl_person.id)的所有{@code fl_feature}记录
      * 
      * @param idOfPerson 用户id 
-     * @see {@link IPersonManager#getFeatureBeansByPersonIdAsList(Integer)}
+     * @see IPersonManager#getFeatureBeansByPersonIdAsList(Integer)
      * @throws RuntimeDaoException
      */
     protected List<FeatureBean> daoGetFeatureBeansByPersonIdOnPerson(Integer idOfPerson)
@@ -1422,7 +1424,7 @@ class BaseDao implements CommonConstant {
      * 返回外键(fl_log.person_id)引用指定记录(fl_person.id)的所有{@code fl_log}记录
      * 
      * @param idOfPerson 用户id 
-     * @see {@link IPersonManager#getLogBeansByPersonIdAsList(Integer)}
+     * @see IPersonManager#getLogBeansByPersonIdAsList(Integer)
      * @throws RuntimeDaoException
      */
     protected List<LogBean> daoGetLogBeansByPersonIdOnPerson(Integer idOfPerson)
@@ -1523,7 +1525,7 @@ class BaseDao implements CommonConstant {
             }};
     //14
     /** 
-     * 参见 {@link IPersonManager#save(PersonBean)}
+     * 参见 {@link TableManager#save(BaseBean)}
      * @throws RuntimeDaoException
      */
     protected PersonBean daoSavePerson(PersonBean personBean)
@@ -1567,7 +1569,7 @@ class BaseDao implements CommonConstant {
     }
     //12-3-5
     /** 
-     * {@link #daoSavePerson(Collection)}的事务化版本
+     * {@link #daoSavePersons(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
     protected Collection<PersonBean> daoSavePersonsAsTransaction(final Collection<PersonBean> beans)
@@ -1583,7 +1585,7 @@ class BaseDao implements CommonConstant {
      * 查询{@code where} SQL条件语句指定的 fl_person 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
-     * @param numRows 返回记录条数(<0时返回所有记录)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
      * @see IPersonManager#loadByWhereAsList(String,int[],int,int)
      * @throws RuntimeDaoException
      */
@@ -1604,7 +1606,7 @@ class BaseDao implements CommonConstant {
     //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_person 记录总数
-     * @see IPersonManager#Where(String)
+     * @see TableManager#countWhere(String)
      * @throws RuntimeDaoException
      */
     protected int daoCountPersonByWhere(String where)
@@ -1835,7 +1837,7 @@ class BaseDao implements CommonConstant {
      * unwrap primary key from {@link PersonGroupBean}<br>
      * if {@code beans} is {@code null},return a empty list(immutable)
      *
-     * @param {@link PersonGroupBean} collection
+     * @param beans {@link PersonGroupBean} collection
      * @return primary key list
      * @see IPersonGroupManager#toPrimaryKeyList(Collection)
      */
@@ -1854,9 +1856,9 @@ class BaseDao implements CommonConstant {
      * changes to {@code beans} will be reflected in the returned list and vice versa. 
      *
      * if {@code beans} is {@code null},return a empty list(immutable)
-     * @param {@link PersonGroupBean} list
+     * @param beans {@link PersonGroupBean} list
      * @return primary key list 
-     * @see Lists$#transform(List, Function)
+     * @see Lists#transform(List, Function)
      */
     protected List<Integer> daoToPrimaryKeyListFromPersonGroups(List<PersonGroupBean> beans){
         if(null == beans){
@@ -1880,7 +1882,7 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see IPersonGroupManager#existsPrimaryKey(PersonGroupBean)
+     * @see IPersonGroupManager#existsPrimaryKey(Object...)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsPersonGroup(PersonGroupBean bean)
@@ -1932,7 +1934,7 @@ class BaseDao implements CommonConstant {
     //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
-     * @see IPersonGroupManager#checkDuplicate(PersonGroupBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      */
@@ -1949,7 +1951,7 @@ class BaseDao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
      * @param id 用户组id 
-     * @see IPersonGroupManager#checkDuplicate(PersonGroupBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code idOfPersonGroup} 
      * @throws RuntimeDaoException
@@ -1967,7 +1969,7 @@ class BaseDao implements CommonConstant {
      * 返回外键(fl_permit.person_group_id)引用指定记录(fl_person_group.id)的所有{@code fl_permit}记录
      * 
      * @param idOfPersonGroup 用户组id 
-     * @see {@link IPersonGroupManager#getPermitBeansByPersonGroupIdAsList(Integer)}
+     * @see IPersonGroupManager#getPermitBeansByPersonGroupIdAsList(Integer)
      * @throws RuntimeDaoException
      */
     protected List<PermitBean> daoGetPermitBeansByPersonGroupIdOnPersonGroup(Integer idOfPersonGroup)
@@ -1991,7 +1993,7 @@ class BaseDao implements CommonConstant {
      * 返回属于{@code idOfPersonGroup}指定组的所有{@code fl_person}记录
      * 
      * @param idOfPersonGroup 用户组id 
-     * @see {@link IPersonGroupManager#getPersonBeansByGroupIdAsList(Integer)}
+     * @see IPersonGroupManager#getPersonBeansByGroupIdAsList(Integer)
      * @throws RuntimeDaoException
      */
     protected List<PersonBean> daoGetPersonsOfGroup(Integer idOfPersonGroup)
@@ -2015,7 +2017,7 @@ class BaseDao implements CommonConstant {
      * 返回{@code idOfPersonGroup)}指定的组下的所有子节点,如果没有子节点则返回空表
      * 
      * @param idOfPersonGroup 用户组id 
-     * @see {@link IPersonGroupManager#getPersonGroupBeansByParentAsList(Integer)}
+     * @see IPersonGroupManager#getPersonGroupBeansByParentAsList(Integer)
      * @throws RuntimeDaoException
      */
     protected List<PersonGroupBean> daoGetSubPersonGroup(Integer idOfPersonGroup)
@@ -2119,7 +2121,7 @@ class BaseDao implements CommonConstant {
     }
     //14
     /** 
-     * 参见 {@link IPersonGroupManager#save(PersonGroupBean)}
+     * 参见 {@link TableManager#save(BaseBean)}
      * @throws RuntimeDaoException
      */
     protected PersonGroupBean daoSavePersonGroup(PersonGroupBean personGroupBean)
@@ -2161,7 +2163,7 @@ class BaseDao implements CommonConstant {
     }
     //12-3-5
     /** 
-     * {@link #daoSavePersonGroup(Collection)}的事务化版本
+     * {@link #daoSavePersonGroups(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
     protected Collection<PersonGroupBean> daoSavePersonGroupsAsTransaction(final Collection<PersonGroupBean> beans)
@@ -2177,7 +2179,7 @@ class BaseDao implements CommonConstant {
      * 查询{@code where} SQL条件语句指定的 fl_person_group 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
-     * @param numRows 返回记录条数(<0时返回所有记录)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
      * @see IPersonGroupManager#loadByWhereAsList(String,int[],int,int)
      * @throws RuntimeDaoException
      */
@@ -2198,7 +2200,7 @@ class BaseDao implements CommonConstant {
     //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
-     * @see IPersonGroupManager#Where(String)
+     * @see TableManager#countWhere(String)
      * @throws RuntimeDaoException
      */
     protected int daoCountPersonGroupByWhere(String where)
@@ -2379,7 +2381,7 @@ class BaseDao implements CommonConstant {
      * unwrap primary key from {@link FaceBean}<br>
      * if {@code beans} is {@code null},return a empty list(immutable)
      *
-     * @param {@link FaceBean} collection
+     * @param beans {@link FaceBean} collection
      * @return primary key list
      * @see IFaceManager#toPrimaryKeyList(Collection)
      */
@@ -2398,9 +2400,9 @@ class BaseDao implements CommonConstant {
      * changes to {@code beans} will be reflected in the returned list and vice versa. 
      *
      * if {@code beans} is {@code null},return a empty list(immutable)
-     * @param {@link FaceBean} list
+     * @param beans {@link FaceBean} list
      * @return primary key list 
-     * @see Lists$#transform(List, Function)
+     * @see Lists#transform(List, Function)
      */
     protected List<Integer> daoToPrimaryKeyListFromFaces(List<FaceBean> beans){
         if(null == beans){
@@ -2424,7 +2426,7 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see IFaceManager#existsPrimaryKey(FaceBean)
+     * @see IFaceManager#existsPrimaryKey(Object...)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsFace(FaceBean bean)
@@ -2476,7 +2478,7 @@ class BaseDao implements CommonConstant {
     //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
-     * @see IFaceManager#checkDuplicate(FaceBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      */
@@ -2493,7 +2495,7 @@ class BaseDao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
      * @param id 主键 
-     * @see IFaceManager#checkDuplicate(FaceBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code idOfFace} 
      * @throws RuntimeDaoException
@@ -2511,7 +2513,7 @@ class BaseDao implements CommonConstant {
      * 返回外键(fl_log.compare_face)引用指定记录(fl_face.id)的所有{@code fl_log}记录
      * 
      * @param idOfFace 主键 
-     * @see {@link IFaceManager#getLogBeansByCompareFaceAsList(Integer)}
+     * @see IFaceManager#getLogBeansByCompareFaceAsList(Integer)
      * @throws RuntimeDaoException
      */
     protected List<LogBean> daoGetLogBeansByCompareFaceOnFace(Integer idOfFace)
@@ -2615,8 +2617,8 @@ class BaseDao implements CommonConstant {
      * 添加新记录<br>
      * fl_face 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link FaceBean#isNew()}返回{@code false},则抛出异常
      * @param faceBean 要添加的新记录
-     * @see IFaceManager#save(FaceBean)
-     * @see IFaceManager#checkDuplicate(FaceBean)
+     * @see TableManager#save(BaseBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code faceBean.isNew()} is {@code false}
@@ -2631,7 +2633,7 @@ class BaseDao implements CommonConstant {
      * 添加新记录(同步保存)<br>
      * fl_face 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link FaceBean#isNew()}返回{@code false},则抛出异常
      * see also {@link IFaceManager#save(FaceBean , FeatureBean, ImageBean , Collection )}<br>
-     * @see IFaceManager#checkDuplicate(FaceBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code faceBean.isNew()} is {@code false}
@@ -2666,7 +2668,7 @@ class BaseDao implements CommonConstant {
     }
     //12-3-5
     /** 
-     * {@link #daoAddFace(Collection)}的事务化版本
+     * {@link #daoAddFaces(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
     protected Collection<FaceBean> daoAddFacesAsTransaction(final Collection<FaceBean> beans)
@@ -2682,7 +2684,7 @@ class BaseDao implements CommonConstant {
      * 查询{@code where} SQL条件语句指定的 fl_face 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
-     * @param numRows 返回记录条数(<0时返回所有记录)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
      * @see IFaceManager#loadByWhereAsList(String,int[],int,int)
      * @throws RuntimeDaoException
      */
@@ -2703,7 +2705,7 @@ class BaseDao implements CommonConstant {
     //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_face 记录总数
-     * @see IFaceManager#Where(String)
+     * @see TableManager#countWhere(String)
      * @throws RuntimeDaoException
      */
     protected int daoCountFaceByWhere(String where)
@@ -2798,7 +2800,7 @@ class BaseDao implements CommonConstant {
      * unwrap primary key from {@link FeatureBean}<br>
      * if {@code beans} is {@code null},return a empty list(immutable)
      *
-     * @param {@link FeatureBean} collection
+     * @param beans {@link FeatureBean} collection
      * @return primary key list
      * @see IFeatureManager#toPrimaryKeyList(Collection)
      */
@@ -2817,9 +2819,9 @@ class BaseDao implements CommonConstant {
      * changes to {@code beans} will be reflected in the returned list and vice versa. 
      *
      * if {@code beans} is {@code null},return a empty list(immutable)
-     * @param {@link FeatureBean} list
+     * @param beans {@link FeatureBean} list
      * @return primary key list 
-     * @see Lists$#transform(List, Function)
+     * @see Lists#transform(List, Function)
      */
     protected List<String> daoToPrimaryKeyListFromFeatures(List<FeatureBean> beans){
         if(null == beans){
@@ -2843,7 +2845,7 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see IFeatureManager#existsPrimaryKey(FeatureBean)
+     * @see IFeatureManager#existsPrimaryKey(Object...)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsFeature(FeatureBean bean)
@@ -2895,7 +2897,7 @@ class BaseDao implements CommonConstant {
     //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
-     * @see IFeatureManager#checkDuplicate(FeatureBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      */
@@ -2912,7 +2914,7 @@ class BaseDao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
      * @param md5 主键,特征码md5校验码 
-     * @see IFeatureManager#checkDuplicate(FeatureBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code md5OfFeature} 
      * @throws RuntimeDaoException
@@ -2930,7 +2932,7 @@ class BaseDao implements CommonConstant {
      * 返回外键(fl_face.feature_md5)引用指定记录(fl_feature.md5)的所有{@code fl_face}记录
      * 
      * @param md5OfFeature 主键,特征码md5校验码 
-     * @see {@link IFeatureManager#getFaceBeansByFeatureMd5AsList(String)}
+     * @see IFeatureManager#getFaceBeansByFeatureMd5AsList(String)
      * @throws RuntimeDaoException
      */
     protected List<FaceBean> daoGetFaceBeansByFeatureMd5OnFeature(String md5OfFeature)
@@ -2954,7 +2956,7 @@ class BaseDao implements CommonConstant {
      * 返回外键(fl_log.verify_feature)引用指定记录(fl_feature.md5)的所有{@code fl_log}记录
      * 
      * @param md5OfFeature 主键,特征码md5校验码 
-     * @see {@link IFeatureManager#getLogBeansByVerifyFeatureAsList(String)}
+     * @see IFeatureManager#getLogBeansByVerifyFeatureAsList(String)
      * @throws RuntimeDaoException
      */
     protected List<LogBean> daoGetLogBeansByVerifyFeatureOnFeature(String md5OfFeature)
@@ -3018,8 +3020,8 @@ class BaseDao implements CommonConstant {
      * 添加新记录<br>
      * fl_feature 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link FeatureBean#isNew()}返回{@code false},则抛出异常
      * @param featureBean 要添加的新记录
-     * @see IFeatureManager#save(FeatureBean)
-     * @see IFeatureManager#checkDuplicate(FeatureBean)
+     * @see TableManager#save(BaseBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code featureBean.isNew()} is {@code false}
@@ -3034,7 +3036,7 @@ class BaseDao implements CommonConstant {
      * 添加新记录(同步保存)<br>
      * fl_feature 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link FeatureBean#isNew()}返回{@code false},则抛出异常
      * see also {@link IFeatureManager#save(FeatureBean , PersonBean , Collection, Collection )}<br>
-     * @see IFeatureManager#checkDuplicate(FeatureBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code featureBean.isNew()} is {@code false}
@@ -3069,7 +3071,7 @@ class BaseDao implements CommonConstant {
     }
     //12-3-5
     /** 
-     * {@link #daoAddFeature(Collection)}的事务化版本
+     * {@link #daoAddFeatures(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
     protected Collection<FeatureBean> daoAddFeaturesAsTransaction(final Collection<FeatureBean> beans)
@@ -3085,7 +3087,7 @@ class BaseDao implements CommonConstant {
      * 查询{@code where} SQL条件语句指定的 fl_feature 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
-     * @param numRows 返回记录条数(<0时返回所有记录)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
      * @see IFeatureManager#loadByWhereAsList(String,int[],int,int)
      * @throws RuntimeDaoException
      */
@@ -3106,7 +3108,7 @@ class BaseDao implements CommonConstant {
     //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_feature 记录总数
-     * @see IFeatureManager#Where(String)
+     * @see TableManager#countWhere(String)
      * @throws RuntimeDaoException
      */
     protected int daoCountFeatureByWhere(String where)
@@ -3244,7 +3246,7 @@ class BaseDao implements CommonConstant {
      * unwrap primary key from {@link ImageBean}<br>
      * if {@code beans} is {@code null},return a empty list(immutable)
      *
-     * @param {@link ImageBean} collection
+     * @param beans {@link ImageBean} collection
      * @return primary key list
      * @see IImageManager#toPrimaryKeyList(Collection)
      */
@@ -3263,9 +3265,9 @@ class BaseDao implements CommonConstant {
      * changes to {@code beans} will be reflected in the returned list and vice versa. 
      *
      * if {@code beans} is {@code null},return a empty list(immutable)
-     * @param {@link ImageBean} list
+     * @param beans {@link ImageBean} list
      * @return primary key list 
-     * @see Lists$#transform(List, Function)
+     * @see Lists#transform(List, Function)
      */
     protected List<String> daoToPrimaryKeyListFromImages(List<ImageBean> beans){
         if(null == beans){
@@ -3289,7 +3291,7 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see IImageManager#existsPrimaryKey(ImageBean)
+     * @see IImageManager#existsPrimaryKey(Object...)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsImage(ImageBean bean)
@@ -3341,7 +3343,7 @@ class BaseDao implements CommonConstant {
     //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
-     * @see IImageManager#checkDuplicate(ImageBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      */
@@ -3358,7 +3360,7 @@ class BaseDao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
      * @param md5 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
-     * @see IImageManager#checkDuplicate(ImageBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code md5OfImage} 
      * @throws RuntimeDaoException
@@ -3376,7 +3378,7 @@ class BaseDao implements CommonConstant {
      * 返回外键(fl_face.image_md5)引用指定记录(fl_image.md5)的所有{@code fl_face}记录
      * 
      * @param md5OfImage 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
-     * @see {@link IImageManager#getFaceBeansByImageMd5AsList(String)}
+     * @see IImageManager#getFaceBeansByImageMd5AsList(String)
      * @throws RuntimeDaoException
      */
     protected List<FaceBean> daoGetFaceBeansByImageMd5OnImage(String md5OfImage)
@@ -3400,7 +3402,7 @@ class BaseDao implements CommonConstant {
      * 返回外键(fl_person.image_md5)引用指定记录(fl_image.md5)的所有{@code fl_person}记录
      * 
      * @param md5OfImage 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
-     * @see {@link IImageManager#getPersonBeansByImageMd5AsList(String)}
+     * @see IImageManager#getPersonBeansByImageMd5AsList(String)
      * @throws RuntimeDaoException
      */
     protected List<PersonBean> daoGetPersonBeansByImageMd5OnImage(String md5OfImage)
@@ -3464,8 +3466,8 @@ class BaseDao implements CommonConstant {
      * 添加新记录<br>
      * fl_image 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link ImageBean#isNew()}返回{@code false},则抛出异常
      * @param imageBean 要添加的新记录
-     * @see IImageManager#save(ImageBean)
-     * @see IImageManager#checkDuplicate(ImageBean)
+     * @see TableManager#save(BaseBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code imageBean.isNew()} is {@code false}
@@ -3480,7 +3482,7 @@ class BaseDao implements CommonConstant {
      * 添加新记录(同步保存)<br>
      * fl_image 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link ImageBean#isNew()}返回{@code false},则抛出异常
      * see also {@link IImageManager#save(ImageBean , DeviceBean , Collection, Collection )}<br>
-     * @see IImageManager#checkDuplicate(ImageBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code imageBean.isNew()} is {@code false}
@@ -3515,7 +3517,7 @@ class BaseDao implements CommonConstant {
     }
     //12-3-5
     /** 
-     * {@link #daoAddImage(Collection)}的事务化版本
+     * {@link #daoAddImages(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
     protected Collection<ImageBean> daoAddImagesAsTransaction(final Collection<ImageBean> beans)
@@ -3531,7 +3533,7 @@ class BaseDao implements CommonConstant {
      * 查询{@code where} SQL条件语句指定的 fl_image 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
-     * @param numRows 返回记录条数(<0时返回所有记录)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
      * @see IImageManager#loadByWhereAsList(String,int[],int,int)
      * @throws RuntimeDaoException
      */
@@ -3552,7 +3554,7 @@ class BaseDao implements CommonConstant {
     //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_image 记录总数
-     * @see IImageManager#Where(String)
+     * @see TableManager#countWhere(String)
      * @throws RuntimeDaoException
      */
     protected int daoCountImageByWhere(String where)
@@ -3647,7 +3649,7 @@ class BaseDao implements CommonConstant {
      * unwrap primary key from {@link LogBean}<br>
      * if {@code beans} is {@code null},return a empty list(immutable)
      *
-     * @param {@link LogBean} collection
+     * @param beans {@link LogBean} collection
      * @return primary key list
      * @see ILogManager#toPrimaryKeyList(Collection)
      */
@@ -3666,9 +3668,9 @@ class BaseDao implements CommonConstant {
      * changes to {@code beans} will be reflected in the returned list and vice versa. 
      *
      * if {@code beans} is {@code null},return a empty list(immutable)
-     * @param {@link LogBean} list
+     * @param beans {@link LogBean} list
      * @return primary key list 
-     * @see Lists$#transform(List, Function)
+     * @see Lists#transform(List, Function)
      */
     protected List<Integer> daoToPrimaryKeyListFromLogs(List<LogBean> beans){
         if(null == beans){
@@ -3692,7 +3694,7 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see ILogManager#existsPrimaryKey(LogBean)
+     * @see ILogManager#existsPrimaryKey(Object...)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsLog(LogBean bean)
@@ -3744,7 +3746,7 @@ class BaseDao implements CommonConstant {
     //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
-     * @see ILogManager#checkDuplicate(LogBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      */
@@ -3761,7 +3763,7 @@ class BaseDao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
      * @param id 日志id 
-     * @see ILogManager#checkDuplicate(LogBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code idOfLog} 
      * @throws RuntimeDaoException
@@ -3939,8 +3941,8 @@ class BaseDao implements CommonConstant {
      * 添加新记录<br>
      * fl_log 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link LogBean#isNew()}返回{@code false},则抛出异常
      * @param logBean 要添加的新记录
-     * @see ILogManager#save(LogBean)
-     * @see ILogManager#checkDuplicate(LogBean)
+     * @see TableManager#save(BaseBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code logBean.isNew()} is {@code false}
@@ -3955,7 +3957,7 @@ class BaseDao implements CommonConstant {
      * 添加新记录(同步保存)<br>
      * fl_log 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link LogBean#isNew()}返回{@code false},则抛出异常
      * see also {@link ILogManager#save(LogBean , DeviceBean, FaceBean, FeatureBean, PersonBean  )}<br>
-     * @see ILogManager#checkDuplicate(LogBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code logBean.isNew()} is {@code false}
@@ -3994,7 +3996,7 @@ class BaseDao implements CommonConstant {
     }
     //12-3-5
     /** 
-     * {@link #daoAddLog(Collection)}的事务化版本
+     * {@link #daoAddLogs(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
     protected Collection<LogBean> daoAddLogsAsTransaction(final Collection<LogBean> beans)
@@ -4010,7 +4012,7 @@ class BaseDao implements CommonConstant {
      * 查询{@code where} SQL条件语句指定的 fl_log 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
-     * @param numRows 返回记录条数(<0时返回所有记录)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
      * @see ILogManager#loadByWhereAsList(String,int[],int,int)
      * @throws RuntimeDaoException
      */
@@ -4031,7 +4033,7 @@ class BaseDao implements CommonConstant {
     //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_log 记录总数
-     * @see ILogManager#Where(String)
+     * @see TableManager#countWhere(String)
      * @throws RuntimeDaoException
      */
     protected int daoCountLogByWhere(String where)
@@ -4182,7 +4184,7 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see IPermitManager#existsPrimaryKey(PermitBean)
+     * @see IPermitManager#existsPrimaryKey(Object...)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsPermit(PermitBean bean)
@@ -4235,7 +4237,7 @@ class BaseDao implements CommonConstant {
     //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
-     * @see IPermitManager#checkDuplicate(PermitBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      */
@@ -4253,7 +4255,7 @@ class BaseDao implements CommonConstant {
      * 
      * @param deviceGroupId 外键,设备组id 
      * @param personGroupId 外键,人员组id 
-     * @see IPermitManager#checkDuplicate(PermitBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws DuplicateRecordException if exists duplicated row
      * 
      * @throws RuntimeDaoException
@@ -4332,8 +4334,8 @@ class BaseDao implements CommonConstant {
      * 添加新记录<br>
      * fl_permit 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link PermitBean#isNew()}返回{@code false},则抛出异常
      * @param permitBean 要添加的新记录
-     * @see IPermitManager#save(PermitBean)
-     * @see IPermitManager#checkDuplicate(PermitBean)
+     * @see TableManager#save(BaseBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code permitBean.isNew()} is {@code false}
@@ -4398,7 +4400,7 @@ class BaseDao implements CommonConstant {
      * 添加新记录(同步保存)<br>
      * fl_permit 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link PermitBean#isNew()}返回{@code false},则抛出异常
      * see also {@link IPermitManager#save(PermitBean , DeviceGroupBean, PersonGroupBean  )}<br>
-     * @see IPermitManager#checkDuplicate(PermitBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code permitBean.isNew()} is {@code false}
@@ -4433,7 +4435,7 @@ class BaseDao implements CommonConstant {
     }
     //12-3-5
     /** 
-     * {@link #daoAddPermit(Collection)}的事务化版本
+     * {@link #daoAddPermits(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
     protected Collection<PermitBean> daoAddPermitsAsTransaction(final Collection<PermitBean> beans)
@@ -4449,7 +4451,7 @@ class BaseDao implements CommonConstant {
      * 查询{@code where} SQL条件语句指定的 fl_permit 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
-     * @param numRows 返回记录条数(<0时返回所有记录)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
      * @see IPermitManager#loadByWhereAsList(String,int[],int,int)
      * @throws RuntimeDaoException
      */
@@ -4470,7 +4472,7 @@ class BaseDao implements CommonConstant {
     //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_permit 记录总数
-     * @see IPermitManager#Where(String)
+     * @see TableManager#countWhere(String)
      * @throws RuntimeDaoException
      */
     protected int daoCountPermitByWhere(String where)
@@ -4585,7 +4587,7 @@ class BaseDao implements CommonConstant {
      * unwrap primary key from {@link StoreBean}<br>
      * if {@code beans} is {@code null},return a empty list(immutable)
      *
-     * @param {@link StoreBean} collection
+     * @param beans {@link StoreBean} collection
      * @return primary key list
      * @see IStoreManager#toPrimaryKeyList(Collection)
      */
@@ -4604,9 +4606,9 @@ class BaseDao implements CommonConstant {
      * changes to {@code beans} will be reflected in the returned list and vice versa. 
      *
      * if {@code beans} is {@code null},return a empty list(immutable)
-     * @param {@link StoreBean} list
+     * @param beans {@link StoreBean} list
      * @return primary key list 
-     * @see Lists$#transform(List, Function)
+     * @see Lists#transform(List, Function)
      */
     protected List<String> daoToPrimaryKeyListFromStores(List<StoreBean> beans){
         if(null == beans){
@@ -4630,7 +4632,7 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see IStoreManager#existsPrimaryKey(StoreBean)
+     * @see IStoreManager#existsPrimaryKey(Object...)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsStore(StoreBean bean)
@@ -4682,7 +4684,7 @@ class BaseDao implements CommonConstant {
     //7
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
-     * @see IStoreManager#checkDuplicate(StoreBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      */
@@ -4699,7 +4701,7 @@ class BaseDao implements CommonConstant {
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * 
      * @param md5 主键,md5检验码 
-     * @see IStoreManager#checkDuplicate(StoreBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws DuplicateRecordException if exists duplicated row
      * @return always {@code md5OfStore} 
      * @throws RuntimeDaoException
@@ -4717,8 +4719,8 @@ class BaseDao implements CommonConstant {
      * 添加新记录<br>
      * fl_store 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link StoreBean#isNew()}返回{@code false},则抛出异常
      * @param storeBean 要添加的新记录
-     * @see IStoreManager#save(StoreBean)
-     * @see IStoreManager#checkDuplicate(StoreBean)
+     * @see TableManager#save(BaseBean)
+     * @see TableManager#checkDuplicate(BaseBean)
      * @throws RuntimeDaoException
      * @throws DuplicateRecordException if exists duplicated row
      * @throws IllegalArgumentException if {@code storeBean.isNew()} is {@code false}
@@ -4747,7 +4749,7 @@ class BaseDao implements CommonConstant {
     }
     //12-3-5
     /** 
-     * {@link #daoAddStore(Collection)}的事务化版本
+     * {@link #daoAddStores(Collection)}的事务化版本
      * @throws RuntimeDaoException
      */
     protected Collection<StoreBean> daoAddStoresAsTransaction(final Collection<StoreBean> beans)
@@ -4763,7 +4765,7 @@ class BaseDao implements CommonConstant {
      * 查询{@code where} SQL条件语句指定的 fl_store 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
-     * @param numRows 返回记录条数(<0时返回所有记录)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
      * @see IStoreManager#loadByWhereAsList(String,int[],int,int)
      * @throws RuntimeDaoException
      */
@@ -4784,7 +4786,7 @@ class BaseDao implements CommonConstant {
     //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_store 记录总数
-     * @see IStoreManager#Where(String)
+     * @see TableManager#countWhere(String)
      * @throws RuntimeDaoException
      */
     protected int daoCountStoreByWhere(String where)
@@ -4811,7 +4813,7 @@ class BaseDao implements CommonConstant {
      * 查询{@code where} SQL条件语句指定的 fl_log_light 记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
-     * @param numRows 返回记录条数(<0时返回所有记录)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
      * @see ILogLightManager#loadByWhereAsList(String,int[],int,int)
      * @throws RuntimeDaoException
      */
@@ -4832,7 +4834,7 @@ class BaseDao implements CommonConstant {
     //17-2
     /**
      * 返回满足{@code where} SQL条件语句的 fl_log_light 记录总数
-     * @see ILogLightManager#Where(String)
+     * @see TableManager#countWhere(String)
      * @throws RuntimeDaoException
      */
     protected int daoCountLogLightByWhere(String where)

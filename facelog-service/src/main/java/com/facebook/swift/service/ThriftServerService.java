@@ -58,7 +58,7 @@ public class ThriftServerService extends AbstractIdleService{
 		 * 设置服务端口
 		 * @param servicePort
 		 * @return
-		 * @see {@link ThriftServerConfig#setPort(int)}
+		 * @see ThriftServerConfig#setPort(int)
 		 */
 		public Builder setServerPort(int servicePort) {
 			this.thriftServerConfig.setPort(servicePort);

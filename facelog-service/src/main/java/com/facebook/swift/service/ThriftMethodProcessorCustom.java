@@ -39,7 +39,7 @@ import static org.apache.thrift.TApplicationException.INTERNAL_ERROR;
 
 /**
  * 定制{@link ThriftMethodProcessor},收到的primitive封装类型(Boolean,Integer...)如果是{@code null}不会被转成default 0.
- * 通过调用{@link #setUseDefaultValueIfPrimitiveWrap(boolean)}方法设置为{@value true}可以禁用该特性
+ * 通过调用 {@link #setUseDefaultValueIfPrimitiveWrap(boolean)} 方法设置为{@code true}可以禁用该特性
  * @author guyadong
  *
  */
@@ -364,7 +364,7 @@ public class ThriftMethodProcessorCustom extends ThriftMethodProcessor
     }
 
 	/**
-	 * 设置对于primitive wrap类型是否将{@link null}转为default value，默认为{@code false} <br>
+	 * 设置对于primitive wrap类型是否将{@code null}转为default value，默认为{@code false} <br>
 	 * 该方法只能被调用一次
 	 * @param useDefaultValueIfPrimitiveWrap
 	 * @throws IllegalStateException 该方法已经被调用过
