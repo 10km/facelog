@@ -88,7 +88,6 @@
     }
     /**
      * (设备端)创建设备命令分发器<br>
-     * @param poolLazy
      * @param token 设备令牌
      * @return
      */
@@ -110,7 +109,7 @@
     /**
      * 返回一个申请命令响应通道的{@link com.google.common.base.Supplier}实例
      * @param token 访问令牌
-     * @param duration 命令通道有效时间(秒) >0有效,否则使用默认的有效期
+     * @param duration 命令通道有效时间(秒) 大于0有效,否则使用默认的有效期
      * @return
      */
     public com.google.common.base.Supplier<String> 
