@@ -875,7 +875,7 @@ public  class FeatureBean
     /////// FOR THRIFT //////
     /** 
      * cast {@code this} to {@link net.gdface.facelog.client.thrift.FeatureBean}
-     * @see ThriftConverter#converterFeatureBean
+     * @see ThriftConverter#CONVERTER_FEATUREBEAN
      */
     public net.gdface.facelog.client.thrift.FeatureBean toThrift(){
         return ThriftConverter.CONVERTER_FEATUREBEAN.toRight(this);
@@ -883,7 +883,7 @@ public  class FeatureBean
     /** 
      * copy all fields from {@link net.gdface.facelog.client.thrift.FeatureBean},do nothing if {@code thriftBean} is null
      * @return current object {@code this}
-     * @see ThriftConverter#converterFeatureBean
+     * @see ThriftConverter#CONVERTER_FEATUREBEAN
      */
     public FeatureBean fromThrift(net.gdface.facelog.client.thrift.FeatureBean thriftBean){
         if(null != thriftBean){
@@ -895,7 +895,7 @@ public  class FeatureBean
     /** 
      * construct new instance from {@link net.gdface.facelog.client.thrift.FeatureBean}
      * @param thriftBean must not be null
-     * @see ThriftConverter#converterFeatureBean
+     * @see ThriftConverter#CONVERTER_FEATUREBEAN
      */
     public FeatureBean(net.gdface.facelog.client.thrift.FeatureBean thriftBean){
         if(null != thriftBean){

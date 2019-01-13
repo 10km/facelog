@@ -113,10 +113,9 @@ public class Heartbeat implements ChannelConstant{
 	/**
 	 * 设置设备心跳包发送周期<br>
 	 * 设置后须调用{@link #start()}才能生效
-	 * @param period 心跳周期(>0有效)
+	 * @param period 心跳周期(大于0有效)
 	 * @param unit
 	 * @return
-	 * @throw NullPointerException {@code timeUnit}为{@code null}
 	 */
 	public Heartbeat setInterval(long period,TimeUnit unit){
 		if(period > 0 ){
@@ -130,7 +129,6 @@ public class Heartbeat implements ChannelConstant{
 	 * @param duration
 	 * @param unit 时间单位
 	 * @return
-	 * @throw NullPointerException {@code unit}为{@code null}
 	 */
 	public Heartbeat setExpire(long duration, TimeUnit unit){
 		if(duration > 0){

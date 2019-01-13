@@ -1464,7 +1464,7 @@ public  class LogBean
     /////// FOR THRIFT //////
     /** 
      * cast {@code this} to {@link net.gdface.facelog.client.thrift.LogBean}
-     * @see ThriftConverter#converterLogBean
+     * @see ThriftConverter#CONVERTER_LOGBEAN
      */
     public net.gdface.facelog.client.thrift.LogBean toThrift(){
         return ThriftConverter.CONVERTER_LOGBEAN.toRight(this);
@@ -1472,7 +1472,7 @@ public  class LogBean
     /** 
      * copy all fields from {@link net.gdface.facelog.client.thrift.LogBean},do nothing if {@code thriftBean} is null
      * @return current object {@code this}
-     * @see ThriftConverter#converterLogBean
+     * @see ThriftConverter#CONVERTER_LOGBEAN
      */
     public LogBean fromThrift(net.gdface.facelog.client.thrift.LogBean thriftBean){
         if(null != thriftBean){
@@ -1484,7 +1484,7 @@ public  class LogBean
     /** 
      * construct new instance from {@link net.gdface.facelog.client.thrift.LogBean}
      * @param thriftBean must not be null
-     * @see ThriftConverter#converterLogBean
+     * @see ThriftConverter#CONVERTER_LOGBEAN
      */
     public LogBean(net.gdface.facelog.client.thrift.LogBean thriftBean){
         if(null != thriftBean){

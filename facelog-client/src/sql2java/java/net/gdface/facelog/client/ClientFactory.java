@@ -101,8 +101,7 @@ public class ClientFactory {
     }
     /**
      * set all timeout arguments
-     * @param time
-     * @param unit
+     * @param timeout
      * @return
      * @see #setConnectTimeout(Duration)
      * @see #setReceiveTimeout(Duration)

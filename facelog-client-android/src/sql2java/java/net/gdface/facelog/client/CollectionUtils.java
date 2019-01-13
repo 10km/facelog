@@ -31,8 +31,8 @@ public class CollectionUtils {
     }
     /**
      * dual transform type between L and R<br>
-     * {@link #toRight(Object)} L -> R<br>
-     * {@link #fromRight(Object)} R -> L
+     * {@link #toRight(Object)} L TO R<br>
+     * {@link #fromRight(Object)} R TO L
      * @author guyadong
      *
      * @param <L> left type

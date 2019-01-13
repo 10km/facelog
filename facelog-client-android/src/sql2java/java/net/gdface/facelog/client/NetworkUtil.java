@@ -135,14 +135,14 @@ public class NetworkUtil {
     }
     /** 
      * MAC地址格式(16进制)格式化{@code source}指定的字节数组 
-     * @see #format(byte[], String, int)
+     * @see #format(byte[], String, Radix)
      */
     public static final String formatMac(byte[] source,String separator) {
         return format(source,separator,Radix.HEX);
     }
     /** 
      * 以IP地址格式(点分位)格式化{@code source}指定的字节数组<br>
-     * @see #format(byte[], String, int) 
+     * @see #format(byte[], String, Radix) 
      */
     public static final String formatIp(byte[] source) {
         return format(source,".",Radix.DEC);

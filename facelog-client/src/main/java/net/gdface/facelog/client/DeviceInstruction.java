@@ -37,10 +37,10 @@ public class DeviceInstruction{
 	}
 	/**
 	 * 设置唯一的命令序列号,每一次设备命令执行都应该要求一个唯一的序列号,
-	 * 以便于命令响应端区分命令响应对象{@link net.gdface.facelog.service.Ack}来源
+	 * 以便于命令响应端区分命令响应对象{@link net.gdface.facelog.client.Ack}来源
 	 * @param cmdSn
 	 * @return 
-	 * @see {@link net.gdface.facelog.client.IFaceLogClient#applyCmdSn(net.gdface.facelog.client.thrift.Token)}
+	 * @see net.gdface.facelog.client.IFaceLogClient#applyCmdSn(net.gdface.facelog.client.thrift.Token)
 	 */
 	public DeviceInstruction setCmdSn(long cmdSn) {
 		this.cmdSn = cmdSn;
@@ -94,7 +94,7 @@ public class DeviceInstruction{
 	 * 每一次设备命令发送都应该有一个唯一的命令响应接受通道,以便于命令发送方区命令响应来源
 	 * @param ackChannel
 	 * @return
-	 * @see {@link net.gdface.facelog.client.IFaceLogClient#applyAckChannel(net.gdface.facelog.client.thrift.Token)}
+	 * @see net.gdface.facelog.client.IFaceLogClient#applyAckChannel(net.gdface.facelog.client.thrift.Token)
 	 */
 	public DeviceInstruction setAckChannel(String ackChannel) {
 		this.ackChannel = ackChannel;
@@ -107,7 +107,7 @@ public class DeviceInstruction{
 	 * 设置设备命令参数,参数个数,类型由{@link Cmd}定义
 	 * @param parameters
 	 * @return
-	 * @see {@link CommandAdapter}
+	 * @see CommandAdapter
 	 */
 	public DeviceInstruction setParameters(Map<String,?> parameters) {
 		this.parameters = parameters;

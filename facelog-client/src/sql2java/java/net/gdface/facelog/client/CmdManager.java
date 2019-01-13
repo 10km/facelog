@@ -66,7 +66,6 @@ public class CmdManager {
     /**
      * 构造方法
      * @param poolLazy 
-     * @param cmdDispatcher 
      * @param redisParameters redis 服务器参数,参见 {@link IFaceLogClient#getRedisParameters(Token)}
      */
     public CmdManager(JedisPoolLazy poolLazy,
@@ -229,7 +228,7 @@ public class CmdManager {
         TLS_BUILDER.remove();
         return this;
     }
-    /** 检查是否创建了{@CmdBuilder}对象没有则抛出异常 */
+    /** 检查是否创建了{@link CmdBuilder}对象没有则抛出异常 */
     protected static final CmdBuilder checkTlsAvailable(){
         return checkNotNull(TLS_BUILDER.get(),
                 "not defined target,please call method targetBuilder() to build parameters");

@@ -1365,7 +1365,7 @@ public  class DeviceBean
     /////// FOR THRIFT //////
     /** 
      * cast {@code this} to {@link net.gdface.facelog.client.thrift.DeviceBean}
-     * @see ThriftConverter#converterDeviceBean
+     * @see ThriftConverter#CONVERTER_DEVICEBEAN
      */
     public net.gdface.facelog.client.thrift.DeviceBean toThrift(){
         return ThriftConverter.CONVERTER_DEVICEBEAN.toRight(this);
@@ -1373,7 +1373,7 @@ public  class DeviceBean
     /** 
      * copy all fields from {@link net.gdface.facelog.client.thrift.DeviceBean},do nothing if {@code thriftBean} is null
      * @return current object {@code this}
-     * @see ThriftConverter#converterDeviceBean
+     * @see ThriftConverter#CONVERTER_DEVICEBEAN
      */
     public DeviceBean fromThrift(net.gdface.facelog.client.thrift.DeviceBean thriftBean){
         if(null != thriftBean){
@@ -1385,7 +1385,7 @@ public  class DeviceBean
     /** 
      * construct new instance from {@link net.gdface.facelog.client.thrift.DeviceBean}
      * @param thriftBean must not be null
-     * @see ThriftConverter#converterDeviceBean
+     * @see ThriftConverter#CONVERTER_DEVICEBEAN
      */
     public DeviceBean(net.gdface.facelog.client.thrift.DeviceBean thriftBean){
         if(null != thriftBean){

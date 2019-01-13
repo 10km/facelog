@@ -1271,7 +1271,7 @@ public  class ImageBean
     /////// FOR THRIFT //////
     /** 
      * cast {@code this} to {@link net.gdface.facelog.client.thrift.ImageBean}
-     * @see ThriftConverter#converterImageBean
+     * @see ThriftConverter#CONVERTER_IMAGEBEAN
      */
     public net.gdface.facelog.client.thrift.ImageBean toThrift(){
         return ThriftConverter.CONVERTER_IMAGEBEAN.toRight(this);
@@ -1279,7 +1279,7 @@ public  class ImageBean
     /** 
      * copy all fields from {@link net.gdface.facelog.client.thrift.ImageBean},do nothing if {@code thriftBean} is null
      * @return current object {@code this}
-     * @see ThriftConverter#converterImageBean
+     * @see ThriftConverter#CONVERTER_IMAGEBEAN
      */
     public ImageBean fromThrift(net.gdface.facelog.client.thrift.ImageBean thriftBean){
         if(null != thriftBean){
@@ -1291,7 +1291,7 @@ public  class ImageBean
     /** 
      * construct new instance from {@link net.gdface.facelog.client.thrift.ImageBean}
      * @param thriftBean must not be null
-     * @see ThriftConverter#converterImageBean
+     * @see ThriftConverter#CONVERTER_IMAGEBEAN
      */
     public ImageBean(net.gdface.facelog.client.thrift.ImageBean thriftBean){
         if(null != thriftBean){

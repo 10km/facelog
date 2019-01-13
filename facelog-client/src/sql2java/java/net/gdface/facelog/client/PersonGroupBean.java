@@ -1371,7 +1371,7 @@ public  class PersonGroupBean
     /////// FOR THRIFT //////
     /** 
      * cast {@code this} to {@link net.gdface.facelog.client.thrift.PersonGroupBean}
-     * @see ThriftConverter#converterPersonGroupBean
+     * @see ThriftConverter#CONVERTER_PERSONGROUPBEAN
      */
     public net.gdface.facelog.client.thrift.PersonGroupBean toThrift(){
         return ThriftConverter.CONVERTER_PERSONGROUPBEAN.toRight(this);
@@ -1379,7 +1379,7 @@ public  class PersonGroupBean
     /** 
      * copy all fields from {@link net.gdface.facelog.client.thrift.PersonGroupBean},do nothing if {@code thriftBean} is null
      * @return current object {@code this}
-     * @see ThriftConverter#converterPersonGroupBean
+     * @see ThriftConverter#CONVERTER_PERSONGROUPBEAN
      */
     public PersonGroupBean fromThrift(net.gdface.facelog.client.thrift.PersonGroupBean thriftBean){
         if(null != thriftBean){
@@ -1391,7 +1391,7 @@ public  class PersonGroupBean
     /** 
      * construct new instance from {@link net.gdface.facelog.client.thrift.PersonGroupBean}
      * @param thriftBean must not be null
-     * @see ThriftConverter#converterPersonGroupBean
+     * @see ThriftConverter#CONVERTER_PERSONGROUPBEAN
      */
     public PersonGroupBean(net.gdface.facelog.client.thrift.PersonGroupBean thriftBean){
         if(null != thriftBean){

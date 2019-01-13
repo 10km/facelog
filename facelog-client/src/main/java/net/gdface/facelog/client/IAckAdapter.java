@@ -114,7 +114,7 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 
         /**
          * 只能被调用一次,否则第二次会抛出异常,
-         * 设备命令发送后，REDIS会返回收到设备命令的设备端数量,{@code clientNum}必须>=0
+         * 设备命令发送后，REDIS会返回收到设备命令的设备端数量,{@code clientNum}必须大等于0
          */
         @Override
         public BaseAdapter<T> setClientNum(long clientNum){
@@ -132,7 +132,7 @@ public interface IAckAdapter <T> extends IMessageAdapter<Ack<T>>{
 		}
 		/**
 		 * 设置超时时间(毫秒)
-		 * @param duration >0有效
+		 * @param duration 大于0有效
 		 * @return
 		 */
 		public final BaseAdapter<T> setDuration(long duration) {
