@@ -115,9 +115,9 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>2.9</version>
 					<configuration>
 						<lifecycleMappingMetadata>
 							<pluginExecutions>
@@ -157,6 +157,9 @@
 								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
+						<!-- 禁用java 8 的DocLint新特性，以确保当javadoc有编译错误时，也能正常生成javadoc jar包-->
+						<!-- ${javadoc.opts}由profile指定 -->
+						<additionalparam>${javadoc.opts}</additionalparam>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -304,23 +307,9 @@
 			<activation>
 				<jdk>[1.8,)</jdk>
 			</activation>
-
-			<build>
-				<pluginManagement>
-					<plugins>
-						<!--引入javadoc插件 -->
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-javadoc-plugin</artifactId>
-							<version>2.9</version>
-							<configuration>
-								<!-- 禁用java 8 的DocLint新特性，以确保当javadoc有编译错误时，也能正常生成javadoc jar包-->
-								<additionalparam>-Xdoclint:none</additionalparam>
-							</configuration>
-						</plugin>
-					</plugins>
-				</pluginManagement>
-			</build>
+			<properties>
+				<javadoc.opts>-Xdoclint:none</javadoc.opts>
+			</properties>
 		</profile>
 	</profiles>
 </project>
