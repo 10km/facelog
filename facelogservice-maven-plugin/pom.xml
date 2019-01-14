@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.gitee.l0km</groupId>
 		<artifactId>facelog</artifactId>
-		<version>1.0.12-SNAPSHOT</version>
+		<version>1.1.0</version>
 	</parent>
 	<artifactId>facelogservice-maven-plugin</artifactId>
 	<name>facelogservice-maven-plugin</name>
