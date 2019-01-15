@@ -1,7 +1,15 @@
 package net.gdface.facelog;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftStruct;
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.Map;
+
+import com.google.common.collect.Maps;
+
 import net.gdface.facelog.service.BaseServiceException;
 
 /**
@@ -11,12 +19,10 @@ import net.gdface.facelog.service.BaseServiceException;
  */
 @ThriftStruct
 public final class ServiceSecurityException extends BaseServiceException {
-	public static interface FieldJsonTransformer<T> {
-		public String jsonOfDeclaredFields(T input);
-	}
-
 	private static final long serialVersionUID = 5298414024971333060L;
-	private static FieldJsonTransformer<ServiceSecurityException> transformer;
+	/** 指定生成的json中field不带引号 */
+	private static final int NO_FIELD_QUOTE_FEATURE=SerializerFeature.config(
+			JSON.DEFAULT_GENERATE_FEATURE, SerializerFeature.QuoteFieldNames, false);
 	@ThriftStruct
 	public static enum SecurityExceptionType{
         /** 其他未分类异常 */UNCLASSIFIED,
@@ -41,6 +47,7 @@ public final class ServiceSecurityException extends BaseServiceException {
 
 	public ServiceSecurityException(String message, Throwable cause) {
 		super(message, cause);
+		TokenContext.getCurrentTokenContext().setError(this);
 	}
 
 	public ServiceSecurityException(Throwable cause) {
@@ -49,10 +56,7 @@ public final class ServiceSecurityException extends BaseServiceException {
 	
 	public ServiceSecurityException(SecurityExceptionType type) {
 		this();
-		if(type == null){
-			throw new NullPointerException("type is null");
-		}
-		this.type = type;
+		this.type = checkNotNull(type);
 	}
     /** return exception type */
     @ThriftField(5)
@@ -82,16 +86,11 @@ public final class ServiceSecurityException extends BaseServiceException {
 	
 	@Override
 	protected String jsonOfDeclaredFields(){
-		if(null == transformer)
-			return super.jsonOfDeclaredFields();
-		return transformer.jsonOfDeclaredFields(this);
-	}
-
-	public static FieldJsonTransformer<ServiceSecurityException> getTransformer() {
-		return transformer;
-	}
-
-	public static void setTransformer(FieldJsonTransformer<ServiceSecurityException> transformer) {
-		ServiceSecurityException.transformer = transformer;
+		Map<String,Object> map = Maps.newHashMap();
+		map.put("type", getType());
+		map.put("deviceID", getDeviceID());
+		return JSON.toJSONString(
+				map,
+				NO_FIELD_QUOTE_FEATURE);
 	}
 }

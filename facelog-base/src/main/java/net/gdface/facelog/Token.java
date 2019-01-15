@@ -139,14 +139,6 @@ public final class Token{
 			.append(".id=").append(id);
 		return buffer.toString();
 	}
-	/**
-	 * 将当前实例设置为当前上下文的令牌
-	 * @return
-	 */
-	Token asContextToken(){
-		TokenContext.getCurrentTokenContext().setToken(this);
-		return this;
-	}
 	static Function<Token,String> KEY_HELPER = new Function<Token,String>(){
 		@Override
 		public String apply(Token input) {

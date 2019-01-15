@@ -10,7 +10,4 @@ public enum TokenOp {
 	/** 验证令牌 */VALIDATE,
 	/** 验证密码 */VALIDPWD;
 	/** 指定为上下文{@link TokenContext}中的令牌操作类型 */
-	public void asContextTokenOp(){
-		TokenContext.getCurrentTokenContext().setTokenOp(this);
-	}
 }
