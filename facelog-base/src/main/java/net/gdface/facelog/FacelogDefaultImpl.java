@@ -128,7 +128,7 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, Token token) {
+	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, Token token) {
 		return null;
 	}
 
@@ -143,25 +143,25 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, FeatureBean featureBean, Integer deviceId,
+	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, FeatureBean featureBean, Integer deviceId,
 			Token token) {
 		return null;
 	}
 
 	@Override
-	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature, List<FaceBean> faceBeans,
+	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans,
 			Token token) {
 		return null;
 	}
 
 	@Override
-	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature,
+	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, byte[] feature,
 			Map<ByteBuffer, FaceBean> faceInfo, Integer deviceId, Token token) {
 		return null;
 	}
 
 	@Override
-	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature, ByteBuffer featureImage,
+	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, byte[] feature, byte[] featureImage,
 			FaceBean featureFaceBean, Integer deviceId, Token token) {
 		return null;
 	}
@@ -232,7 +232,7 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public ImageBean addImage(ByteBuffer imageData, Integer deviceId, FaceBean faceBean, Integer personId, Token token)
+	public ImageBean addImage(byte[] imageData, Integer deviceId, FaceBean faceBean, Integer personId, Token token)
 			throws DuplicateRecordException {
 		return null;
 	}
@@ -243,17 +243,17 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public FeatureBean addFeature(ByteBuffer feature, Integer personId, List<FaceBean> faecBeans, Token token)
+	public FeatureBean addFeature(byte[] feature, Integer personId, List<FaceBean> faecBeans, Token token)
 			throws DuplicateRecordException {
 		return null;
 	}
 
 	@Override
-	public FeatureBean addFeature(ByteBuffer feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo,
+	public FeatureBean addFeature(byte[] feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo,
 			Integer deviceId, Token token) throws DuplicateRecordException {
 		return null;
 	}
-
+	
 	@Override
 	public List<String> deleteFeature(String featureMd5, boolean deleteImage, Token token) {
 		return null;
@@ -280,12 +280,12 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public ByteBuffer getFeatureBytes(String md5) {
+	public byte[] getFeatureBytes(String md5) {
 		return null;
 	}
 
 	@Override
-	public ByteBuffer getImageBytes(String imageMD5) {
+	public byte[] getImageBytes(String imageMD5) {
 		return null;
 	}
 

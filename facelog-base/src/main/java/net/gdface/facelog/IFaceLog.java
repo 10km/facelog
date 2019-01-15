@@ -226,7 +226,7 @@ public interface IFaceLog{
 	 * @return
 	 */
 	@ThriftMethod("savePersonWithPhoto")
-	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, Token token);
+	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, Token token);
 
 	/**
 	 * 保存人员信息记录(包含标准照)
@@ -260,20 +260,20 @@ public interface IFaceLog{
 	 * @return
 	 */
 	@ThriftMethod("savePersonWithPhotoAndFeature")
-	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, FeatureBean featureBean, Integer deviceId, Token token);
+	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, FeatureBean featureBean, Integer deviceId, Token token);
 
 	/**
 	 * 保存人员信息记录
 	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
 	 * @param bean
 	 * @param idPhoto 标准照图像,可为null
-	 * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(ByteBuffer, Integer, List, Token)}
-	 * @param faceBeans 参见 {@link #addFeature(ByteBuffer, Integer, List, Token)}
+	 * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(byte[], Integer, List, Token)}
+	 * @param faceBeans 参见 {@link #addFeature(byte[], Integer, List, Token)}
 	 * @param token 访问令牌
 	 * @return
 	 */
 	@ThriftMethod("savePersonWithPhotoAndFeatureMultiFaces")
-	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature, List<FaceBean> faceBeans, Token token);
+	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token);
 
 	/**
 	 * 保存人员信息记录
@@ -287,7 +287,7 @@ public interface IFaceLog{
 	 * @return bean 保存的{@link PersonBean}对象
 	 */
 	@ThriftMethod("savePersonWithPhotoAndFeatureMultiImage")
-	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature, Map<ByteBuffer, FaceBean> faceInfo,
+	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, byte[] feature, Map<ByteBuffer, FaceBean> faceInfo,
 			Integer deviceId, Token token);
 
 	/**
@@ -303,7 +303,7 @@ public interface IFaceLog{
 	 * @return
 	 */
 	@ThriftMethod("savePersonFull")
-	public PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature, ByteBuffer featureImage,
+	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, byte[] feature, byte[] featureImage,
 			FaceBean featureFaceBean, Integer deviceId, Token token);
 
 	/**
@@ -418,7 +418,7 @@ public interface IFaceLog{
 	 * @return
 	 * @throws DuplicateRecordException 数据库中已经存在要保存的图像数据
 	 */
-	public ImageBean addImage(ByteBuffer imageData, Integer deviceId, FaceBean faceBean, Integer personId, Token token)
+	public ImageBean addImage(byte[] imageData, Integer deviceId, FaceBean faceBean, Integer personId, Token token)
 			throws DuplicateRecordException;
 
 	/**
@@ -438,7 +438,7 @@ public interface IFaceLog{
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws DuplicateRecordException 
 	 */
-	public FeatureBean addFeature(ByteBuffer feature, Integer personId, List<FaceBean> faecBeans, Token token) throws DuplicateRecordException;
+	public FeatureBean addFeature(byte[] feature, Integer personId, List<FaceBean> faecBeans, Token token) throws DuplicateRecordException;
 
 	/**
 	 * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
@@ -451,7 +451,7 @@ public interface IFaceLog{
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws DuplicateRecordException 
 	 */
-	public FeatureBean addFeature(ByteBuffer feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo, Integer deviceId, Token token)
+	public FeatureBean addFeature(byte[] feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo, Integer deviceId, Token token)
 			throws DuplicateRecordException;
 
 	/**
@@ -497,14 +497,14 @@ public interface IFaceLog{
 	 * @param md5
 	 * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
 	 */
-	public ByteBuffer getFeatureBytes(String md5);
+	public byte[] getFeatureBytes(String md5);
 
 	/**
 	 * 根据图像的MD5校验码返回图像数据
 	 * @param imageMD5
 	 * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
 	 */
-	public ByteBuffer getImageBytes(String imageMD5);
+	public byte[] getImageBytes(String imageMD5);
 
 	/**
 	 * 根据图像的MD5校验码返回图像记录

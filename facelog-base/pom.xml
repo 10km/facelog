@@ -27,6 +27,10 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>common-base</artifactId>
+		</dependency>		
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>facelog-db-base</artifactId>
 		</dependency>
 		<dependency>
