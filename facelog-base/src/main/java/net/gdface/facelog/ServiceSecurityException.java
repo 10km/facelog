@@ -82,8 +82,9 @@ public final class ServiceSecurityException extends BaseServiceException {
 	
 	@Override
 	protected String jsonOfDeclaredFields(){
-		if(null == transformer)
+		if(null == transformer){
 			return super.jsonOfDeclaredFields();
+		}
 		return transformer.jsonOfDeclaredFields(this);
 	}
 
