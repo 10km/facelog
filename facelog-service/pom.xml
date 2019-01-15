@@ -16,7 +16,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>facelog-db</artifactId>
+			<artifactId>facelog-db-manager</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>

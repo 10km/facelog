@@ -6,7 +6,6 @@ import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.service.BaseDao.WriteOp;
 import net.gdface.facelog.service.Token.TokenType;
-import net.gdface.facelog.service.TokenMangement.TokenOp;
 
 /**
  * 基于{@link BaseTokenValidatorListener}的fl_device表权限验证侦听器实现

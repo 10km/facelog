@@ -4,8 +4,6 @@ import static com.google.common.base.Preconditions.*;
 
 import com.google.common.base.Strings;
 
-import net.gdface.facelog.service.TokenMangement.TokenOp;
-
 
 /**
  * 令牌状态上下文
