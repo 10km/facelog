@@ -1,5 +1,4 @@
 package net.gdface.facelog;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import net.gdface.facelog.db.DeviceBean;
@@ -447,7 +446,7 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public List<PersonGroupBean> getPersonGroups (Collection<Integer> groupIdList) {
+    public List<PersonGroupBean> getPersonGroups (List<Integer> groupIdList) {
         return delegate().getPersonGroups(groupIdList);
     }
 

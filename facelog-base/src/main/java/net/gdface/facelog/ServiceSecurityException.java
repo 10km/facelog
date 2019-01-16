@@ -1,23 +1,19 @@
 package net.gdface.facelog;
 
-import com.facebook.swift.codec.ThriftField;
-import com.facebook.swift.codec.ThriftStruct;
-import net.gdface.facelog.service.BaseServiceException;
+import net.gdface.exception.BaseFaceException;
 
 /**
  * 安全异常
  * @author guyadong
  *
  */
-@ThriftStruct
-public final class ServiceSecurityException extends BaseServiceException {
+public final class ServiceSecurityException extends BaseFaceException {
 	public static interface FieldJsonTransformer<T> {
 		public String jsonOfDeclaredFields(T input);
 	}
 
 	private static final long serialVersionUID = 5298414024971333060L;
 	private static FieldJsonTransformer<ServiceSecurityException> transformer;
-	@ThriftStruct
 	public static enum SecurityExceptionType{
         /** 其他未分类异常 */UNCLASSIFIED,
         /** 无效MAC地址 */INVALID_MAC,
@@ -41,6 +37,7 @@ public final class ServiceSecurityException extends BaseServiceException {
 
 	public ServiceSecurityException(String message, Throwable cause) {
 		super(message, cause);
+		CurrentTokenContextOp.getDefaultInstance().currentError(this);
 	}
 
 	public ServiceSecurityException(Throwable cause) {
@@ -55,20 +52,16 @@ public final class ServiceSecurityException extends BaseServiceException {
 		this.type = type;
 	}
     /** return exception type */
-    @ThriftField(5)
     public SecurityExceptionType getType() {
         return type;
     }
-    @ThriftField
     public ServiceSecurityException setType(SecurityExceptionType type) {
         this.type = type;
         return this;
     }
-    @ThriftField(6)
 	public Integer getDeviceID() {
 		return deviceID;
 	}
-    @ThriftField
 	public ServiceSecurityException setDeviceID(Integer deviceID) {
 		this.deviceID = deviceID;
 		return this;
@@ -77,22 +70,17 @@ public final class ServiceSecurityException extends BaseServiceException {
     /** return a JSON string of declared fields  */
 	@Override
 	public String toString() {
-		return jsonOfDeclaredFields();
-	} 
-	
-	@Override
-	protected String jsonOfDeclaredFields(){
 		if(null == transformer){
-			return super.jsonOfDeclaredFields();
+			return "";
 		}
 		return transformer.jsonOfDeclaredFields(this);
-	}
-
-	public static FieldJsonTransformer<ServiceSecurityException> getTransformer() {
+	} 
+	
+	static FieldJsonTransformer<ServiceSecurityException> getTransformer() {
 		return transformer;
 	}
 
-	public static void setTransformer(FieldJsonTransformer<ServiceSecurityException> transformer) {
+	static void setTransformer(FieldJsonTransformer<ServiceSecurityException> transformer) {
 		ServiceSecurityException.transformer = transformer;
 	}
 }

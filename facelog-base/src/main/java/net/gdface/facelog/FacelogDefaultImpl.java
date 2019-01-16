@@ -1,7 +1,6 @@
 package net.gdface.facelog;
 
 import java.nio.ByteBuffer;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -400,7 +399,7 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public List<PersonGroupBean> getPersonGroups(Collection<Integer> groupIdList) {
+	public List<PersonGroupBean> getPersonGroups(List<Integer> groupIdList) {
 		return null;
 	}
 

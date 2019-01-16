@@ -1,8 +1,5 @@
 package net.gdface.facelog;
 
-import com.facebook.swift.codec.ThriftField;
-import com.facebook.swift.codec.ThriftField.Requiredness;
-import com.facebook.swift.codec.ThriftStruct;
 import com.google.common.base.Function;
 
 /**
@@ -10,11 +7,9 @@ import com.google.common.base.Function;
  * @author guyadong
  *
  */
-@ThriftStruct
 public final class Token{
 	static final int FAKE_ROOT_ID = -1;
 	/** 令牌类型 */
-	@ThriftStruct
 	public static enum TokenType{
 		/** 未初始化 */UNINITIALIZED,
 		/** 设备令牌 */DEVICE,
@@ -31,35 +26,27 @@ public final class Token{
 		this.t1 = t1;
 		this.t2 = t2;
 	}
-	@ThriftField(value = 1, requiredness = Requiredness.REQUIRED)
 	public int getId() {
 		return id;
 	}
-	@ThriftField
 	public void setId(int id) {
 		this.id = id;
 	}
-	@ThriftField(value = 2, requiredness = Requiredness.REQUIRED)
 	public TokenType getType() {
 		return type;
 	}
-	@ThriftField
 	public void setType(TokenType type) {
 		this.type = type;
 	}
-	@ThriftField(value = 3, requiredness = Requiredness.REQUIRED)
 	public long getT1() {
 		return t1;
 	}
-	@ThriftField
 	public void setT1(long t1) {
 		this.t1 = t1;
 	}
-	@ThriftField(value = 4, requiredness = Requiredness.REQUIRED)
 	public long getT2() {
 		return t2;
 	}
-	@ThriftField
 	public void setT2(long t2) {
 		this.t2 = t2;
 	}
@@ -138,6 +125,14 @@ public final class Token{
 		buffer.append(type)
 			.append(".id=").append(id);
 		return buffer.toString();
+	}
+	/**
+	 * 将当前实例设置为当前上下文的令牌
+	 * @return
+	 */
+	Token asContextToken(){
+		CurrentTokenContextOp.getDefaultInstance().currentToken(this);
+		return this;
 	}
 	static Function<Token,String> KEY_HELPER = new Function<Token,String>(){
 		@Override

@@ -1,12 +1,10 @@
 package net.gdface.facelog;
 
 import java.nio.ByteBuffer;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.facebook.swift.service.ThriftMethod;
-
+import net.gdface.annotation.DeriveMethod;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
@@ -146,7 +144,7 @@ public interface IFaceLog{
 	 * @param expiryDate 失效日期
 	 * @param token 访问令牌
 	 */
-	public void setPersonExpiryDate(int personId, @TargetType(java.util.Date.class)long expiryDate, Token token) ;
+	public void setPersonExpiryDate(int personId, long expiryDate, Token token) ;
 
 	/**
 	 * 修改 personIdList 指定的人员记录的有效期
@@ -156,8 +154,8 @@ public interface IFaceLog{
 	 * @param token 访问令牌
 	 * @
 	 */
-	@ThriftMethod("setPersonExpiryDateList")
-	public void setPersonExpiryDate(List<Integer> personIdList, @TargetType(java.util.Date.class)long expiryDate, Token token);
+	@DeriveMethod(methodSuffix="List")
+	public void setPersonExpiryDate(List<Integer> personIdList, long expiryDate, Token token);
 
 	/**
 	 * 设置 personIdList 指定的人员为禁止状态
@@ -165,7 +163,7 @@ public interface IFaceLog{
 	 * @param personIdList 人员id列表
 	 * @param token 访问令牌
 	 */
-	@ThriftMethod("disablePersonList")
+	@DeriveMethod(methodSuffix="List")
 	public void disablePerson(List<Integer> personIdList, Token token);
 
 	/**
@@ -225,7 +223,7 @@ public interface IFaceLog{
 	 * @param token 访问令牌
 	 * @return
 	 */
-	@ThriftMethod("savePersonWithPhoto")
+	@DeriveMethod(methodSuffix="WithPhoto")
 	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, Token token);
 
 	/**
@@ -235,7 +233,7 @@ public interface IFaceLog{
 	 * @param token 访问令牌
 	 * @return
 	 */
-	@ThriftMethod("savePersonsWithPhoto")
+	@DeriveMethod(methodSuffix="WithPhoto")
 	public int savePerson(Map<ByteBuffer, PersonBean> persons, Token token);
 
 	/**
@@ -246,7 +244,7 @@ public interface IFaceLog{
 	 * @param token 访问令牌
 	 * @return
 	 */
-	@ThriftMethod("savePersonWithPhotoAndFeatureSaved")
+	@DeriveMethod(methodSuffix="WithPhotoAndFeatureSaved")
 	public PersonBean savePerson(PersonBean bean, String idPhotoMd5, String featureMd5, Token token);
 
 	/**
@@ -259,7 +257,7 @@ public interface IFaceLog{
 	 * @param token 访问令牌
 	 * @return
 	 */
-	@ThriftMethod("savePersonWithPhotoAndFeature")
+	@DeriveMethod(methodSuffix="WithPhotoAndFeature")
 	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, FeatureBean featureBean, Integer deviceId, Token token);
 
 	/**
@@ -272,7 +270,7 @@ public interface IFaceLog{
 	 * @param token 访问令牌
 	 * @return
 	 */
-	@ThriftMethod("savePersonWithPhotoAndFeatureMultiFaces")
+	@DeriveMethod(methodSuffix="WithPhotoAndFeatureMultiFaces")
 	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token);
 
 	/**
@@ -286,7 +284,7 @@ public interface IFaceLog{
 	 * @param token 访问令牌
 	 * @return bean 保存的{@link PersonBean}对象
 	 */
-	@ThriftMethod("savePersonWithPhotoAndFeatureMultiImage")
+	@DeriveMethod(methodSuffix="WithPhotoAndFeatureMultiImage")
 	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, byte[] feature, Map<ByteBuffer, FaceBean> faceInfo,
 			Integer deviceId, Token token);
 
@@ -302,7 +300,7 @@ public interface IFaceLog{
 	 * @param token 访问令牌
 	 * @return
 	 */
-	@ThriftMethod("savePersonFull")
+	@DeriveMethod(methodSuffix="Full")
 	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, byte[] feature, byte[] featureImage,
 			FaceBean featureFaceBean, Integer deviceId, Token token);
 
@@ -321,7 +319,7 @@ public interface IFaceLog{
 	 * @param timestamp
 	 * @return 返回fl_person.id 列表
 	 */
-	public List<Integer> loadUpdatedPersons(@TargetType(java.util.Date.class)long timestamp);
+	public List<Integer> loadUpdatedPersons(long timestamp);
 
 	/**
 	 * (主动更新机制实现)<br>
@@ -329,8 +327,7 @@ public interface IFaceLog{
 	 * @param timestamp
 	 * @return 返回fl_person.id 列表
 	 */
-	@ThriftMethod
-	public List<Integer> loadPersonIdByUpdateTime(@TargetType(java.util.Date.class)long timestamp);
+	public List<Integer> loadPersonIdByUpdateTime(long timestamp);
 
 	/**
 	 * (主动更新机制实现)<br>
@@ -338,8 +335,7 @@ public interface IFaceLog{
 	 * @param timestamp
 	 * @return 返回 fl_feature.md5 列表
 	 */
-	@ThriftMethod
-	public List<String> loadFeatureMd5ByUpdate(@TargetType(java.util.Date.class)long timestamp);
+	public List<String> loadFeatureMd5ByUpdate(long timestamp);
 
 	/**
 	 * 添加一条验证日志记录
@@ -395,12 +391,12 @@ public interface IFaceLog{
      * @see #loadLogLightByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
-	public List<LogLightBean> loadLogLightByVerifyTime(@TargetType(java.util.Date.class)long timestamp,int startRow, int numRows);
+	public List<LogLightBean> loadLogLightByVerifyTime(long timestamp,int startRow, int numRows);
     /**
      * 返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
      * @see #countLogLightByWhere(String)
      */
-	 public int countLogLightByVerifyTime(@TargetType(java.util.Date.class)long timestamp);
+	 public int countLogLightByVerifyTime(long timestamp);
 	/**
 	 * 判断md5指定的图像记录是否存在
 	 * @param md5
@@ -673,7 +669,7 @@ public interface IFaceLog{
 	 * @return
 	 * @throws RuntimeDaoException
 	 */
-	public List<PersonGroupBean> getPersonGroups(Collection<Integer> groupIdList);
+	public List<PersonGroupBean> getPersonGroups(List<Integer> groupIdList);
 	/**
 	 * 删除{@code personGroupId}指定的人员组<br>
 	 * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
@@ -752,7 +748,7 @@ public interface IFaceLog{
      * @param token 访问令牌
      * @see #addPermit(DeviceGroupBean,PersonGroupBean, Token)
      */
-	@ThriftMethod("addPermitById")
+	@DeriveMethod(methodSuffix="ById")
 	public void addPermit(int deviceGroupId,int personGroupId, Token token);
 	/**
 	 * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean, Token)}
@@ -792,7 +788,7 @@ public interface IFaceLog{
 	 * @param timestamp
 	 * @return
 	 */
-	public List<PermitBean> loadPermitByUpdate(@TargetType(java.util.Date.class)long timestamp);
+	public List<PermitBean> loadPermitByUpdate(long timestamp);
     /**
      * 查询{@code where} SQL条件语句指定的记录
      * @param where SQL 条件语句,为{@code null}或空时加载所有记录
@@ -906,7 +902,7 @@ public interface IFaceLog{
 	 * @param duration 通道有效时间(秒) 大于0有效,否则使用默认的有效期
 	 * @return
 	 */
-	@ThriftMethod("applyAckChannelWithDuration")
+	@DeriveMethod(methodSuffix="WithDuration")
 	public String applyAckChannel(Token token, long duration);
 	/**
 	 * 申请一个唯一的命令序列号

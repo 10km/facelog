@@ -1,13 +1,10 @@
 package net.gdface.facelog;
 
-import com.facebook.swift.codec.ThriftStruct;
-
 /**
  * 消息系统(redis)基本参数名
  * @author guyadong
  *
  */
-@ThriftStruct
 public enum MQParam {
 	/** redis服务器地址 */REDIS_URI,
 	/** 设备命令通道名 */CMD_CHANNEL,
