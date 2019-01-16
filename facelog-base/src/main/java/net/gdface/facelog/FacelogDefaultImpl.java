@@ -132,7 +132,7 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public int savePerson(Map<ByteBuffer, PersonBean> persons, Token token) {
+	public int savePersons(Map<ByteBuffer, PersonBean> persons, Token token) {
 		return 0;
 	}
 

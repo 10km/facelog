@@ -755,8 +755,8 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public int savePerson (Map<java.nio.ByteBuffer, PersonBean> persons,Token token) {
-        return delegate().savePerson(persons,token);
+    public int savePersons (Map<java.nio.ByteBuffer, PersonBean> persons,Token token) {
+        return delegate().savePersons(persons,token);
     }
 
     @Override

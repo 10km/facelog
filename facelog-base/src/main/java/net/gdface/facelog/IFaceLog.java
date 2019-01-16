@@ -234,7 +234,7 @@ public interface IFaceLog{
 	 * @return
 	 */
 	@DeriveMethod(methodSuffix="WithPhoto")
-	public int savePerson(Map<ByteBuffer, PersonBean> persons, Token token);
+	public int savePersons(Map<ByteBuffer, PersonBean> persons, Token token);
 
 	/**
 	 * 保存人员信息记录
@@ -447,6 +447,7 @@ public interface IFaceLog{
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws DuplicateRecordException 
 	 */
+	@DeriveMethod(methodSuffix="Multi")
 	public FeatureBean addFeature(byte[] feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo, Integer deviceId, Token token)
 			throws DuplicateRecordException;
 
