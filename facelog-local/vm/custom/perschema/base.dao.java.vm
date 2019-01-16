@@ -1,0 +1,813 @@
+#parse( "header.include.vm" )
+#parse( "schema.include.vm" )
+#parse( "macros.include.vm" )
+#set ( $modifier = 'protected ')
+#set ( $javaClassName = 'BaseDao' )
+$codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
+package $extensionPkg;
+
+import static com.google.common.base.Preconditions.*;
+
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.Callable;
+
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+
+import ${schemaPkg}.TableManager;
+import ${schemaPkg}.BaseBean;
+#join($tables '
+import ${schemaPkg}.${e.asManagerInterfaceNSP()};
+import ${schemaPkg}.${e.asBeanClassNSP()};' '')
+
+import ${schemaPkg}.exception.ObjectRetrievalException;
+import ${schemaPkg}.exception.RuntimeDaoException;
+
+/**
+ * 数据库访问基础方法
+ * @author guyadong
+ *
+ */
+class BaseDao implements CommonConstant {
+    #join($tables '
+    static final $e.asManagerInterfaceNSP() $e.getGetManagerMethod()(){
+        return TableManagerInitializer.INSTANCE.${e.asVarManager()};
+    }' '')
+
+#macro(defineMethod $table $onlyAdd)
+    //////////// $table.name.toUpperCase() /////////
+#set ($beanClass = $table.asBeanClassNSP())
+#set ($coreClass = $table.asCoreClassNSP())
+#set ($primaryKeys = $table.primaryKeys)
+#if($table.countPrimaryKeys() == 1)
+#set ( $primaryKey = $table.primaryKey)
+#else
+#set ( $primaryKey = $null)
+#end
+#define($fullVarNames)#join($primaryKeys '$e.fullVarName' ',')#end
+#define($fullParams)#join($primaryKeys '$e.javaType $e.fullVarName' ',')#end
+#define($fullParamComments)#join($primaryKeys '
+     * @param $e.fullVarName $e.remarks ' '')
+#end
+#define($varNames)#join($primaryKeys '$e.varName' ',')#end
+#define($varTypes)#join($primaryKeys '$e.javaType' ',')#end
+#define($params)#join($primaryKeys '$e.javaType $e.varName' ',')#end
+#define($paramComments)#join($primaryKeys '
+     * @param $e.varName $e.remarks ' '')
+#end
+#if($table.hasPrimaryKey())
+    //1
+    /** 
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}<br>
+     * $paramComments
+     * @return 
+     * @see $table.asManagerInterfaceNSP()${esc.hash}loadByPrimaryKey($varTypes)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}$beanClass daoGet${coreClass}($params)throws RuntimeDaoException{
+        return ${table.getGetManagerMethod()}().loadByPrimaryKey($varNames);
+    }
+    //1-2
+    /** 
+     * 根据主键从数据库读取记录,没有找到记录抛出异常<br>
+     * $paramComments
+     * @return 
+     * @see $table.asManagerInterfaceNSP()${esc.hash}loadByPrimaryKeyChecked($varTypes)
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    $!{modifier}$beanClass daoGet${coreClass}Checked($params)throws RuntimeDaoException,ObjectRetrievalException{
+        return ${table.getGetManagerMethod()}().loadByPrimaryKeyChecked($varNames);
+    }
+#if($table.countPrimaryKeys() == 1)
+    //2    
+    /** 
+     * 根据主键从数据库读取记录
+     * @return 返回与输入参数下标对应的 ${beanClass} 列表,没有查到记录的返回{@link ${beanClass}${esc.hash}NULL}
+     * @see $table.asManagerInterfaceNSP()${esc.hash}loadByPrimaryKey(Collection)
+     * @see ${beanClass}${esc.hash}replaceNull(List)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}List<$beanClass> daoGet${coreClass}s(Collection<$primaryKey.javaType> ${primaryKey.varName}Collection)
+                    throws RuntimeDaoException{
+        return ${beanClass}.replaceNull((${table.getGetManagerMethod()}().loadByPrimaryKey(${primaryKey.varName}Collection)));
+    }
+    //3  
+    /** 
+     * 删除主键列表({@code ${primaryKey.varName}Collection})指定的记录
+     * @return 返回删除的记录条数
+     * @see $table.asManagerInterfaceNSP()${esc.hash}deleteByPrimaryKey(Collection)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}int daoDelete${coreClass}sByPrimaryKey(Collection<$primaryKey.javaType> ${primaryKey.varName}Collection)
+                    throws RuntimeDaoException{
+        int count =0;
+        if(null != ${primaryKey.varName}Collection){
+            for($primaryKey.javaType $primaryKey.varName:${primaryKey.varName}Collection){
+                count += daoDelete${coreClass}($primaryKey.varName);
+            }
+        }
+        return count;
+    }
+###### CONVERTER BETWEEN BEAN AND PRIMARY KEY########
+    //3-5
+    /** transformer : $beanClass to $primaryKey.fullName */ 
+    $!{modifier}final Function<$beanClass,$primaryKey.javaType> daoCast${coreClass}ToPk = new Function<$beanClass,$primaryKey.javaType>(){
+            @Override
+            public $primaryKey.javaType apply($beanClass input) {
+                return null == input ? null : input.$primaryKey.getGetMethod()();
+            }};
+    //3-6
+    /** transformer : $primaryKey.fullName to $beanClass */ 
+    $!{modifier}final Function<$primaryKey.javaType,$beanClass> daoCast${coreClass}FromPk = new Function<$primaryKey.javaType,$beanClass>(){
+            @Override
+            public $beanClass apply($primaryKey.javaType input) {
+                return daoGet${coreClass}(input);
+            }};
+    //3-8
+    /**
+     * unwrap primary key from {@link $beanClass}<br>
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     *
+     * @param beans {@link $beanClass} collection
+     * @return primary key list
+     * @see ${table.asManagerInterfaceNSP()}${esc.hash}toPrimaryKeyList(Collection)
+     */
+    $!{modifier}List<$primaryKey.javaType> daoToPrimaryKeyListFrom${coreClass}s(Collection<$beanClass> beans){
+        if (null == beans){
+            return ImmutableList.of();
+        }else{
+            return ${table.getGetManagerMethod()}().toPrimaryKeyList(beans);
+        }
+    }
+    //3-9
+    /**
+     * unwrap primary key from {@link $beanClass}<br>
+     *
+     * the returned list is a transformed view of {@code beans}; 
+     * changes to {@code beans} will be reflected in the returned list and vice versa. 
+     *
+     * if {@code beans} is {@code null},return a empty list(immutable)
+     * @param beans {@link $beanClass} list
+     * @return primary key list 
+     * @see Lists${esc.hash}transform(List, Function)
+     */
+    $!{modifier}List<$primaryKey.javaType> daoToPrimaryKeyListFrom${coreClass}s(List<$beanClass> beans){
+        if(null == beans){
+            return ImmutableList.of();
+        }else{
+            return Lists.transform(beans,daoCast${coreClass}ToPk);
+        }
+    }
+#end
+    //4
+    /** 
+     *　判断主键指定的记录是否存在
+     * $paramComments
+     * @see $table.asManagerInterfaceNSP()${esc.hash}existsPrimaryKey($varTypes)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}boolean daoExists${coreClass}($params)
+                    throws RuntimeDaoException{
+        return ${table.getGetManagerMethod()}().existsPrimaryKey($varNames);
+    }
+    //4-2
+    /** 
+     *　判断指定的记录是否存在
+     * @see $table.asManagerInterfaceNSP()${esc.hash}existsPrimaryKey(Object...)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}boolean daoExists${coreClass}($beanClass bean)
+                    throws RuntimeDaoException{
+        return ${table.getGetManagerMethod()}().existsPrimaryKey(bean);
+    }
+    //5
+    /**
+     * 删除主键指定的记录
+     * $paramComments 
+     * @return 返回删除的记录条数(1),如果记录不存在返回0
+     * @see $table.asManagerInterfaceNSP()${esc.hash}deleteByPrimaryKey($varTypes)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}int daoDelete${coreClass}($params)
+                    throws RuntimeDaoException{
+        return ${table.getGetManagerMethod()}().deleteByPrimaryKey($varNames);
+    }
+    //5-2
+    /**
+     * 删除指定的记录
+     * @param bean 要删除的记录
+     * @return 返回删除的记录条数(1),如果{@code bean}为{@code null}或记录不存在返回0
+     * @see ${esc.hash}daoDelete${coreClass}($varTypes)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}int daoDelete${coreClass}($beanClass bean)
+                    throws RuntimeDaoException{
+        return null == bean ? 0 : daoDelete${coreClass}(#join($primaryKeys 'bean.$e.getGetMethod()()' ','));
+    }
+    //6
+    /**
+     * 删除{@code ${table.asVarBean()}Collection}列表指定的记录
+     * @return 返回删除的记录条数
+     * @see ${esc.hash}daoDelete${coreClass}($varTypes)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}int daoDelete${coreClass}s(Collection<$beanClass> beans)
+                    throws RuntimeDaoException{
+        int count =0;
+        if(null != beans){        
+            for($beanClass bean:beans){
+                count += daoDelete${coreClass}(bean);
+            }
+        }
+        return count;
+    }
+################# CHECK DUPLICATE RECORD##########
+    //7
+    /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
+     * @see TableManager${esc.hash}checkDuplicate(BaseBean)
+     * @throws RuntimeDaoException
+     * @throws DuplicateRecordException if exists duplicated row
+     */
+    $!{modifier}$beanClass daoCheckDuplicate($beanClass $table.asVarBean())
+                    throws RuntimeDaoException,DuplicateRecordException{
+        try{
+            return ${table.getGetManagerMethod()}().checkDuplicate($table.asVarBean());
+        }catch(ObjectRetrievalException e){
+            throw new DuplicateRecordException();
+        }
+    }
+################# CHECK DUPLICATE PRIMARY KEY##########
+#if($table.countPrimaryKeys() == 1)
+#set ($checkReturnType = $primaryKey.javaType)
+#set ($checkReturnComment = "@return always {@code $primaryKey.fullVarName} ")
+#else
+#set ($checkReturnType = 'void')
+#set ($checkReturnComment = "")
+#end
+    //7-3
+    /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
+     * $paramComments
+     * @see TableManager${esc.hash}checkDuplicate(BaseBean)
+     * @throws DuplicateRecordException if exists duplicated row
+     * $!checkReturnComment
+     * @throws RuntimeDaoException
+     * @throws DuplicateRecordException
+     */
+    $!{modifier}$checkReturnType daoCheckDuplicate${coreClass}($params)
+                    throws RuntimeDaoException,DuplicateRecordException{
+        if(${table.getGetManagerMethod()}().existsPrimaryKey($varNames)){
+            throw new DuplicateRecordException();
+        }
+#if($table.countPrimaryKeys() == 1)
+        return $primaryKey.varName;
+#end
+    }
+#end
+######################### IMPORTED KEYS ########
+#foreach ($importedTable in $table.importedTables)
+#set ( $importedClass = "$importedTable.asBeanClassNSP()" )
+#foreach( $fkName in $importedTable.getFkMapNames($table.name) )
+#set ( $fkObj = $importedTable.getForeignKey($fkName) )
+#define($seeLink)$table.asManagerInterfaceNSP()${esc.hash}${importedTable.getImportedBeansGetMethod($fkName)}AsList($varTypes)#end
+    //8
+#if($table.name.endsWith('group') && $fkObj.columns.size() == 1 && $fkObj.columns[0].name == 'group_id')
+#set($methodName = "daoGet${importedTable.asCoreClassNSP()}sOfGroup")
+    /**
+     * 返回属于{@code $fullVarNames}指定组的所有{@code $importedTable.name}记录
+     * $fullParamComments
+     * @see $seeLink
+     * @throws RuntimeDaoException
+     */
+#elseif($importedTable.isSelfRef($fkObj))
+#set($methodName = "daoGetSub${importedTable.asCoreClassNSP()}")
+    /**
+     * 返回{@code $fullVarNames)}指定的组下的所有子节点,如果没有子节点则返回空表
+     * $fullParamComments
+     * @see $seeLink
+     * @throws RuntimeDaoException
+     */
+#else
+#set($methodName = "${importedTable.getImportedBeansGetMethod($fkName).replaceFirst('get','daoGet')}On${coreClass}")
+    /**
+     * 返回外键(#join($fkObj.columns '$e.fullName' ','))引用指定记录(#join($primaryKeys '$e.fullName' ','))的所有{@code $importedTable.name}记录
+     * $fullParamComments
+     * @see $seeLink
+     * @throws RuntimeDaoException
+     */
+#end
+    $!{modifier}List<$importedClass> ${methodName}($fullParams)
+                    throws RuntimeDaoException{
+        return ${table.getGetManagerMethod()}().${importedTable.getImportedBeansGetMethod($fkName)}AsList($fullVarNames);
+    }
+    //8-2
+    /**
+     * 删除外键($fullVarNames))引用指定记录(#join($primaryKeys '$e.fullName' ','))的所有{@code $importedTable.name}记录
+     * $fullParamComments
+     * @see $table.asManagerInterfaceNSP()${esc.hash}${importedTable.getImportedBeansDelMethod($fkName)}($varTypes)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}int ${importedTable.getImportedBeansDelMethod($fkName).replaceFirst('delete','daoDelete')}On${coreClass}($fullParams)
+                    throws RuntimeDaoException{
+        return ${table.getGetManagerMethod()}().${importedTable.getImportedBeansDelMethod($fkName)}($fullVarNames);
+    }
+#end###foreach( $fkName in $importedTable.getFkMapNames($table.name) )
+#end###foreach ($importedTable in $importedTables)
+####################FOREIGN KEY##################
+#foreach ($foreignTable in $table.foreignTables)
+#set ( $foreignClass = "$foreignTable.asBeanClassNSP()" )
+#foreach( $fkName in $table.getFkMapNames($foreignTable.name) )
+#set ( $fkObj = $table.getForeignKey($fkName) )
+    //8-3
+    /**
+     * 返回外键(#join($fkObj.columns '$e.fullName' ','))引用的 $foreignTable.name 记录
+     * @param bean
+     * @see $table.asManagerInterfaceNSP()${esc.hash}$table.getReferencedVarGetMethod($fkName)($beanClass)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}$foreignClass $table.getReferencedVarGetMethod($fkName).replaceFirst('get','daoGet')On${coreClass}($beanClass bean)
+                    throws RuntimeDaoException{
+        return ${table.getGetManagerMethod()}().$table.getReferencedVarGetMethod($fkName)(bean);
+    }
+    //8-4
+    /**
+     * 设置外键${table.name}(#join($fkObj.columns '$e.name' ','))引用为{@code beanToSet}指定的记录,
+     * 如果{@code beanToSet}没有保存则先save
+     * @param bean
+     * @param beanToSet 被引用的记录
+     * @see $table.asManagerInterfaceNSP()${esc.hash}$table.getReferencedVarSetMethod($fkName)($beanClass,$foreignClass)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}$foreignClass $table.getReferencedVarSetMethod($fkName).replaceFirst('set','daoSet')On${coreClass}($beanClass bean,$foreignClass beanToSet)
+                    throws RuntimeDaoException{
+        return ${table.getGetManagerMethod()}().$table.getReferencedVarSetMethod($fkName)(bean,beanToSet);
+    }
+###### CONVERTER BETWEEN BEAN AND FOREIGN KEY########    
+#if(!$table.isSelfRef($fkObj) && $fkObj.columns.size() == 1)
+#set ($fkCol = $fkObj.columns[0])
+#set ($castFunVar = "daoCast${coreClass}To${strUtil.convertName($fkCol.name,false)}")
+    //8-6
+    /** transformer : $beanClass to $fkCol.fullName */
+    $!{modifier}final Function<$beanClass,$fkCol.javaType> ${castFunVar} = new Function<$beanClass,$fkCol.javaType>(){
+            @Override
+            public $fkCol.javaType apply($beanClass input) {
+                return null == input ? null : input.$fkCol.getGetMethod()();
+            }};
+#if($table.countPrimaryKeys() == 1)
+    //8-8
+    /** transformer : $primaryKey.fullName to $fkCol.fullName */
+    $!{modifier}final Function<$primaryKey.javaType,$fkCol.javaType> daoCast${coreClass}PkTo${strUtil.convertName($fkCol.name,false)} = new Function<$primaryKey.javaType,$fkCol.javaType>(){
+            @Override
+            public $fkCol.javaType apply($primaryKey.javaType input) {
+                return null == input 
+                    ? null 
+                    : ${castFunVar}.apply(daoGet${coreClass}(input));
+            }};
+#end###if($table.countPrimaryKeys() == 1)
+#end###if(!$table.isSelfRef($fkObj) && $fkObj.columns.size() == 1)
+#end###foreach( $fkName in $table.getFkMapNames($foreignTable.name) )
+#end###foreach ($foreignTable in $foreignTables)
+################### METHOD FOR SELF-REFERENCE FIELD#################
+#foreach($selfFk in $table.selfRefKeys)
+    //9
+    /**
+     * 返回($fullVarNames))指定的${table.name}记录的所有的父节点(包括自己)<br>
+     * 自引用字段:${table.name}(#join($selfFk.columns '$e.name'))
+     * @see $table.asManagerInterfaceNSP()${esc.hash}$table.getListMethod($selfFk)($varTypes)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}java.util.List<$beanClass> $table.getListMethod($selfFk).replaceFirst('list','daoList')For${coreClass}($fullParams)
+                    throws RuntimeDaoException{
+        return ${table.getGetManagerMethod()}().$table.getListMethod($selfFk)($fullVarNames);
+    }
+    //9-2
+    /**
+     * 返回{@code $selfFk.foreignTable.asVarBean()}指定的${table.name}记录的所有的父节点(包括自己)<br>
+     * 自引用字段:${table.name}(#join($selfFk.columns '$e.name'))
+     * @see $table.asManagerInterfaceNSP()${esc.hash}$table.getListMethod($selfFk)($selfFk.foreignTable.asBeanClassNSP())
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}java.util.List<$beanClass> $table.getListMethod($selfFk).replaceFirst('list','daoList')For${coreClass}($selfFk.foreignTable.asBeanClassNSP() $selfFk.foreignTable.asVarBean())
+                    throws RuntimeDaoException{
+        return ${table.getGetManagerMethod()}().$table.getListMethod($selfFk)($selfFk.foreignTable.asVarBean());
+    }
+#end###foreach($selfFk in $table.selfRefKeys)
+######################## SAVE #################
+#if($table.type == "TABLE")
+########## DEFAULT GROUP ##############
+#if($table.name.endsWith('group'))
+    //10
+    /** 
+     * 如果没有默认组则向 $table.name 表中增加默认组,失败则抛出异常 
+     * 
+     * @throws IllegalStateException 创建失败
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}void daoSaveDefault${coreClass}IfAbsent()
+                    throws RuntimeDaoException{
+        if(!daoExists${coreClass}(DEFAULT_GROUP_ID)){
+            try{
+                $beanClass bean = new $beanClass(DEFAULT_GROUP_ID);
+                bean.setName(DEFAULT_GROUP_NAME);
+                daoSave${coreClass}(bean);
+            }catch(RuntimeDaoException e){
+                // do nothing
+            }
+            if(!daoExists${coreClass}(DEFAULT_GROUP_ID)){
+                throw new IllegalStateException("can't create default group for ${table.getBasename(true)}"); 
+            }
+        }
+    }
+#set( $ename = $table.name.replace('_group',''))
+#set( $etable = $db.getTable($ename))
+#set( $eBeanClass = $etable.asBeanClassNSP())
+    //11
+    /**
+     * 检查{@link $eBeanClass}的'group_id'字段是否为默认组{@link CommonConstant${esc.hash}DEFAULT_GROUP_ID},
+     * 如果是,且默认组记录不存在则创建默认组
+     * @return {@code ${etable.asVarBean()}}
+     * @see ${esc.hash}daoSaveDefault${coreClass}IfAbsent()
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}$eBeanClass daoCheckGroup($eBeanClass ${etable.asVarBean()})
+                    throws RuntimeDaoException{
+        if(null != ${etable.asVarBean()} && Objects.equals(${etable.asVarBean()}.getGroupId(), DEFAULT_GROUP_ID)){
+            daoSaveDefault${coreClass}IfAbsent();
+        }
+        return ${etable.asVarBean()};
+    }
+#end
+#if($onlyAdd)
+    //12
+    /** 
+     * 添加新记录<br>
+     * $table.name 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link $beanClass${esc.hash}isNew()}返回{@code false},则抛出异常
+     * @param $table.asVarBean() 要添加的新记录
+     * @see TableManager${esc.hash}save(BaseBean)
+     * @see TableManager${esc.hash}checkDuplicate(BaseBean)
+     * @throws RuntimeDaoException
+     * @throws DuplicateRecordException if exists duplicated row
+     * @throws IllegalArgumentException if {@code ${table.asVarBean()}.isNew()} is {@code false}
+     */
+    $!{modifier}$beanClass daoAdd${coreClass}($beanClass $table.asVarBean())
+                    throws RuntimeDaoException,DuplicateRecordException{
+        checkArgument(null == ${table.asVarBean()} || ${table.asVarBean()}.isNew(),"can be add,delete,but modify record for $table.name,so the _isNew field must be true");
+        return ${table.getGetManagerMethod()}().save(daoCheckDuplicate($table.asVarBean()));
+    }
+#####  连接表方法 ######
+#if($table.isSampleJunctionTable())
+#set ( $leftFk  = $table.getForeignKeysAsList()[0])
+#set ( $rightFk = $table.getForeignKeysAsList()[1])
+#set ( $leftCol  = $leftFk.columns[0])
+#set ( $rightCol  = $rightFk.columns[0])
+#set ( $leftTable = $leftFk.foreignTable)
+#set ( $rightTable = $rightFk.foreignTable)
+#set ( $leftClass  = $leftTable.asBeanClassNSP())
+#set ( $rightClass = $rightTable.asBeanClassNSP())
+#set ( $leftVar   = "${leftCol.varName}")
+#set ( $rightVar   = "${rightCol.varName}")
+    //12-5
+    /**
+     * 创建$leftTable.name和$rightTable.name之间的MANY TO MANY 联接表($table.name)记录<br>
+     * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
+     * @param $leftVar $leftCol.remarks
+     * @param $rightVar $rightCol.remarks
+     * @see ${esc.hash}daoAdd${coreClass}($leftClass,$rightClass)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}$beanClass daoAdd${coreClass}($leftCol.javaType $leftVar,$rightCol.javaType $rightVar)
+                    throws RuntimeDaoException{
+        return daoAdd${coreClass}(
+                    daoGet${leftTable.asCoreClassNSP()}($leftVar),
+                    daoGet${rightTable.asCoreClassNSP()}($rightVar));
+    }
+#set ( $leftVar   = $leftTable.asVarBean())
+#set ( $rightVar = $rightTable.asVarBean())
+#define($pkParams)${leftVar}.${leftTable.primaryKey.getGetMethod()}(),${rightVar}.${rightTable.primaryKey.getGetMethod()}()#end
+    //12-6
+    /**
+     * 创建$leftTable.name和$rightTable.name之间的MANY TO MANY 联接表($table.name)记录<br>
+     * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
+     * @param $leftVar
+     * @param $rightVar
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}$beanClass daoAdd${coreClass}($leftClass $leftVar,$rightClass $rightVar)
+                    throws RuntimeDaoException{
+        if(daoExists${leftTable.asCoreClassNSP()}($leftVar) && daoExists${rightTable.asCoreClassNSP()}($rightVar)){
+            try{
+                return daoAdd${coreClass}(
+                            new ${beanClass}($pkParams),
+                            $leftVar,$rightVar);
+            }catch(DuplicateRecordException e){
+                return daoGet${coreClass}($pkParams);
+            }
+        }
+        return null; 
+    }
+    //12-7
+    /**
+     * 删除$leftTable.name和$rightTable.name之间的MANY TO MANY 联接表($table.name)记录<br>
+     * @return 删除成功返回0,如果记录不存在或输入的参数为{@code null}则返回0
+     * @param $leftVar
+     * @param $rightVar
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}int daoDelete${coreClass}($leftClass $leftVar,$rightClass $rightVar)
+                    throws RuntimeDaoException{
+        return (null == $leftVar || null == $rightVar)
+            ? 0
+            : daoDelete${coreClass}($pkParams);
+    }
+#end###if($table.isSampleJunctionTable())
+#if( $table.hasForeignTables() || $table.hasImportedTables() )
+    //13
+    /** 
+     * 添加新记录(同步保存)<br>
+     * $table.name 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link $beanClass${esc.hash}isNew()}返回{@code false},则抛出异常
+     * see also {@link $table.asManagerInterfaceNSP()${esc.hash}save($beanClass #foreachForeignTables('native' $table  ", $m_foreignClass" '' '') #foreachImportedTables('native' $table  ", Collection" '' '') )}<br>
+     * @see TableManager${esc.hash}checkDuplicate(BaseBean)
+     * @throws RuntimeDaoException
+     * @throws DuplicateRecordException if exists duplicated row
+     * @throws IllegalArgumentException if {@code ${table.asVarBean()}.isNew()} is {@code false}
+     */
+    $!{modifier}$beanClass daoAdd${coreClass}($beanClass $table.asVarBean()
+        #foreachForeignTables('native' $table  ", $m_foreignClass $table.asRefArg($m_fkName) " '
+        ' '')
+
+        #foreachImportedTables('native' $table  ", Collection<${m_importedClass}> $m_importedTable.asImpArg($m_fkName) " '
+        ' ''))throws RuntimeDaoException,DuplicateRecordException{
+        checkArgument(null == ${table.asVarBean()} || ${table.asVarBean()}.isNew(),"can be add,delete,but modify record for $table.name,so the _isNew field must be true");
+        daoCheckDuplicate($table.asVarBean());
+        return ${table.getGetManagerMethod()}().save($table.asVarBean()
+            #foreachForeignTables('native' $table  ", $table.asRefArg($m_fkName) " '
+            ' '')
+
+            #foreachImportedTables('native' $table  ", $m_importedTable.asImpArg($m_fkName) " '
+            ' ''));
+    }
+#end
+#else###if($onlyAdd)
+    //14
+    /** 
+     * 参见 {@link TableManager${esc.hash}save(BaseBean)}
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}$beanClass daoSave${coreClass}($beanClass $table.asVarBean())
+                    throws RuntimeDaoException{
+#if($table.getColumn('group_id'))
+        daoCheckGroup($table.asVarBean());
+#end
+        return ${table.getGetManagerMethod()}().save($table.asVarBean());
+    }
+#if( $table.hasForeignTables() || $table.hasImportedTables() )
+    //15
+    /** 同步保存<br> 
+     * see also {@link $table.asManagerInterfaceNSP()${esc.hash}save($beanClass #foreachForeignTables('native' $table  ", $m_foreignClass" '' '') #foreachImportedTables('native' $table  ", Collection" '' '') )}
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}$beanClass daoSave${coreClass}($beanClass $table.asVarBean()
+        #foreachForeignTables('native' $table  ", $m_foreignClass $table.asRefArg($m_fkName) " '
+        ' '')
+
+        #foreachImportedTables('native' $table  ", Collection<${m_importedClass}> $m_importedTable.asImpArg($m_fkName) " '
+        ' ''))throws RuntimeDaoException{
+#if($table.getColumn('group_id'))
+        daoCheckGroup($table.asVarBean());
+#end
+        return ${table.getGetManagerMethod()}().save($table.asVarBean()
+            #foreachForeignTables('native' $table  ", $table.asRefArg($m_fkName) " '
+            ' '')
+
+            #foreachImportedTables('native' $table  ", $m_importedTable.asImpArg($m_fkName) " '
+            ' ''));
+    }
+#end###if( $table.hasForeignTables() || $table.hasImportedTables() )
+########### COLLECTION SAVE (集合保存)##############
+#end###if($onlyAdd)
+#set($mprefix = 'daoSave')
+#set($throwsStr = '')
+#if($onlyAdd)
+#set($mprefix = 'daoAdd')
+#set($throwsStr = ',DuplicateRecordException')
+#end
+    //12-3-3
+    /** 
+     * 添加新记录<br>
+     * @param beans 要添加的新记录集合
+     * @return always {@code beans}
+     * @see ${esc.hash}${mprefix}${coreClass}($beanClass)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}Collection<$beanClass> ${mprefix}${coreClass}s(Collection<$beanClass> beans)
+                    throws RuntimeDaoException $!{throwsStr}{
+        if(null != beans){
+            for($beanClass bean : beans){
+                ${mprefix}${coreClass}(bean);
+            }
+        }
+        return beans;
+    }
+    //12-3-5
+    /** 
+     * {@link ${esc.hash}${mprefix}${coreClass}s(Collection)}的事务化版本
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}Collection<$beanClass> ${mprefix}${coreClass}sAsTransaction(final Collection<$beanClass> beans)
+                    throws RuntimeDaoException $!{throwsStr}{
+        return daoRunAsTransaction(new Callable<Collection<$beanClass>>(){      
+            @Override
+            public Collection<$beanClass> call() throws Exception {
+                return ${mprefix}${coreClass}s(beans);
+            }});
+    }
+#end###if($table.type == "TABLE")
+###################### LOAD ##################
+    //16
+    /**
+     * 查询{@code where} SQL条件语句指定的 $table.name 记录
+     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @see $table.asManagerInterfaceNSP()${esc.hash}loadByWhereAsList(String,int[],int,int)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}List<$beanClass> daoLoad${coreClass}ByWhere(String where,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return ${table.getGetManagerMethod()}().loadByWhereAsList(where,null,startRow,numRows);
+    }
+    //17
+    /**
+     * 返回 $table.name 表的所有记录
+     * @see $table.asManagerInterfaceNSP()${esc.hash}loadAllAsList()
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}List<$beanClass> daoLoad${coreClass}All()
+                    throws RuntimeDaoException{
+        return ${table.getGetManagerMethod()}().loadAllAsList();
+    }
+    //17-2
+    /**
+     * 返回满足{@code where} SQL条件语句的 $table.name 记录总数
+     * @see TableManager${esc.hash}countWhere(String)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}int daoCount${coreClass}ByWhere(String where)
+                    throws RuntimeDaoException{
+        return ${table.getGetManagerMethod()}().countWhere(where);
+    }
+#if($table.countPrimaryKeys() == 1)
+#set ($pkName = $strUtil.convertName($primaryKey.name,false))
+    //18
+    /** 
+     * 查询{@code where}条件指定的记录
+     * @return 返回查询结果记录的主键
+     * @see ${esc.hash}daoLoad${coreClass}ByWhere(String,int,int)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}List<$primaryKey.javaType> daoLoad${coreClass}${pkName}ByWhere(String where)
+                    throws RuntimeDaoException{
+        return daoToPrimaryKeyListFrom${coreClass}s(daoLoad${coreClass}ByWhere(where,1,-1));
+    }
+#end
+#foreach($index in $table.uniqueIndicesAsList)
+#set ($indexColumns = $index.getIndexColumnsList())
+    //18-5
+    /** 
+     * 索引(${table.name}.${index.name})查询,没有找到记录返回{@code null}<br>
+     * #join($indexColumns '
+     * @param $e.varName $e.remarks' '')
+
+     * @see $table.asManagerInterfaceNSP()${esc.hash}loadBy${index.asCamelCaseName()}(#join($indexColumns '$e.javaType' ','))
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}$beanClass daoGet${coreClass}By${index.asCamelCaseName()}(#join($indexColumns '$e.javaType $e.varName' ','))
+                    throws RuntimeDaoException{
+        return ${table.getGetManagerMethod()}().loadBy${index.asCamelCaseName()}(#join($indexColumns '$e.varName' ','));
+    }
+    //18-7
+    /** 
+     * 索引(${table.name}.${index.name})查询,没有找到记录抛出异常<br>
+     * #join($indexColumns '
+     * @param $e.varName $e.remarks' '')
+
+     * @see $table.asManagerInterfaceNSP()${esc.hash}loadBy${index.asCamelCaseName()}Checked(#join($indexColumns '$e.javaType' ','))
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    $!{modifier}$beanClass daoGet${coreClass}By${index.asCamelCaseName()}Checked(#join($indexColumns '$e.javaType $e.varName' ','))
+                    throws RuntimeDaoException,ObjectRetrievalException{
+        return ${table.getGetManagerMethod()}().loadBy${index.asCamelCaseName()}Checked(#join($indexColumns '$e.varName' ','));
+    }
+#end
+#### 生成 loadByTimestamp方法
+#define($defineLoadByTimestamp)
+#if($table.getColumn($timestampColumn))
+#set ( $m_suffix = $strUtil.convertName($timestampColumn,false))
+    //19
+    /**
+     * (主动更新机制实现)<br>
+     * 返回 ${table.name}.$timestampColumn 字段大于指定时间戳({@code timestamp})的所有记录
+     * @see ${esc.hash}daoLoad${coreClass}ByWhere(String,int,int)
+     * @throws RuntimeDaoException
+     * @throws IllegalArgumentException {@code timestamp}为{@code null}时
+     */
+    $!{modifier}List<$beanClass> daoLoad${coreClass}By${m_suffix}(Date timestamp,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return daoLoad${coreClass}ByWhere(makeWhere(timestamp,"$timestampColumn"),startRow,numRows);
+    }
+    //20
+    /** 
+     * 参见 {@link ${esc.hash}daoLoad${coreClass}By${m_suffix}(Date,int,int)} 
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}List<$beanClass> daoLoad${coreClass}By${m_suffix}(Date timestamp)
+                    throws RuntimeDaoException{
+        return daoLoad${coreClass}By${m_suffix}(timestamp,1,-1);
+    }
+    //20-5
+    /**
+     * 返回${table.name}.$timestampColumn 字段大于指定时间戳({@code timestamp})的记录总数
+     * @see ${esc.hash}daoCount${coreClass}ByWhere(String)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}int daoCount${coreClass}By${m_suffix}(Date timestamp)
+                    throws RuntimeDaoException{
+        return daoCount${coreClass}ByWhere(makeWhere(timestamp,"$timestampColumn"));
+    }
+#if($table.countPrimaryKeys() == 1)
+#set ($pkName = $strUtil.convertName($primaryKey.name,false))
+    //21
+    /** 
+     * (主动更新机制实现)<br>
+     * 返回 ${table.name}.$timestampColumn 字段大于指定时间戳({@code timestamp})的所有记录
+     * @return 返回查询结果记录的主键
+     * @see ${esc.hash}daoLoad${coreClass}${pkName}ByWhere(String)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}List<$primaryKey.javaType> daoLoad${coreClass}${pkName}By${m_suffix}(Date timestamp)
+                    throws RuntimeDaoException{
+        return daoLoad${coreClass}${pkName}ByWhere(makeWhere(timestamp,"$timestampColumn"));
+    }
+#end
+#end
+#end##define
+#set($timestampColumn = 'create_time') 
+$defineLoadByTimestamp
+#set($timestampColumn = 'update_time') 
+$defineLoadByTimestamp
+#set($timestampColumn = 'verify_time') 
+$defineLoadByTimestamp
+#end###macro(defineMethod $table $onlyAdd)
+    /** 生成 SQL where 语句,example: {@code WHERE create_time >'2017-09-02 12:12:12'} */
+    static private String makeWhere(Date timestamp,String field){
+        SimpleDateFormat formatter = new SimpleDateFormat(TIMESTAMP_FORMATTER_STR);
+        return String.format(
+                "WHERE %s > '%s'", 
+                field,
+                formatter.format(checkNotNull(timestamp)));    
+    }
+    /** 
+     * 事务执行 
+     * @throws RuntimeDaoException
+     */
+    protected static <T> T daoRunAsTransaction(Callable<T> fun)
+                    throws RuntimeDaoException{
+        return getPersonManager().runAsTransaction(checkNotNull(fun));
+    }
+    /** 
+     * 事务执行 
+     * @throws RuntimeDaoException
+     */
+    protected static void daoRunAsTransaction(Runnable fun)
+                    throws RuntimeDaoException{
+        getPersonManager().runAsTransaction(checkNotNull(fun));
+    }
+
+    /**
+     * 数据库写操作类型
+     * @author guyadong
+     *
+     */
+    protected enum WriteOp{
+        /** 增加记录 */insert,
+        /** 更新记录 */update,
+        /** 删除记录 */delete
+    }
+##join($tables '#defineMethod($e false)' '')
+#foreach($tname in ['fl_device','fl_device_group','fl_person','fl_person_group'])
+#set($table = $db.getTable($tname))
+#defineMethod($table false)
+#end
+#foreach($tname in ['fl_face','fl_feature','fl_image','fl_log','fl_permit','fl_store','fl_log_light'])
+#set($table = $db.getTable($tname))
+#defineMethod($table true)
+#end
+}
