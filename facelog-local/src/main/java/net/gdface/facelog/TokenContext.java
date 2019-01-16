@@ -14,7 +14,9 @@ import com.google.common.base.Strings;
  */
 public class TokenContext {
     public static final Logger logger = LoggerFactory.getLogger(TokenContext.class);
-
+    static {
+    	CurrentTokenContextOp.setDefaultInstance(new LocalTokenContextOp());
+    }
 	static final ThreadLocal<TokenContext> TOKEN_CONTEXT = new ThreadLocal<TokenContext>(){
 		@Override
 		protected TokenContext initialValue() {
@@ -142,5 +144,5 @@ public class TokenContext {
 	}
 	public static void setErrorDetail(boolean errorDetail) {
 		TokenContext.errorDetail = errorDetail;
-	}
+	}	
 }
