@@ -755,11 +755,6 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public int savePersons (Map<java.nio.ByteBuffer, PersonBean> persons,Token token) {
-        return delegate().savePersons(persons,token);
-    }
-
-    @Override
     public PersonBean savePerson (PersonBean bean,byte[] idPhoto,byte[] feature,byte[] featureImage,FaceBean featureFaceBean,Integer deviceId,Token token) {
         return delegate().savePerson(bean,idPhoto,feature,featureImage,featureFaceBean,deviceId,token);
     }
@@ -802,6 +797,11 @@ public class IFaceLogDecorator implements IFaceLog{
     @Override
     public void savePersons (List<PersonBean> beans,Token token) {
          delegate().savePersons(beans,token);
+    }
+
+    @Override
+    public int savePersons (Map<java.nio.ByteBuffer, PersonBean> persons,Token token) {
+        return delegate().savePersons(persons,token);
     }
 
     @Override

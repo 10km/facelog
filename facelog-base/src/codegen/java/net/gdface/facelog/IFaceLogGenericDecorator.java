@@ -1,6 +1,5 @@
 package net.gdface.facelog;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import net.gdface.facelog.db.DeviceBean;
