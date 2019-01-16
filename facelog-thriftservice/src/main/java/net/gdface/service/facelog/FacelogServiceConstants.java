@@ -8,7 +8,7 @@ import net.gdface.cli.ThriftServiceConstants;
  *
  */
 public interface FacelogServiceConstants extends ThriftServiceConstants {
-	public static final int DEFAULT_PORT= 26414;
+	public static final int DEFAULT_PORT= 26411;
 
 	public static final String FACEAPI_CLASS_OPTION_LONG ="faceapi";
 	public static final String FACEAPI_CLASS_OPTION_DESC ="faceapi implemention class name,default: empty";
