@@ -20,7 +20,7 @@ import net.gdface.facelog.decorator.IFaceLogThriftDecorator;
  * @author guyadong
  *
  */
-public class FacelogServiceMain implements FacelogServiceConstants{
+public class FacelogServiceMain {
 	private static final Logger logger = LoggerFactory.getLogger(FacelogServiceMain.class);
 
 	private static final FacelogServiceConfig serviceConfig = FacelogServiceConfig.getInstance();
