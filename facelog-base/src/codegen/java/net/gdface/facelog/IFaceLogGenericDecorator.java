@@ -10,7 +10,6 @@ import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
-import net.gdface.facelog.service.DuplicateRecordException;
 import net.gdface.utils.FaceUtilits;
 /**
  * decorator pattern 装饰者模式实现基于{@link IFaceLogDecorator}的支持泛型方法参数{@link IFaceLog}接口<br>
