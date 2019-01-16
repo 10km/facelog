@@ -2,6 +2,7 @@ package net.gdface.facelog.thrift;
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
+import net.gdface.facelog.DuplicateRecordException;
 import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.ServiceSecurityException;
@@ -16,7 +17,6 @@ import net.gdface.facelog.db.LogLightBean;
 import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
-import net.gdface.facelog.service.DuplicateRecordException;
 import net.gdface.thrift.TypeTransformer;
 import net.gdface.thrift.ClientFactory;
 

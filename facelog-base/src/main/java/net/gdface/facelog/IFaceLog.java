@@ -17,7 +17,6 @@ import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
-import net.gdface.facelog.service.DuplicateRecordException;
 
 
 // 由于Java语言的限制,导致swift无法从interface中获取参数名信息，所以采用interface定义生成的thrift IDL文件中service中的方法

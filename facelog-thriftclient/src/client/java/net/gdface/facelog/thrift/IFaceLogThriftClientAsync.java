@@ -80,11 +80,11 @@ public class IFaceLogThriftClientAsync {
             try{
                 throw t;
             }
-            catch(net.gdface.facelog.thrift.client.ServiceSecurityException e){
-                onServiceSecurityException(e);
-            }
             catch(net.gdface.facelog.thrift.client.DuplicateRecordException e){
                 onDuplicateRecordException(e);
+            }
+            catch(net.gdface.facelog.thrift.client.ServiceSecurityException e){
+                onServiceSecurityException(e);
             }
             catch(net.gdface.facelog.thrift.client.ServiceRuntimeException e){
                 onServiceRuntimeException(e);
@@ -93,10 +93,10 @@ public class IFaceLogThriftClientAsync {
                 onThrowable(e);
             }
         }
-        protected void onServiceSecurityException(net.gdface.facelog.thrift.client.ServiceSecurityException e){
+        protected void onDuplicateRecordException(net.gdface.facelog.thrift.client.DuplicateRecordException e){
             System.out.println(e.getServiceStackTraceMessage());
         }
-        protected void onDuplicateRecordException(net.gdface.facelog.thrift.client.DuplicateRecordException e){
+        protected void onServiceSecurityException(net.gdface.facelog.thrift.client.ServiceSecurityException e){
             System.out.println(e.getServiceStackTraceMessage());
         }
         protected void onServiceRuntimeException(net.gdface.facelog.thrift.client.ServiceRuntimeException e){

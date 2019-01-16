@@ -18,7 +18,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<swift.version>0.14.2</swift.version>
 		<common-java.version>1.0.5</common-java.version>
-		<codegen.version>1.0.3-SNAPSHOT</codegen.version>
+		<codegen.version>1.0.3</codegen.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -97,11 +97,6 @@
 				<groupId>com.facebook.nifty</groupId>
 				<artifactId>nifty-core</artifactId>
 				<version>0.14.1</version>
-			</dependency>
-			<dependency>
-				<groupId>com.alibaba</groupId>
-				<artifactId>fastjson</artifactId>
-				<version>1.2.38</version>
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>

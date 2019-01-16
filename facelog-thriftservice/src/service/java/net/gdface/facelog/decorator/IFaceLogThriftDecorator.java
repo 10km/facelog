@@ -14,7 +14,6 @@ import net.gdface.facelog.db.LogLightBean;
 import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
-import net.gdface.facelog.service.DuplicateRecordException;
 import net.gdface.thrift.TypeTransformer;
 import net.gdface.thrift.exception.ServiceRuntimeException;
 import com.facebook.swift.service.ThriftException;
@@ -77,7 +76,7 @@ public class IFaceLogThriftDecorator {
                     FeatureBean.class,
                     FeatureBean.class);
         }
-        catch(DuplicateRecordException e){
+        catch(net.gdface.facelog.DuplicateRecordException e){
             throw new DuplicateRecordException(e);
         }
         catch(RuntimeException e){
@@ -118,7 +117,7 @@ public class IFaceLogThriftDecorator {
                     FeatureBean.class,
                     FeatureBean.class);
         }
-        catch(DuplicateRecordException e){
+        catch(net.gdface.facelog.DuplicateRecordException e){
             throw new DuplicateRecordException(e);
         }
         catch(RuntimeException e){
@@ -157,7 +156,7 @@ public class IFaceLogThriftDecorator {
                     ImageBean.class,
                     ImageBean.class);
         }
-        catch(DuplicateRecordException e){
+        catch(net.gdface.facelog.DuplicateRecordException e){
             throw new DuplicateRecordException(e);
         }
         catch(RuntimeException e){
@@ -184,7 +183,7 @@ public class IFaceLogThriftDecorator {
                     Token.class,
                     net.gdface.facelog.Token.class));
         }
-        catch(DuplicateRecordException e){
+        catch(net.gdface.facelog.DuplicateRecordException e){
             throw new DuplicateRecordException(e);
         }
         catch(RuntimeException e){
@@ -211,7 +210,7 @@ public class IFaceLogThriftDecorator {
                     Token.class,
                     net.gdface.facelog.Token.class));
         }
-        catch(DuplicateRecordException e){
+        catch(net.gdface.facelog.DuplicateRecordException e){
             throw new DuplicateRecordException(e);
         }
         catch(RuntimeException e){

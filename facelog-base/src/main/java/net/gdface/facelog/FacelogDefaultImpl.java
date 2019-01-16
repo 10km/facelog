@@ -14,7 +14,6 @@ import net.gdface.facelog.db.LogLightBean;
 import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
-import net.gdface.facelog.service.DuplicateRecordException;
 
 public class FacelogDefaultImpl implements IFaceLog {
 
