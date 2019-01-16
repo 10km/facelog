@@ -18,7 +18,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<swift.version>0.14.2</swift.version>
 		<common-java.version>1.0.5</common-java.version>
-		<codegen.version>1.0.2</codegen.version>
+		<codegen.version>1.0.3-SNAPSHOT</codegen.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -265,6 +265,25 @@
 									</pluginExecutionFilter>
 									<action>
 										<ignore/>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											com.gitee.l0km
+										</groupId>
+										<artifactId>
+											codegen-thrift-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.0.3-SNAPSHOT,)
+										</versionRange>
+										<goals>
+											<goal>generate</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>

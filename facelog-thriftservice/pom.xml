@@ -12,6 +12,7 @@
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <codegen.dir>${project.basedir}/src/service/java</codegen.dir>
   </properties>
   <dependencies>
     <dependency>
@@ -100,6 +101,33 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.gitee.l0km</groupId>
+				<artifactId>codegen-thrift-maven-plugin</artifactId>
+				<version>${codegen.version}</version>
+				<executions>					
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<interfaceClass>net.gdface.facelog.IFaceLog</interfaceClass>
+					<refClass>net.gdface.facelog.FacelogDefaultImpl</refClass>
+					<package>net.gdface.facelog.decorator</package>
+					<outputDir>${codegen.dir}</outputDir>
+					<thriftPackage>net.gdface.facelog.thrift.client</thriftPackage>
+					<taskType>SERVICE</taskType>
+				</configuration>
+				<dependencies>
+				<dependency>
+					<groupId>${project.groupId}</groupId>
+					<artifactId>facelog-base</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
