@@ -48,6 +48,11 @@
 			<groupId>com.gitee.l0km</groupId>
 			<artifactId>simplemq</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>common-thrift</artifactId>
+			<version>${common-java.version}</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.facebook.swift/swift-service -->
 		<dependency>
 			<groupId>com.facebook.swift</groupId>

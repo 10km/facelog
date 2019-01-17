@@ -1,13 +1,11 @@
 package net.gdface.facelog;
 
-import net.gdface.exception.BaseFaceException;
-
 /**
  * 安全异常
  * @author guyadong
  *
  */
-public final class ServiceSecurityException extends BaseFaceException {
+public final class ServiceSecurityException extends Exception {
 	public static interface FieldJsonTransformer<T> {
 		public String jsonOfDeclaredFields(T input);
 	}
