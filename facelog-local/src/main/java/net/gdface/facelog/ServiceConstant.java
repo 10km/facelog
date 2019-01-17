@@ -6,7 +6,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import org.apache.commons.configuration2.CombinedConfiguration;
 
 import gu.simplemq.Channel;
-import net.gdface.facelog.service.CommonConstant;
+import net.gdface.facelog.CommonConstant;
 
 /**
  * 服务端常量定义

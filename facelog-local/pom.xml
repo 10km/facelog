@@ -44,6 +44,11 @@
 			<groupId>com.gitee.l0km</groupId>
 			<artifactId>simplemq</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.facebook.swift/swift-service -->
+		<dependency>
+			<groupId>com.facebook.swift</groupId>
+			<artifactId>swift-service</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -61,6 +66,10 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>templating-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
