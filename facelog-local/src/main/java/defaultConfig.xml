@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<root>
+		<password description="root帐户密码">root</password>
+	</root>
+	<token description ="令牌(安全)管理参数">
+		<!-- <salt description ="用于password加密的salt,必须是32MD5字符串(小写)">48c22d7ad7cd2a2166a6f818b6d7ab3e</salt> -->
+		<salt description ="用于password加密的salt,创建系统时设定就不可再更改">6AE29B5A44C018611994DD453362F1C73208A84A2FE6D1FF49896AAC9C2B56C0</salt>
+		<device>
+			<validate description="是否执行设备令牌验证">true</validate>
+		</device>
+		<person>
+			<validate description="是否执行人员令牌验证">true</validate>
+			<expire description="人员令牌失效时间[分钟]">60</expire>
+			<rejectZero description = "是否拒绝普通人员申请令牌">true</rejectZero>
+		</person>
+		<cmd description="设备命令参数">
+			<serialNo>
+				<expire description="设备命令序列号有效时间[秒]">60</expire>
+			</serialNo>
+			<ackChannel>
+				<expire description="设备命令响应通道有效时间[秒]">60</expire>
+			</ackChannel>
+		</cmd>
+	</token>
+	<server>
+		<port description="服务端口号">26411</port>
+		<connectiontLimit description="最大连接数"></connectiontLimit>
+		<idleConnectionTimeout description="空闲连接超时[秒]"></idleConnectionTimeout>
+		<workerThreadCount description="工作线程数"></workerThreadCount>
+	</server>
+	<heartbeat>
+		<interval description="心跳包间隔[秒]">8</interval>
+		<expire description="心跳包失效时间[秒]">60</expire>
+	</heartbeat>
+
+	<redis description = "redis 参数配置">
+		<home description="redis 安装位置"></home>
+		<waitIfAbsent description="redis 没启动时是否等待"></waitIfAbsent>
+		<tryCount description="redis 等待重试次数">10</tryCount>
+		<tryInterval description="redis 等待重试间隔(毫秒)">2000</tryInterval>
+		<host description="redis 主机名"></host>
+		<port description="redis 端口"></port>
+		<database description="redis 数据库"></database>
+		<password description="redis 密码"></password>
+		<uri description="redis 服务器访问地址"></uri>
+		<timeout description="redis 超时[秒]"></timeout>
+		<pool>
+			<maxTotal description="jedis pool 最大线程数"></maxTotal>
+		</pool>
+	</redis>
+	<database description="数据库参数配置">
+		<isDebug description="是否为调试状态">false</isDebug>
+		<jdbc>
+			<!-- JDBC驱动类名,目前只支持mysql,不要修改 -->
+			<driver description="JDBC driver class name"></driver>
+			<host description="数据库服务器地址">localhost</host>
+			<port description="数据库服务器端口">3306</port>
+			<schema description="数据库schema">test</schema>
+			<encoding description="数据库字符编码方式">utf8</encoding>
+			<!-- 数据库连接url,目前只支持mysql,不要修改 -->
+			<url description="数据库连接URL">jdbc:mysql://${database.jdbc.host}:${database.jdbc.port}/${database.jdbc.schema}?characterEncoding=${database.jdbc.encoding}
+			</url>
+			<username description="数据库访问用户名">root</username>
+			<password description="数据库访问密码"></password>
+		</jdbc>
+		<!-- 前只支持c3p0，不要修改 -->
+		<datasource description="数据源类型">c3p0</datasource>
+		<c3p0>
+			<minPoolSize description="c3p0 property:连接池保持的最小连接数"></minPoolSize>
+			<maxPoolSize description="c3p0 property:连接池中拥有的最大连接数"></maxPoolSize>
+			<maxIdleTime description="c3p0 property:连接的最大空闲时间"></maxIdleTime>
+			<idleConnectionTestPeriod description="c3p0 property:测试空闲连接的间隔时间"></idleConnectionTestPeriod>
+		</c3p0>
+	</database>
+	<security>
+		<operator>
+			<table>
+				<person>
+					<allow description="允许操作员对人员表执行的操作(insert,delete,update)">insert,delete,update</allow>
+				</person>
+				<persongroup>
+					<allow description="允许操作员对人员组表执行的操作(insert,delete,update)"></allow>
+				</persongroup>
+				<device>
+					<allow description="允许操作员对设备表执行的操作(insert,delete,update)"></allow>
+				</device>
+				<devicegroup>
+					<allow description="允许操作员对设备组表执行的操作(insert,delete,update)"></allow>
+				</devicegroup>
+			</table>
+		</operator>
+		<device>
+			<table>
+				<person>
+					<allow description="允许设备端对人员表执行的操作(insert,delete,update)">insert</allow>
+				</person>
+				<persongroup>
+					<allow description="允许设备端对人员组表执行的操作(insert,delete,update)"></allow>
+				</persongroup>
+				<device>
+					<allow description="允许设备端对设备表执行的操作(insert,delete,update)">insert,delete,update</allow>
+				</device>
+				<devicegroup>
+					<allow description="允许设备端对设备组表执行的操作(insert,delete,update)"></allow>
+				</devicegroup>
+			</table>
+		</device>
+	</security>
+	<monitor description ="监控通道配置">
+		<log description="服务端是否主动向人员验证实时监控通道发送log日志">false</log>
+	</monitor>
+	<executor description="服务端线程池配置">
+		<cachedPool description="通用线程池配置">
+			<corePoolSize description="最小线程数量,默认为CPU逻辑核数"></corePoolSize>
+			<maximumPoolSize description="最大线程数量">128</maximumPoolSize>
+			<keepAliveTime description="空闲线程保留时间(秒)">60</keepAliveTime>
+			<queueCapacity description="任务队列容量">1024</queueCapacity>
+			<nameFormat description="线程命名格式">cached-pool-%d</nameFormat>
+		</cachedPool>
+		<timerPool description="定时任务线程池配置">
+			<corePoolSize description="线程数量,默认值:1">1</corePoolSize>
+			<nameFormat description="线程命名格式">timer-pool-%d</nameFormat>
+		</timerPool>
+	</executor>
+	<syslog description ="系统日志配置">
+		<op>
+			<dao description="指定每张表需要记录日志的写操作(insert,delete,update)">
+				<person description="person 表需要记录日志的操作">insert,delete,update</person>
+				<persongroup description="persongroup 表需要记录日志的操作">insert,delete,update</persongroup>
+				<device description="device 表需要记录日志的操作">insert,delete,update</device>
+				<devicegroup description="devicegroup 表需要记录日志的操作">insert,delete,update	</devicegroup>
+				<permit description="permit 表需要记录日志的操作">insert,delete,update</permit>
+			</dao>
+			<token description ="令牌操作日志配置参数">
+				<errorDetail description = "是否记录详细异常信息">false</errorDetail>
+			</token>
+		</op>
+		<!-- log4j相关配置参数，不指定则使用log4j.properties中的值 -->
+		<!-- 对应 log4j key :log4j.rootCategory 中的level -->
+		<level description ="系统日志级别 [OFF,FATAL,ERROR,WARN,INFO,DEBUG,ALL]"></level>
+		<!-- 对应的 log4j key :log4j.appender.LOGFILE.File  -->
+		<location description = "系统日志文件位置"></location>
+	</syslog>
+</configuration>

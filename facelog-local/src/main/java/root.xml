@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!-- 组合配置文件定义,相关知识参见:
+			http://commons.apache.org/proper/commons-configuration/userguide/howto_combinedbuilder.html#Overriding_properties
+			http://commons.apache.org/proper/commons-configuration/userguide/howto_basicfeatures.html#Variable_Interpolation
+			http://commons.apache.org/proper/commons-configuration/userguide/howto_combinedbuilder.html#Configuration_definition_file_reference 
+	-->
+	<override>
+		<!-- 从系统 home 位置读取 -->
+		<properties
+			fileName="${sys:user.home}/${const:net.gdface.facelog.service.GlobalConfig.HOME_FOLDER}/${const:net.gdface.facelog.service.GlobalConfig.USER_PROPERTIES}"
+			config-name="userConfig"
+			config-forceCreate="true"
+			config-optional="true" />
+		<!-- 如果定义了 FACELOG_HOME 环境变量,从变量指定的位置读取配置 -->
+		<properties
+			fileName="${env:FACELOG_HOME}/${const:net.gdface.facelog.service.GlobalConfig.USER_PROPERTIES}"
+			config-name="envConfig"
+			config-optional="true" />
+		<xml fileName="defaultConfig.xml" config-name="default config" />
+	</override>
+</configuration>
