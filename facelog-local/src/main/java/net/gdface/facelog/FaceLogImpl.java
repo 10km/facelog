@@ -1,8 +1,8 @@
 package net.gdface.facelog;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +24,9 @@ import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
+import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.thrift.exception.ServiceRuntimeException;
+import net.gdface.utils.FaceUtilits;
 import net.gdface.facelog.DuplicateRecordException;
 import net.gdface.facelog.TokenMangement.Enable;
 import redis.clients.jedis.exceptions.JedisException;
@@ -83,10 +85,31 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////
-
 	/**
-	 * 将封装在{@link RuntimeException}中的{@link ServiceSecurityException}剥离出来单独抛出<br>
-	 * 将其他的{@link RuntimeException}封装在{@link ServiceRuntimeException}抛出，
+	 * 将封装在{@link RuntimeException}中的{@link ServiceSecurityException}剥离出来封装到{@link ServiceRuntimeException}
+	 * @param e
+	 * @return
+	 * @see #throwServiceException(RuntimeException)
+	 */
+	protected static final ServiceRuntimeException wrapServiceRuntimeException(Exception e){
+		try{
+			if(e instanceof RuntimeException){
+				throwServiceException((RuntimeException)e);
+			}else 
+				throw e;
+			// dead code
+			return new ServiceRuntimeException(e); 
+		} catch(ServiceSecurityException se){
+			return new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),se);
+		} catch(ServiceRuntimeException se){
+			return se;
+		} catch (Exception e1) {
+			return new ServiceRuntimeException(e);
+		}
+	}
+	/**
+	 * 将封装在{@link Exception}中的{@link ServiceSecurityException}剥离出来单独抛出<br>
+	 * 将其他的{@link Exception}封装在{@link ServiceRuntimeException}抛出，
 	 * @param e
 	 * @return
 	 * @throws ServiceSecurityException
@@ -111,20 +134,36 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	}
 	@Override
 	public PersonBean getPerson(int personId) {
-		return dm.daoGetPerson(personId);
+		try{
+			return dm.daoGetPerson(personId);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public List<PersonBean> getPersons(List<Integer> idList) {
-		return dm.daoGetPersons(idList);
+		try{
+			return dm.daoGetPersons(idList);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public PersonBean getPersonByPapersNum(String papersNum)  {
-		return dm.daoGetPersonByIndexPapersNum(papersNum);
+		try{
+			return dm.daoGetPersonByIndexPapersNum(papersNum);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 
 	@Override
 	public List<String> getFeatureBeansByPersonId(int personId) {
-		return dm.daoToPrimaryKeyListFromFeatures(dm.daoGetFeatureBeansByPersonIdOnPerson(personId));
+		try{
+			return dm.daoToPrimaryKeyListFromFeatures(dm.daoGetFeatureBeansByPersonIdOnPerson(personId));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 
 	@Override
@@ -136,6 +175,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 				public Integer call() throws Exception {
 					return dm.daoDeletePerson(personId);
 				}});
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -150,6 +191,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 				public Integer call() throws Exception {
 					return dm.daoDeletePersonsByPrimaryKey(personIdList);
 				}});
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -164,6 +207,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 				public Integer call() throws Exception {
 					return dm.daoDeletePersonByPapersNum(papersNum);
 				}});
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -178,6 +223,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 				public Integer call() throws Exception {
 					return dm.daoDeletePersonByPapersNum(papersNumlist);
 				}});
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -185,12 +232,20 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 
 	@Override
 	public boolean existsPerson(int persionId) {
-		return dm.daoExistsPerson(persionId);
+		try{
+			return dm.daoExistsPerson(persionId);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 
 	@Override
 	public boolean isDisable(int personId){
-		return dm.daoIsDisable(personId);
+		try{
+			return dm.daoIsDisable(personId);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 
 	@Override
@@ -198,6 +253,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			dm.daoSetPersonExpiryDate(dm.daoGetPerson(personId),new Date());
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -208,6 +265,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			dm.daoSetPersonExpiryDate(dm.daoGetPerson(personId),new Date(expiryDate));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -222,6 +281,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 				public void run() {
 					dm.daoSetPersonExpiryDate(personIdList,new Date(expiryDate));
 				}});			
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -234,31 +295,53 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 
 	@Override
 	public List<LogBean> getLogBeansByPersonId(int personId) {
-		return dm.daoGetLogBeansByPersonIdOnPerson(personId);
+		try{
+			return dm.daoGetLogBeansByPersonIdOnPerson(personId);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 
 	@Override
 	public List<Integer> loadAllPerson() {
-		return dm.daoLoadPersonIdByWhere(null);
+		try{
+			return dm.daoLoadPersonIdByWhere(null);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} 
 	}
 
 	@Override
 	public List<Integer> loadPersonIdByWhere(String where) {
+		try{
 			return dm.daoLoadPersonIdByWhere(where);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} 
 	}
 	@Override
 	public List<PersonBean> loadPersonByWhere(String where, int startRow, int numRows)  {
+		try{
 			return dm.daoLoadPersonByWhere(where, startRow, numRows);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public int countPersonByWhere(String where) {
+		try{
 			return dm.daoCountPersonByWhere(where);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public PersonBean savePerson(PersonBean bean, Token token) {
 		try{
 			Enable.ALL.check(tm, token);
 			return dm.daoSavePerson(bean);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -269,27 +352,31 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			dm.daoSavePersonsAsTransaction(beans);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
 	@Override
-	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, Token token) {
+	public PersonBean savePerson(final PersonBean bean, final byte[] idPhoto, Token token) {
 		try{
 			Enable.ALL.check(tm, token);
 			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
-					return dm.daoSavePerson(bean, idPhoto, null,null);
+					return dm.daoSavePerson(bean, FaceUtilits.getByteBuffer(idPhoto), null,null);
 				}});
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
 	@Override
-	public int savePerson(final Map<ByteBuffer,PersonBean> persons, Token token) {
+	public int savePersons(final Map<ByteBuffer,PersonBean> persons, Token token) {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			return BaseDao.daoRunAsTransaction(new Callable<Integer>(){
@@ -297,6 +384,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 				public Integer call() throws Exception {
 					return dm.daoSavePerson(persons);
 				}});
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -313,69 +402,86 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 					return dm.daoSavePerson(bean, dm.daoGetImage(idPhotoMd5), Arrays.asList(dm.daoGetFeature(featureMd5)));
 				}
 			});
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	
 	@Override
-	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final FeatureBean featureBean,
+	public PersonBean savePerson(final PersonBean bean, final byte[] idPhoto, final FeatureBean featureBean,
 			final Integer deviceId, Token token)  {
 		try {
 			Enable.DEVICE_ONLY.check(tm, token);
 			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
-					return dm.daoSavePerson(bean, idPhoto, featureBean, dm.daoGetDevice(deviceId));
+					return dm.daoSavePerson(bean, FaceUtilits.getByteBuffer(idPhoto), featureBean, dm.daoGetDevice(deviceId));
 				}
 			});
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
 	@Override
-	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final ByteBuffer feature,
+	public PersonBean savePerson(final PersonBean bean, final byte[] idPhoto, final byte[] feature,
 			final List<FaceBean> faceBeans, Token token)  {
 		try {
 			Enable.DEVICE_ONLY.check(tm, token);
 			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
-					return dm.daoSavePerson(bean, idPhoto, dm.daoAddFeature(feature, bean, faceBeans), null);
+					return dm.daoSavePerson(bean, FaceUtilits.getByteBuffer(idPhoto), 
+							dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), bean, faceBeans), null);
 				}
 			});
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
 	@Override
-	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final ByteBuffer feature,
+	public PersonBean savePerson(final PersonBean bean, final byte[] idPhoto, final byte[] feature,
 			final Map<ByteBuffer, FaceBean> faceInfo, final Integer deviceId, Token token)  {
 		try {
 			Enable.DEVICE_ONLY.check(tm, token);
 			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
-					return dm.daoSavePerson(bean, idPhoto, feature, faceInfo, dm.daoGetDevice(deviceId));
+					return dm.daoSavePerson(bean, 
+							FaceUtilits.getByteBuffer(idPhoto), 
+							FaceUtilits.getByteBuffer(feature), faceInfo, dm.daoGetDevice(deviceId));
 				}
 			});
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
 	@Override
-	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final ByteBuffer feature,
-			final ByteBuffer featureImage, final FaceBean featureFaceBean, final Integer deviceId, Token token) {
+	public PersonBean savePerson(final PersonBean bean, final byte[] idPhoto, final byte[] feature,
+			final byte[] featureImage, final FaceBean featureFaceBean, final Integer deviceId, Token token) {
 		try{
 			Enable.DEVICE_ONLY.check(tm, token);
 			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
-					return dm.daoSavePerson(bean,idPhoto,feature,featureImage,featureFaceBean,dm.daoGetDevice(deviceId));
+					return dm.daoSavePerson(bean,
+							FaceUtilits.getByteBuffer(idPhoto),
+							FaceUtilits.getByteBuffer(feature),
+							FaceUtilits.getByteBuffer(featureImage),
+							featureFaceBean,dm.daoGetDevice(deviceId));
 				}});
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -392,6 +498,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 					dm.daoReplaceFeature(personId, featureMd5, deleteOldFeatureImage);
 				}
 			});
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -399,17 +507,29 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 
 	@Override
 	public List<Integer> loadUpdatedPersons(long timestamp) {
-		return dm.daoLoadUpdatedPersons(new Date(timestamp));
+		try{
+			return dm.daoLoadUpdatedPersons(new Date(timestamp));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 
 	@Override
 	public List<Integer> loadPersonIdByUpdateTime(long timestamp) {
-		return dm.daoLoadPersonIdByUpdateTime(new Date(timestamp));
+		try{
+			return dm.daoLoadPersonIdByUpdateTime(new Date(timestamp));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 
 	@Override
 	public List<String> loadFeatureMd5ByUpdate(long timestamp) {
-		return dm.daoLoadFeatureMd5ByUpdateTime(new Date(timestamp));
+		try{		
+			return dm.daoLoadFeatureMd5ByUpdateTime(new Date(timestamp));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 
 	@Override
@@ -417,6 +537,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.DEVICE_ONLY.check(tm, token);
 			dm.daoAddLog(bean);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -427,6 +549,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.DEVICE_ONLY.check(tm, token);
 			dm.daoAddLogsAsTransaction(beans);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -434,70 +558,115 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 
 	@Override
 	public List<LogBean> loadLogByWhere(String where, int startRow, int numRows)  {
-		return dm.daoLoadLogByWhere(where, startRow, numRows);
+		try{
+			return dm.daoLoadLogByWhere(where, startRow, numRows);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} 
 	}
 
 	@Override
 	public List<LogLightBean> loadLogLightByWhere(String where, int startRow, int numRows)  {
-		return dm.daoLoadLogLightByWhere(where, startRow, numRows);
+		try{
+			return dm.daoLoadLogLightByWhere(where, startRow, numRows);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} 
 	}
 
 	@Override
 	public int countLogLightByWhere(String where)  {
-		return dm.daoCountLogLightByWhere(where);
+		try{         
+			return dm.daoCountLogLightByWhere(where);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} 
 	}
 
 	@Override
 	public int countLogByWhere(String where)  {
-		return dm.daoCountLogByWhere(where);
+		try{
+			return dm.daoCountLogByWhere(where);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} 
 	}
 	@Override
     public List<LogLightBean> loadLogLightByVerifyTime(long timestamp,int startRow, int numRows){
-		return dm.daoLoadLogLightByVerifyTime(new Date(timestamp),startRow,numRows);
+		try{
+			return dm.daoLoadLogLightByVerifyTime(new Date(timestamp),startRow,numRows);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
     }
     @Override
     public int countLogLightByVerifyTime(long timestamp){
-		return dm.daoCountLogLightByVerifyTime(new Date(timestamp));
+		try{
+			return dm.daoCountLogLightByVerifyTime(new Date(timestamp));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
     }
     @Override
 	public boolean existsImage(String md5)  {
-		return dm.daoExistsImage(md5);
+		try{
+			return dm.daoExistsImage(md5);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 
 	@Override
-	public ImageBean addImage(ByteBuffer imageData,Integer deviceId
+	public ImageBean addImage(byte[] imageData,Integer deviceId
 			, FaceBean faceBean , Integer personId, Token token) throws DuplicateRecordException{
 		try{
 			Enable.ALL.check(tm, token);
-			return dm.daoAddImage(imageData,dm.daoGetDevice(deviceId),Arrays.asList(faceBean),Arrays.asList(dm.daoGetPerson(personId)));		
+			return dm.daoAddImage(FaceUtilits.getByteBuffer(imageData),
+					dm.daoGetDevice(deviceId),Arrays.asList(faceBean),Arrays.asList(dm.daoGetPerson(personId)));		
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
-		}
+		} catch (IOException e) {
+			throw new ServiceRuntimeException(ExceptionType.IMAGE_ERROR.ordinal(),e);
+		} 
 	}
 
     @Override
 	public boolean existsFeature(String md5)  {
-		return dm.daoExistsFeature(md5);
-	}
-
-	@Override
-	public FeatureBean addFeature(ByteBuffer feature,Integer personId,List<FaceBean> faecBeans, Token token)throws DuplicateRecordException{
 		try{
-			Enable.DEVICE_ONLY.check(tm, token);
-			return dm.daoAddFeature(feature, dm.daoGetPerson(personId), faecBeans);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+			return dm.daoExistsFeature(md5);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		}
 	}
 
 	@Override
-	public FeatureBean addFeature(ByteBuffer feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo,
+	public FeatureBean addFeature(byte[] feature,Integer personId,List<FaceBean> faecBeans, Token token)throws DuplicateRecordException{
+		try{
+			Enable.DEVICE_ONLY.check(tm, token);
+			return dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), dm.daoGetPerson(personId), faecBeans);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} catch (ServiceSecurityException e) {
+			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		} catch (IOException e) {
+			throw new ServiceRuntimeException(ExceptionType.IMAGE_ERROR.ordinal(),e);
+		}
+	}
+
+	@Override
+	public FeatureBean addFeature(byte[] feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo,
 			Integer deviceId, Token token) throws DuplicateRecordException {
 		try {
 			Enable.DEVICE_ONLY.check(tm, token);
-			return dm.daoAddFeature(feature, dm.daoGetPerson(personId), faceInfo, dm.daoGetDevice(deviceId));
+			return dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), dm.daoGetPerson(personId), faceInfo, dm.daoGetDevice(deviceId));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		} catch (IOException e) {
+			throw new ServiceRuntimeException(ExceptionType.IMAGE_ERROR.ordinal(),e);
 		}
 	}
 
@@ -506,6 +675,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.ALL.check(tm, token);
 			return dm.daoDeleteFeature(featureMd5,deleteImage);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -516,6 +687,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.ALL.check(tm, token);
 			return dm.daoDeleteAllFeaturesByPersonId(personId,deleteImage);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -523,49 +696,83 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 
 	@Override
 	public FeatureBean getFeature(String md5){
-		return dm.daoGetFeature(md5);
+		try{
+			return dm.daoGetFeature(md5);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 
 	@Override
 	public List<FeatureBean> getFeatures(List<String> md5){
-		return dm.daoGetFeatures(md5);
+		try{
+			return dm.daoGetFeatures(md5);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public List<String> getFeaturesOfPerson(int personId){
-		return Lists.transform(
-				dm.daoGetFeatureBeansByPersonIdOnPerson(personId),
-				dm.daoCastFeatureToPk); 
+		try{			
+			return Lists.transform(
+					dm.daoGetFeatureBeansByPersonIdOnPerson(personId),
+					dm.daoCastFeatureToPk); 
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
-	public byte[] getFeatureBytes(String md5){
-		FeatureBean featureBean = dm.daoGetFeature(md5);
-		return null ==featureBean?null:featureBean.getFeature();
+	public byte[] getFeatureBytes(String md5){		
+		try {
+			FeatureBean featureBean = dm.daoGetFeature(md5);
+			return null ==featureBean?null:FaceUtilits.getBytes(featureBean.getFeature());
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		} 
 	}
 
 	@Override
-	public ByteBuffer getImageBytes(String imageMD5){
-		StoreBean storeBean = dm.daoGetStore(imageMD5);
-		return null ==storeBean?null:storeBean.getData();
+	public byte[] getImageBytes(String imageMD5){
+		try {
+			StoreBean storeBean = dm.daoGetStore(imageMD5);
+			return null ==storeBean?null:FaceUtilits.getBytes(storeBean.getData());
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 
 	@Override
 	public ImageBean getImage(String imageMD5){
-		return dm.daoGetImage(imageMD5);
+		try{
+			return dm.daoGetImage(imageMD5);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 
 	@Override
 	public List<String> getImagesAssociatedByFeature(String featureMd5){
-		return dm.daoGetImageKeysImportedByFeatureMd5(featureMd5);
+		try{
+			return dm.daoGetImageKeysImportedByFeatureMd5(featureMd5);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public Integer getDeviceIdOfFeature(String featureMd5) {
-		return dm.daoGetDeviceIdOfFeature(featureMd5);
+		try{
+			return dm.daoGetDeviceIdOfFeature(featureMd5);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public int deleteImage(String imageMd5, Token token){
 		try{
 			Enable.ALL.check(tm, token);
 			return dm.daoDeleteImage(imageMd5);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -573,7 +780,11 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 
     @Override
 	public boolean existsDevice(int id)  {
-		return dm.daoExistsDevice(id);
+		try{
+			return dm.daoExistsDevice(id);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} 
 	}
 
 	@Override
@@ -581,6 +792,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			return dm.daoSaveDevice(deviceBean);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -592,30 +805,52 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			checkArgument(null != deviceBean && !deviceBean.isNew(),
 					"require the device must be exists record");
 			return dm.daoSaveDevice(deviceBean);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
 	public DeviceBean getDevice(int deviceId){
-		return dm.daoGetDevice(deviceId);
+		try{
+			return dm.daoGetDevice(deviceId);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} 
 	}
 
 	@Override
 	public List<DeviceBean> getDevices(List<Integer> idList){
-		return dm.daoGetDevices(idList);
+		try{
+			return dm.daoGetDevices(idList);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} 
 	}
 	@Override
 	public List<DeviceBean> loadDeviceByWhere(String where,int startRow, int numRows){
-		return this.dm.daoLoadDeviceByWhere(where, startRow, numRows);
+		try{
+			return this.dm.daoLoadDeviceByWhere(where, startRow, numRows);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public int countDeviceByWhere(String where){
-		return this.dm.daoCountDeviceByWhere(where);
+		try{
+			return this.dm.daoCountDeviceByWhere(where);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public List<Integer> loadDeviceIdByWhere(String where){
-		return this.dm.daoLoadDeviceIdByWhere(where);
+		try{
+			return this.dm.daoLoadDeviceIdByWhere(where);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	////////////////////////////////DeviceGroupBean/////////////
 	
@@ -624,45 +859,73 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			return dm.daoSaveDeviceGroup(deviceGroupBean);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
 	public DeviceGroupBean getDeviceGroup(int deviceGroupId) {
-		return dm.daoGetDeviceGroup(deviceGroupId);
+		try{
+			return dm.daoGetDeviceGroup(deviceGroupId);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public List<DeviceGroupBean> getDeviceGroups(List<Integer> groupIdList) {
-		return dm.daoGetDeviceGroups(groupIdList); 
+		try{
+			return dm.daoGetDeviceGroups(groupIdList); 
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public int deleteDeviceGroup(int deviceGroupId, Token token) {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			return dm.daoDeleteDeviceGroup(deviceGroupId);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
 	public List<Integer> getSubDeviceGroup(int deviceGroupId) {
-		return dm.daoToPrimaryKeyListFromDeviceGroups(dm.daoGetSubDeviceGroup(deviceGroupId));
+		try{
+			return dm.daoToPrimaryKeyListFromDeviceGroups(dm.daoGetSubDeviceGroup(deviceGroupId));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public List<Integer> getDevicesOfGroup(int deviceGroupId) {
-		return dm.daoToPrimaryKeyListFromDevices(dm.daoGetDevicesOfGroup(deviceGroupId));
+		try{
+			return dm.daoToPrimaryKeyListFromDevices(dm.daoGetDevicesOfGroup(deviceGroupId));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public List<Integer> listOfParentForDeviceGroup(int deviceGroupId){
-		return dm.daoToPrimaryKeyListFromDeviceGroups(dm.daoListOfParentForDeviceGroup(deviceGroupId));
+		try{
+			return dm.daoToPrimaryKeyListFromDeviceGroups(dm.daoListOfParentForDeviceGroup(deviceGroupId));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
-	public List<Integer> getDeviceGroupsBelongs(int deviceId){
-		DeviceBean deviceBean = dm.daoGetDevice(deviceId);
-		return null == deviceBean 
-					? ImmutableList.<Integer>of()
-					: listOfParentForDeviceGroup(deviceBean.getGroupId());
+	public List<Integer> getDeviceGroupsBelongs(int deviceId)throws ServiceRuntimeException{
+		try{
+			DeviceBean deviceBean = dm.daoGetDevice(deviceId);
+			return null == deviceBean 
+						? ImmutableList.<Integer>of()
+						: listOfParentForDeviceGroup(deviceBean.getGroupId());
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	////////////////////////////////PersonGroupBean/////////////
 	
@@ -671,57 +934,97 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			return dm.daoSavePersonGroup(personGroupBean);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
 	public PersonGroupBean getPersonGroup(int personGroupId) {
-		return dm.daoGetPersonGroup(personGroupId); 
+		try{
+			return dm.daoGetPersonGroup(personGroupId); 
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
-	public List<PersonGroupBean> getPersonGroups(Collection<Integer> groupIdList) {
-		return dm.daoGetPersonGroups(groupIdList);
+	public List<PersonGroupBean> getPersonGroups(List<Integer> groupIdList) {
+		try{
+			return dm.daoGetPersonGroups(groupIdList);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public int deletePersonGroup(int personGroupId, Token token) {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			return dm.daoDeletePersonGroup(personGroupId);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
 	public List<Integer> getSubPersonGroup(int personGroupId) {
-		return dm.daoToPrimaryKeyListFromPersonGroups(dm.daoGetSubPersonGroup(personGroupId));
+		try{
+			return dm.daoToPrimaryKeyListFromPersonGroups(dm.daoGetSubPersonGroup(personGroupId));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public List<Integer> getPersonsOfGroup(int personGroupId) {
-		return this.dm.daoToPrimaryKeyListFromPersons(dm.daoGetPersonsOfGroup(personGroupId));
+		try{
+			return this.dm.daoToPrimaryKeyListFromPersons(dm.daoGetPersonsOfGroup(personGroupId));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public List<Integer> listOfParentForPersonGroup(int personGroupId){
-		return dm.daoToPrimaryKeyListFromPersonGroups(dm.daoListOfParentForPersonGroup(personGroupId));
+		try{
+			return dm.daoToPrimaryKeyListFromPersonGroups(dm.daoListOfParentForPersonGroup(personGroupId));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public List<Integer> getPersonGroupsBelongs(int personId){
-		PersonBean personBean = dm.daoGetPerson(personId);
-		return null == personBean 
-					? ImmutableList.<Integer>of()
-					: listOfParentForPersonGroup(personBean.getGroupId());
+		try{
+			PersonBean personBean = dm.daoGetPerson(personId);
+			return null == personBean 
+						? ImmutableList.<Integer>of()
+						: listOfParentForPersonGroup(personBean.getGroupId());
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
     @Override
     public List<Integer> loadDeviceGroupByWhere(String where,int startRow, int numRows){
-		return dm.daoToPrimaryKeyListFromDeviceGroups(dm.daoLoadDeviceGroupByWhere(where, startRow, numRows));
+		try{
+			return dm.daoToPrimaryKeyListFromDeviceGroups(dm.daoLoadDeviceGroupByWhere(where, startRow, numRows));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
     }
     @Override
     public int countDeviceGroupByWhere(String where){
-		return dm.daoCountDeviceGroupByWhere(where);
+		try{
+			return dm.daoCountDeviceGroupByWhere(where);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
     }
     @Override
     public List<Integer> loadDeviceGroupIdByWhere(String where){
-   		return dm.daoLoadDeviceGroupIdByWhere(where);
+    	try{
+    		return dm.daoLoadDeviceGroupIdByWhere(where);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
     }
 	/////////////////////PERMIT/////
     
@@ -730,6 +1033,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			dm.daoAddPermit(deviceGroup, personGroup);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -739,6 +1044,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			dm.daoAddPermit(deviceGroupId, personGroupId);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -748,87 +1055,156 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			return dm.daoDeletePermit(deviceGroup, personGroup);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
 	public boolean getGroupPermit(int deviceId,int personGroupId) {
-		return dm.daoGetGroupPermit(deviceId,personGroupId);
+		try{
+			return dm.daoGetGroupPermit(deviceId,personGroupId);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public boolean getPersonPermit(int deviceId,int personId) {
-		return dm.daoGetPersonPermit(deviceId,personId);
+		try{
+			return dm.daoGetPersonPermit(deviceId,personId);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public List<Boolean> getGroupPermits(int deviceId,List<Integer> personGroupIdList) {
-		return dm.daoGetGroupPermit(deviceId, personGroupIdList);
+		try{
+			return dm.daoGetGroupPermit(deviceId, personGroupIdList);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public List<Boolean> getPersonPermits(int deviceId,List<Integer> personIdList) {
-		return dm.daoGetPermit(deviceId, personIdList);
+		try{
+			return dm.daoGetPermit(deviceId, personIdList);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
 	@Override
 	public List<PermitBean> loadPermitByUpdate(long timestamp) {
-		return dm.daoLoadPermitByCreateTime(new Date(timestamp));
+		try{
+			return dm.daoLoadPermitByCreateTime(new Date(timestamp));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
 	}
     @Override
     public List<Integer> loadPersonGroupByWhere(String where,int startRow, int numRows){
-   		return dm.daoToPrimaryKeyListFromPersonGroups(dm.daoLoadPersonGroupByWhere(where, startRow, numRows));
+    	try{
+    		return dm.daoToPrimaryKeyListFromPersonGroups(dm.daoLoadPersonGroupByWhere(where, startRow, numRows));
+    	} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
     }
     @Override
     public int countPersonGroupByWhere(String where){
-   		return dm.daoCountPersonGroupByWhere(where);
-    	
+    	try{
+    		return dm.daoCountPersonGroupByWhere(where);
+    	} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
     }
     @Override
     public List<Integer> loadPersonGroupIdByWhere(String where){
-   		return dm.daoLoadPersonGroupIdByWhere(where);
+    	try{
+    		return dm.daoLoadPersonGroupIdByWhere(where);
+    	} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
     }
     @Override
     public DeviceBean registerDevice(DeviceBean newDevice) throws ServiceSecurityException{
-   		return tm.registerDevice(newDevice);
+    	try{
+    		return tm.registerDevice(newDevice);
+    	} catch (RuntimeException e) {
+			return  throwServiceException(e);
+		}
     }
     @Override
 	public void unregisterDevice(int deviceId,Token token)
 			throws ServiceSecurityException{
-   		tm.unregisterDevice(deviceId,token);
+    	try{
+    		tm.unregisterDevice(deviceId,token);
+    	} catch (RuntimeException e) {
+			throwServiceException(e);
+		}
 	}
     @Override
 	public Token online(DeviceBean device)
 			throws ServiceSecurityException{
-   		return tm.applyDeviceToken(device);
+    	try{
+    		return tm.applyDeviceToken(device);
+    	} catch (RuntimeException e) {
+			return throwServiceException(e);
+		}
 	}
     @Override
 	public void offline(Token token)
 			throws ServiceSecurityException{
-   		tm.releaseDeviceToken(token);
+    	try{
+    		tm.releaseDeviceToken(token);
+    	} catch (RuntimeException e) {
+			throwServiceException(e);
+		}
 	}
     @Override
 	public Token applyPersonToken(int personId, String password, boolean isMd5)
 			throws ServiceSecurityException{
-   		return tm.applyPersonToken(personId, password, isMd5);
+    	try{
+    		return tm.applyPersonToken(personId, password, isMd5);
+    	} catch (RuntimeException e) {
+			return throwServiceException(e);
+		}
 	}
     @Override
 	public void releasePersonToken(Token token)
 			throws ServiceSecurityException{
-		tm.releasePersonToken(token);
+    	try{
+    		tm.releasePersonToken(token);
+    	} catch (RuntimeException e) {
+			throwServiceException(e);
+		}
 	}
     @Override
 	public Token applyRootToken(String password, boolean isMd5)
 			throws ServiceSecurityException{
-		return tm.applyRootToken(password, isMd5);
+		try{
+			return tm.applyRootToken(password, isMd5);
+		} catch (RuntimeException e) {
+			return throwServiceException(e);
+		}
 	}
 	@Override
 	public void releaseRootToken(Token token)
 			throws ServiceSecurityException{
-   		tm.releaseRootToken(token);
+    	try{
+    		tm.releaseRootToken(token);
+    	} catch (RuntimeException e) {
+			throwServiceException(e);
+		}
 	}
 	@Override
 	public boolean isValidPassword(String userId,String password, boolean isMd5, Token token) 
 			throws ServiceSecurityException {
-		Enable.PERSON_ONLY.check(tm, token);
-		return tm.isValidPassword(userId, password, isMd5);
+    	try{
+			Enable.PERSON_ONLY.check(tm, token);
+    		return tm.isValidPassword(userId, password, isMd5);
+    	} catch (RuntimeException e) {
+			return throwServiceException(e);
+		}
 	}
     @Override
     public String applyAckChannel(Token token) {
@@ -838,6 +1214,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     public String applyAckChannel(Token token, long duration) {
     	try {
 			return tm.applyAckChannel(token, duration);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		} 
@@ -846,23 +1224,35 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     public long applyCmdSn(Token token) {
     	try {
 			return tm.applyCmdSn(token);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		} 
 	}
     @Override
     public boolean isValidCmdSn(long cmdSn) {
-		return tm.isValidCmdSn(cmdSn);
+    	try {
+			return tm.isValidCmdSn(cmdSn);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} 
 	}
     @Override
     public boolean isValidAckChannel(String ackChannel) {
-		return tm.isValidAckChannel(ackChannel);
+    	try {
+			return tm.isValidAckChannel(ackChannel);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} 
 	}
     @Override
     public Map<MQParam,String> getRedisParameters(Token token){
     	try {
 			Enable.ALL.check(tm, token);
 			return rm.getRedisParameters();
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		} 
@@ -872,6 +1262,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     	try {
 			Enable.ROOT_ONLY.check(tm, token);
 			return GlobalConfig.getProperty(key);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		} 	
@@ -881,6 +1273,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     	try {
 			Enable.ROOT_ONLY.check(tm, token);
 			return GlobalConfig.toMap(CONFIG);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		} 	
@@ -890,6 +1284,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     	try {
 			Enable.ROOT_ONLY.check(tm, token);
 			GlobalConfig.setProperty(key,value);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		} 	
@@ -899,6 +1295,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     	try {
 			Enable.ROOT_ONLY.check(tm, token);
 			GlobalConfig.setProperties(config);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		} 	
@@ -908,6 +1306,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     	try {
 			Enable.ROOT_ONLY.check(tm, token);
 			GlobalConfig.persistence();
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
@@ -919,5 +1319,9 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     @Override
     public Map<String, String> versionInfo(){
 		return Version.INFO;
+	}
+	@Override
+	public boolean isLocal() {
+		return true;
 	}
 }

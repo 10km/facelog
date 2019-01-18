@@ -79,6 +79,9 @@ public class IFaceLogThriftDecorator {
         catch(net.gdface.facelog.DuplicateRecordException e){
             throw new DuplicateRecordException(e);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -120,6 +123,9 @@ public class IFaceLogThriftDecorator {
         catch(net.gdface.facelog.DuplicateRecordException e){
             throw new DuplicateRecordException(e);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -159,6 +165,9 @@ public class IFaceLogThriftDecorator {
         catch(net.gdface.facelog.DuplicateRecordException e){
             throw new DuplicateRecordException(e);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -185,6 +194,9 @@ public class IFaceLogThriftDecorator {
         }
         catch(net.gdface.facelog.DuplicateRecordException e){
             throw new DuplicateRecordException(e);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -213,6 +225,9 @@ public class IFaceLogThriftDecorator {
         catch(net.gdface.facelog.DuplicateRecordException e){
             throw new DuplicateRecordException(e);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -232,6 +247,9 @@ public class IFaceLogThriftDecorator {
                     token,
                     Token.class,
                     net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -259,6 +277,9 @@ public class IFaceLogThriftDecorator {
                     Token.class,
                     net.gdface.facelog.Token.class));
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -274,6 +295,9 @@ public class IFaceLogThriftDecorator {
                     token,
                     Token.class,
                     net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -293,6 +317,9 @@ public class IFaceLogThriftDecorator {
                     net.gdface.facelog.Token.class),
                 duration);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -308,6 +335,9 @@ public class IFaceLogThriftDecorator {
                     token,
                     Token.class,
                     net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -335,6 +365,9 @@ public class IFaceLogThriftDecorator {
         catch(net.gdface.facelog.ServiceSecurityException e){
             throw new ServiceSecurityException(e);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -359,6 +392,9 @@ public class IFaceLogThriftDecorator {
         catch(net.gdface.facelog.ServiceSecurityException e){
             throw new ServiceSecurityException(e);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -371,6 +407,9 @@ public class IFaceLogThriftDecorator {
         throws ServiceRuntimeException{
         try{
             return delegate().countDeviceByWhere(where);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -385,6 +424,9 @@ public class IFaceLogThriftDecorator {
         try{
             return delegate().countDeviceGroupByWhere(where);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -397,6 +439,9 @@ public class IFaceLogThriftDecorator {
         throws ServiceRuntimeException{
         try{
             return delegate().countLogByWhere(where);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -411,6 +456,9 @@ public class IFaceLogThriftDecorator {
         try{
             return delegate().countLogLightByVerifyTime(timestamp);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -423,6 +471,9 @@ public class IFaceLogThriftDecorator {
         throws ServiceRuntimeException{
         try{
             return delegate().countLogLightByWhere(where);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -437,6 +488,9 @@ public class IFaceLogThriftDecorator {
         try{
             return delegate().countPersonByWhere(where);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -449,6 +503,9 @@ public class IFaceLogThriftDecorator {
         throws ServiceRuntimeException{
         try{
             return delegate().countPersonGroupByWhere(where);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -470,6 +527,9 @@ public class IFaceLogThriftDecorator {
                     Token.class,
                     net.gdface.facelog.Token.class));
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -487,6 +547,9 @@ public class IFaceLogThriftDecorator {
                     token,
                     Token.class,
                     net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -511,6 +574,9 @@ public class IFaceLogThriftDecorator {
                     String.class,
                     String.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -528,6 +594,9 @@ public class IFaceLogThriftDecorator {
                     token,
                     Token.class,
                     net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -555,6 +624,9 @@ public class IFaceLogThriftDecorator {
                     Token.class,
                     net.gdface.facelog.Token.class));
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -572,6 +644,9 @@ public class IFaceLogThriftDecorator {
                     token,
                     Token.class,
                     net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -591,6 +666,9 @@ public class IFaceLogThriftDecorator {
                     Token.class,
                     net.gdface.facelog.Token.class));
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -608,6 +686,9 @@ public class IFaceLogThriftDecorator {
                     token,
                     Token.class,
                     net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -630,6 +711,9 @@ public class IFaceLogThriftDecorator {
                     Token.class,
                     net.gdface.facelog.Token.class));
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -651,6 +735,9 @@ public class IFaceLogThriftDecorator {
                     Token.class,
                     net.gdface.facelog.Token.class));
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -668,6 +755,9 @@ public class IFaceLogThriftDecorator {
                     token,
                     Token.class,
                     net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -690,6 +780,9 @@ public class IFaceLogThriftDecorator {
                     Token.class,
                     net.gdface.facelog.Token.class));
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -702,6 +795,9 @@ public class IFaceLogThriftDecorator {
         throws ServiceRuntimeException{
         try{
             return delegate().existsDevice(id);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -716,6 +812,9 @@ public class IFaceLogThriftDecorator {
         try{
             return delegate().existsFeature(md5);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -729,6 +828,9 @@ public class IFaceLogThriftDecorator {
         try{
             return delegate().existsImage(md5);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -741,6 +843,9 @@ public class IFaceLogThriftDecorator {
         throws ServiceRuntimeException{
         try{
             return delegate().existsPerson(persionId);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -758,6 +863,9 @@ public class IFaceLogThriftDecorator {
                     DeviceBean.class,
                     DeviceBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -773,6 +881,9 @@ public class IFaceLogThriftDecorator {
                     delegate().getDeviceGroup(deviceGroupId),
                     DeviceGroupBean.class,
                     DeviceGroupBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -793,6 +904,9 @@ public class IFaceLogThriftDecorator {
                     DeviceGroupBean.class,
                     DeviceGroupBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -809,6 +923,9 @@ public class IFaceLogThriftDecorator {
                     Integer.class,
                     Integer.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -821,6 +938,9 @@ public class IFaceLogThriftDecorator {
         throws ServiceRuntimeException{
         try{
             return delegate().getDeviceIdOfFeature(featureMd5);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -841,6 +961,9 @@ public class IFaceLogThriftDecorator {
                     DeviceBean.class,
                     DeviceBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -856,6 +979,9 @@ public class IFaceLogThriftDecorator {
                     delegate().getDevicesOfGroup(deviceGroupId),
                     Integer.class,
                     Integer.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -873,6 +999,9 @@ public class IFaceLogThriftDecorator {
                     FeatureBean.class,
                     FeatureBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -889,6 +1018,9 @@ public class IFaceLogThriftDecorator {
                     String.class,
                     String.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -904,6 +1036,9 @@ public class IFaceLogThriftDecorator {
                     delegate().getFeatureBytes(md5),
                     byte[].class,
                     ByteBuffer.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -924,6 +1059,9 @@ public class IFaceLogThriftDecorator {
                     FeatureBean.class,
                     FeatureBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -940,6 +1078,9 @@ public class IFaceLogThriftDecorator {
                     String.class,
                     String.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -954,6 +1095,9 @@ public class IFaceLogThriftDecorator {
         try{
             return delegate().getGroupPermit(deviceId,
                 personGroupId);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -976,6 +1120,9 @@ public class IFaceLogThriftDecorator {
                     Boolean.class,
                     Boolean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -991,6 +1138,9 @@ public class IFaceLogThriftDecorator {
                     delegate().getImage(imageMD5),
                     ImageBean.class,
                     ImageBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1008,6 +1158,9 @@ public class IFaceLogThriftDecorator {
                     byte[].class,
                     ByteBuffer.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1023,6 +1176,9 @@ public class IFaceLogThriftDecorator {
                     delegate().getImagesAssociatedByFeature(featureMd5),
                     String.class,
                     String.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1040,6 +1196,9 @@ public class IFaceLogThriftDecorator {
                     LogBean.class,
                     LogBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1055,6 +1214,9 @@ public class IFaceLogThriftDecorator {
                     delegate().getPerson(personId),
                     PersonBean.class,
                     PersonBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1072,6 +1234,9 @@ public class IFaceLogThriftDecorator {
                     PersonBean.class,
                     PersonBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1087,6 +1252,9 @@ public class IFaceLogThriftDecorator {
                     delegate().getPersonGroup(personGroupId),
                     PersonGroupBean.class,
                     PersonGroupBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1107,6 +1275,9 @@ public class IFaceLogThriftDecorator {
                     PersonGroupBean.class,
                     PersonGroupBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1123,6 +1294,9 @@ public class IFaceLogThriftDecorator {
                     Integer.class,
                     Integer.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1137,6 +1311,9 @@ public class IFaceLogThriftDecorator {
         try{
             return delegate().getPersonPermit(deviceId,
                 personId);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1159,6 +1336,9 @@ public class IFaceLogThriftDecorator {
                     Boolean.class,
                     Boolean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1178,6 +1358,9 @@ public class IFaceLogThriftDecorator {
                     PersonBean.class,
                     PersonBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1193,6 +1376,9 @@ public class IFaceLogThriftDecorator {
                     delegate().getPersonsOfGroup(personGroupId),
                     Integer.class,
                     Integer.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1211,6 +1397,9 @@ public class IFaceLogThriftDecorator {
                     token,
                     Token.class,
                     net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1233,6 +1422,9 @@ public class IFaceLogThriftDecorator {
                     MQParam.class,
                     String.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1254,6 +1446,9 @@ public class IFaceLogThriftDecorator {
                     String.class,
                     String.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1269,6 +1464,9 @@ public class IFaceLogThriftDecorator {
                     delegate().getSubDeviceGroup(deviceGroupId),
                     Integer.class,
                     Integer.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1286,6 +1484,9 @@ public class IFaceLogThriftDecorator {
                     Integer.class,
                     Integer.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1298,6 +1499,9 @@ public class IFaceLogThriftDecorator {
         throws ServiceRuntimeException{
         try{
             return delegate().isDisable(personId);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1312,6 +1516,9 @@ public class IFaceLogThriftDecorator {
         try{
             return delegate().isLocal();
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1325,6 +1532,9 @@ public class IFaceLogThriftDecorator {
         try{
             return delegate().isValidAckChannel(ackChannel);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1337,6 +1547,9 @@ public class IFaceLogThriftDecorator {
         throws ServiceRuntimeException{
         try{
             return delegate().isValidCmdSn(cmdSn);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1366,6 +1579,9 @@ public class IFaceLogThriftDecorator {
         catch(net.gdface.facelog.ServiceSecurityException e){
             throw new ServiceSecurityException(e);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1381,6 +1597,9 @@ public class IFaceLogThriftDecorator {
                     delegate().listOfParentForDeviceGroup(deviceGroupId),
                     Integer.class,
                     Integer.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1398,6 +1617,9 @@ public class IFaceLogThriftDecorator {
                     Integer.class,
                     Integer.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1413,6 +1635,9 @@ public class IFaceLogThriftDecorator {
                     delegate().loadAllPerson(),
                     Integer.class,
                     Integer.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1434,6 +1659,9 @@ public class IFaceLogThriftDecorator {
                     DeviceBean.class,
                     DeviceBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1454,6 +1682,9 @@ public class IFaceLogThriftDecorator {
                     Integer.class,
                     Integer.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1469,6 +1700,9 @@ public class IFaceLogThriftDecorator {
                     delegate().loadDeviceGroupIdByWhere(where),
                     Integer.class,
                     Integer.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1486,6 +1720,9 @@ public class IFaceLogThriftDecorator {
                     Integer.class,
                     Integer.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1501,6 +1738,9 @@ public class IFaceLogThriftDecorator {
                     delegate().loadFeatureMd5ByUpdate(timestamp),
                     String.class,
                     String.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1522,6 +1762,9 @@ public class IFaceLogThriftDecorator {
                     LogBean.class,
                     LogBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1541,6 +1784,9 @@ public class IFaceLogThriftDecorator {
                 numRows),
                     LogLightBean.class,
                     LogLightBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1562,6 +1808,9 @@ public class IFaceLogThriftDecorator {
                     LogLightBean.class,
                     LogLightBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1577,6 +1826,9 @@ public class IFaceLogThriftDecorator {
                     delegate().loadPermitByUpdate(timestamp),
                     PermitBean.class,
                     PermitBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1598,6 +1850,9 @@ public class IFaceLogThriftDecorator {
                     PersonBean.class,
                     PersonBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1618,6 +1873,9 @@ public class IFaceLogThriftDecorator {
                     Integer.class,
                     Integer.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1633,6 +1891,9 @@ public class IFaceLogThriftDecorator {
                     delegate().loadPersonGroupIdByWhere(where),
                     Integer.class,
                     Integer.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1650,6 +1911,9 @@ public class IFaceLogThriftDecorator {
                     Integer.class,
                     Integer.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1666,6 +1930,9 @@ public class IFaceLogThriftDecorator {
                     Integer.class,
                     Integer.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1681,6 +1948,9 @@ public class IFaceLogThriftDecorator {
                     delegate().loadUpdatedPersons(timestamp),
                     Integer.class,
                     Integer.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1703,6 +1973,9 @@ public class IFaceLogThriftDecorator {
         }
         catch(net.gdface.facelog.ServiceSecurityException e){
             throw new ServiceSecurityException(e);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1729,6 +2002,9 @@ public class IFaceLogThriftDecorator {
         catch(net.gdface.facelog.ServiceSecurityException e){
             throw new ServiceSecurityException(e);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1754,6 +2030,9 @@ public class IFaceLogThriftDecorator {
         catch(net.gdface.facelog.ServiceSecurityException e){
             throw new ServiceSecurityException(e);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1775,6 +2054,9 @@ public class IFaceLogThriftDecorator {
         }
         catch(net.gdface.facelog.ServiceSecurityException e){
             throw new ServiceSecurityException(e);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1798,6 +2080,9 @@ public class IFaceLogThriftDecorator {
         catch(net.gdface.facelog.ServiceSecurityException e){
             throw new ServiceSecurityException(e);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1819,6 +2104,9 @@ public class IFaceLogThriftDecorator {
                     token,
                     Token.class,
                     net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1844,6 +2132,9 @@ public class IFaceLogThriftDecorator {
                     DeviceBean.class,
                     DeviceBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1867,6 +2158,9 @@ public class IFaceLogThriftDecorator {
                     net.gdface.facelog.Token.class)),
                     DeviceGroupBean.class,
                     DeviceGroupBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1914,6 +2208,9 @@ public class IFaceLogThriftDecorator {
                     PersonBean.class,
                     PersonBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -1952,6 +2249,9 @@ public class IFaceLogThriftDecorator {
                     net.gdface.facelog.Token.class)),
                     PersonBean.class,
                     PersonBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1996,6 +2296,9 @@ public class IFaceLogThriftDecorator {
                     PersonBean.class,
                     PersonBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -2024,6 +2327,9 @@ public class IFaceLogThriftDecorator {
                     net.gdface.facelog.Token.class)),
                     PersonBean.class,
                     PersonBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -2061,6 +2367,9 @@ public class IFaceLogThriftDecorator {
                     PersonBean.class,
                     PersonBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -2089,6 +2398,9 @@ public class IFaceLogThriftDecorator {
                     PersonBean.class,
                     PersonBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -2112,6 +2424,9 @@ public class IFaceLogThriftDecorator {
                     net.gdface.facelog.Token.class)),
                     PersonBean.class,
                     PersonBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -2137,6 +2452,9 @@ public class IFaceLogThriftDecorator {
                     PersonGroupBean.class,
                     PersonGroupBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -2157,6 +2475,9 @@ public class IFaceLogThriftDecorator {
                     token,
                     Token.class,
                     net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -2181,6 +2502,9 @@ public class IFaceLogThriftDecorator {
                     Token.class,
                     net.gdface.facelog.Token.class));
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -2196,6 +2520,9 @@ public class IFaceLogThriftDecorator {
                     token,
                     Token.class,
                     net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -2216,6 +2543,9 @@ public class IFaceLogThriftDecorator {
                     token,
                     Token.class,
                     net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -2240,6 +2570,9 @@ public class IFaceLogThriftDecorator {
                     Token.class,
                     net.gdface.facelog.Token.class));
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -2263,6 +2596,9 @@ public class IFaceLogThriftDecorator {
                     Token.class,
                     net.gdface.facelog.Token.class));
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -2282,6 +2618,9 @@ public class IFaceLogThriftDecorator {
                     token,
                     Token.class,
                     net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -2307,6 +2646,9 @@ public class IFaceLogThriftDecorator {
         catch(net.gdface.facelog.ServiceSecurityException e){
             throw new ServiceSecurityException(e);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -2331,6 +2673,9 @@ public class IFaceLogThriftDecorator {
                     DeviceBean.class,
                     DeviceBean.class);
         }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
         }
@@ -2343,6 +2688,9 @@ public class IFaceLogThriftDecorator {
         throws ServiceRuntimeException{
         try{
             return delegate().version();
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -2361,6 +2709,9 @@ public class IFaceLogThriftDecorator {
                     String.class,
                     String.class,
                     String.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
         }
         catch(RuntimeException e){
             throw new ServiceRuntimeException(e);

@@ -19,8 +19,6 @@ public class TokenTest implements ServiceConstant{
 			String passwordMd5 = Hashing.md5().hashBytes(password.getBytes()).toString();
 			Token token = instance.applyRootToken(passwordMd5, true);
 			logger.info(token.toString());
-		} catch (ServiceRuntimeException e) {
-			e.printStackTrace();
 		} catch (ServiceSecurityException e) {
 			e.printStackTrace();
 		}
@@ -35,8 +33,6 @@ public class TokenTest implements ServiceConstant{
 			instance.savePerson(person, null);
 			logger.info(person.toString(true, false));
 			assertTrue("password check not pass",instance.isValidPassword(Integer.toString(person.getId()), password, true, null));
-		} catch (ServiceRuntimeException e) {
-			e.printStackTrace();
 		} catch (ServiceSecurityException e) {
 			e.printStackTrace();
 		}
