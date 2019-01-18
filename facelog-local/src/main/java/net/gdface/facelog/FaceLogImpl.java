@@ -90,50 +90,50 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	////////////////////////////////////////////////////////////////////////////////////
 	/**
 	 * 将封装在{@link RuntimeException}中的{@link ServiceSecurityException}剥离出来封装到{@link ServiceRuntimeException}
-	 * @param e
+	 * @param error
 	 * @return
 	 * @see #throwServiceException(RuntimeException)
 	 */
-	protected static final ServiceRuntimeException wrapServiceRuntimeException(Exception e){
+	protected static final ServiceRuntimeException wrapServiceRuntimeException(Exception error){
 		try{
-			if(e instanceof RuntimeException){
-				throwServiceException((RuntimeException)e);
+			if(error instanceof RuntimeException){
+				throwServiceException((RuntimeException)error);
 			}else 
-				throw e;
+				throw error;
 			// dead code
-			return new ServiceRuntimeException(e); 
-		} catch(ServiceSecurityException se){
-			return new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),se);
-		} catch(ServiceRuntimeException se){
-			return se;
-		} catch (Exception e1) {
-			return new ServiceRuntimeException(e);
+			return new ServiceRuntimeException(error); 
+		} catch(ServiceSecurityException e){
+			return new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
+		} catch(ServiceRuntimeException e){
+			return e;
+		} catch (Exception e) {
+			return new ServiceRuntimeException(error);
 		}
 	}
 	/**
 	 * 将封装在{@link Exception}中的{@link ServiceSecurityException}剥离出来单独抛出<br>
 	 * 将其他的{@link Exception}封装在{@link ServiceRuntimeException}抛出，
-	 * @param e
+	 * @param error
 	 * @return
 	 * @throws ServiceSecurityException
 	 */
-	protected static final <T> T throwServiceException(RuntimeException e) 
+	protected static final <T> T throwServiceException(RuntimeException error) 
 			throws ServiceSecurityException{
-		if(null != e.getCause()){
+		if(null != error.getCause()){
 			try{
-				throw e.getCause();
+				throw error.getCause();
 			}catch(ServiceSecurityException se){
 				throw se;
 			} catch (Throwable e1) {
 				// do nothing
 			}
 		}
-		if(e instanceof RuntimeDaoException){
-			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),e); 
-		}else if(e instanceof JedisException){
-			throw new ServiceRuntimeException(ExceptionType.REDIS_ERROR.ordinal(),e);
+		if(error instanceof RuntimeDaoException){
+			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),error); 
+		}else if(error instanceof JedisException){
+			throw new ServiceRuntimeException(ExceptionType.REDIS_ERROR.ordinal(),error);
 		}
-		throw new ServiceRuntimeException(e); 
+		throw new ServiceRuntimeException(error); 
 	}
 	@Override
 	public PersonBean getPerson(int personId) {
