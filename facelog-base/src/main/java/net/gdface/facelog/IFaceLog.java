@@ -18,11 +18,6 @@ import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
 
-
-// 由于Java语言的限制,导致swift无法从interface中获取参数名信息，所以采用interface定义生成的thrift IDL文件中service中的方法
-// 无法生成正确的参数名称(只能是无意义的arg0,arg1...)<br>
-// 所以这里采用抽象类来定义服务接口,如果抽象类中的方法是抽象的，也无法获取参数名，所以这里所有方法都有一个空的函数体。
-
 /**
  * FaceLog 服务接口<br>
  * <ul>
