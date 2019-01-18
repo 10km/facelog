@@ -1,11 +1,4 @@
-#parse( "header.include.vm" )
-#parse( "schema.include.vm" )
-#set ( $javaClassName = 'CommonConstant' )
-$codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
-package $extensionPkg;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package net.gdface.facelog;
 
 /**
  * client端和服务端共用的基本类型常量定义
@@ -13,8 +6,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public interface CommonConstant {
-    public static final Logger logger = LoggerFactory.getLogger(CommonConstant.class);
-    /** 整数型主键的{@code null} 替代值 */
     public static final int NULL_ID_INTEGER = -1;
     /** 字符串型主键的{@code null} 替代值 */
     public static final String NULL_ID_STRING = "";

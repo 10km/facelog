@@ -19,11 +19,6 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.facebook.swift/swift-annotations -->
 		<dependency>
 			<groupId>com.facebook.swift</groupId>

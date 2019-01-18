@@ -4,6 +4,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 
 import org.apache.commons.configuration2.CombinedConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import gu.simplemq.Channel;
 import net.gdface.facelog.CommonConstant;
@@ -14,6 +16,8 @@ import net.gdface.facelog.CommonConstant;
  *
  */
 public interface ServiceConstant extends CommonConstant{
+    public static final Logger logger = LoggerFactory.getLogger(ServiceConstant.class);
+
 	/** 设备访问令牌表,{@code 设备ID -> token}  */
     public static final Channel<Token> TABLE_DEVICE_TOKEN = new Channel<Token>("DeviceToken"){} ;
     /** 人员访问令牌表 {@code 人员ID -> token} */
