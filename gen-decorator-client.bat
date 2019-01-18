@@ -1,4 +1,4 @@
-java -cp lib\codegen-thrift-1.0.3-standalone.jar;facelog-base\target\classes;db\facelog-db-base\target\classes;..\faceapi\faceapi-base\target\classes; ^
+java -cp lib\codegen-thrift-1.0.4-standalone.jar;facelog-base\target\classes;db\facelog-db-base\target\classes;..\faceapi\faceapi-base\target\classes; ^
     net.gdface.codegen.thrift.ThriftServiceDecoratorGenerator ^
 		-ic net.gdface.facelog.IFaceLog ^
 		-rc net.gdface.facelog.FacelogDefaultImpl ^
@@ -8,5 +8,5 @@ java -cp lib\codegen-thrift-1.0.3-standalone.jar;facelog-base\target\classes;db\
 		-gt CLIENT
 
 rem cd facelog-thriftclient
-rem mvn com.gitee.l0km:codegen-thrift-maven-plugin:1.0.3:generate
+rem mvn com.gitee.l0km:codegen-thrift-maven-plugin:1.0.4:generate
 rem cd ..
