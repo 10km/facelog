@@ -54,7 +54,10 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	private final RedisLogListener redisLogListener = new RedisLogListener(rm.getRedisParameters().get(MQParam.HB_MONITOR_CHANNEL));
 
 	//private final RedisLogConsumer redisLogConsumer  = new RedisLogConsumer(this);
-
+	static{
+		LocalTokenContextOp.initCurrentTokenContextOp();
+		ServiceSecurityExceptionHelper.initServiceSecurityException();
+	}
 	/**
 	 * 构造方法
 	 */

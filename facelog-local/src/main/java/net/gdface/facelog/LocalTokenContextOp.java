@@ -1,8 +1,11 @@
 package net.gdface.facelog;
 
 class LocalTokenContextOp extends CurrentTokenContextOp {
-
-	LocalTokenContextOp() {
+	private static final LocalTokenContextOp INSTANCE = new LocalTokenContextOp();
+    static void initCurrentTokenContextOp(){
+    	CurrentTokenContextOp.setInstance(LocalTokenContextOp.INSTANCE);
+    }
+	private  LocalTokenContextOp() {
 	}
 
 	@Override
