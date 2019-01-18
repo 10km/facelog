@@ -131,7 +131,7 @@ public final class Token{
 	 * @return
 	 */
 	Token asContextToken(){
-		CurrentTokenContextOp.getDefaultInstance().currentToken(this);
+		CurrentTokenContextOp.getInstance().currentToken(this);
 		return this;
 	}
 	static Function<Token,String> KEY_HELPER = new Function<Token,String>(){

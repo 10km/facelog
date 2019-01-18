@@ -2,8 +2,8 @@ package net.gdface.facelog;
 
 class CurrentTokenContextOp {
 	private static final CurrentTokenContextOp NULL_INSTANCE = new CurrentTokenContextOp();
-	private static CurrentTokenContextOp defaultInstance = NULL_INSTANCE;
-	CurrentTokenContextOp() {
+	private static CurrentTokenContextOp instance = NULL_INSTANCE;
+	protected CurrentTokenContextOp() {
 	}
 	/**
 	 * 设置当前令牌
@@ -24,12 +24,12 @@ class CurrentTokenContextOp {
 	 */
 	void currentError(ServiceSecurityException error) {}
 	
-	static CurrentTokenContextOp getDefaultInstance() {
-		return defaultInstance;
+	static CurrentTokenContextOp getInstance() {
+		return instance;
 	}
-	synchronized static void setDefaultInstance(CurrentTokenContextOp defaultInstance) {
-		if(defaultInstance != null){
-			CurrentTokenContextOp.defaultInstance = defaultInstance;
+	synchronized static void setInstance(CurrentTokenContextOp instance) {
+		if(instance != null){
+			CurrentTokenContextOp.instance = instance;
 		}
 	}
 }

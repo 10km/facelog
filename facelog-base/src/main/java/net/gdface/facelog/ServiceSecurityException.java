@@ -5,7 +5,7 @@ package net.gdface.facelog;
  * @author guyadong
  *
  */
-public final class ServiceSecurityException extends Exception {
+public class ServiceSecurityException extends Exception {
 	public static interface FieldJsonTransformer<T> {
 		public String jsonOfDeclaredFields(T input);
 	}
@@ -35,7 +35,7 @@ public final class ServiceSecurityException extends Exception {
 
 	public ServiceSecurityException(String message, Throwable cause) {
 		super(message, cause);
-		CurrentTokenContextOp.getDefaultInstance().currentError(this);
+		CurrentTokenContextOp.getInstance().currentError(this);
 	}
 
 	public ServiceSecurityException(Throwable cause) {
