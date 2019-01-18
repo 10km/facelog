@@ -175,11 +175,9 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 				public Integer call() throws Exception {
 					return dm.daoDeletePerson(personId);
 				}});
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
-		}
+		} 
 	}
 
 	@Override
@@ -191,11 +189,9 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 				public Integer call() throws Exception {
 					return dm.daoDeletePersonsByPrimaryKey(personIdList);
 				}});
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
-		}
+		} 
 	}
 
 	@Override
@@ -207,10 +203,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 				public Integer call() throws Exception {
 					return dm.daoDeletePersonByPapersNum(papersNum);
 				}});
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -223,10 +217,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 				public Integer call() throws Exception {
 					return dm.daoDeletePersonByPapersNum(papersNumlist);
 				}});
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -253,10 +245,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			dm.daoSetPersonExpiryDate(dm.daoGetPerson(personId),new Date());
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -265,10 +255,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			dm.daoSetPersonExpiryDate(dm.daoGetPerson(personId),new Date(expiryDate));
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -281,10 +269,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 				public void run() {
 					dm.daoSetPersonExpiryDate(personIdList,new Date(expiryDate));
 				}});			
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -340,10 +326,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.ALL.check(tm, token);
 			return dm.daoSavePerson(bean);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -352,10 +336,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			dm.daoSavePersonsAsTransaction(beans);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -368,10 +350,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 				public PersonBean call() throws Exception {
 					return dm.daoSavePerson(bean, FaceUtilits.getByteBuffer(idPhoto), null,null);
 				}});
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -384,10 +364,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 				public Integer call() throws Exception {
 					return dm.daoSavePerson(persons);
 				}});
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -402,10 +380,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 					return dm.daoSavePerson(bean, dm.daoGetImage(idPhotoMd5), Arrays.asList(dm.daoGetFeature(featureMd5)));
 				}
 			});
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	
@@ -420,10 +396,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 					return dm.daoSavePerson(bean, FaceUtilits.getByteBuffer(idPhoto), featureBean, dm.daoGetDevice(deviceId));
 				}
 			});
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -439,10 +413,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 							dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), bean, faceBeans), null);
 				}
 			});
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -459,10 +431,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 							FaceUtilits.getByteBuffer(feature), faceInfo, dm.daoGetDevice(deviceId));
 				}
 			});
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -480,10 +450,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 							FaceUtilits.getByteBuffer(featureImage),
 							featureFaceBean,dm.daoGetDevice(deviceId));
 				}});
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -498,10 +466,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 					dm.daoReplaceFeature(personId, featureMd5, deleteOldFeatureImage);
 				}
 			});
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -646,12 +612,10 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.DEVICE_ONLY.check(tm, token);
 			return dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), dm.daoGetPerson(personId), faecBeans);
-		} catch (RuntimeException e) {
+		} catch (RuntimeException | IOException e) {
 			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
-		} catch (IOException e) {
-			throw new ServiceRuntimeException(ExceptionType.IMAGE_ERROR.ordinal(),e);
 		}
 	}
 
@@ -661,12 +625,10 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try {
 			Enable.DEVICE_ONLY.check(tm, token);
 			return dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), dm.daoGetPerson(personId), faceInfo, dm.daoGetDevice(deviceId));
-		} catch (RuntimeException e) {
+		} catch (RuntimeException | IOException e) {
 			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
-		} catch (IOException e) {
-			throw new ServiceRuntimeException(ExceptionType.IMAGE_ERROR.ordinal(),e);
 		}
 	}
 
@@ -675,10 +637,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.ALL.check(tm, token);
 			return dm.daoDeleteFeature(featureMd5,deleteImage);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -687,10 +647,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.ALL.check(tm, token);
 			return dm.daoDeleteAllFeaturesByPersonId(personId,deleteImage);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -771,10 +729,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.ALL.check(tm, token);
 			return dm.daoDeleteImage(imageMd5);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -792,10 +748,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			return dm.daoSaveDevice(deviceBean);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
@@ -805,10 +759,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			checkArgument(null != deviceBean && !deviceBean.isNew(),
 					"require the device must be exists record");
 			return dm.daoSaveDevice(deviceBean);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
@@ -859,10 +811,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			return dm.daoSaveDeviceGroup(deviceGroupBean);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
@@ -886,10 +836,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			return dm.daoDeleteDeviceGroup(deviceGroupId);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
@@ -934,10 +882,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			return dm.daoSavePersonGroup(personGroupBean);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
@@ -961,10 +907,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			return dm.daoDeletePersonGroup(personGroupId);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
@@ -1033,10 +977,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			dm.daoAddPermit(deviceGroup, personGroup);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
@@ -1044,10 +986,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			dm.daoAddPermit(deviceGroupId, personGroupId);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
@@ -1055,10 +995,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			return dm.daoDeletePermit(deviceGroup, personGroup);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 	@Override
@@ -1214,20 +1152,16 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     public String applyAckChannel(Token token, long duration) {
     	try {
 			return tm.applyAckChannel(token, duration);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		} 
 	}
     @Override
     public long applyCmdSn(Token token) {
     	try {
 			return tm.applyCmdSn(token);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		} 
 	}
     @Override
@@ -1251,10 +1185,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     	try {
 			Enable.ALL.check(tm, token);
 			return rm.getRedisParameters();
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		} 
     }
     @Override
@@ -1262,10 +1194,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     	try {
 			Enable.ROOT_ONLY.check(tm, token);
 			return GlobalConfig.getProperty(key);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		} 	
     }
     @Override
@@ -1273,10 +1203,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     	try {
 			Enable.ROOT_ONLY.check(tm, token);
 			return GlobalConfig.toMap(CONFIG);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		} 	
     }
     @Override
@@ -1284,10 +1212,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     	try {
 			Enable.ROOT_ONLY.check(tm, token);
 			GlobalConfig.setProperty(key,value);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		} 	
     }
     @Override
@@ -1295,10 +1221,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     	try {
 			Enable.ROOT_ONLY.check(tm, token);
 			GlobalConfig.setProperties(config);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		} 	
     }
     @Override
@@ -1306,10 +1230,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     	try {
 			Enable.ROOT_ONLY.check(tm, token);
 			GlobalConfig.persistence();
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
     }
     @Override
