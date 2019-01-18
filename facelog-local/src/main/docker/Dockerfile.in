@@ -1,0 +1,37 @@
+# docker image of facelog service
+# version 1.0.2
+# description: standlone.jar包启动方式
+FROM java:7
+MAINTAINER guyadong(10km0811@sohu.com)
+RUN groupadd -r facelog && useradd -r -m -g facelog facelog
+LABEL version="$VERSION$" description="facelog service docker"
+ENV FACELOG_VERSION=$VERSION$ \
+		FACELOG_DEBUG=false \
+		FACELOG_DEBUG_PORT=8000 \
+		SERVICE_PORT=26411 \
+		REDIS_HOST=localhost \
+		REDIS_PORT=6379 \
+		REDIS_PASSWORD="" \
+		DATABASE_HOST=localhost \
+		DATABASE_PORT=3306 \
+		DATABASE_SCHEMA=test \
+		DATABASE_USER=root \
+		DATABASE_PASSWORD="" 
+ENV SERVICE_JAR facelog-service-${FACELOG_VERSION}-standalone.jar
+COPY ./$SERVICE_JAR /usr/local/facelog/$SERVICE_JAR
+COPY facelog-entrypoint.sh /usr/local/bin
+# dos to unix
+RUN sed -i 's/\r$//g' /usr/local/bin/facelog-entrypoint.sh
+ENTRYPOINT ["facelog-entrypoint.sh"]
+RUN  mkdir /data && chown facelog:facelog /data
+VOLUME /data
+WORKDIR /data
+EXPOSE $SERVICE_PORT $FACELOG_DEBUG_PORT
+USER facelog
+CMD set -x; \
+		if [ "$FACELOG_DEBUG" = true ] ; then \
+			debug="-Xrunjdwp:transport=dt_socket,server=y,address=$FACELOG_DEBUG_PORT,suspend=n"; \
+		else \
+			debug=''; \
+		fi ; \
+		java $debug -jar /usr/local/facelog/$SERVICE_JAR
