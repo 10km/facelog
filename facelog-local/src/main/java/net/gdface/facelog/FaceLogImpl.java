@@ -122,9 +122,9 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		if(null != error.getCause()){
 			try{
 				throw error.getCause();
-			}catch(ServiceSecurityException se){
-				throw se;
-			} catch (Throwable e1) {
+			}catch(ServiceSecurityException e){
+				throw e;
+			} catch (Throwable e) {
 				// do nothing
 			}
 		}
