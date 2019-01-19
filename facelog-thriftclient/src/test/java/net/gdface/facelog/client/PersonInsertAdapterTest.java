@@ -23,7 +23,7 @@ public class PersonInsertAdapterTest implements CommonConstant {
 
 	@Test
 	public void test() {
-		final IFaceLogThriftClient serviceClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLog.class, IFaceLogThriftClient.class);
+		final IFaceLogClient serviceClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLog.class, IFaceLogClient.class);
 		new SubAdapters.BasePersonInsertSubAdapter(){
 			@Override
 			public void onSubscribe(Integer id) throws SmqUnsubscribeException {

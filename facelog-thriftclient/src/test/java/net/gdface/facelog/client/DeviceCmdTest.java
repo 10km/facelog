@@ -34,7 +34,7 @@ import redis.clients.jedis.Protocol;
 public class DeviceCmdTest implements ChannelConstant{
     public static final Logger logger = LoggerFactory.getLogger(DeviceCmdTest.class);
 
-	private static IFaceLogThriftClient facelogClient;
+	private static IFaceLogClient facelogClient;
 	private static Token rootToken;
 	/** redis 连接参数 */
 	private static Map<PropName, Object> redisParam = 
@@ -50,7 +50,7 @@ public class DeviceCmdTest implements ChannelConstant{
 		// 根据连接参数创建默认实例 
 		JedisPoolLazy.createDefaultInstance( redisParam);
 		// 创建服务实例
-		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLog.class, IFaceLogThriftClient.class);
+		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLog.class, IFaceLogClient.class);
 		// 申请root令牌
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 		byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};

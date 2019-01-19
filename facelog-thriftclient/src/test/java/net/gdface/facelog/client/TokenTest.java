@@ -32,12 +32,12 @@ import net.gdface.utils.NetworkUtil;
 public class TokenTest implements CommonConstant {
     public static final Logger logger = LoggerFactory.getLogger(TokenTest.class);
 
-	private static IFaceLogThriftClient facelogClient;
+	private static IFaceLogClient facelogClient;
 	private static Token rootToken;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLog.class,IFaceLogThriftClient.class);
+		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLog.class,IFaceLogClient.class);
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 
 	}
