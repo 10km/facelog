@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.JedisPoolLazy.PropName;
 import gu.simplemq.redis.JedisUtils;
+import net.gdface.utils.NetworkUtil;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.jedis.exceptions.JedisDataException;
