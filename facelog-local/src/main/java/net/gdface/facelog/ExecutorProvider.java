@@ -3,6 +3,8 @@ package net.gdface.facelog;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 
+import net.gdface.utils.DefaultExecutorProvider;
+
 /**
  * 基于配置文件指定的参数提供全局线程池对象<br>
  * 线程池对象在应用程序结束时自动退出
