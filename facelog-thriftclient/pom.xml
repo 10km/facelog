@@ -43,6 +43,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.gitee.l0km</groupId>
+			<artifactId>common-base2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.gitee.l0km</groupId>
 			<artifactId>simplemq</artifactId>
 		</dependency>
 		<dependency>
