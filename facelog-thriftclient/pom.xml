@@ -36,6 +36,25 @@
 			<artifactId>facelog-base</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>facelog-base</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.gitee.l0km</groupId>
+			<artifactId>simplemq</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>common-thrift</artifactId>
+			<version>${common-java.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>facelog-base</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -57,6 +76,7 @@
 							<sources>
 								<source>${project.basedir}/src/client/java</source>
 								<source>${project.basedir}/src/thrift/java</source>
+								<source>${project.basedir}/src/sql2java/java</source>
 							</sources>
 						</configuration>
 					</execution>
