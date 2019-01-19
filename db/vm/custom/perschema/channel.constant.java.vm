@@ -5,6 +5,8 @@ $codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
 package $extensionPkg;
 
 import gu.simplemq.Channel;
+import net.gdface.facelog.CommonConstant;
+
 #foreach($tableName in ['fl_permit','fl_log'])
 #set ($table = $db.getTable($tableName))
 #if($table.getPackage(true) != $extensionPkg)

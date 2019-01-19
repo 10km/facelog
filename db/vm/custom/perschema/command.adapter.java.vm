@@ -2,8 +2,9 @@
 #parse( "macros.include.vm" )
 #parse( "commands.definition.vm" )
 ## 只在thrift_client,thrifty_client时生成
-#if(!$codewriter.getPropertyExplodedAsList("template.folder.include").contains("thrift_client") && 
- 	  !$codewriter.getPropertyExplodedAsList("template.folder.include").contains("thrifty_client"))
+#if(!$codewriter.getPropertyExplodedAsList("template.folder.include").contains("thrift_client")   && 
+ 	  !$codewriter.getPropertyExplodedAsList("template.folder.include").contains("thrifty_client")  && 
+ 	  !$codewriter.getPropertyExplodedAsList("custom.template.include").contains("command.adapter.java.vm"))
 #set($codewriter.saveCurrentFile = false)
 #stop
 #end

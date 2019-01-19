@@ -2,8 +2,9 @@
 #parse( "macros.include.vm" )
 #parse( "commands.definition.vm" )
 ## 只在thrift_client,thrifty_client时生成
-#if(!$codewriter.getPropertyExplodedAsList("template.folder.include").contains("thrift_client") && 
- 	  !$codewriter.getPropertyExplodedAsList("template.folder.include").contains("thrifty_client"))
+#if(!$codewriter.getPropertyExplodedAsList("template.folder.include").contains("thrift_client")  && 
+ 	  !$codewriter.getPropertyExplodedAsList("template.folder.include").contains("thrifty_client") &&
+ 	  !$codewriter.getPropertyExplodedAsList("custom.template.include").contains("sub.adapters.java.vm"))
 #set($codewriter.saveCurrentFile = false)
 #stop
 #end
@@ -16,6 +17,13 @@ import gu.simplemq.IMessageAdapter;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.RedisSubscriber;
 import gu.simplemq.Channel;
+
+#foreach($tableName in ['fl_permit'])
+#set ($table = $db.getTable($tableName))
+#if($table.getPackage(true) != $extensionPkg)
+import ${table.getPackage(true)}.$table.asBeanClassNSP();
+#end
+#end
 
 /**
  * 数据库表记录变化订阅对象父类集合,应用项目根据需要继承相应的类实现自己的业务逻辑
