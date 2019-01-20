@@ -25,7 +25,6 @@ import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.device.Heartbeat;
-import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
 import redis.clients.jedis.Protocol;
 

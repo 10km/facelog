@@ -1,10 +1,13 @@
-package net.gdface.facelog;
+package net.gdface.service.facelog;
 
 import java.util.Properties;
 
 import org.apache.log4j.PropertyConfigurator;
 
 import com.google.common.base.Joiner;
+
+import net.gdface.facelog.GlobalConfig;
+import net.gdface.facelog.ServiceConstant;
 
 /**
  * log4j配置

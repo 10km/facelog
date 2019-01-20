@@ -18,7 +18,6 @@ import gu.simplemq.redis.JedisPoolLazy.PropName;
 import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.db.DeviceBean;
-import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
 import net.gdface.thrift.exception.ServiceRuntimeException;
 import net.gdface.utils.DefaultExecutorProvider;

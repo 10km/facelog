@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.commons.configuration2.CombinedConfiguration;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
@@ -31,7 +29,6 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableList.Builder;
-import com.facebook.swift.service.ThriftServerConfig;
 import com.google.common.base.Function;
 import com.google.common.base.Predicates;
 import com.google.common.base.Strings;
@@ -40,7 +37,6 @@ import gu.simplemq.redis.JedisPoolLazy.PropName;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import io.airlift.units.Duration;
 import net.gdface.facelog.db.Constant.JdbcProperty;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -120,35 +116,7 @@ public class GlobalConfig implements ServiceConstant{
 	public static CombinedConfiguration getConfig() {
 		return CONFIG;
 	}
-	/**
-	 * 从配置文件中读取参数创建{@link ThriftServerConfig}实例
-	 * @return
-	 */
-	static ThriftServerConfig makeThriftServerConfig(){
-		ThriftServerConfig thriftServerConfig = new ThriftServerConfig();
-		int intValue ;
-		thriftServerConfig.setPort(CONFIG.getInt(SERVER_PORT,DEFAULT_PORT));
-		if((intValue  = CONFIG.getInt(SERVER_CONNECTION_LIMIT,0)) >0){
-			thriftServerConfig.setConnectionLimit(intValue);
-		}
-		if((intValue = CONFIG.getInt(SERVER_IDLE_CONNECTION_TIMEMOUT,0))>0){
-			Duration timeout = new Duration(intValue,TimeUnit.SECONDS);
-			thriftServerConfig.setIdleConnectionTimeout(timeout);
-		}
-		if((intValue = CONFIG.getInt(SERVER_WORKER_THREAD_COUNT,0))>0){
-			thriftServerConfig.setWorkerThreads(intValue);
-		}
-		return thriftServerConfig;
-	}
-	/** log 输出{@code config}中的关键参数 */
-	static final void logThriftServerConfig(ThriftServerConfig config){
-		logger.info("Service Version(服务版本):{}",Version.VERSION);
-		logger.info("RPC Service Parameters(服务运行参数):");
-		logger.info("port({}): {}", descriptionOf(SERVER_PORT),config.getPort());
-		logger.info("connectionLimit({}): {}", descriptionOf(SERVER_CONNECTION_LIMIT),config.getConnectionLimit());
-		logger.info("idleConnectionTimeout({}): {}", descriptionOf(SERVER_IDLE_CONNECTION_TIMEMOUT),config.getIdleConnectionTimeout());
-		logger.info("workerThreads({}): {}", descriptionOf(SERVER_WORKER_THREAD_COUNT),config.getWorkerThreads());
-	}
+
 	/** 从配置文件中读取REDIS参数 */
 	static Map<PropName,Object> makeRedisParameters(){
 		HashMap<PropName, Object> params = new HashMap<PropName,Object>(16);
@@ -255,7 +223,7 @@ public class GlobalConfig implements ServiceConstant{
 	/**
 	 * 返回指定的参数,如果参数没有定义则返回{@code null}
 	 */
-	static String getProperty(String key){
+	public static String getProperty(String key){
 		return getConfig().getString(key,null);
 	}
 	/**
@@ -265,7 +233,7 @@ public class GlobalConfig implements ServiceConstant{
 	 * @param key
 	 * @param value
 	 */
-	static void setProperty(String key,Object value){
+	public static void setProperty(String key,Object value){
 		USER_CONFIG.setProperty(key, value);
 	}
 	/**
@@ -273,7 +241,7 @@ public class GlobalConfig implements ServiceConstant{
 	 * @param config
 	 * @see #setProperty(String, Object)
 	 */
-	static void setProperties(Map<String,? extends Object> config){
+	public static void setProperties(Map<String,? extends Object> config){
 		Synchronizer sync = USER_CONFIG.getSynchronizer();
 		sync.beginWrite();
 		try{
@@ -288,7 +256,7 @@ public class GlobalConfig implements ServiceConstant{
 	 * 配置参数持久化<br>
 	 * 保存修改的配置到自定义配置文件({@link #USER_CONFIG_FILE})
 	 */
-	static void persistence() {
+	public static void persistence() {
 		try {
 			// readConfig 方法中已经指定了文件默认编码方式为UTF-8,这里不需要再指定 
 			FileHandler handler = new FileHandler(USER_CONFIG);

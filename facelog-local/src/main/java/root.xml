@@ -8,13 +8,13 @@
 	<override>
 		<!-- 从系统 home 位置读取 -->
 		<properties
-			fileName="${sys:user.home}/${const:net.gdface.facelog.service.GlobalConfig.HOME_FOLDER}/${const:net.gdface.facelog.service.GlobalConfig.USER_PROPERTIES}"
+			fileName="${sys:user.home}/${const:net.gdface.facelog.GlobalConfig.HOME_FOLDER}/${const:net.gdface.facelog.GlobalConfig.USER_PROPERTIES}"
 			config-name="userConfig"
 			config-forceCreate="true"
 			config-optional="true" />
 		<!-- 如果定义了 FACELOG_HOME 环境变量,从变量指定的位置读取配置 -->
 		<properties
-			fileName="${env:FACELOG_HOME}/${const:net.gdface.facelog.service.GlobalConfig.USER_PROPERTIES}"
+			fileName="${env:FACELOG_HOME}/${const:net.gdface.facelog.GlobalConfig.USER_PROPERTIES}"
 			config-name="envConfig"
 			config-optional="true" />
 		<xml fileName="defaultConfig.xml" config-name="default config" />

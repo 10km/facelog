@@ -44,7 +44,7 @@ public class TokenContext {
 	 * @param token 不可为{@code null} 
 	 * @return 
 	 */
-	TokenContext setToken(Token token) {
+	public TokenContext setToken(Token token) {
 		this.token = checkNotNull(token);
 		return this;
 	}
@@ -57,7 +57,7 @@ public class TokenContext {
 	 * @param tokenOp 不可为{@code null}
 	 * @return
 	 */
-	TokenContext setTokenOp(TokenOp tokenOp) {
+	public TokenContext setTokenOp(TokenOp tokenOp) {
 		this.tokenOp = checkNotNull(tokenOp);
 		return this;
 	}
@@ -77,7 +77,7 @@ public class TokenContext {
 	 * @param error
 	 * @return
 	 */
-	TokenContext setError(ServiceSecurityException error) {
+	public TokenContext setError(ServiceSecurityException error) {
 		this.error = checkNotNull(error);
 		this.ok = false;
 		return this;
@@ -96,7 +96,7 @@ public class TokenContext {
 	 * @throws IllegalStateException {@link #methodName}字段已经初始化
 	 * @throws IllegalArgumentException {@code methodName}为空或{@code null}
 	 */
-	TokenContext setMethodName(String methodName) {
+	public TokenContext setMethodName(String methodName) {
 		checkState(null == this.methodName,"methodName be initialized already");
 		checkArgument(!Strings.isNullOrEmpty(methodName),"methodName is null or empty");
 		this.methodName = methodName;
@@ -106,7 +106,7 @@ public class TokenContext {
 	 * 上下文对象生命期结束时调用<br>
 	 * 记录令牌操作日志
 	 */
-	void contextDone() {
+	public void contextDone() {
 		if(TokenOp.UNINITIALIZED != tokenOp){
 			if(this.ok){
 				logger.info("PORT:{} OP:{}: FROM:{} BY:{}: OK",

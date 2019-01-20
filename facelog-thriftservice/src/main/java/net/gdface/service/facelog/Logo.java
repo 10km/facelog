@@ -1,4 +1,4 @@
-package net.gdface.facelog;
+package net.gdface.service.facelog;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

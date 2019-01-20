@@ -1,4 +1,4 @@
-package net.gdface.facelog;
+package net.gdface.service.facelog;
 
 import java.util.Collections;
 import java.util.Set;
@@ -6,6 +6,9 @@ import java.util.Set;
 import com.facebook.swift.service.ThriftEventHandler;
 import com.facebook.swift.service.ThriftServerService;
 import com.google.common.collect.Sets;
+
+import net.gdface.facelog.Token;
+import net.gdface.facelog.TokenContext;
 
 /**
  * TLS变量管理器<br>
@@ -16,7 +19,7 @@ import com.google.common.collect.Sets;
  *
  */
 public class TlsHandler extends ThriftEventHandler {
-	static final TlsHandler INSTANCE = new TlsHandler();
+	public static final TlsHandler INSTANCE = new TlsHandler();
 	/** 注册到当前对象的TLS变量集合,当RPC调用结束时调用{@link ThreadLocal#remove()}释放TLS变量 */
 	private final Set<ThreadLocal<?>> tlsVariables = Sets.newConcurrentHashSet();
 	private final Set<IPortDone> dones = Collections.synchronizedSet(Sets.<IPortDone>newLinkedHashSet());

@@ -29,12 +29,12 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.facebook.nifty</groupId>
-			<artifactId>nifty-core</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-configuration2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -52,11 +52,6 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>common-thrift</artifactId>
 			<version>${common-java.version}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.facebook.swift/swift-service -->
-		<dependency>
-			<groupId>com.facebook.swift</groupId>
-			<artifactId>swift-service</artifactId>
 		</dependency>
 	</dependencies>
 	<build>

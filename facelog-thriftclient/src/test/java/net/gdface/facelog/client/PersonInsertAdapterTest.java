@@ -10,7 +10,6 @@ import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.RedisFactory;
 import net.gdface.facelog.CommonConstant;
 import net.gdface.facelog.IFaceLog;
-import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
 
 /**

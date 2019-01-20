@@ -1,29 +1,25 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.gitee.l0km</groupId>
-    <artifactId>facelog</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
-  </parent>
-  <artifactId>facelog-thriftservice</artifactId>
-  <name>facelog-thriftservice</name>
-  <url>http://maven.apache.org</url>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <codegen.dir>${project.basedir}/src/service/java</codegen.dir>
-  </properties>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.gitee.l0km</groupId>
+		<artifactId>facelog</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>facelog-thriftservice</artifactId>
+	<name>facelog-thriftservice</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<codegen.dir>${project.basedir}/src/service/java</codegen.dir>
+	</properties>
+	<dependencies>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>common-thrift</artifactId>
-			<version>${common-java.version}</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -39,12 +35,18 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>facelog-local</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-beanutils</groupId>
+					<artifactId>commons-beanutils-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
-  </dependencies>
+	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
@@ -69,66 +71,139 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<configuration>
-					<transformers>
-						<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-							<mainClass>net.gdface.service.facelog.FacelogServiceMain</mainClass>
-						</transformer>
-					</transformers>
-					<shadedArtifactAttached>true</shadedArtifactAttached>
-					<minimizeJar>false</minimizeJar>
-					<!-- 生成依赖包的源码jar包 -->
-					<createSourcesJar>true</createSourcesJar>
-					<shadedClassifierName>standalone</shadedClassifierName>
-					<!-- 强制将log4j打入jar包(log4j不在依赖树上) -->
-					<filters>
-						<filter>
-							<artifact>log4j:log4j</artifact>
-							<includes>
-								<include>**/**</include>
-							</includes>
-						</filter>
-					</filters>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.gitee.l0km</groupId>
-				<artifactId>codegen-thrift-maven-plugin</artifactId>
-				<version>${codegen.version}</version>
-				<executions>					
-					<execution>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<interfaceClass>net.gdface.facelog.IFaceLog</interfaceClass>
-					<refClass>net.gdface.facelog.FacelogDefaultImpl</refClass>
-					<package>net.gdface.facelog.decorator</package>
-					<outputDir>${codegen.dir}</outputDir>
-					<thriftPackage>net.gdface.facelog.thrift.client</thriftPackage>
-					<taskType>SERVICE</taskType>
-				</configuration>
-				<dependencies>
-				<dependency>
-					<groupId>${project.groupId}</groupId>
-					<artifactId>facelog-base</artifactId>
-					<version>${project.version}</version>
-				</dependency>
-				</dependencies>
-			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>com.gitee.l0km</groupId>
+					<artifactId>codegen-thrift-maven-plugin</artifactId>
+					<version>${codegen.version}</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>generate</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<interfaceClass>net.gdface.facelog.IFaceLog</interfaceClass>
+						<refClass>net.gdface.facelog.FacelogDefaultImpl</refClass>
+						<package>net.gdface.facelog.decorator</package>
+						<outputDir>${codegen.dir}</outputDir>
+						<thriftPackage>net.gdface.facelog.thrift.client</thriftPackage>
+						<taskType>SERVICE</taskType>
+					</configuration>
+					<dependencies>
+						<dependency>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>facelog-base</artifactId>
+							<version>${project.version}</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+				<!-- 生成thrift IDL文件的插件 -->
+				<plugin>
+					<groupId>com.gitee.l0km</groupId>
+					<artifactId>swift2thrift-maven-plugin</artifactId>
+					<version>1.9</version>
+					<configuration>
+						<defaultPackage>net.gdface.facelog.decorator</defaultPackage>
+						<swiftClassNames>
+							<swiftClassName>IFaceLogThriftDecorator</swiftClassName>
+						</swiftClassNames>
+						<namespace>
+							<cpp>gdface</cpp>
+							<java>net.gdface.facelog.thrift</java>
+							<py>gdface.thrift</py>
+						</namespace>
+						<recursive>true</recursive>
+						<out>IFaceLog.thrift</out>
+					</configuration>
+					<dependencies>
+						<!-- 添加当前项目依赖 -->
+						<dependency>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>${project.artifactId}</artifactId>
+							<version>${project.version}</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-shade-plugin</artifactId>
+					<configuration>
+						<transformers>
+							<transformer
+								implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+								<mainClass>net.gdface.service.facelog.FacelogServiceMain</mainClass>
+							</transformer>
+						</transformers>
+						<shadedArtifactAttached>true</shadedArtifactAttached>
+						<minimizeJar>false</minimizeJar>
+						<!-- 生成依赖包的源码jar包 -->
+						<createSourcesJar>true</createSourcesJar>
+						<shadedClassifierName>standalone</shadedClassifierName>
+						<!-- 强制将log4j打入jar包(log4j不在依赖树上) -->
+						<filters>
+							<filter>
+								<artifact>log4j:log4j</artifact>
+								<includes>
+									<include>**/**</include>
+								</includes>
+							</filter>
+						</filters>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>package</phase>
+							<goals>
+								<goal>shade</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
+	<profiles>
+		<profile>
+			<id>shade-package</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-shade-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>shade</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>2.4.1</version>
+						<executions>
+							<execution>
+								<id>make-docker-standalone-zip</id>
+								<!-- 绑定到package生命周期阶段上 -->
+								<phase>package</phase>
+								<goals>
+									<!-- 绑定到package生命周期阶段上 -->
+									<goal>single</goal>
+								</goals>
+								<configuration>
+									<descriptors> <!--描述文件路径 -->
+										<descriptor>${project.basedir}/docker.xml</descriptor>
+									</descriptors>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
