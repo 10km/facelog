@@ -124,11 +124,6 @@
 				<artifactId>common-base</artifactId>
 				<version>${common-java.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>${project.groupId}</groupId>
-				<artifactId>common-base2</artifactId>
-				<version>${common-java.version}</version>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>

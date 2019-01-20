@@ -7,6 +7,7 @@
 		<groupId>com.gitee.l0km</groupId>
 		<artifactId>facelog</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
+		<relativePath>..</relativePath>		
 	</parent>
 	<artifactId>facelog-local</artifactId>
 	<name>facelog-local</name>
@@ -45,12 +46,13 @@
 			<artifactId>simplemq</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.gitee.l0km</groupId>
-			<artifactId>common-base2</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>common-thrift</artifactId>
+			<version>${common-java.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.gitee.l0km</groupId>
+			<artifactId>common-base2</artifactId>
 			<version>${common-java.version}</version>
 		</dependency>
 	</dependencies>
