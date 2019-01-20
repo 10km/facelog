@@ -174,6 +174,7 @@ public class Heartbeat implements ChannelConstant{
 		if(null != future){
 			this.scheduledExecutor.remove((Runnable) future);
 		}
+		/** 返回 RunnableScheduledFuture<?>实例  */
 		future = this.timerExecutor.scheduleAtFixedRate(timerTask, intervalMills, intervalMills, TimeUnit.MILLISECONDS);
 	}
 }

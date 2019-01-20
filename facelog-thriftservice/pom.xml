@@ -32,6 +32,9 @@
 			<version>${project.version}</version>
 			<exclusions>
 				<exclusion>
+					<!-- 因为依赖的commons-beanutils-core版本较低，所以排除commons-beanutils-core 
+							用commons-beanutils代替，					
+							否则在fat-jar运行时会抛出 NoSuchMethodError 异常  -->
 					<groupId>commons-beanutils</groupId>
 					<artifactId>commons-beanutils-core</artifactId>
 				</exclusion>
