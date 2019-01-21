@@ -332,6 +332,7 @@
 		<module>db</module>
 		<module>facelog-service</module>
 		<module>facelog-client</module>
+		<module>facelog-client-base</module>
 		<module>facelog-client-android</module>
 		<module>facelogservice-maven-plugin</module>
 		<module>facelog-local</module>
