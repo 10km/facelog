@@ -18,8 +18,8 @@ import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.PersonBean;
+import net.gdface.facelog.thrift.ServiceRuntimeException;
 import net.gdface.thrift.ClientFactory;
-import net.gdface.thrift.exception.ServiceRuntimeException;
 import net.gdface.utils.NetworkUtil;
 
 /**
