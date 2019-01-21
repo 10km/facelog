@@ -7,7 +7,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-import net.gdface.facelog.service.Main;
+import net.gdface.service.facelog.FacelogServiceMain;
 
 /**
  * maven 插件<br>
@@ -31,7 +31,7 @@ public class RunMojo extends AbstractMojo {
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		Main.main(null);
+		FacelogServiceMain.main(null);
 		if (!fork) {
 			waitIndefinitely();
 		}
