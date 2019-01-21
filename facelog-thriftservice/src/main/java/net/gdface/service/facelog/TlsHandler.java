@@ -7,8 +7,8 @@ import com.facebook.swift.service.ThriftEventHandler;
 import com.facebook.swift.service.ThriftServerService;
 import com.google.common.collect.Sets;
 
-import net.gdface.facelog.Token;
 import net.gdface.facelog.TokenContext;
+import net.gdface.facelog.decorator.Token;
 
 /**
  * TLS变量管理器<br>
@@ -37,8 +37,9 @@ public class TlsHandler extends ThriftEventHandler {
 		if(args.length > 0){
 			// 捕获最后一个类型为Token的参数存入TLS
 			Object last = args[args.length-1];
+			// service层拦截token对象是decorator,
 			if( last instanceof Token){
-				TokenContext.getCurrentTokenContext().setToken((Token)last);
+				TokenContext.getCurrentTokenContext().setToken(((Token)last).delegate());
 			}
 		}
 	}
