@@ -17,12 +17,18 @@ import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.thrift.TypeTransformer;
 
+import java.io.IOException;
 import com.google.common.base.Function;
 import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.SettableFuture;
+import com.microsoft.thrifty.ThriftException;
+import com.microsoft.thrifty.service.AsyncClientBase;
+import com.microsoft.thrifty.service.ServiceMethodCallback;
+
 import net.gdface.thrift.ClientFactory;
 import static com.google.common.base.Preconditions.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * 基于thrift/swift框架生成的client端代码提供{@link IFaceLog}接口的异步RPC实现(线程安全)<br>
@@ -46,13 +52,59 @@ public class IFaceLogThriftClientAsync {
         super();
         this.factory = checkNotNull(factory,"factory is null");
     }
-
     /**
-     * 返回{@link net.gdface.facelog.client.thrift.IFaceLog.Async}实例
+     * 当前调用的回调函数，由当前接口方法设置
+     */
+    private final AtomicReference<ServiceMethodCallback<?>> currentCallback = new AtomicReference<ServiceMethodCallback<?>>();
+    private final AsyncClientBase.Listener closeListener = new AsyncClientBase.Listener(){
+        @Override
+        public void onTransportClosed() {
+        }
+
+        @Override
+        public void onError(Throwable error) {
+            currentCallback.get().onError(error);
+        }        
+    };
+    private class MethodCallback<L,R> implements ServiceMethodCallback<R>{
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+        final SettableFuture<L> feature = SettableFuture.create();
+        final Function<R,L> transformer;
+
+        MethodCallback(Function<R, L> transformer) {
+            this.transformer = transformer;
+            currentCallback.set(this);
+        }
+
+        @Override
+        public void onSuccess(R result) {
+            feature.set(transformer.apply(result));            
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
+        }
+
+        @Override 
+        public void onError(Throwable error) {            
+            if(error instanceof ThriftException ){
+                if(((ThriftException)error).kind == ThriftException.Kind.MISSING_RESULT  ){
+                    this.onSuccess(null);
+                }
+            }
+            feature.setException(error);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
+        }
+    }
+    /**
+     * 返回{@link net.gdface.facelog.client.thrift.IFaceLogClient}实例
      * @return
      */
-    protected net.gdface.facelog.client.thrift.IFaceLog.Async delegate() {
-        return factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLog.Async.class);
+    protected net.gdface.facelog.client.thrift.IFaceLogClient delegate() {
+        return factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
     }
     @Override
     public String toString() {
@@ -94,13 +146,13 @@ public class IFaceLogThriftClientAsync {
             }
         }
         protected void onDuplicateRecordException(net.gdface.facelog.client.thrift.DuplicateRecordException e){
-            System.out.println(e.getServiceStackTraceMessage());
+            System.out.println(e.serviceStackTraceMessage);
         }
         protected void onServiceSecurityException(net.gdface.facelog.client.thrift.ServiceSecurityException e){
-            System.out.println(e.getServiceStackTraceMessage());
+            System.out.println(e.serviceStackTraceMessage);
         }
         protected void onServiceRuntimeException(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            System.out.println(e.getServiceStackTraceMessage());
+            System.out.println(e.serviceStackTraceMessage);
         }
         protected void onThrowable(Throwable e){
             e.printStackTrace();
@@ -113,9 +165,21 @@ public class IFaceLogThriftClientAsync {
         Integer personId,
         List<FaceBean> faecBeans,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<FeatureBean> future = Futures.transform(
-            async.addFeature(feature,
+        MethodCallback<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> nativeCallback = 
+            new MethodCallback<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean>(
+                new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>() {
+                        @Override
+                        public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.FeatureBean.class,
+                    FeatureBean.class);
+                }});
+        nativeCallback.service.addFeature(
+                TypeTransformer.getInstance().to(
+                    feature,
+                    byte[].class,
+                    okio.ByteString.class),
             personId,
             TypeTransformer.getInstance().to(
                     faecBeans,
@@ -124,17 +188,8 @@ public class IFaceLogThriftClientAsync {
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-            new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
-                @Override
-                public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                    return TypeTransformer.getInstance().to(
-                    input,
-                    net.gdface.facelog.client.thrift.FeatureBean.class,
-                    FeatureBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void addFeature(byte[] feature,
         Integer personId,
@@ -151,31 +206,34 @@ public class IFaceLogThriftClientAsync {
         Map<ByteBuffer, FaceBean> faceInfo,
         Integer deviceId,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<FeatureBean> future = Futures.transform(
-            async.addFeatureMulti(feature,
+        MethodCallback<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> nativeCallback = 
+            new MethodCallback<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean>(
+                new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>() {
+                        @Override
+                        public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.FeatureBean.class,
+                    FeatureBean.class);
+                }});
+        nativeCallback.service.addFeatureMulti(
+                TypeTransformer.getInstance().to(
+                    feature,
+                    byte[].class,
+                    okio.ByteString.class),
             personId,
             TypeTransformer.getInstance().to(
                     faceInfo,
                     ByteBuffer.class,
                     FaceBean.class,
-                    byte[].class,
+                    okio.ByteString.class,
                     net.gdface.facelog.client.thrift.FaceBean.class),
             deviceId,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-            new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
-                @Override
-                public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                    return TypeTransformer.getInstance().to(
-                    input,
-                    net.gdface.facelog.client.thrift.FeatureBean.class,
-                    FeatureBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void addFeature(byte[] feature,
         Integer personId,
@@ -193,9 +251,21 @@ public class IFaceLogThriftClientAsync {
         FaceBean faceBean,
         Integer personId,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<ImageBean> future = Futures.transform(
-            async.addImage(imageData,
+        MethodCallback<ImageBean,net.gdface.facelog.client.thrift.ImageBean> nativeCallback = 
+            new MethodCallback<ImageBean,net.gdface.facelog.client.thrift.ImageBean>(
+                new Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>() {
+                        @Override
+                        public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.ImageBean.class,
+                    ImageBean.class);
+                }});
+        nativeCallback.service.addImage(
+                TypeTransformer.getInstance().to(
+                    imageData,
+                    byte[].class,
+                    okio.ByteString.class),
             deviceId,
             TypeTransformer.getInstance().to(
                     faceBean,
@@ -205,17 +275,8 @@ public class IFaceLogThriftClientAsync {
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-            new Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
-                @Override
-                public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
-                    return TypeTransformer.getInstance().to(
-                    input,
-                    net.gdface.facelog.client.thrift.ImageBean.class,
-                    ImageBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void addImage(byte[] imageData,
         Integer deviceId,
@@ -230,16 +291,26 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<Void> addLog(LogBean bean,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Void> future = async.addLog(TypeTransformer.getInstance().to(
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.addLog(
+                TypeTransformer.getInstance().to(
                     bean,
                     LogBean.class,
                     net.gdface.facelog.client.thrift.LogBean.class),
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void addLog(LogBean bean,
         Token token,
@@ -251,16 +322,26 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<Void> addLogs(List<LogBean> beans,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Void> future = async.addLogs(TypeTransformer.getInstance().to(
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.addLogs(
+                TypeTransformer.getInstance().to(
                     beans,
                     LogBean.class,
                     net.gdface.facelog.client.thrift.LogBean.class),
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void addLogs(List<LogBean> beans,
         Token token,
@@ -273,14 +354,24 @@ public class IFaceLogThriftClientAsync {
     public ListenableFuture<Void> addPermit(int deviceGroupId,
         int personGroupId,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Void> future = async.addPermitById(deviceGroupId,
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.addPermitById(
+                deviceGroupId,
             personGroupId,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void addPermit(int deviceGroupId,
         int personGroupId,
@@ -294,8 +385,18 @@ public class IFaceLogThriftClientAsync {
     public ListenableFuture<Void> addPermit(DeviceGroupBean deviceGroup,
         PersonGroupBean personGroup,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Void> future = async.addPermit(TypeTransformer.getInstance().to(
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.addPermit(
+                TypeTransformer.getInstance().to(
                     deviceGroup,
                     DeviceGroupBean.class,
                     net.gdface.facelog.client.thrift.DeviceGroupBean.class),
@@ -306,8 +407,8 @@ public class IFaceLogThriftClientAsync {
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void addPermit(DeviceGroupBean deviceGroup,
         PersonGroupBean personGroup,
@@ -319,12 +420,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#applyAckChannel(net.gdface.facelog.Token)}
      */
     public ListenableFuture<String> applyAckChannel(Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<String> future = async.applyAckChannel(TypeTransformer.getInstance().to(
+        MethodCallback<String,String> nativeCallback = 
+            new MethodCallback<String,String>(
+                new Function<String,String>() {
+                        @Override
+                        public String apply(String input) {
+                            return input;
+                }});
+        nativeCallback.service.applyAckChannel(
+                TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void applyAckChannel(Token token,
         FutureCallback<String>callback){
@@ -335,13 +443,20 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<String> applyAckChannel(Token token,
         long duration){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<String> future = async.applyAckChannelWithDuration(TypeTransformer.getInstance().to(
+        MethodCallback<String,String> nativeCallback = 
+            new MethodCallback<String,String>(
+                new Function<String,String>() {
+                        @Override
+                        public String apply(String input) {
+                            return input;
+                }});
+        nativeCallback.service.applyAckChannelWithDuration(
+                TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class),
-            duration);
-        return factory.wrap(async,future);
+            duration,nativeCallback);
+        return nativeCallback.feature;
     }
     public void applyAckChannel(Token token,
         long duration,
@@ -352,12 +467,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#applyCmdSn(net.gdface.facelog.Token)}
      */
     public ListenableFuture<Long> applyCmdSn(Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Long> future = async.applyCmdSn(TypeTransformer.getInstance().to(
+        MethodCallback<Long,Long> nativeCallback = 
+            new MethodCallback<Long,Long>(
+                new Function<Long,Long>() {
+                        @Override
+                        public Long apply(Long input) {
+                            return input;
+                }});
+        nativeCallback.service.applyCmdSn(
+                TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void applyCmdSn(Token token,
         FutureCallback<Long>callback){
@@ -369,21 +491,21 @@ public class IFaceLogThriftClientAsync {
     public ListenableFuture<Token> applyPersonToken(int personId,
         String password,
         boolean isMd5){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Token> future = Futures.transform(
-            async.applyPersonToken(personId,
-            password,
-            isMd5),
-            new Function<net.gdface.facelog.client.thrift.Token,Token>(){
-                @Override
-                public Token apply(net.gdface.facelog.client.thrift.Token input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<Token,net.gdface.facelog.client.thrift.Token> nativeCallback = 
+            new MethodCallback<Token,net.gdface.facelog.client.thrift.Token>(
+                new Function<net.gdface.facelog.client.thrift.Token,Token>() {
+                        @Override
+                        public Token apply(net.gdface.facelog.client.thrift.Token input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.Token.class,
                     Token.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.applyPersonToken(
+                personId,
+            password,
+            isMd5,nativeCallback);
+        return nativeCallback.feature;
     }
     public void applyPersonToken(int personId,
         String password,
@@ -396,20 +518,20 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<Token> applyRootToken(String password,
         boolean isMd5){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Token> future = Futures.transform(
-            async.applyRootToken(password,
-            isMd5),
-            new Function<net.gdface.facelog.client.thrift.Token,Token>(){
-                @Override
-                public Token apply(net.gdface.facelog.client.thrift.Token input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<Token,net.gdface.facelog.client.thrift.Token> nativeCallback = 
+            new MethodCallback<Token,net.gdface.facelog.client.thrift.Token>(
+                new Function<net.gdface.facelog.client.thrift.Token,Token>() {
+                        @Override
+                        public Token apply(net.gdface.facelog.client.thrift.Token input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.Token.class,
                     Token.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.applyRootToken(
+                password,
+            isMd5,nativeCallback);
+        return nativeCallback.feature;
     }
     public void applyRootToken(String password,
         boolean isMd5,
@@ -420,9 +542,16 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#countDeviceByWhere(java.lang.String)}
      */
     public ListenableFuture<Integer> countDeviceByWhere(String where){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.countDeviceByWhere(where);
-        return factory.wrap(async,future);
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.countDeviceByWhere(
+                where,nativeCallback);
+        return nativeCallback.feature;
     }
     public void countDeviceByWhere(String where,
         FutureCallback<Integer>callback){
@@ -432,9 +561,16 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#countDeviceGroupByWhere(java.lang.String)}
      */
     public ListenableFuture<Integer> countDeviceGroupByWhere(String where){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.countDeviceGroupByWhere(where);
-        return factory.wrap(async,future);
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.countDeviceGroupByWhere(
+                where,nativeCallback);
+        return nativeCallback.feature;
     }
     public void countDeviceGroupByWhere(String where,
         FutureCallback<Integer>callback){
@@ -444,9 +580,16 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#countLogByWhere(java.lang.String)}
      */
     public ListenableFuture<Integer> countLogByWhere(String where){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.countLogByWhere(where);
-        return factory.wrap(async,future);
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.countLogByWhere(
+                where,nativeCallback);
+        return nativeCallback.feature;
     }
     public void countLogByWhere(String where,
         FutureCallback<Integer>callback){
@@ -456,9 +599,16 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#countLogLightByVerifyTime(long)}
      */
     public ListenableFuture<Integer> countLogLightByVerifyTime(long timestamp){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.countLogLightByVerifyTime(timestamp);
-        return factory.wrap(async,future);
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.countLogLightByVerifyTime(
+                timestamp,nativeCallback);
+        return nativeCallback.feature;
     }
     public void countLogLightByVerifyTime(long timestamp,
         FutureCallback<Integer>callback){
@@ -468,9 +618,16 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#countLogLightByWhere(java.lang.String)}
      */
     public ListenableFuture<Integer> countLogLightByWhere(String where){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.countLogLightByWhere(where);
-        return factory.wrap(async,future);
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.countLogLightByWhere(
+                where,nativeCallback);
+        return nativeCallback.feature;
     }
     public void countLogLightByWhere(String where,
         FutureCallback<Integer>callback){
@@ -480,9 +637,16 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#countPersonByWhere(java.lang.String)}
      */
     public ListenableFuture<Integer> countPersonByWhere(String where){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.countPersonByWhere(where);
-        return factory.wrap(async,future);
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.countPersonByWhere(
+                where,nativeCallback);
+        return nativeCallback.feature;
     }
     public void countPersonByWhere(String where,
         FutureCallback<Integer>callback){
@@ -492,9 +656,16 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#countPersonGroupByWhere(java.lang.String)}
      */
     public ListenableFuture<Integer> countPersonGroupByWhere(String where){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.countPersonGroupByWhere(where);
-        return factory.wrap(async,future);
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.countPersonGroupByWhere(
+                where,nativeCallback);
+        return nativeCallback.feature;
     }
     public void countPersonGroupByWhere(String where,
         FutureCallback<Integer>callback){
@@ -506,14 +677,21 @@ public class IFaceLogThriftClientAsync {
     public ListenableFuture<Integer> deleteAllFeaturesByPersonId(int personId,
         boolean deleteImage,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.deleteAllFeaturesByPersonId(personId,
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.deleteAllFeaturesByPersonId(
+                personId,
             deleteImage,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void deleteAllFeaturesByPersonId(int personId,
         boolean deleteImage,
@@ -526,13 +704,20 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<Integer> deleteDeviceGroup(int deviceGroupId,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.deleteDeviceGroup(deviceGroupId,
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.deleteDeviceGroup(
+                deviceGroupId,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void deleteDeviceGroup(int deviceGroupId,
         Token token,
@@ -545,14 +730,24 @@ public class IFaceLogThriftClientAsync {
     public ListenableFuture<List<String>> deleteFeature(String featureMd5,
         boolean deleteImage,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<String>> future = async.deleteFeature(featureMd5,
+        MethodCallback<List<String>,List<String>> nativeCallback = 
+            new MethodCallback<List<String>,List<String>>(
+                new Function<List<String>,List<String>>() {
+                        @Override
+                        public List<String> apply(List<String> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    String.class,
+                    String.class);
+                }});
+        nativeCallback.service.deleteFeature(
+                featureMd5,
             deleteImage,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void deleteFeature(String featureMd5,
         boolean deleteImage,
@@ -565,13 +760,20 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<Integer> deleteImage(String imageMd5,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.deleteImage(imageMd5,
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.deleteImage(
+                imageMd5,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void deleteImage(String imageMd5,
         Token token,
@@ -584,8 +786,15 @@ public class IFaceLogThriftClientAsync {
     public ListenableFuture<Integer> deletePermit(DeviceGroupBean deviceGroup,
         PersonGroupBean personGroup,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.deletePermit(TypeTransformer.getInstance().to(
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.deletePermit(
+                TypeTransformer.getInstance().to(
                     deviceGroup,
                     DeviceGroupBean.class,
                     net.gdface.facelog.client.thrift.DeviceGroupBean.class),
@@ -596,8 +805,8 @@ public class IFaceLogThriftClientAsync {
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void deletePermit(DeviceGroupBean deviceGroup,
         PersonGroupBean personGroup,
@@ -610,13 +819,20 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<Integer> deletePerson(int personId,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.deletePerson(personId,
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.deletePerson(
+                personId,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void deletePerson(int personId,
         Token token,
@@ -628,13 +844,20 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<Integer> deletePersonByPapersNum(String papersNum,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.deletePersonByPapersNum(papersNum,
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.deletePersonByPapersNum(
+                papersNum,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void deletePersonByPapersNum(String papersNum,
         Token token,
@@ -646,13 +869,20 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<Integer> deletePersonGroup(int personGroupId,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.deletePersonGroup(personGroupId,
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.deletePersonGroup(
+                personGroupId,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void deletePersonGroup(int personGroupId,
         Token token,
@@ -664,16 +894,23 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<Integer> deletePersons(List<Integer> personIdList,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.deletePersons(TypeTransformer.getInstance().to(
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.deletePersons(
+                TypeTransformer.getInstance().to(
                     personIdList,
                     Integer.class,
                     Integer.class),
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void deletePersons(List<Integer> personIdList,
         Token token,
@@ -685,16 +922,23 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<Integer> deletePersonsByPapersNum(List<String> papersNumlist,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.deletePersonsByPapersNum(TypeTransformer.getInstance().to(
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.deletePersonsByPapersNum(
+                TypeTransformer.getInstance().to(
                     papersNumlist,
                     String.class,
                     String.class),
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void deletePersonsByPapersNum(List<String> papersNumlist,
         Token token,
@@ -706,13 +950,23 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<Void> disablePerson(int personId,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Void> future = async.disablePerson(personId,
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.disablePerson(
+                personId,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void disablePerson(int personId,
         Token token,
@@ -724,16 +978,26 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<Void> disablePerson(List<Integer> personIdList,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Void> future = async.disablePersonList(TypeTransformer.getInstance().to(
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.disablePersonList(
+                TypeTransformer.getInstance().to(
                     personIdList,
                     Integer.class,
                     Integer.class),
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void disablePerson(List<Integer> personIdList,
         Token token,
@@ -744,9 +1008,16 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#existsDevice(int)}
      */
     public ListenableFuture<Boolean> existsDevice(int id){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Boolean> future = async.existsDevice(id);
-        return factory.wrap(async,future);
+        MethodCallback<Boolean,Boolean> nativeCallback = 
+            new MethodCallback<Boolean,Boolean>(
+                new Function<Boolean,Boolean>() {
+                        @Override
+                        public Boolean apply(Boolean input) {
+                            return input;
+                }});
+        nativeCallback.service.existsDevice(
+                id,nativeCallback);
+        return nativeCallback.feature;
     }
     public void existsDevice(int id,
         FutureCallback<Boolean>callback){
@@ -756,9 +1027,16 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#existsFeature(java.lang.String)}
      */
     public ListenableFuture<Boolean> existsFeature(String md5){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Boolean> future = async.existsFeature(md5);
-        return factory.wrap(async,future);
+        MethodCallback<Boolean,Boolean> nativeCallback = 
+            new MethodCallback<Boolean,Boolean>(
+                new Function<Boolean,Boolean>() {
+                        @Override
+                        public Boolean apply(Boolean input) {
+                            return input;
+                }});
+        nativeCallback.service.existsFeature(
+                md5,nativeCallback);
+        return nativeCallback.feature;
     }
     public void existsFeature(String md5,
         FutureCallback<Boolean>callback){
@@ -768,9 +1046,16 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#existsImage(java.lang.String)}
      */
     public ListenableFuture<Boolean> existsImage(String md5){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Boolean> future = async.existsImage(md5);
-        return factory.wrap(async,future);
+        MethodCallback<Boolean,Boolean> nativeCallback = 
+            new MethodCallback<Boolean,Boolean>(
+                new Function<Boolean,Boolean>() {
+                        @Override
+                        public Boolean apply(Boolean input) {
+                            return input;
+                }});
+        nativeCallback.service.existsImage(
+                md5,nativeCallback);
+        return nativeCallback.feature;
     }
     public void existsImage(String md5,
         FutureCallback<Boolean>callback){
@@ -780,9 +1065,16 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#existsPerson(int)}
      */
     public ListenableFuture<Boolean> existsPerson(int persionId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Boolean> future = async.existsPerson(persionId);
-        return factory.wrap(async,future);
+        MethodCallback<Boolean,Boolean> nativeCallback = 
+            new MethodCallback<Boolean,Boolean>(
+                new Function<Boolean,Boolean>() {
+                        @Override
+                        public Boolean apply(Boolean input) {
+                            return input;
+                }});
+        nativeCallback.service.existsPerson(
+                persionId,nativeCallback);
+        return nativeCallback.feature;
     }
     public void existsPerson(int persionId,
         FutureCallback<Boolean>callback){
@@ -792,19 +1084,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getDevice(int)}
      */
     public ListenableFuture<DeviceBean> getDevice(int deviceId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<DeviceBean> future = Futures.transform(
-            async.getDevice(deviceId),
-            new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
-                @Override
-                public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> nativeCallback = 
+            new MethodCallback<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean>(
+                new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>() {
+                        @Override
+                        public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.DeviceBean.class,
                     DeviceBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.getDevice(
+                deviceId,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getDevice(int deviceId,
         FutureCallback<DeviceBean>callback){
@@ -814,19 +1106,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getDeviceGroup(int)}
      */
     public ListenableFuture<DeviceGroupBean> getDeviceGroup(int deviceGroupId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<DeviceGroupBean> future = Futures.transform(
-            async.getDeviceGroup(deviceGroupId),
-            new Function<net.gdface.facelog.client.thrift.DeviceGroupBean,DeviceGroupBean>(){
-                @Override
-                public DeviceGroupBean apply(net.gdface.facelog.client.thrift.DeviceGroupBean input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<DeviceGroupBean,net.gdface.facelog.client.thrift.DeviceGroupBean> nativeCallback = 
+            new MethodCallback<DeviceGroupBean,net.gdface.facelog.client.thrift.DeviceGroupBean>(
+                new Function<net.gdface.facelog.client.thrift.DeviceGroupBean,DeviceGroupBean>() {
+                        @Override
+                        public DeviceGroupBean apply(net.gdface.facelog.client.thrift.DeviceGroupBean input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.DeviceGroupBean.class,
                     DeviceGroupBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.getDeviceGroup(
+                deviceGroupId,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getDeviceGroup(int deviceGroupId,
         FutureCallback<DeviceGroupBean>callback){
@@ -836,22 +1128,22 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getDeviceGroups(java.util.List)}
      */
     public ListenableFuture<List<DeviceGroupBean>> getDeviceGroups(List<Integer> groupIdList){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<DeviceGroupBean>> future = Futures.transform(
-            async.getDeviceGroups(TypeTransformer.getInstance().to(
-                    groupIdList,
-                    Integer.class,
-                    Integer.class)),
-            new Function<List<net.gdface.facelog.client.thrift.DeviceGroupBean>,List<DeviceGroupBean>>(){
-                @Override
-                public List<DeviceGroupBean> apply(List<net.gdface.facelog.client.thrift.DeviceGroupBean> input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<List<DeviceGroupBean>,List<net.gdface.facelog.client.thrift.DeviceGroupBean>> nativeCallback = 
+            new MethodCallback<List<DeviceGroupBean>,List<net.gdface.facelog.client.thrift.DeviceGroupBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.DeviceGroupBean>,List<DeviceGroupBean>>() {
+                        @Override
+                        public List<DeviceGroupBean> apply(List<net.gdface.facelog.client.thrift.DeviceGroupBean> input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.DeviceGroupBean.class,
                     DeviceGroupBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.getDeviceGroups(
+                TypeTransformer.getInstance().to(
+                    groupIdList,
+                    Integer.class,
+                    Integer.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void getDeviceGroups(List<Integer> groupIdList,
         FutureCallback<List<DeviceGroupBean>>callback){
@@ -861,9 +1153,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getDeviceGroupsBelongs(int)}
      */
     public ListenableFuture<List<Integer>> getDeviceGroupsBelongs(int deviceId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Integer>> future = async.getDeviceGroupsBelongs(deviceId);
-        return factory.wrap(async,future);
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.getDeviceGroupsBelongs(
+                deviceId,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getDeviceGroupsBelongs(int deviceId,
         FutureCallback<List<Integer>>callback){
@@ -873,9 +1175,16 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getDeviceIdOfFeature(java.lang.String)}
      */
     public ListenableFuture<Integer> getDeviceIdOfFeature(String featureMd5){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.getDeviceIdOfFeature(featureMd5);
-        return factory.wrap(async,future);
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.getDeviceIdOfFeature(
+                featureMd5,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getDeviceIdOfFeature(String featureMd5,
         FutureCallback<Integer>callback){
@@ -885,22 +1194,22 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getDevices(java.util.List)}
      */
     public ListenableFuture<List<DeviceBean>> getDevices(List<Integer> idList){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<DeviceBean>> future = Futures.transform(
-            async.getDevices(TypeTransformer.getInstance().to(
-                    idList,
-                    Integer.class,
-                    Integer.class)),
-            new Function<List<net.gdface.facelog.client.thrift.DeviceBean>,List<DeviceBean>>(){
-                @Override
-                public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<List<DeviceBean>,List<net.gdface.facelog.client.thrift.DeviceBean>> nativeCallback = 
+            new MethodCallback<List<DeviceBean>,List<net.gdface.facelog.client.thrift.DeviceBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.DeviceBean>,List<DeviceBean>>() {
+                        @Override
+                        public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.DeviceBean.class,
                     DeviceBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.getDevices(
+                TypeTransformer.getInstance().to(
+                    idList,
+                    Integer.class,
+                    Integer.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void getDevices(List<Integer> idList,
         FutureCallback<List<DeviceBean>>callback){
@@ -910,9 +1219,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getDevicesOfGroup(int)}
      */
     public ListenableFuture<List<Integer>> getDevicesOfGroup(int deviceGroupId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Integer>> future = async.getDevicesOfGroup(deviceGroupId);
-        return factory.wrap(async,future);
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.getDevicesOfGroup(
+                deviceGroupId,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getDevicesOfGroup(int deviceGroupId,
         FutureCallback<List<Integer>>callback){
@@ -922,19 +1241,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getFeature(java.lang.String)}
      */
     public ListenableFuture<FeatureBean> getFeature(String md5){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<FeatureBean> future = Futures.transform(
-            async.getFeature(md5),
-            new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
-                @Override
-                public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> nativeCallback = 
+            new MethodCallback<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean>(
+                new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>() {
+                        @Override
+                        public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.FeatureBean.class,
                     FeatureBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.getFeature(
+                md5,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getFeature(String md5,
         FutureCallback<FeatureBean>callback){
@@ -944,9 +1263,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getFeatureBeansByPersonId(int)}
      */
     public ListenableFuture<List<String>> getFeatureBeansByPersonId(int personId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<String>> future = async.getFeatureBeansByPersonId(personId);
-        return factory.wrap(async,future);
+        MethodCallback<List<String>,List<String>> nativeCallback = 
+            new MethodCallback<List<String>,List<String>>(
+                new Function<List<String>,List<String>>() {
+                        @Override
+                        public List<String> apply(List<String> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    String.class,
+                    String.class);
+                }});
+        nativeCallback.service.getFeatureBeansByPersonId(
+                personId,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getFeatureBeansByPersonId(int personId,
         FutureCallback<List<String>>callback){
@@ -956,9 +1285,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getFeatureBytes(java.lang.String)}
      */
     public ListenableFuture<byte[]> getFeatureBytes(String md5){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<byte[]> future = async.getFeatureBytes(md5);
-        return factory.wrap(async,future);
+        MethodCallback<byte[],okio.ByteString> nativeCallback = 
+            new MethodCallback<byte[],okio.ByteString>(
+                new Function<okio.ByteString,byte[]>() {
+                        @Override
+                        public byte[] apply(okio.ByteString input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    okio.ByteString.class,
+                    byte[].class);
+                }});
+        nativeCallback.service.getFeatureBytes(
+                md5,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getFeatureBytes(String md5,
         FutureCallback<byte[]>callback){
@@ -968,22 +1307,22 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getFeatures(java.util.List)}
      */
     public ListenableFuture<List<FeatureBean>> getFeatures(List<String> md5){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<FeatureBean>> future = Futures.transform(
-            async.getFeatures(TypeTransformer.getInstance().to(
-                    md5,
-                    String.class,
-                    String.class)),
-            new Function<List<net.gdface.facelog.client.thrift.FeatureBean>,List<FeatureBean>>(){
-                @Override
-                public List<FeatureBean> apply(List<net.gdface.facelog.client.thrift.FeatureBean> input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<List<FeatureBean>,List<net.gdface.facelog.client.thrift.FeatureBean>> nativeCallback = 
+            new MethodCallback<List<FeatureBean>,List<net.gdface.facelog.client.thrift.FeatureBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.FeatureBean>,List<FeatureBean>>() {
+                        @Override
+                        public List<FeatureBean> apply(List<net.gdface.facelog.client.thrift.FeatureBean> input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.FeatureBean.class,
                     FeatureBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.getFeatures(
+                TypeTransformer.getInstance().to(
+                    md5,
+                    String.class,
+                    String.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void getFeatures(List<String> md5,
         FutureCallback<List<FeatureBean>>callback){
@@ -993,9 +1332,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getFeaturesOfPerson(int)}
      */
     public ListenableFuture<List<String>> getFeaturesOfPerson(int personId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<String>> future = async.getFeaturesOfPerson(personId);
-        return factory.wrap(async,future);
+        MethodCallback<List<String>,List<String>> nativeCallback = 
+            new MethodCallback<List<String>,List<String>>(
+                new Function<List<String>,List<String>>() {
+                        @Override
+                        public List<String> apply(List<String> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    String.class,
+                    String.class);
+                }});
+        nativeCallback.service.getFeaturesOfPerson(
+                personId,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getFeaturesOfPerson(int personId,
         FutureCallback<List<String>>callback){
@@ -1006,10 +1355,17 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<Boolean> getGroupPermit(int deviceId,
         int personGroupId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Boolean> future = async.getGroupPermit(deviceId,
-            personGroupId);
-        return factory.wrap(async,future);
+        MethodCallback<Boolean,Boolean> nativeCallback = 
+            new MethodCallback<Boolean,Boolean>(
+                new Function<Boolean,Boolean>() {
+                        @Override
+                        public Boolean apply(Boolean input) {
+                            return input;
+                }});
+        nativeCallback.service.getGroupPermit(
+                deviceId,
+            personGroupId,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getGroupPermit(int deviceId,
         int personGroupId,
@@ -1021,13 +1377,23 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<List<Boolean>> getGroupPermits(int deviceId,
         List<Integer> personGroupIdList){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Boolean>> future = async.getGroupPermits(deviceId,
+        MethodCallback<List<Boolean>,List<Boolean>> nativeCallback = 
+            new MethodCallback<List<Boolean>,List<Boolean>>(
+                new Function<List<Boolean>,List<Boolean>>() {
+                        @Override
+                        public List<Boolean> apply(List<Boolean> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Boolean.class,
+                    Boolean.class);
+                }});
+        nativeCallback.service.getGroupPermits(
+                deviceId,
             TypeTransformer.getInstance().to(
                     personGroupIdList,
                     Integer.class,
-                    Integer.class));
-        return factory.wrap(async,future);
+                    Integer.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void getGroupPermits(int deviceId,
         List<Integer> personGroupIdList,
@@ -1038,19 +1404,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getImage(java.lang.String)}
      */
     public ListenableFuture<ImageBean> getImage(String imageMD5){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<ImageBean> future = Futures.transform(
-            async.getImage(imageMD5),
-            new Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
-                @Override
-                public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<ImageBean,net.gdface.facelog.client.thrift.ImageBean> nativeCallback = 
+            new MethodCallback<ImageBean,net.gdface.facelog.client.thrift.ImageBean>(
+                new Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>() {
+                        @Override
+                        public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.ImageBean.class,
                     ImageBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.getImage(
+                imageMD5,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getImage(String imageMD5,
         FutureCallback<ImageBean>callback){
@@ -1060,9 +1426,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getImageBytes(java.lang.String)}
      */
     public ListenableFuture<byte[]> getImageBytes(String imageMD5){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<byte[]> future = async.getImageBytes(imageMD5);
-        return factory.wrap(async,future);
+        MethodCallback<byte[],okio.ByteString> nativeCallback = 
+            new MethodCallback<byte[],okio.ByteString>(
+                new Function<okio.ByteString,byte[]>() {
+                        @Override
+                        public byte[] apply(okio.ByteString input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    okio.ByteString.class,
+                    byte[].class);
+                }});
+        nativeCallback.service.getImageBytes(
+                imageMD5,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getImageBytes(String imageMD5,
         FutureCallback<byte[]>callback){
@@ -1072,9 +1448,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getImagesAssociatedByFeature(java.lang.String)}
      */
     public ListenableFuture<List<String>> getImagesAssociatedByFeature(String featureMd5){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<String>> future = async.getImagesAssociatedByFeature(featureMd5);
-        return factory.wrap(async,future);
+        MethodCallback<List<String>,List<String>> nativeCallback = 
+            new MethodCallback<List<String>,List<String>>(
+                new Function<List<String>,List<String>>() {
+                        @Override
+                        public List<String> apply(List<String> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    String.class,
+                    String.class);
+                }});
+        nativeCallback.service.getImagesAssociatedByFeature(
+                featureMd5,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getImagesAssociatedByFeature(String featureMd5,
         FutureCallback<List<String>>callback){
@@ -1084,19 +1470,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getLogBeansByPersonId(int)}
      */
     public ListenableFuture<List<LogBean>> getLogBeansByPersonId(int personId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<LogBean>> future = Futures.transform(
-            async.getLogBeansByPersonId(personId),
-            new Function<List<net.gdface.facelog.client.thrift.LogBean>,List<LogBean>>(){
-                @Override
-                public List<LogBean> apply(List<net.gdface.facelog.client.thrift.LogBean> input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<List<LogBean>,List<net.gdface.facelog.client.thrift.LogBean>> nativeCallback = 
+            new MethodCallback<List<LogBean>,List<net.gdface.facelog.client.thrift.LogBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.LogBean>,List<LogBean>>() {
+                        @Override
+                        public List<LogBean> apply(List<net.gdface.facelog.client.thrift.LogBean> input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.LogBean.class,
                     LogBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.getLogBeansByPersonId(
+                personId,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getLogBeansByPersonId(int personId,
         FutureCallback<List<LogBean>>callback){
@@ -1106,19 +1492,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getPerson(int)}
      */
     public ListenableFuture<PersonBean> getPerson(int personId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<PersonBean> future = Futures.transform(
-            async.getPerson(personId),
-            new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                @Override
-                public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean>(
+                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                        @Override
+                        public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.PersonBean.class,
                     PersonBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.getPerson(
+                personId,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getPerson(int personId,
         FutureCallback<PersonBean>callback){
@@ -1128,19 +1514,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getPersonByPapersNum(java.lang.String)}
      */
     public ListenableFuture<PersonBean> getPersonByPapersNum(String papersNum){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<PersonBean> future = Futures.transform(
-            async.getPersonByPapersNum(papersNum),
-            new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                @Override
-                public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean>(
+                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                        @Override
+                        public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.PersonBean.class,
                     PersonBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.getPersonByPapersNum(
+                papersNum,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getPersonByPapersNum(String papersNum,
         FutureCallback<PersonBean>callback){
@@ -1150,19 +1536,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getPersonGroup(int)}
      */
     public ListenableFuture<PersonGroupBean> getPersonGroup(int personGroupId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<PersonGroupBean> future = Futures.transform(
-            async.getPersonGroup(personGroupId),
-            new Function<net.gdface.facelog.client.thrift.PersonGroupBean,PersonGroupBean>(){
-                @Override
-                public PersonGroupBean apply(net.gdface.facelog.client.thrift.PersonGroupBean input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<PersonGroupBean,net.gdface.facelog.client.thrift.PersonGroupBean> nativeCallback = 
+            new MethodCallback<PersonGroupBean,net.gdface.facelog.client.thrift.PersonGroupBean>(
+                new Function<net.gdface.facelog.client.thrift.PersonGroupBean,PersonGroupBean>() {
+                        @Override
+                        public PersonGroupBean apply(net.gdface.facelog.client.thrift.PersonGroupBean input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.PersonGroupBean.class,
                     PersonGroupBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.getPersonGroup(
+                personGroupId,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getPersonGroup(int personGroupId,
         FutureCallback<PersonGroupBean>callback){
@@ -1172,22 +1558,22 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getPersonGroups(java.util.List)}
      */
     public ListenableFuture<List<PersonGroupBean>> getPersonGroups(List<Integer> groupIdList){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<PersonGroupBean>> future = Futures.transform(
-            async.getPersonGroups(TypeTransformer.getInstance().to(
-                    groupIdList,
-                    Integer.class,
-                    Integer.class)),
-            new Function<List<net.gdface.facelog.client.thrift.PersonGroupBean>,List<PersonGroupBean>>(){
-                @Override
-                public List<PersonGroupBean> apply(List<net.gdface.facelog.client.thrift.PersonGroupBean> input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<List<PersonGroupBean>,List<net.gdface.facelog.client.thrift.PersonGroupBean>> nativeCallback = 
+            new MethodCallback<List<PersonGroupBean>,List<net.gdface.facelog.client.thrift.PersonGroupBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.PersonGroupBean>,List<PersonGroupBean>>() {
+                        @Override
+                        public List<PersonGroupBean> apply(List<net.gdface.facelog.client.thrift.PersonGroupBean> input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.PersonGroupBean.class,
                     PersonGroupBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.getPersonGroups(
+                TypeTransformer.getInstance().to(
+                    groupIdList,
+                    Integer.class,
+                    Integer.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void getPersonGroups(List<Integer> groupIdList,
         FutureCallback<List<PersonGroupBean>>callback){
@@ -1197,9 +1583,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getPersonGroupsBelongs(int)}
      */
     public ListenableFuture<List<Integer>> getPersonGroupsBelongs(int personId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Integer>> future = async.getPersonGroupsBelongs(personId);
-        return factory.wrap(async,future);
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.getPersonGroupsBelongs(
+                personId,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getPersonGroupsBelongs(int personId,
         FutureCallback<List<Integer>>callback){
@@ -1210,10 +1606,17 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<Boolean> getPersonPermit(int deviceId,
         int personId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Boolean> future = async.getPersonPermit(deviceId,
-            personId);
-        return factory.wrap(async,future);
+        MethodCallback<Boolean,Boolean> nativeCallback = 
+            new MethodCallback<Boolean,Boolean>(
+                new Function<Boolean,Boolean>() {
+                        @Override
+                        public Boolean apply(Boolean input) {
+                            return input;
+                }});
+        nativeCallback.service.getPersonPermit(
+                deviceId,
+            personId,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getPersonPermit(int deviceId,
         int personId,
@@ -1225,13 +1628,23 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<List<Boolean>> getPersonPermits(int deviceId,
         List<Integer> personIdList){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Boolean>> future = async.getPersonPermits(deviceId,
+        MethodCallback<List<Boolean>,List<Boolean>> nativeCallback = 
+            new MethodCallback<List<Boolean>,List<Boolean>>(
+                new Function<List<Boolean>,List<Boolean>>() {
+                        @Override
+                        public List<Boolean> apply(List<Boolean> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Boolean.class,
+                    Boolean.class);
+                }});
+        nativeCallback.service.getPersonPermits(
+                deviceId,
             TypeTransformer.getInstance().to(
                     personIdList,
                     Integer.class,
-                    Integer.class));
-        return factory.wrap(async,future);
+                    Integer.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void getPersonPermits(int deviceId,
         List<Integer> personIdList,
@@ -1242,22 +1655,22 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getPersons(java.util.List)}
      */
     public ListenableFuture<List<PersonBean>> getPersons(List<Integer> idList){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<PersonBean>> future = Futures.transform(
-            async.getPersons(TypeTransformer.getInstance().to(
-                    idList,
-                    Integer.class,
-                    Integer.class)),
-            new Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>(){
-                @Override
-                public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<List<PersonBean>,List<net.gdface.facelog.client.thrift.PersonBean>> nativeCallback = 
+            new MethodCallback<List<PersonBean>,List<net.gdface.facelog.client.thrift.PersonBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>() {
+                        @Override
+                        public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.PersonBean.class,
                     PersonBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.getPersons(
+                TypeTransformer.getInstance().to(
+                    idList,
+                    Integer.class,
+                    Integer.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void getPersons(List<Integer> idList,
         FutureCallback<List<PersonBean>>callback){
@@ -1267,9 +1680,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getPersonsOfGroup(int)}
      */
     public ListenableFuture<List<Integer>> getPersonsOfGroup(int personGroupId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Integer>> future = async.getPersonsOfGroup(personGroupId);
-        return factory.wrap(async,future);
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.getPersonsOfGroup(
+                personGroupId,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getPersonsOfGroup(int personGroupId,
         FutureCallback<List<Integer>>callback){
@@ -1280,13 +1703,20 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<String> getProperty(String key,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<String> future = async.getProperty(key,
+        MethodCallback<String,String> nativeCallback = 
+            new MethodCallback<String,String>(
+                new Function<String,String>() {
+                        @Override
+                        public String apply(String input) {
+                            return input;
+                }});
+        nativeCallback.service.getProperty(
+                key,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void getProperty(String key,
         Token token,
@@ -1297,24 +1727,24 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getRedisParameters(net.gdface.facelog.Token)}
      */
     public ListenableFuture<Map<MQParam, String>> getRedisParameters(Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Map<MQParam, String>> future = Futures.transform(
-            async.getRedisParameters(TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-            new Function<Map<net.gdface.facelog.client.thrift.MQParam,String>,Map<MQParam, String>>(){
-                @Override
-                public Map<MQParam, String> apply(Map<net.gdface.facelog.client.thrift.MQParam,String> input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<Map<MQParam, String>,Map<net.gdface.facelog.client.thrift.MQParam,String>> nativeCallback = 
+            new MethodCallback<Map<MQParam, String>,Map<net.gdface.facelog.client.thrift.MQParam,String>>(
+                new Function<Map<net.gdface.facelog.client.thrift.MQParam,String>,Map<MQParam, String>>() {
+                        @Override
+                        public Map<MQParam, String> apply(Map<net.gdface.facelog.client.thrift.MQParam,String> input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.MQParam.class,
                     String.class,
                     MQParam.class,
                     String.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.getRedisParameters(
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void getRedisParameters(Token token,
         FutureCallback<Map<MQParam, String>>callback){
@@ -1324,12 +1754,24 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getServiceConfig(net.gdface.facelog.Token)}
      */
     public ListenableFuture<Map<String, String>> getServiceConfig(Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Map<String, String>> future = async.getServiceConfig(TypeTransformer.getInstance().to(
+        MethodCallback<Map<String, String>,Map<String,String>> nativeCallback = 
+            new MethodCallback<Map<String, String>,Map<String,String>>(
+                new Function<Map<String,String>,Map<String, String>>() {
+                        @Override
+                        public Map<String, String> apply(Map<String,String> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    String.class,
+                    String.class,
+                    String.class,
+                    String.class);
+                }});
+        nativeCallback.service.getServiceConfig(
+                TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void getServiceConfig(Token token,
         FutureCallback<Map<String, String>>callback){
@@ -1339,9 +1781,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getSubDeviceGroup(int)}
      */
     public ListenableFuture<List<Integer>> getSubDeviceGroup(int deviceGroupId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Integer>> future = async.getSubDeviceGroup(deviceGroupId);
-        return factory.wrap(async,future);
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.getSubDeviceGroup(
+                deviceGroupId,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getSubDeviceGroup(int deviceGroupId,
         FutureCallback<List<Integer>>callback){
@@ -1351,9 +1803,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#getSubPersonGroup(int)}
      */
     public ListenableFuture<List<Integer>> getSubPersonGroup(int personGroupId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Integer>> future = async.getSubPersonGroup(personGroupId);
-        return factory.wrap(async,future);
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.getSubPersonGroup(
+                personGroupId,nativeCallback);
+        return nativeCallback.feature;
     }
     public void getSubPersonGroup(int personGroupId,
         FutureCallback<List<Integer>>callback){
@@ -1363,9 +1825,16 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#isDisable(int)}
      */
     public ListenableFuture<Boolean> isDisable(int personId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Boolean> future = async.isDisable(personId);
-        return factory.wrap(async,future);
+        MethodCallback<Boolean,Boolean> nativeCallback = 
+            new MethodCallback<Boolean,Boolean>(
+                new Function<Boolean,Boolean>() {
+                        @Override
+                        public Boolean apply(Boolean input) {
+                            return input;
+                }});
+        nativeCallback.service.isDisable(
+                personId,nativeCallback);
+        return nativeCallback.feature;
     }
     public void isDisable(int personId,
         FutureCallback<Boolean>callback){
@@ -1381,9 +1850,16 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#isValidAckChannel(java.lang.String)}
      */
     public ListenableFuture<Boolean> isValidAckChannel(String ackChannel){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Boolean> future = async.isValidAckChannel(ackChannel);
-        return factory.wrap(async,future);
+        MethodCallback<Boolean,Boolean> nativeCallback = 
+            new MethodCallback<Boolean,Boolean>(
+                new Function<Boolean,Boolean>() {
+                        @Override
+                        public Boolean apply(Boolean input) {
+                            return input;
+                }});
+        nativeCallback.service.isValidAckChannel(
+                ackChannel,nativeCallback);
+        return nativeCallback.feature;
     }
     public void isValidAckChannel(String ackChannel,
         FutureCallback<Boolean>callback){
@@ -1393,9 +1869,16 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#isValidCmdSn(long)}
      */
     public ListenableFuture<Boolean> isValidCmdSn(long cmdSn){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Boolean> future = async.isValidCmdSn(cmdSn);
-        return factory.wrap(async,future);
+        MethodCallback<Boolean,Boolean> nativeCallback = 
+            new MethodCallback<Boolean,Boolean>(
+                new Function<Boolean,Boolean>() {
+                        @Override
+                        public Boolean apply(Boolean input) {
+                            return input;
+                }});
+        nativeCallback.service.isValidCmdSn(
+                cmdSn,nativeCallback);
+        return nativeCallback.feature;
     }
     public void isValidCmdSn(long cmdSn,
         FutureCallback<Boolean>callback){
@@ -1408,15 +1891,22 @@ public class IFaceLogThriftClientAsync {
         String password,
         boolean isMd5,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Boolean> future = async.isValidPassword(userId,
+        MethodCallback<Boolean,Boolean> nativeCallback = 
+            new MethodCallback<Boolean,Boolean>(
+                new Function<Boolean,Boolean>() {
+                        @Override
+                        public Boolean apply(Boolean input) {
+                            return input;
+                }});
+        nativeCallback.service.isValidPassword(
+                userId,
             password,
             isMd5,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void isValidPassword(String userId,
         String password,
@@ -1429,9 +1919,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#listOfParentForDeviceGroup(int)}
      */
     public ListenableFuture<List<Integer>> listOfParentForDeviceGroup(int deviceGroupId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Integer>> future = async.listOfParentForDeviceGroup(deviceGroupId);
-        return factory.wrap(async,future);
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.listOfParentForDeviceGroup(
+                deviceGroupId,nativeCallback);
+        return nativeCallback.feature;
     }
     public void listOfParentForDeviceGroup(int deviceGroupId,
         FutureCallback<List<Integer>>callback){
@@ -1441,9 +1941,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#listOfParentForPersonGroup(int)}
      */
     public ListenableFuture<List<Integer>> listOfParentForPersonGroup(int personGroupId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Integer>> future = async.listOfParentForPersonGroup(personGroupId);
-        return factory.wrap(async,future);
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.listOfParentForPersonGroup(
+                personGroupId,nativeCallback);
+        return nativeCallback.feature;
     }
     public void listOfParentForPersonGroup(int personGroupId,
         FutureCallback<List<Integer>>callback){
@@ -1453,9 +1963,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#loadAllPerson()}
      */
     public ListenableFuture<List<Integer>> loadAllPerson(){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Integer>> future = async.loadAllPerson();
-        return factory.wrap(async,future);
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.loadAllPerson(
+                nativeCallback);
+        return nativeCallback.feature;
     }
     public void loadAllPerson(FutureCallback<List<Integer>>callback){
         factory.addCallback(loadAllPerson(), callback);
@@ -1466,21 +1986,21 @@ public class IFaceLogThriftClientAsync {
     public ListenableFuture<List<DeviceBean>> loadDeviceByWhere(String where,
         int startRow,
         int numRows){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<DeviceBean>> future = Futures.transform(
-            async.loadDeviceByWhere(where,
-            startRow,
-            numRows),
-            new Function<List<net.gdface.facelog.client.thrift.DeviceBean>,List<DeviceBean>>(){
-                @Override
-                public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<List<DeviceBean>,List<net.gdface.facelog.client.thrift.DeviceBean>> nativeCallback = 
+            new MethodCallback<List<DeviceBean>,List<net.gdface.facelog.client.thrift.DeviceBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.DeviceBean>,List<DeviceBean>>() {
+                        @Override
+                        public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.DeviceBean.class,
                     DeviceBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.loadDeviceByWhere(
+                where,
+            startRow,
+            numRows,nativeCallback);
+        return nativeCallback.feature;
     }
     public void loadDeviceByWhere(String where,
         int startRow,
@@ -1494,11 +2014,21 @@ public class IFaceLogThriftClientAsync {
     public ListenableFuture<List<Integer>> loadDeviceGroupByWhere(String where,
         int startRow,
         int numRows){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Integer>> future = async.loadDeviceGroupByWhere(where,
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.loadDeviceGroupByWhere(
+                where,
             startRow,
-            numRows);
-        return factory.wrap(async,future);
+            numRows,nativeCallback);
+        return nativeCallback.feature;
     }
     public void loadDeviceGroupByWhere(String where,
         int startRow,
@@ -1510,9 +2040,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#loadDeviceGroupIdByWhere(java.lang.String)}
      */
     public ListenableFuture<List<Integer>> loadDeviceGroupIdByWhere(String where){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Integer>> future = async.loadDeviceGroupIdByWhere(where);
-        return factory.wrap(async,future);
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.loadDeviceGroupIdByWhere(
+                where,nativeCallback);
+        return nativeCallback.feature;
     }
     public void loadDeviceGroupIdByWhere(String where,
         FutureCallback<List<Integer>>callback){
@@ -1522,9 +2062,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#loadDeviceIdByWhere(java.lang.String)}
      */
     public ListenableFuture<List<Integer>> loadDeviceIdByWhere(String where){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Integer>> future = async.loadDeviceIdByWhere(where);
-        return factory.wrap(async,future);
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.loadDeviceIdByWhere(
+                where,nativeCallback);
+        return nativeCallback.feature;
     }
     public void loadDeviceIdByWhere(String where,
         FutureCallback<List<Integer>>callback){
@@ -1534,9 +2084,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#loadFeatureMd5ByUpdate(long)}
      */
     public ListenableFuture<List<String>> loadFeatureMd5ByUpdate(long timestamp){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<String>> future = async.loadFeatureMd5ByUpdate(timestamp);
-        return factory.wrap(async,future);
+        MethodCallback<List<String>,List<String>> nativeCallback = 
+            new MethodCallback<List<String>,List<String>>(
+                new Function<List<String>,List<String>>() {
+                        @Override
+                        public List<String> apply(List<String> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    String.class,
+                    String.class);
+                }});
+        nativeCallback.service.loadFeatureMd5ByUpdate(
+                timestamp,nativeCallback);
+        return nativeCallback.feature;
     }
     public void loadFeatureMd5ByUpdate(long timestamp,
         FutureCallback<List<String>>callback){
@@ -1548,21 +2108,21 @@ public class IFaceLogThriftClientAsync {
     public ListenableFuture<List<LogBean>> loadLogByWhere(String where,
         int startRow,
         int numRows){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<LogBean>> future = Futures.transform(
-            async.loadLogByWhere(where,
-            startRow,
-            numRows),
-            new Function<List<net.gdface.facelog.client.thrift.LogBean>,List<LogBean>>(){
-                @Override
-                public List<LogBean> apply(List<net.gdface.facelog.client.thrift.LogBean> input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<List<LogBean>,List<net.gdface.facelog.client.thrift.LogBean>> nativeCallback = 
+            new MethodCallback<List<LogBean>,List<net.gdface.facelog.client.thrift.LogBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.LogBean>,List<LogBean>>() {
+                        @Override
+                        public List<LogBean> apply(List<net.gdface.facelog.client.thrift.LogBean> input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.LogBean.class,
                     LogBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.loadLogByWhere(
+                where,
+            startRow,
+            numRows,nativeCallback);
+        return nativeCallback.feature;
     }
     public void loadLogByWhere(String where,
         int startRow,
@@ -1576,21 +2136,21 @@ public class IFaceLogThriftClientAsync {
     public ListenableFuture<List<LogLightBean>> loadLogLightByVerifyTime(long timestamp,
         int startRow,
         int numRows){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<LogLightBean>> future = Futures.transform(
-            async.loadLogLightByVerifyTime(timestamp,
-            startRow,
-            numRows),
-            new Function<List<net.gdface.facelog.client.thrift.LogLightBean>,List<LogLightBean>>(){
-                @Override
-                public List<LogLightBean> apply(List<net.gdface.facelog.client.thrift.LogLightBean> input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<List<LogLightBean>,List<net.gdface.facelog.client.thrift.LogLightBean>> nativeCallback = 
+            new MethodCallback<List<LogLightBean>,List<net.gdface.facelog.client.thrift.LogLightBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.LogLightBean>,List<LogLightBean>>() {
+                        @Override
+                        public List<LogLightBean> apply(List<net.gdface.facelog.client.thrift.LogLightBean> input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.LogLightBean.class,
                     LogLightBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.loadLogLightByVerifyTime(
+                timestamp,
+            startRow,
+            numRows,nativeCallback);
+        return nativeCallback.feature;
     }
     public void loadLogLightByVerifyTime(long timestamp,
         int startRow,
@@ -1604,21 +2164,21 @@ public class IFaceLogThriftClientAsync {
     public ListenableFuture<List<LogLightBean>> loadLogLightByWhere(String where,
         int startRow,
         int numRows){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<LogLightBean>> future = Futures.transform(
-            async.loadLogLightByWhere(where,
-            startRow,
-            numRows),
-            new Function<List<net.gdface.facelog.client.thrift.LogLightBean>,List<LogLightBean>>(){
-                @Override
-                public List<LogLightBean> apply(List<net.gdface.facelog.client.thrift.LogLightBean> input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<List<LogLightBean>,List<net.gdface.facelog.client.thrift.LogLightBean>> nativeCallback = 
+            new MethodCallback<List<LogLightBean>,List<net.gdface.facelog.client.thrift.LogLightBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.LogLightBean>,List<LogLightBean>>() {
+                        @Override
+                        public List<LogLightBean> apply(List<net.gdface.facelog.client.thrift.LogLightBean> input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.LogLightBean.class,
                     LogLightBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.loadLogLightByWhere(
+                where,
+            startRow,
+            numRows,nativeCallback);
+        return nativeCallback.feature;
     }
     public void loadLogLightByWhere(String where,
         int startRow,
@@ -1630,19 +2190,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#loadPermitByUpdate(long)}
      */
     public ListenableFuture<List<PermitBean>> loadPermitByUpdate(long timestamp){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<PermitBean>> future = Futures.transform(
-            async.loadPermitByUpdate(timestamp),
-            new Function<List<net.gdface.facelog.client.thrift.PermitBean>,List<PermitBean>>(){
-                @Override
-                public List<PermitBean> apply(List<net.gdface.facelog.client.thrift.PermitBean> input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<List<PermitBean>,List<net.gdface.facelog.client.thrift.PermitBean>> nativeCallback = 
+            new MethodCallback<List<PermitBean>,List<net.gdface.facelog.client.thrift.PermitBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.PermitBean>,List<PermitBean>>() {
+                        @Override
+                        public List<PermitBean> apply(List<net.gdface.facelog.client.thrift.PermitBean> input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.PermitBean.class,
                     PermitBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.loadPermitByUpdate(
+                timestamp,nativeCallback);
+        return nativeCallback.feature;
     }
     public void loadPermitByUpdate(long timestamp,
         FutureCallback<List<PermitBean>>callback){
@@ -1654,21 +2214,21 @@ public class IFaceLogThriftClientAsync {
     public ListenableFuture<List<PersonBean>> loadPersonByWhere(String where,
         int startRow,
         int numRows){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<PersonBean>> future = Futures.transform(
-            async.loadPersonByWhere(where,
-            startRow,
-            numRows),
-            new Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>(){
-                @Override
-                public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<List<PersonBean>,List<net.gdface.facelog.client.thrift.PersonBean>> nativeCallback = 
+            new MethodCallback<List<PersonBean>,List<net.gdface.facelog.client.thrift.PersonBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>() {
+                        @Override
+                        public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.PersonBean.class,
                     PersonBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.loadPersonByWhere(
+                where,
+            startRow,
+            numRows,nativeCallback);
+        return nativeCallback.feature;
     }
     public void loadPersonByWhere(String where,
         int startRow,
@@ -1682,11 +2242,21 @@ public class IFaceLogThriftClientAsync {
     public ListenableFuture<List<Integer>> loadPersonGroupByWhere(String where,
         int startRow,
         int numRows){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Integer>> future = async.loadPersonGroupByWhere(where,
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.loadPersonGroupByWhere(
+                where,
             startRow,
-            numRows);
-        return factory.wrap(async,future);
+            numRows,nativeCallback);
+        return nativeCallback.feature;
     }
     public void loadPersonGroupByWhere(String where,
         int startRow,
@@ -1698,9 +2268,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#loadPersonGroupIdByWhere(java.lang.String)}
      */
     public ListenableFuture<List<Integer>> loadPersonGroupIdByWhere(String where){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Integer>> future = async.loadPersonGroupIdByWhere(where);
-        return factory.wrap(async,future);
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.loadPersonGroupIdByWhere(
+                where,nativeCallback);
+        return nativeCallback.feature;
     }
     public void loadPersonGroupIdByWhere(String where,
         FutureCallback<List<Integer>>callback){
@@ -1710,9 +2290,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#loadPersonIdByUpdateTime(long)}
      */
     public ListenableFuture<List<Integer>> loadPersonIdByUpdateTime(long timestamp){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Integer>> future = async.loadPersonIdByUpdateTime(timestamp);
-        return factory.wrap(async,future);
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.loadPersonIdByUpdateTime(
+                timestamp,nativeCallback);
+        return nativeCallback.feature;
     }
     public void loadPersonIdByUpdateTime(long timestamp,
         FutureCallback<List<Integer>>callback){
@@ -1722,9 +2312,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#loadPersonIdByWhere(java.lang.String)}
      */
     public ListenableFuture<List<Integer>> loadPersonIdByWhere(String where){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Integer>> future = async.loadPersonIdByWhere(where);
-        return factory.wrap(async,future);
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.loadPersonIdByWhere(
+                where,nativeCallback);
+        return nativeCallback.feature;
     }
     public void loadPersonIdByWhere(String where,
         FutureCallback<List<Integer>>callback){
@@ -1734,9 +2334,19 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#loadUpdatedPersons(long)}
      */
     public ListenableFuture<List<Integer>> loadUpdatedPersons(long timestamp){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Integer>> future = async.loadUpdatedPersons(timestamp);
-        return factory.wrap(async,future);
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.loadUpdatedPersons(
+                timestamp,nativeCallback);
+        return nativeCallback.feature;
     }
     public void loadUpdatedPersons(long timestamp,
         FutureCallback<List<Integer>>callback){
@@ -1746,12 +2356,22 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#offline(net.gdface.facelog.Token)}
      */
     public ListenableFuture<Void> offline(Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Void> future = async.offline(TypeTransformer.getInstance().to(
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.offline(
+                TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void offline(Token token,
         FutureCallback<Void>callback){
@@ -1761,22 +2381,22 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#online(net.gdface.facelog.db.DeviceBean)}
      */
     public ListenableFuture<Token> online(DeviceBean device){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Token> future = Futures.transform(
-            async.online(TypeTransformer.getInstance().to(
-                    device,
-                    DeviceBean.class,
-                    net.gdface.facelog.client.thrift.DeviceBean.class)),
-            new Function<net.gdface.facelog.client.thrift.Token,Token>(){
-                @Override
-                public Token apply(net.gdface.facelog.client.thrift.Token input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<Token,net.gdface.facelog.client.thrift.Token> nativeCallback = 
+            new MethodCallback<Token,net.gdface.facelog.client.thrift.Token>(
+                new Function<net.gdface.facelog.client.thrift.Token,Token>() {
+                        @Override
+                        public Token apply(net.gdface.facelog.client.thrift.Token input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.Token.class,
                     Token.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.online(
+                TypeTransformer.getInstance().to(
+                    device,
+                    DeviceBean.class,
+                    net.gdface.facelog.client.thrift.DeviceBean.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void online(DeviceBean device,
         FutureCallback<Token>callback){
@@ -1786,22 +2406,22 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#registerDevice(net.gdface.facelog.db.DeviceBean)}
      */
     public ListenableFuture<DeviceBean> registerDevice(DeviceBean newDevice){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<DeviceBean> future = Futures.transform(
-            async.registerDevice(TypeTransformer.getInstance().to(
-                    newDevice,
-                    DeviceBean.class,
-                    net.gdface.facelog.client.thrift.DeviceBean.class)),
-            new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
-                @Override
-                public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> nativeCallback = 
+            new MethodCallback<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean>(
+                new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>() {
+                        @Override
+                        public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.DeviceBean.class,
                     DeviceBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.registerDevice(
+                TypeTransformer.getInstance().to(
+                    newDevice,
+                    DeviceBean.class,
+                    net.gdface.facelog.client.thrift.DeviceBean.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void registerDevice(DeviceBean newDevice,
         FutureCallback<DeviceBean>callback){
@@ -1811,12 +2431,22 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#releasePersonToken(net.gdface.facelog.Token)}
      */
     public ListenableFuture<Void> releasePersonToken(Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Void> future = async.releasePersonToken(TypeTransformer.getInstance().to(
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.releasePersonToken(
+                TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void releasePersonToken(Token token,
         FutureCallback<Void>callback){
@@ -1826,12 +2456,22 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#releaseRootToken(net.gdface.facelog.Token)}
      */
     public ListenableFuture<Void> releaseRootToken(Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Void> future = async.releaseRootToken(TypeTransformer.getInstance().to(
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.releaseRootToken(
+                TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void releaseRootToken(Token token,
         FutureCallback<Void>callback){
@@ -1844,15 +2484,25 @@ public class IFaceLogThriftClientAsync {
         String featureMd5,
         boolean deleteOldFeatureImage,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Void> future = async.replaceFeature(personId,
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.replaceFeature(
+                personId,
             featureMd5,
             deleteOldFeatureImage,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void replaceFeature(Integer personId,
         String featureMd5,
@@ -1866,26 +2516,26 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<DeviceBean> saveDevice(DeviceBean deviceBean,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<DeviceBean> future = Futures.transform(
-            async.saveDevice(TypeTransformer.getInstance().to(
+        MethodCallback<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> nativeCallback = 
+            new MethodCallback<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean>(
+                new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>() {
+                        @Override
+                        public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.DeviceBean.class,
+                    DeviceBean.class);
+                }});
+        nativeCallback.service.saveDevice(
+                TypeTransformer.getInstance().to(
                     deviceBean,
                     DeviceBean.class,
                     net.gdface.facelog.client.thrift.DeviceBean.class),
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-            new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
-                @Override
-                public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
-                    return TypeTransformer.getInstance().to(
-                    input,
-                    net.gdface.facelog.client.thrift.DeviceBean.class,
-                    DeviceBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void saveDevice(DeviceBean deviceBean,
         Token token,
@@ -1897,26 +2547,26 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<DeviceGroupBean> saveDeviceGroup(DeviceGroupBean deviceGroupBean,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<DeviceGroupBean> future = Futures.transform(
-            async.saveDeviceGroup(TypeTransformer.getInstance().to(
+        MethodCallback<DeviceGroupBean,net.gdface.facelog.client.thrift.DeviceGroupBean> nativeCallback = 
+            new MethodCallback<DeviceGroupBean,net.gdface.facelog.client.thrift.DeviceGroupBean>(
+                new Function<net.gdface.facelog.client.thrift.DeviceGroupBean,DeviceGroupBean>() {
+                        @Override
+                        public DeviceGroupBean apply(net.gdface.facelog.client.thrift.DeviceGroupBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.DeviceGroupBean.class,
+                    DeviceGroupBean.class);
+                }});
+        nativeCallback.service.saveDeviceGroup(
+                TypeTransformer.getInstance().to(
                     deviceGroupBean,
                     DeviceGroupBean.class,
                     net.gdface.facelog.client.thrift.DeviceGroupBean.class),
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-            new Function<net.gdface.facelog.client.thrift.DeviceGroupBean,DeviceGroupBean>(){
-                @Override
-                public DeviceGroupBean apply(net.gdface.facelog.client.thrift.DeviceGroupBean input) {
-                    return TypeTransformer.getInstance().to(
-                    input,
-                    net.gdface.facelog.client.thrift.DeviceGroupBean.class,
-                    DeviceGroupBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void saveDeviceGroup(DeviceGroupBean deviceGroupBean,
         Token token,
@@ -1933,15 +2583,33 @@ public class IFaceLogThriftClientAsync {
         FaceBean featureFaceBean,
         Integer deviceId,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<PersonBean> future = Futures.transform(
-            async.savePersonFull(TypeTransformer.getInstance().to(
+        MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean>(
+                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                        @Override
+                        public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }});
+        nativeCallback.service.savePersonFull(
+                TypeTransformer.getInstance().to(
                     bean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),
-            idPhoto,
-            feature,
-            featureImage,
+            TypeTransformer.getInstance().to(
+                    idPhoto,
+                    byte[].class,
+                    okio.ByteString.class),
+            TypeTransformer.getInstance().to(
+                    feature,
+                    byte[].class,
+                    okio.ByteString.class),
+            TypeTransformer.getInstance().to(
+                    featureImage,
+                    byte[].class,
+                    okio.ByteString.class),
             TypeTransformer.getInstance().to(
                     featureFaceBean,
                     FaceBean.class,
@@ -1950,17 +2618,8 @@ public class IFaceLogThriftClientAsync {
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-            new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                @Override
-                public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                    return TypeTransformer.getInstance().to(
-                    input,
-                    net.gdface.facelog.client.thrift.PersonBean.class,
-                    PersonBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void savePerson(PersonBean bean,
         byte[] idPhoto,
@@ -1980,14 +2639,29 @@ public class IFaceLogThriftClientAsync {
         byte[] feature,
         List<FaceBean> faceBeans,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<PersonBean> future = Futures.transform(
-            async.savePersonWithPhotoAndFeatureMultiFaces(TypeTransformer.getInstance().to(
+        MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean>(
+                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                        @Override
+                        public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }});
+        nativeCallback.service.savePersonWithPhotoAndFeatureMultiFaces(
+                TypeTransformer.getInstance().to(
                     bean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),
-            idPhoto,
-            feature,
+            TypeTransformer.getInstance().to(
+                    idPhoto,
+                    byte[].class,
+                    okio.ByteString.class),
+            TypeTransformer.getInstance().to(
+                    feature,
+                    byte[].class,
+                    okio.ByteString.class),
             TypeTransformer.getInstance().to(
                     faceBeans,
                     FaceBean.class,
@@ -1995,17 +2669,8 @@ public class IFaceLogThriftClientAsync {
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-            new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                @Override
-                public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                    return TypeTransformer.getInstance().to(
-                    input,
-                    net.gdface.facelog.client.thrift.PersonBean.class,
-                    PersonBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void savePerson(PersonBean bean,
         byte[] idPhoto,
@@ -2024,35 +2689,41 @@ public class IFaceLogThriftClientAsync {
         Map<ByteBuffer, FaceBean> faceInfo,
         Integer deviceId,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<PersonBean> future = Futures.transform(
-            async.savePersonWithPhotoAndFeatureMultiImage(TypeTransformer.getInstance().to(
+        MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean>(
+                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                        @Override
+                        public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }});
+        nativeCallback.service.savePersonWithPhotoAndFeatureMultiImage(
+                TypeTransformer.getInstance().to(
                     bean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),
-            idPhoto,
-            feature,
+            TypeTransformer.getInstance().to(
+                    idPhoto,
+                    byte[].class,
+                    okio.ByteString.class),
+            TypeTransformer.getInstance().to(
+                    feature,
+                    byte[].class,
+                    okio.ByteString.class),
             TypeTransformer.getInstance().to(
                     faceInfo,
                     ByteBuffer.class,
                     FaceBean.class,
-                    byte[].class,
+                    okio.ByteString.class,
                     net.gdface.facelog.client.thrift.FaceBean.class),
             deviceId,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-            new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                @Override
-                public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                    return TypeTransformer.getInstance().to(
-                    input,
-                    net.gdface.facelog.client.thrift.PersonBean.class,
-                    PersonBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void savePerson(PersonBean bean,
         byte[] idPhoto,
@@ -2069,27 +2740,30 @@ public class IFaceLogThriftClientAsync {
     public ListenableFuture<PersonBean> savePerson(PersonBean bean,
         byte[] idPhoto,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<PersonBean> future = Futures.transform(
-            async.savePersonWithPhoto(TypeTransformer.getInstance().to(
-                    bean,
-                    PersonBean.class,
-                    net.gdface.facelog.client.thrift.PersonBean.class),
-            idPhoto,
-            TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-            new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                @Override
-                public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                    return TypeTransformer.getInstance().to(
+        MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean>(
+                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                        @Override
+                        public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                            return TypeTransformer.getInstance().to(
                     input,
                     net.gdface.facelog.client.thrift.PersonBean.class,
                     PersonBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                }});
+        nativeCallback.service.savePersonWithPhoto(
+                TypeTransformer.getInstance().to(
+                    bean,
+                    PersonBean.class,
+                    net.gdface.facelog.client.thrift.PersonBean.class),
+            TypeTransformer.getInstance().to(
+                    idPhoto,
+                    byte[].class,
+                    okio.ByteString.class),
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void savePerson(PersonBean bean,
         byte[] idPhoto,
@@ -2105,13 +2779,25 @@ public class IFaceLogThriftClientAsync {
         FeatureBean featureBean,
         Integer deviceId,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<PersonBean> future = Futures.transform(
-            async.savePersonWithPhotoAndFeature(TypeTransformer.getInstance().to(
+        MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean>(
+                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                        @Override
+                        public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }});
+        nativeCallback.service.savePersonWithPhotoAndFeature(
+                TypeTransformer.getInstance().to(
                     bean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),
-            idPhoto,
+            TypeTransformer.getInstance().to(
+                    idPhoto,
+                    byte[].class,
+                    okio.ByteString.class),
             TypeTransformer.getInstance().to(
                     featureBean,
                     FeatureBean.class,
@@ -2120,17 +2806,8 @@ public class IFaceLogThriftClientAsync {
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-            new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                @Override
-                public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                    return TypeTransformer.getInstance().to(
-                    input,
-                    net.gdface.facelog.client.thrift.PersonBean.class,
-                    PersonBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void savePerson(PersonBean bean,
         byte[] idPhoto,
@@ -2147,9 +2824,18 @@ public class IFaceLogThriftClientAsync {
         String idPhotoMd5,
         String featureMd5,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<PersonBean> future = Futures.transform(
-            async.savePersonWithPhotoAndFeatureSaved(TypeTransformer.getInstance().to(
+        MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean>(
+                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                        @Override
+                        public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }});
+        nativeCallback.service.savePersonWithPhotoAndFeatureSaved(
+                TypeTransformer.getInstance().to(
                     bean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),
@@ -2158,17 +2844,8 @@ public class IFaceLogThriftClientAsync {
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-            new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                @Override
-                public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                    return TypeTransformer.getInstance().to(
-                    input,
-                    net.gdface.facelog.client.thrift.PersonBean.class,
-                    PersonBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void savePerson(PersonBean bean,
         String idPhotoMd5,
@@ -2182,26 +2859,26 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<PersonBean> savePerson(PersonBean bean,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<PersonBean> future = Futures.transform(
-            async.savePerson(TypeTransformer.getInstance().to(
+        MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean>(
+                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                        @Override
+                        public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }});
+        nativeCallback.service.savePerson(
+                TypeTransformer.getInstance().to(
                     bean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-            new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                @Override
-                public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                    return TypeTransformer.getInstance().to(
-                    input,
-                    net.gdface.facelog.client.thrift.PersonBean.class,
-                    PersonBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void savePerson(PersonBean bean,
         Token token,
@@ -2213,26 +2890,26 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<PersonGroupBean> savePersonGroup(PersonGroupBean personGroupBean,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<PersonGroupBean> future = Futures.transform(
-            async.savePersonGroup(TypeTransformer.getInstance().to(
+        MethodCallback<PersonGroupBean,net.gdface.facelog.client.thrift.PersonGroupBean> nativeCallback = 
+            new MethodCallback<PersonGroupBean,net.gdface.facelog.client.thrift.PersonGroupBean>(
+                new Function<net.gdface.facelog.client.thrift.PersonGroupBean,PersonGroupBean>() {
+                        @Override
+                        public PersonGroupBean apply(net.gdface.facelog.client.thrift.PersonGroupBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonGroupBean.class,
+                    PersonGroupBean.class);
+                }});
+        nativeCallback.service.savePersonGroup(
+                TypeTransformer.getInstance().to(
                     personGroupBean,
                     PersonGroupBean.class,
                     net.gdface.facelog.client.thrift.PersonGroupBean.class),
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-            new Function<net.gdface.facelog.client.thrift.PersonGroupBean,PersonGroupBean>(){
-                @Override
-                public PersonGroupBean apply(net.gdface.facelog.client.thrift.PersonGroupBean input) {
-                    return TypeTransformer.getInstance().to(
-                    input,
-                    net.gdface.facelog.client.thrift.PersonGroupBean.class,
-                    PersonGroupBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void savePersonGroup(PersonGroupBean personGroupBean,
         Token token,
@@ -2244,16 +2921,26 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<Void> savePersons(List<PersonBean> beans,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Void> future = async.savePersons(TypeTransformer.getInstance().to(
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.savePersons(
+                TypeTransformer.getInstance().to(
                     beans,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void savePersons(List<PersonBean> beans,
         Token token,
@@ -2265,18 +2952,25 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<Integer> savePersons(Map<ByteBuffer, PersonBean> persons,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.savePersonsWithPhoto(TypeTransformer.getInstance().to(
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.savePersonsWithPhoto(
+                TypeTransformer.getInstance().to(
                     persons,
                     ByteBuffer.class,
                     PersonBean.class,
-                    byte[].class,
+                    okio.ByteString.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void savePersons(Map<ByteBuffer, PersonBean> persons,
         Token token,
@@ -2287,12 +2981,22 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#saveServiceConfig(net.gdface.facelog.Token)}
      */
     public ListenableFuture<Void> saveServiceConfig(Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Void> future = async.saveServiceConfig(TypeTransformer.getInstance().to(
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.saveServiceConfig(
+                TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void saveServiceConfig(Token token,
         FutureCallback<Void>callback){
@@ -2304,14 +3008,24 @@ public class IFaceLogThriftClientAsync {
     public ListenableFuture<Void> setPersonExpiryDate(int personId,
         long expiryDate,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Void> future = async.setPersonExpiryDate(personId,
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.setPersonExpiryDate(
+                personId,
             expiryDate,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void setPersonExpiryDate(int personId,
         long expiryDate,
@@ -2325,8 +3039,18 @@ public class IFaceLogThriftClientAsync {
     public ListenableFuture<Void> setPersonExpiryDate(List<Integer> personIdList,
         long expiryDate,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Void> future = async.setPersonExpiryDateList(TypeTransformer.getInstance().to(
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.setPersonExpiryDateList(
+                TypeTransformer.getInstance().to(
                     personIdList,
                     Integer.class,
                     Integer.class),
@@ -2334,8 +3058,8 @@ public class IFaceLogThriftClientAsync {
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void setPersonExpiryDate(List<Integer> personIdList,
         long expiryDate,
@@ -2348,8 +3072,18 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<Void> setProperties(Map<String, String> config,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Void> future = async.setProperties(TypeTransformer.getInstance().to(
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.setProperties(
+                TypeTransformer.getInstance().to(
                     config,
                     String.class,
                     String.class,
@@ -2358,8 +3092,8 @@ public class IFaceLogThriftClientAsync {
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void setProperties(Map<String, String> config,
         Token token,
@@ -2372,14 +3106,24 @@ public class IFaceLogThriftClientAsync {
     public ListenableFuture<Void> setProperty(String key,
         String value,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Void> future = async.setProperty(key,
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.setProperty(
+                key,
             value,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void setProperty(String key,
         String value,
@@ -2392,13 +3136,23 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<Void> unregisterDevice(int deviceId,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Void> future = async.unregisterDevice(deviceId,
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.unregisterDevice(
+                deviceId,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void unregisterDevice(int deviceId,
         Token token,
@@ -2410,26 +3164,26 @@ public class IFaceLogThriftClientAsync {
      */
     public ListenableFuture<DeviceBean> updateDevice(DeviceBean deviceBean,
         Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<DeviceBean> future = Futures.transform(
-            async.updateDevice(TypeTransformer.getInstance().to(
+        MethodCallback<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> nativeCallback = 
+            new MethodCallback<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean>(
+                new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>() {
+                        @Override
+                        public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.DeviceBean.class,
+                    DeviceBean.class);
+                }});
+        nativeCallback.service.updateDevice(
+                TypeTransformer.getInstance().to(
                     deviceBean,
                     DeviceBean.class,
                     net.gdface.facelog.client.thrift.DeviceBean.class),
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-            new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
-                @Override
-                public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
-                    return TypeTransformer.getInstance().to(
-                    input,
-                    net.gdface.facelog.client.thrift.DeviceBean.class,
-                    DeviceBean.class);
-                }
-            });
-        return factory.wrap(async,future);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
     }
     public void updateDevice(DeviceBean deviceBean,
         Token token,
@@ -2440,9 +3194,16 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#version()}
      */
     public ListenableFuture<String> version(){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<String> future = async.version();
-        return factory.wrap(async,future);
+        MethodCallback<String,String> nativeCallback = 
+            new MethodCallback<String,String>(
+                new Function<String,String>() {
+                        @Override
+                        public String apply(String input) {
+                            return input;
+                }});
+        nativeCallback.service.version(
+                nativeCallback);
+        return nativeCallback.feature;
     }
     public void version(FutureCallback<String>callback){
         factory.addCallback(version(), callback);
@@ -2451,9 +3212,21 @@ public class IFaceLogThriftClientAsync {
      * see also {@link net.gdface.facelog.IFaceLog#versionInfo()}
      */
     public ListenableFuture<Map<String, String>> versionInfo(){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Map<String, String>> future = async.versionInfo();
-        return factory.wrap(async,future);
+        MethodCallback<Map<String, String>,Map<String,String>> nativeCallback = 
+            new MethodCallback<Map<String, String>,Map<String,String>>(
+                new Function<Map<String,String>,Map<String, String>>() {
+                        @Override
+                        public Map<String, String> apply(Map<String,String> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    String.class,
+                    String.class,
+                    String.class,
+                    String.class);
+                }});
+        nativeCallback.service.versionInfo(
+                nativeCallback);
+        return nativeCallback.feature;
     }
     public void versionInfo(FutureCallback<Map<String, String>>callback){
         factory.addCallback(versionInfo(), callback);

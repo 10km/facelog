@@ -72,7 +72,10 @@ public class IFaceLogThriftClient implements IFaceLog {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
             return TypeTransformer.getInstance().to(
-                    instance.addFeature(feature,
+                    instance.addFeature(TypeTransformer.getInstance().to(
+                    feature,
+                    byte[].class,
+                    okio.ByteString.class),
                 personId,
                 TypeTransformer.getInstance().to(
                     faecBeans,
@@ -111,13 +114,16 @@ public class IFaceLogThriftClient implements IFaceLog {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
             return TypeTransformer.getInstance().to(
-                    instance.addFeatureMulti(feature,
+                    instance.addFeatureMulti(TypeTransformer.getInstance().to(
+                    feature,
+                    byte[].class,
+                    okio.ByteString.class),
                 personId,
                 TypeTransformer.getInstance().to(
                     faceInfo,
                     ByteBuffer.class,
                     FaceBean.class,
-                    byte[].class,
+                    okio.ByteString.class,
                     net.gdface.facelog.client.thrift.FaceBean.class),
                 deviceId,
                 TypeTransformer.getInstance().to(
@@ -153,7 +159,10 @@ public class IFaceLogThriftClient implements IFaceLog {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
             return TypeTransformer.getInstance().to(
-                    instance.addImage(imageData,
+                    instance.addImage(TypeTransformer.getInstance().to(
+                    imageData,
+                    byte[].class,
+                    okio.ByteString.class),
                 deviceId,
                 TypeTransformer.getInstance().to(
                     faceBean,
@@ -1001,7 +1010,10 @@ public class IFaceLogThriftClient implements IFaceLog {
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
-            return instance.getFeatureBytes(md5);
+            return TypeTransformer.getInstance().to(
+                    instance.getFeatureBytes(md5),
+                    okio.ByteString.class,
+                    byte[].class);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1122,7 +1134,10 @@ public class IFaceLogThriftClient implements IFaceLog {
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
-            return instance.getImageBytes(imageMD5);
+            return TypeTransformer.getInstance().to(
+                    instance.getImageBytes(imageMD5),
+                    okio.ByteString.class,
+                    byte[].class);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -2158,9 +2173,18 @@ public class IFaceLogThriftClient implements IFaceLog {
                     bean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),
-                idPhoto,
-                feature,
-                featureImage,
+                TypeTransformer.getInstance().to(
+                    idPhoto,
+                    byte[].class,
+                    okio.ByteString.class),
+                TypeTransformer.getInstance().to(
+                    feature,
+                    byte[].class,
+                    okio.ByteString.class),
+                TypeTransformer.getInstance().to(
+                    featureImage,
+                    byte[].class,
+                    okio.ByteString.class),
                 TypeTransformer.getInstance().to(
                     featureFaceBean,
                     FaceBean.class,
@@ -2197,8 +2221,14 @@ public class IFaceLogThriftClient implements IFaceLog {
                     bean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),
-                idPhoto,
-                feature,
+                TypeTransformer.getInstance().to(
+                    idPhoto,
+                    byte[].class,
+                    okio.ByteString.class),
+                TypeTransformer.getInstance().to(
+                    feature,
+                    byte[].class,
+                    okio.ByteString.class),
                 TypeTransformer.getInstance().to(
                     faceBeans,
                     FaceBean.class,
@@ -2235,13 +2265,19 @@ public class IFaceLogThriftClient implements IFaceLog {
                     bean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),
-                idPhoto,
-                feature,
+                TypeTransformer.getInstance().to(
+                    idPhoto,
+                    byte[].class,
+                    okio.ByteString.class),
+                TypeTransformer.getInstance().to(
+                    feature,
+                    byte[].class,
+                    okio.ByteString.class),
                 TypeTransformer.getInstance().to(
                     faceInfo,
                     ByteBuffer.class,
                     FaceBean.class,
-                    byte[].class,
+                    okio.ByteString.class,
                     net.gdface.facelog.client.thrift.FaceBean.class),
                 deviceId,
                 TypeTransformer.getInstance().to(
@@ -2273,7 +2309,10 @@ public class IFaceLogThriftClient implements IFaceLog {
                     bean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),
-                idPhoto,
+                TypeTransformer.getInstance().to(
+                    idPhoto,
+                    byte[].class,
+                    okio.ByteString.class),
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -2305,7 +2344,10 @@ public class IFaceLogThriftClient implements IFaceLog {
                     bean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),
-                idPhoto,
+                TypeTransformer.getInstance().to(
+                    idPhoto,
+                    byte[].class,
+                    okio.ByteString.class),
                 TypeTransformer.getInstance().to(
                     featureBean,
                     FeatureBean.class,
@@ -2448,7 +2490,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                     persons,
                     ByteBuffer.class,
                     PersonBean.class,
-                    byte[].class,
+                    okio.ByteString.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),
                 TypeTransformer.getInstance().to(
                     token,

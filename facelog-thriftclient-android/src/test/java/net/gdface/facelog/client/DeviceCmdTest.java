@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableMap;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.JedisPoolLazy.PropName;
-import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.thrift.ClientFactory;
@@ -49,7 +48,7 @@ public class DeviceCmdTest implements ChannelConstant{
 		// 根据连接参数创建默认实例 
 		JedisPoolLazy.createDefaultInstance( redisParam);
 		// 创建服务实例
-		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLog.class, IFaceLogClient.class);
+		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLogClient.class);
 		// 申请root令牌
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 		byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};

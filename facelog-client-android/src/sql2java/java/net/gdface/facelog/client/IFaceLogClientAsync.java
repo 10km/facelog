@@ -8,6 +8,7 @@
 package net.gdface.facelog.client;
 
 import com.google.common.base.Function;
+import com.google.common.reflect.TypeParameter;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import java.util.concurrent.atomic.AtomicReference;
@@ -130,7 +131,7 @@ public class IFaceLogClientAsync implements Constant{
      * @param personId
      * @return 
      */
-    public ListenableFuture<PersonBean> getPerson(final int personId){
+    public ListenableFuture<PersonBean> getPerson(final int personId){    	
         MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
             new MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean>(
                 new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {

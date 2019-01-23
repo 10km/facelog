@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.RedisFactory;
 import net.gdface.facelog.CommonConstant;
-import net.gdface.facelog.IFaceLog;
 import net.gdface.thrift.ClientFactory;
 
 /**
@@ -22,7 +21,7 @@ public class PersonInsertAdapterTest implements CommonConstant {
 
 	@Test
 	public void test() {
-		final IFaceLogClient serviceClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLog.class, IFaceLogClient.class);
+		final IFaceLogClient serviceClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLogClient.class);
 		new SubAdapters.BasePersonInsertSubAdapter(){
 			@Override
 			public void onSubscribe(Integer id) throws SmqUnsubscribeException {
