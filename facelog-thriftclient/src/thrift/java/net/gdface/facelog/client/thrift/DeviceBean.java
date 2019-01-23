@@ -1,4 +1,4 @@
-package net.gdface.facelog.thrift.client;
+package net.gdface.facelog.client.thrift;
 
 import com.facebook.swift.codec.*;
 import com.facebook.swift.codec.ThriftField.Requiredness;
@@ -6,10 +6,10 @@ import java.util.*;
 
 import static com.google.common.base.Objects.toStringHelper;
 
-@ThriftStruct("PersonGroupBean")
-public final class PersonGroupBean
+@ThriftStruct("DeviceBean")
+public final class DeviceBean
 {
-    public PersonGroupBean() {
+    public DeviceBean() {
     }
 
     private boolean New;
@@ -44,53 +44,53 @@ public final class PersonGroupBean
     @ThriftField
     public void setId(final Integer id) { this.id = id; }
 
+    private Integer groupId;
+
+    @ThriftField(value=5, name="groupId", requiredness=Requiredness.OPTIONAL)
+    public Integer getGroupId() { return groupId; }
+
+    @ThriftField
+    public void setGroupId(final Integer groupId) { this.groupId = groupId; }
+
     private String name;
 
-    @ThriftField(value=5, name="name", requiredness=Requiredness.NONE)
+    @ThriftField(value=6, name="name", requiredness=Requiredness.OPTIONAL)
     public String getName() { return name; }
 
     @ThriftField
     public void setName(final String name) { this.name = name; }
 
-    private Integer leaf;
+    private String version;
 
-    @ThriftField(value=6, name="leaf", requiredness=Requiredness.OPTIONAL)
-    public Integer getLeaf() { return leaf; }
-
-    @ThriftField
-    public void setLeaf(final Integer leaf) { this.leaf = leaf; }
-
-    private Integer parent;
-
-    @ThriftField(value=7, name="parent", requiredness=Requiredness.OPTIONAL)
-    public Integer getParent() { return parent; }
+    @ThriftField(value=7, name="version", requiredness=Requiredness.OPTIONAL)
+    public String getVersion() { return version; }
 
     @ThriftField
-    public void setParent(final Integer parent) { this.parent = parent; }
+    public void setVersion(final String version) { this.version = version; }
+
+    private String serialNo;
+
+    @ThriftField(value=8, name="serialNo", requiredness=Requiredness.OPTIONAL)
+    public String getSerialNo() { return serialNo; }
+
+    @ThriftField
+    public void setSerialNo(final String serialNo) { this.serialNo = serialNo; }
+
+    private String mac;
+
+    @ThriftField(value=9, name="mac", requiredness=Requiredness.OPTIONAL)
+    public String getMac() { return mac; }
+
+    @ThriftField
+    public void setMac(final String mac) { this.mac = mac; }
 
     private String remark;
 
-    @ThriftField(value=8, name="remark", requiredness=Requiredness.NONE)
+    @ThriftField(value=10, name="remark", requiredness=Requiredness.OPTIONAL)
     public String getRemark() { return remark; }
 
     @ThriftField
     public void setRemark(final String remark) { this.remark = remark; }
-
-    private byte [] extBin;
-
-    @ThriftField(value=9, name="extBin", requiredness=Requiredness.NONE)
-    public byte [] getExtBin() { return extBin; }
-
-    @ThriftField
-    public void setExtBin(final byte [] extBin) { this.extBin = extBin; }
-
-    private String extTxt;
-
-    @ThriftField(value=10, name="extTxt", requiredness=Requiredness.NONE)
-    public String getExtTxt() { return extTxt; }
-
-    @ThriftField
-    public void setExtTxt(final String extTxt) { this.extTxt = extTxt; }
 
     private Long createTime;
 
@@ -116,12 +116,12 @@ public final class PersonGroupBean
             .add("modified", modified)
             .add("initialized", initialized)
             .add("id", id)
+            .add("groupId", groupId)
             .add("name", name)
-            .add("leaf", leaf)
-            .add("parent", parent)
+            .add("version", version)
+            .add("serialNo", serialNo)
+            .add("mac", mac)
             .add("remark", remark)
-            .add("extBin", extBin)
-            .add("extTxt", extTxt)
             .add("createTime", createTime)
             .add("updateTime", updateTime)
             .toString();

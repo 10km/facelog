@@ -1,4 +1,4 @@
-package net.gdface.facelog.thrift.client;
+package net.gdface.facelog.client.thrift;
 
 import com.facebook.swift.codec.*;
 import com.facebook.swift.codec.ThriftField.Requiredness;
@@ -46,7 +46,7 @@ public final class FaceBean
 
     private String imageMd5;
 
-    @ThriftField(value=5, name="imageMd5", requiredness=Requiredness.NONE)
+    @ThriftField(value=5, name="imageMd5", requiredness=Requiredness.OPTIONAL)
     public String getImageMd5() { return imageMd5; }
 
     @ThriftField
@@ -174,7 +174,7 @@ public final class FaceBean
 
     private byte [] extInfo;
 
-    @ThriftField(value=21, name="extInfo", requiredness=Requiredness.NONE)
+    @ThriftField(value=21, name="extInfo", requiredness=Requiredness.OPTIONAL)
     public byte [] getExtInfo() { return extInfo; }
 
     @ThriftField
@@ -182,7 +182,7 @@ public final class FaceBean
 
     private String featureMd5;
 
-    @ThriftField(value=22, name="featureMd5", requiredness=Requiredness.NONE)
+    @ThriftField(value=22, name="featureMd5", requiredness=Requiredness.OPTIONAL)
     public String getFeatureMd5() { return featureMd5; }
 
     @ThriftField

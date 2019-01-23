@@ -1,4 +1,4 @@
-package net.gdface.facelog.thrift.client;
+package net.gdface.facelog.client.thrift;
 
 import com.facebook.swift.codec.*;
 import com.facebook.swift.codec.ThriftField.Requiredness;
@@ -6,10 +6,10 @@ import java.util.*;
 
 import static com.google.common.base.Objects.toStringHelper;
 
-@ThriftStruct("FeatureBean")
-public final class FeatureBean
+@ThriftStruct("LogLightBean")
+public final class LogLightBean
 {
-    public FeatureBean() {
+    public LogLightBean() {
     }
 
     private boolean New;
@@ -36,13 +36,13 @@ public final class FeatureBean
     @ThriftField
     public void setInitialized(final long initialized) { this.initialized = initialized; }
 
-    private String md5;
+    private Integer id;
 
-    @ThriftField(value=4, name="md5", requiredness=Requiredness.NONE)
-    public String getMd5() { return md5; }
+    @ThriftField(value=4, name="id", requiredness=Requiredness.OPTIONAL)
+    public Integer getId() { return id; }
 
     @ThriftField
-    public void setMd5(final String md5) { this.md5 = md5; }
+    public void setId(final Integer id) { this.id = id; }
 
     private Integer personId;
 
@@ -52,21 +52,37 @@ public final class FeatureBean
     @ThriftField
     public void setPersonId(final Integer personId) { this.personId = personId; }
 
-    private byte [] feature;
+    private String name;
 
-    @ThriftField(value=6, name="feature", requiredness=Requiredness.NONE)
-    public byte [] getFeature() { return feature; }
-
-    @ThriftField
-    public void setFeature(final byte [] feature) { this.feature = feature; }
-
-    private Long updateTime;
-
-    @ThriftField(value=7, name="updateTime", requiredness=Requiredness.OPTIONAL)
-    public Long getUpdateTime() { return updateTime; }
+    @ThriftField(value=6, name="name", requiredness=Requiredness.OPTIONAL)
+    public String getName() { return name; }
 
     @ThriftField
-    public void setUpdateTime(final Long updateTime) { this.updateTime = updateTime; }
+    public void setName(final String name) { this.name = name; }
+
+    private Integer papersType;
+
+    @ThriftField(value=7, name="papersType", requiredness=Requiredness.OPTIONAL)
+    public Integer getPapersType() { return papersType; }
+
+    @ThriftField
+    public void setPapersType(final Integer papersType) { this.papersType = papersType; }
+
+    private String papersNum;
+
+    @ThriftField(value=8, name="papersNum", requiredness=Requiredness.OPTIONAL)
+    public String getPapersNum() { return papersNum; }
+
+    @ThriftField
+    public void setPapersNum(final String papersNum) { this.papersNum = papersNum; }
+
+    private Long verifyTime;
+
+    @ThriftField(value=9, name="verifyTime", requiredness=Requiredness.OPTIONAL)
+    public Long getVerifyTime() { return verifyTime; }
+
+    @ThriftField
+    public void setVerifyTime(final Long verifyTime) { this.verifyTime = verifyTime; }
 
     @Override
     public String toString()
@@ -75,10 +91,12 @@ public final class FeatureBean
             .add("New", New)
             .add("modified", modified)
             .add("initialized", initialized)
-            .add("md5", md5)
+            .add("id", id)
             .add("personId", personId)
-            .add("feature", feature)
-            .add("updateTime", updateTime)
+            .add("name", name)
+            .add("papersType", papersType)
+            .add("papersNum", papersNum)
+            .add("verifyTime", verifyTime)
             .toString();
     }
 }

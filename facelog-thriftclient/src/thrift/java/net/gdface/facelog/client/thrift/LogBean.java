@@ -1,4 +1,4 @@
-package net.gdface.facelog.thrift.client;
+package net.gdface.facelog.client.thrift;
 
 import com.facebook.swift.codec.*;
 import com.facebook.swift.codec.ThriftField.Requiredness;
@@ -62,7 +62,7 @@ public final class LogBean
 
     private String verifyFeature;
 
-    @ThriftField(value=7, name="verifyFeature", requiredness=Requiredness.NONE)
+    @ThriftField(value=7, name="verifyFeature", requiredness=Requiredness.OPTIONAL)
     public String getVerifyFeature() { return verifyFeature; }
 
     @ThriftField

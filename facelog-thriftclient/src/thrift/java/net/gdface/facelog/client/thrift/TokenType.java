@@ -1,4 +1,4 @@
-package net.gdface.facelog.thrift.client;
+package net.gdface.facelog.client.thrift;
 
 import com.facebook.swift.codec.*;
 

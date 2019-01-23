@@ -1,4 +1,4 @@
-package net.gdface.facelog.thrift.client;
+package net.gdface.facelog.client.thrift;
 
 import com.facebook.swift.codec.*;
 import com.facebook.swift.codec.ThriftField.Requiredness;
@@ -6,10 +6,10 @@ import java.util.*;
 
 import static com.google.common.base.Objects.toStringHelper;
 
-@ThriftStruct("DeviceGroupBean")
-public final class DeviceGroupBean
+@ThriftStruct("PersonGroupBean")
+public final class PersonGroupBean
 {
-    public DeviceGroupBean() {
+    public PersonGroupBean() {
     }
 
     private boolean New;
@@ -46,7 +46,7 @@ public final class DeviceGroupBean
 
     private String name;
 
-    @ThriftField(value=5, name="name", requiredness=Requiredness.NONE)
+    @ThriftField(value=5, name="name", requiredness=Requiredness.OPTIONAL)
     public String getName() { return name; }
 
     @ThriftField
@@ -70,7 +70,7 @@ public final class DeviceGroupBean
 
     private String remark;
 
-    @ThriftField(value=8, name="remark", requiredness=Requiredness.NONE)
+    @ThriftField(value=8, name="remark", requiredness=Requiredness.OPTIONAL)
     public String getRemark() { return remark; }
 
     @ThriftField
@@ -78,7 +78,7 @@ public final class DeviceGroupBean
 
     private byte [] extBin;
 
-    @ThriftField(value=9, name="extBin", requiredness=Requiredness.NONE)
+    @ThriftField(value=9, name="extBin", requiredness=Requiredness.OPTIONAL)
     public byte [] getExtBin() { return extBin; }
 
     @ThriftField
@@ -86,7 +86,7 @@ public final class DeviceGroupBean
 
     private String extTxt;
 
-    @ThriftField(value=10, name="extTxt", requiredness=Requiredness.NONE)
+    @ThriftField(value=10, name="extTxt", requiredness=Requiredness.OPTIONAL)
     public String getExtTxt() { return extTxt; }
 
     @ThriftField
