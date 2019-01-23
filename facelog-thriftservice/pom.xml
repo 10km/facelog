@@ -74,6 +74,10 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>com.facebook.mojo</groupId>
+				<artifactId>swift-maven-plugin</artifactId>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -93,7 +97,7 @@
 						<refClass>net.gdface.facelog.FacelogDefaultImpl</refClass>
 						<package>net.gdface.facelog.decorator</package>
 						<outputDir>${codegen.dir}</outputDir>
-						<thriftPackage>net.gdface.facelog.thrift.client</thriftPackage>
+						<thriftPackage>net.gdface.facelog.client.thrift</thriftPackage>
 						<taskType>SERVICE</taskType>
 					</configuration>
 					<dependencies>
@@ -131,6 +135,38 @@
 						</dependency>
 					</dependencies>
 				</plugin>
+				<!-- 根据thrift生成client java代码的插件 -->
+				<plugin>
+					<groupId>com.facebook.mojo</groupId>
+					<artifactId>swift-maven-plugin</artifactId>
+					<version>${swift.version}</version>
+					<executions>
+						<execution>
+							<phase>compile</phase>
+							<goals>
+								<goal>generate</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<!-- 指定IDL文件 -->
+						<idlFiles>
+							<directory>${project.basedir}</directory>
+							<includes>
+								<include>IFaceLog.thrift</include>
+							</includes>
+						</idlFiles>
+						<!-- 指定生成标准java bean -->
+						<codeFlavor>java-regular</codeFlavor>
+						<outputFolder>../facelog-thriftclient/src/thrift/java</outputFolder>
+						<!-- 指定生成代码的package -->
+						<overridePackage>net.gdface.facelog.client.thrift</overridePackage>
+						<!-- 指定生成的client 代码是否抛出 TException 异常 -->
+						<addThriftExceptions>false</addThriftExceptions>
+						<!-- 指定生成的服务端异常是否为继承自RuntimeException -->
+						<extendRuntimeException>false</extendRuntimeException>
+					</configuration>
+				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-shade-plugin</artifactId>
@@ -164,6 +200,37 @@
 							</goals>
 						</execution>
 					</executions>
+				</plugin>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											com.facebook.mojo
+										</groupId>
+										<artifactId>
+											swift-maven-plugin
+										</artifactId>
+										<versionRange>
+											[0.14.2,)
+										</versionRange>
+										<goals>
+											<goal>generate</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>

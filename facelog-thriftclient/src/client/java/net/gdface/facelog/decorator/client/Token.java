@@ -83,18 +83,18 @@ public final class Token implements ThriftDecorator<net.gdface.facelog.Token> {
     }
 
     @ThriftField(value = 4,requiredness=Requiredness.OPTIONAL)
-    public net.gdface.facelog.thrift.client.TokenType getType(){
+    public net.gdface.facelog.client.thrift.TokenType getType(){
         return TypeTransformer.getInstance().to(
                     delegate().getType(),
                     TokenType.class,
-                    net.gdface.facelog.thrift.client.TokenType.class);
+                    net.gdface.facelog.client.thrift.TokenType.class);
     }
     
     @ThriftField
-    public void setType(net.gdface.facelog.thrift.client.TokenType value){
+    public void setType(net.gdface.facelog.client.thrift.TokenType value){
         delegate().setType(TypeTransformer.getInstance().to(
                     value,
-                    net.gdface.facelog.thrift.client.TokenType.class,
+                    net.gdface.facelog.client.thrift.TokenType.class,
                     TokenType.class));
     }
 

@@ -79,7 +79,7 @@
 					<refClass>net.gdface.facelog.FacelogDefaultImpl</refClass>
 					<package>net.gdface.facelog.thrift</package>
 					<outputDir>${codegen.dir}</outputDir>
-					<thriftPackage>net.gdface.facelog.thrift.client</thriftPackage>
+					<thriftPackage>net.gdface.facelog.client.thrift</thriftPackage>
 					<taskType>CLIENT</taskType>
 				</configuration>
 				<dependencies>

@@ -1,4 +1,4 @@
-namespace java.swift net.gdface.facelog.service
+namespace java.swift net.gdface.facelog.decorator
 namespace cpp gdface
 namespace java net.gdface.facelog.client.thrift
 namespace py gdface.thrift
@@ -6,10 +6,6 @@ namespace py gdface.thrift
 
 enum TokenType {
   UNINITIALIZED, DEVICE, PERSON, ROOT
-}
-
-enum SecurityExceptionType {
-  UNCLASSIFIED, INVALID_MAC, INVALID_SN, OCCUPIED_SN, INVALID_TOKEN, INVALID_DEVICE_ID, INVALID_PERSON_ID, INVALID_PASSWORD, REJECT_APPLY
 }
 
 enum MQParam {
@@ -41,19 +37,19 @@ struct FaceBean {
   22: optional string featureMd5;
 }
 
+exception DuplicateRecordException {
+  1: optional string message;
+  2: optional string causeClass;
+  3: optional string serviceStackTraceMessage;
+  4: optional string causeFields;
+}
+
 exception ServiceRuntimeException {
   1: optional string message;
   2: optional string causeClass;
   3: optional string serviceStackTraceMessage;
   4: optional string causeFields;
   5: required i32 type;
-}
-
-exception DuplicateRecordException {
-  1: optional string message;
-  2: optional string causeClass;
-  3: optional string serviceStackTraceMessage;
-  4: optional string causeFields;
 }
 
 struct FeatureBean {
@@ -125,6 +121,13 @@ struct PersonGroupBean {
   12: optional i64 updateTime;
 }
 
+exception ServiceSecurityException {
+  1: optional string message;
+  2: optional string causeClass;
+  3: optional string serviceStackTraceMessage;
+  4: optional string causeFields;
+}
+
 struct DeviceBean {
   1: required bool _new;
   2: required i64 modified;
@@ -187,33 +190,24 @@ struct PermitBean {
 
 struct Token {
   1: required i32 id;
-  2: required TokenType type;
-  3: required i64 t1;
-  4: required i64 t2;
-}
-
-exception ServiceSecurityException {
-  1: optional string message;
-  2: optional string causeClass;
-  3: optional string serviceStackTraceMessage;
-  4: optional string causeFields;
-  5: optional SecurityExceptionType type;
-  6: optional i32 deviceID;
+  2: required i64 t1;
+  3: required i64 t2;
+  4: optional TokenType type;
 }
 
 service IFaceLog {
-  FeatureBean addFeature(1: optional binary feature, 2: optional i32 personId, 3: optional list<FaceBean> faecBeans, 4: optional Token token) throws (1: ServiceRuntimeException ex1, 2: DuplicateRecordException ex2);
-  FeatureBean addFeatureMulti(1: optional binary feature, 2: optional i32 personId, 3: optional map<binary, FaceBean> faceInfo, 4: optional i32 deviceId, 5: optional Token token) throws (1: ServiceRuntimeException ex1, 2: DuplicateRecordException ex2);
-  ImageBean addImage(1: optional binary imageData, 2: optional i32 deviceId, 3: optional FaceBean faceBean, 4: optional i32 personId, 5: optional Token token) throws (1: ServiceRuntimeException ex1, 2: DuplicateRecordException ex2);
-  void addLog(1: optional LogBean bean, 2: optional Token token) throws (1: ServiceRuntimeException ex1, 2: DuplicateRecordException ex2);
-  void addLogs(1: optional list<LogBean> beans, 2: optional Token token) throws (1: ServiceRuntimeException ex1, 2: DuplicateRecordException ex2);
+  FeatureBean addFeature(1: optional binary feature, 2: optional i32 personId, 3: optional list<FaceBean> faecBeans, 4: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
+  FeatureBean addFeatureMulti(1: optional binary feature, 2: optional i32 personId, 3: optional map<binary, FaceBean> faceInfo, 4: optional i32 deviceId, 5: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
+  ImageBean addImage(1: optional binary imageData, 2: optional i32 deviceId, 3: optional FaceBean faceBean, 4: optional i32 personId, 5: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
+  void addLog(1: optional LogBean bean, 2: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
+  void addLogs(1: optional list<LogBean> beans, 2: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
   void addPermit(1: optional DeviceGroupBean deviceGroup, 2: optional PersonGroupBean personGroup, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   void addPermitById(1: required i32 deviceGroupId, 2: required i32 personGroupId, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   string applyAckChannel(1: optional Token token) throws (1: ServiceRuntimeException ex1);
   string applyAckChannelWithDuration(1: optional Token token, 2: required i64 duration) throws (1: ServiceRuntimeException ex1);
   i64 applyCmdSn(1: optional Token token) throws (1: ServiceRuntimeException ex1);
-  Token applyPersonToken(1: required i32 personId, 2: optional string password, 3: required bool isMd5) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
-  Token applyRootToken(1: optional string password, 2: required bool isMd5) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
+  Token applyPersonToken(1: required i32 personId, 2: optional string password, 3: required bool isMd5) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
+  Token applyRootToken(1: optional string password, 2: required bool isMd5) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   i32 countDeviceByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   i32 countDeviceGroupByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   i32 countLogByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
@@ -270,9 +264,10 @@ service IFaceLog {
   list<i32> getSubDeviceGroup(1: required i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
   list<i32> getSubPersonGroup(1: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   bool isDisable(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
+  bool isLocal() throws (1: ServiceRuntimeException ex1);
   bool isValidAckChannel(1: optional string ackChannel) throws (1: ServiceRuntimeException ex1);
   bool isValidCmdSn(1: required i64 cmdSn) throws (1: ServiceRuntimeException ex1);
-  bool isValidPassword(1: optional string userId, 2: optional string password, 3: required bool isMd5, 4: optional Token token) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
+  bool isValidPassword(1: optional string userId, 2: optional string password, 3: required bool isMd5, 4: optional Token token) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   list<i32> listOfParentForDeviceGroup(1: required i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
   list<i32> listOfParentForPersonGroup(1: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   list<i32> loadAllPerson() throws (1: ServiceRuntimeException ex1);
@@ -291,11 +286,11 @@ service IFaceLog {
   list<i32> loadPersonIdByUpdateTime(1: required i64 timestamp) throws (1: ServiceRuntimeException ex1);
   list<i32> loadPersonIdByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   list<i32> loadUpdatedPersons(1: required i64 timestamp) throws (1: ServiceRuntimeException ex1);
-  void offline(1: optional Token token) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
-  Token online(1: optional DeviceBean device) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
-  DeviceBean registerDevice(1: optional DeviceBean newDevice) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
-  void releasePersonToken(1: optional Token token) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
-  void releaseRootToken(1: optional Token token) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
+  void offline(1: optional Token token) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
+  Token online(1: optional DeviceBean device) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
+  DeviceBean registerDevice(1: optional DeviceBean newDevice) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
+  void releasePersonToken(1: optional Token token) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
+  void releaseRootToken(1: optional Token token) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   void replaceFeature(1: optional i32 personId, 2: optional string featureMd5, 3: required bool deleteOldFeatureImage, 4: optional Token token) throws (1: ServiceRuntimeException ex1);
   DeviceBean saveDevice(1: optional DeviceBean deviceBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   DeviceGroupBean saveDeviceGroup(1: optional DeviceGroupBean deviceGroupBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
@@ -314,8 +309,8 @@ service IFaceLog {
   void setPersonExpiryDateList(1: optional list<i32> personIdList, 2: required i64 expiryDate, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   void setProperties(1: optional map<string, string> config, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   void setProperty(1: optional string key, 2: optional string value, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
-  void unregisterDevice(1: required i32 deviceId, 2: optional Token token) throws (1: ServiceRuntimeException ex1, 2: ServiceSecurityException ex2);
+  void unregisterDevice(1: required i32 deviceId, 2: optional Token token) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   DeviceBean updateDevice(1: optional DeviceBean deviceBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
-  string version();
-  map<string, string> versionInfo();
+  string version() throws (1: ServiceRuntimeException ex1);
+  map<string, string> versionInfo() throws (1: ServiceRuntimeException ex1);
 }

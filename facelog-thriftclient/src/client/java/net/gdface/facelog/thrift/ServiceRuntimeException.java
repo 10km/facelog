@@ -10,7 +10,7 @@ import static com.google.common.base.Preconditions.*;
 public class ServiceRuntimeException extends BaseServiceRuntimeException{
     private static final long serialVersionUID = 1L;
 
-    ServiceRuntimeException(net.gdface.facelog.thrift.client.ServiceRuntimeException cause) {
+    ServiceRuntimeException(net.gdface.facelog.client.thrift.ServiceRuntimeException cause) {
         super(checkNotNull(cause,"cause is null"));
         type = cause.getType();
         message = cause.getMessage();
