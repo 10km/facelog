@@ -28,7 +28,7 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>common-thrift</artifactId>
+			<artifactId>common-thrifty</artifactId>
 			<version>${common-java.version}</version>
 		</dependency>
 		<dependency>
@@ -57,7 +57,7 @@
 						<configuration>
 							<sources>
 								<source>${project.basedir}/src/client/java</source>
-								<source>${project.basedir}/src/thrift/java</source>
+								<source>${project.basedir}/src/thrifty/java</source>
 							</sources>
 						</configuration>
 					</execution>
