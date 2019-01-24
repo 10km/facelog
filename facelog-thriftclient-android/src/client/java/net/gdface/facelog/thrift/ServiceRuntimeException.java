@@ -12,10 +12,10 @@ public class ServiceRuntimeException extends BaseServiceRuntimeException{
 
     ServiceRuntimeException(net.gdface.facelog.client.thrift.ServiceRuntimeException cause) {
         super(checkNotNull(cause,"cause is null"));
-        type = cause.getType();
-        message = cause.getMessage();
-        causeClass = cause.getCauseClass();
-        causeFields = cause.getCauseFields();
-        serviceStackTraceMessage = cause.getServiceStackTraceMessage();
+        type = cause.type;
+        message = cause.message;
+        causeClass = cause.causeClass;
+        causeFields = cause.causeFields;
+        serviceStackTraceMessage = cause.serviceStackTraceMessage;
     }        
 }

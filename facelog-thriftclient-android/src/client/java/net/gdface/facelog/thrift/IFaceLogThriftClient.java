@@ -18,14 +18,21 @@ import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.thrift.TypeTransformer;
-import net.gdface.thrift.ClientFactory;
 
-import com.facebook.swift.service.RuntimeTApplicationException;
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicReference;
+import net.gdface.thrift.ClientFactory;
+import com.google.common.base.Function;
+import com.google.common.base.Throwables;
+import com.microsoft.thrifty.ThriftException;
+import com.microsoft.thrifty.service.AsyncClientBase;
+import com.microsoft.thrifty.service.ServiceMethodCallback;
+
 import static com.google.common.base.Preconditions.*;
 
 /**
  * 基于thrift/swift框架生成的client端代码提供{@link IFaceLog}接口的RPC实现(线程安全)<br>
- * 转发所有{@link IFaceLog}接口方法到{@link #delegate()}指定的实例<br>
+ * 转发所有{@link IFaceLog}接口方法到{@link net.gdface.facelog.client.thrift.IFaceLogClient}实例<br>
  * 所有服务端抛出的{@link RuntimeException}异常被封装到{@link ServiceRuntimeException}中抛出<br>
  * Example:<br>
  * <pre>
@@ -45,14 +52,78 @@ public class IFaceLogThriftClient implements IFaceLog {
         super();
         this.factory = checkNotNull(factory,"factory is null");
     }
-
     /**
-     * 返回{@link net.gdface.facelog.client.thrift.IFaceLog}实例
+     * 当前调用的回调函数，由当前接口方法设置
+     */
+    private final AtomicReference<ServiceMethodCallback<?>> currentCallback = new AtomicReference<ServiceMethodCallback<?>>();
+    private final AsyncClientBase.Listener closeListener = new AsyncClientBase.Listener(){
+        @Override
+        public void onTransportClosed() {
+        }
+
+        @Override
+        public void onError(Throwable error) {
+            currentCallback.get().onError(error);
+        }        
+    };
+    private interface ServiceCall<T> {
+        public void call(ServiceMethodCallback<T> callback);
+    }
+    /**
+     * 异常调用转同步调用实现
+     * @param transformer
+     * @param serviceCall
      * @return
      */
-    protected net.gdface.facelog.client.thrift.IFaceLog delegate() {
-        return factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLog.class);
-    }
+    protected <R,L>R syncCall(final Function<L, R> transformer,final ServiceCall<L> serviceCall){
+        final AtomicReference<R> res = new AtomicReference<R>(null);
+        final AtomicReference<Throwable> err = new AtomicReference<Throwable>(null);
+        final Object lock = new Object();
+        final ServiceMethodCallback<L> callback = new ServiceMethodCallback<L>() {
+
+            @Override
+            public void onSuccess(L result) {
+                res.set(transformer.apply(result));
+                synchronized(lock){
+                    lock.notifyAll();
+                }
+            }
+
+            @Override
+            public void onError(Throwable error) {
+                err.set(error);
+                synchronized(lock){
+                    lock.notifyAll();
+                }
+            }
+        };
+        currentCallback.set(callback);
+        synchronized(lock){
+            try {
+                serviceCall.call(callback);
+                lock.wait();
+            } catch (InterruptedException e) {
+                err.set(e);
+            }
+        }
+        if(null != err.get()){
+            try{
+                throw err.get();
+            }catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+                throw new ServiceRuntimeException(e);
+            }
+            catch(ThriftException e){
+                if(e.kind == ThriftException.Kind.MISSING_RESULT  ){
+                    return null;
+                }
+            }
+            catch (Throwable e) {
+                Throwables.throwIfUnchecked(e);
+                throw new RuntimeException(e);                
+            }
+        }
+        return res.get();
+    }    
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -64,1442 +135,1993 @@ public class IFaceLogThriftClient implements IFaceLog {
         return builder.toString();
     }
     @Override
-    public FeatureBean addFeature(byte[] feature,
-        Integer personId,
-        List<FaceBean> faecBeans,
-        Token token) 
+    public FeatureBean addFeature(final byte[] feature,
+        final Integer personId,
+        final List<FaceBean> faecBeans,
+        final Token token) 
         throws DuplicateRecordException{
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.addFeature(TypeTransformer.getInstance().to(
-                    feature,
-                    byte[].class,
-                    okio.ByteString.class),
-                personId,
-                TypeTransformer.getInstance().to(
-                    faecBeans,
-                    FaceBean.class,
-                    net.gdface.facelog.client.thrift.FaceBean.class),
-                TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
+            return syncCall(new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>() {
+                    @Override
+                    public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.FeatureBean.class,
                     FeatureBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
-            throw TypeTransformer.getInstance().to(
-                    e,
-                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
-                    DuplicateRecordException.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.FeatureBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.FeatureBean> nativeCallback){
+                        service.addFeature(TypeTransformer.getInstance().to(
+                    feature,
+                    byte[].class,
+                    okio.ByteString.class),personId,TypeTransformer.getInstance().to(
+                    faecBeans,
+                    FaceBean.class,
+                    net.gdface.facelog.client.thrift.FaceBean.class),TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public FeatureBean addFeature(byte[] feature,
-        Integer personId,
-        Map<ByteBuffer, FaceBean> faceInfo,
-        Integer deviceId,
-        Token token) 
+    public FeatureBean addFeature(final byte[] feature,
+        final Integer personId,
+        final Map<ByteBuffer, FaceBean> faceInfo,
+        final Integer deviceId,
+        final Token token) 
         throws DuplicateRecordException{
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.addFeatureMulti(TypeTransformer.getInstance().to(
+            return syncCall(new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>() {
+                    @Override
+                    public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.FeatureBean.class,
+                    FeatureBean.class);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.FeatureBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.FeatureBean> nativeCallback){
+                        service.addFeatureMulti(TypeTransformer.getInstance().to(
                     feature,
                     byte[].class,
-                    okio.ByteString.class),
-                personId,
-                TypeTransformer.getInstance().to(
+                    okio.ByteString.class),personId,TypeTransformer.getInstance().to(
                     faceInfo,
                     ByteBuffer.class,
                     FaceBean.class,
                     okio.ByteString.class,
-                    net.gdface.facelog.client.thrift.FaceBean.class),
-                deviceId,
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.FaceBean.class),deviceId,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-                    net.gdface.facelog.client.thrift.FeatureBean.class,
-                    FeatureBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
-            throw TypeTransformer.getInstance().to(
-                    e,
-                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
-                    DuplicateRecordException.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public ImageBean addImage(byte[] imageData,
-        Integer deviceId,
-        FaceBean faceBean,
-        Integer personId,
-        Token token) 
+    public ImageBean addImage(final byte[] imageData,
+        final Integer deviceId,
+        final FaceBean faceBean,
+        final Integer personId,
+        final Token token) 
         throws DuplicateRecordException{
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.addImage(TypeTransformer.getInstance().to(
+            return syncCall(new Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>() {
+                    @Override
+                    public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.ImageBean.class,
+                    ImageBean.class);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.ImageBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.ImageBean> nativeCallback){
+                        service.addImage(TypeTransformer.getInstance().to(
                     imageData,
                     byte[].class,
-                    okio.ByteString.class),
-                deviceId,
-                TypeTransformer.getInstance().to(
+                    okio.ByteString.class),deviceId,TypeTransformer.getInstance().to(
                     faceBean,
                     FaceBean.class,
-                    net.gdface.facelog.client.thrift.FaceBean.class),
-                personId,
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.FaceBean.class),personId,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-                    net.gdface.facelog.client.thrift.ImageBean.class,
-                    ImageBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
-            throw TypeTransformer.getInstance().to(
-                    e,
-                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
-                    DuplicateRecordException.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public void addLog(LogBean bean,
-        Token token) 
+    public void addLog(final LogBean bean,
+        final Token token) 
         throws DuplicateRecordException{
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-             instance.addLog(TypeTransformer.getInstance().to(
+             syncCall(new Function<Void,Void>() {
+                    @Override
+                    public Void apply(Void input) {
+                        return input;
+                    }},
+                    new ServiceCall<Void>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Void> nativeCallback){
+                        service.addLog(TypeTransformer.getInstance().to(
                     bean,
                     LogBean.class,
-                    net.gdface.facelog.client.thrift.LogBean.class),
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.LogBean.class),TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
-            throw TypeTransformer.getInstance().to(
-                    e,
-                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
-                    DuplicateRecordException.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public void addLogs(List<LogBean> beans,
-        Token token) 
+    public void addLogs(final List<LogBean> beans,
+        final Token token) 
         throws DuplicateRecordException{
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-             instance.addLogs(TypeTransformer.getInstance().to(
+             syncCall(new Function<Void,Void>() {
+                    @Override
+                    public Void apply(Void input) {
+                        return input;
+                    }},
+                    new ServiceCall<Void>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Void> nativeCallback){
+                        service.addLogs(TypeTransformer.getInstance().to(
                     beans,
                     LogBean.class,
-                    net.gdface.facelog.client.thrift.LogBean.class),
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.LogBean.class),TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
-            throw TypeTransformer.getInstance().to(
-                    e,
-                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
-                    DuplicateRecordException.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public void addPermit(int deviceGroupId,
-        int personGroupId,
-        Token token) 
+    public void addPermit(final int deviceGroupId,
+        final int personGroupId,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-             instance.addPermitById(deviceGroupId,
-                personGroupId,
-                TypeTransformer.getInstance().to(
+             syncCall(new Function<Void,Void>() {
+                    @Override
+                    public Void apply(Void input) {
+                        return input;
+                    }},
+                    new ServiceCall<Void>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Void> nativeCallback){
+                        service.addPermitById(deviceGroupId,personGroupId,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public void addPermit(DeviceGroupBean deviceGroup,
-        PersonGroupBean personGroup,
-        Token token) 
+    public void addPermit(final DeviceGroupBean deviceGroup,
+        final PersonGroupBean personGroup,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-             instance.addPermit(TypeTransformer.getInstance().to(
+             syncCall(new Function<Void,Void>() {
+                    @Override
+                    public Void apply(Void input) {
+                        return input;
+                    }},
+                    new ServiceCall<Void>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Void> nativeCallback){
+                        service.addPermit(TypeTransformer.getInstance().to(
                     deviceGroup,
                     DeviceGroupBean.class,
-                    net.gdface.facelog.client.thrift.DeviceGroupBean.class),
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.DeviceGroupBean.class),TypeTransformer.getInstance().to(
                     personGroup,
                     PersonGroupBean.class,
-                    net.gdface.facelog.client.thrift.PersonGroupBean.class),
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.PersonGroupBean.class),TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public String applyAckChannel(Token token) 
+    public String applyAckChannel(final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.applyAckChannel(TypeTransformer.getInstance().to(
+            return syncCall(new Function<String,String>() {
+                    @Override
+                    public String apply(String input) {
+                        return input;
+                    }},
+                    new ServiceCall<String>(){
+                    @Override
+                    public void call(ServiceMethodCallback<String> nativeCallback){
+                        service.applyAckChannel(TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public String applyAckChannel(Token token,
-        long duration) 
+    public String applyAckChannel(final Token token,
+        final long duration) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.applyAckChannelWithDuration(TypeTransformer.getInstance().to(
+            return syncCall(new Function<String,String>() {
+                    @Override
+                    public String apply(String input) {
+                        return input;
+                    }},
+                    new ServiceCall<String>(){
+                    @Override
+                    public void call(ServiceMethodCallback<String> nativeCallback){
+                        service.applyAckChannelWithDuration(TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class),
-                duration);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    net.gdface.facelog.client.thrift.Token.class),duration,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public long applyCmdSn(Token token) 
+    public long applyCmdSn(final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.applyCmdSn(TypeTransformer.getInstance().to(
+            return syncCall(new Function<Long,Long>() {
+                    @Override
+                    public Long apply(Long input) {
+                        return input;
+                    }},
+                    new ServiceCall<Long>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Long> nativeCallback){
+                        service.applyCmdSn(TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public Token applyPersonToken(int personId,
-        String password,
-        boolean isMd5) 
+    public Token applyPersonToken(final int personId,
+        final String password,
+        final boolean isMd5) 
         throws ServiceSecurityException{
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.applyPersonToken(personId,
-                password,
-                isMd5),
+            return syncCall(new Function<net.gdface.facelog.client.thrift.Token,Token>() {
+                    @Override
+                    public Token apply(net.gdface.facelog.client.thrift.Token input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.Token.class,
                     Token.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
-            throw TypeTransformer.getInstance().to(
-                    e,
-                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
-                    ServiceSecurityException.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.Token>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.Token> nativeCallback){
+                        service.applyPersonToken(personId,password,isMd5,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public Token applyRootToken(String password,
-        boolean isMd5) 
+    public Token applyRootToken(final String password,
+        final boolean isMd5) 
         throws ServiceSecurityException{
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.applyRootToken(password,
-                isMd5),
+            return syncCall(new Function<net.gdface.facelog.client.thrift.Token,Token>() {
+                    @Override
+                    public Token apply(net.gdface.facelog.client.thrift.Token input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.Token.class,
                     Token.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
-            throw TypeTransformer.getInstance().to(
-                    e,
-                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
-                    ServiceSecurityException.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.Token>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.Token> nativeCallback){
+                        service.applyRootToken(password,isMd5,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public int countDeviceByWhere(String where) 
+    public int countDeviceByWhere(final String where) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.countDeviceByWhere(where);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+            return syncCall(new Function<Integer,Integer>() {
+                    @Override
+                    public Integer apply(Integer input) {
+                        return input;
+                    }},
+                    new ServiceCall<Integer>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Integer> nativeCallback){
+                        service.countDeviceByWhere(where,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public int countDeviceGroupByWhere(String where) 
+    public int countDeviceGroupByWhere(final String where) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.countDeviceGroupByWhere(where);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+            return syncCall(new Function<Integer,Integer>() {
+                    @Override
+                    public Integer apply(Integer input) {
+                        return input;
+                    }},
+                    new ServiceCall<Integer>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Integer> nativeCallback){
+                        service.countDeviceGroupByWhere(where,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public int countLogByWhere(String where) 
+    public int countLogByWhere(final String where) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.countLogByWhere(where);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+            return syncCall(new Function<Integer,Integer>() {
+                    @Override
+                    public Integer apply(Integer input) {
+                        return input;
+                    }},
+                    new ServiceCall<Integer>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Integer> nativeCallback){
+                        service.countLogByWhere(where,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public int countLogLightByVerifyTime(long timestamp) 
+    public int countLogLightByVerifyTime(final long timestamp) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.countLogLightByVerifyTime(timestamp);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+            return syncCall(new Function<Integer,Integer>() {
+                    @Override
+                    public Integer apply(Integer input) {
+                        return input;
+                    }},
+                    new ServiceCall<Integer>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Integer> nativeCallback){
+                        service.countLogLightByVerifyTime(timestamp,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public int countLogLightByWhere(String where) 
+    public int countLogLightByWhere(final String where) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.countLogLightByWhere(where);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+            return syncCall(new Function<Integer,Integer>() {
+                    @Override
+                    public Integer apply(Integer input) {
+                        return input;
+                    }},
+                    new ServiceCall<Integer>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Integer> nativeCallback){
+                        service.countLogLightByWhere(where,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public int countPersonByWhere(String where) 
+    public int countPersonByWhere(final String where) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.countPersonByWhere(where);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+            return syncCall(new Function<Integer,Integer>() {
+                    @Override
+                    public Integer apply(Integer input) {
+                        return input;
+                    }},
+                    new ServiceCall<Integer>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Integer> nativeCallback){
+                        service.countPersonByWhere(where,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public int countPersonGroupByWhere(String where) 
+    public int countPersonGroupByWhere(final String where) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.countPersonGroupByWhere(where);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+            return syncCall(new Function<Integer,Integer>() {
+                    @Override
+                    public Integer apply(Integer input) {
+                        return input;
+                    }},
+                    new ServiceCall<Integer>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Integer> nativeCallback){
+                        service.countPersonGroupByWhere(where,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public int deleteAllFeaturesByPersonId(int personId,
-        boolean deleteImage,
-        Token token) 
+    public int deleteAllFeaturesByPersonId(final int personId,
+        final boolean deleteImage,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.deleteAllFeaturesByPersonId(personId,
-                deleteImage,
-                TypeTransformer.getInstance().to(
+            return syncCall(new Function<Integer,Integer>() {
+                    @Override
+                    public Integer apply(Integer input) {
+                        return input;
+                    }},
+                    new ServiceCall<Integer>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Integer> nativeCallback){
+                        service.deleteAllFeaturesByPersonId(personId,deleteImage,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public int deleteDeviceGroup(int deviceGroupId,
-        Token token) 
+    public int deleteDeviceGroup(final int deviceGroupId,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.deleteDeviceGroup(deviceGroupId,
-                TypeTransformer.getInstance().to(
+            return syncCall(new Function<Integer,Integer>() {
+                    @Override
+                    public Integer apply(Integer input) {
+                        return input;
+                    }},
+                    new ServiceCall<Integer>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Integer> nativeCallback){
+                        service.deleteDeviceGroup(deviceGroupId,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<String> deleteFeature(String featureMd5,
-        boolean deleteImage,
-        Token token) 
+    public List<String> deleteFeature(final String featureMd5,
+        final boolean deleteImage,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.deleteFeature(featureMd5,
-                deleteImage,
-                TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
+            return syncCall(new Function<List<String>,List<String>>() {
+                    @Override
+                    public List<String> apply(List<String> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     String.class,
                     String.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
-        }
-        finally{
-            factory.releaseInstance(instance);
-        }
-    }
-    @Override
-    public int deleteImage(String imageMd5,
-        Token token) 
-        {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
-        try{
-            return instance.deleteImage(imageMd5,
-                TypeTransformer.getInstance().to(
+                    }},
+                    new ServiceCall<List<String>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<String>> nativeCallback){
+                        service.deleteFeature(featureMd5,deleteImage,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public int deletePermit(DeviceGroupBean deviceGroup,
-        PersonGroupBean personGroup,
-        Token token) 
+    public int deleteImage(final String imageMd5,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.deletePermit(TypeTransformer.getInstance().to(
+            return syncCall(new Function<Integer,Integer>() {
+                    @Override
+                    public Integer apply(Integer input) {
+                        return input;
+                    }},
+                    new ServiceCall<Integer>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Integer> nativeCallback){
+                        service.deleteImage(imageMd5,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
+        }
+        finally{
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
+        }
+    }
+    @Override
+    public int deletePermit(final DeviceGroupBean deviceGroup,
+        final PersonGroupBean personGroup,
+        final Token token) 
+        {
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
+        try{
+            return syncCall(new Function<Integer,Integer>() {
+                    @Override
+                    public Integer apply(Integer input) {
+                        return input;
+                    }},
+                    new ServiceCall<Integer>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Integer> nativeCallback){
+                        service.deletePermit(TypeTransformer.getInstance().to(
                     deviceGroup,
                     DeviceGroupBean.class,
-                    net.gdface.facelog.client.thrift.DeviceGroupBean.class),
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.DeviceGroupBean.class),TypeTransformer.getInstance().to(
                     personGroup,
                     PersonGroupBean.class,
-                    net.gdface.facelog.client.thrift.PersonGroupBean.class),
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.PersonGroupBean.class),TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public int deletePerson(int personId,
-        Token token) 
+    public int deletePerson(final int personId,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.deletePerson(personId,
-                TypeTransformer.getInstance().to(
+            return syncCall(new Function<Integer,Integer>() {
+                    @Override
+                    public Integer apply(Integer input) {
+                        return input;
+                    }},
+                    new ServiceCall<Integer>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Integer> nativeCallback){
+                        service.deletePerson(personId,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public int deletePersonByPapersNum(String papersNum,
-        Token token) 
+    public int deletePersonByPapersNum(final String papersNum,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.deletePersonByPapersNum(papersNum,
-                TypeTransformer.getInstance().to(
+            return syncCall(new Function<Integer,Integer>() {
+                    @Override
+                    public Integer apply(Integer input) {
+                        return input;
+                    }},
+                    new ServiceCall<Integer>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Integer> nativeCallback){
+                        service.deletePersonByPapersNum(papersNum,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public int deletePersonGroup(int personGroupId,
-        Token token) 
+    public int deletePersonGroup(final int personGroupId,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.deletePersonGroup(personGroupId,
-                TypeTransformer.getInstance().to(
+            return syncCall(new Function<Integer,Integer>() {
+                    @Override
+                    public Integer apply(Integer input) {
+                        return input;
+                    }},
+                    new ServiceCall<Integer>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Integer> nativeCallback){
+                        service.deletePersonGroup(personGroupId,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public int deletePersons(List<Integer> personIdList,
-        Token token) 
+    public int deletePersons(final List<Integer> personIdList,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.deletePersons(TypeTransformer.getInstance().to(
+            return syncCall(new Function<Integer,Integer>() {
+                    @Override
+                    public Integer apply(Integer input) {
+                        return input;
+                    }},
+                    new ServiceCall<Integer>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Integer> nativeCallback){
+                        service.deletePersons(TypeTransformer.getInstance().to(
                     personIdList,
                     Integer.class,
-                    Integer.class),
-                TypeTransformer.getInstance().to(
+                    Integer.class),TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public int deletePersonsByPapersNum(List<String> papersNumlist,
-        Token token) 
+    public int deletePersonsByPapersNum(final List<String> papersNumlist,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.deletePersonsByPapersNum(TypeTransformer.getInstance().to(
+            return syncCall(new Function<Integer,Integer>() {
+                    @Override
+                    public Integer apply(Integer input) {
+                        return input;
+                    }},
+                    new ServiceCall<Integer>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Integer> nativeCallback){
+                        service.deletePersonsByPapersNum(TypeTransformer.getInstance().to(
                     papersNumlist,
                     String.class,
-                    String.class),
-                TypeTransformer.getInstance().to(
+                    String.class),TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public void disablePerson(int personId,
-        Token token) 
+    public void disablePerson(final int personId,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-             instance.disablePerson(personId,
-                TypeTransformer.getInstance().to(
+             syncCall(new Function<Void,Void>() {
+                    @Override
+                    public Void apply(Void input) {
+                        return input;
+                    }},
+                    new ServiceCall<Void>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Void> nativeCallback){
+                        service.disablePerson(personId,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public void disablePerson(List<Integer> personIdList,
-        Token token) 
+    public void disablePerson(final List<Integer> personIdList,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-             instance.disablePersonList(TypeTransformer.getInstance().to(
+             syncCall(new Function<Void,Void>() {
+                    @Override
+                    public Void apply(Void input) {
+                        return input;
+                    }},
+                    new ServiceCall<Void>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Void> nativeCallback){
+                        service.disablePersonList(TypeTransformer.getInstance().to(
                     personIdList,
                     Integer.class,
-                    Integer.class),
-                TypeTransformer.getInstance().to(
+                    Integer.class),TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public boolean existsDevice(int id) 
+    public boolean existsDevice(final int id) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.existsDevice(id);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+            return syncCall(new Function<Boolean,Boolean>() {
+                    @Override
+                    public Boolean apply(Boolean input) {
+                        return input;
+                    }},
+                    new ServiceCall<Boolean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Boolean> nativeCallback){
+                        service.existsDevice(id,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public boolean existsFeature(String md5) 
+    public boolean existsFeature(final String md5) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.existsFeature(md5);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+            return syncCall(new Function<Boolean,Boolean>() {
+                    @Override
+                    public Boolean apply(Boolean input) {
+                        return input;
+                    }},
+                    new ServiceCall<Boolean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Boolean> nativeCallback){
+                        service.existsFeature(md5,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public boolean existsImage(String md5) 
+    public boolean existsImage(final String md5) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.existsImage(md5);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+            return syncCall(new Function<Boolean,Boolean>() {
+                    @Override
+                    public Boolean apply(Boolean input) {
+                        return input;
+                    }},
+                    new ServiceCall<Boolean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Boolean> nativeCallback){
+                        service.existsImage(md5,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public boolean existsPerson(int persionId) 
+    public boolean existsPerson(final int persionId) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.existsPerson(persionId);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+            return syncCall(new Function<Boolean,Boolean>() {
+                    @Override
+                    public Boolean apply(Boolean input) {
+                        return input;
+                    }},
+                    new ServiceCall<Boolean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Boolean> nativeCallback){
+                        service.existsPerson(persionId,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public DeviceBean getDevice(int deviceId) 
+    public DeviceBean getDevice(final int deviceId) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getDevice(deviceId),
+            return syncCall(new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>() {
+                    @Override
+                    public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.DeviceBean.class,
                     DeviceBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.DeviceBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceBean> nativeCallback){
+                        service.getDevice(deviceId,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public DeviceGroupBean getDeviceGroup(int deviceGroupId) 
+    public DeviceGroupBean getDeviceGroup(final int deviceGroupId) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getDeviceGroup(deviceGroupId),
+            return syncCall(new Function<net.gdface.facelog.client.thrift.DeviceGroupBean,DeviceGroupBean>() {
+                    @Override
+                    public DeviceGroupBean apply(net.gdface.facelog.client.thrift.DeviceGroupBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.DeviceGroupBean.class,
                     DeviceGroupBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.DeviceGroupBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceGroupBean> nativeCallback){
+                        service.getDeviceGroup(deviceGroupId,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<DeviceGroupBean> getDeviceGroups(List<Integer> groupIdList) 
+    public List<DeviceGroupBean> getDeviceGroups(final List<Integer> groupIdList) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getDeviceGroups(TypeTransformer.getInstance().to(
+            return syncCall(new Function<List<net.gdface.facelog.client.thrift.DeviceGroupBean>,List<DeviceGroupBean>>() {
+                    @Override
+                    public List<DeviceGroupBean> apply(List<net.gdface.facelog.client.thrift.DeviceGroupBean> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.DeviceGroupBean.class,
+                    DeviceGroupBean.class);
+                    }},
+                    new ServiceCall<List<net.gdface.facelog.client.thrift.DeviceGroupBean>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<net.gdface.facelog.client.thrift.DeviceGroupBean>> nativeCallback){
+                        service.getDeviceGroups(TypeTransformer.getInstance().to(
                     groupIdList,
                     Integer.class,
-                    Integer.class)),
-                    net.gdface.facelog.client.thrift.DeviceGroupBean.class,
-                    DeviceGroupBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    Integer.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<Integer> getDeviceGroupsBelongs(int deviceId) 
+    public List<Integer> getDeviceGroupsBelongs(final int deviceId) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getDeviceGroupsBelongs(deviceId),
+            return syncCall(new Function<List<Integer>,List<Integer>>() {
+                    @Override
+                    public List<Integer> apply(List<Integer> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     Integer.class,
                     Integer.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<Integer>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<Integer>> nativeCallback){
+                        service.getDeviceGroupsBelongs(deviceId,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public Integer getDeviceIdOfFeature(String featureMd5) 
+    public Integer getDeviceIdOfFeature(final String featureMd5) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.getDeviceIdOfFeature(featureMd5);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+            return syncCall(new Function<Integer,Integer>() {
+                    @Override
+                    public Integer apply(Integer input) {
+                        return input;
+                    }},
+                    new ServiceCall<Integer>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Integer> nativeCallback){
+                        service.getDeviceIdOfFeature(featureMd5,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<DeviceBean> getDevices(List<Integer> idList) 
+    public List<DeviceBean> getDevices(final List<Integer> idList) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getDevices(TypeTransformer.getInstance().to(
-                    idList,
-                    Integer.class,
-                    Integer.class)),
+            return syncCall(new Function<List<net.gdface.facelog.client.thrift.DeviceBean>,List<DeviceBean>>() {
+                    @Override
+                    public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.DeviceBean.class,
                     DeviceBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<net.gdface.facelog.client.thrift.DeviceBean>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<net.gdface.facelog.client.thrift.DeviceBean>> nativeCallback){
+                        service.getDevices(TypeTransformer.getInstance().to(
+                    idList,
+                    Integer.class,
+                    Integer.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<Integer> getDevicesOfGroup(int deviceGroupId) 
+    public List<Integer> getDevicesOfGroup(final int deviceGroupId) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getDevicesOfGroup(deviceGroupId),
+            return syncCall(new Function<List<Integer>,List<Integer>>() {
+                    @Override
+                    public List<Integer> apply(List<Integer> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     Integer.class,
                     Integer.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<Integer>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<Integer>> nativeCallback){
+                        service.getDevicesOfGroup(deviceGroupId,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public FeatureBean getFeature(String md5) 
+    public FeatureBean getFeature(final String md5) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getFeature(md5),
+            return syncCall(new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>() {
+                    @Override
+                    public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.FeatureBean.class,
                     FeatureBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.FeatureBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.FeatureBean> nativeCallback){
+                        service.getFeature(md5,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<String> getFeatureBeansByPersonId(int personId) 
+    public List<String> getFeatureBeansByPersonId(final int personId) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getFeatureBeansByPersonId(personId),
+            return syncCall(new Function<List<String>,List<String>>() {
+                    @Override
+                    public List<String> apply(List<String> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     String.class,
                     String.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<String>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<String>> nativeCallback){
+                        service.getFeatureBeansByPersonId(personId,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public byte[] getFeatureBytes(String md5) 
+    public byte[] getFeatureBytes(final String md5) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getFeatureBytes(md5),
+            return syncCall(new Function<okio.ByteString,byte[]>() {
+                    @Override
+                    public byte[] apply(okio.ByteString input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     okio.ByteString.class,
                     byte[].class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<okio.ByteString>(){
+                    @Override
+                    public void call(ServiceMethodCallback<okio.ByteString> nativeCallback){
+                        service.getFeatureBytes(md5,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<FeatureBean> getFeatures(List<String> md5) 
+    public List<FeatureBean> getFeatures(final List<String> md5) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getFeatures(TypeTransformer.getInstance().to(
+            return syncCall(new Function<List<net.gdface.facelog.client.thrift.FeatureBean>,List<FeatureBean>>() {
+                    @Override
+                    public List<FeatureBean> apply(List<net.gdface.facelog.client.thrift.FeatureBean> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.FeatureBean.class,
+                    FeatureBean.class);
+                    }},
+                    new ServiceCall<List<net.gdface.facelog.client.thrift.FeatureBean>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<net.gdface.facelog.client.thrift.FeatureBean>> nativeCallback){
+                        service.getFeatures(TypeTransformer.getInstance().to(
                     md5,
                     String.class,
-                    String.class)),
-                    net.gdface.facelog.client.thrift.FeatureBean.class,
-                    FeatureBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    String.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<String> getFeaturesOfPerson(int personId) 
+    public List<String> getFeaturesOfPerson(final int personId) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getFeaturesOfPerson(personId),
+            return syncCall(new Function<List<String>,List<String>>() {
+                    @Override
+                    public List<String> apply(List<String> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     String.class,
                     String.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<String>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<String>> nativeCallback){
+                        service.getFeaturesOfPerson(personId,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public boolean getGroupPermit(int deviceId,
-        int personGroupId) 
+    public boolean getGroupPermit(final int deviceId,
+        final int personGroupId) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.getGroupPermit(deviceId,
-                personGroupId);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+            return syncCall(new Function<Boolean,Boolean>() {
+                    @Override
+                    public Boolean apply(Boolean input) {
+                        return input;
+                    }},
+                    new ServiceCall<Boolean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Boolean> nativeCallback){
+                        service.getGroupPermit(deviceId,personGroupId,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<Boolean> getGroupPermits(int deviceId,
-        List<Integer> personGroupIdList) 
+    public List<Boolean> getGroupPermits(final int deviceId,
+        final List<Integer> personGroupIdList) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getGroupPermits(deviceId,
-                TypeTransformer.getInstance().to(
+            return syncCall(new Function<List<Boolean>,List<Boolean>>() {
+                    @Override
+                    public List<Boolean> apply(List<Boolean> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
+                    Boolean.class,
+                    Boolean.class);
+                    }},
+                    new ServiceCall<List<Boolean>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<Boolean>> nativeCallback){
+                        service.getGroupPermits(deviceId,TypeTransformer.getInstance().to(
                     personGroupIdList,
                     Integer.class,
-                    Integer.class)),
-                    Boolean.class,
-                    Boolean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    Integer.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public ImageBean getImage(String imageMD5) 
+    public ImageBean getImage(final String imageMD5) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getImage(imageMD5),
+            return syncCall(new Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>() {
+                    @Override
+                    public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.ImageBean.class,
                     ImageBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.ImageBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.ImageBean> nativeCallback){
+                        service.getImage(imageMD5,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public byte[] getImageBytes(String imageMD5) 
+    public byte[] getImageBytes(final String imageMD5) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getImageBytes(imageMD5),
+            return syncCall(new Function<okio.ByteString,byte[]>() {
+                    @Override
+                    public byte[] apply(okio.ByteString input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     okio.ByteString.class,
                     byte[].class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<okio.ByteString>(){
+                    @Override
+                    public void call(ServiceMethodCallback<okio.ByteString> nativeCallback){
+                        service.getImageBytes(imageMD5,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<String> getImagesAssociatedByFeature(String featureMd5) 
+    public List<String> getImagesAssociatedByFeature(final String featureMd5) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getImagesAssociatedByFeature(featureMd5),
+            return syncCall(new Function<List<String>,List<String>>() {
+                    @Override
+                    public List<String> apply(List<String> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     String.class,
                     String.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<String>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<String>> nativeCallback){
+                        service.getImagesAssociatedByFeature(featureMd5,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<LogBean> getLogBeansByPersonId(int personId) 
+    public List<LogBean> getLogBeansByPersonId(final int personId) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getLogBeansByPersonId(personId),
+            return syncCall(new Function<List<net.gdface.facelog.client.thrift.LogBean>,List<LogBean>>() {
+                    @Override
+                    public List<LogBean> apply(List<net.gdface.facelog.client.thrift.LogBean> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.LogBean.class,
                     LogBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<net.gdface.facelog.client.thrift.LogBean>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<net.gdface.facelog.client.thrift.LogBean>> nativeCallback){
+                        service.getLogBeansByPersonId(personId,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public PersonBean getPerson(int personId) 
+    public PersonBean getPerson(final int personId) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getPerson(personId),
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                    @Override
+                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.PersonBean.class,
                     PersonBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.PersonBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
+                        service.getPerson(personId,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public PersonBean getPersonByPapersNum(String papersNum) 
+    public PersonBean getPersonByPapersNum(final String papersNum) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getPersonByPapersNum(papersNum),
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                    @Override
+                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.PersonBean.class,
                     PersonBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.PersonBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
+                        service.getPersonByPapersNum(papersNum,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public PersonGroupBean getPersonGroup(int personGroupId) 
+    public PersonGroupBean getPersonGroup(final int personGroupId) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getPersonGroup(personGroupId),
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PersonGroupBean,PersonGroupBean>() {
+                    @Override
+                    public PersonGroupBean apply(net.gdface.facelog.client.thrift.PersonGroupBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.PersonGroupBean.class,
                     PersonGroupBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.PersonGroupBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonGroupBean> nativeCallback){
+                        service.getPersonGroup(personGroupId,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<PersonGroupBean> getPersonGroups(List<Integer> groupIdList) 
+    public List<PersonGroupBean> getPersonGroups(final List<Integer> groupIdList) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getPersonGroups(TypeTransformer.getInstance().to(
+            return syncCall(new Function<List<net.gdface.facelog.client.thrift.PersonGroupBean>,List<PersonGroupBean>>() {
+                    @Override
+                    public List<PersonGroupBean> apply(List<net.gdface.facelog.client.thrift.PersonGroupBean> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonGroupBean.class,
+                    PersonGroupBean.class);
+                    }},
+                    new ServiceCall<List<net.gdface.facelog.client.thrift.PersonGroupBean>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<net.gdface.facelog.client.thrift.PersonGroupBean>> nativeCallback){
+                        service.getPersonGroups(TypeTransformer.getInstance().to(
                     groupIdList,
                     Integer.class,
-                    Integer.class)),
-                    net.gdface.facelog.client.thrift.PersonGroupBean.class,
-                    PersonGroupBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    Integer.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<Integer> getPersonGroupsBelongs(int personId) 
+    public List<Integer> getPersonGroupsBelongs(final int personId) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getPersonGroupsBelongs(personId),
+            return syncCall(new Function<List<Integer>,List<Integer>>() {
+                    @Override
+                    public List<Integer> apply(List<Integer> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     Integer.class,
                     Integer.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<Integer>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<Integer>> nativeCallback){
+                        service.getPersonGroupsBelongs(personId,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public boolean getPersonPermit(int deviceId,
-        int personId) 
+    public boolean getPersonPermit(final int deviceId,
+        final int personId) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.getPersonPermit(deviceId,
-                personId);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+            return syncCall(new Function<Boolean,Boolean>() {
+                    @Override
+                    public Boolean apply(Boolean input) {
+                        return input;
+                    }},
+                    new ServiceCall<Boolean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Boolean> nativeCallback){
+                        service.getPersonPermit(deviceId,personId,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<Boolean> getPersonPermits(int deviceId,
-        List<Integer> personIdList) 
+    public List<Boolean> getPersonPermits(final int deviceId,
+        final List<Integer> personIdList) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getPersonPermits(deviceId,
-                TypeTransformer.getInstance().to(
-                    personIdList,
-                    Integer.class,
-                    Integer.class)),
+            return syncCall(new Function<List<Boolean>,List<Boolean>>() {
+                    @Override
+                    public List<Boolean> apply(List<Boolean> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     Boolean.class,
                     Boolean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<Boolean>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<Boolean>> nativeCallback){
+                        service.getPersonPermits(deviceId,TypeTransformer.getInstance().to(
+                    personIdList,
+                    Integer.class,
+                    Integer.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<PersonBean> getPersons(List<Integer> idList) 
+    public List<PersonBean> getPersons(final List<Integer> idList) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getPersons(TypeTransformer.getInstance().to(
-                    idList,
-                    Integer.class,
-                    Integer.class)),
+            return syncCall(new Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>() {
+                    @Override
+                    public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.PersonBean.class,
                     PersonBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<net.gdface.facelog.client.thrift.PersonBean>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<net.gdface.facelog.client.thrift.PersonBean>> nativeCallback){
+                        service.getPersons(TypeTransformer.getInstance().to(
+                    idList,
+                    Integer.class,
+                    Integer.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<Integer> getPersonsOfGroup(int personGroupId) 
+    public List<Integer> getPersonsOfGroup(final int personGroupId) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getPersonsOfGroup(personGroupId),
+            return syncCall(new Function<List<Integer>,List<Integer>>() {
+                    @Override
+                    public List<Integer> apply(List<Integer> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     Integer.class,
                     Integer.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<Integer>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<Integer>> nativeCallback){
+                        service.getPersonsOfGroup(personGroupId,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public String getProperty(String key,
-        Token token) 
+    public String getProperty(final String key,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.getProperty(key,
-                TypeTransformer.getInstance().to(
+            return syncCall(new Function<String,String>() {
+                    @Override
+                    public String apply(String input) {
+                        return input;
+                    }},
+                    new ServiceCall<String>(){
+                    @Override
+                    public void call(ServiceMethodCallback<String> nativeCallback){
+                        service.getProperty(key,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public Map<MQParam, String> getRedisParameters(Token token) 
+    public Map<MQParam, String> getRedisParameters(final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getRedisParameters(TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
+            return syncCall(new Function<Map<net.gdface.facelog.client.thrift.MQParam,String>,Map<MQParam, String>>() {
+                    @Override
+                    public Map<MQParam, String> apply(Map<net.gdface.facelog.client.thrift.MQParam,String> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.MQParam.class,
                     String.class,
                     MQParam.class,
                     String.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<Map<net.gdface.facelog.client.thrift.MQParam,String>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Map<net.gdface.facelog.client.thrift.MQParam,String>> nativeCallback){
+                        service.getRedisParameters(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public Map<String, String> getServiceConfig(Token token) 
+    public Map<String, String> getServiceConfig(final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getServiceConfig(TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
+            return syncCall(new Function<Map<String,String>,Map<String, String>>() {
+                    @Override
+                    public Map<String, String> apply(Map<String,String> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     String.class,
                     String.class,
                     String.class,
                     String.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<Map<String,String>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Map<String,String>> nativeCallback){
+                        service.getServiceConfig(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<Integer> getSubDeviceGroup(int deviceGroupId) 
+    public List<Integer> getSubDeviceGroup(final int deviceGroupId) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getSubDeviceGroup(deviceGroupId),
+            return syncCall(new Function<List<Integer>,List<Integer>>() {
+                    @Override
+                    public List<Integer> apply(List<Integer> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     Integer.class,
                     Integer.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<Integer>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<Integer>> nativeCallback){
+                        service.getSubDeviceGroup(deviceGroupId,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<Integer> getSubPersonGroup(int personGroupId) 
+    public List<Integer> getSubPersonGroup(final int personGroupId) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.getSubPersonGroup(personGroupId),
+            return syncCall(new Function<List<Integer>,List<Integer>>() {
+                    @Override
+                    public List<Integer> apply(List<Integer> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     Integer.class,
                     Integer.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<Integer>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<Integer>> nativeCallback){
+                        service.getSubPersonGroup(personGroupId,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public boolean isDisable(int personId) 
+    public boolean isDisable(final int personId) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.isDisable(personId);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+            return syncCall(new Function<Boolean,Boolean>() {
+                    @Override
+                    public Boolean apply(Boolean input) {
+                        return input;
+                    }},
+                    new ServiceCall<Boolean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Boolean> nativeCallback){
+                        service.isDisable(personId,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
@@ -1507,1200 +2129,1528 @@ public class IFaceLogThriftClient implements IFaceLog {
         return false;
     }
     @Override
-    public boolean isValidAckChannel(String ackChannel) 
+    public boolean isValidAckChannel(final String ackChannel) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.isValidAckChannel(ackChannel);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+            return syncCall(new Function<Boolean,Boolean>() {
+                    @Override
+                    public Boolean apply(Boolean input) {
+                        return input;
+                    }},
+                    new ServiceCall<Boolean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Boolean> nativeCallback){
+                        service.isValidAckChannel(ackChannel,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public boolean isValidCmdSn(long cmdSn) 
+    public boolean isValidCmdSn(final long cmdSn) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.isValidCmdSn(cmdSn);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+            return syncCall(new Function<Boolean,Boolean>() {
+                    @Override
+                    public Boolean apply(Boolean input) {
+                        return input;
+                    }},
+                    new ServiceCall<Boolean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Boolean> nativeCallback){
+                        service.isValidCmdSn(cmdSn,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public boolean isValidPassword(String userId,
-        String password,
-        boolean isMd5,
-        Token token) 
+    public boolean isValidPassword(final String userId,
+        final String password,
+        final boolean isMd5,
+        final Token token) 
         throws ServiceSecurityException{
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.isValidPassword(userId,
-                password,
-                isMd5,
-                TypeTransformer.getInstance().to(
+            return syncCall(new Function<Boolean,Boolean>() {
+                    @Override
+                    public Boolean apply(Boolean input) {
+                        return input;
+                    }},
+                    new ServiceCall<Boolean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Boolean> nativeCallback){
+                        service.isValidPassword(userId,password,isMd5,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
-            throw TypeTransformer.getInstance().to(
-                    e,
-                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
-                    ServiceSecurityException.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<Integer> listOfParentForDeviceGroup(int deviceGroupId) 
+    public List<Integer> listOfParentForDeviceGroup(final int deviceGroupId) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.listOfParentForDeviceGroup(deviceGroupId),
+            return syncCall(new Function<List<Integer>,List<Integer>>() {
+                    @Override
+                    public List<Integer> apply(List<Integer> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     Integer.class,
                     Integer.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<Integer>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<Integer>> nativeCallback){
+                        service.listOfParentForDeviceGroup(deviceGroupId,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<Integer> listOfParentForPersonGroup(int personGroupId) 
+    public List<Integer> listOfParentForPersonGroup(final int personGroupId) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.listOfParentForPersonGroup(personGroupId),
+            return syncCall(new Function<List<Integer>,List<Integer>>() {
+                    @Override
+                    public List<Integer> apply(List<Integer> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     Integer.class,
                     Integer.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<Integer>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<Integer>> nativeCallback){
+                        service.listOfParentForPersonGroup(personGroupId,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
     public List<Integer> loadAllPerson() 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.loadAllPerson(),
+            return syncCall(new Function<List<Integer>,List<Integer>>() {
+                    @Override
+                    public List<Integer> apply(List<Integer> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     Integer.class,
                     Integer.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<Integer>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<Integer>> nativeCallback){
+                        service.loadAllPerson(nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<DeviceBean> loadDeviceByWhere(String where,
-        int startRow,
-        int numRows) 
+    public List<DeviceBean> loadDeviceByWhere(final String where,
+        final int startRow,
+        final int numRows) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.loadDeviceByWhere(where,
-                startRow,
-                numRows),
+            return syncCall(new Function<List<net.gdface.facelog.client.thrift.DeviceBean>,List<DeviceBean>>() {
+                    @Override
+                    public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.DeviceBean.class,
                     DeviceBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<net.gdface.facelog.client.thrift.DeviceBean>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<net.gdface.facelog.client.thrift.DeviceBean>> nativeCallback){
+                        service.loadDeviceByWhere(where,startRow,numRows,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<Integer> loadDeviceGroupByWhere(String where,
-        int startRow,
-        int numRows) 
+    public List<Integer> loadDeviceGroupByWhere(final String where,
+        final int startRow,
+        final int numRows) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.loadDeviceGroupByWhere(where,
-                startRow,
-                numRows),
+            return syncCall(new Function<List<Integer>,List<Integer>>() {
+                    @Override
+                    public List<Integer> apply(List<Integer> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     Integer.class,
                     Integer.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<Integer>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<Integer>> nativeCallback){
+                        service.loadDeviceGroupByWhere(where,startRow,numRows,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<Integer> loadDeviceGroupIdByWhere(String where) 
+    public List<Integer> loadDeviceGroupIdByWhere(final String where) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.loadDeviceGroupIdByWhere(where),
+            return syncCall(new Function<List<Integer>,List<Integer>>() {
+                    @Override
+                    public List<Integer> apply(List<Integer> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     Integer.class,
                     Integer.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<Integer>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<Integer>> nativeCallback){
+                        service.loadDeviceGroupIdByWhere(where,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<Integer> loadDeviceIdByWhere(String where) 
+    public List<Integer> loadDeviceIdByWhere(final String where) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.loadDeviceIdByWhere(where),
+            return syncCall(new Function<List<Integer>,List<Integer>>() {
+                    @Override
+                    public List<Integer> apply(List<Integer> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     Integer.class,
                     Integer.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<Integer>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<Integer>> nativeCallback){
+                        service.loadDeviceIdByWhere(where,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<String> loadFeatureMd5ByUpdate(long timestamp) 
+    public List<String> loadFeatureMd5ByUpdate(final long timestamp) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.loadFeatureMd5ByUpdate(timestamp),
+            return syncCall(new Function<List<String>,List<String>>() {
+                    @Override
+                    public List<String> apply(List<String> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     String.class,
                     String.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<String>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<String>> nativeCallback){
+                        service.loadFeatureMd5ByUpdate(timestamp,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<LogBean> loadLogByWhere(String where,
-        int startRow,
-        int numRows) 
+    public List<LogBean> loadLogByWhere(final String where,
+        final int startRow,
+        final int numRows) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.loadLogByWhere(where,
-                startRow,
-                numRows),
+            return syncCall(new Function<List<net.gdface.facelog.client.thrift.LogBean>,List<LogBean>>() {
+                    @Override
+                    public List<LogBean> apply(List<net.gdface.facelog.client.thrift.LogBean> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.LogBean.class,
                     LogBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<net.gdface.facelog.client.thrift.LogBean>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<net.gdface.facelog.client.thrift.LogBean>> nativeCallback){
+                        service.loadLogByWhere(where,startRow,numRows,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<LogLightBean> loadLogLightByVerifyTime(long timestamp,
-        int startRow,
-        int numRows) 
+    public List<LogLightBean> loadLogLightByVerifyTime(final long timestamp,
+        final int startRow,
+        final int numRows) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.loadLogLightByVerifyTime(timestamp,
-                startRow,
-                numRows),
+            return syncCall(new Function<List<net.gdface.facelog.client.thrift.LogLightBean>,List<LogLightBean>>() {
+                    @Override
+                    public List<LogLightBean> apply(List<net.gdface.facelog.client.thrift.LogLightBean> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.LogLightBean.class,
                     LogLightBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<net.gdface.facelog.client.thrift.LogLightBean>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<net.gdface.facelog.client.thrift.LogLightBean>> nativeCallback){
+                        service.loadLogLightByVerifyTime(timestamp,startRow,numRows,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<LogLightBean> loadLogLightByWhere(String where,
-        int startRow,
-        int numRows) 
+    public List<LogLightBean> loadLogLightByWhere(final String where,
+        final int startRow,
+        final int numRows) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.loadLogLightByWhere(where,
-                startRow,
-                numRows),
+            return syncCall(new Function<List<net.gdface.facelog.client.thrift.LogLightBean>,List<LogLightBean>>() {
+                    @Override
+                    public List<LogLightBean> apply(List<net.gdface.facelog.client.thrift.LogLightBean> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.LogLightBean.class,
                     LogLightBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<net.gdface.facelog.client.thrift.LogLightBean>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<net.gdface.facelog.client.thrift.LogLightBean>> nativeCallback){
+                        service.loadLogLightByWhere(where,startRow,numRows,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<PermitBean> loadPermitByUpdate(long timestamp) 
+    public List<PermitBean> loadPermitByUpdate(final long timestamp) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.loadPermitByUpdate(timestamp),
+            return syncCall(new Function<List<net.gdface.facelog.client.thrift.PermitBean>,List<PermitBean>>() {
+                    @Override
+                    public List<PermitBean> apply(List<net.gdface.facelog.client.thrift.PermitBean> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.PermitBean.class,
                     PermitBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<net.gdface.facelog.client.thrift.PermitBean>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<net.gdface.facelog.client.thrift.PermitBean>> nativeCallback){
+                        service.loadPermitByUpdate(timestamp,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<PersonBean> loadPersonByWhere(String where,
-        int startRow,
-        int numRows) 
+    public List<PersonBean> loadPersonByWhere(final String where,
+        final int startRow,
+        final int numRows) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.loadPersonByWhere(where,
-                startRow,
-                numRows),
+            return syncCall(new Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>() {
+                    @Override
+                    public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.PersonBean.class,
                     PersonBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<net.gdface.facelog.client.thrift.PersonBean>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<net.gdface.facelog.client.thrift.PersonBean>> nativeCallback){
+                        service.loadPersonByWhere(where,startRow,numRows,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<Integer> loadPersonGroupByWhere(String where,
-        int startRow,
-        int numRows) 
+    public List<Integer> loadPersonGroupByWhere(final String where,
+        final int startRow,
+        final int numRows) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.loadPersonGroupByWhere(where,
-                startRow,
-                numRows),
+            return syncCall(new Function<List<Integer>,List<Integer>>() {
+                    @Override
+                    public List<Integer> apply(List<Integer> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     Integer.class,
                     Integer.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<Integer>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<Integer>> nativeCallback){
+                        service.loadPersonGroupByWhere(where,startRow,numRows,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<Integer> loadPersonGroupIdByWhere(String where) 
+    public List<Integer> loadPersonGroupIdByWhere(final String where) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.loadPersonGroupIdByWhere(where),
+            return syncCall(new Function<List<Integer>,List<Integer>>() {
+                    @Override
+                    public List<Integer> apply(List<Integer> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     Integer.class,
                     Integer.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<Integer>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<Integer>> nativeCallback){
+                        service.loadPersonGroupIdByWhere(where,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<Integer> loadPersonIdByUpdateTime(long timestamp) 
+    public List<Integer> loadPersonIdByUpdateTime(final long timestamp) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.loadPersonIdByUpdateTime(timestamp),
+            return syncCall(new Function<List<Integer>,List<Integer>>() {
+                    @Override
+                    public List<Integer> apply(List<Integer> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     Integer.class,
                     Integer.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<Integer>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<Integer>> nativeCallback){
+                        service.loadPersonIdByUpdateTime(timestamp,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<Integer> loadPersonIdByWhere(String where) 
+    public List<Integer> loadPersonIdByWhere(final String where) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.loadPersonIdByWhere(where),
+            return syncCall(new Function<List<Integer>,List<Integer>>() {
+                    @Override
+                    public List<Integer> apply(List<Integer> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     Integer.class,
                     Integer.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<Integer>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<Integer>> nativeCallback){
+                        service.loadPersonIdByWhere(where,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public List<Integer> loadUpdatedPersons(long timestamp) 
+    public List<Integer> loadUpdatedPersons(final long timestamp) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.loadUpdatedPersons(timestamp),
+            return syncCall(new Function<List<Integer>,List<Integer>>() {
+                    @Override
+                    public List<Integer> apply(List<Integer> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     Integer.class,
                     Integer.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<List<Integer>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<List<Integer>> nativeCallback){
+                        service.loadUpdatedPersons(timestamp,nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public void offline(Token token) 
+    public void offline(final Token token) 
         throws ServiceSecurityException{
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-             instance.offline(TypeTransformer.getInstance().to(
+             syncCall(new Function<Void,Void>() {
+                    @Override
+                    public Void apply(Void input) {
+                        return input;
+                    }},
+                    new ServiceCall<Void>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Void> nativeCallback){
+                        service.offline(TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
-            throw TypeTransformer.getInstance().to(
-                    e,
-                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
-                    ServiceSecurityException.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public Token online(DeviceBean device) 
+    public Token online(final DeviceBean device) 
         throws ServiceSecurityException{
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.online(TypeTransformer.getInstance().to(
-                    device,
-                    DeviceBean.class,
-                    net.gdface.facelog.client.thrift.DeviceBean.class)),
+            return syncCall(new Function<net.gdface.facelog.client.thrift.Token,Token>() {
+                    @Override
+                    public Token apply(net.gdface.facelog.client.thrift.Token input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.Token.class,
                     Token.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
-            throw TypeTransformer.getInstance().to(
-                    e,
-                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
-                    ServiceSecurityException.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.Token>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.Token> nativeCallback){
+                        service.online(TypeTransformer.getInstance().to(
+                    device,
+                    DeviceBean.class,
+                    net.gdface.facelog.client.thrift.DeviceBean.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public DeviceBean registerDevice(DeviceBean newDevice) 
+    public DeviceBean registerDevice(final DeviceBean newDevice) 
         throws ServiceSecurityException{
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.registerDevice(TypeTransformer.getInstance().to(
+            return syncCall(new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>() {
+                    @Override
+                    public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.DeviceBean.class,
+                    DeviceBean.class);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.DeviceBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceBean> nativeCallback){
+                        service.registerDevice(TypeTransformer.getInstance().to(
                     newDevice,
                     DeviceBean.class,
-                    net.gdface.facelog.client.thrift.DeviceBean.class)),
+                    net.gdface.facelog.client.thrift.DeviceBean.class),nativeCallback);
+                    }
+                });
+        }
+        finally{
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
+        }
+    }
+    @Override
+    public void releasePersonToken(final Token token) 
+        throws ServiceSecurityException{
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
+        try{
+             syncCall(new Function<Void,Void>() {
+                    @Override
+                    public Void apply(Void input) {
+                        return input;
+                    }},
+                    new ServiceCall<Void>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Void> nativeCallback){
+                        service.releasePersonToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
+        }
+        finally{
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
+        }
+    }
+    @Override
+    public void releaseRootToken(final Token token) 
+        throws ServiceSecurityException{
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
+        try{
+             syncCall(new Function<Void,Void>() {
+                    @Override
+                    public Void apply(Void input) {
+                        return input;
+                    }},
+                    new ServiceCall<Void>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Void> nativeCallback){
+                        service.releaseRootToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
+        }
+        finally{
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
+        }
+    }
+    @Override
+    public void replaceFeature(final Integer personId,
+        final String featureMd5,
+        final boolean deleteOldFeatureImage,
+        final Token token) 
+        {
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
+        try{
+             syncCall(new Function<Void,Void>() {
+                    @Override
+                    public Void apply(Void input) {
+                        return input;
+                    }},
+                    new ServiceCall<Void>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Void> nativeCallback){
+                        service.replaceFeature(personId,featureMd5,deleteOldFeatureImage,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
+        }
+        finally{
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
+        }
+    }
+    @Override
+    public DeviceBean saveDevice(final DeviceBean deviceBean,
+        final Token token) 
+        {
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
+        try{
+            return syncCall(new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>() {
+                    @Override
+                    public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.DeviceBean.class,
                     DeviceBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
-            throw TypeTransformer.getInstance().to(
-                    e,
-                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
-                    ServiceSecurityException.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
-        }
-        finally{
-            factory.releaseInstance(instance);
-        }
-    }
-    @Override
-    public void releasePersonToken(Token token) 
-        throws ServiceSecurityException{
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
-        try{
-             instance.releasePersonToken(TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
-            throw TypeTransformer.getInstance().to(
-                    e,
-                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
-                    ServiceSecurityException.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        finally{
-            factory.releaseInstance(instance);
-        }
-    }
-    @Override
-    public void releaseRootToken(Token token) 
-        throws ServiceSecurityException{
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
-        try{
-             instance.releaseRootToken(TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
-            throw TypeTransformer.getInstance().to(
-                    e,
-                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
-                    ServiceSecurityException.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        finally{
-            factory.releaseInstance(instance);
-        }
-    }
-    @Override
-    public void replaceFeature(Integer personId,
-        String featureMd5,
-        boolean deleteOldFeatureImage,
-        Token token) 
-        {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
-        try{
-             instance.replaceFeature(personId,
-                featureMd5,
-                deleteOldFeatureImage,
-                TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        finally{
-            factory.releaseInstance(instance);
-        }
-    }
-    @Override
-    public DeviceBean saveDevice(DeviceBean deviceBean,
-        Token token) 
-        {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
-        try{
-            return TypeTransformer.getInstance().to(
-                    instance.saveDevice(TypeTransformer.getInstance().to(
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.DeviceBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceBean> nativeCallback){
+                        service.saveDevice(TypeTransformer.getInstance().to(
                     deviceBean,
                     DeviceBean.class,
-                    net.gdface.facelog.client.thrift.DeviceBean.class),
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.DeviceBean.class),TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-                    net.gdface.facelog.client.thrift.DeviceBean.class,
-                    DeviceBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean,
-        Token token) 
+    public DeviceGroupBean saveDeviceGroup(final DeviceGroupBean deviceGroupBean,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.saveDeviceGroup(TypeTransformer.getInstance().to(
-                    deviceGroupBean,
-                    DeviceGroupBean.class,
-                    net.gdface.facelog.client.thrift.DeviceGroupBean.class),
-                TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
+            return syncCall(new Function<net.gdface.facelog.client.thrift.DeviceGroupBean,DeviceGroupBean>() {
+                    @Override
+                    public DeviceGroupBean apply(net.gdface.facelog.client.thrift.DeviceGroupBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.DeviceGroupBean.class,
                     DeviceGroupBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.DeviceGroupBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceGroupBean> nativeCallback){
+                        service.saveDeviceGroup(TypeTransformer.getInstance().to(
+                    deviceGroupBean,
+                    DeviceGroupBean.class,
+                    net.gdface.facelog.client.thrift.DeviceGroupBean.class),TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public PersonBean savePerson(PersonBean bean,
-        byte[] idPhoto,
-        byte[] feature,
-        byte[] featureImage,
-        FaceBean featureFaceBean,
-        Integer deviceId,
-        Token token) 
+    public PersonBean savePerson(final PersonBean bean,
+        final byte[] idPhoto,
+        final byte[] feature,
+        final byte[] featureImage,
+        final FaceBean featureFaceBean,
+        final Integer deviceId,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.savePersonFull(TypeTransformer.getInstance().to(
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                    @Override
+                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.PersonBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
+                        service.savePersonFull(TypeTransformer.getInstance().to(
                     bean,
                     PersonBean.class,
-                    net.gdface.facelog.client.thrift.PersonBean.class),
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.PersonBean.class),TypeTransformer.getInstance().to(
                     idPhoto,
                     byte[].class,
-                    okio.ByteString.class),
-                TypeTransformer.getInstance().to(
+                    okio.ByteString.class),TypeTransformer.getInstance().to(
                     feature,
                     byte[].class,
-                    okio.ByteString.class),
-                TypeTransformer.getInstance().to(
+                    okio.ByteString.class),TypeTransformer.getInstance().to(
                     featureImage,
                     byte[].class,
-                    okio.ByteString.class),
-                TypeTransformer.getInstance().to(
+                    okio.ByteString.class),TypeTransformer.getInstance().to(
                     featureFaceBean,
                     FaceBean.class,
-                    net.gdface.facelog.client.thrift.FaceBean.class),
-                deviceId,
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.FaceBean.class),deviceId,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-                    net.gdface.facelog.client.thrift.PersonBean.class,
-                    PersonBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public PersonBean savePerson(PersonBean bean,
-        byte[] idPhoto,
-        byte[] feature,
-        List<FaceBean> faceBeans,
-        Token token) 
+    public PersonBean savePerson(final PersonBean bean,
+        final byte[] idPhoto,
+        final byte[] feature,
+        final List<FaceBean> faceBeans,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.savePersonWithPhotoAndFeatureMultiFaces(TypeTransformer.getInstance().to(
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                    @Override
+                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.PersonBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
+                        service.savePersonWithPhotoAndFeatureMultiFaces(TypeTransformer.getInstance().to(
                     bean,
                     PersonBean.class,
-                    net.gdface.facelog.client.thrift.PersonBean.class),
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.PersonBean.class),TypeTransformer.getInstance().to(
                     idPhoto,
                     byte[].class,
-                    okio.ByteString.class),
-                TypeTransformer.getInstance().to(
+                    okio.ByteString.class),TypeTransformer.getInstance().to(
                     feature,
                     byte[].class,
-                    okio.ByteString.class),
-                TypeTransformer.getInstance().to(
+                    okio.ByteString.class),TypeTransformer.getInstance().to(
                     faceBeans,
                     FaceBean.class,
-                    net.gdface.facelog.client.thrift.FaceBean.class),
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.FaceBean.class),TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-                    net.gdface.facelog.client.thrift.PersonBean.class,
-                    PersonBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public PersonBean savePerson(PersonBean bean,
-        byte[] idPhoto,
-        byte[] feature,
-        Map<ByteBuffer, FaceBean> faceInfo,
-        Integer deviceId,
-        Token token) 
+    public PersonBean savePerson(final PersonBean bean,
+        final byte[] idPhoto,
+        final byte[] feature,
+        final Map<ByteBuffer, FaceBean> faceInfo,
+        final Integer deviceId,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.savePersonWithPhotoAndFeatureMultiImage(TypeTransformer.getInstance().to(
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                    @Override
+                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.PersonBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
+                        service.savePersonWithPhotoAndFeatureMultiImage(TypeTransformer.getInstance().to(
                     bean,
                     PersonBean.class,
-                    net.gdface.facelog.client.thrift.PersonBean.class),
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.PersonBean.class),TypeTransformer.getInstance().to(
                     idPhoto,
                     byte[].class,
-                    okio.ByteString.class),
-                TypeTransformer.getInstance().to(
+                    okio.ByteString.class),TypeTransformer.getInstance().to(
                     feature,
                     byte[].class,
-                    okio.ByteString.class),
-                TypeTransformer.getInstance().to(
+                    okio.ByteString.class),TypeTransformer.getInstance().to(
                     faceInfo,
                     ByteBuffer.class,
                     FaceBean.class,
                     okio.ByteString.class,
-                    net.gdface.facelog.client.thrift.FaceBean.class),
-                deviceId,
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.FaceBean.class),deviceId,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-                    net.gdface.facelog.client.thrift.PersonBean.class,
-                    PersonBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public PersonBean savePerson(PersonBean bean,
-        byte[] idPhoto,
-        Token token) 
+    public PersonBean savePerson(final PersonBean bean,
+        final byte[] idPhoto,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.savePersonWithPhoto(TypeTransformer.getInstance().to(
-                    bean,
-                    PersonBean.class,
-                    net.gdface.facelog.client.thrift.PersonBean.class),
-                TypeTransformer.getInstance().to(
-                    idPhoto,
-                    byte[].class,
-                    okio.ByteString.class),
-                TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                    @Override
+                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.PersonBean.class,
                     PersonBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.PersonBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
+                        service.savePersonWithPhoto(TypeTransformer.getInstance().to(
+                    bean,
+                    PersonBean.class,
+                    net.gdface.facelog.client.thrift.PersonBean.class),TypeTransformer.getInstance().to(
+                    idPhoto,
+                    byte[].class,
+                    okio.ByteString.class),TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public PersonBean savePerson(PersonBean bean,
-        byte[] idPhoto,
-        FeatureBean featureBean,
-        Integer deviceId,
-        Token token) 
+    public PersonBean savePerson(final PersonBean bean,
+        final byte[] idPhoto,
+        final FeatureBean featureBean,
+        final Integer deviceId,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.savePersonWithPhotoAndFeature(TypeTransformer.getInstance().to(
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                    @Override
+                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.PersonBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
+                        service.savePersonWithPhotoAndFeature(TypeTransformer.getInstance().to(
                     bean,
                     PersonBean.class,
-                    net.gdface.facelog.client.thrift.PersonBean.class),
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.PersonBean.class),TypeTransformer.getInstance().to(
                     idPhoto,
                     byte[].class,
-                    okio.ByteString.class),
-                TypeTransformer.getInstance().to(
+                    okio.ByteString.class),TypeTransformer.getInstance().to(
                     featureBean,
                     FeatureBean.class,
-                    net.gdface.facelog.client.thrift.FeatureBean.class),
-                deviceId,
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.FeatureBean.class),deviceId,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-                    net.gdface.facelog.client.thrift.PersonBean.class,
-                    PersonBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public PersonBean savePerson(PersonBean bean,
-        String idPhotoMd5,
-        String featureMd5,
-        Token token) 
+    public PersonBean savePerson(final PersonBean bean,
+        final String idPhotoMd5,
+        final String featureMd5,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.savePersonWithPhotoAndFeatureSaved(TypeTransformer.getInstance().to(
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                    @Override
+                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.PersonBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
+                        service.savePersonWithPhotoAndFeatureSaved(TypeTransformer.getInstance().to(
                     bean,
                     PersonBean.class,
-                    net.gdface.facelog.client.thrift.PersonBean.class),
-                idPhotoMd5,
-                featureMd5,
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.PersonBean.class),idPhotoMd5,featureMd5,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-                    net.gdface.facelog.client.thrift.PersonBean.class,
-                    PersonBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public PersonBean savePerson(PersonBean bean,
-        Token token) 
+    public PersonBean savePerson(final PersonBean bean,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.savePerson(TypeTransformer.getInstance().to(
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                    @Override
+                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.PersonBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
+                        service.savePerson(TypeTransformer.getInstance().to(
                     bean,
                     PersonBean.class,
-                    net.gdface.facelog.client.thrift.PersonBean.class),
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.PersonBean.class),TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-                    net.gdface.facelog.client.thrift.PersonBean.class,
-                    PersonBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean,
-        Token token) 
+    public PersonGroupBean savePersonGroup(final PersonGroupBean personGroupBean,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.savePersonGroup(TypeTransformer.getInstance().to(
-                    personGroupBean,
-                    PersonGroupBean.class,
-                    net.gdface.facelog.client.thrift.PersonGroupBean.class),
-                TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PersonGroupBean,PersonGroupBean>() {
+                    @Override
+                    public PersonGroupBean apply(net.gdface.facelog.client.thrift.PersonGroupBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.PersonGroupBean.class,
                     PersonGroupBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
-        }
-        finally{
-            factory.releaseInstance(instance);
-        }
-    }
-    @Override
-    public void savePersons(List<PersonBean> beans,
-        Token token) 
-        {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
-        try{
-             instance.savePersons(TypeTransformer.getInstance().to(
-                    beans,
-                    PersonBean.class,
-                    net.gdface.facelog.client.thrift.PersonBean.class),
-                TypeTransformer.getInstance().to(
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.PersonGroupBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonGroupBean> nativeCallback){
+                        service.savePersonGroup(TypeTransformer.getInstance().to(
+                    personGroupBean,
+                    PersonGroupBean.class,
+                    net.gdface.facelog.client.thrift.PersonGroupBean.class),TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public int savePersons(Map<ByteBuffer, PersonBean> persons,
-        Token token) 
+    public void savePersons(final List<PersonBean> beans,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.savePersonsWithPhoto(TypeTransformer.getInstance().to(
+             syncCall(new Function<Void,Void>() {
+                    @Override
+                    public Void apply(Void input) {
+                        return input;
+                    }},
+                    new ServiceCall<Void>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Void> nativeCallback){
+                        service.savePersons(TypeTransformer.getInstance().to(
+                    beans,
+                    PersonBean.class,
+                    net.gdface.facelog.client.thrift.PersonBean.class),TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
+        }
+        finally{
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
+        }
+    }
+    @Override
+    public int savePersons(final Map<ByteBuffer, PersonBean> persons,
+        final Token token) 
+        {
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
+        try{
+            return syncCall(new Function<Integer,Integer>() {
+                    @Override
+                    public Integer apply(Integer input) {
+                        return input;
+                    }},
+                    new ServiceCall<Integer>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Integer> nativeCallback){
+                        service.savePersonsWithPhoto(TypeTransformer.getInstance().to(
                     persons,
                     ByteBuffer.class,
                     PersonBean.class,
                     okio.ByteString.class,
-                    net.gdface.facelog.client.thrift.PersonBean.class),
-                TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.PersonBean.class),TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public void saveServiceConfig(Token token) 
+    public void saveServiceConfig(final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-             instance.saveServiceConfig(TypeTransformer.getInstance().to(
+             syncCall(new Function<Void,Void>() {
+                    @Override
+                    public Void apply(Void input) {
+                        return input;
+                    }},
+                    new ServiceCall<Void>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Void> nativeCallback){
+                        service.saveServiceConfig(TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public void setPersonExpiryDate(int personId,
-        long expiryDate,
-        Token token) 
+    public void setPersonExpiryDate(final int personId,
+        final long expiryDate,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-             instance.setPersonExpiryDate(personId,
-                expiryDate,
-                TypeTransformer.getInstance().to(
+             syncCall(new Function<Void,Void>() {
+                    @Override
+                    public Void apply(Void input) {
+                        return input;
+                    }},
+                    new ServiceCall<Void>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Void> nativeCallback){
+                        service.setPersonExpiryDate(personId,expiryDate,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public void setPersonExpiryDate(List<Integer> personIdList,
-        long expiryDate,
-        Token token) 
+    public void setPersonExpiryDate(final List<Integer> personIdList,
+        final long expiryDate,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-             instance.setPersonExpiryDateList(TypeTransformer.getInstance().to(
+             syncCall(new Function<Void,Void>() {
+                    @Override
+                    public Void apply(Void input) {
+                        return input;
+                    }},
+                    new ServiceCall<Void>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Void> nativeCallback){
+                        service.setPersonExpiryDateList(TypeTransformer.getInstance().to(
                     personIdList,
                     Integer.class,
-                    Integer.class),
-                expiryDate,
-                TypeTransformer.getInstance().to(
+                    Integer.class),expiryDate,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public void setProperties(Map<String, String> config,
-        Token token) 
+    public void setProperties(final Map<String, String> config,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-             instance.setProperties(TypeTransformer.getInstance().to(
+             syncCall(new Function<Void,Void>() {
+                    @Override
+                    public Void apply(Void input) {
+                        return input;
+                    }},
+                    new ServiceCall<Void>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Void> nativeCallback){
+                        service.setProperties(TypeTransformer.getInstance().to(
                     config,
                     String.class,
                     String.class,
                     String.class,
-                    String.class),
-                TypeTransformer.getInstance().to(
+                    String.class),TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public void setProperty(String key,
-        String value,
-        Token token) 
+    public void setProperty(final String key,
+        final String value,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-             instance.setProperty(key,
-                value,
-                TypeTransformer.getInstance().to(
+             syncCall(new Function<Void,Void>() {
+                    @Override
+                    public Void apply(Void input) {
+                        return input;
+                    }},
+                    new ServiceCall<Void>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Void> nativeCallback){
+                        service.setProperty(key,value,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public void unregisterDevice(int deviceId,
-        Token token) 
+    public void unregisterDevice(final int deviceId,
+        final Token token) 
         throws ServiceSecurityException{
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-             instance.unregisterDevice(deviceId,
-                TypeTransformer.getInstance().to(
+             syncCall(new Function<Void,Void>() {
+                    @Override
+                    public Void apply(Void input) {
+                        return input;
+                    }},
+                    new ServiceCall<Void>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Void> nativeCallback){
+                        service.unregisterDevice(deviceId,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
-            throw TypeTransformer.getInstance().to(
-                    e,
-                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
-                    ServiceSecurityException.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
-    public DeviceBean updateDevice(DeviceBean deviceBean,
-        Token token) 
+    public DeviceBean updateDevice(final DeviceBean deviceBean,
+        final Token token) 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.updateDevice(TypeTransformer.getInstance().to(
-                    deviceBean,
-                    DeviceBean.class,
-                    net.gdface.facelog.client.thrift.DeviceBean.class),
-                TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
+            return syncCall(new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>() {
+                    @Override
+                    public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     net.gdface.facelog.client.thrift.DeviceBean.class,
                     DeviceBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<net.gdface.facelog.client.thrift.DeviceBean>(){
+                    @Override
+                    public void call(ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceBean> nativeCallback){
+                        service.updateDevice(TypeTransformer.getInstance().to(
+                    deviceBean,
+                    DeviceBean.class,
+                    net.gdface.facelog.client.thrift.DeviceBean.class),TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
     public String version() 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return instance.version();
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+            return syncCall(new Function<String,String>() {
+                    @Override
+                    public String apply(String input) {
+                        return input;
+                    }},
+                    new ServiceCall<String>(){
+                    @Override
+                    public void call(ServiceMethodCallback<String> nativeCallback){
+                        service.version(nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
     @Override
     public Map<String, String> versionInfo() 
         {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        final net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
+
         try{
-            return TypeTransformer.getInstance().to(
-                    instance.versionInfo(),
+            return syncCall(new Function<Map<String,String>,Map<String, String>>() {
+                    @Override
+                    public Map<String, String> apply(Map<String,String> input) {
+                        return TypeTransformer.getInstance().to(
+                    input,
                     String.class,
                     String.class,
                     String.class,
                     String.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
+                    }},
+                    new ServiceCall<Map<String,String>>(){
+                    @Override
+                    public void call(ServiceMethodCallback<Map<String,String>> nativeCallback){
+                        service.versionInfo(nativeCallback);
+                    }
+                });
         }
         finally{
-            factory.releaseInstance(instance);
+            try {
+                service.close();
+            } catch (IOException e) {
+            }
         }
     }
 }
