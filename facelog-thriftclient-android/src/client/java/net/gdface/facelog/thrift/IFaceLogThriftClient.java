@@ -74,8 +74,9 @@ public class IFaceLogThriftClient implements IFaceLog {
      * @param transformer
      * @param serviceCall
      * @return
+     * @throws Throwable
      */
-    protected <R,L>R syncCall(final Function<L, R> transformer,final ServiceCall<L> serviceCall){
+    protected <R,L>R syncCall(final Function<L, R> transformer,final ServiceCall<L> serviceCall) throws Throwable{
         final AtomicReference<R> res = new AtomicReference<R>(null);
         final AtomicReference<Throwable> err = new AtomicReference<Throwable>(null);
         final Object lock = new Object();
@@ -106,21 +107,14 @@ public class IFaceLogThriftClient implements IFaceLog {
                 err.set(e);
             }
         }
-        if(null != err.get()){
-            try{
-                throw err.get();
-            }catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-                throw new ServiceRuntimeException(e);
-            }
-            catch(ThriftException e){
-                if(e.kind == ThriftException.Kind.MISSING_RESULT  ){
+        Throwable e = err.get(); 
+        if(null != e){
+            if(e instanceof ThriftException){
+                if(((ThriftException)e).kind == ThriftException.Kind.MISSING_RESULT  ){
                     return null;
                 }
             }
-            catch (Throwable e) {
-                Throwables.throwIfUnchecked(e);
-                throw new RuntimeException(e);                
-            }
+            throw e;
         }
         return res.get();
     }    
@@ -167,6 +161,19 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
+                    DuplicateRecordException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -210,6 +217,19 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
+                    DuplicateRecordException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -251,6 +271,19 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
+                    DuplicateRecordException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -282,6 +315,19 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
+                    DuplicateRecordException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -315,6 +361,19 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
+                    DuplicateRecordException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -344,6 +403,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -381,6 +447,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -408,6 +481,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -438,6 +518,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -465,6 +552,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -496,6 +590,19 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
+                    ServiceSecurityException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -525,6 +632,19 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
+                    ServiceSecurityException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -549,6 +669,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.countDeviceByWhere(where,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -575,6 +702,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -599,6 +733,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.countLogByWhere(where,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -625,6 +766,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -649,6 +797,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.countLogLightByWhere(where,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -675,6 +830,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -699,6 +861,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.countPersonGroupByWhere(where,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -730,6 +899,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -758,6 +934,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -792,6 +975,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -820,6 +1010,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -857,6 +1054,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -885,6 +1089,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -915,6 +1126,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -943,6 +1161,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -976,6 +1201,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1008,6 +1240,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1036,6 +1275,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -1069,6 +1315,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1093,6 +1346,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.existsDevice(id,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -1119,6 +1379,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1144,6 +1411,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1168,6 +1442,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.existsPerson(persionId,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -1197,6 +1478,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1224,6 +1512,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.getDeviceGroup(deviceGroupId,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -1256,6 +1551,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1284,6 +1586,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1308,6 +1617,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.getDeviceIdOfFeature(featureMd5,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -1340,6 +1656,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1367,6 +1690,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.getDevicesOfGroup(deviceGroupId,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -1396,6 +1726,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1424,6 +1761,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1451,6 +1795,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.getFeatureBytes(md5,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -1483,6 +1834,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1511,6 +1869,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1536,6 +1901,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.getGroupPermit(deviceId,personGroupId,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -1569,6 +1941,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1596,6 +1975,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.getImage(imageMD5,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -1625,6 +2011,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1652,6 +2045,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.getImagesAssociatedByFeature(featureMd5,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -1681,6 +2081,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1708,6 +2115,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.getPerson(personId,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -1737,6 +2151,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1764,6 +2185,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.getPersonGroup(personGroupId,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -1796,6 +2224,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1824,6 +2259,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1849,6 +2291,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.getPersonPermit(deviceId,personId,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -1882,6 +2331,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1913,6 +2369,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -1940,6 +2403,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.getPersonsOfGroup(personGroupId,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -1969,6 +2439,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -2003,6 +2480,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -2036,6 +2520,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -2063,6 +2554,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.getSubDeviceGroup(deviceGroupId,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -2092,6 +2590,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -2116,6 +2621,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.isDisable(personId,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -2146,6 +2658,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -2170,6 +2689,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.isValidCmdSn(cmdSn,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -2202,6 +2728,19 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
+                    ServiceSecurityException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -2229,6 +2768,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.listOfParentForDeviceGroup(deviceGroupId,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -2258,6 +2804,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -2285,6 +2838,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.loadAllPerson(nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -2316,6 +2876,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -2346,6 +2913,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -2373,6 +2947,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.loadDeviceGroupIdByWhere(where,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -2402,6 +2983,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -2429,6 +3017,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.loadFeatureMd5ByUpdate(timestamp,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -2460,6 +3055,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -2489,6 +3091,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.loadLogLightByVerifyTime(timestamp,startRow,numRows,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -2520,6 +3129,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -2547,6 +3163,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.loadPermitByUpdate(timestamp,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -2578,6 +3201,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -2608,6 +3238,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -2635,6 +3272,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.loadPersonGroupIdByWhere(where,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -2664,6 +3308,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -2691,6 +3342,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.loadPersonIdByWhere(where,nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -2720,6 +3378,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -2747,6 +3412,19 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
+                    ServiceSecurityException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -2779,6 +3457,19 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
+                    ServiceSecurityException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -2810,6 +3501,19 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
+                    ServiceSecurityException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -2838,6 +3542,19 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
+                    ServiceSecurityException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -2865,6 +3582,19 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
+                    ServiceSecurityException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -2896,6 +3626,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -2932,6 +3669,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -2966,6 +3710,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -3019,6 +3770,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -3065,6 +3823,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -3116,6 +3881,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -3154,6 +3926,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -3199,6 +3978,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -3236,6 +4022,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -3270,6 +4063,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -3306,6 +4106,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -3337,6 +4144,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -3372,6 +4186,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -3399,6 +4220,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -3429,6 +4257,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -3462,6 +4297,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -3497,6 +4339,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -3527,6 +4376,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -3555,6 +4411,19 @@ public class IFaceLogThriftClient implements IFaceLog {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
+                    ServiceSecurityException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -3591,6 +4460,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                     }
                 });
         }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
+        }
         finally{
             try {
                 service.close();
@@ -3615,6 +4491,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.version(nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
@@ -3645,6 +4528,13 @@ public class IFaceLogThriftClient implements IFaceLog {
                         service.versionInfo(nativeCallback);
                     }
                 });
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);                
         }
         finally{
             try {
