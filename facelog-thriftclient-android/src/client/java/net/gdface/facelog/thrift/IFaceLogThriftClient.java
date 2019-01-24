@@ -76,6 +76,7 @@ public class IFaceLogThriftClient implements IFaceLog {
             @Override
             public void onSuccess(L result) {
                 res.set(transformer.apply(result));
+                /* 异步调用结束,唤醒等待线程 */
                 synchronized(lock){
                     lock.notifyAll();
                 }
@@ -84,6 +85,7 @@ public class IFaceLogThriftClient implements IFaceLog {
             @Override
             public void onError(Throwable error) {
                 err.set(error);
+                /* 异步调用结束,唤醒等待线程 */
                 synchronized(lock){
                     lock.notifyAll();
                 }
@@ -92,13 +94,13 @@ public class IFaceLogThriftClient implements IFaceLog {
         /* 连接关闭侦听器当检测到异常时调用callback来处理 */
         AsyncClientBase.Listener closeListener = new AsyncClientBase.Listener(){
                 @Override
-		        public void onTransportClosed() {
-		        }
-		
-		        @Override
-		        public void onError(Throwable error) {
-		            callback.onError(error);
-		        }};
+                public void onTransportClosed() {
+                }
+        
+                @Override
+                public void onError(Throwable error) {
+                    callback.onError(error);
+                }};
         net.gdface.facelog.client.thrift.IFaceLogClient service = factory.applyInstance(net.gdface.facelog.client.thrift.IFaceLogClient.class,closeListener);
 
         synchronized(lock){
@@ -109,14 +111,15 @@ public class IFaceLogThriftClient implements IFaceLog {
             } catch (InterruptedException e) {
                 err.set(e);
             } finally{
-		        try {
-		            /* 调用结束关闭连接 */
-		            service.close();
-		        } catch (IOException e) {}
+                try {
+                    /* 调用结束关闭连接 */
+                    service.close();
+                } catch (IOException e) {}
             }
         }
         Throwable e = err.get(); 
         if(null != e){
+            /** 判断异常类型返回null */
             returnNull(e);
         }
         return res.get();
@@ -172,7 +175,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -219,7 +222,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -264,7 +267,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -300,7 +303,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -336,7 +339,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -364,7 +367,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -398,7 +401,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -424,7 +427,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -451,7 +454,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -477,7 +480,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -511,7 +514,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -544,7 +547,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -567,7 +570,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -590,7 +593,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -613,7 +616,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -636,7 +639,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -659,7 +662,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -682,7 +685,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -705,7 +708,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -733,7 +736,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -760,7 +763,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -791,7 +794,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -818,7 +821,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -852,7 +855,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -879,7 +882,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -906,7 +909,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -933,7 +936,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -963,7 +966,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -993,7 +996,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1020,7 +1023,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1050,7 +1053,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1073,7 +1076,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1096,7 +1099,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1119,7 +1122,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1142,7 +1145,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1168,7 +1171,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1194,7 +1197,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1223,7 +1226,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1249,7 +1252,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1272,7 +1275,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1301,7 +1304,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1327,7 +1330,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1353,7 +1356,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1379,7 +1382,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1405,7 +1408,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1434,7 +1437,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1460,7 +1463,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1484,7 +1487,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1514,7 +1517,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1540,7 +1543,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1566,7 +1569,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1592,7 +1595,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1618,7 +1621,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1644,7 +1647,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1670,7 +1673,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1696,7 +1699,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1725,7 +1728,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1751,7 +1754,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1775,7 +1778,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1805,7 +1808,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1834,7 +1837,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1860,7 +1863,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1887,7 +1890,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1918,7 +1921,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1949,7 +1952,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -1975,7 +1978,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2001,7 +2004,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2024,7 +2027,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2051,7 +2054,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2074,7 +2077,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2109,7 +2112,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2135,7 +2138,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2161,7 +2164,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2187,7 +2190,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2215,7 +2218,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2243,7 +2246,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2269,7 +2272,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2295,7 +2298,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2321,7 +2324,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2349,7 +2352,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2377,7 +2380,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2405,7 +2408,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2431,7 +2434,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2459,7 +2462,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2487,7 +2490,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2513,7 +2516,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2539,7 +2542,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2565,7 +2568,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2591,7 +2594,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2623,7 +2626,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2658,7 +2661,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2693,7 +2696,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2725,7 +2728,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2757,7 +2760,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2786,7 +2789,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2819,7 +2822,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2852,7 +2855,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2902,7 +2905,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2947,7 +2950,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -2995,7 +2998,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -3032,7 +3035,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -3074,7 +3077,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -3109,7 +3112,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -3142,7 +3145,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -3175,7 +3178,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -3205,7 +3208,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -3237,7 +3240,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -3263,7 +3266,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -3291,7 +3294,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -3322,7 +3325,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -3354,7 +3357,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -3382,7 +3385,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -3415,7 +3418,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -3448,7 +3451,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -3471,7 +3474,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
     @Override
@@ -3499,7 +3502,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch (Throwable e) {
             Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);                
+            throw new RuntimeException(e);
         }
     }
 }
