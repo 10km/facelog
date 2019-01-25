@@ -24,7 +24,6 @@
 		<dependency>
 			<groupId>com.facebook.swift</groupId>
 			<artifactId>swift-annotations</artifactId>
-			<scope>provide</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
 		<dependency>

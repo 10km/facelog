@@ -3,7 +3,7 @@ java -cp lib\codegen-thrift-1.0.5-standalone.jar;..\facelog-base\target\classes;
 		-ic net.gdface.facelog.IFaceLog ^
 		-rc net.gdface.facelog.FacelogDefaultImpl ^
 		-p net.gdface.facelog.decorator ^
-		-o src\service\java ^
+		-o src\codegen\java ^
 		--thrift-package net.gdface.facelog.thrift.client ^
 		-gt SERVICE
 		

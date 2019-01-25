@@ -33,7 +33,7 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>facelog-thriftservice</artifactId>
+			<artifactId>facelog-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
