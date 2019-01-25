@@ -1,8 +1,8 @@
-# facelog-client-android
+# facelog-client
 
-与facelog-service通讯的client端实现,基于Microsoft/thrifty框架实现。适用于androi平台，也可以用于PC平台。短连接通讯方式。
+与facelog-service通讯的client端实现
 
-[src/thrifty](src/thrifty)下的代码由[Microsoft/thrifty-compiler](https://github.com/Microsoft/thrifty/tree/master/thrifty-compiler)自动生成
+[src/thrift](src/thrift)下的代码由swift自动生成
 
 [src/sql2java](src/sql2java)下的代码由sql2java自动生成
 

@@ -11,6 +11,8 @@ import org.junit.Test;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterators;
 
+import net.gdface.utils.NetworkUtil;
+
 public class NetworkUtilTest {
 
 	@Test

@@ -12,13 +12,20 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.hash.Hashing;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import static org.junit.Assert.*;
 
-import net.gdface.facelog.client.thrift.Token;
+import net.gdface.facelog.CommonConstant;
+import net.gdface.facelog.Token;
+import net.gdface.facelog.db.ImageBean;
+import net.gdface.facelog.db.PersonBean;
+import net.gdface.thrift.ClientFactory;
+import net.gdface.thrift.exception.ServiceRuntimeException;
 import net.gdface.utils.FaceUtilits;
 
 /**
@@ -27,6 +34,7 @@ import net.gdface.utils.FaceUtilits;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ClientTest implements CommonConstant {
+    public static final Logger logger = LoggerFactory.getLogger(ClientTest.class);
 
 	private static IFaceLogClient facelogClient;
 	private static Token rootToken;
@@ -36,15 +44,13 @@ public class ClientTest implements CommonConstant {
 		// docker test
 //		facelogClient = ClientFactory.builder().setHostAndPort("192.168.99.100", DEFAULT_PORT).build();
 //		rootToken = facelogClient.applyRootToken("root", false);
-		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build();
+		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLogClient.class);
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		if(null  != rootToken){
-			facelogClient.releaseRootToken(rootToken);	
-		}		
+		facelogClient.releaseRootToken(rootToken);
 	}
 
 	@Test
@@ -103,7 +109,7 @@ public class ClientTest implements CommonConstant {
 			byte[] imgBytes = FaceUtilits.getBytesNotEmpty(url);
 			String md5 = Hashing.md5().hashBytes(imgBytes).toString();
 			facelogClient.deleteImage(md5, rootToken);
-			ImageBean imageBean = facelogClient.addImage(FaceUtilits.getByteBufferNotEmpty(url), null, null, 0, rootToken);
+			ImageBean imageBean = facelogClient.addImage(FaceUtilits.getBytesNotEmpty(url), null, null, 0, rootToken);
 			logger.info("image added {}",imageBean.toString(true, false));
 		}catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();

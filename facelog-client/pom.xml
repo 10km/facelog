@@ -9,8 +9,8 @@
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>		
 	</parent>
-	<artifactId>facelog-client-android</artifactId>
-	<name>facelog client base Microsoft/thrifty</name>
+	<artifactId>facelog-client</artifactId>
+	<name>facelog-client</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<codegen.dir>${project.basedir}/src/codegen/java</codegen.dir>
@@ -28,7 +28,7 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>common-thrifty</artifactId>
+			<artifactId>common-thrift</artifactId>
 			<version>${common-java.version}</version>
 		</dependency>
 		<dependency>
@@ -57,7 +57,7 @@
 						<configuration>
 							<sources>
 								<source>${codegen.dir}</source>
-								<source>${project.basedir}/src/thrifty/java</source>
+								<source>${project.basedir}/src/thrift/java</source>
 							</sources>
 						</configuration>
 					</execution>
@@ -80,7 +80,7 @@
 					<package>net.gdface.facelog.thrift</package>
 					<outputDir>${codegen.dir}</outputDir>
 					<thriftPackage>net.gdface.facelog.client.thrift</thriftPackage>
-					<taskType>CLIENT_THRIFTY</taskType>
+					<taskType>CLIENT</taskType>
 				</configuration>
 				<dependencies>
 				<dependency>

@@ -5,13 +5,21 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.*;
 
 import com.google.common.hash.Hashing;
 
-import net.gdface.facelog.client.thrift.ServiceSecurityException;
-import net.gdface.facelog.client.thrift.Token;
+import net.gdface.facelog.CommonConstant;
+import net.gdface.facelog.ServiceSecurityException;
+import net.gdface.facelog.Token;
+import net.gdface.facelog.db.DeviceBean;
+import net.gdface.facelog.db.PersonBean;
+import net.gdface.facelog.thrift.ServiceRuntimeException;
+import net.gdface.thrift.ClientFactory;
+import net.gdface.utils.NetworkUtil;
 
 /**
  * 令牌相关测试
@@ -20,13 +28,14 @@ import net.gdface.facelog.client.thrift.Token;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TokenTest implements CommonConstant {
+    public static final Logger logger = LoggerFactory.getLogger(TokenTest.class);
 
 	private static IFaceLogClient facelogClient;
 	private static Token rootToken;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build();
+		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLogClient.class);
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 
 	}
@@ -154,7 +163,7 @@ public class TokenTest implements CommonConstant {
 			assertTrue(e.getMessage(),false);
 		}catch (ServiceSecurityException e) {
 			logger.error(e.getMessage());
-			assertTrue(e.serviceStackTraceMessage,false);
+			assertTrue(e.getMessage(),false);
 		}
 	}
 	@Test
@@ -171,7 +180,7 @@ public class TokenTest implements CommonConstant {
 			assertTrue(e.getMessage(),false);
 		}catch (ServiceSecurityException e) {
 			logger.error(e.getMessage());
-			assertTrue(e.serviceStackTraceMessage,false);
+			assertTrue(e.getMessage(),false);
 		}
 	}
 	@Test
