@@ -15,6 +15,8 @@ gen-sql.xml Maven脚本执行 create_table.sql
 
 # 生成数据库层代码
 
+对应项目[facelog-db-orm](facelog-db-orm)
+
 gen-mysql.properties sql2java生成ORM代码的配置文件
 
 gen-mysql.sh gen-mysql.bat 用于生成ORM代码的简单脚本
@@ -25,6 +27,8 @@ gen-mysql.sh gen-mysql.bat 用于生成ORM代码的简单脚本
 
 # 生成接口层代码
 
+对应项目[facelog-db-base](facelog-db-base)
+
 gen-mysql-g.properties sql2java生成接口层代码的配置文件
 
 gen-mysql-g.sh gen-mysql-g.bat 用于生成接口层代码的简单脚本
@@ -32,6 +36,19 @@ gen-mysql-g.sh gen-mysql-g.bat 用于生成接口层代码的简单脚本
 使用示例如下:
 
 	gen-mysql-g.bat
+
+# 生成操作层代码
+
+对应项目[facelog-db-manager](facelog-db-manager)
+
+gen-mysql-m.properties sql2java生成操作层代码的配置文件
+
+gen-mysql-m.sh gen-mysql-m.bat 用于生成操作层代码的简单脚本
+
+使用示例如下:
+
+	gen-mysql-m.bat
+
 
 # docker
 
