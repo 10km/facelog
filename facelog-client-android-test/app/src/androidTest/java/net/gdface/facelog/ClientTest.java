@@ -4,13 +4,12 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
-import net.gdface.facelog.client.ClientFactory;
-import net.gdface.facelog.client.CommonConstant;
+
 import net.gdface.facelog.client.IFaceLogClient;
-import net.gdface.facelog.client.PersonBean;
-import net.gdface.facelog.client.ServiceRuntimeException;
-import net.gdface.facelog.client.thrift.ServiceSecurityException;
-import net.gdface.facelog.client.thrift.Token;
+import net.gdface.facelog.db.PersonBean;
+import net.gdface.facelog.thrift.ServiceRuntimeException;
+import net.gdface.thrift.ClientFactory;
+
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -18,6 +17,8 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -36,13 +37,14 @@ import static org.junit.Assert.fail;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
 public class ClientTest implements CommonConstant {
+	public static final Logger logger = LoggerFactory.getLogger(ClientTest.class);
 
 	private static IFaceLogClient facelogClient;
 	private static Token rootToken;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		facelogClient = ClientFactory.builder().setHostAndPort("10.0.2.2", DEFAULT_PORT).build();
+		facelogClient = ClientFactory.builder().setHostAndPort("10.0.2.2", DEFAULT_PORT).build(IFaceLogClient.class);
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 	}
 

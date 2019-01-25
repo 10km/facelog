@@ -34,7 +34,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.gitee.l0km:facelog-client-android:1.0.12-SNAPSHOT'
+    implementation 'com.gitee.l0km:facelog-thriftclient-android:2.0.0-SNAPSHOT'
     implementation 'com.gitee.l0km:common-base:1.0.5'
 // https://mvnrepository.com/artifact/de.mindpipe.android/android-logging-log4j
 //    implementation group: 'de.mindpipe.android', name: 'android-logging-log4j', version: '1.0.3'
