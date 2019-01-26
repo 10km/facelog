@@ -106,7 +106,6 @@
 						<refClass>net.gdface.facelog.FacelogDefaultImpl</refClass>
 						<package>net.gdface.facelog.decorator</package>
 						<outputDir>${codegen.dir}</outputDir>
-						<thriftPackage>net.gdface.facelog.client.thrift</thriftPackage>
 						<taskType>SERVICE</taskType>
 					</configuration>
 					<dependencies>
