@@ -44,6 +44,7 @@
 				<artifactId>templating-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
+				<!-- 生成IFaceLog接口装饰类 -->
 				<groupId>com.gitee.l0km</groupId>
 				<artifactId>codegen-decorator-maven-plugin</artifactId>
 				<version>${codegen.version}</version>

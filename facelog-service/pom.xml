@@ -90,6 +90,7 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
+				<!-- 生成IFacelog接口对应的service端thrift装饰类 -->
 				<plugin>
 					<groupId>com.gitee.l0km</groupId>
 					<artifactId>codegen-thrift-maven-plugin</artifactId>
@@ -120,7 +121,7 @@
 				<plugin>
 					<groupId>com.gitee.l0km</groupId>
 					<artifactId>swift2thrift-maven-plugin</artifactId>
-					<version>1.9</version>
+					<version>${idl.generator.version}</version>
 					<configuration>
 						<defaultPackage>net.gdface.facelog.decorator</defaultPackage>
 						<swiftClassNames>
@@ -128,10 +129,11 @@
 						</swiftClassNames>
 						<namespace>
 							<cpp>gdface</cpp>
-							<java>net.gdface.facelog.thrift</java>
+							<java>net.gdface.facelog.client.thrift</java>
 							<py>gdface.thrift</py>
 						</namespace>
 						<recursive>true</recursive>
+						<objectOptional>true</objectOptional>
 						<out>IFaceLog.thrift</out>
 					</configuration>
 					<dependencies>
