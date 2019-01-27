@@ -61,6 +61,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- 生成IFaceLog接口的基于Microsoft/thrifty的client实现代码 -->
 			<plugin>
 				<groupId>com.gitee.l0km</groupId>
 				<artifactId>codegen-thrift-maven-plugin</artifactId>
