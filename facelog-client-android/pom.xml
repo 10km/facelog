@@ -12,6 +12,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<codegen.dir>${project.basedir}/src/codegen/java</codegen.dir>
+		<thrifty.dir>${project.basedir}/src/thrifty/java</thrifty.dir>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -55,7 +56,7 @@
 						<configuration>
 							<sources>
 								<source>${codegen.dir}</source>
-								<source>${project.basedir}/src/thrifty/java</source>
+								<source>${thrifty.dir}</source>
 							</sources>
 						</configuration>
 					</execution>
@@ -91,4 +92,36 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>thrifty-stub</id>
+			<!-- thrifty-compiler 需要jdk8 -->
+			<activation>
+				<jdk>[1.8,)</jdk>
+			</activation>
+			<build>
+				<plugins>
+					<!-- 生成thrifty stub代码 -->
+					<plugin>
+						<groupId>com.gitee.l0km</groupId>
+						<artifactId>thrifty-compiler-maven-plugin</artifactId>
+						<version>${thrifty.compiler.maven.plugin.version}</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>stub</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<outputDir>${thrifty.dir}</outputDir>
+							<thriftFiles>
+								<thriftFile>${project.basedir}/../facelog-service/IFaceLog.thrift</thriftFile>
+							</thriftFiles>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
