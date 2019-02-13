@@ -5,4 +5,7 @@ rem 	IFaceLog.thrift ^
 rem 	-generate_beans ^
 rem 	-override_package net.gdface.facelog.client.thrift ^
 rem 	-out %OUT_FOLDER% 	
-mvn com.facebook.mojo:swift-maven-plugin:0.14.2:generate
+@set sh_folder=%~dp0
+@pushd "%sh_folder%"
+mvn com.facebook.mojo:swift-maven-plugin:generate
+@popd
