@@ -53,6 +53,12 @@
 			<artifactId>common-base2</artifactId>
 			<version>${common-java.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.gitee.l0km</groupId>
+			<artifactId>common-image</artifactId>
+			<version>${common-java.version}</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<!-- properties 配置文件打入jar包 -->
