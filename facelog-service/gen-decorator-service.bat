@@ -10,5 +10,7 @@ rem 		-gt SERVICE
 @rem 生成接口的基于facebook/swift的service端实现代码(decorator)
 @set sh_folder=%~dp0
 @pushd %sh_folder%
+@set OUT_FOLDER=src\codegen\java
+@if exist "%OUT_FOLDER%" rmdir  %OUT_FOLDER% /s/q
 mvn com.gitee.l0km:codegen-thrift-maven-plugin:generate
 @popd
