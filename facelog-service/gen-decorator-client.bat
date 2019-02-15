@@ -7,6 +7,8 @@ rem 		-o ..\facelog-client\src\codegen\java ^
 rem 		--thrift-package net.gdface.facelog.client.thrift ^
 rem 		-gt CLIENT
 
-pushd ..\facelog-client
+@rem 生成基于facebook/swift的client端接口实现代码
+@set sh_folder=%~dp0
+@pushd %sh_folder%..\facelog-client
 mvn com.gitee.l0km:codegen-thrift-maven-plugin:generate
-popd
+@popd

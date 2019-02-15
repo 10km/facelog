@@ -7,6 +7,8 @@ rem 		-o ..\facelog-client-android\src\codegen\java ^
 rem 		--thrift-package net.gdface.facelog.client.thrift ^
 rem 		-gt CLIENT_THRIFTY
 
-pushd ..\facelog-client-android
+@rem 生成基于Microsoft/thrifty的client端接口实现代码
+@set sh_folder=%~dp0
+@pushd %sh_folder%..\facelog-client-android
 mvn com.gitee.l0km:codegen-thrift-maven-plugin:generate
-popd
+@popd

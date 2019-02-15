@@ -7,6 +7,8 @@ rem 		-o src\codegen\java ^
 rem 		--thrift-package net.gdface.facelog.thrift.client ^
 rem 		-gt SERVICE
 		
-pushd ..\facelog-service
+@rem 生成接口的基于facebook/swift的service端实现代码(decorator)
+@set sh_folder=%~dp0
+@pushd %sh_folder%
 mvn com.gitee.l0km:codegen-thrift-maven-plugin:generate
-popd
+@popd
