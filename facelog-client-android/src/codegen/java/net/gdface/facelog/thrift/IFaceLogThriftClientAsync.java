@@ -1872,6 +1872,28 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(isValidCmdSn(cmdSn), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#isValidDeviceToken(net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Boolean> isValidDeviceToken(Token token){
+        MethodCallback<Boolean,Boolean> nativeCallback = 
+            new MethodCallback<Boolean,Boolean>(
+                new Function<Boolean,Boolean>() {
+                        @Override
+                        public Boolean apply(Boolean input) {
+                            return input;
+                }});
+        nativeCallback.service.isValidDeviceToken(
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void isValidDeviceToken(Token token,
+        FutureCallback<Boolean>callback){
+        factory.addCallback(isValidDeviceToken(token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#isValidPassword(java.lang.String,java.lang.String,boolean,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Boolean> isValidPassword(String userId,
@@ -1901,6 +1923,50 @@ public class IFaceLogThriftClientAsync {
         Token token,
         FutureCallback<Boolean>callback){
         factory.addCallback(isValidPassword(userId,password,isMd5,token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#isValidPersonToken(net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Boolean> isValidPersonToken(Token token){
+        MethodCallback<Boolean,Boolean> nativeCallback = 
+            new MethodCallback<Boolean,Boolean>(
+                new Function<Boolean,Boolean>() {
+                        @Override
+                        public Boolean apply(Boolean input) {
+                            return input;
+                }});
+        nativeCallback.service.isValidPersonToken(
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void isValidPersonToken(Token token,
+        FutureCallback<Boolean>callback){
+        factory.addCallback(isValidPersonToken(token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#isValidRootToken(net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Boolean> isValidRootToken(Token token){
+        MethodCallback<Boolean,Boolean> nativeCallback = 
+            new MethodCallback<Boolean,Boolean>(
+                new Function<Boolean,Boolean>() {
+                        @Override
+                        public Boolean apply(Boolean input) {
+                            return input;
+                }});
+        nativeCallback.service.isValidRootToken(
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void isValidRootToken(Token token,
+        FutureCallback<Boolean>callback){
+        factory.addCallback(isValidRootToken(token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#listOfParentForDeviceGroup(int)}

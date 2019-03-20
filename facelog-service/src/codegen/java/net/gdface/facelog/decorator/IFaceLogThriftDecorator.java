@@ -1556,6 +1556,25 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#isValidDeviceToken(net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "isValidDeviceToken" )
+    public boolean isValidDeviceToken(Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return delegate().isValidDeviceToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#isValidPassword(java.lang.String,java.lang.String,boolean,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "isValidPassword" ,exception = {
@@ -1578,6 +1597,44 @@ public class IFaceLogThriftDecorator {
         }
         catch(net.gdface.facelog.ServiceSecurityException e){
             throw new ServiceSecurityException(e);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#isValidPersonToken(net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "isValidPersonToken" )
+    public boolean isValidPersonToken(Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return delegate().isValidPersonToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#isValidRootToken(net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "isValidRootToken" )
+    public boolean isValidRootToken(Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return delegate().isValidRootToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
         }
         catch(ServiceRuntimeException e){
             throw e;

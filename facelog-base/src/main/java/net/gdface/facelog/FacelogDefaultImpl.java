@@ -613,4 +613,16 @@ public class FacelogDefaultImpl implements IFaceLog {
 		return false;
 	}
 
+	public boolean isValidRootToken(Token token) {
+		return false;
+	}
+
+	public boolean isValidPersonToken(Token token) {
+		return false;
+	}
+
+	public boolean isValidDeviceToken(Token token) {
+		return false;
+	}
+
 }

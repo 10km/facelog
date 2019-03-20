@@ -921,6 +921,27 @@ public interface IFaceLog{
 	 */
 	public boolean isValidAckChannel(String ackChannel);
     /**
+	 * 验证root令牌是否有效
+	 * @param token
+	 * @return
+	 */
+	boolean isValidDeviceToken(Token token);
+
+	/**
+	 * 验证人员令牌是否有效
+	 * @param token
+	 * @return
+	 */
+	boolean isValidPersonToken(Token token);
+
+	/**
+	 * 验证设备令牌是否有效
+	 * @param token
+	 * @return
+	 */
+	boolean isValidRootToken(Token token);
+
+	/**
      * 返回redis访问基本参数:<br>
      * <ul>
      * <li>redis服务器地址</li>

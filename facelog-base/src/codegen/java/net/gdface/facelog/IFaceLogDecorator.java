@@ -520,6 +520,11 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public boolean isValidDeviceToken (Token token) {
+        return delegate().isValidDeviceToken(token);
+    }
+
+    @Override
     public boolean isValidPassword (String userId,String password,boolean isMd5,Token token) throws ServiceSecurityException{
         return delegate().isValidPassword(userId,password,isMd5,token);
     }
@@ -541,6 +546,16 @@ public class IFaceLogDecorator implements IFaceLog{
         } catch(Exception e){
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public boolean isValidPersonToken (Token token) {
+        return delegate().isValidPersonToken(token);
+    }
+
+    @Override
+    public boolean isValidRootToken (Token token) {
+        return delegate().isValidRootToken(token);
     }
 
     @Override

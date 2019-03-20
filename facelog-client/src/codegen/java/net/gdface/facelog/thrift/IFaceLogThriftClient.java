@@ -1520,6 +1520,23 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public boolean isValidDeviceToken(Token token) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return instance.isValidDeviceToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
     public boolean isValidPassword(String userId,
         String password,
         boolean isMd5,
@@ -1540,6 +1557,40 @@ public class IFaceLogThriftClient implements IFaceLog {
                     e,
                     net.gdface.facelog.client.thrift.ServiceSecurityException.class,
                     ServiceSecurityException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public boolean isValidPersonToken(Token token) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return instance.isValidPersonToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public boolean isValidRootToken(Token token) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return instance.isValidRootToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);

@@ -1402,6 +1402,21 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(isValidCmdSn(cmdSn), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#isValidDeviceToken(net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Boolean> isValidDeviceToken(Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Boolean> future = async.isValidDeviceToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        return factory.wrap(async,future);
+    }
+    public void isValidDeviceToken(Token token,
+        FutureCallback<Boolean>callback){
+        factory.addCallback(isValidDeviceToken(token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#isValidPassword(java.lang.String,java.lang.String,boolean,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Boolean> isValidPassword(String userId,
@@ -1424,6 +1439,36 @@ public class IFaceLogThriftClientAsync {
         Token token,
         FutureCallback<Boolean>callback){
         factory.addCallback(isValidPassword(userId,password,isMd5,token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#isValidPersonToken(net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Boolean> isValidPersonToken(Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Boolean> future = async.isValidPersonToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        return factory.wrap(async,future);
+    }
+    public void isValidPersonToken(Token token,
+        FutureCallback<Boolean>callback){
+        factory.addCallback(isValidPersonToken(token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#isValidRootToken(net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Boolean> isValidRootToken(Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Boolean> future = async.isValidRootToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        return factory.wrap(async,future);
+    }
+    public void isValidRootToken(Token token,
+        FutureCallback<Boolean>callback){
+        factory.addCallback(isValidRootToken(token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#listOfParentForDeviceGroup(int)}

@@ -1183,6 +1183,33 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			throw wrapServiceRuntimeException(e);
 		} 
 	}
+	/** 验证设备令牌是否有效 */
+	@Override
+	public boolean isValidDeviceToken(Token token){
+    	try {
+			return tm.isValidDeviceToken(token);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} 
+	}
+	/** 验证人员令牌是否有效 */
+	@Override
+	public boolean isValidPersonToken(Token token){
+    	try {
+			return tm.isValidPersonToken(token);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} 
+	}
+	/** 验证root令牌是否有效 */
+	@Override
+	public boolean isValidRootToken(Token token){
+    	try {
+			return tm.isValidRootToken(token);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} 
+	}
     @Override
     public Map<MQParam,String> getRedisParameters(Token token){
     	try {

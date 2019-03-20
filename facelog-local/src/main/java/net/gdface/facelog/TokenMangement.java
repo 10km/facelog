@@ -150,7 +150,7 @@ class TokenMangement implements ServiceConstant {
 		}
 	}
 	/** 验证设备令牌是否有效 */
-	private boolean isValidDeviceToken(Token token){
+	boolean isValidDeviceToken(Token token){
 		if(validateDeviceToken){
 			return null == token ? false : token.equals(deviceTokenTable.get(Integer.toString(token.getId())));			
 		}else{
@@ -158,7 +158,7 @@ class TokenMangement implements ServiceConstant {
 		}
 	}
 	/** 验证人员令牌是否有效 */
-	private boolean isValidPersonToken(Token token){
+	boolean isValidPersonToken(Token token){
 		if(validatePersonToken){
 			return null == token ? false : token.equals(personTokenTable.get(Integer.toString(token.getId())));
 		}else{
@@ -166,7 +166,7 @@ class TokenMangement implements ServiceConstant {
 		}
 	}
 	/** 验证root令牌是否有效 */
-	private boolean isValidRootToken(Token token){
+	boolean isValidRootToken(Token token){
 		if(validatePersonToken){
 			return isValidPersonToken(token) && TokenType.ROOT.equals(token.getType());
 		}else{
