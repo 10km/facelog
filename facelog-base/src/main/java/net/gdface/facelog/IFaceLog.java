@@ -921,7 +921,7 @@ public interface IFaceLog{
 	 */
 	public boolean isValidAckChannel(String ackChannel);
     /**
-	 * 验证root令牌是否有效
+	 * 验证设备令牌是否有效
 	 * @param token
 	 * @return
 	 */
@@ -935,7 +935,7 @@ public interface IFaceLog{
 	boolean isValidPersonToken(Token token);
 
 	/**
-	 * 验证设备令牌是否有效
+	 * 验证root令牌是否有效
 	 * @param token
 	 * @return
 	 */
