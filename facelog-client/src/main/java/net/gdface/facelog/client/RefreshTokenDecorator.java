@@ -18,8 +18,8 @@ public class RefreshTokenDecorator implements InvocationHandler {
 	private final Method applyPersonToken;
 	private final Method applyRootToken;
 	private final Method online;
-	public RefreshTokenDecorator(InvocationHandler delegate) {
-		setDelegate(delegate);
+	private RefreshTokenDecorator(IFaceLog proxyInstance) {
+		this.delegate = Proxy.getInvocationHandler(checkNotNull(proxyInstance,"proxyInstance is null"));
 		try{
 			applyPersonToken = IFaceLog.class.getMethod("applyPersonToken", int.class,String.class,boolean.class);
 			applyRootToken =IFaceLog.class.getMethod("applyRootToken", String.class,boolean.class);
@@ -84,38 +84,27 @@ public class RefreshTokenDecorator implements InvocationHandler {
 		throw new IllegalStateException();
 	}
 
-	public InvocationHandler getDelegate() {
-		return delegate;
-	}
-
-	public RefreshTokenDecorator setDelegate(InvocationHandler delegate) {
-		this.delegate = checkNotNull(delegate,"delegate is null");
-		return this;
-	}
-
-	public TokenHelper getHelper() {
-		return helper;
-	}
-
 	public RefreshTokenDecorator setHelper(TokenHelper helper) {
 		if(helper != null){
 			this.helper = helper;
 		}
 		return this;
 	}
-
-	public static IFaceLog decoratorOf(IFaceLog proxyInstance){
+	public IFaceLog build(){
+		return IFaceLog.class.cast(Proxy.newProxyInstance(
+				IFaceLog.class.getClassLoader(),
+				new Class<?>[]{ IFaceLog.class, Closeable.class },
+				this
+				));
+	}
+	public static RefreshTokenDecorator decoratorOf(IFaceLog proxyInstance){
 		InvocationHandler handler = Proxy.getInvocationHandler(checkNotNull(proxyInstance,"proxyInstance is null"));
 		RefreshTokenDecorator decorator;
 		if(handler instanceof RefreshTokenDecorator){
 			decorator = (RefreshTokenDecorator) handler;
 		}else{
-			decorator = new RefreshTokenDecorator(handler);	
+			decorator = new RefreshTokenDecorator(proxyInstance);	
 		}		
-		return IFaceLog.class.cast(Proxy.newProxyInstance(
-				IFaceLog.class.getClassLoader(),
-				new Class<?>[]{ IFaceLog.class, Closeable.class },
-				decorator
-				));
+		return decorator;
 	}
 }
