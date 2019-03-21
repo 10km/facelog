@@ -19,7 +19,9 @@ public class TokenHelper {
 		return null;
 	}
 	public DeviceBean deviceBean(){
-		return null;
-		
+		return null;		
+	}
+	public boolean isMd5(){
+		return true;
 	}
 }

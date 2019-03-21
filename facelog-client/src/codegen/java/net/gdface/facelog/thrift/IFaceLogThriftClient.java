@@ -63,6 +63,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         builder.append("]");
         return builder.toString();
     }
+
     @Override
     public FeatureBean addFeature(byte[] feature,
         Integer personId,
