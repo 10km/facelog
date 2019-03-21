@@ -1,5 +1,7 @@
 package net.gdface.facelog.decorator;
+import net.gdface.facelog.ServiceSecurityException.SecurityExceptionType;
 import net.gdface.thrift.ThriftDecorator;
+import net.gdface.thrift.TypeTransformer;
 import net.gdface.thrift.exception.BaseServiceException;
 
 import java.io.PrintStream;
@@ -79,4 +81,30 @@ public final class ServiceSecurityException extends BaseServiceException
     public String toString() {
         return delegate().toString();
     }
+    @ThriftField(value = 5,name = "deviceID",requiredness=Requiredness.UNSPECIFIED)
+    public Integer getDeviceID(){
+        return delegate().getDeviceID();
+    }
+    
+    @ThriftField
+    public void setDeviceID(Integer value){
+        delegate().setDeviceID(value);
+    }
+
+    @ThriftField(value = 6,name = "type",requiredness=Requiredness.UNSPECIFIED)
+    public SecurityExceptionType getType(){
+        return TypeTransformer.getInstance().to(
+                    delegate().getType(),
+                    SecurityExceptionType.class,
+                    SecurityExceptionType.class);
+    }
+    
+    @ThriftField
+    public void setType(SecurityExceptionType value){
+        delegate().setType(TypeTransformer.getInstance().to(
+                    value,
+                    SecurityExceptionType.class,
+                    SecurityExceptionType.class));
+    }
+
 }

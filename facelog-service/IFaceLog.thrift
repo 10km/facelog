@@ -8,6 +8,10 @@ enum TokenType {
   UNINITIALIZED, DEVICE, PERSON, ROOT
 }
 
+enum SecurityExceptionType {
+  UNCLASSIFIED, INVALID_MAC, INVALID_SN, OCCUPIED_SN, INVALID_TOKEN, INVALID_DEVICE_ID, INVALID_PERSON_ID, INVALID_PASSWORD, REJECT_APPLY
+}
+
 enum MQParam {
   REDIS_URI, CMD_CHANNEL, LOG_MONITOR_CHANNEL, HB_MONITOR_CHANNEL, HB_INTERVAL, HB_EXPIRE
 }
@@ -121,13 +125,6 @@ struct PersonGroupBean {
   12: optional i64 updateTime;
 }
 
-exception ServiceSecurityException {
-  1: optional string message;
-  2: optional string causeClass;
-  3: optional string serviceStackTraceMessage;
-  4: optional string causeFields;
-}
-
 struct DeviceBean {
   1: required bool _new;
   2: required i64 modified;
@@ -193,6 +190,15 @@ struct Token {
   2: required i64 t1;
   3: required i64 t2;
   4: optional TokenType type;
+}
+
+exception ServiceSecurityException {
+  1: optional string message;
+  2: optional string causeClass;
+  3: optional string serviceStackTraceMessage;
+  4: optional string causeFields;
+  5: optional i32 deviceID;
+  6: optional SecurityExceptionType type;
 }
 
 service IFaceLog {

@@ -43,4 +43,20 @@ public final class ServiceSecurityException extends Exception
 
     @ThriftField
     public void setCauseFields(final String causeFields) { this.causeFields = causeFields; }
+
+    private Integer deviceID;
+
+    @ThriftField(value=5, name="deviceID", requiredness=Requiredness.OPTIONAL)
+    public Integer getDeviceID() { return deviceID; }
+
+    @ThriftField
+    public void setDeviceID(final Integer deviceID) { this.deviceID = deviceID; }
+
+    private SecurityExceptionType type;
+
+    @ThriftField(value=6, name="type", requiredness=Requiredness.OPTIONAL)
+    public SecurityExceptionType getType() { return type; }
+
+    @ThriftField
+    public void setType(final SecurityExceptionType type) { this.type = type; }
 }
