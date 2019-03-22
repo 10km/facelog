@@ -15,6 +15,7 @@ import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.JedisPoolLazy.PropName;
 import net.gdface.facelog.CommonConstant;
+import net.gdface.facelog.IFaceLog;
 import net.gdface.thrift.ClientFactory;
 import redis.clients.jedis.Protocol;
 
@@ -36,7 +37,7 @@ public class PersonInsertAdapterTest implements CommonConstant {
 	public void test() {
 		// 根据连接参数创建默认实例 
 		JedisPoolLazy.createDefaultInstance( redisParam);
-		final IFaceLogClient serviceClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLogClient.class);
+		final IFaceLogClient serviceClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLog.class,IFaceLogClient.class);
 		new SubAdapters.BasePersonInsertSubAdapter(){
 			@Override
 			public void onSubscribe(Integer id) throws SmqUnsubscribeException {

@@ -21,6 +21,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import static org.junit.Assert.*;
 
 import net.gdface.facelog.CommonConstant;
+import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.PersonBean;
@@ -44,7 +45,7 @@ public class ClientTest implements CommonConstant {
 		// docker test
 //		facelogClient = ClientFactory.builder().setHostAndPort("192.168.99.100", DEFAULT_PORT).build();
 //		rootToken = facelogClient.applyRootToken("root", false);
-		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLogClient.class);
+		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLog.class,IFaceLogClient.class);
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 	}
 

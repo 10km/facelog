@@ -11,11 +11,11 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 
+import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.Token.TokenType;
 import net.gdface.facelog.db.DeviceBean;
-import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.facelog.thrift.IFaceLogThriftClientAsync;
 
 /**
@@ -24,9 +24,9 @@ import net.gdface.facelog.thrift.IFaceLogThriftClientAsync;
  *
  */
 public class ClientExtendTools {
-	private IFaceLogThriftClient syncInstance;
+	private IFaceLog syncInstance;
 	private IFaceLogThriftClientAsync asyncInstance;
-	ClientExtendTools(IFaceLogThriftClient syncInstance) {
+	ClientExtendTools(IFaceLog syncInstance) {
 		super();
 		this.syncInstance = checkNotNull(syncInstance,"syncInstance is null");
 		this.asyncInstance = null;
