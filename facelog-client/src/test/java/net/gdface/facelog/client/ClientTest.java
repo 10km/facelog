@@ -45,7 +45,10 @@ public class ClientTest implements CommonConstant {
 		// docker test
 //		facelogClient = ClientFactory.builder().setHostAndPort("192.168.99.100", DEFAULT_PORT).build();
 //		rootToken = facelogClient.applyRootToken("root", false);
-		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLog.class, IFaceLogClient.class);
+		facelogClient = ClientFactory.builder()
+				.setHostAndPort("127.0.0.1", DEFAULT_PORT)
+				.setDecorator(RefreshTokenDecorator.makeDecoratorFunction(new TokenHelperTestImpl()))
+				.build(IFaceLog.class, IFaceLogClient.class);
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 	}
 
@@ -183,4 +186,21 @@ public class ClientTest implements CommonConstant {
 			executor.awaitTermination(10, TimeUnit.SECONDS);
 		}
 	}
+	public static class TokenHelperTestImpl extends TokenHelper {
+
+		public TokenHelperTestImpl() {
+		}
+
+		@Override
+		public String passwordOf(int id) {
+			return "guyadong";
+		}
+
+		@Override
+		public boolean isHashedPwd() {
+			return false;
+		}
+
+	}
+
 }

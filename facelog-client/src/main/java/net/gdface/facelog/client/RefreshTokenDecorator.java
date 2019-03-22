@@ -5,21 +5,36 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+import com.google.common.base.Function;
+
 import net.gdface.facelog.client.thrift.IFaceLog;
 import net.gdface.facelog.client.thrift.SecurityExceptionType;
 import net.gdface.facelog.client.thrift.ServiceSecurityException;
 import net.gdface.facelog.client.thrift.Token;
+import net.gdface.thrift.ClientFactory.DelegateOfProxy;
+import net.gdface.thrift.TypeTransformer;
 
 import static com.google.common.base.Preconditions.*;
 
-public class RefreshTokenDecorator implements InvocationHandler {
-	private InvocationHandler delegate;
-	private TokenHelper helper = TokenHelper.DEFAULT_INSTANCE;
+/**
+ * {@link IFaceLog}接口代理实现令牌失效后自动重发机制<br>
+ * @author guyadong
+ *
+ */
+public class RefreshTokenDecorator implements InvocationHandler,DelegateOfProxy<IFaceLog> {
+	private final InvocationHandler handler;
+	
 	private final Method applyPersonToken;
 	private final Method applyRootToken;
 	private final Method online;
-	private RefreshTokenDecorator(IFaceLog proxyInstance) {
-		this.delegate = Proxy.getInvocationHandler(checkNotNull(proxyInstance,"proxyInstance is null"));
+	private TokenHelper helper = TokenHelper.DEFAULT_INSTANCE;
+
+	private final IFaceLog delegate;
+	private RefreshTokenDecorator(IFaceLog delegate) {
+		this.delegate = checkNotNull(delegate,"delegate is null");
+		this.handler = Proxy.getInvocationHandler(delegate);
+		checkArgument(!(handler instanceof RefreshTokenDecorator),
+				"delegate must not be instance wrapped by RefreshTokenDecorator");
 		try{
 			applyPersonToken = IFaceLog.class.getMethod("applyPersonToken", int.class,String.class,boolean.class);
 			applyRootToken =IFaceLog.class.getMethod("applyRootToken", String.class,boolean.class);
@@ -30,73 +45,115 @@ public class RefreshTokenDecorator implements InvocationHandler {
 		
 	}
 
+	/**
+	 * 排除申请令牌的方法
+	 * @param method
+	 * @return
+	 */
+	private boolean isExclude(Method method){
+		return applyPersonToken.equals(method) || applyRootToken.equals(method) || online.equals(method);
+	}
+	/**
+	 * 拦截接口方法抛出的{@link ServiceSecurityException}异常，当抛出令牌失效异常时自动执行一次申请令牌的动作
+	 * 如果申请成功则再尝试执行上次调用失败的接口方法
+	 * @see java.lang.reflect.InvocationHandler#invoke(java.lang.Object, java.lang.reflect.Method, java.lang.Object[])
+	 */
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		boolean retry = false;
 		do{
 			try{
-				return delegate.invoke(proxy, method, args);
+				return handler.invoke(proxy, method, args);
 			}catch (ServiceSecurityException e) {
 				if(!retry 
 						&& SecurityExceptionType.INVALID_TOKEN.equals(e.getType())
-						&& args.length>0 && (args[args.length-1] instanceof Token)){
+						&& args.length>0 && (args[args.length-1] instanceof Token)
+						&& !isExclude(method)){
 					// 最后一个参数为token
-					Token token = (Token)args[args.length-1];
-					Token token2 = null;
+					Token invalidToken = (Token)args[args.length-1];
+					Token freshToken = null;
 					try{
-						switch(token.getType()){
+						// 重新申请令牌
+						switch(invalidToken.getType()){
 						case DEVICE:{
 							if(helper.deviceBean()!=null){
 								Object[] reqArgs = {helper.deviceBean()};
-								token2 = (Token) delegate.invoke(proxy,online, reqArgs);
+								freshToken = (Token) handler.invoke(proxy,online, reqArgs);
 							}
 							break;
 						}
 						case PERSON:{
-							String pwd = helper.passwordOf(token.getId());
+							String pwd = helper.passwordOf(invalidToken.getId());
 							if(pwd!=null){
-								Object[] reqArgs = {token.getId(),helper.passwordOf(token.getId()),helper.isMd5()};
-								token2 = (Token) delegate.invoke(proxy,applyPersonToken, reqArgs);
+								Object[] reqArgs = {invalidToken.getId(),pwd,helper.isHashedPwd()};
+								freshToken = (Token) handler.invoke(proxy,applyPersonToken, reqArgs);
 							}
 							break;
 						}
 						case ROOT:{
-							if(helper.deviceBean()!=null){
-								Object[] reqArgs = {helper.passwordOf(-1),helper.isMd5()};
-								token2 = (Token) delegate.invoke(proxy,applyRootToken, reqArgs);
+							String pwd = helper.passwordOf(-1);
+							if(pwd!=null){
+								Object[] reqArgs = {pwd,helper.isHashedPwd()};
+								freshToken = (Token) handler.invoke(proxy,applyRootToken, reqArgs);
 							}
 							break;
 						}
 						default:
-							throw new IllegalStateException("UNKNOW ERROR TYPE:" + token.getType().name());
+							break;
 						}
-						// 用申请的新令牌更新参数
-						args[args.length-1] = token2;
-						retry = true;
-						continue;
+						if(freshToken !=null){
+							// 用申请的新令牌更新参数
+							args[args.length-1] = freshToken;
+							helper.saveFreshedToken(TypeTransformer.getInstance().to(
+									freshToken,
+									Token.class,
+									net.gdface.facelog.Token.class));
+							retry = true;
+							continue;
+						}
 					}catch (Exception er) {
+						// DO NOTHING
 					}					
 
 				}
 				throw e;
 			}
 		}while(retry);
-		throw new IllegalStateException();
+		// DEAD CODE
+		throw new IllegalStateException("CANNOT REACH HERE");
 	}
 
+	/**
+	 * 设置{@link TokenHelper}实例，不可为{@code null}
+	 * @param helper
+	 * @return
+	 */
 	public RefreshTokenDecorator setHelper(TokenHelper helper) {
-		if(helper != null){
-			this.helper = helper;
-		}
+		this.helper = checkNotNull(helper,"helper is null");
 		return this;
 	}
-	public IFaceLog build(){
+	/**
+	 * 根据当前对象创建新的接口实例{@link Proxy}
+	 * @return
+	 */
+	public IFaceLog proxyInstance(){
 		return IFaceLog.class.cast(Proxy.newProxyInstance(
 				IFaceLog.class.getClassLoader(),
 				new Class<?>[]{ IFaceLog.class, Closeable.class },
 				this
 				));
 	}
+	
+	@Override
+	public IFaceLog getDelegate() {
+		return delegate;
+	}
+
+	/**
+	 * 根据{@link IFaceLog}接口实例创建{@link RefreshTokenDecorator}实例
+	 * @param proxyInstance 必须为{@link Proxy}代理实例
+	 * @return
+	 */
 	public static RefreshTokenDecorator decoratorOf(IFaceLog proxyInstance){
 		InvocationHandler handler = Proxy.getInvocationHandler(checkNotNull(proxyInstance,"proxyInstance is null"));
 		RefreshTokenDecorator decorator;
@@ -106,5 +163,19 @@ public class RefreshTokenDecorator implements InvocationHandler {
 			decorator = new RefreshTokenDecorator(proxyInstance);	
 		}		
 		return decorator;
+	}
+	/**
+	 * 创建一个将原{@link IFaceLog}接口实例转为{@link RefreshTokenDecorator}代理的接口实例的{@link Function}对象,
+	 * 用于 {@link net.gdface.thrift.ClientFactory#setDecorator(Function)}
+	 * @param helper
+	 * @return
+	 */
+	public static Function<IFaceLog,IFaceLog> makeDecoratorFunction(final TokenHelper helper){
+		checkArgument(helper != null);
+		return new Function<IFaceLog, IFaceLog>(){
+			@Override
+			public IFaceLog apply(IFaceLog input) {
+				return decoratorOf(input).setHelper(helper).proxyInstance();
+			}};
 	}
 }
