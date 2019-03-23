@@ -525,27 +525,8 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public boolean isValidPassword (String userId,String password,boolean isMd5,Token token) throws ServiceSecurityException{
-        return delegate().isValidPassword(userId,password,isMd5,token);
-    }
-
-    /**
-     * {@link IFaceLog#isValidPassword(java.lang.String,java.lang.String,boolean,Token)}对应的unchecked方法,
-     * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
-     * @param userId
-     * @param password
-     * @param isMd5
-     * @param token
-     * @return boolean
-     */
-    public boolean isValidPasswordUnchecked (String userId,String password,boolean isMd5,Token token) {
-        try{
-            return delegate().isValidPassword(userId,password,isMd5,token);
-        } catch(RuntimeException e){
-            throw e;
-        } catch(Exception e){
-            throw new RuntimeException(e);
-        }
+    public boolean isValidPassword (String userId,String password,boolean isMd5) {
+        return delegate().isValidPassword(userId,password,isMd5);
     }
 
     @Override

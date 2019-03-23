@@ -32,7 +32,7 @@ public class TokenTest implements ServiceConstant{
 			PersonBean person = PersonBean.builder().name("顾亚东").password(passwordMd5).build();
 			instance.savePerson(person, null);
 			logger.info(person.toString(true, false));
-			assertTrue("password check not pass",instance.isValidPassword(Integer.toString(person.getId()), password, true, null));
+			assertTrue("password check not pass",instance.isValidPassword(Integer.toString(person.getId()), password, true));
 		} catch (ServiceSecurityException e) {
 			e.printStackTrace();
 		}

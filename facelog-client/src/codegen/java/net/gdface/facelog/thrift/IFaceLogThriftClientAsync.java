@@ -1417,28 +1417,22 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(isValidDeviceToken(token), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#isValidPassword(java.lang.String,java.lang.String,boolean,net.gdface.facelog.Token)}
+     * see also {@link net.gdface.facelog.IFaceLog#isValidPassword(java.lang.String,java.lang.String,boolean)}
      */
     public ListenableFuture<Boolean> isValidPassword(String userId,
         String password,
-        boolean isMd5,
-        Token token){        
+        boolean isMd5){        
         net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
         ListenableFuture<Boolean> future = async.isValidPassword(userId,
             password,
-            isMd5,
-            TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
+            isMd5);
         return factory.wrap(async,future);
     }
     public void isValidPassword(String userId,
         String password,
         boolean isMd5,
-        Token token,
         FutureCallback<Boolean>callback){
-        factory.addCallback(isValidPassword(userId,password,isMd5,token), callback);
+        factory.addCallback(isValidPassword(userId,password,isMd5), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#isValidPersonToken(net.gdface.facelog.Token)}

@@ -81,7 +81,7 @@ public final class ServiceSecurityException extends BaseServiceException
     public String toString() {
         return delegate().toString();
     }
-    @ThriftField(value = 5,name = "deviceID",requiredness=Requiredness.UNSPECIFIED)
+    @ThriftField(value = 5,name = "deviceID",requiredness=Requiredness.OPTIONAL)
     public Integer getDeviceID(){
         return delegate().getDeviceID();
     }
@@ -91,7 +91,7 @@ public final class ServiceSecurityException extends BaseServiceException
         delegate().setDeviceID(value);
     }
 
-    @ThriftField(value = 6,name = "type",requiredness=Requiredness.UNSPECIFIED)
+    @ThriftField(value = 6,name = "type",requiredness=Requiredness.OPTIONAL)
     public SecurityExceptionType getType(){
         return TypeTransformer.getInstance().to(
                     delegate().getType(),

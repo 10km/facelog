@@ -63,7 +63,6 @@ public class IFaceLogThriftClient implements IFaceLog {
         builder.append("]");
         return builder.toString();
     }
-
     @Override
     public FeatureBean addFeature(byte[] feature,
         Integer personId,
@@ -1540,24 +1539,13 @@ public class IFaceLogThriftClient implements IFaceLog {
     @Override
     public boolean isValidPassword(String userId,
         String password,
-        boolean isMd5,
-        Token token) 
-        throws ServiceSecurityException{
+        boolean isMd5) 
+        {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
             return instance.isValidPassword(userId,
                 password,
-                isMd5,
-                TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
-            throw TypeTransformer.getInstance().to(
-                    e,
-                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
-                    ServiceSecurityException.class);
+                isMd5);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);

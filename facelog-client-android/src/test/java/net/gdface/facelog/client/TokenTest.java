@@ -171,7 +171,7 @@ public class TokenTest implements CommonConstant {
 	public void test4RegisterDevice(){
 		byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
 		try {
-			DeviceBean device = DeviceBean.builder().mac(NetworkUtil.formatMac(address, null)).serialNo("12322333").build();
+			DeviceBean device = DeviceBean.builder().mac(NetworkUtil.formatMac(address, null)).serialNo("12122333").build();
 			logger.info(device.toString(true,false));
 			device = facelogClient.registerDevice(device);
 			Token deviceToken = facelogClient.online(device);
@@ -180,7 +180,7 @@ public class TokenTest implements CommonConstant {
 			e.printServiceStackTrace();
 			assertTrue(e.getMessage(),false);
 		}catch (ServiceSecurityException e) {
-			logger.error(e.getMessage());
+			logger.error(e.getType().name());
 			assertTrue(e.getMessage(),false);
 		}
 	}

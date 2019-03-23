@@ -274,7 +274,7 @@ service IFaceLog {
   bool isValidAckChannel(1: optional string ackChannel) throws (1: ServiceRuntimeException ex1);
   bool isValidCmdSn(1: required i64 cmdSn) throws (1: ServiceRuntimeException ex1);
   bool isValidDeviceToken(1: optional Token token) throws (1: ServiceRuntimeException ex1);
-  bool isValidPassword(1: optional string userId, 2: optional string password, 3: required bool isMd5, 4: optional Token token) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
+  bool isValidPassword(1: optional string userId, 2: optional string password, 3: required bool isMd5) throws (1: ServiceRuntimeException ex1);
   bool isValidPersonToken(1: optional Token token) throws (1: ServiceRuntimeException ex1);
   bool isValidRootToken(1: optional Token token) throws (1: ServiceRuntimeException ex1);
   list<i32> listOfParentForDeviceGroup(1: required i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);

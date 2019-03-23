@@ -1575,28 +1575,17 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#isValidPassword(java.lang.String,java.lang.String,boolean,net.gdface.facelog.Token)}
+     * @see {@link net.gdface.facelog.IFaceLog#isValidPassword(java.lang.String,java.lang.String,boolean)}
      */
-    @ThriftMethod(value = "isValidPassword" ,exception = {
-                @ThriftException(type=ServiceSecurityException.class, id=1),
-                @ThriftException(type=ServiceRuntimeException.class, id=2)
-                })
+    @ThriftMethod(value = "isValidPassword" )
     public boolean isValidPassword(String userId,
         String password,
-        boolean isMd5,
-        Token token) 
-        throws ServiceSecurityException,ServiceRuntimeException{
+        boolean isMd5) 
+        throws ServiceRuntimeException{
         try{
             return delegate().isValidPassword(userId,
                 password,
-                isMd5,
-                TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.Token.class));
-        }
-        catch(net.gdface.facelog.ServiceSecurityException e){
-            throw new ServiceSecurityException(e);
+                isMd5);
         }
         catch(ServiceRuntimeException e){
             throw e;

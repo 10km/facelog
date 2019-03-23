@@ -637,14 +637,12 @@ public interface IFaceLog
 
         @ThriftMethod(value = "isValidPassword",
                       exception = {
-                          @ThriftException(type=ServiceSecurityException.class, id=1),
-                          @ThriftException(type=ServiceRuntimeException.class, id=2)
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<Boolean> isValidPassword(
             @ThriftField(value=1, name="userId", requiredness=Requiredness.OPTIONAL) final String userId,
             @ThriftField(value=2, name="password", requiredness=Requiredness.OPTIONAL) final String password,
-            @ThriftField(value=3, name="isMd5", requiredness=Requiredness.REQUIRED) final boolean isMd5,
-            @ThriftField(value=4, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+            @ThriftField(value=3, name="isMd5", requiredness=Requiredness.REQUIRED) final boolean isMd5
         );
 
         @ThriftMethod(value = "isValidPersonToken",
@@ -1703,15 +1701,13 @@ public interface IFaceLog
 
     @ThriftMethod(value = "isValidPassword",
                   exception = {
-                      @ThriftException(type=ServiceSecurityException.class, id=1),
-                      @ThriftException(type=ServiceRuntimeException.class, id=2)
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     boolean isValidPassword(
         @ThriftField(value=1, name="userId", requiredness=Requiredness.OPTIONAL) final String userId,
         @ThriftField(value=2, name="password", requiredness=Requiredness.OPTIONAL) final String password,
-        @ThriftField(value=3, name="isMd5", requiredness=Requiredness.REQUIRED) final boolean isMd5,
-        @ThriftField(value=4, name="token", requiredness=Requiredness.OPTIONAL) final Token token
-    ) throws ServiceSecurityException, ServiceRuntimeException;
+        @ThriftField(value=3, name="isMd5", requiredness=Requiredness.REQUIRED) final boolean isMd5
+    ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "isValidPersonToken",
                   exception = {

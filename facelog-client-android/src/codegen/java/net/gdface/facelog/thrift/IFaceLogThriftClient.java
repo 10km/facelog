@@ -2109,9 +2109,8 @@ public class IFaceLogThriftClient implements IFaceLog {
     @Override
     public boolean isValidPassword(final String userId,
         final String password,
-        final boolean isMd5,
-        final Token token) 
-        throws ServiceSecurityException{
+        final boolean isMd5) 
+        {
         try{
             return syncCall(new Function<Boolean,Boolean>() {
                 @Override
@@ -2121,17 +2120,8 @@ public class IFaceLogThriftClient implements IFaceLog {
                 new ServiceAsyncCall<Boolean>(){
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Boolean> nativeCallback){
-                    service.isValidPassword(userId,password,isMd5,TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                    service.isValidPassword(userId,password,isMd5,nativeCallback);
                 }});
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
-            throw TypeTransformer.getInstance().to(
-                    e,
-                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
-                    ServiceSecurityException.class);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);

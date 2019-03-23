@@ -1138,13 +1138,13 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
 	}
 	@Override
-	public boolean isValidPassword(String userId,String password, boolean isMd5, Token token) 
-			throws ServiceSecurityException {
+	public boolean isValidPassword(String userId,String password, boolean isMd5) {
     	try{
-			Enable.PERSON_ONLY.check(tm, token);
     		return tm.isValidPassword(userId, password, isMd5);
-    	} catch (RuntimeException e) {
-			return throwServiceException(e);
+    	} catch (ServiceSecurityException e) {
+			return false;
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
 		}
 	}
     @Override

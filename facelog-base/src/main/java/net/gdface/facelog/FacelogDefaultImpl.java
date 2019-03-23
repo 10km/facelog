@@ -538,8 +538,7 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public boolean isValidPassword(String userId, String password, boolean isMd5, Token token)
-			throws ServiceSecurityException {
+	public boolean isValidPassword(String userId, String password, boolean isMd5) {
 		return false;
 	}
 

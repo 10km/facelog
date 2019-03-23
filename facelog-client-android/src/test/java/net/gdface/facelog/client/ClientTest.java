@@ -50,6 +50,8 @@ public class ClientTest implements CommonConstant {
 				.setDecorator(RefreshTokenDecorator.makeDecoratorFunction(new TokenHelperTestImpl()))
 				.build(IFaceLogThriftClient.class,IFaceLogClient.class);
 		rootToken = facelogClient.applyRootToken("guyadong", false);
+		boolean valid= facelogClient.isValidPassword("root", "guyadong", false);
+		System.out.printf("root password valid:%b", valid);
 	}
 
 	@AfterClass

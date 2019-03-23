@@ -873,16 +873,12 @@ public interface IFaceLog{
 			throws ServiceSecurityException;
 	/**
 	 * 验证用户密码是否匹配
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
 	 * @param userId 用户id字符串,root用户id即为{@link CommonConstant#ROOT_NAME}
 	 * @param password 用户密码
 	 * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
-	 * @param token 访问令牌
 	 * @return {@code true}密码匹配
-	 * @throws ServiceSecurityException {@code userId}无效
 	 */
-	public boolean isValidPassword(String userId,String password, boolean isMd5, Token token) 
-			throws ServiceSecurityException ;
+	public boolean isValidPassword(String userId,String password, boolean isMd5) ;
 	/**
 	 * 申请一个唯一的命令响应通道(默认有效期)<br>
 	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
