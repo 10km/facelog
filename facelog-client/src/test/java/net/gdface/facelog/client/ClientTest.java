@@ -21,7 +21,6 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import static org.junit.Assert.*;
 
 import net.gdface.facelog.CommonConstant;
-import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.PersonBean;
