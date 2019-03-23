@@ -21,10 +21,10 @@ import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.JedisPoolLazy.PropName;
 import gu.simplemq.redis.RedisFactory;
-import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.device.Heartbeat;
+import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
 import redis.clients.jedis.Protocol;
 
@@ -53,7 +53,7 @@ public class HeartbeatTest implements ChannelConstant{
 		// 根据连接参数创建默认实例 
 		JedisPoolLazy.createDefaultInstance( redisParam);
 		// 创建服务实例
-		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLog.class,IFaceLogClient.class);
+		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLogThriftClient.class,IFaceLogClient.class);
 		// 申请令牌
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 		// 从facelog service 获取心跳监控频道名 
