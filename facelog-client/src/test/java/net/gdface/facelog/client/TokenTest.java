@@ -13,11 +13,11 @@ import static org.junit.Assert.*;
 import com.google.common.hash.Hashing;
 
 import net.gdface.facelog.CommonConstant;
-import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.PersonBean;
+import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.facelog.thrift.ServiceRuntimeException;
 import net.gdface.thrift.ClientFactory;
 import net.gdface.utils.NetworkUtil;
@@ -36,7 +36,7 @@ public class TokenTest implements CommonConstant {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLog.class,IFaceLogClient.class);
+		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLogThriftClient.class,IFaceLogClient.class);
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 
 	}

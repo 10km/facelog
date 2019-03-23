@@ -4,14 +4,14 @@ import java.util.List;
 
 import com.google.common.base.Supplier;
 
+import net.gdface.facelog.IFaceLog;
+import net.gdface.facelog.IFaceLogDecorator;
 import net.gdface.facelog.Token;
-import net.gdface.facelog.thrift.IFaceLogThriftClient;
-import net.gdface.thrift.ClientFactory;
 
-public class IFaceLogClient extends IFaceLogThriftClient {
-	public final ClientExtendTools clientTools;
-	public IFaceLogClient(ClientFactory factory) {
-		super(factory);
+public class IFaceLogClient extends IFaceLogDecorator {
+	private final ClientExtendTools clientTools;
+	public IFaceLogClient(IFaceLog delegate) {
+		super(delegate);
 		clientTools = new ClientExtendTools(this);
 	}
 	public Supplier<Integer> getDeviceGroupIdSupplier(int deviceId) {

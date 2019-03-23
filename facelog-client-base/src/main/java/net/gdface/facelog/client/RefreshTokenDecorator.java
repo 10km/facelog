@@ -15,7 +15,6 @@ import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.ServiceSecurityException.SecurityExceptionType;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.db.DeviceBean;
-import net.gdface.thrift.ClientFactory.DelegateOfProxy;
 import net.gdface.thrift.exception.client.BaseServiceRuntimeException;
 
 import static com.google.common.base.Preconditions.*;
@@ -25,7 +24,7 @@ import static com.google.common.base.Preconditions.*;
  * @author guyadong
  *
  */
-public class RefreshTokenDecorator implements InvocationHandler,DelegateOfProxy<IFaceLog> {
+public class RefreshTokenDecorator implements InvocationHandler{
 	private final Method applyPersonToken;
 	private final Method applyRootToken;
 	private final Method online;
@@ -161,11 +160,7 @@ public class RefreshTokenDecorator implements InvocationHandler,DelegateOfProxy<
 				new Class<?>[]{ IFaceLog.class},
 				this));
 	}
-	
-	@Override
-	public IFaceLog getDelegate() {
-		return delegate;
-	}
+
 
 	/**
 	 * 根据{@link IFaceLog}接口实例创建{@link RefreshTokenDecorator}实例

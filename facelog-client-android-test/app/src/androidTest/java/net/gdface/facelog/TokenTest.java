@@ -21,8 +21,10 @@ import net.gdface.facelog.Token;
 import net.gdface.facelog.client.IFaceLogClient;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.PersonBean;
+import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.facelog.thrift.ServiceRuntimeException;
 import net.gdface.thrift.ClientFactory;
+import net.gdface.thrift.exception.client.BaseServiceRuntimeException;
 import net.gdface.utils.NetworkUtil;
 
 /**
@@ -40,7 +42,7 @@ public class TokenTest implements CommonConstant {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		facelogClient = ClientFactory.builder().setHostAndPort("10.0.2.2", DEFAULT_PORT).build(IFaceLogClient.class);
+		facelogClient = ClientFactory.builder().setHostAndPort("10.0.2.2", DEFAULT_PORT).build(IFaceLogThriftClient.class,IFaceLogClient.class);
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 
 	}
@@ -55,7 +57,7 @@ public class TokenTest implements CommonConstant {
 					.name("root").build();
 			facelogClient.savePerson(person, rootToken);
 			assertTrue("root用户名保留机制无效",false);
-		}catch(ServiceRuntimeException e){
+		}catch(BaseServiceRuntimeException e){
 			ExceptionType type = ExceptionType.values()[e.getType()];
 			assertTrue("异常类型分类错误",type == ExceptionType.UNCLASSIFIED);
 		}
@@ -73,7 +75,7 @@ public class TokenTest implements CommonConstant {
 			person.setPassword(adminpwd);
 			person = facelogClient.savePerson(person, rootToken);
 			assertTrue("存入密码明文应该抛出异常",false);
-		}catch(ServiceRuntimeException e){
+		}catch(BaseServiceRuntimeException e){
 			logger.error(e.getMessage());
 			ExceptionType type = ExceptionType.values()[e.getType()];
 			assertTrue("异常类型分类错误",type == ExceptionType.UNCLASSIFIED);
@@ -82,7 +84,7 @@ public class TokenTest implements CommonConstant {
 			String md5OfPwd= Hashing.md5().hashBytes(adminpwd.getBytes()).toString();
 			person.setPassword(md5OfPwd);
 			person = facelogClient.savePerson(person, rootToken);
-		}catch(ServiceRuntimeException e){
+		}catch(BaseServiceRuntimeException e){
 			logger.error(e.getServiceStackTraceMessage());
 			assertTrue(false);
 		}
@@ -90,7 +92,7 @@ public class TokenTest implements CommonConstant {
 			// 以普通用户身份申请令牌
 			facelogClient.applyPersonToken(person.getId(), adminpwd, false);
 			assertTrue("普通用户不允许申请令牌",false);
-		}catch(ServiceRuntimeException e){
+		}catch(BaseServiceRuntimeException e){
 			logger.error(e.getServiceStackTraceMessage());
 			assertTrue(false);
 		} catch (ServiceSecurityException e) {
@@ -107,7 +109,7 @@ public class TokenTest implements CommonConstant {
 			// 以操作员级别令牌写数据库
 			user = facelogClient.savePerson(user, operatorToken);	
 			assertTrue(user.equals(facelogClient.getPerson(user.getId())));
-		}catch(ServiceRuntimeException e){
+		}catch(BaseServiceRuntimeException e){
 			logger.error(e.getServiceStackTraceMessage());
 			assertTrue(false);
 		} catch (ServiceSecurityException e) {
@@ -124,7 +126,7 @@ public class TokenTest implements CommonConstant {
 			// 以操作员级别令牌写数据库
 			facelogClient.savePerson(user, operatorToken);	
 			assertTrue("权限检查异常,应该不允许创建同级别或高级别帐户",false);
-		}catch(ServiceRuntimeException e){
+		}catch(BaseServiceRuntimeException e){
 			logger.error("{}",ExceptionType.values()[e.getType()]);
 			logger.error("{}",e.getMessage());
 			assertTrue(ExceptionType.SECURITY_ERROR == ExceptionType.values()[e.getType()]);
@@ -163,7 +165,7 @@ public class TokenTest implements CommonConstant {
 				assertTrue(true);
 			}
 			facelogClient.releasePersonToken(adminToken2);
-		} catch(ServiceRuntimeException e){
+		} catch(BaseServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(e.getMessage(),false);
 		}catch (ServiceSecurityException e) {
@@ -180,7 +182,7 @@ public class TokenTest implements CommonConstant {
 			device = facelogClient.registerDevice(device);
 			Token deviceToken = facelogClient.online(device);
 			facelogClient.unregisterDevice(device.getId(), deviceToken);
-		} catch(ServiceRuntimeException e){
+		} catch(BaseServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(e.getMessage(),false);
 		}catch (ServiceSecurityException e) {
@@ -193,7 +195,7 @@ public class TokenTest implements CommonConstant {
 		try{
 			facelogClient.setProperty("do.test.my.key", "芳华", rootToken);
 			facelogClient.saveServiceConfig(rootToken);
-		}catch(ServiceRuntimeException e){
+		}catch(BaseServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(e.getMessage(),false);
 		}catch(RuntimeException e){

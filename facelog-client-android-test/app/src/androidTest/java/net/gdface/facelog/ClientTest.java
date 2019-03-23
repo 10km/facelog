@@ -6,9 +6,11 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 
 import net.gdface.facelog.client.IFaceLogClient;
+import net.gdface.facelog.client.RefreshTokenDecorator;
 import net.gdface.facelog.db.PersonBean;
-import net.gdface.facelog.thrift.ServiceRuntimeException;
+import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
+import net.gdface.thrift.exception.client.BaseServiceRuntimeException;
 
 
 import org.junit.AfterClass;
@@ -44,7 +46,11 @@ public class ClientTest implements CommonConstant {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		facelogClient = ClientFactory.builder().setHostAndPort("10.0.2.2", DEFAULT_PORT).build(IFaceLogClient.class);
+	    // 根据服务地址和端口创建RPC接口实例
+		facelogClient = ClientFactory.builder()
+                .setHostAndPort("192.168.10.104", DEFAULT_PORT)
+                .setDecorator(RefreshTokenDecorator.makeDecoratorFunction(new TokenHelperTestImpl()))
+                .build(IFaceLogThriftClient.class,IFaceLogClient.class);
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 	}
 
@@ -67,7 +73,7 @@ public class ClientTest implements CommonConstant {
 			logger.info("person = {}", newPerson.toString());
 			PersonBean person = facelogClient.getPerson(newPerson.getId());
 			logger.info("person = {}", person.toString());
-		} catch(ServiceRuntimeException e){
+		} catch(BaseServiceRuntimeException e){
 			e.printServiceStackTrace();
 			fail();
 		}catch (Exception e) {
@@ -82,7 +88,7 @@ public class ClientTest implements CommonConstant {
 			for(Integer id:persons){
 				System.out.println(facelogClient.getPerson(id).toString(true, false));
 			}
-		}catch(ServiceRuntimeException e){
+		}catch(BaseServiceRuntimeException e){
 			e.printServiceStackTrace();
 			fail();
 		}catch (Exception e) {
@@ -99,7 +105,7 @@ public class ClientTest implements CommonConstant {
 			for(Integer id:devices){
 				logger.info(id.toString());
 			}
-		}catch(ServiceRuntimeException e){
+		}catch(BaseServiceRuntimeException e){
 			e.printServiceStackTrace();
 			fail();
 		}catch (Exception e) {
@@ -116,7 +122,7 @@ public class ClientTest implements CommonConstant {
 			facelogClient.deleteImage(md5, rootToken);
 			ImageBean imageBean = facelogClient.addImage(FaceUtilits.getByteBufferNotEmpty(url), null, null, 0, rootToken);
 			logger.info("image added {}",imageBean.toString(true, false));
-		}catch(ServiceRuntimeException e){
+		}catch(BaseServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(false);
 		}catch (Exception e) {
@@ -133,7 +139,7 @@ public class ClientTest implements CommonConstant {
 			facelogClient.deletePersons(persons, rootToken);
 			int count = facelogClient.countPersonByWhere(null);
 			assertEquals(0 , count);
-		}catch(ServiceRuntimeException e){
+		}catch(BaseServiceRuntimeException e){
 			e.printServiceStackTrace();
 			fail();
 		}catch (Exception e) {
@@ -167,7 +173,7 @@ public class ClientTest implements CommonConstant {
             try {
                 newPerson = facelogClient.savePerson(newPerson, rootToken);
                 logger.info("person = {}", newPerson.toString());
-            } catch (ServiceRuntimeException e) {
+            } catch (BaseServiceRuntimeException e) {
                 e.printServiceStackTrace();
                 fail();
             } catch (Exception e) {

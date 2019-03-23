@@ -25,6 +25,7 @@ import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.PersonBean;
+import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
 import net.gdface.thrift.exception.ServiceRuntimeException;
 import net.gdface.utils.FaceUtilits;
@@ -48,7 +49,7 @@ public class ClientTest implements CommonConstant {
 		facelogClient = ClientFactory.builder()
 				.setHostAndPort("127.0.0.1", DEFAULT_PORT)
 				.setDecorator(RefreshTokenDecorator.makeDecoratorFunction(new TokenHelperTestImpl()))
-				.build(IFaceLog.class, IFaceLogClient.class);
+				.build(IFaceLogThriftClient.class, IFaceLogClient.class);
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 	}
 
