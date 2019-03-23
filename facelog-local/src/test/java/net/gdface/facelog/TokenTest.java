@@ -26,16 +26,12 @@ public class TokenTest implements ServiceConstant{
 	@Test
 	public void testSavePerson(){
 		FaceLogImpl instance = new FaceLogImpl();
-		try {
-			String password = "do you know ?";
-			String passwordMd5 = Hashing.md5().hashBytes(password.getBytes()).toString();
-			PersonBean person = PersonBean.builder().name("顾亚东").password(passwordMd5).build();
-			instance.savePerson(person, null);
-			logger.info(person.toString(true, false));
-			assertTrue("password check not pass",instance.isValidPassword(Integer.toString(person.getId()), password, true));
-		} catch (ServiceSecurityException e) {
-			e.printStackTrace();
-		}
+		String password = "do you know ?";
+		String passwordMd5 = Hashing.md5().hashBytes(password.getBytes()).toString();
+		PersonBean person = PersonBean.builder().name("顾亚东").password(passwordMd5).build();
+		instance.savePerson(person, null);
+		logger.info(person.toString(true, false));
+		assertTrue("password check not pass",instance.isValidPassword(Integer.toString(person.getId()), password, true));
 	}
 
 }
