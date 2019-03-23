@@ -56,7 +56,6 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	//private final RedisLogConsumer redisLogConsumer  = new RedisLogConsumer(this);
 	static{
 		LocalTokenContextOp.initCurrentTokenContextOp();
-		ServiceSecurityExceptionHelper.initServiceSecurityException();
 	}
 	/**
 	 * 构造方法

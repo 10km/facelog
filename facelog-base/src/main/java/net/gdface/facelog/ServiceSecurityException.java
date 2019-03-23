@@ -1,5 +1,8 @@
 package net.gdface.facelog;
 
+import java.util.Iterator;
+import java.util.ServiceLoader;
+
 /**
  * 安全异常
  * @author guyadong
@@ -9,9 +12,22 @@ public class ServiceSecurityException extends Exception {
 	public static interface FieldJsonTransformer<T> {
 		public String jsonOfDeclaredFields(T input);
 	}
-
+	/**
+	 * SPI(Service Provider Interface)机制加载 {@link FieldJsonTransformer}实例,没有找到返回{@code null}
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	private static FieldJsonTransformer spiTransformer() {		
+		ServiceLoader<FieldJsonTransformer> providers = ServiceLoader.load(FieldJsonTransformer.class);
+		Iterator<FieldJsonTransformer> itor = providers.iterator();
+		if(!itor.hasNext()){
+			return null;
+		}
+		return itor.next();
+	}
 	private static final long serialVersionUID = 5298414024971333060L;
-	private static FieldJsonTransformer<ServiceSecurityException> transformer;
+	@SuppressWarnings("unchecked")
+	private static FieldJsonTransformer<ServiceSecurityException> transformer = spiTransformer();
 	public static enum SecurityExceptionType{
         /** 其他未分类异常 */UNCLASSIFIED,
         /** 无效MAC地址 */INVALID_MAC,
