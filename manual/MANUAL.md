@@ -279,6 +279,43 @@ root令牌|管理端(root)使用的令牌
 
 人员令牌和root令牌定义了有效期，默认有效期是60分钟。可以通过修改系统参数改变该值，参见`CommonConstant.TOKEN_PERSON_EXPIRE` 。如果令牌过期，要重新申请令牌。
 
+#### 失效令牌自动刷新
+
+根据前面对令牌的说明，我们知道令牌是有有效期的，对于client端(管理端，设备端)而言当使用失效令牌访问服务时会抛出安全异常(`ServiceSecurityException`,其中type字段为安全异常的错误类型)，这时要重新申请令牌。
+
+这个机制对安全来说致关重要，但同时也给client端开发带来困扰，那就是client端调用每个需要令牌的接口方法时都要捕获`ServiceSecurityException`异常，来判断是否为令牌失效异常，这可能会导致代码逻辑非常臃肿。
+
+为解决这个问题，facelog client端提供了失效令牌自动刷新机制，其基本原理是设计一个服务接口代理类(参见 [net.gdface.facelog.client.RefreshTokenDecorator](../facelog-client-base/src/main/java/net/gdface/facelog/client/RefreshTokenDecorator.java))，该代理接口类的实例代理所有服务接口方法，并捕获[`ServiceSecurityException`](../facelog-base/src/main/java/net/gdface/facelog/ServiceSecurityException.java)异常,当判断为异常是由令牌失效导致的,则自动调用令牌申请方法，申请新令牌，然后重新调用前面因为抛出安全异常而失败的方法。
+
+	// 安全异常分类
+	public static enum SecurityExceptionType{
+        /** 其他未分类异常 */UNCLASSIFIED,
+        /** 无效MAC地址 */INVALID_MAC,
+        /** 无效序列号 */INVALID_SN,
+        /** 序列号被占用 */OCCUPIED_SN,
+        /** 无效的设备令牌 */INVALID_TOKEN,
+        /** 无效设备ID */INVALID_DEVICE_ID,
+        /** 无效人员ID */INVALID_PERSON_ID,
+        /** 无效root密码 */INVALID_PASSWORD,
+        /** 拒绝令牌申请 */REJECT_APPLY
+	}
+
+facelog已经实现了失效令牌自动刷新机制，但应用层要启用这个机制，还需要向`RefreshTokenDecorator`提供申请令牌时必要的参数，比如对于人员令牌和root令牌，需要提供用户的密码，对于设备令牌需要提供设备信息对象([DeviceBean](../facelog-db-base/src/main/java/net/gdface/facelog/db/DeviceBean.java))
+
+如何向令牌自动刷新机制提供这些必要信息呢？这就涉及到另一个类[TokenHelper](../facelog-client-base/src/main/java/net/gdface/facelog/client/TokenHelper.java),TokenHelper类设计用于应用层向client端提供令牌刷新的必要参数，应用层可以继承此类根据需要重写对应的方法提供参数，以让自动刷新机制能正确运行
+
+下面代码展示如何在client端初始化时开启失效令牌自动刷新机制
+
+		IFaceLogClient facelogClient = ClientFactory.builder()
+				.setHostAndPort("127.0.0.1", DEFAULT_PORT)
+				.setDecorator(RefreshTokenDecorator.makeDecoratorFunction(new TokenHelperTestImpl()))
+				.build(IFaceLogThriftClient.class, IFaceLogClient.class);
+		// TokenHelperTestImpl为TokenHelper的子类，用于向RefreshTokenDecorator提供申请令牌的相关参数
+		// setDecorator方法则将实现令牌自动刷新机制机制的代理接口类实例(Proxy instance)加载到服务接口实例上
+
+关于启动失效令牌自动刷新机制的完整示例参见 [ClientTest](../facelog-client/src/test/java/net/gdface/facelog/client/ClientTest.java)
+
+
 #### 令牌申请注销
 
 令牌是有时效性的数字凭证，所以client在调用需要令牌难的facelog 服务接口方法前需要申请令牌，然后再用申请到的令牌做为方法参数调用接口方法，当应用程序结束时应该释放令牌，如果不释放令牌，过期令牌也会自动失效并自动从 facelog 令牌数据表中删除。
