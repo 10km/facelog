@@ -67,6 +67,12 @@ public final class PersonBean
     /** comments:备注 */
     private String remark;
 
+    /** comments:应用项目自定义二进制扩展字段(最大64KB) */
+    private java.nio.ByteBuffer extBin;
+
+    /** comments:应用项目自定义文本扩展字段(最大64KB) */
+    private String extTxt;
+
     private java.util.Date createTime;
 
     private java.util.Date updateTime;
@@ -1152,6 +1158,138 @@ public final class PersonBean
         return 0L !=  (initialized & FL_PERSON_ID_REMARK_MASK);
     }
     /**
+     * Getter method for {@link #extBin}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_person.ext_bin</li>
+     * <li>comments: 应用项目自定义二进制扩展字段(最大64KB)</li>
+     * <li>column size: 65535</li>
+     * <li>JDBC type returned by the driver: Types.LONGVARBINARY</li>
+     * </ul>
+     *
+     * @return the value of extBin
+     */
+    @ThriftField(value=17)
+    public java.nio.ByteBuffer getExtBin(){
+        return extBin;
+    }
+    /**
+     * Setter method for {@link #extBin}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to extBin
+     */
+    public void setExtBin(java.nio.ByteBuffer newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, extBin)) {
+            return;
+        }
+        extBin = newVal;
+
+        modified |= FL_PERSON_ID_EXT_BIN_MASK;
+        initialized |= FL_PERSON_ID_EXT_BIN_MASK;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "extBin")
+    public void writeExtBin(java.nio.ByteBuffer newVal){
+        checkMutable();
+        extBin = newVal;
+    }
+    /**
+     * Determines if the extBin has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkExtBinModified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_EXT_BIN_MASK);
+    }
+
+    /**
+     * Determines if the extBin has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkExtBinInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_EXT_BIN_MASK);
+    }
+    /**
+     * Getter method for {@link #extTxt}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_person.ext_txt</li>
+     * <li>comments: 应用项目自定义文本扩展字段(最大64KB)</li>
+     * <li>column size: 65535</li>
+     * <li>JDBC type returned by the driver: Types.LONGVARCHAR</li>
+     * </ul>
+     *
+     * @return the value of extTxt
+     */
+    @ThriftField(value=18)
+    public String getExtTxt(){
+        return extTxt;
+    }
+    /**
+     * Setter method for {@link #extTxt}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to extTxt
+     */
+    public void setExtTxt(String newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, extTxt)) {
+            return;
+        }
+        extTxt = newVal;
+
+        modified |= FL_PERSON_ID_EXT_TXT_MASK;
+        initialized |= FL_PERSON_ID_EXT_TXT_MASK;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "extTxt")
+    public void writeExtTxt(String newVal){
+        checkMutable();
+        extTxt = newVal;
+    }
+    /**
+     * Determines if the extTxt has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkExtTxtModified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_EXT_TXT_MASK);
+    }
+
+    /**
+     * Determines if the extTxt has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkExtTxtInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_EXT_TXT_MASK);
+    }
+    /**
      * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -1171,7 +1309,7 @@ public final class PersonBean
      * use Long to represent date type for thrift:swift support 
      * @see #getCreateTime()
      */
-    @ThriftField(name = "createTime",value = 17)
+    @ThriftField(name = "createTime",value = 19)
     public Long readCreateTime(){
         return null == createTime ? null:createTime.getTime();
     }
@@ -1263,7 +1401,7 @@ public final class PersonBean
      * use Long to represent date type for thrift:swift support 
      * @see #getUpdateTime()
      */
-    @ThriftField(name = "updateTime",value = 18)
+    @ThriftField(name = "updateTime",value = 20)
     public Long readUpdateTime(){
         return null == updateTime ? null:updateTime.getTime();
     }
@@ -1412,6 +1550,10 @@ public final class PersonBean
             return checkExpiryDateModified();
         case FL_PERSON_ID_REMARK:
             return checkRemarkModified();
+        case FL_PERSON_ID_EXT_BIN:
+            return checkExtBinModified();
+        case FL_PERSON_ID_EXT_TXT:
+            return checkExtTxtModified();
         case FL_PERSON_ID_CREATE_TIME:
             return checkCreateTimeModified();
         case FL_PERSON_ID_UPDATE_TIME:
@@ -1450,6 +1592,10 @@ public final class PersonBean
             return checkExpiryDateInitialized();
         case FL_PERSON_ID_REMARK:
             return checkRemarkInitialized();
+        case FL_PERSON_ID_EXT_BIN:
+            return checkExtBinInitialized();
+        case FL_PERSON_ID_EXT_TXT:
+            return checkExtTxtInitialized();
         case FL_PERSON_ID_CREATE_TIME:
             return checkCreateTimeInitialized();
         case FL_PERSON_ID_UPDATE_TIME:
@@ -1498,6 +1644,8 @@ public final class PersonBean
             FL_PERSON_ID_IMAGE_MD5_MASK |
             FL_PERSON_ID_EXPIRY_DATE_MASK |
             FL_PERSON_ID_REMARK_MASK |
+            FL_PERSON_ID_EXT_BIN_MASK |
+            FL_PERSON_ID_EXT_TXT_MASK |
             FL_PERSON_ID_CREATE_TIME_MASK |
             FL_PERSON_ID_UPDATE_TIME_MASK));
     }
@@ -1526,6 +1674,8 @@ public final class PersonBean
         /* DEFAULT:'2050-12-31'*/
         this.expiryDate = new java.text.SimpleDateFormat("yyyy-MM-dd").parse("2050-12-31",new java.text.ParsePosition(0));
         this.remark = null;
+        this.extBin = null;
+        this.extTxt = null;
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
         this.createTime = null;
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
@@ -1556,6 +1706,8 @@ public final class PersonBean
             .append(getImageMd5(), obj.getImageMd5())
             .append(getExpiryDate(), obj.getExpiryDate())
             .append(getRemark(), obj.getRemark())
+            .append(getExtBin(), obj.getExtBin())
+            .append(getExtTxt(), obj.getExtTxt())
             .append(getCreateTime(), obj.getCreateTime())
             .append(getUpdateTime(), obj.getUpdateTime())
             .isEquals();
@@ -1739,6 +1891,24 @@ public final class PersonBean
                 append(builder,fullIfStringOrBytes,getRemark());
             }
         }
+        if(checkExtBinInitialized()){
+            if(!notNull || null != getExtBin()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("ext_bin=");
+                append(builder,fullIfStringOrBytes,getExtBin());
+            }
+        }
+        if(checkExtTxtInitialized()){
+            if(!notNull || null != getExtTxt()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("ext_txt=");
+                append(builder,fullIfStringOrBytes,getExtTxt());
+            }
+        }
         if(checkCreateTimeInitialized()){
             if(!notNull || null != getCreateTime()){
                 if(count++ >0){
@@ -1776,6 +1946,8 @@ public final class PersonBean
             .append(getImageMd5(), object.getImageMd5())
             .append(getExpiryDate(), object.getExpiryDate())
             .append(getRemark(), object.getRemark())
+            .append(getExtBin(), object.getExtBin())
+            .append(getExtTxt(), object.getExtTxt())
             .append(getCreateTime(), object.getCreateTime())
             .append(getUpdateTime(), object.getUpdateTime())
             .toComparison();
@@ -1811,6 +1983,8 @@ public final class PersonBean
         setImageMd5((String)null);
         setExpiryDate((java.util.Date)null);
         setRemark((String)null);
+        setExtBin((java.nio.ByteBuffer)null);
+        setExtTxt((String)null);
         setCreateTime((java.util.Date)null);
         setUpdateTime((java.util.Date)null);
         isNew(true);
@@ -1928,6 +2102,10 @@ public final class PersonBean
             return (T)getExpiryDate();        
         case FL_PERSON_ID_REMARK: 
             return (T)getRemark();        
+        case FL_PERSON_ID_EXT_BIN: 
+            return (T)getExtBin();        
+        case FL_PERSON_ID_EXT_TXT: 
+            return (T)getExtTxt();        
         case FL_PERSON_ID_CREATE_TIME: 
             return (T)getCreateTime();        
         case FL_PERSON_ID_UPDATE_TIME: 
@@ -1979,6 +2157,12 @@ public final class PersonBean
             break;
         case FL_PERSON_ID_REMARK:
             setRemark((String)value);
+            break;
+        case FL_PERSON_ID_EXT_BIN:
+            setExtBin((java.nio.ByteBuffer)value);
+            break;
+        case FL_PERSON_ID_EXT_TXT:
+            setExtTxt((String)value);
             break;
         case FL_PERSON_ID_CREATE_TIME:
             setCreateTime((java.util.Date)value);
@@ -2177,6 +2361,26 @@ public final class PersonBean
          */
         public Builder remark(String remark){
             TEMPLATE.get().setRemark(remark);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person.ext_bin
+         * @param extBin 应用项目自定义二进制扩展字段(最大64KB)
+         * @see PersonBean#getExtBin()
+         * @see PersonBean#setExtBin(java.nio.ByteBuffer)
+         */
+        public Builder extBin(java.nio.ByteBuffer extBin){
+            TEMPLATE.get().setExtBin(extBin);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person.ext_txt
+         * @param extTxt 应用项目自定义文本扩展字段(最大64KB)
+         * @see PersonBean#getExtTxt()
+         * @see PersonBean#setExtTxt(String)
+         */
+        public Builder extTxt(String extTxt){
+            TEMPLATE.get().setExtTxt(extTxt);
             return this;
         }
         /** 

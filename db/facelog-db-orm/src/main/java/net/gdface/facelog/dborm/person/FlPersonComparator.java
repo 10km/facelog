@@ -50,6 +50,8 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
      *   <li>{@link Constant#FL_PERSON_ID_IMAGE_MD5}
      *   <li>{@link Constant#FL_PERSON_ID_EXPIRY_DATE}
      *   <li>{@link Constant#FL_PERSON_ID_REMARK}
+     *   <li>{@link Constant#FL_PERSON_ID_EXT_BIN}
+     *   <li>{@link Constant#FL_PERSON_ID_EXT_TXT}
      *   <li>{@link Constant#FL_PERSON_ID_CREATE_TIME}
      *   <li>{@link Constant#FL_PERSON_ID_UPDATE_TIME}
      * </ul>
@@ -83,6 +85,8 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
      *   <li>{@link Constant#FL_PERSON_ID_IMAGE_MD5})
      *   <li>{@link Constant#FL_PERSON_ID_EXPIRY_DATE})
      *   <li>{@link Constant#FL_PERSON_ID_REMARK})
+     *   <li>{@link Constant#FL_PERSON_ID_EXT_BIN})
+     *   <li>{@link Constant#FL_PERSON_ID_EXT_TXT})
      *   <li>{@link Constant#FL_PERSON_ID_CREATE_TIME})
      *   <li>{@link Constant#FL_PERSON_ID_UPDATE_TIME})
      * </ul>
@@ -242,6 +246,28 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getRemark().compareTo(b2.getRemark());
+                }
+                break;
+            case FL_PERSON_ID_EXT_BIN:
+                if (b1.getExtBin() == null && b2.getExtBin() != null) {
+                    iReturn = -1;
+                } else if (b1.getExtBin() == null && b2.getExtBin() == null) {
+                    iReturn = 0;
+                } else if (b1.getExtBin() != null && b2.getExtBin() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getExtBin().compareTo(b2.getExtBin());
+                }
+                break;
+            case FL_PERSON_ID_EXT_TXT:
+                if (b1.getExtTxt() == null && b2.getExtTxt() != null) {
+                    iReturn = -1;
+                } else if (b1.getExtTxt() == null && b2.getExtTxt() == null) {
+                    iReturn = 0;
+                } else if (b1.getExtTxt() != null && b2.getExtTxt() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getExtTxt().compareTo(b2.getExtTxt());
                 }
                 break;
             case FL_PERSON_ID_CREATE_TIME:

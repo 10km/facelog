@@ -641,7 +641,7 @@ public interface DaoConstant {
     public static interface PersonConst{
         public static final String TABLENAME = "fl_person";
         /** column count for fl_person table */
-        public static final int COLUMN_COUNT = 15;
+        public static final int COLUMN_COUNT = 17;
         /** primary keys count for fl_person table */
         public static final int PRIMARY_KEY_COUNT = 1;
         /** foreign keys count for fl_person table */
@@ -664,6 +664,8 @@ public interface DaoConstant {
                             + ",fl_person.image_md5"
                             + ",fl_person.expiry_date"
                             + ",fl_person.remark"
+                            + ",fl_person.ext_bin"
+                            + ",fl_person.ext_txt"
                             + ",fl_person.create_time"
                             + ",fl_person.update_time";
         /** Field that contains the comma separated fields of the fl_person table. */
@@ -680,6 +682,8 @@ public interface DaoConstant {
                             + ",image_md5"
                             + ",expiry_date"
                             + ",remark"
+                            + ",ext_bin"
+                            + ",ext_txt"
                             + ",create_time"
                             + ",update_time";
         /** immutable list of {@link #FIELDS} */
@@ -698,6 +702,8 @@ public interface DaoConstant {
                             + ",imageMd5"
                             + ",expiryDate"
                             + ",remark"
+                            + ",extBin"
+                            + ",extTxt"
                             + ",createTime"
                             + ",updateTime";
         /** immutable list of {@link #JAVA_FIELDS} */
@@ -744,10 +750,14 @@ public interface DaoConstant {
             expiryDate("fl_person","expiry_date",12,"getExpiryDate","setExpiryDate"),
             /** constant for fl_person.remark  */
             remark("fl_person","remark",13,"getRemark","setRemark"),
+            /** constant for fl_person.ext_bin  */
+            extBin("fl_person","ext_bin",14,"getExtBin","setExtBin"),
+            /** constant for fl_person.ext_txt  */
+            extTxt("fl_person","ext_txt",15,"getExtTxt","setExtTxt"),
             /** constant for fl_person.create_time  */
-            createTime("fl_person","create_time",14,"getCreateTime","setCreateTime"),
+            createTime("fl_person","create_time",16,"getCreateTime","setCreateTime"),
             /** constant for fl_person.update_time  */
-            updateTime("fl_person","update_time",15,"getUpdateTime","setUpdateTime");
+            updateTime("fl_person","update_time",17,"getUpdateTime","setUpdateTime");
             final ColumnMeta meta;
             private Column(String table,String field,int ordinal,String getter,String setter){
                 meta = new ColumnMeta(table,field,ordinal,getter,setter);

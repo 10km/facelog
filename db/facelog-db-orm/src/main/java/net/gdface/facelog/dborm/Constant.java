@@ -76,7 +76,7 @@ public interface Constant {
     public static final int FL_LOG_PK_COUNT = 1;
     public static final int FL_PERMIT_COLUMN_COUNT = 6;
     public static final int FL_PERMIT_PK_COUNT = 2;
-    public static final int FL_PERSON_COLUMN_COUNT = 15;
+    public static final int FL_PERSON_COLUMN_COUNT = 17;
     public static final int FL_PERSON_PK_COUNT = 1;
     public static final int FL_PERSON_GROUP_COLUMN_COUNT = 9;
     public static final int FL_PERSON_GROUP_PK_COUNT = 1;
@@ -421,12 +421,18 @@ public interface Constant {
     /** Identify the fl_person.remark field (ordinal:13). */
     public static final int FL_PERSON_ID_REMARK = 12;
     public static final long FL_PERSON_ID_REMARK_MASK = 1L << 12;
-    /** Identify the fl_person.create_time field (ordinal:14). */
-    public static final int FL_PERSON_ID_CREATE_TIME = 13;
-    public static final long FL_PERSON_ID_CREATE_TIME_MASK = 1L << 13;
-    /** Identify the fl_person.update_time field (ordinal:15). */
-    public static final int FL_PERSON_ID_UPDATE_TIME = 14;
-    public static final long FL_PERSON_ID_UPDATE_TIME_MASK = 1L << 14;
+    /** Identify the fl_person.ext_bin field (ordinal:14). */
+    public static final int FL_PERSON_ID_EXT_BIN = 13;
+    public static final long FL_PERSON_ID_EXT_BIN_MASK = 1L << 13;
+    /** Identify the fl_person.ext_txt field (ordinal:15). */
+    public static final int FL_PERSON_ID_EXT_TXT = 14;
+    public static final long FL_PERSON_ID_EXT_TXT_MASK = 1L << 14;
+    /** Identify the fl_person.create_time field (ordinal:16). */
+    public static final int FL_PERSON_ID_CREATE_TIME = 15;
+    public static final long FL_PERSON_ID_CREATE_TIME_MASK = 1L << 15;
+    /** Identify the fl_person.update_time field (ordinal:17). */
+    public static final int FL_PERSON_ID_UPDATE_TIME = 16;
+    public static final long FL_PERSON_ID_UPDATE_TIME_MASK = 1L << 16;
     /** Identify the fl_person_group.id field (ordinal:1). */
     public static final int FL_PERSON_GROUP_ID_ID = 0;
     public static final long FL_PERSON_GROUP_ID_ID_MASK = 1L << 0;
@@ -733,6 +739,8 @@ public interface Constant {
                             + ",fl_person.image_md5"
                             + ",fl_person.expiry_date"
                             + ",fl_person.remark"
+                            + ",fl_person.ext_bin"
+                            + ",fl_person.ext_txt"
                             + ",fl_person.create_time"
                             + ",fl_person.update_time";
     /** Field that contains the comma separated fields of the fl_person table. */
@@ -749,6 +757,8 @@ public interface Constant {
                             + ",image_md5"
                             + ",expiry_date"
                             + ",remark"
+                            + ",ext_bin"
+                            + ",ext_txt"
                             + ",create_time"
                             + ",update_time";
     public static final java.util.List<String> FL_PERSON_FIELDS_LIST = java.util.Arrays.asList(FL_PERSON_FIELDS.split(","));
@@ -766,6 +776,8 @@ public interface Constant {
                             + ",imageMd5"
                             + ",expiryDate"
                             + ",remark"
+                            + ",extBin"
+                            + ",extTxt"
                             + ",createTime"
                             + ",updateTime";
     public static final java.util.List<String> FL_PERSON_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_PERSON_JAVA_FIELDS.split(","));

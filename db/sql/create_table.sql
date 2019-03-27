@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS fl_store ;
 CREATE TABLE IF NOT EXISTS fl_store (
   `md5`      char(32) NOT NULL PRIMARY KEY COMMENT '主键,md5检验码',
   `encoding` varchar(16) DEFAULT NULL COMMENT '编码类型,GBK,UTF8...',
-  `data`     blob COMMENT '二进制数据'
+  `data`     mediumblob COMMENT '二进制数据(最大16MB)'
 ) COMMENT '二进制数据存储表' DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS fl_device_group (
@@ -34,8 +34,8 @@ CREATE TABLE IF NOT EXISTS fl_device_group (
   `leaf`        tinyint(1) DEFAULT NULL COMMENT '是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可',
   `parent`      int(11) DEFAULT NULL COMMENT '上一级设备组id',
   `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
-  `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段',
-  `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段',
+  `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段(最大64KB)',
+  `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段(最大64KB)',
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (parent)  REFERENCES fl_device_group(id) ON DELETE SET NULL
@@ -47,8 +47,8 @@ CREATE TABLE IF NOT EXISTS fl_person_group (
   `leaf`        tinyint(1) DEFAULT NULL COMMENT '是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可',
   `parent`      int(11) DEFAULT NULL COMMENT '上一级用户组id',
   `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
-  `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段',
-  `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段',
+  `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段(最大64KB)',
+  `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段(最大64KB)',
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (parent)  REFERENCES fl_person_group(id) ON DELETE SET NULL
@@ -58,8 +58,8 @@ CREATE TABLE IF NOT EXISTS fl_permit (
   `device_group_id`   int(11) NOT NULL COMMENT '外键,设备组id',
   `person_group_id`    int(11) NOT NULL COMMENT '外键,人员组id',
   `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
-  `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段',
-  `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段',
+  `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段(最大64KB)',
+  `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段(最大64KB)',
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`device_group_id`, `person_group_id`),
   FOREIGN KEY (device_group_id)  REFERENCES fl_device_group(id) ON DELETE CASCADE,
@@ -116,6 +116,8 @@ CREATE TABLE IF NOT EXISTS fl_person (
   `image_md5`   char(32)    DEFAULT NULL UNIQUE COMMENT '用户默认照片(证件照,标准照)的md5校验码,外键',
   `expiry_date` date DEFAULT '2050-12-31' COMMENT '验证有效期限(超过期限不能通过验证),为NULL永久有效',
   `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
+  `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段(最大64KB)',
+  `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段(最大64KB)',
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (group_id)  REFERENCES fl_person_group(id) ON DELETE SET NULL,

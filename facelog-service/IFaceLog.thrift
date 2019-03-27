@@ -157,8 +157,10 @@ struct PersonBean {
   14: optional string imageMd5;
   15: optional i64 expiryDate;
   16: optional string remark;
-  17: optional i64 createTime;
-  18: optional i64 updateTime;
+  17: optional binary extBin;
+  18: optional string extTxt;
+  19: optional i64 createTime;
+  20: optional i64 updateTime;
 }
 
 struct LogLightBean {

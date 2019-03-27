@@ -572,6 +572,12 @@ public class DbConverter implements IDbConverter<
             if(right.checkRemarkInitialized()){
                 left.setRemark(right.getRemark());
             }
+            if(right.checkExtBinInitialized()){
+                left.setExtBin(right.getExtBin());
+            }
+            if(right.checkExtTxtInitialized()){
+                left.setExtTxt(right.getExtTxt());
+            }
             if(right.checkCreateTimeInitialized()){
                 left.setCreateTime(right.getCreateTime());
             }
@@ -622,6 +628,12 @@ public class DbConverter implements IDbConverter<
             }
             if(left.checkRemarkInitialized() ){
                 right.setRemark(left.getRemark());
+            }
+            if(left.checkExtBinInitialized() ){
+                right.setExtBin(left.getExtBin());
+            }
+            if(left.checkExtTxtInitialized() ){
+                right.setExtTxt(left.getExtTxt());
             }
 // IGNORE field fl_person.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(left.checkCreateTimeInitialized() ){

@@ -8,6 +8,8 @@
 package net.gdface.facelog;
 
 import gu.simplemq.Channel;
+import net.gdface.facelog.CommonConstant;
+
 import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.LogBean;
 /**

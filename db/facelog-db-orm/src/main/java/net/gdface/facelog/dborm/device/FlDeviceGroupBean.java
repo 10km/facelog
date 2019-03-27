@@ -44,10 +44,10 @@ public  class FlDeviceGroupBean
     /** comments:备注 */
     private String remark;
 
-    /** comments:应用项目自定义二进制扩展字段 */
+    /** comments:应用项目自定义二进制扩展字段(最大64KB) */
     private java.nio.ByteBuffer extBin;
 
-    /** comments:应用项目自定义文本扩展字段 */
+    /** comments:应用项目自定义文本扩展字段(最大64KB) */
     private String extTxt;
 
     private java.util.Date createTime;
@@ -478,7 +478,7 @@ public  class FlDeviceGroupBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device_group.ext_bin</li>
-     * <li>comments: 应用项目自定义二进制扩展字段</li>
+     * <li>comments: 应用项目自定义二进制扩展字段(最大64KB)</li>
      * <li>column size: 65535</li>
      * <li>JDBC type returned by the driver: Types.LONGVARBINARY</li>
      * </ul>
@@ -533,7 +533,7 @@ public  class FlDeviceGroupBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device_group.ext_txt</li>
-     * <li>comments: 应用项目自定义文本扩展字段</li>
+     * <li>comments: 应用项目自定义文本扩展字段(最大64KB)</li>
      * <li>column size: 65535</li>
      * <li>JDBC type returned by the driver: Types.LONGVARCHAR</li>
      * </ul>
@@ -1338,7 +1338,7 @@ public  class FlDeviceGroupBean
         }
         /** 
          * fill the field : fl_device_group.ext_bin
-         * @param extBin 应用项目自定义二进制扩展字段
+         * @param extBin 应用项目自定义二进制扩展字段(最大64KB)
          * @see FlDeviceGroupBean#getExtBin()
          * @see FlDeviceGroupBean#setExtBin(java.nio.ByteBuffer)
          */
@@ -1348,7 +1348,7 @@ public  class FlDeviceGroupBean
         }
         /** 
          * fill the field : fl_device_group.ext_txt
-         * @param extTxt 应用项目自定义文本扩展字段
+         * @param extTxt 应用项目自定义文本扩展字段(最大64KB)
          * @see FlDeviceGroupBean#getExtTxt()
          * @see FlDeviceGroupBean#setExtTxt(String)
          */

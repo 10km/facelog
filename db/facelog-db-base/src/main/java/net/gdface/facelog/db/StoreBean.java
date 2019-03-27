@@ -34,7 +34,7 @@ public final class StoreBean
     /** comments:编码类型,GBK,UTF8... */
     private String encoding;
 
-    /** comments:二进制数据 */
+    /** comments:二进制数据(最大16MB) */
     private java.nio.ByteBuffer data;
 
     /** flag whether {@code this} can be modified */
@@ -288,8 +288,8 @@ public final class StoreBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_store.data</li>
-     * <li>comments: 二进制数据</li>
-     * <li>column size: 65535</li>
+     * <li>comments: 二进制数据(最大16MB)</li>
+     * <li>column size: 16777215</li>
      * <li>JDBC type returned by the driver: Types.LONGVARBINARY</li>
      * </ul>
      *
@@ -764,7 +764,7 @@ public final class StoreBean
         }
         /** 
          * fill the field : fl_store.data
-         * @param data 二进制数据
+         * @param data 二进制数据(最大16MB)
          * @see StoreBean#getData()
          * @see StoreBean#setData(java.nio.ByteBuffer)
          */
