@@ -1159,6 +1159,28 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(getDeviceGroupsBelongs(deviceId), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#getDeviceGroupsPermit(java.lang.Integer)}
+     */
+    public ListenableFuture<List<Integer>> getDeviceGroupsPermit(Integer personGroupId){
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.getDeviceGroupsPermit(
+                personGroupId,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void getDeviceGroupsPermit(Integer personGroupId,
+        FutureCallback<List<Integer>>callback){
+        factory.addCallback(getDeviceGroupsPermit(personGroupId), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#getDeviceIdOfFeature(java.lang.String)}
      */
     public ListenableFuture<Integer> getDeviceIdOfFeature(String featureMd5){
@@ -1587,6 +1609,28 @@ public class IFaceLogThriftClientAsync {
     public void getPersonGroupsBelongs(int personId,
         FutureCallback<List<Integer>>callback){
         factory.addCallback(getPersonGroupsBelongs(personId), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#getPersonGroupsPermittedBy(java.lang.Integer)}
+     */
+    public ListenableFuture<List<Integer>> getPersonGroupsPermittedBy(Integer deviceGroupId){
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.getPersonGroupsPermittedBy(
+                deviceGroupId,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void getPersonGroupsPermittedBy(Integer deviceGroupId,
+        FutureCallback<List<Integer>>callback){
+        factory.addCallback(getPersonGroupsPermittedBy(deviceGroupId), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getPersonPermit(int,int)}

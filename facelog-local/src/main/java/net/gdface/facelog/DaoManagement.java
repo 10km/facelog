@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -28,6 +29,7 @@ import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
+import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.StoreBean;
@@ -142,6 +144,32 @@ public class DaoManagement extends BaseDao {
 			public Boolean apply(Integer input) {
 				return daoGetPersonPermit(deviceId,input);
 			}}));
+	}
+	/**
+	 * 从permit表返回允许在{@code deviceGroupId}指定的设备组通过的所有人员组({@link PersonGroupBean})对象的id
+	 * @param deviceGroupId
+	 * @return
+	 */
+	protected List<Integer> daoGetPersonGroupsPermittedBy(Integer deviceGroupId){
+		PermitBean template = PermitBean.builder().deviceGroupId(deviceGroupId).build();
+		List<PermitBean> permits = daoLoadPermitUsingTemplate(template, -1, -1);
+		
+		return Lists.transform(permits, daoCastPermitToPersonGroupId);
+	}
+	/**
+	 * 从permit表返回允许在{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})的id<br>
+	 * 不排序,不包含重复id
+	 * @param personGroupId
+	 * @return
+	 */
+	protected List<Integer> daoGetDeviceGroupsPermit(Integer personGroupId){
+		PermitBean template = PermitBean.builder().personGroupId(personGroupId).build();
+		List<PermitBean> permits = daoLoadPermitUsingTemplate(template, -1, -1);
+		HashSet<Integer> groups = Sets.newHashSet();
+		for (PermitBean bean : permits) {
+			groups.addAll(Lists.transform(daoListOfParentForDeviceGroup(bean.getDeviceGroupId()),daoCastDeviceGroupToPk));
+		}
+		return Lists.newArrayList(groups);
 	}
 	////////////////////////////////////////////
 	

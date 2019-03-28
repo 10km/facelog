@@ -777,6 +777,22 @@ public interface IFaceLog{
 	public List<Boolean> getGroupPermits(int deviceId,List<Integer> personGroupIdList);
 	/** 参见 {@link #getPersonPermit(int, int) } */
 	public List<Boolean> getPersonPermits(int deviceId,List<Integer> personIdList);
+
+	/**
+	 * 从permit表返回允许在{@code deviceGroupId}指定的设备组通过的所有人员组{@link PersonGroupBean}对象的id<br>
+	 *  不排序,不包含重复id
+	 * @param deviceGroupId
+	 * @return
+	 */
+	List<Integer> getPersonGroupsPermittedBy(Integer deviceGroupId);
+
+	/**
+	 * 从permit表返回允许在{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})的id<br>
+	 * 不排序,不包含重复id
+	 * @param personGroupId
+	 * @return
+	 */
+	List<Integer> getDeviceGroupsPermit(Integer personGroupId);
 	/**
 	 * (主动更新机制实现)<br>
 	 * 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录

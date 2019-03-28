@@ -643,6 +643,19 @@ class BaseDao implements CommonConstant {
                     throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().loadByWhereAsList(where,null,startRow,numRows);
     }
+    //16-2
+    /**
+     * 以{@code bean} 为模板查询 $table.name 记录
+     * @param bean 模板对象
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @see $table.asManagerInterfaceNSP()${esc.hash}loadUsingTemplate($beanClass,int,int)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}List<$beanClass> daoLoad${coreClass}UsingTemplate($beanClass bean,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return ${table.getGetManagerMethod()}().loadUsingTemplateAsList(bean,startRow,numRows);
+    }
     //17
     /**
      * 返回 $table.name 表的所有记录

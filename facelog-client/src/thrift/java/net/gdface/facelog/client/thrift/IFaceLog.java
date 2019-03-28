@@ -368,6 +368,14 @@ public interface IFaceLog
             @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId
         );
 
+        @ThriftMethod(value = "getDeviceGroupsPermit",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<List<Integer>> getDeviceGroupsPermit(
+            @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.OPTIONAL) final Integer personGroupId
+        );
+
         @ThriftMethod(value = "getDeviceIdOfFeature",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -520,6 +528,14 @@ public interface IFaceLog
                       })
         ListenableFuture<List<Integer>> getPersonGroupsBelongs(
             @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
+        );
+
+        @ThriftMethod(value = "getPersonGroupsPermittedBy",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<List<Integer>> getPersonGroupsPermittedBy(
+            @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.OPTIONAL) final Integer deviceGroupId
         );
 
         @ThriftMethod(value = "getPersonPermit",
@@ -1432,6 +1448,14 @@ public interface IFaceLog
         @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId
     ) throws ServiceRuntimeException;
 
+    @ThriftMethod(value = "getDeviceGroupsPermit",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    List<Integer> getDeviceGroupsPermit(
+        @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.OPTIONAL) final Integer personGroupId
+    ) throws ServiceRuntimeException;
+
     @ThriftMethod(value = "getDeviceIdOfFeature",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1584,6 +1608,14 @@ public interface IFaceLog
                   })
     List<Integer> getPersonGroupsBelongs(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "getPersonGroupsPermittedBy",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    List<Integer> getPersonGroupsPermittedBy(
+        @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.OPTIONAL) final Integer deviceGroupId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getPersonPermit",

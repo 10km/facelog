@@ -480,6 +480,19 @@ class BaseDao implements CommonConstant {
                     throws RuntimeDaoException{
         return getDeviceManager().loadByWhereAsList(where,null,startRow,numRows);
     }
+    //16-2
+    /**
+     * 以{@code bean} 为模板查询 fl_device 记录
+     * @param bean 模板对象
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @see IDeviceManager#loadUsingTemplate(DeviceBean,int,int)
+     * @throws RuntimeDaoException
+     */
+    protected List<DeviceBean> daoLoadDeviceUsingTemplate(DeviceBean bean,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return getDeviceManager().loadUsingTemplateAsList(bean,startRow,numRows);
+    }
     //17
     /**
      * 返回 fl_device 表的所有记录
@@ -684,7 +697,7 @@ class BaseDao implements CommonConstant {
      * @see DeviceGroupBean#replaceNull(List)
      * @throws RuntimeDaoException
      */
-    protected List<DeviceGroupBean> daoGetDeviceGroups(Collection<Integer> idCollection)
+    protected List<DeviceGroupBean> daoGetDeviceGroupsPermit(Collection<Integer> idCollection)
                     throws RuntimeDaoException{
         return DeviceGroupBean.replaceNull((getDeviceGroupManager().loadByPrimaryKey(idCollection)));
     }
@@ -1073,6 +1086,19 @@ class BaseDao implements CommonConstant {
     protected List<DeviceGroupBean> daoLoadDeviceGroupByWhere(String where,int startRow, int numRows)
                     throws RuntimeDaoException{
         return getDeviceGroupManager().loadByWhereAsList(where,null,startRow,numRows);
+    }
+    //16-2
+    /**
+     * 以{@code bean} 为模板查询 fl_device_group 记录
+     * @param bean 模板对象
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @see IDeviceGroupManager#loadUsingTemplate(DeviceGroupBean,int,int)
+     * @throws RuntimeDaoException
+     */
+    protected List<DeviceGroupBean> daoLoadDeviceGroupUsingTemplate(DeviceGroupBean bean,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return getDeviceGroupManager().loadUsingTemplateAsList(bean,startRow,numRows);
     }
     //17
     /**
@@ -1592,6 +1618,19 @@ class BaseDao implements CommonConstant {
     protected List<PersonBean> daoLoadPersonByWhere(String where,int startRow, int numRows)
                     throws RuntimeDaoException{
         return getPersonManager().loadByWhereAsList(where,null,startRow,numRows);
+    }
+    //16-2
+    /**
+     * 以{@code bean} 为模板查询 fl_person 记录
+     * @param bean 模板对象
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @see IPersonManager#loadUsingTemplate(PersonBean,int,int)
+     * @throws RuntimeDaoException
+     */
+    protected List<PersonBean> daoLoadPersonUsingTemplate(PersonBean bean,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return getPersonManager().loadUsingTemplateAsList(bean,startRow,numRows);
     }
     //17
     /**
@@ -2187,6 +2226,19 @@ class BaseDao implements CommonConstant {
                     throws RuntimeDaoException{
         return getPersonGroupManager().loadByWhereAsList(where,null,startRow,numRows);
     }
+    //16-2
+    /**
+     * 以{@code bean} 为模板查询 fl_person_group 记录
+     * @param bean 模板对象
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @see IPersonGroupManager#loadUsingTemplate(PersonGroupBean,int,int)
+     * @throws RuntimeDaoException
+     */
+    protected List<PersonGroupBean> daoLoadPersonGroupUsingTemplate(PersonGroupBean bean,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return getPersonGroupManager().loadUsingTemplateAsList(bean,startRow,numRows);
+    }
     //17
     /**
      * 返回 fl_person_group 表的所有记录
@@ -2692,6 +2744,19 @@ class BaseDao implements CommonConstant {
                     throws RuntimeDaoException{
         return getFaceManager().loadByWhereAsList(where,null,startRow,numRows);
     }
+    //16-2
+    /**
+     * 以{@code bean} 为模板查询 fl_face 记录
+     * @param bean 模板对象
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @see IFaceManager#loadUsingTemplate(FaceBean,int,int)
+     * @throws RuntimeDaoException
+     */
+    protected List<FaceBean> daoLoadFaceUsingTemplate(FaceBean bean,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return getFaceManager().loadUsingTemplateAsList(bean,startRow,numRows);
+    }
     //17
     /**
      * 返回 fl_face 表的所有记录
@@ -3094,6 +3159,19 @@ class BaseDao implements CommonConstant {
     protected List<FeatureBean> daoLoadFeatureByWhere(String where,int startRow, int numRows)
                     throws RuntimeDaoException{
         return getFeatureManager().loadByWhereAsList(where,null,startRow,numRows);
+    }
+    //16-2
+    /**
+     * 以{@code bean} 为模板查询 fl_feature 记录
+     * @param bean 模板对象
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @see IFeatureManager#loadUsingTemplate(FeatureBean,int,int)
+     * @throws RuntimeDaoException
+     */
+    protected List<FeatureBean> daoLoadFeatureUsingTemplate(FeatureBean bean,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return getFeatureManager().loadUsingTemplateAsList(bean,startRow,numRows);
     }
     //17
     /**
@@ -3540,6 +3618,19 @@ class BaseDao implements CommonConstant {
     protected List<ImageBean> daoLoadImageByWhere(String where,int startRow, int numRows)
                     throws RuntimeDaoException{
         return getImageManager().loadByWhereAsList(where,null,startRow,numRows);
+    }
+    //16-2
+    /**
+     * 以{@code bean} 为模板查询 fl_image 记录
+     * @param bean 模板对象
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @see IImageManager#loadUsingTemplate(ImageBean,int,int)
+     * @throws RuntimeDaoException
+     */
+    protected List<ImageBean> daoLoadImageUsingTemplate(ImageBean bean,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return getImageManager().loadUsingTemplateAsList(bean,startRow,numRows);
     }
     //17
     /**
@@ -4020,6 +4111,19 @@ class BaseDao implements CommonConstant {
                     throws RuntimeDaoException{
         return getLogManager().loadByWhereAsList(where,null,startRow,numRows);
     }
+    //16-2
+    /**
+     * 以{@code bean} 为模板查询 fl_log 记录
+     * @param bean 模板对象
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @see ILogManager#loadUsingTemplate(LogBean,int,int)
+     * @throws RuntimeDaoException
+     */
+    protected List<LogBean> daoLoadLogUsingTemplate(LogBean bean,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return getLogManager().loadUsingTemplateAsList(bean,startRow,numRows);
+    }
     //17
     /**
      * 返回 fl_log 表的所有记录
@@ -4459,6 +4563,19 @@ class BaseDao implements CommonConstant {
                     throws RuntimeDaoException{
         return getPermitManager().loadByWhereAsList(where,null,startRow,numRows);
     }
+    //16-2
+    /**
+     * 以{@code bean} 为模板查询 fl_permit 记录
+     * @param bean 模板对象
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @see IPermitManager#loadUsingTemplate(PermitBean,int,int)
+     * @throws RuntimeDaoException
+     */
+    protected List<PermitBean> daoLoadPermitUsingTemplate(PermitBean bean,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return getPermitManager().loadUsingTemplateAsList(bean,startRow,numRows);
+    }
     //17
     /**
      * 返回 fl_permit 表的所有记录
@@ -4773,6 +4890,19 @@ class BaseDao implements CommonConstant {
                     throws RuntimeDaoException{
         return getStoreManager().loadByWhereAsList(where,null,startRow,numRows);
     }
+    //16-2
+    /**
+     * 以{@code bean} 为模板查询 fl_store 记录
+     * @param bean 模板对象
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @see IStoreManager#loadUsingTemplate(StoreBean,int,int)
+     * @throws RuntimeDaoException
+     */
+    protected List<StoreBean> daoLoadStoreUsingTemplate(StoreBean bean,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return getStoreManager().loadUsingTemplateAsList(bean,startRow,numRows);
+    }
     //17
     /**
      * 返回 fl_store 表的所有记录
@@ -4820,6 +4950,19 @@ class BaseDao implements CommonConstant {
     protected List<LogLightBean> daoLoadLogLightByWhere(String where,int startRow, int numRows)
                     throws RuntimeDaoException{
         return getLogLightManager().loadByWhereAsList(where,null,startRow,numRows);
+    }
+    //16-2
+    /**
+     * 以{@code bean} 为模板查询 fl_log_light 记录
+     * @param bean 模板对象
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @see ILogLightManager#loadUsingTemplate(LogLightBean,int,int)
+     * @throws RuntimeDaoException
+     */
+    protected List<LogLightBean> daoLoadLogLightUsingTemplate(LogLightBean bean,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return getLogLightManager().loadUsingTemplateAsList(bean,startRow,numRows);
     }
     //17
     /**

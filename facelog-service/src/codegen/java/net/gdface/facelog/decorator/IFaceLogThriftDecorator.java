@@ -931,6 +931,25 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#getDeviceGroupsPermit(java.lang.Integer)}
+     */
+    @ThriftMethod(value = "getDeviceGroupsPermit" )
+    public List<Integer> getDeviceGroupsPermit(Integer personGroupId) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().getDeviceGroupsPermit(personGroupId),
+                    Integer.class,
+                    Integer.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#getDeviceIdOfFeature(java.lang.String)}
      */
     @ThriftMethod(value = "getDeviceIdOfFeature" )
@@ -1291,6 +1310,25 @@ public class IFaceLogThriftDecorator {
         try{
             return TypeTransformer.getInstance().to(
                     delegate().getPersonGroupsBelongs(personId),
+                    Integer.class,
+                    Integer.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#getPersonGroupsPermittedBy(java.lang.Integer)}
+     */
+    @ThriftMethod(value = "getPersonGroupsPermittedBy" )
+    public List<Integer> getPersonGroupsPermittedBy(Integer deviceGroupId) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().getPersonGroupsPermittedBy(deviceGroupId),
                     Integer.class,
                     Integer.class);
         }

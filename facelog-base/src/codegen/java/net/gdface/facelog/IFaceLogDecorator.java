@@ -360,6 +360,11 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public List<Integer> getDeviceGroupsPermit (Integer personGroupId) {
+        return delegate().getDeviceGroupsPermit(personGroupId);
+    }
+
+    @Override
     public Integer getDeviceIdOfFeature (String featureMd5) {
         return delegate().getDeviceIdOfFeature(featureMd5);
     }
@@ -452,6 +457,11 @@ public class IFaceLogDecorator implements IFaceLog{
     @Override
     public List<Integer> getPersonGroupsBelongs (int personId) {
         return delegate().getPersonGroupsBelongs(personId);
+    }
+
+    @Override
+    public List<Integer> getPersonGroupsPermittedBy (Integer deviceGroupId) {
+        return delegate().getPersonGroupsPermittedBy(deviceGroupId);
     }
 
     @Override

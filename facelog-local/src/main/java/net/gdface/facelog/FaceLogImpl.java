@@ -828,7 +828,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	@Override
 	public List<DeviceGroupBean> getDeviceGroups(List<Integer> groupIdList) {
 		try{
-			return dm.daoGetDeviceGroups(groupIdList); 
+			return dm.daoGetDeviceGroupsPermit(groupIdList); 
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}
@@ -1029,6 +1029,22 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	public List<Boolean> getPersonPermits(int deviceId,List<Integer> personIdList) {
 		try{
 			return dm.daoGetPermit(deviceId, personIdList);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public List<Integer> getPersonGroupsPermittedBy(Integer deviceGroupId){
+		try{
+			return dm.daoGetPersonGroupsPermittedBy(deviceGroupId);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public List<Integer> getDeviceGroupsPermit(Integer personGroupId){
+		try{
+			return dm.daoGetDeviceGroupsPermit(personGroupId);
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}

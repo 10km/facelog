@@ -245,6 +245,7 @@ service IFaceLog {
   DeviceGroupBean getDeviceGroup(1: required i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
   list<DeviceGroupBean> getDeviceGroups(1: optional list<i32> groupIdList) throws (1: ServiceRuntimeException ex1);
   list<i32> getDeviceGroupsBelongs(1: required i32 deviceId) throws (1: ServiceRuntimeException ex1);
+  list<i32> getDeviceGroupsPermit(1: optional i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   i32 getDeviceIdOfFeature(1: optional string featureMd5) throws (1: ServiceRuntimeException ex1);
   list<DeviceBean> getDevices(1: optional list<i32> idList) throws (1: ServiceRuntimeException ex1);
   list<i32> getDevicesOfGroup(1: required i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
@@ -264,6 +265,7 @@ service IFaceLog {
   PersonGroupBean getPersonGroup(1: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   list<PersonGroupBean> getPersonGroups(1: optional list<i32> groupIdList) throws (1: ServiceRuntimeException ex1);
   list<i32> getPersonGroupsBelongs(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
+  list<i32> getPersonGroupsPermittedBy(1: optional i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
   bool getPersonPermit(1: required i32 deviceId, 2: required i32 personId) throws (1: ServiceRuntimeException ex1);
   list<bool> getPersonPermits(1: required i32 deviceId, 2: optional list<i32> personIdList) throws (1: ServiceRuntimeException ex1);
   list<PersonBean> getPersons(1: optional list<i32> idList) throws (1: ServiceRuntimeException ex1);

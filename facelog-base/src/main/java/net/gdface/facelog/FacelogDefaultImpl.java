@@ -477,6 +477,14 @@ public class FacelogDefaultImpl implements IFaceLog {
 		return null;
 	}
 
+	public List<Integer> getPersonGroupsPermittedBy(Integer deviceGroupId) {
+		return null;
+	}
+
+	public List<Integer> getDeviceGroupsPermit(Integer personGroupId) {
+		return null;
+	}
+
 	@Override
 	public List<PermitBean> loadPermitByUpdate(long timestamp) {
 		return null;
