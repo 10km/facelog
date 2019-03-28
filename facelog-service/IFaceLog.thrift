@@ -136,8 +136,10 @@ struct DeviceBean {
   8: optional string serialNo;
   9: optional string mac;
   10: optional string remark;
-  11: optional i64 createTime;
-  12: optional i64 updateTime;
+  11: optional binary extBin;
+  12: optional string extTxt;
+  13: optional i64 createTime;
+  14: optional i64 updateTime;
 }
 
 struct PersonBean {

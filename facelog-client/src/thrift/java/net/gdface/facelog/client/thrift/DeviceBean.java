@@ -92,9 +92,25 @@ public final class DeviceBean
     @ThriftField
     public void setRemark(final String remark) { this.remark = remark; }
 
+    private byte [] extBin;
+
+    @ThriftField(value=11, name="extBin", requiredness=Requiredness.OPTIONAL)
+    public byte [] getExtBin() { return extBin; }
+
+    @ThriftField
+    public void setExtBin(final byte [] extBin) { this.extBin = extBin; }
+
+    private String extTxt;
+
+    @ThriftField(value=12, name="extTxt", requiredness=Requiredness.OPTIONAL)
+    public String getExtTxt() { return extTxt; }
+
+    @ThriftField
+    public void setExtTxt(final String extTxt) { this.extTxt = extTxt; }
+
     private Long createTime;
 
-    @ThriftField(value=11, name="createTime", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=13, name="createTime", requiredness=Requiredness.OPTIONAL)
     public Long getCreateTime() { return createTime; }
 
     @ThriftField
@@ -102,7 +118,7 @@ public final class DeviceBean
 
     private Long updateTime;
 
-    @ThriftField(value=12, name="updateTime", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=14, name="updateTime", requiredness=Requiredness.OPTIONAL)
     public Long getUpdateTime() { return updateTime; }
 
     @ThriftField
@@ -122,6 +138,8 @@ public final class DeviceBean
             .add("serialNo", serialNo)
             .add("mac", mac)
             .add("remark", remark)
+            .add("extBin", extBin)
+            .add("extTxt", extTxt)
             .add("createTime", createTime)
             .add("updateTime", updateTime)
             .toString();

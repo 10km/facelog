@@ -63,7 +63,7 @@ public interface Constant {
     // COLUMN COLUMN CONSTANT
     //////////////////////////////////////    
     
-    public static final int FL_DEVICE_COLUMN_COUNT = 9;
+    public static final int FL_DEVICE_COLUMN_COUNT = 11;
     public static final int FL_DEVICE_PK_COUNT = 1;
     public static final int FL_DEVICE_GROUP_COLUMN_COUNT = 9;
     public static final int FL_DEVICE_GROUP_PK_COUNT = 1;
@@ -212,12 +212,18 @@ public interface Constant {
     /** Identify the fl_device.remark field (ordinal:7). */
     public static final int FL_DEVICE_ID_REMARK = 6;
     public static final long FL_DEVICE_ID_REMARK_MASK = 1L << 6;
-    /** Identify the fl_device.create_time field (ordinal:8). */
-    public static final int FL_DEVICE_ID_CREATE_TIME = 7;
-    public static final long FL_DEVICE_ID_CREATE_TIME_MASK = 1L << 7;
-    /** Identify the fl_device.update_time field (ordinal:9). */
-    public static final int FL_DEVICE_ID_UPDATE_TIME = 8;
-    public static final long FL_DEVICE_ID_UPDATE_TIME_MASK = 1L << 8;
+    /** Identify the fl_device.ext_bin field (ordinal:8). */
+    public static final int FL_DEVICE_ID_EXT_BIN = 7;
+    public static final long FL_DEVICE_ID_EXT_BIN_MASK = 1L << 7;
+    /** Identify the fl_device.ext_txt field (ordinal:9). */
+    public static final int FL_DEVICE_ID_EXT_TXT = 8;
+    public static final long FL_DEVICE_ID_EXT_TXT_MASK = 1L << 8;
+    /** Identify the fl_device.create_time field (ordinal:10). */
+    public static final int FL_DEVICE_ID_CREATE_TIME = 9;
+    public static final long FL_DEVICE_ID_CREATE_TIME_MASK = 1L << 9;
+    /** Identify the fl_device.update_time field (ordinal:11). */
+    public static final int FL_DEVICE_ID_UPDATE_TIME = 10;
+    public static final long FL_DEVICE_ID_UPDATE_TIME_MASK = 1L << 10;
     /** Identify the fl_device_group.id field (ordinal:1). */
     public static final int FL_DEVICE_GROUP_ID_ID = 0;
     public static final long FL_DEVICE_GROUP_ID_ID_MASK = 1L << 0;
@@ -500,6 +506,8 @@ public interface Constant {
                             + ",fl_device.serial_no"
                             + ",fl_device.mac"
                             + ",fl_device.remark"
+                            + ",fl_device.ext_bin"
+                            + ",fl_device.ext_txt"
                             + ",fl_device.create_time"
                             + ",fl_device.update_time";
     /** Field that contains the comma separated fields of the fl_device table. */
@@ -510,6 +518,8 @@ public interface Constant {
                             + ",serial_no"
                             + ",mac"
                             + ",remark"
+                            + ",ext_bin"
+                            + ",ext_txt"
                             + ",create_time"
                             + ",update_time";
     public static final java.util.List<String> FL_DEVICE_FIELDS_LIST = java.util.Arrays.asList(FL_DEVICE_FIELDS.split(","));
@@ -521,6 +531,8 @@ public interface Constant {
                             + ",serialNo"
                             + ",mac"
                             + ",remark"
+                            + ",extBin"
+                            + ",extTxt"
                             + ",createTime"
                             + ",updateTime";
     public static final java.util.List<String> FL_DEVICE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_DEVICE_JAVA_FIELDS.split(","));

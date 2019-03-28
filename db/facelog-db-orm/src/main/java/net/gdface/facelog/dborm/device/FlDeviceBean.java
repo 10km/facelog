@@ -50,6 +50,12 @@ public  class FlDeviceBean
     /** comments:备注 */
     private String remark;
 
+    /** comments:应用项目自定义二进制扩展字段(最大64KB) */
+    private java.nio.ByteBuffer extBin;
+
+    /** comments:应用项目自定义文本扩展字段(最大64KB) */
+    private String extTxt;
+
     private java.util.Date createTime;
 
     private java.util.Date updateTime;
@@ -573,6 +579,116 @@ public  class FlDeviceBean
         return 0L !=  (initialized & FL_DEVICE_ID_REMARK_MASK);
     }
     /**
+     * Getter method for {@link #extBin}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.ext_bin</li>
+     * <li>comments: 应用项目自定义二进制扩展字段(最大64KB)</li>
+     * <li>column size: 65535</li>
+     * <li>JDBC type returned by the driver: Types.LONGVARBINARY</li>
+     * </ul>
+     *
+     * @return the value of extBin
+     */
+    public java.nio.ByteBuffer getExtBin(){
+        return extBin;
+    }
+    /**
+     * Setter method for {@link #extBin}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to extBin
+     */
+    public void setExtBin(java.nio.ByteBuffer newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, extBin)) {
+            return;
+        }
+        extBin = newVal;
+
+        modified |= FL_DEVICE_ID_EXT_BIN_MASK;
+        initialized |= FL_DEVICE_ID_EXT_BIN_MASK;
+    }
+    /**
+     * Determines if the extBin has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkExtBinModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_EXT_BIN_MASK);
+    }
+
+    /**
+     * Determines if the extBin has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkExtBinInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_EXT_BIN_MASK);
+    }
+    /**
+     * Getter method for {@link #extTxt}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.ext_txt</li>
+     * <li>comments: 应用项目自定义文本扩展字段(最大64KB)</li>
+     * <li>column size: 65535</li>
+     * <li>JDBC type returned by the driver: Types.LONGVARCHAR</li>
+     * </ul>
+     *
+     * @return the value of extTxt
+     */
+    public String getExtTxt(){
+        return extTxt;
+    }
+    /**
+     * Setter method for {@link #extTxt}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to extTxt
+     */
+    public void setExtTxt(String newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, extTxt)) {
+            return;
+        }
+        extTxt = newVal;
+
+        modified |= FL_DEVICE_ID_EXT_TXT_MASK;
+        initialized |= FL_DEVICE_ID_EXT_TXT_MASK;
+    }
+    /**
+     * Determines if the extTxt has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkExtTxtModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_EXT_TXT_MASK);
+    }
+
+    /**
+     * Determines if the extTxt has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkExtTxtInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_EXT_TXT_MASK);
+    }
+    /**
      * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -766,6 +882,10 @@ public  class FlDeviceBean
             return checkMacModified();
         case FL_DEVICE_ID_REMARK:
             return checkRemarkModified();
+        case FL_DEVICE_ID_EXT_BIN:
+            return checkExtBinModified();
+        case FL_DEVICE_ID_EXT_TXT:
+            return checkExtTxtModified();
         case FL_DEVICE_ID_CREATE_TIME:
             return checkCreateTimeModified();
         case FL_DEVICE_ID_UPDATE_TIME:
@@ -792,6 +912,10 @@ public  class FlDeviceBean
             return checkMacInitialized();
         case FL_DEVICE_ID_REMARK:
             return checkRemarkInitialized();
+        case FL_DEVICE_ID_EXT_BIN:
+            return checkExtBinInitialized();
+        case FL_DEVICE_ID_EXT_TXT:
+            return checkExtTxtInitialized();
         case FL_DEVICE_ID_CREATE_TIME:
             return checkCreateTimeInitialized();
         case FL_DEVICE_ID_UPDATE_TIME:
@@ -834,6 +958,8 @@ public  class FlDeviceBean
             FL_DEVICE_ID_SERIAL_NO_MASK |
             FL_DEVICE_ID_MAC_MASK |
             FL_DEVICE_ID_REMARK_MASK |
+            FL_DEVICE_ID_EXT_BIN_MASK |
+            FL_DEVICE_ID_EXT_TXT_MASK |
             FL_DEVICE_ID_CREATE_TIME_MASK |
             FL_DEVICE_ID_UPDATE_TIME_MASK));
     }
@@ -855,6 +981,8 @@ public  class FlDeviceBean
         this.serialNo = null;
         this.mac = null;
         this.remark = null;
+        this.extBin = null;
+        this.extTxt = null;
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
         this.createTime = null;
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
@@ -879,6 +1007,8 @@ public  class FlDeviceBean
             .append(getSerialNo(), obj.getSerialNo())
             .append(getMac(), obj.getMac())
             .append(getRemark(), obj.getRemark())
+            .append(getExtBin(), obj.getExtBin())
+            .append(getExtTxt(), obj.getExtTxt())
             .append(getCreateTime(), obj.getCreateTime())
             .append(getUpdateTime(), obj.getUpdateTime())
             .isEquals();
@@ -1008,6 +1138,24 @@ public  class FlDeviceBean
                 append(builder,fullIfStringOrBytes,getRemark());
             }
         }
+        if(checkExtBinInitialized()){
+            if(!notNull || null != getExtBin()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("ext_bin=");
+                append(builder,fullIfStringOrBytes,getExtBin());
+            }
+        }
+        if(checkExtTxtInitialized()){
+            if(!notNull || null != getExtTxt()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("ext_txt=");
+                append(builder,fullIfStringOrBytes,getExtTxt());
+            }
+        }
         if(checkCreateTimeInitialized()){
             if(!notNull || null != getCreateTime()){
                 if(count++ >0){
@@ -1039,6 +1187,8 @@ public  class FlDeviceBean
             .append(getSerialNo(), object.getSerialNo())
             .append(getMac(), object.getMac())
             .append(getRemark(), object.getRemark())
+            .append(getExtBin(), object.getExtBin())
+            .append(getExtTxt(), object.getExtTxt())
             .append(getCreateTime(), object.getCreateTime())
             .append(getUpdateTime(), object.getUpdateTime())
             .toComparison();
@@ -1068,6 +1218,8 @@ public  class FlDeviceBean
         setSerialNo((String)null);
         setMac((String)null);
         setRemark((String)null);
+        setExtBin((java.nio.ByteBuffer)null);
+        setExtTxt((String)null);
         setCreateTime((java.util.Date)null);
         setUpdateTime((java.util.Date)null);
         isNew(true);
@@ -1173,6 +1325,10 @@ public  class FlDeviceBean
             return (T)getMac();        
         case FL_DEVICE_ID_REMARK: 
             return (T)getRemark();        
+        case FL_DEVICE_ID_EXT_BIN: 
+            return (T)getExtBin();        
+        case FL_DEVICE_ID_EXT_TXT: 
+            return (T)getExtTxt();        
         case FL_DEVICE_ID_CREATE_TIME: 
             return (T)getCreateTime();        
         case FL_DEVICE_ID_UPDATE_TIME: 
@@ -1206,6 +1362,12 @@ public  class FlDeviceBean
             break;
         case FL_DEVICE_ID_REMARK:
             setRemark((String)value);
+            break;
+        case FL_DEVICE_ID_EXT_BIN:
+            setExtBin((java.nio.ByteBuffer)value);
+            break;
+        case FL_DEVICE_ID_EXT_TXT:
+            setExtTxt((String)value);
             break;
         case FL_DEVICE_ID_CREATE_TIME:
             setCreateTime((java.util.Date)value);
@@ -1344,6 +1506,26 @@ public  class FlDeviceBean
          */
         public Builder remark(String remark){
             TEMPLATE.get().setRemark(remark);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device.ext_bin
+         * @param extBin 应用项目自定义二进制扩展字段(最大64KB)
+         * @see FlDeviceBean#getExtBin()
+         * @see FlDeviceBean#setExtBin(java.nio.ByteBuffer)
+         */
+        public Builder extBin(java.nio.ByteBuffer extBin){
+            TEMPLATE.get().setExtBin(extBin);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device.ext_txt
+         * @param extTxt 应用项目自定义文本扩展字段(最大64KB)
+         * @see FlDeviceBean#getExtTxt()
+         * @see FlDeviceBean#setExtTxt(String)
+         */
+        public Builder extTxt(String extTxt){
+            TEMPLATE.get().setExtTxt(extTxt);
             return this;
         }
         /** 

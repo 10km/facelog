@@ -1092,6 +1092,22 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                 dirtyCount++;
             }
 
+            if (bean.checkExtBinModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("ext_bin");
+                dirtyCount++;
+            }
+
+            if (bean.checkExtTxtModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("ext_txt");
+                dirtyCount++;
+            }
+
             if (bean.checkCreateTimeModified()) {
                 if (dirtyCount>0) {
                     sql.append(",");
@@ -1250,6 +1266,24 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                     useComma=true;
                 }
                 sql.append("remark=?");
+            }
+
+            if (bean.checkExtBinModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("ext_bin=?");
+            }
+
+            if (bean.checkExtTxtModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("ext_txt=?");
             }
 
             if (bean.checkCreateTimeModified()) {
@@ -2025,6 +2059,22 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("remark ").append(sqlEqualsOperation).append("?");
                 }
             }
+            if (bean.checkExtBinModified()) {
+                dirtyCount ++;
+                if (bean.getExtBin() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_bin IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_bin = ?");
+                }
+            }
+            if (bean.checkExtTxtModified()) {
+                dirtyCount ++;
+                if (bean.getExtTxt() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_txt IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_txt ").append(sqlEqualsOperation).append("?");
+                }
+            }
             if (bean.checkCreateTimeModified()) {
                 dirtyCount ++;
                 if (bean.getCreateTime() == null) {
@@ -2184,6 +2234,32 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                         throw new DaoException("Unknown search type " + searchType);
                 }
             }
+            if (bean.checkExtBinModified()) {
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getExtBin() + "]");
+                if (bean.getExtBin() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.LONGVARBINARY);} } else { Manager.setBytes(Types.LONGVARBINARY,ps, ++dirtyCount, bean.getExtBin()); }
+            }
+            if (bean.checkExtTxtModified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getExtTxt() + "]");
+                        if (bean.getExtTxt() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.LONGVARCHAR);} } else { ps.setString(++dirtyCount, bean.getExtTxt()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getExtTxt() + "%]");
+                        if ( bean.getExtTxt()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.LONGVARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getExtTxt() + SQL_LIKE_WILDCARD); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getExtTxt() + "]");
+                        if ( bean.getExtTxt() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.LONGVARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getExtTxt()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getExtTxt() + "%]");
+                        if (bean.getExtTxt()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.LONGVARCHAR);} } else { ps.setString(++dirtyCount, bean.getExtTxt() + SQL_LIKE_WILDCARD); }
+                        break;
+                    default:
+                        throw new DaoException("Unknown search type " + searchType);
+                }
+            }
             if (bean.checkCreateTimeModified()) {
                 // System.out.println("Setting for " + dirtyCount + " [" + bean.getCreateTime() + "]");
                 if (bean.getCreateTime() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TIMESTAMP);} } else { ps.setTimestamp(++dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
@@ -2316,8 +2392,10 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
             bean.setSerialNo(rs.getString(5));
             bean.setMac(rs.getString(6));
             bean.setRemark(rs.getString(7));
-            bean.setCreateTime(rs.getTimestamp(8));
-            bean.setUpdateTime(rs.getTimestamp(9));
+            bean.setExtBin(Manager.getBytes(rs, 8));
+            bean.setExtTxt(rs.getString(9));
+            bean.setCreateTime(rs.getTimestamp(10));
+            bean.setUpdateTime(rs.getTimestamp(11));
         }
         catch(SQLException e)
         {
@@ -2378,6 +2456,14 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                         ++pos;
                         bean.setRemark(rs.getString(pos));
                         break;
+                    case FL_DEVICE_ID_EXT_BIN:
+                        ++pos;
+                        bean.setExtBin(Manager.getBytes(rs, pos));
+                        break;
+                    case FL_DEVICE_ID_EXT_TXT:
+                        ++pos;
+                        bean.setExtTxt(rs.getString(pos));
+                        break;
                     case FL_DEVICE_ID_CREATE_TIME:
                         ++pos;
                         bean.setCreateTime(rs.getTimestamp(pos));
@@ -2421,6 +2507,8 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
             bean.setSerialNo(rs.getString("serial_no"));
             bean.setMac(rs.getString("mac"));
             bean.setRemark(rs.getString("remark"));
+            bean.setExtBin(Manager.getBytes(rs, "ext_bin"));
+            bean.setExtTxt(rs.getString("ext_txt"));
             bean.setCreateTime(rs.getTimestamp("create_time"));
             bean.setUpdateTime(rs.getTimestamp("update_time"));
         }

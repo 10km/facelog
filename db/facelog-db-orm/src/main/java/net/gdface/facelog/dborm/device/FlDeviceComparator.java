@@ -44,6 +44,8 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
      *   <li>{@link Constant#FL_DEVICE_ID_SERIAL_NO}
      *   <li>{@link Constant#FL_DEVICE_ID_MAC}
      *   <li>{@link Constant#FL_DEVICE_ID_REMARK}
+     *   <li>{@link Constant#FL_DEVICE_ID_EXT_BIN}
+     *   <li>{@link Constant#FL_DEVICE_ID_EXT_TXT}
      *   <li>{@link Constant#FL_DEVICE_ID_CREATE_TIME}
      *   <li>{@link Constant#FL_DEVICE_ID_UPDATE_TIME}
      * </ul>
@@ -71,6 +73,8 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
      *   <li>{@link Constant#FL_DEVICE_ID_SERIAL_NO})
      *   <li>{@link Constant#FL_DEVICE_ID_MAC})
      *   <li>{@link Constant#FL_DEVICE_ID_REMARK})
+     *   <li>{@link Constant#FL_DEVICE_ID_EXT_BIN})
+     *   <li>{@link Constant#FL_DEVICE_ID_EXT_TXT})
      *   <li>{@link Constant#FL_DEVICE_ID_CREATE_TIME})
      *   <li>{@link Constant#FL_DEVICE_ID_UPDATE_TIME})
      * </ul>
@@ -164,6 +168,28 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getRemark().compareTo(b2.getRemark());
+                }
+                break;
+            case FL_DEVICE_ID_EXT_BIN:
+                if (b1.getExtBin() == null && b2.getExtBin() != null) {
+                    iReturn = -1;
+                } else if (b1.getExtBin() == null && b2.getExtBin() == null) {
+                    iReturn = 0;
+                } else if (b1.getExtBin() != null && b2.getExtBin() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getExtBin().compareTo(b2.getExtBin());
+                }
+                break;
+            case FL_DEVICE_ID_EXT_TXT:
+                if (b1.getExtTxt() == null && b2.getExtTxt() != null) {
+                    iReturn = -1;
+                } else if (b1.getExtTxt() == null && b2.getExtTxt() == null) {
+                    iReturn = 0;
+                } else if (b1.getExtTxt() != null && b2.getExtTxt() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getExtTxt().compareTo(b2.getExtTxt());
                 }
                 break;
             case FL_DEVICE_ID_CREATE_TIME:
