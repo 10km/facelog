@@ -74,11 +74,17 @@ public class PermitCacheManager extends PermitManager
     }
     
     @Override
-    protected DeviceGroupCacheManager instanceOfDeviceGroupManager(){
+    protected DeviceGroupManager instanceOfDeviceGroupManager(){
+        if(DeviceGroupCacheManager.getInstance() == null){
+            DeviceGroupManager.getInstance();
+        }
         return DeviceGroupCacheManager.getInstance();
     }
     @Override
-    protected PersonGroupCacheManager instanceOfPersonGroupManager(){
+    protected PersonGroupManager instanceOfPersonGroupManager(){
+        if(PersonGroupCacheManager.getInstance() == null){
+            PersonGroupManager.getInstance();
+        }
         return PersonGroupCacheManager.getInstance();
     }
     //////////////////////////////////////

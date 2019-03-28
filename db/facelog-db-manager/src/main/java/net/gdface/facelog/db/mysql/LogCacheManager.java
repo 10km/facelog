@@ -76,19 +76,31 @@ public class LogCacheManager extends LogManager
     }
     
     @Override
-    protected DeviceCacheManager instanceOfDeviceManager(){
+    protected DeviceManager instanceOfDeviceManager(){
+        if(DeviceCacheManager.getInstance() == null){
+            DeviceManager.getInstance();
+        }
         return DeviceCacheManager.getInstance();
     }
     @Override
-    protected FaceCacheManager instanceOfFaceManager(){
+    protected FaceManager instanceOfFaceManager(){
+        if(FaceCacheManager.getInstance() == null){
+            FaceManager.getInstance();
+        }
         return FaceCacheManager.getInstance();
     }
     @Override
-    protected FeatureCacheManager instanceOfFeatureManager(){
+    protected FeatureManager instanceOfFeatureManager(){
+        if(FeatureCacheManager.getInstance() == null){
+            FeatureManager.getInstance();
+        }
         return FeatureCacheManager.getInstance();
     }
     @Override
-    protected PersonCacheManager instanceOfPersonManager(){
+    protected PersonManager instanceOfPersonManager(){
+        if(PersonCacheManager.getInstance() == null){
+            PersonManager.getInstance();
+        }
         return PersonCacheManager.getInstance();
     }
     //////////////////////////////////////

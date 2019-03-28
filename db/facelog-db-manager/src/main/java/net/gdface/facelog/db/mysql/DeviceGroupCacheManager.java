@@ -75,15 +75,24 @@ public class DeviceGroupCacheManager extends DeviceGroupManager
     }
     
     @Override
-    protected DeviceCacheManager instanceOfDeviceManager(){
+    protected DeviceManager instanceOfDeviceManager(){
+        if(DeviceCacheManager.getInstance() == null){
+            DeviceManager.getInstance();
+        }
         return DeviceCacheManager.getInstance();
     }
     @Override
-    protected PermitCacheManager instanceOfPermitManager(){
+    protected PermitManager instanceOfPermitManager(){
+        if(PermitCacheManager.getInstance() == null){
+            PermitManager.getInstance();
+        }
         return PermitCacheManager.getInstance();
     }
     @Override
-    protected PersonGroupCacheManager instanceOfPersonGroupManager(){
+    protected PersonGroupManager instanceOfPersonGroupManager(){
+        if(PersonGroupCacheManager.getInstance() == null){
+            PersonGroupManager.getInstance();
+        }
         return PersonGroupCacheManager.getInstance();
     }
     @Override
@@ -191,8 +200,16 @@ public class DeviceGroupCacheManager extends DeviceGroupManager
     @Override 
     public java.util.List<DeviceGroupBean> loadViaPermitAsList(PersonGroupBean bean, int startRow, int numRows)
     {
-        java.util.List<PermitBean> junctions = 
-            com.google.common.collect.Lists.newArrayList(instanceOfPermitManager().getBeanByPersonGroupIdUnchecked(bean.getId()));
+        PermitManager m = instanceOfPermitManager();
+        java.util.List<PermitBean> junctions;
+        if(m instanceof PermitCacheManager){
+            junctions = 
+                    com.google.common.collect.Lists.newArrayList(((PermitCacheManager)m).getBeanByPersonGroupIdUnchecked(bean.getId()));
+        }else{
+            PermitBean template = PermitBean.builder().personGroupId(bean.getId()).build();
+            junctions = 
+                    m.loadUsingTemplateAsList(template);
+        }
         startRow = Math.min(Math.max(0, startRow - 1), junctions.size() - 1);
         numRows = numRows < 0 ? junctions.size():Math.min(junctions.size(), numRows);
         numRows = Math.min(junctions.size() - startRow , numRows) ;

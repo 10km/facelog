@@ -75,15 +75,24 @@ public class FaceCacheManager extends FaceManager
     }
     
     @Override
-    protected LogCacheManager instanceOfLogManager(){
+    protected LogManager instanceOfLogManager(){
+        if(LogCacheManager.getInstance() == null){
+            LogManager.getInstance();
+        }
         return LogCacheManager.getInstance();
     }
     @Override
-    protected FeatureCacheManager instanceOfFeatureManager(){
+    protected FeatureManager instanceOfFeatureManager(){
+        if(FeatureCacheManager.getInstance() == null){
+            FeatureManager.getInstance();
+        }
         return FeatureCacheManager.getInstance();
     }
     @Override
-    protected ImageCacheManager instanceOfImageManager(){
+    protected ImageManager instanceOfImageManager(){
+        if(ImageCacheManager.getInstance() == null){
+            ImageManager.getInstance();
+        }
         return ImageCacheManager.getInstance();
     }
     //////////////////////////////////////

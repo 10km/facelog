@@ -76,19 +76,31 @@ public class PersonCacheManager extends PersonManager
     }
     
     @Override
-    protected FeatureCacheManager instanceOfFeatureManager(){
+    protected FeatureManager instanceOfFeatureManager(){
+        if(FeatureCacheManager.getInstance() == null){
+            FeatureManager.getInstance();
+        }
         return FeatureCacheManager.getInstance();
     }
     @Override
-    protected LogCacheManager instanceOfLogManager(){
+    protected LogManager instanceOfLogManager(){
+        if(LogCacheManager.getInstance() == null){
+            LogManager.getInstance();
+        }
         return LogCacheManager.getInstance();
     }
     @Override
-    protected ImageCacheManager instanceOfImageManager(){
+    protected ImageManager instanceOfImageManager(){
+        if(ImageCacheManager.getInstance() == null){
+            ImageManager.getInstance();
+        }
         return ImageCacheManager.getInstance();
     }
     @Override
-    protected PersonGroupCacheManager instanceOfPersonGroupManager(){
+    protected PersonGroupManager instanceOfPersonGroupManager(){
+        if(PersonGroupCacheManager.getInstance() == null){
+            PersonGroupManager.getInstance();
+        }
         return PersonGroupCacheManager.getInstance();
     }
     //////////////////////////////////////
