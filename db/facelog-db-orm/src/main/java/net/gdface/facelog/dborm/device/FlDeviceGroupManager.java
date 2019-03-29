@@ -2737,20 +2737,20 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @throws DaoException
      */
     public java.util.List<FlDeviceGroupBean> listOfParent(Integer id) throws DaoException{
-        FlDeviceGroupBean parent = (null == id)
-            ? null
-            : new FlDeviceGroupBean(id);
-        java.util.List<FlDeviceGroupBean> list;
-        for(list = new java.util.ArrayList<FlDeviceGroupBean>();null != parent;list.add(parent)){
-            parent = loadByPrimaryKey(parent.getParent());
-            if(java.util.Objects.equals(id,parent.getId())){
+        java.util.List<FlDeviceGroupBean> list = new java.util.ArrayList<FlDeviceGroupBean>();
+        for(FlDeviceGroupBean parent = loadByPrimaryKey(id)
+                ; null != parent
+                ; parent = loadByPrimaryKey(parent.getParent())){
+            list.add(parent);
+            if(    (parent.getId().equals(parent.getParent()))
+                || (list.size() > 1 && parent.getId().equals(id))){
                 // cycle reference
-                list.add(parent);
                 break;
             }
         }
         java.util.Collections.reverse(list);
         return list;
+
     }
     //48
     /**
@@ -2770,17 +2770,18 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
      * @throws DaoException
      */
     public int levelOfParent(Integer id) throws DaoException{
-        FlDeviceGroupBean parent = (null == id)
-            ? null
-            : new FlDeviceGroupBean(id);
-        int count;
-        for(count = 0;null != parent;++count){
-            parent = loadByPrimaryKey(parent.getParent());
-            if(null != parent  && java.util.Objects.equals(id,parent.getId())){
+        int count = 0 ;
+        for(FlDeviceGroupBean parent = loadByPrimaryKey(id)
+           ; null != parent
+           ; ++count,parent = loadByPrimaryKey(parent.getParent())){
+            if(    (parent.getId().equals(parent.getParent()))
+                || (count > 0 && parent.getId().equals(id))){
+                // cycle reference
                 return -1;
             }
         }
         return count;
+
     }
     //50
     /**
@@ -2824,12 +2825,15 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
         if(null == id){
             throw new NullPointerException();
         }
-        FlDeviceGroupBean parent = new FlDeviceGroupBean(id);
-        for(;null != parent.getParent();){
-            parent = loadByPrimaryKey(parent.getParent());
-            if(java.util.Objects.equals(id,parent.getId())){
+        FlDeviceGroupBean parent = loadByPrimaryKey(id);
+        int count = 0 ;
+        for(;null != parent && null != parent.getParent();){
+            if(    (parent.getId().equals(parent.getParent()))
+                || (++count > 1 && parent.getId().equals(id))){
+                // cycle reference
                 throw new IllegalStateException("cycle on field: " + "parent");
             }
+            parent = loadByPrimaryKeyChecked(parent.getParent());
         }
         return parent;
     }

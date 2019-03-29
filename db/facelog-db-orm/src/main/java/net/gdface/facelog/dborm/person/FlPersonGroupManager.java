@@ -2737,20 +2737,20 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @throws DaoException
      */
     public java.util.List<FlPersonGroupBean> listOfParent(Integer id) throws DaoException{
-        FlPersonGroupBean parent = (null == id)
-            ? null
-            : new FlPersonGroupBean(id);
-        java.util.List<FlPersonGroupBean> list;
-        for(list = new java.util.ArrayList<FlPersonGroupBean>();null != parent;list.add(parent)){
-            parent = loadByPrimaryKey(parent.getParent());
-            if(java.util.Objects.equals(id,parent.getId())){
+        java.util.List<FlPersonGroupBean> list = new java.util.ArrayList<FlPersonGroupBean>();
+        for(FlPersonGroupBean parent = loadByPrimaryKey(id)
+                ; null != parent
+                ; parent = loadByPrimaryKey(parent.getParent())){
+            list.add(parent);
+            if(    (parent.getId().equals(parent.getParent()))
+                || (list.size() > 1 && parent.getId().equals(id))){
                 // cycle reference
-                list.add(parent);
                 break;
             }
         }
         java.util.Collections.reverse(list);
         return list;
+
     }
     //48
     /**
@@ -2770,17 +2770,18 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
      * @throws DaoException
      */
     public int levelOfParent(Integer id) throws DaoException{
-        FlPersonGroupBean parent = (null == id)
-            ? null
-            : new FlPersonGroupBean(id);
-        int count;
-        for(count = 0;null != parent;++count){
-            parent = loadByPrimaryKey(parent.getParent());
-            if(null != parent  && java.util.Objects.equals(id,parent.getId())){
+        int count = 0 ;
+        for(FlPersonGroupBean parent = loadByPrimaryKey(id)
+           ; null != parent
+           ; ++count,parent = loadByPrimaryKey(parent.getParent())){
+            if(    (parent.getId().equals(parent.getParent()))
+                || (count > 0 && parent.getId().equals(id))){
+                // cycle reference
                 return -1;
             }
         }
         return count;
+
     }
     //50
     /**
@@ -2824,12 +2825,15 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
         if(null == id){
             throw new NullPointerException();
         }
-        FlPersonGroupBean parent = new FlPersonGroupBean(id);
-        for(;null != parent.getParent();){
-            parent = loadByPrimaryKey(parent.getParent());
-            if(java.util.Objects.equals(id,parent.getId())){
+        FlPersonGroupBean parent = loadByPrimaryKey(id);
+        int count = 0 ;
+        for(;null != parent && null != parent.getParent();){
+            if(    (parent.getId().equals(parent.getParent()))
+                || (++count > 1 && parent.getId().equals(id))){
+                // cycle reference
                 throw new IllegalStateException("cycle on field: " + "parent");
             }
+            parent = loadByPrimaryKeyChecked(parent.getParent());
         }
         return parent;
     }
