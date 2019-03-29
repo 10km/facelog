@@ -152,7 +152,7 @@ public class DaoManagement extends BaseDao {
 	 */
 	protected List<Integer> daoGetPersonGroupsPermittedBy(Integer deviceGroupId){
 		PermitBean template = PermitBean.builder().deviceGroupId(deviceGroupId).build();
-		List<PermitBean> permits = daoLoadPermitUsingTemplate(template, -1, -1);
+		List<PermitBean> permits = daoLoadPermitUsingTemplate(template, 1, -1);
 		
 		return Lists.transform(permits, daoCastPermitToPersonGroupId);
 	}
@@ -164,7 +164,7 @@ public class DaoManagement extends BaseDao {
 	 */
 	protected List<Integer> daoGetDeviceGroupsPermit(Integer personGroupId){
 		PermitBean template = PermitBean.builder().personGroupId(personGroupId).build();
-		List<PermitBean> permits = daoLoadPermitUsingTemplate(template, -1, -1);
+		List<PermitBean> permits = daoLoadPermitUsingTemplate(template, 1, -1);
 		HashSet<Integer> groups = Sets.newHashSet();
 		for (PermitBean bean : permits) {
 			groups.addAll(Lists.transform(daoListOfParentForDeviceGroup(bean.getDeviceGroupId()),daoCastDeviceGroupToPk));
