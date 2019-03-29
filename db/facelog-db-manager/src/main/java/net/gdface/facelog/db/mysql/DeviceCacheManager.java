@@ -75,16 +75,28 @@ public class DeviceCacheManager extends DeviceManager
     }
     
     @Override
-    protected ImageCacheManager instanceOfImageManager(){
-        return ImageCacheManager.getInstance();
+    protected ImageManager instanceOfImageManager(){
+        try{
+            return ImageCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return ImageManager.getInstance();
+        }
     }
     @Override
-    protected LogCacheManager instanceOfLogManager(){
-        return LogCacheManager.getInstance();
+    protected LogManager instanceOfLogManager(){
+        try{
+            return LogCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return LogManager.getInstance();
+        }
     }
     @Override
-    protected DeviceGroupCacheManager instanceOfDeviceGroupManager(){
-        return DeviceGroupCacheManager.getInstance();
+    protected DeviceGroupManager instanceOfDeviceGroupManager(){
+        try{
+            return DeviceGroupCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return DeviceGroupManager.getInstance();
+        }
     }
     //////////////////////////////////////
     // PRIMARY KEY METHODS

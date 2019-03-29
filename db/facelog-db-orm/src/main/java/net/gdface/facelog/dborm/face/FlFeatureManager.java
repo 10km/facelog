@@ -728,10 +728,14 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
             this.setReferencedByPersonId(bean,refPersonByPersonId);
         }
         bean = this.save( bean );
-        this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
-        instanceOfFlFaceManager().save( impFaceByFeatureMd5 );
-        this.setLogBeansByVerifyFeature(bean,impLogByVerifyFeature);
-        instanceOfFlLogManager().save( impLogByVerifyFeature );
+        if(null != impFaceByFeatureMd5){
+            this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
+            instanceOfFlFaceManager().save( impFaceByFeatureMd5 );
+        }
+        if(null != impLogByVerifyFeature){
+            this.setLogBeansByVerifyFeature(bean,impLogByVerifyFeature);
+            instanceOfFlLogManager().save( impLogByVerifyFeature );
+        }
         return bean;
     } 
 
@@ -768,12 +772,18 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         if(null == bean) {
             return null;
         }
-        this.setReferencedByPersonId(bean,refPersonByPersonId);
+        if(null != refPersonByPersonId){
+            this.setReferencedByPersonId(bean,refPersonByPersonId);
+        }
         bean = this.save( bean );
-        this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
-        instanceOfFlFaceManager().save( impFaceByFeatureMd5 );
-        this.setLogBeansByVerifyFeature(bean,impLogByVerifyFeature);
-        instanceOfFlLogManager().save( impLogByVerifyFeature );
+        if(null != impFaceByFeatureMd5){
+            this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
+            instanceOfFlFaceManager().save( impFaceByFeatureMd5 );
+        }
+        if(null != impLogByVerifyFeature){
+            this.setLogBeansByVerifyFeature(bean,impLogByVerifyFeature);
+            instanceOfFlLogManager().save( impLogByVerifyFeature );
+        }
         return bean;
     }
 

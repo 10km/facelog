@@ -695,12 +695,18 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
             this.setReferencedByParent(bean,refDevicegroupByParent);
         }
         bean = this.save( bean );
-        this.setDeviceBeansByGroupId(bean,impDeviceByGroupId);
-        instanceOfDeviceManager().save( impDeviceByGroupId );
-        this.setDeviceGroupBeansByParent(bean,impDevicegroupByParent);
-        instanceOfDeviceGroupManager().save( impDevicegroupByParent );
-        this.setPermitBeansByDeviceGroupId(bean,impPermitByDeviceGroupId);
-        instanceOfPermitManager().save( impPermitByDeviceGroupId );
+        if(null != impDeviceByGroupId){
+            this.setDeviceBeansByGroupId(bean,impDeviceByGroupId);
+            instanceOfDeviceManager().save( impDeviceByGroupId );
+        }
+        if(null != impDevicegroupByParent){
+            this.setDeviceGroupBeansByParent(bean,impDevicegroupByParent);
+            instanceOfDeviceGroupManager().save( impDevicegroupByParent );
+        }
+        if(null != impPermitByDeviceGroupId){
+            this.setPermitBeansByDeviceGroupId(bean,impPermitByDeviceGroupId);
+            instanceOfPermitManager().save( impPermitByDeviceGroupId );
+        }
         return bean;
     } 
 
@@ -727,14 +733,22 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         if(null == bean){
             return null;
         }
-        this.setReferencedByParent(bean,refDevicegroupByParent);
+        if(null != refDevicegroupByParent){
+            this.setReferencedByParent(bean,refDevicegroupByParent);
+        }
         bean = this.save( bean );
-        this.setDeviceBeansByGroupId(bean,impDeviceByGroupId);
-        instanceOfDeviceManager().save( impDeviceByGroupId );
-        this.setDeviceGroupBeansByParent(bean,impDevicegroupByParent);
-        instanceOfDeviceGroupManager().save( impDevicegroupByParent );
-        this.setPermitBeansByDeviceGroupId(bean,impPermitByDeviceGroupId);
-        instanceOfPermitManager().save( impPermitByDeviceGroupId );
+        if(null != impDeviceByGroupId){
+            this.setDeviceBeansByGroupId(bean,impDeviceByGroupId);
+            instanceOfDeviceManager().save( impDeviceByGroupId );
+        }
+        if(null != impDevicegroupByParent){
+            this.setDeviceGroupBeansByParent(bean,impDevicegroupByParent);
+            instanceOfDeviceGroupManager().save( impDevicegroupByParent );
+        }
+        if(null != impPermitByDeviceGroupId){
+            this.setPermitBeansByDeviceGroupId(bean,impPermitByDeviceGroupId);
+            instanceOfPermitManager().save( impPermitByDeviceGroupId );
+        }
         return bean;
     }   
 
@@ -1481,15 +1495,14 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
 
     @Override
     public java.util.List<DeviceGroupBean> listOfParent(Integer id){
-        DeviceGroupBean parent = (null == id)
-            ? null
-            : new DeviceGroupBean(id);
-        java.util.List<DeviceGroupBean> list;
-        for(list = new java.util.ArrayList<DeviceGroupBean>();null != parent;list.add(parent)){
-            parent = loadByPrimaryKey(parent.getParent());
-            if(java.util.Objects.equals(id,parent.getId())){
+        java.util.List<DeviceGroupBean> list = new java.util.ArrayList<DeviceGroupBean>();
+        for(DeviceGroupBean parent = loadByPrimaryKey(id)
+                ; null != parent
+                ; parent = loadByPrimaryKey(parent.getParent())){
+            list.add(parent);
+            if(    (parent.getId().equals(parent.getParent()))
+                || (list.size() > 1 && parent.getId().equals(id))){
                 // cycle reference
-                list.add(parent);
                 break;
             }
         }
@@ -1508,13 +1521,13 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
 
     @Override
     public int levelOfParent(Integer id){
-        DeviceGroupBean parent = (null == id)
-            ? null
-            : new DeviceGroupBean(id);
-        int count;
-        for(count = 0;null != parent;++count){
-            parent = loadByPrimaryKey(parent.getParent());
-            if(null != parent  && java.util.Objects.equals(id,parent.getId())){
+        int count = 0 ;
+        for(DeviceGroupBean parent = loadByPrimaryKey(id)
+           ; null != parent
+           ; ++count,parent = loadByPrimaryKey(parent.getParent())){
+            if(    (parent.getId().equals(parent.getParent()))
+                || (count > 0 && parent.getId().equals(id))){
+                // cycle reference
                 return -1;
             }
         }
@@ -1547,12 +1560,15 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         if(null == id){
             throw new NullPointerException();
         }
-        DeviceGroupBean parent = new DeviceGroupBean(id);
-        for(;null != parent.getParent();){
-            parent = loadByPrimaryKey(parent.getParent());
-            if(java.util.Objects.equals(id,parent.getId())){
+        DeviceGroupBean parent = loadByPrimaryKey(id);
+        int count = 0 ;
+        for(;null != parent && null != parent.getParent();){
+            if(    (parent.getId().equals(parent.getParent()))
+                || (++count > 1 && parent.getId().equals(id))){
+                // cycle reference
                 throw new IllegalStateException("cycle on field: " + "parent");
             }
+            parent = loadByPrimaryKeyChecked(parent.getParent());
         }
         return parent;
     }

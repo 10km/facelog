@@ -7,8 +7,6 @@
 // ______________________________________________________
 package net.gdface.facelog.db.exception;
 
-import java.sql.SQLException;
-
 /**
  *
  * @author guyadong

@@ -604,10 +604,14 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
             this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
         }
         bean = this.save( bean );
-        this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
-        instanceOfFaceManager().save( impFaceByImageMd5 );
-        this.setPersonBeansByImageMd5(bean,impPersonByImageMd5);
-        instanceOfPersonManager().save( impPersonByImageMd5 );
+        if(null != impFaceByImageMd5){
+            this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
+            instanceOfFaceManager().save( impFaceByImageMd5 );
+        }
+        if(null != impPersonByImageMd5){
+            this.setPersonBeansByImageMd5(bean,impPersonByImageMd5);
+            instanceOfPersonManager().save( impPersonByImageMd5 );
+        }
         return bean;
     } 
 
@@ -634,12 +638,18 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         if(null == bean){
             return null;
         }
-        this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
+        if(null != refDeviceByDeviceId){
+            this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
+        }
         bean = this.save( bean );
-        this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
-        instanceOfFaceManager().save( impFaceByImageMd5 );
-        this.setPersonBeansByImageMd5(bean,impPersonByImageMd5);
-        instanceOfPersonManager().save( impPersonByImageMd5 );
+        if(null != impFaceByImageMd5){
+            this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
+            instanceOfFaceManager().save( impFaceByImageMd5 );
+        }
+        if(null != impPersonByImageMd5){
+            this.setPersonBeansByImageMd5(bean,impPersonByImageMd5);
+            instanceOfPersonManager().save( impPersonByImageMd5 );
+        }
         return bean;
     }   
 

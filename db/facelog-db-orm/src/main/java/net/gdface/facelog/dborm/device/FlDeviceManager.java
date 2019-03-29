@@ -728,10 +728,14 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
             this.setReferencedByGroupId(bean,refDevicegroupByGroupId);
         }
         bean = this.save( bean );
-        this.setImageBeansByDeviceId(bean,impImageByDeviceId);
-        instanceOfFlImageManager().save( impImageByDeviceId );
-        this.setLogBeansByDeviceId(bean,impLogByDeviceId);
-        instanceOfFlLogManager().save( impLogByDeviceId );
+        if(null != impImageByDeviceId){
+            this.setImageBeansByDeviceId(bean,impImageByDeviceId);
+            instanceOfFlImageManager().save( impImageByDeviceId );
+        }
+        if(null != impLogByDeviceId){
+            this.setLogBeansByDeviceId(bean,impLogByDeviceId);
+            instanceOfFlLogManager().save( impLogByDeviceId );
+        }
         return bean;
     } 
 
@@ -768,12 +772,18 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
         if(null == bean) {
             return null;
         }
-        this.setReferencedByGroupId(bean,refDevicegroupByGroupId);
+        if(null != refDevicegroupByGroupId){
+            this.setReferencedByGroupId(bean,refDevicegroupByGroupId);
+        }
         bean = this.save( bean );
-        this.setImageBeansByDeviceId(bean,impImageByDeviceId);
-        instanceOfFlImageManager().save( impImageByDeviceId );
-        this.setLogBeansByDeviceId(bean,impLogByDeviceId);
-        instanceOfFlLogManager().save( impLogByDeviceId );
+        if(null != impImageByDeviceId){
+            this.setImageBeansByDeviceId(bean,impImageByDeviceId);
+            instanceOfFlImageManager().save( impImageByDeviceId );
+        }
+        if(null != impLogByDeviceId){
+            this.setLogBeansByDeviceId(bean,impLogByDeviceId);
+            instanceOfFlLogManager().save( impLogByDeviceId );
+        }
         return bean;
     }
 

@@ -75,16 +75,28 @@ public class FeatureCacheManager extends FeatureManager
     }
     
     @Override
-    protected FaceCacheManager instanceOfFaceManager(){
-        return FaceCacheManager.getInstance();
+    protected FaceManager instanceOfFaceManager(){
+        try{
+            return FaceCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return FaceManager.getInstance();
+        }
     }
     @Override
-    protected LogCacheManager instanceOfLogManager(){
-        return LogCacheManager.getInstance();
+    protected LogManager instanceOfLogManager(){
+        try{
+            return LogCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return LogManager.getInstance();
+        }
     }
     @Override
-    protected PersonCacheManager instanceOfPersonManager(){
-        return PersonCacheManager.getInstance();
+    protected PersonManager instanceOfPersonManager(){
+        try{
+            return PersonCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return PersonManager.getInstance();
+        }
     }
     //////////////////////////////////////
     // PRIMARY KEY METHODS

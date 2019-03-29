@@ -604,10 +604,14 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
             this.setReferencedByPersonId(bean,refPersonByPersonId);
         }
         bean = this.save( bean );
-        this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
-        instanceOfFaceManager().save( impFaceByFeatureMd5 );
-        this.setLogBeansByVerifyFeature(bean,impLogByVerifyFeature);
-        instanceOfLogManager().save( impLogByVerifyFeature );
+        if(null != impFaceByFeatureMd5){
+            this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
+            instanceOfFaceManager().save( impFaceByFeatureMd5 );
+        }
+        if(null != impLogByVerifyFeature){
+            this.setLogBeansByVerifyFeature(bean,impLogByVerifyFeature);
+            instanceOfLogManager().save( impLogByVerifyFeature );
+        }
         return bean;
     } 
 
@@ -634,12 +638,18 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         if(null == bean){
             return null;
         }
-        this.setReferencedByPersonId(bean,refPersonByPersonId);
+        if(null != refPersonByPersonId){
+            this.setReferencedByPersonId(bean,refPersonByPersonId);
+        }
         bean = this.save( bean );
-        this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
-        instanceOfFaceManager().save( impFaceByFeatureMd5 );
-        this.setLogBeansByVerifyFeature(bean,impLogByVerifyFeature);
-        instanceOfLogManager().save( impLogByVerifyFeature );
+        if(null != impFaceByFeatureMd5){
+            this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
+            instanceOfFaceManager().save( impFaceByFeatureMd5 );
+        }
+        if(null != impLogByVerifyFeature){
+            this.setLogBeansByVerifyFeature(bean,impLogByVerifyFeature);
+            instanceOfLogManager().save( impLogByVerifyFeature );
+        }
         return bean;
     }   
 

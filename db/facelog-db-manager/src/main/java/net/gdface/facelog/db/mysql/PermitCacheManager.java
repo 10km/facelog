@@ -74,12 +74,20 @@ public class PermitCacheManager extends PermitManager
     }
     
     @Override
-    protected DeviceGroupCacheManager instanceOfDeviceGroupManager(){
-        return DeviceGroupCacheManager.getInstance();
+    protected DeviceGroupManager instanceOfDeviceGroupManager(){
+        try{
+            return DeviceGroupCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return DeviceGroupManager.getInstance();
+        }
     }
     @Override
-    protected PersonGroupCacheManager instanceOfPersonGroupManager(){
-        return PersonGroupCacheManager.getInstance();
+    protected PersonGroupManager instanceOfPersonGroupManager(){
+        try{
+            return PersonGroupCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return PersonGroupManager.getInstance();
+        }
     }
     //////////////////////////////////////
     // PRIMARY KEY METHODS

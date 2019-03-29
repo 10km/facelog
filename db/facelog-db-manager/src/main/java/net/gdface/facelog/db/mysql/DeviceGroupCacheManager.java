@@ -75,16 +75,28 @@ public class DeviceGroupCacheManager extends DeviceGroupManager
     }
     
     @Override
-    protected DeviceCacheManager instanceOfDeviceManager(){
-        return DeviceCacheManager.getInstance();
+    protected DeviceManager instanceOfDeviceManager(){
+        try{
+            return DeviceCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return DeviceManager.getInstance();
+        }
     }
     @Override
-    protected PermitCacheManager instanceOfPermitManager(){
-        return PermitCacheManager.getInstance();
+    protected PermitManager instanceOfPermitManager(){
+        try{
+            return PermitCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return PermitManager.getInstance();
+        }
     }
     @Override
-    protected PersonGroupCacheManager instanceOfPersonGroupManager(){
-        return PersonGroupCacheManager.getInstance();
+    protected PersonGroupManager instanceOfPersonGroupManager(){
+        try{
+            return PersonGroupCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return PersonGroupManager.getInstance();
+        }
     }
     @Override
     protected DeviceGroupCacheManager instanceOfDeviceGroupManager(){
@@ -191,8 +203,16 @@ public class DeviceGroupCacheManager extends DeviceGroupManager
     @Override 
     public java.util.List<DeviceGroupBean> loadViaPermitAsList(PersonGroupBean bean, int startRow, int numRows)
     {
-        java.util.List<PermitBean> junctions = 
-            com.google.common.collect.Lists.newArrayList(instanceOfPermitManager().getBeanByPersonGroupIdUnchecked(bean.getId()));
+        PermitManager m = instanceOfPermitManager();
+        java.util.List<PermitBean> junctions;
+        if(m instanceof PermitCacheManager){
+            junctions = 
+                    com.google.common.collect.Lists.newArrayList(((PermitCacheManager)m).getBeanByPersonGroupIdUnchecked(bean.getId()));
+        }else{
+            PermitBean template = PermitBean.builder().personGroupId(bean.getId()).build();
+            junctions = 
+                    m.loadUsingTemplateAsList(template);
+        }
         startRow = Math.min(Math.max(0, startRow - 1), junctions.size() - 1);
         numRows = numRows < 0 ? junctions.size():Math.min(junctions.size(), numRows);
         numRows = Math.min(junctions.size() - startRow , numRows) ;
