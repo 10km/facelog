@@ -647,6 +647,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @return top bean
      * @throws NullPointerException if input primary key is {@code null}
      * @throws IllegalStateException if self-reference field is cycle
+     * @throws ObjectRetrievalException not found record by primary key
      * @throws RuntimeDaoException
      */
     public DeviceGroupBean topOfParent(Integer id)throws RuntimeDaoException;
@@ -655,6 +656,9 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * see also {@link #topOfParent(Integer)}
      * @param bean
      * @return
+     * @throws NullPointerException if input primary key is {@code null}
+     * @throws IllegalStateException if self-reference field is cycle
+     * @throws ObjectRetrievalException not found record by primary key
      * @throws RuntimeDaoException
      */
     public DeviceGroupBean topOfParent(DeviceGroupBean bean)throws RuntimeDaoException;

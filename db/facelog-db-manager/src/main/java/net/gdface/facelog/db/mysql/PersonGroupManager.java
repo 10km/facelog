@@ -1481,15 +1481,14 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
 
     @Override
     public java.util.List<PersonGroupBean> listOfParent(Integer id){
-        PersonGroupBean parent = (null == id)
-            ? null
-            : new PersonGroupBean(id);
-        java.util.List<PersonGroupBean> list;
-        for(list = new java.util.ArrayList<PersonGroupBean>();null != parent;list.add(parent)){
-            parent = loadByPrimaryKey(parent.getParent());
-            if(java.util.Objects.equals(id,parent.getId())){
+        java.util.List<PersonGroupBean> list = new java.util.ArrayList<PersonGroupBean>();
+        for(PersonGroupBean parent = loadByPrimaryKey(id)
+                ; null != parent
+                ; parent = loadByPrimaryKey(parent.getParent())){
+            list.add(parent);
+            if(    (parent.getId().equals(parent.getParent()))
+                || (parent.getId().equals(id))){
                 // cycle reference
-                list.add(parent);
                 break;
             }
         }
@@ -1508,13 +1507,13 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
 
     @Override
     public int levelOfParent(Integer id){
-        PersonGroupBean parent = (null == id)
-            ? null
-            : new PersonGroupBean(id);
-        int count;
-        for(count = 0;null != parent;++count){
-            parent = loadByPrimaryKey(parent.getParent());
-            if(null != parent  && java.util.Objects.equals(id,parent.getId())){
+        int count = 0 ;
+        for(PersonGroupBean parent = loadByPrimaryKey(id)
+           ; null != parent
+           ; ++count,parent = loadByPrimaryKey(parent.getParent())){
+            if(    (parent.getId().equals(parent.getParent()))
+                || (parent.getId().equals(id))){
+                // cycle reference
                 return -1;
             }
         }
@@ -1547,12 +1546,14 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         if(null == id){
             throw new NullPointerException();
         }
-        PersonGroupBean parent = new PersonGroupBean(id);
-        for(;null != parent.getParent();){
-            parent = loadByPrimaryKey(parent.getParent());
-            if(java.util.Objects.equals(id,parent.getId())){
+        PersonGroupBean parent = loadByPrimaryKey(id);
+        for(;null != parent && null != parent.getParent();){
+            if(    (parent.getId().equals(parent.getParent()))
+                || (parent.getId().equals(id))){
+                // cycle reference
                 throw new IllegalStateException("cycle on field: " + "parent");
             }
+            parent = loadByPrimaryKeyChecked(parent.getParent());
         }
         return parent;
     }

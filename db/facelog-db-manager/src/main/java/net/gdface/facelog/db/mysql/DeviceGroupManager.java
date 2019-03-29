@@ -1481,15 +1481,14 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
 
     @Override
     public java.util.List<DeviceGroupBean> listOfParent(Integer id){
-        DeviceGroupBean parent = (null == id)
-            ? null
-            : new DeviceGroupBean(id);
-        java.util.List<DeviceGroupBean> list;
-        for(list = new java.util.ArrayList<DeviceGroupBean>();null != parent;list.add(parent)){
-            parent = loadByPrimaryKey(parent.getParent());
-            if(java.util.Objects.equals(id,parent.getId())){
+        java.util.List<DeviceGroupBean> list = new java.util.ArrayList<DeviceGroupBean>();
+        for(DeviceGroupBean parent = loadByPrimaryKey(id)
+                ; null != parent
+                ; parent = loadByPrimaryKey(parent.getParent())){
+            list.add(parent);
+            if(    (parent.getId().equals(parent.getParent()))
+                || (parent.getId().equals(id))){
                 // cycle reference
-                list.add(parent);
                 break;
             }
         }
@@ -1508,13 +1507,13 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
 
     @Override
     public int levelOfParent(Integer id){
-        DeviceGroupBean parent = (null == id)
-            ? null
-            : new DeviceGroupBean(id);
-        int count;
-        for(count = 0;null != parent;++count){
-            parent = loadByPrimaryKey(parent.getParent());
-            if(null != parent  && java.util.Objects.equals(id,parent.getId())){
+        int count = 0 ;
+        for(DeviceGroupBean parent = loadByPrimaryKey(id)
+           ; null != parent
+           ; ++count,parent = loadByPrimaryKey(parent.getParent())){
+            if(    (parent.getId().equals(parent.getParent()))
+                || (parent.getId().equals(id))){
+                // cycle reference
                 return -1;
             }
         }
@@ -1547,12 +1546,14 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         if(null == id){
             throw new NullPointerException();
         }
-        DeviceGroupBean parent = new DeviceGroupBean(id);
-        for(;null != parent.getParent();){
-            parent = loadByPrimaryKey(parent.getParent());
-            if(java.util.Objects.equals(id,parent.getId())){
+        DeviceGroupBean parent = loadByPrimaryKey(id);
+        for(;null != parent && null != parent.getParent();){
+            if(    (parent.getId().equals(parent.getParent()))
+                || (parent.getId().equals(id))){
+                // cycle reference
                 throw new IllegalStateException("cycle on field: " + "parent");
             }
+            parent = loadByPrimaryKeyChecked(parent.getParent());
         }
         return parent;
     }
