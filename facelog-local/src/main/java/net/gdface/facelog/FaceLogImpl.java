@@ -828,7 +828,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	@Override
 	public List<DeviceGroupBean> getDeviceGroups(List<Integer> groupIdList) {
 		try{
-			return dm.daoGetDeviceGroupsPermit(groupIdList); 
+			return dm.daoGetDeviceGroups(groupIdList); 
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}
