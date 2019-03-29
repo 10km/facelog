@@ -1487,7 +1487,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
                 ; parent = loadByPrimaryKey(parent.getParent())){
             list.add(parent);
             if(    (parent.getId().equals(parent.getParent()))
-                || (parent.getId().equals(id))){
+                || (list.size() > 1 && parent.getId().equals(id))){
                 // cycle reference
                 break;
             }
@@ -1512,7 +1512,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
            ; null != parent
            ; ++count,parent = loadByPrimaryKey(parent.getParent())){
             if(    (parent.getId().equals(parent.getParent()))
-                || (parent.getId().equals(id))){
+                || (count > 0 && parent.getId().equals(id))){
                 // cycle reference
                 return -1;
             }
@@ -1547,9 +1547,10 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
             throw new NullPointerException();
         }
         DeviceGroupBean parent = loadByPrimaryKey(id);
+        int count = 0 ;
         for(;null != parent && null != parent.getParent();){
             if(    (parent.getId().equals(parent.getParent()))
-                || (parent.getId().equals(id))){
+                || (++count > 1 && parent.getId().equals(id))){
                 // cycle reference
                 throw new IllegalStateException("cycle on field: " + "parent");
             }
