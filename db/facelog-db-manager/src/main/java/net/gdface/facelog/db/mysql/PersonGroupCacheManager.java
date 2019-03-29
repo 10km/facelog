@@ -76,24 +76,27 @@ public class PersonGroupCacheManager extends PersonGroupManager
     
     @Override
     protected PermitManager instanceOfPermitManager(){
-        if(PermitCacheManager.getInstance() == null){
-            PermitManager.getInstance();
+        try{
+            return PermitCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return PermitManager.getInstance();
         }
-        return PermitCacheManager.getInstance();
     }
     @Override
     protected PersonManager instanceOfPersonManager(){
-        if(PersonCacheManager.getInstance() == null){
-            PersonManager.getInstance();
+        try{
+            return PersonCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return PersonManager.getInstance();
         }
-        return PersonCacheManager.getInstance();
     }
     @Override
     protected DeviceGroupManager instanceOfDeviceGroupManager(){
-        if(DeviceGroupCacheManager.getInstance() == null){
-            DeviceGroupManager.getInstance();
+        try{
+            return DeviceGroupCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return DeviceGroupManager.getInstance();
         }
-        return DeviceGroupCacheManager.getInstance();
     }
     @Override
     protected PersonGroupCacheManager instanceOfPersonGroupManager(){

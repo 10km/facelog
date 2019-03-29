@@ -76,24 +76,27 @@ public class DeviceGroupCacheManager extends DeviceGroupManager
     
     @Override
     protected DeviceManager instanceOfDeviceManager(){
-        if(DeviceCacheManager.getInstance() == null){
-            DeviceManager.getInstance();
+        try{
+            return DeviceCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return DeviceManager.getInstance();
         }
-        return DeviceCacheManager.getInstance();
     }
     @Override
     protected PermitManager instanceOfPermitManager(){
-        if(PermitCacheManager.getInstance() == null){
-            PermitManager.getInstance();
+        try{
+            return PermitCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return PermitManager.getInstance();
         }
-        return PermitCacheManager.getInstance();
     }
     @Override
     protected PersonGroupManager instanceOfPersonGroupManager(){
-        if(PersonGroupCacheManager.getInstance() == null){
-            PersonGroupManager.getInstance();
+        try{
+            return PersonGroupCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return PersonGroupManager.getInstance();
         }
-        return PersonGroupCacheManager.getInstance();
     }
     @Override
     protected DeviceGroupCacheManager instanceOfDeviceGroupManager(){

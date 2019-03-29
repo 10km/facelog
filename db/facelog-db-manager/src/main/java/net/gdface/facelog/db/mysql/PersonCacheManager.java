@@ -77,31 +77,35 @@ public class PersonCacheManager extends PersonManager
     
     @Override
     protected FeatureManager instanceOfFeatureManager(){
-        if(FeatureCacheManager.getInstance() == null){
-            FeatureManager.getInstance();
+        try{
+            return FeatureCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return FeatureManager.getInstance();
         }
-        return FeatureCacheManager.getInstance();
     }
     @Override
     protected LogManager instanceOfLogManager(){
-        if(LogCacheManager.getInstance() == null){
-            LogManager.getInstance();
+        try{
+            return LogCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return LogManager.getInstance();
         }
-        return LogCacheManager.getInstance();
     }
     @Override
     protected ImageManager instanceOfImageManager(){
-        if(ImageCacheManager.getInstance() == null){
-            ImageManager.getInstance();
+        try{
+            return ImageCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return ImageManager.getInstance();
         }
-        return ImageCacheManager.getInstance();
     }
     @Override
     protected PersonGroupManager instanceOfPersonGroupManager(){
-        if(PersonGroupCacheManager.getInstance() == null){
-            PersonGroupManager.getInstance();
+        try{
+            return PersonGroupCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return PersonGroupManager.getInstance();
         }
-        return PersonGroupCacheManager.getInstance();
     }
     //////////////////////////////////////
     // PRIMARY KEY METHODS

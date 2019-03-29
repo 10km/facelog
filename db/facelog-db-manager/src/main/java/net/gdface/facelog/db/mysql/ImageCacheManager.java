@@ -76,24 +76,27 @@ public class ImageCacheManager extends ImageManager
     
     @Override
     protected FaceManager instanceOfFaceManager(){
-        if(FaceCacheManager.getInstance() == null){
-            FaceManager.getInstance();
+        try{
+            return FaceCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return FaceManager.getInstance();
         }
-        return FaceCacheManager.getInstance();
     }
     @Override
     protected PersonManager instanceOfPersonManager(){
-        if(PersonCacheManager.getInstance() == null){
-            PersonManager.getInstance();
+        try{
+            return PersonCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return PersonManager.getInstance();
         }
-        return PersonCacheManager.getInstance();
     }
     @Override
     protected DeviceManager instanceOfDeviceManager(){
-        if(DeviceCacheManager.getInstance() == null){
-            DeviceManager.getInstance();
+        try{
+            return DeviceCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return DeviceManager.getInstance();
         }
-        return DeviceCacheManager.getInstance();
     }
     //////////////////////////////////////
     // PRIMARY KEY METHODS

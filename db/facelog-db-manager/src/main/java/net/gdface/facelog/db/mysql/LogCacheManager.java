@@ -77,31 +77,35 @@ public class LogCacheManager extends LogManager
     
     @Override
     protected DeviceManager instanceOfDeviceManager(){
-        if(DeviceCacheManager.getInstance() == null){
-            DeviceManager.getInstance();
+        try{
+            return DeviceCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return DeviceManager.getInstance();
         }
-        return DeviceCacheManager.getInstance();
     }
     @Override
     protected FaceManager instanceOfFaceManager(){
-        if(FaceCacheManager.getInstance() == null){
-            FaceManager.getInstance();
+        try{
+            return FaceCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return FaceManager.getInstance();
         }
-        return FaceCacheManager.getInstance();
     }
     @Override
     protected FeatureManager instanceOfFeatureManager(){
-        if(FeatureCacheManager.getInstance() == null){
-            FeatureManager.getInstance();
+        try{
+            return FeatureCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return FeatureManager.getInstance();
         }
-        return FeatureCacheManager.getInstance();
     }
     @Override
     protected PersonManager instanceOfPersonManager(){
-        if(PersonCacheManager.getInstance() == null){
-            PersonManager.getInstance();
+        try{
+            return PersonCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return PersonManager.getInstance();
         }
-        return PersonCacheManager.getInstance();
     }
     //////////////////////////////////////
     // PRIMARY KEY METHODS

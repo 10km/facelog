@@ -76,24 +76,27 @@ public class FeatureCacheManager extends FeatureManager
     
     @Override
     protected FaceManager instanceOfFaceManager(){
-        if(FaceCacheManager.getInstance() == null){
-            FaceManager.getInstance();
+        try{
+            return FaceCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return FaceManager.getInstance();
         }
-        return FaceCacheManager.getInstance();
     }
     @Override
     protected LogManager instanceOfLogManager(){
-        if(LogCacheManager.getInstance() == null){
-            LogManager.getInstance();
+        try{
+            return LogCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return LogManager.getInstance();
         }
-        return LogCacheManager.getInstance();
     }
     @Override
     protected PersonManager instanceOfPersonManager(){
-        if(PersonCacheManager.getInstance() == null){
-            PersonManager.getInstance();
+        try{
+            return PersonCacheManager.getInstance();
+        } catch(IllegalStateException e){
+            return PersonManager.getInstance();
         }
-        return PersonCacheManager.getInstance();
     }
     //////////////////////////////////////
     // PRIMARY KEY METHODS

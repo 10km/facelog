@@ -697,7 +697,7 @@ class BaseDao implements CommonConstant {
      * @see DeviceGroupBean#replaceNull(List)
      * @throws RuntimeDaoException
      */
-    protected List<DeviceGroupBean> daoGetDeviceGroupsPermit(Collection<Integer> idCollection)
+    protected List<DeviceGroupBean> daoGetDeviceGroups(Collection<Integer> idCollection)
                     throws RuntimeDaoException{
         return DeviceGroupBean.replaceNull((getDeviceGroupManager().loadByPrimaryKey(idCollection)));
     }
