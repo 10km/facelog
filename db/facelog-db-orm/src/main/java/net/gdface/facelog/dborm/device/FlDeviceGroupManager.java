@@ -851,12 +851,18 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
             this.setReferencedByParent(bean,refDevicegroupByParent);
         }
         bean = this.save( bean );
-        this.setDeviceBeansByGroupId(bean,impDeviceByGroupId);
-        instanceOfFlDeviceManager().save( impDeviceByGroupId );
-        this.setDeviceGroupBeansByParent(bean,impDevicegroupByParent);
-        instanceOfFlDeviceGroupManager().save( impDevicegroupByParent );
-        this.setPermitBeansByDeviceGroupId(bean,impPermitByDeviceGroupId);
-        instanceOfFlPermitManager().save( impPermitByDeviceGroupId );
+        if(null != impDeviceByGroupId){
+            this.setDeviceBeansByGroupId(bean,impDeviceByGroupId);
+            instanceOfFlDeviceManager().save( impDeviceByGroupId );
+        }
+        if(null != impDevicegroupByParent){
+            this.setDeviceGroupBeansByParent(bean,impDevicegroupByParent);
+            instanceOfFlDeviceGroupManager().save( impDevicegroupByParent );
+        }
+        if(null != impPermitByDeviceGroupId){
+            this.setPermitBeansByDeviceGroupId(bean,impPermitByDeviceGroupId);
+            instanceOfFlPermitManager().save( impPermitByDeviceGroupId );
+        }
         return bean;
     } 
 
@@ -894,14 +900,22 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
         if(null == bean) {
             return null;
         }
-        this.setReferencedByParent(bean,refDevicegroupByParent);
+        if(null != refDevicegroupByParent){
+            this.setReferencedByParent(bean,refDevicegroupByParent);
+        }
         bean = this.save( bean );
-        this.setDeviceBeansByGroupId(bean,impDeviceByGroupId);
-        instanceOfFlDeviceManager().save( impDeviceByGroupId );
-        this.setDeviceGroupBeansByParent(bean,impDevicegroupByParent);
-        instanceOfFlDeviceGroupManager().save( impDevicegroupByParent );
-        this.setPermitBeansByDeviceGroupId(bean,impPermitByDeviceGroupId);
-        instanceOfFlPermitManager().save( impPermitByDeviceGroupId );
+        if(null != impDeviceByGroupId){
+            this.setDeviceBeansByGroupId(bean,impDeviceByGroupId);
+            instanceOfFlDeviceManager().save( impDeviceByGroupId );
+        }
+        if(null != impDevicegroupByParent){
+            this.setDeviceGroupBeansByParent(bean,impDevicegroupByParent);
+            instanceOfFlDeviceGroupManager().save( impDevicegroupByParent );
+        }
+        if(null != impPermitByDeviceGroupId){
+            this.setPermitBeansByDeviceGroupId(bean,impPermitByDeviceGroupId);
+            instanceOfFlPermitManager().save( impPermitByDeviceGroupId );
+        }
         return bean;
     }
 

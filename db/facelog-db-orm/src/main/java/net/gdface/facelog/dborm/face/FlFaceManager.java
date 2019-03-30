@@ -612,8 +612,10 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
             this.setReferencedByImageMd5(bean,refImageByImageMd5);
         }
         bean = this.save( bean );
-        this.setLogBeansByCompareFace(bean,impLogByCompareFace);
-        instanceOfFlLogManager().save( impLogByCompareFace );
+        if(null != impLogByCompareFace){
+            this.setLogBeansByCompareFace(bean,impLogByCompareFace);
+            instanceOfFlLogManager().save( impLogByCompareFace );
+        }
         return bean;
     } 
 
@@ -650,11 +652,17 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
         if(null == bean) {
             return null;
         }
-        this.setReferencedByFeatureMd5(bean,refFeatureByFeatureMd5);
-        this.setReferencedByImageMd5(bean,refImageByImageMd5);
+        if(null != refFeatureByFeatureMd5){
+            this.setReferencedByFeatureMd5(bean,refFeatureByFeatureMd5);
+        }
+        if(null != refImageByImageMd5){
+            this.setReferencedByImageMd5(bean,refImageByImageMd5);
+        }
         bean = this.save( bean );
-        this.setLogBeansByCompareFace(bean,impLogByCompareFace);
-        instanceOfFlLogManager().save( impLogByCompareFace );
+        if(null != impLogByCompareFace){
+            this.setLogBeansByCompareFace(bean,impLogByCompareFace);
+            instanceOfFlLogManager().save( impLogByCompareFace );
+        }
         return bean;
     }
 

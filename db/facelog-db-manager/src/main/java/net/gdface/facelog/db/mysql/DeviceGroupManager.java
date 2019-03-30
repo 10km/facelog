@@ -695,12 +695,18 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
             this.setReferencedByParent(bean,refDevicegroupByParent);
         }
         bean = this.save( bean );
-        this.setDeviceBeansByGroupId(bean,impDeviceByGroupId);
-        instanceOfDeviceManager().save( impDeviceByGroupId );
-        this.setDeviceGroupBeansByParent(bean,impDevicegroupByParent);
-        instanceOfDeviceGroupManager().save( impDevicegroupByParent );
-        this.setPermitBeansByDeviceGroupId(bean,impPermitByDeviceGroupId);
-        instanceOfPermitManager().save( impPermitByDeviceGroupId );
+        if(null != impDeviceByGroupId){
+            this.setDeviceBeansByGroupId(bean,impDeviceByGroupId);
+            instanceOfDeviceManager().save( impDeviceByGroupId );
+        }
+        if(null != impDevicegroupByParent){
+            this.setDeviceGroupBeansByParent(bean,impDevicegroupByParent);
+            instanceOfDeviceGroupManager().save( impDevicegroupByParent );
+        }
+        if(null != impPermitByDeviceGroupId){
+            this.setPermitBeansByDeviceGroupId(bean,impPermitByDeviceGroupId);
+            instanceOfPermitManager().save( impPermitByDeviceGroupId );
+        }
         return bean;
     } 
 
@@ -727,14 +733,22 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         if(null == bean){
             return null;
         }
-        this.setReferencedByParent(bean,refDevicegroupByParent);
+        if(null != refDevicegroupByParent){
+            this.setReferencedByParent(bean,refDevicegroupByParent);
+        }
         bean = this.save( bean );
-        this.setDeviceBeansByGroupId(bean,impDeviceByGroupId);
-        instanceOfDeviceManager().save( impDeviceByGroupId );
-        this.setDeviceGroupBeansByParent(bean,impDevicegroupByParent);
-        instanceOfDeviceGroupManager().save( impDevicegroupByParent );
-        this.setPermitBeansByDeviceGroupId(bean,impPermitByDeviceGroupId);
-        instanceOfPermitManager().save( impPermitByDeviceGroupId );
+        if(null != impDeviceByGroupId){
+            this.setDeviceBeansByGroupId(bean,impDeviceByGroupId);
+            instanceOfDeviceManager().save( impDeviceByGroupId );
+        }
+        if(null != impDevicegroupByParent){
+            this.setDeviceGroupBeansByParent(bean,impDevicegroupByParent);
+            instanceOfDeviceGroupManager().save( impDevicegroupByParent );
+        }
+        if(null != impPermitByDeviceGroupId){
+            this.setPermitBeansByDeviceGroupId(bean,impPermitByDeviceGroupId);
+            instanceOfPermitManager().save( impPermitByDeviceGroupId );
+        }
         return bean;
     }   
 

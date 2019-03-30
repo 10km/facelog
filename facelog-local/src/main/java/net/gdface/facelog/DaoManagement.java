@@ -321,7 +321,7 @@ public class DaoManagement extends BaseDao {
 	protected PersonBean daoSavePerson(PersonBean bean, ByteBuffer idPhoto, FeatureBean featureBean,
 			DeviceBean deviceBean) throws DuplicateRecordException {
 		ImageBean imageBean = daoAddImage(idPhoto, deviceBean, null, null);
-		return daoSavePerson(bean, imageBean, Arrays.asList(featureBean));
+		return daoSavePerson(bean, imageBean, featureBean == null ? null : Arrays.asList(featureBean));
 	}
 
 	protected PersonBean daoSavePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature,

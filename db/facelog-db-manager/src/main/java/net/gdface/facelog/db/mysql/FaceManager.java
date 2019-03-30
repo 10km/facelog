@@ -519,8 +519,10 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
             this.setReferencedByImageMd5(bean,refImageByImageMd5);
         }
         bean = this.save( bean );
-        this.setLogBeansByCompareFace(bean,impLogByCompareFace);
-        instanceOfLogManager().save( impLogByCompareFace );
+        if(null != impLogByCompareFace){
+            this.setLogBeansByCompareFace(bean,impLogByCompareFace);
+            instanceOfLogManager().save( impLogByCompareFace );
+        }
         return bean;
     } 
 
@@ -547,11 +549,17 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         if(null == bean){
             return null;
         }
-        this.setReferencedByFeatureMd5(bean,refFeatureByFeatureMd5);
-        this.setReferencedByImageMd5(bean,refImageByImageMd5);
+        if(null != refFeatureByFeatureMd5){
+            this.setReferencedByFeatureMd5(bean,refFeatureByFeatureMd5);
+        }
+        if(null != refImageByImageMd5){
+            this.setReferencedByImageMd5(bean,refImageByImageMd5);
+        }
         bean = this.save( bean );
-        this.setLogBeansByCompareFace(bean,impLogByCompareFace);
-        instanceOfLogManager().save( impLogByCompareFace );
+        if(null != impLogByCompareFace){
+            this.setLogBeansByCompareFace(bean,impLogByCompareFace);
+            instanceOfLogManager().save( impLogByCompareFace );
+        }
         return bean;
     }   
 

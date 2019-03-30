@@ -737,10 +737,14 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
             this.setReferencedByGroupId(bean,refPersongroupByGroupId);
         }
         bean = this.save( bean );
-        this.setFeatureBeansByPersonId(bean,impFeatureByPersonId);
-        instanceOfFlFeatureManager().save( impFeatureByPersonId );
-        this.setLogBeansByPersonId(bean,impLogByPersonId);
-        instanceOfFlLogManager().save( impLogByPersonId );
+        if(null != impFeatureByPersonId){
+            this.setFeatureBeansByPersonId(bean,impFeatureByPersonId);
+            instanceOfFlFeatureManager().save( impFeatureByPersonId );
+        }
+        if(null != impLogByPersonId){
+            this.setLogBeansByPersonId(bean,impLogByPersonId);
+            instanceOfFlLogManager().save( impLogByPersonId );
+        }
         return bean;
     } 
 
@@ -778,13 +782,21 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
         if(null == bean) {
             return null;
         }
-        this.setReferencedByImageMd5(bean,refImageByImageMd5);
-        this.setReferencedByGroupId(bean,refPersongroupByGroupId);
+        if(null != refImageByImageMd5){
+            this.setReferencedByImageMd5(bean,refImageByImageMd5);
+        }
+        if(null != refPersongroupByGroupId){
+            this.setReferencedByGroupId(bean,refPersongroupByGroupId);
+        }
         bean = this.save( bean );
-        this.setFeatureBeansByPersonId(bean,impFeatureByPersonId);
-        instanceOfFlFeatureManager().save( impFeatureByPersonId );
-        this.setLogBeansByPersonId(bean,impLogByPersonId);
-        instanceOfFlLogManager().save( impLogByPersonId );
+        if(null != impFeatureByPersonId){
+            this.setFeatureBeansByPersonId(bean,impFeatureByPersonId);
+            instanceOfFlFeatureManager().save( impFeatureByPersonId );
+        }
+        if(null != impLogByPersonId){
+            this.setLogBeansByPersonId(bean,impLogByPersonId);
+            instanceOfFlLogManager().save( impLogByPersonId );
+        }
         return bean;
     }
 

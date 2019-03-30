@@ -695,12 +695,18 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
             this.setReferencedByParent(bean,refPersongroupByParent);
         }
         bean = this.save( bean );
-        this.setPermitBeansByPersonGroupId(bean,impPermitByPersonGroupId);
-        instanceOfPermitManager().save( impPermitByPersonGroupId );
-        this.setPersonBeansByGroupId(bean,impPersonByGroupId);
-        instanceOfPersonManager().save( impPersonByGroupId );
-        this.setPersonGroupBeansByParent(bean,impPersongroupByParent);
-        instanceOfPersonGroupManager().save( impPersongroupByParent );
+        if(null != impPermitByPersonGroupId){
+            this.setPermitBeansByPersonGroupId(bean,impPermitByPersonGroupId);
+            instanceOfPermitManager().save( impPermitByPersonGroupId );
+        }
+        if(null != impPersonByGroupId){
+            this.setPersonBeansByGroupId(bean,impPersonByGroupId);
+            instanceOfPersonManager().save( impPersonByGroupId );
+        }
+        if(null != impPersongroupByParent){
+            this.setPersonGroupBeansByParent(bean,impPersongroupByParent);
+            instanceOfPersonGroupManager().save( impPersongroupByParent );
+        }
         return bean;
     } 
 
@@ -727,14 +733,22 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         if(null == bean){
             return null;
         }
-        this.setReferencedByParent(bean,refPersongroupByParent);
+        if(null != refPersongroupByParent){
+            this.setReferencedByParent(bean,refPersongroupByParent);
+        }
         bean = this.save( bean );
-        this.setPermitBeansByPersonGroupId(bean,impPermitByPersonGroupId);
-        instanceOfPermitManager().save( impPermitByPersonGroupId );
-        this.setPersonBeansByGroupId(bean,impPersonByGroupId);
-        instanceOfPersonManager().save( impPersonByGroupId );
-        this.setPersonGroupBeansByParent(bean,impPersongroupByParent);
-        instanceOfPersonGroupManager().save( impPersongroupByParent );
+        if(null != impPermitByPersonGroupId){
+            this.setPermitBeansByPersonGroupId(bean,impPermitByPersonGroupId);
+            instanceOfPermitManager().save( impPermitByPersonGroupId );
+        }
+        if(null != impPersonByGroupId){
+            this.setPersonBeansByGroupId(bean,impPersonByGroupId);
+            instanceOfPersonManager().save( impPersonByGroupId );
+        }
+        if(null != impPersongroupByParent){
+            this.setPersonGroupBeansByParent(bean,impPersongroupByParent);
+            instanceOfPersonGroupManager().save( impPersongroupByParent );
+        }
         return bean;
     }   
 

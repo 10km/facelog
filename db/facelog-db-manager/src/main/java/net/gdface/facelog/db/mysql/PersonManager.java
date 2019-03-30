@@ -611,10 +611,14 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
             this.setReferencedByGroupId(bean,refPersongroupByGroupId);
         }
         bean = this.save( bean );
-        this.setFeatureBeansByPersonId(bean,impFeatureByPersonId);
-        instanceOfFeatureManager().save( impFeatureByPersonId );
-        this.setLogBeansByPersonId(bean,impLogByPersonId);
-        instanceOfLogManager().save( impLogByPersonId );
+        if(null != impFeatureByPersonId){
+            this.setFeatureBeansByPersonId(bean,impFeatureByPersonId);
+            instanceOfFeatureManager().save( impFeatureByPersonId );
+        }
+        if(null != impLogByPersonId){
+            this.setLogBeansByPersonId(bean,impLogByPersonId);
+            instanceOfLogManager().save( impLogByPersonId );
+        }
         return bean;
     } 
 
@@ -641,13 +645,21 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
         if(null == bean){
             return null;
         }
-        this.setReferencedByImageMd5(bean,refImageByImageMd5);
-        this.setReferencedByGroupId(bean,refPersongroupByGroupId);
+        if(null != refImageByImageMd5){
+            this.setReferencedByImageMd5(bean,refImageByImageMd5);
+        }
+        if(null != refPersongroupByGroupId){
+            this.setReferencedByGroupId(bean,refPersongroupByGroupId);
+        }
         bean = this.save( bean );
-        this.setFeatureBeansByPersonId(bean,impFeatureByPersonId);
-        instanceOfFeatureManager().save( impFeatureByPersonId );
-        this.setLogBeansByPersonId(bean,impLogByPersonId);
-        instanceOfLogManager().save( impLogByPersonId );
+        if(null != impFeatureByPersonId){
+            this.setFeatureBeansByPersonId(bean,impFeatureByPersonId);
+            instanceOfFeatureManager().save( impFeatureByPersonId );
+        }
+        if(null != impLogByPersonId){
+            this.setLogBeansByPersonId(bean,impLogByPersonId);
+            instanceOfLogManager().save( impLogByPersonId );
+        }
         return bean;
     }   
 
