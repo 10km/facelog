@@ -41,6 +41,7 @@ public class FlPersonGroupComparator implements Comparator<FlPersonGroupBean>,Co
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_NAME}
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_LEAF}
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_PARENT}
+     *   <li>{@link Constant#FL_PERSON_GROUP_ID_ROOT_GROUP}
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_REMARK}
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_EXT_BIN}
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_EXT_TXT}
@@ -68,6 +69,7 @@ public class FlPersonGroupComparator implements Comparator<FlPersonGroupBean>,Co
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_NAME})
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_LEAF})
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_PARENT})
+     *   <li>{@link Constant#FL_PERSON_GROUP_ID_ROOT_GROUP})
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_REMARK})
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_EXT_BIN})
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_EXT_TXT})
@@ -131,6 +133,17 @@ public class FlPersonGroupComparator implements Comparator<FlPersonGroupBean>,Co
                     iReturn = 1;
                 } else {
                     iReturn = b1.getParent().compareTo(b2.getParent());
+                }
+                break;
+            case FL_PERSON_GROUP_ID_ROOT_GROUP:
+                if (b1.getRootGroup() == null && b2.getRootGroup() != null) {
+                    iReturn = -1;
+                } else if (b1.getRootGroup() == null && b2.getRootGroup() == null) {
+                    iReturn = 0;
+                } else if (b1.getRootGroup() != null && b2.getRootGroup() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getRootGroup().compareTo(b2.getRootGroup());
                 }
                 break;
             case FL_PERSON_GROUP_ID_REMARK:

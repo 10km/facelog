@@ -2979,6 +2979,7 @@ public class BeanConverterUtils implements Constant {
             name("getName","setName"),
             leaf("getLeaf","setLeaf"),
             parent("getParent","setParent"),
+            rootGroup("getRootGroup","setRootGroup"),
             remark("getRemark","setRemark"),
             extBin("getExtBin","setExtBin"),
             extTxt("getExtTxt","setExtTxt"),
@@ -3090,6 +3091,8 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.leaf.setter,Integer.class,int.class);                    
             getGetter(Column.parent.getter);
             getSetterNoThrow(Column.parent.setter,Integer.class,int.class);                    
+            getGetter(Column.rootGroup.getter);
+            getSetterNoThrow(Column.rootGroup.setter,Integer.class,int.class);                    
             getGetter(Column.remark.getter);
             getSetterNoThrow(Column.remark.setter,String.class); 
             getGetter(Column.extBin.getter);
@@ -3138,6 +3141,12 @@ public class BeanConverterUtils implements Constant {
                     left.setParent(cast(Integer.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.parent.name(),modified)){
                         selfModified |= FL_PERSON_GROUP_ID_PARENT_MASK;
+                    }
+                }
+                if( bitCheck(Column.rootGroup.name(),initialized) && (null != (getterMethod = methods.get(Column.rootGroup.getter)))){
+                    left.setRootGroup(cast(Integer.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.rootGroup.name(),modified)){
+                        selfModified |= FL_PERSON_GROUP_ID_ROOT_GROUP_MASK;
                     }
                 }
                 if( bitCheck(Column.remark.name(),initialized) && (null != (getterMethod = methods.get(Column.remark.getter)))){
@@ -3220,6 +3229,15 @@ public class BeanConverterUtils implements Constant {
                         bitOR(Column.parent.name(),initialized);
                         if(left.checkParentModified()){
                             bitOR(Column.parent.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.rootGroup.setter)) && left.checkRootGroupInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.rootGroup.setter),left.getRootGroup()));
+                        bitOR(Column.rootGroup.name(),initialized);
+                        if(left.checkRootGroupModified()){
+                            bitOR(Column.rootGroup.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }

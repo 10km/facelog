@@ -79,7 +79,7 @@ public interface Constant {
     public static final int FL_PERMIT_PK_COUNT = 2;
     public static final int FL_PERSON_COLUMN_COUNT = 17;
     public static final int FL_PERSON_PK_COUNT = 1;
-    public static final int FL_PERSON_GROUP_COLUMN_COUNT = 9;
+    public static final int FL_PERSON_GROUP_COLUMN_COUNT = 10;
     public static final int FL_PERSON_GROUP_PK_COUNT = 1;
     public static final int FL_STORE_COLUMN_COUNT = 3;
     public static final int FL_STORE_PK_COUNT = 1;
@@ -452,21 +452,24 @@ public interface Constant {
     /** Identify the fl_person_group.parent field (ordinal:4). */
     public static final int FL_PERSON_GROUP_ID_PARENT = 3;
     public static final long FL_PERSON_GROUP_ID_PARENT_MASK = 1L << 3;
-    /** Identify the fl_person_group.remark field (ordinal:5). */
-    public static final int FL_PERSON_GROUP_ID_REMARK = 4;
-    public static final long FL_PERSON_GROUP_ID_REMARK_MASK = 1L << 4;
-    /** Identify the fl_person_group.ext_bin field (ordinal:6). */
-    public static final int FL_PERSON_GROUP_ID_EXT_BIN = 5;
-    public static final long FL_PERSON_GROUP_ID_EXT_BIN_MASK = 1L << 5;
-    /** Identify the fl_person_group.ext_txt field (ordinal:7). */
-    public static final int FL_PERSON_GROUP_ID_EXT_TXT = 6;
-    public static final long FL_PERSON_GROUP_ID_EXT_TXT_MASK = 1L << 6;
-    /** Identify the fl_person_group.create_time field (ordinal:8). */
-    public static final int FL_PERSON_GROUP_ID_CREATE_TIME = 7;
-    public static final long FL_PERSON_GROUP_ID_CREATE_TIME_MASK = 1L << 7;
-    /** Identify the fl_person_group.update_time field (ordinal:9). */
-    public static final int FL_PERSON_GROUP_ID_UPDATE_TIME = 8;
-    public static final long FL_PERSON_GROUP_ID_UPDATE_TIME_MASK = 1L << 8;
+    /** Identify the fl_person_group.root_group field (ordinal:5). */
+    public static final int FL_PERSON_GROUP_ID_ROOT_GROUP = 4;
+    public static final long FL_PERSON_GROUP_ID_ROOT_GROUP_MASK = 1L << 4;
+    /** Identify the fl_person_group.remark field (ordinal:6). */
+    public static final int FL_PERSON_GROUP_ID_REMARK = 5;
+    public static final long FL_PERSON_GROUP_ID_REMARK_MASK = 1L << 5;
+    /** Identify the fl_person_group.ext_bin field (ordinal:7). */
+    public static final int FL_PERSON_GROUP_ID_EXT_BIN = 6;
+    public static final long FL_PERSON_GROUP_ID_EXT_BIN_MASK = 1L << 6;
+    /** Identify the fl_person_group.ext_txt field (ordinal:8). */
+    public static final int FL_PERSON_GROUP_ID_EXT_TXT = 7;
+    public static final long FL_PERSON_GROUP_ID_EXT_TXT_MASK = 1L << 7;
+    /** Identify the fl_person_group.create_time field (ordinal:9). */
+    public static final int FL_PERSON_GROUP_ID_CREATE_TIME = 8;
+    public static final long FL_PERSON_GROUP_ID_CREATE_TIME_MASK = 1L << 8;
+    /** Identify the fl_person_group.update_time field (ordinal:10). */
+    public static final int FL_PERSON_GROUP_ID_UPDATE_TIME = 9;
+    public static final long FL_PERSON_GROUP_ID_UPDATE_TIME_MASK = 1L << 9;
     /** Identify the fl_store.md5 field (ordinal:1). */
     public static final int FL_STORE_ID_MD5 = 0;
     public static final long FL_STORE_ID_MD5_MASK = 1L << 0;
@@ -800,6 +803,7 @@ public interface Constant {
                             + ",fl_person_group.name"
                             + ",fl_person_group.leaf"
                             + ",fl_person_group.parent"
+                            + ",fl_person_group.root_group"
                             + ",fl_person_group.remark"
                             + ",fl_person_group.ext_bin"
                             + ",fl_person_group.ext_txt"
@@ -810,6 +814,7 @@ public interface Constant {
                             + ",name"
                             + ",leaf"
                             + ",parent"
+                            + ",root_group"
                             + ",remark"
                             + ",ext_bin"
                             + ",ext_txt"
@@ -821,6 +826,7 @@ public interface Constant {
                             + ",name"
                             + ",leaf"
                             + ",parent"
+                            + ",rootGroup"
                             + ",remark"
                             + ",extBin"
                             + ",extTxt"

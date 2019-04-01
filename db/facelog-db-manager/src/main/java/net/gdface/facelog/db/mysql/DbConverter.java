@@ -675,6 +675,9 @@ public class DbConverter implements IDbConverter<
             if(right.checkParentInitialized()){
                 left.setParent(right.getParent());
             }
+            if(right.checkRootGroupInitialized()){
+                left.setRootGroup(right.getRootGroup());
+            }
             if(right.checkRemarkInitialized()){
                 left.setRemark(right.getRemark());
             }
@@ -707,6 +710,9 @@ public class DbConverter implements IDbConverter<
             }
             if(left.checkParentInitialized() ){
                 right.setParent(left.getParent());
+            }
+            if(left.checkRootGroupInitialized() ){
+                right.setRootGroup(left.getRootGroup());
             }
             if(left.checkRemarkInitialized() ){
                 right.setRemark(left.getRemark());

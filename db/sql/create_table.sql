@@ -46,6 +46,8 @@ CREATE TABLE IF NOT EXISTS fl_person_group (
   `name`        varchar(32) NOT NULL COMMENT '用户组名',
   `leaf`        tinyint(1) DEFAULT NULL COMMENT '是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可',
   `parent`      int(11) DEFAULT NULL COMMENT '上一级用户组id',
+  `root_group`  int(11) DEFAULT NULL COMMENT '指向设备组id,用于应用层定义管理员/操作员的管理边界,此字段不为null代表此用户组为管理边界,指向的设备组为此用户组的设备管理边界,
+  对于属于此组的管理员和操作员都只能管理此组内的用户及对应设备组内的设备',
   `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
   `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段(最大64KB)',
   `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段(最大64KB)',

@@ -41,6 +41,10 @@ public  class FlPersonGroupBean
     /** comments:上一级用户组id */
     private Integer parent;
 
+    /** comments:指向设备组id,用于应用层定义管理员/操作员的管理边界,此字段不为null代表此用户组为管理边界,指向的设备组为此用户组的设备管理边界,
+  对于属于此组的管理员和操作员都只能管理此组内的用户及对应设备组内的设备 */
+    private Integer rootGroup;
+
     /** comments:备注 */
     private String remark;
 
@@ -419,6 +423,72 @@ public  class FlPersonGroupBean
         return 0L !=  (initialized & FL_PERSON_GROUP_ID_PARENT_MASK);
     }
     /**
+     * Getter method for {@link #rootGroup}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_person_group.root_group</li>
+     * <li>comments: 指向设备组id,用于应用层定义管理员/操作员的管理边界,此字段不为null代表此用户组为管理边界,指向的设备组为此用户组的设备管理边界,
+  对于属于此组的管理员和操作员都只能管理此组内的用户及对应设备组内的设备</li>
+     * <li>column size: 10</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
+     * </ul>
+     *
+     * @return the value of rootGroup
+     */
+    public Integer getRootGroup(){
+        return rootGroup;
+    }
+    /**
+     * Setter method for {@link #rootGroup}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to rootGroup
+     */
+    public void setRootGroup(Integer newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, rootGroup)) {
+            return;
+        }
+        rootGroup = newVal;
+
+        modified |= FL_PERSON_GROUP_ID_ROOT_GROUP_MASK;
+        initialized |= FL_PERSON_GROUP_ID_ROOT_GROUP_MASK;
+    }
+    /**
+     * Setter method for {@link #rootGroup}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to rootGroup
+     */
+    public void setRootGroup(int newVal)
+    {
+        setRootGroup(new Integer(newVal));
+    }
+    /**
+     * Determines if the rootGroup has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkRootGroupModified()
+    {
+        return 0L !=  (modified & FL_PERSON_GROUP_ID_ROOT_GROUP_MASK);
+    }
+
+    /**
+     * Determines if the rootGroup has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkRootGroupInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_GROUP_ID_ROOT_GROUP_MASK);
+    }
+    /**
      * Getter method for {@link #remark}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -771,6 +841,8 @@ public  class FlPersonGroupBean
             return checkLeafModified();
         case FL_PERSON_GROUP_ID_PARENT:
             return checkParentModified();
+        case FL_PERSON_GROUP_ID_ROOT_GROUP:
+            return checkRootGroupModified();
         case FL_PERSON_GROUP_ID_REMARK:
             return checkRemarkModified();
         case FL_PERSON_GROUP_ID_EXT_BIN:
@@ -797,6 +869,8 @@ public  class FlPersonGroupBean
             return checkLeafInitialized();
         case FL_PERSON_GROUP_ID_PARENT:
             return checkParentInitialized();
+        case FL_PERSON_GROUP_ID_ROOT_GROUP:
+            return checkRootGroupInitialized();
         case FL_PERSON_GROUP_ID_REMARK:
             return checkRemarkInitialized();
         case FL_PERSON_GROUP_ID_EXT_BIN:
@@ -842,6 +916,7 @@ public  class FlPersonGroupBean
         modified &= (~(FL_PERSON_GROUP_ID_NAME_MASK |
             FL_PERSON_GROUP_ID_LEAF_MASK |
             FL_PERSON_GROUP_ID_PARENT_MASK |
+            FL_PERSON_GROUP_ID_ROOT_GROUP_MASK |
             FL_PERSON_GROUP_ID_REMARK_MASK |
             FL_PERSON_GROUP_ID_EXT_BIN_MASK |
             FL_PERSON_GROUP_ID_EXT_TXT_MASK |
@@ -862,6 +937,7 @@ public  class FlPersonGroupBean
         this.name = null;
         this.leaf = null;
         this.parent = null;
+        this.rootGroup = null;
         this.remark = null;
         this.extBin = null;
         this.extTxt = null;
@@ -886,6 +962,7 @@ public  class FlPersonGroupBean
             .append(getName(), obj.getName())
             .append(getLeaf(), obj.getLeaf())
             .append(getParent(), obj.getParent())
+            .append(getRootGroup(), obj.getRootGroup())
             .append(getRemark(), obj.getRemark())
             .append(getExtBin(), obj.getExtBin())
             .append(getExtTxt(), obj.getExtTxt())
@@ -991,6 +1068,15 @@ public  class FlPersonGroupBean
                 append(builder,fullIfStringOrBytes,getParent());
             }
         }
+        if(checkRootGroupInitialized()){
+            if(!notNull || null != getRootGroup()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("root_group=");
+                append(builder,fullIfStringOrBytes,getRootGroup());
+            }
+        }
         if(checkRemarkInitialized()){
             if(!notNull || null != getRemark()){
                 if(count++ >0){
@@ -1046,6 +1132,7 @@ public  class FlPersonGroupBean
             .append(getName(), object.getName())
             .append(getLeaf(), object.getLeaf())
             .append(getParent(), object.getParent())
+            .append(getRootGroup(), object.getRootGroup())
             .append(getRemark(), object.getRemark())
             .append(getExtBin(), object.getExtBin())
             .append(getExtTxt(), object.getExtTxt())
@@ -1075,6 +1162,7 @@ public  class FlPersonGroupBean
         setName((String)null);
         setLeaf((Integer)null);
         setParent((Integer)null);
+        setRootGroup((Integer)null);
         setRemark((String)null);
         setExtBin((java.nio.ByteBuffer)null);
         setExtTxt((String)null);
@@ -1177,6 +1265,8 @@ public  class FlPersonGroupBean
             return (T)getLeaf();        
         case FL_PERSON_GROUP_ID_PARENT: 
             return (T)getParent();        
+        case FL_PERSON_GROUP_ID_ROOT_GROUP: 
+            return (T)getRootGroup();        
         case FL_PERSON_GROUP_ID_REMARK: 
             return (T)getRemark();        
         case FL_PERSON_GROUP_ID_EXT_BIN: 
@@ -1207,6 +1297,9 @@ public  class FlPersonGroupBean
             break;
         case FL_PERSON_GROUP_ID_PARENT:
             setParent((Integer)value);
+            break;
+        case FL_PERSON_GROUP_ID_ROOT_GROUP:
+            setRootGroup((Integer)value);
             break;
         case FL_PERSON_GROUP_ID_REMARK:
             setRemark((String)value);
@@ -1324,6 +1417,17 @@ public  class FlPersonGroupBean
          */
         public Builder parent(Integer parent){
             TEMPLATE.get().setParent(parent);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person_group.root_group
+         * @param rootGroup 指向设备组id,用于应用层定义管理员/操作员的管理边界,此字段不为null代表此用户组为管理边界,指向的设备组为此用户组的设备管理边界,
+  对于属于此组的管理员和操作员都只能管理此组内的用户及对应设备组内的设备
+         * @see FlPersonGroupBean#getRootGroup()
+         * @see FlPersonGroupBean#setRootGroup(Integer)
+         */
+        public Builder rootGroup(Integer rootGroup){
+            TEMPLATE.get().setRootGroup(rootGroup);
             return this;
         }
         /** 
