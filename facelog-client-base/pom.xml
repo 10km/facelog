@@ -39,6 +39,11 @@
 			<groupId>com.gitee.l0km</groupId>
 			<artifactId>simplemq</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>dtalk-engine</artifactId>
+			<version>${dtalk.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

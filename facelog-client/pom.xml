@@ -34,7 +34,11 @@
 			<artifactId>facelog-client-base</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>dtalk-client</artifactId>
+			<version>${dtalk.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
