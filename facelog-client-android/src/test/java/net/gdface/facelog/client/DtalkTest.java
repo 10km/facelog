@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import net.gdface.facelog.CommonConstant;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.Token;
-import net.gdface.facelog.client.ClientTest.TokenHelperTestImpl;
 import net.gdface.facelog.client.dtalk.FacelogRedisConfigProvider;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
