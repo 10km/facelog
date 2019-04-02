@@ -47,7 +47,7 @@ public class IFaceLogClient extends IFaceLogDecorator {
 	public DtalkEngineForFacelog initDtalkEngine(Token token, MenuItem root) throws DtalkException{
 		Map<MQParam, String> redisParam = getRedisParameters(token);
 		FacelogRedisConfigProvider.setRedisLocation(URI.create(redisParam.get(MQParam.REDIS_URI)));
-		RedisConfigType configType = RedisConfigType.lookupRedisConnect(null);
+		RedisConfigType configType = RedisConfigType.lookupRedisConnect();
 		return new DtalkEngineForFacelog(configType, root);
 	}
 }

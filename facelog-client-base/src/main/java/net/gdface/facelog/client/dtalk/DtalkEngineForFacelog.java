@@ -19,7 +19,7 @@ public class DtalkEngineForFacelog {
 	private final RedisSubscriber subscriber;
 	private final byte[] devMac;
 	public DtalkEngineForFacelog(RedisConfigType configType, MenuItem root) {
-		JedisPoolLazy pool = JedisPoolLazy.getInstance(configType.readRedisParam(),true);
+		JedisPoolLazy pool = JedisPoolLazy.getInstance(configType.readRedisParam(),false);
 		subscriber = RedisFactory.getSubscriber(pool);
 		connAdapter = new SampleConnector(pool)
 				.setItemAdapter(new ItemEngine(pool).setRoot(root));

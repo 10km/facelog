@@ -1,8 +1,10 @@
 package net.gdface.facelog.client.dtalk;
 
 import java.net.URI;
+
 import gu.dtalk.redis.RedisConfigProvider;
 import gu.dtalk.redis.RedisConfigType;
+
 import static com.google.common.base.Preconditions.*;
 
 public class FacelogRedisConfigProvider implements RedisConfigProvider {
