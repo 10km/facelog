@@ -3,18 +3,23 @@ package net.gdface.facelog.client;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
-
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 
+import gu.dtalk.MenuItem;
+import gu.dtalk.exception.DtalkException;
+import gu.dtalk.redis.RedisConfigType;
 import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.Token.TokenType;
+import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
+import net.gdface.facelog.client.dtalk.FacelogRedisConfigProvider;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.thrift.IFaceLogThriftClientAsync;
 
@@ -229,4 +234,19 @@ public class ClientExtendTools {
                     throw new RuntimeException(e);
                 }
             }};
+
+	public DtalkEngineForFacelog initDtalkEngine(Token token, MenuItem root) throws DtalkException{
+		Map<MQParam, String> redisParam;
+		try {
+			redisParam = syncInstance != null 
+				? syncInstance.getRedisParameters(token)
+				: asyncInstance.getRedisParameters(token).get();
+        }catch(Exception e){
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+		FacelogRedisConfigProvider.setRedisLocation(URI.create(redisParam.get(MQParam.REDIS_URI)));
+		return new DtalkEngineForFacelog(RedisConfigType.CUSTOM, root);
+		
+	}
 }

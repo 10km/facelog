@@ -8,24 +8,45 @@ import org.slf4j.Logger;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
+
 import net.gdface.thrift.ClientFactory;
 import static net.gdface.facelog.CommonConstant.*;
 
+/**
+ * facelog连接配置参数
+ * @author guyadong
+ *
+ */
 public enum ConnectConfigType implements ConnectConfigProvider {
-	/** 本机配置(仅用于测试) */LOCALHOST(new LocalhostConnectConfigProvider())
+	/** 自定义配置 */CUSTOM
 	/** 局域网配置 */,LAN(new LocalConnectConfigProvider())
 	/** 公有云配置 */,CLOUD(new CloudConnectConfigProvider())
-	/** 自定义配置 */,CUSTOM;
+	/** 本机配置(仅用于测试) */,LOCALHOST(new LocalhostConnectConfigProvider());
+	/**
+	 * 接口实例的默认实现
+	 */
 	private final ConnectConfigProvider defImpl;
+	/**
+	 * 接口实例
+	 */
 	private volatile ConnectConfigProvider instance;
+	/**
+	 * 当前配置是否可连接
+	 */
+	private boolean connectable;
 	private ConnectConfigType(){
 		this(null);
 	}
 	private ConnectConfigType(ConnectConfigProvider defImpl) {
 		this.defImpl = defImpl;
-		findRedisConfigProvider();
+		findConnectConfigProvider();
 	}
-	private ConnectConfigProvider findRedisConfigProvider(){
+	/**
+	 * SPI(Server Load Interface)方式加载当前类型的{@link ConnectConfigProvider}实例,
+	 * 没找到则用默认{@link #defImpl}实例代替
+	 * @return
+	 */
+	private ConnectConfigProvider findConnectConfigProvider(){
 		// double checking
 		if(instance == null){
 			synchronized (this) {
@@ -49,16 +70,18 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 	 * 测试redis连接
 	 * @return 连接成功返回{@code true},否则返回{@code false}
 	 */
-	public boolean testConnect(){
+	public synchronized boolean testConnect(){
+		connectable = false;
 		if(instance == null){
-			return false;
+//			System.out.printf("try to connect %s...\n", this);
+			try{
+				connectable = ClientFactory.builder()
+						.setHostAndPort(instance.getHost(),instance.getPort())
+						.testConnect();
+			}catch (Exception e) {
+			}
+			System.out.printf("%s connect %s\n",this.toString(),connectable?"OK":"FAIL");
 		}
-		System.out.printf("try to connect %s...", this);
-		
-		boolean connectable = ClientFactory.builder()
-				.setHostAndPort(instance.getHost(),instance.getPort())
-				.testConnect();
-		System.out.println(connectable?"OK":"FAIL");
 		return connectable;
 	}
 
@@ -72,16 +95,36 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 	 * @throws FaceLogConnectException 没有找到有效redis连接
 	 */
 	public static ConnectConfigType lookupRedisConnect() throws FaceLogConnectException{
-		if(ConnectConfigType.CUSTOM.testConnect()){
-			return ConnectConfigType.CUSTOM;
-		}else if(ConnectConfigType.LAN.testConnect()){
-			return ConnectConfigType.LAN;
-		}else if(ConnectConfigType.CLOUD.testConnect()){
-			return ConnectConfigType.CLOUD;
-		}else if(ConnectConfigType.LOCALHOST.testConnect()){
-			return ConnectConfigType.LOCALHOST;
+		// 并发执行连接测试，以减少等待时间
+		Thread[] threads = new Thread[values().length];
+		int index = 0;
+		for (final ConnectConfigType type : values()) {
+			threads[index] = new Thread(){
+
+				@Override
+				public void run() {
+					type.testConnect();
+				}
+				
+			};
+			threads[index].start();
+			index++;
 		}
-		throw new FaceLogConnectException("NOT FOUND VALID REDIS SERVER");
+		// 等待所有子线程结束
+		try {
+			for(Thread thread:threads){
+				thread.join();
+			}
+		} catch (InterruptedException e) {
+		}
+		// 以枚举变量定义的顺序为优先级查找第一个connectable为true的对象返回
+		// 都为false则抛出异常
+		for (final ConnectConfigType type : values()) {
+			if(type.connectable){
+				return type;
+			}
+		}
+		throw new FaceLogConnectException("NOT FOUND VALID Facelog SERVER");
 	}
 
 	/**
@@ -96,18 +139,6 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 			return null;
 		}
 	}
-	@Override
-	public	String toString(){
-		StringBuffer buffer = new StringBuffer();
-		buffer.append(name()).append(" : ");
-		if(instance==null){
-			buffer.append("null");
-		}else{
-			buffer.append(getHost()).append(":")
-			.append(getPort());
-		}
-		return buffer.toString();
-	}
 	private ConnectConfigProvider checkInstance(){
 		if(null == instance){
 			throw new UnsupportedOperationException(String.format("%s unavailable", name()));
@@ -120,7 +151,7 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 	}
 	@Override
 	public void setHost(String host) {
-		
+		checkInstance().setHost(host);
 	}
 	@Override
 	public int getPort() {
@@ -143,5 +174,19 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 	@Override
 	public ConnectConfigType type() {
 		return this;
+	}
+	@Override
+	public	String toString(){
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(name());
+		if(instance==null){
+			buffer.append("(UNDEFINED)");
+		}else{
+			buffer.append("(")
+					.append(getHost()).append(":")
+					.append(getPort())
+					.append(")");
+		}
+		return buffer.toString();
 	}
 }
