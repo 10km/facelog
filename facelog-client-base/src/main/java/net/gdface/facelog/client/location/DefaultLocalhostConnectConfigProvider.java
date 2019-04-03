@@ -9,7 +9,7 @@ public class DefaultLocalhostConnectConfigProvider implements ConnectConfigProvi
 
 	@Override
 	public String getHost() {
-		return "localhost";
+		return "127.0.0.1";
 	}
 
 	@Override

@@ -38,6 +38,13 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>dtalk-client</artifactId>
 			<version>${dtalk.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>dtalk-demo</artifactId>
+			<version>${dtalk.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>

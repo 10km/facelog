@@ -134,6 +134,21 @@ public final class Token{
 		CurrentTokenContextOp.getInstance().currentToken(this);
 		return this;
 	}
+	/**
+	 * 从复制src的所有字段到当前对象<br>
+	 * src为{@code null}则跳过
+	 * @param src
+	 * @return
+	 */
+	public Token assignFrom(Token src){
+		if(src != null){
+			this.id=src.id;
+			this.type=src.type;
+			this.t1 = src.t1;
+			this.t2 = src.t2;
+		}
+		return this;
+	}
 	static Function<Token,String> KEY_HELPER = new Function<Token,String>(){
 		@Override
 		public String apply(Token input) {

@@ -10,17 +10,17 @@ import gu.dtalk.PasswordOption;
 import gu.dtalk.RootMenu;
 import gu.dtalk.StringOption;
 import gu.dtalk.event.ValueListener;
-import gu.dtalk.redis.RedisConfigType;
+import net.gdface.facelog.client.location.ConnectConfigProvider;
 
-import static gu.dtalk.CommonConstant.*;
 import static gu.dtalk.engine.SampleConnector.DEVINFO_PROVIDER;
 
 import gu.dtalk.CheckOption;
 import gu.dtalk.IPv4Option;
 
 public class FacelogMenu extends RootMenu{
-	private RedisConfigType configType;
-	public FacelogMenu() {
+	private final ConnectConfigProvider config;
+	public FacelogMenu(ConnectConfigProvider configType) {
+		this.config = configType;
 	}
 	public FacelogMenu init(){
 		byte[] mac = DEVINFO_PROVIDER.getMac();
@@ -40,13 +40,11 @@ public class FacelogMenu extends RootMenu{
 				.instance();
 		MenuItem redis = 
 			ItemBuilder.builder(MenuItem.class)
-				.name("redis")
-				.uiName("REDIS 服务器")
+				.name("facelog")
+				.uiName("facelog 服务器")
 				.addChilds(
-						ItemBuilder.builder(StringOption.class).name("host").uiName("主机名称").instance().setValue(REDIS_HOST),
-						ItemBuilder.builder(IntOption.class).name("port").uiName("端口号").instance().setValue(REDIS_PORT),
-						ItemBuilder.builder(IntOption.class).name("db").uiName("数据库").instance().setValue(0),
-						ItemBuilder.builder(PasswordOption.class).name("password").uiName("连接密码").instance().setValue(REDIS_PASSWORD))
+						ItemBuilder.builder(StringOption.class).name("host").uiName("主机名称").instance().setValue(config.getHost()),
+						ItemBuilder.builder(IntOption.class).name("port").uiName("端口号").instance().setValue(config.getPort()))
 				.instance();
 		MenuItem test = 
 			ItemBuilder.builder(MenuItem.class)
@@ -70,10 +68,6 @@ public class FacelogMenu extends RootMenu{
 	}
 	public FacelogMenu register(ValueListener<Object> listener){
 		listener.registerTo(this);
-		return this;
-	}
-	public FacelogMenu setConfigType(RedisConfigType configType) {
-		this.configType = configType;
 		return this;
 	}
 }

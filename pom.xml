@@ -21,7 +21,8 @@
 		<codegen.version>1.0.9</codegen.version>
 		<idl.generator.version>1.10</idl.generator.version>
 		<dtalk.version>0.0.1-SNAPSHOT</dtalk.version>
-		<thrifty.compiler.maven.plugin.version>1.1</thrifty.compiler.maven.plugin.version>		
+		<thrifty.compiler.maven.plugin.version>1.1</thrifty.compiler.maven.plugin.version>
+		<simplemq.version>1.0.9-SNAPSHOT</simplemq.version>		
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -120,7 +121,7 @@
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>simplemq</artifactId>
-				<version>1.0.6</version>
+				<version>${simplemq.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>

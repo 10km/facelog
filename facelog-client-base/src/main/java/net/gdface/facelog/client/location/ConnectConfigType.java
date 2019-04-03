@@ -64,13 +64,15 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 		}
 		return instance;
 	}
+	private static volatile ConnectConfigType activeConnectType = null;
+
 	/**
 	 * 测试redis连接
 	 * @return 连接成功返回{@code true},否则返回{@code false}
 	 */
 	public synchronized boolean testConnect(){
 		connectable = false;
-		if(instance == null){
+		if(instance != null){
 //			System.out.printf("try to connect %s...\n", this);
 			try{
 				connectable = ClientFactory.builder()
@@ -93,36 +95,45 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 	 * @throws FaceLogConnectException 没有找到有效redis连接
 	 */
 	public static ConnectConfigType lookupRedisConnect() throws FaceLogConnectException{
-		// 并发执行连接测试，以减少等待时间
-		Thread[] threads = new Thread[values().length];
-		int index = 0;
-		for (final ConnectConfigType type : values()) {
-			threads[index] = new Thread(){
+		// double check
+		if(activeConnectType == null){
+			synchronized (ConnectConfigType.class) {
+				if(activeConnectType == null){
+					// 并发执行连接测试，以减少等待时间
+					Thread[] threads = new Thread[values().length];
+					int index = 0;
+					for (final ConnectConfigType type : values()) {
+						threads[index] = new Thread(){
 
-				@Override
-				public void run() {
-					type.testConnect();
+							@Override
+							public void run() {
+								type.testConnect();
+							}
+
+						};
+						threads[index].start();
+						index++;
+					}
+					// 等待所有子线程结束
+					try {
+						for(Thread thread:threads){
+							thread.join();
+						}
+					} catch (InterruptedException e) {
+					}
+					// 以枚举变量定义的顺序为优先级查找第一个connectable为true的对象返回
+					// 都为false则抛出异常
+					for (final ConnectConfigType type : values()) {
+						if(type.connectable){
+							activeConnectType = type;
+							return type;
+						}
+					}
+					throw new FaceLogConnectException("NOT FOUND VALID Facelog SERVER");
 				}
-				
-			};
-			threads[index].start();
-			index++;
-		}
-		// 等待所有子线程结束
-		try {
-			for(Thread thread:threads){
-				thread.join();
-			}
-		} catch (InterruptedException e) {
-		}
-		// 以枚举变量定义的顺序为优先级查找第一个connectable为true的对象返回
-		// 都为false则抛出异常
-		for (final ConnectConfigType type : values()) {
-			if(type.connectable){
-				return type;
 			}
 		}
-		throw new FaceLogConnectException("NOT FOUND VALID Facelog SERVER");
+		return activeConnectType;
 	}
 
 	/**

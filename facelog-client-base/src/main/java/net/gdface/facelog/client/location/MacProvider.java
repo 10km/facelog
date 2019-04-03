@@ -11,9 +11,9 @@ public class MacProvider extends DefaultDevInfoProvider {
 
 	public MacProvider() {
 		try {
-			ConnectConfigType type = ConnectConfigType.lookupRedisConnectUnchecked();
-			if(type == null){
-				mac = NetworkUtil.getCurrentMac("www.cnnic.net.cn", 80);	
+			ConnectConfigType type = ConnectConfigType.lookupRedisConnectUnchecked();			
+			if(type == null || "127.0.0.1".equals(type.getHost()) || "localhost".equalsIgnoreCase(type.getHost())){
+				mac = NetworkUtil.getCurrentMac("www.cnnic.net.cn", 80);
 			}else{
 				mac = NetworkUtil.getCurrentMac(type.getHost(), type.getPort());
 			}
