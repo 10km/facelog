@@ -1,20 +1,22 @@
 package net.gdface.facelog.client.location;
+
 import net.gdface.facelog.CommonConstant;
+
 /**
- * {@link RedisConfigProvider}默认实现，只用于测试
+ * 公有云配置
  * @author guyadong
  *
  */
-public class LocalhostConnectConfigProvider implements ConnectConfigProvider,CommonConstant {
+public class DefaultCloudConnectConfigProvider implements ConnectConfigProvider,CommonConstant {
 
 	@Override
 	public String getHost() {
-		return "localhost";
+		return "facelog.gdface.net";
 	}
 
 	@Override
 	public void setHost(String host) {
-		
+
 	}
 
 	@Override
@@ -24,7 +26,7 @@ public class LocalhostConnectConfigProvider implements ConnectConfigProvider,Com
 
 	@Override
 	public void setPort(int port) {
-		
+
 	}
 
 	@Override
@@ -34,10 +36,10 @@ public class LocalhostConnectConfigProvider implements ConnectConfigProvider,Com
 
 	@Override
 	public void setTimeout(int timeout) {
+
 	}
-	
 	@Override
-	public final ConnectConfigType type() {
-		return ConnectConfigType.LOCALHOST;
+	public final ConnectConfigType type(){
+		return ConnectConfigType.CLOUD;
 	}
 }

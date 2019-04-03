@@ -7,7 +7,7 @@ import net.gdface.facelog.CommonConstant;
  * @author guyadong
  *
  */
-public class LocalConnectConfigProvider implements ConnectConfigProvider,CommonConstant {
+public class DefaultLocalConnectConfigProvider implements ConnectConfigProvider,CommonConstant {
 
 	@Override
 	public String getHost() {

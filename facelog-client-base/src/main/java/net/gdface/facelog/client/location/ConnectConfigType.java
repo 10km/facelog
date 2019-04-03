@@ -19,9 +19,9 @@ import static net.gdface.facelog.CommonConstant.*;
  */
 public enum ConnectConfigType implements ConnectConfigProvider {
 	/** 自定义配置 */CUSTOM
-	/** 局域网配置 */,LAN(new LocalConnectConfigProvider())
-	/** 公有云配置 */,CLOUD(new CloudConnectConfigProvider())
-	/** 本机配置(仅用于测试) */,LOCALHOST(new LocalhostConnectConfigProvider());
+	/** 局域网配置 */,LAN(new DefaultLocalConnectConfigProvider())
+	/** 公有云配置 */,CLOUD(new DefaultCloudConnectConfigProvider())
+	/** 本机配置(仅用于测试) */,LOCALHOST(new DefaultLocalhostConnectConfigProvider());
 	/**
 	 * 接口实例的默认实现
 	 */
