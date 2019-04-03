@@ -935,21 +935,21 @@ public interface IFaceLog{
     /**
 	 * 验证设备令牌是否有效
 	 * @param token
-	 * @return
+	 * @return 令牌有效返回{@code true},否则返回{@code false}
 	 */
 	boolean isValidDeviceToken(Token token);
 
 	/**
 	 * 验证人员令牌是否有效
 	 * @param token
-	 * @return
+	 * @return  令牌有效返回{@code true},否则返回{@code false}
 	 */
 	boolean isValidPersonToken(Token token);
 
 	/**
 	 * 验证root令牌是否有效
 	 * @param token
-	 * @return
+	 * @return 令牌有效返回{@code true},否则返回{@code false}
 	 */
 	boolean isValidRootToken(Token token);
 

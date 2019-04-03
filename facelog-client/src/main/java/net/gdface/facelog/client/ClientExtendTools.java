@@ -12,8 +12,6 @@ import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 
 import gu.dtalk.MenuItem;
-import gu.dtalk.exception.DtalkException;
-import gu.dtalk.redis.RedisConfigType;
 import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.Token;
@@ -21,6 +19,7 @@ import net.gdface.facelog.Token.TokenType;
 import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
 import net.gdface.facelog.client.dtalk.FacelogRedisConfigProvider;
 import net.gdface.facelog.db.DeviceBean;
+import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.thrift.IFaceLogThriftClientAsync;
 
 /**
@@ -234,19 +233,98 @@ public class ClientExtendTools {
                     throw new RuntimeException(e);
                 }
             }};
-
-	public DtalkEngineForFacelog initDtalkEngine(Token token, MenuItem root) throws DtalkException{
+    /** 设备令牌验证器 */
+    public final Predicate<Token> deviceTokenValidator =
+        new Predicate<Token>(){
+            @Override
+            public boolean apply(Token input) {
+                try{
+                    return null == input ? false 
+                    		: (syncInstance != null 
+                    				? syncInstance.isValidDeviceToken(input) 
+                    				: asyncInstance.isValidDeviceToken(input).get());
+                }catch(Exception e){
+                    Throwables.throwIfUnchecked(e);
+                    throw new RuntimeException(e);
+                }
+            }};
+    /** 人员令牌验证器 */
+	public final Predicate<Token> personTokenValidator =
+	        new Predicate<Token>(){
+	            @Override
+	            public boolean apply(Token input) {
+	                try{
+	                    return null == input ? false 
+	                    		: (syncInstance != null 
+	                    				? syncInstance.isValidPersonToken(input) 
+	                    				: asyncInstance.isValidPersonToken(input).get());
+	                }catch(Exception e){
+	                    Throwables.throwIfUnchecked(e);
+	                    throw new RuntimeException(e);
+	                }
+	            }};
+    /** root令牌验证器 */
+	public final Predicate<Token> rootTokenValidator =
+	        new Predicate<Token>(){
+	            @Override
+	            public boolean apply(Token input) {
+	                try{
+	                    return null == input ? false 
+	                    		: (syncInstance != null 
+	                    				? syncInstance.isValidRootToken(input) 
+	                    				: asyncInstance.isValidRootToken(input).get());
+	                }catch(Exception e){
+	                    Throwables.throwIfUnchecked(e);
+	                    throw new RuntimeException(e);
+	                }
+	            }};
+	/** 
+	 * 管理令牌验证器,返回令牌的管理等级
+	 * <li> 4---root</li>
+	 * <li> 3---管理员</li>
+	 * <li> 2---操作员</li>
+	 * <li> 0---普通用户</li>
+	 * <li>-1---未定义</li>
+	 */
+	public final Function<Token,Integer> tokenRank =
+	        new Function<Token,Integer>(){
+	            @Override
+	            public Integer apply(Token input) {
+	                try{
+	                	if(rootTokenValidator.apply(input)){
+	                		return 4;
+	                	}else if(personTokenValidator.apply(input)){ 
+	                		PersonBean bean = (syncInstance != null 
+                    				? syncInstance.getPerson(input.getId()) 
+                    				: asyncInstance.getPerson(input.getId()).get());
+	                		Integer rank = bean.getRank();
+	                		return rank != null ? rank : 0;
+	                	}
+	                    return -1;
+	                }catch(Exception e){
+	                    Throwables.throwIfUnchecked(e);
+	                    throw new RuntimeException(e);
+	                }
+	            }};
+	/**
+	 * 创建dtalk引擎
+	 * @param deviceToken 设备令牌，不可为{@code null}
+	 * @param rootMenu 包括所有菜单的根菜单对象，不可为{@code null}
+	 * @return
+	 */
+	public DtalkEngineForFacelog initDtalkEngine(Token deviceToken, MenuItem rootMenu){
+		// 设备端才能调用此方法
+		checkArgument(deviceTokenValidator.apply(deviceToken),"device token REQUIRED");
 		Map<MQParam, String> redisParam;
 		try {
 			redisParam = syncInstance != null 
-				? syncInstance.getRedisParameters(token)
-				: asyncInstance.getRedisParameters(token).get();
+				? syncInstance.getRedisParameters(deviceToken)
+				: asyncInstance.getRedisParameters(deviceToken).get();
         }catch(Exception e){
             Throwables.throwIfUnchecked(e);
             throw new RuntimeException(e);
         }
 		FacelogRedisConfigProvider.setRedisLocation(URI.create(redisParam.get(MQParam.REDIS_URI)));
-		return new DtalkEngineForFacelog(RedisConfigType.CUSTOM, root);
-		
+		return new DtalkEngineForFacelog(checkNotNull(rootMenu,"rootMenu is null"), tokenRank);		
 	}
 }

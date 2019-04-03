@@ -7,10 +7,13 @@ import gu.simplemq.Channel;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisSubscriber;
+import net.gdface.facelog.Token;
 import net.gdface.utils.NetworkUtil;
 
 import static gu.dtalk.CommonUtils.*;
 import static gu.dtalk.engine.SampleConnector.*;
+
+import com.google.common.base.Function;
 
 import gu.dtalk.MenuItem;
 
@@ -18,11 +21,12 @@ public class DtalkEngineForFacelog {
 	private final SampleConnector connAdapter;
 	private final RedisSubscriber subscriber;
 	private final byte[] devMac;
-	public DtalkEngineForFacelog(RedisConfigType configType, MenuItem root) {
-		JedisPoolLazy pool = JedisPoolLazy.getInstance(configType.readRedisParam(),false);
+	public DtalkEngineForFacelog(MenuItem root, Function<Token,Integer>  ranker) {
+		JedisPoolLazy pool = JedisPoolLazy.getInstance(RedisConfigType.CUSTOM.readRedisParam(),false);
 		subscriber = RedisFactory.getSubscriber(pool);
 		connAdapter = new SampleConnector(pool)
-				.setItemAdapter(new ItemEngine(pool).setRoot(root));
+				.setItemAdapter(new ItemEngine(pool).setRoot(root))
+				.setRequestValidator(new TokenRequestValidator(ranker));
 		devMac = DEVINFO_PROVIDER.getMac();
 	}
 	/**

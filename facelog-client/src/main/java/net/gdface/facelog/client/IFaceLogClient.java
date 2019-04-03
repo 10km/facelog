@@ -8,7 +8,7 @@ import net.gdface.facelog.IFaceLogDecorator;
 import net.gdface.facelog.Token;
 
 public class IFaceLogClient extends IFaceLogDecorator {
-	private final ClientExtendTools clientTools;
+	public final ClientExtendTools clientTools;
 	public IFaceLogClient(IFaceLog delegate) {
 		super(delegate);
 		clientTools = new ClientExtendTools(this);
