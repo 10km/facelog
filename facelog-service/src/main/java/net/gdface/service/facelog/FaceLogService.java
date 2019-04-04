@@ -8,8 +8,6 @@ import org.apache.commons.configuration2.CombinedConfiguration;
 import com.facebook.swift.service.ThriftEventHandler;
 import com.facebook.swift.service.ThriftServerConfig;
 import com.facebook.swift.service.ThriftServerService;
-import com.google.common.util.concurrent.MoreExecutors;
-
 import io.airlift.units.Duration;
 import net.gdface.facelog.CommonConstant;
 import net.gdface.facelog.FaceLogImpl;
@@ -56,12 +54,6 @@ public class FaceLogService extends ThriftServerService implements CommonConstan
 						.setEventHandlers(TlsHandler.INSTANCE)
 						.setThriftServerConfig(makeThriftServerConfig())
 						.build(FaceLogService.class);	
-			 service.addListener(new Listener(){
-					@Override
-					public void starting() {
-						logThriftServerConfig(service.thriftServerConfig);
-					}			
-				}, MoreExecutors.directExecutor());
 		}
 		checkState(State.NEW == service.state(),"INVALID service state %s ",service.toString());
 		return service;
