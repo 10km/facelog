@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.Map;
 
-import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,6 +81,9 @@ public class DtalkDemo {
 		logger.info("Connect channel registered(连接频道注册) : {} ",connchname);
 		return this;
 	}
+	/**
+	 * 等待程序结束
+	 */
 	private static void waitquit(){
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); 
 		try{
@@ -119,14 +121,11 @@ public class DtalkDemo {
 					.setHostAndPort(type.getHost(), type.getPort())
 					.setDecorator(RefreshTokenDecorator.makeDecoratorFunction( DeviceTokenHelper.HELPER))
 					.build(IFaceLogThriftClient.class, IFaceLogClient.class);			
-			DtalkDemo  demo =new DtalkDemo(facelogClient, type).registerHelper(DeviceTokenHelper.HELPER).start();
+			new DtalkDemo(facelogClient, type).registerHelper(DeviceTokenHelper.HELPER).start();
 			System.out.println("PRESS 'quit' OR 'CTRL-C' to exit");
 			waitquit();
-			demo.subscriber.unregister(getConnChannel(demo.devMac));
-			for(GenericObjectPool<?> pool:ClientFactory.INSTANCE_POOL_CACHE.asMap().values()){
-				System.out.printf("close pool\n");
-				pool.close();
-			}
+			// 程序结束时关闭所有JedisPool实例
+//			JedisPoolLazy.closeAll();
 		}catch (Exception e) {
 			//System.out.println(e.getMessage());
 			e.printStackTrace();
