@@ -124,7 +124,6 @@ public class DtalkDemo {
 			new DtalkDemo(facelogClient, type).registerHelper(DeviceTokenHelper.HELPER).start();
 			System.out.println("PRESS 'quit' OR 'CTRL-C' to exit");
 			waitquit();
-			// 程序结束时关闭所有JedisPool实例
 //			JedisPoolLazy.closeAll();
 		}catch (Exception e) {
 			//System.out.println(e.getMessage());

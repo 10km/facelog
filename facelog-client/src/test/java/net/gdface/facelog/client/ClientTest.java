@@ -75,13 +75,14 @@ public class ClientTest implements CommonConstant {
 	}
 	@Test
 	public void test2SavePersonWithImage() {
-		PersonBean newPerson = PersonBean.builder().name("guyadong").build();
+		PersonBean newPerson = PersonBean.builder().name("person1").build();
 		try {			
 			byte[] imgdata = FaceUtilits.getBytes(ClientTest.class.getResourceAsStream("/images/guyadong-3.jpg"));
 			newPerson = facelogClient.savePerson(newPerson,imgdata,rootToken);
 			logger.info("person = {}", newPerson.toString());
 			PersonBean person = facelogClient.getPerson(newPerson.getId());
 			logger.info("person = {}", person.toString());
+			facelogClient.deletePerson(person.getId(), rootToken);
 		} catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(false);

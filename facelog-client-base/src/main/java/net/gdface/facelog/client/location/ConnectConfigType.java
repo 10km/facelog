@@ -115,19 +115,17 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 						index++;
 					}
 					// 等待所有子线程结束
-					try {
-						for(Thread thread:threads){
-							thread.join();
-						}
-					} catch (InterruptedException e) {
-					}
 					// 以枚举变量定义的顺序为优先级查找第一个connectable为true的对象返回
 					// 都为false则抛出异常
-					for (final ConnectConfigType type : values()) {
-						if(type.connectable){
-							activeConnectType = type;
-							return type;
+					try {
+						for(int i =0;i<threads.length;++i){
+							threads[i].join();
+							ConnectConfigType type = values()[i];
+							if(type.connectable){
+								return type;
+							}
 						}
+					} catch (InterruptedException e) {
 					}
 					throw new FaceLogConnectException("NOT FOUND VALID Facelog SERVER");
 				}
