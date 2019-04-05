@@ -1,0 +1,22 @@
+package net.gdface.facelog.client;
+
+import net.gdface.cli.CommonCliConstants;
+
+/**
+ * 常量定义
+ * @author guyadong
+ *
+ */
+public interface ConsoleConstants extends CommonCliConstants {
+	public static final String DEFAULT_HOST="localhost";
+	public static final String DEFAULT_USER="root";
+	public static final String DEFAULT_PWD="root";
+	public static final String SERVICE_HOST_OPTION_LONG = "host";
+	public static final String SERVICE_HOST_OPTION_DESC = "service host name,default: ";
+	public static final String SERVICE_PORT_OPTION_LONG = "port";
+	public static final String SERVICE_PORT_OPTION_DESC = "service port number,default: ";
+	public static final String SERVICE_USER_OPTION_LONG = "user";
+	public static final String SERVICE_USER_OPTION_DESC = "user name,default: ";
+	public static final String SERVICE_PWD_OPTION_LONG = "pwd";
+	public static final String SERVICE_PWD_OPTION_DESC = "password ,default: ";
+}
