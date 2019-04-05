@@ -122,8 +122,7 @@ public class DtalkDemo {
 					.setDecorator(RefreshTokenDecorator.makeDecoratorFunction( DeviceTokenHelper.HELPER))
 					.build(IFaceLogThriftClient.class, IFaceLogClient.class);			
 			new DtalkDemo(facelogClient, type).registerHelper(DeviceTokenHelper.HELPER).start();
-			System.out.println("PRESS 'quit' OR 'CTRL-C' to exit");
-			waitquit();
+			System.out.println("PRESS 'CTRL-C' to exit");
 //			JedisPoolLazy.closeAll();
 		}catch (Exception e) {
 			//System.out.println(e.getMessage());

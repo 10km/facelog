@@ -340,6 +340,7 @@
 		<module>facelog-client-base</module>
 		<module>facelog-client</module>
 		<module>facelog-client-android</module>		
+		<module>facelog-dtalk-demo</module>		
 		<module>facelogservice-maven-plugin</module>
   </modules>
 	<licenses>
