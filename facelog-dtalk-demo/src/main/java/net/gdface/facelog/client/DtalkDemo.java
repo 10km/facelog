@@ -59,14 +59,13 @@ public class DtalkDemo {
 	 * @return 
 	 * @throws ServiceSecurityException 
 	 */
-	private DtalkDemo start() {
+	private void start() {
 		// 获取redis连接参数
 		Map<MQParam, String> redisParam = this.facelogClient.getRedisParameters(deviceToken);
 		FacelogRedisConfigProvider.setRedisLocation(URI.create(redisParam.get(MQParam.REDIS_URI)));
 		FacelogMenu root = new FacelogMenu(config).init().register(DemoListener.INSTANCE);
 		engine = facelogClient.initDtalkEngine(deviceToken, root);
 		engine.start();
-		return this;
 	}
 	private DtalkDemo registerHelper(DeviceTokenHelper helper){
 		helper.demo = this;
