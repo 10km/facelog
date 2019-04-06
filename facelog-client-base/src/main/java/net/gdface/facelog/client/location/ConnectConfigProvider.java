@@ -7,7 +7,7 @@ package net.gdface.facelog.client.location;
  */
 public interface ConnectConfigProvider {
 	/**
-	 * @return 返回redis主机名,当{@link #getURI()}返回{@code null}时，不可为{@code null}
+	 * @return 返回redis主机名,当{@link #getURI()}返回{@code null}时，不可为{@code null}或空
 	 */
 	String getHost();
 	/**

@@ -43,14 +43,14 @@ public class DefaultCustomConnectConfigProvider implements ConnectConfigProvider
 	}
 
 	public static boolean initHost(String host){
-		if(!Strings.isNullOrEmpty(host)){
+		if(!Strings.isNullOrEmpty(host) && !DefaultCustomConnectConfigProvider.host.equals(host)){
 			DefaultCustomConnectConfigProvider.host = host;
 			return true;
 		}
 		return false;
 	}
 	public static boolean initPort(int port){
-		if(port >0){
+		if(port >0 && port !=DefaultCustomConnectConfigProvider.port){
 			DefaultCustomConnectConfigProvider.port = port;
 			return true;
 		}

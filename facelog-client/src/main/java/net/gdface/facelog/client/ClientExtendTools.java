@@ -6,6 +6,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
@@ -14,6 +16,7 @@ import com.google.common.base.Throwables;
 import gu.dtalk.MenuItem;
 import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.MQParam;
+import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.Token.TokenType;
 import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
@@ -306,6 +309,19 @@ public class ClientExtendTools {
 	                    throw new RuntimeException(e);
 	                }
 	            }};
+    public Token applyUserToken(int userid,String password,boolean isMd5) throws ServiceSecurityException, InterruptedException, ExecutionException{
+    	Token token;
+    	if(userid == -1){
+    		token = syncInstance != null 
+    				? syncInstance.applyRootToken(password, isMd5)
+    				: asyncInstance.applyRootToken(password, isMd5).get();
+    	}else{
+    		token = syncInstance != null 
+    				? syncInstance.applyPersonToken(userid, password, isMd5)
+    				: asyncInstance.applyPersonToken(userid, password, isMd5).get();
+    	}
+		return token;
+    }
 	/**
 	 * 创建dtalk引擎
 	 * @param deviceToken 设备令牌，不可为{@code null}

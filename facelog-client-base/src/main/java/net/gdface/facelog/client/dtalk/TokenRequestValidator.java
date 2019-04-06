@@ -77,7 +77,7 @@ public class TokenRequestValidator implements RequestValidator {
 				new TypeReference<Map<DtalkReqField, String>>(){}.getType());
 		// 分字段解析
 		Token token = BaseJsonEncoder.getEncoder().fromJson(m.get(DtalkReqField.TOKEN),Token.class);
-		String mac = BaseJsonEncoder.getEncoder().fromJson(m.get(DtalkReqField.MAC),String.class);
+		String mac = m.get(DtalkReqField.MAC);
 		return ImmutableMap.<DtalkReqField, Object>of(
 				DtalkReqField.TOKEN,checkNotNull(token,"request token must REQUIRED"),
 				DtalkReqField.MAC,checkNotNull(mac,"MAC address must REQUIRED"));

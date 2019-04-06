@@ -5,6 +5,7 @@ import java.util.ServiceLoader;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
 import com.google.common.collect.Iterators;
 
 import net.gdface.thrift.ClientFactory;
@@ -58,7 +59,9 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 							return input.type() == ConnectConfigType.this;
 						}
 					});
-					instance =  find.isPresent() ? find.get() : this.defImpl;
+					// 通过host是否为空判断接口实例提供的数据是否有效
+					instance =  find.isPresent() && !Strings.isNullOrEmpty(find.get().getHost()) 
+							? find.get() : this.defImpl;
 				}
 			}
 		}
