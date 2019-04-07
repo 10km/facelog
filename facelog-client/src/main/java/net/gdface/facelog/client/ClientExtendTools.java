@@ -118,7 +118,7 @@ public class ClientExtendTools {
      */
     public CmdManager makeCmdManager(Token token){
         try{
-            checkArgument(checkNotNull(token).getType() == TokenType.PERSON 
+            checkArgument(checkNotNull(token,"token is null").getType() == TokenType.PERSON 
                 || token.getType() == TokenType.ROOT,"person or root token required");
             
             return new CmdManager(
@@ -138,7 +138,7 @@ public class ClientExtendTools {
      */
     public CmdDispatcher makeCmdDispatcher(Token token){
         try{
-            checkArgument(checkNotNull(token).getType() == TokenType.DEVICE,"device token required");
+            checkArgument(checkNotNull(token,"token is null").getType() == TokenType.DEVICE,"device token required");
             int deviceId = token.getId();
             Map<MQParam, String> pameters = syncInstance != null 
             		? syncInstance.getRedisParameters(token) 
