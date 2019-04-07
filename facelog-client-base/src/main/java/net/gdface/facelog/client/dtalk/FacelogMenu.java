@@ -1,21 +1,15 @@
 package net.gdface.facelog.client.dtalk;
 
-import gu.dtalk.IntOption;
 import gu.dtalk.ItemBuilder;
-import gu.dtalk.MACOption;
 import gu.dtalk.MenuItem;
-import gu.dtalk.NumberValidator;
 import gu.dtalk.OptionType;
-import gu.dtalk.PasswordOption;
 import gu.dtalk.RootMenu;
-import gu.dtalk.StringOption;
 import gu.dtalk.event.ValueListener;
 import net.gdface.facelog.client.location.ConnectConfigProvider;
 
 import static gu.dtalk.engine.SampleConnector.DEVINFO_PROVIDER;
 
-import gu.dtalk.CheckOption;
-import gu.dtalk.IPv4Option;
+import gu.dtalk.CmdItem;
 
 public class FacelogMenu extends RootMenu{
 	private final ConnectConfigProvider config;
@@ -30,39 +24,66 @@ public class FacelogMenu extends RootMenu{
 				.name("device")
 				.uiName("设备")
 				.addChilds(
-						ItemBuilder.builder(StringOption.class).name("name").uiName("设备名称").instance(),
-						ItemBuilder.builder(StringOption.class).name("sn").uiName("设备序列号").instance().asValue("001122334455"),
-						ItemBuilder.builder(IPv4Option.class).name("IP").uiName("IP地址").instance().setValue(ip).setReadOnly(true),
-						ItemBuilder.builder(MACOption.class).name("mac").uiName("物理地址").instance().setReadOnly(true).setValue(mac).setReadOnly(true),
-						ItemBuilder.builder(StringOption.class).name("gps").uiName("位置(GPS)").instance().setReadOnly(true),
-						ItemBuilder.builder(PasswordOption.class).name("password").uiName("连接密码").instance().setValue(DEVINFO_PROVIDER.getPassword()),
-						ItemBuilder.builder(StringOption.class).name("version").uiName("版本号").instance().setReadOnly(true).setValue("unknow"))
+						OptionType.STRING.builder().name("model").uiName("设备型号").readonly(true).instance(),
+						OptionType.STRING.builder().name("name").uiName("设备名称").instance(),
+						OptionType.STRING.builder().name("sn").uiName("设备序列号").instance().asValue("001122334455"),
+						OptionType.IP.builder().name("IP").uiName("IP地址").readonly(true).instance().setValue(ip),
+						OptionType.MAC.builder().name("mac").uiName("物理地址").readonly(true).instance().setValue(mac).setReadOnly(true),
+						OptionType.STRING.builder().name("gps").uiName("位置(GPS)").readonly(true).instance(),
+						OptionType.PASSWORD.builder().name("password").uiName("连接密码").instance().setValue(DEVINFO_PROVIDER.getPassword()),
+						OptionType.STRING.builder().name("version").uiName("版本号").readonly(true).instance().setValue("unknow"))
 				.instance();
-		MenuItem redis = 
+		MenuItem facelog = 
 			ItemBuilder.builder(MenuItem.class)
 				.name("facelog")
 				.uiName("facelog 服务器")
 				.addChilds(
-						ItemBuilder.builder(StringOption.class).name("host").uiName("主机名称").instance().setValue(config.getHost()),
-						ItemBuilder.builder(IntOption.class).name("port").uiName("端口号").instance().setValue(config.getPort()))
+						OptionType.STRING.builder().name("host").uiName("主机名称").instance().setValue(config.getHost()),
+						OptionType.INTEGER.builder().name("port").uiName("端口号").instance().setValue(config.getPort()))
 				.instance();
-		MenuItem test = 
+		MenuItem commands = 
 			ItemBuilder.builder(MenuItem.class)
-				.name("test")
-				.uiName("类型测试")
+				.name("commands")
+				.uiName("基本设备命令")
 				.addChilds(
-						ItemBuilder.builder(new CheckOption<String>()).name("check").uiName("CHECK测试").instance()
-							.addOption("中国", "zero")
-							.addOption("俄罗斯", "half")
-							.addOption("美国", "full")
-							.setValue(1),
-						OptionType.INTEGER.builder().name("integer").uiName("数字测试").value(0)
-											.validator(NumberValidator.makeValidator(1024,256,128,0)).instance(),
-						OptionType.URL.builder().name("url").uiName("URL测试").asValue("https://gitee.com/l0km/dtalk.git").instance(),
-						OptionType.IMAGE.builder().name("image").uiName("图像测试").instance()							
+						ItemBuilder.builder(CmdItem.class).name("parameter").uiName("设置参数").addChilds(
+								OptionType.STRING.builder().name("name").uiName("参数名称").description("option's full path start with '/'").instance(),
+								OptionType.STRING.builder().name("value").uiName("参数值").instance()
+								).instance(),
+						ItemBuilder.builder(CmdItem.class).name("status").uiName("获取参数").addChilds(
+								OptionType.STRING.builder().name("name").uiName("参数名称").description("option's full path start with '/'").instance()
+								).instance(),
+						ItemBuilder.builder(CmdItem.class).name("version").uiName("获取版本信息").instance(),
+						ItemBuilder.builder(CmdItem.class).name("enable").uiName("设备启用/禁用").addChilds(
+								OptionType.BOOL.builder().name("enable").uiName("工作状态").description("true:工作状态,否则为非工作状态").instance(),
+								OptionType.STRING.builder().name("message").uiName("附加消息").description("工作状态附加消息,比如'设备维修,禁止通行'").instance()
+								).instance(),
+						ItemBuilder.builder(CmdItem.class).name("isEnable").uiName("获取设备工作状态").instance(),
+						ItemBuilder.builder(CmdItem.class).name("reset").uiName("设备重启").addChilds(
+								OptionType.INTEGER.builder().name("schedule").uiName("延迟执行时间").description("指定执行时间(unix time[秒]),为null立即执行").instance()
+								).instance(),
+						ItemBuilder.builder(CmdItem.class).name("time").uiName("时间同步").addChilds(
+								OptionType.INTEGER.builder().name("timestamp").uiName("服务器时间").description("服务器 unix 时间[秒]").instance()
+								).instance(),
+						ItemBuilder.builder(CmdItem.class).name("update").uiName("更新版本").addChilds(
+								OptionType.URL.builder().name("url").uiName("更新版本的位置").instance(),
+								OptionType.STRING.builder().name("version").uiName("版本号").instance(),
+								OptionType.INTEGER.builder().name("schedule").uiName("延迟执行时间").description("指定执行时间(unix time[秒]),为null立即执行").instance()
+								).instance(),
+						ItemBuilder.builder(CmdItem.class).name("idleMessage").uiName("空闲消息").description("设置空闲时显示的消息").addChilds(
+								OptionType.STRING.builder().name("message").uiName("显示的消息").instance(),
+								OptionType.INTEGER.builder().name("duration").uiName("持续时间").description("持续时间[分钟],为null一直显示").instance()
+								).instance(),
+						ItemBuilder.builder(CmdItem.class).name("personMessage").uiName("定制消息").description("为指定人员通过时显示的临时消息").addChilds(
+								OptionType.STRING.builder().name("message").uiName("显示的消息").instance(),
+								OptionType.INTEGER.builder().name("id").uiName("人员/人员组ID").instance(),
+								OptionType.BOOL.builder().name("isGroup").uiName("人员组标志").description("为true时,id参数为人员组ID,否则为人员ID").instance(),
+								OptionType.BOOL.builder().name("onceOnly").uiName("只显示一次").description("为true时只在id指定的用户通过时显示一次").instance(),
+								OptionType.INTEGER.builder().name("duration").uiName("持续时间").description("持续时间[分钟],为null一直显示").instance()
+								).instance()
 						)
 				.instance();
-		addChilds(device,redis,test);
+		addChilds(device,facelog,commands);
 		
 		return this;
 	}
