@@ -27,6 +27,11 @@ public class FacelogConsole extends BaseConsole {
 		super(devmac, config);
 	}
 
+	/**
+	 * 向dtalk引擎发送包含令牌和本机mac地址的json连接请求字符串，
+	 * 收到回复的请求通道名，即连接成功
+	 * @see gu.dtalk.client.BaseConsole#authorize()
+	 */
 	@Override
 	protected boolean authorize() {
 		String connstr = TokenRequestValidator.encodeReq(token,temminalMac);

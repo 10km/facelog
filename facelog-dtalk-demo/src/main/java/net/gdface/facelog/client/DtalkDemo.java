@@ -1,12 +1,14 @@
 package net.gdface.facelog.client;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gu.dtalk.engine.demo.DemoListener;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.Token;
@@ -67,6 +69,21 @@ public class DtalkDemo {
 		engine = facelogClient.initDtalkEngine(deviceToken, root);
 		engine.start();
 	}
+	/**
+	 * 等待程序结束
+	 */
+	private static void waitquit(){
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); 
+		try{
+			while(!"quit".equalsIgnoreCase(reader.readLine())){
+				return;
+			}
+		} catch (IOException e) {
+
+		}finally {
+
+		}
+	}
 	private DtalkDemo registerHelper(DeviceTokenHelper helper){
 		helper.demo = this;
 		return this;
@@ -93,11 +110,13 @@ public class DtalkDemo {
 					.setDecorator(RefreshTokenDecorator.makeDecoratorFunction( DeviceTokenHelper.HELPER))
 					.build(IFaceLogThriftClient.class, IFaceLogClient.class);			
 			new DtalkDemo(facelogClient, type)
-				.registerHelper(DeviceTokenHelper.HELPER)
-				.initDevice()
-				.start();
+					.registerHelper(DeviceTokenHelper.HELPER)
+					.initDevice()
+					.start();
 			System.out.println("PRESS 'CTRL-C' to exit");
-//			JedisPoolLazy.closeAll();
+			// 如果依赖库commons-pool的版本号为2.4.2则需要调用waitquit()
+			// 如果版本号高于2.4.2低于2.6.1则不需要调用，参见https://blog.csdn.net/10km/article/details/89016301
+			waitquit();
 		}catch (Exception e) {
 			//System.out.println(e.getMessage());
 			e.printStackTrace();

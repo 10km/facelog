@@ -17,7 +17,7 @@ public class FacelogRedisConfigProvider implements RedisConfigProvider {
 	private static URI redisLocation;
 	public FacelogRedisConfigProvider() {
 		super();
-		logger.info("{} constucted redisLocation {}",getClass().getSimpleName(),redisLocation);
+//		logger.info("{} constucted redisLocation {}",getClass().getSimpleName(),redisLocation);
 	}
 
 	@Override

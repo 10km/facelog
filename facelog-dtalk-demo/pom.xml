@@ -34,11 +34,6 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>dtalk-demo</artifactId>
-			<version>${dtalk.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
 			<artifactId>common-cli</artifactId>
 			<version>${common-java.version}</version>
 		</dependency>
