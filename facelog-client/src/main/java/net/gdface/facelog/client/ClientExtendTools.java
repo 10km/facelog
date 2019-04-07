@@ -120,7 +120,7 @@ public class ClientExtendTools {
         try{
             checkArgument(checkNotNull(token,"token is null").getType() == TokenType.PERSON 
                 || token.getType() == TokenType.ROOT,"person or root token required");
-            
+            checkArgument(tokenRank.apply(token)>=2,"person or root token required");
             return new CmdManager(
                     gu.simplemq.redis.JedisPoolLazy.getDefaultInstance(),
                     syncInstance != null 
@@ -246,7 +246,10 @@ public class ClientExtendTools {
                     		: (syncInstance != null 
                     				? syncInstance.isValidDeviceToken(input) 
                     				: asyncInstance.isValidDeviceToken(input).get());
-                }catch(Exception e){
+                } catch (ExecutionException e) {
+        	        Throwables.throwIfUnchecked(e.getCause());
+        	        throw new RuntimeException(e.getCause());
+        		} catch(Exception e){
                     Throwables.throwIfUnchecked(e);
                     throw new RuntimeException(e);
                 }
@@ -261,7 +264,10 @@ public class ClientExtendTools {
 	                    		: (syncInstance != null 
 	                    				? syncInstance.isValidPersonToken(input) 
 	                    				: asyncInstance.isValidPersonToken(input).get());
-	                }catch(Exception e){
+	                } catch (ExecutionException e) {
+	        	        Throwables.throwIfUnchecked(e.getCause());
+	        	        throw new RuntimeException(e.getCause());
+	        		} catch(Exception e){
 	                    Throwables.throwIfUnchecked(e);
 	                    throw new RuntimeException(e);
 	                }
@@ -276,13 +282,16 @@ public class ClientExtendTools {
 	                    		: (syncInstance != null 
 	                    				? syncInstance.isValidRootToken(input) 
 	                    				: asyncInstance.isValidRootToken(input).get());
-	                }catch(Exception e){
+	                } catch (ExecutionException e) {
+	        	        Throwables.throwIfUnchecked(e.getCause());
+	        	        throw new RuntimeException(e.getCause());
+	        		} catch(Exception e){
 	                    Throwables.throwIfUnchecked(e);
 	                    throw new RuntimeException(e);
 	                }
 	            }};
 	/** 
-	 * 管理令牌验证器,返回令牌的管理等级
+	 * 返回令牌的管理等级,输入为{@code null}或设备令牌返回-1
 	 * <li> 4---root</li>
 	 * <li> 3---管理员</li>
 	 * <li> 2---操作员</li>
@@ -294,33 +303,66 @@ public class ClientExtendTools {
 	            @Override
 	            public Integer apply(Token input) {
 	                try{
-	                	if(rootTokenValidator.apply(input)){
-	                		return 4;
-	                	}else if(personTokenValidator.apply(input)){ 
-	                		PersonBean bean = (syncInstance != null 
-                    				? syncInstance.getPerson(input.getId()) 
-                    				: asyncInstance.getPerson(input.getId()).get());
-	                		Integer rank = bean.getRank();
-	                		return rank != null ? rank : 0;
+	                	if(null != input){
+	                		switch (input.getType()) {
+	                		case ROOT:
+	                			if(rootTokenValidator.apply(input)){
+	                				return 4;
+	                			}
+	                			break;
+	                		case PERSON:{
+	                			if(personTokenValidator.apply(input)){ 
+	                				PersonBean bean = (syncInstance != null 
+	                						? syncInstance.getPerson(input.getId()) 
+	                								: asyncInstance.getPerson(input.getId()).get());
+	                				Integer rank = bean.getRank();
+	                				return rank != null ? rank : 0;
+	                			}
+	                			break;
+	                		}	                		
+	                		default:
+	                			break;
+	                		}
 	                	}
-	                    return -1;
-	                }catch(Exception e){
+						return -1;
+	                } catch (ExecutionException e) {
+	        	        Throwables.throwIfUnchecked(e.getCause());
+	        	        throw new RuntimeException(e.getCause());
+	        		} catch(Exception e){
 	                    Throwables.throwIfUnchecked(e);
 	                    throw new RuntimeException(e);
 	                }
 	            }};
-    public Token applyUserToken(int userid,String password,boolean isMd5) throws ServiceSecurityException, InterruptedException, ExecutionException{
+    /**
+     * 申请用户令牌
+     * @param userid 用户id，为-1代表root
+     * @param password 用户密码
+     * @param isMd5 密码是否为md5校验码
+     * @return
+     * @throws ServiceSecurityException
+     */
+    public Token applyUserToken(int userid,String password,boolean isMd5) throws ServiceSecurityException{
     	Token token;
-    	if(userid == -1){
-    		token = syncInstance != null 
-    				? syncInstance.applyRootToken(password, isMd5)
-    				: asyncInstance.applyRootToken(password, isMd5).get();
-    	}else{
-    		token = syncInstance != null 
-    				? syncInstance.applyPersonToken(userid, password, isMd5)
-    				: asyncInstance.applyPersonToken(userid, password, isMd5).get();
-    	}
-		return token;
+    	try {
+    		if(userid == -1){
+
+    			token = syncInstance != null 
+    					? syncInstance.applyRootToken(password, isMd5)
+    							: asyncInstance.applyRootToken(password, isMd5).get();
+
+    		}else{
+    			token = syncInstance != null 
+    					? syncInstance.applyPersonToken(userid, password, isMd5)
+    							: asyncInstance.applyPersonToken(userid, password, isMd5).get();
+    		}
+    		return token;
+    	} catch (ExecutionException e) {
+    		Throwables.propagateIfPossible(e.getCause(), ServiceSecurityException.class);
+	        throw new RuntimeException(e.getCause());
+		} catch(Exception e){
+    		Throwables.propagateIfPossible(e, ServiceSecurityException.class);
+            throw new RuntimeException(e);
+        }
     }
 	/**
 	 *  获取redis连接参数
@@ -355,7 +397,7 @@ public class ClientExtendTools {
 	}
 	
 	/**
-	 * 初始化redis的连接参数
+	 * 初始化dtalk的redis的连接参数
 	 * @param token
 	 * @see FacelogRedisConfigProvider#setRedisLocation(URI)
 	 */

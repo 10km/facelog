@@ -1,7 +1,6 @@
 package net.gdface.facelog.client;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import com.google.common.base.Supplier;
 
@@ -40,7 +39,7 @@ public class IFaceLogClient extends IFaceLogDecorator {
 		return clientTools.getCmdSnSupplier(token);
 	}
 	public Token applyUserToken(int userid, String password, boolean isMd5)
-			throws ServiceSecurityException, InterruptedException, ExecutionException {
+			throws ServiceSecurityException {
 		return clientTools.applyUserToken(userid, password, isMd5);
 	}
 	public DtalkEngineForFacelog initDtalkEngine(Token deviceToken, MenuItem rootMenu) {

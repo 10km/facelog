@@ -44,6 +44,10 @@ public class TokenRequestValidator implements RequestValidator {
 		this.ranker = checkNotNull(ranker,"ranker is null");
 	}
 
+	/**
+	 * 通过令牌验证连接请求合法性
+	 * @see gu.dtalk.engine.RequestValidator#validate(java.lang.String)
+	 */
 	@Override
 	public String validate(String connstr) throws Exception {
 		Map<DtalkReqField, Object> m = decodeReq(connstr);
