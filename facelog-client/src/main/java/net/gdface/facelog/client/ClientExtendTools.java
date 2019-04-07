@@ -323,6 +323,25 @@ public class ClientExtendTools {
 		return token;
     }
 	/**
+	 *  获取redis连接参数
+	 * @param token
+	 * @return
+	 */
+	private Map<MQParam, String> getRedisParameters(Token token){
+		// 获取redis连接参数
+		try {
+			return syncInstance != null 
+					? syncInstance.getRedisParameters(token)
+					: asyncInstance.getRedisParameters(token).get();
+	    } catch (ExecutionException e) {
+	        Throwables.throwIfUnchecked(e.getCause());
+	        throw new RuntimeException(e.getCause());
+		} catch(Exception e){
+	        Throwables.throwIfUnchecked(e);
+	        throw new RuntimeException(e);
+	    }
+	}
+	/**
 	 * 创建dtalk引擎
 	 * @param deviceToken 设备令牌，不可为{@code null}
 	 * @param rootMenu 包括所有菜单的根菜单对象，不可为{@code null}
@@ -331,16 +350,17 @@ public class ClientExtendTools {
 	public DtalkEngineForFacelog initDtalkEngine(Token deviceToken, MenuItem rootMenu){
 		// 设备端才能调用此方法
 		checkArgument(deviceTokenValidator.apply(deviceToken),"device token REQUIRED");
-		Map<MQParam, String> redisParam;
-		try {
-			redisParam = syncInstance != null 
-				? syncInstance.getRedisParameters(deviceToken)
-				: asyncInstance.getRedisParameters(deviceToken).get();
-        }catch(Exception e){
-            Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);
-        }
-		FacelogRedisConfigProvider.setRedisLocation(URI.create(redisParam.get(MQParam.REDIS_URI)));
+		initDtalkRedisLocation(deviceToken);
 		return new DtalkEngineForFacelog(checkNotNull(rootMenu,"rootMenu is null"), tokenRank);		
+	}
+	
+	/**
+	 * 初始化redis的连接参数
+	 * @param token
+	 * @see FacelogRedisConfigProvider#setRedisLocation(URI)
+	 */
+	public void initDtalkRedisLocation(Token token){
+		Map<MQParam, String> redisParam = getRedisParameters(token);
+		FacelogRedisConfigProvider.setRedisLocation(URI.create(redisParam.get(MQParam.REDIS_URI)));
 	}
 }

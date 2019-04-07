@@ -3,18 +3,13 @@ package net.gdface.facelog.client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URI;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.gdface.facelog.MQParam;
 import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
 import net.gdface.facelog.client.dtalk.FacelogMenu;
-import net.gdface.facelog.client.dtalk.FacelogRedisConfigProvider;
 import net.gdface.facelog.client.location.ConnectConfigProvider;
 import net.gdface.facelog.client.location.ConnectConfigType;
 import net.gdface.facelog.db.DeviceBean;
@@ -62,9 +57,6 @@ public class DtalkDemo {
 	 * @throws ServiceSecurityException 
 	 */
 	private void start() {
-		// 获取redis连接参数
-		Map<MQParam, String> redisParam = this.facelogClient.getRedisParameters(deviceToken);
-		FacelogRedisConfigProvider.setRedisLocation(URI.create(redisParam.get(MQParam.REDIS_URI)));
 		FacelogMenu root = new FacelogMenu(config).init().register(DemoListener.INSTANCE);
 		engine = facelogClient.initDtalkEngine(deviceToken, root);
 		engine.start();
@@ -110,7 +102,7 @@ public class DtalkDemo {
 			IFaceLogClient facelogClient = ClientFactory.builder()
 					.setHostAndPort(type.getHost(), type.getPort())
 					.setDecorator(RefreshTokenDecorator.makeDecoratorFunction( DeviceTokenHelper.HELPER))
-					.build(IFaceLogThriftClient.class, IFaceLogClient.class);			
+					.build(IFaceLogThriftClient.class, IFaceLogClient.class);
 			new DtalkDemo(facelogClient, type)
 					.registerHelper(DeviceTokenHelper.HELPER)
 					.initDevice()

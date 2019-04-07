@@ -46,5 +46,8 @@ public class IFaceLogClient extends IFaceLogDecorator {
 	public DtalkEngineForFacelog initDtalkEngine(Token deviceToken, MenuItem rootMenu) {
 		return clientTools.initDtalkEngine(deviceToken, rootMenu);
 	}
+	public void initDtalkRedisLocation(Token token) {
+		clientTools.initDtalkRedisLocation(token);
+	}
 
 }
