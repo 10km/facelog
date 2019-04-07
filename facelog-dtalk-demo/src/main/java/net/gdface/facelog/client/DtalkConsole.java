@@ -20,10 +20,10 @@ import java.util.Map;
 
 import static com.google.common.base.Preconditions.*;
 
-public class FacelogConsole extends BaseConsole {
+public class DtalkConsole extends BaseConsole {
 
 	private static Token token;
-	public FacelogConsole(String devmac, RedisConfigType config) {
+	public DtalkConsole(String devmac, RedisConfigType config) {
 		super(devmac, config);
 	}
 
@@ -46,9 +46,10 @@ public class FacelogConsole extends BaseConsole {
 	}
 
 	public static void main(String []args){
-		System.out.println("Text terminal for Facelog Device is starting(facelog设备交互字符终端启动)");
 
 		CONSOLE_CONFIG.parseCommandLine(args);
+		System.out.println("Text terminal for Facelog Device is starting(facelog设备交互字符终端启动)");
+
 		boolean useCustom = 
 				   DefaultCustomConnectConfigProvider.initHost(CONSOLE_CONFIG.getServiceHost())
 				|| DefaultCustomConnectConfigProvider.initPort(CONSOLE_CONFIG.getServicePort());
@@ -85,7 +86,7 @@ public class FacelogConsole extends BaseConsole {
 		// 创建redis连接实例
 		JedisPoolLazy.createDefaultInstance( config.readRedisParam() );
 
-		FacelogConsole client = new FacelogConsole(CONSOLE_CONFIG.getMac(), config);
+		DtalkConsole client = new DtalkConsole(CONSOLE_CONFIG.getMac(), config);
 		client.start();
 
 	}
@@ -106,7 +107,7 @@ public class FacelogConsole extends BaseConsole {
 
 		@Override
 		public void saveFreshedToken(Token token) {
-			FacelogConsole.token.assignFrom(token);
+			DtalkConsole.token.assignFrom(token);
 		}
 
 	}

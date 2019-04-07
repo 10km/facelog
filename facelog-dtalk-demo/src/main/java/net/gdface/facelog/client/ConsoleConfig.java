@@ -5,12 +5,15 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import com.google.common.base.Strings;
+
 import gu.dtalk.OptionType;
 import net.gdface.cli.BaseAppConfig;
 
 import static net.gdface.facelog.CommonConstant.*;
+import static com.google.common.base.Preconditions.*;
 /**
- * 服务基本配置参数
+ * 终端命令行配置参数
  * @author guyadong
  *
  */
@@ -58,10 +61,13 @@ public class ConsoleConfig extends BaseAppConfig implements ConsoleConstants {
 		this.servicePort = ((Number)getProperty(SERVICE_PORT_OPTION_LONG)).intValue(); 
 		this.userId =  ((Number)getProperty(SERVICE_USER_OPTION_LONG)).intValue(); 
 		this.password = getProperty(SERVICE_PWD_OPTION_LONG); 
-		String tmp = (String) getProperty(DEVICE_MAC_OPTION_LONG);
-		if(OptionType.MAC.strValidator.apply(tmp)){
-			this.mac = tmp.replace(":", ""); 
+		this.mac = (String) getProperty(DEVICE_MAC_OPTION_LONG);
+		if(!Strings.isNullOrEmpty(this.mac)){
+			// 检查输入的mac地址字符串是否符合格式要求
+			checkArgument(OptionType.MAC.strValidator.apply(this.mac),"INVALID MAC address %s",this.mac);
+			this.mac = this.mac.replaceAll("[:-]", "");
 		}
+		
 	}
 	/**
 	 * @return 服务端口号
@@ -85,5 +91,12 @@ public class ConsoleConfig extends BaseAppConfig implements ConsoleConstants {
 	public String getMac() {
 		return mac;
 	}
-	
+	@Override
+	protected String getAppName() {
+		return DtalkConsole.class.getSimpleName();
+	}
+	@Override
+	protected String getHeader() {
+		return "Text terminal for Facelog Device(facelog设备交互字符终端)";
+	}
 }

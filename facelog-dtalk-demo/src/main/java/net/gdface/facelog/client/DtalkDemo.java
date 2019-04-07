@@ -53,7 +53,7 @@ public class DtalkDemo {
 		logger.info("registered device {}",device.toString(true, false));
 		// 申请设备令牌
 		deviceToken = this.facelogClient.online(device);
-		logger.info("device token = {}",deviceToken);	
+		logger.info("设备令牌 = {}",deviceToken);	
 		return this;
 	}
 	/**
@@ -103,6 +103,8 @@ public class DtalkDemo {
 		
 	}
 	public static void main(String []args){
+		System.out.println("Dtalk simulator for Facelog Device is starting(facelog设备dtalk模拟器启动)");
+
 		try{
 			ConnectConfigType type = ConnectConfigType.lookupRedisConnect();
 			IFaceLogClient facelogClient = ClientFactory.builder()
@@ -118,8 +120,8 @@ public class DtalkDemo {
 			// 如果版本号高于2.4.2低于2.6.1则不需要调用，参见https://blog.csdn.net/10km/article/details/89016301
 			waitquit();
 		}catch (Exception e) {
-			//System.out.println(e.getMessage());
-			e.printStackTrace();
+			System.out.println(e.getMessage());
+//			e.printStackTrace();
 			return ;
 		}
 	}
