@@ -116,7 +116,7 @@ public class FacelogMenu extends RootMenu{
 		return this;
 	}
 
-	public String getCmdpath(String name){
+	public String cmdpath(String name){
 		BaseItem item; 
 		if((item = commands.getChild(name)) != null){
 			return item.getPath();
@@ -129,7 +129,7 @@ public class FacelogMenu extends RootMenu{
 		cmdItems = MoreObjects.firstNonNull(cmdItems, new CmdItem[0]);
 		cmdext.addChilds(cmdItems);
 	}
-	public static FacelogMenu makeActiveInstance(ConnectConfigProvider config){
+	public synchronized static FacelogMenu makeActiveInstance(ConnectConfigProvider config){
 		checkState(activeInstance == null,"activeInstance must be initialize only once");
 		activeInstance = new FacelogMenu(config);
 		return activeInstance;

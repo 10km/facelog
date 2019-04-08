@@ -73,8 +73,7 @@ public class CmdManager {
         this.redisPublisher = RedisFactory.getPublisher(checkNotNull(poolLazy));
         this.subscriber = RedisFactory.getSubscriber(checkNotNull(poolLazy));
         this.redisParameters = checkNotNull(redisParameters);
-        this.cmdChannel = new Channel<DeviceInstruction>(
-                this.redisParameters.get(MQParam.CMD_CHANNEL)){};
+        this.cmdChannel = new Channel<DeviceInstruction>(this.redisParameters.get(MQParam.CMD_CHANNEL)){};
     }
     public CmdManager setExecutor(ExecutorService executor) {
         subscriber.setExecutor(executor);

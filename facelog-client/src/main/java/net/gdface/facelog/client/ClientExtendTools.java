@@ -147,7 +147,6 @@ public class ClientExtendTools {
                     this.getDeviceGroupIdSupplier(deviceId))
                 .setCmdSnValidator(cmdSnValidator)
                 .setAckChannelValidator(ackChannelValidator)
-                .setCmdAdapter(new CommandAdapterContainer())
                 .registerChannel(pameters.get(MQParam.CMD_CHANNEL));
           }catch(Exception e){
               Throwables.throwIfUnchecked(e);

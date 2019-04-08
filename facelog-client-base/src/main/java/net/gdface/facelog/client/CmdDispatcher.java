@@ -140,18 +140,6 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 		}
 	}
 	/**
-	 * 设置应用程序执行设备命令的对象<br>
-	 * 创建{@link CmdDispatcher}对象时如果不调用本方法,设备不会响应任何设备命令
-	 * @param cmdAdapter
-	 * @throws NullPointerException {@code cmdAdapter} 为 {@code null}
-	 * @return
-	 */
-	public CmdDispatcher setCmdAdapter(CommandAdapter cmdAdapter) {
-		checkNotNull(cmdAdapter,"cmdAdapter is null");
-		return this;
-	}
-	
-	/**
 	 * 当前对象注册到指定的频道,重复注册无效
 	 * @param channel 设备命令通道名
 	 * @return
