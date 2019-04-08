@@ -57,7 +57,7 @@ public class DtalkDemo {
 	 * @throws ServiceSecurityException 
 	 */
 	private void start() {
-		FacelogMenu root = new FacelogMenu(config).init().register(DemoListener.INSTANCE);
+		FacelogMenu root = FacelogMenu.makeActiveInstance(config).init().register(DemoListener.INSTANCE);
 		engine = facelogClient.initDtalkEngine(deviceToken, root);
 		engine.start();
 	}

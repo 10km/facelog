@@ -8,13 +8,18 @@ import gu.dtalk.event.ValueListener;
 import net.gdface.facelog.client.location.ConnectConfigProvider;
 
 import static gu.dtalk.engine.SampleConnector.DEVINFO_PROVIDER;
-
+import com.google.common.base.MoreObjects;
+import static com.google.common.base.Preconditions.*;
+import gu.dtalk.BaseItem;
 import gu.dtalk.CmdItem;
 
 public class FacelogMenu extends RootMenu{
+	private static FacelogMenu activeInstance;
 	private final ConnectConfigProvider config;
-	public FacelogMenu(ConnectConfigProvider configType) {
-		this.config = configType;
+	private MenuItem cmdext;
+	private MenuItem commands;
+	protected FacelogMenu(ConnectConfigProvider config) {
+		this.config = config;
 	}
 	public FacelogMenu init(){
 		byte[] mac = DEVINFO_PROVIDER.getMac();
@@ -41,15 +46,14 @@ public class FacelogMenu extends RootMenu{
 						OptionType.STRING.builder().name("host").uiName("主机名称").instance().setValue(config.getHost()),
 						OptionType.INTEGER.builder().name("port").uiName("端口号").instance().setValue(config.getPort()))
 				.instance();
-		MenuItem commands = 
+		commands = 
 			ItemBuilder.builder(MenuItem.class)
 				.name("commands")
 				.uiName("基本设备命令")
-				.addChilds(
-						ItemBuilder.builder(CmdItem.class).name("parameter").uiName("设置参数").addChilds(
-								OptionType.STRING.builder().name("name").uiName("参数名称").description("option's full path start with '/'").instance(),
-								OptionType.STRING.builder().name("value").uiName("参数值").instance()
-								).instance(),
+				.addChilds(ItemBuilder.builder(CmdItem.class).name("parameter").uiName("设置参数").addChilds(
+						OptionType.STRING.builder().name("name").uiName("参数名称").description("option's full path start with '/'").instance(),
+						OptionType.STRING.builder().name("value").uiName("参数值").instance()
+						).instance(),
 						ItemBuilder.builder(CmdItem.class).name("status").uiName("获取参数").addChilds(
 								OptionType.STRING.builder().name("name").uiName("参数名称").description("option's full path start with '/'").instance()
 								).instance(),
@@ -83,12 +87,39 @@ public class FacelogMenu extends RootMenu{
 								).instance()
 						)
 				.instance();
-		addChilds(device,facelog,commands);
+		cmdext = 
+				ItemBuilder.builder(MenuItem.class)
+					.name("cmdext")
+					.uiName("扩展设备命令")
+					.instance();
+		addChilds(device,facelog,commands,cmdext);
 		
 		return this;
 	}
 	public FacelogMenu register(ValueListener<Object> listener){
 		listener.registerTo(this);
 		return this;
+	}
+
+	public String pathOfCmd(String name){
+		BaseItem item; 
+		if((item = commands.getChild(name)) != null){
+			return item.getPath();
+		}else if((item = cmdext.getChild(name)) != null){
+			return item.getPath();
+		}
+		return null;
+	}
+	public void addExtCmd(CmdItem... cmdItems){
+		cmdItems = MoreObjects.firstNonNull(cmdItems, new CmdItem[0]);
+		cmdext.addChilds(cmdItems);
+	}
+	public static FacelogMenu makeActiveInstance(ConnectConfigProvider config){
+		checkState(activeInstance == null,"activeInstance must be initialize only once");
+		activeInstance = new FacelogMenu(config);
+		return activeInstance;
+	}
+	public static FacelogMenu getActiveInstance(){
+		return checkNotNull(activeInstance,"activeInstance is null,must call makeInstance() firstly");
 	}
 }
