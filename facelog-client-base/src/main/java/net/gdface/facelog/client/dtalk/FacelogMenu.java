@@ -15,7 +15,13 @@ import static com.google.common.base.Preconditions.*;
 import gu.dtalk.BaseItem;
 import gu.dtalk.CmdItem;
 
+/**
+ * facelog 功能菜单
+ * @author guyadong
+ *
+ */
 public class FacelogMenu extends RootMenu{	
+	// 定义基本命令名,扩展命令不在此列 
 	public static final String CMD_PARAM = "parameter";
 	public static final String CMD_STATUS = "status";
 	public static final String CMD_VERSION = "version";
@@ -27,15 +33,23 @@ public class FacelogMenu extends RootMenu{
 	public static final String CMD_IDLE_MSG = "idleMessage";
 	public static final String CMD_PERSON_MSG = "personMessage";
 	
-	public static final String MENU_CMD = "cmd";
-	public static final String MENU_CMD_EXT = "cmdext";
+	/** 基本命令所在菜单名 */
+	private static final String MENU_CMD = "cmd";
+	/* 扩展命令所在菜单名 */
+	private static final String MENU_CMD_EXT = "cmdext";
+	/* 单实例 */
 	private static FacelogMenu activeInstance;
+	/* 连接配置参数 */
 	private final ConnectConfigProvider config;
 	private MenuItem cmdext;
 	private MenuItem commands;
 	protected FacelogMenu(ConnectConfigProvider config) {
 		this.config = config;
 	}
+	/**
+	 * 初始化菜单
+	 * @return
+	 */
 	public FacelogMenu init(){
 		byte[] mac = DEVINFO_PROVIDER.getMac();
 		byte[] ip = DEVINFO_PROVIDER.getIp();
@@ -116,6 +130,11 @@ public class FacelogMenu extends RootMenu{
 		return this;
 	}
 
+	/**
+	 * 返回{@code name}指定命令的全路径名，如果{@code name}指定命令不存在则返回{@code null}
+	 * @param name
+	 * @return
+	 */
 	public String cmdpath(String name){
 		BaseItem item; 
 		if((item = commands.getChild(name)) != null){
@@ -129,11 +148,20 @@ public class FacelogMenu extends RootMenu{
 		cmdItems = MoreObjects.firstNonNull(cmdItems, new CmdItem[0]);
 		cmdext.addChilds(cmdItems);
 	}
+	/**
+	 * 创建唯一实例
+	 * @param config
+	 * @return
+	 */
 	public synchronized static FacelogMenu makeActiveInstance(ConnectConfigProvider config){
 		checkState(activeInstance == null,"activeInstance must be initialize only once");
 		activeInstance = new FacelogMenu(config);
 		return activeInstance;
 	}
+	/**
+	 * 获取单实例，如果没有先调用{@link #makeActiveInstance(ConnectConfigProvider)}则抛出异常
+	 * @return
+	 */
 	public static FacelogMenu getActiveInstance(){
 		return checkNotNull(activeInstance,"activeInstance is null,must call makeInstance() firstly");
 	}
@@ -143,9 +171,19 @@ public class FacelogMenu extends RootMenu{
 		public MenuItem get() {
 			return activeInstance;
 		}};
+	/**
+	 * 返回指定命令的全路径名
+	 * @param name
+	 * @return
+	 */
 	public static final String pathOfCmd(String name){
 		return new StringBuffer("/").append(MENU_CMD).append("/").append(name).toString();
 	}
+	/**
+	 * 返回指定扩展命令的全路径名
+	 * @param name
+	 * @return
+	 */
 	public static final String pathOfCmdExt(String name){
 		return new StringBuffer("/").append(MENU_CMD_EXT).append("/").append(name).toString();
 	}

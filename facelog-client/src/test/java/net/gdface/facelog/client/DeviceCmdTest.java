@@ -17,7 +17,6 @@ import gu.dtalk.exception.CmdExecutionException;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.JedisPoolLazy.PropName;
 import net.gdface.facelog.Token;
-import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
 import net.gdface.facelog.client.dtalk.FacelogMenu;
 import net.gdface.facelog.client.location.ConnectConfigType;
 import net.gdface.facelog.db.DeviceBean;
@@ -91,12 +90,13 @@ public class DeviceCmdTest implements ChannelConstant{
 				return false;
 			}
 		});
+		// 启动设备命令分发器(广播命令由此执行)
 		facelogClient.makeCmdDispatcher(deviceToken)
 			.setRootSupplier(FacelogMenu.ROOT_SUPPLIER)
 			/** 程序退出时自动注销设备命令频道 */
-			.autoUnregisterChannel();	
-		DtalkEngineForFacelog engine = facelogClient.initDtalkEngine(deviceToken, root);
-		engine.start();
+			.autoUnregisterChannel();
+		// 启动dtalk引擎(点对点命令由此执行)
+		facelogClient.initDtalkEngine(deviceToken, root).start();
 	}
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
