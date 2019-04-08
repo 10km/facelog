@@ -11,7 +11,7 @@ import java.util.Map;
  *
  */
 public class DeviceInstruction{
-	private Cmd cmd;
+	private String cmdpath;
 	private long cmdSn;
 	private List<Integer> target;
 	private boolean group;
@@ -19,16 +19,12 @@ public class DeviceInstruction{
 	private Map<String, ?> parameters;
 	public DeviceInstruction() {
 	}
-	public Cmd getCmd() {
-		return cmd;
+
+	public String getCmdpath() {
+		return cmdpath;
 	}
-	/**
-	 * 设置要执行的设备命令类型
-	 * @param cmd
-	 * @return
-	 */
-	public DeviceInstruction setCmd(Cmd cmd) {
-		this.cmd = cmd;
+	public DeviceInstruction setCmdpath(String cmdpath) {
+		this.cmdpath = cmdpath;
 		return this;
 	}
 	/** 设置要执行的设备命令类型 */

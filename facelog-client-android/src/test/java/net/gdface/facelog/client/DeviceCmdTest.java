@@ -16,13 +16,15 @@ import com.google.common.collect.ImmutableMap;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.JedisPoolLazy.PropName;
 import net.gdface.facelog.Token;
+import net.gdface.facelog.client.dtalk.FacelogMenu;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
+import net.gdface.facelog.thrift.ServiceRuntimeException;
 import net.gdface.thrift.ClientFactory;
-import net.gdface.thrift.exception.client.BaseServiceRuntimeException;
 import net.gdface.utils.DefaultExecutorProvider;
 import net.gdface.utils.NetworkUtil;
 import redis.clients.jedis.Protocol;
+import static net.gdface.facelog.client.dtalk.FacelogMenu.*;
 
 /**
  * 设备命令发送接收测试
@@ -99,12 +101,10 @@ public class DeviceCmdTest implements ChannelConstant{
 	public void test1CommandAdapter(){		
 		try {
 			facelogClient.makeCmdDispatcher(deviceToken)
-				/** 注册命令执行器 */
-				.registerAdapter(Cmd.reset, new RestAdapter())
-				.registerAdapter(Cmd.isEnable, new IsEnableAdapter())
+				.setRootSupplier(FacelogMenu.ROOT_SUPPLIER)				
 				/** 程序退出时自动注销设备命令频道 */
 				.autoUnregisterChannel();	
-		} catch(BaseServiceRuntimeException e){
+		} catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(e.getMessage(),false);
 		}
@@ -128,9 +128,9 @@ public class DeviceCmdTest implements ChannelConstant{
 			// 指定设备命令执行接收目标为一组设备(id)
 			.setDeviceTarget(device.getId()).autoRemove(false);
 		logger.info("异步接收命令响应:");
-		cmdManager.reset(null, new IAckAdapter.BaseAdapter<Void>(){
+		cmdManager.runCmd("/cmd/reset",null, new IAckAdapter.BaseAdapter<Object>(){
 				@Override
-				protected void doOnSubscribe(Ack<Void> t) {
+				protected void doOnSubscribe(Ack<Object> t) {
 					logger.info("ADMIN client : 设备命令响应 {}",t);
 				}
 			}); // 异步执行设备复位命令
@@ -140,9 +140,9 @@ public class DeviceCmdTest implements ChannelConstant{
 		 
 		 // 复用CmdBuilder对象同步执行 isEnable 命令
 		 cmdManager.targetBuilder().resetApply();
-		 List<Ack<Boolean>> receivedAcks = cmdManager.isEnableSync(false);
+		 List<Ack<Object>> receivedAcks = cmdManager.runCmdSync(pathOfCmd(CMD_RESET),null,false);
 		 logger.info("同步接收命令响应:");
-		 for(Ack<Boolean> ack:receivedAcks){
+		 for(Ack<Object> ack:receivedAcks){
 			 logger.info("ADMIN client : 设备命令响应 {}",ack);
 		 }
 		 logger.info("isEnable同步命令响应结束");
@@ -164,9 +164,9 @@ public class DeviceCmdTest implements ChannelConstant{
 			.setAckChannel(facelogClient.getAckChannelSupplier(rootToken))
 			// 指定设备命令执行接收目标为一组设备(id)
 			.setDeviceTarget(device.getId()) ;
-		List<Ack<Void>> receivedAcks = cmdManager.resetSync(null, false);
+		List<Ack<Object>> receivedAcks = cmdManager.runCmdSync(pathOfCmd(CMD_RESET),null, false);
 		logger.info("同步接收命令响应:");
-		for(Ack<Void> ack:receivedAcks){
+		for(Ack<Object> ack:receivedAcks){
 			logger.info("ADMIN client : 设备命令响应 {}",ack);
 		}
 		logger.info("reset同步命令响应结束");

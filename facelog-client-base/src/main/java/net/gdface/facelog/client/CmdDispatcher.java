@@ -20,6 +20,10 @@ import com.google.common.base.Supplier;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
+import gu.dtalk.MenuItem;
+import gu.dtalk.RootMenu;
+import gu.dtalk.exception.CmdExecutionException;
+import gu.dtalk.exception.UnsupportCmdException;
 import gu.simplemq.Channel;
 import gu.simplemq.IMessageAdapter;
 import gu.simplemq.IPublisher;
@@ -52,14 +56,19 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 	                0L, TimeUnit.MILLISECONDS,
 	                new LinkedBlockingQueue<Runnable>(),
 	                new ThreadFactoryBuilder().setNameFormat("subscribe-%d").build()));
-	/** 命令执行器 */
-	private CommandAdapter cmdAdapter = CommandAdapter.NULL_ADAPTER;
 	/** 设备命令通道 */
 	private volatile Channel<DeviceInstruction> cmdChannel;
 	 /** 设备命令序列号验证器 */
 	private Predicate<Long> cmdSnValidator = Predicates.alwaysTrue();
 	/** 设备命令响应通道验证器 */
 	private Predicate<String> ackChannelValidator = Predicates.alwaysTrue();
+	private MenuItem rootMenu = new RootMenu();
+	private Supplier<MenuItem> rootSupplier = new Supplier<MenuItem>(){
+		@Override
+		public MenuItem get() {
+			return rootMenu;
+		}		
+	};
 	/**
 	 * 构造方法<br>
 	 *  设备所属的组可能是可以变化的,所以这里需要用{@code Supplier} 接口来动态获取当前设备的设备组
@@ -98,8 +107,18 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 				executor.execute(new Runnable(){
 					@Override
 					public void run() {
+						Ack<Object> ack = new Ack<Object>().setStatus(Ack.Status.OK);
 						// 将设备命令交给命令类型对应的方法执行设备命令
-						Ack<?> ack = t.getCmd().run(cmdAdapter, t.getParameters()).setCmdSn(cmdSn);
+						try {
+							ack.setValue(getRootMenu().runCmd(t.getCmdpath(),t.getParameters()));
+						} catch(UnsupportCmdException e){
+		                    // 该命令设备端未实现
+		                    ack.setStatus(Ack.Status.UNSUPPORTED);
+		                }catch(CmdExecutionException e){
+		                    // 填入异常状态,设置错误信息
+		                    ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
+		                } 
+						ack.setCmdSn(cmdSn);
 						// 如果指定了响应频道且频道名有效则向指定的频道发送响应消息
 						if(!Strings.isNullOrEmpty(t.getAckChannel())){
 							String ackChannel = t.getAckChannel();
@@ -128,21 +147,8 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 	 * @return
 	 */
 	public CmdDispatcher setCmdAdapter(CommandAdapter cmdAdapter) {
-		this.cmdAdapter = checkNotNull(cmdAdapter,"cmdAdapter is null");
+		checkNotNull(cmdAdapter,"cmdAdapter is null");
 		return this;
-	}
-	
-	public CommandAdapter getCmdAdapter() {
-		return cmdAdapter;
-	}
-	/**
-	 * 返回{@link CommandAdapterContainer}实例
-	 * @return
-	 * @throws IllegalStateException {@link #cmdAdapter}实例类型不是{@link CommandAdapterContainer}
-	 */
-	public CommandAdapterContainer getCommandAdapterContainer() {
-		checkState(cmdAdapter instanceof CommandAdapterContainer,"the cmdAdapter is not Container instance");
-		return (CommandAdapterContainer) cmdAdapter;
 	}
 	
 	/**
@@ -181,27 +187,6 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 		return this;
 	}
 	/**
-	 * {@link CommandAdapterContainer#register(Cmd, CommandAdapter)}代理方法<br>
-	 * @param cmd
-	 * @param adapter
-	 * @return
-	 * @see #getCommandAdapterContainer()
-	 */
-	public CmdDispatcher registerAdapter(Cmd cmd,CommandAdapter adapter){
-		getCommandAdapterContainer().register(cmd, adapter);		
-		return this;
-	}
-	/**
-	 * {@link CommandAdapterContainer#unregister(Cmd)}代理方法<br>
-	 * @param cmd
-	 * @return
-	 * @see #getCommandAdapterContainer()
-	 */
-	public CmdDispatcher unregisterAdapter(Cmd cmd){
-		getCommandAdapterContainer().unregister(cmd);
-		return this;
-	}
-	/**
 	 * 设置命令序列号验证器
 	 * @param cmdSnValidator 为{@code null}无效
 	 * @return
@@ -235,6 +220,24 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 					unregisterChannel();
 				}
 			});
+		}
+		return this;
+	}
+	private MenuItem getRootMenu() {
+		if(rootSupplier.get() != null){
+			return rootSupplier.get();
+		}
+		return rootMenu;
+	}
+	public CmdDispatcher setRootMenu(MenuItem rootMenu) {
+		if(null != rootMenu){
+			this.rootMenu = rootMenu;
+		}
+		return this;
+	}
+	public CmdDispatcher setRootSupplier(Supplier<MenuItem> rootSupplier) {
+		if(null != rootSupplier){
+			this.rootSupplier = rootSupplier;
 		}
 		return this;
 	}
