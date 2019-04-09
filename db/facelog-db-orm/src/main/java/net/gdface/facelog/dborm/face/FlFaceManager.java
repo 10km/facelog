@@ -287,7 +287,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
 
     @Override
     public FlFaceBean checkDuplicate(FlFaceBean bean) throws DaoException{
-        if(!existsByPrimaryKey(bean)){
+        if(existsByPrimaryKey(bean)){
             throw new ObjectRetrievalException("Duplicate entry ("+ bean.getId() +") for key 'PRIMARY'");
         }
         return bean;

@@ -287,7 +287,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
 
     @Override
     public FlFeatureBean checkDuplicate(FlFeatureBean bean) throws DaoException{
-        if(!existsByPrimaryKey(bean)){
+        if(existsByPrimaryKey(bean)){
             throw new ObjectRetrievalException("Duplicate entry ("+ bean.getMd5() +") for key 'PRIMARY'");
         }
         return bean;

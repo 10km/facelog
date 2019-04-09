@@ -296,7 +296,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
 
     @Override
     public FlPermitBean checkDuplicate(FlPermitBean bean) throws DaoException{
-        if(!existsByPrimaryKey(bean)){
+        if(existsByPrimaryKey(bean)){
             throw new ObjectRetrievalException("Duplicate entry ("+ bean.getDeviceGroupId() + " " +bean.getPersonGroupId() +") for key 'PRIMARY'");
         }
         return bean;

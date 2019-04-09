@@ -287,7 +287,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
 
     @Override
     public FlDeviceBean checkDuplicate(FlDeviceBean bean) throws DaoException{
-        if(!existsByPrimaryKey(bean)){
+        if(existsByPrimaryKey(bean)){
             throw new ObjectRetrievalException("Duplicate entry ("+ bean.getId() +") for key 'PRIMARY'");
         }
         return bean;

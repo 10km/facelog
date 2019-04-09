@@ -290,7 +290,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
 
     @Override
     public FlPersonGroupBean checkDuplicate(FlPersonGroupBean bean) throws DaoException{
-        if(!existsByPrimaryKey(bean)){
+        if(existsByPrimaryKey(bean)){
             throw new ObjectRetrievalException("Duplicate entry ("+ bean.getId() +") for key 'PRIMARY'");
         }
         return bean;

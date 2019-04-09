@@ -274,7 +274,7 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
 
     @Override
     public FlStoreBean checkDuplicate(FlStoreBean bean) throws DaoException{
-        if(!existsByPrimaryKey(bean)){
+        if(existsByPrimaryKey(bean)){
             throw new ObjectRetrievalException("Duplicate entry ("+ bean.getMd5() +") for key 'PRIMARY'");
         }
         return bean;
