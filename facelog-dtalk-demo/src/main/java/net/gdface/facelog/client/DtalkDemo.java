@@ -12,6 +12,7 @@ import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
 import net.gdface.facelog.client.dtalk.FacelogMenu;
 import net.gdface.facelog.client.location.ConnectConfigProvider;
 import net.gdface.facelog.client.location.ConnectConfigType;
+import net.gdface.facelog.client.location.DefaultCustomConnectConfigProvider;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
@@ -19,6 +20,7 @@ import net.gdface.utils.NetworkUtil;
 
 import static gu.dtalk.engine.SampleConnector.*;
 import static com.google.common.base.Preconditions.*;
+import static net.gdface.facelog.client.DemoConfig.CONSOLE_CONFIG;
 
 public class DtalkDemo {
 	private static final Logger logger = LoggerFactory.getLogger(DtalkDemo.class);
@@ -95,10 +97,20 @@ public class DtalkDemo {
 		
 	}
 	public static void main(String []args){
+		CONSOLE_CONFIG.parseCommandLine(args);
 		System.out.println("Dtalk simulator for Facelog Device is starting(facelog设备dtalk模拟器启动)");
-
+		boolean useCustom = 
+				   DefaultCustomConnectConfigProvider.initHost(CONSOLE_CONFIG.getServiceHost())
+				|| DefaultCustomConnectConfigProvider.initPort(CONSOLE_CONFIG.getServicePort());
+		ConnectConfigType type;
 		try{
-			ConnectConfigType type = ConnectConfigType.lookupRedisConnect();
+			if(useCustom){
+				type = ConnectConfigType.CUSTOM;
+				checkArgument(type.testConnect(),"NOT CONNECT TO facelog service %s:%s",
+						type.getHost(),type.getPort());
+			}else{
+				type = ConnectConfigType.lookupRedisConnect();
+			}
 			IFaceLogClient facelogClient = ClientFactory.builder()
 					.setHostAndPort(type.getHost(), type.getPort())
 					.setDecorator(RefreshTokenDecorator.makeDecoratorFunction( DeviceTokenHelper.HELPER))
