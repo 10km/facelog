@@ -17,12 +17,12 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<swift.version>0.14.2</swift.version>
-		<common-java.version>1.1.18-SNAPSHOT</common-java.version>
+		<common-java.version>1.1.18</common-java.version>
 		<codegen.version>1.0.9</codegen.version>
 		<idl.generator.version>1.10</idl.generator.version>
 		<dtalk.version>0.0.1-SNAPSHOT</dtalk.version>
 		<thrifty.compiler.maven.plugin.version>1.1</thrifty.compiler.maven.plugin.version>
-		<simplemq.version>1.0.9-SNAPSHOT</simplemq.version>		
+		<simplemq.version>1.0.9</simplemq.version>		
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -148,6 +148,10 @@
 						<!-- 禁用java 8 的DocLint新特性，以确保当javadoc有编译错误时，也能正常生成javadoc jar包 -->
 						<!-- ${javadoc.opts}由profile指定 -->
 						<additionalparam>${javadoc.opts}</additionalparam>
+						<detectLinks>false</detectLinks>
+						<detectOfflineLinks>true</detectOfflineLinks>
+						<linksource>true</linksource>
+						<detectJavaApiLink>false</detectJavaApiLink>
 					</configuration>
 				</plugin>
 				<plugin>

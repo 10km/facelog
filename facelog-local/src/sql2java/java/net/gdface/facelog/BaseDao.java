@@ -242,12 +242,12 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see IDeviceManager#existsPrimaryKey(Object...)
+     * @see IDeviceManager#existsByPrimaryKey(Object)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsDevice(DeviceBean bean)
                     throws RuntimeDaoException{
-        return getDeviceManager().existsPrimaryKey(bean);
+        return getDeviceManager().existsByPrimaryKey(bean);
     }
     //5
     /**
@@ -782,12 +782,12 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see IDeviceGroupManager#existsPrimaryKey(Object...)
+     * @see IDeviceGroupManager#existsByPrimaryKey(Object)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsDeviceGroup(DeviceGroupBean bean)
                     throws RuntimeDaoException{
-        return getDeviceGroupManager().existsPrimaryKey(bean);
+        return getDeviceGroupManager().existsByPrimaryKey(bean);
     }
     //5
     /**
@@ -1339,12 +1339,12 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see IPersonManager#existsPrimaryKey(Object...)
+     * @see IPersonManager#existsByPrimaryKey(Object)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsPerson(PersonBean bean)
                     throws RuntimeDaoException{
-        return getPersonManager().existsPrimaryKey(bean);
+        return getPersonManager().existsByPrimaryKey(bean);
     }
     //5
     /**
@@ -1921,12 +1921,12 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see IPersonGroupManager#existsPrimaryKey(Object...)
+     * @see IPersonGroupManager#existsByPrimaryKey(Object)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsPersonGroup(PersonGroupBean bean)
                     throws RuntimeDaoException{
-        return getPersonGroupManager().existsPrimaryKey(bean);
+        return getPersonGroupManager().existsByPrimaryKey(bean);
     }
     //5
     /**
@@ -2478,12 +2478,12 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see IFaceManager#existsPrimaryKey(Object...)
+     * @see IFaceManager#existsByPrimaryKey(Object)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsFace(FaceBean bean)
                     throws RuntimeDaoException{
-        return getFaceManager().existsPrimaryKey(bean);
+        return getFaceManager().existsByPrimaryKey(bean);
     }
     //5
     /**
@@ -2910,12 +2910,12 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see IFeatureManager#existsPrimaryKey(Object...)
+     * @see IFeatureManager#existsByPrimaryKey(Object)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsFeature(FeatureBean bean)
                     throws RuntimeDaoException{
-        return getFeatureManager().existsPrimaryKey(bean);
+        return getFeatureManager().existsByPrimaryKey(bean);
     }
     //5
     /**
@@ -3369,12 +3369,12 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see IImageManager#existsPrimaryKey(Object...)
+     * @see IImageManager#existsByPrimaryKey(Object)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsImage(ImageBean bean)
                     throws RuntimeDaoException{
-        return getImageManager().existsPrimaryKey(bean);
+        return getImageManager().existsByPrimaryKey(bean);
     }
     //5
     /**
@@ -3785,12 +3785,12 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see ILogManager#existsPrimaryKey(Object...)
+     * @see ILogManager#existsByPrimaryKey(Object)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsLog(LogBean bean)
                     throws RuntimeDaoException{
-        return getLogManager().existsPrimaryKey(bean);
+        return getLogManager().existsByPrimaryKey(bean);
     }
     //5
     /**
@@ -4288,12 +4288,12 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see IPermitManager#existsPrimaryKey(Object...)
+     * @see IPermitManager#existsByPrimaryKey(Object)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsPermit(PermitBean bean)
                     throws RuntimeDaoException{
-        return getPermitManager().existsPrimaryKey(bean);
+        return getPermitManager().existsByPrimaryKey(bean);
     }
     //5
     /**
@@ -4749,12 +4749,12 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see IStoreManager#existsPrimaryKey(Object...)
+     * @see IStoreManager#existsByPrimaryKey(Object)
      * @throws RuntimeDaoException
      */
     protected boolean daoExistsStore(StoreBean bean)
                     throws RuntimeDaoException{
-        return getStoreManager().existsPrimaryKey(bean);
+        return getStoreManager().existsByPrimaryKey(bean);
     }
     //5
     /**

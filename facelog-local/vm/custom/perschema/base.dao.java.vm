@@ -179,12 +179,12 @@ class BaseDao implements CommonConstant {
     //4-2
     /** 
      *　判断指定的记录是否存在
-     * @see $table.asManagerInterfaceNSP()${esc.hash}existsPrimaryKey(Object...)
+     * @see $table.asManagerInterfaceNSP()${esc.hash}existsByPrimaryKey(Object)
      * @throws RuntimeDaoException
      */
     $!{modifier}boolean daoExists${coreClass}($beanClass bean)
                     throws RuntimeDaoException{
-        return ${table.getGetManagerMethod()}().existsPrimaryKey(bean);
+        return ${table.getGetManagerMethod()}().existsByPrimaryKey(bean);
     }
     //5
     /**
