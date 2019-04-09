@@ -58,7 +58,10 @@ public class ClientExtendTools {
                 		? syncInstance.getDevice(input) 
                 		: asyncInstance.getDevice(input).get();
                 return null == device ? null : device.getGroupId();
-            }catch(Exception e){
+            } catch (ExecutionException e) {
+    	        Throwables.throwIfUnchecked(e.getCause());
+    	        throw new RuntimeException(e.getCause());
+    		} catch(Exception e){
                 Throwables.throwIfUnchecked(e);
                 throw new RuntimeException(e);
             }
@@ -90,7 +93,10 @@ public class ClientExtendTools {
                 return syncInstance != null 
                 		? syncInstance.getPersonGroupsBelongs(personId) 
                 		: asyncInstance.getPersonGroupsBelongs(personId).get();
-            }catch(Exception e){
+            } catch (ExecutionException e) {
+    	        Throwables.throwIfUnchecked(e.getCause());
+    	        throw new RuntimeException(e.getCause());
+    		} catch(Exception e){
                 Throwables.throwIfUnchecked(e);
                 throw new RuntimeException(e);
             }
@@ -127,7 +133,10 @@ public class ClientExtendTools {
                     syncInstance != null 
                     	? syncInstance.getRedisParameters(token) 
                     	: asyncInstance.getRedisParameters(token).get());
-        }catch(Exception e){
+        } catch (ExecutionException e) {
+	        Throwables.throwIfUnchecked(e.getCause());
+	        throw new RuntimeException(e.getCause());
+		} catch(Exception e){
             Throwables.throwIfUnchecked(e);
             throw new RuntimeException(e);
         }
@@ -138,21 +147,24 @@ public class ClientExtendTools {
      * @return
      */
     public CmdDispatcher makeCmdDispatcher(Token token){
-        try{
-            checkArgument(checkNotNull(token,"token is null").getType() == TokenType.DEVICE,"device token required");
-            int deviceId = token.getId();
-            Map<MQParam, String> pameters = syncInstance != null 
-            		? syncInstance.getRedisParameters(token) 
-            		: asyncInstance.getRedisParameters(token).get();
-            return new CmdDispatcher(deviceId,
-                    this.getDeviceGroupIdSupplier(deviceId))
-                .setCmdSnValidator(cmdSnValidator)
-                .setAckChannelValidator(ackChannelValidator)
-                .registerChannel(pameters.get(MQParam.CMD_CHANNEL));
-          }catch(Exception e){
-              Throwables.throwIfUnchecked(e);
-              throw new RuntimeException(e);
-          }
+    	try{
+    		checkArgument(checkNotNull(token,"token is null").getType() == TokenType.DEVICE,"device token required");
+    		int deviceId = token.getId();
+    		Map<MQParam, String> pameters = syncInstance != null 
+    				? syncInstance.getRedisParameters(token) 
+    				: asyncInstance.getRedisParameters(token).get();
+    				return new CmdDispatcher(deviceId,
+    						this.getDeviceGroupIdSupplier(deviceId))
+    						.setCmdSnValidator(cmdSnValidator)
+    						.setAckChannelValidator(ackChannelValidator)
+    						.registerChannel(pameters.get(MQParam.CMD_CHANNEL));
+    	} catch (ExecutionException e) {
+    		Throwables.throwIfUnchecked(e.getCause());
+    		throw new RuntimeException(e.getCause());
+    	} catch(Exception e){
+    		Throwables.throwIfUnchecked(e);
+    		throw new RuntimeException(e);
+    	}
     }
     /**
      * 返回一个申请命令响应通道的{@link Supplier}实例
@@ -169,7 +181,10 @@ public class ClientExtendTools {
                     return syncInstance != null 
                     		? syncInstance.applyAckChannel(token,duration) 
                     		: asyncInstance.applyAckChannel(token, duration).get();
-                }catch(Exception e){
+                } catch (ExecutionException e) {
+        	        Throwables.throwIfUnchecked(e.getCause());
+        	        throw new RuntimeException(e.getCause());
+        		} catch(Exception e){
                     Throwables.throwIfUnchecked(e);
                     throw new RuntimeException(e);
                 }
@@ -199,7 +214,10 @@ public class ClientExtendTools {
                     return syncInstance != null 
                     		? syncInstance.applyCmdSn(token) 
                     		: asyncInstance.applyCmdSn(token).get();
-                }catch(Exception e){
+                } catch (ExecutionException e) {
+        	        Throwables.throwIfUnchecked(e.getCause());
+        	        throw new RuntimeException(e.getCause());
+        		} catch(Exception e){
                     Throwables.throwIfUnchecked(e);
                     throw new RuntimeException(e);
                 }
@@ -216,7 +234,10 @@ public class ClientExtendTools {
                     		: (syncInstance != null 
                     				? syncInstance.isValidCmdSn(input) 
                     				: asyncInstance.isValidCmdSn(input).get());
-                }catch(Exception e){
+                } catch (ExecutionException e) {
+        	        Throwables.throwIfUnchecked(e.getCause());
+        	        throw new RuntimeException(e.getCause());
+        		} catch(Exception e){
                     Throwables.throwIfUnchecked(e);
                     throw new RuntimeException(e);
                 }
@@ -231,7 +252,10 @@ public class ClientExtendTools {
                     		: (syncInstance != null 
                     				? syncInstance.isValidAckChannel(input) 
                     				: asyncInstance.isValidAckChannel(input).get());
-                }catch(Exception e){
+                } catch (ExecutionException e) {
+        	        Throwables.throwIfUnchecked(e.getCause());
+        	        throw new RuntimeException(e.getCause());
+        		} catch(Exception e){
                     Throwables.throwIfUnchecked(e);
                     throw new RuntimeException(e);
                 }
