@@ -3,19 +3,27 @@ package net.gdface.facelog.client;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 
+import gu.dtalk.MenuItem;
+import gu.simplemq.redis.JedisPoolLazy;
 import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.MQParam;
+import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.Token.TokenType;
+import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
+import net.gdface.facelog.client.dtalk.FacelogRedisConfigProvider;
 import net.gdface.facelog.db.DeviceBean;
+import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.thrift.IFaceLogThriftClientAsync;
 
 /**
@@ -50,7 +58,10 @@ public class ClientExtendTools {
                 		? syncInstance.getDevice(input) 
                 		: asyncInstance.getDevice(input).get();
                 return null == device ? null : device.getGroupId();
-            }catch(Exception e){
+            } catch (ExecutionException e) {
+    	        Throwables.throwIfUnchecked(e.getCause());
+    	        throw new RuntimeException(e.getCause());
+    		} catch(Exception e){
                 Throwables.throwIfUnchecked(e);
                 throw new RuntimeException(e);
             }
@@ -82,7 +93,10 @@ public class ClientExtendTools {
                 return syncInstance != null 
                 		? syncInstance.getPersonGroupsBelongs(personId) 
                 		: asyncInstance.getPersonGroupsBelongs(personId).get();
-            }catch(Exception e){
+            } catch (ExecutionException e) {
+    	        Throwables.throwIfUnchecked(e.getCause());
+    	        throw new RuntimeException(e.getCause());
+    		} catch(Exception e){
                 Throwables.throwIfUnchecked(e);
                 throw new RuntimeException(e);
             }
@@ -111,15 +125,18 @@ public class ClientExtendTools {
      */
     public CmdManager makeCmdManager(Token token){
         try{
-            checkArgument(checkNotNull(token).getType() == TokenType.PERSON 
+            checkArgument(checkNotNull(token,"token is null").getType() == TokenType.PERSON 
                 || token.getType() == TokenType.ROOT,"person or root token required");
-            
+            checkArgument(tokenRank.apply(token)>=2,"person or root token required");
             return new CmdManager(
                     gu.simplemq.redis.JedisPoolLazy.getDefaultInstance(),
                     syncInstance != null 
                     	? syncInstance.getRedisParameters(token) 
                     	: asyncInstance.getRedisParameters(token).get());
-        }catch(Exception e){
+        } catch (ExecutionException e) {
+	        Throwables.throwIfUnchecked(e.getCause());
+	        throw new RuntimeException(e.getCause());
+		} catch(Exception e){
             Throwables.throwIfUnchecked(e);
             throw new RuntimeException(e);
         }
@@ -130,21 +147,24 @@ public class ClientExtendTools {
      * @return
      */
     public CmdDispatcher makeCmdDispatcher(Token token){
-        try{
-            checkArgument(checkNotNull(token).getType() == TokenType.DEVICE,"device token required");
-            int deviceId = token.getId();
-            Map<MQParam, String> pameters = syncInstance != null 
-            		? syncInstance.getRedisParameters(token) 
-            		: asyncInstance.getRedisParameters(token).get();
-            return new CmdDispatcher(deviceId,
-                    this.getDeviceGroupIdSupplier(deviceId))
-                .setCmdSnValidator(cmdSnValidator)
-                .setAckChannelValidator(ackChannelValidator)
-                .registerChannel(pameters.get(MQParam.CMD_CHANNEL));
-          }catch(Exception e){
-              Throwables.throwIfUnchecked(e);
-              throw new RuntimeException(e);
-          }
+    	try{
+    		checkArgument(checkNotNull(token,"token is null").getType() == TokenType.DEVICE,"device token required");
+    		int deviceId = token.getId();
+    		Map<MQParam, String> pameters = syncInstance != null 
+    				? syncInstance.getRedisParameters(token) 
+    				: asyncInstance.getRedisParameters(token).get();
+    				return new CmdDispatcher(deviceId,
+    						this.getDeviceGroupIdSupplier(deviceId))
+    						.setCmdSnValidator(cmdSnValidator)
+    						.setAckChannelValidator(ackChannelValidator)
+    						.registerChannel(pameters.get(MQParam.CMD_CHANNEL));
+    	} catch (ExecutionException e) {
+    		Throwables.throwIfUnchecked(e.getCause());
+    		throw new RuntimeException(e.getCause());
+    	} catch(Exception e){
+    		Throwables.throwIfUnchecked(e);
+    		throw new RuntimeException(e);
+    	}
     }
     /**
      * 返回一个申请命令响应通道的{@link Supplier}实例
@@ -161,7 +181,10 @@ public class ClientExtendTools {
                     return syncInstance != null 
                     		? syncInstance.applyAckChannel(token,duration) 
                     		: asyncInstance.applyAckChannel(token, duration).get();
-                }catch(Exception e){
+                } catch (ExecutionException e) {
+        	        Throwables.throwIfUnchecked(e.getCause());
+        	        throw new RuntimeException(e.getCause());
+        		} catch(Exception e){
                     Throwables.throwIfUnchecked(e);
                     throw new RuntimeException(e);
                 }
@@ -191,7 +214,10 @@ public class ClientExtendTools {
                     return syncInstance != null 
                     		? syncInstance.applyCmdSn(token) 
                     		: asyncInstance.applyCmdSn(token).get();
-                }catch(Exception e){
+                } catch (ExecutionException e) {
+        	        Throwables.throwIfUnchecked(e.getCause());
+        	        throw new RuntimeException(e.getCause());
+        		} catch(Exception e){
                     Throwables.throwIfUnchecked(e);
                     throw new RuntimeException(e);
                 }
@@ -208,7 +234,10 @@ public class ClientExtendTools {
                     		: (syncInstance != null 
                     				? syncInstance.isValidCmdSn(input) 
                     				: asyncInstance.isValidCmdSn(input).get());
-                }catch(Exception e){
+                } catch (ExecutionException e) {
+        	        Throwables.throwIfUnchecked(e.getCause());
+        	        throw new RuntimeException(e.getCause());
+        		} catch(Exception e){
                     Throwables.throwIfUnchecked(e);
                     throw new RuntimeException(e);
                 }
@@ -223,9 +252,192 @@ public class ClientExtendTools {
                     		: (syncInstance != null 
                     				? syncInstance.isValidAckChannel(input) 
                     				: asyncInstance.isValidAckChannel(input).get());
-                }catch(Exception e){
+                } catch (ExecutionException e) {
+        	        Throwables.throwIfUnchecked(e.getCause());
+        	        throw new RuntimeException(e.getCause());
+        		} catch(Exception e){
                     Throwables.throwIfUnchecked(e);
                     throw new RuntimeException(e);
                 }
             }};
+    /** 设备令牌验证器 */
+    public final Predicate<Token> deviceTokenValidator =
+        new Predicate<Token>(){
+            @Override
+            public boolean apply(Token input) {
+                try{
+                    return null == input ? false 
+                    		: (syncInstance != null 
+                    				? syncInstance.isValidDeviceToken(input) 
+                    				: asyncInstance.isValidDeviceToken(input).get());
+                } catch (ExecutionException e) {
+        	        Throwables.throwIfUnchecked(e.getCause());
+        	        throw new RuntimeException(e.getCause());
+        		} catch(Exception e){
+                    Throwables.throwIfUnchecked(e);
+                    throw new RuntimeException(e);
+                }
+            }};
+    /** 人员令牌验证器 */
+	public final Predicate<Token> personTokenValidator =
+	        new Predicate<Token>(){
+	            @Override
+	            public boolean apply(Token input) {
+	                try{
+	                    return null == input ? false 
+	                    		: (syncInstance != null 
+	                    				? syncInstance.isValidPersonToken(input) 
+	                    				: asyncInstance.isValidPersonToken(input).get());
+	                } catch (ExecutionException e) {
+	        	        Throwables.throwIfUnchecked(e.getCause());
+	        	        throw new RuntimeException(e.getCause());
+	        		} catch(Exception e){
+	                    Throwables.throwIfUnchecked(e);
+	                    throw new RuntimeException(e);
+	                }
+	            }};
+    /** root令牌验证器 */
+	public final Predicate<Token> rootTokenValidator =
+	        new Predicate<Token>(){
+	            @Override
+	            public boolean apply(Token input) {
+	                try{
+	                    return null == input ? false 
+	                    		: (syncInstance != null 
+	                    				? syncInstance.isValidRootToken(input) 
+	                    				: asyncInstance.isValidRootToken(input).get());
+	                } catch (ExecutionException e) {
+	        	        Throwables.throwIfUnchecked(e.getCause());
+	        	        throw new RuntimeException(e.getCause());
+	        		} catch(Exception e){
+	                    Throwables.throwIfUnchecked(e);
+	                    throw new RuntimeException(e);
+	                }
+	            }};
+	/** 
+	 * 返回令牌的管理等级,输入为{@code null}或设备令牌返回-1
+	 * <li> 4---root</li>
+	 * <li> 3---管理员</li>
+	 * <li> 2---操作员</li>
+	 * <li> 0---普通用户</li>
+	 * <li>-1---未定义</li>
+	 */
+	public final Function<Token,Integer> tokenRank =
+	        new Function<Token,Integer>(){
+	            @Override
+	            public Integer apply(Token input) {
+	                try{
+	                	if(null != input){
+	                		switch (input.getType()) {
+	                		case ROOT:
+	                			if(rootTokenValidator.apply(input)){
+	                				return 4;
+	                			}
+	                			break;
+	                		case PERSON:{
+	                			if(personTokenValidator.apply(input)){ 
+	                				PersonBean bean = (syncInstance != null 
+	                						? syncInstance.getPerson(input.getId()) 
+	                								: asyncInstance.getPerson(input.getId()).get());
+	                				Integer rank = bean.getRank();
+	                				return rank != null ? rank : 0;
+	                			}
+	                			break;
+	                		}	                		
+	                		default:
+	                			break;
+	                		}
+	                	}
+						return -1;
+	                } catch (ExecutionException e) {
+	        	        Throwables.throwIfUnchecked(e.getCause());
+	        	        throw new RuntimeException(e.getCause());
+	        		} catch(Exception e){
+	                    Throwables.throwIfUnchecked(e);
+	                    throw new RuntimeException(e);
+	                }
+	            }};
+    /**
+     * 申请用户令牌
+     * @param userid 用户id，为-1代表root
+     * @param password 用户密码
+     * @param isMd5 密码是否为md5校验码
+     * @return
+     * @throws ServiceSecurityException
+     */
+    public Token applyUserToken(int userid,String password,boolean isMd5) throws ServiceSecurityException{
+    	Token token;
+    	try {
+    		if(userid == -1){
+
+    			token = syncInstance != null 
+    					? syncInstance.applyRootToken(password, isMd5)
+    							: asyncInstance.applyRootToken(password, isMd5).get();
+
+    		}else{
+    			token = syncInstance != null 
+    					? syncInstance.applyPersonToken(userid, password, isMd5)
+    							: asyncInstance.applyPersonToken(userid, password, isMd5).get();
+    		}
+    		return token;
+    	} catch (ExecutionException e) {
+    		Throwables.propagateIfPossible(e.getCause(), ServiceSecurityException.class);
+	        throw new RuntimeException(e.getCause());
+		} catch(Exception e){
+    		Throwables.propagateIfPossible(e, ServiceSecurityException.class);
+            throw new RuntimeException(e);
+        }
+    }
+	/**
+	 *  获取redis连接参数
+	 * @param token
+	 * @return
+	 */
+	private Map<MQParam, String> getRedisParameters(Token token){
+		// 获取redis连接参数
+		try {
+			return syncInstance != null 
+					? syncInstance.getRedisParameters(token)
+					: asyncInstance.getRedisParameters(token).get();
+	    } catch (ExecutionException e) {
+	        Throwables.throwIfUnchecked(e.getCause());
+	        throw new RuntimeException(e.getCause());
+		} catch(Exception e){
+	        Throwables.throwIfUnchecked(e);
+	        throw new RuntimeException(e);
+	    }
+	}
+	/**
+	 * 创建dtalk引擎
+	 * @param deviceToken 设备令牌，不可为{@code null}
+	 * @param rootMenu 包括所有菜单的根菜单对象，不可为{@code null}
+	 * @return
+	 */
+	public DtalkEngineForFacelog initDtalkEngine(Token deviceToken, MenuItem rootMenu){
+		// 设备端才能调用此方法
+		checkArgument(deviceTokenValidator.apply(deviceToken),"device token REQUIRED");
+		initDtalkRedisLocation(deviceToken);
+		return new DtalkEngineForFacelog(checkNotNull(rootMenu,"rootMenu is null"), tokenRank);		
+	}
+	
+	/**
+	 * 初始化dtalk的redis的连接参数
+	 * @param token
+	 * @see FacelogRedisConfigProvider#setRedisLocation(URI)
+	 */
+	public void initDtalkRedisLocation(Token token){
+		Map<MQParam, String> redisParam = getRedisParameters(token);
+		FacelogRedisConfigProvider.setRedisLocation(URI.create(redisParam.get(MQParam.REDIS_URI)));
+	}
+	/**
+	 * 从facelog获取redis连接参数，初始化为{@link JedisPoolLazy}的默认实例<br>
+	 * 该方法只能在应用启动时调用一次
+	 * @param token
+	 * @see JedisPoolLazy#getInstance(URI)
+	 * @see JedisPoolLazy#asDefaultInstance()
+	 */
+	public void initRedisDefaultInstance(Token token){
+		Map<MQParam, String> redisParam = getRedisParameters(token);
+		JedisPoolLazy.getInstance(URI.create(redisParam.get(MQParam.REDIS_URI))).asDefaultInstance();
+	}
 }
