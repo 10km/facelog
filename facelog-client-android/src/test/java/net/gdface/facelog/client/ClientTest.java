@@ -26,7 +26,7 @@ import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
-import net.gdface.thrift.exception.client.BaseServiceRuntimeException;
+import net.gdface.thrift.exception.ServiceRuntimeException;
 import net.gdface.utils.FaceUtilits;
 
 /**
@@ -48,10 +48,8 @@ public class ClientTest implements CommonConstant {
 		facelogClient = ClientFactory.builder()
 				.setHostAndPort("127.0.0.1", DEFAULT_PORT)
 				.setDecorator(RefreshTokenDecorator.makeDecoratorFunction(new TokenHelperTestImpl()))
-				.build(IFaceLogThriftClient.class,IFaceLogClient.class);
+				.build(IFaceLogThriftClient.class, IFaceLogClient.class);
 		rootToken = facelogClient.applyRootToken("guyadong", false);
-		boolean valid= facelogClient.isValidPassword("root", "guyadong", false);
-		System.out.printf("root password valid:%b", valid);
 	}
 
 	@AfterClass
@@ -67,7 +65,25 @@ public class ClientTest implements CommonConstant {
 			logger.info("person = {}", newPerson.toString());
 			PersonBean person = facelogClient.getPerson(newPerson.getId());
 			logger.info("person = {}", person.toString());
-		} catch(BaseServiceRuntimeException e){
+		} catch(ServiceRuntimeException e){
+			e.printServiceStackTrace();
+			assertTrue(false);
+		}catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			assertTrue(false);
+		}
+	}
+	@Test
+	public void test2SavePersonWithImage() {
+		PersonBean newPerson = PersonBean.builder().name("person1").build();
+		try {			
+			byte[] imgdata = FaceUtilits.getBytes(ClientTest.class.getResourceAsStream("/images/guyadong-3.jpg"));
+			newPerson = facelogClient.savePerson(newPerson,imgdata,rootToken);
+			logger.info("person = {}", newPerson.toString());
+			PersonBean person = facelogClient.getPerson(newPerson.getId());
+			logger.info("person = {}", person.toString());
+			facelogClient.deletePerson(person.getId(), rootToken);
+		} catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(false);
 		}catch (Exception e) {
@@ -82,7 +98,7 @@ public class ClientTest implements CommonConstant {
 			for(Integer id:persons){
 				System.out.println(facelogClient.getPerson(id).toString(true, false));
 			}
-		}catch(BaseServiceRuntimeException e){
+		}catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(false);
 		}catch (Exception e) {
@@ -100,7 +116,7 @@ public class ClientTest implements CommonConstant {
 			for(Integer id:devices){
 				logger.info(id.toString());
 			}
-		}catch(BaseServiceRuntimeException e){
+		}catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(false);
 		}catch (Exception e) {
@@ -117,7 +133,7 @@ public class ClientTest implements CommonConstant {
 			facelogClient.deleteImage(md5, rootToken);
 			ImageBean imageBean = facelogClient.addImage(FaceUtilits.getBytesNotEmpty(url), null, null, 0, rootToken);
 			logger.info("image added {}",imageBean.toString(true, false));
-		}catch(BaseServiceRuntimeException e){
+		}catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(false);
 		}catch (Exception e) {
@@ -134,7 +150,7 @@ public class ClientTest implements CommonConstant {
 			facelogClient.deletePersons(persons, rootToken);
 			int count = facelogClient.countPersonByWhere(null);
 			assertTrue(0 == count);
-		}catch(BaseServiceRuntimeException e){
+		}catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(false);
 		}catch (Exception e) {
@@ -163,7 +179,7 @@ public class ClientTest implements CommonConstant {
 		try {
 			newPerson = facelogClient.savePerson(newPerson,rootToken);
 			logger.info("person = {}", newPerson.toString());
-		} catch(BaseServiceRuntimeException e){
+		} catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(false);
 		}catch (Exception e) {
@@ -188,4 +204,21 @@ public class ClientTest implements CommonConstant {
 			executor.awaitTermination(10, TimeUnit.SECONDS);
 		}
 	}
+	public static class TokenHelperTestImpl extends TokenHelper {
+
+		public TokenHelperTestImpl() {
+		}
+
+		@Override
+		public String passwordOf(int id) {
+			return "guyadong";
+		}
+
+		@Override
+		public boolean isHashedPwd() {
+			return false;
+		}
+
+	}
+
 }

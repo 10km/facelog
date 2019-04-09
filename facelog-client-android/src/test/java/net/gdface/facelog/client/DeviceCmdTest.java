@@ -1,7 +1,5 @@
 package net.gdface.facelog.client;
 
-import static org.junit.Assert.*;
-
 import java.util.List;
 import java.util.Map;
 import org.junit.AfterClass;
@@ -12,18 +10,16 @@ import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ImmutableMap;
-import gu.simplemq.redis.JedisPoolLazy;
-import gu.simplemq.redis.JedisPoolLazy.PropName;
+import gu.dtalk.CmdItem.ICmdAdapter;
+import gu.dtalk.exception.CmdExecutionException;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.client.dtalk.FacelogMenu;
+import net.gdface.facelog.client.location.ConnectConfigType;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
-import net.gdface.facelog.thrift.ServiceRuntimeException;
 import net.gdface.thrift.ClientFactory;
 import net.gdface.utils.DefaultExecutorProvider;
 import net.gdface.utils.NetworkUtil;
-import redis.clients.jedis.Protocol;
 import static net.gdface.facelog.client.dtalk.FacelogMenu.*;
 
 /**
@@ -37,21 +33,18 @@ public class DeviceCmdTest implements ChannelConstant{
 
 	private static IFaceLogClient facelogClient;
 	private static Token rootToken;
-	/** redis 连接参数 */
-	private static Map<PropName, Object> redisParam = 
-			ImmutableMap.<PropName, Object>of(
-					/** redis 主机名 */PropName.host,Protocol.DEFAULT_HOST,
-					/** redis 端口号 */PropName.port,Protocol.DEFAULT_PORT,
-					/** redis 连接密码 */PropName.password, "hello"
-					);
 	private static DeviceBean device;
 	private static Token deviceToken;
+
+	private static FacelogMenu root;
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		// 根据连接参数创建默认实例 
-		JedisPoolLazy.createDefaultInstance( redisParam);
+
 		// 创建服务实例
-		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLogThriftClient.class,IFaceLogClient.class);
+		facelogClient = ClientFactory.builder()
+				.setHostAndPort("127.0.0.1", DEFAULT_PORT)
+				.setDecorator(RefreshTokenDecorator.makeDecoratorFunction( DeviceTokenHelper.HELPER))
+				.build(IFaceLogThriftClient.class, IFaceLogClient.class);
 		// 申请root令牌
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 		byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
@@ -63,52 +56,43 @@ public class DeviceCmdTest implements ChannelConstant{
 		// 申请设备令牌
 		deviceToken = facelogClient.online(device);
 		logger.info("device token = {}",deviceToken);
+		DeviceTokenHelper.HELPER.device = device;
+		DeviceTokenHelper.HELPER.deviceToken = deviceToken;
+		root = FacelogMenu.makeActiveInstance(ConnectConfigType.LOCALHOST).init();
+		// 设置RESET命令执行器
+		root.findCmd(pathOfCmd(CMD_RESET)).setCmdAdapter(new ICmdAdapter() {
+			
+			@Override
+			public Object apply(Map<String, Object> input) throws CmdExecutionException {
+				logger.info("DEVICE client : do device reset...(执行设备RESET)");
+				return null;
+			}
+		});
+		// 设置ISENABLE命令执行器
+		root.findCmd(pathOfCmd(CMD_ISENABLE)).setCmdAdapter(new ICmdAdapter() {
+			
+			@Override
+			public Object apply(Map<String, Object> input) throws CmdExecutionException {
+				logger.info("DEVICE client : return enable status...(返回设备enable状态)");
+				return false;
+			}
+		});
+		// 初始化 JedisPoolLazy的默认实例
+		facelogClient.initRedisDefaultInstance(deviceToken);
+		// 启动设备命令分发器(广播命令由此执行)
+		facelogClient.makeCmdDispatcher(deviceToken)
+			.setRootSupplier(FacelogMenu.ROOT_SUPPLIER)
+			/** 程序退出时自动注销设备命令频道 */
+			.autoUnregisterChannel();
+		// 启动dtalk引擎(点对点命令由此执行)
+		facelogClient.initDtalkEngine(deviceToken, root).start();
 	}
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 		facelogClient.unregisterDevice(device.getId(), deviceToken);
 		facelogClient.releaseRootToken(rootToken);
 	}
-	/**
-	 * reset 命令执行器
-	 * @author guyadong
-	 *
-	 */
-	public class RestAdapter extends CommandAdapter{
-		@Override
-		public void reset(Long schedule)  {
-			logger.info("DEVICE client : do device reset...(执行设备RESET)");
-		}		
-	}
-	/**
-	 * isEnable 命令执行器
-	 * @author guyadong
-	 *
-	 */
-	public class IsEnableAdapter extends CommandAdapter{
 
-		@Override
-		public Boolean isEnable() {
-			logger.info("DEVICE client : return enable status...(返回设备enable状态)");
-			return false;
-		}		
-	}
-	/**
-	 * 模拟设备端响应设备命令
-	 * @throws InterruptedException 
-	 */
-	@Test
-	public void test1CommandAdapter(){		
-		try {
-			facelogClient.makeCmdDispatcher(deviceToken)
-				.setRootSupplier(FacelogMenu.ROOT_SUPPLIER)				
-				/** 程序退出时自动注销设备命令频道 */
-				.autoUnregisterChannel();	
-		} catch(ServiceRuntimeException e){
-			e.printServiceStackTrace();
-			assertTrue(e.getMessage(),false);
-		}
-	}
 	/**
 	 * 模拟设备端发送设备复位(异步执行)和isEnable命令(同步执行)
 	 * @throws InterruptedException 
@@ -128,7 +112,7 @@ public class DeviceCmdTest implements ChannelConstant{
 			// 指定设备命令执行接收目标为一组设备(id)
 			.setDeviceTarget(device.getId()).autoRemove(false);
 		logger.info("异步接收命令响应:");
-		cmdManager.runCmd("/cmd/reset",null, new IAckAdapter.BaseAdapter<Object>(){
+		cmdManager.runCmd(pathOfCmd(CMD_RESET),null, new IAckAdapter.BaseAdapter<Object>(){
 				@Override
 				protected void doOnSubscribe(Ack<Object> t) {
 					logger.info("ADMIN client : 设备命令响应 {}",t);
@@ -171,5 +155,20 @@ public class DeviceCmdTest implements ChannelConstant{
 		}
 		logger.info("reset同步命令响应结束");
 		logger.info("测试结束");
+	}
+	private static class DeviceTokenHelper extends TokenHelper{
+		static final DeviceTokenHelper HELPER = new DeviceTokenHelper();
+		DeviceBean device;
+		Token deviceToken;
+		@Override
+		public DeviceBean deviceBean() {
+			return device;
+		}
+
+		@Override
+		public void saveFreshedToken(Token token) {
+			deviceToken.assignFrom(token);
+		}
+		
 	}
 }

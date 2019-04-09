@@ -53,7 +53,7 @@ public class HeartbeatTest implements ChannelConstant{
 		// 根据连接参数创建默认实例 
 		JedisPoolLazy.createDefaultInstance( redisParam);
 		// 创建服务实例
-		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLogThriftClient.class,IFaceLogClient.class);
+		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLogThriftClient.class, IFaceLogClient.class);
 		// 申请令牌
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 		// 从facelog service 获取心跳监控频道名 
