@@ -5,15 +5,21 @@ import gu.dtalk.MenuItem;
 import gu.dtalk.OptionType;
 import gu.dtalk.RootMenu;
 import gu.dtalk.event.ValueListener;
+import gu.dtalk.exception.CmdExecutionException;
 import net.gdface.facelog.client.location.ConnectConfigProvider;
 
 import static gu.dtalk.engine.SampleConnector.DEVINFO_PROVIDER;
+
+import java.util.Map;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Supplier;
 
 import static com.google.common.base.Preconditions.*;
 import gu.dtalk.BaseItem;
+import gu.dtalk.BaseOption;
 import gu.dtalk.CmdItem;
+import gu.dtalk.CmdItem.ICmdAdapter;
 
 /**
  * facelog 功能菜单
@@ -80,13 +86,13 @@ public class FacelogMenu extends RootMenu{
 				.name(MENU_CMD)
 				.uiName("基本设备命令")
 				.addChilds(ItemBuilder.builder(CmdItem.class).name(CMD_PARAM).uiName("设置参数").addChilds(
-						OptionType.STRING.builder().name("name").uiName("参数名称").description("option's full path start with '/'").instance(),
-						OptionType.STRING.builder().name("value").uiName("参数值").instance()
-						).instance(),
+						OptionType.STRING.builder().name(CmdParamAdapter.P_NAME).uiName("参数名称").description("option's full path start with '/'").instance(),
+						OptionType.STRING.builder().name(CmdParamAdapter.P_VALUE).uiName("参数值").instance()
+						).instance().setCmdAdapter(new CmdParamAdapter()),
 						ItemBuilder.builder(CmdItem.class).name(CMD_STATUS).uiName("获取参数").addChilds(
-								OptionType.STRING.builder().name("name").uiName("参数名称").description("option's full path start with '/'").instance()
-								).instance(),
-						ItemBuilder.builder(CmdItem.class).name(CMD_VERSION).uiName("获取版本信息").instance(),
+								OptionType.STRING.builder().name(CmdStatusAdapter.P_NAME).uiName("参数名称").description("option's full path start with '/'").instance()
+								).instance().setCmdAdapter(new CmdStatusAdapter()),
+						ItemBuilder.builder(CmdItem.class).name(CMD_VERSION).uiName("获取版本信息").instance().setCmdAdapter(new CmdVersionAdapter()),
 						ItemBuilder.builder(CmdItem.class).name(CMD_ENABLE).uiName("设备启用/禁用").addChilds(
 								OptionType.BOOL.builder().name("enable").uiName("工作状态").description("true:工作状态,否则为非工作状态").instance(),
 								OptionType.STRING.builder().name("message").uiName("附加消息").description("工作状态附加消息,比如'设备维修,禁止通行'").instance()
@@ -184,7 +190,68 @@ public class FacelogMenu extends RootMenu{
 	 * @param name
 	 * @return
 	 */
-	public static final String pathOfCmdExt(String name){
+	public final String pathOfCmdExt(String name){
 		return new StringBuffer("/").append(MENU_CMD_EXT).append("/").append(name).toString();
+	}
+	/**
+	 * {@value #CMD_PARAM}命令实现
+	 * @author guyadong
+	 *
+	 */
+	private class CmdParamAdapter implements ICmdAdapter{
+		static final String P_NAME = "name";
+		static final String P_VALUE = "value";
+		private CmdParamAdapter() {
+		}
+		@Override
+		public Object apply(Map<String, Object> input) throws CmdExecutionException {
+			try {
+				String key = (String) input.get(P_NAME);
+				Object value = input.get(P_VALUE);
+				BaseOption<Object> opt = findOptionChecked(key);
+				value = CmdItem.cast(value, opt.javaType());
+				opt.updateFrom(value);
+				return null;
+			} catch (Exception e) {
+				throw new CmdExecutionException(e);
+			}
+		}		
+	}
+	/**
+	 * {@value #CMD_STATUS}命令实现
+	 * @author guyadong
+	 *
+	 */
+	private class CmdStatusAdapter implements ICmdAdapter{
+		static final String P_NAME = "name";
+		private CmdStatusAdapter() {
+		}
+		@Override
+		public Object apply(Map<String, Object> input) throws CmdExecutionException {
+			try {
+				String key = (String) input.get(P_NAME);
+				return findOptionChecked(key).getValue();
+			} catch (Exception e) {
+				throw new CmdExecutionException(e);
+			}
+		}		
+	}
+	/**
+	 * {@value #CMD_VERSION}命令实现
+	 * @author guyadong
+	 *
+	 */
+	private class CmdVersionAdapter implements ICmdAdapter{
+		private CmdVersionAdapter() {
+		}
+		@Override
+		public Object apply(Map<String, Object> input) throws CmdExecutionException {
+			try {
+				Object v = findOptionChecked("/device/version").getValue();
+				return v == null ? "unknow" : v;
+			} catch (Exception e) {
+				throw new CmdExecutionException(e);
+			}
+		}		
 	}
 }
