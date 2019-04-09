@@ -14,6 +14,7 @@ import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 
 import gu.dtalk.MenuItem;
+import gu.simplemq.redis.JedisPoolLazy;
 import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.ServiceSecurityException;
@@ -403,5 +404,16 @@ public class ClientExtendTools {
 	public void initDtalkRedisLocation(Token token){
 		Map<MQParam, String> redisParam = getRedisParameters(token);
 		FacelogRedisConfigProvider.setRedisLocation(URI.create(redisParam.get(MQParam.REDIS_URI)));
+	}
+	/**
+	 * 从facelog获取redis连接参数，初始化为{@link JedisPoolLazy}的默认实例<br>
+	 * 该方法只能在应用启动时调用一次
+	 * @param token
+	 * @see JedisPoolLazy#getInstance(URI)
+	 * @see JedisPoolLazy#asDefaultInstance()
+	 */
+	public void initRedisDefaultInstance(Token token){
+		Map<MQParam, String> redisParam = getRedisParameters(token);
+		JedisPoolLazy.getInstance(URI.create(redisParam.get(MQParam.REDIS_URI))).asDefaultInstance();
 	}
 }

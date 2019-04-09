@@ -48,5 +48,8 @@ public class IFaceLogClient extends IFaceLogDecorator {
 	public void initDtalkRedisLocation(Token token) {
 		clientTools.initDtalkRedisLocation(token);
 	}
+	public void initRedisDefaultInstance(Token token) {
+		clientTools.initRedisDefaultInstance(token);
+	}
 
 }

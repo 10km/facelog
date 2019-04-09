@@ -10,12 +10,8 @@ import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ImmutableMap;
-
 import gu.dtalk.CmdItem.ICmdAdapter;
 import gu.dtalk.exception.CmdExecutionException;
-import gu.simplemq.redis.JedisPoolLazy;
-import gu.simplemq.redis.JedisPoolLazy.PropName;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.client.dtalk.FacelogMenu;
 import net.gdface.facelog.client.location.ConnectConfigType;
@@ -24,7 +20,6 @@ import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
 import net.gdface.utils.DefaultExecutorProvider;
 import net.gdface.utils.NetworkUtil;
-import redis.clients.jedis.Protocol;
 import static net.gdface.facelog.client.dtalk.FacelogMenu.*;
 
 /**
@@ -38,21 +33,13 @@ public class DeviceCmdTest implements ChannelConstant{
 
 	private static IFaceLogClient facelogClient;
 	private static Token rootToken;
-	/** redis 连接参数 */
-	private static Map<PropName, Object> redisParam = 
-			ImmutableMap.<PropName, Object>of(
-					/** redis 主机名 */PropName.host,Protocol.DEFAULT_HOST,
-					/** redis 端口号 */PropName.port,Protocol.DEFAULT_PORT,
-					/** redis 连接密码 */PropName.password, "hello"
-					);
 	private static DeviceBean device;
 	private static Token deviceToken;
 
 	private static FacelogMenu root;
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		// 根据连接参数创建默认实例 
-		JedisPoolLazy.createDefaultInstance( redisParam);
+
 		// 创建服务实例
 		facelogClient = ClientFactory.builder()
 				.setHostAndPort("127.0.0.1", DEFAULT_PORT)
@@ -90,6 +77,8 @@ public class DeviceCmdTest implements ChannelConstant{
 				return false;
 			}
 		});
+		// 初始化 JedisPoolLazy的默认实例
+		facelogClient.initRedisDefaultInstance(deviceToken);
 		// 启动设备命令分发器(广播命令由此执行)
 		facelogClient.makeCmdDispatcher(deviceToken)
 			.setRootSupplier(FacelogMenu.ROOT_SUPPLIER)

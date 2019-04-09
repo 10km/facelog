@@ -51,11 +51,11 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 	/**  是否自动注销标志 */
 	private final AtomicBoolean autoUnregisterCmdChannel = new AtomicBoolean(false);
 	/** 固定为1的线程池，确保所有的命令按收到的顺序执行 */
-	private final ExecutorService executor = MoreExecutors.getExitingExecutorService(
+	private static final ExecutorService executor = MoreExecutors.getExitingExecutorService(
 			new ThreadPoolExecutor(1, 1,
 	                0L, TimeUnit.MILLISECONDS,
 	                new LinkedBlockingQueue<Runnable>(),
-	                new ThreadFactoryBuilder().setNameFormat("subscribe-%d").build()));
+	                new ThreadFactoryBuilder().setNameFormat("cmd-dispatcher-%d").build()));
 	/** 设备命令通道 */
 	private volatile Channel<DeviceInstruction> cmdChannel;
 	 /** 设备命令序列号验证器 */
