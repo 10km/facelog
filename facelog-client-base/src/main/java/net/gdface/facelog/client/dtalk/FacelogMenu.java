@@ -22,7 +22,8 @@ import gu.dtalk.CmdItem;
 import gu.dtalk.CmdItem.ICmdAdapter;
 
 /**
- * facelog 功能菜单
+ * facelog 功能菜单<br>
+ * 为{@value #CMD_PARAM},{@value #CMD_STATUS},{@value #CMD_VERSION}基本设备命令提供了默认实现
  * @author guyadong
  *
  */
@@ -47,7 +48,13 @@ public class FacelogMenu extends RootMenu{
 	private static FacelogMenu activeInstance;
 	/* 连接配置参数 */
 	private final ConnectConfigProvider config;
+	/**
+	 * 扩展命令菜单
+	 */
 	private MenuItem cmdext;
+	/**
+	 * 基本从菜单
+	 */
 	private MenuItem commands;
 	protected FacelogMenu(ConnectConfigProvider config) {
 		this.config = config;
@@ -150,14 +157,20 @@ public class FacelogMenu extends RootMenu{
 		}
 		return null;
 	}
+	/**
+	 * 向{@link #cmdext}添加扩展命令
+	 * @param cmdItems
+	 */
 	public void addExtCmd(CmdItem... cmdItems){
 		cmdItems = MoreObjects.firstNonNull(cmdItems, new CmdItem[0]);
 		cmdext.addChilds(cmdItems);
 	}
 	/**
-	 * 创建唯一实例
+	 * 创建根菜单唯一实例<br>
+	 * 只能调用一次
 	 * @param config
 	 * @return
+	 * @throw IllegalStateException 该方法被重复调用
 	 */
 	public synchronized static FacelogMenu makeActiveInstance(ConnectConfigProvider config){
 		checkState(activeInstance == null,"activeInstance must be initialize only once");
@@ -165,14 +178,22 @@ public class FacelogMenu extends RootMenu{
 		return activeInstance;
 	}
 	/**
-	 * 获取单实例，如果没有先调用{@link #makeActiveInstance(ConnectConfigProvider)}则抛出异常
+	 * 获取根菜单的单实例，如果没有先调用{@link #makeActiveInstance(ConnectConfigProvider)}则抛出异常
 	 * @return
+	 * @throw NullPointerException 还没有创建根菜单的实例
 	 */
 	public static FacelogMenu getActiveInstance(){
 		return checkNotNull(activeInstance,"activeInstance is null,must call makeInstance() firstly");
 	}
+	/**
+	 * 提供{@link Supplier}接口提供根单实例，适用延迟加载场景使用
+	 */
 	public static final Supplier<MenuItem> ROOT_SUPPLIER = new Supplier<MenuItem>(){
 
+		/**
+		 * 返回根菜单的实例，如果实例还没有创建，则返回{@code null}
+		 * @see com.google.common.base.Supplier#get()
+		 */
 		@Override
 		public MenuItem get() {
 			return activeInstance;
