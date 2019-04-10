@@ -221,7 +221,7 @@ class RedisManagement implements ServiceConstant{
 	 * @param task 任务名
 	 * @return 返回保存队列名的key
 	 */
-	protected String registerTask(String task) {
+	protected String taskRegister(String task) {
 		checkArgument(Strings.isNullOrEmpty(task),"task is empty or null");
 		String key = createTaskQueue(task);
 		taskKeys.add(key);

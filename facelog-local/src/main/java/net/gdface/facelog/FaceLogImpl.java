@@ -1243,10 +1243,10 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	 * @param token 访问令牌
 	 * @return 返回保存队列名的key
 	 */
-	public String registerTask(String task,Token token) {
+	public String taskRegister(String task,Token token) {
     	try {
 			Enable.ROOT_ONLY.check(tm, token);
-			return rm.registerTask(task);
+			return rm.taskRegister(task);
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
 		} 
