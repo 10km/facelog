@@ -2,9 +2,6 @@ package net.gdface.facelog.client.dtalk;
 
 import java.net.URI;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import gu.dtalk.redis.RedisConfigProvider;
 import gu.dtalk.redis.RedisConfigType;
 import redis.clients.util.JedisURIHelper;
@@ -12,12 +9,10 @@ import redis.clients.util.JedisURIHelper;
 import static com.google.common.base.Preconditions.*;
 
 public class FacelogRedisConfigProvider implements RedisConfigProvider {
-	private static final Logger logger = LoggerFactory.getLogger(FacelogRedisConfigProvider.class);
 
 	private static URI redisLocation;
 	public FacelogRedisConfigProvider() {
 		super();
-//		logger.info("{} constucted redisLocation {}",getClass().getSimpleName(),redisLocation);
 	}
 
 	@Override
