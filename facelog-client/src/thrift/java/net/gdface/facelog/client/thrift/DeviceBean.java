@@ -60,9 +60,49 @@ public final class DeviceBean
     @ThriftField
     public void setName(final String name) { this.name = name; }
 
+    private String productName;
+
+    @ThriftField(value=7, name="productName", requiredness=Requiredness.OPTIONAL)
+    public String getProductName() { return productName; }
+
+    @ThriftField
+    public void setProductName(final String productName) { this.productName = productName; }
+
+    private String model;
+
+    @ThriftField(value=8, name="model", requiredness=Requiredness.OPTIONAL)
+    public String getModel() { return model; }
+
+    @ThriftField
+    public void setModel(final String model) { this.model = model; }
+
+    private String vendor;
+
+    @ThriftField(value=9, name="vendor", requiredness=Requiredness.OPTIONAL)
+    public String getVendor() { return vendor; }
+
+    @ThriftField
+    public void setVendor(final String vendor) { this.vendor = vendor; }
+
+    private String manufacturer;
+
+    @ThriftField(value=10, name="manufacturer", requiredness=Requiredness.OPTIONAL)
+    public String getManufacturer() { return manufacturer; }
+
+    @ThriftField
+    public void setManufacturer(final String manufacturer) { this.manufacturer = manufacturer; }
+
+    private Long madeDate;
+
+    @ThriftField(value=11, name="madeDate", requiredness=Requiredness.OPTIONAL)
+    public Long getMadeDate() { return madeDate; }
+
+    @ThriftField
+    public void setMadeDate(final Long madeDate) { this.madeDate = madeDate; }
+
     private String version;
 
-    @ThriftField(value=7, name="version", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=12, name="version", requiredness=Requiredness.OPTIONAL)
     public String getVersion() { return version; }
 
     @ThriftField
@@ -70,7 +110,7 @@ public final class DeviceBean
 
     private String serialNo;
 
-    @ThriftField(value=8, name="serialNo", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=13, name="serialNo", requiredness=Requiredness.OPTIONAL)
     public String getSerialNo() { return serialNo; }
 
     @ThriftField
@@ -78,7 +118,7 @@ public final class DeviceBean
 
     private String mac;
 
-    @ThriftField(value=9, name="mac", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=14, name="mac", requiredness=Requiredness.OPTIONAL)
     public String getMac() { return mac; }
 
     @ThriftField
@@ -86,7 +126,7 @@ public final class DeviceBean
 
     private String remark;
 
-    @ThriftField(value=10, name="remark", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=15, name="remark", requiredness=Requiredness.OPTIONAL)
     public String getRemark() { return remark; }
 
     @ThriftField
@@ -94,7 +134,7 @@ public final class DeviceBean
 
     private byte [] extBin;
 
-    @ThriftField(value=11, name="extBin", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=16, name="extBin", requiredness=Requiredness.OPTIONAL)
     public byte [] getExtBin() { return extBin; }
 
     @ThriftField
@@ -102,7 +142,7 @@ public final class DeviceBean
 
     private String extTxt;
 
-    @ThriftField(value=12, name="extTxt", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=17, name="extTxt", requiredness=Requiredness.OPTIONAL)
     public String getExtTxt() { return extTxt; }
 
     @ThriftField
@@ -110,7 +150,7 @@ public final class DeviceBean
 
     private Long createTime;
 
-    @ThriftField(value=13, name="createTime", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=18, name="createTime", requiredness=Requiredness.OPTIONAL)
     public Long getCreateTime() { return createTime; }
 
     @ThriftField
@@ -118,7 +158,7 @@ public final class DeviceBean
 
     private Long updateTime;
 
-    @ThriftField(value=14, name="updateTime", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=19, name="updateTime", requiredness=Requiredness.OPTIONAL)
     public Long getUpdateTime() { return updateTime; }
 
     @ThriftField
@@ -134,6 +174,11 @@ public final class DeviceBean
             .add("id", id)
             .add("groupId", groupId)
             .add("name", name)
+            .add("productName", productName)
+            .add("model", model)
+            .add("vendor", vendor)
+            .add("manufacturer", manufacturer)
+            .add("madeDate", madeDate)
             .add("version", version)
             .add("serialNo", serialNo)
             .add("mac", mac)

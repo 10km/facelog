@@ -40,6 +40,11 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
      *   <li>{@link Constant#FL_DEVICE_ID_ID}
      *   <li>{@link Constant#FL_DEVICE_ID_GROUP_ID}
      *   <li>{@link Constant#FL_DEVICE_ID_NAME}
+     *   <li>{@link Constant#FL_DEVICE_ID_PRODUCT_NAME}
+     *   <li>{@link Constant#FL_DEVICE_ID_MODEL}
+     *   <li>{@link Constant#FL_DEVICE_ID_VENDOR}
+     *   <li>{@link Constant#FL_DEVICE_ID_MANUFACTURER}
+     *   <li>{@link Constant#FL_DEVICE_ID_MADE_DATE}
      *   <li>{@link Constant#FL_DEVICE_ID_VERSION}
      *   <li>{@link Constant#FL_DEVICE_ID_SERIAL_NO}
      *   <li>{@link Constant#FL_DEVICE_ID_MAC}
@@ -69,6 +74,11 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
      *   <li>{@link Constant#FL_DEVICE_ID_ID})
      *   <li>{@link Constant#FL_DEVICE_ID_GROUP_ID})
      *   <li>{@link Constant#FL_DEVICE_ID_NAME})
+     *   <li>{@link Constant#FL_DEVICE_ID_PRODUCT_NAME})
+     *   <li>{@link Constant#FL_DEVICE_ID_MODEL})
+     *   <li>{@link Constant#FL_DEVICE_ID_VENDOR})
+     *   <li>{@link Constant#FL_DEVICE_ID_MANUFACTURER})
+     *   <li>{@link Constant#FL_DEVICE_ID_MADE_DATE})
      *   <li>{@link Constant#FL_DEVICE_ID_VERSION})
      *   <li>{@link Constant#FL_DEVICE_ID_SERIAL_NO})
      *   <li>{@link Constant#FL_DEVICE_ID_MAC})
@@ -124,6 +134,61 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getName().compareTo(b2.getName());
+                }
+                break;
+            case FL_DEVICE_ID_PRODUCT_NAME:
+                if (b1.getProductName() == null && b2.getProductName() != null) {
+                    iReturn = -1;
+                } else if (b1.getProductName() == null && b2.getProductName() == null) {
+                    iReturn = 0;
+                } else if (b1.getProductName() != null && b2.getProductName() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getProductName().compareTo(b2.getProductName());
+                }
+                break;
+            case FL_DEVICE_ID_MODEL:
+                if (b1.getModel() == null && b2.getModel() != null) {
+                    iReturn = -1;
+                } else if (b1.getModel() == null && b2.getModel() == null) {
+                    iReturn = 0;
+                } else if (b1.getModel() != null && b2.getModel() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getModel().compareTo(b2.getModel());
+                }
+                break;
+            case FL_DEVICE_ID_VENDOR:
+                if (b1.getVendor() == null && b2.getVendor() != null) {
+                    iReturn = -1;
+                } else if (b1.getVendor() == null && b2.getVendor() == null) {
+                    iReturn = 0;
+                } else if (b1.getVendor() != null && b2.getVendor() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getVendor().compareTo(b2.getVendor());
+                }
+                break;
+            case FL_DEVICE_ID_MANUFACTURER:
+                if (b1.getManufacturer() == null && b2.getManufacturer() != null) {
+                    iReturn = -1;
+                } else if (b1.getManufacturer() == null && b2.getManufacturer() == null) {
+                    iReturn = 0;
+                } else if (b1.getManufacturer() != null && b2.getManufacturer() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getManufacturer().compareTo(b2.getManufacturer());
+                }
+                break;
+            case FL_DEVICE_ID_MADE_DATE:
+                if (b1.getMadeDate() == null && b2.getMadeDate() != null) {
+                    iReturn = -1;
+                } else if (b1.getMadeDate() == null && b2.getMadeDate() == null) {
+                    iReturn = 0;
+                } else if (b1.getMadeDate() != null && b2.getMadeDate() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getMadeDate().compareTo(b2.getMadeDate());
                 }
                 break;
             case FL_DEVICE_ID_VERSION:

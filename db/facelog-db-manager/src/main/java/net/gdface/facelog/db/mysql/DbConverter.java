@@ -53,6 +53,21 @@ public class DbConverter implements IDbConverter<
             if(right.checkNameInitialized()){
                 left.setName(right.getName());
             }
+            if(right.checkProductNameInitialized()){
+                left.setProductName(right.getProductName());
+            }
+            if(right.checkModelInitialized()){
+                left.setModel(right.getModel());
+            }
+            if(right.checkVendorInitialized()){
+                left.setVendor(right.getVendor());
+            }
+            if(right.checkManufacturerInitialized()){
+                left.setManufacturer(right.getManufacturer());
+            }
+            if(right.checkMadeDateInitialized()){
+                left.setMadeDate(right.getMadeDate());
+            }
             if(right.checkVersionInitialized()){
                 left.setVersion(right.getVersion());
             }
@@ -91,6 +106,21 @@ public class DbConverter implements IDbConverter<
             }
             if(left.checkNameInitialized() ){
                 right.setName(left.getName());
+            }
+            if(left.checkProductNameInitialized() ){
+                right.setProductName(left.getProductName());
+            }
+            if(left.checkModelInitialized() ){
+                right.setModel(left.getModel());
+            }
+            if(left.checkVendorInitialized() ){
+                right.setVendor(left.getVendor());
+            }
+            if(left.checkManufacturerInitialized() ){
+                right.setManufacturer(left.getManufacturer());
+            }
+            if(left.checkMadeDateInitialized() ){
+                right.setMadeDate(left.getMadeDate());
             }
             if(left.checkVersionInitialized() ){
                 right.setVersion(left.getVersion());

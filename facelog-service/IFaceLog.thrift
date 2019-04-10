@@ -133,14 +133,19 @@ struct DeviceBean {
   4: optional i32 id;
   5: optional i32 groupId;
   6: optional string name;
-  7: optional string version;
-  8: optional string serialNo;
-  9: optional string mac;
-  10: optional string remark;
-  11: optional binary extBin;
-  12: optional string extTxt;
-  13: optional i64 createTime;
-  14: optional i64 updateTime;
+  7: optional string productName;
+  8: optional string model;
+  9: optional string vendor;
+  10: optional string manufacturer;
+  11: optional i64 madeDate;
+  12: optional string version;
+  13: optional string serialNo;
+  14: optional string mac;
+  15: optional string remark;
+  16: optional binary extBin;
+  17: optional string extTxt;
+  18: optional i64 createTime;
+  19: optional i64 updateTime;
 }
 
 struct PersonBean {

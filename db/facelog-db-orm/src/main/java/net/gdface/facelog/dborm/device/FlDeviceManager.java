@@ -1070,6 +1070,46 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                 dirtyCount++;
             }
 
+            if (bean.checkProductNameModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("product_name");
+                dirtyCount++;
+            }
+
+            if (bean.checkModelModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("model");
+                dirtyCount++;
+            }
+
+            if (bean.checkVendorModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("vendor");
+                dirtyCount++;
+            }
+
+            if (bean.checkManufacturerModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("manufacturer");
+                dirtyCount++;
+            }
+
+            if (bean.checkMadeDateModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("made_date");
+                dirtyCount++;
+            }
+
             if (bean.checkVersionModified()) {
                 if (dirtyCount>0) {
                     sql.append(",");
@@ -1240,6 +1280,51 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                     useComma=true;
                 }
                 sql.append("name=?");
+            }
+
+            if (bean.checkProductNameModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("product_name=?");
+            }
+
+            if (bean.checkModelModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("model=?");
+            }
+
+            if (bean.checkVendorModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("vendor=?");
+            }
+
+            if (bean.checkManufacturerModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("manufacturer=?");
+            }
+
+            if (bean.checkMadeDateModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("made_date=?");
             }
 
             if (bean.checkVersionModified()) {
@@ -2037,6 +2122,46 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("name ").append(sqlEqualsOperation).append("?");
                 }
             }
+            if (bean.checkProductNameModified()) {
+                dirtyCount ++;
+                if (bean.getProductName() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("product_name IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("product_name ").append(sqlEqualsOperation).append("?");
+                }
+            }
+            if (bean.checkModelModified()) {
+                dirtyCount ++;
+                if (bean.getModel() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("model IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("model ").append(sqlEqualsOperation).append("?");
+                }
+            }
+            if (bean.checkVendorModified()) {
+                dirtyCount ++;
+                if (bean.getVendor() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("vendor IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("vendor ").append(sqlEqualsOperation).append("?");
+                }
+            }
+            if (bean.checkManufacturerModified()) {
+                dirtyCount ++;
+                if (bean.getManufacturer() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("manufacturer IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("manufacturer ").append(sqlEqualsOperation).append("?");
+                }
+            }
+            if (bean.checkMadeDateModified()) {
+                dirtyCount ++;
+                if (bean.getMadeDate() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("made_date IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("made_date = ?");
+                }
+            }
             if (bean.checkVersionModified()) {
                 dirtyCount ++;
                 if (bean.getVersion() == null) {
@@ -2155,6 +2280,98 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                     default:
                         throw new DaoException("Unknown search type " + searchType);
                 }
+            }
+            if (bean.checkProductNameModified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getProductName() + "]");
+                        if (bean.getProductName() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getProductName()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getProductName() + "%]");
+                        if ( bean.getProductName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getProductName() + SQL_LIKE_WILDCARD); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getProductName() + "]");
+                        if ( bean.getProductName() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getProductName()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getProductName() + "%]");
+                        if (bean.getProductName()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getProductName() + SQL_LIKE_WILDCARD); }
+                        break;
+                    default:
+                        throw new DaoException("Unknown search type " + searchType);
+                }
+            }
+            if (bean.checkModelModified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getModel() + "]");
+                        if (bean.getModel() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getModel()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getModel() + "%]");
+                        if ( bean.getModel()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getModel() + SQL_LIKE_WILDCARD); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getModel() + "]");
+                        if ( bean.getModel() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getModel()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getModel() + "%]");
+                        if (bean.getModel()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getModel() + SQL_LIKE_WILDCARD); }
+                        break;
+                    default:
+                        throw new DaoException("Unknown search type " + searchType);
+                }
+            }
+            if (bean.checkVendorModified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getVendor() + "]");
+                        if (bean.getVendor() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getVendor()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getVendor() + "%]");
+                        if ( bean.getVendor()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getVendor() + SQL_LIKE_WILDCARD); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getVendor() + "]");
+                        if ( bean.getVendor() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getVendor()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getVendor() + "%]");
+                        if (bean.getVendor()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getVendor() + SQL_LIKE_WILDCARD); }
+                        break;
+                    default:
+                        throw new DaoException("Unknown search type " + searchType);
+                }
+            }
+            if (bean.checkManufacturerModified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getManufacturer() + "]");
+                        if (bean.getManufacturer() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getManufacturer()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getManufacturer() + "%]");
+                        if ( bean.getManufacturer()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getManufacturer() + SQL_LIKE_WILDCARD); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getManufacturer() + "]");
+                        if ( bean.getManufacturer() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getManufacturer()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getManufacturer() + "%]");
+                        if (bean.getManufacturer()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getManufacturer() + SQL_LIKE_WILDCARD); }
+                        break;
+                    default:
+                        throw new DaoException("Unknown search type " + searchType);
+                }
+            }
+            if (bean.checkMadeDateModified()) {
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getMadeDate() + "]");
+                if (bean.getMadeDate() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.DATE);} } else { ps.setDate(++dirtyCount, new java.sql.Date(bean.getMadeDate().getTime())); }
             }
             if (bean.checkVersionModified()) {
                 switch (searchType) {
@@ -2398,14 +2615,19 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
             bean.setId(Manager.getInteger(rs, 1));
             bean.setGroupId(Manager.getInteger(rs, 2));
             bean.setName(rs.getString(3));
-            bean.setVersion(rs.getString(4));
-            bean.setSerialNo(rs.getString(5));
-            bean.setMac(rs.getString(6));
-            bean.setRemark(rs.getString(7));
-            bean.setExtBin(Manager.getBytes(rs, 8));
-            bean.setExtTxt(rs.getString(9));
-            bean.setCreateTime(rs.getTimestamp(10));
-            bean.setUpdateTime(rs.getTimestamp(11));
+            bean.setProductName(rs.getString(4));
+            bean.setModel(rs.getString(5));
+            bean.setVendor(rs.getString(6));
+            bean.setManufacturer(rs.getString(7));
+            bean.setMadeDate(rs.getDate(8));
+            bean.setVersion(rs.getString(9));
+            bean.setSerialNo(rs.getString(10));
+            bean.setMac(rs.getString(11));
+            bean.setRemark(rs.getString(12));
+            bean.setExtBin(Manager.getBytes(rs, 13));
+            bean.setExtTxt(rs.getString(14));
+            bean.setCreateTime(rs.getTimestamp(15));
+            bean.setUpdateTime(rs.getTimestamp(16));
         }
         catch(SQLException e)
         {
@@ -2449,6 +2671,26 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                     case FL_DEVICE_ID_NAME:
                         ++pos;
                         bean.setName(rs.getString(pos));
+                        break;
+                    case FL_DEVICE_ID_PRODUCT_NAME:
+                        ++pos;
+                        bean.setProductName(rs.getString(pos));
+                        break;
+                    case FL_DEVICE_ID_MODEL:
+                        ++pos;
+                        bean.setModel(rs.getString(pos));
+                        break;
+                    case FL_DEVICE_ID_VENDOR:
+                        ++pos;
+                        bean.setVendor(rs.getString(pos));
+                        break;
+                    case FL_DEVICE_ID_MANUFACTURER:
+                        ++pos;
+                        bean.setManufacturer(rs.getString(pos));
+                        break;
+                    case FL_DEVICE_ID_MADE_DATE:
+                        ++pos;
+                        bean.setMadeDate(rs.getDate(pos));
                         break;
                     case FL_DEVICE_ID_VERSION:
                         ++pos;
@@ -2513,6 +2755,11 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
             bean.setId(Manager.getInteger(rs, "id"));
             bean.setGroupId(Manager.getInteger(rs, "group_id"));
             bean.setName(rs.getString("name"));
+            bean.setProductName(rs.getString("product_name"));
+            bean.setModel(rs.getString("model"));
+            bean.setVendor(rs.getString("vendor"));
+            bean.setManufacturer(rs.getString("manufacturer"));
+            bean.setMadeDate(rs.getDate("made_date"));
             bean.setVersion(rs.getString("version"));
             bean.setSerialNo(rs.getString("serial_no"));
             bean.setMac(rs.getString("mac"));

@@ -46,7 +46,7 @@ public interface DaoConstant {
     public static interface DeviceConst{
         public static final String TABLENAME = "fl_device";
         /** column count for fl_device table */
-        public static final int COLUMN_COUNT = 11;
+        public static final int COLUMN_COUNT = 16;
         /** primary keys count for fl_device table */
         public static final int PRIMARY_KEY_COUNT = 1;
         /** foreign keys count for fl_device table */
@@ -59,6 +59,11 @@ public interface DaoConstant {
         public static final String FULL_FIELDS ="fl_device.id"
                             + ",fl_device.group_id"
                             + ",fl_device.name"
+                            + ",fl_device.product_name"
+                            + ",fl_device.model"
+                            + ",fl_device.vendor"
+                            + ",fl_device.manufacturer"
+                            + ",fl_device.made_date"
                             + ",fl_device.version"
                             + ",fl_device.serial_no"
                             + ",fl_device.mac"
@@ -71,6 +76,11 @@ public interface DaoConstant {
         public static final String FIELDS = "id"
                             + ",group_id"
                             + ",name"
+                            + ",product_name"
+                            + ",model"
+                            + ",vendor"
+                            + ",manufacturer"
+                            + ",made_date"
                             + ",version"
                             + ",serial_no"
                             + ",mac"
@@ -85,6 +95,11 @@ public interface DaoConstant {
         public static final String JAVA_FIELDS = "id"
                             + ",groupId"
                             + ",name"
+                            + ",productName"
+                            + ",model"
+                            + ",vendor"
+                            + ",manufacturer"
+                            + ",madeDate"
                             + ",version"
                             + ",serialNo"
                             + ",mac"
@@ -115,22 +130,32 @@ public interface DaoConstant {
             groupId("fl_device","group_id",2,"getGroupId","setGroupId"),
             /** constant for fl_device.name  */
             name("fl_device","name",3,"getName","setName"),
+            /** constant for fl_device.product_name  */
+            productName("fl_device","product_name",4,"getProductName","setProductName"),
+            /** constant for fl_device.model  */
+            model("fl_device","model",5,"getModel","setModel"),
+            /** constant for fl_device.vendor  */
+            vendor("fl_device","vendor",6,"getVendor","setVendor"),
+            /** constant for fl_device.manufacturer  */
+            manufacturer("fl_device","manufacturer",7,"getManufacturer","setManufacturer"),
+            /** constant for fl_device.made_date  */
+            madeDate("fl_device","made_date",8,"getMadeDate","setMadeDate"),
             /** constant for fl_device.version  */
-            version("fl_device","version",4,"getVersion","setVersion"),
+            version("fl_device","version",9,"getVersion","setVersion"),
             /** constant for fl_device.serial_no  */
-            serialNo("fl_device","serial_no",5,"getSerialNo","setSerialNo"),
+            serialNo("fl_device","serial_no",10,"getSerialNo","setSerialNo"),
             /** constant for fl_device.mac  */
-            mac("fl_device","mac",6,"getMac","setMac"),
+            mac("fl_device","mac",11,"getMac","setMac"),
             /** constant for fl_device.remark  */
-            remark("fl_device","remark",7,"getRemark","setRemark"),
+            remark("fl_device","remark",12,"getRemark","setRemark"),
             /** constant for fl_device.ext_bin  */
-            extBin("fl_device","ext_bin",8,"getExtBin","setExtBin"),
+            extBin("fl_device","ext_bin",13,"getExtBin","setExtBin"),
             /** constant for fl_device.ext_txt  */
-            extTxt("fl_device","ext_txt",9,"getExtTxt","setExtTxt"),
+            extTxt("fl_device","ext_txt",14,"getExtTxt","setExtTxt"),
             /** constant for fl_device.create_time  */
-            createTime("fl_device","create_time",10,"getCreateTime","setCreateTime"),
+            createTime("fl_device","create_time",15,"getCreateTime","setCreateTime"),
             /** constant for fl_device.update_time  */
-            updateTime("fl_device","update_time",11,"getUpdateTime","setUpdateTime");
+            updateTime("fl_device","update_time",16,"getUpdateTime","setUpdateTime");
             final ColumnMeta meta;
             private Column(String table,String field,int ordinal,String getter,String setter){
                 meta = new ColumnMeta(table,field,ordinal,getter,setter);

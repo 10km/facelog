@@ -153,6 +153,11 @@ public class BeanConverterUtils implements Constant {
             id("getId","setId"),
             groupId("getGroupId","setGroupId"),
             name("getName","setName"),
+            productName("getProductName","setProductName"),
+            model("getModel","setModel"),
+            vendor("getVendor","setVendor"),
+            manufacturer("getManufacturer","setManufacturer"),
+            madeDate("getMadeDate","setMadeDate"),
             version("getVersion","setVersion"),
             serialNo("getSerialNo","setSerialNo"),
             mac("getMac","setMac"),
@@ -265,6 +270,16 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.groupId.setter,Integer.class,int.class);                    
             getGetter(Column.name.getter);
             getSetterNoThrow(Column.name.setter,String.class); 
+            getGetter(Column.productName.getter);
+            getSetterNoThrow(Column.productName.setter,String.class); 
+            getGetter(Column.model.getter);
+            getSetterNoThrow(Column.model.setter,String.class); 
+            getGetter(Column.vendor.getter);
+            getSetterNoThrow(Column.vendor.setter,String.class); 
+            getGetter(Column.manufacturer.getter);
+            getSetterNoThrow(Column.manufacturer.setter,String.class); 
+            getGetter(Column.madeDate.getter);
+            getSetterNoThrow(Column.madeDate.setter,java.util.Date.class,Long.class,long.class);  
             getGetter(Column.version.getter);
             getSetterNoThrow(Column.version.setter,String.class); 
             getGetter(Column.serialNo.getter);
@@ -313,6 +328,36 @@ public class BeanConverterUtils implements Constant {
                     left.setName(cast(String.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.name.name(),modified)){
                         selfModified |= FL_DEVICE_ID_NAME_MASK;
+                    }
+                }
+                if( bitCheck(Column.productName.name(),initialized) && (null != (getterMethod = methods.get(Column.productName.getter)))){
+                    left.setProductName(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.productName.name(),modified)){
+                        selfModified |= FL_DEVICE_ID_PRODUCT_NAME_MASK;
+                    }
+                }
+                if( bitCheck(Column.model.name(),initialized) && (null != (getterMethod = methods.get(Column.model.getter)))){
+                    left.setModel(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.model.name(),modified)){
+                        selfModified |= FL_DEVICE_ID_MODEL_MASK;
+                    }
+                }
+                if( bitCheck(Column.vendor.name(),initialized) && (null != (getterMethod = methods.get(Column.vendor.getter)))){
+                    left.setVendor(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.vendor.name(),modified)){
+                        selfModified |= FL_DEVICE_ID_VENDOR_MASK;
+                    }
+                }
+                if( bitCheck(Column.manufacturer.name(),initialized) && (null != (getterMethod = methods.get(Column.manufacturer.getter)))){
+                    left.setManufacturer(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.manufacturer.name(),modified)){
+                        selfModified |= FL_DEVICE_ID_MANUFACTURER_MASK;
+                    }
+                }
+                if( bitCheck(Column.madeDate.name(),initialized) && (null != (getterMethod = methods.get(Column.madeDate.getter)))){
+                    left.setMadeDate(cast(java.util.Date.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.madeDate.name(),modified)){
+                        selfModified |= FL_DEVICE_ID_MADE_DATE_MASK;
                     }
                 }
                 if( bitCheck(Column.version.name(),initialized) && (null != (getterMethod = methods.get(Column.version.getter)))){
@@ -404,6 +449,51 @@ public class BeanConverterUtils implements Constant {
                         bitOR(Column.name.name(),initialized);
                         if(left.checkNameModified()){
                             bitOR(Column.name.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.productName.setter)) && left.checkProductNameInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.productName.setter),left.getProductName()));
+                        bitOR(Column.productName.name(),initialized);
+                        if(left.checkProductNameModified()){
+                            bitOR(Column.productName.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.model.setter)) && left.checkModelInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.model.setter),left.getModel()));
+                        bitOR(Column.model.name(),initialized);
+                        if(left.checkModelModified()){
+                            bitOR(Column.model.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.vendor.setter)) && left.checkVendorInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.vendor.setter),left.getVendor()));
+                        bitOR(Column.vendor.name(),initialized);
+                        if(left.checkVendorModified()){
+                            bitOR(Column.vendor.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.manufacturer.setter)) && left.checkManufacturerInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.manufacturer.setter),left.getManufacturer()));
+                        bitOR(Column.manufacturer.name(),initialized);
+                        if(left.checkManufacturerModified()){
+                            bitOR(Column.manufacturer.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.madeDate.setter)) && left.checkMadeDateInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.madeDate.setter),left.getMadeDate()));
+                        bitOR(Column.madeDate.name(),initialized);
+                        if(left.checkMadeDateModified()){
+                            bitOR(Column.madeDate.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }

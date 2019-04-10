@@ -37,6 +37,21 @@ public final class DeviceBean
     /** comments:设备名称 */
     private String name;
 
+    /** comments:产品名称 */
+    private String productName;
+
+    /** comments:设备型号 */
+    private String model;
+
+    /** comments:设备供应商 */
+    private String vendor;
+
+    /** comments:设备制造商 */
+    private String manufacturer;
+
+    /** comments:设备生产日期 */
+    private java.util.Date madeDate;
+
     /** comments:设备版本号 */
     private String version;
 
@@ -397,6 +412,361 @@ public final class DeviceBean
         return 0L !=  (initialized & FL_DEVICE_ID_NAME_MASK);
     }
     /**
+     * Getter method for {@link #productName}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.product_name</li>
+     * <li>comments: 产品名称</li>
+     * <li>column size: 32</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of productName
+     */
+    @ThriftField(value=7)
+    public String getProductName(){
+        return productName;
+    }
+    /**
+     * Setter method for {@link #productName}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to productName
+     */
+    public void setProductName(String newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, productName)) {
+            return;
+        }
+        productName = newVal;
+
+        modified |= FL_DEVICE_ID_PRODUCT_NAME_MASK;
+        initialized |= FL_DEVICE_ID_PRODUCT_NAME_MASK;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "productName")
+    public void writeProductName(String newVal){
+        checkMutable();
+        productName = newVal;
+    }
+    /**
+     * Determines if the productName has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkProductNameModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_PRODUCT_NAME_MASK);
+    }
+
+    /**
+     * Determines if the productName has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkProductNameInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_PRODUCT_NAME_MASK);
+    }
+    /**
+     * Getter method for {@link #model}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.model</li>
+     * <li>comments: 设备型号</li>
+     * <li>column size: 32</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of model
+     */
+    @ThriftField(value=8)
+    public String getModel(){
+        return model;
+    }
+    /**
+     * Setter method for {@link #model}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to model
+     */
+    public void setModel(String newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, model)) {
+            return;
+        }
+        model = newVal;
+
+        modified |= FL_DEVICE_ID_MODEL_MASK;
+        initialized |= FL_DEVICE_ID_MODEL_MASK;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "model")
+    public void writeModel(String newVal){
+        checkMutable();
+        model = newVal;
+    }
+    /**
+     * Determines if the model has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkModelModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_MODEL_MASK);
+    }
+
+    /**
+     * Determines if the model has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkModelInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_MODEL_MASK);
+    }
+    /**
+     * Getter method for {@link #vendor}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.vendor</li>
+     * <li>comments: 设备供应商</li>
+     * <li>column size: 32</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of vendor
+     */
+    @ThriftField(value=9)
+    public String getVendor(){
+        return vendor;
+    }
+    /**
+     * Setter method for {@link #vendor}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to vendor
+     */
+    public void setVendor(String newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, vendor)) {
+            return;
+        }
+        vendor = newVal;
+
+        modified |= FL_DEVICE_ID_VENDOR_MASK;
+        initialized |= FL_DEVICE_ID_VENDOR_MASK;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "vendor")
+    public void writeVendor(String newVal){
+        checkMutable();
+        vendor = newVal;
+    }
+    /**
+     * Determines if the vendor has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkVendorModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_VENDOR_MASK);
+    }
+
+    /**
+     * Determines if the vendor has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkVendorInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_VENDOR_MASK);
+    }
+    /**
+     * Getter method for {@link #manufacturer}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.manufacturer</li>
+     * <li>comments: 设备制造商</li>
+     * <li>column size: 32</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of manufacturer
+     */
+    @ThriftField(value=10)
+    public String getManufacturer(){
+        return manufacturer;
+    }
+    /**
+     * Setter method for {@link #manufacturer}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to manufacturer
+     */
+    public void setManufacturer(String newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, manufacturer)) {
+            return;
+        }
+        manufacturer = newVal;
+
+        modified |= FL_DEVICE_ID_MANUFACTURER_MASK;
+        initialized |= FL_DEVICE_ID_MANUFACTURER_MASK;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "manufacturer")
+    public void writeManufacturer(String newVal){
+        checkMutable();
+        manufacturer = newVal;
+    }
+    /**
+     * Determines if the manufacturer has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkManufacturerModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_MANUFACTURER_MASK);
+    }
+
+    /**
+     * Determines if the manufacturer has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkManufacturerInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_MANUFACTURER_MASK);
+    }
+    /**
+     * Getter method for {@link #madeDate}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.made_date</li>
+     * <li>comments: 设备生产日期</li>
+     * <li>column size: 10</li>
+     * <li>JDBC type returned by the driver: Types.DATE</li>
+     * </ul>
+     *
+     * @return the value of madeDate
+     */
+    public java.util.Date getMadeDate(){
+        return madeDate;
+    }
+    /** 
+     * use Long to represent date type for thrift:swift support 
+     * @see #getMadeDate()
+     */
+    @ThriftField(name = "madeDate",value = 11)
+    public Long readMadeDate(){
+        return null == madeDate ? null:madeDate.getTime();
+    }
+    /**
+     * Setter method for {@link #madeDate}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to madeDate
+     */
+    public void setMadeDate(java.util.Date newVal)
+    {
+        checkMutable();
+        if (Objects.equals(newVal, madeDate)) {
+            return;
+        }
+        madeDate = newVal;
+
+        modified |= FL_DEVICE_ID_MADE_DATE_MASK;
+        initialized |= FL_DEVICE_ID_MADE_DATE_MASK;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "madeDate")
+    public void writeMadeDate(Long newVal){
+        checkMutable();
+        madeDate = null == newVal?null:new java.util.Date(newVal);
+    }
+    /**
+     * Setter method for {@link #madeDate}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to madeDate
+     */
+    public void setMadeDate(long newVal)
+    {
+        setMadeDate(new java.util.Date(newVal));
+    }
+    /**
+     * Setter method for {@link #madeDate}.<br>
+     * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+     */
+    public void setMadeDate(Long newVal)
+    {
+        setMadeDate(null == newVal ? null : new java.util.Date(newVal));
+    }
+    /**
+     * Determines if the madeDate has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkMadeDateModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_MADE_DATE_MASK);
+    }
+
+    /**
+     * Determines if the madeDate has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkMadeDateInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_MADE_DATE_MASK);
+    }
+    /**
      * Getter method for {@link #version}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -408,7 +778,7 @@ public final class DeviceBean
      *
      * @return the value of version
      */
-    @ThriftField(value=7)
+    @ThriftField(value=12)
     public String getVersion(){
         return version;
     }
@@ -474,7 +844,7 @@ public final class DeviceBean
      *
      * @return the value of serialNo
      */
-    @ThriftField(value=8)
+    @ThriftField(value=13)
     public String getSerialNo(){
         return serialNo;
     }
@@ -540,7 +910,7 @@ public final class DeviceBean
      *
      * @return the value of mac
      */
-    @ThriftField(value=9)
+    @ThriftField(value=14)
     public String getMac(){
         return mac;
     }
@@ -606,7 +976,7 @@ public final class DeviceBean
      *
      * @return the value of remark
      */
-    @ThriftField(value=10)
+    @ThriftField(value=15)
     public String getRemark(){
         return remark;
     }
@@ -672,7 +1042,7 @@ public final class DeviceBean
      *
      * @return the value of extBin
      */
-    @ThriftField(value=11)
+    @ThriftField(value=16)
     public java.nio.ByteBuffer getExtBin(){
         return extBin;
     }
@@ -738,7 +1108,7 @@ public final class DeviceBean
      *
      * @return the value of extTxt
      */
-    @ThriftField(value=12)
+    @ThriftField(value=17)
     public String getExtTxt(){
         return extTxt;
     }
@@ -812,7 +1182,7 @@ public final class DeviceBean
      * use Long to represent date type for thrift:swift support 
      * @see #getCreateTime()
      */
-    @ThriftField(name = "createTime",value = 13)
+    @ThriftField(name = "createTime",value = 18)
     public Long readCreateTime(){
         return null == createTime ? null:createTime.getTime();
     }
@@ -904,7 +1274,7 @@ public final class DeviceBean
      * use Long to represent date type for thrift:swift support 
      * @see #getUpdateTime()
      */
-    @ThriftField(name = "updateTime",value = 14)
+    @ThriftField(name = "updateTime",value = 19)
     public Long readUpdateTime(){
         return null == updateTime ? null:updateTime.getTime();
     }
@@ -1014,6 +1384,16 @@ public final class DeviceBean
             return checkGroupIdModified();
         case FL_DEVICE_ID_NAME:
             return checkNameModified();
+        case FL_DEVICE_ID_PRODUCT_NAME:
+            return checkProductNameModified();
+        case FL_DEVICE_ID_MODEL:
+            return checkModelModified();
+        case FL_DEVICE_ID_VENDOR:
+            return checkVendorModified();
+        case FL_DEVICE_ID_MANUFACTURER:
+            return checkManufacturerModified();
+        case FL_DEVICE_ID_MADE_DATE:
+            return checkMadeDateModified();
         case FL_DEVICE_ID_VERSION:
             return checkVersionModified();
         case FL_DEVICE_ID_SERIAL_NO:
@@ -1044,6 +1424,16 @@ public final class DeviceBean
             return checkGroupIdInitialized();
         case FL_DEVICE_ID_NAME:
             return checkNameInitialized();
+        case FL_DEVICE_ID_PRODUCT_NAME:
+            return checkProductNameInitialized();
+        case FL_DEVICE_ID_MODEL:
+            return checkModelInitialized();
+        case FL_DEVICE_ID_VENDOR:
+            return checkVendorInitialized();
+        case FL_DEVICE_ID_MANUFACTURER:
+            return checkManufacturerInitialized();
+        case FL_DEVICE_ID_MADE_DATE:
+            return checkMadeDateInitialized();
         case FL_DEVICE_ID_VERSION:
             return checkVersionInitialized();
         case FL_DEVICE_ID_SERIAL_NO:
@@ -1094,6 +1484,11 @@ public final class DeviceBean
     {
         modified &= (~(FL_DEVICE_ID_GROUP_ID_MASK |
             FL_DEVICE_ID_NAME_MASK |
+            FL_DEVICE_ID_PRODUCT_NAME_MASK |
+            FL_DEVICE_ID_MODEL_MASK |
+            FL_DEVICE_ID_VENDOR_MASK |
+            FL_DEVICE_ID_MANUFACTURER_MASK |
+            FL_DEVICE_ID_MADE_DATE_MASK |
             FL_DEVICE_ID_VERSION_MASK |
             FL_DEVICE_ID_SERIAL_NO_MASK |
             FL_DEVICE_ID_MAC_MASK |
@@ -1117,6 +1512,11 @@ public final class DeviceBean
         /* DEFAULT:'1'*/
         this.groupId = new Integer(1);
         this.name = null;
+        this.productName = null;
+        this.model = null;
+        this.vendor = null;
+        this.manufacturer = null;
+        this.madeDate = null;
         this.version = null;
         this.serialNo = null;
         this.mac = null;
@@ -1143,6 +1543,11 @@ public final class DeviceBean
             .append(getId(), obj.getId())
             .append(getGroupId(), obj.getGroupId())
             .append(getName(), obj.getName())
+            .append(getProductName(), obj.getProductName())
+            .append(getModel(), obj.getModel())
+            .append(getVendor(), obj.getVendor())
+            .append(getManufacturer(), obj.getManufacturer())
+            .append(getMadeDate(), obj.getMadeDate())
             .append(getVersion(), obj.getVersion())
             .append(getSerialNo(), obj.getSerialNo())
             .append(getMac(), obj.getMac())
@@ -1242,6 +1647,51 @@ public final class DeviceBean
                 append(builder,fullIfStringOrBytes,getName());
             }
         }
+        if(checkProductNameInitialized()){
+            if(!notNull || null != getProductName()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("product_name=");
+                append(builder,fullIfStringOrBytes,getProductName());
+            }
+        }
+        if(checkModelInitialized()){
+            if(!notNull || null != getModel()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("model=");
+                append(builder,fullIfStringOrBytes,getModel());
+            }
+        }
+        if(checkVendorInitialized()){
+            if(!notNull || null != getVendor()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("vendor=");
+                append(builder,fullIfStringOrBytes,getVendor());
+            }
+        }
+        if(checkManufacturerInitialized()){
+            if(!notNull || null != getManufacturer()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("manufacturer=");
+                append(builder,fullIfStringOrBytes,getManufacturer());
+            }
+        }
+        if(checkMadeDateInitialized()){
+            if(!notNull || null != getMadeDate()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("made_date=");
+                append(builder,fullIfStringOrBytes,getMadeDate());
+            }
+        }
         if(checkVersionInitialized()){
             if(!notNull || null != getVersion()){
                 if(count++ >0){
@@ -1323,6 +1773,11 @@ public final class DeviceBean
             .append(getId(), object.getId())
             .append(getGroupId(), object.getGroupId())
             .append(getName(), object.getName())
+            .append(getProductName(), object.getProductName())
+            .append(getModel(), object.getModel())
+            .append(getVendor(), object.getVendor())
+            .append(getManufacturer(), object.getManufacturer())
+            .append(getMadeDate(), object.getMadeDate())
             .append(getVersion(), object.getVersion())
             .append(getSerialNo(), object.getSerialNo())
             .append(getMac(), object.getMac())
@@ -1354,6 +1809,11 @@ public final class DeviceBean
         setId((Integer)null);
         setGroupId((Integer)null);
         setName((String)null);
+        setProductName((String)null);
+        setModel((String)null);
+        setVendor((String)null);
+        setManufacturer((String)null);
+        setMadeDate((java.util.Date)null);
         setVersion((String)null);
         setSerialNo((String)null);
         setMac((String)null);
@@ -1457,6 +1917,16 @@ public final class DeviceBean
             return (T)getGroupId();        
         case FL_DEVICE_ID_NAME: 
             return (T)getName();        
+        case FL_DEVICE_ID_PRODUCT_NAME: 
+            return (T)getProductName();        
+        case FL_DEVICE_ID_MODEL: 
+            return (T)getModel();        
+        case FL_DEVICE_ID_VENDOR: 
+            return (T)getVendor();        
+        case FL_DEVICE_ID_MANUFACTURER: 
+            return (T)getManufacturer();        
+        case FL_DEVICE_ID_MADE_DATE: 
+            return (T)getMadeDate();        
         case FL_DEVICE_ID_VERSION: 
             return (T)getVersion();        
         case FL_DEVICE_ID_SERIAL_NO: 
@@ -1490,6 +1960,21 @@ public final class DeviceBean
             break;
         case FL_DEVICE_ID_NAME:
             setName((String)value);
+            break;
+        case FL_DEVICE_ID_PRODUCT_NAME:
+            setProductName((String)value);
+            break;
+        case FL_DEVICE_ID_MODEL:
+            setModel((String)value);
+            break;
+        case FL_DEVICE_ID_VENDOR:
+            setVendor((String)value);
+            break;
+        case FL_DEVICE_ID_MANUFACTURER:
+            setManufacturer((String)value);
+            break;
+        case FL_DEVICE_ID_MADE_DATE:
+            setMadeDate((java.util.Date)value);
             break;
         case FL_DEVICE_ID_VERSION:
             setVersion((String)value);
@@ -1606,6 +2091,56 @@ public final class DeviceBean
          */
         public Builder name(String name){
             TEMPLATE.get().setName(name);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device.product_name
+         * @param productName 产品名称
+         * @see DeviceBean#getProductName()
+         * @see DeviceBean#setProductName(String)
+         */
+        public Builder productName(String productName){
+            TEMPLATE.get().setProductName(productName);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device.model
+         * @param model 设备型号
+         * @see DeviceBean#getModel()
+         * @see DeviceBean#setModel(String)
+         */
+        public Builder model(String model){
+            TEMPLATE.get().setModel(model);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device.vendor
+         * @param vendor 设备供应商
+         * @see DeviceBean#getVendor()
+         * @see DeviceBean#setVendor(String)
+         */
+        public Builder vendor(String vendor){
+            TEMPLATE.get().setVendor(vendor);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device.manufacturer
+         * @param manufacturer 设备制造商
+         * @see DeviceBean#getManufacturer()
+         * @see DeviceBean#setManufacturer(String)
+         */
+        public Builder manufacturer(String manufacturer){
+            TEMPLATE.get().setManufacturer(manufacturer);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device.made_date
+         * @param madeDate 设备生产日期
+         * @see DeviceBean#getMadeDate()
+         * @see DeviceBean#setMadeDate(java.util.Date)
+         */
+        public Builder madeDate(java.util.Date madeDate){
+            TEMPLATE.get().setMadeDate(madeDate);
             return this;
         }
         /** 
