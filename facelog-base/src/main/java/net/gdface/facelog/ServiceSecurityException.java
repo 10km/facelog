@@ -3,6 +3,8 @@ package net.gdface.facelog;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
+import static com.google.common.base.Preconditions.*;
+
 /**
  * 安全异常
  * @author guyadong
@@ -59,10 +61,7 @@ public class ServiceSecurityException extends Exception {
 	}
 	
 	public ServiceSecurityException(SecurityExceptionType type) {
-		this();
-		if(type == null){
-			throw new NullPointerException("type is null");
-		}
+		this(checkNotNull(type, "type is null").name());
 		this.type = type;
 	}
     /** return exception type */
@@ -70,7 +69,9 @@ public class ServiceSecurityException extends Exception {
         return type;
     }
     public ServiceSecurityException setType(SecurityExceptionType type) {
-        this.type = type;
+    	if(null != type){
+    		this.type = type;
+    	}
         return this;
     }
 	public Integer getDeviceID() {
@@ -81,7 +82,17 @@ public class ServiceSecurityException extends Exception {
 		return this;
 	}
     
-    /** return a JSON string of declared fields  */
+    /**
+     * 如果父类方法返回空,则将错误类型{@link #type}名字返回
+	 * @see java.lang.Throwable#getMessage()
+	 */
+	@Override
+	public String getMessage() {
+		String msg = super.getMessage();
+		return msg == null ? type.name() : msg;
+	}
+
+	/** return a JSON string of declared fields  */
 	@Override
 	public String toString() {
 		if(null == transformer){
