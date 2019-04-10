@@ -5,10 +5,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.Set;
 import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.JedisPoolLazy.PropName;
 import gu.simplemq.redis.JedisUtils;
@@ -17,6 +20,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.jedis.exceptions.JedisDataException;
 
+import static com.google.common.base.Preconditions.*;
 /**
  * 
  * redis管理模块
@@ -25,6 +29,7 @@ import redis.clients.jedis.exceptions.JedisDataException;
  */
 class RedisManagement implements ServiceConstant{
 	private static final String CMD_PREFIX = "cmd_";
+	private static final String TASK_PREFIX = "task_";
 	private static final String LOG_MONITOR_PREFIX = "log_monitor_";
 	private static final String HEARTBEAT_MONITOR_PREFIX = "hb_monitor_";
 
@@ -35,6 +40,8 @@ class RedisManagement implements ServiceConstant{
 	private static Map<PropName, Object> parameters;
 	/** 消息系统(redis)基本参数  */
 	private final ImmutableMap<MQParam,String> redisParam ;
+	/** 所有任务队列key */
+	private static final Set<String> taskKeys = Sets.newConcurrentHashSet();
 	static{
 		parameters = GlobalConfig.makeRedisParameters();
 		JedisPoolLazy.createDefaultInstance(parameters);
@@ -71,6 +78,18 @@ class RedisManagement implements ServiceConstant{
 	private String createHeartbeatMonitorChannel(){
 		return createRandomConstOnRedis(KEY_HB_MONITOR_CHANNEL,HEARTBEAT_MONITOR_PREFIX);
 	}
+	private String taskKeyOf(String taskname){
+		return TASK_PREFIX + taskname + "_";
+	}
+	/** 创建随机任务通道
+	 * @param taskname 任务名 不可为{@code null}
+	 * @return 返回key
+	 */
+	private String createTaskQueue(String taskname){
+		String key = taskKeyOf(taskname);
+		createRandomConstOnRedis(key,key);
+		return key;
+	}
 	/**
 	 * 用当前时间生成一个随机的字符串值存到Redis服务器上({@code key})
 	 * @param key 常量名 redis上key
@@ -78,7 +97,6 @@ class RedisManagement implements ServiceConstant{
 	 * @return
 	 */
 	private String createRandomConstOnRedis(String key,String prefix){
-		// 初始化redis 全局常量 KEY_LOG_MONITOR_CHANNEL
 		String timestamp = String.format("%06x", System.nanoTime());
 		String monitorChannel = prefix + timestamp.substring(timestamp.length()-6, timestamp.length());
 		return JedisUtils.setnx(key,monitorChannel);		
@@ -182,6 +200,10 @@ class RedisManagement implements ServiceConstant{
 				jedis.del(KEY_CMD_CHANNEL);
 				jedis.del(KEY_LOG_MONITOR_CHANNEL);
 				jedis.del(KEY_HB_MONITOR_CHANNEL);
+				for(String key:taskKeys){
+					jedis.del(key);
+				}
+				taskKeys.clear();
 				jedis.shutdown();
 			}finally{
 				jedis.close();
@@ -191,5 +213,27 @@ class RedisManagement implements ServiceConstant{
 	/** 返回redis访问参数 */
 	protected Map<MQParam,String> getRedisParameters(){
 		return this.redisParam;
+	}
+	/**
+	 * 注册一个任务名<br>
+	 * 方法将会根据任务名在redis上生成一个对应的队列<br>
+	 * 对同一个任务名多次调用本方法，不会产生不同的队列名字
+	 * @param task 任务名
+	 * @return 返回保存队列名的key
+	 */
+	protected String registerTask(String task) {
+		checkArgument(Strings.isNullOrEmpty(task),"task is empty or null");
+		String key = createTaskQueue(task);
+		taskKeys.add(key);
+		return key;
+	}
+	/**
+	 * 根据任务名返回redis队列名
+	 * @param task 任务名
+	 * @return 返回redis队列名
+	 */
+	protected String taskQueueOf(String task) {	
+		checkArgument(Strings.isNullOrEmpty(task),"task is empty or null");
+		return JedisUtils.get(taskKeyOf(task));
 	}
 }

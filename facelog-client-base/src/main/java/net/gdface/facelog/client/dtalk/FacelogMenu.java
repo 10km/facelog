@@ -39,7 +39,9 @@ public class FacelogMenu extends RootMenu{
 	public static final String CMD_UPDATE = "update";
 	public static final String CMD_IDLE_MSG = "idleMessage";
 	public static final String CMD_PERSON_MSG = "personMessage";
-	
+	/** 对图像检测人脸提取人脸特征 */
+	public static final String CMD_FEATURE = "feature";
+
 	/** 基本命令所在菜单名 */
 	private static final String MENU_CMD = "cmd";
 	/* 扩展命令所在菜单名 */
@@ -49,13 +51,13 @@ public class FacelogMenu extends RootMenu{
 	/* 连接配置参数 */
 	private final ConnectConfigProvider config;
 	/**
+	 * 基本命令菜单
+	 */
+	private MenuItem commands;
+	/**
 	 * 扩展命令菜单
 	 */
 	private MenuItem cmdext;
-	/**
-	 * 基本从菜单
-	 */
-	private MenuItem commands;
 	protected FacelogMenu(ConnectConfigProvider config) {
 		this.config = config;
 	}
@@ -130,6 +132,9 @@ public class FacelogMenu extends RootMenu{
 								OptionType.BOOL.builder().name("isGroup").uiName("人员组标志").description("为true时,id参数为人员组ID,否则为人员ID").instance(),
 								OptionType.BOOL.builder().name("onceOnly").uiName("只显示一次").description("为true时只在id指定的用户通过时显示一次").instance(),
 								OptionType.INTEGER.builder().name("duration").uiName("持续时间").description("持续时间[分钟],为null一直显示").instance()
+								).instance(),
+						ItemBuilder.builder(CmdItem.class).name(CMD_FEATURE).uiName("提取人脸特征").addChilds(
+								OptionType.BASE64.builder().name("image").uiName("人脸图像").instance()
 								).instance()
 						)
 				.instance();
