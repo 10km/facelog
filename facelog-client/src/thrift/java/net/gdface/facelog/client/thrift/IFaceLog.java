@@ -1062,6 +1062,24 @@ public interface IFaceLog
             @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
+        @ThriftMethod(value = "taskQueueOf",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<String> taskQueueOf(
+            @ThriftField(value=1, name="task", requiredness=Requiredness.OPTIONAL) final String task,
+            @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        );
+
+        @ThriftMethod(value = "taskRegister",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<String> taskRegister(
+            @ThriftField(value=1, name="task", requiredness=Requiredness.OPTIONAL) final String task,
+            @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        );
+
         @ThriftMethod(value = "unregisterDevice",
                       exception = {
                           @ThriftException(type=ServiceSecurityException.class, id=1),
@@ -2140,6 +2158,24 @@ public interface IFaceLog
         @ThriftField(value=1, name="key", requiredness=Requiredness.OPTIONAL) final String key,
         @ThriftField(value=2, name="value", requiredness=Requiredness.OPTIONAL) final String value,
         @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "taskQueueOf",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    String taskQueueOf(
+        @ThriftField(value=1, name="task", requiredness=Requiredness.OPTIONAL) final String task,
+        @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "taskRegister",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    String taskRegister(
+        @ThriftField(value=1, name="task", requiredness=Requiredness.OPTIONAL) final String task,
+        @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "unregisterDevice",

@@ -1234,15 +1234,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			throw wrapServiceRuntimeException(e);
 		} 
     }
-    /**
-	 * 注册一个任务名<br>
-	 * 方法将会根据任务名在redis上生成一个对应的队列<br>
-	 * 对同一个任务名多次调用本方法，不会产生不同的队列名字
-	 * <br>{@link TokenMangement.Enable#ROOT_ONLY}
-	 * @param task 任务名
-	 * @param token 访问令牌
-	 * @return 返回保存队列名的key
-	 */
+
+	@Override
 	public String taskRegister(String task,Token token) {
     	try {
 			Enable.ROOT_ONLY.check(tm, token);
@@ -1251,13 +1244,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			throw wrapServiceRuntimeException(e);
 		} 
 	}
-	/**
-	 * 根据任务名返回redis队列名
-	 * <br>{@link TokenMangement.Enable#ALL}
-	 * @param task 任务名
-	 * @param token 访问令牌
-	 * @return 返回redis队列名
-	 */
+
+	@Override
 	public String taskQueueOf(String task,Token token) {	
     	try {
 			Enable.ALL.check(tm, token);

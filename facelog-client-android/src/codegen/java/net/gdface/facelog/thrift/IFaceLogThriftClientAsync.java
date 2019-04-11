@@ -3223,6 +3223,56 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(setProperty(key,value,token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#taskQueueOf(java.lang.String,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<String> taskQueueOf(String task,
+        Token token){
+        MethodCallback<String,String> nativeCallback = 
+            new MethodCallback<String,String>(
+                new Function<String,String>() {
+                        @Override
+                        public String apply(String input) {
+                            return input;
+                }});
+        nativeCallback.service.taskQueueOf(
+                task,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void taskQueueOf(String task,
+        Token token,
+        FutureCallback<String>callback){
+        factory.addCallback(taskQueueOf(task,token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#taskRegister(java.lang.String,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<String> taskRegister(String task,
+        Token token){
+        MethodCallback<String,String> nativeCallback = 
+            new MethodCallback<String,String>(
+                new Function<String,String>() {
+                        @Override
+                        public String apply(String input) {
+                            return input;
+                }});
+        nativeCallback.service.taskRegister(
+                task,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void taskRegister(String task,
+        Token token,
+        FutureCallback<String>callback){
+        factory.addCallback(taskRegister(task,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#unregisterDevice(int,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Void> unregisterDevice(int deviceId,

@@ -632,4 +632,12 @@ public class FacelogDefaultImpl implements IFaceLog {
 		return false;
 	}
 
+	public String taskQueueOf(String task, Token token) {
+		return null;
+	}
+
+	public String taskRegister(String task, Token token) {
+		return null;
+	}
+
 }

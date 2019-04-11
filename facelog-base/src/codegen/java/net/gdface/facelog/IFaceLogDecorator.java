@@ -835,6 +835,16 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public String taskQueueOf (String task,Token token) {
+        return delegate().taskQueueOf(task,token);
+    }
+
+    @Override
+    public String taskRegister (String task,Token token) {
+        return delegate().taskRegister(task,token);
+    }
+
+    @Override
     public void unregisterDevice (int deviceId,Token token) throws ServiceSecurityException{
          delegate().unregisterDevice(deviceId,token);
     }

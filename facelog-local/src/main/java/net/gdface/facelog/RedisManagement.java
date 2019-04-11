@@ -78,17 +78,8 @@ class RedisManagement implements ServiceConstant{
 	private String createHeartbeatMonitorChannel(){
 		return createRandomConstOnRedis(KEY_HB_MONITOR_CHANNEL,HEARTBEAT_MONITOR_PREFIX);
 	}
-	private String taskKeyOf(String taskname){
+	private static String taskKeyOf(String taskname){
 		return TASK_PREFIX + taskname + "_";
-	}
-	/** 创建随机任务通道
-	 * @param taskname 任务名 不可为{@code null}
-	 * @return 返回key
-	 */
-	private String createTaskQueue(String taskname){
-		String key = taskKeyOf(taskname);
-		createRandomConstOnRedis(key,key);
-		return key;
 	}
 	/**
 	 * 用当前时间生成一个随机的字符串值存到Redis服务器上({@code key})
@@ -223,14 +214,15 @@ class RedisManagement implements ServiceConstant{
 	 */
 	protected String taskRegister(String task) {
 		checkArgument(Strings.isNullOrEmpty(task),"task is empty or null");
-		String key = createTaskQueue(task);
+		String key = taskKeyOf(task);
+		createRandomConstOnRedis(key,key);
 		taskKeys.add(key);
 		return key;
 	}
 	/**
 	 * 根据任务名返回redis队列名
 	 * @param task 任务名
-	 * @return 返回redis队列名
+	 * @return 返回redis队列名,队列不存在则返回{@code null}
 	 */
 	protected String taskQueueOf(String task) {	
 		checkArgument(Strings.isNullOrEmpty(task),"task is empty or null");

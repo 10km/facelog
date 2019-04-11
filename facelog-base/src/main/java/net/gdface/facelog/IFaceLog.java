@@ -969,6 +969,26 @@ public interface IFaceLog{
      */
     public Map<MQParam,String> getRedisParameters(Token token);
 	/**
+	 * 注册一个任务名<br>
+	 * 方法将会根据任务名在redis上生成一个对应的队列<br>
+	 * 对同一个任务名多次调用本方法，不会产生不同的队列名字
+	 * <br>{@link TokenMangement.Enable#ROOT_ONLY}
+	 * @param task 任务名
+	 * @param token 访问令牌
+	 * @return 返回保存队列名的key
+	 */
+	public String taskRegister(String task, Token token);
+
+	/**
+	 * 根据任务名返回redis队列名
+	 * <br>{@link TokenMangement.Enable#ALL}
+	 * @param task 任务名
+	 * @param token 访问令牌
+	 * @return 返回redis队列名,队列不存在则返回{@code null}
+	 */
+	public String taskQueueOf(String task, Token token);
+
+	/**
 	 * 返回指定的参数,如果参数没有定义则返回{@code null}
 	 * <br>{@link TokenMangement.Enable#ROOT_ONLY}
 	 * @param key

@@ -2650,6 +2650,50 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public String taskQueueOf(String task,
+        Token token) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return instance.taskQueueOf(task,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public String taskRegister(String task,
+        Token token) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return instance.taskRegister(task,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
     public void unregisterDevice(int deviceId,
         Token token) 
         throws ServiceSecurityException{

@@ -330,6 +330,8 @@ service IFaceLog {
   void setPersonExpiryDateList(1: optional list<i32> personIdList, 2: required i64 expiryDate, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   void setProperties(1: optional map<string, string> config, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   void setProperty(1: optional string key, 2: optional string value, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
+  string taskQueueOf(1: optional string task, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
+  string taskRegister(1: optional string task, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   void unregisterDevice(1: required i32 deviceId, 2: optional Token token) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   DeviceBean updateDevice(1: optional DeviceBean deviceBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   string version() throws (1: ServiceRuntimeException ex1);

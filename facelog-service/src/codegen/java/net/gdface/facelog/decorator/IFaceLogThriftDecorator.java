@@ -2711,6 +2711,48 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#taskQueueOf(java.lang.String,net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "taskQueueOf" )
+    public String taskQueueOf(String task,
+        Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return delegate().taskQueueOf(task,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#taskRegister(java.lang.String,net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "taskRegister" )
+    public String taskRegister(String task,
+        Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return delegate().taskRegister(task,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#unregisterDevice(int,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "unregisterDevice" ,exception = {
