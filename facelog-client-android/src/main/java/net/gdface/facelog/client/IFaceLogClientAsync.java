@@ -1,5 +1,6 @@
 package net.gdface.facelog.client;
 
+import java.net.URI;
 import java.util.List;
 
 import com.google.common.base.Supplier;
@@ -16,6 +17,22 @@ public class IFaceLogClientAsync extends IFaceLogThriftClientAsync {
 	public IFaceLogClientAsync(ClientFactory factory) {
 		super(factory);
 		clientTools = new ClientExtendTools(this);
+	}
+	/**
+	 * 如果{@code host}是本机地址则用facelog服务主机名替换
+	 * @param host
+	 * @return {@code host} or host in {@link #factory}
+	 */
+	public String insteadHostIfLocalhost(String host) {
+		return clientTools.insteadHostIfLocalhost(host);
+	}
+	/**
+	 * 如果{@code uri}的主机名是本机地址则用facelog服务主机名替换
+	 * @param uri
+	 * @return {@code uri} or new URI instead with host of facelog
+	 */
+	public URI insteadHostIfLocalhost(URI uri) {
+		return clientTools.insteadHostIfLocalhost(uri);
 	}
 	/**
 	 * @param deviceId

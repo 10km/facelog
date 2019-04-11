@@ -1,21 +1,38 @@
 package net.gdface.facelog.client;
 
+import java.net.URI;
 import java.util.List;
 
 import com.google.common.base.Supplier;
 
 import gu.dtalk.MenuItem;
-import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.IFaceLogDecorator;
 import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
+import net.gdface.facelog.thrift.IFaceLogThriftClient;
 
 public class IFaceLogClient extends IFaceLogDecorator {
 	public final ClientExtendTools clientTools;
-	public IFaceLogClient(IFaceLog delegate) {
+	public IFaceLogClient(IFaceLogThriftClient delegate) {
 		super(delegate);
-		clientTools = new ClientExtendTools(this);
+		clientTools = new ClientExtendTools( delegate);
+	}
+	/**
+	 * 如果{@code host}是本机地址则用facelog服务主机名替换
+	 * @param host
+	 * @return {@code host} or host in {@link #factory}
+	 */
+	public String insteadHostIfLocalhost(String host) {
+		return clientTools.insteadHostIfLocalhost(host);
+	}
+	/**
+	 * 如果{@code uri}的主机名是本机地址则用facelog服务主机名替换
+	 * @param uri
+	 * @return {@code uri} or new URI instead with host of facelog
+	 */
+	public URI insteadHostIfLocalhost(URI uri) {
+		return clientTools.insteadHostIfLocalhost(uri);
 	}
 	/**
 	 * @param deviceId

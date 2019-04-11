@@ -42,6 +42,9 @@ import static com.google.common.base.Preconditions.*;
 public class IFaceLogThriftClientAsync {
     private final ClientFactory factory;
 
+    public ClientFactory getFactory() {
+		return factory;
+	}
     public IFaceLogThriftClientAsync(ClientFactory factory) {
         super();
         this.factory = checkNotNull(factory,"factory is null");

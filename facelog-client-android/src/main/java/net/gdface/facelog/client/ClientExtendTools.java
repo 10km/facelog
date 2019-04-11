@@ -4,14 +4,17 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
+import com.google.common.collect.ImmutableSet;
 
 import gu.dtalk.MenuItem;
 import gu.simplemq.redis.JedisPoolLazy;
@@ -24,7 +27,9 @@ import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
 import net.gdface.facelog.client.dtalk.FacelogRedisConfigProvider;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.PersonBean;
+import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.facelog.thrift.IFaceLogThriftClientAsync;
+import net.gdface.thrift.ClientFactory;
 
 /**
  * client端便利性扩展工具类
@@ -32,19 +37,55 @@ import net.gdface.facelog.thrift.IFaceLogThriftClientAsync;
  *
  */
 public class ClientExtendTools {
-	private IFaceLog syncInstance;
-	private IFaceLogThriftClientAsync asyncInstance;
-	ClientExtendTools(IFaceLog syncInstance) {
+	private final IFaceLog syncInstance;
+	private final IFaceLogThriftClientAsync asyncInstance;
+	private final ClientFactory factory;
+	private static Set<String> LOCAHOSTS = ImmutableSet.of("localhost","127.0.0.1");
+	ClientExtendTools(IFaceLogThriftClient syncInstance) {
 		super();
 		this.syncInstance = checkNotNull(syncInstance,"syncInstance is null");
 		this.asyncInstance = null;
+		factory = syncInstance.getFactory();
 	}
 	ClientExtendTools(IFaceLogThriftClientAsync asyncInstance) {
 		super();
 		this.syncInstance = null;
 		this.asyncInstance = checkNotNull(asyncInstance,"asyncInstance is null");
+		factory = asyncInstance.getFactory();
+
 	}
-    
+	/**
+	 * 如果{@code host}是本机地址则用facelog服务主机名替换
+	 * @param host
+	 * @return {@code host} or host in {@link #factory}
+	 */
+	public String insteadHostIfLocalhost(String host){
+		if(LOCAHOSTS.contains(host)){
+			return factory.getHostAndPort().getHost();
+		}
+		return host;
+	}
+	/**
+	 * 如果{@code uri}的主机名是本机地址则用facelog服务主机名替换
+	 * @param uri
+	 * @return {@code uri} or new URI instead with host of facelog
+	 */
+	public URI insteadHostIfLocalhost(URI uri){
+		if(LOCAHOSTS.contains(uri.getHost())){
+			try {
+				return new URI(uri.getScheme(),
+				           uri.getUserInfo(), 
+				           factory.getHostAndPort().getHost(), 
+				           uri.getPort(),
+				           uri.getPath(), 
+				           uri.getQuery(), 
+				           uri.getFragment());
+			} catch (URISyntaxException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return uri;
+	}
     /**
      * 根据设备ID返回设备所属的设备组ID的{@code Function}实例,
      * 设备ID无效则返回{@code null}
@@ -419,7 +460,7 @@ public class ClientExtendTools {
 		initDtalkRedisLocation(deviceToken);
 		return new DtalkEngineForFacelog(checkNotNull(rootMenu,"rootMenu is null"), tokenRank);		
 	}
-	
+
 	/**
 	 * 初始化dtalk的redis的连接参数
 	 * @param token
@@ -427,7 +468,8 @@ public class ClientExtendTools {
 	 */
 	public void initDtalkRedisLocation(Token token){
 		Map<MQParam, String> redisParam = getRedisParameters(token);
-		FacelogRedisConfigProvider.setRedisLocation(URI.create(redisParam.get(MQParam.REDIS_URI)));
+		URI uri = insteadHostIfLocalhost(URI.create(redisParam.get(MQParam.REDIS_URI)));
+		FacelogRedisConfigProvider.setRedisLocation(uri);
 	}
 	/**
 	 * 从facelog获取redis连接参数，初始化为{@link JedisPoolLazy}的默认实例<br>
@@ -438,6 +480,7 @@ public class ClientExtendTools {
 	 */
 	public void initRedisDefaultInstance(Token token){
 		Map<MQParam, String> redisParam = getRedisParameters(token);
-		JedisPoolLazy.getInstance(URI.create(redisParam.get(MQParam.REDIS_URI))).asDefaultInstance();
+		URI uri = insteadHostIfLocalhost(URI.create(redisParam.get(MQParam.REDIS_URI)));
+		JedisPoolLazy.getInstance(uri).asDefaultInstance();
 	}
 }

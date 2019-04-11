@@ -41,7 +41,11 @@ import static com.google.common.base.Preconditions.*;
 public class IFaceLogThriftClient implements IFaceLog {
     private final ClientFactory factory;
 
-    public IFaceLogThriftClient(ClientFactory factory) {
+    public ClientFactory getFactory() {
+		return factory;
+	}
+
+	public IFaceLogThriftClient(ClientFactory factory) {
         super();
         this.factory = checkNotNull(factory,"factory is null");
     }

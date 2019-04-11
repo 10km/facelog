@@ -47,6 +47,9 @@ import static net.gdface.thrift.ThriftUtils.returnNull;
 public class IFaceLogThriftClient implements IFaceLog {
     private final ClientFactory factory;
 
+    public ClientFactory getFactory() {
+		return factory;
+	}
     public IFaceLogThriftClient(ClientFactory factory) {
         super();
         this.factory = checkNotNull(factory,"factory is null");
