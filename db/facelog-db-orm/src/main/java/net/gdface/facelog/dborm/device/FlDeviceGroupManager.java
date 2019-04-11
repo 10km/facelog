@@ -1219,6 +1219,14 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                 dirtyCount++;
             }
 
+            if (bean.checkRootGroupModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("root_group");
+                dirtyCount++;
+            }
+
             if (bean.checkRemarkModified()) {
                 if (dirtyCount>0) {
                     sql.append(",");
@@ -1374,6 +1382,15 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                     useComma=true;
                 }
                 sql.append("parent=?");
+            }
+
+            if (bean.checkRootGroupModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("root_group=?");
             }
 
             if (bean.checkRemarkModified()) {
@@ -1985,6 +2002,14 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("parent = ?");
                 }
             }
+            if (bean.checkRootGroupModified()) {
+                dirtyCount ++;
+                if (bean.getRootGroup() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("root_group IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("root_group = ?");
+                }
+            }
             if (bean.checkRemarkModified()) {
                 dirtyCount ++;
                 if (bean.getRemark() == null) {
@@ -2083,6 +2108,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
             if (bean.checkParentModified()) {
                 // System.out.println("Setting for " + dirtyCount + " [" + bean.getParent() + "]");
                 if (bean.getParent() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getParent()); }
+            }
+            if (bean.checkRootGroupModified()) {
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getRootGroup() + "]");
+                if (bean.getRootGroup() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getRootGroup()); }
             }
             if (bean.checkRemarkModified()) {
                 switch (searchType) {
@@ -2261,11 +2290,12 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
             bean.setName(rs.getString(2));
             bean.setLeaf(Manager.getInteger(rs, 3));
             bean.setParent(Manager.getInteger(rs, 4));
-            bean.setRemark(rs.getString(5));
-            bean.setExtBin(Manager.getBytes(rs, 6));
-            bean.setExtTxt(rs.getString(7));
-            bean.setCreateTime(rs.getTimestamp(8));
-            bean.setUpdateTime(rs.getTimestamp(9));
+            bean.setRootGroup(Manager.getInteger(rs, 5));
+            bean.setRemark(rs.getString(6));
+            bean.setExtBin(Manager.getBytes(rs, 7));
+            bean.setExtTxt(rs.getString(8));
+            bean.setCreateTime(rs.getTimestamp(9));
+            bean.setUpdateTime(rs.getTimestamp(10));
         }
         catch(SQLException e)
         {
@@ -2313,6 +2343,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                     case FL_DEVICE_GROUP_ID_PARENT:
                         ++pos;
                         bean.setParent(Manager.getInteger(rs, pos));
+                        break;
+                    case FL_DEVICE_GROUP_ID_ROOT_GROUP:
+                        ++pos;
+                        bean.setRootGroup(Manager.getInteger(rs, pos));
                         break;
                     case FL_DEVICE_GROUP_ID_REMARK:
                         ++pos;
@@ -2366,6 +2400,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
             bean.setName(rs.getString("name"));
             bean.setLeaf(Manager.getInteger(rs, "leaf"));
             bean.setParent(Manager.getInteger(rs, "parent"));
+            bean.setRootGroup(Manager.getInteger(rs, "root_group"));
             bean.setRemark(rs.getString("remark"));
             bean.setExtBin(Manager.getBytes(rs, "ext_bin"));
             bean.setExtTxt(rs.getString("ext_txt"));

@@ -166,7 +166,7 @@ public interface DaoConstant {
     public static interface DeviceGroupConst{
         public static final String TABLENAME = "fl_device_group";
         /** column count for fl_device_group table */
-        public static final int COLUMN_COUNT = 9;
+        public static final int COLUMN_COUNT = 10;
         /** primary keys count for fl_device_group table */
         public static final int PRIMARY_KEY_COUNT = 1;
         /** foreign keys count for fl_device_group table */
@@ -180,6 +180,7 @@ public interface DaoConstant {
                             + ",fl_device_group.name"
                             + ",fl_device_group.leaf"
                             + ",fl_device_group.parent"
+                            + ",fl_device_group.root_group"
                             + ",fl_device_group.remark"
                             + ",fl_device_group.ext_bin"
                             + ",fl_device_group.ext_txt"
@@ -190,6 +191,7 @@ public interface DaoConstant {
                             + ",name"
                             + ",leaf"
                             + ",parent"
+                            + ",root_group"
                             + ",remark"
                             + ",ext_bin"
                             + ",ext_txt"
@@ -202,6 +204,7 @@ public interface DaoConstant {
                             + ",name"
                             + ",leaf"
                             + ",parent"
+                            + ",rootGroup"
                             + ",remark"
                             + ",extBin"
                             + ",extTxt"
@@ -230,16 +233,18 @@ public interface DaoConstant {
             leaf("fl_device_group","leaf",3,"getLeaf","setLeaf"),
             /** constant for fl_device_group.parent  */
             parent("fl_device_group","parent",4,"getParent","setParent"),
+            /** constant for fl_device_group.root_group  */
+            rootGroup("fl_device_group","root_group",5,"getRootGroup","setRootGroup"),
             /** constant for fl_device_group.remark  */
-            remark("fl_device_group","remark",5,"getRemark","setRemark"),
+            remark("fl_device_group","remark",6,"getRemark","setRemark"),
             /** constant for fl_device_group.ext_bin  */
-            extBin("fl_device_group","ext_bin",6,"getExtBin","setExtBin"),
+            extBin("fl_device_group","ext_bin",7,"getExtBin","setExtBin"),
             /** constant for fl_device_group.ext_txt  */
-            extTxt("fl_device_group","ext_txt",7,"getExtTxt","setExtTxt"),
+            extTxt("fl_device_group","ext_txt",8,"getExtTxt","setExtTxt"),
             /** constant for fl_device_group.create_time  */
-            createTime("fl_device_group","create_time",8,"getCreateTime","setCreateTime"),
+            createTime("fl_device_group","create_time",9,"getCreateTime","setCreateTime"),
             /** constant for fl_device_group.update_time  */
-            updateTime("fl_device_group","update_time",9,"getUpdateTime","setUpdateTime");
+            updateTime("fl_device_group","update_time",10,"getUpdateTime","setUpdateTime");
             final ColumnMeta meta;
             private Column(String table,String field,int ordinal,String getter,String setter){
                 meta = new ColumnMeta(table,field,ordinal,getter,setter);

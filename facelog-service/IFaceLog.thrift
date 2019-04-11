@@ -103,11 +103,12 @@ struct DeviceGroupBean {
   5: optional string name;
   6: optional i32 leaf;
   7: optional i32 parent;
-  8: optional string remark;
-  9: optional binary extBin;
-  10: optional string extTxt;
-  11: optional i64 createTime;
-  12: optional i64 updateTime;
+  8: optional i32 rootGroup;
+  9: optional string remark;
+  10: optional binary extBin;
+  11: optional string extTxt;
+  12: optional i64 createTime;
+  13: optional i64 updateTime;
 }
 
 struct PersonGroupBean {

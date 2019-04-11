@@ -65,7 +65,7 @@ public interface Constant {
     
     public static final int FL_DEVICE_COLUMN_COUNT = 16;
     public static final int FL_DEVICE_PK_COUNT = 1;
-    public static final int FL_DEVICE_GROUP_COLUMN_COUNT = 9;
+    public static final int FL_DEVICE_GROUP_COLUMN_COUNT = 10;
     public static final int FL_DEVICE_GROUP_PK_COUNT = 1;
     public static final int FL_FACE_COLUMN_COUNT = 19;
     public static final int FL_FACE_PK_COUNT = 1;
@@ -251,21 +251,24 @@ public interface Constant {
     /** Identify the fl_device_group.parent field (ordinal:4). */
     public static final int FL_DEVICE_GROUP_ID_PARENT = 3;
     public static final long FL_DEVICE_GROUP_ID_PARENT_MASK = 1L << 3;
-    /** Identify the fl_device_group.remark field (ordinal:5). */
-    public static final int FL_DEVICE_GROUP_ID_REMARK = 4;
-    public static final long FL_DEVICE_GROUP_ID_REMARK_MASK = 1L << 4;
-    /** Identify the fl_device_group.ext_bin field (ordinal:6). */
-    public static final int FL_DEVICE_GROUP_ID_EXT_BIN = 5;
-    public static final long FL_DEVICE_GROUP_ID_EXT_BIN_MASK = 1L << 5;
-    /** Identify the fl_device_group.ext_txt field (ordinal:7). */
-    public static final int FL_DEVICE_GROUP_ID_EXT_TXT = 6;
-    public static final long FL_DEVICE_GROUP_ID_EXT_TXT_MASK = 1L << 6;
-    /** Identify the fl_device_group.create_time field (ordinal:8). */
-    public static final int FL_DEVICE_GROUP_ID_CREATE_TIME = 7;
-    public static final long FL_DEVICE_GROUP_ID_CREATE_TIME_MASK = 1L << 7;
-    /** Identify the fl_device_group.update_time field (ordinal:9). */
-    public static final int FL_DEVICE_GROUP_ID_UPDATE_TIME = 8;
-    public static final long FL_DEVICE_GROUP_ID_UPDATE_TIME_MASK = 1L << 8;
+    /** Identify the fl_device_group.root_group field (ordinal:5). */
+    public static final int FL_DEVICE_GROUP_ID_ROOT_GROUP = 4;
+    public static final long FL_DEVICE_GROUP_ID_ROOT_GROUP_MASK = 1L << 4;
+    /** Identify the fl_device_group.remark field (ordinal:6). */
+    public static final int FL_DEVICE_GROUP_ID_REMARK = 5;
+    public static final long FL_DEVICE_GROUP_ID_REMARK_MASK = 1L << 5;
+    /** Identify the fl_device_group.ext_bin field (ordinal:7). */
+    public static final int FL_DEVICE_GROUP_ID_EXT_BIN = 6;
+    public static final long FL_DEVICE_GROUP_ID_EXT_BIN_MASK = 1L << 6;
+    /** Identify the fl_device_group.ext_txt field (ordinal:8). */
+    public static final int FL_DEVICE_GROUP_ID_EXT_TXT = 7;
+    public static final long FL_DEVICE_GROUP_ID_EXT_TXT_MASK = 1L << 7;
+    /** Identify the fl_device_group.create_time field (ordinal:9). */
+    public static final int FL_DEVICE_GROUP_ID_CREATE_TIME = 8;
+    public static final long FL_DEVICE_GROUP_ID_CREATE_TIME_MASK = 1L << 8;
+    /** Identify the fl_device_group.update_time field (ordinal:10). */
+    public static final int FL_DEVICE_GROUP_ID_UPDATE_TIME = 9;
+    public static final long FL_DEVICE_GROUP_ID_UPDATE_TIME_MASK = 1L << 9;
     /** Identify the fl_face.id field (ordinal:1). */
     public static final int FL_FACE_ID_ID = 0;
     public static final long FL_FACE_ID_ID_MASK = 1L << 0;
@@ -575,6 +578,7 @@ public interface Constant {
                             + ",fl_device_group.name"
                             + ",fl_device_group.leaf"
                             + ",fl_device_group.parent"
+                            + ",fl_device_group.root_group"
                             + ",fl_device_group.remark"
                             + ",fl_device_group.ext_bin"
                             + ",fl_device_group.ext_txt"
@@ -585,6 +589,7 @@ public interface Constant {
                             + ",name"
                             + ",leaf"
                             + ",parent"
+                            + ",root_group"
                             + ",remark"
                             + ",ext_bin"
                             + ",ext_txt"
@@ -596,6 +601,7 @@ public interface Constant {
                             + ",name"
                             + ",leaf"
                             + ",parent"
+                            + ",rootGroup"
                             + ",remark"
                             + ",extBin"
                             + ",extTxt"
