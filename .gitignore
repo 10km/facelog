@@ -12,3 +12,4 @@ log/
 /facelog-service/dump.rdb
 *.~vdx
 *.log
+*.iml
