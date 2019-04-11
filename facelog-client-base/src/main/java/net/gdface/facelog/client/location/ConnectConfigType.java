@@ -92,7 +92,7 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 	}
 
 	/**
-	 * 按照如下优先顺序测试配置的redis连接，返回第一个能建立有效连接的配置，否则抛出异常<br>
+	 * 按照如下优先顺序测试配置的facelog服务连接，返回第一个能建立有效连接的配置，否则抛出异常<br>
 	 * <li>{@link ConnectConfigType#CUSTOM}</li>
 	 * <li>{@link ConnectConfigType#LAN}</li>
 	 * <li>{@link ConnectConfigType#CLOUD}</li>
