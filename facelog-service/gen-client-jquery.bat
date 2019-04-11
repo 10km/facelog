@@ -4,7 +4,7 @@ set sh_folder=%~dp0
 rem 删除最后的 '\'
 set sh_folder=%sh_folder:~0,-1%
 pushd "%sh_folder%"
-set OUT_FOLDER=%sh_folder%\..\facelog-client-ext\node.js
+set OUT_FOLDER=%sh_folder%\..\facelog-client-ext\jquery
 :: 指定thrift compiler位置
 where thrift >nul 2>nul
 if errorlevel 1 (
@@ -17,7 +17,7 @@ if exist "%OUT_FOLDER%" (
 	)
 if not exist "%OUT_FOLDER%" mkdir  "%OUT_FOLDER%"
 
-%THRIFT_EXE% --gen js:node^
+%THRIFT_EXE% --gen js:jquery^
 	-out "%OUT_FOLDER%" ^
 	%sh_folder%\IFaceLog.thrift 
 
