@@ -9,6 +9,9 @@ import net.gdface.facelog.CommonConstant;
  */
 public class DefaultLocalConnectConfigProvider implements ConnectConfigProvider,CommonConstant {
 
+	public DefaultLocalConnectConfigProvider() {
+	}
+
 	@Override
 	public String getHost() {
 		return "landtalkhost";
