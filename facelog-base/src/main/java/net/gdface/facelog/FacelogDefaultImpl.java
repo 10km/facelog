@@ -648,10 +648,10 @@ public class FacelogDefaultImpl implements IFaceLog {
 		return null;
 	}
 
-	public void unbindBorder(Integer personGroupId, Integer deviceGroupId) {
+	public void unbindBorder(Integer personGroupId, Integer deviceGroupId, Token token) {
 	}
 
-	public void bindBorder(Integer personGroupId, Integer deviceGroupId) {
+	public void bindBorder(Integer personGroupId, Integer deviceGroupId, Token token) {
 	}
 
 }

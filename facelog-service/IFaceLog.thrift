@@ -225,7 +225,7 @@ service IFaceLog {
   i64 applyCmdSn(1: optional Token token) throws (1: ServiceRuntimeException ex1);
   Token applyPersonToken(1: required i32 personId, 2: optional string password, 3: required bool isMd5) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   Token applyRootToken(1: optional string password, 2: required bool isMd5) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
-  void bindBorder(1: optional i32 personGroupId, 2: optional i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
+  void bindBorder(1: optional i32 personGroupId, 2: optional i32 deviceGroupId, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 countDeviceByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   i32 countDeviceGroupByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   i32 countLogByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
@@ -336,7 +336,7 @@ service IFaceLog {
   void setProperty(1: optional string key, 2: optional string value, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   string taskQueueOf(1: optional string task, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   string taskRegister(1: optional string task, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
-  void unbindBorder(1: optional i32 personGroupId, 2: optional i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
+  void unbindBorder(1: optional i32 personGroupId, 2: optional i32 deviceGroupId, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   void unregisterDevice(1: required i32 deviceId, 2: optional Token token) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   DeviceBean updateDevice(1: optional DeviceBean deviceBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   string version() throws (1: ServiceRuntimeException ex1);

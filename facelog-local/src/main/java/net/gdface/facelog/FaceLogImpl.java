@@ -976,7 +976,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	/////////////////////MANAGEMENT BORDER/////
 
 	@Override
-	public void bindBorder(Integer personGroupId,Integer deviceGroupId) {
+	public void bindBorder(Integer personGroupId,Integer deviceGroupId, Token token) {
     	try{
     		dm.daoBindBorder(personGroupId,deviceGroupId);
 		} catch (RuntimeException e) {
@@ -985,7 +985,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	}
 
 	@Override
-	public void unbindBorder(Integer personGroupId,Integer deviceGroupId) {
+	public void unbindBorder(Integer personGroupId,Integer deviceGroupId, Token token) {
     	try{
     		dm.daoUnbindBorder(personGroupId,deviceGroupId);
 		} catch (RuntimeException e) {

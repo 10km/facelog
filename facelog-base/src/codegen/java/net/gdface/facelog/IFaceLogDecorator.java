@@ -225,8 +225,8 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public void bindBorder (Integer personGroupId,Integer deviceGroupId) {
-         delegate().bindBorder(personGroupId,deviceGroupId);
+    public void bindBorder (Integer personGroupId,Integer deviceGroupId,Token token) {
+         delegate().bindBorder(personGroupId,deviceGroupId,token);
     }
 
     @Override
@@ -860,8 +860,8 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public void unbindBorder (Integer personGroupId,Integer deviceGroupId) {
-         delegate().unbindBorder(personGroupId,deviceGroupId);
+    public void unbindBorder (Integer personGroupId,Integer deviceGroupId,Token token) {
+         delegate().unbindBorder(personGroupId,deviceGroupId,token);
     }
 
     @Override

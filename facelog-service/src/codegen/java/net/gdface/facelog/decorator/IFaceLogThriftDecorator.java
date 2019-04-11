@@ -400,15 +400,20 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#bindBorder(java.lang.Integer,java.lang.Integer)}
+     * @see {@link net.gdface.facelog.IFaceLog#bindBorder(java.lang.Integer,java.lang.Integer,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "bindBorder" )
     public void bindBorder(Integer personGroupId,
-        Integer deviceGroupId) 
+        Integer deviceGroupId,
+        Token token) 
         throws ServiceRuntimeException{
         try{
              delegate().bindBorder(personGroupId,
-                deviceGroupId);
+                deviceGroupId,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
         }
         catch(ServiceRuntimeException e){
             throw e;
@@ -2803,15 +2808,20 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#unbindBorder(java.lang.Integer,java.lang.Integer)}
+     * @see {@link net.gdface.facelog.IFaceLog#unbindBorder(java.lang.Integer,java.lang.Integer,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "unbindBorder" )
     public void unbindBorder(Integer personGroupId,
-        Integer deviceGroupId) 
+        Integer deviceGroupId,
+        Token token) 
         throws ServiceRuntimeException{
         try{
              delegate().unbindBorder(personGroupId,
-                deviceGroupId);
+                deviceGroupId,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
         }
         catch(ServiceRuntimeException e){
             throw e;

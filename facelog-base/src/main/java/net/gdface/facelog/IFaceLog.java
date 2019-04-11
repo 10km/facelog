@@ -728,22 +728,26 @@ public interface IFaceLog{
     /**
 	 * 创建管理边界<br>
 	 * 设置fl_person_group.root_group和fl_device_group.root_group字段互相指向<br>
-	 * 没有找到personGroupId或deviceGroupId指定的记录抛出异常
-	 * 以事务操作方式更新数据库
+	 * 没有找到personGroupId或deviceGroupId指定的记录抛出异常,
+	 * 以事务操作方式更新数据库<br>
+	 * <br>{@link TokenMangement.Enable#ROOT}<br>
 	 * @param personGroupId 人员组id
-	 * @param deviceGroupId 设备组id
+     * @param deviceGroupId 设备组id
+     * @param token 访问令牌
 	 */
-	public void bindBorder(Integer personGroupId, Integer deviceGroupId);
+	public void bindBorder(Integer personGroupId, Integer deviceGroupId, Token token);
 	/**
 	 * 删除管理边界<br>
 	 * 删除fl_person_group.root_group和fl_device_group.root_group字段的互相指向,设置为{@code null},
 	 * 以事务操作方式更新数据库<br>
-	 * 如果personGroupId和deviceGroupId不存在绑定关系则跳过<br>
-	 * 没有找到personGroupId或deviceGroupId指定的记录抛出异常
+	 * 如果personGroupId和deviceGroupId不存在绑定关系则跳过,
+	 * 没有找到personGroupId或deviceGroupId指定的记录抛出异常<br>
+	 * <br>{@link TokenMangement.Enable#ROOT}<br>
 	 * @param personGroupId 人员组id
 	 * @param deviceGroupId 设备组id
+	 * @param token 访问令牌
 	 */
-	public void unbindBorder(Integer personGroupId, Integer deviceGroupId);
+	public void unbindBorder(Integer personGroupId, Integer deviceGroupId, Token token);
     /**
 	 * 返回personId所属的管理边界人员组id<br>
 	 * 在personId所属组的所有父节点中自顶向下查找第一个{@code fl_person_group.root_group}字段不为空的人员组，返回此记录组id<br>

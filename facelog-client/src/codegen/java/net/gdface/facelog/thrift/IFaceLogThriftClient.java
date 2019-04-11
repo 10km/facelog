@@ -406,12 +406,17 @@ public class IFaceLogThriftClient implements IFaceLog {
     }
     @Override
     public void bindBorder(Integer personGroupId,
-        Integer deviceGroupId) 
+        Integer deviceGroupId,
+        Token token) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
              instance.bindBorder(personGroupId,
-                deviceGroupId);
+                deviceGroupId,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -2745,12 +2750,17 @@ public class IFaceLogThriftClient implements IFaceLog {
     }
     @Override
     public void unbindBorder(Integer personGroupId,
-        Integer deviceGroupId) 
+        Integer deviceGroupId,
+        Token token) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
              instance.unbindBorder(personGroupId,
-                deviceGroupId);
+                deviceGroupId,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);

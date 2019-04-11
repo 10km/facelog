@@ -552,7 +552,8 @@ public class IFaceLogThriftClient implements IFaceLog {
     }
     @Override
     public void bindBorder(final Integer personGroupId,
-        final Integer deviceGroupId) 
+        final Integer deviceGroupId,
+        final Token token) 
         {
         try{
              syncCall(new Function<Void,Void>() {
@@ -563,7 +564,10 @@ public class IFaceLogThriftClient implements IFaceLog {
                 new ServiceAsyncCall<Void>(){
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Void> nativeCallback){
-                    service.bindBorder(personGroupId,deviceGroupId,nativeCallback);
+                    service.bindBorder(personGroupId,deviceGroupId,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                 }});
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
@@ -3634,7 +3638,8 @@ public class IFaceLogThriftClient implements IFaceLog {
     }
     @Override
     public void unbindBorder(final Integer personGroupId,
-        final Integer deviceGroupId) 
+        final Integer deviceGroupId,
+        final Token token) 
         {
         try{
              syncCall(new Function<Void,Void>() {
@@ -3645,7 +3650,10 @@ public class IFaceLogThriftClient implements IFaceLog {
                 new ServiceAsyncCall<Void>(){
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Void> nativeCallback){
-                    service.unbindBorder(personGroupId,deviceGroupId,nativeCallback);
+                    service.unbindBorder(personGroupId,deviceGroupId,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                 }});
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){

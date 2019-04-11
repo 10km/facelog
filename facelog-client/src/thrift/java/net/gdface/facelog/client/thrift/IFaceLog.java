@@ -143,7 +143,8 @@ public interface IFaceLog
                       })
         ListenableFuture<Void> bindBorder(
             @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.OPTIONAL) final Integer personGroupId,
-            @ThriftField(value=2, name="deviceGroupId", requiredness=Requiredness.OPTIONAL) final Integer deviceGroupId
+            @ThriftField(value=2, name="deviceGroupId", requiredness=Requiredness.OPTIONAL) final Integer deviceGroupId,
+            @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
         @ThriftMethod(value = "countDeviceByWhere",
@@ -1111,7 +1112,8 @@ public interface IFaceLog
                       })
         ListenableFuture<Void> unbindBorder(
             @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.OPTIONAL) final Integer personGroupId,
-            @ThriftField(value=2, name="deviceGroupId", requiredness=Requiredness.OPTIONAL) final Integer deviceGroupId
+            @ThriftField(value=2, name="deviceGroupId", requiredness=Requiredness.OPTIONAL) final Integer deviceGroupId,
+            @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
         @ThriftMethod(value = "unregisterDevice",
@@ -1275,7 +1277,8 @@ public interface IFaceLog
                   })
     void bindBorder(
         @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.OPTIONAL) final Integer personGroupId,
-        @ThriftField(value=2, name="deviceGroupId", requiredness=Requiredness.OPTIONAL) final Integer deviceGroupId
+        @ThriftField(value=2, name="deviceGroupId", requiredness=Requiredness.OPTIONAL) final Integer deviceGroupId,
+        @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "countDeviceByWhere",
@@ -2243,7 +2246,8 @@ public interface IFaceLog
                   })
     void unbindBorder(
         @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.OPTIONAL) final Integer personGroupId,
-        @ThriftField(value=2, name="deviceGroupId", requiredness=Requiredness.OPTIONAL) final Integer deviceGroupId
+        @ThriftField(value=2, name="deviceGroupId", requiredness=Requiredness.OPTIONAL) final Integer deviceGroupId,
+        @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "unregisterDevice",
