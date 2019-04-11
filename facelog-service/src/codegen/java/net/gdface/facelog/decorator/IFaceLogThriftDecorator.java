@@ -400,6 +400,24 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#bindBorder(java.lang.Integer,java.lang.Integer)}
+     */
+    @ThriftMethod(value = "bindBorder" )
+    public void bindBorder(Integer personGroupId,
+        Integer deviceGroupId) 
+        throws ServiceRuntimeException{
+        try{
+             delegate().bindBorder(personGroupId,
+                deviceGroupId);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#countDeviceByWhere(java.lang.String)}
      */
     @ThriftMethod(value = "countDeviceByWhere" )
@@ -2197,6 +2215,38 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#rootGroupOfDevice(java.lang.Integer)}
+     */
+    @ThriftMethod(value = "rootGroupOfDevice" )
+    public Integer rootGroupOfDevice(Integer deviceId) 
+        throws ServiceRuntimeException{
+        try{
+            return delegate().rootGroupOfDevice(deviceId);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#rootGroupOfPerson(java.lang.Integer)}
+     */
+    @ThriftMethod(value = "rootGroupOfPerson" )
+    public Integer rootGroupOfPerson(Integer personId) 
+        throws ServiceRuntimeException{
+        try{
+            return delegate().rootGroupOfPerson(personId);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#saveDevice(net.gdface.facelog.db.DeviceBean,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "saveDevice" )
@@ -2744,6 +2794,24 @@ public class IFaceLogThriftDecorator {
                     token,
                     Token.class,
                     net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#unbindBorder(java.lang.Integer,java.lang.Integer)}
+     */
+    @ThriftMethod(value = "unbindBorder" )
+    public void unbindBorder(Integer personGroupId,
+        Integer deviceGroupId) 
+        throws ServiceRuntimeException{
+        try{
+             delegate().unbindBorder(personGroupId,
+                deviceGroupId);
         }
         catch(ServiceRuntimeException e){
             throw e;

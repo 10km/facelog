@@ -640,4 +640,18 @@ public class FacelogDefaultImpl implements IFaceLog {
 		return null;
 	}
 
+	public Integer rootGroupOfDevice(Integer deviceId) {
+		return null;
+	}
+
+	public Integer rootGroupOfPerson(Integer personId) {
+		return null;
+	}
+
+	public void unbindBorder(Integer personGroupId, Integer deviceGroupId) {
+	}
+
+	public void bindBorder(Integer personGroupId, Integer deviceGroupId) {
+	}
+
 }

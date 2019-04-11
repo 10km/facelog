@@ -17,15 +17,18 @@ import java.util.Map.Entry;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import net.gdface.facelog.db.DeviceBean;
+import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
@@ -33,6 +36,7 @@ import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.StoreBean;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.image.LazyImage;
 import net.gdface.image.NotImageException;
@@ -413,5 +417,99 @@ public class DaoManagement extends BaseDao {
 		@SuppressWarnings("unused")
 		boolean b = Iterators.addAll(updatedPersons, Iterators.filter(idList.iterator(), Predicates.notNull()));
 		return Lists.newArrayList(updatedPersons);
+	}
+	/**
+	 * 创建管理边界<br>
+	 * 设置fl_person_group.root_group和fl_device_group.root_group字段互相指向,
+	 * 以事务操作方式更新数据库
+	 * @param personGroupId 人员组id
+	 * @param deviceGroupId 设备组id
+	 * @throws ObjectRetrievalException 没有找到personGroupId或deviceGroupId指定的记录
+	 */
+	protected void daoBindBorder(Integer personGroupId,Integer deviceGroupId) throws ObjectRetrievalException{
+		final PersonGroupBean personGroup = daoGetPersonGroupChecked(personGroupId);
+		final DeviceGroupBean deviceGroup = daoGetDeviceGroupChecked(deviceGroupId);
+		personGroup.setRootGroup(deviceGroup.getId());
+		deviceGroup.setRootGroup(personGroup.getId());
+		daoRunAsTransaction(new Runnable() {
+			@Override
+			public void run() {
+				daoSavePersonGroup(personGroup);
+				daoSaveDeviceGroup(deviceGroup);
+			}
+		});
+	}
+	/**
+	 * 删除管理边界<br>
+	 * 删除fl_person_group.root_group和fl_device_group.root_group字段的互相指向,设置为{@code null},
+	 * 以事务操作方式更新数据库<br>
+	 * 如果personGroupId和deviceGroupId不存在绑定关系则跳过
+	 * @param personGroupId 人员组id
+	 * @param deviceGroupId 设备组id
+	 * @throws ObjectRetrievalException 没有找到personGroupId或deviceGroupId指定的记录
+	 */
+	protected void daoUnbindBorder(Integer personGroupId,Integer deviceGroupId) throws ObjectRetrievalException{
+		final PersonGroupBean personGroup = daoGetPersonGroupChecked(personGroupId);
+		final DeviceGroupBean deviceGroup = daoGetDeviceGroupChecked(deviceGroupId);
+		if(deviceGroup.getId().equals(personGroup.getRootGroup())
+				|| personGroup.getId().equals(deviceGroup.getRootGroup())){
+			personGroup.setRootGroup(null);
+			deviceGroup.setRootGroup(null);
+			daoRunAsTransaction(new Runnable() {
+				@Override
+				public void run() {
+					daoSavePersonGroup(personGroup);
+					daoSaveDeviceGroup(deviceGroup);
+				}
+			});
+		}
+	}
+	/**
+	 * 返回personId所属的管理边界人员组id<br>
+	 * 在personId所属组的所有父节点中自顶向下查找第一个{@code fl_person_group.root_group}字段不为空的人员组，返回此记录组id
+	 * @param personId
+	 * @return {@code fl_person_group.root_group}字段不为空的记录id,没有找到则返回{@code null}
+	 * @throws ObjectRetrievalException 没有找到personId指定的记录
+	 */
+	protected Integer daoRootGroupOfPerson(Integer personId) throws ObjectRetrievalException{
+		Integer groupId = daoGetPersonChecked(personId).getGroupId();
+		if(groupId == null || groupId ==DEFAULT_GROUP_ID){
+			return null;
+		}
+		// 循环引用检查
+		getPersonGroupManager().checkCycleOfParent(groupId);
+		List<PersonGroupBean> parents = daoListOfParentForPersonGroup(groupId);
+		Optional<PersonGroupBean> top = Iterables.tryFind(parents, new Predicate<PersonGroupBean>() {
+
+			@Override
+			public boolean apply(PersonGroupBean input) {
+				return input.getRootGroup()!=null;
+			}
+		});
+		return top.isPresent() ? top.get().getId() : null;
+	}
+	/**
+	 * 返回deviceId所属的管理边界设备组id<br>
+	 * 在deviceId所属组的所有父节点中自顶向下查找第一个{@code fl_device_group.root_group}字段不为空的组，返回此记录id
+	 * @param deviceId
+	 * @return {@code fl_device_group.root_group}字段不为空的记录id,没有找到则返回{@code null}
+	 * @throws ObjectRetrievalException 没有找到deviceId指定的记录
+	 */
+	protected Integer daoRootGroupOfDevice(Integer deviceId) throws ObjectRetrievalException{
+		Integer groupId = daoGetDeviceChecked(deviceId).getGroupId();
+		if(groupId == null || groupId ==DEFAULT_GROUP_ID){
+			return null;
+		}
+		// 循环引用检查
+		getDeviceGroupManager().checkCycleOfParent(groupId);
+		List<DeviceGroupBean> parents = daoListOfParentForDeviceGroup(groupId);
+		Optional<DeviceGroupBean> top = Iterables.tryFind(parents, new Predicate<DeviceGroupBean>() {
+
+			@Override
+			public boolean apply(DeviceGroupBean input) {
+				return input.getRootGroup()!=null;
+			}
+		});
+		return top.isPresent() ? top.get().getId() : null;
 	}
 }

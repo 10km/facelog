@@ -405,6 +405,22 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public void bindBorder(Integer personGroupId,
+        Integer deviceGroupId) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+             instance.bindBorder(personGroupId,
+                deviceGroupId);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
     public int countDeviceByWhere(String where) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
@@ -2167,6 +2183,40 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public Integer rootGroupOfDevice(Integer deviceId) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return instance.rootGroupOfDevice(deviceId);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public Integer rootGroupOfPerson(Integer personId) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return instance.rootGroupOfPerson(personId);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
     public DeviceBean saveDevice(DeviceBean deviceBean,
         Token token) 
         {
@@ -2688,6 +2738,22 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch(RuntimeTApplicationException e){
             return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public void unbindBorder(Integer personGroupId,
+        Integer deviceGroupId) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+             instance.unbindBorder(personGroupId,
+                deviceGroupId);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
         }
         finally{
             factory.releaseInstance(instance);

@@ -526,6 +526,31 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(applyRootToken(password,isMd5), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#bindBorder(java.lang.Integer,java.lang.Integer)}
+     */
+    public ListenableFuture<Void> bindBorder(Integer personGroupId,
+        Integer deviceGroupId){
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.bindBorder(
+                personGroupId,
+            deviceGroupId,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void bindBorder(Integer personGroupId,
+        Integer deviceGroupId,
+        FutureCallback<Void>callback){
+        factory.addCallback(bindBorder(personGroupId,deviceGroupId), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#countDeviceByWhere(java.lang.String)}
      */
     public ListenableFuture<Integer> countDeviceByWhere(String where){
@@ -2603,6 +2628,44 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(replaceFeature(personId,featureMd5,deleteOldFeatureImage,token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#rootGroupOfDevice(java.lang.Integer)}
+     */
+    public ListenableFuture<Integer> rootGroupOfDevice(Integer deviceId){
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.rootGroupOfDevice(
+                deviceId,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void rootGroupOfDevice(Integer deviceId,
+        FutureCallback<Integer>callback){
+        factory.addCallback(rootGroupOfDevice(deviceId), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#rootGroupOfPerson(java.lang.Integer)}
+     */
+    public ListenableFuture<Integer> rootGroupOfPerson(Integer personId){
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.rootGroupOfPerson(
+                personId,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void rootGroupOfPerson(Integer personId,
+        FutureCallback<Integer>callback){
+        factory.addCallback(rootGroupOfPerson(personId), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#saveDevice(net.gdface.facelog.db.DeviceBean,net.gdface.facelog.Token)}
      */
     public ListenableFuture<DeviceBean> saveDevice(DeviceBean deviceBean,
@@ -3271,6 +3334,31 @@ public class IFaceLogThriftClientAsync {
         Token token,
         FutureCallback<String>callback){
         factory.addCallback(taskRegister(task,token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#unbindBorder(java.lang.Integer,java.lang.Integer)}
+     */
+    public ListenableFuture<Void> unbindBorder(Integer personGroupId,
+        Integer deviceGroupId){
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.unbindBorder(
+                personGroupId,
+            deviceGroupId,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void unbindBorder(Integer personGroupId,
+        Integer deviceGroupId,
+        FutureCallback<Void>callback){
+        factory.addCallback(unbindBorder(personGroupId,deviceGroupId), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#unregisterDevice(int,net.gdface.facelog.Token)}

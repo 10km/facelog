@@ -877,6 +877,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			throw wrapServiceRuntimeException(e);
 		}
 	}
+
 	////////////////////////////////PersonGroupBean/////////////
 	
 	@Override
@@ -972,6 +973,43 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			throw wrapServiceRuntimeException(e);
 		}
     }
+	/////////////////////MANAGEMENT BORDER/////
+
+	@Override
+	public void bindBorder(Integer personGroupId,Integer deviceGroupId) {
+    	try{
+    		dm.daoBindBorder(personGroupId,deviceGroupId);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+
+	@Override
+	public void unbindBorder(Integer personGroupId,Integer deviceGroupId) {
+    	try{
+    		dm.daoUnbindBorder(personGroupId,deviceGroupId);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+
+	@Override
+	public Integer rootGroupOfPerson(Integer personId){
+    	try{
+    		return dm.daoRootGroupOfPerson(personId);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+
+	@Override
+	public Integer rootGroupOfDevice(Integer deviceId){
+    	try{
+    		return dm.daoRootGroupOfDevice(deviceId);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
 	/////////////////////PERMIT/////
     
 	@Override

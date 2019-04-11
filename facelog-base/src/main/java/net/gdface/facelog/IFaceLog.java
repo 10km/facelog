@@ -723,6 +723,44 @@ public interface IFaceLog{
      * @see #loadDeviceGroupByWhere(String,int,int)
      */
     public List<Integer> loadDeviceGroupIdByWhere(String where);
+    
+	/////////////////////MANAGEMENT BORDER/////
+    /**
+	 * 创建管理边界<br>
+	 * 设置fl_person_group.root_group和fl_device_group.root_group字段互相指向<br>
+	 * 没有找到personGroupId或deviceGroupId指定的记录抛出异常
+	 * 以事务操作方式更新数据库
+	 * @param personGroupId 人员组id
+	 * @param deviceGroupId 设备组id
+	 */
+	public void bindBorder(Integer personGroupId, Integer deviceGroupId);
+	/**
+	 * 删除管理边界<br>
+	 * 删除fl_person_group.root_group和fl_device_group.root_group字段的互相指向,设置为{@code null},
+	 * 以事务操作方式更新数据库<br>
+	 * 如果personGroupId和deviceGroupId不存在绑定关系则跳过<br>
+	 * 没有找到personGroupId或deviceGroupId指定的记录抛出异常
+	 * @param personGroupId 人员组id
+	 * @param deviceGroupId 设备组id
+	 */
+	public void unbindBorder(Integer personGroupId, Integer deviceGroupId);
+    /**
+	 * 返回personId所属的管理边界人员组id<br>
+	 * 在personId所属组的所有父节点中自顶向下查找第一个{@code fl_person_group.root_group}字段不为空的人员组，返回此记录组id<br>
+	 * 没有找到personId指定的记录抛出异常
+	 * @param personId
+	 * @return {@code fl_person_group.root_group}字段不为空的记录id,没有找到则返回{@code null}
+	 */
+	public Integer rootGroupOfPerson(Integer personId);
+	/**
+	 * 返回deviceId所属的管理边界设备组id<br>
+	 * 在deviceId所属组的所有父节点中自顶向下查找第一个{@code fl_device_group.root_group}字段不为空的组，返回此记录id<br>
+	 * 没有找到deviceId指定的记录抛出异常
+	 * @param deviceId
+	 * @return {@code fl_device_group.root_group}字段不为空的记录id,没有找到则返回{@code null}
+	 */
+	public Integer rootGroupOfDevice(Integer deviceId);
+
 	/////////////////////PERMIT/////
 	/**
 	 * 添加一个(允许)通行关联记录:允许{@code personGroup}指定的人员组在
@@ -1047,4 +1085,5 @@ public interface IFaceLog{
 	 * @return
 	 */
 	public boolean isLocal();
+
 }

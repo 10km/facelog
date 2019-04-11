@@ -417,6 +417,21 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(applyRootToken(password,isMd5), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#bindBorder(java.lang.Integer,java.lang.Integer)}
+     */
+    public ListenableFuture<Void> bindBorder(Integer personGroupId,
+        Integer deviceGroupId){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Void> future = async.bindBorder(personGroupId,
+            deviceGroupId);
+        return factory.wrap(async,future);
+    }
+    public void bindBorder(Integer personGroupId,
+        Integer deviceGroupId,
+        FutureCallback<Void>callback){
+        factory.addCallback(bindBorder(personGroupId,deviceGroupId), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#countDeviceByWhere(java.lang.String)}
      */
     public ListenableFuture<Integer> countDeviceByWhere(String where){        
@@ -1925,6 +1940,30 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(replaceFeature(personId,featureMd5,deleteOldFeatureImage,token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#rootGroupOfDevice(java.lang.Integer)}
+     */
+    public ListenableFuture<Integer> rootGroupOfDevice(Integer deviceId){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Integer> future = async.rootGroupOfDevice(deviceId);
+        return factory.wrap(async,future);
+    }
+    public void rootGroupOfDevice(Integer deviceId,
+        FutureCallback<Integer>callback){
+        factory.addCallback(rootGroupOfDevice(deviceId), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#rootGroupOfPerson(java.lang.Integer)}
+     */
+    public ListenableFuture<Integer> rootGroupOfPerson(Integer personId){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Integer> future = async.rootGroupOfPerson(personId);
+        return factory.wrap(async,future);
+    }
+    public void rootGroupOfPerson(Integer personId,
+        FutureCallback<Integer>callback){
+        factory.addCallback(rootGroupOfPerson(personId), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#saveDevice(net.gdface.facelog.db.DeviceBean,net.gdface.facelog.Token)}
      */
     public ListenableFuture<DeviceBean> saveDevice(DeviceBean deviceBean,
@@ -2485,6 +2524,21 @@ public class IFaceLogThriftClientAsync {
         Token token,
         FutureCallback<String>callback){
         factory.addCallback(taskRegister(task,token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#unbindBorder(java.lang.Integer,java.lang.Integer)}
+     */
+    public ListenableFuture<Void> unbindBorder(Integer personGroupId,
+        Integer deviceGroupId){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Void> future = async.unbindBorder(personGroupId,
+            deviceGroupId);
+        return factory.wrap(async,future);
+    }
+    public void unbindBorder(Integer personGroupId,
+        Integer deviceGroupId,
+        FutureCallback<Void>callback){
+        factory.addCallback(unbindBorder(personGroupId,deviceGroupId), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#unregisterDevice(int,net.gdface.facelog.Token)}

@@ -225,6 +225,11 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public void bindBorder (Integer personGroupId,Integer deviceGroupId) {
+         delegate().bindBorder(personGroupId,deviceGroupId);
+    }
+
+    @Override
     public int countDeviceByWhere (String where) {
         return delegate().countDeviceByWhere(where);
     }
@@ -750,6 +755,16 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public Integer rootGroupOfDevice (Integer deviceId) {
+        return delegate().rootGroupOfDevice(deviceId);
+    }
+
+    @Override
+    public Integer rootGroupOfPerson (Integer personId) {
+        return delegate().rootGroupOfPerson(personId);
+    }
+
+    @Override
     public DeviceBean saveDevice (DeviceBean deviceBean,Token token) {
         return delegate().saveDevice(deviceBean,token);
     }
@@ -842,6 +857,11 @@ public class IFaceLogDecorator implements IFaceLog{
     @Override
     public String taskRegister (String task,Token token) {
         return delegate().taskRegister(task,token);
+    }
+
+    @Override
+    public void unbindBorder (Integer personGroupId,Integer deviceGroupId) {
+         delegate().unbindBorder(personGroupId,deviceGroupId);
     }
 
     @Override

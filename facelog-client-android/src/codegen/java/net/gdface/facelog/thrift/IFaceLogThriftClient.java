@@ -551,6 +551,30 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public void bindBorder(final Integer personGroupId,
+        final Integer deviceGroupId) 
+        {
+        try{
+             syncCall(new Function<Void,Void>() {
+                @Override
+                public Void apply(Void input) {
+                    return input;
+                }},
+                new ServiceAsyncCall<Void>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Void> nativeCallback){
+                    service.bindBorder(personGroupId,deviceGroupId,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public int countDeviceByWhere(final String where) 
         {
         try{
@@ -2913,6 +2937,52 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public Integer rootGroupOfDevice(final Integer deviceId) 
+        {
+        try{
+            return syncCall(new Function<Integer,Integer>() {
+                @Override
+                public Integer apply(Integer input) {
+                    return input;
+                }},
+                new ServiceAsyncCall<Integer>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Integer> nativeCallback){
+                    service.rootGroupOfDevice(deviceId,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public Integer rootGroupOfPerson(final Integer personId) 
+        {
+        try{
+            return syncCall(new Function<Integer,Integer>() {
+                @Override
+                public Integer apply(Integer input) {
+                    return input;
+                }},
+                new ServiceAsyncCall<Integer>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Integer> nativeCallback){
+                    service.rootGroupOfPerson(personId,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public DeviceBean saveDevice(final DeviceBean deviceBean,
         final Token token) 
         {
@@ -3552,6 +3622,30 @@ public class IFaceLogThriftClient implements IFaceLog {
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public void unbindBorder(final Integer personGroupId,
+        final Integer deviceGroupId) 
+        {
+        try{
+             syncCall(new Function<Void,Void>() {
+                @Override
+                public Void apply(Void input) {
+                    return input;
+                }},
+                new ServiceAsyncCall<Void>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Void> nativeCallback){
+                    service.unbindBorder(personGroupId,deviceGroupId,nativeCallback);
                 }});
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){

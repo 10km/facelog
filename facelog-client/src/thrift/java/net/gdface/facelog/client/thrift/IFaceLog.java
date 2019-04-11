@@ -137,6 +137,15 @@ public interface IFaceLog
             @ThriftField(value=2, name="isMd5", requiredness=Requiredness.REQUIRED) final boolean isMd5
         );
 
+        @ThriftMethod(value = "bindBorder",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Void> bindBorder(
+            @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.OPTIONAL) final Integer personGroupId,
+            @ThriftField(value=2, name="deviceGroupId", requiredness=Requiredness.OPTIONAL) final Integer deviceGroupId
+        );
+
         @ThriftMethod(value = "countDeviceByWhere",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -889,6 +898,22 @@ public interface IFaceLog
             @ThriftField(value=4, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
+        @ThriftMethod(value = "rootGroupOfDevice",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Integer> rootGroupOfDevice(
+            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.OPTIONAL) final Integer deviceId
+        );
+
+        @ThriftMethod(value = "rootGroupOfPerson",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Integer> rootGroupOfPerson(
+            @ThriftField(value=1, name="personId", requiredness=Requiredness.OPTIONAL) final Integer personId
+        );
+
         @ThriftMethod(value = "saveDevice",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1080,6 +1105,15 @@ public interface IFaceLog
             @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
+        @ThriftMethod(value = "unbindBorder",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Void> unbindBorder(
+            @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.OPTIONAL) final Integer personGroupId,
+            @ThriftField(value=2, name="deviceGroupId", requiredness=Requiredness.OPTIONAL) final Integer deviceGroupId
+        );
+
         @ThriftMethod(value = "unregisterDevice",
                       exception = {
                           @ThriftException(type=ServiceSecurityException.class, id=1),
@@ -1234,6 +1268,15 @@ public interface IFaceLog
         @ThriftField(value=1, name="password", requiredness=Requiredness.OPTIONAL) final String password,
         @ThriftField(value=2, name="isMd5", requiredness=Requiredness.REQUIRED) final boolean isMd5
     ) throws ServiceSecurityException, ServiceRuntimeException;
+
+    @ThriftMethod(value = "bindBorder",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    void bindBorder(
+        @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.OPTIONAL) final Integer personGroupId,
+        @ThriftField(value=2, name="deviceGroupId", requiredness=Requiredness.OPTIONAL) final Integer deviceGroupId
+    ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "countDeviceByWhere",
                   exception = {
@@ -1987,6 +2030,22 @@ public interface IFaceLog
         @ThriftField(value=4, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 
+    @ThriftMethod(value = "rootGroupOfDevice",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    int rootGroupOfDevice(
+        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.OPTIONAL) final Integer deviceId
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "rootGroupOfPerson",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    int rootGroupOfPerson(
+        @ThriftField(value=1, name="personId", requiredness=Requiredness.OPTIONAL) final Integer personId
+    ) throws ServiceRuntimeException;
+
     @ThriftMethod(value = "saveDevice",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -2176,6 +2235,15 @@ public interface IFaceLog
     String taskRegister(
         @ThriftField(value=1, name="task", requiredness=Requiredness.OPTIONAL) final String task,
         @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "unbindBorder",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    void unbindBorder(
+        @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.OPTIONAL) final Integer personGroupId,
+        @ThriftField(value=2, name="deviceGroupId", requiredness=Requiredness.OPTIONAL) final Integer deviceGroupId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "unregisterDevice",
