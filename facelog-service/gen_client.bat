@@ -7,5 +7,5 @@ rem 	-override_package net.gdface.facelog.client.thrift ^
 rem 	-out %OUT_FOLDER% 	
 @set sh_folder=%~dp0
 @pushd "%sh_folder%"
-mvn com.facebook.mojo:swift-maven-plugin:generate
+call mvn com.facebook.mojo:swift-maven-plugin:generate
 @popd

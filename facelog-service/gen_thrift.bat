@@ -7,5 +7,7 @@ rem     -out IFaceLog.thrift ^
 rem     -package net.gdface.facelog.decorator IFaceLogThriftDecorator ^
 rem     -recursive ^
 rem     -objectOptional
-    
-mvn com.gitee.l0km:swift2thrift-maven-plugin:generate
+@set sh_folder=%~dp0
+@pushd "%sh_folder%"
+call mvn com.gitee.l0km:swift2thrift-maven-plugin:generate
+@popd
