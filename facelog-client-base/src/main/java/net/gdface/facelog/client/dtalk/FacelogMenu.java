@@ -47,7 +47,7 @@ public class FacelogMenu extends RootMenu{
 	/* 扩展命令所在菜单名 */
 	private static final String MENU_CMD_EXT = "cmdext";
 	/* 单实例 */
-	private static FacelogMenu activeInstance;
+	private static volatile FacelogMenu activeInstance;
 	/* 连接配置参数 */
 	private final ConnectConfigProvider config;
 	/**
