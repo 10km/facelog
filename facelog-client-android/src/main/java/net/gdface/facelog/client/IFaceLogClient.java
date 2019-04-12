@@ -1,6 +1,5 @@
 package net.gdface.facelog.client;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.net.URI;
 import java.util.List;
@@ -8,33 +7,27 @@ import java.util.List;
 import com.google.common.base.Supplier;
 
 import gu.dtalk.MenuItem;
-import net.gdface.facelog.Delegator;
 import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.IFaceLogDecorator;
 import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
-import static com.google.common.base.Preconditions.*;
+import net.gdface.utils.Delegator;
 
 public class IFaceLogClient extends IFaceLogDecorator {
 	public final ClientExtendTools clientTools;
 	public IFaceLogClient(IFaceLog delegate) {
 		super(delegate);		
-		if(Proxy.isProxyClass(delegate.getClass())){
-			InvocationHandler handler = Proxy.getInvocationHandler(delegate);
-			clientTools = new ClientExtendTools(cast(handler));
-		}else{
-			clientTools = new ClientExtendTools(cast(delegate));
-		}
+		clientTools = new ClientExtendTools(unwrap(delegate,IFaceLogThriftClient.class));
 	}
-	private static IFaceLogThriftClient cast(Object delegate){
-		Object facelog = delegate;
-		if(delegate instanceof Delegator){
-			facelog = ((Delegator<?>) delegate).delegate();
+	private static <T>T unwrap(Object value,Class<T> clazz){
+		if(Proxy.isProxyClass(value.getClass())){
+			return unwrap(Proxy.getInvocationHandler(value),clazz);
+		}else if(value instanceof Delegator){
+			return unwrap(((Delegator<?>)value).delegate(),clazz);
 		}
-		checkArgument(facelog instanceof IFaceLogThriftClient,"INVALID INTANCE");
-		return ( (IFaceLogThriftClient) facelog);
+		return clazz.cast(value);
 	}
 	/**
 	 * 如果{@code host}是本机地址则用facelog服务主机名替换

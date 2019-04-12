@@ -10,13 +10,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Function;
 
 import net.gdface.facelog.CommonConstant.ExceptionType;
-import net.gdface.facelog.Delegator;
 import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.ServiceSecurityException.SecurityExceptionType;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.thrift.exception.client.BaseServiceRuntimeException;
+import net.gdface.utils.Delegator;
 
 import static com.google.common.base.Preconditions.*;
 
