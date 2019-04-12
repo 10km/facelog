@@ -17,10 +17,10 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<swift.version>0.14.2</swift.version>
-		<common-java.version>1.1.19-SNAPSHOT</common-java.version>
-		<codegen.version>1.0.9</codegen.version>
+		<common-java.version>1.1.19</common-java.version>
+		<codegen.version>1.0.10</codegen.version>
 		<idl.generator.version>1.10</idl.generator.version>
-		<dtalk.version>0.1.1</dtalk.version>
+		<dtalk.version>0.1.2</dtalk.version>
 		<thrifty.compiler.maven.plugin.version>1.1</thrifty.compiler.maven.plugin.version>
 		<simplemq.version>1.0.10</simplemq.version>		
 	</properties>
