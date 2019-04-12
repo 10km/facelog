@@ -87,6 +87,22 @@
 				<groupId>com.facebook.mojo</groupId>
 				<artifactId>swift-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>templating-maven-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>filter-bat</id>
+							<goals>
+								<goal>filter-sources</goal>
+							</goals>
+							<configuration>
+								<sourceDirectory>${project.basedir}/shell.template</sourceDirectory>
+								<outputDirectory>${project.basedir}</outputDirectory>
+							</configuration>
+						</execution>
+					</executions>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
