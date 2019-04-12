@@ -1,2 +1,1 @@
-mvn install 
-mvn package -Pshade-package
+mvn install && mvn package -Pshade-package
