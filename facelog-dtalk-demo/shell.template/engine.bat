@@ -1,3 +1,3 @@
 pushd %~dp0
-java -jar target\facelog-dtalk-demo-${project.version}-engine-standalone.jar %*
+java -jar facelog-dtalk-demo-${project.version}-engine-standalone.jar %*
 popd
