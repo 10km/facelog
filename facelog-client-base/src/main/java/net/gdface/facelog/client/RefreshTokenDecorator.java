@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Function;
 
 import net.gdface.facelog.CommonConstant.ExceptionType;
+import net.gdface.facelog.Delegator;
 import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.ServiceSecurityException.SecurityExceptionType;
@@ -24,7 +25,7 @@ import static com.google.common.base.Preconditions.*;
  * @author guyadong
  *
  */
-public class RefreshTokenDecorator implements InvocationHandler{
+public class RefreshTokenDecorator implements InvocationHandler,Delegator<IFaceLog>{
 	private final Method applyPersonToken;
 	private final Method applyRootToken;
 	private final Method online;
@@ -191,10 +192,13 @@ public class RefreshTokenDecorator implements InvocationHandler{
 			}};
 	}
 
-	/**
-	 * @return delegate
-	 */
-	public IFaceLog getDelegate() {
+	@Override
+	public IFaceLog delegateInstance() {
 		return delegate;
+	}
+
+	@Override
+	public Class<IFaceLog> typeOfDelegate() {
+		return IFaceLog.class;
 	}
 }
