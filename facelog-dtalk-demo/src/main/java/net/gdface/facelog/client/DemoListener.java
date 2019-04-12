@@ -14,7 +14,7 @@ public class DemoListener extends ValueListener<Object> {
 	}
 
 	@Override
-	protected void doUpdte(ValueChangeEvent<BaseOption<Object>> event) {
+	protected void doUpdate(ValueChangeEvent<BaseOption<Object>> event) {
 		logger.info("VALUE UPDATE {}({}) = {}",
 				event.option().getUiName(),
 				event.option().getPath(),
