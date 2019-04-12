@@ -193,12 +193,7 @@ public class RefreshTokenDecorator implements InvocationHandler,Delegator<IFaceL
 	}
 
 	@Override
-	public IFaceLog delegateInstance() {
+	public IFaceLog delegate() {
 		return delegate;
-	}
-
-	@Override
-	public Class<IFaceLog> typeOfDelegate() {
-		return IFaceLog.class;
 	}
 }

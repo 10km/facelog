@@ -23,18 +23,17 @@ public class IFaceLogClient extends IFaceLogDecorator {
 		super(delegate);		
 		if(Proxy.isProxyClass(delegate.getClass())){
 			InvocationHandler handler = Proxy.getInvocationHandler(delegate);
-			clientTools = new ClientExtendTools(cast(handler));
+			clientTools = new ClientExtendTools(toThriftClient(handler));
 		}else{
-			clientTools = new ClientExtendTools(cast(delegate));
+			clientTools = new ClientExtendTools(toThriftClient(delegate));
 		}
 	}
-	private static IFaceLogThriftClient cast(Object delegate){
-		Object facelog = delegate;
-		if(delegate instanceof Delegator){
-			facelog = ((Delegator<?>) delegate).delegateInstance();
+	private static IFaceLogThriftClient toThriftClient(Object instance){
+		if(instance instanceof Delegator){
+			instance = ((Delegator<?>) instance).delegate();
 		}
-		checkArgument(facelog instanceof IFaceLogThriftClient,"INVALID INTANCE");
-		return ( (IFaceLogThriftClient) facelog);
+		checkArgument(instance instanceof IFaceLogThriftClient,"INVALID THRIFT CLIENT  INTANCE");
+		return ( (IFaceLogThriftClient) instance);
 	}
 	/**
 	 * 如果{@code host}是本机地址则用facelog服务主机名替换

@@ -31,7 +31,7 @@ public class IFaceLogClient extends IFaceLogDecorator {
 	private static IFaceLogThriftClient cast(Object delegate){
 		Object facelog = delegate;
 		if(delegate instanceof Delegator){
-			facelog = ((Delegator<?>) delegate).delegateInstance();
+			facelog = ((Delegator<?>) delegate).delegate();
 		}
 		checkArgument(facelog instanceof IFaceLogThriftClient,"INVALID INTANCE");
 		return ( (IFaceLogThriftClient) facelog);
