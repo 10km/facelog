@@ -1,11 +1,14 @@
 package net.gdface.facelog.client;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
 import java.net.URI;
 import java.util.List;
 
 import com.google.common.base.Supplier;
 
 import gu.dtalk.MenuItem;
+import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.IFaceLogDecorator;
 import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.Token;
@@ -14,9 +17,18 @@ import net.gdface.facelog.thrift.IFaceLogThriftClient;
 
 public class IFaceLogClient extends IFaceLogDecorator {
 	public final ClientExtendTools clientTools;
-	public IFaceLogClient(IFaceLogThriftClient delegate) {
-		super(delegate);
-		clientTools = new ClientExtendTools( delegate);
+	public IFaceLogClient(IFaceLog delegate) {
+		super(delegate);		
+		if(Proxy.isProxyClass(delegate.getClass())){
+			InvocationHandler handler = Proxy.getInvocationHandler(delegate);
+			if(handler instanceof RefreshTokenDecorator){
+				clientTools = new ClientExtendTools( (IFaceLogThriftClient) ((RefreshTokenDecorator) handler).getDelegate());
+			}else{
+				throw new UnsupportedOperationException();
+			}
+		}else{
+			clientTools = new ClientExtendTools( (IFaceLogThriftClient) delegate);
+		}
 	}
 	/**
 	 * 如果{@code host}是本机地址则用facelog服务主机名替换

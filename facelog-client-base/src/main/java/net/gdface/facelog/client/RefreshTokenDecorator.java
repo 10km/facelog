@@ -190,4 +190,11 @@ public class RefreshTokenDecorator implements InvocationHandler{
 				return decoratorOf(input).setHelper(helper).proxyInstance();
 			}};
 	}
+
+	/**
+	 * @return delegate
+	 */
+	public IFaceLog getDelegate() {
+		return delegate;
+	}
 }
