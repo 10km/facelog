@@ -80,7 +80,7 @@ public class DtalkConsole extends BaseConsole {
 		JedisPoolLazy.createDefaultInstance( config.readRedisParam() );
 
 		DtalkConsole client = new DtalkConsole(CONSOLE_CONFIG.getMac(), config);
-		client.start();
+		client.setStackTrace(CONSOLE_CONFIG.isTrace()).start();
 
 	}
 	public static class UserTokenHelperImpl extends TokenHelper {

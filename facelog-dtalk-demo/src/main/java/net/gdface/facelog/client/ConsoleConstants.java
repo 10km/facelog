@@ -21,4 +21,7 @@ public interface ConsoleConstants extends CommonCliConstants {
 	public static final String SERVICE_PWD_OPTION_DESC = "password ,default: ";
 	public static final String DEVICE_MAC_OPTION_LONG = "mac";
 	public static final String DEVICE_MAC_OPTION_DESC = "MAC addres(hex)for target device,such as d0:17:c2:d0:3f:bf,default: self mac address";
+	public static final String TRACE_OPTION = "X";
+	public static final String TRACE_OPTION_LONG = "trace";
+	public static final String TRACE_OPTION_DESC = "show stack trace on error ,default: false";
 }
