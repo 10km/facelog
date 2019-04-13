@@ -161,6 +161,17 @@ public class DaoManagement extends BaseDao {
 		return Lists.transform(permits, daoCastPermitToPersonGroupId);
 	}
 	/**
+	 * 从permit表返回允许{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})对象的id
+	 * @param personGroupId
+	 * @return
+	 */
+	protected List<Integer> daoGetDeviceGroupsPermittedBy(Integer personGroupId){
+		PermitBean template = PermitBean.builder().personGroupId(personGroupId).build();
+		List<PermitBean> permits = daoLoadPermitUsingTemplate(template, 1, -1);
+		
+		return Lists.transform(permits, daoCastPermitToDeviceGroupId);
+	}
+	/**
 	 * 从permit表返回允许在{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})的id<br>
 	 * 不排序,不包含重复id
 	 * @param personGroupId

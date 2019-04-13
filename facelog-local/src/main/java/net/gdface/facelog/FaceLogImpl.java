@@ -1079,6 +1079,13 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			throw wrapServiceRuntimeException(e);
 		}
 	}
+	public List<Integer> getDeviceGroupsPermittedBy(Integer personGroupId){
+		try{
+			return dm.daoGetDeviceGroupsPermittedBy(personGroupId);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
 	@Override
 	public List<Integer> getDeviceGroupsPermit(Integer personGroupId){
 		try{
