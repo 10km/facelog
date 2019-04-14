@@ -1215,6 +1215,28 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(getDeviceGroupsPermit(personGroupId), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#getDeviceGroupsPermittedBy(java.lang.Integer)}
+     */
+    public ListenableFuture<List<Integer>> getDeviceGroupsPermittedBy(Integer personGroupId){
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.getDeviceGroupsPermittedBy(
+                personGroupId,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void getDeviceGroupsPermittedBy(Integer personGroupId,
+        FutureCallback<List<Integer>>callback){
+        factory.addCallback(getDeviceGroupsPermittedBy(personGroupId), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#getDeviceIdOfFeature(java.lang.String)}
      */
     public ListenableFuture<Integer> getDeviceIdOfFeature(String featureMd5){

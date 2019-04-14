@@ -799,10 +799,13 @@ public interface IFaceLog{
 	public int deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup, Token token);
 	/**
 	 * 获取人员组通行权限<br>
-	 * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行
+	 * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行,
+	 * 本方法会对{@code personGroupId}的父结点向上回溯：
+	 * {@codepersonGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，
+	 * 输入参数为{@code null}或找不到指定的记录则返回false
 	 * @param deviceId
 	 * @param personGroupId
-	 * @return
+	 * @return 允许通行返回false，否则返回false
 	 * @throws RuntimeDaoException
 	 */
 	public boolean getGroupPermit(int deviceId,int personGroupId);
@@ -822,11 +825,18 @@ public interface IFaceLog{
 
 	/**
 	 * 从permit表返回允许在{@code deviceGroupId}指定的设备组通过的所有人员组{@link PersonGroupBean}对象的id<br>
-	 *  不排序,不包含重复id
+	 *  不排序,不包含重复id,本方法不会对{@link PersonGroupBean}的父结点向上回溯
 	 * @param deviceGroupId
 	 * @return
 	 */
 	List<Integer> getPersonGroupsPermittedBy(Integer deviceGroupId);
+	/**
+	 * 从permit表返回允许在{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})的id<br>
+	 * 不排序,不包含重复id,本方法不会对{@code personGroupId}的父结点向上回溯
+	 * @param personGroupId
+	 * @return
+	 */
+	List<Integer> getDeviceGroupsPermittedBy(Integer personGroupId);
 
 	/**
 	 * 从permit表返回允许在{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})的id<br>

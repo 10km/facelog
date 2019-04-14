@@ -906,6 +906,18 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(getDeviceGroupsPermit(personGroupId), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#getDeviceGroupsPermittedBy(java.lang.Integer)}
+     */
+    public ListenableFuture<List<Integer>> getDeviceGroupsPermittedBy(Integer personGroupId){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<List<Integer>> future = async.getDeviceGroupsPermittedBy(personGroupId);
+        return factory.wrap(async,future);
+    }
+    public void getDeviceGroupsPermittedBy(Integer personGroupId,
+        FutureCallback<List<Integer>>callback){
+        factory.addCallback(getDeviceGroupsPermittedBy(personGroupId), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#getDeviceIdOfFeature(java.lang.String)}
      */
     public ListenableFuture<Integer> getDeviceIdOfFeature(String featureMd5){        

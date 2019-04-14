@@ -476,11 +476,17 @@ public class FacelogDefaultImpl implements IFaceLog {
 	public List<Boolean> getPersonPermits(int deviceId, List<Integer> personIdList) {
 		return null;
 	}
-
+	@Override
 	public List<Integer> getPersonGroupsPermittedBy(Integer deviceGroupId) {
 		return null;
 	}
 
+	@Override
+	public List<Integer> getDeviceGroupsPermittedBy(Integer personGroupId) {
+		return null;
+	}
+
+	@Override
 	public List<Integer> getDeviceGroupsPermit(Integer personGroupId) {
 		return null;
 	}
@@ -624,14 +630,17 @@ public class FacelogDefaultImpl implements IFaceLog {
 		return false;
 	}
 
+	@Override
 	public boolean isValidPersonToken(Token token) {
 		return false;
 	}
 
+	@Override
 	public boolean isValidDeviceToken(Token token) {
 		return false;
 	}
 
+	@Override
 	public String taskQueueOf(String task, Token token) {
 		return null;
 	}
@@ -640,17 +649,21 @@ public class FacelogDefaultImpl implements IFaceLog {
 		return null;
 	}
 
+	@Override
 	public Integer rootGroupOfDevice(Integer deviceId) {
 		return null;
 	}
 
+	@Override
 	public Integer rootGroupOfPerson(Integer personId) {
 		return null;
 	}
-
+	
+	@Override
 	public void unbindBorder(Integer personGroupId, Integer deviceGroupId, Token token) {
 	}
-
+	
+	@Override
 	public void bindBorder(Integer personGroupId, Integer deviceGroupId, Token token) {
 	}
 

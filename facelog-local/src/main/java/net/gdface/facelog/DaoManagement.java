@@ -104,6 +104,16 @@ public class DaoManagement extends BaseDao {
 
 	/////////////////////PERMIT////////////////////
 	
+	/**
+	 * 获取人员组通行权限<br>
+	 * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行,
+	 * 本方法会对{@code personGroupId}的父结点向上回溯：
+	 * {@codepersonGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，
+	 * 输入参数为{@code null}或找不到指定的记录则返回false
+	 * @param deviceId
+	 * @param personGroupId
+	 * @return 允许通行返回false，否则返回false
+	 */
 	protected boolean daoGetGroupPermit(Integer deviceId,Integer personGroupId){
 		PersonGroupBean personGroup;
 		final DeviceBean device;

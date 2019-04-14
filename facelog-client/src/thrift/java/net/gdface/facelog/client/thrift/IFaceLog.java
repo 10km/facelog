@@ -386,6 +386,14 @@ public interface IFaceLog
             @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.OPTIONAL) final Integer personGroupId
         );
 
+        @ThriftMethod(value = "getDeviceGroupsPermittedBy",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<List<Integer>> getDeviceGroupsPermittedBy(
+            @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.OPTIONAL) final Integer personGroupId
+        );
+
         @ThriftMethod(value = "getDeviceIdOfFeature",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1517,6 +1525,14 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<Integer> getDeviceGroupsPermit(
+        @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.OPTIONAL) final Integer personGroupId
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "getDeviceGroupsPermittedBy",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    List<Integer> getDeviceGroupsPermittedBy(
         @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.OPTIONAL) final Integer personGroupId
     ) throws ServiceRuntimeException;
 

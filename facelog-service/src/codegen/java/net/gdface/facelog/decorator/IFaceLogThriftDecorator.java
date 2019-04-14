@@ -973,6 +973,25 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#getDeviceGroupsPermittedBy(java.lang.Integer)}
+     */
+    @ThriftMethod(value = "getDeviceGroupsPermittedBy" )
+    public List<Integer> getDeviceGroupsPermittedBy(Integer personGroupId) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().getDeviceGroupsPermittedBy(personGroupId),
+                    Integer.class,
+                    Integer.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#getDeviceIdOfFeature(java.lang.String)}
      */
     @ThriftMethod(value = "getDeviceIdOfFeature" )
