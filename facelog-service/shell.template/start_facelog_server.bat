@@ -1,3 +1,3 @@
 pushd %~dp0
-java -jar facelog-service-${project.version}-standalone.jar
+java -jar ${project.build.finalName}-standalone.jar %*
 popd
