@@ -17,6 +17,11 @@ import com.google.common.base.Function;
 
 import gu.dtalk.MenuItem;
 
+/**
+ * 基于dtalk的设备命令引擎
+ * @author guyadong
+ *
+ */
 public class DtalkEngineForFacelog {
 	private final SampleConnector connAdapter;
 	private final RedisSubscriber subscriber;
