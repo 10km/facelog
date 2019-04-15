@@ -100,7 +100,7 @@ facelog 由 mysql 提供数据库服务，下图为表关系结构图，图中�
 
 为提高数据库访问效率，facelog 为除 `fl_log，fl_log_light`之外的所有需要频繁读取的表实现缓存能力。
 
-可以从 [`net.gdface.facelog.service.TableManagerInitializer`](../facelog-service/src/main/java/net/gdface/facelog/service/TableManagerInitializer.java)代码为入口查看具体实现。
+可以从 [`net.gdface.facelog.TableManagerInitializer`](../facelog-local/src/main/java/net/gdface/facelog/TableManagerInitializer.java)代码为入口查看具体实现。
 
 ### 消息系统
 
@@ -112,50 +112,57 @@ service 是被动提供服务，只能由 client 主动向service发起请求。
 
 基于消息系统，当后端数据库中的记录有增加，删除或修改时，facelog 服务会自动向指定的redis频道发布消息。设备端只要订阅了该频道，就会收到相应的通知，实现本地数据更新。
 
-facelog 为 `fl_person，fl_feature，fl_permit` 三张表提供了实时更新发布频道。具体定义参见[`net.gdface.facelog.client.ChannelConstant`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/ChannelConstant.java) 中所有频道(Channel)的定义。前端设备订阅指定的频道，就可以收到相应的通知。
+facelog 为 `fl_person，fl_feature，fl_permit` 三张表提供了实时更新发布频道。具体定义参见[`net.gdface.facelog.client.ChannelConstant`](../facelog-client-base/src/sql2java/java/net/gdface/facelog/client/ChannelConstant.java) 中所有频道(Channel)的定义。前端设备订阅指定的频道，就可以收到相应的通知。
 
-[`net.gdface.facelog.client.SubAdapters`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/SubAdapters.java) 提供了响应对应上述数据库表数据更新消息的基类。应用项目只需要继承对应的类，重载 `onSubscribe`方法实现自己的业务逻辑。
+[`net.gdface.facelog.client.SubAdapters`](../facelog-client-base/src/sql2java/java/net/gdface/facelog/client/ChannelConstant.java) 提供了响应对应上述数据库表数据更新消息的基类。应用项目只需要继承对应的类，重载 `onSubscribe`方法实现自己的业务逻辑。
 
 #### 设备心跳
 
 对于管理端，实时获取所有前端设备的运行状态，是否在线，是设备管理的基本需要。设备端通过定时通过消息系统发送心跳数据，管理端即可通过接收所有设备的心跳数据实时掌握前端设备的运行状态。
 
-参见 [`net.gdface.facelog.device.Heartbeat`](../facelog-client/src/main/java/net/gdface/facelog/device/Heartbeat.java)
+参见 [`net.gdface.facelog.device.Heartbeat`](../facelog-client-base/src/main/java/net/gdface/facelog/device/Heartbeat.java)
 
 #### 设备命令
 
 管理端可以通过消息系统向指定的设备或设备组发送设备命令,前端设备通过设备命令频道收到设备命令，执行相应的业务逻辑，并向命令发送端返回命令执行结果响应。
 
-参见  设备命令管理对象：[`net.gdface.facelog.client.CmdManager`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/CmdManager.java)
+参见  设备命令管理对象：[`net.gdface.facelog.client.CmdManager`](../facelog-client-base/src/main/java/net/gdface/facelog/client/CmdManager.java)
 
-参见 设备命令响应对象：[`net.gdface.facelog.client.Ack`](../facelog-client/src/main/java/net/gdface/facelog/client/Ack.java)
+参见 设备命令响应对象：[`net.gdface.facelog.client.Ack`](../facelog-client-base/src/main/java/net/gdface/facelog/client/Ack.java)
 
 ### facelog 服务
 
 facelog 服务是一个基于[facebook thrift/swift](https://github.com/facebook/swift "swift") 框架开发的远程调用接口服务。为client端提供数据管理，安全认证等基础服务。
 
 服务接口定义参见
-[`net.gdface.facelog.service.BaseFaceLog`](../facelog-service/src/main/java/net/gdface/facelog/service/BaseFaceLog.java) 
+[`net.gdface.facelog.IFaceLog`](../facelog-base/src/main/java/net/gdface/facelog/IFaceLog.java) 
 
-服务接口由[`net.gdface.facelog.service.FaceLogImpl`](../facelog-service/src/main/java/net/gdface/facelog/service/FaceLogImpl.java)实现
+服务接口由[`net.gdface.facelog.FaceLogImpl`](../facelog-local/src/main/java/net/gdface/facelog/FaceLogImpl.java)实现
 
-服务接口在client端的实现参见[`net.gdface.facelog.client.IFaceLogClient`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/IFaceLogClient.java)(同步实现)，
-[`net.gdface.facelog.client.IFaceLogClientAsync`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/IFaceLogClientAsync.java)(异步实现)
+服务接口在client端的实现参见
 
->`BaseFaceLog`中每个接口定义方法的描述与client端 `IFaceLogClient`和`IFaceLogClient`保持一致。所以本文中引用接口方法时使用`BaseFaceLog`或`IFaceLogClient`和`IFaceLogClient`都是等价的
+[`net.gdface.facelog.client.IFaceLogClient`](../facelog-client/src/main/java/net/gdface/facelog/client/IFaceLogClient.java)(同步实现)，
 
-client端服务实例创建参见工厂类：[`net.gdface.facelog.client.ClientFactory`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/ClientFactory.java)
+[`net.gdface.facelog.client.IFaceLogClientAsync`](../facelog-client/src/main/java/net/gdface/facelog/client/IFaceLogClientAsync.java)(异步实现)
 
-#### ClientFactory 使用示例
+服务接口适用于android平台的client端的实现参见
+
+[`net.gdface.facelog.client.IFaceLogClient`](../facelog-client-android/src/main/java/net/gdface/facelog/client/IFaceLogClient.java)(同步实现)，
+
+[`net.gdface.facelog.client.IFaceLogClientAsync`](../facelog-client-android/src/main/java/net/gdface/facelog/client/IFaceLogClientAsync.java)(异步实现)
+
+>`IFaceLog`中每个接口定义方法的描述与client端 `IFaceLogClient`保持一致。所以本文中引用接口方法时使用`IFaceLog`和`IFaceLogClient`都是等价的
+
+#### 创建 IFaceLog实例示例
 
 	// 创建 faceLog 服务同步实例
 	IFaceLogClient facelogClient = ClientFactory.builder()
 									.setHostAndPort("127.0.0.1", DEFAULT_PORT) // 指定服务的主机地址和端口号
-									.build(); // 创建实例(同步)
+									.build(IFaceLogThriftClient.class, IFaceLogClient.class); // 创建实例(同步)
 	// 创建 faceLog 服务异步实例
 	IFaceLogClientAsync facelogClientAsync = ClientFactory.builder()
 									.setHostAndPort("127.0.0.1", DEFAULT_PORT) // 指定服务的主机地址和端口号
-									.buildAsync(); // 创建实例(异步)
+									.buildAsync(IFaceLogThriftClient.class,IFaceLogClientAsync.class); // 创建实例(异步)
 
 ## 开发指南
 
@@ -245,7 +252,7 @@ root|4|系统内置帐户，拥有所有管理权限，还可以修改系统配�
 	`root`用户的密码存储在系统配置文件中(properties)，其他的级别的用户的密码存储在`fl_person`表的`password`字段。
 
 
-参见[`net.gdface.facelog.client.CommonConstant.PersonRank`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommonConstant.java)
+参见[`net.gdface.facelog.CommonConstant.PersonRank`](../facelog-base/src/main/java/net/gdface/facelog/CommonConstant.java)
 
 #### 密码验证
 
@@ -261,7 +268,7 @@ root|4|系统内置帐户，拥有所有管理权限，还可以修改系统配�
 
 一个令牌对象只应由一个cleint使用，可多线程共享，但不可共享给其他client端。
 
-参见服务接口：[`net.gdface.facelog.client.IFaceLogClient`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/IFaceLogClient.java)，代码注释中对每一个方法是否需要令牌，需要什么类型的令牌都有明确说明。
+参见服务接口：[`net.gdface.facelog.IFaceLog`](../facelog-base/src/main/java/net/gdface/facelog/IFaceLog.java)，代码注释中对每一个方法是否需要令牌，需要什么类型的令牌都有明确说明。
 
 #### 令牌类型
 
@@ -271,7 +278,7 @@ type|说明
 人员令牌|管理端(管理员，操作员)使用的令牌
 root令牌|管理端(root)使用的令牌
 
-参见 [`net.gdface.facelog.service.Token`](../facelog-service/src/main/java/net/gdface/facelog/service/Token.java)
+参见 [`net.gdface.facelog.Token`](../facelog-base/src/main/java/net/gdface/facelog/Token.java)
 
 #### 令牌有效期
 
@@ -616,16 +623,11 @@ client收到消息后如何处理，这属于具体应用的业务逻辑，应�
 
 #### 设备命令定义
 
-facelog 只是一个开发框架，并不实现具体的设备命令，facelog 根据应用场景的提供一组预定义的设备命令，同时也允许应用项目根据需求自定义设备命令。 
+facelog 基于[dtalk](https://gitee.com/l0km/dtalk)框架实现设备命令定义，facelog 只是一个开发框架，并不实现具体的设备命令，根据应用场景的提供一组预定义的设备命令，同时也允许应用项目根据需求自定义设备命令。
 
-参见 [`net.gdface.facelog.client.Cmd`](../facelog-client/src/sql2java/java/net/gdface/facelog/client/Cmd.java)
+参见 [`net.gdface.facelog.client.dtalk.FacelogMenu`](../facelog-client-base/src/main/java/net/gdface/facelog/client/dtalk/FacelogMenu.java)
 
 每个设备命令都有命令参数和返回类型，对于预定义的设备命令，参数类型是已知的，对于自定义命令，参数类型则由应用项目自己解释。
-
-何为自定义命令？
-
-`net.gdface.facelog.client.Cmd`中`custom`代表自定义命令，自定义命令由应用程序自行约定，可以支持任意多参数。返回任意类型的结果。
-
 
 #### 发送设备命令
 
@@ -670,7 +672,7 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
     				.setAckChannel(serviceClient.getAckChannelSupplier(token)) // 设置命令响应通道
     				.setDeviceTarget(125,207,122) // 指定设备命令执行接收目标为一组设备(id)
     				.build()
-    				.resetSync(null, false); // 同步执行设备复位命令				
+    				.runCmdSync(pathOfCmd(CMD_RESET),null,false); // 同步执行设备复位命令				
     			// 输出命令执行结果
     			for(Ack<Void> ack:ackList){
     				logger.info("ack :{}",ack);
@@ -691,13 +693,12 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
 				.setAckChannel(serviceClient.getAckChannelSupplier(token)) // 设置命令响应通道
 				.setDeviceTarget(125,207,122) // 指定设备命令执行接收目标为一组设备(id)
 				.build()
-				.reset(null, new IAckAdapter.BaseAdapter<Void>(){
-					@Override
-					protected void doOnSubscribe(Ack<Void> t) {
-						// 输出命令执行结果
-						logger.info("ack :{}",t);
-					}
-				}); // 异步执行设备复位命令
+				.runCmd(pathOfCmd(CMD_RESET),null, new IAckAdapter.BaseAdapter<Object>(){
+				@Override
+				protected void doOnSubscribe(Ack<Object> t) {
+					logger.info("ADMIN client : 设备命令响应 {}",t);
+				}
+			}); // 异步执行设备复位命令
 		}  
     }
     
@@ -707,8 +708,6 @@ facelog 只是一个开发框架，并不实现具体的设备命令，facelog �
 #### 执行设备命令
 
 设备命令接收与任务分发执行由[`net.gdface.facelog.client.CmdDispatcher`](../facelog-client/src/main/java/net/gdface/facelog/client/CmdDispatcher.java)实现。
-
-
 
 ----------
 设备命令分发流程
