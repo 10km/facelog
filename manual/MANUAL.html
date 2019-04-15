@@ -447,41 +447,44 @@ document.addEventListener("DOMContentLoaded", function() {
 </ol>
 <h4>数据缓存</h4>
 <p>为提高数据库访问效率，facelog 为除 <code>fl_log，fl_log_light</code>之外的所有需要频繁读取的表实现缓存能力。</p>
-<p>可以从 <a href="../facelog-service/src/main/java/net/gdface/facelog/service/TableManagerInitializer.java"><code>net.gdface.facelog.service.TableManagerInitializer</code></a>代码为入口查看具体实现。</p>
+<p>可以从 <a href="../facelog-local/src/main/java/net/gdface/facelog/TableManagerInitializer.java"><code>net.gdface.facelog.TableManagerInitializer</code></a>代码为入口查看具体实现。</p>
 <h3>消息系统</h3>
 <p>service 是被动提供服务，只能由 client 主动向service发起请求。对于实现数据下发，设备管理等需求都需要service或admin client有主动向设备发送通知的能力。对前端设备的主动通知，facelog 基于 redis 提供了一个简单的消息系统(simpleMQ)。使设备端有能力以频道订阅的方式，异步获取来自服务端和管理端的通知消息。</p>
 <p>通过消息系统 faelog 实现以下能力：</p>
 <h4>数据更新</h4>
 <p>基于消息系统，当后端数据库中的记录有增加，删除或修改时，facelog 服务会自动向指定的redis频道发布消息。设备端只要订阅了该频道，就会收到相应的通知，实现本地数据更新。</p>
-<p>facelog 为 <code>fl_person，fl_feature，fl_permit</code> 三张表提供了实时更新发布频道。具体定义参见<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/ChannelConstant.java"><code>net.gdface.facelog.client.ChannelConstant</code></a> 中所有频道(Channel)的定义。前端设备订阅指定的频道，就可以收到相应的通知。</p>
-<p><a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/SubAdapters.java"><code>net.gdface.facelog.client.SubAdapters</code></a> 提供了响应对应上述数据库表数据更新消息的基类。应用项目只需要继承对应的类，重载 <code>onSubscribe</code>方法实现自己的业务逻辑。</p>
+<p>facelog 为 <code>fl_person，fl_feature，fl_permit</code> 三张表提供了实时更新发布频道。具体定义参见<a href="../facelog-client-base/src/sql2java/java/net/gdface/facelog/client/ChannelConstant.java"><code>net.gdface.facelog.client.ChannelConstant</code></a> 中所有频道(Channel)的定义。前端设备订阅指定的频道，就可以收到相应的通知。</p>
+<p><a href="../facelog-client-base/src/sql2java/java/net/gdface/facelog/client/ChannelConstant.java"><code>net.gdface.facelog.client.SubAdapters</code></a> 提供了响应对应上述数据库表数据更新消息的基类。应用项目只需要继承对应的类，重载 <code>onSubscribe</code>方法实现自己的业务逻辑。</p>
 <h4>设备心跳</h4>
 <p>对于管理端，实时获取所有前端设备的运行状态，是否在线，是设备管理的基本需要。设备端通过定时通过消息系统发送心跳数据，管理端即可通过接收所有设备的心跳数据实时掌握前端设备的运行状态。</p>
-<p>参见 <a href="../facelog-client/src/main/java/net/gdface/facelog/device/Heartbeat.java"><code>net.gdface.facelog.device.Heartbeat</code></a></p>
+<p>参见 <a href="../facelog-client-base/src/main/java/net/gdface/facelog/device/Heartbeat.java"><code>net.gdface.facelog.device.Heartbeat</code></a></p>
 <h4>设备命令</h4>
 <p>管理端可以通过消息系统向指定的设备或设备组发送设备命令,前端设备通过设备命令频道收到设备命令，执行相应的业务逻辑，并向命令发送端返回命令执行结果响应。</p>
-<p>参见  设备命令管理对象：<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/CmdManager.java"><code>net.gdface.facelog.client.CmdManager</code></a></p>
-<p>参见 设备命令响应对象：<a href="../facelog-client/src/main/java/net/gdface/facelog/client/Ack.java"><code>net.gdface.facelog.client.Ack</code></a></p>
+<p>参见  设备命令管理对象：<a href="../facelog-client-base/src/main/java/net/gdface/facelog/client/CmdManager.java"><code>net.gdface.facelog.client.CmdManager</code></a></p>
+<p>参见 设备命令响应对象：<a href="../facelog-client-base/src/main/java/net/gdface/facelog/client/Ack.java"><code>net.gdface.facelog.client.Ack</code></a></p>
 <h3>facelog 服务</h3>
 <p>facelog 服务是一个基于<a href="https://github.com/facebook/swift" title="swift">facebook thrift/swift</a> 框架开发的远程调用接口服务。为client端提供数据管理，安全认证等基础服务。</p>
 <p>服务接口定义参见
-<a href="../facelog-service/src/main/java/net/gdface/facelog/service/BaseFaceLog.java"><code>net.gdface.facelog.service.BaseFaceLog</code></a> </p>
-<p>服务接口由<a href="../facelog-service/src/main/java/net/gdface/facelog/service/FaceLogImpl.java"><code>net.gdface.facelog.service.FaceLogImpl</code></a>实现</p>
-<p>服务接口在client端的实现参见<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/IFaceLogClient.java"><code>net.gdface.facelog.client.IFaceLogClient</code></a>(同步实现)，
-<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/IFaceLogClientAsync.java"><code>net.gdface.facelog.client.IFaceLogClientAsync</code></a>(异步实现)</p>
+<a href="../facelog-base/src/main/java/net/gdface/facelog/IFaceLog.java"><code>net.gdface.facelog.IFaceLog</code></a> </p>
+<p>服务接口由<a href="../facelog-local/src/main/java/net/gdface/facelog/FaceLogImpl.java"><code>net.gdface.facelog.FaceLogImpl</code></a>实现</p>
+<p>服务接口在client端的实现参见</p>
+<p><a href="../facelog-client/src/main/java/net/gdface/facelog/client/IFaceLogClient.java"><code>net.gdface.facelog.client.IFaceLogClient</code></a>(同步实现)，</p>
+<p><a href="../facelog-client/src/main/java/net/gdface/facelog/client/IFaceLogClientAsync.java"><code>net.gdface.facelog.client.IFaceLogClientAsync</code></a>(异步实现)</p>
+<p>服务接口适用于android平台的client端的实现参见</p>
+<p><a href="../facelog-client-android/src/main/java/net/gdface/facelog/client/IFaceLogClient.java"><code>net.gdface.facelog.client.IFaceLogClient</code></a>(同步实现)，</p>
+<p><a href="../facelog-client-android/src/main/java/net/gdface/facelog/client/IFaceLogClientAsync.java"><code>net.gdface.facelog.client.IFaceLogClientAsync</code></a>(异步实现)</p>
 <blockquote>
-<p><code>BaseFaceLog</code>中每个接口定义方法的描述与client端 <code>IFaceLogClient</code>和<code>IFaceLogClient</code>保持一致。所以本文中引用接口方法时使用<code>BaseFaceLog</code>或<code>IFaceLogClient</code>和<code>IFaceLogClient</code>都是等价的</p>
+<p><code>IFaceLog</code>中每个接口定义方法的描述与client端 <code>IFaceLogClient</code>保持一致。所以本文中引用接口方法时使用<code>IFaceLog</code>和<code>IFaceLogClient</code>都是等价的</p>
 </blockquote>
-<p>client端服务实例创建参见工厂类：<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/ClientFactory.java"><code>net.gdface.facelog.client.ClientFactory</code></a></p>
-<h4>ClientFactory 使用示例</h4>
+<h4>创建 IFaceLog实例示例</h4>
 <pre><code>// 创建 faceLog 服务同步实例
 IFaceLogClient facelogClient = ClientFactory.builder()
                                 .setHostAndPort(&quot;127.0.0.1&quot;, DEFAULT_PORT) // 指定服务的主机地址和端口号
-                                .build(); // 创建实例(同步)
+                                .build(IFaceLogThriftClient.class, IFaceLogClient.class); // 创建实例(同步)
 // 创建 faceLog 服务异步实例
 IFaceLogClientAsync facelogClientAsync = ClientFactory.builder()
                                 .setHostAndPort(&quot;127.0.0.1&quot;, DEFAULT_PORT) // 指定服务的主机地址和端口号
-                                .buildAsync(); // 创建实例(异步)
+                                .buildAsync(IFaceLogThriftClient.class,IFaceLogClientAsync.class); // 创建实例(异步)
 </code></pre>
 
 <h2>开发指南</h2>
@@ -610,7 +613,7 @@ IFaceLogClientAsync facelogClientAsync = ClientFactory.builder()
 <p><code>root</code>用户的密码存储在系统配置文件中(properties)，其他的级别的用户的密码存储在<code>fl_person</code>表的<code>password</code>字段。</p>
 </li>
 </ul>
-<p>参见<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommonConstant.java"><code>net.gdface.facelog.client.CommonConstant.PersonRank</code></a></p>
+<p>参见<a href="../facelog-base/src/main/java/net/gdface/facelog/CommonConstant.java"><code>net.gdface.facelog.CommonConstant.PersonRank</code></a></p>
 <h4>密码验证</h4>
 <p>参见facelog 服务接口方法：</p>
 <pre><code>net.gdface.facelog.client.IFaceLogClient.isValidPassword
@@ -620,7 +623,7 @@ IFaceLogClientAsync facelogClientAsync = ClientFactory.builder()
 <p>令牌是系统安全设计的关键环节，凡是涉及数据写操作或安全管理的facelog服务接口都需要令牌。</p>
 <p>令牌本身是由facelog服务生成的一个具有一定时效的数据对象。client端在使用facelog服务之前需要向facelog申请令牌，client端程序结束时应该释放令牌。</p>
 <p>一个令牌对象只应由一个cleint使用，可多线程共享，但不可共享给其他client端。</p>
-<p>参见服务接口：<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/IFaceLogClient.java"><code>net.gdface.facelog.client.IFaceLogClient</code></a>，代码注释中对每一个方法是否需要令牌，需要什么类型的令牌都有明确说明。</p>
+<p>参见服务接口：<a href="../facelog-base/src/main/java/net/gdface/facelog/IFaceLog.java"><code>net.gdface.facelog.IFaceLog</code></a>，代码注释中对每一个方法是否需要令牌，需要什么类型的令牌都有明确说明。</p>
 <h4>令牌类型</h4>
 <table>
 <thead>
@@ -644,7 +647,7 @@ IFaceLogClientAsync facelogClientAsync = ClientFactory.builder()
 </tr>
 </tbody>
 </table>
-<p>参见 <a href="../facelog-service/src/main/java/net/gdface/facelog/service/Token.java"><code>net.gdface.facelog.service.Token</code></a></p>
+<p>参见 <a href="../facelog-base/src/main/java/net/gdface/facelog/Token.java"><code>net.gdface.facelog.Token</code></a></p>
 <h4>令牌有效期</h4>
 <p>设备令牌目前未定义有效期，所以设备令牌在facelog 服务运行期内一直有效。</p>
 <p>人员令牌和root令牌定义了有效期，默认有效期是60分钟。可以通过修改系统参数改变该值，参见<code>CommonConstant.TOKEN_PERSON_EXPIRE</code> 。如果令牌过期，要重新申请令牌。</p>
@@ -1006,11 +1009,9 @@ public class HeartbeatTest implements ChannelConstant{
 <p>管理端是设备命令的发送端，设备端是设备命令的接收和处理端，设备端执行命令后，将命令执行结果以命令响应的形式返回给管理端。</p>
 <p>以上只是示意图，设备命令的发送与接收都是通过redis的订阅发布功能实现，管理端和设备之间并没有直接的网络通讯。</p>
 <h4>设备命令定义</h4>
-<p>facelog 只是一个开发框架，并不实现具体的设备命令，facelog 根据应用场景的提供一组预定义的设备命令，同时也允许应用项目根据需求自定义设备命令。 </p>
-<p>参见 <a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/Cmd.java"><code>net.gdface.facelog.client.Cmd</code></a></p>
+<p>facelog 基于<a href="https://gitee.com/l0km/dtalk">dtalk</a>框架实现设备命令定义，facelog 只是一个开发框架，并不实现具体的设备命令，根据应用场景的提供一组预定义的设备命令，同时也允许应用项目根据需求自定义设备命令。</p>
+<p>参见 <a href="../facelog-client-base/src/main/java/net/gdface/facelog/client/dtalk/FacelogMenu.java"><code>net.gdface.facelog.client.dtalk.FacelogMenu</code></a></p>
 <p>每个设备命令都有命令参数和返回类型，对于预定义的设备命令，参数类型是已知的，对于自定义命令，参数类型则由应用项目自己解释。</p>
-<p>何为自定义命令？</p>
-<p><code>net.gdface.facelog.client.Cmd</code>中<code>custom</code>代表自定义命令，自定义命令由应用程序自行约定，可以支持任意多参数。返回任意类型的结果。</p>
 <h4>发送设备命令</h4>
 <ul>
 <li>
@@ -1067,7 +1068,7 @@ public class HeartbeatTest implements ChannelConstant{
                 .setAckChannel(serviceClient.getAckChannelSupplier(token)) // 设置命令响应通道
                 .setDeviceTarget(125,207,122) // 指定设备命令执行接收目标为一组设备(id)
                 .build()
-                .resetSync(null, false); // 同步执行设备复位命令              
+                .runCmdSync(pathOfCmd(CMD_RESET),null,false); // 同步执行设备复位命令             
             // 输出命令执行结果
             for(Ack&lt;Void&gt; ack:ackList){
                 logger.info(&quot;ack :{}&quot;,ack);
@@ -1088,13 +1089,12 @@ public class HeartbeatTest implements ChannelConstant{
             .setAckChannel(serviceClient.getAckChannelSupplier(token)) // 设置命令响应通道
             .setDeviceTarget(125,207,122) // 指定设备命令执行接收目标为一组设备(id)
             .build()
-            .reset(null, new IAckAdapter.BaseAdapter&lt;Void&gt;(){
-                @Override
-                protected void doOnSubscribe(Ack&lt;Void&gt; t) {
-                    // 输出命令执行结果
-                    logger.info(&quot;ack :{}&quot;,t);
-                }
-            }); // 异步执行设备复位命令
+            .runCmd(pathOfCmd(CMD_RESET),null, new IAckAdapter.BaseAdapter&lt;Object&gt;(){
+            @Override
+            protected void doOnSubscribe(Ack&lt;Object&gt; t) {
+                logger.info(&quot;ADMIN client : 设备命令响应 {}&quot;,t);
+            }
+        }); // 异步执行设备复位命令
     }  
 }
 </code></pre>
