@@ -1,5 +1,6 @@
 /**
  * redis访问测试
+ * @param guyadong
  */
 var redis = require('redis');
 var client = redis.createClient(6379,'localhost');

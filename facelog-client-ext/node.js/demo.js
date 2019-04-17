@@ -7,12 +7,16 @@ var thrift = require('thrift');
 var IFacelog = require('./IFaceLog.js'),
 ttypes = require('./IFaceLog_types.js');
 
+// 创建网络连接
 var connection = thrift.createConnection('localhost', 26411),
-  client = thrift.createClient(IFacelog, connection);
+
+// 创建facelog服务client端实例
+client = thrift.createClient(IFacelog, connection);
 
 connection.on('error', function(err) {
   console.error(err);
 });
+///////////// 接口调用示例 ////////////////
 // 调用version接口 
 client.version(function(err, res) {
   if (err) {
