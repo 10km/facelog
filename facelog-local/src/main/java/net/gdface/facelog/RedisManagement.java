@@ -2,10 +2,12 @@ package net.gdface.facelog;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
@@ -146,37 +148,93 @@ class RedisManagement implements ServiceConstant{
 	/** 启动本地 redis 服务器 */
 	private static final  void startLocalServer(Map<PropName, Object> parameters){
 		String home = CONFIG.getString(REDIS_HOME,"");
-		if(!home.isEmpty()){
-			// redis-server 可执行程序路径
-			String exe = new StringBuffer()
-					.append(home)
-					.append(File.separator)
-					.append(REDIS_SERVER_EXE)
-					.append(suffixOfExe()).toString();
-			if(new File(exe).canExecute()){
-				ArrayList<String> args = Lists.newArrayList(shell(),exe);
-				// 命令行指定端口
-				if(parameters.containsKey(PropName.port)){
-					args.add("--port " + parameters.get(PropName.port));
-				}
-				// 命令行指定password
-				if(parameters.containsKey(PropName.password)){
-					args.add("--requirepass " + parameters.get(PropName.password));
-				}
-				try {
-					logger.info("start redis server(启动redis服务器)");
-					String cmd = Joiner.on(' ').join(args);
-					logger.debug("cmd(启动命令): {}",cmd);
-					Runtime.getRuntime().exec(cmd);
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-			}else{
-				throw new IllegalArgumentException(String.format("INVALID FILE(无效文件名) %s",exe));
-			}
-		}else{
-			throw new IllegalArgumentException(String.format("NOT DEFINE(参数没有定义) %s",REDIS_HOME));
+		checkArgument(!home.isEmpty(),"NOT DEFINE(参数没有定义) %s",REDIS_HOME);
+		// redis-server 可执行程序路径
+		String exe = new StringBuffer()
+				.append(home)
+				.append(File.separator)
+				.append(REDIS_SERVER_EXE)
+				.append(suffixOfExe()).toString();
+		checkArgument(new File(exe).canExecute(),"NOT EXECUTABLE FILE(非可执行文件名) %s",exe);
+
+		ArrayList<String> args = Lists.newArrayList(shell(),exe);
+		// 命令行指定端口
+		if(parameters.containsKey(PropName.port)){
+			args.add("--port " + parameters.get(PropName.port));
 		}
+		// 命令行指定password
+		if(parameters.containsKey(PropName.password)){
+			args.add("--requirepass " + parameters.get(PropName.password));
+		}
+		try {
+			logger.info("start redis server(启动redis服务器)");
+			String cmd = Joiner.on(' ').join(args);
+			logger.debug("cmd(启动命令): {}",cmd);
+			Runtime.getRuntime().exec(cmd);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}	
+	}
+	/** 
+	 * 根据提醒的参数启动本地 webredis 服务(node.js) 
+	 * @param parameters 
+	 * @return node.js进程,启动失败返回{@code null}
+	 */
+	private static final  Process startLocalWebredis(Map<String, Object> parameters){
+		String nodejsExe = CONFIG.getString(NODEJS_EXE,"");
+		String webredisFile = CONFIG.getString(WEBREDIS_FILE,"");
+		if(!nodejsExe.isEmpty() && !webredisFile.isEmpty()){
+			checkArgument(new File(nodejsExe).canExecute(),
+					"NOT EXECUTABLE FILE(非可执行文件名) %s",nodejsExe);
+			ArrayList<String> args = Lists.newArrayList(shell(),nodejsExe);
+
+			// 命令行指定端口
+			if(parameters.containsKey(WEBREDIS_PORT)){
+				args.add("--port " + parameters.get(WEBREDIS_PORT));
+			}
+			/** 优先使用  WEBREDIS_RURL  */
+			if(parameters.containsKey(WEBREDIS_RURL)){
+				// 命令行指定redis 连接url
+				args.add("--rurl " + parameters.get(WEBREDIS_RURL));
+			}else{
+				// 命令行指定redis 主机
+				if(parameters.containsKey(WEBREDIS_RHOST)){
+					args.add("--rhost " + parameters.get(WEBREDIS_RHOST));
+				}
+				// 命令行指定redis 端口
+				if(parameters.containsKey(WEBREDIS_RPORT)){
+					args.add("--rport " + parameters.get(WEBREDIS_RPORT));
+				}
+				// 命令行指定redis 连接密码
+				if(parameters.containsKey(WEBREDIS_RAUTH)){
+					args.add("--rauth " + parameters.get(WEBREDIS_RAUTH));
+				}
+				// 命令行指定redis 数据库
+				if(parameters.containsKey(WEBREDIS_RDB)){
+					args.add("--rdb " + parameters.get(WEBREDIS_RDB));
+				}
+			}
+			try {
+				logger.info("start webredis server(启动webredis服务器)");
+				String cmd = Joiner.on(' ').join(args);
+				logger.debug("cmd(启动命令): {}",cmd);
+//				Process process =  Runtime.getRuntime().exec(cmd);
+				Process process =  new ProcessBuilder(cmd)
+						.redirectError(Redirect.INHERIT)
+						.start();
+				try {
+					int exitValue = process.exitValue();
+					// node.js没有正常启动
+					logger.debug("node.js can't start {}",exitValue);
+				} catch (IllegalThreadStateException e) {
+					// 服务正常启动
+					return process;
+				}
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			} 
+		}
+		return null;
 	}
 	/** 中止本地 redis 服务器*/
 	private static void  shutdownLocalServer(){

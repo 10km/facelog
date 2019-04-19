@@ -1,6 +1,7 @@
 package net.gdface.facelog;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -134,6 +135,28 @@ public class GlobalConfig implements ServiceConstant{
 			poolConfig.setMaxTotal(CONFIG.getInt(REDIS_POOL_MAXTOTAL));
 			params.put(PropName.jedisPoolConfig, poolConfig);
 		}
+		// 过滤掉所有为null的参数
+		return Maps.filterValues(params, Predicates.notNull());
+
+	}
+	/** 从配置文件中读取WEBREDIS参数 */
+	static Map<String,Object> makeWebredisParameters(){
+		HashMap<String, Object> params = new HashMap<String,Object>(16);
+		params.put(NODEJS_EXE, CONFIG.getString(NODEJS_EXE));
+		if(CONFIG.containsKey(REDIS_URI)){
+			try {
+				params.put(WEBREDIS_RURL, new URL(CONFIG.getString(WEBREDIS_RURL)));
+			} catch (MalformedURLException e) {
+				throw new IllegalArgumentException(e);
+			}
+		}else{
+			params.put(WEBREDIS_FILE, CONFIG.getString(WEBREDIS_FILE,null));
+			params.put(WEBREDIS_RHOST, CONFIG.getString(WEBREDIS_RHOST,null));
+			params.put(WEBREDIS_RPORT, CONFIG.getInteger(WEBREDIS_RPORT,null));
+			params.put(WEBREDIS_RDB, CONFIG.getInteger(WEBREDIS_RDB,null));
+			params.put(WEBREDIS_RAUTH, CONFIG.getString(WEBREDIS_RAUTH,null));
+		}
+
 		// 过滤掉所有为null的参数
 		return Maps.filterValues(params, Predicates.notNull());
 

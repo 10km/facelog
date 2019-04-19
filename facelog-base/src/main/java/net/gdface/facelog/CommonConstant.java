@@ -11,6 +11,8 @@ public interface CommonConstant {
     public static final String NULL_ID_STRING = "";
     /** 默认服务端口号 */
     public static final int DEFAULT_PORT = 26411;
+    /** 默认webredis服务端口号 */
+    public static final int DEFAULT_WEBREDIS_PORT = 16379;
     /** 默认心跳包间隔(秒) */
     public static final int DEFAULT_HEARTBEAT_PERIOD = 8;
     /** 默认心跳包失效时间(秒) */
@@ -191,6 +193,30 @@ public interface CommonConstant {
     /** jedis pool 最大线程数 */
     public static final String REDIS_POOL_MAXTOTAL = "redis.pool.maxTotal";
     
+    /** node可执行程序路径 */
+    public static final String NODEJS_EXE = "nodejs.exe";
+ 
+    /** webredis参数配置 */
+    public static final String WEBREDIS_FILE = "webredis.file";
+   
+    /** webredis服务端口 */
+    public static final String WEBREDIS_PORT = "webredis.port";
+    
+    /** webredis:redis 主机名 */
+    public static final String WEBREDIS_RHOST = "webredis.rhost";
+    
+    /** webredis:redis 端口 */
+    public static final String WEBREDIS_RPORT = "webredis.rport";
+    
+    /** webredis:redis 密码 */
+    public static final String WEBREDIS_RAUTH = "webredis.rauth";
+    
+    /** webredis:redis 数据库 */
+    public static final String WEBREDIS_RDB = "webredis.rdb";
+
+    /** webredis:redis 连接url */
+    public static final String WEBREDIS_RURL = "webredis.rurl";
+
     /** 操作员对person表允许的操作 */
     public static final String SECURITY_OPERATOR_TABLE_PERSON_ALLOW = "security.operator.table.person.allow";
     
