@@ -1,7 +1,6 @@
 package net.gdface.facelog;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -35,6 +34,7 @@ import com.google.common.base.Predicates;
 import com.google.common.base.Strings;
 
 import gu.simplemq.redis.JedisPoolLazy.PropName;
+import gu.simplemq.redis.JedisUtils;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -74,6 +74,7 @@ public class GlobalConfig implements ServiceConstant{
 			config.setExpressionEngine(engine);
 			// 设置同步器
 			config.setSynchronizer(new ReadWriteSynchronizer());
+			config.setConversionHandler(CustomConversionHandler.INSTANCE);
 			return config;
 		}catch(Exception e){
 			throw new ExceptionInInitializerError(e);
@@ -137,30 +138,46 @@ public class GlobalConfig implements ServiceConstant{
 		}
 		// 过滤掉所有为null的参数
 		return Maps.filterValues(params, Predicates.notNull());
-
 	}
-	/** 从配置文件中读取WEBREDIS参数 */
+	/**
+	 * 从配置文件中读取WEBREDIS参数
+	 * @return 参数名vs参数值映射
+	 */
 	static Map<String,Object> makeWebredisParameters(){
 		HashMap<String, Object> params = new HashMap<String,Object>(16);
-		params.put(NODEJS_EXE, CONFIG.getString(NODEJS_EXE));
-		if(CONFIG.containsKey(REDIS_URI)){
-			try {
-				params.put(WEBREDIS_RURL, new URL(CONFIG.getString(WEBREDIS_RURL)));
-			} catch (MalformedURLException e) {
-				throw new IllegalArgumentException(e);
-			}
+		params.put(NODEJS_EXE, valueOf(String.class,NODEJS_EXE,null));
+		params.put(WEBREDIS_FILE, valueOf(String.class,WEBREDIS_FILE,null));
+		params.put(WEBREDIS_HOST, valueOf(String.class,WEBREDIS_HOST,DEFAULT_WEBREDIS_HOST));
+		params.put(WEBREDIS_PORT, valueOf(Integer.class,WEBREDIS_PORT,DEFAULT_WEBREDIS_PORT));
+	
+		// 优先使用REDIS_URI
+		if(defined(WEBREDIS_RURI)){
+			params.put(WEBREDIS_RURI, valueOf(URI.class,WEBREDIS_RURI));
 		}else{
-			params.put(WEBREDIS_FILE, CONFIG.getString(WEBREDIS_FILE,null));
-			params.put(WEBREDIS_RHOST, CONFIG.getString(WEBREDIS_RHOST,null));
-			params.put(WEBREDIS_RPORT, CONFIG.getInteger(WEBREDIS_RPORT,null));
-			params.put(WEBREDIS_RDB, CONFIG.getInteger(WEBREDIS_RDB,null));
-			params.put(WEBREDIS_RAUTH, CONFIG.getString(WEBREDIS_RAUTH,null));
+			// 用redis host,port,database,password值创建redis uri
+			URI uri = JedisUtils.createJedisURI(
+					valueOf(String.class,WEBREDIS_RHOST,null), 
+					valueOf(Integer.class,WEBREDIS_RPORT,null), 
+					valueOf(String.class,WEBREDIS_RAUTH,null), 
+					valueOf(Integer.class,WEBREDIS_RDB,null));
+			params.put(WEBREDIS_RURI, uri);
 		}
-
 		// 过滤掉所有为null的参数
 		return Maps.filterValues(params, Predicates.notNull());
-
+	
 	}
+	private static boolean defined(String key){
+		if(Strings.isNullOrEmpty(key)){
+			return false;
+		}
+		return !CONFIG.getString(key,"").matches(".*\\$\\{.+\\}.*");
+	}
+	private static <T>T valueOf(Class<T> clazz,String key){
+		return defined(key) ? CONFIG.get(clazz, key) : null;
+	} 
+	private static <T>T valueOf(Class<T> clazz,String key,T defaultValue){
+		return defined(key)  ? CONFIG.get(clazz, key,defaultValue) : null;
+	} 
 	/** log 输出REDIS参数 */
 	static final void logRedisParameters(Map<PropName,Object>params){
 		logger.info("redis 服务器参数:");

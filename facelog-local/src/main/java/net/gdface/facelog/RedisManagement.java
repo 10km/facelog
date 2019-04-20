@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -40,26 +41,34 @@ class RedisManagement implements ServiceConstant{
 	private static boolean localServerStarted = false;
 	/** redis数据库配置参数 */
 	private static Map<PropName, Object> parameters;
+	private static Process webredisProcess;
+	private static String webredisURL;
+	/** webredis服务参数 */
+	private final static Map<String, Object> webredisParameters;
 	/** 消息系统(redis)基本参数  */
 	private final ImmutableMap<MQParam,String> redisParam ;
 	/** 所有任务队列key */
 	private static final Set<String> taskKeys = Sets.newConcurrentHashSet();
 	static{
 		parameters = GlobalConfig.makeRedisParameters();
+		webredisParameters = GlobalConfig.makeWebredisParameters();
 		JedisPoolLazy.createDefaultInstance(parameters);
 		redisURI = JedisPoolLazy.getDefaultInstance().getCanonicalURI().toString();
 		/** 程序结束时关闭 redis 服务器 */
 		Runtime.getRuntime().addShutdownHook(new Thread(){
 			@Override
 			public void run() {
+				shutdownLocalWebredisServer();
 				shutdownLocalServer();
 			}
 		});
 	}
 	protected RedisManagement() {
 		init();
+		initWebredis();
 		redisParam = ImmutableMap.<MQParam,String>builder()
 			.put(MQParam.REDIS_URI, redisURI)
+			.put(MQParam.WEBREDIS_URL, webredisURL)
 			.put(MQParam.CMD_CHANNEL, createCmdChannel())
 			.put(MQParam.LOG_MONITOR_CHANNEL, createLogMonitorChannel())
 			.put(MQParam.HB_MONITOR_CHANNEL, createHeartbeatMonitorChannel())
@@ -175,67 +184,6 @@ class RedisManagement implements ServiceConstant{
 			throw new RuntimeException(e);
 		}	
 	}
-	/** 
-	 * 根据提醒的参数启动本地 webredis 服务(node.js) 
-	 * @param parameters 
-	 * @return node.js进程,启动失败返回{@code null}
-	 */
-	private static final  Process startLocalWebredis(Map<String, Object> parameters){
-		String nodejsExe = CONFIG.getString(NODEJS_EXE,"");
-		String webredisFile = CONFIG.getString(WEBREDIS_FILE,"");
-		if(!nodejsExe.isEmpty() && !webredisFile.isEmpty()){
-			checkArgument(new File(nodejsExe).canExecute(),
-					"NOT EXECUTABLE FILE(非可执行文件名) %s",nodejsExe);
-			ArrayList<String> args = Lists.newArrayList(shell(),nodejsExe);
-
-			// 命令行指定端口
-			if(parameters.containsKey(WEBREDIS_PORT)){
-				args.add("--port " + parameters.get(WEBREDIS_PORT));
-			}
-			/** 优先使用  WEBREDIS_RURL  */
-			if(parameters.containsKey(WEBREDIS_RURL)){
-				// 命令行指定redis 连接url
-				args.add("--rurl " + parameters.get(WEBREDIS_RURL));
-			}else{
-				// 命令行指定redis 主机
-				if(parameters.containsKey(WEBREDIS_RHOST)){
-					args.add("--rhost " + parameters.get(WEBREDIS_RHOST));
-				}
-				// 命令行指定redis 端口
-				if(parameters.containsKey(WEBREDIS_RPORT)){
-					args.add("--rport " + parameters.get(WEBREDIS_RPORT));
-				}
-				// 命令行指定redis 连接密码
-				if(parameters.containsKey(WEBREDIS_RAUTH)){
-					args.add("--rauth " + parameters.get(WEBREDIS_RAUTH));
-				}
-				// 命令行指定redis 数据库
-				if(parameters.containsKey(WEBREDIS_RDB)){
-					args.add("--rdb " + parameters.get(WEBREDIS_RDB));
-				}
-			}
-			try {
-				logger.info("start webredis server(启动webredis服务器)");
-				String cmd = Joiner.on(' ').join(args);
-				logger.debug("cmd(启动命令): {}",cmd);
-//				Process process =  Runtime.getRuntime().exec(cmd);
-				Process process =  new ProcessBuilder(cmd)
-						.redirectError(Redirect.INHERIT)
-						.start();
-				try {
-					int exitValue = process.exitValue();
-					// node.js没有正常启动
-					logger.debug("node.js can't start {}",exitValue);
-				} catch (IllegalThreadStateException e) {
-					// 服务正常启动
-					return process;
-				}
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			} 
-		}
-		return null;
-	}
 	/** 中止本地 redis 服务器*/
 	private static void  shutdownLocalServer(){
 		if(localServerStarted){
@@ -257,6 +205,104 @@ class RedisManagement implements ServiceConstant{
 			}finally{
 				jedis.close();
 			}
+		}
+	}
+	/** 
+	 * 根据提醒的参数启动本地 webredis 服务(node.js) 
+	 * @param parameters 
+	 * @return node.js进程
+	 */
+	private static Process startLocalWebredis(Map<String, Object> parameters){
+		String nodejsExe = (String) parameters.get(NODEJS_EXE);
+		String webredisFile = (String) parameters.get(WEBREDIS_FILE);
+
+		checkArgument(new File(nodejsExe).canExecute(),
+				"NOT EXECUTABLE FILE(非可执行文件名) %s",nodejsExe);
+		ArrayList<String> args = Lists.newArrayList(shell(),nodejsExe);
+		
+		args.add(webredisFile);
+		// 命令行指定端口
+		if(parameters.containsKey(WEBREDIS_PORT)){
+			args.add("--port " + parameters.get(WEBREDIS_PORT));
+		}
+		/** 优先使用  WEBREDIS_RURL  */
+		if(parameters.containsKey(WEBREDIS_RURI)){
+			// 命令行指定redis 连接url
+			args.add("--rurl " + parameters.get(WEBREDIS_RURI));
+		}else{
+			// 命令行指定redis 主机
+			if(parameters.containsKey(WEBREDIS_RHOST)){
+				args.add("--rhost " + parameters.get(WEBREDIS_RHOST));
+			}
+			// 命令行指定redis 端口
+			if(parameters.containsKey(WEBREDIS_RPORT)){
+				args.add("--rport " + parameters.get(WEBREDIS_RPORT));
+			}
+			// 命令行指定redis 连接密码
+			if(parameters.containsKey(WEBREDIS_RAUTH)){
+				args.add("--rauth " + parameters.get(WEBREDIS_RAUTH));
+			}
+			// 命令行指定redis 数据库
+			if(parameters.containsKey(WEBREDIS_RDB)){
+				args.add("--rdb " + parameters.get(WEBREDIS_RDB));
+			}
+		}
+		try {
+			logger.info("start webredis server(启动webredis服务器)");
+			String cmd = Joiner.on(' ').join(args);
+			logger.debug("cmd(启动命令): {}",cmd);
+			//				Process process =  Runtime.getRuntime().exec(cmd);
+			return  new ProcessBuilder(cmd)
+					.redirectError(Redirect.INHERIT)
+					.start();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} 
+	}
+	
+	/** 中止本地 redis 服务器*/
+	private static void  shutdownLocalWebredisServer(){
+		if(webredisProcess != null){
+			try {
+				webredisProcess.exitValue();				
+			} catch (IllegalThreadStateException  e) {
+				webredisProcess.destroy();
+			}
+			webredisProcess = null;
+		}
+	}
+	private static void initWebredis(){
+		String host = (String) webredisParameters.get(WEBREDIS_HOST);
+		int port = (int) webredisParameters.get(WEBREDIS_PORT);
+		webredisURL = String.format("http://%s:%d",host,port);
+		Predicate<String> responseValidator = new Predicate<String>() {
+
+			@Override
+			public boolean apply(String input) {
+				return null == input ? false : input.startsWith("webredis");
+			}
+		};
+		if(NetworkUtil.selfBind(host)){
+			if(webredisParameters.containsKey(NODEJS_EXE) 
+				&& webredisParameters.containsKey(WEBREDIS_FILE)){
+
+				if(!NetworkUtil.testHttpConnect(host, port, responseValidator)){
+					webredisProcess = startLocalWebredis(webredisParameters);
+					for(int c=0;c<3;++c){
+						try {
+							Thread.sleep(2000);
+							if(NetworkUtil.testHttpConnect(host, port, responseValidator)){
+								return;
+							}
+						} catch (InterruptedException e) {
+							break;
+						}
+					}
+				}
+			}
+		}else if(!NetworkUtil.testHttpConnect(host, port, responseValidator)){
+			// 检查指定的webredis外部连接是否可访问
+			logger.warn("INVALID WEBREDIS SERVER(webredis服务不可访问) http://{}:{}",host,port);
 		}
 	}
 	/** 返回redis访问参数 */

@@ -1,11 +1,17 @@
 package net.gdface.facelog.client;
 
 import java.net.URI;
+import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
+import com.google.common.base.Function;
 import com.google.common.base.Supplier;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import gu.dtalk.MenuItem;
+import net.gdface.facelog.MQParam;
 import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
@@ -33,6 +39,14 @@ public class IFaceLogClientAsync extends IFaceLogThriftClientAsync {
 	 */
 	public URI insteadHostIfLocalhost(URI uri) {
 		return clientTools.insteadHostIfLocalhost(uri);
+	}
+	/**
+	 * 如果{@code url}的主机名是本机地址则用facelog服务主机名替换
+	 * @param url
+	 * @return {@code url} or new URI instead with host of facelog
+	 */
+	public URL insteadHostIfLocalhost(URL url) {
+		return clientTools.insteadHostIfLocalhost(url);
 	}
 	/**
 	 * @param deviceId
@@ -124,6 +138,23 @@ public class IFaceLogClientAsync extends IFaceLogThriftClientAsync {
 	 */
 	public void initRedisDefaultInstance(Token token) {
 		clientTools.initRedisDefaultInstance(token);
+	}
+	/**
+	 * 转参数中的主机名
+	 * @see net.gdface.facelog.thrift.IFaceLogThriftClientAsync#getRedisParameters(net.gdface.facelog.Token)
+	 * @see ClientExtendTools#insteadHostOfMQParamIfLocalhost(Map)
+	 */
+	@Override
+	public ListenableFuture<Map<MQParam, String>> getRedisParameters(Token token) {
+		ListenableFuture<Map<MQParam, String>> feature = super.getRedisParameters(token);
+		return Futures.transform(feature, 
+			new Function<Map<MQParam, String>, Map<MQParam, String>>() {
+
+			@Override
+			public Map<MQParam, String> apply(Map<MQParam, String> input) {
+				return clientTools.insteadHostOfMQParamIfLocalhost(input);
+			}
+		});
 	}
 
 

@@ -11,6 +11,8 @@ public interface CommonConstant {
     public static final String NULL_ID_STRING = "";
     /** 默认服务端口号 */
     public static final int DEFAULT_PORT = 26411;
+    /** 默认webredis主机名 */
+    public static final String DEFAULT_WEBREDIS_HOST = "locahost";
     /** 默认webredis服务端口号 */
     public static final int DEFAULT_WEBREDIS_PORT = 16379;
     /** 默认心跳包间隔(秒) */
@@ -199,9 +201,12 @@ public interface CommonConstant {
     /** webredis参数配置 */
     public static final String WEBREDIS_FILE = "webredis.file";
    
+    /** webredis主机名,为非本机名('localhost','127.0.0.1')时,不执行本地webredis启动 */
+    public static final String WEBREDIS_HOST = "webredis.host";
+
     /** webredis服务端口 */
     public static final String WEBREDIS_PORT = "webredis.port";
-    
+
     /** webredis:redis 主机名 */
     public static final String WEBREDIS_RHOST = "webredis.rhost";
     
@@ -214,8 +219,8 @@ public interface CommonConstant {
     /** webredis:redis 数据库 */
     public static final String WEBREDIS_RDB = "webredis.rdb";
 
-    /** webredis:redis 连接url */
-    public static final String WEBREDIS_RURL = "webredis.rurl";
+    /** webredis:redis 连接uri,设置此值时忽略所有其他redis参数('rhost','rport'...) */
+    public static final String WEBREDIS_RURI = "webredis.ruri";
 
     /** 操作员对person表允许的操作 */
     public static final String SECURITY_OPERATOR_TABLE_PERSON_ALLOW = "security.operator.table.person.allow";
