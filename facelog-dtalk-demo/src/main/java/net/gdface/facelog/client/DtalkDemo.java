@@ -16,6 +16,7 @@ import net.gdface.facelog.client.location.DefaultCustomConnectConfigProvider;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
+import net.gdface.utils.FaceUtilits;
 import net.gdface.utils.NetworkUtil;
 
 import static gu.dtalk.engine.SampleConnector.*;
@@ -43,7 +44,7 @@ public class DtalkDemo {
 	private DtalkDemo initDevice() throws ServiceSecurityException{
 		devMac = DEVINFO_PROVIDER.getMac();
 
-		device = DeviceBean.builder().mac(NetworkUtil.formatMac(devMac, null)).serialNo("5432122").build();
+		device = DeviceBean.builder().mac(FaceUtilits.toHex(devMac)).serialNo("5432122").build();
 		logger.info(device.toString(true,false));
 		// 注册设备 
 		device = this.facelogClient.registerDevice(device);
