@@ -17,7 +17,6 @@ import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
 import net.gdface.utils.FaceUtilits;
-import net.gdface.utils.NetworkUtil;
 
 import static gu.dtalk.engine.SampleConnector.*;
 import static com.google.common.base.Preconditions.*;
