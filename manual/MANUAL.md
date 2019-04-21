@@ -987,7 +987,7 @@ mysql数据库连接参数的参数名并没有在`CommonConstant.java`中有完
 
 完整的redis参数名定义参见[`net.gdface.facelog.client.CommonConstant`][3]中 `REDIS_`为前缀的所有参数名定义。
 
-### webredis 连接参数
+### webredis 启动参数
 
 [webredis](https://gitee.com/l0km/webredis)是一个简单的基于websocket+redis+[node.js](https://nodejs.org)实现web端消息推送的服务,用于向浏览器推送redis订阅消息，基于浏览器的设备管理端需要用此服务实现对设备的管理。
 
