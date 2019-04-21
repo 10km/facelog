@@ -251,7 +251,7 @@ class RedisManagement implements ServiceConstant{
 		try {
 			logger.info("start webredis server(启动webredis服务器)");
 			String cmd = Joiner.on(' ').join(args);
-			logger.info("cmd(启动命令): {}",cmd);
+			logger.debug("cmd(启动命令): {}",cmd);
 			return new ProcessBuilder(args)
 					.redirectError(Redirect.INHERIT)
 					.redirectOutput(Redirect.INHERIT)

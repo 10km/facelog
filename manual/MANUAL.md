@@ -964,22 +964,48 @@ facelog 可修改的系统参数名都定义在[`net.gdface.facelog.client.Commo
 
 mysql数据库连接参数的参数名并没有在`CommonConstant.java`中有完整定义。[`defaultConfig.xml`][4]中`database`下的节点都是数据连接的相关参数，数据库连接的主要参数如下：
 
-1. database.host 数据库主机名
-2. database.port 数据库连接端口号
-3. database.schema 数据库schema
-4. database.username 数据库访问用户名
-5. database.password 数据库访问密码
+
+|参数名|默认值|说明|
+|:--|:--|:--|
+|database.jdbc.host|localhost|数据库主机名|
+|database.jdbc.port|3306|数据库连接端口号|
+|database.jdbc.schema|test|数据库schema|
+|database.jdbc.username|root|数据库访问用户名|
+|database.jdbc.password|空|数据库访问密码|
 
 ### redis 连接参数
 
-1. redis.host redis服务器主机名
-2. redis.port redis服务器端口号
-3. redis.database redis数据库索引
-4. redis.password redis数据库访问密码
-5. redis.timeout redis 超时参数(秒)
-6. redis.home redis本机安装位置，当指定此值时,facelog启动会自动启动redis 
+|参数名|默认值|说明|
+|:--|:--|:--|
+|redis.host|localhost|redis服务器主机名|
+|redis.port|6379|redis服务器端口号|
+|redis.database|0|redis数据库索引|
+|redis.password|空|redis数据库访问密码|
+|redis.timeout|2000|redis 超时参数(秒)|
+|redis.uri||redis 访问地址,如 'jedis://localhost:6397/0',设置此值时忽略所有其他redis参数(host,port,password,database)|
+|redis.home||redis本机安装位置，当指定此值时,facelog启动会自动启动redis| 
 
 完整的redis参数名定义参见[`net.gdface.facelog.client.CommonConstant`][3]中 `REDIS_`为前缀的所有参数名定义。
+
+### webredis 连接参数
+
+[webredis](https://gitee.com/l0km/webredis)是一个简单的基于websocket+redis+[node.js](https://nodejs.org)实现web端消息推送的服务,用于向浏览器推送redis订阅消息，基于浏览器的设备管理端需要用此服务实现对设备的管理。
+
+|参数名  |默认值|说明     |
+|:------ |:-----|:--------|
+|nodejs.exe||[node.js](https://nodejs.org)可执行程序路径,用于执行webredis脚本|
+|webredis.file||webredis 启动脚本路径|
+|webredis.host|localhost|webredis主机名,为非本机名('localhost','127.0.0.1')时,不执行本地webredis启动|
+|webredis.port|16379|webredis服务端口|
+|webredis.rhost|${redis.host}|redis 主机名|
+|webredis.rport|${redis.port}|redis 端口|
+|webredis.rauth|${redis.password}|redis 密码|
+|webredis.rdb|${redis.database}|redis 数据库|
+|webredis.ruri|redis://:${webredis.rauth}@${webredis.rhost}:${webredis.rport}/${webredis.rdb}|redis 连接uri,设置此值时忽略所有其他redis参数('rhost','rport'...)|
+
+**NOTE**当指定`nodejs.exe`和`webredis.file`时,facelog启动会尝试启动webredis
+
+完整的webredis参数名定义参见[`net.gdface.facelog.client.CommonConstant`][3]中 `WEBREDIS_`为前缀的所有参数名定义。
 
 ### 系统日志参数
 
@@ -1034,5 +1060,5 @@ facelog服务启动前请确保mysql,redis已经启动
 
 [1]:https://gitee.com/l0km/simplemq
 [2]:https://redis.io/
-[3]:../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommonConstant.java
-[4]:../facelog-service/src/main/java/defaultConfig.xml
+[3]:../facelog-base/src/main/java/net/gdface/facelog/CommonConstant.java
+[4]:../facelog-local/src/main/resources/defaultConfig.xml

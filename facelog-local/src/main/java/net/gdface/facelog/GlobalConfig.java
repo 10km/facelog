@@ -122,14 +122,16 @@ public class GlobalConfig implements ServiceConstant{
 	/** 从配置文件中读取REDIS参数 */
 	static Map<PropName,Object> makeRedisParameters(){
 		HashMap<PropName, Object> params = new HashMap<PropName,Object>(16);
+		// 优先使用REDIS_URI
 		if(CONFIG.containsKey(REDIS_URI)){
-			params.put(PropName.uri, URI.create(CONFIG.getString(REDIS_URI)));
+			params.put(PropName.uri, CONFIG.get(URI.class,REDIS_URI));
+		}else{
+			params.put(PropName.host, CONFIG.getString(REDIS_HOST,null));
+			params.put(PropName.port, CONFIG.getInteger(REDIS_PORT,null));
+			params.put(PropName.database, CONFIG.getInteger(REDIS_DATABASE,null));
+			params.put(PropName.password, CONFIG.getString(REDIS_PASSWORD,null));
 		}
-		params.put(PropName.host, CONFIG.getString(REDIS_HOST,null));
-		params.put(PropName.port, CONFIG.getInteger(REDIS_PORT,null));
-		params.put(PropName.database, CONFIG.getInteger(REDIS_DATABASE,null));
 		params.put(PropName.timeout, CONFIG.getInteger(REDIS_TIMEOUT,null));
-		params.put(PropName.password, CONFIG.getString(REDIS_PASSWORD,null));
 
 		if(CONFIG.containsKey(REDIS_POOL_MAXTOTAL)){
 			JedisPoolConfig poolConfig = new JedisPoolConfig();

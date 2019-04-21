@@ -186,7 +186,7 @@ public interface CommonConstant {
     /** REDIS 密码 */
     public static final String REDIS_PASSWORD = "redis.password";        
     
-    /** REDIS 访问地址(host,port,database,password) */
+    /** REDIS 访问地址,如 'jedis://localhost:6397/0',设置此值时忽略所有其他redis参数(host,port,password,database) */
     public static final String REDIS_URI = "redis.uri";
     
     /** REDIS 超时(秒) */
@@ -198,7 +198,7 @@ public interface CommonConstant {
     /** node可执行程序路径 */
     public static final String NODEJS_EXE = "nodejs.exe";
  
-    /** webredis参数配置 */
+    /** webredis 启动脚本路径 */
     public static final String WEBREDIS_FILE = "webredis.file";
    
     /** webredis主机名,为非本机名('localhost','127.0.0.1')时,不执行本地webredis启动 */
