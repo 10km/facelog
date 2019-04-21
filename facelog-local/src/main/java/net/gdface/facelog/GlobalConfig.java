@@ -156,6 +156,7 @@ public class GlobalConfig implements ServiceConstant{
 		}else{
 			// 用redis host,port,database,password值创建redis uri
 			URI uri = JedisUtils.createJedisURI(
+					"redis",
 					valueOf(String.class,WEBREDIS_RHOST,null), 
 					valueOf(Integer.class,WEBREDIS_RPORT,null), 
 					valueOf(String.class,WEBREDIS_RAUTH,null), 

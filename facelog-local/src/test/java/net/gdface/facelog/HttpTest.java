@@ -18,7 +18,7 @@ public class HttpTest {
 	public void test() {
 		try {
 			URL url = new URL("http://localhost:6380");
-			boolean connected = NetworkUtil.testHttpConnect(url,new Predicate<String>() {
+			boolean connected = NetworkUtil.testHttpConnectChecked(url,new Predicate<String>() {
 
 				@Override
 				public boolean apply(String input) {
