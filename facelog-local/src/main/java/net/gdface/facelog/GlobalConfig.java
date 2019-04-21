@@ -74,7 +74,7 @@ public class GlobalConfig implements ServiceConstant{
 			config.setExpressionEngine(engine);
 			// 设置同步器
 			config.setSynchronizer(new ReadWriteSynchronizer());
-			config.setConversionHandler(CustomConversionHandler.INSTANCE);
+			config.setConversionHandler(ConversionHandlerWithURI.INSTANCE);
 			return config;
 		}catch(Exception e){
 			throw new ExceptionInInitializerError(e);
