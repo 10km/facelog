@@ -1,8 +1,7 @@
 package net.gdface.facelog.client;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.Scanner;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,15 +66,16 @@ public class DtalkDemo {
 	 * 等待程序结束
 	 */
 	private static void waitquit(){
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); 
+		Scanner scaner = new Scanner(System.in);
 		try{
-			while(!"quit".equalsIgnoreCase(reader.readLine())){
-				return;
+			while (scaner.hasNextLine()) {
+				String str = scaner.next();
+				if("quit".equalsIgnoreCase(str)){
+					return ;
+				}
 			}
-		} catch (IOException e) {
-
-		}finally {
-
+		}finally{
+			scaner.close();
 		}
 	}
 	private DtalkDemo registerHelper(DeviceTokenHelper helper){
@@ -119,7 +119,7 @@ public class DtalkDemo {
 					.registerHelper(DeviceTokenHelper.HELPER)
 					.initDevice()
 					.start();
-			System.out.println("PRESS 'CTRL-C' to exit");
+			System.out.println("PRESS 'CTRL-C' or 'quit' to exit");
 			// 如果依赖库commons-pool的版本号为2.4.2则需要调用waitquit()
 			// 如果版本号高于2.4.2低于2.6.1则不需要调用，参见https://blog.csdn.net/10km/article/details/89016301
 			waitquit();
