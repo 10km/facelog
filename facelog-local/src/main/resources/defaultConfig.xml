@@ -43,12 +43,25 @@
 		<port description="redis 端口"></port>
 		<database description="redis 数据库"></database>
 		<password description="redis 密码"></password>
-		<uri description="redis 服务器访问地址"></uri>
+		<uri description="redis 服务器访问地址,如 'jedis://localhost:6397/0',设置此值时忽略所有其他redis参数(host,port,password,database)"></uri>
 		<timeout description="redis 超时[秒]"></timeout>
 		<pool>
 			<maxTotal description="jedis pool 最大线程数"></maxTotal>
 		</pool>
 	</redis>
+	<nodejs>
+		<exe description="node可执行程序路径"></exe>
+	</nodejs>
+	<webredis description="webredis参数配置">
+		<file description="webredis 启动脚本路径"></file>
+		<host description="webredis主机名,为非本机名('localhost','127.0.0.1')时,不执行本地webredis启动">localhost</host>
+		<port description="webredis服务端口">16379</port>
+		<rhost description="redis 主机名">${redis.host}</rhost>
+		<rport description="redis 端口">${redis.port}</rport>
+		<rauth description="redis 密码">${redis.password}</rauth>
+		<rdb description="redis 数据库">${redis.database}</rdb>
+		<ruri description="redis 连接uri,设置此值时忽略所有其他redis参数('rhost','rport'...)">redis://:${webredis.rauth}@${webredis.rhost}:${webredis.rport}/${webredis.rdb}</ruri>
+	</webredis>
 	<database description="数据库参数配置">
 		<isDebug description="是否为调试状态">false</isDebug>
 		<jdbc>
