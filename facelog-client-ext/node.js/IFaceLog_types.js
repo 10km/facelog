@@ -30,11 +30,12 @@ ttypes.SecurityExceptionType = {
 };
 ttypes.MQParam = {
   'REDIS_URI' : 0,
-  'CMD_CHANNEL' : 1,
-  'LOG_MONITOR_CHANNEL' : 2,
-  'HB_MONITOR_CHANNEL' : 3,
-  'HB_INTERVAL' : 4,
-  'HB_EXPIRE' : 5
+  'WEBREDIS_URL' : 1,
+  'CMD_CHANNEL' : 2,
+  'LOG_MONITOR_CHANNEL' : 3,
+  'HB_MONITOR_CHANNEL' : 4,
+  'HB_INTERVAL' : 5,
+  'HB_EXPIRE' : 6
 };
 var FaceBean = module.exports.FaceBean = function(args) {
   this._new = null;
