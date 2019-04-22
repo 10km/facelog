@@ -3,19 +3,19 @@ package net.gdface.facelog.client;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableSet;
-
 import gu.dtalk.MenuItem;
 import gu.simplemq.redis.JedisPoolLazy;
 import net.gdface.facelog.IFaceLog;
@@ -30,6 +30,7 @@ import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.facelog.thrift.IFaceLogThriftClientAsync;
 import net.gdface.thrift.ClientFactory;
+import net.gdface.utils.NetworkUtil;
 
 /**
  * client端便利性扩展工具类
@@ -40,7 +41,6 @@ public class ClientExtendTools {
 	private final IFaceLog syncInstance;
 	private final IFaceLogThriftClientAsync asyncInstance;
 	private final ClientFactory factory;
-	private static Set<String> LOCAHOSTS = ImmutableSet.of("localhost","127.0.0.1");
 	ClientExtendTools(IFaceLogThriftClient syncInstance) {
 		super();
 		this.syncInstance = checkNotNull(syncInstance,"syncInstance is null");
@@ -60,7 +60,7 @@ public class ClientExtendTools {
 	 * @return {@code host} or host in {@link #factory}
 	 */
 	public String insteadHostIfLocalhost(String host){
-		if(LOCAHOSTS.contains(host)){
+		if(NetworkUtil.isLoopbackAddress(host)){
 			return factory.getHostAndPort().getHost();
 		}
 		return host;
@@ -71,7 +71,7 @@ public class ClientExtendTools {
 	 * @return {@code uri} or new URI instead with host of facelog
 	 */
 	public URI insteadHostIfLocalhost(URI uri){
-		if(LOCAHOSTS.contains(uri.getHost())){
+		if(null != uri && NetworkUtil.isLoopbackAddress(uri.getHost())){
 			try {
 				return new URI(uri.getScheme(),
 				           uri.getUserInfo(), 
@@ -81,10 +81,74 @@ public class ClientExtendTools {
 				           uri.getQuery(), 
 				           uri.getFragment());
 			} catch (URISyntaxException e) {
-				throw new RuntimeException(e);
+				// DO NOTHING
 			}
 		}
 		return uri;
+	}
+	/**
+	 * 如果{@code url}的主机名是本机地址则用facelog服务主机名替换
+	 * @param url
+	 * @return {@code url} or new URI instead with host of facelog
+	 */
+	public URL insteadHostIfLocalhost(URL url){
+		if(null != url && NetworkUtil.isLoopbackAddress(url.getHost())){
+			try {
+				return new URL(url.getProtocol(),
+				           factory.getHostAndPort().getHost(), 
+				           url.getPort(),
+				           url.getFile());
+			} catch (MalformedURLException e) {
+				// DO NOTHING
+			}
+		}
+		return url;
+	}
+	/**
+	 *  如果{@code uri}的主机名是本机地址则用facelog服务主机名替换
+	 * @param uri
+	 * @return {@code uri} or new URI string instead with host of facelog
+	 */
+	public String insteadHostOfURIIfLocalhost(String uri){
+		try {
+			return Strings.isNullOrEmpty(uri) ? uri : insteadHostIfLocalhost(new URI(uri)).toString();
+		} catch (URISyntaxException e) {
+			// DO NOTHING
+		}
+		return uri;
+	}
+	/**
+	 *  如果{@code url}的主机名是本机地址则用facelog服务主机名替换
+	 * @param url 
+	 * @return {@code url} or new URL string instead with host of facelog
+	 */
+	public String insteadHostOfURLIfLocalhost(String url){
+		try {
+			return Strings.isNullOrEmpty(url) ? url : insteadHostIfLocalhost(new URL(url)).toString();
+		} catch (MalformedURLException e) {
+			// DO NOTHING
+		}
+		return url;
+	}
+	/**
+	 * 如果{@code parameters}的参数({@link MQParam#REDIS_URI},{@link MQParam#WEBREDIS_URL})是本机地址则用facelog服务主机名替换
+	 * @param parameters
+	 * @return 替换主机名参数后的{@code parameters}
+	 * @see #insteadHostOfURIIfLocalhost(String)
+	 * @see #insteadHostOfURLIfLocalhost(String)
+	 */
+	public Map<MQParam, String> insteadHostOfMQParamIfLocalhost(Map<MQParam, String> parameters) {
+		if(parameters != null){
+			if(parameters.containsKey(MQParam.REDIS_URI)){
+				String insteaded = insteadHostOfURIIfLocalhost(parameters.get(MQParam.REDIS_URI));
+				parameters.put(MQParam.REDIS_URI, insteaded);
+			}
+			if(parameters.containsKey(MQParam.WEBREDIS_URL)){
+				String insteaded = insteadHostOfURLIfLocalhost(parameters.get(MQParam.WEBREDIS_URL));
+				parameters.put(MQParam.WEBREDIS_URL, insteaded);
+			}
+		}
+		return parameters;
 	}
     /**
      * 根据设备ID返回设备所属的设备组ID的{@code Function}实例,
@@ -468,7 +532,7 @@ public class ClientExtendTools {
 	 */
 	public void initDtalkRedisLocation(Token token){
 		Map<MQParam, String> redisParam = getRedisParameters(token);
-		URI uri = insteadHostIfLocalhost(URI.create(redisParam.get(MQParam.REDIS_URI)));
+		URI uri = URI.create(redisParam.get(MQParam.REDIS_URI));
 		FacelogRedisConfigProvider.setRedisLocation(uri);
 	}
 	/**
@@ -480,7 +544,7 @@ public class ClientExtendTools {
 	 */
 	public void initRedisDefaultInstance(Token token){
 		Map<MQParam, String> redisParam = getRedisParameters(token);
-		URI uri = insteadHostIfLocalhost(URI.create(redisParam.get(MQParam.REDIS_URI)));
+		URI uri = URI.create(redisParam.get(MQParam.REDIS_URI));
 		JedisPoolLazy.getInstance(uri).asDefaultInstance();
 	}
 }

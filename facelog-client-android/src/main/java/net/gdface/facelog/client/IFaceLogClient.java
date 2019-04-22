@@ -2,13 +2,16 @@ package net.gdface.facelog.client;
 
 import java.lang.reflect.Proxy;
 import java.net.URI;
+import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.base.Supplier;
 
 import gu.dtalk.MenuItem;
 import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.IFaceLogDecorator;
+import net.gdface.facelog.MQParam;
 import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
@@ -44,6 +47,14 @@ public class IFaceLogClient extends IFaceLogDecorator {
 	 */
 	public URI insteadHostIfLocalhost(URI uri) {
 		return clientTools.insteadHostIfLocalhost(uri);
+	}
+	/**
+	 * 如果{@code url}的主机名是本机地址则用facelog服务主机名替换
+	 * @param url
+	 * @return {@code url} or new URI instead with host of facelog
+	 */
+	public URL insteadHostIfLocalhost(URL url) {
+		return clientTools.insteadHostIfLocalhost(url);
 	}
 	/**
 	 * @param deviceId
@@ -136,7 +147,15 @@ public class IFaceLogClient extends IFaceLogDecorator {
 	public void initRedisDefaultInstance(Token token) {
 		clientTools.initRedisDefaultInstance(token);
 	}
-
-
+	/**
+	 * 转参数中的主机名
+	 * @see net.gdface.facelog.IFaceLogDecorator#getRedisParameters(net.gdface.facelog.Token)
+	 * @see ClientExtendTools#insteadHostOfMQParamIfLocalhost(Map)
+	 */
+	@Override
+	public Map<MQParam, String> getRedisParameters(Token token) {
+		Map<MQParam, String> parameters = super.getRedisParameters(token);
+		return clientTools.insteadHostOfMQParamIfLocalhost(parameters);
+	}
 
 }
