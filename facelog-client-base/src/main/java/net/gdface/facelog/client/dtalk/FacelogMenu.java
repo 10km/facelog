@@ -80,7 +80,7 @@ public class FacelogMenu extends RootMenu{
 						OptionType.STRING.builder().name("vendor").uiName("设备供应商").readonly(true).instance(),
 						OptionType.STRING.builder().name("manufacturer").uiName("设备制造商").readonly(true).instance(),
 						OptionType.DATE.builder().name("madeDate").uiName("设备生产日期").instance(),
-						OptionType.STRING.builder().name("sn").uiName("设备序列号").instance().asValue("001122334455"),
+						OptionType.STRING.builder().name("sn").uiName("设备序列号").instance(),
 						OptionType.IP.builder().name("IP").uiName("IP地址").readonly(true).instance().setValue(ip),
 						OptionType.MAC.builder().name("mac").uiName("物理地址").readonly(true).instance().setValue(mac).setReadOnly(true),
 						OptionType.STRING.builder().name("gps").uiName("位置(GPS)").readonly(true).instance(),
