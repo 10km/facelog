@@ -134,7 +134,7 @@ public class FacelogMenu extends RootMenu{
 								OptionType.INTEGER.builder().name("duration").uiName("持续时间").description("持续时间[分钟],为null一直显示").instance()
 								).instance(),
 						ItemBuilder.builder(CmdItem.class).name(CMD_FEATURE).uiName("提取人脸特征").addChilds(
-								OptionType.BASE64.builder().name("image").uiName("人脸图像").instance()
+								OptionType.IMAGE.builder().name("image").uiName("人脸图像").instance()
 								).instance()
 						)
 				.instance();
