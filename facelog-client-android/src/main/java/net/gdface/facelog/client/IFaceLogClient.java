@@ -148,7 +148,7 @@ public class IFaceLogClient extends IFaceLogDecorator {
 		clientTools.initRedisDefaultInstance(token);
 	}
 	/**
-	 * 转参数中的主机名
+	 * 转换参数中的主机名
 	 * @see net.gdface.facelog.IFaceLogDecorator#getRedisParameters(net.gdface.facelog.Token)
 	 * @see ClientExtendTools#insteadHostOfMQParamIfLocalhost(Map)
 	 */

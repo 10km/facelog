@@ -501,9 +501,10 @@ public class ClientExtendTools {
 	private Map<MQParam, String> getRedisParameters(Token token){
 		// 获取redis连接参数
 		try {
-			return syncInstance != null 
+			Map<MQParam, String> param = syncInstance != null 
 					? syncInstance.getRedisParameters(token)
 					: asyncInstance.getRedisParameters(token).get();
+			return insteadHostOfMQParamIfLocalhost(param);
 	    } catch (ExecutionException e) {
 	        Throwables.throwIfUnchecked(e.getCause());
 	        throw new RuntimeException(e.getCause());

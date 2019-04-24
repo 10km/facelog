@@ -140,7 +140,7 @@ public class IFaceLogClientAsync extends IFaceLogThriftClientAsync {
 		clientTools.initRedisDefaultInstance(token);
 	}
 	/**
-	 * 转参数中的主机名
+	 * 转换参数中的主机名
 	 * @see net.gdface.facelog.thrift.IFaceLogThriftClientAsync#getRedisParameters(net.gdface.facelog.Token)
 	 * @see ClientExtendTools#insteadHostOfMQParamIfLocalhost(Map)
 	 */
