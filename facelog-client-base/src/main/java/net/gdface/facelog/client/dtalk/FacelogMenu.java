@@ -74,7 +74,7 @@ public class FacelogMenu extends RootMenu{
 				.uiName("设备")
 				.addChilds(
 						OptionType.STRING.builder().name("name").uiName("设备名称").instance(),
-						OptionType.STRING.builder().name("description").uiName("备注").instance(),
+						OptionType.STRING.builder().name("remark").uiName("备注").instance(),
 						OptionType.STRING.builder().name("productName").uiName("产品名称").readonly(true).instance(),
 						OptionType.STRING.builder().name("model").uiName("设备型号").readonly(true).instance(),
 						OptionType.STRING.builder().name("vendor").uiName("设备供应商").readonly(true).instance(),
