@@ -107,7 +107,7 @@ public class FacelogMenu extends RootMenu{
 								).instance().setCmdAdapter(new CmdStatusAdapter()),
 						ItemBuilder.builder(CmdItem.class).name(CMD_VERSION).uiName("获取版本信息").instance().setCmdAdapter(new CmdVersionAdapter()),
 						ItemBuilder.builder(CmdItem.class).name(CMD_ENABLE).uiName("设备启用/禁用").addChilds(
-								OptionType.BOOL.builder().name("enable").uiName("工作状态").description("true:工作状态,否则为非工作状态").instance(),
+								OptionType.INTEGER.builder().name("enable").uiName("工作状态").description("0:工作状态,否则为非工作状态").instance(),
 								OptionType.STRING.builder().name("message").uiName("附加消息").description("工作状态附加消息,比如'设备维修,禁止通行'").instance()
 								).instance(),
 						ItemBuilder.builder(CmdItem.class).name(CMD_ISENABLE).uiName("获取设备工作状态").instance(),
