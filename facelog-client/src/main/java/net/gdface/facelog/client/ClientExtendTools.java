@@ -12,14 +12,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 
-import org.weakref.jmx.com.google.common.collect.ImmutableMap;
-import org.weakref.jmx.com.google.common.collect.ImmutableMap.Builder;
-
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
+
 import gu.dtalk.MenuItem;
 import gu.simplemq.redis.JedisPoolLazy;
 import net.gdface.facelog.IFaceLog;

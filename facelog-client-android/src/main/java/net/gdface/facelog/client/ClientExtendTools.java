@@ -9,6 +9,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 
 import com.google.common.base.Function;
@@ -16,6 +17,9 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
+
 import gu.dtalk.MenuItem;
 import gu.simplemq.redis.JedisPoolLazy;
 import net.gdface.facelog.IFaceLog;
@@ -133,20 +137,27 @@ public class ClientExtendTools {
 	/**
 	 * 如果{@code parameters}的参数({@link MQParam#REDIS_URI},{@link MQParam#WEBREDIS_URL})是本机地址则用facelog服务主机名替换
 	 * @param parameters
-	 * @return 替换主机名参数后的{@code parameters}
+	 * @return 替换主机名参数后的新对象 {@link ImmutableMap}
 	 * @see #insteadHostOfURIIfLocalhost(String)
 	 * @see #insteadHostOfURLIfLocalhost(String)
 	 */
 	public Map<MQParam, String> insteadHostOfMQParamIfLocalhost(Map<MQParam, String> parameters) {
 		if(parameters != null){
-			if(parameters.containsKey(MQParam.REDIS_URI)){
-				String insteaded = insteadHostOfURIIfLocalhost(parameters.get(MQParam.REDIS_URI));
-				parameters.put(MQParam.REDIS_URI, insteaded);
+			Builder<MQParam, String> builder = ImmutableMap.builder();
+			for (Entry<MQParam, String> entry : parameters.entrySet()) {
+				MQParam key = entry.getKey();
+				String value = entry.getValue();
+				if(MQParam.REDIS_URI.equals(key)){
+					String insteaded = insteadHostOfURIIfLocalhost(value);
+					builder.put(key, insteaded);
+				}else	if(MQParam.WEBREDIS_URL.equals(key)){
+					String insteaded = insteadHostOfURLIfLocalhost(value);
+					builder.put(key, insteaded);
+				}else{
+					builder.put(entry);
+				}
 			}
-			if(parameters.containsKey(MQParam.WEBREDIS_URL)){
-				String insteaded = insteadHostOfURLIfLocalhost(parameters.get(MQParam.WEBREDIS_URL));
-				parameters.put(MQParam.WEBREDIS_URL, insteaded);
-			}
+			return builder.build();
 		}
 		return parameters;
 	}
