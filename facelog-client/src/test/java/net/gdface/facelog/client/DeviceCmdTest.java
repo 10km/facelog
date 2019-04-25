@@ -69,7 +69,7 @@ public class DeviceCmdTest implements ChannelConstant{
 			}
 		});
 		// 设置ISENABLE命令执行器
-		root.findCmd(pathOfCmd(CMD_ISENABLE)).setCmdAdapter(new ICmdAdapter() {
+		root.findCmd(pathOfCmd(CMD_GET_STATUS)).setCmdAdapter(new ICmdAdapter() {
 			
 			@Override
 			public Object apply(Map<String, Object> input) throws CmdExecutionException {

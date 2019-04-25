@@ -2,8 +2,10 @@ package net.gdface.facelog.client.dtalk;
 
 import gu.dtalk.ItemBuilder;
 import gu.dtalk.MenuItem;
+import gu.dtalk.OptionBuilder;
 import gu.dtalk.OptionType;
 import gu.dtalk.RootMenu;
+import gu.dtalk.SwitchOption;
 import gu.dtalk.event.ValueListener;
 import gu.dtalk.exception.CmdExecutionException;
 import net.gdface.facelog.client.location.ConnectConfigProvider;
@@ -23,17 +25,17 @@ import gu.dtalk.CmdItem.ICmdAdapter;
 
 /**
  * facelog 功能菜单<br>
- * 为{@value #CMD_PARAM},{@value #CMD_STATUS},{@value #CMD_VERSION}基本设备命令提供了默认实现
+ * 为{@value #CMD_SET_PARAM},{@value #CMD_GET_PARAM},{@value #CMD_VERSION}基本设备命令提供了默认实现
  * @author guyadong
  *
  */
 public class FacelogMenu extends RootMenu{	
 	// 定义基本命令名,扩展命令不在此列 
-	public static final String CMD_PARAM = "parameter";
-	public static final String CMD_STATUS = "status";
+	public static final String CMD_SET_PARAM = "setParameter";
+	public static final String CMD_GET_PARAM = "getParameter";
 	public static final String CMD_VERSION = "version";
-	public static final String CMD_ENABLE = "enable";
-	public static final String CMD_ISENABLE = "isEnable";
+	public static final String CMD_SET_STATUS = "setStatus";
+	public static final String CMD_GET_STATUS = "getStatus";
 	public static final String CMD_RESET="reset";
 	public static final String CMD_TIME = "time";
 	public static final String CMD_UPDATE = "update";
@@ -99,19 +101,20 @@ public class FacelogMenu extends RootMenu{
 			ItemBuilder.builder(MenuItem.class)
 				.name(MENU_CMD)
 				.uiName("基本设备命令")
-				.addChilds(ItemBuilder.builder(CmdItem.class).name(CMD_PARAM).uiName("设置参数").addChilds(
+				.addChilds(ItemBuilder.builder(CmdItem.class).name(CMD_SET_PARAM).uiName("设置参数").addChilds(
 						OptionType.STRING.builder().name(CmdParamAdapter.P_NAME).uiName("参数名称").description("option's full path start with '/'").instance(),
 						OptionType.STRING.builder().name(CmdParamAdapter.P_VALUE).uiName("参数值").instance()
 						).instance().setCmdAdapter(new CmdParamAdapter()),
-						ItemBuilder.builder(CmdItem.class).name(CMD_STATUS).uiName("获取参数").addChilds(
+						ItemBuilder.builder(CmdItem.class).name(CMD_GET_PARAM).uiName("获取参数").addChilds(
 								OptionType.STRING.builder().name(CmdStatusAdapter.P_NAME).uiName("参数名称").description("option's full path start with '/'").instance()
 								).instance().setCmdAdapter(new CmdStatusAdapter()),
 						ItemBuilder.builder(CmdItem.class).name(CMD_VERSION).uiName("获取版本信息").instance().setCmdAdapter(new CmdVersionAdapter()),
-						ItemBuilder.builder(CmdItem.class).name(CMD_ENABLE).uiName("设备启用/禁用").addChilds(
-								OptionType.INTEGER.builder().name("enable").uiName("工作状态").description("0:工作状态,否则为非工作状态").instance(),
+						ItemBuilder.builder(CmdItem.class).name(CMD_SET_STATUS).uiName("设置设备状态(启用/禁用)").addChilds(								
+								OptionBuilder.builder(new SwitchOption<Integer>()).name("status").uiName("状态值").description("0:工作状态,否则为非工作状态").instance()
+									.addOption(0, "正常").setValue(0),
 								OptionType.STRING.builder().name("message").uiName("附加消息").description("工作状态附加消息,比如'设备维修,禁止通行'").instance()
 								).instance(),
-						ItemBuilder.builder(CmdItem.class).name(CMD_ISENABLE).uiName("获取设备工作状态").instance(),
+						ItemBuilder.builder(CmdItem.class).name(CMD_GET_STATUS).uiName("获取设备工作状态").instance(),
 						ItemBuilder.builder(CmdItem.class).name("reset").uiName("设备重启").addChilds(
 								OptionType.INTEGER.builder().name("schedule").uiName("延迟执行时间").description("指定执行时间(unix time[秒]),为null立即执行").instance()
 								).instance(),
@@ -225,7 +228,7 @@ public class FacelogMenu extends RootMenu{
 		return new StringBuffer("/").append(MENU_CMD_EXT).append("/").append(name).toString();
 	}
 	/**
-	 * {@value #CMD_PARAM}命令实现
+	 * {@value #CMD_SET_PARAM}命令实现
 	 * @author guyadong
 	 *
 	 */
@@ -249,7 +252,7 @@ public class FacelogMenu extends RootMenu{
 		}		
 	}
 	/**
-	 * {@value #CMD_STATUS}命令实现
+	 * {@value #CMD_GET_PARAM}命令实现
 	 * @author guyadong
 	 *
 	 */
