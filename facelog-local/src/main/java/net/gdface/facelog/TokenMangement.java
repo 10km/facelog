@@ -6,6 +6,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.primitives.Bytes;
@@ -197,18 +198,19 @@ class TokenMangement implements ServiceConstant {
 	}
 	/**
 	 * 计算设备令牌
-	 * @param device 设备参数(包括设备ID,MAC地址,序列号)为{@code null}抛出异常
+	 * @param device 设备参数(包括设备ID,MAC地址,序列号),序列号为null则用MAC地址代替
 	 * @return 设备访问令牌
-	 * @throws IllegalArgumentException 设备参数为{@code null}
+	 * @throws IllegalArgumentException 设备ID,MAC地址为{@code null}
 	 */
 	private static Token makeDeviceTokenOf(DeviceBean device){
 		checkArgument(null != device,"device is null");
 		checkArgument(
 						null != device.getId() 
-				&& 	null != device.getMac() 
-				&& 	null != device.getSerialNo(),
-				"null device argument(id,mac,serialNo)");
-		return makeToken(device.getId(),device.getMac(),device.getSerialNo()).asDeviceToken(device.getId());
+				&& 	null != device.getMac(),
+				"null device argument(id,mac)");
+		return makeToken(device.getId(),device.getMac(),
+				MoreObjects.firstNonNull(device.getSerialNo(),device.getMac()))
+				.asDeviceToken(device.getId());
 	}
 	private static Token makePersonTokenOf(int personId){
 		ByteBuffer buffer = ByteBuffer.wrap(new byte[8]);
