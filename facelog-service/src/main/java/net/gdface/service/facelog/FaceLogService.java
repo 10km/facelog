@@ -22,6 +22,10 @@ import static com.google.common.base.Preconditions.*;
  */
 public class FaceLogService extends ThriftServerService implements CommonConstant {
 	private static FaceLogService service;
+	private static FaceLogService httpService;
+	// 封装为thrift服务的facelog接口静态实例
+	private static final IFaceLogThriftDecorator FACELOG = new IFaceLogThriftDecorator(new FaceLogImpl());
+	
 	/**
 	 * 从配置文件中读取参数创建{@link ThriftServerConfig}实例
 	 * @return
@@ -44,21 +48,41 @@ public class FaceLogService extends ThriftServerService implements CommonConstan
 		return thriftServerConfig;
 	}
 	/**
-	 * 创建服务实例
+	 * 创建服务实例(frame,binary)
 	 * @return
 	 */
 	public static synchronized final FaceLogService buildService(){
-		if(null == service || State.TERMINATED == service.state() || State.FAILED == service.state()){
-			 service = ThriftServerService.bulider()
-						.withServices(new IFaceLogThriftDecorator(new FaceLogImpl()))
+		return service = buildService(service,makeThriftServerConfig());
+	}
+	/**
+	 * 创建HTTP服务实例(http,json)
+	 * @return
+	 */
+	public static synchronized final FaceLogService buildHttpService(){
+		return httpService = buildService(httpService,
+				makeThriftServerConfig()
+					.setPort(26412)
+					.setTransportName("http")
+					.setProtocolName("json"));
+	}
+
+	/**
+	 * 创建服务实例<br>
+	 * @param service 服务实例,如果为{@code null}或服务已经停止则创建新的服务实例
+	 * @param config thrift服务配置
+	 * @return 返回{@code service}或创建的新的服务实例
+	 */
+	private static FaceLogService buildService(FaceLogService service,ThriftServerConfig config){
+		if(null == service || State.TERMINATED == service.state() || State.FAILED == service.state()){		
+			service = ThriftServerService.bulider()
+						.withServices(FACELOG)	
 						.setEventHandlers(TlsHandler.INSTANCE)
-						.setThriftServerConfig(makeThriftServerConfig())
+						.setThriftServerConfig(config)
 						.build(FaceLogService.class);	
 		}
 		checkState(State.NEW == service.state(),"INVALID service state %s ",service.toString());
 		return service;
 	}
-	
 	public FaceLogService(List<?> services, 
 			List<ThriftEventHandler> eventHandlers,
 			ThriftServerConfig thriftServerConfig) {

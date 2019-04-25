@@ -23,6 +23,8 @@ public class FacelogServiceMain {
 		// 设置slf4j记录日志,否则会有警告
 		InternalLoggerFactory.setDefaultFactory(new Slf4JLoggerFactory());
 		@SuppressWarnings("unused")
-		Service s = FaceLogService.buildService().startAsync();
+		Service service = FaceLogService.buildService().startAsync();
+		@SuppressWarnings("unused")
+		Service httpService = FaceLogService.buildHttpService().startAsync();
 	}	
 }
