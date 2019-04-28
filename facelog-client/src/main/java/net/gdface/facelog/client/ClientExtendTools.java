@@ -17,9 +17,7 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMap.Builder;
-
+import com.google.common.collect.Maps;
 import gu.dtalk.MenuItem;
 import gu.simplemq.redis.JedisPoolLazy;
 import net.gdface.facelog.IFaceLog;
@@ -137,27 +135,27 @@ public class ClientExtendTools {
 	/**
 	 * 如果{@code parameters}的参数({@link MQParam#REDIS_URI},{@link MQParam#WEBREDIS_URL})是本机地址则用facelog服务主机名替换
 	 * @param parameters
-	 * @return 替换主机名参数后的新对象 {@link ImmutableMap}
+	 * @return 替换主机名参数后的新对象 {@link java.util.HashMap}
 	 * @see #insteadHostOfURIIfLocalhost(String)
 	 * @see #insteadHostOfURLIfLocalhost(String)
 	 */
 	public Map<MQParam, String> insteadHostOfMQParamIfLocalhost(Map<MQParam, String> parameters) {
 		if(parameters != null){
-			Builder<MQParam, String> builder = ImmutableMap.builder();
+			Map<MQParam, String> out = Maps.newHashMap();
 			for (Entry<MQParam, String> entry : parameters.entrySet()) {
 				MQParam key = entry.getKey();
 				String value = entry.getValue();
 				if(MQParam.REDIS_URI.equals(key)){
 					String insteaded = insteadHostOfURIIfLocalhost(value);
-					builder.put(key, insteaded);
+					out.put(key, insteaded);
 				}else	if(MQParam.WEBREDIS_URL.equals(key)){
 					String insteaded = insteadHostOfURLIfLocalhost(value);
-					builder.put(key, insteaded);
+					out.put(key, insteaded);
 				}else{
-					builder.put(entry);
+					out.put(key,value);
 				}
 			}
-			return builder.build();
+			return out;
 		}
 		return parameters;
 	}
