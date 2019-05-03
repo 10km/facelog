@@ -42,23 +42,34 @@
   <h1 id="qunit-header">Thrift Javascript Test: </h1>
   <script>
     // 调用version接口方法
-    client.version((v)=>{
-      $('.hint-version').append('version:' + v ) 
+    client.version((res)=>{
+      $('.hint-version').append('version:' + res ) 
+    })
+    // 调用versionInfo接口方法
+    client.versionInfo((res)=>{
+      $('.hint-versionInfo').append('versionInfo:' + JSON.stringify(res) ) 
     })
     // 调用applyRootToken接口方法
-    client.applyRootToken("guyadong",false,token=>{
-      $('.hint-token').append('token:' + JSON.stringify(token))
+    client.applyRootToken("guyadong",false,res=>{
+      $('.hint-token').append('applyRootToken:' + JSON.stringify(res))
+      // 调用getRedisParameters接口方法(失败)，令牌无效原因未明
+      client.getRedisParameters(res,_res=>{
+        $('.hint-getRedisParameters').append('getRedisParameters:' + JSON.stringify(_res))
+      })
     })
     // 调用getPerson接口方法
-    client.getPerson(5,bean=>{
-      $('.hint-getPerson').append('person:' + JSON.stringify(bean))
+    // user id = 5
+    client.getPerson(5,res=>{
+      $('.hint-getPerson').append('getPerson:' + JSON.stringify(res))
     })
   </script>
   <div>
     RESPONSE:
     <p class="hint-version"></p>
+    <p class="hint-versionInfo"></p>
     <p class="hint-token"></p>
     <p class="hint-getPerson"></p>
+    <p class="hint-getRedisParameters"></p>
   </div>
 </body>
 </html>
