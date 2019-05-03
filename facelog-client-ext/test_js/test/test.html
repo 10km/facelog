@@ -31,6 +31,7 @@
 
 
   <script>
+    // 连接facelog XHR服务
     var transport = new Thrift.Transport("http://localhost:26412");
     var protocol  = new Thrift.Protocol(transport);
     var client    = new IFaceLogClient(protocol);
@@ -40,13 +41,24 @@
 <body>
   <h1 id="qunit-header">Thrift Javascript Test: </h1>
   <script>
+    // 调用version接口方法
     client.version((v)=>{
-      $('.hint-response').append('<p>version:'+ v +'</p>'); 
+      $('.hint-version').append('version:' + v ) 
+    })
+    // 调用applyRootToken接口方法
+    client.applyRootToken("guyadong",false,token=>{
+      $('.hint-token').append('token:' + JSON.stringify(token))
+    })
+    // 调用getPerson接口方法
+    client.getPerson(5,bean=>{
+      $('.hint-getPerson').append('person:' + JSON.stringify(bean))
     })
   </script>
   <div>
     RESPONSE:
-    <p class="hint-response"></p>
+    <p class="hint-version"></p>
+    <p class="hint-token"></p>
+    <p class="hint-getPerson"></p>
   </div>
 </body>
 </html>
