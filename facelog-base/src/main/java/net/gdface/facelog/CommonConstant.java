@@ -11,6 +11,8 @@ public interface CommonConstant {
     public static final String NULL_ID_STRING = "";
     /** 默认服务端口号 */
     public static final int DEFAULT_PORT = 26411;
+    /** 默认XHR(XML Http Request)服务端口号 */
+    public static final int DEFAULT_PORT_XHR = 26412;
     /** 默认webredis主机名 */
     public static final String DEFAULT_WEBREDIS_HOST = "locahost";
     /** 默认webredis服务端口号 */

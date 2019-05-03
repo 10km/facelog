@@ -40,9 +40,13 @@
 <body>
   <h1 id="qunit-header">Thrift Javascript Test: </h1>
   <script>
-    client.version(()=>{
-      console.log("OK")
+    client.version((v)=>{
+      $('.hint-response').append('<p>version:'+ v +'</p>'); 
     })
   </script>
+  <div>
+    RESPONSE:
+    <p class="hint-response"></p>
+  </div>
 </body>
 </html>
