@@ -46,3 +46,11 @@ facelog服务可以手工启动，也提供docker快速部署。参见[《facelo
 ## 执行JUnit测试
 
 facelog服务正常启动后，就可以执行[facelog-client/src/test/java/net/gdface/facelog/client](facelog-client/src/test/java/net/gdface/facelog/client)下的测试程序(如`ClientTest`，`HeartbeatTest`，`TokenTest`)
+
+## Node.js 支持
+
+参见 [README-nodejs.md](README-nodejs.md)
+
+## javascript支持
+
+参见 [README-js.md](README-js.md)
