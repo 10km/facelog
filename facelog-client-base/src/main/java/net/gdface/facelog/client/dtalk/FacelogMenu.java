@@ -104,9 +104,7 @@ public class FacelogMenu extends RootMenu{
 				.uiName("facelog 服务器")
 				.addChilds(
 						OptionType.STRING.builder().name("host").uiName("主机名称").instance().setValue(config.getHost()),
-						OptionType.INTEGER.builder().name("port").uiName("端口号").instance().setValue(config.getPort()),
-						OptionType.INTEGER.builder().name("hbInterval").uiName("设备心跳包间隔[秒]").instance(),
-						OptionType.INTEGER.builder().name("hbExpire").uiName("设备心跳包失效时间[秒]").instance())
+						OptionType.INTEGER.builder().name("port").uiName("端口号").instance().setValue(config.getPort()))
 				.instance();
 
 		commands = 
