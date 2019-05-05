@@ -17,7 +17,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<swift.version>0.14.2</swift.version>
-		<common-java.version>1.1.22</common-java.version>
+		<common-java.version>1.1.24</common-java.version>
 		<codegen.version>1.0.10</codegen.version>
 		<idl.generator.version>1.10</idl.generator.version>
 		<dtalk.version>0.1.10</dtalk.version>

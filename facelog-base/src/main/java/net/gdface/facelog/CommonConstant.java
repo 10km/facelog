@@ -11,6 +11,8 @@ public interface CommonConstant {
     public static final String NULL_ID_STRING = "";
     /** 默认服务端口号 */
     public static final int DEFAULT_PORT = 26411;
+    /** 默认XHR(XML Http Request)服务端口号 */
+    public static final int DEFAULT_PORT_XHR = 36411;
     /** 默认webredis主机名 */
     public static final String DEFAULT_WEBREDIS_HOST = "locahost";
     /** 默认webredis服务端口号 */
@@ -222,6 +224,12 @@ public interface CommonConstant {
     /** webredis:redis 连接uri,设置此值时忽略所有其他redis参数('rhost','rport'...) */
     public static final String WEBREDIS_RURI = "webredis.ruri";
 
+    /** XHR(XML HTTP Request)服务参数配置:XHR服务端是否启动 */
+    public static final String XHR_START = "xhr.start";
+    
+    /** XHR(XML HTTP Request)服务参数配置:XHR服务端口,默认值{@value #DEFAULT_PORT_XHR} */
+    public static final String XHR_PORT = "xhr.port";
+    
     /** 操作员对person表允许的操作 */
     public static final String SECURITY_OPERATOR_TABLE_PERSON_ALLOW = "security.operator.table.person.allow";
     
