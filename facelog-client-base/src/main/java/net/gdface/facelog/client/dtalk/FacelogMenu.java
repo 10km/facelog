@@ -70,6 +70,14 @@ public class FacelogMenu extends RootMenu{
 	public FacelogMenu init(){
 		byte[] mac = DEVINFO_PROVIDER.getMac();
 		byte[] ip = DEVINFO_PROVIDER.getIp();
+		MenuItem heartbeat = 
+				ItemBuilder.builder(MenuItem.class)
+					.name("heartbeat")
+					.uiName("设备心跳")
+					.addChilds(
+							OptionType.INTEGER.builder().name("interval").uiName("心跳包间隔[秒]").instance(),
+							OptionType.INTEGER.builder().name("expire").uiName("心跳包失效时间[秒]").instance())
+					.instance();
 		MenuItem device = 
 			ItemBuilder.builder(MenuItem.class)
 				.name("device")
@@ -87,7 +95,8 @@ public class FacelogMenu extends RootMenu{
 						OptionType.MAC.builder().name("mac").uiName("物理地址").readonly(true).instance().setValue(mac).setReadOnly(true),
 						OptionType.STRING.builder().name("gps").uiName("位置(GPS)").readonly(true).instance(),
 						OptionType.PASSWORD.builder().name("password").uiName("连接密码").instance().setValue(DEVINFO_PROVIDER.getPassword()),
-						OptionType.STRING.builder().name("version").uiName("版本号").readonly(true).instance().setValue("unknow"))
+						OptionType.STRING.builder().name("version").uiName("版本号").readonly(true).instance().setValue("unknow"),
+						heartbeat)
 				.instance();
 		MenuItem facelog = 
 			ItemBuilder.builder(MenuItem.class)
@@ -95,8 +104,11 @@ public class FacelogMenu extends RootMenu{
 				.uiName("facelog 服务器")
 				.addChilds(
 						OptionType.STRING.builder().name("host").uiName("主机名称").instance().setValue(config.getHost()),
-						OptionType.INTEGER.builder().name("port").uiName("端口号").instance().setValue(config.getPort()))
+						OptionType.INTEGER.builder().name("port").uiName("端口号").instance().setValue(config.getPort()),
+						OptionType.INTEGER.builder().name("hbInterval").uiName("设备心跳包间隔[秒]").instance(),
+						OptionType.INTEGER.builder().name("hbExpire").uiName("设备心跳包失效时间[秒]").instance())
 				.instance();
+
 		commands = 
 			ItemBuilder.builder(MenuItem.class)
 				.name(MENU_CMD)
