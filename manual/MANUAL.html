@@ -1341,37 +1341,165 @@ facelog 服务端也提供<code>version,versionInfo</code>接口方法用于获�
 <blockquote>
 <p>参见 <a href="../facelog-service/src/main/java/root.xml">root.xml</a></p>
 </blockquote>
-<p>facelog 服务启动时先加载<a href="../facelog-service/src/main/java/defaultConfig.xml"><code>defaultConfig.xml</code></a>再加载<code>config.properties</code>，用户参数优先级高于默认参数，所以加载<code>config.properties</code>会覆盖<code>defaultConfig.xml</code>同名参数。</p>
+<p>facelog 服务启动时先加载<a href="../facelog-local/src/main/resources/defaultConfig.xml"><code>defaultConfig.xml</code></a>再加载<code>config.properties</code>，用户参数优先级高于默认参数，所以加载<code>config.properties</code>会覆盖<code>defaultConfig.xml</code>同名参数。</p>
 <p>在<code>config.properties</code>中定义参数值可以修改系统参数。</p>
 <h3>修改系统参数</h3>
-<p>facelog 可修改的系统参数名都定义在<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommonConstant.java"><code>net.gdface.facelog.client.CommonConstant</code></a>中。</p>
+<p>facelog 可修改的系统参数名都定义在<a href="../facelog-base/src/main/java/net/gdface/facelog/CommonConstant.java"><code>net.gdface.facelog.client.CommonConstant</code></a>中。</p>
 <p>查找<code>// COMMONS PROPERTY KEY DEFINITION</code>这一行注释,该行以下都是系统参数名定义。</p>
 <blockquote>
 <p>比如 <code>ROOT_PASSWORD = &quot;root.password&quot;</code>为root用户密码的参数名。</p>
 </blockquote>
-<p><a href="../facelog-service/src/main/java/defaultConfig.xml"><code>defaultConfig.xml</code></a>中定义的root用户默认密码为<code>root</code>，如果要修改root密码，需要在<code>config.properties</code>中定义新的密码</p>
+<p><a href="../facelog-local/src/main/resources/defaultConfig.xml"><code>defaultConfig.xml</code></a>中定义的root用户默认密码为<code>root</code>，如果要修改root密码，需要在<code>config.properties</code>中定义新的密码</p>
 <pre><code>root.password = new_root_password
 </code></pre>
 
 <h3>mysql数据库连接参数</h3>
-<p>mysql数据库连接参数的参数名并没有在<code>CommonConstant.java</code>中有完整定义。<a href="../facelog-service/src/main/java/defaultConfig.xml"><code>defaultConfig.xml</code></a>中<code>database</code>下的节点都是数据连接的相关参数，数据库连接的主要参数如下：</p>
-<ol>
-<li>database.host 数据库主机名</li>
-<li>database.port 数据库连接端口号</li>
-<li>database.schema 数据库schema</li>
-<li>database.username 数据库访问用户名</li>
-<li>database.password 数据库访问密码</li>
-</ol>
+<p>mysql数据库连接参数的参数名并没有在<code>CommonConstant.java</code>中有完整定义。<a href="../facelog-local/src/main/resources/defaultConfig.xml"><code>defaultConfig.xml</code></a>中<code>database</code>下的节点都是数据连接的相关参数，数据库连接的主要参数如下：</p>
+<table>
+<thead>
+<tr>
+	<th align="left">参数名</th>
+	<th align="left">默认值</th>
+	<th align="left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td align="left">database.jdbc.host</td>
+	<td align="left">localhost</td>
+	<td align="left">数据库主机名</td>
+</tr>
+<tr>
+	<td align="left">database.jdbc.port</td>
+	<td align="left">3306</td>
+	<td align="left">数据库连接端口号</td>
+</tr>
+<tr>
+	<td align="left">database.jdbc.schema</td>
+	<td align="left">test</td>
+	<td align="left">数据库schema</td>
+</tr>
+<tr>
+	<td align="left">database.jdbc.username</td>
+	<td align="left">root</td>
+	<td align="left">数据库访问用户名</td>
+</tr>
+<tr>
+	<td align="left">database.jdbc.password</td>
+	<td align="left">空</td>
+	<td align="left">数据库访问密码</td>
+</tr>
+</tbody>
+</table>
 <h3>redis 连接参数</h3>
-<ol>
-<li>redis.host redis服务器主机名</li>
-<li>redis.port redis服务器端口号</li>
-<li>redis.database redis数据库索引</li>
-<li>redis.password redis数据库访问密码</li>
-<li>redis.timeout redis 超时参数(秒)</li>
-<li>redis.home redis本机安装位置，当指定此值时,facelog启动会自动启动redis </li>
-</ol>
-<p>完整的redis参数名定义参见<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommonConstant.java"><code>net.gdface.facelog.client.CommonConstant</code></a>中 <code>REDIS_</code>为前缀的所有参数名定义。</p>
+<table>
+<thead>
+<tr>
+	<th align="left">参数名</th>
+	<th align="left">默认值</th>
+	<th align="left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td align="left">redis.host</td>
+	<td align="left">localhost</td>
+	<td align="left">redis服务器主机名</td>
+</tr>
+<tr>
+	<td align="left">redis.port</td>
+	<td align="left">6379</td>
+	<td align="left">redis服务器端口号</td>
+</tr>
+<tr>
+	<td align="left">redis.database</td>
+	<td align="left">0</td>
+	<td align="left">redis数据库索引</td>
+</tr>
+<tr>
+	<td align="left">redis.password</td>
+	<td align="left">空</td>
+	<td align="left">redis数据库访问密码</td>
+</tr>
+<tr>
+	<td align="left">redis.timeout</td>
+	<td align="left">2000</td>
+	<td align="left">redis 超时参数(秒)</td>
+</tr>
+<tr>
+	<td align="left">redis.uri</td>
+	<td align="left"></td>
+	<td align="left">redis 访问地址,如 'jedis://localhost:6397/0',设置此值时忽略所有其他redis参数(host,port,password,database)</td>
+</tr>
+<tr>
+	<td align="left">redis.home</td>
+	<td align="left"></td>
+	<td align="left">redis本机安装位置，当指定此值时,facelog启动会自动启动redis</td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+<p>完整的redis参数名定义参见<a href="../facelog-base/src/main/java/net/gdface/facelog/CommonConstant.java"><code>net.gdface.facelog.client.CommonConstant</code></a>中 <code>REDIS_</code>为前缀的所有参数名定义。</p>
+<h3>webredis 启动参数</h3>
+<p><a href="https://gitee.com/l0km/webredis">webredis</a>是一个简单的基于websocket+redis+<a href="https://nodejs.org">node.js</a>实现web端消息推送的服务,用于向浏览器推送redis订阅消息，基于浏览器的设备管理端需要用此服务实现对设备的管理。</p>
+<table>
+<thead>
+<tr>
+	<th align="left">参数名</th>
+	<th align="left">默认值</th>
+	<th align="left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td align="left">nodejs.exe</td>
+	<td align="left"></td>
+	<td align="left"><a href="https://nodejs.org">node.js</a>可执行程序路径,用于执行webredis脚本</td>
+</tr>
+<tr>
+	<td align="left">webredis.file</td>
+	<td align="left"></td>
+	<td align="left">webredis 启动脚本路径</td>
+</tr>
+<tr>
+	<td align="left">webredis.host</td>
+	<td align="left">localhost</td>
+	<td align="left">webredis主机名,为非本机名('localhost','127.0.0.1')时,不执行本地webredis启动</td>
+</tr>
+<tr>
+	<td align="left">webredis.port</td>
+	<td align="left">16379</td>
+	<td align="left">webredis服务端口</td>
+</tr>
+<tr>
+	<td align="left">webredis.rhost</td>
+	<td align="left">${redis.host}</td>
+	<td align="left">redis 主机名</td>
+</tr>
+<tr>
+	<td align="left">webredis.rport</td>
+	<td align="left">${redis.port}</td>
+	<td align="left">redis 端口</td>
+</tr>
+<tr>
+	<td align="left">webredis.rauth</td>
+	<td align="left">${redis.password}</td>
+	<td align="left">redis 密码</td>
+</tr>
+<tr>
+	<td align="left">webredis.rdb</td>
+	<td align="left">${redis.database}</td>
+	<td align="left">redis 数据库</td>
+</tr>
+<tr>
+	<td align="left">webredis.ruri</td>
+	<td align="left">redis://:${webredis.rauth}@${webredis.rhost}:${webredis.rport}/${webredis.rdb}</td>
+	<td align="left">redis 连接uri,设置此值时忽略所有其他redis参数('rhost','rport'...)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>NOTE</strong>当指定<code>nodejs.exe</code>和<code>webredis.file</code>时,facelog启动会尝试启动webredis</p>
+<p>完整的webredis参数名定义参见<a href="../facelog-base/src/main/java/net/gdface/facelog/CommonConstant.java"><code>net.gdface.facelog.client.CommonConstant</code></a>中 <code>WEBREDIS_</code>为前缀的所有参数名定义。</p>
 <h3>系统日志参数</h3>
 <p>facelog service采用 <a href="https://logging.apache.org/log4j">log4j</a> 记录日志。</p>
 <p>日志相关参数如下</p>
@@ -1379,7 +1507,7 @@ facelog 服务端也提供<code>version,versionInfo</code>接口方法用于获�
 <li>syslog.level 系统日志级别，默认INFO,与log4j 中的日志级别定义一致</li>
 <li>syslog.location 系统日志文件位置(与lo4j 中<code>log4j.appender.LOGFILE.File</code>对应)，默认 <code>${usr.dir}/log/facelog.log</code></li>
 </ol>
-<p>更详细的日志参数参见<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommonConstant.java"><code>net.gdface.facelog.client.CommonConstant</code></a>中 <code>SYSLOG_</code>为前缀的所有参数名定义。</p>
+<p>更详细的日志参数参见<a href="../facelog-base/src/main/java/net/gdface/facelog/CommonConstant.java"><code>net.gdface.facelog.client.CommonConstant</code></a>中 <code>SYSLOG_</code>为前缀的所有参数名定义。</p>
 <p>应用程序也可以直接按传统的修改<code>log4j.properties</code>方式配置日志记录参数</p>
 <p>关于facelog 对系统日志参数的配置逻辑，参见 <a href="../facelog-service/src/main/java/net/gdface/facelog/service/SyslogConfig.java"><code>net.gdface.facelog.service.SyslogConfig</code></a></p>
 <h3>程序修改参数</h3>
