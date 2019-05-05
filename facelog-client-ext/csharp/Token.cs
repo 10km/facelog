@@ -25,9 +25,13 @@ public partial class Token : TBase
 
   public int Id { get; set; }
 
-  public long T1 { get; set; }
+  public int T1 { get; set; }
 
-  public long T2 { get; set; }
+  public int T2 { get; set; }
+
+  public int T3 { get; set; }
+
+  public int T4 { get; set; }
 
   /// <summary>
   /// 
@@ -38,10 +42,12 @@ public partial class Token : TBase
   public Token() {
   }
 
-  public Token(int id, long t1, long t2) : this() {
+  public Token(int id, int t1, int t2, int t3, int t4) : this() {
     this.Id = id;
     this.T1 = t1;
     this.T2 = t2;
+    this.T3 = t3;
+    this.T4 = t4;
   }
 
   public void Read (TProtocol iprot)
@@ -52,6 +58,8 @@ public partial class Token : TBase
       bool isset_id = false;
       bool isset_t1 = false;
       bool isset_t2 = false;
+      bool isset_t3 = false;
+      bool isset_t4 = false;
       TField field;
       iprot.ReadStructBegin();
       while (true)
@@ -71,22 +79,38 @@ public partial class Token : TBase
             }
             break;
           case 2:
-            if (field.Type == TType.I64) {
-              T1 = iprot.ReadI64();
+            if (field.Type == TType.I32) {
+              T1 = iprot.ReadI32();
               isset_t1 = true;
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
           case 3:
-            if (field.Type == TType.I64) {
-              T2 = iprot.ReadI64();
+            if (field.Type == TType.I32) {
+              T2 = iprot.ReadI32();
               isset_t2 = true;
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
           case 4:
+            if (field.Type == TType.I32) {
+              T3 = iprot.ReadI32();
+              isset_t3 = true;
+            } else { 
+              TProtocolUtil.Skip(iprot, field.Type);
+            }
+            break;
+          case 5:
+            if (field.Type == TType.I32) {
+              T4 = iprot.ReadI32();
+              isset_t4 = true;
+            } else { 
+              TProtocolUtil.Skip(iprot, field.Type);
+            }
+            break;
+          case 6:
             if (field.Type == TType.I32) {
               Type = (TokenType)iprot.ReadI32();
             } else { 
@@ -106,6 +130,10 @@ public partial class Token : TBase
         throw new TProtocolException(TProtocolException.INVALID_DATA, "required field T1 not set");
       if (!isset_t2)
         throw new TProtocolException(TProtocolException.INVALID_DATA, "required field T2 not set");
+      if (!isset_t3)
+        throw new TProtocolException(TProtocolException.INVALID_DATA, "required field T3 not set");
+      if (!isset_t4)
+        throw new TProtocolException(TProtocolException.INVALID_DATA, "required field T4 not set");
     }
     finally
     {
@@ -127,21 +155,33 @@ public partial class Token : TBase
       oprot.WriteI32(Id);
       oprot.WriteFieldEnd();
       field.Name = "t1";
-      field.Type = TType.I64;
+      field.Type = TType.I32;
       field.ID = 2;
       oprot.WriteFieldBegin(field);
-      oprot.WriteI64(T1);
+      oprot.WriteI32(T1);
       oprot.WriteFieldEnd();
       field.Name = "t2";
-      field.Type = TType.I64;
+      field.Type = TType.I32;
       field.ID = 3;
       oprot.WriteFieldBegin(field);
-      oprot.WriteI64(T2);
+      oprot.WriteI32(T2);
+      oprot.WriteFieldEnd();
+      field.Name = "t3";
+      field.Type = TType.I32;
+      field.ID = 4;
+      oprot.WriteFieldBegin(field);
+      oprot.WriteI32(T3);
+      oprot.WriteFieldEnd();
+      field.Name = "t4";
+      field.Type = TType.I32;
+      field.ID = 5;
+      oprot.WriteFieldBegin(field);
+      oprot.WriteI32(T4);
       oprot.WriteFieldEnd();
       if (Type != null) {
         field.Name = "type";
         field.Type = TType.I32;
-        field.ID = 4;
+        field.ID = 6;
         oprot.WriteFieldBegin(field);
         oprot.WriteI32((int)Type.Value);
         oprot.WriteFieldEnd();
@@ -163,6 +203,10 @@ public partial class Token : TBase
     __sb.Append(T1);
     __sb.Append(", T2: ");
     __sb.Append(T2);
+    __sb.Append(", T3: ");
+    __sb.Append(T3);
+    __sb.Append(", T4: ");
+    __sb.Append(T4);
     if (Type != null) {
       __sb.Append(", Type: ");
       __sb.Append(Type);

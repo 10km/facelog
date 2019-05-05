@@ -2811,6 +2811,8 @@ Token = function(args) {
   this.id = null;
   this.t1 = null;
   this.t2 = null;
+  this.t3 = null;
+  this.t4 = null;
   this.type = null;
   if (args) {
     if (args.id !== undefined && args.id !== null) {
@@ -2827,6 +2829,16 @@ Token = function(args) {
       this.t2 = args.t2;
     } else {
       throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field t2 is unset!');
+    }
+    if (args.t3 !== undefined && args.t3 !== null) {
+      this.t3 = args.t3;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field t3 is unset!');
+    }
+    if (args.t4 !== undefined && args.t4 !== null) {
+      this.t4 = args.t4;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field t4 is unset!');
     }
     if (args.type !== undefined && args.type !== null) {
       this.type = args.type;
@@ -2855,20 +2867,34 @@ Token.prototype.read = function(input) {
       }
       break;
       case 2:
-      if (ftype == Thrift.Type.I64) {
-        this.t1 = input.readI64().value;
+      if (ftype == Thrift.Type.I32) {
+        this.t1 = input.readI32().value;
       } else {
         input.skip(ftype);
       }
       break;
       case 3:
-      if (ftype == Thrift.Type.I64) {
-        this.t2 = input.readI64().value;
+      if (ftype == Thrift.Type.I32) {
+        this.t2 = input.readI32().value;
       } else {
         input.skip(ftype);
       }
       break;
       case 4:
+      if (ftype == Thrift.Type.I32) {
+        this.t3 = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 5:
+      if (ftype == Thrift.Type.I32) {
+        this.t4 = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 6:
       if (ftype == Thrift.Type.I32) {
         this.type = input.readI32().value;
       } else {
@@ -2892,17 +2918,27 @@ Token.prototype.write = function(output) {
     output.writeFieldEnd();
   }
   if (this.t1 !== null && this.t1 !== undefined) {
-    output.writeFieldBegin('t1', Thrift.Type.I64, 2);
-    output.writeI64(this.t1);
+    output.writeFieldBegin('t1', Thrift.Type.I32, 2);
+    output.writeI32(this.t1);
     output.writeFieldEnd();
   }
   if (this.t2 !== null && this.t2 !== undefined) {
-    output.writeFieldBegin('t2', Thrift.Type.I64, 3);
-    output.writeI64(this.t2);
+    output.writeFieldBegin('t2', Thrift.Type.I32, 3);
+    output.writeI32(this.t2);
+    output.writeFieldEnd();
+  }
+  if (this.t3 !== null && this.t3 !== undefined) {
+    output.writeFieldBegin('t3', Thrift.Type.I32, 4);
+    output.writeI32(this.t3);
+    output.writeFieldEnd();
+  }
+  if (this.t4 !== null && this.t4 !== undefined) {
+    output.writeFieldBegin('t4', Thrift.Type.I32, 5);
+    output.writeI32(this.t4);
     output.writeFieldEnd();
   }
   if (this.type !== null && this.type !== undefined) {
-    output.writeFieldBegin('type', Thrift.Type.I32, 4);
+    output.writeFieldBegin('type', Thrift.Type.I32, 6);
     output.writeI32(this.type);
     output.writeFieldEnd();
   }

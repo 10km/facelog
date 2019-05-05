@@ -186,7 +186,7 @@ class TokenMangement implements ServiceConstant {
 		buffer.asLongBuffer().put(System.nanoTime());
 		byte[] md5 = FaceUtilits.getMD5(Bytes.concat(checkNotNull(source),buffer.array()));
 		ByteBuffer byteBuffers = ByteBuffer.wrap(md5);
-		return new Token(byteBuffers.getLong(), byteBuffers.getLong()).asContextToken();
+		return new Token(byteBuffers.getInt(), byteBuffers.getInt(),byteBuffers.getInt(),byteBuffers.getInt()).asContextToken();
 	}
 	private static Token makeToken(Object ...objs){
 		checkArgument(null != objs && 0 != objs.length,"objs must not be null or empty");

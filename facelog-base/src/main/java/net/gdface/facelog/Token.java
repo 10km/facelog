@@ -19,10 +19,10 @@ public final class Token{
 	/** 持有令牌的设备/人员ID */
 	private int id;
 	private TokenType type = TokenType.UNINITIALIZED;
-	private long t1,t2;
+	private int t1,t2,t3,t4;
 	public Token() {
 	}
-	public Token(long t1, long t2) {
+	public Token(int t1, int t2, int t3, int t4) {
 		this.t1 = t1;
 		this.t2 = t2;
 	}
@@ -38,17 +38,33 @@ public final class Token{
 	public void setType(TokenType type) {
 		this.type = type;
 	}
-	public long getT1() {
+	public int getT1() {
 		return t1;
 	}
-	public void setT1(long t1) {
+	public void setT1(int t1) {
 		this.t1 = t1;
 	}
-	public long getT2() {
+	public int getT2() {
 		return t2;
 	}
-	public void setT2(long t2) {
+	public void setT2(int t2) {
 		this.t2 = t2;
+	}
+
+	public int getT3() {
+		return t3;
+	}
+
+	public void setT3(int t3) {
+		this.t3 = t3;
+	}
+
+	public int getT4() {
+		return t4;
+	}
+
+	public void setT4(int t4) {
+		this.t4 = t4;
 	}
 	Token asDeviceToken(int deviceId){
 		this.setId(deviceId);
@@ -70,11 +86,14 @@ public final class Token{
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + id;
-		result = prime * result + (int) (t1 ^ (t1 >>> 32));
-		result = prime * result + (int) (t2 ^ (t2 >>> 32));
+		result = prime * result + t1;
+		result = prime * result + t2;
+		result = prime * result + t3;
+		result = prime * result + t4;
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -96,6 +115,12 @@ public final class Token{
 		if (t2 != other.t2) {
 			return false;
 		}
+		if (t3 != other.t3) {
+			return false;
+		}
+		if (t4 != other.t4) {
+			return false;
+		}
 		if (type != other.type) {
 			return false;
 		}
@@ -112,6 +137,10 @@ public final class Token{
 		builder.append(t1);
 		builder.append(", t2=");
 		builder.append(t2);
+		builder.append(", t3=");
+		builder.append(t3);
+		builder.append(", t4=");
+		builder.append(t4);
 		builder.append("]");
 		return builder.toString();
 	}
@@ -146,6 +175,8 @@ public final class Token{
 			this.type=src.type;
 			this.t1 = src.t1;
 			this.t2 = src.t2;
+			this.t3 = src.t3;
+			this.t4 = src.t4;
 		}
 		return this;
 	}

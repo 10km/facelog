@@ -198,9 +198,11 @@ struct PermitBean {
 
 struct Token {
   1: required i32 id;
-  2: required i64 t1;
-  3: required i64 t2;
-  4: optional TokenType type;
+  2: required i32 t1;
+  3: required i32 t2;
+  4: required i32 t3;
+  5: required i32 t4;
+  6: optional TokenType type;
 }
 
 exception ServiceSecurityException {

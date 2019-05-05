@@ -52,7 +52,7 @@
     // 调用applyRootToken接口方法
     client.applyRootToken("guyadong",false,res=>{
       $('.hint-token').append('applyRootToken:' + JSON.stringify(res))
-      // 调用getRedisParameters接口方法(失败)，令牌无效原因未明
+      // 调用getRedisParameters接口方法
       client.getRedisParameters(res,_res=>{
         $('.hint-getRedisParameters').append('getRedisParameters:' + JSON.stringify(_res))
       })

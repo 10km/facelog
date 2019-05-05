@@ -63,26 +63,46 @@ public final class Token implements ThriftDecorator<net.gdface.facelog.Token> {
     }
 
     @ThriftField(value = 2,requiredness=Requiredness.REQUIRED)
-    public long getT1(){
+    public int getT1(){
         return delegate().getT1();
     }
     
     @ThriftField
-    public void setT1(long value){
+    public void setT1(int value){
         delegate().setT1(value);
     }
 
     @ThriftField(value = 3,requiredness=Requiredness.REQUIRED)
-    public long getT2(){
+    public int getT2(){
         return delegate().getT2();
     }
     
     @ThriftField
-    public void setT2(long value){
+    public void setT2(int value){
         delegate().setT2(value);
     }
 
-    @ThriftField(value = 4,requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value = 4,requiredness=Requiredness.REQUIRED)
+    public int getT3(){
+        return delegate().getT3();
+    }
+    
+    @ThriftField
+    public void setT3(int value){
+        delegate().setT3(value);
+    }
+
+    @ThriftField(value = 5,requiredness=Requiredness.REQUIRED)
+    public int getT4(){
+        return delegate().getT4();
+    }
+    
+    @ThriftField
+    public void setT4(int value){
+        delegate().setT4(value);
+    }
+
+    @ThriftField(value = 6,requiredness=Requiredness.OPTIONAL)
     public net.gdface.facelog.client.thrift.TokenType getType(){
         return TypeTransformer.getInstance().to(
                     delegate().getType(),
