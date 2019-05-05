@@ -25,6 +25,8 @@ public final class Token{
 	public Token(int t1, int t2, int t3, int t4) {
 		this.t1 = t1;
 		this.t2 = t2;
+		this.t3 = t3;
+		this.t4 = t4;
 	}
 	public int getId() {
 		return id;
