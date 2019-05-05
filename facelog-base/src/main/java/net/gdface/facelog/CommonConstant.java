@@ -224,6 +224,12 @@ public interface CommonConstant {
     /** webredis:redis 连接uri,设置此值时忽略所有其他redis参数('rhost','rport'...) */
     public static final String WEBREDIS_RURI = "webredis.ruri";
 
+    /** XHR(XML HTTP Request)服务参数配置:XHR服务端是否启动 */
+    public static final String XHR_START = "xhr.start";
+    
+    /** XHR(XML HTTP Request)服务参数配置:XHR服务端口,默认值{@value #DEFAULT_PORT_XHR} */
+    public static final String XHR_PORT = "xhr.port";
+    
     /** 操作员对person表允许的操作 */
     public static final String SECURITY_OPERATOR_TABLE_PERSON_ALLOW = "security.operator.table.person.allow";
     

@@ -5,6 +5,9 @@ import org.jboss.netty.logging.Slf4JLoggerFactory;
 
 import com.google.common.util.concurrent.Service;
 
+import net.gdface.facelog.GlobalConfig;
+import static net.gdface.facelog.CommonConstant.*;
+
 /**
  * 启动 IFacelog 服务
  * @author guyadong
@@ -24,7 +27,9 @@ public class FacelogServiceMain {
 		InternalLoggerFactory.setDefaultFactory(new Slf4JLoggerFactory());
 		@SuppressWarnings("unused")
 		Service service = FaceLogService.buildService().startAsync();
-		@SuppressWarnings("unused")
-		Service httpService = FaceLogService.buildHttpService().startAsync();
+		if(GlobalConfig.getConfig().getBoolean(XHR_START, true)){
+			@SuppressWarnings("unused")
+			Service httpService = FaceLogService.buildHttpService().startAsync();
+		}
 	}	
 }

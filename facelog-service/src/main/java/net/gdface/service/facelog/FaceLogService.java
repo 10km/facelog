@@ -61,7 +61,7 @@ public class FaceLogService extends ThriftServerService implements CommonConstan
 	public static synchronized final FaceLogService buildHttpService(){
 		return httpService = buildService(httpService,
 				makeThriftServerConfig()
-					.setPort(DEFAULT_PORT_XHR)
+					.setPort(GlobalConfig.getConfig().getInt(XHR_PORT, DEFAULT_PORT_XHR))
 					.setIdleConnectionTimeout(Duration.valueOf("10ms"))
 					.setTransportName(ThriftServerService.HTTP_TRANSPORT)
 					.setProtocolName(ThriftServerService.JSON_PROTOCOL));

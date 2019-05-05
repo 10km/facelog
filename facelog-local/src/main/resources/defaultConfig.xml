@@ -62,6 +62,10 @@
 		<rdb description="redis 数据库">${redis.database}</rdb>
 		<ruri description="redis 连接uri,设置此值时忽略所有其他redis参数('rhost','rport'...)">redis://:${webredis.rauth}@${webredis.rhost}:${webredis.rport}/${webredis.rdb}</ruri>
 	</webredis>
+	<xhr description="XHR(XML HTTP Request)服务参数配置">
+		<start description="XHR服务端是否启动">true</start>
+		<port description="XHR服务端口">36411</port>
+	</xhr>
 	<database description="数据库参数配置">
 		<isDebug description="是否为调试状态">false</isDebug>
 		<jdbc>
