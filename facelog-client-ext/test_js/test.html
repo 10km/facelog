@@ -35,9 +35,12 @@
     client.applyRootToken("guyadong",false,res=>{
       $('.hint-token').append('applyRootToken:' + JSON.stringify(res))
       // 调用getRedisParameters接口方法
-      client.getRedisParameters(res,_res=>{
-        $('.hint-getRedisParameters').append('getRedisParameters:' + JSON.stringify(_res))
-      })
+      // client.getRedisParameters(res,_res=>{
+      //   $('.hint-getRedisParameters').append('getRedisParameters:' + JSON.stringify(_res))
+      // })
+      // 同步调用getRedisParameters接口方法
+      var param = client.getRedisParameters(res)
+      $('.hint-getRedisParameters').append('getRedisParameters:' + JSON.stringify(param))
     })
     // 调用getPerson接口方法
     // user id = 5
