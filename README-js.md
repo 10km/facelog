@@ -43,9 +43,13 @@ javascript访问facelog服务的示例代码如下：
 
 自从2.1.0版本开始，facelog支持XHR(XML HTTP Request)服务启动。开启这个服务，才能支持javascript访问。
 
-facelog服务启动时，默认启动XHR服务。
+facelog服务启动时，默认启动XHR服务，如下图在服务端日志输出显示XHR服务启动。
 
 ![](manual/images/xhr.png)
+
+在前端用浏览器打开XHR服务端口`http://${xhr_host}:${xhr_port}`,如果显示如下页面，则XHR服务工作正常
+
+![](manual/images/xhr_homepage.png)
 
 
 
