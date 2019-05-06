@@ -8,6 +8,7 @@ facelog 只是一个针对人脸识别应用的开发框架，并不针对特定
 
 关于 facelog 更详细的说明参见 [《facelog 开发手册》](manual/MANUAL.md)
 
+facelog API 文档(javadoc) : [https://apidoc.gitee.com/l0km/facelog](https://apidoc.gitee.com/l0km/facelog)
 
 # 编译说明
 
