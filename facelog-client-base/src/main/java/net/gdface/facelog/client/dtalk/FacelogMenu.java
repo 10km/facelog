@@ -10,8 +10,7 @@ import gu.dtalk.event.ValueListener;
 import gu.dtalk.exception.CmdExecutionException;
 import net.gdface.facelog.client.location.ConnectConfigProvider;
 
-import static gu.dtalk.engine.SampleConnector.DEVINFO_PROVIDER;
-
+import static gu.dtalk.engine.DeviceUtils.DEVINFO_PROVIDER;
 import java.util.Map;
 
 import com.google.common.base.MoreObjects;

@@ -17,9 +17,9 @@ import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
 import net.gdface.utils.FaceUtilits;
 
-import static gu.dtalk.engine.SampleConnector.*;
 import static com.google.common.base.Preconditions.*;
 import static net.gdface.facelog.client.DemoConfig.CONSOLE_CONFIG;
+import static gu.dtalk.engine.DeviceUtils.DEVINFO_PROVIDER;
 
 public class DtalkDemo {
 	private static final Logger logger = LoggerFactory.getLogger(DtalkDemo.class);

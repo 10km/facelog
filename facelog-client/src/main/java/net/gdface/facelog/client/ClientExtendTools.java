@@ -16,6 +16,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 import gu.dtalk.MenuItem;
@@ -508,6 +509,7 @@ public class ClientExtendTools {
 	 * @return
 	 */
 	private Map<MQParam, String> getRedisParameters(Token token){
+		checkArgument(token != null,"token is null");
 		// 获取redis连接参数
 		try {
 			Map<MQParam, String> param = syncInstance != null 
@@ -521,6 +523,23 @@ public class ClientExtendTools {
 	        Throwables.throwIfUnchecked(e);
 	        throw new RuntimeException(e);
 	    }
+	}
+	public Supplier<Map<MQParam, String>> getRedisParametersSupplier(final Token token){
+		checkArgument(token != null,"token is null");
+		return new Supplier<Map<MQParam, String>>(){
+
+			@Override
+			public Map<MQParam, String> get() {
+				return getRedisParameters(token);
+			}};
+	}
+	public Supplier<String> getMonitorChannelSupplier(Token token){
+		return Suppliers.compose(new Function<Map<MQParam, String>,String>(){
+			@Override
+			public String apply(Map<MQParam, String> input) {
+				return input.get(MQParam.HB_MONITOR_CHANNEL);
+			}
+		}, getRedisParametersSupplier(token));
 	}
 	/**
 	 * 创建dtalk引擎

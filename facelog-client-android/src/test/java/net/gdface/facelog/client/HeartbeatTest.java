@@ -1,7 +1,5 @@
 package net.gdface.facelog.client;
 
-import static org.junit.Assert.*;
-
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -69,8 +67,7 @@ public class HeartbeatTest implements ChannelConstant{
 	 */
 	@Test
 	public void test1SendHB() {
-		byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
-		Heartbeat hb = Heartbeat.makeHeartbeat(address, 12345, JedisPoolLazy.getDefaultInstance())
+		Heartbeat hb = Heartbeat.makeHeartbeat(12345, JedisPoolLazy.getDefaultInstance())
 				/** 将设备心跳包数据发送到指定的设备心跳监控通道名,否则监控端无法收到设备心跳包 */
 				.setMonitorChannel(monitorChannelName);
 		/** 以默认间隔启动定时任务 */
