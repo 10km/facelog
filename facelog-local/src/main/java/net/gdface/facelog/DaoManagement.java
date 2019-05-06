@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.*;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,7 +22,6 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
@@ -106,20 +106,18 @@ public class DaoManagement extends BaseDao {
 	
 	/**
 	 * 获取人员组通行权限<br>
-	 * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行,
+	 * 返回{@code personGroupId}指定的人员组在{@code deviceGroupId}指定的设备组上是否允许通行,
 	 * 本方法会对{@code personGroupId}的父结点向上回溯：
 	 * {@codepersonGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，
 	 * 输入参数为{@code null}或找不到指定的记录则返回false
-	 * @param deviceId
+	 * @param deviceGroupId
 	 * @param personGroupId
 	 * @return 允许通行返回false，否则返回false
 	 */
-	protected boolean daoGetGroupPermit(Integer deviceId,Integer personGroupId){
+	protected boolean daoGetGroupPermitOnDeviceGroup(final Integer deviceGroupId,Integer personGroupId){
 		PersonGroupBean personGroup;
-		final DeviceBean device;
-		if(null == deviceId
+		if(null == deviceGroupId
 			|| null == personGroupId 
-			|| null ==(device = daoGetDevice(deviceId))
 			|| null == (personGroup = daoGetPersonGroup(personGroupId))){
 			return false;
 		}
@@ -129,8 +127,26 @@ public class DaoManagement extends BaseDao {
 		return Iterators.tryFind(personGroupList.iterator(), new Predicate<PersonGroupBean>(){
 			@Override
 			public boolean apply(PersonGroupBean input) {
-				return daoExistsPermit(device.getGroupId(), input.getId());
+				return daoExistsPermit(deviceGroupId, input.getId());
 			}}).isPresent();
+	}
+	/**
+	 * 获取人员组通行权限<br>
+	 * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行,
+	 * 本方法会对{@code personGroupId}的父结点向上回溯：
+	 * {@codepersonGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，
+	 * 输入参数为{@code null}或找不到指定的记录则返回false
+	 * @param deviceGroupId
+	 * @param personGroupId
+	 * @return 允许通行返回false，否则返回false
+	 * @see #daoGetGroupPermitOnDeviceGroup(Integer, Integer)
+	 */
+	protected boolean daoGetGroupPermit(Integer deviceId,Integer personGroupId){
+		DeviceBean device;
+		if(null == deviceId || null ==(device = daoGetDevice(deviceId))){
+			return false;
+		}
+		return daoGetGroupPermitOnDeviceGroup(device.getGroupId(),personGroupId);
 	}
 	protected boolean daoGetPersonPermit(Integer deviceId,Integer personId){
 		PersonBean person;
@@ -141,7 +157,7 @@ public class DaoManagement extends BaseDao {
 	}
 	protected List<Boolean> daoGetGroupPermit(final Integer deviceId,List<Integer> personGroupIdList){
 		if(null == deviceId || null == personGroupIdList){
-			return ImmutableList.<Boolean>of();
+			return Collections.emptyList();
 		}
 		return Lists.newArrayList(Lists.transform(personGroupIdList, new Function<Integer,Boolean>(){
 			@Override
@@ -151,7 +167,7 @@ public class DaoManagement extends BaseDao {
 	}
 	protected List<Boolean> daoGetPermit(final Integer deviceId,List<Integer> personIdList){
 		if(null == deviceId || null == personIdList){
-			return ImmutableList.<Boolean>of();
+			return Collections.emptyList();
 		}
 		return Lists.newArrayList(Lists.transform(personIdList, new Function<Integer,Boolean>(){
 			@Override
@@ -161,10 +177,13 @@ public class DaoManagement extends BaseDao {
 	}
 	/**
 	 * 从permit表返回允许在{@code deviceGroupId}指定的设备组通过的所有人员组({@link PersonGroupBean})对象的id
-	 * @param deviceGroupId
+	 * @param deviceGroupId 为{@code null}返回空表
 	 * @return
 	 */
 	protected List<Integer> daoGetPersonGroupsPermittedBy(Integer deviceGroupId){
+		if(deviceGroupId == null){
+			return Collections.emptyList();
+		}
 		PermitBean template = PermitBean.builder().deviceGroupId(deviceGroupId).build();
 		List<PermitBean> permits = daoLoadPermitUsingTemplate(template, 1, -1);
 		
@@ -172,10 +191,13 @@ public class DaoManagement extends BaseDao {
 	}
 	/**
 	 * 从permit表返回允许{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})对象的id
-	 * @param personGroupId
+	 * @param personGroupId 为{@code null}返回空表
 	 * @return
 	 */
 	protected List<Integer> daoGetDeviceGroupsPermittedBy(Integer personGroupId){
+		if(personGroupId == null){
+			return Collections.emptyList();
+		}
 		PermitBean template = PermitBean.builder().personGroupId(personGroupId).build();
 		List<PermitBean> permits = daoLoadPermitUsingTemplate(template, 1, -1);
 		
@@ -184,10 +206,13 @@ public class DaoManagement extends BaseDao {
 	/**
 	 * 从permit表返回允许在{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})的id<br>
 	 * 不排序,不包含重复id
-	 * @param personGroupId
+	 * @param personGroupId 为{@code null}返回空表
 	 * @return
 	 */
 	protected List<Integer> daoGetDeviceGroupsPermit(Integer personGroupId){
+		if(personGroupId == null){
+			return Collections.emptyList();
+		}
 		PermitBean template = PermitBean.builder().personGroupId(personGroupId).build();
 		List<PermitBean> permits = daoLoadPermitUsingTemplate(template, 1, -1);
 		HashSet<Integer> groups = Sets.newHashSet();
@@ -195,6 +220,31 @@ public class DaoManagement extends BaseDao {
 			groups.addAll(Lists.transform(daoListOfParentForDeviceGroup(bean.getDeviceGroupId()),daoCastDeviceGroupToPk));
 		}
 		return Lists.newArrayList(groups);
+	}
+	
+	/**
+	 * 从permit表删除指定{@code personGroupId}指定人员组的在所有设备上的通行权限
+	 * @param personGroupId 为{@code null}返回0
+	 * @return 删除的记录条数
+	 */
+	protected int daoDeletePersonGroupPermit(Integer personGroupId) {
+		if(personGroupId == null){
+			return 0;
+		}
+		PermitBean template = PermitBean.builder().personGroupId(personGroupId).build();
+		return getPermitManager().deleteUsingTemplate(template);
+	}
+	/**
+	 * 从permit表删除指定{@code deviceGroupId}指定设备组上的人员通行权限
+	 * @param deviceGroupId 为{@code null}返回0
+	 * @return 删除的记录条数
+	 */
+	protected int daoDeleteGroupPermitOnDeviceGroup(Integer deviceGroupId) {
+		if(deviceGroupId == null){
+			return 0;
+		}
+		PermitBean template = PermitBean.builder().deviceGroupId(deviceGroupId).build();
+		return getPermitManager().deleteUsingTemplate(template);
 	}
 	////////////////////////////////////////////
 	

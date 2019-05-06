@@ -829,6 +829,33 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public int deleteGroupPermitOnDeviceGroup(final int deviceGroupId,
+        final Token token) 
+        {
+        try{
+            return syncCall(new Function<Integer,Integer>() {
+                @Override
+                public Integer apply(Integer input) {
+                    return input;
+                }},
+                new ServiceAsyncCall<Integer>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Integer> nativeCallback){
+                    service.deleteGroupPermitOnDeviceGroup(deviceGroupId,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public int deleteImage(final String imageMd5,
         final Token token) 
         {
@@ -957,6 +984,33 @@ public class IFaceLogThriftClient implements IFaceLog {
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Integer> nativeCallback){
                     service.deletePersonGroup(personGroupId,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public int deletePersonGroupPermit(final int personGroupId,
+        final Token token) 
+        {
+        try{
+            return syncCall(new Function<Integer,Integer>() {
+                @Override
+                public Integer apply(Integer input) {
+                    return input;
+                }},
+                new ServiceAsyncCall<Integer>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Integer> nativeCallback){
+                    service.deletePersonGroupPermit(personGroupId,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
@@ -1287,7 +1341,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public List<Integer> getDeviceGroupsPermit(final Integer personGroupId) 
+    public List<Integer> getDeviceGroupsPermit(final int personGroupId) 
         {
         try{
             return syncCall(new Function<List<Integer>,List<Integer>>() {
@@ -1313,7 +1367,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public List<Integer> getDeviceGroupsPermittedBy(final Integer personGroupId) 
+    public List<Integer> getDeviceGroupsPermittedBy(final int personGroupId) 
         {
         try{
             return syncCall(new Function<List<Integer>,List<Integer>>() {
@@ -1563,6 +1617,30 @@ public class IFaceLogThriftClient implements IFaceLog {
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Boolean> nativeCallback){
                     service.getGroupPermit(deviceId,personGroupId,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public boolean getGroupPermitOnDeviceGroup(final int deviceGroupId,
+        final int personGroupId) 
+        {
+        try{
+            return syncCall(new Function<Boolean,Boolean>() {
+                @Override
+                public Boolean apply(Boolean input) {
+                    return input;
+                }},
+                new ServiceAsyncCall<Boolean>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Boolean> nativeCallback){
+                    service.getGroupPermitOnDeviceGroup(deviceGroupId,personGroupId,nativeCallback);
                 }});
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
@@ -1841,7 +1919,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public List<Integer> getPersonGroupsPermittedBy(final Integer deviceGroupId) 
+    public List<Integer> getPersonGroupsPermittedBy(final int deviceGroupId) 
         {
         try{
             return syncCall(new Function<List<Integer>,List<Integer>>() {

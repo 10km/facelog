@@ -456,7 +456,20 @@ public class FacelogDefaultImpl implements IFaceLog {
 	public int deletePermit(DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token) {
 		return 0;
 	}
+	@Override
+	public int deletePersonGroupPermit(int personGroupId, Token token) {
+		return 0;
+	}
 
+	@Override
+	public int deleteGroupPermitOnDeviceGroup(int deviceGroupId, Token token) {
+		return 0;
+	}
+
+	@Override
+	public boolean getGroupPermitOnDeviceGroup(int deviceGroupId, int personGroupId) {
+		return false;
+	}
 	@Override
 	public boolean getGroupPermit(int deviceId, int personGroupId) {
 		return false;
@@ -477,17 +490,17 @@ public class FacelogDefaultImpl implements IFaceLog {
 		return null;
 	}
 	@Override
-	public List<Integer> getPersonGroupsPermittedBy(Integer deviceGroupId) {
+	public List<Integer> getPersonGroupsPermittedBy(int deviceGroupId) {
 		return null;
 	}
 
 	@Override
-	public List<Integer> getDeviceGroupsPermittedBy(Integer personGroupId) {
+	public List<Integer> getDeviceGroupsPermittedBy(int personGroupId) {
 		return null;
 	}
 
 	@Override
-	public List<Integer> getDeviceGroupsPermit(Integer personGroupId) {
+	public List<Integer> getDeviceGroupsPermit(int personGroupId) {
 		return null;
 	}
 
@@ -666,5 +679,7 @@ public class FacelogDefaultImpl implements IFaceLog {
 	@Override
 	public void bindBorder(Integer personGroupId, Integer deviceGroupId, Token token) {
 	}
+
+
 
 }

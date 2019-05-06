@@ -777,6 +777,31 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(deleteFeature(featureMd5,deleteImage,token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#deleteGroupPermitOnDeviceGroup(int,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Integer> deleteGroupPermitOnDeviceGroup(int deviceGroupId,
+        Token token){
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.deleteGroupPermitOnDeviceGroup(
+                deviceGroupId,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void deleteGroupPermitOnDeviceGroup(int deviceGroupId,
+        Token token,
+        FutureCallback<Integer>callback){
+        factory.addCallback(deleteGroupPermitOnDeviceGroup(deviceGroupId,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#deleteImage(java.lang.String,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Integer> deleteImage(String imageMd5,
@@ -909,6 +934,31 @@ public class IFaceLogThriftClientAsync {
         Token token,
         FutureCallback<Integer>callback){
         factory.addCallback(deletePersonGroup(personGroupId,token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#deletePersonGroupPermit(int,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Integer> deletePersonGroupPermit(int personGroupId,
+        Token token){
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.deletePersonGroupPermit(
+                personGroupId,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void deletePersonGroupPermit(int personGroupId,
+        Token token,
+        FutureCallback<Integer>callback){
+        factory.addCallback(deletePersonGroupPermit(personGroupId,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#deletePersons(java.util.List,net.gdface.facelog.Token)}
@@ -1193,9 +1243,9 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(getDeviceGroupsBelongs(deviceId), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#getDeviceGroupsPermit(java.lang.Integer)}
+     * see also {@link net.gdface.facelog.IFaceLog#getDeviceGroupsPermit(int)}
      */
-    public ListenableFuture<List<Integer>> getDeviceGroupsPermit(Integer personGroupId){
+    public ListenableFuture<List<Integer>> getDeviceGroupsPermit(int personGroupId){
         MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
             new MethodCallback<List<Integer>,List<Integer>>(
                 new Function<List<Integer>,List<Integer>>() {
@@ -1210,14 +1260,14 @@ public class IFaceLogThriftClientAsync {
                 personGroupId,nativeCallback);
         return nativeCallback.feature;
     }
-    public void getDeviceGroupsPermit(Integer personGroupId,
+    public void getDeviceGroupsPermit(int personGroupId,
         FutureCallback<List<Integer>>callback){
         factory.addCallback(getDeviceGroupsPermit(personGroupId), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#getDeviceGroupsPermittedBy(java.lang.Integer)}
+     * see also {@link net.gdface.facelog.IFaceLog#getDeviceGroupsPermittedBy(int)}
      */
-    public ListenableFuture<List<Integer>> getDeviceGroupsPermittedBy(Integer personGroupId){
+    public ListenableFuture<List<Integer>> getDeviceGroupsPermittedBy(int personGroupId){
         MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
             new MethodCallback<List<Integer>,List<Integer>>(
                 new Function<List<Integer>,List<Integer>>() {
@@ -1232,7 +1282,7 @@ public class IFaceLogThriftClientAsync {
                 personGroupId,nativeCallback);
         return nativeCallback.feature;
     }
-    public void getDeviceGroupsPermittedBy(Integer personGroupId,
+    public void getDeviceGroupsPermittedBy(int personGroupId,
         FutureCallback<List<Integer>>callback){
         factory.addCallback(getDeviceGroupsPermittedBy(personGroupId), callback);
     }
@@ -1436,6 +1486,28 @@ public class IFaceLogThriftClientAsync {
         int personGroupId,
         FutureCallback<Boolean>callback){
         factory.addCallback(getGroupPermit(deviceId,personGroupId), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#getGroupPermitOnDeviceGroup(int,int)}
+     */
+    public ListenableFuture<Boolean> getGroupPermitOnDeviceGroup(int deviceGroupId,
+        int personGroupId){
+        MethodCallback<Boolean,Boolean> nativeCallback = 
+            new MethodCallback<Boolean,Boolean>(
+                new Function<Boolean,Boolean>() {
+                        @Override
+                        public Boolean apply(Boolean input) {
+                            return input;
+                }});
+        nativeCallback.service.getGroupPermitOnDeviceGroup(
+                deviceGroupId,
+            personGroupId,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void getGroupPermitOnDeviceGroup(int deviceGroupId,
+        int personGroupId,
+        FutureCallback<Boolean>callback){
+        factory.addCallback(getGroupPermitOnDeviceGroup(deviceGroupId,personGroupId), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getGroupPermits(int,java.util.List)}
@@ -1667,9 +1739,9 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(getPersonGroupsBelongs(personId), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#getPersonGroupsPermittedBy(java.lang.Integer)}
+     * see also {@link net.gdface.facelog.IFaceLog#getPersonGroupsPermittedBy(int)}
      */
-    public ListenableFuture<List<Integer>> getPersonGroupsPermittedBy(Integer deviceGroupId){
+    public ListenableFuture<List<Integer>> getPersonGroupsPermittedBy(int deviceGroupId){
         MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
             new MethodCallback<List<Integer>,List<Integer>>(
                 new Function<List<Integer>,List<Integer>>() {
@@ -1684,7 +1756,7 @@ public class IFaceLogThriftClientAsync {
                 deviceGroupId,nativeCallback);
         return nativeCallback.feature;
     }
-    public void getPersonGroupsPermittedBy(Integer deviceGroupId,
+    public void getPersonGroupsPermittedBy(int deviceGroupId,
         FutureCallback<List<Integer>>callback){
         factory.addCallback(getPersonGroupsPermittedBy(deviceGroupId), callback);
     }

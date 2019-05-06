@@ -594,6 +594,25 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public int deleteGroupPermitOnDeviceGroup(int deviceGroupId,
+        Token token) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return instance.deleteGroupPermitOnDeviceGroup(deviceGroupId,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
     public int deleteImage(String imageMd5,
         Token token) 
         {
@@ -684,6 +703,25 @@ public class IFaceLogThriftClient implements IFaceLog {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
             return instance.deletePersonGroup(personGroupId,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public int deletePersonGroupPermit(int personGroupId,
+        Token token) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return instance.deletePersonGroupPermit(personGroupId,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -921,7 +959,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public List<Integer> getDeviceGroupsPermit(Integer personGroupId) 
+    public List<Integer> getDeviceGroupsPermit(int personGroupId) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
@@ -941,7 +979,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public List<Integer> getDeviceGroupsPermittedBy(Integer personGroupId) 
+    public List<Integer> getDeviceGroupsPermittedBy(int personGroupId) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
@@ -1127,6 +1165,22 @@ public class IFaceLogThriftClient implements IFaceLog {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
             return instance.getGroupPermit(deviceId,
+                personGroupId);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public boolean getGroupPermitOnDeviceGroup(int deviceGroupId,
+        int personGroupId) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return instance.getGroupPermitOnDeviceGroup(deviceGroupId,
                 personGroupId);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
@@ -1342,7 +1396,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public List<Integer> getPersonGroupsPermittedBy(Integer deviceGroupId) 
+    public List<Integer> getPersonGroupsPermittedBy(int deviceGroupId) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{

@@ -238,11 +238,13 @@ service IFaceLog {
   i32 deleteAllFeaturesByPersonId(1: required i32 personId, 2: required bool deleteImage, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deleteDeviceGroup(1: required i32 deviceGroupId, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   list<string> deleteFeature(1: optional string featureMd5, 2: required bool deleteImage, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
+  i32 deleteGroupPermitOnDeviceGroup(1: required i32 deviceGroupId, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deleteImage(1: optional string imageMd5, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deletePermit(1: optional DeviceGroupBean deviceGroup, 2: optional PersonGroupBean personGroup, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deletePerson(1: required i32 personId, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deletePersonByPapersNum(1: optional string papersNum, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deletePersonGroup(1: required i32 personGroupId, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
+  i32 deletePersonGroupPermit(1: required i32 personGroupId, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deletePersons(1: optional list<i32> personIdList, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deletePersonsByPapersNum(1: optional list<string> papersNumlist, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   void disablePerson(1: required i32 personId, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
@@ -255,8 +257,8 @@ service IFaceLog {
   DeviceGroupBean getDeviceGroup(1: required i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
   list<DeviceGroupBean> getDeviceGroups(1: optional list<i32> groupIdList) throws (1: ServiceRuntimeException ex1);
   list<i32> getDeviceGroupsBelongs(1: required i32 deviceId) throws (1: ServiceRuntimeException ex1);
-  list<i32> getDeviceGroupsPermit(1: optional i32 personGroupId) throws (1: ServiceRuntimeException ex1);
-  list<i32> getDeviceGroupsPermittedBy(1: optional i32 personGroupId) throws (1: ServiceRuntimeException ex1);
+  list<i32> getDeviceGroupsPermit(1: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
+  list<i32> getDeviceGroupsPermittedBy(1: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   i32 getDeviceIdOfFeature(1: optional string featureMd5) throws (1: ServiceRuntimeException ex1);
   list<DeviceBean> getDevices(1: optional list<i32> idList) throws (1: ServiceRuntimeException ex1);
   list<i32> getDevicesOfGroup(1: required i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
@@ -266,6 +268,7 @@ service IFaceLog {
   list<FeatureBean> getFeatures(1: optional list<string> md5) throws (1: ServiceRuntimeException ex1);
   list<string> getFeaturesOfPerson(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
   bool getGroupPermit(1: required i32 deviceId, 2: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
+  bool getGroupPermitOnDeviceGroup(1: required i32 deviceGroupId, 2: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   list<bool> getGroupPermits(1: required i32 deviceId, 2: optional list<i32> personGroupIdList) throws (1: ServiceRuntimeException ex1);
   ImageBean getImage(1: optional string imageMD5) throws (1: ServiceRuntimeException ex1);
   binary getImageBytes(1: optional string imageMD5) throws (1: ServiceRuntimeException ex1);
@@ -276,7 +279,7 @@ service IFaceLog {
   PersonGroupBean getPersonGroup(1: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   list<PersonGroupBean> getPersonGroups(1: optional list<i32> groupIdList) throws (1: ServiceRuntimeException ex1);
   list<i32> getPersonGroupsBelongs(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
-  list<i32> getPersonGroupsPermittedBy(1: optional i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
+  list<i32> getPersonGroupsPermittedBy(1: required i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
   bool getPersonPermit(1: required i32 deviceId, 2: required i32 personId) throws (1: ServiceRuntimeException ex1);
   list<bool> getPersonPermits(1: required i32 deviceId, 2: optional list<i32> personIdList) throws (1: ServiceRuntimeException ex1);
   list<PersonBean> getPersons(1: optional list<i32> idList) throws (1: ServiceRuntimeException ex1);

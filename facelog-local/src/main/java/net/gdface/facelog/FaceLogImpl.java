@@ -1041,6 +1041,33 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			throw wrapServiceRuntimeException(e);
 		}
 	}
+
+	@Override
+	public int deletePersonGroupPermit(int personGroupId,Token token){
+		try{
+			Enable.PERSON_ONLY.check(tm, token);
+			return dm.daoDeletePersonGroupPermit(personGroupId);
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public int deleteGroupPermitOnDeviceGroup(int deviceGroupId, Token token){
+		try{
+			Enable.PERSON_ONLY.check(tm, token);
+			return dm.daoDeleteGroupPermitOnDeviceGroup(deviceGroupId);
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public boolean getGroupPermitOnDeviceGroup(int deviceGroupId,int personGroupId) {
+		try{
+			return dm.daoGetGroupPermitOnDeviceGroup(deviceGroupId,personGroupId);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
 	@Override
 	public boolean getGroupPermit(int deviceId,int personGroupId) {
 		try{
@@ -1074,7 +1101,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
 	}
 	@Override
-	public List<Integer> getPersonGroupsPermittedBy(Integer deviceGroupId){
+	public List<Integer> getPersonGroupsPermittedBy(int deviceGroupId){
 		try{
 			return dm.daoGetPersonGroupsPermittedBy(deviceGroupId);
 		} catch (RuntimeException e) {
@@ -1082,7 +1109,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
 	}
 	@Override
-	public List<Integer> getDeviceGroupsPermittedBy(Integer personGroupId){
+	public List<Integer> getDeviceGroupsPermittedBy(int personGroupId){
 		try{
 			return dm.daoGetDeviceGroupsPermittedBy(personGroupId);
 		} catch (RuntimeException e) {
@@ -1090,13 +1117,14 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
 	}
 	@Override
-	public List<Integer> getDeviceGroupsPermit(Integer personGroupId){
+	public List<Integer> getDeviceGroupsPermit(int personGroupId){
 		try{
 			return dm.daoGetDeviceGroupsPermit(personGroupId);
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}
 	}
+
 	@Override
 	public List<PermitBean> loadPermitByUpdate(long timestamp) {
 		try{

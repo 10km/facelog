@@ -605,6 +605,27 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#deleteGroupPermitOnDeviceGroup(int,net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "deleteGroupPermitOnDeviceGroup" )
+    public int deleteGroupPermitOnDeviceGroup(int deviceGroupId,
+        Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return delegate().deleteGroupPermitOnDeviceGroup(deviceGroupId,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#deleteImage(java.lang.String,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "deleteImage" )
@@ -705,6 +726,27 @@ public class IFaceLogThriftDecorator {
         throws ServiceRuntimeException{
         try{
             return delegate().deletePersonGroup(personGroupId,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#deletePersonGroupPermit(int,net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "deletePersonGroupPermit" )
+    public int deletePersonGroupPermit(int personGroupId,
+        Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return delegate().deletePersonGroupPermit(personGroupId,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -954,10 +996,10 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#getDeviceGroupsPermit(java.lang.Integer)}
+     * @see {@link net.gdface.facelog.IFaceLog#getDeviceGroupsPermit(int)}
      */
     @ThriftMethod(value = "getDeviceGroupsPermit" )
-    public List<Integer> getDeviceGroupsPermit(Integer personGroupId) 
+    public List<Integer> getDeviceGroupsPermit(int personGroupId) 
         throws ServiceRuntimeException{
         try{
             return TypeTransformer.getInstance().to(
@@ -973,10 +1015,10 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#getDeviceGroupsPermittedBy(java.lang.Integer)}
+     * @see {@link net.gdface.facelog.IFaceLog#getDeviceGroupsPermittedBy(int)}
      */
     @ThriftMethod(value = "getDeviceGroupsPermittedBy" )
-    public List<Integer> getDeviceGroupsPermittedBy(Integer personGroupId) 
+    public List<Integer> getDeviceGroupsPermittedBy(int personGroupId) 
         throws ServiceRuntimeException{
         try{
             return TypeTransformer.getInstance().to(
@@ -1155,6 +1197,24 @@ public class IFaceLogThriftDecorator {
         throws ServiceRuntimeException{
         try{
             return delegate().getGroupPermit(deviceId,
+                personGroupId);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#getGroupPermitOnDeviceGroup(int,int)}
+     */
+    @ThriftMethod(value = "getGroupPermitOnDeviceGroup" )
+    public boolean getGroupPermitOnDeviceGroup(int deviceGroupId,
+        int personGroupId) 
+        throws ServiceRuntimeException{
+        try{
+            return delegate().getGroupPermitOnDeviceGroup(deviceGroupId,
                 personGroupId);
         }
         catch(ServiceRuntimeException e){
@@ -1363,10 +1423,10 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#getPersonGroupsPermittedBy(java.lang.Integer)}
+     * @see {@link net.gdface.facelog.IFaceLog#getPersonGroupsPermittedBy(int)}
      */
     @ThriftMethod(value = "getPersonGroupsPermittedBy" )
-    public List<Integer> getPersonGroupsPermittedBy(Integer deviceGroupId) 
+    public List<Integer> getPersonGroupsPermittedBy(int deviceGroupId) 
         throws ServiceRuntimeException{
         try{
             return TypeTransformer.getInstance().to(

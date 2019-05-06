@@ -798,6 +798,32 @@ public interface IFaceLog{
 	 */
 	public int deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup, Token token);
 	/**
+	 * 从permit表删除指定{@code personGroupId}指定人员组的在所有设备上的通行权限
+	 * @param personGroupId 
+	 * @param token 令牌
+	 * @return 删除的记录条数
+	 */
+	int deletePersonGroupPermit(int personGroupId, Token token);
+
+	/**
+	 * 从permit表删除指定{@code deviceGroupId}指定设备组上的人员通行权限
+	 * @param deviceGroupId 
+	 * @param token 令牌
+	 * @return 删除的记录条数
+	 */
+	int deleteGroupPermitOnDeviceGroup(int deviceGroupId, Token token);
+	/**
+	 * 获取人员组通行权限<br>
+	 * 返回{@code personGroupId}指定的人员组在{@code deviceGroupId}指定的设备组上是否允许通行,
+	 * 本方法会对{@code personGroupId}的父结点向上回溯：
+	 * {@codepersonGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，
+	 * 输入参数为{@code null}或找不到指定的记录则返回false
+	 * @param deviceGroupId
+	 * @param personGroupId
+	 * @return 允许通行返回false，否则返回false
+	 */
+	boolean getGroupPermitOnDeviceGroup(int deviceGroupId, int personGroupId);
+	/**
 	 * 获取人员组通行权限<br>
 	 * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行,
 	 * 本方法会对{@code personGroupId}的父结点向上回溯：
@@ -829,22 +855,22 @@ public interface IFaceLog{
 	 * @param deviceGroupId
 	 * @return
 	 */
-	List<Integer> getPersonGroupsPermittedBy(Integer deviceGroupId);
+	List<Integer> getPersonGroupsPermittedBy(int deviceGroupId);
 	/**
 	 * 从permit表返回允许在{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})的id<br>
 	 * 不排序,不包含重复id,本方法不会对{@code personGroupId}的父结点向上回溯
 	 * @param personGroupId
 	 * @return
 	 */
-	List<Integer> getDeviceGroupsPermittedBy(Integer personGroupId);
+	List<Integer> getDeviceGroupsPermittedBy(int personGroupId);
 
 	/**
 	 * 从permit表返回允许在{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})的id<br>
 	 * 不排序,不包含重复id
-	 * @param personGroupId
+	 * @param personGroupId 为{@code null}返回空表
 	 * @return
 	 */
-	List<Integer> getDeviceGroupsPermit(Integer personGroupId);
+	List<Integer> getDeviceGroupsPermit(int personGroupId);
 	/**
 	 * (主动更新机制实现)<br>
 	 * 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录
@@ -1099,5 +1125,6 @@ public interface IFaceLog{
 	 * @return
 	 */
 	public boolean isLocal();
+
 
 }

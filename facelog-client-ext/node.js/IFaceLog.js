@@ -3488,6 +3488,146 @@ IFaceLog_deleteFeature_result.prototype.write = function(output) {
   return;
 };
 
+var IFaceLog_deleteGroupPermitOnDeviceGroup_args = function(args) {
+  this.deviceGroupId = null;
+  this.token = null;
+  if (args) {
+    if (args.deviceGroupId !== undefined && args.deviceGroupId !== null) {
+      this.deviceGroupId = args.deviceGroupId;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field deviceGroupId is unset!');
+    }
+    if (args.token !== undefined && args.token !== null) {
+      this.token = new ttypes.Token(args.token);
+    }
+  }
+};
+IFaceLog_deleteGroupPermitOnDeviceGroup_args.prototype = {};
+IFaceLog_deleteGroupPermitOnDeviceGroup_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I32) {
+        this.deviceGroupId = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.token = new ttypes.Token();
+        this.token.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_deleteGroupPermitOnDeviceGroup_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_deleteGroupPermitOnDeviceGroup_args');
+  if (this.deviceGroupId !== null && this.deviceGroupId !== undefined) {
+    output.writeFieldBegin('deviceGroupId', Thrift.Type.I32, 1);
+    output.writeI32(this.deviceGroupId);
+    output.writeFieldEnd();
+  }
+  if (this.token !== null && this.token !== undefined) {
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 2);
+    this.token.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_deleteGroupPermitOnDeviceGroup_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  if (args instanceof ttypes.ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = args.success;
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_deleteGroupPermitOnDeviceGroup_result.prototype = {};
+IFaceLog_deleteGroupPermitOnDeviceGroup_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.I32) {
+        this.success = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ttypes.ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_deleteGroupPermitOnDeviceGroup_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_deleteGroupPermitOnDeviceGroup_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.I32, 0);
+    output.writeI32(this.success);
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 var IFaceLog_deleteImage_args = function(args) {
   this.imageMd5 = null;
   this.token = null;
@@ -4185,6 +4325,146 @@ IFaceLog_deletePersonGroup_result.prototype.read = function(input) {
 
 IFaceLog_deletePersonGroup_result.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_deletePersonGroup_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.I32, 0);
+    output.writeI32(this.success);
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_deletePersonGroupPermit_args = function(args) {
+  this.personGroupId = null;
+  this.token = null;
+  if (args) {
+    if (args.personGroupId !== undefined && args.personGroupId !== null) {
+      this.personGroupId = args.personGroupId;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field personGroupId is unset!');
+    }
+    if (args.token !== undefined && args.token !== null) {
+      this.token = new ttypes.Token(args.token);
+    }
+  }
+};
+IFaceLog_deletePersonGroupPermit_args.prototype = {};
+IFaceLog_deletePersonGroupPermit_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I32) {
+        this.personGroupId = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.token = new ttypes.Token();
+        this.token.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_deletePersonGroupPermit_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_deletePersonGroupPermit_args');
+  if (this.personGroupId !== null && this.personGroupId !== undefined) {
+    output.writeFieldBegin('personGroupId', Thrift.Type.I32, 1);
+    output.writeI32(this.personGroupId);
+    output.writeFieldEnd();
+  }
+  if (this.token !== null && this.token !== undefined) {
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 2);
+    this.token.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_deletePersonGroupPermit_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  if (args instanceof ttypes.ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = args.success;
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_deletePersonGroupPermit_result.prototype = {};
+IFaceLog_deletePersonGroupPermit_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.I32) {
+        this.success = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ttypes.ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_deletePersonGroupPermit_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_deletePersonGroupPermit_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.I32, 0);
     output.writeI32(this.success);
@@ -5870,6 +6150,8 @@ var IFaceLog_getDeviceGroupsPermit_args = function(args) {
   if (args) {
     if (args.personGroupId !== undefined && args.personGroupId !== null) {
       this.personGroupId = args.personGroupId;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field personGroupId is unset!');
     }
   }
 };
@@ -6016,6 +6298,8 @@ var IFaceLog_getDeviceGroupsPermittedBy_args = function(args) {
   if (args) {
     if (args.personGroupId !== undefined && args.personGroupId !== null) {
       this.personGroupId = args.personGroupId;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field personGroupId is unset!');
     }
   }
 };
@@ -7438,6 +7722,147 @@ IFaceLog_getGroupPermit_result.prototype.read = function(input) {
 
 IFaceLog_getGroupPermit_result.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_getGroupPermit_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.BOOL, 0);
+    output.writeBool(this.success);
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_getGroupPermitOnDeviceGroup_args = function(args) {
+  this.deviceGroupId = null;
+  this.personGroupId = null;
+  if (args) {
+    if (args.deviceGroupId !== undefined && args.deviceGroupId !== null) {
+      this.deviceGroupId = args.deviceGroupId;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field deviceGroupId is unset!');
+    }
+    if (args.personGroupId !== undefined && args.personGroupId !== null) {
+      this.personGroupId = args.personGroupId;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field personGroupId is unset!');
+    }
+  }
+};
+IFaceLog_getGroupPermitOnDeviceGroup_args.prototype = {};
+IFaceLog_getGroupPermitOnDeviceGroup_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I32) {
+        this.deviceGroupId = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.I32) {
+        this.personGroupId = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_getGroupPermitOnDeviceGroup_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_getGroupPermitOnDeviceGroup_args');
+  if (this.deviceGroupId !== null && this.deviceGroupId !== undefined) {
+    output.writeFieldBegin('deviceGroupId', Thrift.Type.I32, 1);
+    output.writeI32(this.deviceGroupId);
+    output.writeFieldEnd();
+  }
+  if (this.personGroupId !== null && this.personGroupId !== undefined) {
+    output.writeFieldBegin('personGroupId', Thrift.Type.I32, 2);
+    output.writeI32(this.personGroupId);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_getGroupPermitOnDeviceGroup_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  if (args instanceof ttypes.ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = args.success;
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_getGroupPermitOnDeviceGroup_result.prototype = {};
+IFaceLog_getGroupPermitOnDeviceGroup_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.BOOL) {
+        this.success = input.readBool();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ttypes.ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_getGroupPermitOnDeviceGroup_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_getGroupPermitOnDeviceGroup_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.BOOL, 0);
     output.writeBool(this.success);
@@ -8881,6 +9306,8 @@ var IFaceLog_getPersonGroupsPermittedBy_args = function(args) {
   if (args) {
     if (args.deviceGroupId !== undefined && args.deviceGroupId !== null) {
       this.deviceGroupId = args.deviceGroupId;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field deviceGroupId is unset!');
     }
   }
 };
@@ -20287,6 +20714,59 @@ IFaceLogClient.prototype.recv_deleteFeature = function(input,mtype,rseqid) {
   }
   return callback('deleteFeature failed: unknown result');
 };
+IFaceLogClient.prototype.deleteGroupPermitOnDeviceGroup = function(deviceGroupId, token, callback) {
+  this._seqid = this.new_seqid();
+  if (callback === undefined) {
+    var _defer = Q.defer();
+    this._reqs[this.seqid()] = function(error, result) {
+      if (error) {
+        _defer.reject(error);
+      } else {
+        _defer.resolve(result);
+      }
+    };
+    this.send_deleteGroupPermitOnDeviceGroup(deviceGroupId, token);
+    return _defer.promise;
+  } else {
+    this._reqs[this.seqid()] = callback;
+    this.send_deleteGroupPermitOnDeviceGroup(deviceGroupId, token);
+  }
+};
+
+IFaceLogClient.prototype.send_deleteGroupPermitOnDeviceGroup = function(deviceGroupId, token) {
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('deleteGroupPermitOnDeviceGroup', Thrift.MessageType.CALL, this.seqid());
+  var params = {
+    deviceGroupId: deviceGroupId,
+    token: token
+  };
+  var args = new IFaceLog_deleteGroupPermitOnDeviceGroup_args(params);
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
+};
+
+IFaceLogClient.prototype.recv_deleteGroupPermitOnDeviceGroup = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
+  }
+  var result = new IFaceLog_deleteGroupPermitOnDeviceGroup_result();
+  result.read(input);
+  input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    return callback(result.ex1);
+  }
+  if (null !== result.success) {
+    return callback(null, result.success);
+  }
+  return callback('deleteGroupPermitOnDeviceGroup failed: unknown result');
+};
 IFaceLogClient.prototype.deleteImage = function(imageMd5, token, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
@@ -20552,6 +21032,59 @@ IFaceLogClient.prototype.recv_deletePersonGroup = function(input,mtype,rseqid) {
     return callback(null, result.success);
   }
   return callback('deletePersonGroup failed: unknown result');
+};
+IFaceLogClient.prototype.deletePersonGroupPermit = function(personGroupId, token, callback) {
+  this._seqid = this.new_seqid();
+  if (callback === undefined) {
+    var _defer = Q.defer();
+    this._reqs[this.seqid()] = function(error, result) {
+      if (error) {
+        _defer.reject(error);
+      } else {
+        _defer.resolve(result);
+      }
+    };
+    this.send_deletePersonGroupPermit(personGroupId, token);
+    return _defer.promise;
+  } else {
+    this._reqs[this.seqid()] = callback;
+    this.send_deletePersonGroupPermit(personGroupId, token);
+  }
+};
+
+IFaceLogClient.prototype.send_deletePersonGroupPermit = function(personGroupId, token) {
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('deletePersonGroupPermit', Thrift.MessageType.CALL, this.seqid());
+  var params = {
+    personGroupId: personGroupId,
+    token: token
+  };
+  var args = new IFaceLog_deletePersonGroupPermit_args(params);
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
+};
+
+IFaceLogClient.prototype.recv_deletePersonGroupPermit = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
+  }
+  var result = new IFaceLog_deletePersonGroupPermit_result();
+  result.read(input);
+  input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    return callback(result.ex1);
+  }
+  if (null !== result.success) {
+    return callback(null, result.success);
+  }
+  return callback('deletePersonGroupPermit failed: unknown result');
 };
 IFaceLogClient.prototype.deletePersons = function(personIdList, token, callback) {
   this._seqid = this.new_seqid();
@@ -21747,6 +22280,59 @@ IFaceLogClient.prototype.recv_getGroupPermit = function(input,mtype,rseqid) {
     return callback(null, result.success);
   }
   return callback('getGroupPermit failed: unknown result');
+};
+IFaceLogClient.prototype.getGroupPermitOnDeviceGroup = function(deviceGroupId, personGroupId, callback) {
+  this._seqid = this.new_seqid();
+  if (callback === undefined) {
+    var _defer = Q.defer();
+    this._reqs[this.seqid()] = function(error, result) {
+      if (error) {
+        _defer.reject(error);
+      } else {
+        _defer.resolve(result);
+      }
+    };
+    this.send_getGroupPermitOnDeviceGroup(deviceGroupId, personGroupId);
+    return _defer.promise;
+  } else {
+    this._reqs[this.seqid()] = callback;
+    this.send_getGroupPermitOnDeviceGroup(deviceGroupId, personGroupId);
+  }
+};
+
+IFaceLogClient.prototype.send_getGroupPermitOnDeviceGroup = function(deviceGroupId, personGroupId) {
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('getGroupPermitOnDeviceGroup', Thrift.MessageType.CALL, this.seqid());
+  var params = {
+    deviceGroupId: deviceGroupId,
+    personGroupId: personGroupId
+  };
+  var args = new IFaceLog_getGroupPermitOnDeviceGroup_args(params);
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
+};
+
+IFaceLogClient.prototype.recv_getGroupPermitOnDeviceGroup = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
+  }
+  var result = new IFaceLog_getGroupPermitOnDeviceGroup_result();
+  result.read(input);
+  input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    return callback(result.ex1);
+  }
+  if (null !== result.success) {
+    return callback(null, result.success);
+  }
+  return callback('getGroupPermitOnDeviceGroup failed: unknown result');
 };
 IFaceLogClient.prototype.getGroupPermits = function(deviceId, personGroupIdList, callback) {
   this._seqid = this.new_seqid();
@@ -26802,6 +27388,47 @@ IFaceLogProcessor.prototype.process_deleteFeature = function(seqid, input, outpu
     });
   }
 };
+IFaceLogProcessor.prototype.process_deleteGroupPermitOnDeviceGroup = function(seqid, input, output) {
+  var args = new IFaceLog_deleteGroupPermitOnDeviceGroup_args();
+  args.read(input);
+  input.readMessageEnd();
+  if (this._handler.deleteGroupPermitOnDeviceGroup.length === 2) {
+    Q.fcall(this._handler.deleteGroupPermitOnDeviceGroup.bind(this._handler), args.deviceGroupId, args.token)
+      .then(function(result) {
+        var result_obj = new IFaceLog_deleteGroupPermitOnDeviceGroup_result({success: result});
+        output.writeMessageBegin("deleteGroupPermitOnDeviceGroup", Thrift.MessageType.REPLY, seqid);
+        result_obj.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      }, function (err) {
+        var result;
+        if (err instanceof ttypes.ServiceRuntimeException) {
+          result = new IFaceLog_deleteGroupPermitOnDeviceGroup_result(err);
+          output.writeMessageBegin("deleteGroupPermitOnDeviceGroup", Thrift.MessageType.REPLY, seqid);
+        } else {
+          result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+          output.writeMessageBegin("deleteGroupPermitOnDeviceGroup", Thrift.MessageType.EXCEPTION, seqid);
+        }
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      });
+  } else {
+    this._handler.deleteGroupPermitOnDeviceGroup(args.deviceGroupId, args.token, function (err, result) {
+      var result_obj;
+      if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
+        result_obj = new IFaceLog_deleteGroupPermitOnDeviceGroup_result((err !== null || typeof err === 'undefined') ? err : {success: result});
+        output.writeMessageBegin("deleteGroupPermitOnDeviceGroup", Thrift.MessageType.REPLY, seqid);
+      } else {
+        result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+        output.writeMessageBegin("deleteGroupPermitOnDeviceGroup", Thrift.MessageType.EXCEPTION, seqid);
+      }
+      result_obj.write(output);
+      output.writeMessageEnd();
+      output.flush();
+    });
+  }
+};
 IFaceLogProcessor.prototype.process_deleteImage = function(seqid, input, output) {
   var args = new IFaceLog_deleteImage_args();
   args.read(input);
@@ -27000,6 +27627,47 @@ IFaceLogProcessor.prototype.process_deletePersonGroup = function(seqid, input, o
       } else {
         result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
         output.writeMessageBegin("deletePersonGroup", Thrift.MessageType.EXCEPTION, seqid);
+      }
+      result_obj.write(output);
+      output.writeMessageEnd();
+      output.flush();
+    });
+  }
+};
+IFaceLogProcessor.prototype.process_deletePersonGroupPermit = function(seqid, input, output) {
+  var args = new IFaceLog_deletePersonGroupPermit_args();
+  args.read(input);
+  input.readMessageEnd();
+  if (this._handler.deletePersonGroupPermit.length === 2) {
+    Q.fcall(this._handler.deletePersonGroupPermit.bind(this._handler), args.personGroupId, args.token)
+      .then(function(result) {
+        var result_obj = new IFaceLog_deletePersonGroupPermit_result({success: result});
+        output.writeMessageBegin("deletePersonGroupPermit", Thrift.MessageType.REPLY, seqid);
+        result_obj.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      }, function (err) {
+        var result;
+        if (err instanceof ttypes.ServiceRuntimeException) {
+          result = new IFaceLog_deletePersonGroupPermit_result(err);
+          output.writeMessageBegin("deletePersonGroupPermit", Thrift.MessageType.REPLY, seqid);
+        } else {
+          result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+          output.writeMessageBegin("deletePersonGroupPermit", Thrift.MessageType.EXCEPTION, seqid);
+        }
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      });
+  } else {
+    this._handler.deletePersonGroupPermit(args.personGroupId, args.token, function (err, result) {
+      var result_obj;
+      if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
+        result_obj = new IFaceLog_deletePersonGroupPermit_result((err !== null || typeof err === 'undefined') ? err : {success: result});
+        output.writeMessageBegin("deletePersonGroupPermit", Thrift.MessageType.REPLY, seqid);
+      } else {
+        result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+        output.writeMessageBegin("deletePersonGroupPermit", Thrift.MessageType.EXCEPTION, seqid);
       }
       result_obj.write(output);
       output.writeMessageEnd();
@@ -27943,6 +28611,47 @@ IFaceLogProcessor.prototype.process_getGroupPermit = function(seqid, input, outp
       } else {
         result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
         output.writeMessageBegin("getGroupPermit", Thrift.MessageType.EXCEPTION, seqid);
+      }
+      result_obj.write(output);
+      output.writeMessageEnd();
+      output.flush();
+    });
+  }
+};
+IFaceLogProcessor.prototype.process_getGroupPermitOnDeviceGroup = function(seqid, input, output) {
+  var args = new IFaceLog_getGroupPermitOnDeviceGroup_args();
+  args.read(input);
+  input.readMessageEnd();
+  if (this._handler.getGroupPermitOnDeviceGroup.length === 2) {
+    Q.fcall(this._handler.getGroupPermitOnDeviceGroup.bind(this._handler), args.deviceGroupId, args.personGroupId)
+      .then(function(result) {
+        var result_obj = new IFaceLog_getGroupPermitOnDeviceGroup_result({success: result});
+        output.writeMessageBegin("getGroupPermitOnDeviceGroup", Thrift.MessageType.REPLY, seqid);
+        result_obj.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      }, function (err) {
+        var result;
+        if (err instanceof ttypes.ServiceRuntimeException) {
+          result = new IFaceLog_getGroupPermitOnDeviceGroup_result(err);
+          output.writeMessageBegin("getGroupPermitOnDeviceGroup", Thrift.MessageType.REPLY, seqid);
+        } else {
+          result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+          output.writeMessageBegin("getGroupPermitOnDeviceGroup", Thrift.MessageType.EXCEPTION, seqid);
+        }
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      });
+  } else {
+    this._handler.getGroupPermitOnDeviceGroup(args.deviceGroupId, args.personGroupId, function (err, result) {
+      var result_obj;
+      if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
+        result_obj = new IFaceLog_getGroupPermitOnDeviceGroup_result((err !== null || typeof err === 'undefined') ? err : {success: result});
+        output.writeMessageBegin("getGroupPermitOnDeviceGroup", Thrift.MessageType.REPLY, seqid);
+      } else {
+        result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+        output.writeMessageBegin("getGroupPermitOnDeviceGroup", Thrift.MessageType.EXCEPTION, seqid);
       }
       result_obj.write(output);
       output.writeMessageEnd();

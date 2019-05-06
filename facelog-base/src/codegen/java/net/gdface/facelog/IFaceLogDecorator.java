@@ -280,6 +280,11 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public int deleteGroupPermitOnDeviceGroup (int deviceGroupId,Token token) {
+        return delegate().deleteGroupPermitOnDeviceGroup(deviceGroupId,token);
+    }
+
+    @Override
     public int deleteImage (String imageMd5,Token token) {
         return delegate().deleteImage(imageMd5,token);
     }
@@ -302,6 +307,11 @@ public class IFaceLogDecorator implements IFaceLog{
     @Override
     public int deletePersonGroup (int personGroupId,Token token) {
         return delegate().deletePersonGroup(personGroupId,token);
+    }
+
+    @Override
+    public int deletePersonGroupPermit (int personGroupId,Token token) {
+        return delegate().deletePersonGroupPermit(personGroupId,token);
     }
 
     @Override
@@ -365,12 +375,12 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public List<Integer> getDeviceGroupsPermit (Integer personGroupId) {
+    public List<Integer> getDeviceGroupsPermit (int personGroupId) {
         return delegate().getDeviceGroupsPermit(personGroupId);
     }
 
     @Override
-    public List<Integer> getDeviceGroupsPermittedBy (Integer personGroupId) {
+    public List<Integer> getDeviceGroupsPermittedBy (int personGroupId) {
         return delegate().getDeviceGroupsPermittedBy(personGroupId);
     }
 
@@ -417,6 +427,11 @@ public class IFaceLogDecorator implements IFaceLog{
     @Override
     public boolean getGroupPermit (int deviceId,int personGroupId) {
         return delegate().getGroupPermit(deviceId,personGroupId);
+    }
+
+    @Override
+    public boolean getGroupPermitOnDeviceGroup (int deviceGroupId,int personGroupId) {
+        return delegate().getGroupPermitOnDeviceGroup(deviceGroupId,personGroupId);
     }
 
     @Override
@@ -470,7 +485,7 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public List<Integer> getPersonGroupsPermittedBy (Integer deviceGroupId) {
+    public List<Integer> getPersonGroupsPermittedBy (int deviceGroupId) {
         return delegate().getPersonGroupsPermittedBy(deviceGroupId);
     }
 

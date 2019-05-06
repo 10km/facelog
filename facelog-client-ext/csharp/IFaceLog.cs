@@ -41,11 +41,13 @@ public partial class IFaceLog {
     int deleteAllFeaturesByPersonId(int personId, bool deleteImage, Token token);
     int deleteDeviceGroup(int deviceGroupId, Token token);
     List<string> deleteFeature(string featureMd5, bool deleteImage, Token token);
+    int deleteGroupPermitOnDeviceGroup(int deviceGroupId, Token token);
     int deleteImage(string imageMd5, Token token);
     int deletePermit(DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token);
     int deletePerson(int personId, Token token);
     int deletePersonByPapersNum(string papersNum, Token token);
     int deletePersonGroup(int personGroupId, Token token);
+    int deletePersonGroupPermit(int personGroupId, Token token);
     int deletePersons(List<int> personIdList, Token token);
     int deletePersonsByPapersNum(List<string> papersNumlist, Token token);
     void disablePerson(int personId, Token token);
@@ -69,6 +71,7 @@ public partial class IFaceLog {
     List<FeatureBean> getFeatures(List<string> md5);
     List<string> getFeaturesOfPerson(int personId);
     bool getGroupPermit(int deviceId, int personGroupId);
+    bool getGroupPermitOnDeviceGroup(int deviceGroupId, int personGroupId);
     List<bool> getGroupPermits(int deviceId, List<int> personGroupIdList);
     ImageBean getImage(string imageMD5);
     byte[] getImageBytes(string imageMD5);
@@ -173,11 +176,13 @@ public partial class IFaceLog {
     Task<int> deleteAllFeaturesByPersonIdAsync(int personId, bool deleteImage, Token token);
     Task<int> deleteDeviceGroupAsync(int deviceGroupId, Token token);
     Task<List<string>> deleteFeatureAsync(string featureMd5, bool deleteImage, Token token);
+    Task<int> deleteGroupPermitOnDeviceGroupAsync(int deviceGroupId, Token token);
     Task<int> deleteImageAsync(string imageMd5, Token token);
     Task<int> deletePermitAsync(DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token);
     Task<int> deletePersonAsync(int personId, Token token);
     Task<int> deletePersonByPapersNumAsync(string papersNum, Token token);
     Task<int> deletePersonGroupAsync(int personGroupId, Token token);
+    Task<int> deletePersonGroupPermitAsync(int personGroupId, Token token);
     Task<int> deletePersonsAsync(List<int> personIdList, Token token);
     Task<int> deletePersonsByPapersNumAsync(List<string> papersNumlist, Token token);
     Task disablePersonAsync(int personId, Token token);
@@ -201,6 +206,7 @@ public partial class IFaceLog {
     Task<List<FeatureBean>> getFeaturesAsync(List<string> md5);
     Task<List<string>> getFeaturesOfPersonAsync(int personId);
     Task<bool> getGroupPermitAsync(int deviceId, int personGroupId);
+    Task<bool> getGroupPermitOnDeviceGroupAsync(int deviceGroupId, int personGroupId);
     Task<List<bool>> getGroupPermitsAsync(int deviceId, List<int> personGroupIdList);
     Task<ImageBean> getImageAsync(string imageMD5);
     Task<byte[]> getImageBytesAsync(string imageMD5);
@@ -328,6 +334,8 @@ public partial class IFaceLog {
     int End_deleteDeviceGroup(IAsyncResult asyncResult);
     IAsyncResult Begin_deleteFeature(AsyncCallback callback, object state, string featureMd5, bool deleteImage, Token token);
     List<string> End_deleteFeature(IAsyncResult asyncResult);
+    IAsyncResult Begin_deleteGroupPermitOnDeviceGroup(AsyncCallback callback, object state, int deviceGroupId, Token token);
+    int End_deleteGroupPermitOnDeviceGroup(IAsyncResult asyncResult);
     IAsyncResult Begin_deleteImage(AsyncCallback callback, object state, string imageMd5, Token token);
     int End_deleteImage(IAsyncResult asyncResult);
     IAsyncResult Begin_deletePermit(AsyncCallback callback, object state, DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token);
@@ -338,6 +346,8 @@ public partial class IFaceLog {
     int End_deletePersonByPapersNum(IAsyncResult asyncResult);
     IAsyncResult Begin_deletePersonGroup(AsyncCallback callback, object state, int personGroupId, Token token);
     int End_deletePersonGroup(IAsyncResult asyncResult);
+    IAsyncResult Begin_deletePersonGroupPermit(AsyncCallback callback, object state, int personGroupId, Token token);
+    int End_deletePersonGroupPermit(IAsyncResult asyncResult);
     IAsyncResult Begin_deletePersons(AsyncCallback callback, object state, List<int> personIdList, Token token);
     int End_deletePersons(IAsyncResult asyncResult);
     IAsyncResult Begin_deletePersonsByPapersNum(AsyncCallback callback, object state, List<string> papersNumlist, Token token);
@@ -384,6 +394,8 @@ public partial class IFaceLog {
     List<string> End_getFeaturesOfPerson(IAsyncResult asyncResult);
     IAsyncResult Begin_getGroupPermit(AsyncCallback callback, object state, int deviceId, int personGroupId);
     bool End_getGroupPermit(IAsyncResult asyncResult);
+    IAsyncResult Begin_getGroupPermitOnDeviceGroup(AsyncCallback callback, object state, int deviceGroupId, int personGroupId);
+    bool End_getGroupPermitOnDeviceGroup(IAsyncResult asyncResult);
     IAsyncResult Begin_getGroupPermits(AsyncCallback callback, object state, int deviceId, List<int> personGroupIdList);
     List<bool> End_getGroupPermits(IAsyncResult asyncResult);
     IAsyncResult Begin_getImage(AsyncCallback callback, object state, string imageMD5);
@@ -1957,6 +1969,65 @@ public partial class IFaceLog {
     }
 
     
+    public IAsyncResult Begin_deleteGroupPermitOnDeviceGroup(AsyncCallback callback, object state, int deviceGroupId, Token token)
+    {
+      return send_deleteGroupPermitOnDeviceGroup(callback, state, deviceGroupId, token);
+    }
+
+    public int End_deleteGroupPermitOnDeviceGroup(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      return recv_deleteGroupPermitOnDeviceGroup();
+    }
+
+    public async Task<int> deleteGroupPermitOnDeviceGroupAsync(int deviceGroupId, Token token)
+    {
+      int retval;
+      retval = await Task.Run(() =>
+      {
+        return deleteGroupPermitOnDeviceGroup(deviceGroupId, token);
+      });
+      return retval;
+    }
+
+    public int deleteGroupPermitOnDeviceGroup(int deviceGroupId, Token token)
+    {
+      var asyncResult = Begin_deleteGroupPermitOnDeviceGroup(null, null, deviceGroupId, token);
+      return End_deleteGroupPermitOnDeviceGroup(asyncResult);
+
+    }
+    public IAsyncResult send_deleteGroupPermitOnDeviceGroup(AsyncCallback callback, object state, int deviceGroupId, Token token)
+    {
+      oprot_.WriteMessageBegin(new TMessage("deleteGroupPermitOnDeviceGroup", TMessageType.Call, seqid_));
+      deleteGroupPermitOnDeviceGroup_args args = new deleteGroupPermitOnDeviceGroup_args();
+      args.DeviceGroupId = deviceGroupId;
+      args.Token = token;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public int recv_deleteGroupPermitOnDeviceGroup()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      deleteGroupPermitOnDeviceGroup_result result = new deleteGroupPermitOnDeviceGroup_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Success.HasValue) {
+        return result.Success.Value;
+      }
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "deleteGroupPermitOnDeviceGroup failed: unknown result");
+    }
+
+    
     public IAsyncResult Begin_deleteImage(AsyncCallback callback, object state, string imageMd5, Token token)
     {
       return send_deleteImage(callback, state, imageMd5, token);
@@ -2250,6 +2321,65 @@ public partial class IFaceLog {
         throw result.Ex1;
       }
       throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "deletePersonGroup failed: unknown result");
+    }
+
+    
+    public IAsyncResult Begin_deletePersonGroupPermit(AsyncCallback callback, object state, int personGroupId, Token token)
+    {
+      return send_deletePersonGroupPermit(callback, state, personGroupId, token);
+    }
+
+    public int End_deletePersonGroupPermit(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      return recv_deletePersonGroupPermit();
+    }
+
+    public async Task<int> deletePersonGroupPermitAsync(int personGroupId, Token token)
+    {
+      int retval;
+      retval = await Task.Run(() =>
+      {
+        return deletePersonGroupPermit(personGroupId, token);
+      });
+      return retval;
+    }
+
+    public int deletePersonGroupPermit(int personGroupId, Token token)
+    {
+      var asyncResult = Begin_deletePersonGroupPermit(null, null, personGroupId, token);
+      return End_deletePersonGroupPermit(asyncResult);
+
+    }
+    public IAsyncResult send_deletePersonGroupPermit(AsyncCallback callback, object state, int personGroupId, Token token)
+    {
+      oprot_.WriteMessageBegin(new TMessage("deletePersonGroupPermit", TMessageType.Call, seqid_));
+      deletePersonGroupPermit_args args = new deletePersonGroupPermit_args();
+      args.PersonGroupId = personGroupId;
+      args.Token = token;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public int recv_deletePersonGroupPermit()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      deletePersonGroupPermit_result result = new deletePersonGroupPermit_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Success.HasValue) {
+        return result.Success.Value;
+      }
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "deletePersonGroupPermit failed: unknown result");
     }
 
     
@@ -3579,6 +3709,65 @@ public partial class IFaceLog {
         throw result.Ex1;
       }
       throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "getGroupPermit failed: unknown result");
+    }
+
+    
+    public IAsyncResult Begin_getGroupPermitOnDeviceGroup(AsyncCallback callback, object state, int deviceGroupId, int personGroupId)
+    {
+      return send_getGroupPermitOnDeviceGroup(callback, state, deviceGroupId, personGroupId);
+    }
+
+    public bool End_getGroupPermitOnDeviceGroup(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      return recv_getGroupPermitOnDeviceGroup();
+    }
+
+    public async Task<bool> getGroupPermitOnDeviceGroupAsync(int deviceGroupId, int personGroupId)
+    {
+      bool retval;
+      retval = await Task.Run(() =>
+      {
+        return getGroupPermitOnDeviceGroup(deviceGroupId, personGroupId);
+      });
+      return retval;
+    }
+
+    public bool getGroupPermitOnDeviceGroup(int deviceGroupId, int personGroupId)
+    {
+      var asyncResult = Begin_getGroupPermitOnDeviceGroup(null, null, deviceGroupId, personGroupId);
+      return End_getGroupPermitOnDeviceGroup(asyncResult);
+
+    }
+    public IAsyncResult send_getGroupPermitOnDeviceGroup(AsyncCallback callback, object state, int deviceGroupId, int personGroupId)
+    {
+      oprot_.WriteMessageBegin(new TMessage("getGroupPermitOnDeviceGroup", TMessageType.Call, seqid_));
+      getGroupPermitOnDeviceGroup_args args = new getGroupPermitOnDeviceGroup_args();
+      args.DeviceGroupId = deviceGroupId;
+      args.PersonGroupId = personGroupId;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public bool recv_getGroupPermitOnDeviceGroup()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      getGroupPermitOnDeviceGroup_result result = new getGroupPermitOnDeviceGroup_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Success.HasValue) {
+        return result.Success.Value;
+      }
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "getGroupPermitOnDeviceGroup failed: unknown result");
     }
 
     
@@ -8153,11 +8342,13 @@ public partial class IFaceLog {
       processMap_["deleteAllFeaturesByPersonId"] = deleteAllFeaturesByPersonId_ProcessAsync;
       processMap_["deleteDeviceGroup"] = deleteDeviceGroup_ProcessAsync;
       processMap_["deleteFeature"] = deleteFeature_ProcessAsync;
+      processMap_["deleteGroupPermitOnDeviceGroup"] = deleteGroupPermitOnDeviceGroup_ProcessAsync;
       processMap_["deleteImage"] = deleteImage_ProcessAsync;
       processMap_["deletePermit"] = deletePermit_ProcessAsync;
       processMap_["deletePerson"] = deletePerson_ProcessAsync;
       processMap_["deletePersonByPapersNum"] = deletePersonByPapersNum_ProcessAsync;
       processMap_["deletePersonGroup"] = deletePersonGroup_ProcessAsync;
+      processMap_["deletePersonGroupPermit"] = deletePersonGroupPermit_ProcessAsync;
       processMap_["deletePersons"] = deletePersons_ProcessAsync;
       processMap_["deletePersonsByPapersNum"] = deletePersonsByPapersNum_ProcessAsync;
       processMap_["disablePerson"] = disablePerson_ProcessAsync;
@@ -8181,6 +8372,7 @@ public partial class IFaceLog {
       processMap_["getFeatures"] = getFeatures_ProcessAsync;
       processMap_["getFeaturesOfPerson"] = getFeaturesOfPerson_ProcessAsync;
       processMap_["getGroupPermit"] = getGroupPermit_ProcessAsync;
+      processMap_["getGroupPermitOnDeviceGroup"] = getGroupPermitOnDeviceGroup_ProcessAsync;
       processMap_["getGroupPermits"] = getGroupPermits_ProcessAsync;
       processMap_["getImage"] = getImage_ProcessAsync;
       processMap_["getImageBytes"] = getImageBytes_ProcessAsync;
@@ -9124,6 +9316,41 @@ public partial class IFaceLog {
       oprot.Transport.Flush();
     }
 
+    public async Task deleteGroupPermitOnDeviceGroup_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      deleteGroupPermitOnDeviceGroup_args args = new deleteGroupPermitOnDeviceGroup_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      deleteGroupPermitOnDeviceGroup_result result = new deleteGroupPermitOnDeviceGroup_result();
+      try
+      {
+        try
+        {
+          result.Success = await iface_.deleteGroupPermitOnDeviceGroupAsync(args.DeviceGroupId.Value, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("deleteGroupPermitOnDeviceGroup", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("deleteGroupPermitOnDeviceGroup", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
     public async Task deleteImage_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
     {
       deleteImage_args args = new deleteImage_args();
@@ -9293,6 +9520,41 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("deletePersonGroup", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public async Task deletePersonGroupPermit_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      deletePersonGroupPermit_args args = new deletePersonGroupPermit_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      deletePersonGroupPermit_result result = new deletePersonGroupPermit_result();
+      try
+      {
+        try
+        {
+          result.Success = await iface_.deletePersonGroupPermitAsync(args.PersonGroupId.Value, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("deletePersonGroupPermit", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("deletePersonGroupPermit", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -10098,6 +10360,41 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("getGroupPermit", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public async Task getGroupPermitOnDeviceGroup_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      getGroupPermitOnDeviceGroup_args args = new getGroupPermitOnDeviceGroup_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      getGroupPermitOnDeviceGroup_result result = new getGroupPermitOnDeviceGroup_result();
+      try
+      {
+        try
+        {
+          result.Success = await iface_.getGroupPermitOnDeviceGroupAsync(args.DeviceGroupId.Value, args.PersonGroupId.Value);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("getGroupPermitOnDeviceGroup", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("getGroupPermitOnDeviceGroup", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -12887,11 +13184,13 @@ public partial class IFaceLog {
       processMap_["deleteAllFeaturesByPersonId"] = deleteAllFeaturesByPersonId_Process;
       processMap_["deleteDeviceGroup"] = deleteDeviceGroup_Process;
       processMap_["deleteFeature"] = deleteFeature_Process;
+      processMap_["deleteGroupPermitOnDeviceGroup"] = deleteGroupPermitOnDeviceGroup_Process;
       processMap_["deleteImage"] = deleteImage_Process;
       processMap_["deletePermit"] = deletePermit_Process;
       processMap_["deletePerson"] = deletePerson_Process;
       processMap_["deletePersonByPapersNum"] = deletePersonByPapersNum_Process;
       processMap_["deletePersonGroup"] = deletePersonGroup_Process;
+      processMap_["deletePersonGroupPermit"] = deletePersonGroupPermit_Process;
       processMap_["deletePersons"] = deletePersons_Process;
       processMap_["deletePersonsByPapersNum"] = deletePersonsByPapersNum_Process;
       processMap_["disablePerson"] = disablePerson_Process;
@@ -12915,6 +13214,7 @@ public partial class IFaceLog {
       processMap_["getFeatures"] = getFeatures_Process;
       processMap_["getFeaturesOfPerson"] = getFeaturesOfPerson_Process;
       processMap_["getGroupPermit"] = getGroupPermit_Process;
+      processMap_["getGroupPermitOnDeviceGroup"] = getGroupPermitOnDeviceGroup_Process;
       processMap_["getGroupPermits"] = getGroupPermits_Process;
       processMap_["getImage"] = getImage_Process;
       processMap_["getImageBytes"] = getImageBytes_Process;
@@ -13858,6 +14158,41 @@ public partial class IFaceLog {
       oprot.Transport.Flush();
     }
 
+    public void deleteGroupPermitOnDeviceGroup_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      deleteGroupPermitOnDeviceGroup_args args = new deleteGroupPermitOnDeviceGroup_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      deleteGroupPermitOnDeviceGroup_result result = new deleteGroupPermitOnDeviceGroup_result();
+      try
+      {
+        try
+        {
+          result.Success = iface_.deleteGroupPermitOnDeviceGroup(args.DeviceGroupId.Value, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("deleteGroupPermitOnDeviceGroup", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("deleteGroupPermitOnDeviceGroup", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
     public void deleteImage_Process(int seqid, TProtocol iprot, TProtocol oprot)
     {
       deleteImage_args args = new deleteImage_args();
@@ -14027,6 +14362,41 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("deletePersonGroup", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public void deletePersonGroupPermit_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      deletePersonGroupPermit_args args = new deletePersonGroupPermit_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      deletePersonGroupPermit_result result = new deletePersonGroupPermit_result();
+      try
+      {
+        try
+        {
+          result.Success = iface_.deletePersonGroupPermit(args.PersonGroupId.Value, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("deletePersonGroupPermit", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("deletePersonGroupPermit", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -14832,6 +15202,41 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("getGroupPermit", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public void getGroupPermitOnDeviceGroup_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      getGroupPermitOnDeviceGroup_args args = new getGroupPermitOnDeviceGroup_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      getGroupPermitOnDeviceGroup_result result = new getGroupPermitOnDeviceGroup_result();
+      try
+      {
+        try
+        {
+          result.Success = iface_.getGroupPermitOnDeviceGroup(args.DeviceGroupId.Value, args.PersonGroupId.Value);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("getGroupPermitOnDeviceGroup", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("getGroupPermitOnDeviceGroup", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -22945,6 +23350,227 @@ public partial class IFaceLog {
   #if !SILVERLIGHT
   [Serializable]
   #endif
+  public partial class deleteGroupPermitOnDeviceGroup_args : TBase
+  {
+
+    public int DeviceGroupId { get; set; }
+
+    public Token Token { get; set; }
+
+    public deleteGroupPermitOnDeviceGroup_args() {
+    }
+
+    public deleteGroupPermitOnDeviceGroup_args(int deviceGroupId) : this() {
+      this.DeviceGroupId = deviceGroupId;
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        bool isset_deviceGroupId = false;
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.I32) {
+                DeviceGroupId = iprot.ReadI32();
+                isset_deviceGroupId = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.Struct) {
+                Token = new Token();
+                Token.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+        if (!isset_deviceGroupId)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field DeviceGroupId not set");
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("deleteGroupPermitOnDeviceGroup_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        field.Name = "deviceGroupId";
+        field.Type = TType.I32;
+        field.ID = 1;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteI32(DeviceGroupId);
+        oprot.WriteFieldEnd();
+        if (Token != null) {
+          field.Name = "token";
+          field.Type = TType.Struct;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          Token.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("deleteGroupPermitOnDeviceGroup_args(");
+      __sb.Append(", DeviceGroupId: ");
+      __sb.Append(DeviceGroupId);
+      if (Token != null) {
+        __sb.Append(", Token: ");
+        __sb.Append(Token== null ? "<null>" : Token.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class deleteGroupPermitOnDeviceGroup_result : TBase
+  {
+
+    public int? Success { get; set; }
+
+    public ServiceRuntimeException Ex1 { get; set; }
+
+    public deleteGroupPermitOnDeviceGroup_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.I32) {
+                Success = iprot.ReadI32();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new ServiceRuntimeException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("deleteGroupPermitOnDeviceGroup_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Success != null) {
+          field.Name = "Success";
+          field.Type = TType.I32;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI32(Success.Value);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("deleteGroupPermitOnDeviceGroup_result(");
+      bool __first = true;
+      if (Success != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Success: ");
+        __sb.Append(Success);
+      }
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
   public partial class deleteImage_args : TBase
   {
 
@@ -24055,6 +24681,227 @@ public partial class IFaceLog {
 
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("deletePersonGroup_result(");
+      bool __first = true;
+      if (Success != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Success: ");
+        __sb.Append(Success);
+      }
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class deletePersonGroupPermit_args : TBase
+  {
+
+    public int PersonGroupId { get; set; }
+
+    public Token Token { get; set; }
+
+    public deletePersonGroupPermit_args() {
+    }
+
+    public deletePersonGroupPermit_args(int personGroupId) : this() {
+      this.PersonGroupId = personGroupId;
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        bool isset_personGroupId = false;
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.I32) {
+                PersonGroupId = iprot.ReadI32();
+                isset_personGroupId = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.Struct) {
+                Token = new Token();
+                Token.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+        if (!isset_personGroupId)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field PersonGroupId not set");
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("deletePersonGroupPermit_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        field.Name = "personGroupId";
+        field.Type = TType.I32;
+        field.ID = 1;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteI32(PersonGroupId);
+        oprot.WriteFieldEnd();
+        if (Token != null) {
+          field.Name = "token";
+          field.Type = TType.Struct;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          Token.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("deletePersonGroupPermit_args(");
+      __sb.Append(", PersonGroupId: ");
+      __sb.Append(PersonGroupId);
+      if (Token != null) {
+        __sb.Append(", Token: ");
+        __sb.Append(Token== null ? "<null>" : Token.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class deletePersonGroupPermit_result : TBase
+  {
+
+    public int? Success { get; set; }
+
+    public ServiceRuntimeException Ex1 { get; set; }
+
+    public deletePersonGroupPermit_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.I32) {
+                Success = iprot.ReadI32();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new ServiceRuntimeException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("deletePersonGroupPermit_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Success != null) {
+          field.Name = "Success";
+          field.Type = TType.I32;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI32(Success.Value);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("deletePersonGroupPermit_result(");
       bool __first = true;
       if (Success != null) {
         if(!__first) { __sb.Append(", "); }
@@ -26618,9 +27465,13 @@ public partial class IFaceLog {
   public partial class getDeviceGroupsPermit_args : TBase
   {
 
-    public int? PersonGroupId { get; set; }
+    public int PersonGroupId { get; set; }
 
     public getDeviceGroupsPermit_args() {
+    }
+
+    public getDeviceGroupsPermit_args(int personGroupId) : this() {
+      this.PersonGroupId = personGroupId;
     }
 
     public void Read (TProtocol iprot)
@@ -26628,6 +27479,7 @@ public partial class IFaceLog {
       iprot.IncrementRecursionDepth();
       try
       {
+        bool isset_personGroupId = false;
         TField field;
         iprot.ReadStructBegin();
         while (true)
@@ -26641,6 +27493,7 @@ public partial class IFaceLog {
             case 1:
               if (field.Type == TType.I32) {
                 PersonGroupId = iprot.ReadI32();
+                isset_personGroupId = true;
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -26652,6 +27505,8 @@ public partial class IFaceLog {
           iprot.ReadFieldEnd();
         }
         iprot.ReadStructEnd();
+        if (!isset_personGroupId)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field PersonGroupId not set");
       }
       finally
       {
@@ -26666,14 +27521,12 @@ public partial class IFaceLog {
         TStruct struc = new TStruct("getDeviceGroupsPermit_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        if (PersonGroupId != null) {
-          field.Name = "personGroupId";
-          field.Type = TType.I32;
-          field.ID = 1;
-          oprot.WriteFieldBegin(field);
-          oprot.WriteI32(PersonGroupId.Value);
-          oprot.WriteFieldEnd();
-        }
+        field.Name = "personGroupId";
+        field.Type = TType.I32;
+        field.ID = 1;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteI32(PersonGroupId);
+        oprot.WriteFieldEnd();
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
@@ -26685,13 +27538,8 @@ public partial class IFaceLog {
 
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("getDeviceGroupsPermit_args(");
-      bool __first = true;
-      if (PersonGroupId != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("PersonGroupId: ");
-        __sb.Append(PersonGroupId);
-      }
+      __sb.Append(", PersonGroupId: ");
+      __sb.Append(PersonGroupId);
       __sb.Append(")");
       return __sb.ToString();
     }
@@ -26833,9 +27681,13 @@ public partial class IFaceLog {
   public partial class getDeviceGroupsPermittedBy_args : TBase
   {
 
-    public int? PersonGroupId { get; set; }
+    public int PersonGroupId { get; set; }
 
     public getDeviceGroupsPermittedBy_args() {
+    }
+
+    public getDeviceGroupsPermittedBy_args(int personGroupId) : this() {
+      this.PersonGroupId = personGroupId;
     }
 
     public void Read (TProtocol iprot)
@@ -26843,6 +27695,7 @@ public partial class IFaceLog {
       iprot.IncrementRecursionDepth();
       try
       {
+        bool isset_personGroupId = false;
         TField field;
         iprot.ReadStructBegin();
         while (true)
@@ -26856,6 +27709,7 @@ public partial class IFaceLog {
             case 1:
               if (field.Type == TType.I32) {
                 PersonGroupId = iprot.ReadI32();
+                isset_personGroupId = true;
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -26867,6 +27721,8 @@ public partial class IFaceLog {
           iprot.ReadFieldEnd();
         }
         iprot.ReadStructEnd();
+        if (!isset_personGroupId)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field PersonGroupId not set");
       }
       finally
       {
@@ -26881,14 +27737,12 @@ public partial class IFaceLog {
         TStruct struc = new TStruct("getDeviceGroupsPermittedBy_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        if (PersonGroupId != null) {
-          field.Name = "personGroupId";
-          field.Type = TType.I32;
-          field.ID = 1;
-          oprot.WriteFieldBegin(field);
-          oprot.WriteI32(PersonGroupId.Value);
-          oprot.WriteFieldEnd();
-        }
+        field.Name = "personGroupId";
+        field.Type = TType.I32;
+        field.ID = 1;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteI32(PersonGroupId);
+        oprot.WriteFieldEnd();
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
@@ -26900,13 +27754,8 @@ public partial class IFaceLog {
 
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("getDeviceGroupsPermittedBy_args(");
-      bool __first = true;
-      if (PersonGroupId != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("PersonGroupId: ");
-        __sb.Append(PersonGroupId);
-      }
+      __sb.Append(", PersonGroupId: ");
+      __sb.Append(PersonGroupId);
       __sb.Append(")");
       return __sb.ToString();
     }
@@ -28952,6 +29801,227 @@ public partial class IFaceLog {
 
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("getGroupPermit_result(");
+      bool __first = true;
+      if (Success != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Success: ");
+        __sb.Append(Success);
+      }
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class getGroupPermitOnDeviceGroup_args : TBase
+  {
+
+    public int DeviceGroupId { get; set; }
+
+    public int PersonGroupId { get; set; }
+
+    public getGroupPermitOnDeviceGroup_args() {
+    }
+
+    public getGroupPermitOnDeviceGroup_args(int deviceGroupId, int personGroupId) : this() {
+      this.DeviceGroupId = deviceGroupId;
+      this.PersonGroupId = personGroupId;
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        bool isset_deviceGroupId = false;
+        bool isset_personGroupId = false;
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.I32) {
+                DeviceGroupId = iprot.ReadI32();
+                isset_deviceGroupId = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.I32) {
+                PersonGroupId = iprot.ReadI32();
+                isset_personGroupId = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+        if (!isset_deviceGroupId)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field DeviceGroupId not set");
+        if (!isset_personGroupId)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field PersonGroupId not set");
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("getGroupPermitOnDeviceGroup_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        field.Name = "deviceGroupId";
+        field.Type = TType.I32;
+        field.ID = 1;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteI32(DeviceGroupId);
+        oprot.WriteFieldEnd();
+        field.Name = "personGroupId";
+        field.Type = TType.I32;
+        field.ID = 2;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteI32(PersonGroupId);
+        oprot.WriteFieldEnd();
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("getGroupPermitOnDeviceGroup_args(");
+      __sb.Append(", DeviceGroupId: ");
+      __sb.Append(DeviceGroupId);
+      __sb.Append(", PersonGroupId: ");
+      __sb.Append(PersonGroupId);
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class getGroupPermitOnDeviceGroup_result : TBase
+  {
+
+    public bool? Success { get; set; }
+
+    public ServiceRuntimeException Ex1 { get; set; }
+
+    public getGroupPermitOnDeviceGroup_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Bool) {
+                Success = iprot.ReadBool();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new ServiceRuntimeException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("getGroupPermitOnDeviceGroup_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Success != null) {
+          field.Name = "Success";
+          field.Type = TType.Bool;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteBool(Success.Value);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("getGroupPermitOnDeviceGroup_result(");
       bool __first = true;
       if (Success != null) {
         if(!__first) { __sb.Append(", "); }
@@ -31109,9 +32179,13 @@ public partial class IFaceLog {
   public partial class getPersonGroupsPermittedBy_args : TBase
   {
 
-    public int? DeviceGroupId { get; set; }
+    public int DeviceGroupId { get; set; }
 
     public getPersonGroupsPermittedBy_args() {
+    }
+
+    public getPersonGroupsPermittedBy_args(int deviceGroupId) : this() {
+      this.DeviceGroupId = deviceGroupId;
     }
 
     public void Read (TProtocol iprot)
@@ -31119,6 +32193,7 @@ public partial class IFaceLog {
       iprot.IncrementRecursionDepth();
       try
       {
+        bool isset_deviceGroupId = false;
         TField field;
         iprot.ReadStructBegin();
         while (true)
@@ -31132,6 +32207,7 @@ public partial class IFaceLog {
             case 1:
               if (field.Type == TType.I32) {
                 DeviceGroupId = iprot.ReadI32();
+                isset_deviceGroupId = true;
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -31143,6 +32219,8 @@ public partial class IFaceLog {
           iprot.ReadFieldEnd();
         }
         iprot.ReadStructEnd();
+        if (!isset_deviceGroupId)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field DeviceGroupId not set");
       }
       finally
       {
@@ -31157,14 +32235,12 @@ public partial class IFaceLog {
         TStruct struc = new TStruct("getPersonGroupsPermittedBy_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        if (DeviceGroupId != null) {
-          field.Name = "deviceGroupId";
-          field.Type = TType.I32;
-          field.ID = 1;
-          oprot.WriteFieldBegin(field);
-          oprot.WriteI32(DeviceGroupId.Value);
-          oprot.WriteFieldEnd();
-        }
+        field.Name = "deviceGroupId";
+        field.Type = TType.I32;
+        field.ID = 1;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteI32(DeviceGroupId);
+        oprot.WriteFieldEnd();
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
@@ -31176,13 +32252,8 @@ public partial class IFaceLog {
 
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("getPersonGroupsPermittedBy_args(");
-      bool __first = true;
-      if (DeviceGroupId != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("DeviceGroupId: ");
-        __sb.Append(DeviceGroupId);
-      }
+      __sb.Append(", DeviceGroupId: ");
+      __sb.Append(DeviceGroupId);
       __sb.Append(")");
       return __sb.ToString();
     }
