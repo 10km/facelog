@@ -227,6 +227,7 @@ service IFaceLog {
   i64 applyCmdSn(1: optional Token token) throws (1: ServiceRuntimeException ex1);
   Token applyPersonToken(1: required i32 personId, 2: optional string password, 3: required bool isMd5) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   Token applyRootToken(1: optional string password, 2: required bool isMd5) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
+  Token applyUserToken(1: required i32 userid, 2: optional string password, 3: required bool isMd5) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   void bindBorder(1: optional i32 personGroupId, 2: optional i32 deviceGroupId, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 countDeviceByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   i32 countDeviceGroupByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
@@ -297,6 +298,8 @@ service IFaceLog {
   bool isValidPassword(1: optional string userId, 2: optional string password, 3: required bool isMd5) throws (1: ServiceRuntimeException ex1);
   bool isValidPersonToken(1: optional Token token) throws (1: ServiceRuntimeException ex1);
   bool isValidRootToken(1: optional Token token) throws (1: ServiceRuntimeException ex1);
+  bool isValidToken(1: optional Token token) throws (1: ServiceRuntimeException ex1);
+  bool isValidUserToken(1: optional Token token) throws (1: ServiceRuntimeException ex1);
   list<i32> listOfParentForDeviceGroup(1: required i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
   list<i32> listOfParentForPersonGroup(1: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   list<i32> loadAllPerson() throws (1: ServiceRuntimeException ex1);
@@ -320,6 +323,7 @@ service IFaceLog {
   DeviceBean registerDevice(1: optional DeviceBean newDevice) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   void releasePersonToken(1: optional Token token) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   void releaseRootToken(1: optional Token token) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
+  void releaseUserToken(1: optional Token token) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   void replaceFeature(1: optional i32 personId, 2: optional string featureMd5, 3: required bool deleteOldFeatureImage, 4: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 rootGroupOfDevice(1: optional i32 deviceId) throws (1: ServiceRuntimeException ex1);
   i32 rootGroupOfPerson(1: optional i32 personId) throws (1: ServiceRuntimeException ex1);

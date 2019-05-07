@@ -554,6 +554,40 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public Token applyUserToken(final int userid,
+        final String password,
+        final boolean isMd5) 
+        throws ServiceSecurityException{
+        try{
+            return syncCall(new Function<net.gdface.facelog.client.thrift.Token,Token>() {
+                @Override
+                public Token apply(net.gdface.facelog.client.thrift.Token input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.Token.class,
+                    Token.class);
+                }},
+                new ServiceAsyncCall<net.gdface.facelog.client.thrift.Token>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.Token> nativeCallback){
+                    service.applyUserToken(userid,password,isMd5,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
+                    ServiceSecurityException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public void bindBorder(final Integer personGroupId,
         final Integer deviceGroupId,
         final Token token) 
@@ -2371,6 +2405,58 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public boolean isValidToken(final Token token) 
+        {
+        try{
+            return syncCall(new Function<Boolean,Boolean>() {
+                @Override
+                public Boolean apply(Boolean input) {
+                    return input;
+                }},
+                new ServiceAsyncCall<Boolean>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Boolean> nativeCallback){
+                    service.isValidToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public boolean isValidUserToken(final Token token) 
+        {
+        try{
+            return syncCall(new Function<Boolean,Boolean>() {
+                @Override
+                public Boolean apply(Boolean input) {
+                    return input;
+                }},
+                new ServiceAsyncCall<Boolean>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Boolean> nativeCallback){
+                    service.isValidUserToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public List<Integer> listOfParentForDeviceGroup(final int deviceGroupId) 
         {
         try{
@@ -2999,6 +3085,38 @@ public class IFaceLogThriftClient implements IFaceLog {
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Void> nativeCallback){
                     service.releaseRootToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
+                    ServiceSecurityException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public void releaseUserToken(final Token token) 
+        throws ServiceSecurityException{
+        try{
+             syncCall(new Function<Void,Void>() {
+                @Override
+                public Void apply(Void input) {
+                    return input;
+                }},
+                new ServiceAsyncCall<Void>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Void> nativeCallback){
+                    service.releaseUserToken(TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);

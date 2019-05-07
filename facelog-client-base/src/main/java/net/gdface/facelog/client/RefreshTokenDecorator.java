@@ -28,6 +28,7 @@ import static com.google.common.base.Preconditions.*;
 public class RefreshTokenDecorator implements InvocationHandler,Delegator<IFaceLog>{
 	private final Method applyPersonToken;
 	private final Method applyRootToken;
+	private final Method applyUserToken;
 	private final Method online;
 	private TokenHelper helper = TokenHelper.DEFAULT_INSTANCE;
 
@@ -37,6 +38,7 @@ public class RefreshTokenDecorator implements InvocationHandler,Delegator<IFaceL
 		try{
 			applyPersonToken = IFaceLog.class.getMethod("applyPersonToken", int.class,String.class,boolean.class);
 			applyRootToken =IFaceLog.class.getMethod("applyRootToken", String.class,boolean.class);
+			applyUserToken = IFaceLog.class.getMethod("applyUserToken", int.class,String.class,boolean.class);
 			online = IFaceLog.class.getMethod("online", DeviceBean.class);
 		}catch (NoSuchMethodException e) {
 			throw new IllegalArgumentException(e);
@@ -50,7 +52,7 @@ public class RefreshTokenDecorator implements InvocationHandler,Delegator<IFaceL
 	 * @return
 	 */
 	private boolean isExclude(Method method){
-		return applyPersonToken.equals(method) || applyRootToken.equals(method) || online.equals(method);
+		return applyPersonToken.equals(method) || applyRootToken.equals(method) || applyUserToken.equals(method) ||online.equals(method);
 	}
 	/**
 	 * 拦截接口方法抛出的{@link ServiceSecurityException}异常，当抛出令牌失效异常时自动执行一次申请令牌的动作

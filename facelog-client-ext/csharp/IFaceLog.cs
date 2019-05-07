@@ -30,6 +30,7 @@ public partial class IFaceLog {
     long applyCmdSn(Token token);
     Token applyPersonToken(int personId, string password, bool isMd5);
     Token applyRootToken(string password, bool isMd5);
+    Token applyUserToken(int userid, string password, bool isMd5);
     void bindBorder(int personGroupId, int deviceGroupId, Token token);
     int countDeviceByWhere(string @where);
     int countDeviceGroupByWhere(string @where);
@@ -100,6 +101,8 @@ public partial class IFaceLog {
     bool isValidPassword(string userId, string password, bool isMd5);
     bool isValidPersonToken(Token token);
     bool isValidRootToken(Token token);
+    bool isValidToken(Token token);
+    bool isValidUserToken(Token token);
     List<int> listOfParentForDeviceGroup(int deviceGroupId);
     List<int> listOfParentForPersonGroup(int personGroupId);
     List<int> loadAllPerson();
@@ -123,6 +126,7 @@ public partial class IFaceLog {
     DeviceBean registerDevice(DeviceBean newDevice);
     void releasePersonToken(Token token);
     void releaseRootToken(Token token);
+    void releaseUserToken(Token token);
     void replaceFeature(int personId, string featureMd5, bool deleteOldFeatureImage, Token token);
     int rootGroupOfDevice(int deviceId);
     int rootGroupOfPerson(int personId);
@@ -165,6 +169,7 @@ public partial class IFaceLog {
     Task<long> applyCmdSnAsync(Token token);
     Task<Token> applyPersonTokenAsync(int personId, string password, bool isMd5);
     Task<Token> applyRootTokenAsync(string password, bool isMd5);
+    Task<Token> applyUserTokenAsync(int userid, string password, bool isMd5);
     Task bindBorderAsync(int personGroupId, int deviceGroupId, Token token);
     Task<int> countDeviceByWhereAsync(string @where);
     Task<int> countDeviceGroupByWhereAsync(string @where);
@@ -235,6 +240,8 @@ public partial class IFaceLog {
     Task<bool> isValidPasswordAsync(string userId, string password, bool isMd5);
     Task<bool> isValidPersonTokenAsync(Token token);
     Task<bool> isValidRootTokenAsync(Token token);
+    Task<bool> isValidTokenAsync(Token token);
+    Task<bool> isValidUserTokenAsync(Token token);
     Task<List<int>> listOfParentForDeviceGroupAsync(int deviceGroupId);
     Task<List<int>> listOfParentForPersonGroupAsync(int personGroupId);
     Task<List<int>> loadAllPersonAsync();
@@ -258,6 +265,7 @@ public partial class IFaceLog {
     Task<DeviceBean> registerDeviceAsync(DeviceBean newDevice);
     Task releasePersonTokenAsync(Token token);
     Task releaseRootTokenAsync(Token token);
+    Task releaseUserTokenAsync(Token token);
     Task replaceFeatureAsync(int personId, string featureMd5, bool deleteOldFeatureImage, Token token);
     Task<int> rootGroupOfDeviceAsync(int deviceId);
     Task<int> rootGroupOfPersonAsync(int personId);
@@ -312,6 +320,8 @@ public partial class IFaceLog {
     Token End_applyPersonToken(IAsyncResult asyncResult);
     IAsyncResult Begin_applyRootToken(AsyncCallback callback, object state, string password, bool isMd5);
     Token End_applyRootToken(IAsyncResult asyncResult);
+    IAsyncResult Begin_applyUserToken(AsyncCallback callback, object state, int userid, string password, bool isMd5);
+    Token End_applyUserToken(IAsyncResult asyncResult);
     IAsyncResult Begin_bindBorder(AsyncCallback callback, object state, int personGroupId, int deviceGroupId, Token token);
     void End_bindBorder(IAsyncResult asyncResult);
     IAsyncResult Begin_countDeviceByWhere(AsyncCallback callback, object state, string @where);
@@ -452,6 +462,10 @@ public partial class IFaceLog {
     bool End_isValidPersonToken(IAsyncResult asyncResult);
     IAsyncResult Begin_isValidRootToken(AsyncCallback callback, object state, Token token);
     bool End_isValidRootToken(IAsyncResult asyncResult);
+    IAsyncResult Begin_isValidToken(AsyncCallback callback, object state, Token token);
+    bool End_isValidToken(IAsyncResult asyncResult);
+    IAsyncResult Begin_isValidUserToken(AsyncCallback callback, object state, Token token);
+    bool End_isValidUserToken(IAsyncResult asyncResult);
     IAsyncResult Begin_listOfParentForDeviceGroup(AsyncCallback callback, object state, int deviceGroupId);
     List<int> End_listOfParentForDeviceGroup(IAsyncResult asyncResult);
     IAsyncResult Begin_listOfParentForPersonGroup(AsyncCallback callback, object state, int personGroupId);
@@ -498,6 +512,8 @@ public partial class IFaceLog {
     void End_releasePersonToken(IAsyncResult asyncResult);
     IAsyncResult Begin_releaseRootToken(AsyncCallback callback, object state, Token token);
     void End_releaseRootToken(IAsyncResult asyncResult);
+    IAsyncResult Begin_releaseUserToken(AsyncCallback callback, object state, Token token);
+    void End_releaseUserToken(IAsyncResult asyncResult);
     IAsyncResult Begin_replaceFeature(AsyncCallback callback, object state, int personId, string featureMd5, bool deleteOldFeatureImage, Token token);
     void End_replaceFeature(IAsyncResult asyncResult);
     IAsyncResult Begin_rootGroupOfDevice(AsyncCallback callback, object state, int deviceId);
@@ -1326,6 +1342,69 @@ public partial class IFaceLog {
         throw result.Ex2;
       }
       throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "applyRootToken failed: unknown result");
+    }
+
+    
+    public IAsyncResult Begin_applyUserToken(AsyncCallback callback, object state, int userid, string password, bool isMd5)
+    {
+      return send_applyUserToken(callback, state, userid, password, isMd5);
+    }
+
+    public Token End_applyUserToken(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      return recv_applyUserToken();
+    }
+
+    public async Task<Token> applyUserTokenAsync(int userid, string password, bool isMd5)
+    {
+      Token retval;
+      retval = await Task.Run(() =>
+      {
+        return applyUserToken(userid, password, isMd5);
+      });
+      return retval;
+    }
+
+    public Token applyUserToken(int userid, string password, bool isMd5)
+    {
+      var asyncResult = Begin_applyUserToken(null, null, userid, password, isMd5);
+      return End_applyUserToken(asyncResult);
+
+    }
+    public IAsyncResult send_applyUserToken(AsyncCallback callback, object state, int userid, string password, bool isMd5)
+    {
+      oprot_.WriteMessageBegin(new TMessage("applyUserToken", TMessageType.Call, seqid_));
+      applyUserToken_args args = new applyUserToken_args();
+      args.Userid = userid;
+      args.Password = password;
+      args.IsMd5 = isMd5;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public Token recv_applyUserToken()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      applyUserToken_result result = new applyUserToken_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Success != null) {
+        return result.Success;
+      }
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      if (result.Ex2 != null) {
+        throw result.Ex2;
+      }
+      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "applyUserToken failed: unknown result");
     }
 
     
@@ -5400,6 +5479,122 @@ public partial class IFaceLog {
     }
 
     
+    public IAsyncResult Begin_isValidToken(AsyncCallback callback, object state, Token token)
+    {
+      return send_isValidToken(callback, state, token);
+    }
+
+    public bool End_isValidToken(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      return recv_isValidToken();
+    }
+
+    public async Task<bool> isValidTokenAsync(Token token)
+    {
+      bool retval;
+      retval = await Task.Run(() =>
+      {
+        return isValidToken(token);
+      });
+      return retval;
+    }
+
+    public bool isValidToken(Token token)
+    {
+      var asyncResult = Begin_isValidToken(null, null, token);
+      return End_isValidToken(asyncResult);
+
+    }
+    public IAsyncResult send_isValidToken(AsyncCallback callback, object state, Token token)
+    {
+      oprot_.WriteMessageBegin(new TMessage("isValidToken", TMessageType.Call, seqid_));
+      isValidToken_args args = new isValidToken_args();
+      args.Token = token;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public bool recv_isValidToken()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      isValidToken_result result = new isValidToken_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Success.HasValue) {
+        return result.Success.Value;
+      }
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "isValidToken failed: unknown result");
+    }
+
+    
+    public IAsyncResult Begin_isValidUserToken(AsyncCallback callback, object state, Token token)
+    {
+      return send_isValidUserToken(callback, state, token);
+    }
+
+    public bool End_isValidUserToken(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      return recv_isValidUserToken();
+    }
+
+    public async Task<bool> isValidUserTokenAsync(Token token)
+    {
+      bool retval;
+      retval = await Task.Run(() =>
+      {
+        return isValidUserToken(token);
+      });
+      return retval;
+    }
+
+    public bool isValidUserToken(Token token)
+    {
+      var asyncResult = Begin_isValidUserToken(null, null, token);
+      return End_isValidUserToken(asyncResult);
+
+    }
+    public IAsyncResult send_isValidUserToken(AsyncCallback callback, object state, Token token)
+    {
+      oprot_.WriteMessageBegin(new TMessage("isValidUserToken", TMessageType.Call, seqid_));
+      isValidUserToken_args args = new isValidUserToken_args();
+      args.Token = token;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public bool recv_isValidUserToken()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      isValidUserToken_result result = new isValidUserToken_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Success.HasValue) {
+        return result.Success.Value;
+      }
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "isValidUserToken failed: unknown result");
+    }
+
+    
     public IAsyncResult Begin_listOfParentForDeviceGroup(AsyncCallback callback, object state, int deviceGroupId)
     {
       return send_listOfParentForDeviceGroup(callback, state, deviceGroupId);
@@ -6735,6 +6930,62 @@ public partial class IFaceLog {
         throw x;
       }
       releaseRootToken_result result = new releaseRootToken_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      if (result.Ex2 != null) {
+        throw result.Ex2;
+      }
+      return;
+    }
+
+    
+    public IAsyncResult Begin_releaseUserToken(AsyncCallback callback, object state, Token token)
+    {
+      return send_releaseUserToken(callback, state, token);
+    }
+
+    public void End_releaseUserToken(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      recv_releaseUserToken();
+    }
+
+    public async Task releaseUserTokenAsync(Token token)
+    {
+      await Task.Run(() =>
+      {
+        releaseUserToken(token);
+      });
+    }
+
+    public void releaseUserToken(Token token)
+    {
+      var asyncResult = Begin_releaseUserToken(null, null, token);
+      End_releaseUserToken(asyncResult);
+
+    }
+    public IAsyncResult send_releaseUserToken(AsyncCallback callback, object state, Token token)
+    {
+      oprot_.WriteMessageBegin(new TMessage("releaseUserToken", TMessageType.Call, seqid_));
+      releaseUserToken_args args = new releaseUserToken_args();
+      args.Token = token;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public void recv_releaseUserToken()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      releaseUserToken_result result = new releaseUserToken_result();
       result.Read(iprot_);
       iprot_.ReadMessageEnd();
       if (result.Ex1 != null) {
@@ -8331,6 +8582,7 @@ public partial class IFaceLog {
       processMap_["applyCmdSn"] = applyCmdSn_ProcessAsync;
       processMap_["applyPersonToken"] = applyPersonToken_ProcessAsync;
       processMap_["applyRootToken"] = applyRootToken_ProcessAsync;
+      processMap_["applyUserToken"] = applyUserToken_ProcessAsync;
       processMap_["bindBorder"] = bindBorder_ProcessAsync;
       processMap_["countDeviceByWhere"] = countDeviceByWhere_ProcessAsync;
       processMap_["countDeviceGroupByWhere"] = countDeviceGroupByWhere_ProcessAsync;
@@ -8401,6 +8653,8 @@ public partial class IFaceLog {
       processMap_["isValidPassword"] = isValidPassword_ProcessAsync;
       processMap_["isValidPersonToken"] = isValidPersonToken_ProcessAsync;
       processMap_["isValidRootToken"] = isValidRootToken_ProcessAsync;
+      processMap_["isValidToken"] = isValidToken_ProcessAsync;
+      processMap_["isValidUserToken"] = isValidUserToken_ProcessAsync;
       processMap_["listOfParentForDeviceGroup"] = listOfParentForDeviceGroup_ProcessAsync;
       processMap_["listOfParentForPersonGroup"] = listOfParentForPersonGroup_ProcessAsync;
       processMap_["loadAllPerson"] = loadAllPerson_ProcessAsync;
@@ -8424,6 +8678,7 @@ public partial class IFaceLog {
       processMap_["registerDevice"] = registerDevice_ProcessAsync;
       processMap_["releasePersonToken"] = releasePersonToken_ProcessAsync;
       processMap_["releaseRootToken"] = releaseRootToken_ProcessAsync;
+      processMap_["releaseUserToken"] = releaseUserToken_ProcessAsync;
       processMap_["replaceFeature"] = replaceFeature_ProcessAsync;
       processMap_["rootGroupOfDevice"] = rootGroupOfDevice_ProcessAsync;
       processMap_["rootGroupOfPerson"] = rootGroupOfPerson_ProcessAsync;
@@ -8925,6 +9180,45 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("applyRootToken", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public async Task applyUserToken_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      applyUserToken_args args = new applyUserToken_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      applyUserToken_result result = new applyUserToken_result();
+      try
+      {
+        try
+        {
+          result.Success = await iface_.applyUserTokenAsync(args.Userid.Value, args.Password, args.IsMd5.Value);
+        }
+        catch (ServiceSecurityException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        catch (ServiceRuntimeException ex2)
+        {
+          result.Ex2 = ex2;
+        }
+        oprot.WriteMessageBegin(new TMessage("applyUserToken", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("applyUserToken", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -11381,6 +11675,76 @@ public partial class IFaceLog {
       oprot.Transport.Flush();
     }
 
+    public async Task isValidToken_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      isValidToken_args args = new isValidToken_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      isValidToken_result result = new isValidToken_result();
+      try
+      {
+        try
+        {
+          result.Success = await iface_.isValidTokenAsync(args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("isValidToken", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("isValidToken", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public async Task isValidUserToken_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      isValidUserToken_args args = new isValidUserToken_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      isValidUserToken_result result = new isValidUserToken_result();
+      try
+      {
+        try
+        {
+          result.Success = await iface_.isValidUserTokenAsync(args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("isValidUserToken", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("isValidUserToken", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
     public async Task listOfParentForDeviceGroup_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
     {
       listOfParentForDeviceGroup_args args = new listOfParentForDeviceGroup_args();
@@ -12200,6 +12564,45 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("releaseRootToken", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public async Task releaseUserToken_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      releaseUserToken_args args = new releaseUserToken_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      releaseUserToken_result result = new releaseUserToken_result();
+      try
+      {
+        try
+        {
+          await iface_.releaseUserTokenAsync(args.Token);
+        }
+        catch (ServiceSecurityException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        catch (ServiceRuntimeException ex2)
+        {
+          result.Ex2 = ex2;
+        }
+        oprot.WriteMessageBegin(new TMessage("releaseUserToken", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("releaseUserToken", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -13173,6 +13576,7 @@ public partial class IFaceLog {
       processMap_["applyCmdSn"] = applyCmdSn_Process;
       processMap_["applyPersonToken"] = applyPersonToken_Process;
       processMap_["applyRootToken"] = applyRootToken_Process;
+      processMap_["applyUserToken"] = applyUserToken_Process;
       processMap_["bindBorder"] = bindBorder_Process;
       processMap_["countDeviceByWhere"] = countDeviceByWhere_Process;
       processMap_["countDeviceGroupByWhere"] = countDeviceGroupByWhere_Process;
@@ -13243,6 +13647,8 @@ public partial class IFaceLog {
       processMap_["isValidPassword"] = isValidPassword_Process;
       processMap_["isValidPersonToken"] = isValidPersonToken_Process;
       processMap_["isValidRootToken"] = isValidRootToken_Process;
+      processMap_["isValidToken"] = isValidToken_Process;
+      processMap_["isValidUserToken"] = isValidUserToken_Process;
       processMap_["listOfParentForDeviceGroup"] = listOfParentForDeviceGroup_Process;
       processMap_["listOfParentForPersonGroup"] = listOfParentForPersonGroup_Process;
       processMap_["loadAllPerson"] = loadAllPerson_Process;
@@ -13266,6 +13672,7 @@ public partial class IFaceLog {
       processMap_["registerDevice"] = registerDevice_Process;
       processMap_["releasePersonToken"] = releasePersonToken_Process;
       processMap_["releaseRootToken"] = releaseRootToken_Process;
+      processMap_["releaseUserToken"] = releaseUserToken_Process;
       processMap_["replaceFeature"] = replaceFeature_Process;
       processMap_["rootGroupOfDevice"] = rootGroupOfDevice_Process;
       processMap_["rootGroupOfPerson"] = rootGroupOfPerson_Process;
@@ -13767,6 +14174,45 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("applyRootToken", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public void applyUserToken_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      applyUserToken_args args = new applyUserToken_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      applyUserToken_result result = new applyUserToken_result();
+      try
+      {
+        try
+        {
+          result.Success = iface_.applyUserToken(args.Userid.Value, args.Password, args.IsMd5.Value);
+        }
+        catch (ServiceSecurityException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        catch (ServiceRuntimeException ex2)
+        {
+          result.Ex2 = ex2;
+        }
+        oprot.WriteMessageBegin(new TMessage("applyUserToken", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("applyUserToken", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -16223,6 +16669,76 @@ public partial class IFaceLog {
       oprot.Transport.Flush();
     }
 
+    public void isValidToken_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      isValidToken_args args = new isValidToken_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      isValidToken_result result = new isValidToken_result();
+      try
+      {
+        try
+        {
+          result.Success = iface_.isValidToken(args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("isValidToken", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("isValidToken", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public void isValidUserToken_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      isValidUserToken_args args = new isValidUserToken_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      isValidUserToken_result result = new isValidUserToken_result();
+      try
+      {
+        try
+        {
+          result.Success = iface_.isValidUserToken(args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("isValidUserToken", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("isValidUserToken", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
     public void listOfParentForDeviceGroup_Process(int seqid, TProtocol iprot, TProtocol oprot)
     {
       listOfParentForDeviceGroup_args args = new listOfParentForDeviceGroup_args();
@@ -17042,6 +17558,45 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("releaseRootToken", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public void releaseUserToken_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      releaseUserToken_args args = new releaseUserToken_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      releaseUserToken_result result = new releaseUserToken_result();
+      try
+      {
+        try
+        {
+          iface_.releaseUserToken(args.Token);
+        }
+        catch (ServiceSecurityException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        catch (ServiceRuntimeException ex2)
+        {
+          result.Ex2 = ex2;
+        }
+        oprot.WriteMessageBegin(new TMessage("releaseUserToken", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("releaseUserToken", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -20984,6 +21539,272 @@ public partial class IFaceLog {
 
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("applyRootToken_result(");
+      bool __first = true;
+      if (Success != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Success: ");
+        __sb.Append(Success== null ? "<null>" : Success.ToString());
+      }
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      if (Ex2 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex2: ");
+        __sb.Append(Ex2== null ? "<null>" : Ex2.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class applyUserToken_args : TBase
+  {
+
+    public int Userid { get; set; }
+
+    public string Password { get; set; }
+
+    public bool IsMd5 { get; set; }
+
+    public applyUserToken_args() {
+    }
+
+    public applyUserToken_args(int userid, bool isMd5) : this() {
+      this.Userid = userid;
+      this.IsMd5 = isMd5;
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        bool isset_userid = false;
+        bool isset_isMd5 = false;
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.I32) {
+                Userid = iprot.ReadI32();
+                isset_userid = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.String) {
+                Password = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 3:
+              if (field.Type == TType.Bool) {
+                IsMd5 = iprot.ReadBool();
+                isset_isMd5 = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+        if (!isset_userid)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field Userid not set");
+        if (!isset_isMd5)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field IsMd5 not set");
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("applyUserToken_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        field.Name = "userid";
+        field.Type = TType.I32;
+        field.ID = 1;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteI32(Userid);
+        oprot.WriteFieldEnd();
+        if (Password != null) {
+          field.Name = "password";
+          field.Type = TType.String;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Password);
+          oprot.WriteFieldEnd();
+        }
+        field.Name = "isMd5";
+        field.Type = TType.Bool;
+        field.ID = 3;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteBool(IsMd5);
+        oprot.WriteFieldEnd();
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("applyUserToken_args(");
+      __sb.Append(", Userid: ");
+      __sb.Append(Userid);
+      if (Password != null) {
+        __sb.Append(", Password: ");
+        __sb.Append(Password);
+      }
+      __sb.Append(", IsMd5: ");
+      __sb.Append(IsMd5);
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class applyUserToken_result : TBase
+  {
+
+    public Token Success { get; set; }
+
+    public ServiceSecurityException Ex1 { get; set; }
+
+    public ServiceRuntimeException Ex2 { get; set; }
+
+    public applyUserToken_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Struct) {
+                Success = new Token();
+                Success.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new ServiceSecurityException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.Struct) {
+                Ex2 = new ServiceRuntimeException();
+                Ex2.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("applyUserToken_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Success != null) {
+          field.Name = "Success";
+          field.Type = TType.Struct;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          Success.Write(oprot);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex2 != null) {
+          field.Name = "Ex2";
+          field.Type = TType.Struct;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          Ex2.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("applyUserToken_result(");
       bool __first = true;
       if (Success != null) {
         if(!__first) { __sb.Append(", "); }
@@ -36021,6 +36842,404 @@ public partial class IFaceLog {
   #if !SILVERLIGHT
   [Serializable]
   #endif
+  public partial class isValidToken_args : TBase
+  {
+
+    public Token Token { get; set; }
+
+    public isValidToken_args() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.Struct) {
+                Token = new Token();
+                Token.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("isValidToken_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (Token != null) {
+          field.Name = "token";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Token.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("isValidToken_args(");
+      bool __first = true;
+      if (Token != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Token: ");
+        __sb.Append(Token== null ? "<null>" : Token.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class isValidToken_result : TBase
+  {
+
+    public bool? Success { get; set; }
+
+    public ServiceRuntimeException Ex1 { get; set; }
+
+    public isValidToken_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Bool) {
+                Success = iprot.ReadBool();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new ServiceRuntimeException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("isValidToken_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Success != null) {
+          field.Name = "Success";
+          field.Type = TType.Bool;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteBool(Success.Value);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("isValidToken_result(");
+      bool __first = true;
+      if (Success != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Success: ");
+        __sb.Append(Success);
+      }
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class isValidUserToken_args : TBase
+  {
+
+    public Token Token { get; set; }
+
+    public isValidUserToken_args() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.Struct) {
+                Token = new Token();
+                Token.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("isValidUserToken_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (Token != null) {
+          field.Name = "token";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Token.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("isValidUserToken_args(");
+      bool __first = true;
+      if (Token != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Token: ");
+        __sb.Append(Token== null ? "<null>" : Token.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class isValidUserToken_result : TBase
+  {
+
+    public bool? Success { get; set; }
+
+    public ServiceRuntimeException Ex1 { get; set; }
+
+    public isValidUserToken_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Bool) {
+                Success = iprot.ReadBool();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new ServiceRuntimeException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("isValidUserToken_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Success != null) {
+          field.Name = "Success";
+          field.Type = TType.Bool;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteBool(Success.Value);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("isValidUserToken_result(");
+      bool __first = true;
+      if (Success != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Success: ");
+        __sb.Append(Success);
+      }
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
   public partial class listOfParentForDeviceGroup_args : TBase
   {
 
@@ -41234,6 +42453,206 @@ public partial class IFaceLog {
 
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("releaseRootToken_result(");
+      bool __first = true;
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      if (Ex2 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex2: ");
+        __sb.Append(Ex2== null ? "<null>" : Ex2.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class releaseUserToken_args : TBase
+  {
+
+    public Token Token { get; set; }
+
+    public releaseUserToken_args() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.Struct) {
+                Token = new Token();
+                Token.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("releaseUserToken_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (Token != null) {
+          field.Name = "token";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Token.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("releaseUserToken_args(");
+      bool __first = true;
+      if (Token != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Token: ");
+        __sb.Append(Token== null ? "<null>" : Token.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class releaseUserToken_result : TBase
+  {
+
+    public ServiceSecurityException Ex1 { get; set; }
+
+    public ServiceRuntimeException Ex2 { get; set; }
+
+    public releaseUserToken_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new ServiceSecurityException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.Struct) {
+                Ex2 = new ServiceRuntimeException();
+                Ex2.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("releaseUserToken_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex2 != null) {
+          field.Name = "Ex2";
+          field.Type = TType.Struct;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          Ex2.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("releaseUserToken_result(");
       bool __first = true;
       if (Ex1 != null) {
         if(!__first) { __sb.Append(", "); }

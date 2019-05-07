@@ -21,6 +21,7 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 import gu.dtalk.MenuItem;
 import gu.simplemq.redis.JedisPoolLazy;
+import gu.simplemq.redis.RedisFactory;
 import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.ServiceSecurityException;
@@ -40,22 +41,82 @@ import net.gdface.utils.NetworkUtil;
  * @author guyadong
  *
  */
-public class ClientExtendTools {
+public class ClientExtendTools{
 	private final IFaceLog syncInstance;
 	private final IFaceLogThriftClientAsync asyncInstance;
 	private final ClientFactory factory;
+	private final Map<MQParam, String> redisParameters = Maps.newConcurrentMap();
+	private void updateRedisParameters(Map<MQParam, String>param){
+		synchronized (redisParameters) {
+			redisParameters.clear();
+			redisParameters.putAll(param);
+		}
+	}
+	private final ServiceEventListener tokenRefreshListener = new ServiceEventListener(){
+		@Override
+		public void online() {
+			if(tokenRefresh !=null){
+				tokenRefresh.relead = true;
+				Token token = tokenRefresh.get();
+				if(null != token){
+					getRedisParameters(token);
+				}
+			}
+		}		
+	}; 
+	private TokenRefresh tokenRefresh;
+	private class TokenRefresh implements Supplier<Token>{
+		private Token token;
+		private boolean relead = true;
+		private final TokenHelper helper;
+		private TokenRefresh(TokenHelper helper,Token token) {
+			this.helper = checkNotNull(helper,"helper is null");
+			this.token = checkNotNull(token,"token is null");
+		}
+		@Override
+		public Token get() {
+			if(relead){
+				Token t = refreshToken(helper, token);				
+				if(null != t){
+					relead = false;
+					token = t;
+				}
+				return t;
+			}
+			return token;
+		}
+		
+	}
 	ClientExtendTools(IFaceLogThriftClient syncInstance) {
 		super();
 		this.syncInstance = checkNotNull(syncInstance,"syncInstance is null");
 		this.asyncInstance = null;
-		factory = syncInstance.getFactory();
+		this.factory = syncInstance.getFactory();
+		init();
 	}
 	ClientExtendTools(IFaceLogThriftClientAsync asyncInstance) {
 		super();
 		this.syncInstance = null;
 		this.asyncInstance = checkNotNull(asyncInstance,"asyncInstance is null");
-		factory = asyncInstance.getFactory();
-
+		this.factory = asyncInstance.getFactory();
+		init();
+	}
+	private void init(){
+		RedisFactory.getSubscriber().register(ServiceEventAdapter.SERVICE_EVENT_CHANNEL);
+		addServiceEventListener(tokenRefreshListener);
+	}
+	/**
+	 * 
+	 * @param listener
+	 * @return
+	 */
+	public ClientExtendTools addServiceEventListener(ServiceEventListener listener){
+		ServiceEventAdapter.INSTANCE.addServiceEventListener(listener);	
+		return this;
+	}
+	public ClientExtendTools removeServiceEventListener(ServiceEventListener listener){
+		ServiceEventAdapter.INSTANCE.removeServiceEventListener(listener);
+		return this;
 	}
 	/**
 	 * 如果{@code host}是本机地址则用facelog服务主机名替换
@@ -480,20 +541,12 @@ public class ClientExtendTools {
      * @return
      * @throws ServiceSecurityException
      */
-    public Token applyUserToken(int userid,String password,boolean isMd5) throws ServiceSecurityException{
+    private Token applyUserToken(int userid,String password,boolean isMd5) throws ServiceSecurityException{
     	Token token;
     	try {
-    		if(userid == -1){
-
-    			token = syncInstance != null 
-    					? syncInstance.applyRootToken(password, isMd5)
-    							: asyncInstance.applyRootToken(password, isMd5).get();
-
-    		}else{
-    			token = syncInstance != null 
-    					? syncInstance.applyPersonToken(userid, password, isMd5)
-    							: asyncInstance.applyPersonToken(userid, password, isMd5).get();
-    		}
+			token = syncInstance != null 
+					? syncInstance.applyPersonToken(userid, password, isMd5)
+					: asyncInstance.applyPersonToken(userid, password, isMd5).get();
     		return token;
     	} catch (ExecutionException e) {
     		Throwables.propagateIfPossible(e.getCause(), ServiceSecurityException.class);
@@ -515,7 +568,8 @@ public class ClientExtendTools {
 			Map<MQParam, String> param = syncInstance != null 
 					? syncInstance.getRedisParameters(token)
 					: asyncInstance.getRedisParameters(token).get();
-			return insteadHostOfMQParamIfLocalhost(param);
+			updateRedisParameters(insteadHostOfMQParamIfLocalhost(param));
+			return redisParameters;
 	    } catch (ExecutionException e) {
 	        Throwables.throwIfUnchecked(e.getCause());
 	        throw new RuntimeException(e.getCause());
@@ -524,15 +578,29 @@ public class ClientExtendTools {
 	        throw new RuntimeException(e);
 	    }
 	}
+	private Map<MQParam, String> getRedisParametersLazy(Token token){
+		if(redisParameters.isEmpty()){
+			getRedisParameters(token);
+		}
+		return redisParameters;
+	}
+	/**
+	 * @param token 调用 {@link #getRedisParameters(Token)}所需要的令牌
+	 * @return 返回一个获取redis参数的{@link Supplier}实例
+	 */
 	public Supplier<Map<MQParam, String>> getRedisParametersSupplier(final Token token){
 		checkArgument(token != null,"token is null");
 		return new Supplier<Map<MQParam, String>>(){
 
 			@Override
 			public Map<MQParam, String> get() {
-				return getRedisParameters(token);
+				return getRedisParametersLazy(token);
 			}};
 	}
+	/**
+	 * @param token 调用 {@link #getRedisParameters(Token)}所需要的令牌
+	 * @return 返回一个获取设备心跳实时监控通道名的{@link Supplier}实例
+	 */
 	public Supplier<String> getMonitorChannelSupplier(Token token){
 		return Suppliers.compose(new Function<Map<MQParam, String>,String>(){
 			@Override
@@ -575,5 +643,70 @@ public class ClientExtendTools {
 		Map<MQParam, String> redisParam = getRedisParameters(token);
 		URI uri = URI.create(redisParam.get(MQParam.REDIS_URI));
 		JedisPoolLazy.getInstance(uri).asDefaultInstance();
+	}
+	private Token online(DeviceBean deviceBean) throws ServiceSecurityException{
+		try{
+			return syncInstance != null 
+					? syncInstance.online(deviceBean) 
+					: asyncInstance.online(deviceBean).get();
+    	} catch (ExecutionException e) {
+    		Throwables.propagateIfPossible(e.getCause(), ServiceSecurityException.class);
+	        throw new RuntimeException(e.getCause());
+		} catch(Exception e){
+    		Throwables.propagateIfPossible(e, ServiceSecurityException.class);
+            throw new RuntimeException(e);
+        }
+	}
+
+	/**
+	 * 令牌刷新
+	 * @param helper
+	 * @param token
+	 * @return 刷新的令牌,刷新失败返回{@code null}
+	 */
+	public Token refreshToken(TokenHelper helper,Token token){
+		// 最后一个参数为token
+		Token freshToken = null;
+		try{
+			// 重新申请令牌
+			switch(token.getType()){
+			case DEVICE:{
+				if(helper.deviceBean() != null){
+					freshToken = online(helper.deviceBean());
+				}
+				break;
+			}
+			case ROOT:
+			case PERSON:{
+				String pwd = helper.passwordOf(token.getId());
+				if(pwd != null){
+					freshToken = applyUserToken(token.getId(),pwd,helper.isHashedPwd());
+				}
+				break;
+			}
+			default:
+				break;
+			}
+			// 如果申请令牌成功则更新令牌参数，重新执行方法调用
+			if(freshToken != null){
+				// 用申请的新令牌更新参数
+				helper.saveFreshedToken(freshToken);
+			}
+		}catch (Exception er) {
+			// DO NOTHING
+		}
+		return freshToken;
+	}
+
+	/**
+	 * 返回有效令牌的{@link Supplier}实例<br>
+	 * 实现在服务端重启后令牌的自动刷新
+	 * @param helper
+	 * @param token
+	 * @return
+	 */
+	public Supplier<Token> initTokenSupplier(TokenHelper helper,Token token){
+		this.tokenRefresh = new TokenRefresh(helper, token);
+		return this.tokenRefresh;
 	}
 }

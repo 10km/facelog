@@ -565,6 +565,15 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
+	public Token applyUserToken(int userid, String password, boolean isMd5) throws ServiceSecurityException {
+		return null;
+	}
+
+	@Override
+	public void releaseUserToken(Token token) throws ServiceSecurityException {
+	}
+
+	@Override
 	public boolean isValidPassword(String userId, String password, boolean isMd5) {
 		return false;
 	}
@@ -650,6 +659,16 @@ public class FacelogDefaultImpl implements IFaceLog {
 
 	@Override
 	public boolean isValidDeviceToken(Token token) {
+		return false;
+	}
+
+	@Override
+	public boolean isValidUserToken(Token token) {
+		return false;
+	}
+
+	@Override
+	public boolean isValidToken(Token token) {
 		return false;
 	}
 
