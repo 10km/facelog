@@ -22,7 +22,6 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.base.Strings;
-import com.google.common.cache.CacheLoader.InvalidCacheLoadException;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
@@ -128,11 +127,7 @@ public class DaoManagement extends BaseDao {
 		return Iterators.tryFind(personGroupList.iterator(), new Predicate<PersonGroupBean>(){
 			@Override
 			public boolean apply(PersonGroupBean input) {
-				try {
-					return daoExistsPermit(deviceGroupId, input.getId());	
-				} catch (InvalidCacheLoadException e) {
-					return false;
-				}				
+					return daoExistsPermit(deviceGroupId, input.getId());
 			}}).isPresent();
 	}
 	/**
