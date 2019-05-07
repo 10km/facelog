@@ -69,7 +69,7 @@ public class PermitCache extends BaseJunctionTableCache<Integer,Integer, PermitB
     @Override
     protected Object loadfromDatabase(Key key)throws Exception {
         if(null != key.k1 && null != key.k2){
-            return manager.loadByPrimaryKey(key.k1, key.k2);
+            return manager.loadByPrimaryKeyChecked(key.k1, key.k2);
         }
         PermitBean bean = new PermitBean();
         if(null != key.k1){
