@@ -156,6 +156,21 @@ public class IFaceLogClientAsync extends IFaceLogThriftClientAsync {
 			}
 		});
 	}
-
+	/**
+	 * @param token
+	 * @return
+	 * @see net.gdface.facelog.client.ClientExtendTools#getRedisParametersSupplier(net.gdface.facelog.Token)
+	 */
+	public Supplier<Map<MQParam, String>> getRedisParametersSupplier(Token token) {
+		return clientTools.getRedisParametersSupplier(token);
+	}
+	/**
+	 * @param token
+	 * @return
+	 * @see net.gdface.facelog.client.ClientExtendTools#getMonitorChannelSupplier(net.gdface.facelog.Token)
+	 */
+	public Supplier<String> getMonitorChannelSupplier(Token token) {
+		return clientTools.getMonitorChannelSupplier(token);
+	}
 
 }

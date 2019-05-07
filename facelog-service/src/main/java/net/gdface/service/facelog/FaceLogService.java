@@ -8,10 +8,15 @@ import org.apache.commons.configuration2.CombinedConfiguration;
 import com.facebook.swift.service.ThriftEventHandler;
 import com.facebook.swift.service.ThriftServerConfig;
 import com.facebook.swift.service.ThriftServerService;
+import com.google.common.util.concurrent.MoreExecutors;
+
+import gu.simplemq.Channel;
+import gu.simplemq.redis.RedisFactory;
 import io.airlift.units.Duration;
 import net.gdface.facelog.CommonConstant;
 import net.gdface.facelog.FaceLogImpl;
 import net.gdface.facelog.GlobalConfig;
+import net.gdface.facelog.ServiceEvent;
 import net.gdface.facelog.decorator.IFaceLogThriftDecorator;
 
 import static com.google.common.base.Preconditions.*;
@@ -25,7 +30,7 @@ public class FaceLogService extends ThriftServerService implements CommonConstan
 	private static FaceLogService httpService;
 	// 封装为thrift服务的facelog接口静态实例
 	private static final IFaceLogThriftDecorator FACELOG = new IFaceLogThriftDecorator(new FaceLogImpl());
-	
+	private static final Channel<ServiceEvent> EVT_CHANNEL = new Channel<>(FACELOG_EVT_CHANNEL, ServiceEvent.class);
 	/**
 	 * 从配置文件中读取参数创建{@link ThriftServerConfig}实例
 	 * @return
@@ -52,19 +57,33 @@ public class FaceLogService extends ThriftServerService implements CommonConstan
 	 * @return
 	 */
 	public static synchronized final FaceLogService buildService(){
-		return service = buildService(service,makeThriftServerConfig());
+		service = buildService(service,makeThriftServerConfig());
+		service.addListener(new Listener(){
+			@Override
+			public void starting() {
+				RedisFactory.getPublisher().publish(EVT_CHANNEL, ServiceEvent.FRAME_ONLINE);
+			}
+		}, MoreExecutors.directExecutor());
+		return service;
 	}
 	/**
 	 * 创建HTTP服务实例(http,json)
 	 * @return
 	 */
 	public static synchronized final FaceLogService buildHttpService(){
-		return httpService = buildService(httpService,
+		httpService = buildService(httpService,
 				makeThriftServerConfig()
 					.setPort(GlobalConfig.getConfig().getInt(XHR_PORT, DEFAULT_PORT_XHR))
 					.setIdleConnectionTimeout(Duration.valueOf("100ms"))
 					.setTransportName(ThriftServerService.HTTP_TRANSPORT)
 					.setProtocolName(ThriftServerService.JSON_PROTOCOL));
+		httpService.addListener(new Listener(){
+			@Override
+			public void starting() {
+				RedisFactory.getPublisher().publish(EVT_CHANNEL, ServiceEvent.XHR_ONLINE);
+			}
+		}, MoreExecutors.directExecutor());
+		return httpService;
 	}
 
 	/**

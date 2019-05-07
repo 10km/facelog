@@ -69,7 +69,7 @@ public class HeartbeatTest implements ChannelConstant{
 	public void test1SendHB() {
 		Heartbeat hb = Heartbeat.makeHeartbeat(12345, JedisPoolLazy.getDefaultInstance())
 				/** 将设备心跳包数据发送到指定的设备心跳监控通道名,否则监控端无法收到设备心跳包 */
-				.setMonitorChannel(monitorChannelName);
+				.setMonitorChannelSupplier(facelogClient.getMonitorChannelSupplier(rootToken));
 		/** 以默认间隔启动定时任务 */
 		hb.start();
 		System.out.println("Heartbeat thead start");

@@ -21,6 +21,8 @@ public interface CommonConstant {
     public static final int DEFAULT_HEARTBEAT_PERIOD = 8;
     /** 默认心跳包失效时间(秒) */
     public static final int DEFAULT_HEARTBEAT_EXPIRE = 60;
+    /* 服务端状态频道名 */
+    public static final String FACELOG_EVT_CHANNEL = "FACELOG_EVT";
     /** 心跳包报道数据 */
     public static class HeadbeatPackage{
         /** 设备ID */

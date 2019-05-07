@@ -166,6 +166,7 @@ public class Heartbeat implements ChannelConstant{
 	 * @param channel 
 	 * @return 当前 {@link Heartbeat}实例
 	 * @throws IllegalArgumentException {@code channel}为{@code null}或空
+	 * @deprecated
 	 */
 	public Heartbeat setMonitorChannel(String channel){
 		checkArgument(!Strings.isNullOrEmpty(channel),"channel is null or empty");
