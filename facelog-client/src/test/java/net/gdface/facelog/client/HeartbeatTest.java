@@ -13,12 +13,10 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
 
-import gu.simplemq.Channel;
 import gu.simplemq.IMessageAdapter;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.JedisPoolLazy.PropName;
-import gu.simplemq.redis.RedisFactory;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.device.Heartbeat;
@@ -78,7 +76,11 @@ public class HeartbeatTest implements ChannelConstant{
 		hb.start();
 		System.out.println("Heartbeat thead start");
 		/** 间隔2秒发送心跳，重新启动定时任务 */
-		hb.setInterval(2, TimeUnit.SECONDS).start();
+		try {
+			hb.setInterval(2, TimeUnit.SECONDS).start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	/**
 	 * 管理端心跳包监控测试
@@ -92,12 +94,10 @@ public class HeartbeatTest implements ChannelConstant{
 				// 显示收到的心跳包
 				logger.info(t.toString());
 			}};
-		Channel<HeadbeatPackage> hbMonitorChannel = new Channel<HeadbeatPackage>(monitorChannelName,hbAdapter){};
-		// 注册，订阅设备心跳监控频道消息
-		RedisFactory.getSubscriber().register(hbMonitorChannel);
 		
-		/** 20秒后结束测试 */
-		Thread.sleep(40*1000);
+		new HeartbeatMonitor(hbAdapter,facelogClient.getMonitorChannelSupplier(rootToken)).start();
+		/** 40秒后结束测试 */
+		Thread.sleep(60*1000);
 	}
 	public static class TokenHelperTestImpl extends TokenHelper {
 		final static TokenHelperTestImpl INSTANCE = new TokenHelperTestImpl(); 
