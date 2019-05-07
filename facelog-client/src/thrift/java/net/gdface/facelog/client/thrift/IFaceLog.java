@@ -137,6 +137,17 @@ public interface IFaceLog
             @ThriftField(value=2, name="isMd5", requiredness=Requiredness.REQUIRED) final boolean isMd5
         );
 
+        @ThriftMethod(value = "applyUserToken",
+                      exception = {
+                          @ThriftException(type=ServiceSecurityException.class, id=1),
+                          @ThriftException(type=ServiceRuntimeException.class, id=2)
+                      })
+        ListenableFuture<Token> applyUserToken(
+            @ThriftField(value=1, name="userid", requiredness=Requiredness.REQUIRED) final int userid,
+            @ThriftField(value=2, name="password", requiredness=Requiredness.OPTIONAL) final String password,
+            @ThriftField(value=3, name="isMd5", requiredness=Requiredness.REQUIRED) final boolean isMd5
+        );
+
         @ThriftMethod(value = "bindBorder",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -722,6 +733,22 @@ public interface IFaceLog
             @ThriftField(value=1, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
+        @ThriftMethod(value = "isValidToken",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Boolean> isValidToken(
+            @ThriftField(value=1, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        );
+
+        @ThriftMethod(value = "isValidUserToken",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Boolean> isValidUserToken(
+            @ThriftField(value=1, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        );
+
         @ThriftMethod(value = "listOfParentForDeviceGroup",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -920,6 +947,15 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=2)
                       })
         ListenableFuture<Void> releaseRootToken(
+            @ThriftField(value=1, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        );
+
+        @ThriftMethod(value = "releaseUserToken",
+                      exception = {
+                          @ThriftException(type=ServiceSecurityException.class, id=1),
+                          @ThriftException(type=ServiceRuntimeException.class, id=2)
+                      })
+        ListenableFuture<Void> releaseUserToken(
             @ThriftField(value=1, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
@@ -1304,6 +1340,17 @@ public interface IFaceLog
     Token applyRootToken(
         @ThriftField(value=1, name="password", requiredness=Requiredness.OPTIONAL) final String password,
         @ThriftField(value=2, name="isMd5", requiredness=Requiredness.REQUIRED) final boolean isMd5
+    ) throws ServiceSecurityException, ServiceRuntimeException;
+
+    @ThriftMethod(value = "applyUserToken",
+                  exception = {
+                      @ThriftException(type=ServiceSecurityException.class, id=1),
+                      @ThriftException(type=ServiceRuntimeException.class, id=2)
+                  })
+    Token applyUserToken(
+        @ThriftField(value=1, name="userid", requiredness=Requiredness.REQUIRED) final int userid,
+        @ThriftField(value=2, name="password", requiredness=Requiredness.OPTIONAL) final String password,
+        @ThriftField(value=3, name="isMd5", requiredness=Requiredness.REQUIRED) final boolean isMd5
     ) throws ServiceSecurityException, ServiceRuntimeException;
 
     @ThriftMethod(value = "bindBorder",
@@ -1891,6 +1938,22 @@ public interface IFaceLog
         @ThriftField(value=1, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 
+    @ThriftMethod(value = "isValidToken",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    boolean isValidToken(
+        @ThriftField(value=1, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "isValidUserToken",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    boolean isValidUserToken(
+        @ThriftField(value=1, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+    ) throws ServiceRuntimeException;
+
     @ThriftMethod(value = "listOfParentForDeviceGroup",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -2089,6 +2152,15 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=2)
                   })
     void releaseRootToken(
+        @ThriftField(value=1, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+    ) throws ServiceSecurityException, ServiceRuntimeException;
+
+    @ThriftMethod(value = "releaseUserToken",
+                  exception = {
+                      @ThriftException(type=ServiceSecurityException.class, id=1),
+                      @ThriftException(type=ServiceRuntimeException.class, id=2)
+                  })
+    void releaseUserToken(
         @ThriftField(value=1, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceSecurityException, ServiceRuntimeException;
 

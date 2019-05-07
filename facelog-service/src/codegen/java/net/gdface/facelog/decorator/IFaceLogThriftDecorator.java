@@ -400,6 +400,35 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#applyUserToken(int,java.lang.String,boolean)}
+     */
+    @ThriftMethod(value = "applyUserToken" ,exception = {
+                @ThriftException(type=ServiceSecurityException.class, id=1),
+                @ThriftException(type=ServiceRuntimeException.class, id=2)
+                })
+    public Token applyUserToken(int userid,
+        String password,
+        boolean isMd5) 
+        throws ServiceSecurityException,ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().applyUserToken(userid,
+                password,
+                isMd5),
+                    net.gdface.facelog.Token.class,
+                    Token.class);
+        }
+        catch(net.gdface.facelog.ServiceSecurityException e){
+            throw new ServiceSecurityException(e);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#bindBorder(java.lang.Integer,java.lang.Integer,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "bindBorder" )
@@ -1773,6 +1802,44 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#isValidToken(net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "isValidToken" )
+    public boolean isValidToken(Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return delegate().isValidToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#isValidUserToken(net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "isValidUserToken" )
+    public boolean isValidUserToken(Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return delegate().isValidUserToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#listOfParentForDeviceGroup(int)}
      */
     @ThriftMethod(value = "listOfParentForDeviceGroup" )
@@ -2259,6 +2326,31 @@ public class IFaceLogThriftDecorator {
         throws ServiceSecurityException,ServiceRuntimeException{
         try{
              delegate().releaseRootToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
+        }
+        catch(net.gdface.facelog.ServiceSecurityException e){
+            throw new ServiceSecurityException(e);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#releaseUserToken(net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "releaseUserToken" ,exception = {
+                @ThriftException(type=ServiceSecurityException.class, id=1),
+                @ThriftException(type=ServiceRuntimeException.class, id=2)
+                })
+    public void releaseUserToken(Token token) 
+        throws ServiceSecurityException,ServiceRuntimeException{
+        try{
+             delegate().releaseUserToken(TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.Token.class));

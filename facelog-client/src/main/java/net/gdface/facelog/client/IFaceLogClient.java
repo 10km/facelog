@@ -12,7 +12,6 @@ import gu.dtalk.MenuItem;
 import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.IFaceLogDecorator;
 import net.gdface.facelog.MQParam;
-import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
@@ -114,17 +113,6 @@ public class IFaceLogClient extends IFaceLogDecorator {
 		return clientTools.getCmdSnSupplier(token);
 	}
 	/**
-	 * @param userid
-	 * @param password
-	 * @param isMd5
-	 * @return
-	 * @throws ServiceSecurityException
-	 * @see net.gdface.facelog.client.ClientExtendTools#applyUserToken(int, java.lang.String, boolean)
-	 */
-	public Token applyUserToken(int userid, String password, boolean isMd5) throws ServiceSecurityException {
-		return clientTools.applyUserToken(userid, password, isMd5);
-	}
-	/**
 	 * @param deviceToken
 	 * @param rootMenu
 	 * @return
@@ -159,7 +147,7 @@ public class IFaceLogClient extends IFaceLogDecorator {
 	}
 	/**
 	 * @param token
-	 * @return
+	 * @return 返回一个获取redis参数的{@link Supplier}实例
 	 * @see net.gdface.facelog.client.ClientExtendTools#getRedisParametersSupplier(net.gdface.facelog.Token)
 	 */
 	public Supplier<Map<MQParam, String>> getRedisParametersSupplier(Token token) {
@@ -167,11 +155,27 @@ public class IFaceLogClient extends IFaceLogDecorator {
 	}
 	/**
 	 * @param token
-	 * @return
+	 * @return 返回一个获取设备心跳实时监控通道名的{@link Supplier}实例
 	 * @see net.gdface.facelog.client.ClientExtendTools#getMonitorChannelSupplier(net.gdface.facelog.Token)
 	 */
 	public Supplier<String> getMonitorChannelSupplier(Token token) {
 		return clientTools.getMonitorChannelSupplier(token);
 	}
-
+	/**
+	 * @param helper
+	 * @param token
+	 * @return
+	 * @see net.gdface.facelog.client.ClientExtendTools#initTokenSupplier(net.gdface.facelog.client.TokenHelper, net.gdface.facelog.Token)
+	 */
+	public Supplier<Token> initTokenSupplier(TokenHelper helper, Token token) {
+		return clientTools.initTokenSupplier(helper, token);
+	}
+	public IFaceLogClient addServiceEventListener(ServiceEventListener listener){
+		clientTools.addServiceEventListener(listener);	
+		return this;
+	}
+	public IFaceLogClient removeServiceEventListener(ServiceEventListener listener){
+		clientTools.removeServiceEventListener(listener);
+		return this;
+	}
 }

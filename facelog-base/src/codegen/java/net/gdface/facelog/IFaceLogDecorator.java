@@ -225,6 +225,29 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public Token applyUserToken (int userid,String password,boolean isMd5) throws ServiceSecurityException{
+        return delegate().applyUserToken(userid,password,isMd5);
+    }
+
+    /**
+     * {@link IFaceLog#applyUserToken(int,java.lang.String,boolean)}对应的unchecked方法,
+     * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
+     * @param userid
+     * @param password
+     * @param isMd5
+     * @return Token
+     */
+    public Token applyUserTokenUnchecked (int userid,String password,boolean isMd5) {
+        try{
+            return delegate().applyUserToken(userid,password,isMd5);
+        } catch(RuntimeException e){
+            throw e;
+        } catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public void bindBorder (Integer personGroupId,Integer deviceGroupId,Token token) {
          delegate().bindBorder(personGroupId,deviceGroupId,token);
     }
@@ -575,6 +598,16 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public boolean isValidToken (Token token) {
+        return delegate().isValidToken(token);
+    }
+
+    @Override
+    public boolean isValidUserToken (Token token) {
+        return delegate().isValidUserToken(token);
+    }
+
+    @Override
     public List<Integer> listOfParentForDeviceGroup (int deviceGroupId) {
         return delegate().listOfParentForDeviceGroup(deviceGroupId);
     }
@@ -762,6 +795,27 @@ public class IFaceLogDecorator implements IFaceLog{
     public void releaseRootTokenUnchecked (Token token) {
         try{
              delegate().releaseRootToken(token);
+        } catch(RuntimeException e){
+            throw e;
+        } catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void releaseUserToken (Token token) throws ServiceSecurityException{
+         delegate().releaseUserToken(token);
+    }
+
+    /**
+     * {@link IFaceLog#releaseUserToken(Token)}对应的unchecked方法,
+     * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
+     * @param token
+     * @return void
+     */
+    public void releaseUserTokenUnchecked (Token token) {
+        try{
+             delegate().releaseUserToken(token);
         } catch(RuntimeException e){
             throw e;
         } catch(Exception e){

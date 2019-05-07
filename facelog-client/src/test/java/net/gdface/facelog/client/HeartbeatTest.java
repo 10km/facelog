@@ -51,11 +51,15 @@ public class HeartbeatTest implements ChannelConstant{
 		// 根据连接参数创建默认实例 
 		JedisPoolLazy.createDefaultInstance( redisParam);
 		// 创建服务实例
-		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLogThriftClient.class, IFaceLogClient.class);
+		facelogClient = ClientFactory.builder()
+				.setHostAndPort("127.0.0.1", DEFAULT_PORT)
+				.setDecorator(RefreshTokenDecorator.makeDecoratorFunction(TokenHelperTestImpl.INSTANCE))
+				.build(IFaceLogThriftClient.class, IFaceLogClient.class);
 		// 申请令牌
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 		// 从facelog service 获取心跳监控频道名 
 		monitorChannelName = facelogClient.getRedisParameters(rootToken).get(MQParam.HB_MONITOR_CHANNEL);
+		facelogClient.initTokenSupplier(TokenHelperTestImpl.INSTANCE, rootToken);
 		logger.info("monitorChannelName = {}",monitorChannelName);
 	}
 	@AfterClass
@@ -82,17 +86,33 @@ public class HeartbeatTest implements ChannelConstant{
 	 */
 	@Test
 	public void test2HBMonitor() throws InterruptedException{
-		Channel<HeadbeatPackage> hbMonitorChannel = new Channel<HeadbeatPackage>(monitorChannelName,
-				new IMessageAdapter<HeadbeatPackage>(){
+		IMessageAdapter<HeadbeatPackage> hbAdapter = new IMessageAdapter<HeadbeatPackage>(){
 			@Override
 			public void onSubscribe(HeadbeatPackage t) throws SmqUnsubscribeException {
 				// 显示收到的心跳包
 				logger.info(t.toString());
-			}}){};
+			}};
+		Channel<HeadbeatPackage> hbMonitorChannel = new Channel<HeadbeatPackage>(monitorChannelName,hbAdapter){};
 		// 注册，订阅设备心跳监控频道消息
 		RedisFactory.getSubscriber().register(hbMonitorChannel);
 		
 		/** 20秒后结束测试 */
-		Thread.sleep(20*1000);
+		Thread.sleep(40*1000);
+	}
+	public static class TokenHelperTestImpl extends TokenHelper {
+		final static TokenHelperTestImpl INSTANCE = new TokenHelperTestImpl(); 
+		public TokenHelperTestImpl() {
+		}
+
+		@Override
+		public String passwordOf(int id) {
+			return "guyadong";
+		}
+
+		@Override
+		public boolean isHashedPwd() {
+			return false;
+		}
+
 	}
 }

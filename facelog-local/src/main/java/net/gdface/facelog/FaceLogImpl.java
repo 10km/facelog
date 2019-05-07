@@ -1229,6 +1229,38 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
 	}
 	@Override
+	public Token applyUserToken(int userid,String password,boolean isMd5) throws ServiceSecurityException{
+		try{
+			if(userid == -1){
+				return tm.applyRootToken(password, isMd5);
+			}else{
+				return tm.applyPersonToken(userid, password, isMd5);
+			}
+		} catch (RuntimeException e) {
+			return throwServiceException(e);
+		}
+	}
+	@Override
+	public void releaseUserToken(Token token)
+			throws ServiceSecurityException{
+    	try{
+    		if(token != null){
+    			switch (token.getType()) {
+				case PERSON:
+					tm.releasePersonToken(token);
+					break;
+				case ROOT:
+					tm.releaseRootToken(token);
+					break;
+				default:
+					throw new ServiceSecurityException("UNSUPPORTED TOKEN TYPE " + token.getType());
+				}	
+    		}
+    	} catch (RuntimeException e) {
+			throwServiceException(e);
+		}
+	}
+	@Override
 	public boolean isValidPassword(String userId,String password, boolean isMd5) {
     	try{
     		return tm.isValidPassword(userId, password, isMd5);
@@ -1274,7 +1306,6 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			throw wrapServiceRuntimeException(e);
 		} 
 	}
-	/** 验证设备令牌是否有效 */
 	@Override
 	public boolean isValidDeviceToken(Token token){
     	try {
@@ -1283,7 +1314,6 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			throw wrapServiceRuntimeException(e);
 		} 
 	}
-	/** 验证人员令牌是否有效 */
 	@Override
 	public boolean isValidPersonToken(Token token){
     	try {
@@ -1292,11 +1322,27 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			throw wrapServiceRuntimeException(e);
 		} 
 	}
-	/** 验证root令牌是否有效 */
 	@Override
 	public boolean isValidRootToken(Token token){
     	try {
 			return tm.isValidRootToken(token);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} 
+	}
+	
+	@Override
+	public boolean isValidUserToken(Token token){
+    	try {
+   			return tm.isValidUserToken(token);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} 
+	}
+	@Override
+	public boolean isValidToken(Token token){
+    	try {
+   			return tm.isValidToken(token);
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		} 
