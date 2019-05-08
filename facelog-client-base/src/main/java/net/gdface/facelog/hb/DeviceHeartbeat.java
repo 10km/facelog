@@ -25,7 +25,6 @@ import gu.simplemq.redis.RedisTable;
 import net.gdface.facelog.DeviceHeadbeatPackage;
 import net.gdface.facelog.ServiceHeartbeatPackage;
 import net.gdface.facelog.client.ChannelConstant;
-import net.gdface.facelog.hb.BaseServiceHeartbeatListener;
 
 import static gu.dtalk.engine.DeviceUtils.DEVINFO_PROVIDER;
 /**
