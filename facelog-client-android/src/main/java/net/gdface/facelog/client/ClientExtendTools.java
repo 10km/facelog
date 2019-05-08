@@ -35,7 +35,7 @@ import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.hb.BaseServiceHeartbeatListener;
 import net.gdface.facelog.hb.DeviceHeartbeatListener;
-import net.gdface.facelog.hb.Heartbeat;
+import net.gdface.facelog.hb.DeviceHeartbeat;
 import net.gdface.facelog.hb.HeartbeatMonitor;
 import net.gdface.facelog.hb.ServiceHeartbeatAdapter;
 import net.gdface.facelog.hb.ServiceHeartbeatListener;
@@ -745,14 +745,14 @@ public class ClientExtendTools{
 	}
 	/**
 	 * 创建设备心跳包发送对象<br>
-	 * {@link Heartbeat}为单实例,该方法只能调用一次
+	 * {@link DeviceHeartbeat}为单实例,该方法只能调用一次
 	 * @param deviceID 设备ID
 	 * @param token 设备令牌
 	 * @param jedisPoolLazy jedis连接池对象，为{@code null}使用默认实例
-	 * @return {@link Heartbeat}实例
+	 * @return {@link DeviceHeartbeat}实例
 	 */
-	public Heartbeat makeHeartbeat(int deviceID,Token token,JedisPoolLazy jedisPoolLazy){
-		Heartbeat heartbeat = Heartbeat.makeHeartbeat(
+	public DeviceHeartbeat makeHeartbeat(int deviceID,Token token,JedisPoolLazy jedisPoolLazy){
+		DeviceHeartbeat heartbeat = DeviceHeartbeat.makeHeartbeat(
 				deviceID,
 				MoreObjects.firstNonNull(jedisPoolLazy,JedisPoolLazy.getDefaultInstance()))
 				/** 将设备心跳包数据发送到指定的设备心跳监控通道名,否则监控端无法收到设备心跳包 */

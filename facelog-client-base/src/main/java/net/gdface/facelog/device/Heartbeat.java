@@ -35,7 +35,7 @@ import static gu.dtalk.engine.DeviceUtils.DEVINFO_PROVIDER;
  * 调用{@link #start()}心跳开始<br>
  * 应用程序结束时心跳包线程自动停止
  * @author guyadong
- * @deprecated replaced by {@link net.gdface.facelog.hb.Heartbeat}
+ * @deprecated replaced by {@link net.gdface.facelog.hb.DeviceHeartbeat}
  *
  */
 public class Heartbeat extends BaseServiceHeartbeatListener implements ChannelConstant{
