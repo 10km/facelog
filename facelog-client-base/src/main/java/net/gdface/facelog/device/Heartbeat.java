@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
@@ -69,7 +70,7 @@ public class Heartbeat extends BaseServiceHeartbeatListener implements ChannelCo
 				table.expire(hardwareAddress);
 				Channel<DeviceHeadbeatPackage> monitorChannel = monitorChannelSupplier.get();
 				if(null != monitorChannel){
-					logger.info("send hb ->{}",monitorChannel.name);
+//					logger.info("send hb ->{}",monitorChannel.name);
 					publisher.publish(monitorChannel, heartBeatPackage);
 				}				
 			} catch (Exception e) {
@@ -92,17 +93,18 @@ public class Heartbeat extends BaseServiceHeartbeatListener implements ChannelCo
 	/**
 	 * 构造方法
 	 * @param deviceID 当前设备ID
-	 * @param poolLazy redis 连接池对象
+	 * @param jedisPoolLazy redis 连接池对象,为{@code null}使用默认实例
 	 * @throws NullPointerException {@code poolLazy}为{@code null}
 	 * @throws IllegalArgumentException {@code hardwareAddress}无效
 	 */
-	private Heartbeat(int deviceID, JedisPoolLazy poolLazy) {
+	private Heartbeat(int deviceID, JedisPoolLazy jedisPoolLazy) {
+		jedisPoolLazy = MoreObjects.firstNonNull(jedisPoolLazy,JedisPoolLazy.getDefaultInstance());
 		this.heartBeatPackage = new DeviceHeadbeatPackage().setDeviceId(deviceID);
-		this.publisher = RedisFactory.getPublisher(checkNotNull(poolLazy,"pool is null"));
+		this.publisher = RedisFactory.getPublisher(jedisPoolLazy);
 		this.scheduledExecutor =new ScheduledThreadPoolExecutor(1,
 				new ThreadFactoryBuilder().setNameFormat("heartbeat-pool-%d").build());	
 		this.timerExecutor = MoreExecutors.getExitingScheduledExecutorService(	scheduledExecutor);
-		this.table =  RedisFactory.getTable(TABLE_HEARTBEAT, poolLazy);
+		this.table =  RedisFactory.getTable(TABLE_HEARTBEAT, jedisPoolLazy);
 		this.table.setExpire(DEFAULT_HEARTBEAT_EXPIRE, TimeUnit.SECONDS);
 	}
 	/**

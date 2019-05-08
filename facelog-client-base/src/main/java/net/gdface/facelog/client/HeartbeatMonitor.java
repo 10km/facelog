@@ -27,26 +27,37 @@ import com.google.common.base.Objects;
 public class HeartbeatMonitor extends BaseServiceHeartbeatListener {
     public static final Logger logger = LoggerFactory.getLogger(HeartbeatMonitor.class);
 
-	public static final IMessageAdapter<DeviceHeadbeatPackage> DEF_ADAPTER = new IMessageAdapter<DeviceHeadbeatPackage>(){
+	public static final IMessageAdapter<DeviceHeadbeatPackage> DEF_DEVICE_ADAPTER = new IMessageAdapter<DeviceHeadbeatPackage>(){
 
 		@Override
 		public void onSubscribe(DeviceHeadbeatPackage t) throws SmqUnsubscribeException {
 		}};
-	private IMessageAdapter<DeviceHeadbeatPackage> hbAdapter = DEF_ADAPTER;
+	private IMessageAdapter<DeviceHeadbeatPackage> hbAdapter = DEF_DEVICE_ADAPTER;
 	private final Supplier<String> channelSupplier;
 	private volatile String channelName ;
 	private final RedisSubscriber subscriber;
+	/**
+	 * 构造方法
+	 * @param hbAdapter 设备心跳包侦听实例
+	 * @param channelSupplier 心跳包频道名的{@link Supplier}实例，用于提供当前的心跳包频道名
+	 * @param jedisPoolLazy jedis连接池对象,为{@code null}使用默认实例
+	 */
 	public HeartbeatMonitor(IMessageAdapter<DeviceHeadbeatPackage> hbAdapter,Supplier<String> channelSupplier,JedisPoolLazy jedisPoolLazy) {
 		super();
-		this.hbAdapter = MoreObjects.firstNonNull(hbAdapter,DEF_ADAPTER);
+		this.hbAdapter = MoreObjects.firstNonNull(hbAdapter,DEF_DEVICE_ADAPTER);
 		this.channelSupplier = checkNotNull(channelSupplier,"channelSupplier is null");
-		this.subscriber = RedisFactory.getSubscriber(checkNotNull(jedisPoolLazy,"jedisPoolLazy is null"));
+		this.subscriber = RedisFactory.getSubscriber(MoreObjects.firstNonNull(jedisPoolLazy,JedisPoolLazy.getDefaultInstance()));
 	}
+	/**
+	 * 构造方法
+	 * @param hbAdapter 设备心跳包侦听实例
+	 * @param channelSupplier 心跳包频道名的{@link Supplier}实例，用于提供当前的心跳包频道名
+	 */
 	public HeartbeatMonitor(IMessageAdapter<DeviceHeadbeatPackage> hbAdapter,Supplier<String> channelSupplier){
 		this(hbAdapter, channelSupplier, JedisPoolLazy.getDefaultInstance());
 	}
 	public HeartbeatMonitor(Supplier<String> channelSupplier){
-		this(DEF_ADAPTER, channelSupplier);
+		this(DEF_DEVICE_ADAPTER, channelSupplier);
 	}
 
 	@Override
@@ -84,9 +95,17 @@ public class HeartbeatMonitor extends BaseServiceHeartbeatListener {
 			}
 		}
 	}
+	/**
+	 * @return 返回设备心跳包侦听实例
+	 */
 	public IMessageAdapter<DeviceHeadbeatPackage> getHbAdapter() {
 		return hbAdapter;
 	}
+	/**
+	 * 设置设备心跳包侦听实例
+	 * @param hbAdapter 不可为{@code null}
+	 * @return
+	 */
 	public HeartbeatMonitor setHbAdapter(IMessageAdapter<DeviceHeadbeatPackage> hbAdapter) {
 		this.hbAdapter = checkNotNull(hbAdapter,"hbAdapter is null");
 		return this;

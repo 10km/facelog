@@ -9,11 +9,13 @@ import java.util.Map;
 import com.google.common.base.Supplier;
 
 import gu.dtalk.MenuItem;
+import gu.simplemq.redis.JedisPoolLazy;
 import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.IFaceLogDecorator;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
+import net.gdface.facelog.device.Heartbeat;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.utils.Delegator;
 
@@ -162,20 +164,52 @@ public class IFaceLogClient extends IFaceLogDecorator {
 		return clientTools.getMonitorChannelSupplier(token);
 	}
 	/**
+	 * 返回有效令牌的{@link Supplier}实例<br>
+	 * 实现在服务端重启后令牌的自动刷新
 	 * @param helper
 	 * @param token
-	 * @return
-	 * @see net.gdface.facelog.client.ClientExtendTools#initTokenSupplier(net.gdface.facelog.client.TokenHelper, net.gdface.facelog.Token)
+	 * @return {@link Supplier}实例
 	 */
 	public Supplier<Token> initTokenSupplier(TokenHelper helper, Token token) {
 		return clientTools.initTokenSupplier(helper, token);
 	}
+	/**
+	 * 添加服务心跳侦听器
+	 * @param listener
+	 * @return 当前{@link IFaceLogClient}对象
+	 */
 	public IFaceLogClient addServiceEventListener(ServiceHeartbeatListener listener){
 		clientTools.addServiceEventListener(listener);	
 		return this;
 	}
+	/**
+	 * 删除服务心跳侦听器
+	 * @param listener
+	 * @return 当前{@link IFaceLogClient}对象
+	 */
 	public IFaceLogClient removeServiceEventListener(ServiceHeartbeatListener listener){
 		clientTools.removeServiceEventListener(listener);
 		return this;
+	}
+	/**
+	 * 创建设备心跳包侦听对象
+	 * @param listener 设备心跳侦听器实例
+	 * @param token 令牌
+	 * @param jedisPoolLazy jedis连接池对象，为{@code null}使用默认实例
+	 * @return 返回{@link HeartbeatMonitor}实例
+	 */
+	public HeartbeatMonitor makeHeartbeatMonitor(DeviceHeartbeatListener listener, Token token,JedisPoolLazy jedisPoolLazy) {
+		return clientTools.makeHeartbeatMonitor(listener, token, jedisPoolLazy);
+	}
+	/**
+	 * 创建设备心跳包发送对象<br>
+	 * {@link Heartbeat}为单实例,该方法只能调用一次
+	 * @param deviceID 设备ID
+	 * @param token 设备令牌
+	 * @param jedisPoolLazy jedis连接池对象，为{@code null}使用默认实例
+	 * @return {@link Heartbeat}实例
+	 */
+	public Heartbeat makeHeartbeat(int deviceID, Token token, JedisPoolLazy jedisPoolLazy) {
+		return clientTools.makeHeartbeat(deviceID, token, jedisPoolLazy);
 	}
 }

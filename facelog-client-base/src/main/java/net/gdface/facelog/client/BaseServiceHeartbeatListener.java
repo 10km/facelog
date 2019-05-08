@@ -5,8 +5,14 @@ import com.google.common.base.Objects;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
 import net.gdface.facelog.ServiceHeartbeatPackage;
 
+/**
+ * 服务心跳侦听器基类
+ * @author guyadong
+ *
+ */
 public class BaseServiceHeartbeatListener implements ServiceHeartbeatListener{
 	public static final ServiceHeartbeatListener EMPTY_LISTENER = new BaseServiceHeartbeatListener();
+	/** 服务ID */
 	private volatile Integer serviceID;
 	@Override
 	public final void onSubscribe(ServiceHeartbeatPackage heartbeatPackage) throws SmqUnsubscribeException {

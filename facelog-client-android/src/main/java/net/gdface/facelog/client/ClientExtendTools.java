@@ -13,7 +13,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 
 import com.google.common.base.Function;
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
@@ -21,7 +21,6 @@ import com.google.common.base.Suppliers;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 import gu.dtalk.MenuItem;
-import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import net.gdface.facelog.IFaceLog;
@@ -34,6 +33,7 @@ import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
 import net.gdface.facelog.client.dtalk.FacelogRedisConfigProvider;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.PersonBean;
+import net.gdface.facelog.device.Heartbeat;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.facelog.thrift.IFaceLogThriftClientAsync;
 import net.gdface.thrift.ClientFactory;
@@ -49,20 +49,11 @@ public class ClientExtendTools{
 	private final IFaceLogThriftClientAsync asyncInstance;
 	private final ClientFactory factory;
 	private final Map<MQParam, String> redisParameters = Maps.newConcurrentMap();
-	private final ServiceHeartbeatListener tokenRefreshListener = new ServiceHeartbeatListener(){
-		private Integer serviceID;
+	private final ServiceHeartbeatListener tokenRefreshListener = new BaseServiceHeartbeatListener(){
 		@Override
-		public void onSubscribe(ServiceHeartbeatPackage heartbeatPackage) throws SmqUnsubscribeException {
-			// 比较服务ID是否相等，不相等则执行令牌刷新，更新redis参数
-			// 确保每次服务端重启后都执行令牌刷新和redis参数
-			if(!Objects.equal(heartbeatPackage.getId(),serviceID)){				
-				// 刷新令牌
-				if(tokenRefresh !=null){			
-					if(tokenRefresh.refresh()){
-						serviceID = heartbeatPackage.getId();
-					}
-				}
-			}			
+		public boolean doServiceOnline(ServiceHeartbeatPackage heartbeatPackage){
+			// 执行令牌刷新，更新redis参数
+			return tokenRefresh !=null && tokenRefresh.refresh();
 		}};
 	private Map<MQParam, String> updateRedisParameters(Map<MQParam, String>param){
 		synchronized (redisParameters) {
@@ -569,8 +560,8 @@ public class ClientExtendTools{
     	Token token;
     	try {
 			token = syncInstance != null 
-					? syncInstance.applyPersonToken(userid, password, isMd5)
-					: asyncInstance.applyPersonToken(userid, password, isMd5).get();
+					? syncInstance.applyUserToken(userid, password, isMd5)
+					: asyncInstance.applyUserToken(userid, password, isMd5).get();
     		return token;
     	} catch (ExecutionException e) {
     		Throwables.propagateIfPossible(e.getCause(), ServiceSecurityException.class);
@@ -731,5 +722,37 @@ public class ClientExtendTools{
 	public Supplier<Token> initTokenSupplier(TokenHelper helper,Token token){
 		this.tokenRefresh = new TokenRefresh(helper, token);
 		return this.tokenRefresh;
+	}
+	/**
+	 * 创建设备心跳包侦听对象
+	 * @param listener
+	 * @param token
+	 * @param jedisPoolLazy jedis连接池对象，为{@code null}使用默认实例
+	 * @return 返回{@link HeartbeatMonitor}实例
+	 */
+	public HeartbeatMonitor makeHeartbeatMonitor(DeviceHeartbeatListener listener,Token token, JedisPoolLazy jedisPoolLazy) {
+		HeartbeatMonitor monitor = new HeartbeatMonitor(
+				listener,
+				getMonitorChannelSupplier(token),
+				MoreObjects.firstNonNull(jedisPoolLazy,JedisPoolLazy.getDefaultInstance()));
+		addServiceEventListener(monitor);
+		return monitor;
+	}
+	/**
+	 * 创建设备心跳包发送对象<br>
+	 * {@link Heartbeat}为单实例,该方法只能调用一次
+	 * @param deviceID 设备ID
+	 * @param token 设备令牌
+	 * @param jedisPoolLazy jedis连接池对象，为{@code null}使用默认实例
+	 * @return {@link Heartbeat}实例
+	 */
+	public Heartbeat makeHeartbeat(int deviceID,Token token,JedisPoolLazy jedisPoolLazy){
+		Heartbeat heartbeat = Heartbeat.makeHeartbeat(
+				deviceID,
+				MoreObjects.firstNonNull(jedisPoolLazy,JedisPoolLazy.getDefaultInstance()))
+				/** 将设备心跳包数据发送到指定的设备心跳监控通道名,否则监控端无法收到设备心跳包 */
+				.setMonitorChannelSupplier(getMonitorChannelSupplier(token));
+		addServiceEventListener(heartbeat);
+		return heartbeat;
 	}
 }

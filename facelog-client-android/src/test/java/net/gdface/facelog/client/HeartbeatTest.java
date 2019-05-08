@@ -13,14 +13,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
 
-import gu.simplemq.IMessageAdapter;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.JedisPoolLazy.PropName;
 import net.gdface.facelog.DeviceHeadbeatPackage;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.Token;
-import net.gdface.facelog.device.Heartbeat;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
 import redis.clients.jedis.Protocol;
@@ -67,21 +65,21 @@ public class HeartbeatTest implements ChannelConstant{
 	}
 	/**
 	 * 设备端发送心跳包测试
+	 * @throws InterruptedException 
 	 */
 	@Test
-	public void test1SendHB() {
-		Heartbeat hb = Heartbeat.makeHeartbeat(12345, JedisPoolLazy.getDefaultInstance())
-				/** 将设备心跳包数据发送到指定的设备心跳监控通道名,否则监控端无法收到设备心跳包 */
-				.setMonitorChannelSupplier(facelogClient.getMonitorChannelSupplier(rootToken));
-		/** 以默认间隔启动定时任务 */
-		hb.start();
+	public void test1SendHB() throws InterruptedException {
+	
 		System.out.println("Heartbeat thead start");
-		/** 间隔2秒发送心跳，重新启动定时任务 */
 		try {
-			hb.setInterval(2, TimeUnit.SECONDS).start();
+			facelogClient.makeHeartbeat(12345, rootToken, null)
+				/** 间隔2秒发送心跳，重新启动定时任务 */
+				.setInterval(2, TimeUnit.SECONDS)
+				.start();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 	}
 	/**
 	 * 管理端心跳包监控测试
@@ -89,16 +87,16 @@ public class HeartbeatTest implements ChannelConstant{
 	 */
 	@Test
 	public void test2HBMonitor() throws InterruptedException{
-		IMessageAdapter<DeviceHeadbeatPackage> hbAdapter = new IMessageAdapter<DeviceHeadbeatPackage>(){
+		DeviceHeartbeatListener hbAdapter = new DeviceHeartbeatListener(){
 			@Override
 			public void onSubscribe(DeviceHeadbeatPackage t) throws SmqUnsubscribeException {
 				// 显示收到的心跳包
 				logger.info(t.toString());
 			}};
 		
-		new HeartbeatMonitor(hbAdapter,facelogClient.getMonitorChannelSupplier(rootToken)).start();
+		facelogClient.makeHeartbeatMonitor(hbAdapter, rootToken,null).start();
 		/** 40秒后结束测试 */
-		Thread.sleep(60*1000);
+		Thread.sleep(300*1000);
 	}
 	public static class TokenHelperTestImpl extends TokenHelper {
 		final static TokenHelperTestImpl INSTANCE = new TokenHelperTestImpl(); 

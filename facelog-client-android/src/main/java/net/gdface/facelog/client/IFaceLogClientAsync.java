@@ -11,9 +11,11 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import gu.dtalk.MenuItem;
+import gu.simplemq.redis.JedisPoolLazy;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
+import net.gdface.facelog.device.Heartbeat;
 import net.gdface.facelog.thrift.IFaceLogThriftClientAsync;
 import net.gdface.thrift.ClientFactory;
 
@@ -170,5 +172,24 @@ public class IFaceLogClientAsync extends IFaceLogThriftClientAsync {
 	public Supplier<Token> initTokenSupplier(TokenHelper helper, Token token) {
 		return clientTools.initTokenSupplier(helper, token);
 	}
-
+	/**
+	 * 创建设备心跳包侦听对象
+	 * @param listener
+	 * @param token 令牌
+	 * @return 返回{@link HeartbeatMonitor}实例
+	 */
+	public HeartbeatMonitor makeHeartbeatMonitor(DeviceHeartbeatListener listener, Token token) {
+		return clientTools.makeHeartbeatMonitor(listener, token, null);
+	}
+	/**
+	 * 创建设备心跳包发送对象<br>
+	 * {@link Heartbeat}为单实例,该方法只能调用一次
+	 * @param deviceID 设备ID
+	 * @param token 设备令牌
+	 * @param jedisPoolLazy jedis连接池对象，为{@code null}使用默认实例
+	 * @return {@link Heartbeat}实例
+	 */
+	public Heartbeat makeHeartbeat(int deviceID, Token token, JedisPoolLazy jedisPoolLazy) {
+		return clientTools.makeHeartbeat(deviceID, token, jedisPoolLazy);
+	}
 }
