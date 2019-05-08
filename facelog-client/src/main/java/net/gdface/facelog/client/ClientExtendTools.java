@@ -33,7 +33,12 @@ import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
 import net.gdface.facelog.client.dtalk.FacelogRedisConfigProvider;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.PersonBean;
-import net.gdface.facelog.device.Heartbeat;
+import net.gdface.facelog.hb.BaseServiceHeartbeatListener;
+import net.gdface.facelog.hb.DeviceHeartbeatListener;
+import net.gdface.facelog.hb.Heartbeat;
+import net.gdface.facelog.hb.HeartbeatMonitor;
+import net.gdface.facelog.hb.ServiceHeartbeatAdapter;
+import net.gdface.facelog.hb.ServiceHeartbeatListener;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.facelog.thrift.IFaceLogThriftClientAsync;
 import net.gdface.thrift.ClientFactory;
@@ -121,16 +126,16 @@ public class ClientExtendTools{
 		init();
 	}
 	private void init(){
-		RedisFactory.getSubscriber().register(ServiceEventAdapter.SERVICE_EVENT_CHANNEL);
+		RedisFactory.getSubscriber().register(ServiceHeartbeatAdapter.SERVICE_EVENT_CHANNEL);
 		addServiceEventListener(tokenRefreshListener);
 	}
 
 	public ClientExtendTools addServiceEventListener(ServiceHeartbeatListener listener){
-		ServiceEventAdapter.INSTANCE.addServiceEventListener(listener);	
+		ServiceHeartbeatAdapter.INSTANCE.addServiceEventListener(listener);	
 		return this;
 	}
 	public ClientExtendTools removeServiceEventListener(ServiceHeartbeatListener listener){
-		ServiceEventAdapter.INSTANCE.removeServiceEventListener(listener);
+		ServiceHeartbeatAdapter.INSTANCE.removeServiceEventListener(listener);
 		return this;
 	}
 	/**

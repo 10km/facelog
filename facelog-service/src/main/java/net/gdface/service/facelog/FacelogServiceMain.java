@@ -6,6 +6,8 @@ import org.jboss.netty.logging.Slf4JLoggerFactory;
 import com.google.common.util.concurrent.Service;
 
 import net.gdface.facelog.GlobalConfig;
+import net.gdface.facelog.hb.ServiceHeartbeat;
+
 import static net.gdface.facelog.CommonConstant.*;
 
 import java.io.BufferedReader;

@@ -19,6 +19,7 @@ import gu.simplemq.redis.JedisPoolLazy.PropName;
 import net.gdface.facelog.DeviceHeadbeatPackage;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.Token;
+import net.gdface.facelog.hb.DeviceHeartbeatListener;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
 import redis.clients.jedis.Protocol;

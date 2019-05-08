@@ -15,7 +15,10 @@ import net.gdface.facelog.IFaceLogDecorator;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
-import net.gdface.facelog.device.Heartbeat;
+import net.gdface.facelog.hb.DeviceHeartbeatListener;
+import net.gdface.facelog.hb.Heartbeat;
+import net.gdface.facelog.hb.HeartbeatMonitor;
+import net.gdface.facelog.hb.ServiceHeartbeatListener;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.utils.Delegator;
 

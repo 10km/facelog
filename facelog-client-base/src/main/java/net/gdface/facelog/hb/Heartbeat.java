@@ -1,4 +1,4 @@
-package net.gdface.facelog.device;
+package net.gdface.facelog.hb;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -35,7 +35,6 @@ import static gu.dtalk.engine.DeviceUtils.DEVINFO_PROVIDER;
  * 调用{@link #start()}心跳开始<br>
  * 应用程序结束时心跳包线程自动停止
  * @author guyadong
- * @deprecated replaced by {@link net.gdface.facelog.hb.Heartbeat}
  *
  */
 public class Heartbeat extends BaseServiceHeartbeatListener implements ChannelConstant{

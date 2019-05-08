@@ -1,4 +1,4 @@
-package net.gdface.facelog.client;
+package net.gdface.facelog.hb;
 
 import gu.simplemq.IMessageAdapter;
 import net.gdface.facelog.ServiceHeartbeatPackage;

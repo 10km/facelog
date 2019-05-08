@@ -1,4 +1,4 @@
-package net.gdface.facelog.client;
+package net.gdface.facelog.hb;
 
 import com.google.common.base.Objects;
 

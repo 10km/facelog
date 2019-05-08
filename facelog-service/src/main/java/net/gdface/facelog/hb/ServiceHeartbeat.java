@@ -1,4 +1,4 @@
-package net.gdface.service.facelog;
+package net.gdface.facelog.hb;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -129,7 +129,7 @@ public class ServiceHeartbeat implements ChannelConstant{
 			this.scheduledExecutor.remove((Runnable) future);
 		}
 		/** 返回 RunnableScheduledFuture<?>实例  */
-		future = this.timerExecutor.scheduleAtFixedRate(timerTask, intervalMills, intervalMills, TimeUnit.MILLISECONDS);
+		future = this.timerExecutor.scheduleAtFixedRate(timerTask, 0, intervalMills, TimeUnit.MILLISECONDS);
 	}
 	/**
 	 * 设置设备心跳包发送周期<br>
