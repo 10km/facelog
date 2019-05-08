@@ -13,7 +13,6 @@ import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 
 import com.google.common.base.Function;
-import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
@@ -21,7 +20,6 @@ import com.google.common.base.Suppliers;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 import gu.dtalk.MenuItem;
-import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import net.gdface.facelog.IFaceLog;
@@ -49,20 +47,11 @@ public class ClientExtendTools{
 	private final IFaceLogThriftClientAsync asyncInstance;
 	private final ClientFactory factory;
 	private final Map<MQParam, String> redisParameters = Maps.newConcurrentMap();
-	private final ServiceHeartbeatListener tokenRefreshListener = new ServiceHeartbeatListener(){
-		private Integer serviceID;
+	private final ServiceHeartbeatListener tokenRefreshListener = new BaseServiceHeartbeatListener(){
 		@Override
-		public void onSubscribe(ServiceHeartbeatPackage heartbeatPackage) throws SmqUnsubscribeException {
-			// 比较服务ID是否相等，不相等则执行令牌刷新，更新redis参数
-			// 确保每次服务端重启后都执行令牌刷新和redis参数
-			if(!Objects.equal(heartbeatPackage.getId(),serviceID)){				
-				// 刷新令牌
-				if(tokenRefresh !=null){			
-					if(tokenRefresh.refresh()){
-						serviceID = heartbeatPackage.getId();
-					}
-				}
-			}			
+		public boolean doServiceOnline(ServiceHeartbeatPackage heartbeatPackage){
+			// 执行令牌刷新，更新redis参数
+			return tokenRefresh !=null && tokenRefresh.refresh();
 		}};
 	private Map<MQParam, String> updateRedisParameters(Map<MQParam, String>param){
 		synchronized (redisParameters) {
@@ -569,8 +558,8 @@ public class ClientExtendTools{
     	Token token;
     	try {
 			token = syncInstance != null 
-					? syncInstance.applyPersonToken(userid, password, isMd5)
-					: asyncInstance.applyPersonToken(userid, password, isMd5).get();
+					? syncInstance.applyUserToken(userid, password, isMd5)
+					: asyncInstance.applyUserToken(userid, password, isMd5).get();
     		return token;
     	} catch (ExecutionException e) {
     		Throwables.propagateIfPossible(e.getCause(), ServiceSecurityException.class);

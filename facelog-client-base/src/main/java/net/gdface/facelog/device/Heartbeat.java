@@ -5,6 +5,9 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
@@ -19,7 +22,10 @@ import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisPublisher;
 import gu.simplemq.redis.RedisTable;
 import net.gdface.facelog.DeviceHeadbeatPackage;
+import net.gdface.facelog.ServiceHeartbeatPackage;
+import net.gdface.facelog.client.BaseServiceHeartbeatListener;
 import net.gdface.facelog.client.ChannelConstant;
+
 import static gu.dtalk.engine.DeviceUtils.DEVINFO_PROVIDER;
 /**
  * 设备心跳包redis实现<br>
@@ -30,7 +36,9 @@ import static gu.dtalk.engine.DeviceUtils.DEVINFO_PROVIDER;
  * @author guyadong
  *
  */
-public class Heartbeat implements ChannelConstant{
+public class Heartbeat extends BaseServiceHeartbeatListener implements ChannelConstant{
+    public static final Logger logger = LoggerFactory.getLogger(Heartbeat.class);
+
 	/**  单实例 */
 	private static Heartbeat heartbeat;
 	/** 心跳周期(毫秒) */
@@ -55,13 +63,19 @@ public class Heartbeat implements ChannelConstant{
 	private final Runnable timerTask = new Runnable(){
 		@Override
 		public void run() {
-			heartBeatPackage.setHostAddress(DEVINFO_PROVIDER.getIpAsString());
-			table.set(hardwareAddress,heartBeatPackage, false);
-			table.expire(hardwareAddress);
-			Channel<DeviceHeadbeatPackage> monitorChannel = monitorChannelSupplier.get();
-			if(null != monitorChannel){
-				publisher.publish(monitorChannel, heartBeatPackage);
+			try {
+				heartBeatPackage.setHostAddress(DEVINFO_PROVIDER.getIpAsString());
+				table.set(hardwareAddress,heartBeatPackage, false);
+				table.expire(hardwareAddress);
+				Channel<DeviceHeadbeatPackage> monitorChannel = monitorChannelSupplier.get();
+				if(null != monitorChannel){
+					logger.info("send hb ->{}",monitorChannel.name);
+					publisher.publish(monitorChannel, heartBeatPackage);
+				}				
+			} catch (Exception e) {
+				logger.info(e.getMessage());
 			}
+
 		}};
 	/**
 	 * 构造方法
@@ -175,7 +189,7 @@ public class Heartbeat implements ChannelConstant{
 		return this;
 	}
 	
-	private class MonitorChannelSupplier implements Supplier<Channel<DeviceHeadbeatPackage>>{
+	private class MonitorChannelSupplier  implements Supplier<Channel<DeviceHeadbeatPackage>>{
 		
 		Channel<DeviceHeadbeatPackage> channel;
 		Supplier<String> channelSupplier;
@@ -222,5 +236,10 @@ public class Heartbeat implements ChannelConstant{
 		}
 		/** 返回 RunnableScheduledFuture<?>实例  */
 		future = this.timerExecutor.scheduleAtFixedRate(timerTask, intervalMills, intervalMills, TimeUnit.MILLISECONDS);
+	}
+	@Override
+	protected boolean doServiceOnline(ServiceHeartbeatPackage heartbeatPackage) {
+		monitorChannelSupplier.reload = true;
+		return true;
 	}
 }

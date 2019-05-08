@@ -67,12 +67,14 @@ public class HeartbeatTest implements ChannelConstant{
 	}
 	/**
 	 * 设备端发送心跳包测试
+	 * @throws InterruptedException 
 	 */
 	@Test
-	public void test1SendHB() {
+	public void test1SendHB() throws InterruptedException {
 		Heartbeat hb = Heartbeat.makeHeartbeat(12345, JedisPoolLazy.getDefaultInstance())
 				/** 将设备心跳包数据发送到指定的设备心跳监控通道名,否则监控端无法收到设备心跳包 */
 				.setMonitorChannelSupplier(facelogClient.getMonitorChannelSupplier(rootToken));
+		facelogClient.addServiceEventListener(hb);
 		/** 以默认间隔启动定时任务 */
 		hb.start();
 		System.out.println("Heartbeat thead start");
@@ -82,6 +84,8 @@ public class HeartbeatTest implements ChannelConstant{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		/** 40秒后结束测试 */
+		Thread.sleep(300*1000);
 	}
 	/**
 	 * 管理端心跳包监控测试
@@ -96,9 +100,10 @@ public class HeartbeatTest implements ChannelConstant{
 				logger.info(t.toString());
 			}};
 		
-		new HeartbeatMonitor(hbAdapter,facelogClient.getMonitorChannelSupplier(rootToken)).start();
+		HeartbeatMonitor monitor = new HeartbeatMonitor(hbAdapter,facelogClient.getMonitorChannelSupplier(rootToken)).start();
+		facelogClient.addServiceEventListener(monitor);
 		/** 40秒后结束测试 */
-		Thread.sleep(60*1000);
+		Thread.sleep(300*1000);
 	}
 	public static class TokenHelperTestImpl extends TokenHelper {
 		final static TokenHelperTestImpl INSTANCE = new TokenHelperTestImpl(); 

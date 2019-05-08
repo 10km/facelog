@@ -22,7 +22,7 @@
 		<idl.generator.version>1.10</idl.generator.version>
 		<dtalk.version>0.1.11-SNAPSHOT</dtalk.version>
 		<thrifty.compiler.maven.plugin.version>1.1</thrifty.compiler.maven.plugin.version>
-		<simplemq.version>1.0.13</simplemq.version>		
+		<simplemq.version>1.0.14-SNAPSHOT</simplemq.version>		
 	</properties>
 	<dependencyManagement>
 		<dependencies>

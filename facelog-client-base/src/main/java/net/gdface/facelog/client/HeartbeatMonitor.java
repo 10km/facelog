@@ -17,13 +17,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 
 /**
  * 心跳包频道监控
  * @author guyadong
  *
  */
-public class HeartbeatMonitor implements ServiceHeartbeatListener {
+public class HeartbeatMonitor extends BaseServiceHeartbeatListener {
     public static final Logger logger = LoggerFactory.getLogger(HeartbeatMonitor.class);
 
 	public static final IMessageAdapter<DeviceHeadbeatPackage> DEF_ADAPTER = new IMessageAdapter<DeviceHeadbeatPackage>(){
@@ -49,18 +50,24 @@ public class HeartbeatMonitor implements ServiceHeartbeatListener {
 	}
 
 	@Override
-	public void onSubscribe(ServiceHeartbeatPackage t) throws SmqUnsubscribeException {
+	protected boolean doServiceOnline(ServiceHeartbeatPackage t){
 		start();
+		return true;
 	}
 	/**
 	 * 注册心跳包频道，启动频道监控
+	 * @return 
 	 */
-	public void start(){
-		stop();
-		// 申请新的频道名
-		channelName = channelSupplier.get();
-		logger.info("Start Heartbeat Monitor ch:[{}]",channelName);
-		subscriber.register(new Channel<DeviceHeadbeatPackage>(channelName,hbAdapter){});
+	public HeartbeatMonitor start(){
+		String ch = channelSupplier.get();
+		if(!Objects.equal(channelName, ch)){
+			stop();
+			// 申请新的频道名
+			logger.info("Start Heartbeat Monitor ch:[{}]",ch);
+			subscriber.register(new Channel<DeviceHeadbeatPackage>(ch,hbAdapter){});
+			channelName = ch;
+		}
+		return this;
 	}
 	/**
 	 * 取消心跳包频道订阅，停止频道监控
@@ -71,6 +78,7 @@ public class HeartbeatMonitor implements ServiceHeartbeatListener {
 				if(null != channelName){
 					// 注销上一个频道名
 					subscriber.unregister(channelName);
+					logger.info("unregister last monitor channel :[{}]",channelName);
 					channelName = null;				
 				}
 			}
