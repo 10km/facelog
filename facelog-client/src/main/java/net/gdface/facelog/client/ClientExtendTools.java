@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 
 import com.google.common.base.Function;
+import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
@@ -20,10 +21,12 @@ import com.google.common.base.Suppliers;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 import gu.dtalk.MenuItem;
+import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.MQParam;
+import net.gdface.facelog.ServiceHeartbeatPackage;
 import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.Token.TokenType;
@@ -46,28 +49,33 @@ public class ClientExtendTools{
 	private final IFaceLogThriftClientAsync asyncInstance;
 	private final ClientFactory factory;
 	private final Map<MQParam, String> redisParameters = Maps.newConcurrentMap();
-	private void updateRedisParameters(Map<MQParam, String>param){
+	private final ServiceHeartbeatListener tokenRefreshListener = new ServiceHeartbeatListener(){
+		private Integer serviceID;
+		@Override
+		public void onSubscribe(ServiceHeartbeatPackage heartbeatPackage) throws SmqUnsubscribeException {
+			// 比较服务ID是否相等，不相等则执行令牌刷新，更新redis参数
+			// 确保每次服务端重启后都执行令牌刷新和redis参数
+			if(!Objects.equal(heartbeatPackage.getId(),serviceID)){				
+				// 刷新令牌
+				if(tokenRefresh !=null){			
+					if(tokenRefresh.refresh()){
+						serviceID = heartbeatPackage.getId();
+					}
+				}
+			}			
+		}};
+	private Map<MQParam, String> updateRedisParameters(Map<MQParam, String>param){
 		synchronized (redisParameters) {
 			redisParameters.clear();
 			redisParameters.putAll(param);
+			return redisParameters;
 		}
 	}
-	private final ServiceEventListener tokenRefreshListener = new ServiceEventListener(){
-		@Override
-		public void online() {
-			if(tokenRefresh !=null){
-				tokenRefresh.relead = true;
-				Token token = tokenRefresh.get();
-				if(null != token){
-					getRedisParameters(token);
-				}
-			}
-		}		
-	}; 
 	private TokenRefresh tokenRefresh;
 	private class TokenRefresh implements Supplier<Token>{
 		private Token token;
-		private boolean relead = true;
+		private final Object lock = new Object();
+		private volatile boolean relead = true;
 		private final TokenHelper helper;
 		private TokenRefresh(TokenHelper helper,Token token) {
 			this.helper = checkNotNull(helper,"helper is null");
@@ -76,16 +84,36 @@ public class ClientExtendTools{
 		@Override
 		public Token get() {
 			if(relead){
-				Token t = refreshToken(helper, token);				
-				if(null != t){
-					relead = false;
-					token = t;
-				}
-				return t;
+				synchronized (lock) {
+					if(relead){
+						Token t = refreshToken(helper, token);				
+						if(null != t){
+							relead = false;
+							token.assignFrom(t);
+						}
+						return t;
+					}					
+				}				
 			}
 			return token;
 		}
-		
+		/**
+		 * 刷新令牌和redis参数
+		 * @return 刷新成功返回{@code true}，否则返回{@code false}
+		 */
+		boolean refresh(){
+			relead = true;
+			Token token = get();
+			if(null != token){
+				try {
+					getRedisParameters(token);
+					return 	true;
+				} catch (Exception e) {
+					// DO NOTHING
+				}
+			}
+			return false;
+		}
 	}
 	ClientExtendTools(IFaceLogThriftClient syncInstance) {
 		super();
@@ -105,16 +133,12 @@ public class ClientExtendTools{
 		RedisFactory.getSubscriber().register(ServiceEventAdapter.SERVICE_EVENT_CHANNEL);
 		addServiceEventListener(tokenRefreshListener);
 	}
-	/**
-	 * 
-	 * @param listener
-	 * @return
-	 */
-	public ClientExtendTools addServiceEventListener(ServiceEventListener listener){
+
+	public ClientExtendTools addServiceEventListener(ServiceHeartbeatListener listener){
 		ServiceEventAdapter.INSTANCE.addServiceEventListener(listener);	
 		return this;
 	}
-	public ClientExtendTools removeServiceEventListener(ServiceEventListener listener){
+	public ClientExtendTools removeServiceEventListener(ServiceHeartbeatListener listener){
 		ServiceEventAdapter.INSTANCE.removeServiceEventListener(listener);
 		return this;
 	}
@@ -568,8 +592,7 @@ public class ClientExtendTools{
 			Map<MQParam, String> param = syncInstance != null 
 					? syncInstance.getRedisParameters(token)
 					: asyncInstance.getRedisParameters(token).get();
-			updateRedisParameters(insteadHostOfMQParamIfLocalhost(param));
-			return redisParameters;
+			return updateRedisParameters(insteadHostOfMQParamIfLocalhost(param));
 	    } catch (ExecutionException e) {
 	        Throwables.throwIfUnchecked(e.getCause());
 	        throw new RuntimeException(e.getCause());
@@ -613,7 +636,7 @@ public class ClientExtendTools{
 	 * 创建dtalk引擎
 	 * @param deviceToken 设备令牌，不可为{@code null}
 	 * @param rootMenu 包括所有菜单的根菜单对象，不可为{@code null}
-	 * @return
+	 * @return {@link DtalkEngineForFacelog}实例
 	 */
 	public DtalkEngineForFacelog initDtalkEngine(Token deviceToken, MenuItem rootMenu){
 		// 设备端才能调用此方法
@@ -703,7 +726,7 @@ public class ClientExtendTools{
 	 * 实现在服务端重启后令牌的自动刷新
 	 * @param helper
 	 * @param token
-	 * @return
+	 * @return {@link Supplier}实例
 	 */
 	public Supplier<Token> initTokenSupplier(TokenHelper helper,Token token){
 		this.tokenRefresh = new TokenRefresh(helper, token);

@@ -18,12 +18,13 @@ import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisPublisher;
 import gu.simplemq.redis.RedisTable;
+import net.gdface.facelog.DeviceHeadbeatPackage;
 import net.gdface.facelog.client.ChannelConstant;
 import static gu.dtalk.engine.DeviceUtils.DEVINFO_PROVIDER;
 /**
  * 设备心跳包redis实现<br>
  * 以{@link #intervalMills}指定的周期向redis表({@link ChannelConstant#TABLE_HEARTBEAT})写入当前设备序列号及报道时间.<br>
- * 如果指定了心跳实时监控通道({@link #setMonitorChannel(String)}),还会向该通道(频道)发布订阅消息, 以便于应用实时显示人员验证信息.<br>
+ * 如果指定了心跳实时监控通道({@link #setMonitorChannel(String)}),还会向该通道(频道)发布订阅消息<br>
  * 调用{@link #start()}心跳开始<br>
  * 应用程序结束时心跳包线程自动停止
  * @author guyadong
@@ -35,7 +36,7 @@ public class Heartbeat implements ChannelConstant{
 	/** 心跳周期(毫秒) */
 	private long intervalMills = TimeUnit.MILLISECONDS.convert(DEFAULT_HEARTBEAT_PERIOD,TimeUnit.SECONDS);
 	/** 心跳报告表 */
-	private final RedisTable<HeadbeatPackage> table;
+	private final RedisTable<DeviceHeadbeatPackage> table;
 	/** 
 	 * 提供设备心跳实时监控通道名,如果指定了通道名,
 	 * 每次心跳都不仅会向{@link TABLE_HEARTBEAT} 写入心跳报告,还会向该频道发布订阅消息
@@ -43,7 +44,7 @@ public class Heartbeat implements ChannelConstant{
 	private final MonitorChannelSupplier monitorChannelSupplier = new MonitorChannelSupplier();
 	/** MAC 地址 */
 	private final String hardwareAddress = DEVINFO_PROVIDER.getMacAsString();
-	private final HeadbeatPackage heartBeatPackage;
+	private final DeviceHeadbeatPackage heartBeatPackage;
 	private final RedisPublisher publisher;
 	/** 执行定时任务的线程池对象 */
 	private final ScheduledThreadPoolExecutor scheduledExecutor;
@@ -57,7 +58,7 @@ public class Heartbeat implements ChannelConstant{
 			heartBeatPackage.setHostAddress(DEVINFO_PROVIDER.getIpAsString());
 			table.set(hardwareAddress,heartBeatPackage, false);
 			table.expire(hardwareAddress);
-			Channel<HeadbeatPackage> monitorChannel = monitorChannelSupplier.get();
+			Channel<DeviceHeadbeatPackage> monitorChannel = monitorChannelSupplier.get();
 			if(null != monitorChannel){
 				publisher.publish(monitorChannel, heartBeatPackage);
 			}
@@ -82,7 +83,7 @@ public class Heartbeat implements ChannelConstant{
 	 * @throws IllegalArgumentException {@code hardwareAddress}无效
 	 */
 	private Heartbeat(int deviceID, JedisPoolLazy poolLazy) {
-		this.heartBeatPackage = new HeadbeatPackage().setDeviceId(deviceID);
+		this.heartBeatPackage = new DeviceHeadbeatPackage().setDeviceId(deviceID);
 		this.publisher = RedisFactory.getPublisher(checkNotNull(poolLazy,"pool is null"));
 		this.scheduledExecutor =new ScheduledThreadPoolExecutor(1,
 				new ThreadFactoryBuilder().setNameFormat("heartbeat-pool-%d").build());	
@@ -174,17 +175,17 @@ public class Heartbeat implements ChannelConstant{
 		return this;
 	}
 	
-	private class MonitorChannelSupplier implements Supplier<Channel<HeadbeatPackage>>{
+	private class MonitorChannelSupplier implements Supplier<Channel<DeviceHeadbeatPackage>>{
 		
-		Channel<HeadbeatPackage> channel;
+		Channel<DeviceHeadbeatPackage> channel;
 		Supplier<String> channelSupplier;
 		boolean reload = true;
 
 		@Override
-		public Channel<HeadbeatPackage> get() {
+		public Channel<DeviceHeadbeatPackage> get() {
 			if(null == channel || reload){
 				if(null != channelSupplier && !Strings.isNullOrEmpty(channelSupplier.get())){
-					channel = new Channel<HeadbeatPackage>(channelSupplier.get()){};
+					channel = new Channel<DeviceHeadbeatPackage>(channelSupplier.get()){};
 					reload = false;
 				}
 			}

@@ -1,7 +1,7 @@
 package net.gdface.facelog.client;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static net.gdface.facelog.CommonConstant.FACELOG_EVT_CHANNEL;
+import static net.gdface.facelog.CommonConstant.FACELOG_HB_CHANNEL;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,24 +9,23 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import gu.simplemq.Channel;
-import gu.simplemq.IMessageAdapter;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
-import net.gdface.facelog.ServiceEvent;
+import net.gdface.facelog.ServiceHeartbeatPackage;
 
-public class ServiceEventAdapter extends ServiceEventListener implements IMessageAdapter<ServiceEvent>{
+public class ServiceEventAdapter implements ServiceHeartbeatListener{
 	public static final ServiceEventAdapter INSTANCE = new ServiceEventAdapter();
-	private final List<ServiceEventListener> listeners = Collections.synchronizedList(Lists.<ServiceEventListener>newLinkedList());
-	public static final Channel<ServiceEvent> SERVICE_EVENT_CHANNEL = new Channel<>(FACELOG_EVT_CHANNEL, ServiceEvent.class,INSTANCE);
+	private final List<ServiceHeartbeatListener> listeners = Collections.synchronizedList(Lists.<ServiceHeartbeatListener>newLinkedList());
+	public static final Channel<ServiceHeartbeatPackage> SERVICE_EVENT_CHANNEL = new Channel<>(FACELOG_HB_CHANNEL, ServiceHeartbeatPackage.class,INSTANCE);
 
 	public ServiceEventAdapter() {
 	}
-	public ServiceEventAdapter addServiceEventListener(ServiceEventListener listener){
+	public ServiceEventAdapter addServiceEventListener(ServiceHeartbeatListener listener){
 		synchronized (listeners) {
 			listeners.add(checkNotNull(listener,"listener is null"));	
-		}		
+		}
 		return this;
 	}
-	public ServiceEventAdapter removeServiceEventListener(ServiceEventListener listener){
+	public ServiceEventAdapter removeServiceEventListener(ServiceHeartbeatListener listener){
 		synchronized (listeners) {
 			listeners.remove(listener);
 		}
@@ -34,44 +33,11 @@ public class ServiceEventAdapter extends ServiceEventListener implements IMessag
 	}
 
 	@Override
-	public void online() {
+	public void onSubscribe(ServiceHeartbeatPackage t) throws SmqUnsubscribeException {
 		synchronized(listeners){
-			for(ServiceEventListener listener:listeners){
-				listener.online();
+			for(ServiceHeartbeatListener listener:listeners){
+				listener.onSubscribe(t);
 			}
-		}
-	}
-	@Override
-	public void xhrOnline() {
-		synchronized(listeners){
-			for(ServiceEventListener listener:listeners){
-				listener.xhrOnline();
-			}
-		}
-	}
-	@Override
-	public void frameOnline() {
-		synchronized(listeners){
-			for(ServiceEventListener listener:listeners){
-				listener.frameOnline();
-			}
-		}
-	}
-	@Override
-	public void onSubscribe(ServiceEvent t) throws SmqUnsubscribeException {
-		System.out.printf("ServiceEvent :%s\n",t.name());
-		switch (t) {
-		case ONLINE:
-			online();
-			break;
-		case FRAME_ONLINE:
-			frameOnline();
-			break;
-		case XHR_ONLINE:
-			xhrOnline();
-			break;
-		default:
-			break;
 		}
 	}
 }

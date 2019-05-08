@@ -21,39 +21,8 @@ public interface CommonConstant {
     public static final int DEFAULT_HEARTBEAT_PERIOD = 8;
     /** 默认心跳包失效时间(秒) */
     public static final int DEFAULT_HEARTBEAT_EXPIRE = 60;
-    /* 服务端状态频道名 */
-    public static final String FACELOG_EVT_CHANNEL = "FACELOG_EVT";
-    /** 心跳包报道数据 */
-    public static class HeadbeatPackage{
-        /** 设备ID */
-        private int deviceId;
-        /** 设备当前IP地址 */
-        private String hostAddress;
-        public int getDeviceId() {
-            return deviceId;
-        }
-        public HeadbeatPackage setDeviceId(int deviceId) {
-            this.deviceId = deviceId;
-            return this;
-        }
-        public String getHostAddress() {
-            return hostAddress;
-        }
-        public HeadbeatPackage setHostAddress(String hostAddress) {
-            this.hostAddress = hostAddress;
-            return this;
-        }
-        @Override
-        public String toString() {
-            StringBuilder builder = new StringBuilder();
-            builder.append("HeadbeatPackage [deviceId=");
-            builder.append(deviceId);
-            builder.append(", hostAddress=");
-            builder.append(hostAddress);
-            builder.append("]");
-            return builder.toString();
-        }
-    }
+    /** 服务端状态频道名 */
+    public static final String FACELOG_HB_CHANNEL = "FACELOG_HB";
     /** 默认(设备/人员)组id */
     public static final int DEFAULT_GROUP_ID = 1;
     /** 默认(设备/人员)组名 */
@@ -159,11 +128,14 @@ public interface CommonConstant {
     
     /** 工作线程数 */
     public static final String SERVER_WORKER_THREAD_COUNT ="server.workerThreadCount";
-    
-    /**  心跳包间隔(秒)  */
+
+    /** 服务心跳包间隔[秒] */
+    public static final String SERVER_HBINTERVAL ="server.hbInterval";
+
+    /**  设备心跳包间隔(秒)  */
     public static final String HEARTBEAT_INTERVAL = "heartbeat.interval";
     
-    /** 心跳包失效时间(秒) */
+    /** 设备心跳包失效时间(秒) */
     public static final String HEARTBEAT_EXPIRE = "heartbeat.expire";
     
     /** REDIS 安装位置 */

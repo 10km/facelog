@@ -170,11 +170,11 @@ public class IFaceLogClient extends IFaceLogDecorator {
 	public Supplier<Token> initTokenSupplier(TokenHelper helper, Token token) {
 		return clientTools.initTokenSupplier(helper, token);
 	}
-	public IFaceLogClient addServiceEventListener(ServiceEventListener listener){
+	public IFaceLogClient addServiceEventListener(ServiceHeartbeatListener listener){
 		clientTools.addServiceEventListener(listener);	
 		return this;
 	}
-	public IFaceLogClient removeServiceEventListener(ServiceEventListener listener){
+	public IFaceLogClient removeServiceEventListener(ServiceHeartbeatListener listener){
 		clientTools.removeServiceEventListener(listener);
 		return this;
 	}

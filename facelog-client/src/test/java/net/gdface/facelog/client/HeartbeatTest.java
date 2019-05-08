@@ -17,6 +17,7 @@ import gu.simplemq.IMessageAdapter;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.JedisPoolLazy.PropName;
+import net.gdface.facelog.DeviceHeadbeatPackage;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.device.Heartbeat;
@@ -88,9 +89,9 @@ public class HeartbeatTest implements ChannelConstant{
 	 */
 	@Test
 	public void test2HBMonitor() throws InterruptedException{
-		IMessageAdapter<HeadbeatPackage> hbAdapter = new IMessageAdapter<HeadbeatPackage>(){
+		IMessageAdapter<DeviceHeadbeatPackage> hbAdapter = new IMessageAdapter<DeviceHeadbeatPackage>(){
 			@Override
-			public void onSubscribe(HeadbeatPackage t) throws SmqUnsubscribeException {
+			public void onSubscribe(DeviceHeadbeatPackage t) throws SmqUnsubscribeException {
 				// 显示收到的心跳包
 				logger.info(t.toString());
 			}};

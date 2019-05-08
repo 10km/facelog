@@ -5,17 +5,13 @@ import org.jboss.netty.logging.Slf4JLoggerFactory;
 
 import com.google.common.util.concurrent.Service;
 
-import gu.simplemq.Channel;
-import gu.simplemq.redis.RedisFactory;
-import gu.simplemq.redis.RedisPublisher;
 import net.gdface.facelog.GlobalConfig;
-import net.gdface.facelog.ServiceEvent;
-
 import static net.gdface.facelog.CommonConstant.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 启动 IFacelog 服务
@@ -40,6 +36,9 @@ public class FacelogServiceMain {
 
 		}
 	}
+	private static Integer portOf(FaceLogService instance){
+		return null == instance ? null : instance.getThriftServerConfig().getPort();
+	}
 	public static void main(String[] args) {
 		Logo.textLogo();
 		serviceConfig.parseCommandLine(args);
@@ -48,13 +47,16 @@ public class FacelogServiceMain {
 		InternalLoggerFactory.setDefaultFactory(new Slf4JLoggerFactory());
 		@SuppressWarnings("unused")
 		Service service = FaceLogService.buildService().startAsync();
-		RedisPublisher publisher = RedisFactory.getPublisher();
-		Channel<ServiceEvent> channel = new Channel<>(FACELOG_EVT_CHANNEL, ServiceEvent.class);
 		if(GlobalConfig.getConfig().getBoolean(XHR_START, true)){
 			@SuppressWarnings("unused")
 			Service httpService = FaceLogService.buildHttpService().startAsync();
 		}
-		publisher.publish(channel, ServiceEvent.ONLINE);
+		// 启动服务心跳
+		ServiceHeartbeat.makeHeartbeat((int)System.currentTimeMillis(), 
+				portOf(FaceLogService.getService()), 
+				portOf(FaceLogService.getHttpService()))
+			.setInterval(GlobalConfig.getConfig().getInt(SERVER_HBINTERVAL, DEFAULT_HEARTBEAT_PERIOD), TimeUnit.SECONDS)
+			.start();
 		waitquit();
 	}	
 }
