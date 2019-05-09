@@ -17,7 +17,6 @@ import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.JedisPoolLazy.PropName;
 import net.gdface.facelog.DeviceHeadbeatPackage;
-import net.gdface.facelog.MQParam;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.hb.DeviceHeartbeatListener;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
@@ -42,8 +41,6 @@ public class HeartbeatTest implements ChannelConstant{
 					/** redis 端口号 */PropName.port,Protocol.DEFAULT_PORT,
 					/** redis 连接密码 */PropName.password, "hello"
 					);
-	/** 设备心跳监控频道 */
-	private static String monitorChannelName;
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		// 根据连接参数创建默认实例 
@@ -55,10 +52,8 @@ public class HeartbeatTest implements ChannelConstant{
 				.build(IFaceLogThriftClient.class, IFaceLogClient.class);
 		// 申请令牌
 		rootToken = facelogClient.applyRootToken("guyadong", false);
-		// 从facelog service 获取心跳监控频道名 
-		monitorChannelName = facelogClient.getRedisParameters(rootToken).get(MQParam.HB_MONITOR_CHANNEL);
-		facelogClient.initTokenSupplier(TokenHelperTestImpl.INSTANCE, rootToken);
-		logger.info("monitorChannelName = {}",monitorChannelName);
+		facelogClient.setTokenHelper(TokenHelperTestImpl.INSTANCE)
+			.startServiceHeartbeatListener(rootToken, true);
 	}
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {

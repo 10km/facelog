@@ -168,12 +168,9 @@ public class IFaceLogClient extends IFaceLogDecorator {
 	}
 	/**
 	 * 返回有效令牌的{@link Supplier}实例<br>
-	 * 实现在服务端重启后令牌的自动刷新
-	 * @param helper
-	 * @param token
 	 * @return {@link Supplier}实例
 	 */
-	public Supplier<Token> initTokenSupplier(TokenHelper helper, Token token) {
+	public Supplier<Token> getTokenSupplier() {
 		return clientTools.getTokenSupplier();
 	}
 	/**
@@ -214,5 +211,25 @@ public class IFaceLogClient extends IFaceLogDecorator {
 	 */
 	public DeviceHeartbeat makeHeartbeat(int deviceID, Token token, JedisPoolLazy jedisPoolLazy) {
 		return clientTools.makeHeartbeat(deviceID, token, jedisPoolLazy);
+	}
+	/**
+	 * @param tokenHelper 要设置的 tokenHelper
+	 * @return 当前{@link IFaceLogClient}实例
+	 */
+	public IFaceLogClient setTokenHelper(TokenHelper tokenHelper) {
+		clientTools.setTokenHelper(tokenHelper);
+		return this;
+	}
+	/**
+	 * 启动服务心跳侦听器<br>
+	 * 启动侦听器后CLIENT端才能感知服务端断线，并执行相应动作。
+	 * 调用前必须先执行{@link #setTokenHelper(TokenHelper)}初始化
+	 * @param token 令牌
+	 * @param initJedisPoolLazyDefaultInstance 是否初始化 {@link JedisPoolLazy}默认实例
+	 * @return 返回当前{@link IFaceLogClient}实例
+	 */
+	public IFaceLogClient startServiceHeartbeatListener(Token token, boolean initJedisPoolLazyDefaultInstance) {
+		clientTools.startServiceHeartbeatListener(token, initJedisPoolLazyDefaultInstance);
+		return this;
 	}
 }

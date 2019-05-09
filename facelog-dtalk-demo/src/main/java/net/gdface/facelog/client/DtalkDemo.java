@@ -1,6 +1,7 @@
 package net.gdface.facelog.client;
 
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,18 +55,24 @@ public class DtalkDemo {
 	}
 	/**
 	 * 启动连接
-	 * @return 
-	 * @throws ServiceSecurityException 
 	 */
 	private void start() {
 		FacelogMenu root = FacelogMenu.makeActiveInstance(config).init().register(DemoListener.INSTANCE);
 		engine = facelogClient.initDtalkEngine(deviceToken, root);
 		engine.start();
+		// 启动设备心跳
+		facelogClient.setTokenHelper(DeviceTokenHelper.HELPER)
+			.startServiceHeartbeatListener(deviceToken, true)
+			.makeHeartbeat(device.getId(), deviceToken, null)
+			/** 间隔2秒发送心跳，重新启动定时任务 */
+			.setInterval(2, TimeUnit.SECONDS)
+			.start();
 	}
 	/**
 	 * 等待程序结束
 	 */
 	private static void waitquit(){
+		System.out.println("PRESS 'CTRL-C' or 'quit' to exit");
 		Scanner scaner = new Scanner(System.in);
 		try{
 			while (scaner.hasNextLine()) {
@@ -119,7 +126,6 @@ public class DtalkDemo {
 					.registerHelper(DeviceTokenHelper.HELPER)
 					.initDevice()
 					.start();
-			System.out.println("PRESS 'CTRL-C' or 'quit' to exit");
 			// 如果依赖库commons-pool的版本号为2.4.2则需要调用waitquit()
 			// 如果版本号高于2.4.2低于2.6.1则不需要调用，参见https://blog.csdn.net/10km/article/details/89016301
 			waitquit();
