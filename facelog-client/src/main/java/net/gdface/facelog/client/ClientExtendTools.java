@@ -597,12 +597,6 @@ public class ClientExtendTools{
 	        throw new RuntimeException(e);
 	    }
 	}
-	private Map<MQParam, String> getRedisParametersLazy(Token token){
-		if(redisParameters.isEmpty()){
-			getRedisParameters(token);
-		}
-		return redisParameters;
-	}
 	/**
 	 * @param token 调用 {@link #getRedisParameters(Token)}所需要的令牌
 	 * @return 返回一个获取redis参数的{@link Supplier}实例
@@ -613,7 +607,7 @@ public class ClientExtendTools{
 
 			@Override
 			public Map<MQParam, String> get() {
-				return getRedisParametersLazy(token);
+				return getRedisParameters(token);
 			}};
 	}
 	/**
