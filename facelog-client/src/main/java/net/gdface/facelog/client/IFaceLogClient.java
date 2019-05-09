@@ -174,7 +174,7 @@ public class IFaceLogClient extends IFaceLogDecorator {
 	 * @return {@link Supplier}实例
 	 */
 	public Supplier<Token> initTokenSupplier(TokenHelper helper, Token token) {
-		return clientTools.initTokenSupplier(helper, token);
+		return clientTools.getTokenSupplier();
 	}
 	/**
 	 * 添加服务心跳侦听器

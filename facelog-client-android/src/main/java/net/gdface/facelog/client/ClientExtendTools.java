@@ -126,7 +126,7 @@ public class ClientExtendTools{
 		init();
 	}
 	private void init(){
-		RedisFactory.getSubscriber().register(ServiceHeartbeatAdapter.SERVICE_EVENT_CHANNEL);
+		RedisFactory.getSubscriber().register(ServiceHeartbeatAdapter.SERVICE_HB_CHANNEL);
 		addServiceEventListener(tokenRefreshListener);
 	}
 

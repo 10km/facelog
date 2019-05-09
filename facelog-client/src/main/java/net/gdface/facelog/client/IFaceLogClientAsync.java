@@ -169,10 +169,10 @@ public class IFaceLogClientAsync extends IFaceLogThriftClientAsync {
 	 * @param helper
 	 * @param token
 	 * @return
-	 * @see net.gdface.facelog.client.ClientExtendTools#initTokenSupplier(net.gdface.facelog.client.TokenHelper, net.gdface.facelog.Token)
+	 * @see net.gdface.facelog.client.ClientExtendTools#getTokenSupplier()
 	 */
 	public Supplier<Token> initTokenSupplier(TokenHelper helper, Token token) {
-		return clientTools.initTokenSupplier(helper, token);
+		return clientTools.getTokenSupplier();
 	}
 	/**
 	 * 创建设备心跳包侦听对象
