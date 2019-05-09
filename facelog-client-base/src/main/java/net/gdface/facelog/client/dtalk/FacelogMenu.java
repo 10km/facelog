@@ -64,7 +64,7 @@ public class FacelogMenu extends RootMenu{
 	}
 	/**
 	 * 初始化菜单
-	 * @return
+	 * @return {@link FacelogMenu}实例
 	 */
 	public FacelogMenu init(){
 		byte[] mac = DEVINFO_PROVIDER.getMac();
