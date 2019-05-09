@@ -73,9 +73,9 @@ public class FacelogMenu extends RootMenu{
 				ItemBuilder.builder(MenuItem.class)
 					.name("heartbeat")
 					.uiName("设备心跳")
+					.hide()
 					.addChilds(
-							OptionType.INTEGER.builder().name("interval").uiName("心跳包间隔[秒]").instance(),
-							OptionType.INTEGER.builder().name("expire").uiName("心跳包失效时间[秒]").instance())
+							OptionType.INTEGER.builder().name("interval").uiName("心跳包间隔[秒]").instance())
 					.instance();
 		MenuItem device = 
 			ItemBuilder.builder(MenuItem.class)
@@ -111,15 +111,15 @@ public class FacelogMenu extends RootMenu{
 				.name(MENU_CMD)
 				.uiName("基本设备命令")
 				.addChilds(ItemBuilder.builder(CmdItem.class).name(CMD_SET_PARAM).uiName("设置参数").addChilds(
-						OptionType.STRING.builder().name(CmdParamAdapter.P_NAME).uiName("参数名称").description("option's full path start with '/'").instance(),
-						OptionType.STRING.builder().name(CmdParamAdapter.P_VALUE).uiName("参数值").instance()
+						OptionType.STRING.builder().name(CmdParamAdapter.P_NAME).uiName("参数名称").required().description("option's full path start with '/'").instance(),
+						OptionType.STRING.builder().name(CmdParamAdapter.P_VALUE).uiName("参数值").required().instance()
 						).instance().setCmdAdapter(new CmdParamAdapter()),
 						ItemBuilder.builder(CmdItem.class).name(CMD_GET_PARAM).uiName("获取参数").addChilds(
-								OptionType.STRING.builder().name(CmdStatusAdapter.P_NAME).uiName("参数名称").description("option's full path start with '/'").instance()
+								OptionType.STRING.builder().name(CmdStatusAdapter.P_NAME).uiName("参数名称").required().description("option's full path start with '/'").instance()
 								).instance().setCmdAdapter(new CmdStatusAdapter()),
 						ItemBuilder.builder(CmdItem.class).name(CMD_VERSION).uiName("获取版本信息").instance().setCmdAdapter(new CmdVersionAdapter()),
 						ItemBuilder.builder(CmdItem.class).name(CMD_SET_STATUS).uiName("设置设备状态(启用/禁用)").addChilds(								
-								OptionBuilder.builder(new SwitchOption<Integer>()).name("status").uiName("状态值").description("0:工作状态,否则为非工作状态").instance()
+								OptionBuilder.builder(new SwitchOption<Integer>()).name("status").uiName("状态值").required().description("0:工作状态,否则为非工作状态").instance()
 									.addOption(0, "正常").setValue(0),
 								OptionType.STRING.builder().name("message").uiName("附加消息").description("工作状态附加消息,比如'设备维修,禁止通行'").instance()
 								).instance(),
@@ -128,26 +128,26 @@ public class FacelogMenu extends RootMenu{
 								OptionType.INTEGER.builder().name("schedule").uiName("延迟执行时间").description("指定执行时间(unix time[秒]),为null立即执行").instance()
 								).instance(),
 						ItemBuilder.builder(CmdItem.class).name(CMD_TIME).uiName("时间同步").addChilds(
-								OptionType.INTEGER.builder().name("timestamp").uiName("服务器时间").description("服务器 unix 时间[秒]").instance()
+								OptionType.INTEGER.builder().name("timestamp").uiName("服务器时间").required().description("服务器 unix 时间[秒]").instance()
 								).instance(),
 						ItemBuilder.builder(CmdItem.class).name(CMD_UPDATE).uiName("更新版本").addChilds(
-								OptionType.URL.builder().name("url").uiName("更新版本的位置").instance(),
-								OptionType.STRING.builder().name(CMD_VERSION).uiName("版本号").instance(),
+								OptionType.URL.builder().name("url").uiName("更新版本的位置").required().instance(),
+								OptionType.STRING.builder().name(CMD_VERSION).uiName("版本号").required().instance(),
 								OptionType.INTEGER.builder().name("schedule").uiName("延迟执行时间").description("指定执行时间(unix time[秒]),为null立即执行").instance()
 								).instance(),
 						ItemBuilder.builder(CmdItem.class).name(CMD_IDLE_MSG).uiName("空闲消息").description("设置空闲时显示的消息").addChilds(
-								OptionType.STRING.builder().name("message").uiName("显示的消息").instance(),
+								OptionType.STRING.builder().name("message").uiName("显示的消息").required().instance(),
 								OptionType.INTEGER.builder().name("duration").uiName("持续时间").description("持续时间[分钟],为null一直显示").instance()
 								).instance(),
 						ItemBuilder.builder(CmdItem.class).name(CMD_PERSON_MSG).uiName("定制消息").description("为指定人员通过时显示的临时消息").addChilds(
-								OptionType.STRING.builder().name("message").uiName("显示的消息").instance(),
-								OptionType.INTEGER.builder().name("id").uiName("人员/人员组ID").instance(),
+								OptionType.STRING.builder().name("message").uiName("显示的消息").required().instance(),
+								OptionType.INTEGER.builder().name("id").uiName("人员/人员组ID").required().instance(),
 								OptionType.BOOL.builder().name("isGroup").uiName("人员组标志").description("为true时,id参数为人员组ID,否则为人员ID").instance(),
 								OptionType.BOOL.builder().name("onceOnly").uiName("只显示一次").description("为true时只在id指定的用户通过时显示一次").instance(),
 								OptionType.INTEGER.builder().name("duration").uiName("持续时间").description("持续时间[分钟],为null一直显示").instance()
 								).instance(),
-						ItemBuilder.builder(CmdItem.class).name(CMD_FEATURE).uiName("提取人脸特征").addChilds(
-								OptionType.IMAGE.builder().name("image").uiName("人脸图像").instance()
+						ItemBuilder.builder(CmdItem.class).name(CMD_FEATURE).uiName("提取人脸特征").hide().addChilds(
+								OptionType.IMAGE.builder().name("image").uiName("人脸图像").required().instance()
 								).instance()
 						)
 				.instance();
