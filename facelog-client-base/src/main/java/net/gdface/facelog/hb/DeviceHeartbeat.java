@@ -9,9 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
-import com.google.common.base.Suppliers;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
@@ -79,18 +79,6 @@ public class DeviceHeartbeat extends BaseServiceHeartbeatListener implements Cha
 		}};
 	/**
 	 * 构造方法
-	 * @param hardwareAddress 当前设备物理地址(MAC)
-	 * @param deviceID 当前设备ID
-	 * @param poolLazy redis 连接池对象
-	 * @throws NullPointerException {@code poolLazy}为{@code null}
-	 * @throws IllegalArgumentException {@code hardwareAddress}无效
-	 * @deprecated replaced by {@link #Heartbeat(int, JedisPoolLazy)}
-	 */
-	private DeviceHeartbeat(byte[] hardwareAddress,int deviceID, JedisPoolLazy poolLazy) {
-		this(deviceID, poolLazy);
-	}
-	/**
-	 * 构造方法
 	 * @param deviceID 当前设备ID
 	 * @param jedisPoolLazy redis 连接池对象,为{@code null}使用默认实例
 	 * @throws NullPointerException {@code poolLazy}为{@code null}
@@ -105,24 +93,6 @@ public class DeviceHeartbeat extends BaseServiceHeartbeatListener implements Cha
 		this.timerExecutor = MoreExecutors.getExitingScheduledExecutorService(	scheduledExecutor);
 		this.table =  RedisFactory.getTable(TABLE_HEARTBEAT, jedisPoolLazy);
 		this.table.setExpire(DEFAULT_HEARTBEAT_EXPIRE, TimeUnit.SECONDS);
-	}
-	/**
-	 * 创建{@link DeviceHeartbeat}实例<br>
-	 * {@link DeviceHeartbeat}为单实例,该方法只能调用一次。
-	 * @param hardwareAddress 网卡物理地址(MAC)
-	 * @param deviceID 设备ID
-	 * @param pool
-	 * @return
-	 * @throws IllegalStateException 实例已经创建
-	 * @deprecated use {@link #makeHeartbeat(int, JedisPoolLazy)}
-	 */
-	public static synchronized final DeviceHeartbeat makeHeartbeat(
-			byte[] hardwareAddress,
-			int deviceID, 
-			JedisPoolLazy pool){
-		checkState(null == heartbeat,"singleton instance created");
-		heartbeat = new DeviceHeartbeat(hardwareAddress,deviceID, pool);
-		return heartbeat;
 	}
 	/**
 	 * 创建{@link DeviceHeartbeat}实例<br>
@@ -175,33 +145,26 @@ public class DeviceHeartbeat extends BaseServiceHeartbeatListener implements Cha
 		}
 		return this;
 	}
-	/**
-	 * 设置设备心跳实时监控通道名<br>
-	 * 实时监控通道名不是一个常量，要从服务接口获取,
-	 * 参见 {@link net.gdface.facelog.client.IFaceLogClient#getRedisParameters(net.gdface.facelog.client.thrift.Token)}
-	 * @param channel 
-	 * @return 当前 {@link DeviceHeartbeat}实例
-	 * @throws IllegalArgumentException {@code channel}为{@code null}或空
-	 * @deprecated
-	 */
-	public DeviceHeartbeat setMonitorChannel(String channel){
-		checkArgument(!Strings.isNullOrEmpty(channel),"channel is null or empty");
-		setMonitorChannelSupplier(Suppliers.ofInstance(channel));
-		return this;
-	}
-	
 	private class MonitorChannelSupplier  implements Supplier<Channel<DeviceHeadbeatPackage>>{
 		
 		Channel<DeviceHeadbeatPackage> channel;
 		Supplier<String> channelSupplier;
 		boolean reload = true;
-
+		String hbChannel = null;
 		@Override
 		public Channel<DeviceHeadbeatPackage> get() {
 			if(null == channel || reload){
-				if(null != channelSupplier && !Strings.isNullOrEmpty(channelSupplier.get())){
-					channel = new Channel<DeviceHeadbeatPackage>(channelSupplier.get()){};
-					reload = false;
+				if(null != channelSupplier){
+					String n = channelSupplier.get();
+					if(!Strings.isNullOrEmpty(n)){
+						// 通道名变化了则输出日志
+						if(!Objects.equal(hbChannel, n)){							
+							logger.info("Device Heartbeat channel changed:{}->{}",hbChannel,n);
+							hbChannel = n;
+							channel = new Channel<DeviceHeadbeatPackage>(hbChannel){};
+							reload = false;
+						}
+					}
 				}
 			}
 			return channel;
@@ -217,16 +180,6 @@ public class DeviceHeartbeat extends BaseServiceHeartbeatListener implements Cha
 		this.monitorChannelSupplier.channelSupplier = checkNotNull(channelSupplier,"channelSupplier is null");
 		return this;
 	}
-	/** 
-	 * 验证MAC地址有效性
-	 * @throws IllegalArgumentException MAC地址无效
-	 * @deprecated
-	  */
-	public static final byte[] validateMac(byte[]mac){
-		checkArgument(null != mac && 6 == mac.length ,"INVAILD MAC address");
-		return mac;
-	}
-
 	/**
 	 * 用指定的心跳周期参数({@link #intervalMills})启动心跳包报告定时任务<p>
 	 * 如果定时任务已经启动则先取消当前的定时任务再启动一个新的定时任务,确保只有一个定时任务在执行
