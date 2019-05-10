@@ -28,10 +28,11 @@
 		<connectiontLimit description="最大连接数"></connectiontLimit>
 		<idleConnectionTimeout description="空闲连接超时[秒]"></idleConnectionTimeout>
 		<workerThreadCount description="工作线程数"></workerThreadCount>
+		<hbInterval description="服务心跳包间隔[秒]">8</hbInterval>
 	</server>
-	<heartbeat>
-		<interval description="心跳包间隔[秒]">8</interval>
-		<expire description="心跳包失效时间[秒]">60</expire>
+	<heartbeat description="设备心跳参数">
+		<interval description="设备心跳包间隔[秒]">8</interval>
+		<expire description="设备心跳包失效时间[秒]">60</expire>
 	</heartbeat>
 
 	<redis description = "redis 参数配置">

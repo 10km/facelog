@@ -529,6 +529,34 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(applyRootToken(password,isMd5), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#applyUserToken(int,java.lang.String,boolean)}
+     */
+    public ListenableFuture<Token> applyUserToken(int userid,
+        String password,
+        boolean isMd5){
+        MethodCallback<Token,net.gdface.facelog.client.thrift.Token> nativeCallback = 
+            new MethodCallback<Token,net.gdface.facelog.client.thrift.Token>(
+                new Function<net.gdface.facelog.client.thrift.Token,Token>() {
+                        @Override
+                        public Token apply(net.gdface.facelog.client.thrift.Token input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.Token.class,
+                    Token.class);
+                }});
+        nativeCallback.service.applyUserToken(
+                userid,
+            password,
+            isMd5,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void applyUserToken(int userid,
+        String password,
+        boolean isMd5,
+        FutureCallback<Token>callback){
+        factory.addCallback(applyUserToken(userid,password,isMd5), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#bindBorder(java.lang.Integer,java.lang.Integer,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Void> bindBorder(Integer personGroupId,
@@ -2135,6 +2163,50 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(isValidRootToken(token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#isValidToken(net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Boolean> isValidToken(Token token){
+        MethodCallback<Boolean,Boolean> nativeCallback = 
+            new MethodCallback<Boolean,Boolean>(
+                new Function<Boolean,Boolean>() {
+                        @Override
+                        public Boolean apply(Boolean input) {
+                            return input;
+                }});
+        nativeCallback.service.isValidToken(
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void isValidToken(Token token,
+        FutureCallback<Boolean>callback){
+        factory.addCallback(isValidToken(token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#isValidUserToken(net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Boolean> isValidUserToken(Token token){
+        MethodCallback<Boolean,Boolean> nativeCallback = 
+            new MethodCallback<Boolean,Boolean>(
+                new Function<Boolean,Boolean>() {
+                        @Override
+                        public Boolean apply(Boolean input) {
+                            return input;
+                }});
+        nativeCallback.service.isValidUserToken(
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void isValidUserToken(Token token,
+        FutureCallback<Boolean>callback){
+        factory.addCallback(isValidUserToken(token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#listOfParentForDeviceGroup(int)}
      */
     public ListenableFuture<List<Integer>> listOfParentForDeviceGroup(int deviceGroupId){
@@ -2695,6 +2767,31 @@ public class IFaceLogThriftClientAsync {
     public void releaseRootToken(Token token,
         FutureCallback<Void>callback){
         factory.addCallback(releaseRootToken(token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#releaseUserToken(net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Void> releaseUserToken(Token token){
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.releaseUserToken(
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void releaseUserToken(Token token,
+        FutureCallback<Void>callback){
+        factory.addCallback(releaseUserToken(token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#replaceFeature(java.lang.Integer,java.lang.String,boolean,net.gdface.facelog.Token)}

@@ -420,6 +420,34 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(applyRootToken(password,isMd5), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#applyUserToken(int,java.lang.String,boolean)}
+     */
+    public ListenableFuture<Token> applyUserToken(int userid,
+        String password,
+        boolean isMd5){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Token> future = Futures.transform(
+            async.applyUserToken(userid,
+            password,
+            isMd5),
+            new Function<net.gdface.facelog.client.thrift.Token,Token>(){
+                @Override
+                public Token apply(net.gdface.facelog.client.thrift.Token input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.Token.class,
+                    Token.class);
+                }
+            });
+        return factory.wrap(async,future);
+    }
+    public void applyUserToken(int userid,
+        String password,
+        boolean isMd5,
+        FutureCallback<Token>callback){
+        factory.addCallback(applyUserToken(userid,password,isMd5), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#bindBorder(java.lang.Integer,java.lang.Integer,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Void> bindBorder(Integer personGroupId,
@@ -1576,6 +1604,36 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(isValidRootToken(token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#isValidToken(net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Boolean> isValidToken(Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Boolean> future = async.isValidToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        return factory.wrap(async,future);
+    }
+    public void isValidToken(Token token,
+        FutureCallback<Boolean>callback){
+        factory.addCallback(isValidToken(token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#isValidUserToken(net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Boolean> isValidUserToken(Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Boolean> future = async.isValidUserToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        return factory.wrap(async,future);
+    }
+    public void isValidUserToken(Token token,
+        FutureCallback<Boolean>callback){
+        factory.addCallback(isValidUserToken(token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#listOfParentForDeviceGroup(int)}
      */
     public ListenableFuture<List<Integer>> listOfParentForDeviceGroup(int deviceGroupId){        
@@ -1986,6 +2044,21 @@ public class IFaceLogThriftClientAsync {
     public void releaseRootToken(Token token,
         FutureCallback<Void>callback){
         factory.addCallback(releaseRootToken(token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#releaseUserToken(net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Void> releaseUserToken(Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Void> future = async.releaseUserToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        return factory.wrap(async,future);
+    }
+    public void releaseUserToken(Token token,
+        FutureCallback<Void>callback){
+        factory.addCallback(releaseUserToken(token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#replaceFeature(java.lang.Integer,java.lang.String,boolean,net.gdface.facelog.Token)}

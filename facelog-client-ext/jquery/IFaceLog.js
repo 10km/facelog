@@ -2000,6 +2000,185 @@ IFaceLog_applyRootToken_result.prototype.write = function(output) {
   return;
 };
 
+IFaceLog_applyUserToken_args = function(args) {
+  this.userid = null;
+  this.password = null;
+  this.isMd5 = null;
+  if (args) {
+    if (args.userid !== undefined && args.userid !== null) {
+      this.userid = args.userid;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field userid is unset!');
+    }
+    if (args.password !== undefined && args.password !== null) {
+      this.password = args.password;
+    }
+    if (args.isMd5 !== undefined && args.isMd5 !== null) {
+      this.isMd5 = args.isMd5;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field isMd5 is unset!');
+    }
+  }
+};
+IFaceLog_applyUserToken_args.prototype = {};
+IFaceLog_applyUserToken_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I32) {
+        this.userid = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRING) {
+        this.password = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.BOOL) {
+        this.isMd5 = input.readBool().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_applyUserToken_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_applyUserToken_args');
+  if (this.userid !== null && this.userid !== undefined) {
+    output.writeFieldBegin('userid', Thrift.Type.I32, 1);
+    output.writeI32(this.userid);
+    output.writeFieldEnd();
+  }
+  if (this.password !== null && this.password !== undefined) {
+    output.writeFieldBegin('password', Thrift.Type.STRING, 2);
+    output.writeString(this.password);
+    output.writeFieldEnd();
+  }
+  if (this.isMd5 !== null && this.isMd5 !== undefined) {
+    output.writeFieldBegin('isMd5', Thrift.Type.BOOL, 3);
+    output.writeBool(this.isMd5);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+IFaceLog_applyUserToken_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  this.ex2 = null;
+  if (args instanceof ServiceSecurityException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args instanceof ServiceRuntimeException) {
+    this.ex2 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = new Token(args.success);
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+    if (args.ex2 !== undefined && args.ex2 !== null) {
+      this.ex2 = args.ex2;
+    }
+  }
+};
+IFaceLog_applyUserToken_result.prototype = {};
+IFaceLog_applyUserToken_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.success = new Token();
+        this.success.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ServiceSecurityException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex2 = new ServiceRuntimeException();
+        this.ex2.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_applyUserToken_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_applyUserToken_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
+    this.success.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.ex2 !== null && this.ex2 !== undefined) {
+    output.writeFieldBegin('ex2', Thrift.Type.STRUCT, 2);
+    this.ex2.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 IFaceLog_bindBorder_args = function(args) {
   this.personGroupId = null;
   this.deviceGroupId = null;
@@ -11842,6 +12021,256 @@ IFaceLog_isValidRootToken_result.prototype.write = function(output) {
   return;
 };
 
+IFaceLog_isValidToken_args = function(args) {
+  this.token = null;
+  if (args) {
+    if (args.token !== undefined && args.token !== null) {
+      this.token = new Token(args.token);
+    }
+  }
+};
+IFaceLog_isValidToken_args.prototype = {};
+IFaceLog_isValidToken_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.token = new Token();
+        this.token.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 0:
+        input.skip(ftype);
+        break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_isValidToken_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_isValidToken_args');
+  if (this.token !== null && this.token !== undefined) {
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 1);
+    this.token.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+IFaceLog_isValidToken_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  if (args instanceof ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = args.success;
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_isValidToken_result.prototype = {};
+IFaceLog_isValidToken_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.BOOL) {
+        this.success = input.readBool().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_isValidToken_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_isValidToken_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.BOOL, 0);
+    output.writeBool(this.success);
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+IFaceLog_isValidUserToken_args = function(args) {
+  this.token = null;
+  if (args) {
+    if (args.token !== undefined && args.token !== null) {
+      this.token = new Token(args.token);
+    }
+  }
+};
+IFaceLog_isValidUserToken_args.prototype = {};
+IFaceLog_isValidUserToken_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.token = new Token();
+        this.token.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 0:
+        input.skip(ftype);
+        break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_isValidUserToken_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_isValidUserToken_args');
+  if (this.token !== null && this.token !== undefined) {
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 1);
+    this.token.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+IFaceLog_isValidUserToken_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  if (args instanceof ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = args.success;
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_isValidUserToken_result.prototype = {};
+IFaceLog_isValidUserToken_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.BOOL) {
+        this.success = input.readBool().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_isValidUserToken_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_isValidUserToken_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.BOOL, 0);
+    output.writeBool(this.success);
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 IFaceLog_listOfParentForDeviceGroup_args = function(args) {
   this.deviceGroupId = null;
   if (args) {
@@ -15365,6 +15794,136 @@ IFaceLog_releaseRootToken_result.prototype.read = function(input) {
 
 IFaceLog_releaseRootToken_result.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_releaseRootToken_result');
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.ex2 !== null && this.ex2 !== undefined) {
+    output.writeFieldBegin('ex2', Thrift.Type.STRUCT, 2);
+    this.ex2.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+IFaceLog_releaseUserToken_args = function(args) {
+  this.token = null;
+  if (args) {
+    if (args.token !== undefined && args.token !== null) {
+      this.token = new Token(args.token);
+    }
+  }
+};
+IFaceLog_releaseUserToken_args.prototype = {};
+IFaceLog_releaseUserToken_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.token = new Token();
+        this.token.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 0:
+        input.skip(ftype);
+        break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_releaseUserToken_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_releaseUserToken_args');
+  if (this.token !== null && this.token !== undefined) {
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 1);
+    this.token.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+IFaceLog_releaseUserToken_result = function(args) {
+  this.ex1 = null;
+  this.ex2 = null;
+  if (args instanceof ServiceSecurityException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args instanceof ServiceRuntimeException) {
+    this.ex2 = args;
+    return;
+  }
+  if (args) {
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+    if (args.ex2 !== undefined && args.ex2 !== null) {
+      this.ex2 = args.ex2;
+    }
+  }
+};
+IFaceLog_releaseUserToken_result.prototype = {};
+IFaceLog_releaseUserToken_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ServiceSecurityException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex2 = new ServiceRuntimeException();
+        this.ex2.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_releaseUserToken_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_releaseUserToken_result');
   if (this.ex1 !== null && this.ex1 !== undefined) {
     output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
     this.ex1.write(output);
@@ -20080,6 +20639,56 @@ IFaceLogClient.prototype.recv_applyRootToken = function() {
   }
   throw 'applyRootToken failed: unknown result';
 };
+IFaceLogClient.prototype.applyUserToken = function(userid, password, isMd5, callback) {
+  if (callback === undefined) {
+    this.send_applyUserToken(userid, password, isMd5);
+    return this.recv_applyUserToken();
+  } else {
+    var postData = this.send_applyUserToken(userid, password, isMd5, true);
+    return this.output.getTransport()
+      .jqRequest(this, postData, arguments, this.recv_applyUserToken);
+  }
+};
+
+IFaceLogClient.prototype.send_applyUserToken = function(userid, password, isMd5, callback) {
+  this.output.writeMessageBegin('applyUserToken', Thrift.MessageType.CALL, this.seqid);
+  var params = {
+    userid: userid,
+    password: password,
+    isMd5: isMd5
+  };
+  var args = new IFaceLog_applyUserToken_args(params);
+  args.write(this.output);
+  this.output.writeMessageEnd();
+  return this.output.getTransport().flush(callback);
+};
+
+IFaceLogClient.prototype.recv_applyUserToken = function() {
+  var ret = this.input.readMessageBegin();
+  var fname = ret.fname;
+  var mtype = ret.mtype;
+  var rseqid = ret.rseqid;
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(this.input);
+    this.input.readMessageEnd();
+    throw x;
+  }
+  var result = new IFaceLog_applyUserToken_result();
+  result.read(this.input);
+  this.input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    throw result.ex1;
+  }
+  if (null !== result.ex2) {
+    throw result.ex2;
+  }
+  if (null !== result.success) {
+    return result.success;
+  }
+  throw 'applyUserToken failed: unknown result';
+};
 IFaceLogClient.prototype.bindBorder = function(personGroupId, deviceGroupId, token, callback) {
   if (callback === undefined) {
     this.send_bindBorder(personGroupId, deviceGroupId, token);
@@ -23245,6 +23854,96 @@ IFaceLogClient.prototype.recv_isValidRootToken = function() {
   }
   throw 'isValidRootToken failed: unknown result';
 };
+IFaceLogClient.prototype.isValidToken = function(token, callback) {
+  if (callback === undefined) {
+    this.send_isValidToken(token);
+    return this.recv_isValidToken();
+  } else {
+    var postData = this.send_isValidToken(token, true);
+    return this.output.getTransport()
+      .jqRequest(this, postData, arguments, this.recv_isValidToken);
+  }
+};
+
+IFaceLogClient.prototype.send_isValidToken = function(token, callback) {
+  this.output.writeMessageBegin('isValidToken', Thrift.MessageType.CALL, this.seqid);
+  var params = {
+    token: token
+  };
+  var args = new IFaceLog_isValidToken_args(params);
+  args.write(this.output);
+  this.output.writeMessageEnd();
+  return this.output.getTransport().flush(callback);
+};
+
+IFaceLogClient.prototype.recv_isValidToken = function() {
+  var ret = this.input.readMessageBegin();
+  var fname = ret.fname;
+  var mtype = ret.mtype;
+  var rseqid = ret.rseqid;
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(this.input);
+    this.input.readMessageEnd();
+    throw x;
+  }
+  var result = new IFaceLog_isValidToken_result();
+  result.read(this.input);
+  this.input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    throw result.ex1;
+  }
+  if (null !== result.success) {
+    return result.success;
+  }
+  throw 'isValidToken failed: unknown result';
+};
+IFaceLogClient.prototype.isValidUserToken = function(token, callback) {
+  if (callback === undefined) {
+    this.send_isValidUserToken(token);
+    return this.recv_isValidUserToken();
+  } else {
+    var postData = this.send_isValidUserToken(token, true);
+    return this.output.getTransport()
+      .jqRequest(this, postData, arguments, this.recv_isValidUserToken);
+  }
+};
+
+IFaceLogClient.prototype.send_isValidUserToken = function(token, callback) {
+  this.output.writeMessageBegin('isValidUserToken', Thrift.MessageType.CALL, this.seqid);
+  var params = {
+    token: token
+  };
+  var args = new IFaceLog_isValidUserToken_args(params);
+  args.write(this.output);
+  this.output.writeMessageEnd();
+  return this.output.getTransport().flush(callback);
+};
+
+IFaceLogClient.prototype.recv_isValidUserToken = function() {
+  var ret = this.input.readMessageBegin();
+  var fname = ret.fname;
+  var mtype = ret.mtype;
+  var rseqid = ret.rseqid;
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(this.input);
+    this.input.readMessageEnd();
+    throw x;
+  }
+  var result = new IFaceLog_isValidUserToken_result();
+  result.read(this.input);
+  this.input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    throw result.ex1;
+  }
+  if (null !== result.success) {
+    return result.success;
+  }
+  throw 'isValidUserToken failed: unknown result';
+};
 IFaceLogClient.prototype.listOfParentForDeviceGroup = function(deviceGroupId, callback) {
   if (callback === undefined) {
     this.send_listOfParentForDeviceGroup(deviceGroupId);
@@ -24286,6 +24985,51 @@ IFaceLogClient.prototype.recv_releaseRootToken = function() {
     throw x;
   }
   var result = new IFaceLog_releaseRootToken_result();
+  result.read(this.input);
+  this.input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    throw result.ex1;
+  }
+  if (null !== result.ex2) {
+    throw result.ex2;
+  }
+  return;
+};
+IFaceLogClient.prototype.releaseUserToken = function(token, callback) {
+  if (callback === undefined) {
+    this.send_releaseUserToken(token);
+    this.recv_releaseUserToken();
+  } else {
+    var postData = this.send_releaseUserToken(token, true);
+    return this.output.getTransport()
+      .jqRequest(this, postData, arguments, this.recv_releaseUserToken);
+  }
+};
+
+IFaceLogClient.prototype.send_releaseUserToken = function(token, callback) {
+  this.output.writeMessageBegin('releaseUserToken', Thrift.MessageType.CALL, this.seqid);
+  var params = {
+    token: token
+  };
+  var args = new IFaceLog_releaseUserToken_args(params);
+  args.write(this.output);
+  this.output.writeMessageEnd();
+  return this.output.getTransport().flush(callback);
+};
+
+IFaceLogClient.prototype.recv_releaseUserToken = function() {
+  var ret = this.input.readMessageBegin();
+  var fname = ret.fname;
+  var mtype = ret.mtype;
+  var rseqid = ret.rseqid;
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(this.input);
+    this.input.readMessageEnd();
+    throw x;
+  }
+  var result = new IFaceLog_releaseUserToken_result();
   result.read(this.input);
   this.input.readMessageEnd();
 

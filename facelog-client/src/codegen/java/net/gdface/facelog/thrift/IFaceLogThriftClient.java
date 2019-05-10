@@ -408,6 +408,36 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public Token applyUserToken(int userid,
+        String password,
+        boolean isMd5) 
+        throws ServiceSecurityException{
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.applyUserToken(userid,
+                password,
+                isMd5),
+                    net.gdface.facelog.client.thrift.Token.class,
+                    Token.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
+                    ServiceSecurityException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
     public void bindBorder(Integer personGroupId,
         Integer deviceGroupId,
         Token token) 
@@ -1727,6 +1757,40 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public boolean isValidToken(Token token) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return instance.isValidToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public boolean isValidUserToken(Token token) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return instance.isValidUserToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
     public List<Integer> listOfParentForDeviceGroup(int deviceGroupId) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
@@ -2224,6 +2288,29 @@ public class IFaceLogThriftClient implements IFaceLog {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
              instance.releaseRootToken(TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceSecurityException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.ServiceSecurityException.class,
+                    ServiceSecurityException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public void releaseUserToken(Token token) 
+        throws ServiceSecurityException{
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+             instance.releaseUserToken(TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class));

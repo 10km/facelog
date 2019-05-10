@@ -1,7 +1,5 @@
 package net.gdface.facelog.client;
 
-import static org.junit.Assert.*;
-
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -15,15 +13,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
 
-import gu.simplemq.Channel;
-import gu.simplemq.IMessageAdapter;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.JedisPoolLazy.PropName;
-import gu.simplemq.redis.RedisFactory;
-import net.gdface.facelog.MQParam;
+import net.gdface.facelog.DeviceHeadbeatPackage;
 import net.gdface.facelog.Token;
-import net.gdface.facelog.device.Heartbeat;
+import net.gdface.facelog.hb.DeviceHeartbeatListener;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
 import redis.clients.jedis.Protocol;
@@ -46,19 +41,19 @@ public class HeartbeatTest implements ChannelConstant{
 					/** redis 端口号 */PropName.port,Protocol.DEFAULT_PORT,
 					/** redis 连接密码 */PropName.password, "hello"
 					);
-	/** 设备心跳监控频道 */
-	private static String monitorChannelName;
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		// 根据连接参数创建默认实例 
 		JedisPoolLazy.createDefaultInstance( redisParam);
 		// 创建服务实例
-		facelogClient = ClientFactory.builder().setHostAndPort("127.0.0.1", DEFAULT_PORT).build(IFaceLogThriftClient.class, IFaceLogClient.class);
+		facelogClient = ClientFactory.builder()
+				.setHostAndPort("127.0.0.1", DEFAULT_PORT)
+				.setDecorator(RefreshTokenDecorator.makeDecoratorFunction(TokenHelperTestImpl.INSTANCE))
+				.build(IFaceLogThriftClient.class, IFaceLogClient.class);
 		// 申请令牌
 		rootToken = facelogClient.applyRootToken("guyadong", false);
-		// 从facelog service 获取心跳监控频道名 
-		monitorChannelName = facelogClient.getRedisParameters(rootToken).get(MQParam.HB_MONITOR_CHANNEL);
-		logger.info("monitorChannelName = {}",monitorChannelName);
+		facelogClient.setTokenHelper(TokenHelperTestImpl.INSTANCE)
+			.startServiceHeartbeatListener(rootToken, true);
 	}
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
@@ -66,18 +61,21 @@ public class HeartbeatTest implements ChannelConstant{
 	}
 	/**
 	 * 设备端发送心跳包测试
+	 * @throws InterruptedException 
 	 */
 	@Test
-	public void test1SendHB() {
-		byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
-		Heartbeat hb = Heartbeat.makeHeartbeat(address, 12345, JedisPoolLazy.getDefaultInstance())
-				/** 将设备心跳包数据发送到指定的设备心跳监控通道名,否则监控端无法收到设备心跳包 */
-				.setMonitorChannel(monitorChannelName);
-		/** 以默认间隔启动定时任务 */
-		hb.start();
+	public void test1SendHB() throws InterruptedException {
+	
 		System.out.println("Heartbeat thead start");
-		/** 间隔2秒发送心跳，重新启动定时任务 */
-		hb.setInterval(2, TimeUnit.SECONDS).start();
+		try {
+			facelogClient.makeHeartbeat(12345, rootToken, null)
+				/** 间隔2秒发送心跳，重新启动定时任务 */
+				.setInterval(2, TimeUnit.SECONDS)
+				.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 	/**
 	 * 管理端心跳包监控测试
@@ -85,17 +83,31 @@ public class HeartbeatTest implements ChannelConstant{
 	 */
 	@Test
 	public void test2HBMonitor() throws InterruptedException{
-		Channel<HeadbeatPackage> hbMonitorChannel = new Channel<HeadbeatPackage>(monitorChannelName,
-				new IMessageAdapter<HeadbeatPackage>(){
+		DeviceHeartbeatListener hbAdapter = new DeviceHeartbeatListener(){
 			@Override
-			public void onSubscribe(HeadbeatPackage t) throws SmqUnsubscribeException {
+			public void onSubscribe(DeviceHeadbeatPackage t) throws SmqUnsubscribeException {
 				// 显示收到的心跳包
 				logger.info(t.toString());
-			}}){};
-		// 注册，订阅设备心跳监控频道消息
-		RedisFactory.getSubscriber().register(hbMonitorChannel);
+			}};
 		
-		/** 20秒后结束测试 */
-		Thread.sleep(20*1000);
+		facelogClient.makeHeartbeatMonitor(hbAdapter, rootToken,null).start();
+		/** 40秒后结束测试 */
+		Thread.sleep(300*1000);
+	}
+	public static class TokenHelperTestImpl extends TokenHelper {
+		final static TokenHelperTestImpl INSTANCE = new TokenHelperTestImpl(); 
+		public TokenHelperTestImpl() {
+		}
+
+		@Override
+		public String passwordOf(int id) {
+			return "guyadong";
+		}
+
+		@Override
+		public boolean isHashedPwd() {
+			return false;
+		}
+
 	}
 }

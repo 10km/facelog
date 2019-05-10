@@ -153,7 +153,20 @@ class TokenMangement implements ServiceConstant {
 	/** 验证设备令牌是否有效 */
 	boolean isValidDeviceToken(Token token){
 		if(validateDeviceToken){
-			return null == token ? false : token.equals(deviceTokenTable.get(Integer.toString(token.getId())));			
+			return null == token 
+					? false 
+					: TokenType.DEVICE.equals(token.getType()) && token.equals(deviceTokenTable.get(Integer.toString(token.getId())));			
+		}else{
+			return true;
+		}
+	}
+	/** 验证PERSON/ROOT令牌是否有效 */
+	boolean isValidUserToken(Token token){
+		if(validatePersonToken){
+			return null == token 
+					? false 
+					: (TokenType.PERSON.equals(token.getType()) || TokenType.ROOT.equals(token.getType()))
+						&& token.equals(personTokenTable.get(Integer.toString(token.getId())));
 		}else{
 			return true;
 		}
@@ -161,7 +174,7 @@ class TokenMangement implements ServiceConstant {
 	/** 验证人员令牌是否有效 */
 	boolean isValidPersonToken(Token token){
 		if(validatePersonToken){
-			return null == token ? false : token.equals(personTokenTable.get(Integer.toString(token.getId())));
+			return token != null  ? TokenType.PERSON.equals(token.getType()) && isValidUserToken(token) : false;
 		}else{
 			return true;
 		}
@@ -169,10 +182,26 @@ class TokenMangement implements ServiceConstant {
 	/** 验证root令牌是否有效 */
 	boolean isValidRootToken(Token token){
 		if(validatePersonToken){
-			return isValidPersonToken(token) && TokenType.ROOT.equals(token.getType());
+			return TokenType.ROOT.equals(token.getType()) && isValidUserToken(token);
 		}else{
 			return true;
 		}
+	}
+	/** 验证令牌是否有效 */
+	boolean isValidToken(Token token){
+		if(token != null){
+			switch (token.getType()) {
+			case DEVICE:
+				return isValidDeviceToken(token);
+			case PERSON:
+			case ROOT:
+				return isValidUserToken(token);
+			default:
+				break;
+			}
+		}
+		return false;
+
 	}
 	/** 检查数据库是否存在指定的设备记录,没有则抛出异常{@link ServiceSecurityException} */
 	protected void checkValidDeviceId(Integer deviceId) throws ServiceSecurityException{

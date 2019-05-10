@@ -1,7 +1,6 @@
 package net.gdface.facelog.client;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -11,17 +10,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
-
 import com.google.common.base.Function;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 import gu.dtalk.MenuItem;
 import gu.simplemq.redis.JedisPoolLazy;
+import gu.simplemq.redis.RedisFactory;
+import gu.simplemq.redis.RedisSubscriber;
 import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.MQParam;
+import net.gdface.facelog.ServiceHeartbeatPackage;
 import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.Token.TokenType;
@@ -29,6 +32,12 @@ import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
 import net.gdface.facelog.client.dtalk.FacelogRedisConfigProvider;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.PersonBean;
+import net.gdface.facelog.hb.BaseServiceHeartbeatListener;
+import net.gdface.facelog.hb.DeviceHeartbeatListener;
+import net.gdface.facelog.hb.DeviceHeartbeat;
+import net.gdface.facelog.hb.HeartbeatMonitor;
+import net.gdface.facelog.hb.ServiceHeartbeatAdapter;
+import net.gdface.facelog.hb.ServiceHeartbeatListener;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.facelog.thrift.IFaceLogThriftClientAsync;
 import net.gdface.thrift.ClientFactory;
@@ -39,22 +48,73 @@ import net.gdface.utils.NetworkUtil;
  * @author guyadong
  *
  */
-public class ClientExtendTools {
+public class ClientExtendTools{
 	private final IFaceLog syncInstance;
 	private final IFaceLogThriftClientAsync asyncInstance;
 	private final ClientFactory factory;
+	private TokenHelper tokenHelper;
+	private final ServiceHeartbeatListener tokenRefreshListener = new BaseServiceHeartbeatListener(){
+		@Override
+		public boolean doServiceOnline(ServiceHeartbeatPackage heartbeatPackage){
+			// 执行令牌刷新，更新redis参数
+			return tokenRefresh !=null && tokenRefresh.refresh();
+		}};
+
+	private TokenRefresh tokenRefresh;
+	private class TokenRefresh implements Supplier<Token>{
+		private Token token;
+		private final Object lock = new Object();
+		private volatile boolean relead = true;
+		private final TokenHelper helper;
+		private TokenRefresh(TokenHelper helper,Token token) {
+			this.helper = checkNotNull(helper,"helper is null");
+			this.token = checkNotNull(token,"token is null");
+		}
+		@Override
+		public Token get() {
+			if(relead){
+				synchronized (lock) {
+					if(relead){
+						Token t = refreshToken(helper, token);				
+						if(null != t){
+							relead = false;
+							token.assignFrom(t);
+						}
+						return t;
+					}					
+				}				
+			}
+			return token;
+		}
+		/**
+		 * 刷新令牌和redis参数
+		 * @return 刷新成功返回{@code true}，否则返回{@code false}
+		 */
+		boolean refresh(){
+			relead = true;
+			Token token = get();
+			if(null != token){
+				try {
+					getRedisParameters(token);
+					return 	true;
+				} catch (Exception e) {
+					// DO NOTHING
+				}
+			}
+			return false;
+		}
+	}
 	ClientExtendTools(IFaceLogThriftClient syncInstance) {
 		super();
 		this.syncInstance = checkNotNull(syncInstance,"syncInstance is null");
 		this.asyncInstance = null;
-		factory = syncInstance.getFactory();
+		this.factory = syncInstance.getFactory();
 	}
 	ClientExtendTools(IFaceLogThriftClientAsync asyncInstance) {
 		super();
 		this.syncInstance = null;
 		this.asyncInstance = checkNotNull(asyncInstance,"asyncInstance is null");
-		factory = asyncInstance.getFactory();
-
+		this.factory = asyncInstance.getFactory();
 	}
 	/**
 	 * 如果{@code host}是本机地址则用facelog服务主机名替换
@@ -479,20 +539,12 @@ public class ClientExtendTools {
      * @return
      * @throws ServiceSecurityException
      */
-    public Token applyUserToken(int userid,String password,boolean isMd5) throws ServiceSecurityException{
+    private Token applyUserToken(int userid,String password,boolean isMd5) throws ServiceSecurityException{
     	Token token;
     	try {
-    		if(userid == -1){
-
-    			token = syncInstance != null 
-    					? syncInstance.applyRootToken(password, isMd5)
-    							: asyncInstance.applyRootToken(password, isMd5).get();
-
-    		}else{
-    			token = syncInstance != null 
-    					? syncInstance.applyPersonToken(userid, password, isMd5)
-    							: asyncInstance.applyPersonToken(userid, password, isMd5).get();
-    		}
+			token = syncInstance != null 
+					? syncInstance.applyUserToken(userid, password, isMd5)
+					: asyncInstance.applyUserToken(userid, password, isMd5).get();
     		return token;
     	} catch (ExecutionException e) {
     		Throwables.propagateIfPossible(e.getCause(), ServiceSecurityException.class);
@@ -508,6 +560,7 @@ public class ClientExtendTools {
 	 * @return
 	 */
 	private Map<MQParam, String> getRedisParameters(Token token){
+		checkArgument(token != null,"token is null");
 		// 获取redis连接参数
 		try {
 			Map<MQParam, String> param = syncInstance != null 
@@ -523,10 +576,35 @@ public class ClientExtendTools {
 	    }
 	}
 	/**
+	 * @param token 调用 {@link #getRedisParameters(Token)}所需要的令牌
+	 * @return 返回一个获取redis参数的{@link Supplier}实例
+	 */
+	public Supplier<Map<MQParam, String>> getRedisParametersSupplier(final Token token){
+		checkArgument(token != null,"token is null");
+		return new Supplier<Map<MQParam, String>>(){
+
+			@Override
+			public Map<MQParam, String> get() {
+				return getRedisParameters(token);
+			}};
+	}
+	/**
+	 * @param token 调用 {@link #getRedisParameters(Token)}所需要的令牌
+	 * @return 返回一个获取设备心跳实时监控通道名的{@link Supplier}实例
+	 */
+	public Supplier<String> getMonitorChannelSupplier(Token token){
+		return Suppliers.compose(new Function<Map<MQParam, String>,String>(){
+			@Override
+			public String apply(Map<MQParam, String> input) {
+				return input.get(MQParam.HB_MONITOR_CHANNEL);
+			}
+		}, getRedisParametersSupplier(token));
+	}
+	/**
 	 * 创建dtalk引擎
 	 * @param deviceToken 设备令牌，不可为{@code null}
 	 * @param rootMenu 包括所有菜单的根菜单对象，不可为{@code null}
-	 * @return
+	 * @return {@link DtalkEngineForFacelog}实例
 	 */
 	public DtalkEngineForFacelog initDtalkEngine(Token deviceToken, MenuItem rootMenu){
 		// 设备端才能调用此方法
@@ -556,5 +634,138 @@ public class ClientExtendTools {
 		Map<MQParam, String> redisParam = getRedisParameters(token);
 		URI uri = URI.create(redisParam.get(MQParam.REDIS_URI));
 		JedisPoolLazy.getInstance(uri).asDefaultInstance();
+	}
+	private Token online(DeviceBean deviceBean) throws ServiceSecurityException{
+		try{
+			return syncInstance != null 
+					? syncInstance.online(deviceBean) 
+					: asyncInstance.online(deviceBean).get();
+    	} catch (ExecutionException e) {
+    		Throwables.propagateIfPossible(e.getCause(), ServiceSecurityException.class);
+	        throw new RuntimeException(e.getCause());
+		} catch(Exception e){
+    		Throwables.propagateIfPossible(e, ServiceSecurityException.class);
+            throw new RuntimeException(e);
+        }
+	}
+
+	/**
+	 * 令牌刷新
+	 * @param helper
+	 * @param token
+	 * @return 刷新的令牌,刷新失败返回{@code null}
+	 */
+	public Token refreshToken(TokenHelper helper,Token token){
+		// 最后一个参数为token
+		Token freshToken = null;
+		try{
+			// 重新申请令牌
+			switch(token.getType()){
+			case DEVICE:{
+				if(helper.deviceBean() != null){
+					freshToken = online(helper.deviceBean());
+				}
+				break;
+			}
+			case ROOT:
+			case PERSON:{
+				String pwd = helper.passwordOf(token.getId());
+				if(pwd != null){
+					freshToken = applyUserToken(token.getId(),pwd,helper.isHashedPwd());
+				}
+				break;
+			}
+			default:
+				break;
+			}
+			// 如果申请令牌成功则更新令牌参数，重新执行方法调用
+			if(freshToken != null){
+				// 用申请的新令牌更新参数
+				helper.saveFreshedToken(freshToken);
+			}
+		}catch (Exception er) {
+			// DO NOTHING
+		}
+		return freshToken;
+	}
+
+	/**
+	 * 返回有效令牌的{@link Supplier}实例<br>
+	 * @return {@link Supplier}实例
+	 */
+	public Supplier<Token> getTokenSupplier(){
+		return checkNotNull(this.tokenRefresh,"tokenRefresh field must be initialized by startServiceHeartbeatListener firstly");
+	}
+	public ClientExtendTools addServiceEventListener(ServiceHeartbeatListener listener){
+		ServiceHeartbeatAdapter.INSTANCE.addServiceEventListener(listener);	
+		return this;
+	}
+	public ClientExtendTools removeServiceEventListener(ServiceHeartbeatListener listener){
+		ServiceHeartbeatAdapter.INSTANCE.removeServiceEventListener(listener);
+		return this;
+	}
+	/**
+	 * 创建设备心跳包侦听对象
+	 * @param listener
+	 * @param token
+	 * @param jedisPoolLazy jedis连接池对象，为{@code null}使用默认实例
+	 * @return 返回{@link HeartbeatMonitor}实例
+	 */
+	public HeartbeatMonitor makeHeartbeatMonitor(DeviceHeartbeatListener listener,Token token, JedisPoolLazy jedisPoolLazy) {
+		HeartbeatMonitor monitor = new HeartbeatMonitor(
+				listener,
+				getMonitorChannelSupplier(token),
+				MoreObjects.firstNonNull(jedisPoolLazy,JedisPoolLazy.getDefaultInstance()));
+		addServiceEventListener(monitor);
+		return monitor;
+	}
+	/**
+	 * 创建设备心跳包发送对象<br>
+	 * {@link DeviceHeartbeat}为单实例,该方法只能调用一次
+	 * @param deviceID 设备ID
+	 * @param token 设备令牌
+	 * @param jedisPoolLazy jedis连接池对象，为{@code null}使用默认实例
+	 * @return {@link DeviceHeartbeat}实例
+	 */
+	public DeviceHeartbeat makeHeartbeat(int deviceID,Token token,JedisPoolLazy jedisPoolLazy){
+		DeviceHeartbeat heartbeat = DeviceHeartbeat.makeHeartbeat(
+				deviceID,
+				MoreObjects.firstNonNull(jedisPoolLazy,JedisPoolLazy.getDefaultInstance()))
+				/** 将设备心跳包数据发送到指定的设备心跳监控通道名,否则监控端无法收到设备心跳包 */
+				.setMonitorChannelSupplier(getMonitorChannelSupplier(token));
+		addServiceEventListener(heartbeat);
+		return heartbeat;
+	}
+	/**
+	 * @param tokenHelper 要设置的 tokenHelper
+	 * @return 当前{@link ClientExtendTools}实例
+	 */
+	public ClientExtendTools setTokenHelper(TokenHelper tokenHelper) {
+		this.tokenHelper = tokenHelper;
+		return this;
+	}
+	/**
+	 * 启动服务心跳侦听器<br>
+	 * 启动侦听器后CLIENT端才能感知服务端断线，并执行相应动作。
+	 * 调用前必须先执行{@link #setTokenHelper(TokenHelper)}初始化
+	 * @param token 令牌
+	 * @param initJedisPoolLazyDefaultInstance 是否初始化 {@link JedisPoolLazy}默认实例
+	 * @return 返回当前{@link ClientExtendTools}实例
+	 */
+	public ClientExtendTools startServiceHeartbeatListener(Token token,boolean initJedisPoolLazyDefaultInstance){
+		checkState(tokenHelper != null,"tokenHelper field must be initialized by setTokenHelper firstly");
+		this.tokenRefresh = new TokenRefresh(tokenHelper, token);
+		RedisSubscriber subscriber;
+		if(initJedisPoolLazyDefaultInstance){
+			initRedisDefaultInstance(token);
+			subscriber = RedisFactory.getSubscriber();
+		}else{
+			Map<MQParam, String> redisParam = getRedisParameters(token);
+			URI uri = URI.create(redisParam.get(MQParam.REDIS_URI));
+			subscriber = RedisFactory.getSubscriber(JedisPoolLazy.getInstance(uri));
+		}
+		subscriber.register(ServiceHeartbeatAdapter.SERVICE_HB_CHANNEL);
+		addServiceEventListener(tokenRefreshListener);
+		return this;
 	}
 }

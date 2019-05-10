@@ -25,7 +25,6 @@ public class FaceLogService extends ThriftServerService implements CommonConstan
 	private static FaceLogService httpService;
 	// 封装为thrift服务的facelog接口静态实例
 	private static final IFaceLogThriftDecorator FACELOG = new IFaceLogThriftDecorator(new FaceLogImpl());
-	
 	/**
 	 * 从配置文件中读取参数创建{@link ThriftServerConfig}实例
 	 * @return
@@ -88,5 +87,17 @@ public class FaceLogService extends ThriftServerService implements CommonConstan
 			List<ThriftEventHandler> eventHandlers,
 			ThriftServerConfig thriftServerConfig) {
 		super(services, eventHandlers, thriftServerConfig);
+	}
+	/**
+	 * @return service
+	 */
+	public static FaceLogService getService() {
+		return service;
+	}
+	/**
+	 * @return httpService
+	 */
+	public static FaceLogService getHttpService() {
+		return httpService;
 	}
 }

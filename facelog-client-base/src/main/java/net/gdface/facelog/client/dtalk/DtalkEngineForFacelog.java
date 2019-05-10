@@ -11,8 +11,7 @@ import net.gdface.facelog.Token;
 import net.gdface.utils.NetworkUtil;
 
 import static gu.dtalk.CommonUtils.*;
-import static gu.dtalk.engine.SampleConnector.*;
-
+import static gu.dtalk.engine.DeviceUtils.DEVINFO_PROVIDER;
 import com.google.common.base.Function;
 
 import gu.dtalk.MenuItem;

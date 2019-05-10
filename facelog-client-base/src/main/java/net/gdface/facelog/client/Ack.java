@@ -14,6 +14,8 @@ import com.google.common.base.Strings;
 public class Ack<T> {
 	private long cmdSn;
 	private int deviceId;
+	private String deviceMac;
+	private String item;
 	private T value;
 	private Status status;
 	private String errorMessage;
@@ -67,14 +69,52 @@ public class Ack<T> {
 		return deviceId;
 	}
 
+	/**
+	 * @param deviceId
+	 * @return 当前{@link Ack}实例
+	 */
 	public Ack<T> setDeviceId(int deviceId) {
 		this.deviceId = deviceId;
+		return this;
+	}
+	/**
+	 * @return 返回设备MAC地址16进制(HEX)字符串
+	 */
+	public String getDeviceMac() {
+		return deviceMac;
+	}
+	/**
+	 * @param deviceMac 要设置的 deviceMac
+	 * @return 当前{@link Ack}实例
+	 */
+	public Ack<T> setDeviceMac(String deviceMac) {
+		this.deviceMac = deviceMac;
+		return this;
+	}
+	/**
+	 * @return 返回响应的条目(item)路径
+	 */
+	public String getItem() {
+		return item;
+	}
+	/**
+	 * 设备响应的条目(item)路径
+	 * @param item 要设置的 item
+	 * @return 当前{@link Ack}实例
+	 */
+	public Ack<T> setItem(String item) {
+		this.item = item;
 		return this;
 	}
 	/** 返回设备命令执行结果对象 */
 	public T getValue() {
 		return value;
 	}
+	/**
+	 * 设置设备命令执行结果对象
+	 * @param value
+	 * @return 当前{@link Ack}实例
+	 */
 	public Ack<T> setValue(T value) {
 		this.value = value;
 		return this;
@@ -83,18 +123,29 @@ public class Ack<T> {
 	public Status getStatus() {
 		return status;
 	}
+	/**
+	 * 设置响应状态
+	 * @param status
+	 * @return 当前{@link Ack}实例
+	 */
 	public Ack<T> setStatus(Status status) {
 		this.status = status;
 		return this;
 	}
-	/** 返回设备命令执行错误信息 */
+	/** 返回错误信息 */
 	public String getErrorMessage() {
 		return errorMessage;
 	}
+	/**
+	 * 设置错误信息
+	 * @param errorMessage 
+	 * @return 当前{@link Ack}实例
+	 */
 	public Ack<T> setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
 		return this;
 	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -102,13 +153,33 @@ public class Ack<T> {
 		builder.append(cmdSn);
 		builder.append(", deviceId=");
 		builder.append(deviceId);
-		builder.append(", value=");
-		builder.append(value);
-		builder.append(", status=");
-		builder.append(status);
-		builder.append(", errorMessage=");
-		builder.append(errorMessage);
+		builder.append(", ");
+		if (deviceMac != null) {
+			builder.append("deviceMac=");
+			builder.append(deviceMac);
+			builder.append(", ");
+		}
+		if (item != null) {
+			builder.append("item=");
+			builder.append(item);
+			builder.append(", ");
+		}
+		if (value != null) {
+			builder.append("value=");
+			builder.append(value);
+			builder.append(", ");
+		}
+		if (status != null) {
+			builder.append("status=");
+			builder.append(status);
+			builder.append(", ");
+		}
+		if (errorMessage != null) {
+			builder.append("errorMessage=");
+			builder.append(errorMessage);
+		}
 		builder.append("]");
 		return builder.toString();
 	}
+
 }

@@ -931,10 +931,10 @@ public interface IFaceLog{
 	public void offline(Token token)	throws ServiceSecurityException;
 	/**
 	 * 申请人员访问令牌
-	 * @param personId
+	 * @param personId 用户ID
 	 * @param password 密码
 	 * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
-	 * @return
+	 * @return 返回申请的令牌
 	 * @throws ServiceSecurityException
 	 */
 	public Token applyPersonToken(int personId, String password, boolean isMd5)
@@ -951,7 +951,7 @@ public interface IFaceLog{
 	 * 申请root访问令牌
 	 * @param password root用户密码
 	 * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
-	 * @return
+	 * @return 返回申请的令牌
 	 * @throws ServiceSecurityException
 	 */
 	public Token applyRootToken(String password, boolean isMd5)
@@ -965,6 +965,25 @@ public interface IFaceLog{
 	 */
 	public void releaseRootToken(Token token)
 			throws ServiceSecurityException;
+	/**
+	 * 申请person/root访问令牌
+	 * @param userid 用户ID(为-1时为root)
+	 * @param password 用户密码
+	 * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
+	 * @return 返回申请的令牌
+	 * @throws ServiceSecurityException
+	 * @since 2.1.1
+	 */
+	Token applyUserToken(int userid, String password, boolean isMd5) throws ServiceSecurityException;
+
+	/**
+	 * 释放person/root访问令牌
+	 * @param token 要释放的令牌,如果令牌类型非{@link net.gdface.facelog.Token.TokenType#PERSON}或{@link net.gdface.facelog.Token.TokenType#ROOT}则抛出{@link ServiceSecurityException}异常
+	 * @throws ServiceSecurityException
+	 * @since 2.1.1
+	 */
+	void releaseUserToken(Token token) throws ServiceSecurityException;
+
 	/**
 	 * 验证用户密码是否匹配
 	 * @param userId 用户id字符串,root用户id即为{@link CommonConstant#ROOT_NAME}
@@ -1030,6 +1049,21 @@ public interface IFaceLog{
 	 * @return 令牌有效返回{@code true},否则返回{@code false}
 	 */
 	boolean isValidRootToken(Token token);
+	/**
+	 * 验证PERSON/ROOT令牌是否有效
+	 * @param token
+	 * @return 令牌有效返回{@code true},否则返回{@code false}
+	 * @since 2.1.1
+	 */
+	boolean isValidUserToken(Token token);
+
+	/**
+	 * 验证令牌是否有效
+	 * @param token
+	 * @return 令牌有效返回{@code true},否则返回{@code false}
+	 * @since 2.1.1
+	 */
+	boolean isValidToken(Token token);
 
 	/**
      * 返回redis访问基本参数:<br>
@@ -1125,6 +1159,7 @@ public interface IFaceLog{
 	 * @return
 	 */
 	public boolean isLocal();
+
 
 
 }

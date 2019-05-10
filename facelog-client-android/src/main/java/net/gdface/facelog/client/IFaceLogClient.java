@@ -9,12 +9,16 @@ import java.util.Map;
 import com.google.common.base.Supplier;
 
 import gu.dtalk.MenuItem;
+import gu.simplemq.redis.JedisPoolLazy;
 import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.IFaceLogDecorator;
 import net.gdface.facelog.MQParam;
-import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
+import net.gdface.facelog.hb.DeviceHeartbeatListener;
+import net.gdface.facelog.hb.DeviceHeartbeat;
+import net.gdface.facelog.hb.HeartbeatMonitor;
+import net.gdface.facelog.hb.ServiceHeartbeatListener;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.utils.Delegator;
 
@@ -114,17 +118,6 @@ public class IFaceLogClient extends IFaceLogDecorator {
 		return clientTools.getCmdSnSupplier(token);
 	}
 	/**
-	 * @param userid
-	 * @param password
-	 * @param isMd5
-	 * @return
-	 * @throws ServiceSecurityException
-	 * @see net.gdface.facelog.client.ClientExtendTools#applyUserToken(int, java.lang.String, boolean)
-	 */
-	public Token applyUserToken(int userid, String password, boolean isMd5) throws ServiceSecurityException {
-		return clientTools.applyUserToken(userid, password, isMd5);
-	}
-	/**
 	 * @param deviceToken
 	 * @param rootMenu
 	 * @return
@@ -157,5 +150,86 @@ public class IFaceLogClient extends IFaceLogDecorator {
 		Map<MQParam, String> parameters = super.getRedisParameters(token);
 		return clientTools.insteadHostOfMQParamIfLocalhost(parameters);
 	}
-
+	/**
+	 * @param token
+	 * @return 返回一个获取redis参数的{@link Supplier}实例
+	 * @see net.gdface.facelog.client.ClientExtendTools#getRedisParametersSupplier(net.gdface.facelog.Token)
+	 */
+	public Supplier<Map<MQParam, String>> getRedisParametersSupplier(Token token) {
+		return clientTools.getRedisParametersSupplier(token);
+	}
+	/**
+	 * @param token
+	 * @return 返回一个获取设备心跳实时监控通道名的{@link Supplier}实例
+	 * @see net.gdface.facelog.client.ClientExtendTools#getMonitorChannelSupplier(net.gdface.facelog.Token)
+	 */
+	public Supplier<String> getMonitorChannelSupplier(Token token) {
+		return clientTools.getMonitorChannelSupplier(token);
+	}
+	/**
+	 * 返回有效令牌的{@link Supplier}实例<br>
+	 * @return {@link Supplier}实例
+	 */
+	public Supplier<Token> getTokenSupplier() {
+		return clientTools.getTokenSupplier();
+	}
+	/**
+	 * 添加服务心跳侦听器
+	 * @param listener
+	 * @return 当前{@link IFaceLogClient}对象
+	 */
+	public IFaceLogClient addServiceEventListener(ServiceHeartbeatListener listener){
+		clientTools.addServiceEventListener(listener);	
+		return this;
+	}
+	/**
+	 * 删除服务心跳侦听器
+	 * @param listener
+	 * @return 当前{@link IFaceLogClient}对象
+	 */
+	public IFaceLogClient removeServiceEventListener(ServiceHeartbeatListener listener){
+		clientTools.removeServiceEventListener(listener);
+		return this;
+	}
+	/**
+	 * 创建设备心跳包侦听对象
+	 * @param listener 设备心跳侦听器实例
+	 * @param token 令牌
+	 * @param jedisPoolLazy jedis连接池对象，为{@code null}使用默认实例
+	 * @return 返回{@link HeartbeatMonitor}实例
+	 */
+	public HeartbeatMonitor makeHeartbeatMonitor(DeviceHeartbeatListener listener, Token token,JedisPoolLazy jedisPoolLazy) {
+		return clientTools.makeHeartbeatMonitor(listener, token, jedisPoolLazy);
+	}
+	/**
+	 * 创建设备心跳包发送对象<br>
+	 * {@link DeviceHeartbeat}为单实例,该方法只能调用一次
+	 * @param deviceID 设备ID
+	 * @param token 设备令牌
+	 * @param jedisPoolLazy jedis连接池对象，为{@code null}使用默认实例
+	 * @return {@link DeviceHeartbeat}实例
+	 */
+	public DeviceHeartbeat makeHeartbeat(int deviceID, Token token, JedisPoolLazy jedisPoolLazy) {
+		return clientTools.makeHeartbeat(deviceID, token, jedisPoolLazy);
+	}
+	/**
+	 * @param tokenHelper 要设置的 tokenHelper
+	 * @return 当前{@link IFaceLogClient}实例
+	 */
+	public IFaceLogClient setTokenHelper(TokenHelper tokenHelper) {
+		clientTools.setTokenHelper(tokenHelper);
+		return this;
+	}
+	/**
+	 * 启动服务心跳侦听器<br>
+	 * 启动侦听器后CLIENT端才能感知服务端断线，并执行相应动作。
+	 * 调用前必须先执行{@link #setTokenHelper(TokenHelper)}初始化
+	 * @param token 令牌
+	 * @param initJedisPoolLazyDefaultInstance 是否初始化 {@link JedisPoolLazy}默认实例
+	 * @return 返回当前{@link IFaceLogClient}实例
+	 */
+	public IFaceLogClient startServiceHeartbeatListener(Token token, boolean initJedisPoolLazyDefaultInstance) {
+		clientTools.startServiceHeartbeatListener(token, initJedisPoolLazyDefaultInstance);
+		return this;
+	}
 }
