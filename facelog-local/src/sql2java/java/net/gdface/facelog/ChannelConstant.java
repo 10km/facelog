@@ -18,8 +18,8 @@ import net.gdface.facelog.db.LogBean;
  *
  */
 public interface ChannelConstant extends CommonConstant{
-    /** 设备心跳包表 {@code 设备MAC地址 -> DeviceHeadbeatPackage} */
-    public static final Channel<DeviceHeadbeatPackage> TABLE_HEARTBEAT = new Channel<DeviceHeadbeatPackage>("DeviceHeartbeat"){}.immutable();
+    /** 设备心跳包表 {@code 设备MAC地址 -> DeviceHeartdbeatPackage} */
+    public static final Channel<DeviceHeartdbeatPackage> TABLE_HEARTBEAT = new Channel<DeviceHeartdbeatPackage>("DeviceHeartbeat"){}.immutable();
     /** 服务心跳包频道 */
     public static final Channel<ServiceHeartbeatPackage> SERVICE_HEARTBEAT_CHANNEL = new Channel<ServiceHeartbeatPackage>(FACELOG_HB_CHANNEL){}.immutable();
 
