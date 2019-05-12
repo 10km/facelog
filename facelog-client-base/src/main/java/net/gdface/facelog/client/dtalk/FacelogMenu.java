@@ -6,9 +6,12 @@ import gu.dtalk.OptionBuilder;
 import gu.dtalk.OptionType;
 import gu.dtalk.RootMenu;
 import gu.dtalk.SwitchOption;
+import gu.dtalk.event.ValueChangeEvent;
 import gu.dtalk.event.ValueListener;
 import gu.dtalk.exception.CmdExecutionException;
 import net.gdface.facelog.client.location.ConnectConfigProvider;
+import net.gdface.facelog.hb.DeviceHeartbeat;
+
 import static gu.dtalk.engine.DeviceUtils.DEVINFO_PROVIDER;
 import java.util.Map;
 
@@ -20,6 +23,7 @@ import gu.dtalk.BaseItem;
 import gu.dtalk.BaseOption;
 import gu.dtalk.CmdItem;
 import gu.dtalk.CmdItem.ICmdAdapter;
+import gu.dtalk.IntOption;
 
 /**
  * facelog 功能菜单<br>
@@ -96,7 +100,9 @@ public class FacelogMenu extends RootMenu{
 						OptionType.STRING.builder().name("gps").uiName("位置(GPS)").readonly(true).instance(),
 						OptionType.PASSWORD.builder().name("password").uiName("连接密码").instance().setValue(DEVINFO_PROVIDER.getPassword()),
 						OptionType.STRING.builder().name("version").uiName("版本号").readonly(true).instance().setValue("unknow"),
-						OptionType.INTEGER.builder().name("status").uiName("当前设备状态").readonly(true).value(0).hide().instance(),
+						OptionBuilder.builder(IntOption.class).name("status").uiName("当前设备状态").readonly(true).value(0).hide().instance()
+								/** 添加侦听器，当设备状态值改变时同步修改心跳包的状态值 */
+								.addListener(new StatusListener()),
 						heartbeat)
 				.instance();
 		MenuItem facelog = 
@@ -346,5 +352,24 @@ public class FacelogMenu extends RootMenu{
 				throw new CmdExecutionException(e);
 			}
 		}		
+	}
+	/**
+	 * 设备状态参数({@link FacelogMenu#OPTION__DEVICE_STATUS})侦听器，
+	 * 当设备状态值改变时同步修改心跳包的状态值
+	 * @author guyadong
+	 *
+	 */
+	private class StatusListener extends ValueListener<Integer>{
+		private StatusListener() {
+		}
+
+		@Override
+		protected void doUpdate(ValueChangeEvent<BaseOption<Integer>> event) {
+			try {
+				DeviceHeartbeat.getInstance().setStatus(event.option().getValue());				
+			} catch (IllegalStateException e) {
+				// DeviceHeartbeat 实例还没有创建则跳过
+			}
+		}
 	}
 }

@@ -6,9 +6,6 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gu.dtalk.BaseOption;
-import gu.dtalk.event.ValueChangeEvent;
-import gu.dtalk.event.ValueListener;
 import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
@@ -17,7 +14,6 @@ import net.gdface.facelog.client.location.ConnectConfigProvider;
 import net.gdface.facelog.client.location.ConnectConfigType;
 import net.gdface.facelog.client.location.DefaultCustomConnectConfigProvider;
 import net.gdface.facelog.db.DeviceBean;
-import net.gdface.facelog.hb.DeviceHeartbeat;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
 import net.gdface.utils.FaceUtilits;
@@ -71,13 +67,6 @@ public class DtalkDemo {
 			/** 间隔2秒发送心跳，重新启动定时任务 */
 			.setInterval(2, TimeUnit.SECONDS)
 			.start();
-		// 添加侦听器，当设备状态值改变时同步修改心跳包的状态值
-		root.findIntOption(FacelogMenu.OPTION__DEVICE_STATUS).addListener(new ValueListener<Integer>(){
-
-			@Override
-			protected void doUpdate(ValueChangeEvent<BaseOption<Integer>> event) {
-				DeviceHeartbeat.getInstance().setStatus(event.option().getValue());				
-			}});
 	}
 	/**
 	 * 等待程序结束
