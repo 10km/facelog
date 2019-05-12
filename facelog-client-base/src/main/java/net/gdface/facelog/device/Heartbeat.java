@@ -22,7 +22,7 @@ import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisPublisher;
 import gu.simplemq.redis.RedisTable;
-import net.gdface.facelog.DeviceHeadbeatPackage;
+import net.gdface.facelog.DeviceHeartdbeatPackage;
 import net.gdface.facelog.ServiceHeartbeatPackage;
 import net.gdface.facelog.client.ChannelConstant;
 import net.gdface.facelog.hb.BaseServiceHeartbeatListener;
@@ -46,7 +46,7 @@ public class Heartbeat extends BaseServiceHeartbeatListener implements ChannelCo
 	/** 心跳周期(毫秒) */
 	private long intervalMills = TimeUnit.MILLISECONDS.convert(DEFAULT_HEARTBEAT_PERIOD,TimeUnit.SECONDS);
 	/** 心跳报告表 */
-	private final RedisTable<DeviceHeadbeatPackage> table;
+	private final RedisTable<DeviceHeartdbeatPackage> table;
 	/** 
 	 * 提供设备心跳实时监控通道名,如果指定了通道名,
 	 * 每次心跳都不仅会向{@link TABLE_HEARTBEAT} 写入心跳报告,还会向该频道发布订阅消息
@@ -54,7 +54,7 @@ public class Heartbeat extends BaseServiceHeartbeatListener implements ChannelCo
 	private final MonitorChannelSupplier monitorChannelSupplier = new MonitorChannelSupplier();
 	/** MAC 地址 */
 	private final String hardwareAddress = DEVINFO_PROVIDER.getMacAsString();
-	private final DeviceHeadbeatPackage heartBeatPackage;
+	private final DeviceHeartdbeatPackage heartBeatPackage;
 	private final RedisPublisher publisher;
 	/** 执行定时任务的线程池对象 */
 	private final ScheduledThreadPoolExecutor scheduledExecutor;
@@ -69,7 +69,7 @@ public class Heartbeat extends BaseServiceHeartbeatListener implements ChannelCo
 				heartBeatPackage.setHostAddress(DEVINFO_PROVIDER.getIpAsString());
 				table.set(hardwareAddress,heartBeatPackage, false);
 				table.expire(hardwareAddress);
-				Channel<DeviceHeadbeatPackage> monitorChannel = monitorChannelSupplier.get();
+				Channel<DeviceHeartdbeatPackage> monitorChannel = monitorChannelSupplier.get();
 				if(null != monitorChannel){
 //					logger.info("send hb ->{}",monitorChannel.name);
 					publisher.publish(monitorChannel, heartBeatPackage);
@@ -100,7 +100,7 @@ public class Heartbeat extends BaseServiceHeartbeatListener implements ChannelCo
 	 */
 	private Heartbeat(int deviceID, JedisPoolLazy jedisPoolLazy) {
 		jedisPoolLazy = MoreObjects.firstNonNull(jedisPoolLazy,JedisPoolLazy.getDefaultInstance());
-		this.heartBeatPackage = new DeviceHeadbeatPackage().setDeviceId(deviceID);
+		this.heartBeatPackage = new DeviceHeartdbeatPackage().setDeviceId(deviceID);
 		this.publisher = RedisFactory.getPublisher(jedisPoolLazy);
 		this.scheduledExecutor =new ScheduledThreadPoolExecutor(1,
 				new ThreadFactoryBuilder().setNameFormat("heartbeat-pool-%d").build());	
@@ -192,17 +192,17 @@ public class Heartbeat extends BaseServiceHeartbeatListener implements ChannelCo
 		return this;
 	}
 	
-	private class MonitorChannelSupplier  implements Supplier<Channel<DeviceHeadbeatPackage>>{
+	private class MonitorChannelSupplier  implements Supplier<Channel<DeviceHeartdbeatPackage>>{
 		
-		Channel<DeviceHeadbeatPackage> channel;
+		Channel<DeviceHeartdbeatPackage> channel;
 		Supplier<String> channelSupplier;
 		boolean reload = true;
 
 		@Override
-		public Channel<DeviceHeadbeatPackage> get() {
+		public Channel<DeviceHeartdbeatPackage> get() {
 			if(null == channel || reload){
 				if(null != channelSupplier && !Strings.isNullOrEmpty(channelSupplier.get())){
-					channel = new Channel<DeviceHeadbeatPackage>(channelSupplier.get()){};
+					channel = new Channel<DeviceHeartdbeatPackage>(channelSupplier.get()){};
 					reload = false;
 				}
 			}

@@ -9,7 +9,7 @@ package net.gdface.facelog.client;
 
 import gu.simplemq.Channel;
 import net.gdface.facelog.CommonConstant;
-import net.gdface.facelog.DeviceHeadbeatPackage;
+import net.gdface.facelog.DeviceHeartdbeatPackage;
 import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.LogBean;
 /**
@@ -19,7 +19,7 @@ import net.gdface.facelog.db.LogBean;
  */
 public interface ChannelConstant extends CommonConstant{
    /** 设备心跳包表 {@code 设备MAC地址 -> HeadbeatPackage} */
-    public static final Channel<DeviceHeadbeatPackage> TABLE_HEARTBEAT = new Channel<DeviceHeadbeatPackage>("DeviceHeartbeat"){}.immutable();
+    public static final Channel<DeviceHeartdbeatPackage> TABLE_HEARTBEAT = new Channel<DeviceHeartdbeatPackage>("DeviceHeartbeat"){}.immutable();
 
     //////////////定义数据库实时更新频道/////////
 

@@ -16,7 +16,7 @@ import com.google.common.collect.ImmutableMap;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.JedisPoolLazy.PropName;
-import net.gdface.facelog.DeviceHeadbeatPackage;
+import net.gdface.facelog.DeviceHeartdbeatPackage;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.hb.DeviceHeartbeatListener;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
@@ -85,7 +85,7 @@ public class HeartbeatTest implements ChannelConstant{
 	public void test2HBMonitor() throws InterruptedException{
 		DeviceHeartbeatListener hbAdapter = new DeviceHeartbeatListener(){
 			@Override
-			public void onSubscribe(DeviceHeadbeatPackage t) throws SmqUnsubscribeException {
+			public void onSubscribe(DeviceHeartdbeatPackage t) throws SmqUnsubscribeException {
 				// 显示收到的心跳包
 				logger.info(t.toString());
 			}};

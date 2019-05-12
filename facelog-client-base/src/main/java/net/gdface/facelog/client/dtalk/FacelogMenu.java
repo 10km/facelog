@@ -9,7 +9,6 @@ import gu.dtalk.SwitchOption;
 import gu.dtalk.event.ValueListener;
 import gu.dtalk.exception.CmdExecutionException;
 import net.gdface.facelog.client.location.ConnectConfigProvider;
-
 import static gu.dtalk.engine.DeviceUtils.DEVINFO_PROVIDER;
 import java.util.Map;
 
@@ -34,6 +33,7 @@ public class FacelogMenu extends RootMenu{
 	public static final String CMD_GET_PARAM = "getParameter";
 	public static final String CMD_VERSION = "version";
 	public static final String CMD_SET_STATUS = "setStatus";
+	public static final String CMD_SET_STATUS_PARAM = "status";
 	public static final String CMD_GET_STATUS = "getStatus";
 	public static final String CMD_RESET="reset";
 	public static final String CMD_TIME = "time";
@@ -47,6 +47,7 @@ public class FacelogMenu extends RootMenu{
 	private static final String MENU_CMD = "cmd";
 	/* 扩展命令所在菜单名 */
 	private static final String MENU_CMD_EXT = "cmdext";
+	public static final String OPTION__DEVICE_STATUS = "/device/status";
 	/* 单实例 */
 	private static volatile FacelogMenu activeInstance;
 	/* 连接配置参数 */
@@ -95,6 +96,7 @@ public class FacelogMenu extends RootMenu{
 						OptionType.STRING.builder().name("gps").uiName("位置(GPS)").readonly(true).instance(),
 						OptionType.PASSWORD.builder().name("password").uiName("连接密码").instance().setValue(DEVINFO_PROVIDER.getPassword()),
 						OptionType.STRING.builder().name("version").uiName("版本号").readonly(true).instance().setValue("unknow"),
+						OptionType.INTEGER.builder().name("status").uiName("当前设备状态").readonly(true).value(0).hide().instance(),
 						heartbeat)
 				.instance();
 		MenuItem facelog = 
@@ -110,20 +112,21 @@ public class FacelogMenu extends RootMenu{
 			ItemBuilder.builder(MenuItem.class)
 				.name(MENU_CMD)
 				.uiName("基本设备命令")
-				.addChilds(ItemBuilder.builder(CmdItem.class).name(CMD_SET_PARAM).uiName("设置参数").addChilds(
+				.addChilds(ItemBuilder.builder(CmdItem.class).name(CMD_SET_PARAM).uiName("设置参数").hide().addChilds(
 						OptionType.STRING.builder().name(CmdParamAdapter.P_NAME).uiName("参数名称").required().description("option's full path start with '/'").instance(),
 						OptionType.STRING.builder().name(CmdParamAdapter.P_VALUE).uiName("参数值").required().instance()
 						).instance().setCmdAdapter(new CmdParamAdapter()),
-						ItemBuilder.builder(CmdItem.class).name(CMD_GET_PARAM).uiName("获取参数").addChilds(
-								OptionType.STRING.builder().name(CmdStatusAdapter.P_NAME).uiName("参数名称").required().description("option's full path start with '/'").instance()
-								).instance().setCmdAdapter(new CmdStatusAdapter()),
-						ItemBuilder.builder(CmdItem.class).name(CMD_VERSION).uiName("获取版本信息").instance().setCmdAdapter(new CmdVersionAdapter()),
+						ItemBuilder.builder(CmdItem.class).name(CMD_GET_PARAM).uiName("获取参数").hide().addChilds(
+								OptionType.STRING.builder().name(CmdGetParameterAdapter.P_NAME).uiName("参数名称").required().description("option's full path start with '/'").instance()
+								).instance().setCmdAdapter(new CmdGetParameterAdapter()),
+						ItemBuilder.builder(CmdItem.class).name(CMD_VERSION).uiName("获取版本信息").hide().instance().setCmdAdapter(new CmdVersionAdapter()),
 						ItemBuilder.builder(CmdItem.class).name(CMD_SET_STATUS).uiName("设置设备状态(启用/禁用)").addChilds(								
-								OptionBuilder.builder(new SwitchOption<Integer>()).name("status").uiName("状态值").required().description("0:工作状态,否则为非工作状态").instance()
+								OptionBuilder.builder(new SwitchOption<Integer>()).name(CMD_SET_STATUS_PARAM).uiName("状态值").required().description("0:工作状态,否则为非工作状态").instance()
 									.addOption(0, "正常").setValue(0),
 								OptionType.STRING.builder().name("message").uiName("附加消息").description("工作状态附加消息,比如'设备维修,禁止通行'").instance()
-								).instance(),
-						ItemBuilder.builder(CmdItem.class).name(CMD_GET_STATUS).uiName("获取设备工作状态").instance(),
+								).instance().setCmdAdapter(new CmdSetStatusAdapter(this)),
+						ItemBuilder.builder(CmdItem.class).name(CMD_GET_STATUS).uiName("获取设备工作状态").hide().instance()
+								.setCmdAdapter(new CmdGetStatusAdapter()),
 						ItemBuilder.builder(CmdItem.class).name("reset").uiName("设备重启").addChilds(
 								OptionType.INTEGER.builder().name("schedule").uiName("延迟执行时间").description("指定执行时间(unix time[秒]),为null立即执行").instance()
 								).instance(),
@@ -265,9 +268,9 @@ public class FacelogMenu extends RootMenu{
 	 * @author guyadong
 	 *
 	 */
-	private class CmdStatusAdapter implements ICmdAdapter{
+	private class CmdGetParameterAdapter implements ICmdAdapter{
 		static final String P_NAME = "name";
-		private CmdStatusAdapter() {
+		private CmdGetParameterAdapter() {
 		}
 		@Override
 		public Object apply(Map<String, Object> input) throws CmdExecutionException {
@@ -292,6 +295,53 @@ public class FacelogMenu extends RootMenu{
 			try {
 				Object v = findOptionChecked("/device/version").getValue();
 				return v == null ? "unknow" : v;
+			} catch (Exception e) {
+				throw new CmdExecutionException(e);
+			}
+		}		
+	}
+	/**
+	 * {@value #CMD_GET_STATUS}命令实现
+	 * @author guyadong
+	 *
+	 */
+	private class CmdGetStatusAdapter implements ICmdAdapter{
+
+		private CmdGetStatusAdapter() {
+		}
+
+		@Override
+		public Object apply(Map<String, Object> input) throws CmdExecutionException {
+			try{
+				return findIntOption(OPTION__DEVICE_STATUS).getValue();
+			} catch (Exception e) {
+				throw new CmdExecutionException(e);
+			}
+		}		
+	}
+	/**
+	 * {@value #CMD_SET_STATUS}命令实现,应用层可继承重写{@link CmdSetStatusAdapter#doSetStatus(int)}方法实现改变状态的业务逻辑
+	 * @author guyadong
+	 *
+	 */
+	public static class CmdSetStatusAdapter implements ICmdAdapter{
+
+		private final FacelogMenu root;
+		public CmdSetStatusAdapter(FacelogMenu root) {
+			this.root = checkNotNull(root,"root menu is null");
+		}
+		public void doSetStatus(int status){
+			
+		}
+		@Override
+		public final Object apply(Map<String, Object> input) throws CmdExecutionException {
+			try{
+				BaseOption<Integer> opt = root.findOptionChecked(OPTION__DEVICE_STATUS);
+				Integer value = (Integer) input.get(CMD_SET_STATUS_PARAM);
+				doSetStatus(value);
+				checkArgument(opt.validate(value),"INVALID STATUS VALUE");	
+				opt.setValue(value);
+				return null;
 			} catch (Exception e) {
 				throw new CmdExecutionException(e);
 			}

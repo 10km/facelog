@@ -8,7 +8,7 @@ import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisSubscriber;
-import net.gdface.facelog.DeviceHeadbeatPackage;
+import net.gdface.facelog.DeviceHeartdbeatPackage;
 import net.gdface.facelog.ServiceHeartbeatPackage;
 
 import static com.google.common.base.Preconditions.*;
@@ -27,12 +27,12 @@ import com.google.common.base.Objects;
 public class HeartbeatMonitor extends BaseServiceHeartbeatListener {
     public static final Logger logger = LoggerFactory.getLogger(HeartbeatMonitor.class);
 
-	public static final IMessageAdapter<DeviceHeadbeatPackage> DEF_DEVICE_ADAPTER = new IMessageAdapter<DeviceHeadbeatPackage>(){
+	public static final IMessageAdapter<DeviceHeartdbeatPackage> DEF_DEVICE_ADAPTER = new IMessageAdapter<DeviceHeartdbeatPackage>(){
 
 		@Override
-		public void onSubscribe(DeviceHeadbeatPackage t) throws SmqUnsubscribeException {
+		public void onSubscribe(DeviceHeartdbeatPackage t) throws SmqUnsubscribeException {
 		}};
-	private IMessageAdapter<DeviceHeadbeatPackage> hbAdapter = DEF_DEVICE_ADAPTER;
+	private IMessageAdapter<DeviceHeartdbeatPackage> hbAdapter = DEF_DEVICE_ADAPTER;
 	private final Supplier<String> channelSupplier;
 	private volatile String channelName ;
 	private final RedisSubscriber subscriber;
@@ -42,7 +42,7 @@ public class HeartbeatMonitor extends BaseServiceHeartbeatListener {
 	 * @param channelSupplier 心跳包频道名的{@link Supplier}实例，用于提供当前的心跳包频道名
 	 * @param jedisPoolLazy jedis连接池对象,为{@code null}使用默认实例
 	 */
-	public HeartbeatMonitor(IMessageAdapter<DeviceHeadbeatPackage> hbAdapter,Supplier<String> channelSupplier,JedisPoolLazy jedisPoolLazy) {
+	public HeartbeatMonitor(IMessageAdapter<DeviceHeartdbeatPackage> hbAdapter,Supplier<String> channelSupplier,JedisPoolLazy jedisPoolLazy) {
 		super();
 		this.hbAdapter = MoreObjects.firstNonNull(hbAdapter,DEF_DEVICE_ADAPTER);
 		this.channelSupplier = checkNotNull(channelSupplier,"channelSupplier is null");
@@ -53,7 +53,7 @@ public class HeartbeatMonitor extends BaseServiceHeartbeatListener {
 	 * @param hbAdapter 设备心跳包侦听实例
 	 * @param channelSupplier 心跳包频道名的{@link Supplier}实例，用于提供当前的心跳包频道名
 	 */
-	public HeartbeatMonitor(IMessageAdapter<DeviceHeadbeatPackage> hbAdapter,Supplier<String> channelSupplier){
+	public HeartbeatMonitor(IMessageAdapter<DeviceHeartdbeatPackage> hbAdapter,Supplier<String> channelSupplier){
 		this(hbAdapter, channelSupplier, JedisPoolLazy.getDefaultInstance());
 	}
 	public HeartbeatMonitor(Supplier<String> channelSupplier){
@@ -75,7 +75,7 @@ public class HeartbeatMonitor extends BaseServiceHeartbeatListener {
 			stop();
 			// 申请新的频道名
 			logger.info("Start Heartbeat Monitor ch:[{}]",ch);
-			subscriber.register(new Channel<DeviceHeadbeatPackage>(ch,hbAdapter){});
+			subscriber.register(new Channel<DeviceHeartdbeatPackage>(ch,hbAdapter){});
 			channelName = ch;
 		}
 		return this;
@@ -98,7 +98,7 @@ public class HeartbeatMonitor extends BaseServiceHeartbeatListener {
 	/**
 	 * @return 返回设备心跳包侦听实例
 	 */
-	public IMessageAdapter<DeviceHeadbeatPackage> getHbAdapter() {
+	public IMessageAdapter<DeviceHeartdbeatPackage> getHbAdapter() {
 		return hbAdapter;
 	}
 	/**
@@ -106,7 +106,7 @@ public class HeartbeatMonitor extends BaseServiceHeartbeatListener {
 	 * @param hbAdapter 不可为{@code null}
 	 * @return
 	 */
-	public HeartbeatMonitor setHbAdapter(IMessageAdapter<DeviceHeadbeatPackage> hbAdapter) {
+	public HeartbeatMonitor setHbAdapter(IMessageAdapter<DeviceHeartdbeatPackage> hbAdapter) {
 		this.hbAdapter = checkNotNull(hbAdapter,"hbAdapter is null");
 		return this;
 	}
