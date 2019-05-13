@@ -14,6 +14,7 @@ import net.gdface.facelog.hb.DeviceHeartbeat;
 
 import static gu.dtalk.engine.DeviceUtils.DEVINFO_PROVIDER;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Supplier;
@@ -361,10 +362,11 @@ public class FacelogMenu extends RootMenu{
 		@Override
 		public final Object apply(Map<String, Object> input) throws CmdExecutionException {
 			try{
-				Integer status = (Integer) input.get(CMD_SET_STATUS_PARAM1);
+				@SuppressWarnings("unchecked")
+				Set<Integer> status = (Set<Integer>) input.get(CMD_SET_STATUS_PARAM1);
+				checkArgument(opt.validate(status),"INVALID STATUS VALUE");				
 				message = (String) input.get(CMD_SET_STATUS_PARAM2);
-				checkArgument(opt.validate(status),"INVALID STATUS VALUE");	
-				opt.setValue(status);
+				opt.setValue(status.toArray(new Integer[0])[0]);
 				return null;
 			} catch (Exception e) {
 				throw new CmdExecutionException(e);
