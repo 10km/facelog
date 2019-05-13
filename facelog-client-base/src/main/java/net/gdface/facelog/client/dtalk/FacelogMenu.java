@@ -130,7 +130,7 @@ public class FacelogMenu extends RootMenu{
 								OptionBuilder.builder(new SwitchOption<Integer>()).name(CMD_SET_STATUS_PARAM).uiName("状态值").required().description("0:工作状态,否则为非工作状态").instance()
 									.addOption(0, "正常").setValue(0),
 								OptionType.STRING.builder().name("message").uiName("附加消息").description("工作状态附加消息,比如'设备维修,禁止通行'").instance()
-								).instance().setCmdAdapter(new CmdSetStatusAdapter()),
+								).instance(),
 						ItemBuilder.builder(CmdItem.class).name(CMD_GET_STATUS).uiName("获取设备工作状态").hide().instance()
 								.setCmdAdapter(new CmdGetStatusAdapter()),
 						ItemBuilder.builder(CmdItem.class).name("reset").uiName("设备重启").addChilds(
@@ -166,7 +166,7 @@ public class FacelogMenu extends RootMenu{
 					.uiName("扩展设备命令")
 					.instance();
 		addChilds(device,facelog,commands,cmdext);
-		
+		registerSetStatusAdapter(new CmdSetStatusAdapter(this));
 		return this;
 	}
 	public FacelogMenu register(ValueListener<Object> listener){
@@ -244,6 +244,17 @@ public class FacelogMenu extends RootMenu{
 	 */
 	public final String pathOfCmdExt(String name){
 		return new StringBuffer("/").append(MENU_CMD_EXT).append("/").append(name).toString();
+	}
+	
+	
+	/**
+	 * 注册设置设备状态({@value #CMD_SET_STATUS})的命令执行器
+	 * @param adapter
+	 */
+	public void registerSetStatusAdapter(CmdSetStatusAdapter adapter){
+		checkArgument(null != adapter,"adapter is null");
+		findIntOption(OPTION__DEVICE_STATUS).addListener(adapter);
+		findCmd(pathOfCmd(CMD_SET_STATUS)).setCmdAdapter(adapter);
 	}
 	/**
 	 * {@value #CMD_SET_PARAM}命令实现
@@ -330,25 +341,33 @@ public class FacelogMenu extends RootMenu{
 	 * 应用层可继承重写{@link CmdSetStatusAdapter#doSetStatus(int)}方法实现改变状态的业务逻辑
 	 * @author guyadong
 	 */
-	public class CmdSetStatusAdapter implements ICmdAdapter{
+	public static class CmdSetStatusAdapter extends ValueListener<Integer> implements ICmdAdapter{
 
-		public CmdSetStatusAdapter() {
+		private final BaseOption<Integer> opt;
+		public CmdSetStatusAdapter(FacelogMenu facelogMenu) {
+			this.opt = checkNotNull(facelogMenu,"facelogMenu is null").findIntOption(OPTION__DEVICE_STATUS);
 		}
+		/**
+		 * 应用层重写此方法实现设置设备状态的业务逻辑
+		 * @param status
+		 */
 		public void doSetStatus(int status){
 			
 		}
 		@Override
 		public final Object apply(Map<String, Object> input) throws CmdExecutionException {
 			try{
-				BaseOption<Integer> opt = findOptionChecked(OPTION__DEVICE_STATUS);
 				Integer value = (Integer) input.get(CMD_SET_STATUS_PARAM);
 				checkArgument(opt.validate(value),"INVALID STATUS VALUE");	
-				doSetStatus(value);
 				opt.setValue(value);
 				return null;
 			} catch (Exception e) {
 				throw new CmdExecutionException(e);
 			}
+		}
+		@Override
+		protected final void doUpdate(ValueChangeEvent<BaseOption<Integer>> event) {
+			doSetStatus(event.option().getValue());
 		}		
 	}
 	/**
