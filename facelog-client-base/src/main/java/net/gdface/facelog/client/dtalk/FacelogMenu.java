@@ -80,7 +80,7 @@ public class FacelogMenu extends RootMenu{
 					.uiName("设备心跳")
 					.hide()
 					.addChilds(
-							OptionType.INTEGER.builder().name("interval").uiName("心跳包间隔[秒]").instance())
+							OptionType.INTEGER.builder().name("interval").uiName("心跳包间隔[秒],<=0时使用默认值").instance())
 					.instance();
 		MenuItem device = 
 			ItemBuilder.builder(MenuItem.class)
