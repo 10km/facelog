@@ -249,7 +249,8 @@ public class FacelogMenu extends RootMenu{
 	
 	
 	/**
-	 * 注册设置设备状态({@value #CMD_SET_STATUS})的命令执行器
+	 * 注册设置设备状态({@value #CMD_SET_STATUS})的命令执行器，
+	 * 设置{@value #CMD_SET_STATUS}的命令执行器务必要通过此方法执行
 	 * @param adapter
 	 */
 	public void registerSetStatusAdapter(CmdSetStatusAdapter adapter){
