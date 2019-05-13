@@ -26,7 +26,8 @@ ttypes.SecurityExceptionType = {
   'INVALID_DEVICE_ID' : 5,
   'INVALID_PERSON_ID' : 6,
   'INVALID_PASSWORD' : 7,
-  'REJECT_APPLY' : 8
+  'REJECT_APPLY' : 8,
+  'ACCESS_DENIED' : 9
 };
 ttypes.MQParam = {
   'REDIS_URI' : 0,

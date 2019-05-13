@@ -39,7 +39,8 @@ public class ServiceSecurityException extends Exception {
         /** 无效设备ID */INVALID_DEVICE_ID,
         /** 无效人员ID */INVALID_PERSON_ID,
         /** 无效root密码 */INVALID_PASSWORD,
-        /** 拒绝令牌申请 */REJECT_APPLY
+        /** 拒绝令牌申请 */REJECT_APPLY,
+        /** 拒绝访问 */ACCESS_DENIED
 	}
     private SecurityExceptionType type = SecurityExceptionType.UNCLASSIFIED;
     private Integer deviceID;

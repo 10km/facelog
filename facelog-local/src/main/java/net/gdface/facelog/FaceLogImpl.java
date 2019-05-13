@@ -25,6 +25,7 @@ import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.ServiceSecurityException;
+import net.gdface.facelog.Token.TokenType;
 import net.gdface.thrift.exception.ServiceRuntimeException;
 import net.gdface.utils.FaceUtilits;
 import net.gdface.facelog.DuplicateRecordException;
@@ -1379,7 +1380,10 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     @Override
     public String getProperty(String key,Token token){
     	try {
-			Enable.ROOT_ONLY.check(tm, token);
+			Enable.PERSON_ONLY.check(tm, token);			
+			if(TokenType.PERSON.equals(token.getType())){
+				PropertyWhiteList.INSTANCE.checkAccess(key);
+			}
 			return GlobalConfig.getProperty(key);
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);

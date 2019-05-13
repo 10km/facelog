@@ -16,4 +16,5 @@ public enum SecurityExceptionType
   INVALID_PERSON_ID = 6,
   INVALID_PASSWORD = 7,
   REJECT_APPLY = 8,
+  ACCESS_DENIED = 9,
 }
