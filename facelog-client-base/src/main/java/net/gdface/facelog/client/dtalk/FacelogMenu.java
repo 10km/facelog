@@ -112,7 +112,7 @@ public class FacelogMenu extends RootMenu{
 				.uiName("facelog 服务器")
 				.addChilds(
 						OptionType.STRING.builder().name("host").uiName("主机名称").instance().setValue(config.getHost()),
-						OptionType.INTEGER.builder().name("port").uiName("端口号").instance().setValue(config.getPort()))
+						OptionType.INTEGER.builder().name("port").uiName("端口号,<=0使用默认值").instance().setValue(config.getPort()))
 				.instance();
 
 		commands = 
