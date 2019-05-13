@@ -28,7 +28,7 @@ public class PropertyWhiteList implements Predicate<String> {
 	/**
 	 * 检查{@code key}是否在许可访问的白名单内，是则返回{@code key}，否则抛出异常
 	 * @param key
-	 * @return
+	 * @return always {@code key}
 	 * @throws ServiceSecurityException 不允许访问key值
 	 */
 	public String checkAccess(String key) throws ServiceSecurityException{
