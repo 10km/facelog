@@ -37,7 +37,8 @@ public class FacelogMenu extends RootMenu{
 	public static final String CMD_GET_PARAM = "getParameter";
 	public static final String CMD_VERSION = "version";
 	public static final String CMD_SET_STATUS = "setStatus";
-	public static final String CMD_SET_STATUS_PARAM = "status";
+	public static final String CMD_SET_STATUS_PARAM1 = "status";
+	public static final String CMD_SET_STATUS_PARAM2 = "message";
 	public static final String CMD_GET_STATUS = "getStatus";
 	public static final String CMD_RESET="reset";
 	public static final String CMD_TIME = "time";
@@ -127,9 +128,9 @@ public class FacelogMenu extends RootMenu{
 								).instance().setCmdAdapter(new CmdGetParameterAdapter()),
 						ItemBuilder.builder(CmdItem.class).name(CMD_VERSION).uiName("获取版本信息").hide().instance().setCmdAdapter(new CmdVersionAdapter()),
 						ItemBuilder.builder(CmdItem.class).name(CMD_SET_STATUS).uiName("设置设备状态(启用/禁用)").addChilds(								
-								OptionBuilder.builder(new SwitchOption<Integer>()).name(CMD_SET_STATUS_PARAM).uiName("状态值").required().description("0:工作状态,否则为非工作状态").instance()
+								OptionBuilder.builder(new SwitchOption<Integer>()).name(CMD_SET_STATUS_PARAM1).uiName("状态值").required().description("0:工作状态,否则为非工作状态").instance()
 									.addOption(0, "正常").setValue(0),
-								OptionType.STRING.builder().name("message").uiName("附加消息").description("工作状态附加消息,比如'设备维修,禁止通行'").instance()
+								OptionType.STRING.builder().name(CMD_SET_STATUS_PARAM2).uiName("附加消息").description("工作状态附加消息,比如'设备维修,禁止通行'").instance()
 								).instance(),
 						ItemBuilder.builder(CmdItem.class).name(CMD_GET_STATUS).uiName("获取设备工作状态").hide().instance()
 								.setCmdAdapter(new CmdGetStatusAdapter()),
@@ -338,28 +339,31 @@ public class FacelogMenu extends RootMenu{
 	}
 	/**
 	 * {@value #CMD_SET_STATUS}命令实现,
-	 * 应用层可继承重写{@link CmdSetStatusAdapter#doSetStatus(int)}方法实现改变状态的业务逻辑
+	 * 应用层可继承重写{@link CmdSetStatusAdapter#doSetStatus(int, String)}方法实现改变状态的业务逻辑
 	 * @author guyadong
 	 */
 	public static class CmdSetStatusAdapter extends ValueListener<Integer> implements ICmdAdapter{
 
 		private final BaseOption<Integer> opt;
+		private String message;
 		public CmdSetStatusAdapter(FacelogMenu facelogMenu) {
 			this.opt = checkNotNull(facelogMenu,"facelogMenu is null").findIntOption(OPTION__DEVICE_STATUS);
 		}
 		/**
 		 * 应用层重写此方法实现设置设备状态的业务逻辑
-		 * @param status
+		 * @param status 设备状态值
+		 * @param message 附加消息
 		 */
-		public void doSetStatus(int status){
+		public void doSetStatus(int status, String message){
 			
 		}
 		@Override
 		public final Object apply(Map<String, Object> input) throws CmdExecutionException {
 			try{
-				Integer value = (Integer) input.get(CMD_SET_STATUS_PARAM);
-				checkArgument(opt.validate(value),"INVALID STATUS VALUE");	
-				opt.setValue(value);
+				Integer status = (Integer) input.get(CMD_SET_STATUS_PARAM1);
+				message = (String) input.get(CMD_SET_STATUS_PARAM2);
+				checkArgument(opt.validate(status),"INVALID STATUS VALUE");	
+				opt.setValue(status);
 				return null;
 			} catch (Exception e) {
 				throw new CmdExecutionException(e);
@@ -367,7 +371,7 @@ public class FacelogMenu extends RootMenu{
 		}
 		@Override
 		protected final void doUpdate(ValueChangeEvent<BaseOption<Integer>> event) {
-			doSetStatus(event.option().getValue());
+			doSetStatus(event.option().getValue(), message);
 		}		
 	}
 	/**
