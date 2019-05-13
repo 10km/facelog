@@ -15,6 +15,7 @@ import net.gdface.facelog.hb.DeviceHeartbeat;
 import static gu.dtalk.engine.DeviceUtils.DEVINFO_PROVIDER;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Supplier;
@@ -25,7 +26,7 @@ import gu.dtalk.BaseOption;
 import gu.dtalk.CmdItem;
 import gu.dtalk.CmdItem.ICmdAdapter;
 import gu.dtalk.IntOption;
-
+import static net.gdface.facelog.CommonConstant.*;
 /**
  * facelog 功能菜单<br>
  * 为{@value #CMD_SET_PARAM},{@value #CMD_GET_PARAM},{@value #CMD_VERSION}基本设备命令提供了默认实现
@@ -82,7 +83,8 @@ public class FacelogMenu extends RootMenu{
 					.uiName("设备心跳")
 					.hide()
 					.addChilds(
-							OptionType.INTEGER.builder().name("interval").uiName("心跳包间隔[秒],<=0时使用默认值").instance())
+							OptionBuilder.builder(IntOption.class).name("interval").uiName("心跳包间隔[秒],<=0时使用默认值")
+							.addListener(new HeartbeatIntervalListener()).value(0).instance())
 					.instance();
 		MenuItem device = 
 			ItemBuilder.builder(MenuItem.class)
@@ -391,6 +393,30 @@ public class FacelogMenu extends RootMenu{
 		protected void doUpdate(ValueChangeEvent<BaseOption<Integer>> event) {
 			try {
 				DeviceHeartbeat.getInstance().setStatus(event.option().getValue());				
+			} catch (IllegalStateException e) {
+				// DeviceHeartbeat 实例还没有创建则跳过
+			}
+		}
+	}
+	/**
+	 * 心跳间隔('/device/heartbeat/interval')参数侦听器
+	 * @author guyadong
+	 *
+	 */
+	private class HeartbeatIntervalListener extends ValueListener<Integer>{
+		private HeartbeatIntervalListener() {
+		}
+
+		@Override
+		protected void doUpdate(ValueChangeEvent<BaseOption<Integer>> event) {
+			try {
+				Integer interval = event.option().getValue();
+				interval = MoreObjects.firstNonNull(interval, DEFAULT_HEARTBEAT_PERIOD);
+				if(interval <= 0){
+					interval = DEFAULT_HEARTBEAT_PERIOD;					
+				}
+				DeviceHeartbeat.getInstance().setInterval(interval, TimeUnit.SECONDS).start();
+			
 			} catch (IllegalStateException e) {
 				// DeviceHeartbeat 实例还没有创建则跳过
 			}
