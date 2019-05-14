@@ -11,6 +11,7 @@ import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import java.util.ServiceLoader;
 import java.util.Iterator;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,27 +28,18 @@ import io.swagger.annotations.*;
 @Api(value = "IFaceLog")
 public class IFaceLogSpringDecorator {
     private static final Logger logger = LoggerFactory.getLogger(IFaceLogSpringDecorator.class);
-    private final IFaceLog delegate = loadDelegate();
+    private static final InstanceSupplier instanceSupplier = getInstanceSupplier();
     private final ResponseFactory respFactory = loadRespFactory();
     /**
-     * SPI(Service Provider Interface)机制加载 {@link InstanceSupplier}实例,没有找到则抛出异常,
+     * SPI(Service Provider Interface)机制加载 {@link InstanceSupplier}实例,没有找到则返回{@code null},
      * 返回{@link InstanceSupplier}提供的{@link IFaceLog}实例
      * @return 返回{@link IFaceLog}实例
-     * @throws IllegalStateException 没有找到{@link InstanceSupplier}实例
-     * @throws NullPointerException {@link InstanceSupplier}实例返回的{@link IFaceLog}为{@code null}
      */
-    private static final IFaceLog loadDelegate() {
+    private static final InstanceSupplier getInstanceSupplier() {
             /* SPI(Service Provider Interface)机制加载 {@link InstanceSupplier}实例,没有找到则抛出异常 */
             ServiceLoader<InstanceSupplier> providers = ServiceLoader.load(InstanceSupplier.class);
             Iterator<InstanceSupplier> itor = providers.iterator();
-            if(!itor.hasNext()){
-                throw new IllegalStateException("NOT FOUND InstanceSupplier instance");
-            }
-            IFaceLog instance = itor.next().instanceOfIFaceLog();
-            if(instance == null){
-                throw new NullPointerException("");
-            }
-            return instance;
+            return itor.hasNext() ? itor.next() : null;
     }   
     /**
      * SPI(Service Provider Interface)加载{@link ResponseFactory}接口实例,
@@ -66,8 +58,10 @@ public class IFaceLogSpringDecorator {
      * 返回被装饰的{@link IFaceLog}实例
      * @return
      */
-    private IFaceLog delegate() {
-        return delegate;
+    protected IFaceLog delegate() {
+    	return Objects.requireNonNull(
+    			instanceSupplier == null ? null : instanceSupplier.instanceOfIFaceLog(),
+    			"IFaceLog  instance is null"	);
     }
     /**
      * @see {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.Integer,java.util.List,net.gdface.facelog.Token)}
