@@ -207,7 +207,7 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         try{
             return this.nativeManager.checkDuplicate(id);
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
-        	throw new ObjectRetrievalException(e);
+            throw new ObjectRetrievalException(e);
         }catch(DaoException e){
             throw new RuntimeDaoException(e);
         }

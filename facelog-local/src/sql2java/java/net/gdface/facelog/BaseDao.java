@@ -982,6 +982,28 @@ class BaseDao implements CommonConstant {
                     throws RuntimeDaoException{
         return getDeviceGroupManager().listOfParent(deviceGroupBean);
     }
+    //9-3
+    /**
+     * 返回(idOfDeviceGroup))指定的fl_device_group记录的所有的子节点(包括自己)<br>
+     * 自引用字段:fl_device_group(parent)
+     * @see IDeviceGroupManager#childListByParent(Integer)
+     * @throws RuntimeDaoException
+     */
+    protected java.util.List<DeviceGroupBean> childListByParentForDeviceGroup(Integer idOfDeviceGroup)
+                    throws RuntimeDaoException{
+        return getDeviceGroupManager().childListByParent(idOfDeviceGroup);
+    }
+    //9-4
+    /**
+     * 返回{@code deviceGroupBean}指定的fl_device_group记录的所有的子节点(包括自己)<br>
+     * 自引用字段:fl_device_group(parent)
+     * @see IDeviceGroupManager#listOfParent(DeviceGroupBean)
+     * @throws RuntimeDaoException
+     */
+    protected java.util.List<DeviceGroupBean> childListByParentForDeviceGroup(DeviceGroupBean deviceGroupBean)
+                    throws RuntimeDaoException{
+        return getDeviceGroupManager().childListByParent(deviceGroupBean);
+    }
     //10
     /** 
      * 如果没有默认组则向 fl_device_group 表中增加默认组,失败则抛出异常 
@@ -2120,6 +2142,28 @@ class BaseDao implements CommonConstant {
     protected java.util.List<PersonGroupBean> daoListOfParentForPersonGroup(PersonGroupBean personGroupBean)
                     throws RuntimeDaoException{
         return getPersonGroupManager().listOfParent(personGroupBean);
+    }
+    //9-3
+    /**
+     * 返回(idOfPersonGroup))指定的fl_person_group记录的所有的子节点(包括自己)<br>
+     * 自引用字段:fl_person_group(parent)
+     * @see IPersonGroupManager#childListByParent(Integer)
+     * @throws RuntimeDaoException
+     */
+    protected java.util.List<PersonGroupBean> childListByParentForPersonGroup(Integer idOfPersonGroup)
+                    throws RuntimeDaoException{
+        return getPersonGroupManager().childListByParent(idOfPersonGroup);
+    }
+    //9-4
+    /**
+     * 返回{@code personGroupBean}指定的fl_person_group记录的所有的子节点(包括自己)<br>
+     * 自引用字段:fl_person_group(parent)
+     * @see IPersonGroupManager#listOfParent(PersonGroupBean)
+     * @throws RuntimeDaoException
+     */
+    protected java.util.List<PersonGroupBean> childListByParentForPersonGroup(PersonGroupBean personGroupBean)
+                    throws RuntimeDaoException{
+        return getPersonGroupManager().childListByParent(personGroupBean);
     }
     //10
     /** 

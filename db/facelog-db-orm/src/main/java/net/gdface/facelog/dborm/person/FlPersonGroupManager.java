@@ -2926,4 +2926,48 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
         }
         return bean;
     }
+    //57
+    /**
+     * return child bean list (self included) by the self-reference field : {@code fl_person_group(parent) }<br>
+     * throw {@link RuntimeDaoException} if self-reference field is cycle
+     * @param id PK# 1 
+     * @return  child bean list,{@code null} if not found record
+     * @throws IllegalStateException if self-reference field is cycle
+     * @throws DaoException
+     */
+    public java.util.List<FlPersonGroupBean> childListByParent(Integer id)throws DaoException{
+        java.util.LinkedHashSet<FlPersonGroupBean> set = new java.util.LinkedHashSet<FlPersonGroupBean>();
+        return new java.util.ArrayList<FlPersonGroupBean>(doListOfChild(id,set));
+    }
+    //58
+    /**
+     * see also {@link #childListByParent(Integer)}
+     */
+    public java.util.List<FlPersonGroupBean> childListByParent(FlPersonGroupBean bean) throws DaoException{
+        return null == bean
+                ? java.util.Collections.<FlPersonGroupBean>emptyList()
+                : childListByParent(bean.getId());
+    }
+    /**
+     * get all of child recursively
+     * @param id PK# 1 
+     * @param set child set for output
+     * @throws IllegalStateException if self-reference field is cycle
+     * @throws DaoException 
+     */
+    private java.util.LinkedHashSet<FlPersonGroupBean> doListOfChild(Integer id, java.util.LinkedHashSet<FlPersonGroupBean> set)throws DaoException{
+        FlPersonGroupBean bean = loadByPrimaryKey(id);
+        if(bean != null){
+            if(set.contains(bean)){
+                throw new IllegalStateException("cycle on field: " + "parent");
+            }
+            set.add(bean);
+            FlPersonGroupBean tmpl = FlPersonGroupBean.builder().parent(bean.getId()).build();
+            java.util.List<FlPersonGroupBean> childs = loadUsingTemplateAsList(tmpl);
+            for(FlPersonGroupBean c:childs){
+                doListOfChild(c.getId(),set);
+            }
+        }
+        return set;
+    }
 }

@@ -682,4 +682,22 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @see #isCycleOnParent(DeviceGroupBean)
      */
     public DeviceGroupBean checkCycleOfParent(DeviceGroupBean bean)throws RuntimeDaoException;
+    //57
+    /**
+     * return child bean list (self included) by the self-reference field : {@code fl_device_group(parent) }<br>
+     * throw {@link RuntimeDaoException} if self-reference field is cycle
+     * @param id PK# 1 
+     * @return  child bean list,{@code null} if not found record
+     * @throws IllegalStateException if self-reference field is cycle
+     * @throws RuntimeDaoException
+     */
+    public java.util.List<DeviceGroupBean> childListByParent(Integer id)throws RuntimeDaoException;
+    //58
+    /**
+     * see also {@link #childListByParent(Integer)}
+     * @param bean
+     * @return
+     * @throws RuntimeDaoException
+     */
+    public java.util.List<DeviceGroupBean> childListByParent(DeviceGroupBean bean)throws RuntimeDaoException;
 }

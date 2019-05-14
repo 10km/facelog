@@ -207,7 +207,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         try{
             return this.nativeManager.checkDuplicate(id);
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
-        	throw new ObjectRetrievalException(e);
+            throw new ObjectRetrievalException(e);
         }catch(DaoException e){
             throw new RuntimeDaoException(e);
         }

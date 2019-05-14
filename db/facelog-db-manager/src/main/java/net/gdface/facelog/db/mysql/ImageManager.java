@@ -207,7 +207,7 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
         try{
             return this.nativeManager.checkDuplicate(md5);
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
-        	throw new ObjectRetrievalException(e);
+            throw new ObjectRetrievalException(e);
         }catch(DaoException e){
             throw new RuntimeDaoException(e);
         }

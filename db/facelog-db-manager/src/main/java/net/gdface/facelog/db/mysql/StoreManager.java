@@ -195,7 +195,7 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         try{
             return this.nativeManager.checkDuplicate(md5);
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
-        	throw new ObjectRetrievalException(e);
+            throw new ObjectRetrievalException(e);
         }catch(DaoException e){
             throw new RuntimeDaoException(e);
         }

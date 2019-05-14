@@ -210,7 +210,7 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
         try{
             return this.nativeManager.checkDuplicate(id);
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
-        	throw new ObjectRetrievalException(e);
+            throw new ObjectRetrievalException(e);
         }catch(DaoException e){
             throw new RuntimeDaoException(e);
         }
@@ -1598,5 +1598,40 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
             throw new IllegalStateException("cycle on field: " + "parent");
         }
         return bean;
+    }
+    //57 IPersonGroupManager
+
+    @Override
+    public java.util.List<PersonGroupBean> childListByParent(Integer id){
+        java.util.LinkedHashSet<PersonGroupBean> set = new java.util.LinkedHashSet<PersonGroupBean>();
+        return new java.util.ArrayList<PersonGroupBean>(doListOfChild(id,set));
+    }
+    //58 IPersonGroupManager
+
+    @Override
+    public java.util.List<PersonGroupBean> childListByParent(PersonGroupBean bean){
+        return null == bean
+                ? java.util.Collections.<PersonGroupBean>emptyList()
+                : childListByParent(bean.getId());
+    }
+    /**
+     * get all of child recursively
+     * @param id PK# 1 
+     * @param set child set for output
+     */
+    private java.util.LinkedHashSet<PersonGroupBean> doListOfChild(Integer id, java.util.LinkedHashSet<PersonGroupBean> set){
+        PersonGroupBean bean = loadByPrimaryKey(id);
+        if(bean != null){
+            if(set.contains(bean)){
+                throw new IllegalStateException("cycle on field: " + "parent");
+            }
+            set.add(bean);
+            PersonGroupBean tmpl = PersonGroupBean.builder().parent(bean.getId()).build();
+            java.util.List<PersonGroupBean> childs = loadUsingTemplateAsList(tmpl);
+            for(PersonGroupBean c:childs){
+                doListOfChild(c.getId(),set);
+            }
+        }
+        return set;
     }
 }

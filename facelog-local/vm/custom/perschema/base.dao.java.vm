@@ -398,6 +398,28 @@ class BaseDao implements CommonConstant {
                     throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().$table.getListMethod($selfFk)($selfFk.foreignTable.asVarBean());
     }
+    //9-3
+    /**
+     * 返回($fullVarNames))指定的${table.name}记录的所有的子节点(包括自己)<br>
+     * 自引用字段:${table.name}(#join($selfFk.columns '$e.name'))
+     * @see $table.asManagerInterfaceNSP()${esc.hash}$table.getChildListMethod($selfFk)($varTypes)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}java.util.List<$beanClass> $table.getChildListMethod($selfFk).replaceFirst('list','daoList')For${coreClass}($fullParams)
+                    throws RuntimeDaoException{
+        return ${table.getGetManagerMethod()}().$table.getChildListMethod($selfFk)($fullVarNames);
+    }
+    //9-4
+    /**
+     * 返回{@code $selfFk.foreignTable.asVarBean()}指定的${table.name}记录的所有的子节点(包括自己)<br>
+     * 自引用字段:${table.name}(#join($selfFk.columns '$e.name'))
+     * @see $table.asManagerInterfaceNSP()${esc.hash}$table.getListMethod($selfFk)($selfFk.foreignTable.asBeanClassNSP())
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}java.util.List<$beanClass> $table.getChildListMethod($selfFk).replaceFirst('list','daoList')For${coreClass}($selfFk.foreignTable.asBeanClassNSP() $selfFk.foreignTable.asVarBean())
+                    throws RuntimeDaoException{
+        return ${table.getGetManagerMethod()}().$table.getChildListMethod($selfFk)($selfFk.foreignTable.asVarBean());
+    }
 #end###foreach($selfFk in $table.selfRefKeys)
 ######################## SAVE #################
 #if($table.type == "TABLE")

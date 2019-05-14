@@ -210,7 +210,7 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         try{
             return this.nativeManager.checkDuplicate(id);
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
-        	throw new ObjectRetrievalException(e);
+            throw new ObjectRetrievalException(e);
         }catch(DaoException e){
             throw new RuntimeDaoException(e);
         }
@@ -1598,5 +1598,40 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
             throw new IllegalStateException("cycle on field: " + "parent");
         }
         return bean;
+    }
+    //57 IDeviceGroupManager
+
+    @Override
+    public java.util.List<DeviceGroupBean> childListByParent(Integer id){
+        java.util.LinkedHashSet<DeviceGroupBean> set = new java.util.LinkedHashSet<DeviceGroupBean>();
+        return new java.util.ArrayList<DeviceGroupBean>(doListOfChild(id,set));
+    }
+    //58 IDeviceGroupManager
+
+    @Override
+    public java.util.List<DeviceGroupBean> childListByParent(DeviceGroupBean bean){
+        return null == bean
+                ? java.util.Collections.<DeviceGroupBean>emptyList()
+                : childListByParent(bean.getId());
+    }
+    /**
+     * get all of child recursively
+     * @param id PK# 1 
+     * @param set child set for output
+     */
+    private java.util.LinkedHashSet<DeviceGroupBean> doListOfChild(Integer id, java.util.LinkedHashSet<DeviceGroupBean> set){
+        DeviceGroupBean bean = loadByPrimaryKey(id);
+        if(bean != null){
+            if(set.contains(bean)){
+                throw new IllegalStateException("cycle on field: " + "parent");
+            }
+            set.add(bean);
+            DeviceGroupBean tmpl = DeviceGroupBean.builder().parent(bean.getId()).build();
+            java.util.List<DeviceGroupBean> childs = loadUsingTemplateAsList(tmpl);
+            for(DeviceGroupBean c:childs){
+                doListOfChild(c.getId(),set);
+            }
+        }
+        return set;
     }
 }

@@ -211,7 +211,7 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         try{
             return this.nativeManager.checkDuplicate(id);
         }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
-        	throw new ObjectRetrievalException(e);
+            throw new ObjectRetrievalException(e);
         }catch(DaoException e){
             throw new RuntimeDaoException(e);
         }
