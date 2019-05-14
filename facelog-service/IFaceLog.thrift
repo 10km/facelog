@@ -229,6 +229,8 @@ service IFaceLog {
   Token applyRootToken(1: optional string password, 2: required bool isMd5) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   Token applyUserToken(1: required i32 userid, 2: optional string password, 3: required bool isMd5) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   void bindBorder(1: optional i32 personGroupId, 2: optional i32 deviceGroupId, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
+  list<i32> childListForDeviceGroup(1: required i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
+  list<i32> childListForPersonGroup(1: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   i32 countDeviceByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   i32 countDeviceGroupByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   i32 countLogByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);

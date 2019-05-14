@@ -253,6 +253,16 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public List<Integer> childListForDeviceGroup (int deviceGroupId) {
+        return delegate().childListForDeviceGroup(deviceGroupId);
+    }
+
+    @Override
+    public List<Integer> childListForPersonGroup (int personGroupId) {
+        return delegate().childListForPersonGroup(personGroupId);
+    }
+
+    @Override
     public int countDeviceByWhere (String where) {
         return delegate().countDeviceByWhere(where);
     }

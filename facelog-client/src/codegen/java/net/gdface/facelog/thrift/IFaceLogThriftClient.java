@@ -459,6 +459,46 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public List<Integer> childListForDeviceGroup(int deviceGroupId) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.childListForDeviceGroup(deviceGroupId),
+                    Integer.class,
+                    Integer.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public List<Integer> childListForPersonGroup(int personGroupId) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.childListForPersonGroup(personGroupId),
+                    Integer.class,
+                    Integer.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
     public int countDeviceByWhere(String where) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();

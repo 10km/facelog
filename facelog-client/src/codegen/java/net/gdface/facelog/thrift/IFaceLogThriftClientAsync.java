@@ -469,6 +469,30 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(bindBorder(personGroupId,deviceGroupId,token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#childListForDeviceGroup(int)}
+     */
+    public ListenableFuture<List<Integer>> childListForDeviceGroup(int deviceGroupId){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<List<Integer>> future = async.childListForDeviceGroup(deviceGroupId);
+        return factory.wrap(async,future);
+    }
+    public void childListForDeviceGroup(int deviceGroupId,
+        FutureCallback<List<Integer>>callback){
+        factory.addCallback(childListForDeviceGroup(deviceGroupId), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#childListForPersonGroup(int)}
+     */
+    public ListenableFuture<List<Integer>> childListForPersonGroup(int personGroupId){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<List<Integer>> future = async.childListForPersonGroup(personGroupId);
+        return factory.wrap(async,future);
+    }
+    public void childListForPersonGroup(int personGroupId,
+        FutureCallback<List<Integer>>callback){
+        factory.addCallback(childListForPersonGroup(personGroupId), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#countDeviceByWhere(java.lang.String)}
      */
     public ListenableFuture<Integer> countDeviceByWhere(String where){        

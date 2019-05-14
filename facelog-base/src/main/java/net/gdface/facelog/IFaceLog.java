@@ -634,6 +634,15 @@ public interface IFaceLog{
 	 * @return  如果{@code deviceGroupId}无效则返回空表
      */
 	public List<Integer> listOfParentForDeviceGroup(int deviceGroupId);
+	
+	/**
+     * 返回(deviceGroupId))指定的fl_device_group记录的所有的子节点(包括自己)<br>
+     * 自引用字段:fl_device_group(parent)
+	 * @param deviceGroupId
+	 * @return 如果{@code deviceGroupId}无效则返回空表
+	 */
+	public List<Integer> childListForDeviceGroup(int deviceGroupId);
+
 	/**
      * 返回({@code deviceId})指定的设备所属所有设备组<br>
 	 * @param deviceId
@@ -698,6 +707,14 @@ public interface IFaceLog{
 	 * @return  如果{@code personGroupId}无效则返回空表
      */
 	public List<Integer> listOfParentForPersonGroup(int personGroupId);
+	
+	/**
+     * 返回(personGroupId))指定的fl_person_group记录的所有的子节点(包括自己)<br>
+     * 自引用字段:fl_person_group(parent)
+	 * @param personGroupId
+	 * @return 如果{@code personGroupId}无效则返回空表
+	 */
+	public List<Integer> childListForPersonGroup(int personGroupId);
 	/**
      * 返回({@code personId})指定的人员所属所有人员组<br>
 	 * @param personId
@@ -1161,7 +1178,5 @@ public interface IFaceLog{
 	 * @return
 	 */
 	public boolean isLocal();
-
-
 
 }

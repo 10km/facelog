@@ -452,6 +452,44 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#childListForDeviceGroup(int)}
+     */
+    @ThriftMethod(value = "childListForDeviceGroup" )
+    public List<Integer> childListForDeviceGroup(int deviceGroupId) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().childListForDeviceGroup(deviceGroupId),
+                    Integer.class,
+                    Integer.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#childListForPersonGroup(int)}
+     */
+    @ThriftMethod(value = "childListForPersonGroup" )
+    public List<Integer> childListForPersonGroup(int personGroupId) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().childListForPersonGroup(personGroupId),
+                    Integer.class,
+                    Integer.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#countDeviceByWhere(java.lang.String)}
      */
     @ThriftMethod(value = "countDeviceByWhere" )

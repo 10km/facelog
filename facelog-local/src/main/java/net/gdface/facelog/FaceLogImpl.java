@@ -870,6 +870,14 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
 	}
 	@Override
+	public List<Integer> childListForDeviceGroup(int deviceGroupId){
+		try{
+			return dm.daoToPrimaryKeyListFromDeviceGroups(dm.childListByParentForDeviceGroup(deviceGroupId));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	@Override
 	public List<Integer> getDeviceGroupsBelongs(int deviceId)throws ServiceRuntimeException{
 		try{
 			DeviceBean deviceBean = dm.daoGetDevice(deviceId);
@@ -937,6 +945,14 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	public List<Integer> listOfParentForPersonGroup(int personGroupId){
 		try{
 			return dm.daoToPrimaryKeyListFromPersonGroups(dm.daoListOfParentForPersonGroup(personGroupId));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public List<Integer> childListForPersonGroup(int personGroupId){
+		try{
+			return dm.daoToPrimaryKeyListFromPersonGroups(dm.childListByParentForPersonGroup(personGroupId));
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}

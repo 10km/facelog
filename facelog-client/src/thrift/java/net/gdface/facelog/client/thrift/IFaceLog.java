@@ -158,6 +158,22 @@ public interface IFaceLog
             @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
+        @ThriftMethod(value = "childListForDeviceGroup",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<List<Integer>> childListForDeviceGroup(
+            @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId
+        );
+
+        @ThriftMethod(value = "childListForPersonGroup",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<List<Integer>> childListForPersonGroup(
+            @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
+        );
+
         @ThriftMethod(value = "countDeviceByWhere",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1361,6 +1377,22 @@ public interface IFaceLog
         @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.OPTIONAL) final Integer personGroupId,
         @ThriftField(value=2, name="deviceGroupId", requiredness=Requiredness.OPTIONAL) final Integer deviceGroupId,
         @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "childListForDeviceGroup",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    List<Integer> childListForDeviceGroup(
+        @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "childListForPersonGroup",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    List<Integer> childListForPersonGroup(
+        @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "countDeviceByWhere",

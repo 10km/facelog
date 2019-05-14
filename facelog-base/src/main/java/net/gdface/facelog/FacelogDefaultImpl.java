@@ -381,7 +381,12 @@ public class FacelogDefaultImpl implements IFaceLog {
 	public List<Integer> listOfParentForDeviceGroup(int deviceGroupId) {
 		return null;
 	}
-
+	
+	@Override
+	public List<Integer> childListForDeviceGroup(int deviceGroupId) {
+		return null;
+	}
+	
 	@Override
 	public List<Integer> getDeviceGroupsBelongs(int deviceId) {
 		return null;
@@ -421,7 +426,12 @@ public class FacelogDefaultImpl implements IFaceLog {
 	public List<Integer> listOfParentForPersonGroup(int personGroupId) {
 		return null;
 	}
-
+	
+	@Override
+	public List<Integer> childListForPersonGroup(int personGroupId) {
+		return null;
+	}
+	
 	@Override
 	public List<Integer> getPersonGroupsBelongs(int personId) {
 		return null;
@@ -698,7 +708,6 @@ public class FacelogDefaultImpl implements IFaceLog {
 	@Override
 	public void bindBorder(Integer personGroupId, Integer deviceGroupId, Token token) {
 	}
-
 
 
 }

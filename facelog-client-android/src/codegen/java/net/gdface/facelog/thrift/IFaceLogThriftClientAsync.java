@@ -588,6 +588,50 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(bindBorder(personGroupId,deviceGroupId,token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#childListForDeviceGroup(int)}
+     */
+    public ListenableFuture<List<Integer>> childListForDeviceGroup(int deviceGroupId){
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.childListForDeviceGroup(
+                deviceGroupId,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void childListForDeviceGroup(int deviceGroupId,
+        FutureCallback<List<Integer>>callback){
+        factory.addCallback(childListForDeviceGroup(deviceGroupId), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#childListForPersonGroup(int)}
+     */
+    public ListenableFuture<List<Integer>> childListForPersonGroup(int personGroupId){
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.childListForPersonGroup(
+                personGroupId,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void childListForPersonGroup(int personGroupId,
+        FutureCallback<List<Integer>>callback){
+        factory.addCallback(childListForPersonGroup(personGroupId), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#countDeviceByWhere(java.lang.String)}
      */
     public ListenableFuture<Integer> countDeviceByWhere(String where){
