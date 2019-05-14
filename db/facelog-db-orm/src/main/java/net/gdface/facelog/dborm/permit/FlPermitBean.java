@@ -185,13 +185,14 @@ public  class FlPermitBean
     public void setDeviceGroupId(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_PERMIT_ID_DEVICE_GROUP_ID_MASK;
+        initialized |= FL_PERMIT_ID_DEVICE_GROUP_ID_MASK;
+
         if (Objects.equals(newVal, deviceGroupId)) {
             return;
         }
         deviceGroupId = newVal;
-
-        modified |= FL_PERMIT_ID_DEVICE_GROUP_ID_MASK;
-        initialized |= FL_PERMIT_ID_DEVICE_GROUP_ID_MASK;
     }
     /**
      * Setter method for {@link #deviceGroupId}.<br>
@@ -253,13 +254,14 @@ public  class FlPermitBean
     public void setPersonGroupId(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_PERMIT_ID_PERSON_GROUP_ID_MASK;
+        initialized |= FL_PERMIT_ID_PERSON_GROUP_ID_MASK;
+
         if (Objects.equals(newVal, personGroupId)) {
             return;
         }
         personGroupId = newVal;
-
-        modified |= FL_PERMIT_ID_PERSON_GROUP_ID_MASK;
-        initialized |= FL_PERMIT_ID_PERSON_GROUP_ID_MASK;
     }
     /**
      * Setter method for {@link #personGroupId}.<br>
@@ -318,13 +320,14 @@ public  class FlPermitBean
     public void setRemark(String newVal)
     {
         checkMutable();
+
+        modified |= FL_PERMIT_ID_REMARK_MASK;
+        initialized |= FL_PERMIT_ID_REMARK_MASK;
+
         if (Objects.equals(newVal, remark)) {
             return;
         }
         remark = newVal;
-
-        modified |= FL_PERMIT_ID_REMARK_MASK;
-        initialized |= FL_PERMIT_ID_REMARK_MASK;
     }
     /**
      * Determines if the remark has been modified.
@@ -373,13 +376,14 @@ public  class FlPermitBean
     public void setExtBin(java.nio.ByteBuffer newVal)
     {
         checkMutable();
+
+        modified |= FL_PERMIT_ID_EXT_BIN_MASK;
+        initialized |= FL_PERMIT_ID_EXT_BIN_MASK;
+
         if (Objects.equals(newVal, extBin)) {
             return;
         }
         extBin = newVal;
-
-        modified |= FL_PERMIT_ID_EXT_BIN_MASK;
-        initialized |= FL_PERMIT_ID_EXT_BIN_MASK;
     }
     /**
      * Determines if the extBin has been modified.
@@ -428,13 +432,14 @@ public  class FlPermitBean
     public void setExtTxt(String newVal)
     {
         checkMutable();
+
+        modified |= FL_PERMIT_ID_EXT_TXT_MASK;
+        initialized |= FL_PERMIT_ID_EXT_TXT_MASK;
+
         if (Objects.equals(newVal, extTxt)) {
             return;
         }
         extTxt = newVal;
-
-        modified |= FL_PERMIT_ID_EXT_TXT_MASK;
-        initialized |= FL_PERMIT_ID_EXT_TXT_MASK;
     }
     /**
      * Determines if the extTxt has been modified.
@@ -484,13 +489,14 @@ public  class FlPermitBean
     public void setCreateTime(java.util.Date newVal)
     {
         checkMutable();
+
+        modified |= FL_PERMIT_ID_CREATE_TIME_MASK;
+        initialized |= FL_PERMIT_ID_CREATE_TIME_MASK;
+
         if (Objects.equals(newVal, createTime)) {
             return;
         }
         createTime = newVal;
-
-        modified |= FL_PERMIT_ID_CREATE_TIME_MASK;
-        initialized |= FL_PERMIT_ID_CREATE_TIME_MASK;
     }
     /**
      * Setter method for {@link #createTime}.<br>

@@ -182,13 +182,14 @@ public final class FeatureBean
     public void setMd5(String newVal)
     {
         checkMutable();
+
+        modified |= FL_FEATURE_ID_MD5_MASK;
+        initialized |= FL_FEATURE_ID_MD5_MASK;
+
         if (Objects.equals(newVal, md5)) {
             return;
         }
         md5 = newVal;
-
-        modified |= FL_FEATURE_ID_MD5_MASK;
-        initialized |= FL_FEATURE_ID_MD5_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -249,13 +250,14 @@ public final class FeatureBean
     public void setPersonId(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FEATURE_ID_PERSON_ID_MASK;
+        initialized |= FL_FEATURE_ID_PERSON_ID_MASK;
+
         if (Objects.equals(newVal, personId)) {
             return;
         }
         personId = newVal;
-
-        modified |= FL_FEATURE_ID_PERSON_ID_MASK;
-        initialized |= FL_FEATURE_ID_PERSON_ID_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -326,13 +328,14 @@ public final class FeatureBean
     public void setFeature(java.nio.ByteBuffer newVal)
     {
         checkMutable();
+
+        modified |= FL_FEATURE_ID_FEATURE_MASK;
+        initialized |= FL_FEATURE_ID_FEATURE_MASK;
+
         if (Objects.equals(newVal, feature)) {
             return;
         }
         feature = newVal;
-
-        modified |= FL_FEATURE_ID_FEATURE_MASK;
-        initialized |= FL_FEATURE_ID_FEATURE_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -400,13 +403,14 @@ public final class FeatureBean
     public void setUpdateTime(java.util.Date newVal)
     {
         checkMutable();
+
+        modified |= FL_FEATURE_ID_UPDATE_TIME_MASK;
+        initialized |= FL_FEATURE_ID_UPDATE_TIME_MASK;
+
         if (Objects.equals(newVal, updateTime)) {
             return;
         }
         updateTime = newVal;
-
-        modified |= FL_FEATURE_ID_UPDATE_TIME_MASK;
-        initialized |= FL_FEATURE_ID_UPDATE_TIME_MASK;
     }
     /** 
      * setter for thrift:swift support<br>

@@ -213,13 +213,14 @@ public final class FaceBean
     public void setId(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_ID_MASK;
+        initialized |= FL_FACE_ID_ID_MASK;
+
         if (Objects.equals(newVal, id)) {
             return;
         }
         id = newVal;
-
-        modified |= FL_FACE_ID_ID_MASK;
-        initialized |= FL_FACE_ID_ID_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -291,13 +292,14 @@ public final class FaceBean
     public void setImageMd5(String newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_IMAGE_MD5_MASK;
+        initialized |= FL_FACE_ID_IMAGE_MD5_MASK;
+
         if (Objects.equals(newVal, imageMd5)) {
             return;
         }
         imageMd5 = newVal;
-
-        modified |= FL_FACE_ID_IMAGE_MD5_MASK;
-        initialized |= FL_FACE_ID_IMAGE_MD5_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -357,13 +359,14 @@ public final class FaceBean
     public void setFaceLeft(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_FACE_LEFT_MASK;
+        initialized |= FL_FACE_ID_FACE_LEFT_MASK;
+
         if (Objects.equals(newVal, faceLeft)) {
             return;
         }
         faceLeft = newVal;
-
-        modified |= FL_FACE_ID_FACE_LEFT_MASK;
-        initialized |= FL_FACE_ID_FACE_LEFT_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -433,13 +436,14 @@ public final class FaceBean
     public void setFaceTop(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_FACE_TOP_MASK;
+        initialized |= FL_FACE_ID_FACE_TOP_MASK;
+
         if (Objects.equals(newVal, faceTop)) {
             return;
         }
         faceTop = newVal;
-
-        modified |= FL_FACE_ID_FACE_TOP_MASK;
-        initialized |= FL_FACE_ID_FACE_TOP_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -509,13 +513,14 @@ public final class FaceBean
     public void setFaceWidth(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_FACE_WIDTH_MASK;
+        initialized |= FL_FACE_ID_FACE_WIDTH_MASK;
+
         if (Objects.equals(newVal, faceWidth)) {
             return;
         }
         faceWidth = newVal;
-
-        modified |= FL_FACE_ID_FACE_WIDTH_MASK;
-        initialized |= FL_FACE_ID_FACE_WIDTH_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -585,13 +590,14 @@ public final class FaceBean
     public void setFaceHeight(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_FACE_HEIGHT_MASK;
+        initialized |= FL_FACE_ID_FACE_HEIGHT_MASK;
+
         if (Objects.equals(newVal, faceHeight)) {
             return;
         }
         faceHeight = newVal;
-
-        modified |= FL_FACE_ID_FACE_HEIGHT_MASK;
-        initialized |= FL_FACE_ID_FACE_HEIGHT_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -660,13 +666,14 @@ public final class FaceBean
     public void setEyeLeftx(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_EYE_LEFTX_MASK;
+        initialized |= FL_FACE_ID_EYE_LEFTX_MASK;
+
         if (Objects.equals(newVal, eyeLeftx)) {
             return;
         }
         eyeLeftx = newVal;
-
-        modified |= FL_FACE_ID_EYE_LEFTX_MASK;
-        initialized |= FL_FACE_ID_EYE_LEFTX_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -735,13 +742,14 @@ public final class FaceBean
     public void setEyeLefty(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_EYE_LEFTY_MASK;
+        initialized |= FL_FACE_ID_EYE_LEFTY_MASK;
+
         if (Objects.equals(newVal, eyeLefty)) {
             return;
         }
         eyeLefty = newVal;
-
-        modified |= FL_FACE_ID_EYE_LEFTY_MASK;
-        initialized |= FL_FACE_ID_EYE_LEFTY_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -810,13 +818,14 @@ public final class FaceBean
     public void setEyeRightx(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_EYE_RIGHTX_MASK;
+        initialized |= FL_FACE_ID_EYE_RIGHTX_MASK;
+
         if (Objects.equals(newVal, eyeRightx)) {
             return;
         }
         eyeRightx = newVal;
-
-        modified |= FL_FACE_ID_EYE_RIGHTX_MASK;
-        initialized |= FL_FACE_ID_EYE_RIGHTX_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -885,13 +894,14 @@ public final class FaceBean
     public void setEyeRighty(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_EYE_RIGHTY_MASK;
+        initialized |= FL_FACE_ID_EYE_RIGHTY_MASK;
+
         if (Objects.equals(newVal, eyeRighty)) {
             return;
         }
         eyeRighty = newVal;
-
-        modified |= FL_FACE_ID_EYE_RIGHTY_MASK;
-        initialized |= FL_FACE_ID_EYE_RIGHTY_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -960,13 +970,14 @@ public final class FaceBean
     public void setMouthX(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_MOUTH_X_MASK;
+        initialized |= FL_FACE_ID_MOUTH_X_MASK;
+
         if (Objects.equals(newVal, mouthX)) {
             return;
         }
         mouthX = newVal;
-
-        modified |= FL_FACE_ID_MOUTH_X_MASK;
-        initialized |= FL_FACE_ID_MOUTH_X_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -1035,13 +1046,14 @@ public final class FaceBean
     public void setMouthY(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_MOUTH_Y_MASK;
+        initialized |= FL_FACE_ID_MOUTH_Y_MASK;
+
         if (Objects.equals(newVal, mouthY)) {
             return;
         }
         mouthY = newVal;
-
-        modified |= FL_FACE_ID_MOUTH_Y_MASK;
-        initialized |= FL_FACE_ID_MOUTH_Y_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -1110,13 +1122,14 @@ public final class FaceBean
     public void setNoseX(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_NOSE_X_MASK;
+        initialized |= FL_FACE_ID_NOSE_X_MASK;
+
         if (Objects.equals(newVal, noseX)) {
             return;
         }
         noseX = newVal;
-
-        modified |= FL_FACE_ID_NOSE_X_MASK;
-        initialized |= FL_FACE_ID_NOSE_X_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -1185,13 +1198,14 @@ public final class FaceBean
     public void setNoseY(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_NOSE_Y_MASK;
+        initialized |= FL_FACE_ID_NOSE_Y_MASK;
+
         if (Objects.equals(newVal, noseY)) {
             return;
         }
         noseY = newVal;
-
-        modified |= FL_FACE_ID_NOSE_Y_MASK;
-        initialized |= FL_FACE_ID_NOSE_Y_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -1260,13 +1274,14 @@ public final class FaceBean
     public void setAngleYaw(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_ANGLE_YAW_MASK;
+        initialized |= FL_FACE_ID_ANGLE_YAW_MASK;
+
         if (Objects.equals(newVal, angleYaw)) {
             return;
         }
         angleYaw = newVal;
-
-        modified |= FL_FACE_ID_ANGLE_YAW_MASK;
-        initialized |= FL_FACE_ID_ANGLE_YAW_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -1335,13 +1350,14 @@ public final class FaceBean
     public void setAnglePitch(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_ANGLE_PITCH_MASK;
+        initialized |= FL_FACE_ID_ANGLE_PITCH_MASK;
+
         if (Objects.equals(newVal, anglePitch)) {
             return;
         }
         anglePitch = newVal;
-
-        modified |= FL_FACE_ID_ANGLE_PITCH_MASK;
-        initialized |= FL_FACE_ID_ANGLE_PITCH_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -1410,13 +1426,14 @@ public final class FaceBean
     public void setAngleRoll(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_ANGLE_ROLL_MASK;
+        initialized |= FL_FACE_ID_ANGLE_ROLL_MASK;
+
         if (Objects.equals(newVal, angleRoll)) {
             return;
         }
         angleRoll = newVal;
-
-        modified |= FL_FACE_ID_ANGLE_ROLL_MASK;
-        initialized |= FL_FACE_ID_ANGLE_ROLL_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -1486,13 +1503,14 @@ public final class FaceBean
     public void setExtInfo(java.nio.ByteBuffer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_EXT_INFO_MASK;
+        initialized |= FL_FACE_ID_EXT_INFO_MASK;
+
         if (Objects.equals(newVal, extInfo)) {
             return;
         }
         extInfo = newVal;
-
-        modified |= FL_FACE_ID_EXT_INFO_MASK;
-        initialized |= FL_FACE_ID_EXT_INFO_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -1553,13 +1571,14 @@ public final class FaceBean
     public void setFeatureMd5(String newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_FEATURE_MD5_MASK;
+        initialized |= FL_FACE_ID_FEATURE_MD5_MASK;
+
         if (Objects.equals(newVal, featureMd5)) {
             return;
         }
         featureMd5 = newVal;
-
-        modified |= FL_FACE_ID_FEATURE_MD5_MASK;
-        initialized |= FL_FACE_ID_FEATURE_MD5_MASK;
     }
     /** 
      * setter for thrift:swift support<br>

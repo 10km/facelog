@@ -196,13 +196,14 @@ public  class FlPersonGroupBean
     public void setId(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_GROUP_ID_ID_MASK;
+        initialized |= FL_PERSON_GROUP_ID_ID_MASK;
+
         if (Objects.equals(newVal, id)) {
             return;
         }
         id = newVal;
-
-        modified |= FL_PERSON_GROUP_ID_ID_MASK;
-        initialized |= FL_PERSON_GROUP_ID_ID_MASK;
     }
     /**
      * Setter method for {@link #id}.<br>
@@ -262,13 +263,14 @@ public  class FlPersonGroupBean
     public void setName(String newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_GROUP_ID_NAME_MASK;
+        initialized |= FL_PERSON_GROUP_ID_NAME_MASK;
+
         if (Objects.equals(newVal, name)) {
             return;
         }
         name = newVal;
-
-        modified |= FL_PERSON_GROUP_ID_NAME_MASK;
-        initialized |= FL_PERSON_GROUP_ID_NAME_MASK;
     }
     /**
      * Determines if the name has been modified.
@@ -317,13 +319,14 @@ public  class FlPersonGroupBean
     public void setLeaf(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_GROUP_ID_LEAF_MASK;
+        initialized |= FL_PERSON_GROUP_ID_LEAF_MASK;
+
         if (Objects.equals(newVal, leaf)) {
             return;
         }
         leaf = newVal;
-
-        modified |= FL_PERSON_GROUP_ID_LEAF_MASK;
-        initialized |= FL_PERSON_GROUP_ID_LEAF_MASK;
     }
     /**
      * Setter method for {@link #leaf}.<br>
@@ -383,13 +386,14 @@ public  class FlPersonGroupBean
     public void setParent(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_GROUP_ID_PARENT_MASK;
+        initialized |= FL_PERSON_GROUP_ID_PARENT_MASK;
+
         if (Objects.equals(newVal, parent)) {
             return;
         }
         parent = newVal;
-
-        modified |= FL_PERSON_GROUP_ID_PARENT_MASK;
-        initialized |= FL_PERSON_GROUP_ID_PARENT_MASK;
     }
     /**
      * Setter method for {@link #parent}.<br>
@@ -449,13 +453,14 @@ public  class FlPersonGroupBean
     public void setRootGroup(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_GROUP_ID_ROOT_GROUP_MASK;
+        initialized |= FL_PERSON_GROUP_ID_ROOT_GROUP_MASK;
+
         if (Objects.equals(newVal, rootGroup)) {
             return;
         }
         rootGroup = newVal;
-
-        modified |= FL_PERSON_GROUP_ID_ROOT_GROUP_MASK;
-        initialized |= FL_PERSON_GROUP_ID_ROOT_GROUP_MASK;
     }
     /**
      * Setter method for {@link #rootGroup}.<br>
@@ -514,13 +519,14 @@ public  class FlPersonGroupBean
     public void setRemark(String newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_GROUP_ID_REMARK_MASK;
+        initialized |= FL_PERSON_GROUP_ID_REMARK_MASK;
+
         if (Objects.equals(newVal, remark)) {
             return;
         }
         remark = newVal;
-
-        modified |= FL_PERSON_GROUP_ID_REMARK_MASK;
-        initialized |= FL_PERSON_GROUP_ID_REMARK_MASK;
     }
     /**
      * Determines if the remark has been modified.
@@ -569,13 +575,14 @@ public  class FlPersonGroupBean
     public void setExtBin(java.nio.ByteBuffer newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_GROUP_ID_EXT_BIN_MASK;
+        initialized |= FL_PERSON_GROUP_ID_EXT_BIN_MASK;
+
         if (Objects.equals(newVal, extBin)) {
             return;
         }
         extBin = newVal;
-
-        modified |= FL_PERSON_GROUP_ID_EXT_BIN_MASK;
-        initialized |= FL_PERSON_GROUP_ID_EXT_BIN_MASK;
     }
     /**
      * Determines if the extBin has been modified.
@@ -624,13 +631,14 @@ public  class FlPersonGroupBean
     public void setExtTxt(String newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_GROUP_ID_EXT_TXT_MASK;
+        initialized |= FL_PERSON_GROUP_ID_EXT_TXT_MASK;
+
         if (Objects.equals(newVal, extTxt)) {
             return;
         }
         extTxt = newVal;
-
-        modified |= FL_PERSON_GROUP_ID_EXT_TXT_MASK;
-        initialized |= FL_PERSON_GROUP_ID_EXT_TXT_MASK;
     }
     /**
      * Determines if the extTxt has been modified.
@@ -680,13 +688,14 @@ public  class FlPersonGroupBean
     public void setCreateTime(java.util.Date newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_GROUP_ID_CREATE_TIME_MASK;
+        initialized |= FL_PERSON_GROUP_ID_CREATE_TIME_MASK;
+
         if (Objects.equals(newVal, createTime)) {
             return;
         }
         createTime = newVal;
-
-        modified |= FL_PERSON_GROUP_ID_CREATE_TIME_MASK;
-        initialized |= FL_PERSON_GROUP_ID_CREATE_TIME_MASK;
     }
     /**
      * Setter method for {@link #createTime}.<br>
@@ -754,13 +763,14 @@ public  class FlPersonGroupBean
     public void setUpdateTime(java.util.Date newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_GROUP_ID_UPDATE_TIME_MASK;
+        initialized |= FL_PERSON_GROUP_ID_UPDATE_TIME_MASK;
+
         if (Objects.equals(newVal, updateTime)) {
             return;
         }
         updateTime = newVal;
-
-        modified |= FL_PERSON_GROUP_ID_UPDATE_TIME_MASK;
-        initialized |= FL_PERSON_GROUP_ID_UPDATE_TIME_MASK;
     }
     /**
      * Setter method for {@link #updateTime}.<br>

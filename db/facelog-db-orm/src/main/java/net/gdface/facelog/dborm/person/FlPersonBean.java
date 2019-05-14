@@ -216,13 +216,14 @@ public  class FlPersonBean
     public void setId(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_ID_ID_MASK;
+        initialized |= FL_PERSON_ID_ID_MASK;
+
         if (Objects.equals(newVal, id)) {
             return;
         }
         id = newVal;
-
-        modified |= FL_PERSON_ID_ID_MASK;
-        initialized |= FL_PERSON_ID_ID_MASK;
     }
     /**
      * Setter method for {@link #id}.<br>
@@ -283,13 +284,14 @@ public  class FlPersonBean
     public void setGroupId(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_ID_GROUP_ID_MASK;
+        initialized |= FL_PERSON_ID_GROUP_ID_MASK;
+
         if (Objects.equals(newVal, groupId)) {
             return;
         }
         groupId = newVal;
-
-        modified |= FL_PERSON_ID_GROUP_ID_MASK;
-        initialized |= FL_PERSON_ID_GROUP_ID_MASK;
     }
     /**
      * Setter method for {@link #groupId}.<br>
@@ -349,13 +351,14 @@ public  class FlPersonBean
     public void setName(String newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_ID_NAME_MASK;
+        initialized |= FL_PERSON_ID_NAME_MASK;
+
         if (Objects.equals(newVal, name)) {
             return;
         }
         name = newVal;
-
-        modified |= FL_PERSON_ID_NAME_MASK;
-        initialized |= FL_PERSON_ID_NAME_MASK;
     }
     /**
      * Determines if the name has been modified.
@@ -404,13 +407,14 @@ public  class FlPersonBean
     public void setSex(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_ID_SEX_MASK;
+        initialized |= FL_PERSON_ID_SEX_MASK;
+
         if (Objects.equals(newVal, sex)) {
             return;
         }
         sex = newVal;
-
-        modified |= FL_PERSON_ID_SEX_MASK;
-        initialized |= FL_PERSON_ID_SEX_MASK;
     }
     /**
      * Setter method for {@link #sex}.<br>
@@ -469,13 +473,14 @@ public  class FlPersonBean
     public void setRank(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_ID_RANK_MASK;
+        initialized |= FL_PERSON_ID_RANK_MASK;
+
         if (Objects.equals(newVal, rank)) {
             return;
         }
         rank = newVal;
-
-        modified |= FL_PERSON_ID_RANK_MASK;
-        initialized |= FL_PERSON_ID_RANK_MASK;
     }
     /**
      * Setter method for {@link #rank}.<br>
@@ -534,13 +539,14 @@ public  class FlPersonBean
     public void setPassword(String newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_ID_PASSWORD_MASK;
+        initialized |= FL_PERSON_ID_PASSWORD_MASK;
+
         if (Objects.equals(newVal, password)) {
             return;
         }
         password = newVal;
-
-        modified |= FL_PERSON_ID_PASSWORD_MASK;
-        initialized |= FL_PERSON_ID_PASSWORD_MASK;
     }
     /**
      * Determines if the password has been modified.
@@ -589,13 +595,14 @@ public  class FlPersonBean
     public void setBirthdate(java.util.Date newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_ID_BIRTHDATE_MASK;
+        initialized |= FL_PERSON_ID_BIRTHDATE_MASK;
+
         if (Objects.equals(newVal, birthdate)) {
             return;
         }
         birthdate = newVal;
-
-        modified |= FL_PERSON_ID_BIRTHDATE_MASK;
-        initialized |= FL_PERSON_ID_BIRTHDATE_MASK;
     }
     /**
      * Setter method for {@link #birthdate}.<br>
@@ -662,13 +669,14 @@ public  class FlPersonBean
     public void setMobilePhone(String newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_ID_MOBILE_PHONE_MASK;
+        initialized |= FL_PERSON_ID_MOBILE_PHONE_MASK;
+
         if (Objects.equals(newVal, mobilePhone)) {
             return;
         }
         mobilePhone = newVal;
-
-        modified |= FL_PERSON_ID_MOBILE_PHONE_MASK;
-        initialized |= FL_PERSON_ID_MOBILE_PHONE_MASK;
     }
     /**
      * Determines if the mobilePhone has been modified.
@@ -717,13 +725,14 @@ public  class FlPersonBean
     public void setPapersType(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_ID_PAPERS_TYPE_MASK;
+        initialized |= FL_PERSON_ID_PAPERS_TYPE_MASK;
+
         if (Objects.equals(newVal, papersType)) {
             return;
         }
         papersType = newVal;
-
-        modified |= FL_PERSON_ID_PAPERS_TYPE_MASK;
-        initialized |= FL_PERSON_ID_PAPERS_TYPE_MASK;
     }
     /**
      * Setter method for {@link #papersType}.<br>
@@ -782,13 +791,14 @@ public  class FlPersonBean
     public void setPapersNum(String newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_ID_PAPERS_NUM_MASK;
+        initialized |= FL_PERSON_ID_PAPERS_NUM_MASK;
+
         if (Objects.equals(newVal, papersNum)) {
             return;
         }
         papersNum = newVal;
-
-        modified |= FL_PERSON_ID_PAPERS_NUM_MASK;
-        initialized |= FL_PERSON_ID_PAPERS_NUM_MASK;
     }
     /**
      * Determines if the papersNum has been modified.
@@ -838,13 +848,14 @@ public  class FlPersonBean
     public void setImageMd5(String newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_ID_IMAGE_MD5_MASK;
+        initialized |= FL_PERSON_ID_IMAGE_MD5_MASK;
+
         if (Objects.equals(newVal, imageMd5)) {
             return;
         }
         imageMd5 = newVal;
-
-        modified |= FL_PERSON_ID_IMAGE_MD5_MASK;
-        initialized |= FL_PERSON_ID_IMAGE_MD5_MASK;
     }
     /**
      * Determines if the imageMd5 has been modified.
@@ -894,13 +905,14 @@ public  class FlPersonBean
     public void setExpiryDate(java.util.Date newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_ID_EXPIRY_DATE_MASK;
+        initialized |= FL_PERSON_ID_EXPIRY_DATE_MASK;
+
         if (Objects.equals(newVal, expiryDate)) {
             return;
         }
         expiryDate = newVal;
-
-        modified |= FL_PERSON_ID_EXPIRY_DATE_MASK;
-        initialized |= FL_PERSON_ID_EXPIRY_DATE_MASK;
     }
     /**
      * Setter method for {@link #expiryDate}.<br>
@@ -967,13 +979,14 @@ public  class FlPersonBean
     public void setRemark(String newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_ID_REMARK_MASK;
+        initialized |= FL_PERSON_ID_REMARK_MASK;
+
         if (Objects.equals(newVal, remark)) {
             return;
         }
         remark = newVal;
-
-        modified |= FL_PERSON_ID_REMARK_MASK;
-        initialized |= FL_PERSON_ID_REMARK_MASK;
     }
     /**
      * Determines if the remark has been modified.
@@ -1022,13 +1035,14 @@ public  class FlPersonBean
     public void setExtBin(java.nio.ByteBuffer newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_ID_EXT_BIN_MASK;
+        initialized |= FL_PERSON_ID_EXT_BIN_MASK;
+
         if (Objects.equals(newVal, extBin)) {
             return;
         }
         extBin = newVal;
-
-        modified |= FL_PERSON_ID_EXT_BIN_MASK;
-        initialized |= FL_PERSON_ID_EXT_BIN_MASK;
     }
     /**
      * Determines if the extBin has been modified.
@@ -1077,13 +1091,14 @@ public  class FlPersonBean
     public void setExtTxt(String newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_ID_EXT_TXT_MASK;
+        initialized |= FL_PERSON_ID_EXT_TXT_MASK;
+
         if (Objects.equals(newVal, extTxt)) {
             return;
         }
         extTxt = newVal;
-
-        modified |= FL_PERSON_ID_EXT_TXT_MASK;
-        initialized |= FL_PERSON_ID_EXT_TXT_MASK;
     }
     /**
      * Determines if the extTxt has been modified.
@@ -1133,13 +1148,14 @@ public  class FlPersonBean
     public void setCreateTime(java.util.Date newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_ID_CREATE_TIME_MASK;
+        initialized |= FL_PERSON_ID_CREATE_TIME_MASK;
+
         if (Objects.equals(newVal, createTime)) {
             return;
         }
         createTime = newVal;
-
-        modified |= FL_PERSON_ID_CREATE_TIME_MASK;
-        initialized |= FL_PERSON_ID_CREATE_TIME_MASK;
     }
     /**
      * Setter method for {@link #createTime}.<br>
@@ -1207,13 +1223,14 @@ public  class FlPersonBean
     public void setUpdateTime(java.util.Date newVal)
     {
         checkMutable();
+
+        modified |= FL_PERSON_ID_UPDATE_TIME_MASK;
+        initialized |= FL_PERSON_ID_UPDATE_TIME_MASK;
+
         if (Objects.equals(newVal, updateTime)) {
             return;
         }
         updateTime = newVal;
-
-        modified |= FL_PERSON_ID_UPDATE_TIME_MASK;
-        initialized |= FL_PERSON_ID_UPDATE_TIME_MASK;
     }
     /**
      * Setter method for {@link #updateTime}.<br>

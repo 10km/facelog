@@ -94,6 +94,7 @@ public class DbConverter implements IDbConverter<
             }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
+            left.setInitialized(right.getInitialized());
         }
 
         @Override
@@ -150,6 +151,7 @@ public class DbConverter implements IDbConverter<
 //             }
             right.setNew(left.isNew());
             right.setModified(left.getModified());
+            right.setInitialized(left.getInitialized());
         }};
         
     public static final IBeanConverter<DeviceGroupBean,net.gdface.facelog.dborm.device.FlDeviceGroupBean> CONVERTER_DEVICEGROUPBEAN=new IBeanConverter.AbstractHandle<DeviceGroupBean,net.gdface.facelog.dborm.device.FlDeviceGroupBean>(){
@@ -188,6 +190,7 @@ public class DbConverter implements IDbConverter<
             }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
+            left.setInitialized(right.getInitialized());
         }
 
         @Override
@@ -226,6 +229,7 @@ public class DbConverter implements IDbConverter<
 //             }
             right.setNew(left.isNew());
             right.setModified(left.getModified());
+            right.setInitialized(left.getInitialized());
         }};
         
     public static final IBeanConverter<FaceBean,net.gdface.facelog.dborm.face.FlFaceBean> CONVERTER_FACEBEAN=new IBeanConverter.AbstractHandle<FaceBean,net.gdface.facelog.dborm.face.FlFaceBean>(){
@@ -291,6 +295,7 @@ public class DbConverter implements IDbConverter<
             }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
+            left.setInitialized(right.getInitialized());
         }
 
         @Override
@@ -354,6 +359,7 @@ public class DbConverter implements IDbConverter<
             }
             right.setNew(left.isNew());
             right.setModified(left.getModified());
+            right.setInitialized(left.getInitialized());
         }};
         
     public static final IBeanConverter<FeatureBean,net.gdface.facelog.dborm.face.FlFeatureBean> CONVERTER_FEATUREBEAN=new IBeanConverter.AbstractHandle<FeatureBean,net.gdface.facelog.dborm.face.FlFeatureBean>(){
@@ -374,6 +380,7 @@ public class DbConverter implements IDbConverter<
             }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
+            left.setInitialized(right.getInitialized());
         }
 
         @Override
@@ -393,6 +400,7 @@ public class DbConverter implements IDbConverter<
 //             }
             right.setNew(left.isNew());
             right.setModified(left.getModified());
+            right.setInitialized(left.getInitialized());
         }};
         
     public static final IBeanConverter<ImageBean,net.gdface.facelog.dborm.image.FlImageBean> CONVERTER_IMAGEBEAN=new IBeanConverter.AbstractHandle<ImageBean,net.gdface.facelog.dborm.image.FlImageBean>(){
@@ -425,6 +433,7 @@ public class DbConverter implements IDbConverter<
             }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
+            left.setInitialized(right.getInitialized());
         }
 
         @Override
@@ -455,6 +464,7 @@ public class DbConverter implements IDbConverter<
             }
             right.setNew(left.isNew());
             right.setModified(left.getModified());
+            right.setInitialized(left.getInitialized());
         }};
         
     public static final IBeanConverter<LogBean,net.gdface.facelog.dborm.log.FlLogBean> CONVERTER_LOGBEAN=new IBeanConverter.AbstractHandle<LogBean,net.gdface.facelog.dborm.log.FlLogBean>(){
@@ -490,6 +500,7 @@ public class DbConverter implements IDbConverter<
             }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
+            left.setInitialized(right.getInitialized());
         }
 
         @Override
@@ -524,6 +535,7 @@ public class DbConverter implements IDbConverter<
 //             }
             right.setNew(left.isNew());
             right.setModified(left.getModified());
+            right.setInitialized(left.getInitialized());
         }};
         
     public static final IBeanConverter<PermitBean,net.gdface.facelog.dborm.permit.FlPermitBean> CONVERTER_PERMITBEAN=new IBeanConverter.AbstractHandle<PermitBean,net.gdface.facelog.dborm.permit.FlPermitBean>(){
@@ -550,6 +562,7 @@ public class DbConverter implements IDbConverter<
             }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
+            left.setInitialized(right.getInitialized());
         }
 
         @Override
@@ -575,6 +588,7 @@ public class DbConverter implements IDbConverter<
 //             }
             right.setNew(left.isNew());
             right.setModified(left.getModified());
+            right.setInitialized(left.getInitialized());
         }};
         
     public static final IBeanConverter<PersonBean,net.gdface.facelog.dborm.person.FlPersonBean> CONVERTER_PERSONBEAN=new IBeanConverter.AbstractHandle<PersonBean,net.gdface.facelog.dborm.person.FlPersonBean>(){
@@ -634,6 +648,7 @@ public class DbConverter implements IDbConverter<
             }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
+            left.setInitialized(right.getInitialized());
         }
 
         @Override
@@ -693,6 +708,7 @@ public class DbConverter implements IDbConverter<
 //             }
             right.setNew(left.isNew());
             right.setModified(left.getModified());
+            right.setInitialized(left.getInitialized());
         }};
         
     public static final IBeanConverter<PersonGroupBean,net.gdface.facelog.dborm.person.FlPersonGroupBean> CONVERTER_PERSONGROUPBEAN=new IBeanConverter.AbstractHandle<PersonGroupBean,net.gdface.facelog.dborm.person.FlPersonGroupBean>(){
@@ -731,6 +747,7 @@ public class DbConverter implements IDbConverter<
             }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
+            left.setInitialized(right.getInitialized());
         }
 
         @Override
@@ -769,6 +786,7 @@ public class DbConverter implements IDbConverter<
 //             }
             right.setNew(left.isNew());
             right.setModified(left.getModified());
+            right.setInitialized(left.getInitialized());
         }};
         
     public static final IBeanConverter<StoreBean,net.gdface.facelog.dborm.image.FlStoreBean> CONVERTER_STOREBEAN=new IBeanConverter.AbstractHandle<StoreBean,net.gdface.facelog.dborm.image.FlStoreBean>(){
@@ -786,6 +804,7 @@ public class DbConverter implements IDbConverter<
             }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
+            left.setInitialized(right.getInitialized());
         }
 
         @Override
@@ -801,6 +820,7 @@ public class DbConverter implements IDbConverter<
             }
             right.setNew(left.isNew());
             right.setModified(left.getModified());
+            right.setInitialized(left.getInitialized());
         }};
         
     public static final IBeanConverter<LogLightBean,net.gdface.facelog.dborm.log.FlLogLightBean> CONVERTER_LOGLIGHTBEAN=new IBeanConverter.AbstractHandle<LogLightBean,net.gdface.facelog.dborm.log.FlLogLightBean>(){
@@ -827,6 +847,7 @@ public class DbConverter implements IDbConverter<
             }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
+            left.setInitialized(right.getInitialized());
         }
 
         @Override
@@ -851,6 +872,7 @@ public class DbConverter implements IDbConverter<
             }
             right.setNew(left.isNew());
             right.setModified(left.getModified());
+            right.setInitialized(left.getInitialized());
         }};
         
     public static final DbConverter INSTANCE = new DbConverter();

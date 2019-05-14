@@ -173,13 +173,14 @@ public  class FlLogLightBean
     public void setId(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_LIGHT_ID_ID_MASK;
+        initialized |= FL_LOG_LIGHT_ID_ID_MASK;
+
         if (Objects.equals(newVal, id)) {
             return;
         }
         id = newVal;
-
-        modified |= FL_LOG_LIGHT_ID_ID_MASK;
-        initialized |= FL_LOG_LIGHT_ID_ID_MASK;
     }
     /**
      * Setter method for {@link #id}.<br>
@@ -240,13 +241,14 @@ public  class FlLogLightBean
     public void setPersonId(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_LIGHT_ID_PERSON_ID_MASK;
+        initialized |= FL_LOG_LIGHT_ID_PERSON_ID_MASK;
+
         if (Objects.equals(newVal, personId)) {
             return;
         }
         personId = newVal;
-
-        modified |= FL_LOG_LIGHT_ID_PERSON_ID_MASK;
-        initialized |= FL_LOG_LIGHT_ID_PERSON_ID_MASK;
     }
     /**
      * Setter method for {@link #personId}.<br>
@@ -306,13 +308,14 @@ public  class FlLogLightBean
     public void setName(String newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_LIGHT_ID_NAME_MASK;
+        initialized |= FL_LOG_LIGHT_ID_NAME_MASK;
+
         if (Objects.equals(newVal, name)) {
             return;
         }
         name = newVal;
-
-        modified |= FL_LOG_LIGHT_ID_NAME_MASK;
-        initialized |= FL_LOG_LIGHT_ID_NAME_MASK;
     }
     /**
      * Determines if the name has been modified.
@@ -361,13 +364,14 @@ public  class FlLogLightBean
     public void setPapersType(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK;
+        initialized |= FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK;
+
         if (Objects.equals(newVal, papersType)) {
             return;
         }
         papersType = newVal;
-
-        modified |= FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK;
-        initialized |= FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK;
     }
     /**
      * Setter method for {@link #papersType}.<br>
@@ -426,13 +430,14 @@ public  class FlLogLightBean
     public void setPapersNum(String newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_LIGHT_ID_PAPERS_NUM_MASK;
+        initialized |= FL_LOG_LIGHT_ID_PAPERS_NUM_MASK;
+
         if (Objects.equals(newVal, papersNum)) {
             return;
         }
         papersNum = newVal;
-
-        modified |= FL_LOG_LIGHT_ID_PAPERS_NUM_MASK;
-        initialized |= FL_LOG_LIGHT_ID_PAPERS_NUM_MASK;
     }
     /**
      * Determines if the papersNum has been modified.
@@ -483,13 +488,14 @@ public  class FlLogLightBean
     public void setVerifyTime(java.util.Date newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_LIGHT_ID_VERIFY_TIME_MASK;
+        initialized |= FL_LOG_LIGHT_ID_VERIFY_TIME_MASK;
+
         if (Objects.equals(newVal, verifyTime)) {
             return;
         }
         verifyTime = newVal;
-
-        modified |= FL_LOG_LIGHT_ID_VERIFY_TIME_MASK;
-        initialized |= FL_LOG_LIGHT_ID_VERIFY_TIME_MASK;
     }
     /**
      * Setter method for {@link #verifyTime}.<br>

@@ -212,13 +212,14 @@ public  class FlDeviceBean
     public void setId(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_DEVICE_ID_ID_MASK;
+        initialized |= FL_DEVICE_ID_ID_MASK;
+
         if (Objects.equals(newVal, id)) {
             return;
         }
         id = newVal;
-
-        modified |= FL_DEVICE_ID_ID_MASK;
-        initialized |= FL_DEVICE_ID_ID_MASK;
     }
     /**
      * Setter method for {@link #id}.<br>
@@ -279,13 +280,14 @@ public  class FlDeviceBean
     public void setGroupId(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_DEVICE_ID_GROUP_ID_MASK;
+        initialized |= FL_DEVICE_ID_GROUP_ID_MASK;
+
         if (Objects.equals(newVal, groupId)) {
             return;
         }
         groupId = newVal;
-
-        modified |= FL_DEVICE_ID_GROUP_ID_MASK;
-        initialized |= FL_DEVICE_ID_GROUP_ID_MASK;
     }
     /**
      * Setter method for {@link #groupId}.<br>
@@ -344,13 +346,14 @@ public  class FlDeviceBean
     public void setName(String newVal)
     {
         checkMutable();
+
+        modified |= FL_DEVICE_ID_NAME_MASK;
+        initialized |= FL_DEVICE_ID_NAME_MASK;
+
         if (Objects.equals(newVal, name)) {
             return;
         }
         name = newVal;
-
-        modified |= FL_DEVICE_ID_NAME_MASK;
-        initialized |= FL_DEVICE_ID_NAME_MASK;
     }
     /**
      * Determines if the name has been modified.
@@ -399,13 +402,14 @@ public  class FlDeviceBean
     public void setProductName(String newVal)
     {
         checkMutable();
+
+        modified |= FL_DEVICE_ID_PRODUCT_NAME_MASK;
+        initialized |= FL_DEVICE_ID_PRODUCT_NAME_MASK;
+
         if (Objects.equals(newVal, productName)) {
             return;
         }
         productName = newVal;
-
-        modified |= FL_DEVICE_ID_PRODUCT_NAME_MASK;
-        initialized |= FL_DEVICE_ID_PRODUCT_NAME_MASK;
     }
     /**
      * Determines if the productName has been modified.
@@ -454,13 +458,14 @@ public  class FlDeviceBean
     public void setModel(String newVal)
     {
         checkMutable();
+
+        modified |= FL_DEVICE_ID_MODEL_MASK;
+        initialized |= FL_DEVICE_ID_MODEL_MASK;
+
         if (Objects.equals(newVal, model)) {
             return;
         }
         model = newVal;
-
-        modified |= FL_DEVICE_ID_MODEL_MASK;
-        initialized |= FL_DEVICE_ID_MODEL_MASK;
     }
     /**
      * Determines if the model has been modified.
@@ -509,13 +514,14 @@ public  class FlDeviceBean
     public void setVendor(String newVal)
     {
         checkMutable();
+
+        modified |= FL_DEVICE_ID_VENDOR_MASK;
+        initialized |= FL_DEVICE_ID_VENDOR_MASK;
+
         if (Objects.equals(newVal, vendor)) {
             return;
         }
         vendor = newVal;
-
-        modified |= FL_DEVICE_ID_VENDOR_MASK;
-        initialized |= FL_DEVICE_ID_VENDOR_MASK;
     }
     /**
      * Determines if the vendor has been modified.
@@ -564,13 +570,14 @@ public  class FlDeviceBean
     public void setManufacturer(String newVal)
     {
         checkMutable();
+
+        modified |= FL_DEVICE_ID_MANUFACTURER_MASK;
+        initialized |= FL_DEVICE_ID_MANUFACTURER_MASK;
+
         if (Objects.equals(newVal, manufacturer)) {
             return;
         }
         manufacturer = newVal;
-
-        modified |= FL_DEVICE_ID_MANUFACTURER_MASK;
-        initialized |= FL_DEVICE_ID_MANUFACTURER_MASK;
     }
     /**
      * Determines if the manufacturer has been modified.
@@ -619,13 +626,14 @@ public  class FlDeviceBean
     public void setMadeDate(java.util.Date newVal)
     {
         checkMutable();
+
+        modified |= FL_DEVICE_ID_MADE_DATE_MASK;
+        initialized |= FL_DEVICE_ID_MADE_DATE_MASK;
+
         if (Objects.equals(newVal, madeDate)) {
             return;
         }
         madeDate = newVal;
-
-        modified |= FL_DEVICE_ID_MADE_DATE_MASK;
-        initialized |= FL_DEVICE_ID_MADE_DATE_MASK;
     }
     /**
      * Setter method for {@link #madeDate}.<br>
@@ -692,13 +700,14 @@ public  class FlDeviceBean
     public void setVersion(String newVal)
     {
         checkMutable();
+
+        modified |= FL_DEVICE_ID_VERSION_MASK;
+        initialized |= FL_DEVICE_ID_VERSION_MASK;
+
         if (Objects.equals(newVal, version)) {
             return;
         }
         version = newVal;
-
-        modified |= FL_DEVICE_ID_VERSION_MASK;
-        initialized |= FL_DEVICE_ID_VERSION_MASK;
     }
     /**
      * Determines if the version has been modified.
@@ -747,13 +756,14 @@ public  class FlDeviceBean
     public void setSerialNo(String newVal)
     {
         checkMutable();
+
+        modified |= FL_DEVICE_ID_SERIAL_NO_MASK;
+        initialized |= FL_DEVICE_ID_SERIAL_NO_MASK;
+
         if (Objects.equals(newVal, serialNo)) {
             return;
         }
         serialNo = newVal;
-
-        modified |= FL_DEVICE_ID_SERIAL_NO_MASK;
-        initialized |= FL_DEVICE_ID_SERIAL_NO_MASK;
     }
     /**
      * Determines if the serialNo has been modified.
@@ -802,13 +812,14 @@ public  class FlDeviceBean
     public void setMac(String newVal)
     {
         checkMutable();
+
+        modified |= FL_DEVICE_ID_MAC_MASK;
+        initialized |= FL_DEVICE_ID_MAC_MASK;
+
         if (Objects.equals(newVal, mac)) {
             return;
         }
         mac = newVal;
-
-        modified |= FL_DEVICE_ID_MAC_MASK;
-        initialized |= FL_DEVICE_ID_MAC_MASK;
     }
     /**
      * Determines if the mac has been modified.
@@ -857,13 +868,14 @@ public  class FlDeviceBean
     public void setRemark(String newVal)
     {
         checkMutable();
+
+        modified |= FL_DEVICE_ID_REMARK_MASK;
+        initialized |= FL_DEVICE_ID_REMARK_MASK;
+
         if (Objects.equals(newVal, remark)) {
             return;
         }
         remark = newVal;
-
-        modified |= FL_DEVICE_ID_REMARK_MASK;
-        initialized |= FL_DEVICE_ID_REMARK_MASK;
     }
     /**
      * Determines if the remark has been modified.
@@ -912,13 +924,14 @@ public  class FlDeviceBean
     public void setExtBin(java.nio.ByteBuffer newVal)
     {
         checkMutable();
+
+        modified |= FL_DEVICE_ID_EXT_BIN_MASK;
+        initialized |= FL_DEVICE_ID_EXT_BIN_MASK;
+
         if (Objects.equals(newVal, extBin)) {
             return;
         }
         extBin = newVal;
-
-        modified |= FL_DEVICE_ID_EXT_BIN_MASK;
-        initialized |= FL_DEVICE_ID_EXT_BIN_MASK;
     }
     /**
      * Determines if the extBin has been modified.
@@ -967,13 +980,14 @@ public  class FlDeviceBean
     public void setExtTxt(String newVal)
     {
         checkMutable();
+
+        modified |= FL_DEVICE_ID_EXT_TXT_MASK;
+        initialized |= FL_DEVICE_ID_EXT_TXT_MASK;
+
         if (Objects.equals(newVal, extTxt)) {
             return;
         }
         extTxt = newVal;
-
-        modified |= FL_DEVICE_ID_EXT_TXT_MASK;
-        initialized |= FL_DEVICE_ID_EXT_TXT_MASK;
     }
     /**
      * Determines if the extTxt has been modified.
@@ -1023,13 +1037,14 @@ public  class FlDeviceBean
     public void setCreateTime(java.util.Date newVal)
     {
         checkMutable();
+
+        modified |= FL_DEVICE_ID_CREATE_TIME_MASK;
+        initialized |= FL_DEVICE_ID_CREATE_TIME_MASK;
+
         if (Objects.equals(newVal, createTime)) {
             return;
         }
         createTime = newVal;
-
-        modified |= FL_DEVICE_ID_CREATE_TIME_MASK;
-        initialized |= FL_DEVICE_ID_CREATE_TIME_MASK;
     }
     /**
      * Setter method for {@link #createTime}.<br>
@@ -1097,13 +1112,14 @@ public  class FlDeviceBean
     public void setUpdateTime(java.util.Date newVal)
     {
         checkMutable();
+
+        modified |= FL_DEVICE_ID_UPDATE_TIME_MASK;
+        initialized |= FL_DEVICE_ID_UPDATE_TIME_MASK;
+
         if (Objects.equals(newVal, updateTime)) {
             return;
         }
         updateTime = newVal;
-
-        modified |= FL_DEVICE_ID_UPDATE_TIME_MASK;
-        initialized |= FL_DEVICE_ID_UPDATE_TIME_MASK;
     }
     /**
      * Setter method for {@link #updateTime}.<br>

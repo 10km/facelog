@@ -194,13 +194,14 @@ public  class FlLogBean
     public void setId(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_ID_ID_MASK;
+        initialized |= FL_LOG_ID_ID_MASK;
+
         if (Objects.equals(newVal, id)) {
             return;
         }
         id = newVal;
-
-        modified |= FL_LOG_ID_ID_MASK;
-        initialized |= FL_LOG_ID_ID_MASK;
     }
     /**
      * Setter method for {@link #id}.<br>
@@ -261,13 +262,14 @@ public  class FlLogBean
     public void setPersonId(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_ID_PERSON_ID_MASK;
+        initialized |= FL_LOG_ID_PERSON_ID_MASK;
+
         if (Objects.equals(newVal, personId)) {
             return;
         }
         personId = newVal;
-
-        modified |= FL_LOG_ID_PERSON_ID_MASK;
-        initialized |= FL_LOG_ID_PERSON_ID_MASK;
     }
     /**
      * Setter method for {@link #personId}.<br>
@@ -327,13 +329,14 @@ public  class FlLogBean
     public void setDeviceId(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_ID_DEVICE_ID_MASK;
+        initialized |= FL_LOG_ID_DEVICE_ID_MASK;
+
         if (Objects.equals(newVal, deviceId)) {
             return;
         }
         deviceId = newVal;
-
-        modified |= FL_LOG_ID_DEVICE_ID_MASK;
-        initialized |= FL_LOG_ID_DEVICE_ID_MASK;
     }
     /**
      * Setter method for {@link #deviceId}.<br>
@@ -393,13 +396,14 @@ public  class FlLogBean
     public void setVerifyFeature(String newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_ID_VERIFY_FEATURE_MASK;
+        initialized |= FL_LOG_ID_VERIFY_FEATURE_MASK;
+
         if (Objects.equals(newVal, verifyFeature)) {
             return;
         }
         verifyFeature = newVal;
-
-        modified |= FL_LOG_ID_VERIFY_FEATURE_MASK;
-        initialized |= FL_LOG_ID_VERIFY_FEATURE_MASK;
     }
     /**
      * Determines if the verifyFeature has been modified.
@@ -449,13 +453,14 @@ public  class FlLogBean
     public void setCompareFace(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_ID_COMPARE_FACE_MASK;
+        initialized |= FL_LOG_ID_COMPARE_FACE_MASK;
+
         if (Objects.equals(newVal, compareFace)) {
             return;
         }
         compareFace = newVal;
-
-        modified |= FL_LOG_ID_COMPARE_FACE_MASK;
-        initialized |= FL_LOG_ID_COMPARE_FACE_MASK;
     }
     /**
      * Setter method for {@link #compareFace}.<br>
@@ -514,13 +519,14 @@ public  class FlLogBean
     public void setVerifyStatus(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_ID_VERIFY_STATUS_MASK;
+        initialized |= FL_LOG_ID_VERIFY_STATUS_MASK;
+
         if (Objects.equals(newVal, verifyStatus)) {
             return;
         }
         verifyStatus = newVal;
-
-        modified |= FL_LOG_ID_VERIFY_STATUS_MASK;
-        initialized |= FL_LOG_ID_VERIFY_STATUS_MASK;
     }
     /**
      * Setter method for {@link #verifyStatus}.<br>
@@ -579,13 +585,14 @@ public  class FlLogBean
     public void setSimilarty(Double newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_ID_SIMILARTY_MASK;
+        initialized |= FL_LOG_ID_SIMILARTY_MASK;
+
         if (Objects.equals(newVal, similarty)) {
             return;
         }
         similarty = newVal;
-
-        modified |= FL_LOG_ID_SIMILARTY_MASK;
-        initialized |= FL_LOG_ID_SIMILARTY_MASK;
     }
     /**
      * Setter method for {@link #similarty}.<br>
@@ -646,13 +653,14 @@ public  class FlLogBean
     public void setVerifyTime(java.util.Date newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_ID_VERIFY_TIME_MASK;
+        initialized |= FL_LOG_ID_VERIFY_TIME_MASK;
+
         if (Objects.equals(newVal, verifyTime)) {
             return;
         }
         verifyTime = newVal;
-
-        modified |= FL_LOG_ID_VERIFY_TIME_MASK;
-        initialized |= FL_LOG_ID_VERIFY_TIME_MASK;
     }
     /**
      * Setter method for {@link #verifyTime}.<br>
@@ -720,13 +728,14 @@ public  class FlLogBean
     public void setCreateTime(java.util.Date newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_ID_CREATE_TIME_MASK;
+        initialized |= FL_LOG_ID_CREATE_TIME_MASK;
+
         if (Objects.equals(newVal, createTime)) {
             return;
         }
         createTime = newVal;
-
-        modified |= FL_LOG_ID_CREATE_TIME_MASK;
-        initialized |= FL_LOG_ID_CREATE_TIME_MASK;
     }
     /**
      * Setter method for {@link #createTime}.<br>

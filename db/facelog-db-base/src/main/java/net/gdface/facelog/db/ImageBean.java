@@ -195,13 +195,14 @@ public final class ImageBean
     public void setMd5(String newVal)
     {
         checkMutable();
+
+        modified |= FL_IMAGE_ID_MD5_MASK;
+        initialized |= FL_IMAGE_ID_MD5_MASK;
+
         if (Objects.equals(newVal, md5)) {
             return;
         }
         md5 = newVal;
-
-        modified |= FL_IMAGE_ID_MD5_MASK;
-        initialized |= FL_IMAGE_ID_MD5_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -261,13 +262,14 @@ public final class ImageBean
     public void setFormat(String newVal)
     {
         checkMutable();
+
+        modified |= FL_IMAGE_ID_FORMAT_MASK;
+        initialized |= FL_IMAGE_ID_FORMAT_MASK;
+
         if (Objects.equals(newVal, format)) {
             return;
         }
         format = newVal;
-
-        modified |= FL_IMAGE_ID_FORMAT_MASK;
-        initialized |= FL_IMAGE_ID_FORMAT_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -328,13 +330,14 @@ public final class ImageBean
     public void setWidth(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_IMAGE_ID_WIDTH_MASK;
+        initialized |= FL_IMAGE_ID_WIDTH_MASK;
+
         if (Objects.equals(newVal, width)) {
             return;
         }
         width = newVal;
-
-        modified |= FL_IMAGE_ID_WIDTH_MASK;
-        initialized |= FL_IMAGE_ID_WIDTH_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -405,13 +408,14 @@ public final class ImageBean
     public void setHeight(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_IMAGE_ID_HEIGHT_MASK;
+        initialized |= FL_IMAGE_ID_HEIGHT_MASK;
+
         if (Objects.equals(newVal, height)) {
             return;
         }
         height = newVal;
-
-        modified |= FL_IMAGE_ID_HEIGHT_MASK;
-        initialized |= FL_IMAGE_ID_HEIGHT_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -483,13 +487,14 @@ public final class ImageBean
     public void setDepth(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_IMAGE_ID_DEPTH_MASK;
+        initialized |= FL_IMAGE_ID_DEPTH_MASK;
+
         if (Objects.equals(newVal, depth)) {
             return;
         }
         depth = newVal;
-
-        modified |= FL_IMAGE_ID_DEPTH_MASK;
-        initialized |= FL_IMAGE_ID_DEPTH_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -561,13 +566,14 @@ public final class ImageBean
     public void setFaceNum(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_IMAGE_ID_FACE_NUM_MASK;
+        initialized |= FL_IMAGE_ID_FACE_NUM_MASK;
+
         if (Objects.equals(newVal, faceNum)) {
             return;
         }
         faceNum = newVal;
-
-        modified |= FL_IMAGE_ID_FACE_NUM_MASK;
-        initialized |= FL_IMAGE_ID_FACE_NUM_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -637,13 +643,14 @@ public final class ImageBean
     public void setThumbMd5(String newVal)
     {
         checkMutable();
+
+        modified |= FL_IMAGE_ID_THUMB_MD5_MASK;
+        initialized |= FL_IMAGE_ID_THUMB_MD5_MASK;
+
         if (Objects.equals(newVal, thumbMd5)) {
             return;
         }
         thumbMd5 = newVal;
-
-        modified |= FL_IMAGE_ID_THUMB_MD5_MASK;
-        initialized |= FL_IMAGE_ID_THUMB_MD5_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -704,13 +711,14 @@ public final class ImageBean
     public void setDeviceId(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_IMAGE_ID_DEVICE_ID_MASK;
+        initialized |= FL_IMAGE_ID_DEVICE_ID_MASK;
+
         if (Objects.equals(newVal, deviceId)) {
             return;
         }
         deviceId = newVal;
-
-        modified |= FL_IMAGE_ID_DEVICE_ID_MASK;
-        initialized |= FL_IMAGE_ID_DEVICE_ID_MASK;
     }
     /** 
      * setter for thrift:swift support<br>

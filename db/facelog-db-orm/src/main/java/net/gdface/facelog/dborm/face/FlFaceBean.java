@@ -208,13 +208,14 @@ public  class FlFaceBean
     public void setId(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_ID_MASK;
+        initialized |= FL_FACE_ID_ID_MASK;
+
         if (Objects.equals(newVal, id)) {
             return;
         }
         id = newVal;
-
-        modified |= FL_FACE_ID_ID_MASK;
-        initialized |= FL_FACE_ID_ID_MASK;
     }
     /**
      * Setter method for {@link #id}.<br>
@@ -275,13 +276,14 @@ public  class FlFaceBean
     public void setImageMd5(String newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_IMAGE_MD5_MASK;
+        initialized |= FL_FACE_ID_IMAGE_MD5_MASK;
+
         if (Objects.equals(newVal, imageMd5)) {
             return;
         }
         imageMd5 = newVal;
-
-        modified |= FL_FACE_ID_IMAGE_MD5_MASK;
-        initialized |= FL_FACE_ID_IMAGE_MD5_MASK;
     }
     /**
      * Determines if the imageMd5 has been modified.
@@ -330,13 +332,14 @@ public  class FlFaceBean
     public void setFaceLeft(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_FACE_LEFT_MASK;
+        initialized |= FL_FACE_ID_FACE_LEFT_MASK;
+
         if (Objects.equals(newVal, faceLeft)) {
             return;
         }
         faceLeft = newVal;
-
-        modified |= FL_FACE_ID_FACE_LEFT_MASK;
-        initialized |= FL_FACE_ID_FACE_LEFT_MASK;
     }
     /**
      * Setter method for {@link #faceLeft}.<br>
@@ -395,13 +398,14 @@ public  class FlFaceBean
     public void setFaceTop(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_FACE_TOP_MASK;
+        initialized |= FL_FACE_ID_FACE_TOP_MASK;
+
         if (Objects.equals(newVal, faceTop)) {
             return;
         }
         faceTop = newVal;
-
-        modified |= FL_FACE_ID_FACE_TOP_MASK;
-        initialized |= FL_FACE_ID_FACE_TOP_MASK;
     }
     /**
      * Setter method for {@link #faceTop}.<br>
@@ -460,13 +464,14 @@ public  class FlFaceBean
     public void setFaceWidth(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_FACE_WIDTH_MASK;
+        initialized |= FL_FACE_ID_FACE_WIDTH_MASK;
+
         if (Objects.equals(newVal, faceWidth)) {
             return;
         }
         faceWidth = newVal;
-
-        modified |= FL_FACE_ID_FACE_WIDTH_MASK;
-        initialized |= FL_FACE_ID_FACE_WIDTH_MASK;
     }
     /**
      * Setter method for {@link #faceWidth}.<br>
@@ -525,13 +530,14 @@ public  class FlFaceBean
     public void setFaceHeight(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_FACE_HEIGHT_MASK;
+        initialized |= FL_FACE_ID_FACE_HEIGHT_MASK;
+
         if (Objects.equals(newVal, faceHeight)) {
             return;
         }
         faceHeight = newVal;
-
-        modified |= FL_FACE_ID_FACE_HEIGHT_MASK;
-        initialized |= FL_FACE_ID_FACE_HEIGHT_MASK;
     }
     /**
      * Setter method for {@link #faceHeight}.<br>
@@ -589,13 +595,14 @@ public  class FlFaceBean
     public void setEyeLeftx(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_EYE_LEFTX_MASK;
+        initialized |= FL_FACE_ID_EYE_LEFTX_MASK;
+
         if (Objects.equals(newVal, eyeLeftx)) {
             return;
         }
         eyeLeftx = newVal;
-
-        modified |= FL_FACE_ID_EYE_LEFTX_MASK;
-        initialized |= FL_FACE_ID_EYE_LEFTX_MASK;
     }
     /**
      * Setter method for {@link #eyeLeftx}.<br>
@@ -653,13 +660,14 @@ public  class FlFaceBean
     public void setEyeLefty(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_EYE_LEFTY_MASK;
+        initialized |= FL_FACE_ID_EYE_LEFTY_MASK;
+
         if (Objects.equals(newVal, eyeLefty)) {
             return;
         }
         eyeLefty = newVal;
-
-        modified |= FL_FACE_ID_EYE_LEFTY_MASK;
-        initialized |= FL_FACE_ID_EYE_LEFTY_MASK;
     }
     /**
      * Setter method for {@link #eyeLefty}.<br>
@@ -717,13 +725,14 @@ public  class FlFaceBean
     public void setEyeRightx(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_EYE_RIGHTX_MASK;
+        initialized |= FL_FACE_ID_EYE_RIGHTX_MASK;
+
         if (Objects.equals(newVal, eyeRightx)) {
             return;
         }
         eyeRightx = newVal;
-
-        modified |= FL_FACE_ID_EYE_RIGHTX_MASK;
-        initialized |= FL_FACE_ID_EYE_RIGHTX_MASK;
     }
     /**
      * Setter method for {@link #eyeRightx}.<br>
@@ -781,13 +790,14 @@ public  class FlFaceBean
     public void setEyeRighty(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_EYE_RIGHTY_MASK;
+        initialized |= FL_FACE_ID_EYE_RIGHTY_MASK;
+
         if (Objects.equals(newVal, eyeRighty)) {
             return;
         }
         eyeRighty = newVal;
-
-        modified |= FL_FACE_ID_EYE_RIGHTY_MASK;
-        initialized |= FL_FACE_ID_EYE_RIGHTY_MASK;
     }
     /**
      * Setter method for {@link #eyeRighty}.<br>
@@ -845,13 +855,14 @@ public  class FlFaceBean
     public void setMouthX(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_MOUTH_X_MASK;
+        initialized |= FL_FACE_ID_MOUTH_X_MASK;
+
         if (Objects.equals(newVal, mouthX)) {
             return;
         }
         mouthX = newVal;
-
-        modified |= FL_FACE_ID_MOUTH_X_MASK;
-        initialized |= FL_FACE_ID_MOUTH_X_MASK;
     }
     /**
      * Setter method for {@link #mouthX}.<br>
@@ -909,13 +920,14 @@ public  class FlFaceBean
     public void setMouthY(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_MOUTH_Y_MASK;
+        initialized |= FL_FACE_ID_MOUTH_Y_MASK;
+
         if (Objects.equals(newVal, mouthY)) {
             return;
         }
         mouthY = newVal;
-
-        modified |= FL_FACE_ID_MOUTH_Y_MASK;
-        initialized |= FL_FACE_ID_MOUTH_Y_MASK;
     }
     /**
      * Setter method for {@link #mouthY}.<br>
@@ -973,13 +985,14 @@ public  class FlFaceBean
     public void setNoseX(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_NOSE_X_MASK;
+        initialized |= FL_FACE_ID_NOSE_X_MASK;
+
         if (Objects.equals(newVal, noseX)) {
             return;
         }
         noseX = newVal;
-
-        modified |= FL_FACE_ID_NOSE_X_MASK;
-        initialized |= FL_FACE_ID_NOSE_X_MASK;
     }
     /**
      * Setter method for {@link #noseX}.<br>
@@ -1037,13 +1050,14 @@ public  class FlFaceBean
     public void setNoseY(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_NOSE_Y_MASK;
+        initialized |= FL_FACE_ID_NOSE_Y_MASK;
+
         if (Objects.equals(newVal, noseY)) {
             return;
         }
         noseY = newVal;
-
-        modified |= FL_FACE_ID_NOSE_Y_MASK;
-        initialized |= FL_FACE_ID_NOSE_Y_MASK;
     }
     /**
      * Setter method for {@link #noseY}.<br>
@@ -1101,13 +1115,14 @@ public  class FlFaceBean
     public void setAngleYaw(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_ANGLE_YAW_MASK;
+        initialized |= FL_FACE_ID_ANGLE_YAW_MASK;
+
         if (Objects.equals(newVal, angleYaw)) {
             return;
         }
         angleYaw = newVal;
-
-        modified |= FL_FACE_ID_ANGLE_YAW_MASK;
-        initialized |= FL_FACE_ID_ANGLE_YAW_MASK;
     }
     /**
      * Setter method for {@link #angleYaw}.<br>
@@ -1165,13 +1180,14 @@ public  class FlFaceBean
     public void setAnglePitch(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_ANGLE_PITCH_MASK;
+        initialized |= FL_FACE_ID_ANGLE_PITCH_MASK;
+
         if (Objects.equals(newVal, anglePitch)) {
             return;
         }
         anglePitch = newVal;
-
-        modified |= FL_FACE_ID_ANGLE_PITCH_MASK;
-        initialized |= FL_FACE_ID_ANGLE_PITCH_MASK;
     }
     /**
      * Setter method for {@link #anglePitch}.<br>
@@ -1229,13 +1245,14 @@ public  class FlFaceBean
     public void setAngleRoll(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_ANGLE_ROLL_MASK;
+        initialized |= FL_FACE_ID_ANGLE_ROLL_MASK;
+
         if (Objects.equals(newVal, angleRoll)) {
             return;
         }
         angleRoll = newVal;
-
-        modified |= FL_FACE_ID_ANGLE_ROLL_MASK;
-        initialized |= FL_FACE_ID_ANGLE_ROLL_MASK;
     }
     /**
      * Setter method for {@link #angleRoll}.<br>
@@ -1294,13 +1311,14 @@ public  class FlFaceBean
     public void setExtInfo(java.nio.ByteBuffer newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_EXT_INFO_MASK;
+        initialized |= FL_FACE_ID_EXT_INFO_MASK;
+
         if (Objects.equals(newVal, extInfo)) {
             return;
         }
         extInfo = newVal;
-
-        modified |= FL_FACE_ID_EXT_INFO_MASK;
-        initialized |= FL_FACE_ID_EXT_INFO_MASK;
     }
     /**
      * Determines if the extInfo has been modified.
@@ -1350,13 +1368,14 @@ public  class FlFaceBean
     public void setFeatureMd5(String newVal)
     {
         checkMutable();
+
+        modified |= FL_FACE_ID_FEATURE_MD5_MASK;
+        initialized |= FL_FACE_ID_FEATURE_MD5_MASK;
+
         if (Objects.equals(newVal, featureMd5)) {
             return;
         }
         featureMd5 = newVal;
-
-        modified |= FL_FACE_ID_FEATURE_MD5_MASK;
-        initialized |= FL_FACE_ID_FEATURE_MD5_MASK;
     }
     /**
      * Determines if the featureMd5 has been modified.

@@ -172,13 +172,14 @@ public  class FlStoreBean
     public void setMd5(String newVal)
     {
         checkMutable();
+
+        modified |= FL_STORE_ID_MD5_MASK;
+        initialized |= FL_STORE_ID_MD5_MASK;
+
         if (Objects.equals(newVal, md5)) {
             return;
         }
         md5 = newVal;
-
-        modified |= FL_STORE_ID_MD5_MASK;
-        initialized |= FL_STORE_ID_MD5_MASK;
     }
     /**
      * Determines if the md5 has been modified.
@@ -227,13 +228,14 @@ public  class FlStoreBean
     public void setEncoding(String newVal)
     {
         checkMutable();
+
+        modified |= FL_STORE_ID_ENCODING_MASK;
+        initialized |= FL_STORE_ID_ENCODING_MASK;
+
         if (Objects.equals(newVal, encoding)) {
             return;
         }
         encoding = newVal;
-
-        modified |= FL_STORE_ID_ENCODING_MASK;
-        initialized |= FL_STORE_ID_ENCODING_MASK;
     }
     /**
      * Determines if the encoding has been modified.
@@ -282,13 +284,14 @@ public  class FlStoreBean
     public void setData(java.nio.ByteBuffer newVal)
     {
         checkMutable();
+
+        modified |= FL_STORE_ID_DATA_MASK;
+        initialized |= FL_STORE_ID_DATA_MASK;
+
         if (Objects.equals(newVal, data)) {
             return;
         }
         data = newVal;
-
-        modified |= FL_STORE_ID_DATA_MASK;
-        initialized |= FL_STORE_ID_DATA_MASK;
     }
     /**
      * Determines if the data has been modified.

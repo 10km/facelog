@@ -179,13 +179,14 @@ public final class LogLightBean
     public void setId(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_LIGHT_ID_ID_MASK;
+        initialized |= FL_LOG_LIGHT_ID_ID_MASK;
+
         if (Objects.equals(newVal, id)) {
             return;
         }
         id = newVal;
-
-        modified |= FL_LOG_LIGHT_ID_ID_MASK;
-        initialized |= FL_LOG_LIGHT_ID_ID_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -257,13 +258,14 @@ public final class LogLightBean
     public void setPersonId(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_LIGHT_ID_PERSON_ID_MASK;
+        initialized |= FL_LOG_LIGHT_ID_PERSON_ID_MASK;
+
         if (Objects.equals(newVal, personId)) {
             return;
         }
         personId = newVal;
-
-        modified |= FL_LOG_LIGHT_ID_PERSON_ID_MASK;
-        initialized |= FL_LOG_LIGHT_ID_PERSON_ID_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -334,13 +336,14 @@ public final class LogLightBean
     public void setName(String newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_LIGHT_ID_NAME_MASK;
+        initialized |= FL_LOG_LIGHT_ID_NAME_MASK;
+
         if (Objects.equals(newVal, name)) {
             return;
         }
         name = newVal;
-
-        modified |= FL_LOG_LIGHT_ID_NAME_MASK;
-        initialized |= FL_LOG_LIGHT_ID_NAME_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -400,13 +403,14 @@ public final class LogLightBean
     public void setPapersType(Integer newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK;
+        initialized |= FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK;
+
         if (Objects.equals(newVal, papersType)) {
             return;
         }
         papersType = newVal;
-
-        modified |= FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK;
-        initialized |= FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -476,13 +480,14 @@ public final class LogLightBean
     public void setPapersNum(String newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_LIGHT_ID_PAPERS_NUM_MASK;
+        initialized |= FL_LOG_LIGHT_ID_PAPERS_NUM_MASK;
+
         if (Objects.equals(newVal, papersNum)) {
             return;
         }
         papersNum = newVal;
-
-        modified |= FL_LOG_LIGHT_ID_PAPERS_NUM_MASK;
-        initialized |= FL_LOG_LIGHT_ID_PAPERS_NUM_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
@@ -551,13 +556,14 @@ public final class LogLightBean
     public void setVerifyTime(java.util.Date newVal)
     {
         checkMutable();
+
+        modified |= FL_LOG_LIGHT_ID_VERIFY_TIME_MASK;
+        initialized |= FL_LOG_LIGHT_ID_VERIFY_TIME_MASK;
+
         if (Objects.equals(newVal, verifyTime)) {
             return;
         }
         verifyTime = newVal;
-
-        modified |= FL_LOG_LIGHT_ID_VERIFY_TIME_MASK;
-        initialized |= FL_LOG_LIGHT_ID_VERIFY_TIME_MASK;
     }
     /** 
      * setter for thrift:swift support<br>
