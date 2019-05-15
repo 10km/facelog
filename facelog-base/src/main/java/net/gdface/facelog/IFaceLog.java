@@ -22,11 +22,11 @@ import net.gdface.facelog.db.exception.RuntimeDaoException;
  * FaceLog 服务接口<br>
  * <ul>
  * <li>所有标明为图像数据的参数,是指具有特定图像格式的图像数据(如jpg,png...),而非无格式的原始点阵位图</li>
- * <li>所有{@link RuntimeException}异常会被封装在{@link ServiceRuntimeException}抛出,
- * client端可以通过{@link ServiceRuntimeException#getType()}获取异常类型.<br>
+ * <li>所有{@link RuntimeException}异常会被封装在{@code ServiceRuntimeException}抛出,
+ * client端可以通过{@code ServiceRuntimeException#getType()}获取异常类型.<br>
  * 异常类型定义参见{@link CommonConstant.ExceptionType},<br>
  * 例如: 在执行涉及数据库操作的异常{@link RuntimeDaoException}，
- * 被封装到{@link ServiceRuntimeException}抛出时type为{@link ExceptionType#DAO}</li>
+ * 被封装到{@code ServiceRuntimeException}抛出时type为{@link ExceptionType#DAO}</li>
  * <li>所有数据库对象(Java Bean,比如 {@link PersonBean}),在执行保存操作(save)时,
  * 如果为新增记录({@link PersonBean#isNew()}为true),则执行insert操作,否则执行update操作,
  * 如果数据库已经存在指定的记录而{@code isNew()}为{@code true},则那么执行insert操作数据库就会抛出异常，
