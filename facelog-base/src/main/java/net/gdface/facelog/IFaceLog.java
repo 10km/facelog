@@ -73,7 +73,7 @@ public interface IFaceLog{
 
 	/**
 	 * 删除personId指定的人员(person)记录及关联的所有记录
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param personId
 	 * @param token 访问令牌
 	 * @return
@@ -82,7 +82,7 @@ public interface IFaceLog{
 
 	/**
 	 * 删除personIdList指定的人员(person)记录及关联的所有记录
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param personIdList 人员id列表
 	 * @param token 访问令牌
 	 * @return 返回删除的 person 记录数量
@@ -91,7 +91,7 @@ public interface IFaceLog{
 
 	/**
 	 * 删除papersNum指定的人员(person)记录及关联的所有记录
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param papersNum 证件号码
 	 * @param token 访问令牌
 	 * @return 返回删除的 person 记录数量
@@ -101,7 +101,7 @@ public interface IFaceLog{
 
 	/**
 	 * 删除papersNum指定的人员(person)记录及关联的所有记录
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param papersNumlist 证件号码列表
 	 * @param token 访问令牌
 	 * @return 返回删除的 person 记录数量
@@ -124,7 +124,7 @@ public interface IFaceLog{
 
 	/**
 	 * 设置 personId 指定的人员为禁止状态
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param personId
 	 * @param token 访问令牌
 	 * @see #setPersonExpiryDate(int, long, Token)
@@ -133,7 +133,7 @@ public interface IFaceLog{
 
 	/**
 	 * 修改 personId 指定的人员记录的有效期
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param personId
 	 * @param expiryDate 失效日期
 	 * @param token 访问令牌
@@ -142,7 +142,7 @@ public interface IFaceLog{
 
 	/**
 	 * 修改 personIdList 指定的人员记录的有效期
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param personIdList 人员id列表
 	 * @param expiryDate 失效日期 
 	 * @param token 访问令牌
@@ -153,7 +153,7 @@ public interface IFaceLog{
 
 	/**
 	 * 设置 personIdList 指定的人员为禁止状态
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param personIdList 人员id列表
 	 * @param token 访问令牌
 	 */
@@ -204,7 +204,7 @@ public interface IFaceLog{
 
 	/**
 	 * 保存人员(person)记录
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param beans 
 	 * @param token 访问令牌
 	 */
@@ -222,7 +222,7 @@ public interface IFaceLog{
 
 	/**
 	 * 保存人员信息记录(包含标准照)
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param persons
 	 * @param token 访问令牌
 	 * @return
@@ -243,7 +243,7 @@ public interface IFaceLog{
 
 	/**
 	 * 保存人员信息记录
-	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+	 * <br>{@code DEVICE_ONLY}
 	 * @param bean
 	 * @param idPhoto 标准照图像,可为null
 	 * @param featureBean 用于验证的人脸特征数据对象,可为null
@@ -256,7 +256,7 @@ public interface IFaceLog{
 
 	/**
 	 * 保存人员信息记录
-	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+	 * <br>{@code DEVICE_ONLY}
 	 * @param bean
 	 * @param idPhoto 标准照图像,可为null
 	 * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(byte[], Integer, List, Token)}
@@ -269,7 +269,7 @@ public interface IFaceLog{
 
 	/**
 	 * 保存人员信息记录
-	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+	 * <br>{@code DEVICE_ONLY}
 	 * @param bean 
 	 * @param idPhoto 标准照图像,可为null
 	 * @param feature 用于验证的人脸特征数据,可为null 
@@ -284,7 +284,7 @@ public interface IFaceLog{
 
 	/**
 	 * 
-	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+	 * <br>{@code DEVICE_ONLY}
 	 * @param bean 人员信息对象
 	 * @param idPhoto 标准照图像
 	 * @param feature 人脸特征数据
@@ -333,7 +333,7 @@ public interface IFaceLog{
 
 	/**
 	 * 添加一条验证日志记录
-	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+	 * <br>{@code DEVICE_ONLY}
 	 * @param bean
 	 * @param token 访问令牌
 	 * @throws DuplicateRecordException 数据库中存在相同记录
@@ -342,7 +342,7 @@ public interface IFaceLog{
 
 	/**
 	 * 添加一组验证日志记录(事务存储)
-	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+	 * <br>{@code DEVICE_ONLY}
 	 * @param beans
 	 * @param token 访问令牌
 	 * @throws DuplicateRecordException 数据库中存在相同记录
@@ -420,7 +420,7 @@ public interface IFaceLog{
 
 	/**
 	 * 增加一个人脸特征记录，如果记录已经存在则抛出异常
-	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+	 * <br>{@code DEVICE_ONLY}
 	 * @param feature 特征数据
 	 * @param personId 关联的人员id(fl_person.id),可为null
 	 * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
@@ -432,7 +432,7 @@ public interface IFaceLog{
 
 	/**
 	 * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
-	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+	 * <br>{@code DEVICE_ONLY}
 	 * @param feature 特征数据
 	 * @param personId 关联的人员id(fl_person.id),可为null
 	 * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
@@ -532,7 +532,7 @@ public interface IFaceLog{
 	public boolean existsDevice(int id);
 	/**
 	 * 保存设备记录
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param deviceBean
 	 * @param token 访问令牌
 	 * @return
@@ -580,7 +580,7 @@ public interface IFaceLog{
 	////////////////////////////////DeviceGroupBean/////////////
 	/**
 	 * 保存设备组记录
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param deviceGroupBean
 	 * @param token 访问令牌
 	 * @return
@@ -604,7 +604,7 @@ public interface IFaceLog{
 	/**
 	 * 删除{@code deviceGroupId}指定的设备组<br>
 	 * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param deviceGroupId
 	 * @param token 访问令牌
 	 * @return  返回删除的记录条数
@@ -653,7 +653,7 @@ public interface IFaceLog{
 	////////////////////////////////PersonGroupBean/////////////
 	/**
 	 * 保存人员组记录
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param personGroupBean
 	 * @param token 访问令牌
 	 * @return
@@ -677,7 +677,7 @@ public interface IFaceLog{
 	/**
 	 * 删除{@code personGroupId}指定的人员组<br>
 	 * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param personGroupId
 	 * @param token 访问令牌
 	 * @return 
@@ -786,7 +786,7 @@ public interface IFaceLog{
 	/**
 	 * 添加一个(允许)通行关联记录:允许{@code personGroup}指定的人员组在
 	 * {@code deviceGroup}指定的设备组下属的所有设备通行
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param deviceGroup
 	 * @param personGroup
 	 * @param token 访问令牌
@@ -796,7 +796,7 @@ public interface IFaceLog{
     /**
      * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
      * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
      * @param deviceGroupId 外键,设备组id
      * @param personGroupId 外键,人员组id
      * @param token 访问令牌
@@ -806,7 +806,7 @@ public interface IFaceLog{
 	public void addPermit(int deviceGroupId,int personGroupId, Token token);
 	/**
 	 * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean, Token)}
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param deviceGroup
 	 * @param personGroup
 	 * @param token 访问令牌
@@ -924,7 +924,7 @@ public interface IFaceLog{
 	public DeviceBean registerDevice(DeviceBean newDevice) throws ServiceSecurityException;
 	/**
 	 * (设备端)设备删除
-	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+	 * <br>{@code DEVICE_ONLY}
 	 * @param deviceId
 	 * @param token 设备验证令牌
 	 * @throws ServiceSecurityException
@@ -941,7 +941,7 @@ public interface IFaceLog{
 			throws ServiceSecurityException;
 	/**
 	 * 设备申请离线,删除设备令牌
-	 * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+	 * <br>{@code DEVICE_ONLY}
 	 * @param token 当前持有的令牌
 	 * @throws ServiceSecurityException
 	 */
@@ -958,7 +958,7 @@ public interface IFaceLog{
 			throws ServiceSecurityException;
 	/**
 	 * 释放人员访问令牌
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param token 当前持有的令牌
 	 * @throws ServiceSecurityException
 	 */
@@ -976,7 +976,7 @@ public interface IFaceLog{
 
 	/**
 	 * 释放root访问令牌
-	 * <br>{@link TokenMangement.Enable#ROOT_ONLY}
+	 * <br>{@code ROOT_ONLY}
 	 * @param token 当前持有的令牌
 	 * @throws ServiceSecurityException
 	 */
@@ -1011,14 +1011,14 @@ public interface IFaceLog{
 	public boolean isValidPassword(String userId,String password, boolean isMd5) ;
 	/**
 	 * 申请一个唯一的命令响应通道(默认有效期)<br>
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param token 访问令牌
 	 * @return
 	 */
 	public String applyAckChannel(Token token);
 	/**
 	 * 申请一个唯一的命令响应通道<br>
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param token 访问令牌
 	 * @param duration 通道有效时间(秒) 大于0有效,否则使用默认的有效期
 	 * @return
@@ -1027,7 +1027,7 @@ public interface IFaceLog{
 	public String applyAckChannel(Token token, long duration);
 	/**
 	 * 申请一个唯一的命令序列号
-	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+	 * <br>{@code PERSON_ONLY}
 	 * @param token 访问令牌
 	 * @return
 	 */
@@ -1101,7 +1101,7 @@ public interface IFaceLog{
 	 * 注册一个任务名<br>
 	 * 方法将会根据任务名在redis上生成一个对应的队列<br>
 	 * 对同一个任务名多次调用本方法，不会产生不同的队列名字
-	 * <br>{@link TokenMangement.Enable#ROOT_ONLY}
+	 * <br>{@code ROOT_ONLY}
 	 * @param task 任务名
 	 * @param token 访问令牌
 	 * @return 返回保存队列名的key
@@ -1119,7 +1119,7 @@ public interface IFaceLog{
 
 	/**
 	 * 返回指定的参数,如果参数没有定义则返回{@code null}<br>
-	 * {@link TokenMangement.Enable#PERSON_ONLY}<br>
+	 * {@code PERSON_ONLY}<br>
 	 * root令牌不受限制<br>
 	 * 人员令牌只能访问指定范围的参数,否则会抛出异常<br>
 	 * @param key
@@ -1129,14 +1129,14 @@ public interface IFaceLog{
 	public String getProperty(String key,Token token);
 	/**
 	 * 获取服务的所有配置参数
-	 * <br>{@link TokenMangement.Enable#ROOT_ONLY}
+	 * <br>{@code ROOT_ONLY}
 	 * @param token 访问令牌
 	 * @return
 	 */
 	public Map<String,String> getServiceConfig(Token token);
 	/**
 	 * 修改/增加指定的配置参数
-	 * <br>{@link TokenMangement.Enable#ROOT_ONLY}
+	 * <br>{@code ROOT_ONLY}
 	 * @param key 参数名
 	 * @param value 参数值
 	 * @param token 访问令牌
@@ -1144,7 +1144,7 @@ public interface IFaceLog{
     public void setProperty(String key,String value,Token token);
     /**
      * 修改一组配置参数
-	 * <br>{@link TokenMangement.Enable#ROOT_ONLY}
+	 * <br>{@code ROOT_ONLY}
      * @param config 参数名-参数值对
      * @param token 访问令牌
      */
@@ -1152,7 +1152,7 @@ public interface IFaceLog{
 	/**
 	 * 配置参数持久化<br>
 	 * 保存修改的配置到自定义配置文件
-	 * <br>{@link TokenMangement.Enable#ROOT_ONLY}
+	 * <br>{@code ROOT_ONLY}
 	 * @param token 访问令牌
 	 */
     public void saveServiceConfig(Token token);

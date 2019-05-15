@@ -23,17 +23,16 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
 /**
  * FaceLog 服务接口<br>
  * <ul>
  * <li>所有标明为图像数据的参数,是指具有特定图像格式的图像数据(如jpg,png...),而非无格式的原始点阵位图</li>
- * <li>所有{@link RuntimeException}异常会被封装在{@link ServiceRuntimeException}抛出,
- * client端可以通过{@link ServiceRuntimeException#getType()}获取异常类型.<br>
+ * <li>所有{@link RuntimeException}异常会被封装在{@code ServiceRuntimeException}抛出,
+ * client端可以通过{@code ServiceRuntimeException#getType()}获取异常类型.<br>
  * 异常类型定义参见{@link CommonConstant.ExceptionType},<br>
  * 例如: 在执行涉及数据库操作的异常{@link RuntimeDaoException}，
- * 被封装到{@link ServiceRuntimeException}抛出时type为{@link ExceptionType#DAO}</li>
+ * 被封装到{@code ServiceRuntimeException}抛出时type为{@link ExceptionType#DAO}</li>
  * <li>所有数据库对象(Java Bean,比如 {@link PersonBean}),在执行保存操作(save)时,
  * 如果为新增记录({@link PersonBean#isNew()}为true),则执行insert操作,否则执行update操作,
  * 如果数据库已经存在指定的记录而{@code isNew()}为{@code true},则那么执行insert操作数据库就会抛出异常，
@@ -49,11 +48,10 @@ import io.swagger.annotations.*;
  * @author guyadong
  */
 @RestController
-@Api(value = "IFaceLog")
-public class IFaceLogSpringDecorator {
-    private static final Logger logger = LoggerFactory.getLogger(IFaceLogSpringDecorator.class);
+public class IFaceLogSpringController {
+    private static final Logger logger = LoggerFactory.getLogger(IFaceLogSpringController.class);
     private static final InstanceSupplier instanceSupplier = getInstanceSupplier();
-    private final ResponseFactory respFactory = loadRespFactory();
+    private final ResponseFactory responseFactory = loadRespFactory();
     /**
      * SPI(Service Provider Interface)机制加载 {@link InstanceSupplier}实例,没有找到则返回{@code null},
      * 返回{@link InstanceSupplier}提供的{@link IFaceLog}实例
@@ -75,7 +73,7 @@ public class IFaceLogSpringDecorator {
             Iterator<ResponseFactory> itor = providers.iterator();
             return itor.hasNext() ? itor.next() : new DefaultResponseFactory();
     }  
-    public IFaceLogSpringDecorator() {
+    public IFaceLogSpringController() {
     }
 
     /**
@@ -89,7 +87,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 增加一个人脸特征记录，如果记录已经存在则抛出异常
-     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+     * <br>{@code DEVICE_ONLY}
      * @param feature 特征数据
      * @param personId 关联的人员id(fl_person.id),可为null
      * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
@@ -104,7 +102,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("faecBeans") List<FaceBean> faecBeans,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().addFeature(feature,personId,faecBeans,token));
         }
@@ -116,7 +114,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
-     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+     * <br>{@code DEVICE_ONLY}
      * @param feature 特征数据
      * @param personId 关联的人员id(fl_person.id),可为null
      * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
@@ -133,7 +131,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("deviceId") Integer deviceId,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().addFeature(feature,personId,faceInfo,deviceId,token));
         }
@@ -161,7 +159,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("personId") Integer personId,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().addImage(imageData,deviceId,faceBean,personId,token));
         }
@@ -173,7 +171,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 添加一条验证日志记录
-     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+     * <br>{@code DEVICE_ONLY}
      * @param bean
      * @param token 访问令牌
      * @throws DuplicateRecordException 数据库中存在相同记录
@@ -183,7 +181,7 @@ public class IFaceLogSpringDecorator {
     public Response addLog(@RequestParam("bean") LogBean bean,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().addLog(bean,token);
             response.onComplete();
@@ -196,7 +194,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 添加一组验证日志记录(事务存储)
-     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+     * <br>{@code DEVICE_ONLY}
      * @param beans
      * @param token 访问令牌
      * @throws DuplicateRecordException 数据库中存在相同记录
@@ -206,7 +204,7 @@ public class IFaceLogSpringDecorator {
     public Response addLogs(@RequestParam("beans") List<LogBean> beans,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().addLogs(beans,token);
             response.onComplete();
@@ -220,7 +218,7 @@ public class IFaceLogSpringDecorator {
     /**
      * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
      * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param deviceGroupId 外键,设备组id
      * @param personGroupId 外键,人员组id
      * @param token 访问令牌
@@ -232,7 +230,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("personGroupId") int personGroupId,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().addPermit(deviceGroupId,personGroupId,token);
             response.onComplete();
@@ -246,7 +244,7 @@ public class IFaceLogSpringDecorator {
     /**
      * 添加一个(允许)通行关联记录:允许{@code personGroup}指定的人员组在
      * {@code deviceGroup}指定的设备组下属的所有设备通行
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param deviceGroup
      * @param personGroup
      * @param token 访问令牌
@@ -258,7 +256,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("personGroup") PersonGroupBean personGroup,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().addPermit(deviceGroup,personGroup,token);
             response.onComplete();
@@ -271,7 +269,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 申请一个唯一的命令响应通道(默认有效期)<br>
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param token 访问令牌
      * @return 
      */
@@ -279,7 +277,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/applyAckChannel", method = RequestMethod.POST)
     public Response applyAckChannel(@RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().applyAckChannel(token));
         }
@@ -291,7 +289,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 申请一个唯一的命令响应通道<br>
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param token 访问令牌
      * @param duration 通道有效时间(秒) 大于0有效,否则使用默认的有效期
      * @return 
@@ -301,7 +299,7 @@ public class IFaceLogSpringDecorator {
     public Response applyAckChannel(@RequestParam("token") Token token,
         @RequestParam("duration") long duration) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().applyAckChannel(token,duration));
         }
@@ -313,7 +311,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 申请一个唯一的命令序列号
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param token 访问令牌
      * @return 
      */
@@ -321,7 +319,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/applyCmdSn", method = RequestMethod.POST)
     public Response applyCmdSn(@RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().applyCmdSn(token));
         }
@@ -345,7 +343,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("password") String password,
         @RequestParam("isMd5") boolean isMd5) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().applyPersonToken(personId,password,isMd5));
         }
@@ -367,7 +365,7 @@ public class IFaceLogSpringDecorator {
     public Response applyRootToken(@RequestParam("password") String password,
         @RequestParam("isMd5") boolean isMd5) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().applyRootToken(password,isMd5));
         }
@@ -392,7 +390,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("password") String password,
         @RequestParam("isMd5") boolean isMd5) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().applyUserToken(userid,password,isMd5));
         }
@@ -418,7 +416,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("deviceGroupId") Integer deviceGroupId,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().bindBorder(personGroupId,deviceGroupId,token);
             response.onComplete();
@@ -439,7 +437,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/childListForDeviceGroup", method = RequestMethod.POST)
     public Response childListForDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().childListForDeviceGroup(deviceGroupId));
         }
@@ -459,7 +457,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/childListForPersonGroup", method = RequestMethod.POST)
     public Response childListForPersonGroup(@RequestParam("personGroupId") int personGroupId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().childListForPersonGroup(personGroupId));
         }
@@ -478,7 +476,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/countDeviceByWhere", method = RequestMethod.POST)
     public Response countDeviceByWhere(@RequestParam("where") String where) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().countDeviceByWhere(where));
         }
@@ -495,7 +493,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/countDeviceGroupByWhere", method = RequestMethod.POST)
     public Response countDeviceGroupByWhere(@RequestParam("where") String where) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().countDeviceGroupByWhere(where));
         }
@@ -514,7 +512,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/countLogByWhere", method = RequestMethod.POST)
     public Response countLogByWhere(@RequestParam("where") String where) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().countLogByWhere(where));
         }
@@ -532,7 +530,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/countLogLightByVerifyTime", method = RequestMethod.POST)
     public Response countLogLightByVerifyTime(@RequestParam("timestamp") long timestamp) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().countLogLightByVerifyTime(timestamp));
         }
@@ -551,7 +549,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/countLogLightByWhere", method = RequestMethod.POST)
     public Response countLogLightByWhere(@RequestParam("where") String where) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().countLogLightByWhere(where));
         }
@@ -570,7 +568,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/countPersonByWhere", method = RequestMethod.POST)
     public Response countPersonByWhere(@RequestParam("where") String where) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().countPersonByWhere(where));
         }
@@ -588,7 +586,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/countPersonGroupByWhere", method = RequestMethod.POST)
     public Response countPersonGroupByWhere(@RequestParam("where") String where) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().countPersonGroupByWhere(where));
         }
@@ -612,7 +610,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("deleteImage") boolean deleteImage,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().deleteAllFeaturesByPersonId(personId,deleteImage,token));
         }
@@ -625,7 +623,7 @@ public class IFaceLogSpringDecorator {
     /**
      * 删除{@code deviceGroupId}指定的设备组<br>
      * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param deviceGroupId
      * @param token 访问令牌
      * @return 返回删除的记录条数
@@ -636,7 +634,7 @@ public class IFaceLogSpringDecorator {
     public Response deleteDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().deleteDeviceGroup(deviceGroupId,token));
         }
@@ -660,7 +658,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("deleteImage") boolean deleteImage,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().deleteFeature(featureMd5,deleteImage,token));
         }
@@ -681,7 +679,7 @@ public class IFaceLogSpringDecorator {
     public Response deleteGroupPermitOnDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().deleteGroupPermitOnDeviceGroup(deviceGroupId,token));
         }
@@ -702,7 +700,7 @@ public class IFaceLogSpringDecorator {
     public Response deleteImage(@RequestParam("imageMd5") String imageMd5,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().deleteImage(imageMd5,token));
         }
@@ -714,7 +712,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean, Token)}
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param deviceGroup
      * @param personGroup
      * @param token 访问令牌
@@ -727,7 +725,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("personGroup") PersonGroupBean personGroup,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().deletePermit(deviceGroup,personGroup,token));
         }
@@ -739,7 +737,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 删除personId指定的人员(person)记录及关联的所有记录
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param personId
      * @param token 访问令牌
      * @return 
@@ -749,7 +747,7 @@ public class IFaceLogSpringDecorator {
     public Response deletePerson(@RequestParam("personId") int personId,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().deletePerson(personId,token));
         }
@@ -761,7 +759,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 删除papersNum指定的人员(person)记录及关联的所有记录
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param papersNum 证件号码
      * @param token 访问令牌
      * @return 返回删除的 person 记录数量
@@ -772,7 +770,7 @@ public class IFaceLogSpringDecorator {
     public Response deletePersonByPapersNum(@RequestParam("papersNum") String papersNum,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().deletePersonByPapersNum(papersNum,token));
         }
@@ -785,7 +783,7 @@ public class IFaceLogSpringDecorator {
     /**
      * 删除{@code personGroupId}指定的人员组<br>
      * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param personGroupId
      * @param token 访问令牌
      * @return 
@@ -796,7 +794,7 @@ public class IFaceLogSpringDecorator {
     public Response deletePersonGroup(@RequestParam("personGroupId") int personGroupId,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().deletePersonGroup(personGroupId,token));
         }
@@ -817,7 +815,7 @@ public class IFaceLogSpringDecorator {
     public Response deletePersonGroupPermit(@RequestParam("personGroupId") int personGroupId,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().deletePersonGroupPermit(personGroupId,token));
         }
@@ -829,7 +827,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 删除personIdList指定的人员(person)记录及关联的所有记录
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param personIdList 人员id列表
      * @param token 访问令牌
      * @return 返回删除的 person 记录数量
@@ -839,7 +837,7 @@ public class IFaceLogSpringDecorator {
     public Response deletePersons(@RequestParam("personIdList") List<Integer> personIdList,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().deletePersons(personIdList,token));
         }
@@ -851,7 +849,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 删除papersNum指定的人员(person)记录及关联的所有记录
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param papersNumlist 证件号码列表
      * @param token 访问令牌
      * @return 返回删除的 person 记录数量
@@ -861,7 +859,7 @@ public class IFaceLogSpringDecorator {
     public Response deletePersonsByPapersNum(@RequestParam("papersNumlist") List<String> papersNumlist,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().deletePersonsByPapersNum(papersNumlist,token));
         }
@@ -873,7 +871,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 设置 personId 指定的人员为禁止状态
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param personId
      * @param token 访问令牌
      * @see #setPersonExpiryDate(int, long, Token)
@@ -883,7 +881,7 @@ public class IFaceLogSpringDecorator {
     public Response disablePerson(@RequestParam("personId") int personId,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().disablePerson(personId,token);
             response.onComplete();
@@ -896,7 +894,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 设置 personIdList 指定的人员为禁止状态
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param personIdList 人员id列表
      * @param token 访问令牌
      */
@@ -905,7 +903,7 @@ public class IFaceLogSpringDecorator {
     public Response disablePerson(@RequestParam("personIdList") List<Integer> personIdList,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().disablePerson(personIdList,token);
             response.onComplete();
@@ -925,7 +923,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/existsDevice", method = RequestMethod.POST)
     public Response existsDevice(@RequestParam("id") int id) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().existsDevice(id));
         }
@@ -944,7 +942,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/existsFeature", method = RequestMethod.POST)
     public Response existsFeature(@RequestParam("md5") String md5) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().existsFeature(md5));
         }
@@ -963,7 +961,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/existsImage", method = RequestMethod.POST)
     public Response existsImage(@RequestParam("md5") String md5) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().existsImage(md5));
         }
@@ -982,7 +980,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/existsPerson", method = RequestMethod.POST)
     public Response existsPerson(@RequestParam("persionId") int persionId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().existsPerson(persionId));
         }
@@ -1001,7 +999,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getDevice", method = RequestMethod.POST)
     public Response getDevice(@RequestParam("deviceId") int deviceId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getDevice(deviceId));
         }
@@ -1021,7 +1019,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getDeviceGroup", method = RequestMethod.POST)
     public Response getDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getDeviceGroup(deviceGroupId));
         }
@@ -1041,7 +1039,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getDeviceGroups", method = RequestMethod.POST)
     public Response getDeviceGroups(@RequestParam("groupIdList") List<Integer> groupIdList) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getDeviceGroups(groupIdList));
         }
@@ -1061,7 +1059,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getDeviceGroupsBelongs", method = RequestMethod.POST)
     public Response getDeviceGroupsBelongs(@RequestParam("deviceId") int deviceId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getDeviceGroupsBelongs(deviceId));
         }
@@ -1081,7 +1079,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getDeviceGroupsPermit", method = RequestMethod.POST)
     public Response getDeviceGroupsPermit(@RequestParam("personGroupId") int personGroupId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getDeviceGroupsPermit(personGroupId));
         }
@@ -1101,7 +1099,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getDeviceGroupsPermittedBy", method = RequestMethod.POST)
     public Response getDeviceGroupsPermittedBy(@RequestParam("personGroupId") int personGroupId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getDeviceGroupsPermittedBy(personGroupId));
         }
@@ -1120,7 +1118,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getDeviceIdOfFeature", method = RequestMethod.POST)
     public Response getDeviceIdOfFeature(@RequestParam("featureMd5") String featureMd5) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getDeviceIdOfFeature(featureMd5));
         }
@@ -1139,7 +1137,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getDevices", method = RequestMethod.POST)
     public Response getDevices(@RequestParam("idList") List<Integer> idList) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getDevices(idList));
         }
@@ -1160,7 +1158,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getDevicesOfGroup", method = RequestMethod.POST)
     public Response getDevicesOfGroup(@RequestParam("deviceGroupId") int deviceGroupId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getDevicesOfGroup(deviceGroupId));
         }
@@ -1179,7 +1177,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getFeature", method = RequestMethod.POST)
     public Response getFeature(@RequestParam("md5") String md5) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getFeature(md5));
         }
@@ -1198,7 +1196,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getFeatureBeansByPersonId", method = RequestMethod.POST)
     public Response getFeatureBeansByPersonId(@RequestParam("personId") int personId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getFeatureBeansByPersonId(personId));
         }
@@ -1217,7 +1215,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getFeatureBytes", method = RequestMethod.POST)
     public Response getFeatureBytes(@RequestParam("md5") String md5) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getFeatureBytes(md5));
         }
@@ -1236,7 +1234,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getFeatures", method = RequestMethod.POST)
     public Response getFeatures(@RequestParam("md5") List<String> md5) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getFeatures(md5));
         }
@@ -1255,7 +1253,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getFeaturesOfPerson", method = RequestMethod.POST)
     public Response getFeaturesOfPerson(@RequestParam("personId") int personId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getFeaturesOfPerson(personId));
         }
@@ -1281,7 +1279,7 @@ public class IFaceLogSpringDecorator {
     public Response getGroupPermit(@RequestParam("deviceId") int deviceId,
         @RequestParam("personGroupId") int personGroupId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getGroupPermit(deviceId,personGroupId));
         }
@@ -1306,7 +1304,7 @@ public class IFaceLogSpringDecorator {
     public Response getGroupPermitOnDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId,
         @RequestParam("personGroupId") int personGroupId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getGroupPermitOnDeviceGroup(deviceGroupId,personGroupId));
         }
@@ -1324,7 +1322,7 @@ public class IFaceLogSpringDecorator {
     public Response getGroupPermits(@RequestParam("deviceId") int deviceId,
         @RequestParam("personGroupIdList") List<Integer> personGroupIdList) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getGroupPermits(deviceId,personGroupIdList));
         }
@@ -1343,7 +1341,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getImage", method = RequestMethod.POST)
     public Response getImage(@RequestParam("imageMD5") String imageMD5) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getImage(imageMD5));
         }
@@ -1362,7 +1360,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getImageBytes", method = RequestMethod.POST)
     public Response getImageBytes(@RequestParam("imageMD5") String imageMD5) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getImageBytes(imageMD5));
         }
@@ -1381,7 +1379,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getImagesAssociatedByFeature", method = RequestMethod.POST)
     public Response getImagesAssociatedByFeature(@RequestParam("featureMd5") String featureMd5) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getImagesAssociatedByFeature(featureMd5));
         }
@@ -1400,7 +1398,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getLogBeansByPersonId", method = RequestMethod.POST)
     public Response getLogBeansByPersonId(@RequestParam("personId") int personId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getLogBeansByPersonId(personId));
         }
@@ -1419,7 +1417,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getPerson", method = RequestMethod.POST)
     public Response getPerson(@RequestParam("personId") int personId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getPerson(personId));
         }
@@ -1438,7 +1436,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getPersonByPapersNum", method = RequestMethod.POST)
     public Response getPersonByPapersNum(@RequestParam("papersNum") String papersNum) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getPersonByPapersNum(papersNum));
         }
@@ -1458,7 +1456,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getPersonGroup", method = RequestMethod.POST)
     public Response getPersonGroup(@RequestParam("personGroupId") int personGroupId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getPersonGroup(personGroupId));
         }
@@ -1478,7 +1476,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getPersonGroups", method = RequestMethod.POST)
     public Response getPersonGroups(@RequestParam("groupIdList") List<Integer> groupIdList) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getPersonGroups(groupIdList));
         }
@@ -1498,7 +1496,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getPersonGroupsBelongs", method = RequestMethod.POST)
     public Response getPersonGroupsBelongs(@RequestParam("personId") int personId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getPersonGroupsBelongs(personId));
         }
@@ -1518,7 +1516,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getPersonGroupsPermittedBy", method = RequestMethod.POST)
     public Response getPersonGroupsPermittedBy(@RequestParam("deviceGroupId") int deviceGroupId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getPersonGroupsPermittedBy(deviceGroupId));
         }
@@ -1541,7 +1539,7 @@ public class IFaceLogSpringDecorator {
     public Response getPersonPermit(@RequestParam("deviceId") int deviceId,
         @RequestParam("personId") int personId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getPersonPermit(deviceId,personId));
         }
@@ -1559,7 +1557,7 @@ public class IFaceLogSpringDecorator {
     public Response getPersonPermits(@RequestParam("deviceId") int deviceId,
         @RequestParam("personIdList") List<Integer> personIdList) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getPersonPermits(deviceId,personIdList));
         }
@@ -1578,7 +1576,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getPersons", method = RequestMethod.POST)
     public Response getPersons(@RequestParam("idList") List<Integer> idList) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getPersons(idList));
         }
@@ -1599,7 +1597,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getPersonsOfGroup", method = RequestMethod.POST)
     public Response getPersonsOfGroup(@RequestParam("personGroupId") int personGroupId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getPersonsOfGroup(personGroupId));
         }
@@ -1611,7 +1609,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 返回指定的参数,如果参数没有定义则返回{@code null}<br>
-     * {@link TokenMangement.Enable#PERSON_ONLY}<br>
+     * {@code PERSON_ONLY}<br>
      * root令牌不受限制<br>
      * 人员令牌只能访问指定范围的参数,否则会抛出异常<br>
      * @param key
@@ -1623,7 +1621,7 @@ public class IFaceLogSpringDecorator {
     public Response getProperty(@RequestParam("key") String key,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getProperty(key,token));
         }
@@ -1651,7 +1649,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getRedisParameters", method = RequestMethod.POST)
     public Response getRedisParameters(@RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getRedisParameters(token));
         }
@@ -1663,7 +1661,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 获取服务的所有配置参数
-     * <br>{@link TokenMangement.Enable#ROOT_ONLY}
+     * <br>{@code ROOT_ONLY}
      * @param token 访问令牌
      * @return 
      */
@@ -1671,7 +1669,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getServiceConfig", method = RequestMethod.POST)
     public Response getServiceConfig(@RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getServiceConfig(token));
         }
@@ -1692,7 +1690,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getSubDeviceGroup", method = RequestMethod.POST)
     public Response getSubDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getSubDeviceGroup(deviceGroupId));
         }
@@ -1713,7 +1711,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/getSubPersonGroup", method = RequestMethod.POST)
     public Response getSubPersonGroup(@RequestParam("personGroupId") int personGroupId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getSubPersonGroup(personGroupId));
         }
@@ -1732,7 +1730,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/isDisable", method = RequestMethod.POST)
     public Response isDisable(@RequestParam("personId") int personId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().isDisable(personId));
         }
@@ -1750,7 +1748,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/isLocal", method = RequestMethod.POST)
     public Response isLocal() 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().isLocal());
         }
@@ -1770,7 +1768,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/isValidAckChannel", method = RequestMethod.POST)
     public Response isValidAckChannel(@RequestParam("ackChannel") String ackChannel) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().isValidAckChannel(ackChannel));
         }
@@ -1790,7 +1788,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/isValidCmdSn", method = RequestMethod.POST)
     public Response isValidCmdSn(@RequestParam("cmdSn") long cmdSn) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().isValidCmdSn(cmdSn));
         }
@@ -1809,7 +1807,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/isValidDeviceToken", method = RequestMethod.POST)
     public Response isValidDeviceToken(@RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().isValidDeviceToken(token));
         }
@@ -1832,7 +1830,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("password") String password,
         @RequestParam("isMd5") boolean isMd5) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().isValidPassword(userId,password,isMd5));
         }
@@ -1851,7 +1849,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/isValidPersonToken", method = RequestMethod.POST)
     public Response isValidPersonToken(@RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().isValidPersonToken(token));
         }
@@ -1870,7 +1868,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/isValidRootToken", method = RequestMethod.POST)
     public Response isValidRootToken(@RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().isValidRootToken(token));
         }
@@ -1890,7 +1888,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/isValidToken", method = RequestMethod.POST)
     public Response isValidToken(@RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().isValidToken(token));
         }
@@ -1910,7 +1908,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/isValidUserToken", method = RequestMethod.POST)
     public Response isValidUserToken(@RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().isValidUserToken(token));
         }
@@ -1930,7 +1928,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/listOfParentForDeviceGroup", method = RequestMethod.POST)
     public Response listOfParentForDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().listOfParentForDeviceGroup(deviceGroupId));
         }
@@ -1950,7 +1948,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/listOfParentForPersonGroup", method = RequestMethod.POST)
     public Response listOfParentForPersonGroup(@RequestParam("personGroupId") int personGroupId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().listOfParentForPersonGroup(personGroupId));
         }
@@ -1968,7 +1966,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/loadAllPerson", method = RequestMethod.POST)
     public Response loadAllPerson() 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().loadAllPerson());
         }
@@ -1991,7 +1989,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("startRow") int startRow,
         @RequestParam("numRows") int numRows) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().loadDeviceByWhere(where,startRow,numRows));
         }
@@ -2014,7 +2012,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("startRow") int startRow,
         @RequestParam("numRows") int numRows) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().loadDeviceGroupByWhere(where,startRow,numRows));
         }
@@ -2033,7 +2031,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/loadDeviceGroupIdByWhere", method = RequestMethod.POST)
     public Response loadDeviceGroupIdByWhere(@RequestParam("where") String where) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().loadDeviceGroupIdByWhere(where));
         }
@@ -2052,7 +2050,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/loadDeviceIdByWhere", method = RequestMethod.POST)
     public Response loadDeviceIdByWhere(@RequestParam("where") String where) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().loadDeviceIdByWhere(where));
         }
@@ -2072,7 +2070,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/loadFeatureMd5ByUpdate", method = RequestMethod.POST)
     public Response loadFeatureMd5ByUpdate(@RequestParam("timestamp") long timestamp) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().loadFeatureMd5ByUpdate(timestamp));
         }
@@ -2096,7 +2094,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("startRow") int startRow,
         @RequestParam("numRows") int numRows) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().loadLogByWhere(where,startRow,numRows));
         }
@@ -2118,7 +2116,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("startRow") int startRow,
         @RequestParam("numRows") int numRows) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().loadLogLightByVerifyTime(timestamp,startRow,numRows));
         }
@@ -2142,7 +2140,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("startRow") int startRow,
         @RequestParam("numRows") int numRows) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().loadLogLightByWhere(where,startRow,numRows));
         }
@@ -2162,7 +2160,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/loadPermitByUpdate", method = RequestMethod.POST)
     public Response loadPermitByUpdate(@RequestParam("timestamp") long timestamp) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().loadPermitByUpdate(timestamp));
         }
@@ -2185,7 +2183,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("startRow") int startRow,
         @RequestParam("numRows") int numRows) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().loadPersonByWhere(where,startRow,numRows));
         }
@@ -2208,7 +2206,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("startRow") int startRow,
         @RequestParam("numRows") int numRows) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().loadPersonGroupByWhere(where,startRow,numRows));
         }
@@ -2227,7 +2225,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/loadPersonGroupIdByWhere", method = RequestMethod.POST)
     public Response loadPersonGroupIdByWhere(@RequestParam("where") String where) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().loadPersonGroupIdByWhere(where));
         }
@@ -2247,7 +2245,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/loadPersonIdByUpdateTime", method = RequestMethod.POST)
     public Response loadPersonIdByUpdateTime(@RequestParam("timestamp") long timestamp) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().loadPersonIdByUpdateTime(timestamp));
         }
@@ -2266,7 +2264,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/loadPersonIdByWhere", method = RequestMethod.POST)
     public Response loadPersonIdByWhere(@RequestParam("where") String where) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().loadPersonIdByWhere(where));
         }
@@ -2287,7 +2285,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/loadUpdatedPersons", method = RequestMethod.POST)
     public Response loadUpdatedPersons(@RequestParam("timestamp") long timestamp) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().loadUpdatedPersons(timestamp));
         }
@@ -2299,7 +2297,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 设备申请离线,删除设备令牌
-     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+     * <br>{@code DEVICE_ONLY}
      * @param token 当前持有的令牌
      * @throws ServiceSecurityException
      */
@@ -2307,7 +2305,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/offline", method = RequestMethod.POST)
     public Response offline(@RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().offline(token);
             response.onComplete();
@@ -2328,7 +2326,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/online", method = RequestMethod.POST)
     public Response online(@RequestParam("device") DeviceBean device) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().online(device));
         }
@@ -2349,7 +2347,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/registerDevice", method = RequestMethod.POST)
     public Response registerDevice(@RequestParam("newDevice") DeviceBean newDevice) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().registerDevice(newDevice));
         }
@@ -2361,7 +2359,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 释放人员访问令牌
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param token 当前持有的令牌
      * @throws ServiceSecurityException
      */
@@ -2369,7 +2367,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/releasePersonToken", method = RequestMethod.POST)
     public Response releasePersonToken(@RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().releasePersonToken(token);
             response.onComplete();
@@ -2382,7 +2380,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 释放root访问令牌
-     * <br>{@link TokenMangement.Enable#ROOT_ONLY}
+     * <br>{@code ROOT_ONLY}
      * @param token 当前持有的令牌
      * @throws ServiceSecurityException
      */
@@ -2390,7 +2388,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/releaseRootToken", method = RequestMethod.POST)
     public Response releaseRootToken(@RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().releaseRootToken(token);
             response.onComplete();
@@ -2411,7 +2409,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/releaseUserToken", method = RequestMethod.POST)
     public Response releaseUserToken(@RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().releaseUserToken(token);
             response.onComplete();
@@ -2436,7 +2434,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("deleteOldFeatureImage") boolean deleteOldFeatureImage,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().replaceFeature(personId,featureMd5,deleteOldFeatureImage,token);
             response.onComplete();
@@ -2458,7 +2456,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/rootGroupOfDevice", method = RequestMethod.POST)
     public Response rootGroupOfDevice(@RequestParam("deviceId") Integer deviceId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().rootGroupOfDevice(deviceId));
         }
@@ -2479,7 +2477,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/rootGroupOfPerson", method = RequestMethod.POST)
     public Response rootGroupOfPerson(@RequestParam("personId") Integer personId) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().rootGroupOfPerson(personId));
         }
@@ -2491,7 +2489,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 保存设备记录
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param deviceBean
      * @param token 访问令牌
      * @return 
@@ -2501,7 +2499,7 @@ public class IFaceLogSpringDecorator {
     public Response saveDevice(@RequestParam("deviceBean") DeviceBean deviceBean,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().saveDevice(deviceBean,token));
         }
@@ -2513,7 +2511,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 保存设备组记录
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param deviceGroupBean
      * @param token 访问令牌
      * @return 
@@ -2524,7 +2522,7 @@ public class IFaceLogSpringDecorator {
     public Response saveDeviceGroup(@RequestParam("deviceGroupBean") DeviceGroupBean deviceGroupBean,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().saveDeviceGroup(deviceGroupBean,token));
         }
@@ -2535,7 +2533,7 @@ public class IFaceLogSpringDecorator {
         return response;
     }
     /**
-     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+     * <br>{@code DEVICE_ONLY}
      * @param bean 人员信息对象
      * @param idPhoto 标准照图像
      * @param feature 人脸特征数据
@@ -2555,7 +2553,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("deviceId") Integer deviceId,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().savePerson(bean,idPhoto,feature,featureImage,featureFaceBean,deviceId,token));
         }
@@ -2567,7 +2565,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 保存人员信息记录
-     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+     * <br>{@code DEVICE_ONLY}
      * @param bean
      * @param idPhoto 标准照图像,可为null
      * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(byte[], Integer, List, Token)}
@@ -2583,7 +2581,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("faceBeans") List<FaceBean> faceBeans,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().savePerson(bean,idPhoto,feature,faceBeans,token));
         }
@@ -2595,7 +2593,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 保存人员信息记录
-     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+     * <br>{@code DEVICE_ONLY}
      * @param bean
      * @param idPhoto 标准照图像,可为null
      * @param feature 用于验证的人脸特征数据,可为null
@@ -2613,7 +2611,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("deviceId") Integer deviceId,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().savePerson(bean,idPhoto,feature,faceInfo,deviceId,token));
         }
@@ -2636,7 +2634,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("idPhoto") byte[] idPhoto,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().savePerson(bean,idPhoto,token));
         }
@@ -2648,7 +2646,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 保存人员信息记录
-     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+     * <br>{@code DEVICE_ONLY}
      * @param bean
      * @param idPhoto 标准照图像,可为null
      * @param featureBean 用于验证的人脸特征数据对象,可为null
@@ -2664,7 +2662,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("deviceId") Integer deviceId,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().savePerson(bean,idPhoto,featureBean,deviceId,token));
         }
@@ -2689,7 +2687,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("featureMd5") String featureMd5,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().savePerson(bean,idPhotoMd5,featureMd5,token));
         }
@@ -2710,7 +2708,7 @@ public class IFaceLogSpringDecorator {
     public Response savePerson(@RequestParam("bean") PersonBean bean,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().savePerson(bean,token));
         }
@@ -2722,7 +2720,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 保存人员组记录
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param personGroupBean
      * @param token 访问令牌
      * @return 
@@ -2733,7 +2731,7 @@ public class IFaceLogSpringDecorator {
     public Response savePersonGroup(@RequestParam("personGroupBean") PersonGroupBean personGroupBean,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().savePersonGroup(personGroupBean,token));
         }
@@ -2745,7 +2743,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 保存人员(person)记录
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param beans
      * @param token 访问令牌
      */
@@ -2754,7 +2752,7 @@ public class IFaceLogSpringDecorator {
     public Response savePersons(@RequestParam("beans") List<PersonBean> beans,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().savePersons(beans,token);
             response.onComplete();
@@ -2767,7 +2765,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 保存人员信息记录(包含标准照)
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param persons
      * @param token 访问令牌
      * @return 
@@ -2777,7 +2775,7 @@ public class IFaceLogSpringDecorator {
     public Response savePersons(@RequestParam("persons") Map<java.nio.ByteBuffer, PersonBean> persons,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().savePersons(persons,token));
         }
@@ -2790,14 +2788,14 @@ public class IFaceLogSpringDecorator {
     /**
      * 配置参数持久化<br>
      * 保存修改的配置到自定义配置文件
-     * <br>{@link TokenMangement.Enable#ROOT_ONLY}
+     * <br>{@code ROOT_ONLY}
      * @param token 访问令牌
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/saveServiceConfig", method = RequestMethod.POST)
     public Response saveServiceConfig(@RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().saveServiceConfig(token);
             response.onComplete();
@@ -2810,7 +2808,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 修改 personId 指定的人员记录的有效期
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param personId
      * @param expiryDate 失效日期
      * @param token 访问令牌
@@ -2821,7 +2819,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("expiryDate") long expiryDate,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().setPersonExpiryDate(personId,expiryDate,token);
             response.onComplete();
@@ -2834,7 +2832,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 修改 personIdList 指定的人员记录的有效期
-     * <br>{@link TokenMangement.Enable#PERSON_ONLY}
+     * <br>{@code PERSON_ONLY}
      * @param personIdList 人员id列表
      * @param expiryDate 失效日期
      * @param token 访问令牌
@@ -2846,7 +2844,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("expiryDate") long expiryDate,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().setPersonExpiryDate(personIdList,expiryDate,token);
             response.onComplete();
@@ -2859,7 +2857,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 修改一组配置参数
-     * <br>{@link TokenMangement.Enable#ROOT_ONLY}
+     * <br>{@code ROOT_ONLY}
      * @param config 参数名-参数值对
      * @param token 访问令牌
      */
@@ -2868,7 +2866,7 @@ public class IFaceLogSpringDecorator {
     public Response setProperties(@RequestParam("config") Map<String, String> config,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().setProperties(config,token);
             response.onComplete();
@@ -2881,7 +2879,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * 修改/增加指定的配置参数
-     * <br>{@link TokenMangement.Enable#ROOT_ONLY}
+     * <br>{@code ROOT_ONLY}
      * @param key 参数名
      * @param value 参数值
      * @param token 访问令牌
@@ -2892,7 +2890,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("value") String value,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().setProperty(key,value,token);
             response.onComplete();
@@ -2915,7 +2913,7 @@ public class IFaceLogSpringDecorator {
     public Response taskQueueOf(@RequestParam("task") String task,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().taskQueueOf(task,token));
         }
@@ -2929,7 +2927,7 @@ public class IFaceLogSpringDecorator {
      * 注册一个任务名<br>
      * 方法将会根据任务名在redis上生成一个对应的队列<br>
      * 对同一个任务名多次调用本方法，不会产生不同的队列名字
-     * <br>{@link TokenMangement.Enable#ROOT_ONLY}
+     * <br>{@code ROOT_ONLY}
      * @param task 任务名
      * @param token 访问令牌
      * @return 返回保存队列名的key
@@ -2939,7 +2937,7 @@ public class IFaceLogSpringDecorator {
     public Response taskRegister(@RequestParam("task") String task,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().taskRegister(task,token));
         }
@@ -2966,7 +2964,7 @@ public class IFaceLogSpringDecorator {
         @RequestParam("deviceGroupId") Integer deviceGroupId,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().unbindBorder(personGroupId,deviceGroupId,token);
             response.onComplete();
@@ -2979,7 +2977,7 @@ public class IFaceLogSpringDecorator {
     }
     /**
      * (设备端)设备删除
-     * <br>{@link TokenMangement.Enable#DEVICE_ONLY}
+     * <br>{@code DEVICE_ONLY}
      * @param deviceId
      * @param token 设备验证令牌
      * @throws ServiceSecurityException
@@ -2989,7 +2987,7 @@ public class IFaceLogSpringDecorator {
     public Response unregisterDevice(@RequestParam("deviceId") int deviceId,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             delegate().unregisterDevice(deviceId,token);
             response.onComplete();
@@ -3011,7 +3009,7 @@ public class IFaceLogSpringDecorator {
     public Response updateDevice(@RequestParam("deviceBean") DeviceBean deviceBean,
         @RequestParam("token") Token token) 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().updateDevice(deviceBean,token));
         }
@@ -3029,7 +3027,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/version", method = RequestMethod.POST)
     public Response version() 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().version());
         }
@@ -3053,7 +3051,7 @@ public class IFaceLogSpringDecorator {
     @RequestMapping(value = "/IFaceLog/versionInfo", method = RequestMethod.POST)
     public Response versionInfo() 
         {
-        Response response = respFactory.newIFaceLogResponse();
+        Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().versionInfo());
         }
