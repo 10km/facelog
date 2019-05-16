@@ -98,11 +98,11 @@ public class IFaceLogSpringController {
      * @throws DuplicateRecordException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addFeature", method = RequestMethod.POST)
-    public Response addFeature(@RequestParam("feature") byte[] feature,
+    @RequestMapping(value = "/IFaceLog/addFeature", method = RequestMethod.POST)    
+    public Response addFeature(@RequestBody byte[] feature,
         @RequestParam("personId") Integer personId,
-        @RequestParam("faecBeans") List<FaceBean> faecBeans,
-        @RequestParam("token") Token token) 
+        @RequestBody List<FaceBean> faecBeans,
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -126,12 +126,12 @@ public class IFaceLogSpringController {
      * @throws DuplicateRecordException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addFeatureMulti", method = RequestMethod.POST)
-    public Response addFeature(@RequestParam("feature") byte[] feature,
+    @RequestMapping(value = "/IFaceLog/addFeatureMulti", method = RequestMethod.POST)    
+    public Response addFeature(@RequestBody byte[] feature,
         @RequestParam("personId") Integer personId,
-        @RequestParam("faceInfo") Map<java.nio.ByteBuffer, FaceBean> faceInfo,
+        @RequestBody Map<java.nio.ByteBuffer, FaceBean> faceInfo,
         @RequestParam("deviceId") Integer deviceId,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -154,12 +154,12 @@ public class IFaceLogSpringController {
      * @throws DuplicateRecordException 数据库中已经存在要保存的图像数据
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addImage", method = RequestMethod.POST)
-    public Response addImage(@RequestParam("imageData") byte[] imageData,
+    @RequestMapping(value = "/IFaceLog/addImage", method = RequestMethod.POST)    
+    public Response addImage(@RequestBody byte[] imageData,
         @RequestParam("deviceId") Integer deviceId,
-        @RequestParam("faceBean") FaceBean faceBean,
+        @RequestBody FaceBean faceBean,
         @RequestParam("personId") Integer personId,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -179,9 +179,9 @@ public class IFaceLogSpringController {
      * @throws DuplicateRecordException 数据库中存在相同记录
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addLog", method = RequestMethod.POST)
-    public Response addLog(@RequestParam("bean") LogBean bean,
-        @RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/addLog", method = RequestMethod.POST)    
+    public Response addLog(@RequestBody LogBean bean,
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -202,9 +202,9 @@ public class IFaceLogSpringController {
      * @throws DuplicateRecordException 数据库中存在相同记录
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addLogs", method = RequestMethod.POST)
-    public Response addLogs(@RequestParam("beans") List<LogBean> beans,
-        @RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/addLogs", method = RequestMethod.POST)    
+    public Response addLogs(@RequestBody List<LogBean> beans,
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -227,10 +227,10 @@ public class IFaceLogSpringController {
      * @see #addPermit(DeviceGroupBean,PersonGroupBean, Token)
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addPermitById", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/addPermitById", method = RequestMethod.POST)    
     public Response addPermit(@RequestParam("deviceGroupId") int deviceGroupId,
         @RequestParam("personGroupId") int personGroupId,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -253,10 +253,10 @@ public class IFaceLogSpringController {
      * @throws RuntimeDaoException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addPermit", method = RequestMethod.POST)
-    public Response addPermit(@RequestParam("deviceGroup") DeviceGroupBean deviceGroup,
-        @RequestParam("personGroup") PersonGroupBean personGroup,
-        @RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/addPermit", method = RequestMethod.POST)    
+    public Response addPermit(@RequestBody DeviceGroupBean deviceGroup,
+        @RequestBody PersonGroupBean personGroup,
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -276,8 +276,8 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/applyAckChannel", method = RequestMethod.POST)
-    public Response applyAckChannel(@RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/applyAckChannel", method = RequestMethod.POST)    
+    public Response applyAckChannel(@RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -297,8 +297,8 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/applyAckChannelWithDuration", method = RequestMethod.POST)
-    public Response applyAckChannel(@RequestParam("token") Token token,
+    @RequestMapping(value = "/IFaceLog/applyAckChannelWithDuration", method = RequestMethod.POST)    
+    public Response applyAckChannel(@RequestBody Token token,
         @RequestParam("duration") long duration) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -318,8 +318,8 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/applyCmdSn", method = RequestMethod.POST)
-    public Response applyCmdSn(@RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/applyCmdSn", method = RequestMethod.POST)    
+    public Response applyCmdSn(@RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -340,7 +340,7 @@ public class IFaceLogSpringController {
      * @throws ServiceSecurityException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/applyPersonToken", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/applyPersonToken", method = RequestMethod.POST)    
     public Response applyPersonToken(@RequestParam("personId") int personId,
         @RequestParam("password") String password,
         @RequestParam("isMd5") boolean isMd5) 
@@ -363,7 +363,7 @@ public class IFaceLogSpringController {
      * @throws ServiceSecurityException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/applyRootToken", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/applyRootToken", method = RequestMethod.POST)    
     public Response applyRootToken(@RequestParam("password") String password,
         @RequestParam("isMd5") boolean isMd5) 
         {
@@ -387,7 +387,7 @@ public class IFaceLogSpringController {
      * @since 2.1.1
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/applyUserToken", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/applyUserToken", method = RequestMethod.POST)    
     public Response applyUserToken(@RequestParam("userid") int userid,
         @RequestParam("password") String password,
         @RequestParam("isMd5") boolean isMd5) 
@@ -413,10 +413,10 @@ public class IFaceLogSpringController {
      * @param token 访问令牌
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/bindBorder", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/bindBorder", method = RequestMethod.POST)    
     public Response bindBorder(@RequestParam("personGroupId") Integer personGroupId,
         @RequestParam("deviceGroupId") Integer deviceGroupId,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -436,7 +436,7 @@ public class IFaceLogSpringController {
      * @return 如果{@code deviceGroupId}无效则返回空表
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/childListForDeviceGroup", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/childListForDeviceGroup", method = RequestMethod.POST)    
     public Response childListForDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -456,7 +456,7 @@ public class IFaceLogSpringController {
      * @return 如果{@code personGroupId}无效则返回空表
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/childListForPersonGroup", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/childListForPersonGroup", method = RequestMethod.POST)    
     public Response childListForPersonGroup(@RequestParam("personGroupId") int personGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -475,7 +475,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/countDeviceByWhere", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/countDeviceByWhere", method = RequestMethod.POST)    
     public Response countDeviceByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -492,7 +492,7 @@ public class IFaceLogSpringController {
      * 返回满足{@code where} SQL条件语句的fl_device_group记录总数
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/countDeviceGroupByWhere", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/countDeviceGroupByWhere", method = RequestMethod.POST)    
     public Response countDeviceGroupByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -511,7 +511,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/countLogByWhere", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/countLogByWhere", method = RequestMethod.POST)    
     public Response countLogByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -529,7 +529,7 @@ public class IFaceLogSpringController {
      * @see #countLogLightByWhere(String)
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/countLogLightByVerifyTime", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/countLogLightByVerifyTime", method = RequestMethod.POST)    
     public Response countLogLightByVerifyTime(@RequestParam("timestamp") long timestamp) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -548,7 +548,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/countLogLightByWhere", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/countLogLightByWhere", method = RequestMethod.POST)    
     public Response countLogLightByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -567,7 +567,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/countPersonByWhere", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/countPersonByWhere", method = RequestMethod.POST)    
     public Response countPersonByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -585,7 +585,7 @@ public class IFaceLogSpringController {
      * @see TableManager#countWhere(String)
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/countPersonGroupByWhere", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/countPersonGroupByWhere", method = RequestMethod.POST)    
     public Response countPersonGroupByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -607,10 +607,10 @@ public class IFaceLogSpringController {
      * @see #deleteFeature(String, boolean, Token)
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deleteAllFeaturesByPersonId", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/deleteAllFeaturesByPersonId", method = RequestMethod.POST)    
     public Response deleteAllFeaturesByPersonId(@RequestParam("personId") int personId,
         @RequestParam("deleteImage") boolean deleteImage,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -632,9 +632,9 @@ public class IFaceLogSpringController {
      * @throws RuntimeDaoException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deleteDeviceGroup", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/deleteDeviceGroup", method = RequestMethod.POST)    
     public Response deleteDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -655,10 +655,10 @@ public class IFaceLogSpringController {
      * {@code deleteImage}为{@code true}时返回空表
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deleteFeature", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/deleteFeature", method = RequestMethod.POST)    
     public Response deleteFeature(@RequestParam("featureMd5") String featureMd5,
         @RequestParam("deleteImage") boolean deleteImage,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -677,9 +677,9 @@ public class IFaceLogSpringController {
      * @return 删除的记录条数
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deleteGroupPermitOnDeviceGroup", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/deleteGroupPermitOnDeviceGroup", method = RequestMethod.POST)    
     public Response deleteGroupPermitOnDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -698,9 +698,9 @@ public class IFaceLogSpringController {
      * @return 删除成功返回1,否则返回0
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deleteImage", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/deleteImage", method = RequestMethod.POST)    
     public Response deleteImage(@RequestParam("imageMd5") String imageMd5,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -722,10 +722,10 @@ public class IFaceLogSpringController {
      * @throws RuntimeDaoException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deletePermit", method = RequestMethod.POST)
-    public Response deletePermit(@RequestParam("deviceGroup") DeviceGroupBean deviceGroup,
-        @RequestParam("personGroup") PersonGroupBean personGroup,
-        @RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/deletePermit", method = RequestMethod.POST)    
+    public Response deletePermit(@RequestBody DeviceGroupBean deviceGroup,
+        @RequestBody PersonGroupBean personGroup,
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -745,9 +745,9 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deletePerson", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/deletePerson", method = RequestMethod.POST)    
     public Response deletePerson(@RequestParam("personId") int personId,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -768,9 +768,9 @@ public class IFaceLogSpringController {
      * @see #deletePerson(int, Token)
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deletePersonByPapersNum", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/deletePersonByPapersNum", method = RequestMethod.POST)    
     public Response deletePersonByPapersNum(@RequestParam("papersNum") String papersNum,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -792,9 +792,9 @@ public class IFaceLogSpringController {
      * @throws RuntimeDaoException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deletePersonGroup", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/deletePersonGroup", method = RequestMethod.POST)    
     public Response deletePersonGroup(@RequestParam("personGroupId") int personGroupId,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -813,9 +813,9 @@ public class IFaceLogSpringController {
      * @return 删除的记录条数
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deletePersonGroupPermit", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/deletePersonGroupPermit", method = RequestMethod.POST)    
     public Response deletePersonGroupPermit(@RequestParam("personGroupId") int personGroupId,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -835,9 +835,9 @@ public class IFaceLogSpringController {
      * @return 返回删除的 person 记录数量
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deletePersons", method = RequestMethod.POST)
-    public Response deletePersons(@RequestParam("personIdList") List<Integer> personIdList,
-        @RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/deletePersons", method = RequestMethod.POST)    
+    public Response deletePersons(@RequestBody List<Integer> personIdList,
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -857,9 +857,9 @@ public class IFaceLogSpringController {
      * @return 返回删除的 person 记录数量
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deletePersonsByPapersNum", method = RequestMethod.POST)
-    public Response deletePersonsByPapersNum(@RequestParam("papersNumlist") List<String> papersNumlist,
-        @RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/deletePersonsByPapersNum", method = RequestMethod.POST)    
+    public Response deletePersonsByPapersNum(@RequestBody List<String> papersNumlist,
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -879,9 +879,9 @@ public class IFaceLogSpringController {
      * @see #setPersonExpiryDate(int, long, Token)
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/disablePerson", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/disablePerson", method = RequestMethod.POST)    
     public Response disablePerson(@RequestParam("personId") int personId,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -901,9 +901,9 @@ public class IFaceLogSpringController {
      * @param token 访问令牌
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/disablePersonList", method = RequestMethod.POST)
-    public Response disablePerson(@RequestParam("personIdList") List<Integer> personIdList,
-        @RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/disablePersonList", method = RequestMethod.POST)    
+    public Response disablePerson(@RequestBody List<Integer> personIdList,
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -922,7 +922,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/existsDevice", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/existsDevice", method = RequestMethod.POST)    
     public Response existsDevice(@RequestParam("id") int id) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -941,7 +941,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/existsFeature", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/existsFeature", method = RequestMethod.POST)    
     public Response existsFeature(@RequestParam("md5") String md5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -960,7 +960,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/existsImage", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/existsImage", method = RequestMethod.POST)    
     public Response existsImage(@RequestParam("md5") String md5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -979,7 +979,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/existsPerson", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/existsPerson", method = RequestMethod.POST)    
     public Response existsPerson(@RequestParam("persionId") int persionId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -998,7 +998,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getDevice", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getDevice", method = RequestMethod.POST)    
     public Response getDevice(@RequestParam("deviceId") int deviceId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1018,7 +1018,7 @@ public class IFaceLogSpringController {
      * @throws RuntimeDaoException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getDeviceGroup", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getDeviceGroup", method = RequestMethod.POST)    
     public Response getDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1038,8 +1038,8 @@ public class IFaceLogSpringController {
      * @throws RuntimeDaoException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getDeviceGroups", method = RequestMethod.POST)
-    public Response getDeviceGroups(@RequestParam("groupIdList") List<Integer> groupIdList) 
+    @RequestMapping(value = "/IFaceLog/getDeviceGroups", method = RequestMethod.POST)    
+    public Response getDeviceGroups(@RequestBody List<Integer> groupIdList) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1058,7 +1058,7 @@ public class IFaceLogSpringController {
      * @see #listOfParentForDeviceGroup(int)
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getDeviceGroupsBelongs", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getDeviceGroupsBelongs", method = RequestMethod.POST)    
     public Response getDeviceGroupsBelongs(@RequestParam("deviceId") int deviceId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1078,7 +1078,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getDeviceGroupsPermit", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getDeviceGroupsPermit", method = RequestMethod.POST)    
     public Response getDeviceGroupsPermit(@RequestParam("personGroupId") int personGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1098,7 +1098,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getDeviceGroupsPermittedBy", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getDeviceGroupsPermittedBy", method = RequestMethod.POST)    
     public Response getDeviceGroupsPermittedBy(@RequestParam("personGroupId") int personGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1117,7 +1117,7 @@ public class IFaceLogSpringController {
      * @return 如果没有关联的设备则返回{@code null}
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getDeviceIdOfFeature", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getDeviceIdOfFeature", method = RequestMethod.POST)    
     public Response getDeviceIdOfFeature(@RequestParam("featureMd5") String featureMd5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1136,8 +1136,8 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getDevices", method = RequestMethod.POST)
-    public Response getDevices(@RequestParam("idList") List<Integer> idList) 
+    @RequestMapping(value = "/IFaceLog/getDevices", method = RequestMethod.POST)    
+    public Response getDevices(@RequestBody List<Integer> idList) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1157,7 +1157,7 @@ public class IFaceLogSpringController {
      * @throws RuntimeDaoException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getDevicesOfGroup", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getDevicesOfGroup", method = RequestMethod.POST)    
     public Response getDevicesOfGroup(@RequestParam("deviceGroupId") int deviceGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1176,7 +1176,7 @@ public class IFaceLogSpringController {
      * @return 如果数据库中没有对应的数据则返回null
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getFeature", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getFeature", method = RequestMethod.POST)    
     public Response getFeature(@RequestParam("md5") String md5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1195,7 +1195,7 @@ public class IFaceLogSpringController {
      * @return 返回 fl_feature.md5  列表
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getFeatureBeansByPersonId", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getFeatureBeansByPersonId", method = RequestMethod.POST)    
     public Response getFeatureBeansByPersonId(@RequestParam("personId") int personId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1214,7 +1214,7 @@ public class IFaceLogSpringController {
      * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getFeatureBytes", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getFeatureBytes", method = RequestMethod.POST)    
     public Response getFeatureBytes(@RequestParam("md5") String md5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1233,8 +1233,8 @@ public class IFaceLogSpringController {
      * @return {@link FeatureBean}列表
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getFeatures", method = RequestMethod.POST)
-    public Response getFeatures(@RequestParam("md5") List<String> md5) 
+    @RequestMapping(value = "/IFaceLog/getFeatures", method = RequestMethod.POST)    
+    public Response getFeatures(@RequestBody List<String> md5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1252,7 +1252,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getFeaturesOfPerson", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getFeaturesOfPerson", method = RequestMethod.POST)    
     public Response getFeaturesOfPerson(@RequestParam("personId") int personId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1277,7 +1277,7 @@ public class IFaceLogSpringController {
      * @throws RuntimeDaoException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getGroupPermit", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getGroupPermit", method = RequestMethod.POST)    
     public Response getGroupPermit(@RequestParam("deviceId") int deviceId,
         @RequestParam("personGroupId") int personGroupId) 
         {
@@ -1302,7 +1302,7 @@ public class IFaceLogSpringController {
      * @return 允许通行返回false，否则返回false
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getGroupPermitOnDeviceGroup", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getGroupPermitOnDeviceGroup", method = RequestMethod.POST)    
     public Response getGroupPermitOnDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId,
         @RequestParam("personGroupId") int personGroupId) 
         {
@@ -1320,9 +1320,9 @@ public class IFaceLogSpringController {
      * 参见 {@link #getGroupPermit(int, int)}
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getGroupPermits", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getGroupPermits", method = RequestMethod.POST)    
     public Response getGroupPermits(@RequestParam("deviceId") int deviceId,
-        @RequestParam("personGroupIdList") List<Integer> personGroupIdList) 
+        @RequestBody List<Integer> personGroupIdList) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1340,7 +1340,7 @@ public class IFaceLogSpringController {
      * @return {@link ImageBean} ,如果没有对应记录则返回null
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getImage", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getImage", method = RequestMethod.POST)    
     public Response getImage(@RequestParam("imageMD5") String imageMD5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1359,7 +1359,7 @@ public class IFaceLogSpringController {
      * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getImageBytes", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getImageBytes", method = RequestMethod.POST)    
     public Response getImageBytes(@RequestParam("imageMD5") String imageMD5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1378,7 +1378,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getImagesAssociatedByFeature", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getImagesAssociatedByFeature", method = RequestMethod.POST)    
     public Response getImagesAssociatedByFeature(@RequestParam("featureMd5") String featureMd5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1397,7 +1397,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getLogBeansByPersonId", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getLogBeansByPersonId", method = RequestMethod.POST)    
     public Response getLogBeansByPersonId(@RequestParam("personId") int personId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1416,7 +1416,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPerson", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getPerson", method = RequestMethod.POST)    
     public Response getPerson(@RequestParam("personId") int personId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1435,7 +1435,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPersonByPapersNum", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getPersonByPapersNum", method = RequestMethod.POST)    
     public Response getPersonByPapersNum(@RequestParam("papersNum") String papersNum) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1455,7 +1455,7 @@ public class IFaceLogSpringController {
      * @throws RuntimeDaoException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPersonGroup", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getPersonGroup", method = RequestMethod.POST)    
     public Response getPersonGroup(@RequestParam("personGroupId") int personGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1475,8 +1475,8 @@ public class IFaceLogSpringController {
      * @throws RuntimeDaoException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPersonGroups", method = RequestMethod.POST)
-    public Response getPersonGroups(@RequestParam("groupIdList") List<Integer> groupIdList) 
+    @RequestMapping(value = "/IFaceLog/getPersonGroups", method = RequestMethod.POST)    
+    public Response getPersonGroups(@RequestBody List<Integer> groupIdList) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1495,7 +1495,7 @@ public class IFaceLogSpringController {
      * @see #listOfParentForPersonGroup(int)
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPersonGroupsBelongs", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getPersonGroupsBelongs", method = RequestMethod.POST)    
     public Response getPersonGroupsBelongs(@RequestParam("personId") int personId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1515,7 +1515,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPersonGroupsPermittedBy", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getPersonGroupsPermittedBy", method = RequestMethod.POST)    
     public Response getPersonGroupsPermittedBy(@RequestParam("deviceGroupId") int deviceGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1537,7 +1537,7 @@ public class IFaceLogSpringController {
      * @throws RuntimeDaoException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPersonPermit", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getPersonPermit", method = RequestMethod.POST)    
     public Response getPersonPermit(@RequestParam("deviceId") int deviceId,
         @RequestParam("personId") int personId) 
         {
@@ -1555,9 +1555,9 @@ public class IFaceLogSpringController {
      * 参见 {@link #getPersonPermit(int, int) }
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPersonPermits", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getPersonPermits", method = RequestMethod.POST)    
     public Response getPersonPermits(@RequestParam("deviceId") int deviceId,
-        @RequestParam("personIdList") List<Integer> personIdList) 
+        @RequestBody List<Integer> personIdList) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1575,8 +1575,8 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPersons", method = RequestMethod.POST)
-    public Response getPersons(@RequestParam("idList") List<Integer> idList) 
+    @RequestMapping(value = "/IFaceLog/getPersons", method = RequestMethod.POST)    
+    public Response getPersons(@RequestBody List<Integer> idList) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1596,7 +1596,7 @@ public class IFaceLogSpringController {
      * @throws RuntimeDaoException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPersonsOfGroup", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getPersonsOfGroup", method = RequestMethod.POST)    
     public Response getPersonsOfGroup(@RequestParam("personGroupId") int personGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1619,9 +1619,9 @@ public class IFaceLogSpringController {
      * @return 返回{@code key}指定的参数值
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getProperty", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getProperty", method = RequestMethod.POST)    
     public Response getProperty(@RequestParam("key") String key,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1648,8 +1648,8 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getRedisParameters", method = RequestMethod.POST)
-    public Response getRedisParameters(@RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/getRedisParameters", method = RequestMethod.POST)    
+    public Response getRedisParameters(@RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1668,8 +1668,8 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getServiceConfig", method = RequestMethod.POST)
-    public Response getServiceConfig(@RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/getServiceConfig", method = RequestMethod.POST)    
+    public Response getServiceConfig(@RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1689,7 +1689,7 @@ public class IFaceLogSpringController {
      * @throws RuntimeDaoException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getSubDeviceGroup", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getSubDeviceGroup", method = RequestMethod.POST)    
     public Response getSubDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1710,7 +1710,7 @@ public class IFaceLogSpringController {
      * @throws RuntimeDaoException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getSubPersonGroup", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/getSubPersonGroup", method = RequestMethod.POST)    
     public Response getSubPersonGroup(@RequestParam("personGroupId") int personGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1729,7 +1729,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isDisable", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/isDisable", method = RequestMethod.POST)    
     public Response isDisable(@RequestParam("personId") int personId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1747,7 +1747,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isLocal", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/isLocal", method = RequestMethod.POST)    
     public Response isLocal() 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1767,7 +1767,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isValidAckChannel", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/isValidAckChannel", method = RequestMethod.POST)    
     public Response isValidAckChannel(@RequestParam("ackChannel") String ackChannel) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1787,7 +1787,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isValidCmdSn", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/isValidCmdSn", method = RequestMethod.POST)    
     public Response isValidCmdSn(@RequestParam("cmdSn") long cmdSn) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1806,8 +1806,8 @@ public class IFaceLogSpringController {
      * @return 令牌有效返回{@code true},否则返回{@code false}
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isValidDeviceToken", method = RequestMethod.POST)
-    public Response isValidDeviceToken(@RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/isValidDeviceToken", method = RequestMethod.POST)    
+    public Response isValidDeviceToken(@RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1827,7 +1827,7 @@ public class IFaceLogSpringController {
      * @return {@code true}密码匹配
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isValidPassword", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/isValidPassword", method = RequestMethod.POST)    
     public Response isValidPassword(@RequestParam("userId") String userId,
         @RequestParam("password") String password,
         @RequestParam("isMd5") boolean isMd5) 
@@ -1848,8 +1848,8 @@ public class IFaceLogSpringController {
      * @return 令牌有效返回{@code true},否则返回{@code false}
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isValidPersonToken", method = RequestMethod.POST)
-    public Response isValidPersonToken(@RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/isValidPersonToken", method = RequestMethod.POST)    
+    public Response isValidPersonToken(@RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1867,8 +1867,8 @@ public class IFaceLogSpringController {
      * @return 令牌有效返回{@code true},否则返回{@code false}
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isValidRootToken", method = RequestMethod.POST)
-    public Response isValidRootToken(@RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/isValidRootToken", method = RequestMethod.POST)    
+    public Response isValidRootToken(@RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1887,8 +1887,8 @@ public class IFaceLogSpringController {
      * @since 2.1.1
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isValidToken", method = RequestMethod.POST)
-    public Response isValidToken(@RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/isValidToken", method = RequestMethod.POST)    
+    public Response isValidToken(@RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1907,8 +1907,8 @@ public class IFaceLogSpringController {
      * @since 2.1.1
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isValidUserToken", method = RequestMethod.POST)
-    public Response isValidUserToken(@RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/isValidUserToken", method = RequestMethod.POST)    
+    public Response isValidUserToken(@RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1927,7 +1927,7 @@ public class IFaceLogSpringController {
      * @return 如果{@code deviceGroupId}无效则返回空表
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/listOfParentForDeviceGroup", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/listOfParentForDeviceGroup", method = RequestMethod.POST)    
     public Response listOfParentForDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1947,7 +1947,7 @@ public class IFaceLogSpringController {
      * @return 如果{@code personGroupId}无效则返回空表
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/listOfParentForPersonGroup", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/listOfParentForPersonGroup", method = RequestMethod.POST)    
     public Response listOfParentForPersonGroup(@RequestParam("personGroupId") int personGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1965,7 +1965,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadAllPerson", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/loadAllPerson", method = RequestMethod.POST)    
     public Response loadAllPerson() 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1986,7 +1986,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadDeviceByWhere", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/loadDeviceByWhere", method = RequestMethod.POST)    
     public Response loadDeviceByWhere(@RequestParam("where") String where,
         @RequestParam("startRow") int startRow,
         @RequestParam("numRows") int numRows) 
@@ -2009,7 +2009,7 @@ public class IFaceLogSpringController {
      * @return 设备组ID列表
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadDeviceGroupByWhere", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/loadDeviceGroupByWhere", method = RequestMethod.POST)    
     public Response loadDeviceGroupByWhere(@RequestParam("where") String where,
         @RequestParam("startRow") int startRow,
         @RequestParam("numRows") int numRows) 
@@ -2030,7 +2030,7 @@ public class IFaceLogSpringController {
      * @see #loadDeviceGroupByWhere(String,int,int)
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadDeviceGroupIdByWhere", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/loadDeviceGroupIdByWhere", method = RequestMethod.POST)    
     public Response loadDeviceGroupIdByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -2049,7 +2049,7 @@ public class IFaceLogSpringController {
      * @return 返回设备ID列表
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadDeviceIdByWhere", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/loadDeviceIdByWhere", method = RequestMethod.POST)    
     public Response loadDeviceIdByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -2069,7 +2069,7 @@ public class IFaceLogSpringController {
      * @return 返回 fl_feature.md5 列表
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadFeatureMd5ByUpdate", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/loadFeatureMd5ByUpdate", method = RequestMethod.POST)    
     public Response loadFeatureMd5ByUpdate(@RequestParam("timestamp") long timestamp) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -2091,7 +2091,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadLogByWhere", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/loadLogByWhere", method = RequestMethod.POST)    
     public Response loadLogByWhere(@RequestParam("where") String where,
         @RequestParam("startRow") int startRow,
         @RequestParam("numRows") int numRows) 
@@ -2113,7 +2113,7 @@ public class IFaceLogSpringController {
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadLogLightByVerifyTime", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/loadLogLightByVerifyTime", method = RequestMethod.POST)    
     public Response loadLogLightByVerifyTime(@RequestParam("timestamp") long timestamp,
         @RequestParam("startRow") int startRow,
         @RequestParam("numRows") int numRows) 
@@ -2137,7 +2137,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadLogLightByWhere", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/loadLogLightByWhere", method = RequestMethod.POST)    
     public Response loadLogLightByWhere(@RequestParam("where") String where,
         @RequestParam("startRow") int startRow,
         @RequestParam("numRows") int numRows) 
@@ -2159,7 +2159,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadPermitByUpdate", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/loadPermitByUpdate", method = RequestMethod.POST)    
     public Response loadPermitByUpdate(@RequestParam("timestamp") long timestamp) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -2180,7 +2180,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadPersonByWhere", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/loadPersonByWhere", method = RequestMethod.POST)    
     public Response loadPersonByWhere(@RequestParam("where") String where,
         @RequestParam("startRow") int startRow,
         @RequestParam("numRows") int numRows) 
@@ -2203,7 +2203,7 @@ public class IFaceLogSpringController {
      * @return 人员组ID列表
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadPersonGroupByWhere", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/loadPersonGroupByWhere", method = RequestMethod.POST)    
     public Response loadPersonGroupByWhere(@RequestParam("where") String where,
         @RequestParam("startRow") int startRow,
         @RequestParam("numRows") int numRows) 
@@ -2224,7 +2224,7 @@ public class IFaceLogSpringController {
      * @see #loadPersonGroupByWhere(String,int,int)
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadPersonGroupIdByWhere", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/loadPersonGroupIdByWhere", method = RequestMethod.POST)    
     public Response loadPersonGroupIdByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -2244,7 +2244,7 @@ public class IFaceLogSpringController {
      * @return 返回fl_person.id 列表
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadPersonIdByUpdateTime", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/loadPersonIdByUpdateTime", method = RequestMethod.POST)    
     public Response loadPersonIdByUpdateTime(@RequestParam("timestamp") long timestamp) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -2263,7 +2263,7 @@ public class IFaceLogSpringController {
      * @return 返回 fl_person.id 列表
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadPersonIdByWhere", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/loadPersonIdByWhere", method = RequestMethod.POST)    
     public Response loadPersonIdByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -2284,7 +2284,7 @@ public class IFaceLogSpringController {
      * @return 返回fl_person.id 列表
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadUpdatedPersons", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/loadUpdatedPersons", method = RequestMethod.POST)    
     public Response loadUpdatedPersons(@RequestParam("timestamp") long timestamp) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -2304,8 +2304,8 @@ public class IFaceLogSpringController {
      * @throws ServiceSecurityException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/offline", method = RequestMethod.POST)
-    public Response offline(@RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/offline", method = RequestMethod.POST)    
+    public Response offline(@RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2325,8 +2325,8 @@ public class IFaceLogSpringController {
      * @throws ServiceSecurityException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/online", method = RequestMethod.POST)
-    public Response online(@RequestParam("device") DeviceBean device) 
+    @RequestMapping(value = "/IFaceLog/online", method = RequestMethod.POST)    
+    public Response online(@RequestBody DeviceBean device) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2346,8 +2346,8 @@ public class IFaceLogSpringController {
      * @throws ServiceSecurityException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/registerDevice", method = RequestMethod.POST)
-    public Response registerDevice(@RequestParam("newDevice") DeviceBean newDevice) 
+    @RequestMapping(value = "/IFaceLog/registerDevice", method = RequestMethod.POST)    
+    public Response registerDevice(@RequestBody DeviceBean newDevice) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2366,8 +2366,8 @@ public class IFaceLogSpringController {
      * @throws ServiceSecurityException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/releasePersonToken", method = RequestMethod.POST)
-    public Response releasePersonToken(@RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/releasePersonToken", method = RequestMethod.POST)    
+    public Response releasePersonToken(@RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2387,8 +2387,8 @@ public class IFaceLogSpringController {
      * @throws ServiceSecurityException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/releaseRootToken", method = RequestMethod.POST)
-    public Response releaseRootToken(@RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/releaseRootToken", method = RequestMethod.POST)    
+    public Response releaseRootToken(@RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2408,8 +2408,8 @@ public class IFaceLogSpringController {
      * @since 2.1.1
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/releaseUserToken", method = RequestMethod.POST)
-    public Response releaseUserToken(@RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/releaseUserToken", method = RequestMethod.POST)    
+    public Response releaseUserToken(@RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2430,11 +2430,11 @@ public class IFaceLogSpringController {
      * @param token 访问令牌
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/replaceFeature", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/replaceFeature", method = RequestMethod.POST)    
     public Response replaceFeature(@RequestParam("personId") Integer personId,
         @RequestParam("featureMd5") String featureMd5,
         @RequestParam("deleteOldFeatureImage") boolean deleteOldFeatureImage,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2455,7 +2455,7 @@ public class IFaceLogSpringController {
      * @return {@code fl_device_group.root_group}字段不为空的记录id,没有找到则返回{@code null}
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/rootGroupOfDevice", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/rootGroupOfDevice", method = RequestMethod.POST)    
     public Response rootGroupOfDevice(@RequestParam("deviceId") Integer deviceId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -2476,7 +2476,7 @@ public class IFaceLogSpringController {
      * @return {@code fl_person_group.root_group}字段不为空的记录id,没有找到则返回{@code null}
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/rootGroupOfPerson", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/rootGroupOfPerson", method = RequestMethod.POST)    
     public Response rootGroupOfPerson(@RequestParam("personId") Integer personId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -2497,9 +2497,9 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/saveDevice", method = RequestMethod.POST)
-    public Response saveDevice(@RequestParam("deviceBean") DeviceBean deviceBean,
-        @RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/saveDevice", method = RequestMethod.POST)    
+    public Response saveDevice(@RequestBody DeviceBean deviceBean,
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2520,9 +2520,9 @@ public class IFaceLogSpringController {
      * @throws RuntimeDaoException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/saveDeviceGroup", method = RequestMethod.POST)
-    public Response saveDeviceGroup(@RequestParam("deviceGroupBean") DeviceGroupBean deviceGroupBean,
-        @RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/saveDeviceGroup", method = RequestMethod.POST)    
+    public Response saveDeviceGroup(@RequestBody DeviceGroupBean deviceGroupBean,
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2546,14 +2546,14 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersonFull", method = RequestMethod.POST)
-    public Response savePerson(@RequestParam("bean") PersonBean bean,
-        @RequestParam("idPhoto") byte[] idPhoto,
-        @RequestParam("feature") byte[] feature,
-        @RequestParam("featureImage") byte[] featureImage,
-        @RequestParam("featureFaceBean") FaceBean featureFaceBean,
+    @RequestMapping(value = "/IFaceLog/savePersonFull", method = RequestMethod.POST)    
+    public Response savePerson(@RequestBody PersonBean bean,
+        @RequestBody byte[] idPhoto,
+        @RequestBody byte[] feature,
+        @RequestBody byte[] featureImage,
+        @RequestBody FaceBean featureFaceBean,
         @RequestParam("deviceId") Integer deviceId,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2576,12 +2576,12 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureMultiFaces", method = RequestMethod.POST)
-    public Response savePerson(@RequestParam("bean") PersonBean bean,
-        @RequestParam("idPhoto") byte[] idPhoto,
-        @RequestParam("feature") byte[] feature,
-        @RequestParam("faceBeans") List<FaceBean> faceBeans,
-        @RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureMultiFaces", method = RequestMethod.POST)    
+    public Response savePerson(@RequestBody PersonBean bean,
+        @RequestBody byte[] idPhoto,
+        @RequestBody byte[] feature,
+        @RequestBody List<FaceBean> faceBeans,
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2605,13 +2605,13 @@ public class IFaceLogSpringController {
      * @return bean 保存的{@link PersonBean}对象
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureMultiImage", method = RequestMethod.POST)
-    public Response savePerson(@RequestParam("bean") PersonBean bean,
-        @RequestParam("idPhoto") byte[] idPhoto,
-        @RequestParam("feature") byte[] feature,
-        @RequestParam("faceInfo") Map<java.nio.ByteBuffer, FaceBean> faceInfo,
+    @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureMultiImage", method = RequestMethod.POST)    
+    public Response savePerson(@RequestBody PersonBean bean,
+        @RequestBody byte[] idPhoto,
+        @RequestBody byte[] feature,
+        @RequestBody Map<java.nio.ByteBuffer, FaceBean> faceInfo,
         @RequestParam("deviceId") Integer deviceId,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2631,10 +2631,10 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersonWithPhoto", method = RequestMethod.POST)
-    public Response savePerson(@RequestParam("bean") PersonBean bean,
-        @RequestParam("idPhoto") byte[] idPhoto,
-        @RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/savePersonWithPhoto", method = RequestMethod.POST)    
+    public Response savePerson(@RequestBody PersonBean bean,
+        @RequestBody byte[] idPhoto,
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2657,12 +2657,12 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeature", method = RequestMethod.POST)
-    public Response savePerson(@RequestParam("bean") PersonBean bean,
-        @RequestParam("idPhoto") byte[] idPhoto,
-        @RequestParam("featureBean") FeatureBean featureBean,
+    @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeature", method = RequestMethod.POST)    
+    public Response savePerson(@RequestBody PersonBean bean,
+        @RequestBody byte[] idPhoto,
+        @RequestBody FeatureBean featureBean,
         @RequestParam("deviceId") Integer deviceId,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2683,11 +2683,11 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureSaved", method = RequestMethod.POST)
-    public Response savePerson(@RequestParam("bean") PersonBean bean,
+    @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureSaved", method = RequestMethod.POST)    
+    public Response savePerson(@RequestBody PersonBean bean,
         @RequestParam("idPhotoMd5") String idPhotoMd5,
         @RequestParam("featureMd5") String featureMd5,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2706,9 +2706,9 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePerson", method = RequestMethod.POST)
-    public Response savePerson(@RequestParam("bean") PersonBean bean,
-        @RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/savePerson", method = RequestMethod.POST)    
+    public Response savePerson(@RequestBody PersonBean bean,
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2729,9 +2729,9 @@ public class IFaceLogSpringController {
      * @throws RuntimeDaoException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersonGroup", method = RequestMethod.POST)
-    public Response savePersonGroup(@RequestParam("personGroupBean") PersonGroupBean personGroupBean,
-        @RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/savePersonGroup", method = RequestMethod.POST)    
+    public Response savePersonGroup(@RequestBody PersonGroupBean personGroupBean,
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2750,9 +2750,9 @@ public class IFaceLogSpringController {
      * @param token 访问令牌
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersons", method = RequestMethod.POST)
-    public Response savePersons(@RequestParam("beans") List<PersonBean> beans,
-        @RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/savePersons", method = RequestMethod.POST)    
+    public Response savePersons(@RequestBody List<PersonBean> beans,
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2773,9 +2773,9 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersonsWithPhoto", method = RequestMethod.POST)
-    public Response savePersons(@RequestParam("persons") Map<java.nio.ByteBuffer, PersonBean> persons,
-        @RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/savePersonsWithPhoto", method = RequestMethod.POST)    
+    public Response savePersons(@RequestBody Map<java.nio.ByteBuffer, PersonBean> persons,
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2794,8 +2794,8 @@ public class IFaceLogSpringController {
      * @param token 访问令牌
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/saveServiceConfig", method = RequestMethod.POST)
-    public Response saveServiceConfig(@RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/saveServiceConfig", method = RequestMethod.POST)    
+    public Response saveServiceConfig(@RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2816,10 +2816,10 @@ public class IFaceLogSpringController {
      * @param token 访问令牌
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/setPersonExpiryDate", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/setPersonExpiryDate", method = RequestMethod.POST)    
     public Response setPersonExpiryDate(@RequestParam("personId") int personId,
         @RequestParam("expiryDate") long expiryDate,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2841,10 +2841,10 @@ public class IFaceLogSpringController {
      * @ 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/setPersonExpiryDateList", method = RequestMethod.POST)
-    public Response setPersonExpiryDate(@RequestParam("personIdList") List<Integer> personIdList,
+    @RequestMapping(value = "/IFaceLog/setPersonExpiryDateList", method = RequestMethod.POST)    
+    public Response setPersonExpiryDate(@RequestBody List<Integer> personIdList,
         @RequestParam("expiryDate") long expiryDate,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2864,9 +2864,9 @@ public class IFaceLogSpringController {
      * @param token 访问令牌
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/setProperties", method = RequestMethod.POST)
-    public Response setProperties(@RequestParam("config") Map<String, String> config,
-        @RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/setProperties", method = RequestMethod.POST)    
+    public Response setProperties(@RequestBody Map<String, String> config,
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2887,10 +2887,10 @@ public class IFaceLogSpringController {
      * @param token 访问令牌
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/setProperty", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/setProperty", method = RequestMethod.POST)    
     public Response setProperty(@RequestParam("key") String key,
         @RequestParam("value") String value,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2911,9 +2911,9 @@ public class IFaceLogSpringController {
      * @return 返回redis队列名,队列不存在则返回{@code null}
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/taskQueueOf", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/taskQueueOf", method = RequestMethod.POST)    
     public Response taskQueueOf(@RequestParam("task") String task,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2935,9 +2935,9 @@ public class IFaceLogSpringController {
      * @return 返回保存队列名的key
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/taskRegister", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/taskRegister", method = RequestMethod.POST)    
     public Response taskRegister(@RequestParam("task") String task,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2961,10 +2961,10 @@ public class IFaceLogSpringController {
      * @param token 访问令牌
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/unbindBorder", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/unbindBorder", method = RequestMethod.POST)    
     public Response unbindBorder(@RequestParam("personGroupId") Integer personGroupId,
         @RequestParam("deviceGroupId") Integer deviceGroupId,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2985,9 +2985,9 @@ public class IFaceLogSpringController {
      * @throws ServiceSecurityException
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/unregisterDevice", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/unregisterDevice", method = RequestMethod.POST)    
     public Response unregisterDevice(@RequestParam("deviceId") int deviceId,
-        @RequestParam("token") Token token) 
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -3007,9 +3007,9 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/updateDevice", method = RequestMethod.POST)
-    public Response updateDevice(@RequestParam("deviceBean") DeviceBean deviceBean,
-        @RequestParam("token") Token token) 
+    @RequestMapping(value = "/IFaceLog/updateDevice", method = RequestMethod.POST)    
+    public Response updateDevice(@RequestBody DeviceBean deviceBean,
+        @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -3026,7 +3026,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/version", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/version", method = RequestMethod.POST)    
     public Response version() 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -3050,7 +3050,7 @@ public class IFaceLogSpringController {
      * @return 
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/versionInfo", method = RequestMethod.POST)
+    @RequestMapping(value = "/IFaceLog/versionInfo", method = RequestMethod.POST)    
     public Response versionInfo() 
         {
         Response response = responseFactory.newIFaceLogResponse();
