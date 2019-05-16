@@ -17,6 +17,8 @@ import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import java.util.ServiceLoader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.Objects;
 
@@ -51,7 +53,7 @@ import org.springframework.web.bind.annotation.*;
 public class IFaceLogSpringController {
     private static final Logger logger = LoggerFactory.getLogger(IFaceLogSpringController.class);
     private static final InstanceSupplier instanceSupplier = getInstanceSupplier();
-    private final ResponseFactory responseFactory = loadRespFactory();
+    private final ResponseFactory responseFactory = loadResponseFactory();
     /**
      * SPI(Service Provider Interface)机制加载 {@link InstanceSupplier}实例,没有找到则返回{@code null},
      * 返回{@link InstanceSupplier}提供的{@link IFaceLog}实例
@@ -68,7 +70,7 @@ public class IFaceLogSpringController {
      * 没有找到则返回{@link DefaultResponseFactory}实例
      * @return 返回{@link ResponseFactory}实例
      */
-    private static final ResponseFactory loadRespFactory() {
+    private static final ResponseFactory loadResponseFactory() {
             ServiceLoader<ResponseFactory> providers = ServiceLoader.load(ResponseFactory.class);
             Iterator<ResponseFactory> itor = providers.iterator();
             return itor.hasNext() ? itor.next() : new DefaultResponseFactory();
@@ -81,9 +83,9 @@ public class IFaceLogSpringController {
      * @return
      */
     protected IFaceLog delegate() {
-    	return Objects.requireNonNull(
-    			instanceSupplier == null ? null : instanceSupplier.instanceOfIFaceLog(),
-    			"IFaceLog  instance is null"	);
+        return Objects.requireNonNull(
+                instanceSupplier == null ? null : instanceSupplier.instanceOfIFaceLog(),
+                "IFaceLog  instance is null"    );
     }
     /**
      * 增加一个人脸特征记录，如果记录已经存在则抛出异常
@@ -3108,28 +3110,37 @@ public class IFaceLogSpringController {
      *
      */
     public static class DefaultResponse implements Response{
+        private static boolean outStrackTrace = false;
         private boolean success;
+        /** RPC调用的返回值 */
         private Object result;
+        /** 异常信息 */
         private String errorMessage;
-        private Exception exception;
+        /** 异常堆栈信息 */
+        private String stackTrace;
         @Override
         public void onComplete(Object result) {
-            success = true;
+            this.success = true;
             this.result = result;
         }
-
+        @Override
+        public void onComplete() {
+            onComplete(null);
+        }
         @Override
         public void onError(Exception e) {
-            success = true;
-            exception = e;
+            success = false;
             errorMessage = e.getMessage();
             if(errorMessage == null){
                 errorMessage = e.getClass().getSimpleName();
             }
+            if(outStrackTrace){
+                StringWriter writer = new StringWriter();
+                e.printStackTrace(new PrintWriter(writer));
+                stackTrace = writer.toString();
+            }
         }
-        @Override
-        public void onComplete() {            
-        }
+
         public boolean isSuccess() {
             return success;
         }
@@ -3154,29 +3165,44 @@ public class IFaceLogSpringController {
             this.errorMessage = errorMessage;
         }
 
-        public Exception getException() {
-            return exception;
+        public String getStackTrace() {
+            return stackTrace;
         }
 
-        public void setException(Exception exception) {
-            this.exception = exception;
+        public void setStackTrace(String stackTrace) {
+            this.stackTrace = stackTrace;
         }
 
-        @Override
         public String toString() {
             StringBuilder builder = new StringBuilder();
             builder.append("DefaultResponse [success=");
             builder.append(success);
-            builder.append(", result=");
-            builder.append(result);
-            builder.append(", errorMessage=");
-            builder.append(errorMessage);
-            builder.append(", exception=");
-            builder.append(exception);
+            builder.append(", ");
+            if (result != null) {
+                builder.append("result=");
+                builder.append(result);
+                builder.append(", ");
+            }
+            if (errorMessage != null) {
+                builder.append("errorMessage=");
+                builder.append(errorMessage);
+                builder.append(", ");
+            }
+            if (stackTrace != null) {
+                builder.append("stackTrace=");
+                builder.append(stackTrace);
+            }
             builder.append("]");
             return builder.toString();
         }
-        
+        /**
+         * 开启输出堆栈信息(默认为不开启)<br>
+         * 开发时为了调试需要获取详细的异常堆栈信息可以开启
+         * @param outStrackTrace 要设置的 outStrackTrace
+         */
+        public static void enableStrackTrace() {
+            outStrackTrace = true;
+        }
     }
     /**
      * {@link ResponseFactory}接口默认实现
