@@ -99,7 +99,7 @@ public class IFaceLogSpringController {
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/addFeature", method = RequestMethod.POST)    
-    public Response addFeature(@RequestBody byte[] feature,
+    public Response addFeature(@RequestParam("feature") byte[] feature,
         @RequestParam("personId") Integer personId,
         @RequestBody List<FaceBean> faecBeans,
         @RequestBody Token token) 
@@ -127,7 +127,7 @@ public class IFaceLogSpringController {
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/addFeatureMulti", method = RequestMethod.POST)    
-    public Response addFeature(@RequestBody byte[] feature,
+    public Response addFeature(@RequestParam("feature") byte[] feature,
         @RequestParam("personId") Integer personId,
         @RequestBody Map<java.nio.ByteBuffer, FaceBean> faceInfo,
         @RequestParam("deviceId") Integer deviceId,
@@ -155,7 +155,7 @@ public class IFaceLogSpringController {
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/addImage", method = RequestMethod.POST)    
-    public Response addImage(@RequestBody byte[] imageData,
+    public Response addImage(@RequestParam("imageData") byte[] imageData,
         @RequestParam("deviceId") Integer deviceId,
         @RequestBody FaceBean faceBean,
         @RequestParam("personId") Integer personId,
@@ -2548,9 +2548,9 @@ public class IFaceLogSpringController {
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/savePersonFull", method = RequestMethod.POST)    
     public Response savePerson(@RequestBody PersonBean bean,
-        @RequestBody byte[] idPhoto,
-        @RequestBody byte[] feature,
-        @RequestBody byte[] featureImage,
+        @RequestParam("idPhoto") byte[] idPhoto,
+        @RequestParam("feature") byte[] feature,
+        @RequestParam("featureImage") byte[] featureImage,
         @RequestBody FaceBean featureFaceBean,
         @RequestParam("deviceId") Integer deviceId,
         @RequestBody Token token) 
@@ -2578,8 +2578,8 @@ public class IFaceLogSpringController {
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureMultiFaces", method = RequestMethod.POST)    
     public Response savePerson(@RequestBody PersonBean bean,
-        @RequestBody byte[] idPhoto,
-        @RequestBody byte[] feature,
+        @RequestParam("idPhoto") byte[] idPhoto,
+        @RequestParam("feature") byte[] feature,
         @RequestBody List<FaceBean> faceBeans,
         @RequestBody Token token) 
         {
@@ -2607,8 +2607,8 @@ public class IFaceLogSpringController {
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureMultiImage", method = RequestMethod.POST)    
     public Response savePerson(@RequestBody PersonBean bean,
-        @RequestBody byte[] idPhoto,
-        @RequestBody byte[] feature,
+        @RequestParam("idPhoto") byte[] idPhoto,
+        @RequestParam("feature") byte[] feature,
         @RequestBody Map<java.nio.ByteBuffer, FaceBean> faceInfo,
         @RequestParam("deviceId") Integer deviceId,
         @RequestBody Token token) 
@@ -2633,7 +2633,7 @@ public class IFaceLogSpringController {
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/savePersonWithPhoto", method = RequestMethod.POST)    
     public Response savePerson(@RequestBody PersonBean bean,
-        @RequestBody byte[] idPhoto,
+        @RequestParam("idPhoto") byte[] idPhoto,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -2659,7 +2659,7 @@ public class IFaceLogSpringController {
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeature", method = RequestMethod.POST)    
     public Response savePerson(@RequestBody PersonBean bean,
-        @RequestBody byte[] idPhoto,
+        @RequestParam("idPhoto") byte[] idPhoto,
         @RequestBody FeatureBean featureBean,
         @RequestParam("deviceId") Integer deviceId,
         @RequestBody Token token) 
