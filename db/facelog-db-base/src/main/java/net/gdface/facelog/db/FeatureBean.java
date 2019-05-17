@@ -32,18 +32,18 @@ public final class FeatureBean
     /** NULL {@link FeatureBean} bean , IMMUTABLE instance */
     public static final FeatureBean NULL = new FeatureBean().asNULL().asImmutable();
     /** comments:主键,特征码md5校验码 */
-    @ApiModelProperty(value = "主键,特征码md5校验码" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "主键,特征码md5校验码" ,required=true ,dataType="String")
     private String md5;
 
     /** comments:外键,所属用户id */
-    @ApiModelProperty(value = "外键,所属用户id"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "外键,所属用户id"  ,dataType="Integer")
     private Integer personId;
 
     /** comments:二进制特征数据 */
-    @ApiModelProperty(value = "二进制特征数据" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "二进制特征数据" ,required=true ,dataType="ByteBuffer")
     private java.nio.ByteBuffer feature;
 
-    @ApiModelProperty(value = "update_time"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "update_time"  ,dataType="Date")
     private java.util.Date updateTime;
 
     /** flag whether {@code this} can be modified */

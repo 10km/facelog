@@ -32,27 +32,27 @@ public final class LogLightBean
     /** NULL {@link LogLightBean} bean , IMMUTABLE instance */
     public static final LogLightBean NULL = new LogLightBean().asNULL().asImmutable();
     /** comments:日志id */
-    @ApiModelProperty(value = "日志id"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "日志id"  ,dataType="Integer")
     private Integer id;
 
     /** comments:用户id */
-    @ApiModelProperty(value = "用户id"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "用户id"  ,dataType="Integer")
     private Integer personId;
 
     /** comments:姓名 */
-    @ApiModelProperty(value = "姓名" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "姓名" ,required=true ,dataType="String")
     private String name;
 
     /** comments:证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他 */
-    @ApiModelProperty(value = "证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他"  ,dataType="Integer")
     private Integer papersType;
 
     /** comments:证件号码 */
-    @ApiModelProperty(value = "证件号码"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "证件号码"  ,dataType="String")
     private String papersNum;
 
     /** comments:验证时间(可能由前端设备提供时间) */
-    @ApiModelProperty(value = "验证时间(可能由前端设备提供时间)"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "验证时间(可能由前端设备提供时间)"  ,dataType="Date")
     private java.util.Date verifyTime;
 
     /** flag whether {@code this} can be modified */

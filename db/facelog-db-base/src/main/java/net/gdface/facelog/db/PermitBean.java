@@ -32,26 +32,26 @@ public final class PermitBean
     /** NULL {@link PermitBean} bean , IMMUTABLE instance */
     public static final PermitBean NULL = new PermitBean().asNULL().asImmutable();
     /** comments:外键,设备组id */
-    @ApiModelProperty(value = "外键,设备组id" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "外键,设备组id" ,required=true ,dataType="Integer")
     private Integer deviceGroupId;
 
     /** comments:外键,人员组id */
-    @ApiModelProperty(value = "外键,人员组id" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "外键,人员组id" ,required=true ,dataType="Integer")
     private Integer personGroupId;
 
     /** comments:备注 */
-    @ApiModelProperty(value = "备注"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "备注"  ,dataType="String")
     private String remark;
 
     /** comments:应用项目自定义二进制扩展字段(最大64KB) */
-    @ApiModelProperty(value = "应用项目自定义二进制扩展字段(最大64KB)"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "应用项目自定义二进制扩展字段(最大64KB)"  ,dataType="ByteBuffer")
     private java.nio.ByteBuffer extBin;
 
     /** comments:应用项目自定义文本扩展字段(最大64KB) */
-    @ApiModelProperty(value = "应用项目自定义文本扩展字段(最大64KB)"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "应用项目自定义文本扩展字段(最大64KB)"  ,dataType="String")
     private String extTxt;
 
-    @ApiModelProperty(value = "create_time"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "create_time"  ,dataType="Date")
     private java.util.Date createTime;
 
     /** flag whether {@code this} can be modified */

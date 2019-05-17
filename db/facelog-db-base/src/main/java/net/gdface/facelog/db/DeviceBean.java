@@ -32,65 +32,65 @@ public final class DeviceBean
     /** NULL {@link DeviceBean} bean , IMMUTABLE instance */
     public static final DeviceBean NULL = new DeviceBean().asNULL().asImmutable();
     /** comments:设备id */
-    @ApiModelProperty(value = "设备id" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "设备id" ,required=true ,dataType="Integer")
     private Integer id;
 
     /** comments:所属设备组id */
-    @ApiModelProperty(value = "所属设备组id"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "所属设备组id"  ,dataType="Integer")
     private Integer groupId;
 
     /** comments:设备名称 */
-    @ApiModelProperty(value = "设备名称"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "设备名称"  ,dataType="String")
     private String name;
 
     /** comments:产品名称 */
-    @ApiModelProperty(value = "产品名称"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "产品名称"  ,dataType="String")
     private String productName;
 
     /** comments:设备型号 */
-    @ApiModelProperty(value = "设备型号"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "设备型号"  ,dataType="String")
     private String model;
 
     /** comments:设备供应商 */
-    @ApiModelProperty(value = "设备供应商"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "设备供应商"  ,dataType="String")
     private String vendor;
 
     /** comments:设备制造商 */
-    @ApiModelProperty(value = "设备制造商"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "设备制造商"  ,dataType="String")
     private String manufacturer;
 
     /** comments:设备生产日期 */
-    @ApiModelProperty(value = "设备生产日期"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "设备生产日期"  ,dataType="Date")
     private java.util.Date madeDate;
 
     /** comments:设备版本号 */
-    @ApiModelProperty(value = "设备版本号"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "设备版本号"  ,dataType="String")
     private String version;
 
     /** comments:设备序列号 */
-    @ApiModelProperty(value = "设备序列号"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "设备序列号"  ,dataType="String")
     private String serialNo;
 
     /** comments:6字节MAC地址(HEX) */
-    @ApiModelProperty(value = "6字节MAC地址(HEX)"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "6字节MAC地址(HEX)"  ,dataType="String")
     private String mac;
 
     /** comments:备注 */
-    @ApiModelProperty(value = "备注"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "备注"  ,dataType="String")
     private String remark;
 
     /** comments:应用项目自定义二进制扩展字段(最大64KB) */
-    @ApiModelProperty(value = "应用项目自定义二进制扩展字段(最大64KB)"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "应用项目自定义二进制扩展字段(最大64KB)"  ,dataType="ByteBuffer")
     private java.nio.ByteBuffer extBin;
 
     /** comments:应用项目自定义文本扩展字段(最大64KB) */
-    @ApiModelProperty(value = "应用项目自定义文本扩展字段(最大64KB)"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "应用项目自定义文本扩展字段(最大64KB)"  ,dataType="String")
     private String extTxt;
 
-    @ApiModelProperty(value = "create_time"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "create_time"  ,dataType="Date")
     private java.util.Date createTime;
 
-    @ApiModelProperty(value = "update_time"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "update_time"  ,dataType="Date")
     private java.util.Date updateTime;
 
     /** flag whether {@code this} can be modified */

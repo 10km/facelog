@@ -32,15 +32,15 @@ public final class StoreBean
     /** NULL {@link StoreBean} bean , IMMUTABLE instance */
     public static final StoreBean NULL = new StoreBean().asNULL().asImmutable();
     /** comments:主键,md5检验码 */
-    @ApiModelProperty(value = "主键,md5检验码" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "主键,md5检验码" ,required=true ,dataType="String")
     private String md5;
 
     /** comments:编码类型,GBK,UTF8... */
-    @ApiModelProperty(value = "编码类型,GBK,UTF8..."  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "编码类型,GBK,UTF8..."  ,dataType="String")
     private String encoding;
 
     /** comments:二进制数据(最大16MB) */
-    @ApiModelProperty(value = "二进制数据(最大16MB)"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "二进制数据(最大16MB)"  ,dataType="ByteBuffer")
     private java.nio.ByteBuffer data;
 
     /** flag whether {@code this} can be modified */

@@ -32,43 +32,43 @@ public final class PersonGroupBean
     /** NULL {@link PersonGroupBean} bean , IMMUTABLE instance */
     public static final PersonGroupBean NULL = new PersonGroupBean().asNULL().asImmutable();
     /** comments:用户组id */
-    @ApiModelProperty(value = "用户组id" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "用户组id" ,required=true ,dataType="Integer")
     private Integer id;
 
     /** comments:用户组名 */
-    @ApiModelProperty(value = "用户组名" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "用户组名" ,required=true ,dataType="String")
     private String name;
 
     /** comments:是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可 */
-    @ApiModelProperty(value = "是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可"  ,dataType="Integer")
     private Integer leaf;
 
     /** comments:上一级用户组id */
-    @ApiModelProperty(value = "上一级用户组id"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "上一级用户组id"  ,dataType="Integer")
     private Integer parent;
 
     /** comments:指向设备组id,用于应用层定义管理员/操作员的管理边界,此字段不为null代表此用户组为管理边界,指向的设备组为此用户组的设备管理边界,
   对于属于此组的管理员和操作员都只能管理此组内的用户及对应设备组内的设备 */
-    @ApiModelProperty(value = "指向设备组id,用于应用层定义管理员/操作员的管理边界,此字段不为null代表此用户组为管理边界,指向的设备组为此用户组的设备管理边界,"
-+"  对于属于此组的管理员和操作员都只能管理此组内的用户及对应设备组内的设备"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "指向设备组id,用于应用层定义管理员/操作员的管理边界,此字段不为null代表此用户组为管理边界,指向的设备组为此用户组的设备管理边界,\n"
++"  对于属于此组的管理员和操作员都只能管理此组内的用户及对应设备组内的设备"  ,dataType="Integer")
     private Integer rootGroup;
 
     /** comments:备注 */
-    @ApiModelProperty(value = "备注"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "备注"  ,dataType="String")
     private String remark;
 
     /** comments:应用项目自定义二进制扩展字段(最大64KB) */
-    @ApiModelProperty(value = "应用项目自定义二进制扩展字段(最大64KB)"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "应用项目自定义二进制扩展字段(最大64KB)"  ,dataType="ByteBuffer")
     private java.nio.ByteBuffer extBin;
 
     /** comments:应用项目自定义文本扩展字段(最大64KB) */
-    @ApiModelProperty(value = "应用项目自定义文本扩展字段(最大64KB)"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "应用项目自定义文本扩展字段(最大64KB)"  ,dataType="String")
     private String extTxt;
 
-    @ApiModelProperty(value = "create_time"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "create_time"  ,dataType="Date")
     private java.util.Date createTime;
 
-    @ApiModelProperty(value = "update_time"  ,dataType="$strUtil.simpleName($column.javaType)")
+    @ApiModelProperty(value = "update_time"  ,dataType="Date")
     private java.util.Date updateTime;
 
     /** flag whether {@code this} can be modified */
