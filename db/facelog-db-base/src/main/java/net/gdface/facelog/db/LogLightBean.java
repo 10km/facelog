@@ -13,6 +13,8 @@ import java.util.Objects;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftField.Requiredness;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 /**
  * LogLightBean is a mapping of fl_log_light Table.
  * <br>Meta Data Information (in progress):
@@ -22,6 +24,7 @@ import com.facebook.swift.codec.ThriftField.Requiredness;
  * @author guyadong
 */
 @ThriftStruct
+@ApiModel(description="VIEW")
 public final class LogLightBean
     implements Serializable,BaseBean<LogLightBean>,Comparable<LogLightBean>,Constant,Cloneable
 {
@@ -29,29 +32,39 @@ public final class LogLightBean
     /** NULL {@link LogLightBean} bean , IMMUTABLE instance */
     public static final LogLightBean NULL = new LogLightBean().asNULL().asImmutable();
     /** comments:日志id */
+    @ApiModelProperty("日志id")
     private Integer id;
 
     /** comments:用户id */
+    @ApiModelProperty("用户id")
     private Integer personId;
 
     /** comments:姓名 */
+    @ApiModelProperty("姓名")
     private String name;
 
     /** comments:证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他 */
+    @ApiModelProperty("证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他")
     private Integer papersType;
 
     /** comments:证件号码 */
+    @ApiModelProperty("证件号码")
     private String papersNum;
 
     /** comments:验证时间(可能由前端设备提供时间) */
+    @ApiModelProperty("验证时间(可能由前端设备提供时间)")
     private java.util.Date verifyTime;
 
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
+    @ApiModelProperty("columns modified flag")
     private long modified;
     /** columns initialized flag */
+    @ApiModelProperty("columns initialized flag")
     private long initialized;
+    /** new record flag  */
+    @ApiModelProperty("new record flag")
     private boolean isNew;        
     /** 
      * set immutable status

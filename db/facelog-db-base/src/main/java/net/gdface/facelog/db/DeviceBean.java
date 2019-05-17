@@ -13,6 +13,8 @@ import java.util.Objects;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftField.Requiredness;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 /**
  * DeviceBean is a mapping of fl_device Table.
  * <br>Meta Data Information (in progress):
@@ -22,6 +24,7 @@ import com.facebook.swift.codec.ThriftField.Requiredness;
  * @author guyadong
 */
 @ThriftStruct
+@ApiModel(description="前端设备基本信息")
 public final class DeviceBean
     implements Serializable,BaseBean<DeviceBean>,Comparable<DeviceBean>,Constant,Cloneable
 {
@@ -29,57 +32,77 @@ public final class DeviceBean
     /** NULL {@link DeviceBean} bean , IMMUTABLE instance */
     public static final DeviceBean NULL = new DeviceBean().asNULL().asImmutable();
     /** comments:设备id */
+    @ApiModelProperty("设备id")
     private Integer id;
 
     /** comments:所属设备组id */
+    @ApiModelProperty("所属设备组id")
     private Integer groupId;
 
     /** comments:设备名称 */
+    @ApiModelProperty("设备名称")
     private String name;
 
     /** comments:产品名称 */
+    @ApiModelProperty("产品名称")
     private String productName;
 
     /** comments:设备型号 */
+    @ApiModelProperty("设备型号")
     private String model;
 
     /** comments:设备供应商 */
+    @ApiModelProperty("设备供应商")
     private String vendor;
 
     /** comments:设备制造商 */
+    @ApiModelProperty("设备制造商")
     private String manufacturer;
 
     /** comments:设备生产日期 */
+    @ApiModelProperty("设备生产日期")
     private java.util.Date madeDate;
 
     /** comments:设备版本号 */
+    @ApiModelProperty("设备版本号")
     private String version;
 
     /** comments:设备序列号 */
+    @ApiModelProperty("设备序列号")
     private String serialNo;
 
     /** comments:6字节MAC地址(HEX) */
+    @ApiModelProperty("6字节MAC地址(HEX)")
     private String mac;
 
     /** comments:备注 */
+    @ApiModelProperty("备注")
     private String remark;
 
     /** comments:应用项目自定义二进制扩展字段(最大64KB) */
+    @ApiModelProperty("应用项目自定义二进制扩展字段(最大64KB)")
     private java.nio.ByteBuffer extBin;
 
     /** comments:应用项目自定义文本扩展字段(最大64KB) */
+    @ApiModelProperty("应用项目自定义文本扩展字段(最大64KB)")
     private String extTxt;
 
+    @ApiModelProperty("create_time")
     private java.util.Date createTime;
 
+    @ApiModelProperty("update_time")
     private java.util.Date updateTime;
 
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
+    @ApiModelProperty("columns modified flag")
     private long modified;
     /** columns initialized flag */
+    @ApiModelProperty("columns initialized flag")
     private long initialized;
+    /** new record flag  */
+    @ApiModelProperty("new record flag")
     private boolean isNew;        
     /** 
      * set immutable status

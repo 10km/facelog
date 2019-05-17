@@ -13,6 +13,8 @@ import java.util.Objects;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftField.Requiredness;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 /**
  * FaceBean is a mapping of fl_face Table.
  * <br>Meta Data Information (in progress):
@@ -22,6 +24,7 @@ import com.facebook.swift.codec.ThriftField.Requiredness;
  * @author guyadong
 */
 @ThriftStruct
+@ApiModel(description="人脸检测信息数据表,用于保存检测到的人脸的所有信息(特征数据除外)")
 public final class FaceBean
     implements Serializable,BaseBean<FaceBean>,Comparable<FaceBean>,Constant,Cloneable
 {
@@ -29,53 +32,76 @@ public final class FaceBean
     /** NULL {@link FaceBean} bean , IMMUTABLE instance */
     public static final FaceBean NULL = new FaceBean().asNULL().asImmutable();
     /** comments:主键 */
+    @ApiModelProperty("主键")
     private Integer id;
 
     /** comments:外键,所属图像id */
+    @ApiModelProperty("外键,所属图像id")
     private String imageMd5;
 
+    @ApiModelProperty("face_left")
     private Integer faceLeft;
 
+    @ApiModelProperty("face_top")
     private Integer faceTop;
 
+    @ApiModelProperty("face_width")
     private Integer faceWidth;
 
+    @ApiModelProperty("face_height")
     private Integer faceHeight;
 
+    @ApiModelProperty("eye_leftx")
     private Integer eyeLeftx;
 
+    @ApiModelProperty("eye_lefty")
     private Integer eyeLefty;
 
+    @ApiModelProperty("eye_rightx")
     private Integer eyeRightx;
 
+    @ApiModelProperty("eye_righty")
     private Integer eyeRighty;
 
+    @ApiModelProperty("mouth_x")
     private Integer mouthX;
 
+    @ApiModelProperty("mouth_y")
     private Integer mouthY;
 
+    @ApiModelProperty("nose_x")
     private Integer noseX;
 
+    @ApiModelProperty("nose_y")
     private Integer noseY;
 
+    @ApiModelProperty("angle_yaw")
     private Integer angleYaw;
 
+    @ApiModelProperty("angle_pitch")
     private Integer anglePitch;
 
+    @ApiModelProperty("angle_roll")
     private Integer angleRoll;
 
     /** comments:扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析 */
+    @ApiModelProperty("扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析")
     private java.nio.ByteBuffer extInfo;
 
     /** comments:外键,人脸特征数据MD5 id */
+    @ApiModelProperty("外键,人脸特征数据MD5 id")
     private String featureMd5;
 
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
+    @ApiModelProperty("columns modified flag")
     private long modified;
     /** columns initialized flag */
+    @ApiModelProperty("columns initialized flag")
     private long initialized;
+    /** new record flag  */
+    @ApiModelProperty("new record flag")
     private boolean isNew;        
     /** 
      * set immutable status

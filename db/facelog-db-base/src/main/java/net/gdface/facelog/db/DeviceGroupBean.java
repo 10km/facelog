@@ -13,6 +13,8 @@ import java.util.Objects;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftField.Requiredness;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 /**
  * DeviceGroupBean is a mapping of fl_device_group Table.
  * <br>Meta Data Information (in progress):
@@ -22,6 +24,7 @@ import com.facebook.swift.codec.ThriftField.Requiredness;
  * @author guyadong
 */
 @ThriftStruct
+@ApiModel(description="设备组信息")
 public final class DeviceGroupBean
     implements Serializable,BaseBean<DeviceGroupBean>,Comparable<DeviceGroupBean>,Constant,Cloneable
 {
@@ -29,39 +32,53 @@ public final class DeviceGroupBean
     /** NULL {@link DeviceGroupBean} bean , IMMUTABLE instance */
     public static final DeviceGroupBean NULL = new DeviceGroupBean().asNULL().asImmutable();
     /** comments:设备组id */
+    @ApiModelProperty("设备组id")
     private Integer id;
 
     /** comments:设备组名 */
+    @ApiModelProperty("设备组名")
     private String name;
 
     /** comments:是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可 */
+    @ApiModelProperty("是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可")
     private Integer leaf;
 
     /** comments:上一级设备组id */
+    @ApiModelProperty("上一级设备组id")
     private Integer parent;
 
     /** comments:指向人员组id,用于应用层定义管理员/操作员的管理边界,此字段不为null代表此设备组为管理边界,指向的人员组为此设备组的拥有者的顶级组 */
+    @ApiModelProperty("指向人员组id,用于应用层定义管理员/操作员的管理边界,此字段不为null代表此设备组为管理边界,指向的人员组为此设备组的拥有者的顶级组")
     private Integer rootGroup;
 
     /** comments:备注 */
+    @ApiModelProperty("备注")
     private String remark;
 
     /** comments:应用项目自定义二进制扩展字段(最大64KB) */
+    @ApiModelProperty("应用项目自定义二进制扩展字段(最大64KB)")
     private java.nio.ByteBuffer extBin;
 
     /** comments:应用项目自定义文本扩展字段(最大64KB) */
+    @ApiModelProperty("应用项目自定义文本扩展字段(最大64KB)")
     private String extTxt;
 
+    @ApiModelProperty("create_time")
     private java.util.Date createTime;
 
+    @ApiModelProperty("update_time")
     private java.util.Date updateTime;
 
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
+    @ApiModelProperty("columns modified flag")
     private long modified;
     /** columns initialized flag */
+    @ApiModelProperty("columns initialized flag")
     private long initialized;
+    /** new record flag  */
+    @ApiModelProperty("new record flag")
     private boolean isNew;        
     /** 
      * set immutable status

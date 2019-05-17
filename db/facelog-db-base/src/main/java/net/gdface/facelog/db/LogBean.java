@@ -13,6 +13,8 @@ import java.util.Objects;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftField.Requiredness;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 /**
  * LogBean is a mapping of fl_log Table.
  * <br>Meta Data Information (in progress):
@@ -22,6 +24,7 @@ import com.facebook.swift.codec.ThriftField.Requiredness;
  * @author guyadong
 */
 @ThriftStruct
+@ApiModel(description="人脸验证日志,记录所有通过验证的人员")
 public final class LogBean
     implements Serializable,BaseBean<LogBean>,Comparable<LogBean>,Constant,Cloneable
 {
@@ -29,37 +32,50 @@ public final class LogBean
     /** NULL {@link LogBean} bean , IMMUTABLE instance */
     public static final LogBean NULL = new LogBean().asNULL().asImmutable();
     /** comments:日志id */
+    @ApiModelProperty("日志id")
     private Integer id;
 
     /** comments:外键,用户id */
+    @ApiModelProperty("外键,用户id")
     private Integer personId;
 
     /** comments:外键,日志来源设备id */
+    @ApiModelProperty("外键,日志来源设备id")
     private Integer deviceId;
 
     /** comments:外键,用于验证身份的人脸特征数据MD5 id */
+    @ApiModelProperty("外键,用于验证身份的人脸特征数据MD5 id")
     private String verifyFeature;
 
     /** comments:外键,数据库中相似度最高的人脸 id */
+    @ApiModelProperty("外键,数据库中相似度最高的人脸 id")
     private Integer compareFace;
 
     /** comments:验证状态,NULL,0:允许通过,其他:拒绝 */
+    @ApiModelProperty("验证状态,NULL,0:允许通过,其他:拒绝")
     private Integer verifyStatus;
 
     /** comments:验证相似度 */
+    @ApiModelProperty("验证相似度")
     private Double similarty;
 
     /** comments:验证时间(可能由前端设备提供时间) */
+    @ApiModelProperty("验证时间(可能由前端设备提供时间)")
     private java.util.Date verifyTime;
 
+    @ApiModelProperty("create_time")
     private java.util.Date createTime;
 
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
+    @ApiModelProperty("columns modified flag")
     private long modified;
     /** columns initialized flag */
+    @ApiModelProperty("columns initialized flag")
     private long initialized;
+    /** new record flag  */
+    @ApiModelProperty("new record flag")
     private boolean isNew;        
     /** 
      * set immutable status

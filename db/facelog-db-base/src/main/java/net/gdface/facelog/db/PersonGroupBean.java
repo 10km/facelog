@@ -13,6 +13,8 @@ import java.util.Objects;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftField.Requiredness;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 /**
  * PersonGroupBean is a mapping of fl_person_group Table.
  * <br>Meta Data Information (in progress):
@@ -22,6 +24,7 @@ import com.facebook.swift.codec.ThriftField.Requiredness;
  * @author guyadong
 */
 @ThriftStruct
+@ApiModel(description="用户组信息")
 public final class PersonGroupBean
     implements Serializable,BaseBean<PersonGroupBean>,Comparable<PersonGroupBean>,Constant,Cloneable
 {
@@ -29,40 +32,55 @@ public final class PersonGroupBean
     /** NULL {@link PersonGroupBean} bean , IMMUTABLE instance */
     public static final PersonGroupBean NULL = new PersonGroupBean().asNULL().asImmutable();
     /** comments:用户组id */
+    @ApiModelProperty("用户组id")
     private Integer id;
 
     /** comments:用户组名 */
+    @ApiModelProperty("用户组名")
     private String name;
 
     /** comments:是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可 */
+    @ApiModelProperty("是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可")
     private Integer leaf;
 
     /** comments:上一级用户组id */
+    @ApiModelProperty("上一级用户组id")
     private Integer parent;
 
     /** comments:指向设备组id,用于应用层定义管理员/操作员的管理边界,此字段不为null代表此用户组为管理边界,指向的设备组为此用户组的设备管理边界,
   对于属于此组的管理员和操作员都只能管理此组内的用户及对应设备组内的设备 */
+    @ApiModelProperty("指向设备组id,用于应用层定义管理员/操作员的管理边界,此字段不为null代表此用户组为管理边界,指向的设备组为此用户组的设备管理边界,"
++"  对于属于此组的管理员和操作员都只能管理此组内的用户及对应设备组内的设备")
     private Integer rootGroup;
 
     /** comments:备注 */
+    @ApiModelProperty("备注")
     private String remark;
 
     /** comments:应用项目自定义二进制扩展字段(最大64KB) */
+    @ApiModelProperty("应用项目自定义二进制扩展字段(最大64KB)")
     private java.nio.ByteBuffer extBin;
 
     /** comments:应用项目自定义文本扩展字段(最大64KB) */
+    @ApiModelProperty("应用项目自定义文本扩展字段(最大64KB)")
     private String extTxt;
 
+    @ApiModelProperty("create_time")
     private java.util.Date createTime;
 
+    @ApiModelProperty("update_time")
     private java.util.Date updateTime;
 
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
+    @ApiModelProperty("columns modified flag")
     private long modified;
     /** columns initialized flag */
+    @ApiModelProperty("columns initialized flag")
     private long initialized;
+    /** new record flag  */
+    @ApiModelProperty("new record flag")
     private boolean isNew;        
     /** 
      * set immutable status

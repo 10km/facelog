@@ -13,6 +13,8 @@ import java.util.Objects;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftField.Requiredness;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 /**
  * StoreBean is a mapping of fl_store Table.
  * <br>Meta Data Information (in progress):
@@ -22,6 +24,7 @@ import com.facebook.swift.codec.ThriftField.Requiredness;
  * @author guyadong
 */
 @ThriftStruct
+@ApiModel(description="二进制数据存储表")
 public final class StoreBean
     implements Serializable,BaseBean<StoreBean>,Comparable<StoreBean>,Constant,Cloneable
 {
@@ -29,20 +32,27 @@ public final class StoreBean
     /** NULL {@link StoreBean} bean , IMMUTABLE instance */
     public static final StoreBean NULL = new StoreBean().asNULL().asImmutable();
     /** comments:主键,md5检验码 */
+    @ApiModelProperty("主键,md5检验码")
     private String md5;
 
     /** comments:编码类型,GBK,UTF8... */
+    @ApiModelProperty("编码类型,GBK,UTF8...")
     private String encoding;
 
     /** comments:二进制数据(最大16MB) */
+    @ApiModelProperty("二进制数据(最大16MB)")
     private java.nio.ByteBuffer data;
 
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
+    @ApiModelProperty("columns modified flag")
     private long modified;
     /** columns initialized flag */
+    @ApiModelProperty("columns initialized flag")
     private long initialized;
+    /** new record flag  */
+    @ApiModelProperty("new record flag")
     private boolean isNew;        
     /** 
      * set immutable status
