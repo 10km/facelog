@@ -110,7 +110,7 @@ public class IFaceLogSpringController {
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
     public Response addFeature(@RequestParam("feature") byte[] feature,
         @RequestParam("personId") Integer personId,
-        @RequestBody List<FaceBean> faecBeans,
+        @RequestParam("faecBeans") List<FaceBean> faecBeans,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -237,7 +237,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "beans", value = "", type="body", dataType="List"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response addLogs(@RequestBody List<LogBean> beans,
+    public Response addLogs(@RequestParam("beans") List<LogBean> beans,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1004,7 +1004,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personIdList", value = "人员id列表", type="body", dataType="List"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response deletePersons(@RequestBody List<Integer> personIdList,
+    public Response deletePersons(@RequestParam("personIdList") List<Integer> personIdList,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1031,7 +1031,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "papersNumlist", value = "证件号码列表", type="body", dataType="List"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response deletePersonsByPapersNum(@RequestBody List<String> papersNumlist,
+    public Response deletePersonsByPapersNum(@RequestParam("papersNumlist") List<String> papersNumlist,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1085,7 +1085,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personIdList", value = "人员id列表", type="body", dataType="List"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response disablePerson(@RequestBody List<Integer> personIdList,
+    public Response disablePerson(@RequestParam("personIdList") List<Integer> personIdList,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1243,7 +1243,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回设备组id列表指定的数据库记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "groupIdList", value = "", type="body", dataType="List")})
-    public Response getDeviceGroups(@RequestBody List<Integer> groupIdList) 
+    public Response getDeviceGroups(@RequestParam("groupIdList") List<Integer> groupIdList) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1358,7 +1358,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回 {@code idList} 指定的设备记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "idList", value = "", type="body", dataType="List")})
-    public Response getDevices(@RequestBody List<Integer> idList) 
+    public Response getDevices(@RequestParam("idList") List<Integer> idList) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1471,7 +1471,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "根据MD5校验码返回人脸特征数据记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "md5", value = "md5列表", type="body", dataType="List")})
-    public Response getFeatures(@RequestBody List<String> md5) 
+    public Response getFeatures(@RequestParam("md5") List<String> md5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1582,7 +1582,7 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "deviceId", value = "", type="form", dataType="int"),
         @ApiImplicitParam(name = "personGroupIdList", value = "", type="body", dataType="List")})
     public Response getGroupPermits(@RequestParam("deviceId") int deviceId,
-        @RequestBody List<Integer> personGroupIdList) 
+        @RequestParam("personGroupIdList") List<Integer> personGroupIdList) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1760,7 +1760,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回人员组id列表指定的数据库记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "groupIdList", value = "", type="body", dataType="List")})
-    public Response getPersonGroups(@RequestBody List<Integer> groupIdList) 
+    public Response getPersonGroups(@RequestParam("groupIdList") List<Integer> groupIdList) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1857,7 +1857,7 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "deviceId", value = "", type="form", dataType="int"),
         @ApiImplicitParam(name = "personIdList", value = "", type="body", dataType="List")})
     public Response getPersonPermits(@RequestParam("deviceId") int deviceId,
-        @RequestBody List<Integer> personIdList) 
+        @RequestParam("personIdList") List<Integer> personIdList) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1879,7 +1879,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回 list 指定的人员记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "idList", value = "人员id列表", type="body", dataType="List")})
-    public Response getPersons(@RequestBody List<Integer> idList) 
+    public Response getPersons(@RequestParam("idList") List<Integer> idList) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -3093,7 +3093,7 @@ public class IFaceLogSpringController {
     public Response savePerson(@RequestBody PersonBean bean,
         @RequestParam("idPhoto") byte[] idPhoto,
         @RequestParam("feature") byte[] feature,
-        @RequestBody List<FaceBean> faceBeans,
+        @RequestParam("faceBeans") List<FaceBean> faceBeans,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -3306,7 +3306,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "beans", value = "", type="body", dataType="List"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response savePersons(@RequestBody List<PersonBean> beans,
+    public Response savePersons(@RequestParam("beans") List<PersonBean> beans,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -3419,7 +3419,7 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "personIdList", value = "人员id列表", type="body", dataType="List"),
         @ApiImplicitParam(name = "expiryDate", value = "失效日期", type="form", dataType="long"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response setPersonExpiryDate(@RequestBody List<Integer> personIdList,
+    public Response setPersonExpiryDate(@RequestParam("personIdList") List<Integer> personIdList,
         @RequestParam("expiryDate") long expiryDate,
         @RequestBody Token token) 
         {
