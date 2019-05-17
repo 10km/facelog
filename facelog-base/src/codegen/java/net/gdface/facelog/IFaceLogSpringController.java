@@ -109,7 +109,7 @@ public class IFaceLogSpringController {
         @ApiImplicitParam(name = "faecBeans", value = "生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null", type="body", dataType="List"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
     public Response addFeature(@RequestParam("feature") byte[] feature,
-        @RequestBody Integer personId,
+        @RequestParam("personId") Integer personId,
         @RequestBody List<FaceBean> faecBeans,
         @RequestBody Token token) 
         {
@@ -145,9 +145,9 @@ public class IFaceLogSpringController {
         @ApiImplicitParam(name = "deviceId", value = "图像来源设备id,可为null", type="form", dataType="Integer"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
     public Response addFeature(@RequestParam("feature") byte[] feature,
-        @RequestBody Integer personId,
+        @RequestParam("personId") Integer personId,
         @RequestBody Map<java.nio.ByteBuffer, FaceBean> faceInfo,
-        @RequestBody Integer deviceId,
+        @RequestParam("deviceId") Integer deviceId,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -180,9 +180,9 @@ public class IFaceLogSpringController {
         @ApiImplicitParam(name = "personId", value = "关联的人员id(fl_person.id),可为null", type="form", dataType="Integer"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
     public Response addImage(@RequestParam("imageData") byte[] imageData,
-        @RequestBody Integer deviceId,
+        @RequestParam("deviceId") Integer deviceId,
         @RequestBody FaceBean faceBean,
-        @RequestBody Integer personId,
+        @RequestParam("personId") Integer personId,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -269,8 +269,8 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "deviceGroupId", value = "外键,设备组id", type="form", dataType="int"),
         @ApiImplicitParam(name = "personGroupId", value = "外键,人员组id", type="form", dataType="int"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response addPermit(@RequestBody int deviceGroupId,
-        @RequestBody int personGroupId,
+    public Response addPermit(@RequestParam("deviceGroupId") int deviceGroupId,
+        @RequestParam("personGroupId") int personGroupId,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -356,7 +356,7 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token"),
         @ApiImplicitParam(name = "duration", value = "通道有效时间(秒) 大于0有效,否则使用默认的有效期", type="form", dataType="long")})
     public Response applyAckChannel(@RequestBody Token token,
-        @RequestBody long duration) 
+        @RequestParam("duration") long duration) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -407,9 +407,9 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "personId", value = "用户ID", type="form", dataType="int"),
         @ApiImplicitParam(name = "password", value = "密码", type="form", dataType="String"),
         @ApiImplicitParam(name = "isMd5", value = "为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)", type="form", dataType="boolean")})
-    public Response applyPersonToken(@RequestBody int personId,
-        @RequestBody String password,
-        @RequestBody boolean isMd5) 
+    public Response applyPersonToken(@RequestParam("personId") int personId,
+        @RequestParam("password") String password,
+        @RequestParam("isMd5") boolean isMd5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -434,8 +434,8 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "password", value = "root用户密码", type="form", dataType="String"),
         @ApiImplicitParam(name = "isMd5", value = "为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)", type="form", dataType="boolean")})
-    public Response applyRootToken(@RequestBody String password,
-        @RequestBody boolean isMd5) 
+    public Response applyRootToken(@RequestParam("password") String password,
+        @RequestParam("isMd5") boolean isMd5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -463,9 +463,9 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "userid", value = "用户ID(为-1时为root)", type="form", dataType="int"),
         @ApiImplicitParam(name = "password", value = "用户密码", type="form", dataType="String"),
         @ApiImplicitParam(name = "isMd5", value = "为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)", type="form", dataType="boolean")})
-    public Response applyUserToken(@RequestBody int userid,
-        @RequestBody String password,
-        @RequestBody boolean isMd5) 
+    public Response applyUserToken(@RequestParam("userid") int userid,
+        @RequestParam("password") String password,
+        @RequestParam("isMd5") boolean isMd5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -498,8 +498,8 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "personGroupId", value = "人员组id", type="form", dataType="Integer"),
         @ApiImplicitParam(name = "deviceGroupId", value = "设备组id", type="form", dataType="Integer"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response bindBorder(@RequestBody Integer personGroupId,
-        @RequestBody Integer deviceGroupId,
+    public Response bindBorder(@RequestParam("personGroupId") Integer personGroupId,
+        @RequestParam("deviceGroupId") Integer deviceGroupId,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -525,7 +525,7 @@ public class IFaceLogSpringController {
 +" 自引用字段:fl_device_group(parent)",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "deviceGroupId", value = "", type="form", dataType="int")})
-    public Response childListForDeviceGroup(@RequestBody int deviceGroupId) 
+    public Response childListForDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -549,7 +549,7 @@ public class IFaceLogSpringController {
 +" 自引用字段:fl_person_group(parent)",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personGroupId", value = "", type="form", dataType="int")})
-    public Response childListForPersonGroup(@RequestBody int personGroupId) 
+    public Response childListForPersonGroup(@RequestParam("personGroupId") int personGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -571,7 +571,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回满足{@code where} SQL条件语句的fl_device记录总数",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "where", value = "", type="form", dataType="String")})
-    public Response countDeviceByWhere(@RequestBody String where) 
+    public Response countDeviceByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -591,7 +591,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回满足{@code where} SQL条件语句的fl_device_group记录总数",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "where", value = "", type="form", dataType="String")})
-    public Response countDeviceGroupByWhere(@RequestBody String where) 
+    public Response countDeviceGroupByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -613,7 +613,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回满足{@code where}条件的日志记录(fl_log)数目",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "where", value = "为{@code null}时返回所有记录", type="form", dataType="String")})
-    public Response countLogByWhere(@RequestBody String where) 
+    public Response countLogByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -634,7 +634,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "timestamp", value = "为{@code null}时返回所有记录", type="form", dataType="long")})
-    public Response countLogLightByVerifyTime(@RequestBody long timestamp) 
+    public Response countLogLightByVerifyTime(@RequestParam("timestamp") long timestamp) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -656,7 +656,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回符合{@code where}条件的记录条数",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "where", value = "", type="form", dataType="String")})
-    public Response countLogLightByWhere(@RequestBody String where) 
+    public Response countLogLightByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -678,7 +678,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回满足{@code where}条件的日志记录(fl_person)数目",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "where", value = "为{@code null}时返回所有记录", type="form", dataType="String")})
-    public Response countPersonByWhere(@RequestBody String where) 
+    public Response countPersonByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -699,7 +699,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回满足{@code where} SQL条件语句的 fl_person_group 记录总数",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "where", value = "为{@code null}时返回所有记录", type="form", dataType="String")})
-    public Response countPersonGroupByWhere(@RequestBody String where) 
+    public Response countPersonGroupByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -726,8 +726,8 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "personId", value = "", type="form", dataType="int"),
         @ApiImplicitParam(name = "deleteImage", value = "是否删除关联的 image记录", type="form", dataType="boolean"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response deleteAllFeaturesByPersonId(@RequestBody int personId,
-        @RequestBody boolean deleteImage,
+    public Response deleteAllFeaturesByPersonId(@RequestParam("personId") int personId,
+        @RequestParam("deleteImage") boolean deleteImage,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -757,7 +757,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "deviceGroupId", value = "", type="form", dataType="int"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response deleteDeviceGroup(@RequestBody int deviceGroupId,
+    public Response deleteDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -785,8 +785,8 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "featureMd5", value = "", type="form", dataType="String"),
         @ApiImplicitParam(name = "deleteImage", value = "是否删除关联的 image记录", type="form", dataType="boolean"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response deleteFeature(@RequestBody String featureMd5,
-        @RequestBody boolean deleteImage,
+    public Response deleteFeature(@RequestParam("featureMd5") String featureMd5,
+        @RequestParam("deleteImage") boolean deleteImage,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -811,7 +811,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "deviceGroupId", value = "", type="form", dataType="int"),
         @ApiImplicitParam(name = "token", value = "令牌", type="body", dataType="Token")})
-    public Response deleteGroupPermitOnDeviceGroup(@RequestBody int deviceGroupId,
+    public Response deleteGroupPermitOnDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -836,7 +836,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "imageMd5", value = "", type="form", dataType="String"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response deleteImage(@RequestBody String imageMd5,
+    public Response deleteImage(@RequestParam("imageMd5") String imageMd5,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -894,7 +894,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personId", value = "", type="form", dataType="int"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response deletePerson(@RequestBody int personId,
+    public Response deletePerson(@RequestParam("personId") int personId,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -922,7 +922,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "papersNum", value = "证件号码", type="form", dataType="String"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response deletePersonByPapersNum(@RequestBody String papersNum,
+    public Response deletePersonByPapersNum(@RequestParam("papersNum") String papersNum,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -952,7 +952,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personGroupId", value = "", type="form", dataType="int"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response deletePersonGroup(@RequestBody int personGroupId,
+    public Response deletePersonGroup(@RequestParam("personGroupId") int personGroupId,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -977,7 +977,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personGroupId", value = "", type="form", dataType="int"),
         @ApiImplicitParam(name = "token", value = "令牌", type="body", dataType="Token")})
-    public Response deletePersonGroupPermit(@RequestBody int personGroupId,
+    public Response deletePersonGroupPermit(@RequestParam("personGroupId") int personGroupId,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1058,7 +1058,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personId", value = "", type="form", dataType="int"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response disablePerson(@RequestBody int personId,
+    public Response disablePerson(@RequestParam("personId") int personId,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1109,7 +1109,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "判断id指定的设备记录是否存在",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "", type="form", dataType="int")})
-    public Response existsDevice(@RequestBody int id) 
+    public Response existsDevice(@RequestParam("id") int id) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1131,7 +1131,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "判断md5指定的特征记录是否存在",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "md5", value = "", type="form", dataType="String")})
-    public Response existsFeature(@RequestBody String md5) 
+    public Response existsFeature(@RequestParam("md5") String md5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1153,7 +1153,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "判断md5指定的图像记录是否存在",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "md5", value = "", type="form", dataType="String")})
-    public Response existsImage(@RequestBody String md5) 
+    public Response existsImage(@RequestParam("md5") String md5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1175,7 +1175,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "判断是否存在personId指定的人员记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "persionId", value = "", type="form", dataType="int")})
-    public Response existsPerson(@RequestBody int persionId) 
+    public Response existsPerson(@RequestParam("persionId") int persionId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1197,7 +1197,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回{@code deviceId}指定的设备记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "deviceId", value = "", type="form", dataType="int")})
-    public Response getDevice(@RequestBody int deviceId) 
+    public Response getDevice(@RequestParam("deviceId") int deviceId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1220,7 +1220,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "根据设备组id返回数据库记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "deviceGroupId", value = "", type="form", dataType="int")})
-    public Response getDeviceGroup(@RequestBody int deviceGroupId) 
+    public Response getDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1266,7 +1266,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回({@code deviceId})指定的设备所属所有设备组<br>",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "deviceId", value = "", type="form", dataType="int")})
-    public Response getDeviceGroupsBelongs(@RequestBody int deviceId) 
+    public Response getDeviceGroupsBelongs(@RequestParam("deviceId") int deviceId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1290,7 +1290,7 @@ public class IFaceLogSpringController {
 +" 不排序,不包含重复id",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personGroupId", value = "为{@code null}返回空表", type="form", dataType="int")})
-    public Response getDeviceGroupsPermit(@RequestBody int personGroupId) 
+    public Response getDeviceGroupsPermit(@RequestParam("personGroupId") int personGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1314,7 +1314,7 @@ public class IFaceLogSpringController {
 +" 不排序,不包含重复id,本方法不会对{@code personGroupId}的父结点向上回溯",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personGroupId", value = "", type="form", dataType="int")})
-    public Response getDeviceGroupsPermittedBy(@RequestBody int personGroupId) 
+    public Response getDeviceGroupsPermittedBy(@RequestParam("personGroupId") int personGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1336,7 +1336,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回featureMd5的人脸特征记录关联的设备id<br>",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "featureMd5", value = "", type="form", dataType="String")})
-    public Response getDeviceIdOfFeature(@RequestBody String featureMd5) 
+    public Response getDeviceIdOfFeature(@RequestParam("featureMd5") String featureMd5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1383,7 +1383,7 @@ public class IFaceLogSpringController {
 +" 如果没有下属设备记录则返回空表",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "deviceGroupId", value = "", type="form", dataType="int")})
-    public Response getDevicesOfGroup(@RequestBody int deviceGroupId) 
+    public Response getDevicesOfGroup(@RequestParam("deviceGroupId") int deviceGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1405,7 +1405,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "根据MD5校验码返回人脸特征数据记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "md5", value = "", type="form", dataType="String")})
-    public Response getFeature(@RequestBody String md5) 
+    public Response getFeature(@RequestParam("md5") String md5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1427,7 +1427,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回 persionId 关联的所有人脸特征记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personId", value = "fl_person.id", type="form", dataType="int")})
-    public Response getFeatureBeansByPersonId(@RequestBody int personId) 
+    public Response getFeatureBeansByPersonId(@RequestParam("personId") int personId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1449,7 +1449,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "根据MD5校验码返回人脸特征数据",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "md5", value = "", type="form", dataType="String")})
-    public Response getFeatureBytes(@RequestBody String md5) 
+    public Response getFeatureBytes(@RequestParam("md5") String md5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1493,7 +1493,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回指定人员{@code personId}关联的所有特征<br>",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personId", value = "", type="form", dataType="int")})
-    public Response getFeaturesOfPerson(@RequestBody int personId) 
+    public Response getFeaturesOfPerson(@RequestParam("personId") int personId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1526,8 +1526,8 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "deviceId", value = "", type="form", dataType="int"),
         @ApiImplicitParam(name = "personGroupId", value = "", type="form", dataType="int")})
-    public Response getGroupPermit(@RequestBody int deviceId,
-        @RequestBody int personGroupId) 
+    public Response getGroupPermit(@RequestParam("deviceId") int deviceId,
+        @RequestParam("personGroupId") int personGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1559,8 +1559,8 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "deviceGroupId", value = "", type="form", dataType="int"),
         @ApiImplicitParam(name = "personGroupId", value = "", type="form", dataType="int")})
-    public Response getGroupPermitOnDeviceGroup(@RequestBody int deviceGroupId,
-        @RequestBody int personGroupId) 
+    public Response getGroupPermitOnDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId,
+        @RequestParam("personGroupId") int personGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1581,7 +1581,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "deviceId", value = "", type="form", dataType="int"),
         @ApiImplicitParam(name = "personGroupIdList", value = "", type="body", dataType="List")})
-    public Response getGroupPermits(@RequestBody int deviceId,
+    public Response getGroupPermits(@RequestParam("deviceId") int deviceId,
         @RequestBody List<Integer> personGroupIdList) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1604,7 +1604,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "根据图像的MD5校验码返回图像记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "imageMD5", value = "", type="form", dataType="String")})
-    public Response getImage(@RequestBody String imageMD5) 
+    public Response getImage(@RequestParam("imageMD5") String imageMD5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1626,7 +1626,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "根据图像的MD5校验码返回图像数据",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "imageMD5", value = "", type="form", dataType="String")})
-    public Response getImageBytes(@RequestBody String imageMD5) 
+    public Response getImageBytes(@RequestParam("imageMD5") String imageMD5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1648,7 +1648,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回featureMd5的人脸特征记录关联的所有图像记录id(MD5)",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "featureMd5", value = "人脸特征id(MD5)", type="form", dataType="String")})
-    public Response getImagesAssociatedByFeature(@RequestBody String featureMd5) 
+    public Response getImagesAssociatedByFeature(@RequestParam("featureMd5") String featureMd5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1670,7 +1670,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回 persionId 关联的所有日志记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personId", value = "fl_person.id", type="form", dataType="int")})
-    public Response getLogBeansByPersonId(@RequestBody int personId) 
+    public Response getLogBeansByPersonId(@RequestParam("personId") int personId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1692,7 +1692,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回personId指定的人员记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personId", value = "", type="form", dataType="int")})
-    public Response getPerson(@RequestBody int personId) 
+    public Response getPerson(@RequestParam("personId") int personId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1714,7 +1714,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "根据证件号码返回人员记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "papersNum", value = "", type="form", dataType="String")})
-    public Response getPersonByPapersNum(@RequestBody String papersNum) 
+    public Response getPersonByPapersNum(@RequestParam("papersNum") String papersNum) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1737,7 +1737,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "根据人员组id返回数据库记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personGroupId", value = "", type="form", dataType="int")})
-    public Response getPersonGroup(@RequestBody int personGroupId) 
+    public Response getPersonGroup(@RequestParam("personGroupId") int personGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1783,7 +1783,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回({@code personId})指定的人员所属所有人员组<br>",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personId", value = "", type="form", dataType="int")})
-    public Response getPersonGroupsBelongs(@RequestBody int personId) 
+    public Response getPersonGroupsBelongs(@RequestParam("personId") int personId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1807,7 +1807,7 @@ public class IFaceLogSpringController {
 +"  不排序,不包含重复id,本方法不会对{@link PersonGroupBean}的父结点向上回溯",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "deviceGroupId", value = "", type="form", dataType="int")})
-    public Response getPersonGroupsPermittedBy(@RequestBody int deviceGroupId) 
+    public Response getPersonGroupsPermittedBy(@RequestParam("deviceGroupId") int deviceGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1834,8 +1834,8 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "deviceId", value = "", type="form", dataType="int"),
         @ApiImplicitParam(name = "personId", value = "", type="form", dataType="int")})
-    public Response getPersonPermit(@RequestBody int deviceId,
-        @RequestBody int personId) 
+    public Response getPersonPermit(@RequestParam("deviceId") int deviceId,
+        @RequestParam("personId") int personId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1856,7 +1856,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "deviceId", value = "", type="form", dataType="int"),
         @ApiImplicitParam(name = "personIdList", value = "", type="body", dataType="List")})
-    public Response getPersonPermits(@RequestBody int deviceId,
+    public Response getPersonPermits(@RequestParam("deviceId") int deviceId,
         @RequestBody List<Integer> personIdList) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1904,7 +1904,7 @@ public class IFaceLogSpringController {
 +" 如果没有下属人员记录则返回空表",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personGroupId", value = "", type="form", dataType="int")})
-    public Response getPersonsOfGroup(@RequestBody int personGroupId) 
+    public Response getPersonsOfGroup(@RequestParam("personGroupId") int personGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -1934,7 +1934,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "key", value = "", type="form", dataType="String"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response getProperty(@RequestBody String key,
+    public Response getProperty(@RequestParam("key") String key,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -2024,7 +2024,7 @@ public class IFaceLogSpringController {
 +" 如果没有子节点则返回空表",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "deviceGroupId", value = "", type="form", dataType="int")})
-    public Response getSubDeviceGroup(@RequestBody int deviceGroupId) 
+    public Response getSubDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2049,7 +2049,7 @@ public class IFaceLogSpringController {
 +" 如果没有子节点则返回空表",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personGroupId", value = "", type="form", dataType="int")})
-    public Response getSubPersonGroup(@RequestBody int personGroupId) 
+    public Response getSubPersonGroup(@RequestParam("personGroupId") int personGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2071,7 +2071,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "判断 personId 指定的人员记录是否过期",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personId", value = "", type="form", dataType="int")})
-    public Response isDisable(@RequestBody int personId) 
+    public Response isDisable(@RequestParam("personId") int personId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2114,7 +2114,7 @@ public class IFaceLogSpringController {
 +" 通道过期或不存在都返回{@code false}",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "ackChannel", value = "", type="form", dataType="String")})
-    public Response isValidAckChannel(@RequestBody String ackChannel) 
+    public Response isValidAckChannel(@RequestParam("ackChannel") String ackChannel) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2138,7 +2138,7 @@ public class IFaceLogSpringController {
 +" 序列号过期或不存在都返回{@code false}",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cmdSn", value = "", type="form", dataType="long")})
-    public Response isValidCmdSn(@RequestBody long cmdSn) 
+    public Response isValidCmdSn(@RequestParam("cmdSn") long cmdSn) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2186,9 +2186,9 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "userId", value = "用户id字符串,root用户id即为{@link CommonConstant#ROOT_NAME}", type="form", dataType="String"),
         @ApiImplicitParam(name = "password", value = "用户密码", type="form", dataType="String"),
         @ApiImplicitParam(name = "isMd5", value = "为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)", type="form", dataType="boolean")})
-    public Response isValidPassword(@RequestBody String userId,
-        @RequestBody String password,
-        @RequestBody boolean isMd5) 
+    public Response isValidPassword(@RequestParam("userId") String userId,
+        @RequestParam("password") String password,
+        @RequestParam("isMd5") boolean isMd5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2302,7 +2302,7 @@ public class IFaceLogSpringController {
 +" 自引用字段:fl_device_group(parent)",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "deviceGroupId", value = "", type="form", dataType="int")})
-    public Response listOfParentForDeviceGroup(@RequestBody int deviceGroupId) 
+    public Response listOfParentForDeviceGroup(@RequestParam("deviceGroupId") int deviceGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2326,7 +2326,7 @@ public class IFaceLogSpringController {
 +" 自引用字段:fl_person_group(parent)",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personGroupId", value = "", type="form", dataType="int")})
-    public Response listOfParentForPersonGroup(@RequestBody int personGroupId) 
+    public Response listOfParentForPersonGroup(@RequestParam("personGroupId") int personGroupId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2371,9 +2371,9 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "where", value = "SQL 条件语句", type="form", dataType="String"),
         @ApiImplicitParam(name = "startRow", value = "记录起始行号 (first row = 1, last row = -1)", type="form", dataType="int"),
         @ApiImplicitParam(name = "numRows", value = "返回记录条数 为负值是返回{@code startRow}开始的所有行", type="form", dataType="int")})
-    public Response loadDeviceByWhere(@RequestBody String where,
-        @RequestBody int startRow,
-        @RequestBody int numRows) 
+    public Response loadDeviceByWhere(@RequestParam("where") String where,
+        @RequestParam("startRow") int startRow,
+        @RequestParam("numRows") int numRows) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2399,9 +2399,9 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "where", value = "SQL 条件语句,为{@code null}或空时加载所有记录", type="form", dataType="String"),
         @ApiImplicitParam(name = "startRow", value = "返回记录的起始行(首行=1,尾行=-1)", type="form", dataType="int"),
         @ApiImplicitParam(name = "numRows", value = "返回记录条数(小于0时返回所有记录)", type="form", dataType="int")})
-    public Response loadDeviceGroupByWhere(@RequestBody String where,
-        @RequestBody int startRow,
-        @RequestBody int numRows) 
+    public Response loadDeviceGroupByWhere(@RequestParam("where") String where,
+        @RequestParam("startRow") int startRow,
+        @RequestParam("numRows") int numRows) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2423,7 +2423,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "查询{@code where}条件指定的记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "where", value = "返回记录条数(小于0时返回所有记录)", type="form", dataType="String")})
-    public Response loadDeviceGroupIdByWhere(@RequestBody String where) 
+    public Response loadDeviceGroupIdByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2445,7 +2445,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "根据{@code where}指定的查询条件查询设备记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "where", value = "", type="form", dataType="String")})
-    public Response loadDeviceIdByWhere(@RequestBody String where) 
+    public Response loadDeviceIdByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2469,7 +2469,7 @@ public class IFaceLogSpringController {
 +" 返回 fl_feature.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_feature记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "timestamp", value = "", type="form", dataType="long")})
-    public Response loadFeatureMd5ByUpdate(@RequestBody long timestamp) 
+    public Response loadFeatureMd5ByUpdate(@RequestParam("timestamp") long timestamp) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2497,9 +2497,9 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "where", value = "", type="form", dataType="String"),
         @ApiImplicitParam(name = "startRow", value = "记录起始行号 (first row = 1, last row = -1)", type="form", dataType="int"),
         @ApiImplicitParam(name = "numRows", value = "返回记录条数 为负值是返回{@code startRow}开始的所有行", type="form", dataType="int")})
-    public Response loadLogByWhere(@RequestBody String where,
-        @RequestBody int startRow,
-        @RequestBody int numRows) 
+    public Response loadLogByWhere(@RequestParam("where") String where,
+        @RequestParam("startRow") int startRow,
+        @RequestParam("numRows") int numRows) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2525,9 +2525,9 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "timestamp", value = "返回记录条数 为负值是返回{@code startRow}开始的所有行", type="form", dataType="long"),
         @ApiImplicitParam(name = "startRow", value = "返回记录条数 为负值是返回{@code startRow}开始的所有行", type="form", dataType="int"),
         @ApiImplicitParam(name = "numRows", value = "返回记录条数 为负值是返回{@code startRow}开始的所有行", type="form", dataType="int")})
-    public Response loadLogLightByVerifyTime(@RequestBody long timestamp,
-        @RequestBody int startRow,
-        @RequestBody int numRows) 
+    public Response loadLogLightByVerifyTime(@RequestParam("timestamp") long timestamp,
+        @RequestParam("startRow") int startRow,
+        @RequestParam("numRows") int numRows) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2555,9 +2555,9 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "where", value = "", type="form", dataType="String"),
         @ApiImplicitParam(name = "startRow", value = "", type="form", dataType="int"),
         @ApiImplicitParam(name = "numRows", value = "", type="form", dataType="int")})
-    public Response loadLogLightByWhere(@RequestBody String where,
-        @RequestBody int startRow,
-        @RequestBody int numRows) 
+    public Response loadLogLightByWhere(@RequestParam("where") String where,
+        @RequestParam("startRow") int startRow,
+        @RequestParam("numRows") int numRows) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2581,7 +2581,7 @@ public class IFaceLogSpringController {
 +" 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "timestamp", value = "", type="form", dataType="long")})
-    public Response loadPermitByUpdate(@RequestBody long timestamp) 
+    public Response loadPermitByUpdate(@RequestParam("timestamp") long timestamp) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2607,9 +2607,9 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "where", value = "SQL条件语句", type="form", dataType="String"),
         @ApiImplicitParam(name = "startRow", value = "记录起始行号 (first row = 1, last row = -1)", type="form", dataType="int"),
         @ApiImplicitParam(name = "numRows", value = "返回记录条数 为负值是返回{@code startRow}开始的所有行", type="form", dataType="int")})
-    public Response loadPersonByWhere(@RequestBody String where,
-        @RequestBody int startRow,
-        @RequestBody int numRows) 
+    public Response loadPersonByWhere(@RequestParam("where") String where,
+        @RequestParam("startRow") int startRow,
+        @RequestParam("numRows") int numRows) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2635,9 +2635,9 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "where", value = "SQL 条件语句,为{@code null}或空时加载所有记录", type="form", dataType="String"),
         @ApiImplicitParam(name = "startRow", value = "返回记录的起始行(首行=1,尾行=-1)", type="form", dataType="int"),
         @ApiImplicitParam(name = "numRows", value = "返回记录条数(小于0时返回所有记录)", type="form", dataType="int")})
-    public Response loadPersonGroupByWhere(@RequestBody String where,
-        @RequestBody int startRow,
-        @RequestBody int numRows) 
+    public Response loadPersonGroupByWhere(@RequestParam("where") String where,
+        @RequestParam("startRow") int startRow,
+        @RequestParam("numRows") int numRows) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2659,7 +2659,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "查询{@code where}条件指定的记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "where", value = "返回记录条数(小于0时返回所有记录)", type="form", dataType="String")})
-    public Response loadPersonGroupIdByWhere(@RequestBody String where) 
+    public Response loadPersonGroupIdByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2683,7 +2683,7 @@ public class IFaceLogSpringController {
 +" 返回 fl_person.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_person记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "timestamp", value = "", type="form", dataType="long")})
-    public Response loadPersonIdByUpdateTime(@RequestBody long timestamp) 
+    public Response loadPersonIdByUpdateTime(@RequestParam("timestamp") long timestamp) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2705,7 +2705,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "返回 where 指定的所有人员记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "where", value = "SQL条件语句", type="form", dataType="String")})
-    public Response loadPersonIdByWhere(@RequestBody String where) 
+    public Response loadPersonIdByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2731,7 +2731,7 @@ public class IFaceLogSpringController {
 +" 同时包含fl_feature更新记录引用的fl_person记录",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "timestamp", value = "", type="form", dataType="long")})
-    public Response loadUpdatedPersons(@RequestBody long timestamp) 
+    public Response loadUpdatedPersons(@RequestParam("timestamp") long timestamp) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2905,9 +2905,9 @@ public class IFaceLogSpringController {
         @ApiImplicitParam(name = "featureMd5", value = "人脸特征数据记录id (已经保存在数据库中)", type="form", dataType="String"),
         @ApiImplicitParam(name = "deleteOldFeatureImage", value = "是否删除原特征数据记录间接关联的原始图像记录(fl_image)", type="form", dataType="boolean"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response replaceFeature(@RequestBody Integer personId,
-        @RequestBody String featureMd5,
-        @RequestBody boolean deleteOldFeatureImage,
+    public Response replaceFeature(@RequestParam("personId") Integer personId,
+        @RequestParam("featureMd5") String featureMd5,
+        @RequestParam("deleteOldFeatureImage") boolean deleteOldFeatureImage,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -2935,7 +2935,7 @@ public class IFaceLogSpringController {
 +" 没有找到deviceId指定的记录抛出异常",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "deviceId", value = "", type="form", dataType="Integer")})
-    public Response rootGroupOfDevice(@RequestBody Integer deviceId) 
+    public Response rootGroupOfDevice(@RequestParam("deviceId") Integer deviceId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -2961,7 +2961,7 @@ public class IFaceLogSpringController {
 +" 没有找到personId指定的记录抛出异常",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personId", value = "", type="form", dataType="Integer")})
-    public Response rootGroupOfPerson(@RequestBody Integer personId) 
+    public Response rootGroupOfPerson(@RequestParam("personId") Integer personId) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
@@ -3057,7 +3057,7 @@ public class IFaceLogSpringController {
         @RequestParam("feature") byte[] feature,
         @RequestParam("featureImage") byte[] featureImage,
         @RequestBody FaceBean featureFaceBean,
-        @RequestBody Integer deviceId,
+        @RequestParam("deviceId") Integer deviceId,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -3132,7 +3132,7 @@ public class IFaceLogSpringController {
         @RequestParam("idPhoto") byte[] idPhoto,
         @RequestParam("feature") byte[] feature,
         @RequestBody Map<java.nio.ByteBuffer, FaceBean> faceInfo,
-        @RequestBody Integer deviceId,
+        @RequestParam("deviceId") Integer deviceId,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -3196,7 +3196,7 @@ public class IFaceLogSpringController {
     public Response savePerson(@RequestBody PersonBean bean,
         @RequestParam("idPhoto") byte[] idPhoto,
         @RequestBody FeatureBean featureBean,
-        @RequestBody Integer deviceId,
+        @RequestParam("deviceId") Integer deviceId,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -3226,8 +3226,8 @@ public class IFaceLogSpringController {
         @ApiImplicitParam(name = "featureMd5", value = "用于验证的人脸特征数据对象,可为null", type="form", dataType="String"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
     public Response savePerson(@RequestBody PersonBean bean,
-        @RequestBody String idPhotoMd5,
-        @RequestBody String featureMd5,
+        @RequestParam("idPhotoMd5") String idPhotoMd5,
+        @RequestParam("featureMd5") String featureMd5,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -3388,8 +3388,8 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "personId", value = "", type="form", dataType="int"),
         @ApiImplicitParam(name = "expiryDate", value = "失效日期", type="form", dataType="long"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response setPersonExpiryDate(@RequestBody int personId,
-        @RequestBody long expiryDate,
+    public Response setPersonExpiryDate(@RequestParam("personId") int personId,
+        @RequestParam("expiryDate") long expiryDate,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -3420,7 +3420,7 @@ public class IFaceLogSpringController {
         @ApiImplicitParam(name = "expiryDate", value = "失效日期", type="form", dataType="long"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
     public Response setPersonExpiryDate(@RequestBody List<Integer> personIdList,
-        @RequestBody long expiryDate,
+        @RequestParam("expiryDate") long expiryDate,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -3476,8 +3476,8 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "key", value = "参数名", type="form", dataType="String"),
         @ApiImplicitParam(name = "value", value = "参数值", type="form", dataType="String"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response setProperty(@RequestBody String key,
-        @RequestBody String value,
+    public Response setProperty(@RequestParam("key") String key,
+        @RequestParam("value") String value,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -3505,7 +3505,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "task", value = "任务名", type="form", dataType="String"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response taskQueueOf(@RequestBody String task,
+    public Response taskQueueOf(@RequestParam("task") String task,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -3536,7 +3536,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "task", value = "任务名", type="form", dataType="String"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response taskRegister(@RequestBody String task,
+    public Response taskRegister(@RequestParam("task") String task,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -3572,8 +3572,8 @@ public class IFaceLogSpringController {
             @ApiImplicitParam(name = "personGroupId", value = "人员组id", type="form", dataType="Integer"),
         @ApiImplicitParam(name = "deviceGroupId", value = "设备组id", type="form", dataType="Integer"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response unbindBorder(@RequestBody Integer personGroupId,
-        @RequestBody Integer deviceGroupId,
+    public Response unbindBorder(@RequestParam("personGroupId") Integer personGroupId,
+        @RequestParam("deviceGroupId") Integer deviceGroupId,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -3601,7 +3601,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "deviceId", value = "", type="form", dataType="int"),
         @ApiImplicitParam(name = "token", value = "设备验证令牌", type="body", dataType="Token")})
-    public Response unregisterDevice(@RequestBody int deviceId,
+    public Response unregisterDevice(@RequestParam("deviceId") int deviceId,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
