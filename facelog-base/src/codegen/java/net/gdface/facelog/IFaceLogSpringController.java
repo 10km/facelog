@@ -3029,6 +3029,7 @@ public class IFaceLogSpringController {
         return response;
     }
     /**
+     * 保存人员信息记录
      * <br>{@code DEVICE_ONLY}
      * @param bean 人员信息对象
      * @param idPhoto 标准照图像
@@ -3041,7 +3042,8 @@ public class IFaceLogSpringController {
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/savePersonFull", method = RequestMethod.POST)
-    @ApiOperation(value = "<br>{@code DEVICE_ONLY}",httpMethod="POST")
+    @ApiOperation(value = "保存人员信息记录\n"
++" <br>{@code DEVICE_ONLY}",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "bean", value = "人员信息对象", type="body", dataType="PersonBean"),
         @ApiImplicitParam(name = "idPhoto", value = "标准照图像", type="form", dataType="byte[]"),

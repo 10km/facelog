@@ -283,7 +283,7 @@ public interface IFaceLog{
 			Integer deviceId, Token token);
 
 	/**
-	 * 
+	 * 保存人员信息记录
 	 * <br>{@code DEVICE_ONLY}
 	 * @param bean 人员信息对象
 	 * @param idPhoto 标准照图像
