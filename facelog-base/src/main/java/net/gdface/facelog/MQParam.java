@@ -1,10 +1,13 @@
 package net.gdface.facelog;
 
+import io.swagger.annotations.ApiModel;
+
 /**
  * 消息系统(redis)基本参数名
  * @author guyadong
  *
  */
+@ApiModel(description="消息系统(redis)基本参数名")
 public enum MQParam {
 	/** redis服务器地址 */REDIS_URI,
 	/** webredis服务器地址 */WEBREDIS_URL,
