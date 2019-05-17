@@ -32,77 +32,77 @@ public final class DeviceBean
     /** NULL {@link DeviceBean} bean , IMMUTABLE instance */
     public static final DeviceBean NULL = new DeviceBean().asNULL().asImmutable();
     /** comments:设备id */
-    @ApiModelProperty("设备id")
+    @ApiModelProperty(value = "设备id" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer id;
 
     /** comments:所属设备组id */
-    @ApiModelProperty("所属设备组id")
+    @ApiModelProperty(value = "所属设备组id"  ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer groupId;
 
     /** comments:设备名称 */
-    @ApiModelProperty("设备名称")
+    @ApiModelProperty(value = "设备名称"  ,dataType="$strUtil.simpleName($column.javaType)")
     private String name;
 
     /** comments:产品名称 */
-    @ApiModelProperty("产品名称")
+    @ApiModelProperty(value = "产品名称"  ,dataType="$strUtil.simpleName($column.javaType)")
     private String productName;
 
     /** comments:设备型号 */
-    @ApiModelProperty("设备型号")
+    @ApiModelProperty(value = "设备型号"  ,dataType="$strUtil.simpleName($column.javaType)")
     private String model;
 
     /** comments:设备供应商 */
-    @ApiModelProperty("设备供应商")
+    @ApiModelProperty(value = "设备供应商"  ,dataType="$strUtil.simpleName($column.javaType)")
     private String vendor;
 
     /** comments:设备制造商 */
-    @ApiModelProperty("设备制造商")
+    @ApiModelProperty(value = "设备制造商"  ,dataType="$strUtil.simpleName($column.javaType)")
     private String manufacturer;
 
     /** comments:设备生产日期 */
-    @ApiModelProperty("设备生产日期")
+    @ApiModelProperty(value = "设备生产日期"  ,dataType="$strUtil.simpleName($column.javaType)")
     private java.util.Date madeDate;
 
     /** comments:设备版本号 */
-    @ApiModelProperty("设备版本号")
+    @ApiModelProperty(value = "设备版本号"  ,dataType="$strUtil.simpleName($column.javaType)")
     private String version;
 
     /** comments:设备序列号 */
-    @ApiModelProperty("设备序列号")
+    @ApiModelProperty(value = "设备序列号"  ,dataType="$strUtil.simpleName($column.javaType)")
     private String serialNo;
 
     /** comments:6字节MAC地址(HEX) */
-    @ApiModelProperty("6字节MAC地址(HEX)")
+    @ApiModelProperty(value = "6字节MAC地址(HEX)"  ,dataType="$strUtil.simpleName($column.javaType)")
     private String mac;
 
     /** comments:备注 */
-    @ApiModelProperty("备注")
+    @ApiModelProperty(value = "备注"  ,dataType="$strUtil.simpleName($column.javaType)")
     private String remark;
 
     /** comments:应用项目自定义二进制扩展字段(最大64KB) */
-    @ApiModelProperty("应用项目自定义二进制扩展字段(最大64KB)")
+    @ApiModelProperty(value = "应用项目自定义二进制扩展字段(最大64KB)"  ,dataType="$strUtil.simpleName($column.javaType)")
     private java.nio.ByteBuffer extBin;
 
     /** comments:应用项目自定义文本扩展字段(最大64KB) */
-    @ApiModelProperty("应用项目自定义文本扩展字段(最大64KB)")
+    @ApiModelProperty(value = "应用项目自定义文本扩展字段(最大64KB)"  ,dataType="$strUtil.simpleName($column.javaType)")
     private String extTxt;
 
-    @ApiModelProperty("create_time")
+    @ApiModelProperty(value = "create_time"  ,dataType="$strUtil.simpleName($column.javaType)")
     private java.util.Date createTime;
 
-    @ApiModelProperty("update_time")
+    @ApiModelProperty(value = "update_time"  ,dataType="$strUtil.simpleName($column.javaType)")
     private java.util.Date updateTime;
 
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
-    @ApiModelProperty("columns modified flag")
+    @ApiModelProperty(value="columns modified flag",dataType="long",required=true)
     private long modified;
     /** columns initialized flag */
-    @ApiModelProperty("columns initialized flag")
+    @ApiModelProperty(value="columns initialized flag",dataType="long",required=true)
     private long initialized;
     /** new record flag  */
-    @ApiModelProperty("new record flag")
+    @ApiModelProperty(value="new record flag",dataType="boolean",required=true)
     private boolean isNew;        
     /** 
      * set immutable status

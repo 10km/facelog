@@ -32,47 +32,47 @@ public final class ImageBean
     /** NULL {@link ImageBean} bean , IMMUTABLE instance */
     public static final ImageBean NULL = new ImageBean().asNULL().asImmutable();
     /** comments:主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key */
-    @ApiModelProperty("主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key")
+    @ApiModelProperty(value = "主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
     private String md5;
 
     /** comments:图像格式 */
-    @ApiModelProperty("图像格式")
+    @ApiModelProperty(value = "图像格式"  ,dataType="$strUtil.simpleName($column.javaType)")
     private String format;
 
     /** comments:图像宽度 */
-    @ApiModelProperty("图像宽度")
+    @ApiModelProperty(value = "图像宽度" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer width;
 
     /** comments:图像高度 */
-    @ApiModelProperty("图像高度")
+    @ApiModelProperty(value = "图像高度" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer height;
 
     /** comments:通道数 */
-    @ApiModelProperty("通道数")
+    @ApiModelProperty(value = "通道数"  ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer depth;
 
     /** comments:图像中的人脸数目 */
-    @ApiModelProperty("图像中的人脸数目")
+    @ApiModelProperty(value = "图像中的人脸数目"  ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer faceNum;
 
     /** comments:缩略图md5,图像数据存储在 fl_imae_store(md5) */
-    @ApiModelProperty("缩略图md5,图像数据存储在 fl_imae_store(md5)")
+    @ApiModelProperty(value = "缩略图md5,图像数据存储在 fl_imae_store(md5)"  ,dataType="$strUtil.simpleName($column.javaType)")
     private String thumbMd5;
 
     /** comments:外键,图像来源设备 */
-    @ApiModelProperty("外键,图像来源设备")
+    @ApiModelProperty(value = "外键,图像来源设备"  ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer deviceId;
 
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
-    @ApiModelProperty("columns modified flag")
+    @ApiModelProperty(value="columns modified flag",dataType="long",required=true)
     private long modified;
     /** columns initialized flag */
-    @ApiModelProperty("columns initialized flag")
+    @ApiModelProperty(value="columns initialized flag",dataType="long",required=true)
     private long initialized;
     /** new record flag  */
-    @ApiModelProperty("new record flag")
+    @ApiModelProperty(value="new record flag",dataType="boolean",required=true)
     private boolean isNew;        
     /** 
      * set immutable status

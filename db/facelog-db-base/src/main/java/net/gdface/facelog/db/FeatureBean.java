@@ -32,30 +32,30 @@ public final class FeatureBean
     /** NULL {@link FeatureBean} bean , IMMUTABLE instance */
     public static final FeatureBean NULL = new FeatureBean().asNULL().asImmutable();
     /** comments:主键,特征码md5校验码 */
-    @ApiModelProperty("主键,特征码md5校验码")
+    @ApiModelProperty(value = "主键,特征码md5校验码" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
     private String md5;
 
     /** comments:外键,所属用户id */
-    @ApiModelProperty("外键,所属用户id")
+    @ApiModelProperty(value = "外键,所属用户id"  ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer personId;
 
     /** comments:二进制特征数据 */
-    @ApiModelProperty("二进制特征数据")
+    @ApiModelProperty(value = "二进制特征数据" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
     private java.nio.ByteBuffer feature;
 
-    @ApiModelProperty("update_time")
+    @ApiModelProperty(value = "update_time"  ,dataType="$strUtil.simpleName($column.javaType)")
     private java.util.Date updateTime;
 
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
-    @ApiModelProperty("columns modified flag")
+    @ApiModelProperty(value="columns modified flag",dataType="long",required=true)
     private long modified;
     /** columns initialized flag */
-    @ApiModelProperty("columns initialized flag")
+    @ApiModelProperty(value="columns initialized flag",dataType="long",required=true)
     private long initialized;
     /** new record flag  */
-    @ApiModelProperty("new record flag")
+    @ApiModelProperty(value="new record flag",dataType="boolean",required=true)
     private boolean isNew;        
     /** 
      * set immutable status

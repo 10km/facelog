@@ -32,76 +32,76 @@ public final class FaceBean
     /** NULL {@link FaceBean} bean , IMMUTABLE instance */
     public static final FaceBean NULL = new FaceBean().asNULL().asImmutable();
     /** comments:主键 */
-    @ApiModelProperty("主键")
+    @ApiModelProperty(value = "主键" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer id;
 
     /** comments:外键,所属图像id */
-    @ApiModelProperty("外键,所属图像id")
+    @ApiModelProperty(value = "外键,所属图像id" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
     private String imageMd5;
 
-    @ApiModelProperty("face_left")
+    @ApiModelProperty(value = "face_left" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer faceLeft;
 
-    @ApiModelProperty("face_top")
+    @ApiModelProperty(value = "face_top" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer faceTop;
 
-    @ApiModelProperty("face_width")
+    @ApiModelProperty(value = "face_width" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer faceWidth;
 
-    @ApiModelProperty("face_height")
+    @ApiModelProperty(value = "face_height" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer faceHeight;
 
-    @ApiModelProperty("eye_leftx")
+    @ApiModelProperty(value = "eye_leftx"  ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer eyeLeftx;
 
-    @ApiModelProperty("eye_lefty")
+    @ApiModelProperty(value = "eye_lefty"  ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer eyeLefty;
 
-    @ApiModelProperty("eye_rightx")
+    @ApiModelProperty(value = "eye_rightx"  ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer eyeRightx;
 
-    @ApiModelProperty("eye_righty")
+    @ApiModelProperty(value = "eye_righty"  ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer eyeRighty;
 
-    @ApiModelProperty("mouth_x")
+    @ApiModelProperty(value = "mouth_x"  ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer mouthX;
 
-    @ApiModelProperty("mouth_y")
+    @ApiModelProperty(value = "mouth_y"  ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer mouthY;
 
-    @ApiModelProperty("nose_x")
+    @ApiModelProperty(value = "nose_x"  ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer noseX;
 
-    @ApiModelProperty("nose_y")
+    @ApiModelProperty(value = "nose_y"  ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer noseY;
 
-    @ApiModelProperty("angle_yaw")
+    @ApiModelProperty(value = "angle_yaw"  ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer angleYaw;
 
-    @ApiModelProperty("angle_pitch")
+    @ApiModelProperty(value = "angle_pitch"  ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer anglePitch;
 
-    @ApiModelProperty("angle_roll")
+    @ApiModelProperty(value = "angle_roll"  ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer angleRoll;
 
     /** comments:扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析 */
-    @ApiModelProperty("扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析")
+    @ApiModelProperty(value = "扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析"  ,dataType="$strUtil.simpleName($column.javaType)")
     private java.nio.ByteBuffer extInfo;
 
     /** comments:外键,人脸特征数据MD5 id */
-    @ApiModelProperty("外键,人脸特征数据MD5 id")
+    @ApiModelProperty(value = "外键,人脸特征数据MD5 id"  ,dataType="$strUtil.simpleName($column.javaType)")
     private String featureMd5;
 
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
-    @ApiModelProperty("columns modified flag")
+    @ApiModelProperty(value="columns modified flag",dataType="long",required=true)
     private long modified;
     /** columns initialized flag */
-    @ApiModelProperty("columns initialized flag")
+    @ApiModelProperty(value="columns initialized flag",dataType="long",required=true)
     private long initialized;
     /** new record flag  */
-    @ApiModelProperty("new record flag")
+    @ApiModelProperty(value="new record flag",dataType="boolean",required=true)
     private boolean isNew;        
     /** 
      * set immutable status

@@ -32,38 +32,38 @@ public final class PermitBean
     /** NULL {@link PermitBean} bean , IMMUTABLE instance */
     public static final PermitBean NULL = new PermitBean().asNULL().asImmutable();
     /** comments:外键,设备组id */
-    @ApiModelProperty("外键,设备组id")
+    @ApiModelProperty(value = "外键,设备组id" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer deviceGroupId;
 
     /** comments:外键,人员组id */
-    @ApiModelProperty("外键,人员组id")
+    @ApiModelProperty(value = "外键,人员组id" ,required=true ,dataType="$strUtil.simpleName($column.javaType)")
     private Integer personGroupId;
 
     /** comments:备注 */
-    @ApiModelProperty("备注")
+    @ApiModelProperty(value = "备注"  ,dataType="$strUtil.simpleName($column.javaType)")
     private String remark;
 
     /** comments:应用项目自定义二进制扩展字段(最大64KB) */
-    @ApiModelProperty("应用项目自定义二进制扩展字段(最大64KB)")
+    @ApiModelProperty(value = "应用项目自定义二进制扩展字段(最大64KB)"  ,dataType="$strUtil.simpleName($column.javaType)")
     private java.nio.ByteBuffer extBin;
 
     /** comments:应用项目自定义文本扩展字段(最大64KB) */
-    @ApiModelProperty("应用项目自定义文本扩展字段(最大64KB)")
+    @ApiModelProperty(value = "应用项目自定义文本扩展字段(最大64KB)"  ,dataType="$strUtil.simpleName($column.javaType)")
     private String extTxt;
 
-    @ApiModelProperty("create_time")
+    @ApiModelProperty(value = "create_time"  ,dataType="$strUtil.simpleName($column.javaType)")
     private java.util.Date createTime;
 
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
-    @ApiModelProperty("columns modified flag")
+    @ApiModelProperty(value="columns modified flag",dataType="long",required=true)
     private long modified;
     /** columns initialized flag */
-    @ApiModelProperty("columns initialized flag")
+    @ApiModelProperty(value="columns initialized flag",dataType="long",required=true)
     private long initialized;
     /** new record flag  */
-    @ApiModelProperty("new record flag")
+    @ApiModelProperty(value="new record flag",dataType="boolean",required=true)
     private boolean isNew;        
     /** 
      * set immutable status
