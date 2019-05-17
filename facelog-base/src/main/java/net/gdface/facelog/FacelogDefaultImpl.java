@@ -466,6 +466,11 @@ public class FacelogDefaultImpl implements IFaceLog {
 	public int deletePermit(DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token) {
 		return 0;
 	}
+	
+	@Override
+	public int deletePermit(int deviceGroupId, int personGroupId, Token token) {
+		return 0;
+	}
 	@Override
 	public int deletePersonGroupPermit(int personGroupId, Token token) {
 		return 0;
@@ -708,6 +713,5 @@ public class FacelogDefaultImpl implements IFaceLog {
 	@Override
 	public void bindBorder(Integer personGroupId, Integer deviceGroupId, Token token) {
 	}
-
 
 }

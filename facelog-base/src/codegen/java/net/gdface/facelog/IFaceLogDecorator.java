@@ -323,6 +323,11 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public int deletePermit (int deviceGroupId,int personGroupId,Token token) {
+        return delegate().deletePermit(deviceGroupId,personGroupId,token);
+    }
+
+    @Override
     public int deletePermit (DeviceGroupBean deviceGroup,PersonGroupBean personGroup,Token token) {
         return delegate().deletePermit(deviceGroup,personGroup,token);
     }

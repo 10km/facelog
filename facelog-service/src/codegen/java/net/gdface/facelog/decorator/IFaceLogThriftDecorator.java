@@ -714,6 +714,29 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#deletePermit(int,int,net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "deletePermitById" )
+    public int deletePermitById(int deviceGroupId,
+        int personGroupId,
+        Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return delegate().deletePermit(deviceGroupId,
+                personGroupId,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#deletePermit(net.gdface.facelog.db.DeviceGroupBean,net.gdface.facelog.db.PersonGroupBean,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "deletePermit" )

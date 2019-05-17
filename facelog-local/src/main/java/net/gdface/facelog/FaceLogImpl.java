@@ -1058,7 +1058,15 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			throw wrapServiceRuntimeException(e);
 		}
 	}
-
+	@Override
+	public int deletePermit(int deviceGroupId,int personGroupId, Token token) {
+		try{
+			Enable.PERSON_ONLY.check(tm, token);
+			return dm.daoDeletePermit(deviceGroupId, personGroupId);
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
 	@Override
 	public int deletePersonGroupPermit(int personGroupId,Token token){
 		try{

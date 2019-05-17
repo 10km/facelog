@@ -244,6 +244,7 @@ service IFaceLog {
   i32 deleteGroupPermitOnDeviceGroup(1: required i32 deviceGroupId, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deleteImage(1: optional string imageMd5, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deletePermit(1: optional DeviceGroupBean deviceGroup, 2: optional PersonGroupBean personGroup, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
+  i32 deletePermitById(1: required i32 deviceGroupId, 2: required i32 personGroupId, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deletePerson(1: required i32 personId, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deletePersonByPapersNum(1: optional string papersNum, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deletePersonGroup(1: required i32 personGroupId, 2: optional Token token) throws (1: ServiceRuntimeException ex1);

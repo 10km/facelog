@@ -969,6 +969,34 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public int deletePermit(final int deviceGroupId,
+        final int personGroupId,
+        final Token token) 
+        {
+        try{
+            return syncCall(new Function<Integer,Integer>() {
+                @Override
+                public Integer apply(Integer input) {
+                    return input;
+                }},
+                new ServiceAsyncCall<Integer>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Integer> nativeCallback){
+                    service.deletePermitById(deviceGroupId,personGroupId,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public int deletePermit(final DeviceGroupBean deviceGroup,
         final PersonGroupBean personGroup,
         final Token token) 

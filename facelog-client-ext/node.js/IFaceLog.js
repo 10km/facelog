@@ -4397,6 +4397,164 @@ IFaceLog_deletePermit_result.prototype.write = function(output) {
   return;
 };
 
+var IFaceLog_deletePermitById_args = function(args) {
+  this.deviceGroupId = null;
+  this.personGroupId = null;
+  this.token = null;
+  if (args) {
+    if (args.deviceGroupId !== undefined && args.deviceGroupId !== null) {
+      this.deviceGroupId = args.deviceGroupId;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field deviceGroupId is unset!');
+    }
+    if (args.personGroupId !== undefined && args.personGroupId !== null) {
+      this.personGroupId = args.personGroupId;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field personGroupId is unset!');
+    }
+    if (args.token !== undefined && args.token !== null) {
+      this.token = new ttypes.Token(args.token);
+    }
+  }
+};
+IFaceLog_deletePermitById_args.prototype = {};
+IFaceLog_deletePermitById_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I32) {
+        this.deviceGroupId = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.I32) {
+        this.personGroupId = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.token = new ttypes.Token();
+        this.token.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_deletePermitById_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_deletePermitById_args');
+  if (this.deviceGroupId !== null && this.deviceGroupId !== undefined) {
+    output.writeFieldBegin('deviceGroupId', Thrift.Type.I32, 1);
+    output.writeI32(this.deviceGroupId);
+    output.writeFieldEnd();
+  }
+  if (this.personGroupId !== null && this.personGroupId !== undefined) {
+    output.writeFieldBegin('personGroupId', Thrift.Type.I32, 2);
+    output.writeI32(this.personGroupId);
+    output.writeFieldEnd();
+  }
+  if (this.token !== null && this.token !== undefined) {
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 3);
+    this.token.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_deletePermitById_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  if (args instanceof ttypes.ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = args.success;
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_deletePermitById_result.prototype = {};
+IFaceLog_deletePermitById_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.I32) {
+        this.success = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ttypes.ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_deletePermitById_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_deletePermitById_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.I32, 0);
+    output.writeI32(this.success);
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 var IFaceLog_deletePerson_args = function(args) {
   this.personId = null;
   this.token = null;
@@ -21890,6 +22048,60 @@ IFaceLogClient.prototype.recv_deletePermit = function(input,mtype,rseqid) {
   }
   return callback('deletePermit failed: unknown result');
 };
+IFaceLogClient.prototype.deletePermitById = function(deviceGroupId, personGroupId, token, callback) {
+  this._seqid = this.new_seqid();
+  if (callback === undefined) {
+    var _defer = Q.defer();
+    this._reqs[this.seqid()] = function(error, result) {
+      if (error) {
+        _defer.reject(error);
+      } else {
+        _defer.resolve(result);
+      }
+    };
+    this.send_deletePermitById(deviceGroupId, personGroupId, token);
+    return _defer.promise;
+  } else {
+    this._reqs[this.seqid()] = callback;
+    this.send_deletePermitById(deviceGroupId, personGroupId, token);
+  }
+};
+
+IFaceLogClient.prototype.send_deletePermitById = function(deviceGroupId, personGroupId, token) {
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('deletePermitById', Thrift.MessageType.CALL, this.seqid());
+  var params = {
+    deviceGroupId: deviceGroupId,
+    personGroupId: personGroupId,
+    token: token
+  };
+  var args = new IFaceLog_deletePermitById_args(params);
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
+};
+
+IFaceLogClient.prototype.recv_deletePermitById = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
+  }
+  var result = new IFaceLog_deletePermitById_result();
+  result.read(input);
+  input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    return callback(result.ex1);
+  }
+  if (null !== result.success) {
+    return callback(null, result.success);
+  }
+  return callback('deletePermitById failed: unknown result');
+};
 IFaceLogClient.prototype.deletePerson = function(personId, token, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
@@ -28799,6 +29011,47 @@ IFaceLogProcessor.prototype.process_deletePermit = function(seqid, input, output
       } else {
         result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
         output.writeMessageBegin("deletePermit", Thrift.MessageType.EXCEPTION, seqid);
+      }
+      result_obj.write(output);
+      output.writeMessageEnd();
+      output.flush();
+    });
+  }
+};
+IFaceLogProcessor.prototype.process_deletePermitById = function(seqid, input, output) {
+  var args = new IFaceLog_deletePermitById_args();
+  args.read(input);
+  input.readMessageEnd();
+  if (this._handler.deletePermitById.length === 3) {
+    Q.fcall(this._handler.deletePermitById.bind(this._handler), args.deviceGroupId, args.personGroupId, args.token)
+      .then(function(result) {
+        var result_obj = new IFaceLog_deletePermitById_result({success: result});
+        output.writeMessageBegin("deletePermitById", Thrift.MessageType.REPLY, seqid);
+        result_obj.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      }, function (err) {
+        var result;
+        if (err instanceof ttypes.ServiceRuntimeException) {
+          result = new IFaceLog_deletePermitById_result(err);
+          output.writeMessageBegin("deletePermitById", Thrift.MessageType.REPLY, seqid);
+        } else {
+          result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+          output.writeMessageBegin("deletePermitById", Thrift.MessageType.EXCEPTION, seqid);
+        }
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      });
+  } else {
+    this._handler.deletePermitById(args.deviceGroupId, args.personGroupId, args.token, function (err, result) {
+      var result_obj;
+      if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
+        result_obj = new IFaceLog_deletePermitById_result((err !== null || typeof err === 'undefined') ? err : {success: result});
+        output.writeMessageBegin("deletePermitById", Thrift.MessageType.REPLY, seqid);
+      } else {
+        result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+        output.writeMessageBegin("deletePermitById", Thrift.MessageType.EXCEPTION, seqid);
       }
       result_obj.write(output);
       output.writeMessageEnd();

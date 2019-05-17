@@ -287,6 +287,16 @@ public interface IFaceLog
             @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
+        @ThriftMethod(value = "deletePermitById",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Integer> deletePermitById(
+            @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId,
+            @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId,
+            @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        );
+
         @ThriftMethod(value = "deletePerson",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1505,6 +1515,16 @@ public interface IFaceLog
     int deletePermit(
         @ThriftField(value=1, name="deviceGroup", requiredness=Requiredness.OPTIONAL) final DeviceGroupBean deviceGroup,
         @ThriftField(value=2, name="personGroup", requiredness=Requiredness.OPTIONAL) final PersonGroupBean personGroup,
+        @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "deletePermitById",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    int deletePermitById(
+        @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId,
+        @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId,
         @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 

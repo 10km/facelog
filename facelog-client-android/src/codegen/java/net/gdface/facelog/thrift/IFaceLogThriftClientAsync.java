@@ -899,6 +899,34 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(deleteImage(imageMd5,token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#deletePermit(int,int,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Integer> deletePermit(int deviceGroupId,
+        int personGroupId,
+        Token token){
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.deletePermitById(
+                deviceGroupId,
+            personGroupId,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void deletePermit(int deviceGroupId,
+        int personGroupId,
+        Token token,
+        FutureCallback<Integer>callback){
+        factory.addCallback(deletePermit(deviceGroupId,personGroupId,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#deletePermit(net.gdface.facelog.db.DeviceGroupBean,net.gdface.facelog.db.PersonGroupBean,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Integer> deletePermit(DeviceGroupBean deviceGroup,

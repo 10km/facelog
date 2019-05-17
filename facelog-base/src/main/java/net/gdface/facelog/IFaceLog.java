@@ -797,23 +797,32 @@ public interface IFaceLog{
      * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
      * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
 	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
-     * @param deviceGroupId 外键,设备组id
-     * @param personGroupId 外键,人员组id
+     * @param deviceGroupId 设备组id
+     * @param personGroupId 人员组id
      * @param token 访问令牌
      * @see #addPermit(DeviceGroupBean,PersonGroupBean, Token)
      */
 	@DeriveMethod(methodSuffix="ById")
 	public void addPermit(int deviceGroupId,int personGroupId, Token token);
 	/**
-	 * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean, Token)}
+	 * 删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
 	 * <br>{@link TokenMangement.Enable#PERSON_ONLY}
-	 * @param deviceGroup
-	 * @param personGroup
+	 * @param deviceGroup 设备组记录
+	 * @param personGroup 人员组记录
 	 * @param token 访问令牌
 	 * @return 删除成功返回1,否则返回0
-	 * @throws RuntimeDaoException
 	 */
 	public int deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup, Token token);
+	/**
+	 * 删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
+	 * @param deviceGroupId 设备组id
+	 * @param personGroupId 人员组id
+	 * @param token
+	 * @return 删除成功返回1,否则返回0
+	 */
+	@DeriveMethod(methodSuffix="ById")
+	int deletePermit(int deviceGroupId, int personGroupId, Token token);
+
 	/**
 	 * 从permit表删除指定{@code personGroupId}指定人员组的在所有设备上的通行权限
 	 * @param personGroupId 
@@ -1178,5 +1187,6 @@ public interface IFaceLog{
 	 * @return
 	 */
 	public boolean isLocal();
+
 
 }
