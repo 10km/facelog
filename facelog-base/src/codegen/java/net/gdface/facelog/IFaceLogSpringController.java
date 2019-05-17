@@ -146,7 +146,7 @@ public class IFaceLogSpringController {
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
     public Response addFeature(@RequestParam("feature") byte[] feature,
         @RequestParam("personId") Integer personId,
-        @RequestBody Map<java.nio.ByteBuffer, FaceBean> faceInfo,
+        @RequestParam("faceInfo") Map<java.nio.ByteBuffer, FaceBean> faceInfo,
         @RequestParam("deviceId") Integer deviceId,
         @RequestBody Token token) 
         {
@@ -3131,7 +3131,7 @@ public class IFaceLogSpringController {
     public Response savePerson(@RequestBody PersonBean bean,
         @RequestParam("idPhoto") byte[] idPhoto,
         @RequestParam("feature") byte[] feature,
-        @RequestBody Map<java.nio.ByteBuffer, FaceBean> faceInfo,
+        @RequestParam("faceInfo") Map<java.nio.ByteBuffer, FaceBean> faceInfo,
         @RequestParam("deviceId") Integer deviceId,
         @RequestBody Token token) 
         {
@@ -3334,7 +3334,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "persons", value = "", type="body", dataType="Map"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response savePersons(@RequestBody Map<java.nio.ByteBuffer, PersonBean> persons,
+    public Response savePersons(@RequestParam("persons") Map<java.nio.ByteBuffer, PersonBean> persons,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -3447,7 +3447,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "config", value = "参数名-参数值对", type="body", dataType="Map"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response setProperties(@RequestBody Map<String, String> config,
+    public Response setProperties(@RequestParam("config") Map<String, String> config,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
