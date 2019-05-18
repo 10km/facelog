@@ -3,7 +3,6 @@ package net.gdface.facelog;
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
-
 import net.gdface.annotation.DeriveMethod;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.DeviceGroupBean;
@@ -196,73 +195,73 @@ public interface IFaceLog{
 	
 	/**
 	 * 保存人员(person)记录
-	 * @param bean
+	 * @param personBean {@code fl_person}表记录
 	 * @param token 访问令牌
-	 * @return
+	 * @return 保存的{@link PersonBean}
 	 */
-	public PersonBean savePerson(PersonBean bean, Token token);
+	public PersonBean savePerson(PersonBean personBean, Token token);
 
 	/**
 	 * 保存人员(person)记录
 	 * <br>{@code PERSON_ONLY}
-	 * @param beans 
+	 * @param persons {@code fl_person}表记录
 	 * @param token 访问令牌
 	 */
-	public void savePersons(List<PersonBean> beans, Token token);
+	public void savePersons(List<PersonBean> persons, Token token);
 
 	/**
 	 * 保存人员信息记录
-	 * @param bean
+	 * @param personBean {@code fl_person}表记录
 	 * @param idPhoto 标准照图像对象,可为null
 	 * @param token 访问令牌
-	 * @return
+	 * @return 保存的{@link PersonBean}
 	 */
 	@DeriveMethod(methodSuffix="WithPhoto")
-	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, Token token);
+	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, Token token);
 
 	/**
-	 * 保存人员信息记录(包含标准照)
-	 * <br>{@code PERSON_ONLY}
-	 * @param persons
+	 * 保存人员信息记录(包含标准照)<br>
+	 * {@code PERSON_ONLY}
+	 * @param persons {@code fl_person}表记录
 	 * @param token 访问令牌
-	 * @return
+	 * @return 保存的{@link PersonBean}记录条数
 	 */
 	@DeriveMethod(methodSuffix="WithPhoto")
 	public int savePersons(Map<ByteBuffer, PersonBean> persons, Token token);
 
 	/**
 	 * 保存人员信息记录
-	 * @param bean
+	 * @param personBean {@code fl_person}表记录
 	 * @param idPhotoMd5 标准照图像对象,可为null
 	 * @param featureMd5 用于验证的人脸特征数据对象,可为null
 	 * @param token 访问令牌
-	 * @return
+	 * @return 保存的{@link PersonBean}
 	 */
 	@DeriveMethod(methodSuffix="WithPhotoAndFeatureSaved")
-	public PersonBean savePerson(PersonBean bean, String idPhotoMd5, String featureMd5, Token token);
+	public PersonBean savePerson(PersonBean personBean, String idPhotoMd5, String featureMd5, Token token);
 
 	/**
 	 * 保存人员信息记录
 	 * <br>{@code DEVICE_ONLY}
-	 * @param bean
+	 * @param personBean {@code fl_person}表记录
 	 * @param idPhoto 标准照图像,可为null
 	 * @param featureBean 用于验证的人脸特征数据对象,可为null
 	 * @param deviceId 标准照图像来源设备id,可为null
 	 * @param token 访问令牌
-	 * @return
+	 * @return 保存的{@link PersonBean}
 	 */
 	@DeriveMethod(methodSuffix="WithPhotoAndFeature")
-	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, FeatureBean featureBean, Integer deviceId, Token token);
+	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, FeatureBean featureBean, Integer deviceId, Token token);
 
 	/**
 	 * 保存人员信息记录
 	 * <br>{@code DEVICE_ONLY}
-	 * @param personBean
+	 * @param personBean {@code fl_person}表记录
 	 * @param idPhoto 标准照图像,可为null
 	 * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(byte[], Integer, List, Token)}
 	 * @param faceBeans 可为{@code null},参见 {@link #addFeature(byte[], Integer, List, Token)}
 	 * @param token 访问令牌
-	 * @return
+	 * @return 保存的{@link PersonBean}
 	 */
 	@DeriveMethod(methodSuffix="WithPhotoAndFeatureMultiFaces")
 	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token);
@@ -270,37 +269,37 @@ public interface IFaceLog{
 	/**
 	 * 保存人员信息记录
 	 * <br>{@code DEVICE_ONLY}
-	 * @param bean 
+	 * @param personBean {@code fl_person}表记录
 	 * @param idPhoto 标准照图像,可为null
 	 * @param feature 用于验证的人脸特征数据,可为null 
 	 * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
 	 * @param deviceId faceInfo 图像来源设备id,可为null 
 	 * @param token 访问令牌
-	 * @return bean 保存的{@link PersonBean}对象
+	 * @return 保存的{@link PersonBean}对象
 	 */
 	@DeriveMethod(methodSuffix="WithPhotoAndFeatureMultiImage")
-	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, byte[] feature, Map<ByteBuffer, FaceBean> faceInfo,
+	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, Map<ByteBuffer, FaceBean> faceInfo,
 			Integer deviceId, Token token);
 
 	/**
 	 * 保存人员信息记录
 	 * <br>{@code DEVICE_ONLY}
-	 * @param bean 人员信息对象
+	 * @param personBean 人员信息对象,{@code fl_person}表记录
 	 * @param idPhoto 标准照图像
 	 * @param feature 人脸特征数据
 	 * @param featureImage 提取特征源图像,为null 时,默认使用idPhoto
 	 * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
 	 * @param deviceId 设备ID
 	 * @param token 访问令牌
-	 * @return
+	 * @return 保存的{@link PersonBean}
 	 */
 	@DeriveMethod(methodSuffix="Full")
-	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, byte[] feature, byte[] featureImage,
+	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, byte[] featureImage,
 			FaceBean featureFaceBean, Integer deviceId, Token token);
 
 	/**
 	 * 替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录
-	 * @param personId 人员记录id
+	 * @param personId 人员记录id,{@code fl_person.id}
 	 * @param featureMd5 人脸特征数据记录id (已经保存在数据库中)
 	 * @param deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
 	 * @param token 访问令牌
@@ -419,16 +418,34 @@ public interface IFaceLog{
 	public boolean existsFeature(String md5);
 
 	/**
-	 * 增加一个人脸特征记录，如果记录已经存在则抛出异常
-	 * <br>{@code DEVICE_ONLY}
-	 * @param feature 特征数据
+	 * 增加一个人脸特征记录，如果记录已经存在则抛出异常<br>
+	 * {@code DEVICE_ONLY}
+	 * @param feature 人脸特征数据
 	 * @param personId 关联的人员id(fl_person.id),可为null
 	 * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
-	 * @param token 访问令牌
+	 * @param token (设备)访问令牌
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws DuplicateRecordException 
 	 */
 	public FeatureBean addFeature(byte[] feature, Integer personId, List<FaceBean> faecBeans, Token token) throws DuplicateRecordException;
+	
+	/**
+	 * 增加一个人脸特征记录，如果记录已经存在则抛出异常<br>
+	 * 适用于一张人脸图像提取一个人脸特征的算法<br>
+	 * {@code DEVICE_ONLY}
+	 * @param feature 特征数据
+	 * @param personId 关联的人员id(fl_person.id),可为null
+	 * @param asIdPhotoIfAbsent 如果{@code personId}指定的记录没指定身份照片,
+	 * 是否用{@code featurePhoto}作为身份照片,{@code featurePhoto}为{@code null}时无效
+	 * @param featurePhoto 生成人脸特征的原始照片,如果不要求保留原始照片可为null
+	 * @param faceBean 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
+	 * @param deviceId 采集图像的设备ID,可为null
+	 * @param token (设备)访问令牌
+	 * @return 保存的人脸特征记录{@link FeatureBean}
+	 * @throws DuplicateRecordException
+	 */
+	@DeriveMethod(methodSuffix="WithImage")
+	FeatureBean addFeature(final byte[] feature, final Integer personId, final boolean asIdPhotoIfAbsent, final byte[] featurePhoto, final FaceBean faceBean, final Integer deviceId, Token token)throws DuplicateRecordException;
 
 	/**
 	 * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
@@ -1187,6 +1204,7 @@ public interface IFaceLog{
 	 * @return
 	 */
 	public boolean isLocal();
+
 
 
 }

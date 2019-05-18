@@ -13,7 +13,7 @@ public class TokenTest implements ServiceConstant{
 
 	@Test
 	public void testApplyRootToken() {
-		FaceLogImpl instance = new FaceLogImpl();
+		IFaceLog instance = new FaceLogImpl();
 		try {
 			String password = CONFIG.getString(ROOT_PASSWORD);
 			String passwordMd5 = Hashing.md5().hashBytes(password.getBytes()).toString();
@@ -25,7 +25,7 @@ public class TokenTest implements ServiceConstant{
 	}
 	@Test
 	public void testSavePerson(){
-		FaceLogImpl instance = new FaceLogImpl();
+		IFaceLog instance = new FaceLogImpl();
 		String password = "do you know ?";
 		String passwordMd5 = Hashing.md5().hashBytes(password.getBytes()).toString();
 		PersonBean person = PersonBean.builder().name("顾亚东").password(passwordMd5).build();

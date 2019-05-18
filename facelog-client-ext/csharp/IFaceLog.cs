@@ -20,6 +20,7 @@ public partial class IFaceLog {
   public interface ISync {
     FeatureBean addFeature(byte[] feature, int personId, List<FaceBean> faecBeans, Token token);
     FeatureBean addFeatureMulti(byte[] feature, int personId, Dictionary<byte[], FaceBean> faceInfo, int deviceId, Token token);
+    FeatureBean addFeatureWithImage(byte[] feature, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, int deviceId, Token token);
     ImageBean addImage(byte[] imageData, int deviceId, FaceBean faceBean, int personId, Token token);
     void addLog(LogBean bean, Token token);
     void addLogs(List<LogBean> beans, Token token);
@@ -135,15 +136,15 @@ public partial class IFaceLog {
     int rootGroupOfPerson(int personId);
     DeviceBean saveDevice(DeviceBean deviceBean, Token token);
     DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean, Token token);
-    PersonBean savePerson(PersonBean bean, Token token);
-    PersonBean savePersonFull(PersonBean bean, byte[] idPhoto, byte[] feature, byte[] featureImage, FaceBean featureFaceBean, int deviceId, Token token);
+    PersonBean savePerson(PersonBean personBean, Token token);
+    PersonBean savePersonFull(PersonBean personBean, byte[] idPhoto, byte[] feature, byte[] featureImage, FaceBean featureFaceBean, int deviceId, Token token);
     PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean, Token token);
-    PersonBean savePersonWithPhoto(PersonBean bean, byte[] idPhoto, Token token);
-    PersonBean savePersonWithPhotoAndFeature(PersonBean bean, byte[] idPhoto, FeatureBean featureBean, int deviceId, Token token);
-    PersonBean savePersonWithPhotoAndFeatureMultiFaces(PersonBean bean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token);
-    PersonBean savePersonWithPhotoAndFeatureMultiImage(PersonBean bean, byte[] idPhoto, byte[] feature, Dictionary<byte[], FaceBean> faceInfo, int deviceId, Token token);
-    PersonBean savePersonWithPhotoAndFeatureSaved(PersonBean bean, string idPhotoMd5, string featureMd5, Token token);
-    void savePersons(List<PersonBean> beans, Token token);
+    PersonBean savePersonWithPhoto(PersonBean personBean, byte[] idPhoto, Token token);
+    PersonBean savePersonWithPhotoAndFeature(PersonBean personBean, byte[] idPhoto, FeatureBean featureBean, int deviceId, Token token);
+    PersonBean savePersonWithPhotoAndFeatureMultiFaces(PersonBean personBean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token);
+    PersonBean savePersonWithPhotoAndFeatureMultiImage(PersonBean personBean, byte[] idPhoto, byte[] feature, Dictionary<byte[], FaceBean> faceInfo, int deviceId, Token token);
+    PersonBean savePersonWithPhotoAndFeatureSaved(PersonBean personBean, string idPhotoMd5, string featureMd5, Token token);
+    void savePersons(List<PersonBean> persons, Token token);
     int savePersonsWithPhoto(Dictionary<byte[], PersonBean> persons, Token token);
     void saveServiceConfig(Token token);
     void setPersonExpiryDate(int personId, long expiryDate, Token token);
@@ -162,6 +163,7 @@ public partial class IFaceLog {
   public interface IAsync {
     Task<FeatureBean> addFeatureAsync(byte[] feature, int personId, List<FaceBean> faecBeans, Token token);
     Task<FeatureBean> addFeatureMultiAsync(byte[] feature, int personId, Dictionary<byte[], FaceBean> faceInfo, int deviceId, Token token);
+    Task<FeatureBean> addFeatureWithImageAsync(byte[] feature, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, int deviceId, Token token);
     Task<ImageBean> addImageAsync(byte[] imageData, int deviceId, FaceBean faceBean, int personId, Token token);
     Task addLogAsync(LogBean bean, Token token);
     Task addLogsAsync(List<LogBean> beans, Token token);
@@ -277,15 +279,15 @@ public partial class IFaceLog {
     Task<int> rootGroupOfPersonAsync(int personId);
     Task<DeviceBean> saveDeviceAsync(DeviceBean deviceBean, Token token);
     Task<DeviceGroupBean> saveDeviceGroupAsync(DeviceGroupBean deviceGroupBean, Token token);
-    Task<PersonBean> savePersonAsync(PersonBean bean, Token token);
-    Task<PersonBean> savePersonFullAsync(PersonBean bean, byte[] idPhoto, byte[] feature, byte[] featureImage, FaceBean featureFaceBean, int deviceId, Token token);
+    Task<PersonBean> savePersonAsync(PersonBean personBean, Token token);
+    Task<PersonBean> savePersonFullAsync(PersonBean personBean, byte[] idPhoto, byte[] feature, byte[] featureImage, FaceBean featureFaceBean, int deviceId, Token token);
     Task<PersonGroupBean> savePersonGroupAsync(PersonGroupBean personGroupBean, Token token);
-    Task<PersonBean> savePersonWithPhotoAsync(PersonBean bean, byte[] idPhoto, Token token);
-    Task<PersonBean> savePersonWithPhotoAndFeatureAsync(PersonBean bean, byte[] idPhoto, FeatureBean featureBean, int deviceId, Token token);
-    Task<PersonBean> savePersonWithPhotoAndFeatureMultiFacesAsync(PersonBean bean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token);
-    Task<PersonBean> savePersonWithPhotoAndFeatureMultiImageAsync(PersonBean bean, byte[] idPhoto, byte[] feature, Dictionary<byte[], FaceBean> faceInfo, int deviceId, Token token);
-    Task<PersonBean> savePersonWithPhotoAndFeatureSavedAsync(PersonBean bean, string idPhotoMd5, string featureMd5, Token token);
-    Task savePersonsAsync(List<PersonBean> beans, Token token);
+    Task<PersonBean> savePersonWithPhotoAsync(PersonBean personBean, byte[] idPhoto, Token token);
+    Task<PersonBean> savePersonWithPhotoAndFeatureAsync(PersonBean personBean, byte[] idPhoto, FeatureBean featureBean, int deviceId, Token token);
+    Task<PersonBean> savePersonWithPhotoAndFeatureMultiFacesAsync(PersonBean personBean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token);
+    Task<PersonBean> savePersonWithPhotoAndFeatureMultiImageAsync(PersonBean personBean, byte[] idPhoto, byte[] feature, Dictionary<byte[], FaceBean> faceInfo, int deviceId, Token token);
+    Task<PersonBean> savePersonWithPhotoAndFeatureSavedAsync(PersonBean personBean, string idPhotoMd5, string featureMd5, Token token);
+    Task savePersonsAsync(List<PersonBean> persons, Token token);
     Task<int> savePersonsWithPhotoAsync(Dictionary<byte[], PersonBean> persons, Token token);
     Task saveServiceConfigAsync(Token token);
     Task setPersonExpiryDateAsync(int personId, long expiryDate, Token token);
@@ -306,6 +308,8 @@ public partial class IFaceLog {
     FeatureBean End_addFeature(IAsyncResult asyncResult);
     IAsyncResult Begin_addFeatureMulti(AsyncCallback callback, object state, byte[] feature, int personId, Dictionary<byte[], FaceBean> faceInfo, int deviceId, Token token);
     FeatureBean End_addFeatureMulti(IAsyncResult asyncResult);
+    IAsyncResult Begin_addFeatureWithImage(AsyncCallback callback, object state, byte[] feature, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, int deviceId, Token token);
+    FeatureBean End_addFeatureWithImage(IAsyncResult asyncResult);
     IAsyncResult Begin_addImage(AsyncCallback callback, object state, byte[] imageData, int deviceId, FaceBean faceBean, int personId, Token token);
     ImageBean End_addImage(IAsyncResult asyncResult);
     IAsyncResult Begin_addLog(AsyncCallback callback, object state, LogBean bean, Token token);
@@ -536,23 +540,23 @@ public partial class IFaceLog {
     DeviceBean End_saveDevice(IAsyncResult asyncResult);
     IAsyncResult Begin_saveDeviceGroup(AsyncCallback callback, object state, DeviceGroupBean deviceGroupBean, Token token);
     DeviceGroupBean End_saveDeviceGroup(IAsyncResult asyncResult);
-    IAsyncResult Begin_savePerson(AsyncCallback callback, object state, PersonBean bean, Token token);
+    IAsyncResult Begin_savePerson(AsyncCallback callback, object state, PersonBean personBean, Token token);
     PersonBean End_savePerson(IAsyncResult asyncResult);
-    IAsyncResult Begin_savePersonFull(AsyncCallback callback, object state, PersonBean bean, byte[] idPhoto, byte[] feature, byte[] featureImage, FaceBean featureFaceBean, int deviceId, Token token);
+    IAsyncResult Begin_savePersonFull(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, byte[] feature, byte[] featureImage, FaceBean featureFaceBean, int deviceId, Token token);
     PersonBean End_savePersonFull(IAsyncResult asyncResult);
     IAsyncResult Begin_savePersonGroup(AsyncCallback callback, object state, PersonGroupBean personGroupBean, Token token);
     PersonGroupBean End_savePersonGroup(IAsyncResult asyncResult);
-    IAsyncResult Begin_savePersonWithPhoto(AsyncCallback callback, object state, PersonBean bean, byte[] idPhoto, Token token);
+    IAsyncResult Begin_savePersonWithPhoto(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, Token token);
     PersonBean End_savePersonWithPhoto(IAsyncResult asyncResult);
-    IAsyncResult Begin_savePersonWithPhotoAndFeature(AsyncCallback callback, object state, PersonBean bean, byte[] idPhoto, FeatureBean featureBean, int deviceId, Token token);
+    IAsyncResult Begin_savePersonWithPhotoAndFeature(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, FeatureBean featureBean, int deviceId, Token token);
     PersonBean End_savePersonWithPhotoAndFeature(IAsyncResult asyncResult);
-    IAsyncResult Begin_savePersonWithPhotoAndFeatureMultiFaces(AsyncCallback callback, object state, PersonBean bean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token);
+    IAsyncResult Begin_savePersonWithPhotoAndFeatureMultiFaces(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token);
     PersonBean End_savePersonWithPhotoAndFeatureMultiFaces(IAsyncResult asyncResult);
-    IAsyncResult Begin_savePersonWithPhotoAndFeatureMultiImage(AsyncCallback callback, object state, PersonBean bean, byte[] idPhoto, byte[] feature, Dictionary<byte[], FaceBean> faceInfo, int deviceId, Token token);
+    IAsyncResult Begin_savePersonWithPhotoAndFeatureMultiImage(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, byte[] feature, Dictionary<byte[], FaceBean> faceInfo, int deviceId, Token token);
     PersonBean End_savePersonWithPhotoAndFeatureMultiImage(IAsyncResult asyncResult);
-    IAsyncResult Begin_savePersonWithPhotoAndFeatureSaved(AsyncCallback callback, object state, PersonBean bean, string idPhotoMd5, string featureMd5, Token token);
+    IAsyncResult Begin_savePersonWithPhotoAndFeatureSaved(AsyncCallback callback, object state, PersonBean personBean, string idPhotoMd5, string featureMd5, Token token);
     PersonBean End_savePersonWithPhotoAndFeatureSaved(IAsyncResult asyncResult);
-    IAsyncResult Begin_savePersons(AsyncCallback callback, object state, List<PersonBean> beans, Token token);
+    IAsyncResult Begin_savePersons(AsyncCallback callback, object state, List<PersonBean> persons, Token token);
     void End_savePersons(IAsyncResult asyncResult);
     IAsyncResult Begin_savePersonsWithPhoto(AsyncCallback callback, object state, Dictionary<byte[], PersonBean> persons, Token token);
     int End_savePersonsWithPhoto(IAsyncResult asyncResult);
@@ -765,6 +769,73 @@ public partial class IFaceLog {
         throw result.Ex2;
       }
       throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "addFeatureMulti failed: unknown result");
+    }
+
+    
+    public IAsyncResult Begin_addFeatureWithImage(AsyncCallback callback, object state, byte[] feature, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, int deviceId, Token token)
+    {
+      return send_addFeatureWithImage(callback, state, feature, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, deviceId, token);
+    }
+
+    public FeatureBean End_addFeatureWithImage(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      return recv_addFeatureWithImage();
+    }
+
+    public async Task<FeatureBean> addFeatureWithImageAsync(byte[] feature, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, int deviceId, Token token)
+    {
+      FeatureBean retval;
+      retval = await Task.Run(() =>
+      {
+        return addFeatureWithImage(feature, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, deviceId, token);
+      });
+      return retval;
+    }
+
+    public FeatureBean addFeatureWithImage(byte[] feature, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, int deviceId, Token token)
+    {
+      var asyncResult = Begin_addFeatureWithImage(null, null, feature, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, deviceId, token);
+      return End_addFeatureWithImage(asyncResult);
+
+    }
+    public IAsyncResult send_addFeatureWithImage(AsyncCallback callback, object state, byte[] feature, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, int deviceId, Token token)
+    {
+      oprot_.WriteMessageBegin(new TMessage("addFeatureWithImage", TMessageType.Call, seqid_));
+      addFeatureWithImage_args args = new addFeatureWithImage_args();
+      args.Feature = feature;
+      args.PersonId = personId;
+      args.AsIdPhotoIfAbsent = asIdPhotoIfAbsent;
+      args.FeaturePhoto = featurePhoto;
+      args.FaceBean = faceBean;
+      args.DeviceId = deviceId;
+      args.Token = token;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public FeatureBean recv_addFeatureWithImage()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      addFeatureWithImage_result result = new addFeatureWithImage_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Success != null) {
+        return result.Success;
+      }
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      if (result.Ex2 != null) {
+        throw result.Ex2;
+      }
+      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "addFeatureWithImage failed: unknown result");
     }
 
     
@@ -7476,9 +7547,9 @@ public partial class IFaceLog {
     }
 
     
-    public IAsyncResult Begin_savePerson(AsyncCallback callback, object state, PersonBean bean, Token token)
+    public IAsyncResult Begin_savePerson(AsyncCallback callback, object state, PersonBean personBean, Token token)
     {
-      return send_savePerson(callback, state, bean, token);
+      return send_savePerson(callback, state, personBean, token);
     }
 
     public PersonBean End_savePerson(IAsyncResult asyncResult)
@@ -7487,27 +7558,27 @@ public partial class IFaceLog {
       return recv_savePerson();
     }
 
-    public async Task<PersonBean> savePersonAsync(PersonBean bean, Token token)
+    public async Task<PersonBean> savePersonAsync(PersonBean personBean, Token token)
     {
       PersonBean retval;
       retval = await Task.Run(() =>
       {
-        return savePerson(bean, token);
+        return savePerson(personBean, token);
       });
       return retval;
     }
 
-    public PersonBean savePerson(PersonBean bean, Token token)
+    public PersonBean savePerson(PersonBean personBean, Token token)
     {
-      var asyncResult = Begin_savePerson(null, null, bean, token);
+      var asyncResult = Begin_savePerson(null, null, personBean, token);
       return End_savePerson(asyncResult);
 
     }
-    public IAsyncResult send_savePerson(AsyncCallback callback, object state, PersonBean bean, Token token)
+    public IAsyncResult send_savePerson(AsyncCallback callback, object state, PersonBean personBean, Token token)
     {
       oprot_.WriteMessageBegin(new TMessage("savePerson", TMessageType.Call, seqid_));
       savePerson_args args = new savePerson_args();
-      args.Bean = bean;
+      args.PersonBean = personBean;
       args.Token = token;
       args.Write(oprot_);
       oprot_.WriteMessageEnd();
@@ -7535,9 +7606,9 @@ public partial class IFaceLog {
     }
 
     
-    public IAsyncResult Begin_savePersonFull(AsyncCallback callback, object state, PersonBean bean, byte[] idPhoto, byte[] feature, byte[] featureImage, FaceBean featureFaceBean, int deviceId, Token token)
+    public IAsyncResult Begin_savePersonFull(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, byte[] feature, byte[] featureImage, FaceBean featureFaceBean, int deviceId, Token token)
     {
-      return send_savePersonFull(callback, state, bean, idPhoto, feature, featureImage, featureFaceBean, deviceId, token);
+      return send_savePersonFull(callback, state, personBean, idPhoto, feature, featureImage, featureFaceBean, deviceId, token);
     }
 
     public PersonBean End_savePersonFull(IAsyncResult asyncResult)
@@ -7546,27 +7617,27 @@ public partial class IFaceLog {
       return recv_savePersonFull();
     }
 
-    public async Task<PersonBean> savePersonFullAsync(PersonBean bean, byte[] idPhoto, byte[] feature, byte[] featureImage, FaceBean featureFaceBean, int deviceId, Token token)
+    public async Task<PersonBean> savePersonFullAsync(PersonBean personBean, byte[] idPhoto, byte[] feature, byte[] featureImage, FaceBean featureFaceBean, int deviceId, Token token)
     {
       PersonBean retval;
       retval = await Task.Run(() =>
       {
-        return savePersonFull(bean, idPhoto, feature, featureImage, featureFaceBean, deviceId, token);
+        return savePersonFull(personBean, idPhoto, feature, featureImage, featureFaceBean, deviceId, token);
       });
       return retval;
     }
 
-    public PersonBean savePersonFull(PersonBean bean, byte[] idPhoto, byte[] feature, byte[] featureImage, FaceBean featureFaceBean, int deviceId, Token token)
+    public PersonBean savePersonFull(PersonBean personBean, byte[] idPhoto, byte[] feature, byte[] featureImage, FaceBean featureFaceBean, int deviceId, Token token)
     {
-      var asyncResult = Begin_savePersonFull(null, null, bean, idPhoto, feature, featureImage, featureFaceBean, deviceId, token);
+      var asyncResult = Begin_savePersonFull(null, null, personBean, idPhoto, feature, featureImage, featureFaceBean, deviceId, token);
       return End_savePersonFull(asyncResult);
 
     }
-    public IAsyncResult send_savePersonFull(AsyncCallback callback, object state, PersonBean bean, byte[] idPhoto, byte[] feature, byte[] featureImage, FaceBean featureFaceBean, int deviceId, Token token)
+    public IAsyncResult send_savePersonFull(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, byte[] feature, byte[] featureImage, FaceBean featureFaceBean, int deviceId, Token token)
     {
       oprot_.WriteMessageBegin(new TMessage("savePersonFull", TMessageType.Call, seqid_));
       savePersonFull_args args = new savePersonFull_args();
-      args.Bean = bean;
+      args.PersonBean = personBean;
       args.IdPhoto = idPhoto;
       args.Feature = feature;
       args.FeatureImage = featureImage;
@@ -7658,9 +7729,9 @@ public partial class IFaceLog {
     }
 
     
-    public IAsyncResult Begin_savePersonWithPhoto(AsyncCallback callback, object state, PersonBean bean, byte[] idPhoto, Token token)
+    public IAsyncResult Begin_savePersonWithPhoto(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, Token token)
     {
-      return send_savePersonWithPhoto(callback, state, bean, idPhoto, token);
+      return send_savePersonWithPhoto(callback, state, personBean, idPhoto, token);
     }
 
     public PersonBean End_savePersonWithPhoto(IAsyncResult asyncResult)
@@ -7669,27 +7740,27 @@ public partial class IFaceLog {
       return recv_savePersonWithPhoto();
     }
 
-    public async Task<PersonBean> savePersonWithPhotoAsync(PersonBean bean, byte[] idPhoto, Token token)
+    public async Task<PersonBean> savePersonWithPhotoAsync(PersonBean personBean, byte[] idPhoto, Token token)
     {
       PersonBean retval;
       retval = await Task.Run(() =>
       {
-        return savePersonWithPhoto(bean, idPhoto, token);
+        return savePersonWithPhoto(personBean, idPhoto, token);
       });
       return retval;
     }
 
-    public PersonBean savePersonWithPhoto(PersonBean bean, byte[] idPhoto, Token token)
+    public PersonBean savePersonWithPhoto(PersonBean personBean, byte[] idPhoto, Token token)
     {
-      var asyncResult = Begin_savePersonWithPhoto(null, null, bean, idPhoto, token);
+      var asyncResult = Begin_savePersonWithPhoto(null, null, personBean, idPhoto, token);
       return End_savePersonWithPhoto(asyncResult);
 
     }
-    public IAsyncResult send_savePersonWithPhoto(AsyncCallback callback, object state, PersonBean bean, byte[] idPhoto, Token token)
+    public IAsyncResult send_savePersonWithPhoto(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, Token token)
     {
       oprot_.WriteMessageBegin(new TMessage("savePersonWithPhoto", TMessageType.Call, seqid_));
       savePersonWithPhoto_args args = new savePersonWithPhoto_args();
-      args.Bean = bean;
+      args.PersonBean = personBean;
       args.IdPhoto = idPhoto;
       args.Token = token;
       args.Write(oprot_);
@@ -7718,9 +7789,9 @@ public partial class IFaceLog {
     }
 
     
-    public IAsyncResult Begin_savePersonWithPhotoAndFeature(AsyncCallback callback, object state, PersonBean bean, byte[] idPhoto, FeatureBean featureBean, int deviceId, Token token)
+    public IAsyncResult Begin_savePersonWithPhotoAndFeature(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, FeatureBean featureBean, int deviceId, Token token)
     {
-      return send_savePersonWithPhotoAndFeature(callback, state, bean, idPhoto, featureBean, deviceId, token);
+      return send_savePersonWithPhotoAndFeature(callback, state, personBean, idPhoto, featureBean, deviceId, token);
     }
 
     public PersonBean End_savePersonWithPhotoAndFeature(IAsyncResult asyncResult)
@@ -7729,27 +7800,27 @@ public partial class IFaceLog {
       return recv_savePersonWithPhotoAndFeature();
     }
 
-    public async Task<PersonBean> savePersonWithPhotoAndFeatureAsync(PersonBean bean, byte[] idPhoto, FeatureBean featureBean, int deviceId, Token token)
+    public async Task<PersonBean> savePersonWithPhotoAndFeatureAsync(PersonBean personBean, byte[] idPhoto, FeatureBean featureBean, int deviceId, Token token)
     {
       PersonBean retval;
       retval = await Task.Run(() =>
       {
-        return savePersonWithPhotoAndFeature(bean, idPhoto, featureBean, deviceId, token);
+        return savePersonWithPhotoAndFeature(personBean, idPhoto, featureBean, deviceId, token);
       });
       return retval;
     }
 
-    public PersonBean savePersonWithPhotoAndFeature(PersonBean bean, byte[] idPhoto, FeatureBean featureBean, int deviceId, Token token)
+    public PersonBean savePersonWithPhotoAndFeature(PersonBean personBean, byte[] idPhoto, FeatureBean featureBean, int deviceId, Token token)
     {
-      var asyncResult = Begin_savePersonWithPhotoAndFeature(null, null, bean, idPhoto, featureBean, deviceId, token);
+      var asyncResult = Begin_savePersonWithPhotoAndFeature(null, null, personBean, idPhoto, featureBean, deviceId, token);
       return End_savePersonWithPhotoAndFeature(asyncResult);
 
     }
-    public IAsyncResult send_savePersonWithPhotoAndFeature(AsyncCallback callback, object state, PersonBean bean, byte[] idPhoto, FeatureBean featureBean, int deviceId, Token token)
+    public IAsyncResult send_savePersonWithPhotoAndFeature(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, FeatureBean featureBean, int deviceId, Token token)
     {
       oprot_.WriteMessageBegin(new TMessage("savePersonWithPhotoAndFeature", TMessageType.Call, seqid_));
       savePersonWithPhotoAndFeature_args args = new savePersonWithPhotoAndFeature_args();
-      args.Bean = bean;
+      args.PersonBean = personBean;
       args.IdPhoto = idPhoto;
       args.FeatureBean = featureBean;
       args.DeviceId = deviceId;
@@ -7780,9 +7851,9 @@ public partial class IFaceLog {
     }
 
     
-    public IAsyncResult Begin_savePersonWithPhotoAndFeatureMultiFaces(AsyncCallback callback, object state, PersonBean bean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token)
+    public IAsyncResult Begin_savePersonWithPhotoAndFeatureMultiFaces(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token)
     {
-      return send_savePersonWithPhotoAndFeatureMultiFaces(callback, state, bean, idPhoto, feature, faceBeans, token);
+      return send_savePersonWithPhotoAndFeatureMultiFaces(callback, state, personBean, idPhoto, feature, faceBeans, token);
     }
 
     public PersonBean End_savePersonWithPhotoAndFeatureMultiFaces(IAsyncResult asyncResult)
@@ -7791,27 +7862,27 @@ public partial class IFaceLog {
       return recv_savePersonWithPhotoAndFeatureMultiFaces();
     }
 
-    public async Task<PersonBean> savePersonWithPhotoAndFeatureMultiFacesAsync(PersonBean bean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token)
+    public async Task<PersonBean> savePersonWithPhotoAndFeatureMultiFacesAsync(PersonBean personBean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token)
     {
       PersonBean retval;
       retval = await Task.Run(() =>
       {
-        return savePersonWithPhotoAndFeatureMultiFaces(bean, idPhoto, feature, faceBeans, token);
+        return savePersonWithPhotoAndFeatureMultiFaces(personBean, idPhoto, feature, faceBeans, token);
       });
       return retval;
     }
 
-    public PersonBean savePersonWithPhotoAndFeatureMultiFaces(PersonBean bean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token)
+    public PersonBean savePersonWithPhotoAndFeatureMultiFaces(PersonBean personBean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token)
     {
-      var asyncResult = Begin_savePersonWithPhotoAndFeatureMultiFaces(null, null, bean, idPhoto, feature, faceBeans, token);
+      var asyncResult = Begin_savePersonWithPhotoAndFeatureMultiFaces(null, null, personBean, idPhoto, feature, faceBeans, token);
       return End_savePersonWithPhotoAndFeatureMultiFaces(asyncResult);
 
     }
-    public IAsyncResult send_savePersonWithPhotoAndFeatureMultiFaces(AsyncCallback callback, object state, PersonBean bean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token)
+    public IAsyncResult send_savePersonWithPhotoAndFeatureMultiFaces(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token)
     {
       oprot_.WriteMessageBegin(new TMessage("savePersonWithPhotoAndFeatureMultiFaces", TMessageType.Call, seqid_));
       savePersonWithPhotoAndFeatureMultiFaces_args args = new savePersonWithPhotoAndFeatureMultiFaces_args();
-      args.Bean = bean;
+      args.PersonBean = personBean;
       args.IdPhoto = idPhoto;
       args.Feature = feature;
       args.FaceBeans = faceBeans;
@@ -7842,9 +7913,9 @@ public partial class IFaceLog {
     }
 
     
-    public IAsyncResult Begin_savePersonWithPhotoAndFeatureMultiImage(AsyncCallback callback, object state, PersonBean bean, byte[] idPhoto, byte[] feature, Dictionary<byte[], FaceBean> faceInfo, int deviceId, Token token)
+    public IAsyncResult Begin_savePersonWithPhotoAndFeatureMultiImage(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, byte[] feature, Dictionary<byte[], FaceBean> faceInfo, int deviceId, Token token)
     {
-      return send_savePersonWithPhotoAndFeatureMultiImage(callback, state, bean, idPhoto, feature, faceInfo, deviceId, token);
+      return send_savePersonWithPhotoAndFeatureMultiImage(callback, state, personBean, idPhoto, feature, faceInfo, deviceId, token);
     }
 
     public PersonBean End_savePersonWithPhotoAndFeatureMultiImage(IAsyncResult asyncResult)
@@ -7853,27 +7924,27 @@ public partial class IFaceLog {
       return recv_savePersonWithPhotoAndFeatureMultiImage();
     }
 
-    public async Task<PersonBean> savePersonWithPhotoAndFeatureMultiImageAsync(PersonBean bean, byte[] idPhoto, byte[] feature, Dictionary<byte[], FaceBean> faceInfo, int deviceId, Token token)
+    public async Task<PersonBean> savePersonWithPhotoAndFeatureMultiImageAsync(PersonBean personBean, byte[] idPhoto, byte[] feature, Dictionary<byte[], FaceBean> faceInfo, int deviceId, Token token)
     {
       PersonBean retval;
       retval = await Task.Run(() =>
       {
-        return savePersonWithPhotoAndFeatureMultiImage(bean, idPhoto, feature, faceInfo, deviceId, token);
+        return savePersonWithPhotoAndFeatureMultiImage(personBean, idPhoto, feature, faceInfo, deviceId, token);
       });
       return retval;
     }
 
-    public PersonBean savePersonWithPhotoAndFeatureMultiImage(PersonBean bean, byte[] idPhoto, byte[] feature, Dictionary<byte[], FaceBean> faceInfo, int deviceId, Token token)
+    public PersonBean savePersonWithPhotoAndFeatureMultiImage(PersonBean personBean, byte[] idPhoto, byte[] feature, Dictionary<byte[], FaceBean> faceInfo, int deviceId, Token token)
     {
-      var asyncResult = Begin_savePersonWithPhotoAndFeatureMultiImage(null, null, bean, idPhoto, feature, faceInfo, deviceId, token);
+      var asyncResult = Begin_savePersonWithPhotoAndFeatureMultiImage(null, null, personBean, idPhoto, feature, faceInfo, deviceId, token);
       return End_savePersonWithPhotoAndFeatureMultiImage(asyncResult);
 
     }
-    public IAsyncResult send_savePersonWithPhotoAndFeatureMultiImage(AsyncCallback callback, object state, PersonBean bean, byte[] idPhoto, byte[] feature, Dictionary<byte[], FaceBean> faceInfo, int deviceId, Token token)
+    public IAsyncResult send_savePersonWithPhotoAndFeatureMultiImage(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, byte[] feature, Dictionary<byte[], FaceBean> faceInfo, int deviceId, Token token)
     {
       oprot_.WriteMessageBegin(new TMessage("savePersonWithPhotoAndFeatureMultiImage", TMessageType.Call, seqid_));
       savePersonWithPhotoAndFeatureMultiImage_args args = new savePersonWithPhotoAndFeatureMultiImage_args();
-      args.Bean = bean;
+      args.PersonBean = personBean;
       args.IdPhoto = idPhoto;
       args.Feature = feature;
       args.FaceInfo = faceInfo;
@@ -7905,9 +7976,9 @@ public partial class IFaceLog {
     }
 
     
-    public IAsyncResult Begin_savePersonWithPhotoAndFeatureSaved(AsyncCallback callback, object state, PersonBean bean, string idPhotoMd5, string featureMd5, Token token)
+    public IAsyncResult Begin_savePersonWithPhotoAndFeatureSaved(AsyncCallback callback, object state, PersonBean personBean, string idPhotoMd5, string featureMd5, Token token)
     {
-      return send_savePersonWithPhotoAndFeatureSaved(callback, state, bean, idPhotoMd5, featureMd5, token);
+      return send_savePersonWithPhotoAndFeatureSaved(callback, state, personBean, idPhotoMd5, featureMd5, token);
     }
 
     public PersonBean End_savePersonWithPhotoAndFeatureSaved(IAsyncResult asyncResult)
@@ -7916,27 +7987,27 @@ public partial class IFaceLog {
       return recv_savePersonWithPhotoAndFeatureSaved();
     }
 
-    public async Task<PersonBean> savePersonWithPhotoAndFeatureSavedAsync(PersonBean bean, string idPhotoMd5, string featureMd5, Token token)
+    public async Task<PersonBean> savePersonWithPhotoAndFeatureSavedAsync(PersonBean personBean, string idPhotoMd5, string featureMd5, Token token)
     {
       PersonBean retval;
       retval = await Task.Run(() =>
       {
-        return savePersonWithPhotoAndFeatureSaved(bean, idPhotoMd5, featureMd5, token);
+        return savePersonWithPhotoAndFeatureSaved(personBean, idPhotoMd5, featureMd5, token);
       });
       return retval;
     }
 
-    public PersonBean savePersonWithPhotoAndFeatureSaved(PersonBean bean, string idPhotoMd5, string featureMd5, Token token)
+    public PersonBean savePersonWithPhotoAndFeatureSaved(PersonBean personBean, string idPhotoMd5, string featureMd5, Token token)
     {
-      var asyncResult = Begin_savePersonWithPhotoAndFeatureSaved(null, null, bean, idPhotoMd5, featureMd5, token);
+      var asyncResult = Begin_savePersonWithPhotoAndFeatureSaved(null, null, personBean, idPhotoMd5, featureMd5, token);
       return End_savePersonWithPhotoAndFeatureSaved(asyncResult);
 
     }
-    public IAsyncResult send_savePersonWithPhotoAndFeatureSaved(AsyncCallback callback, object state, PersonBean bean, string idPhotoMd5, string featureMd5, Token token)
+    public IAsyncResult send_savePersonWithPhotoAndFeatureSaved(AsyncCallback callback, object state, PersonBean personBean, string idPhotoMd5, string featureMd5, Token token)
     {
       oprot_.WriteMessageBegin(new TMessage("savePersonWithPhotoAndFeatureSaved", TMessageType.Call, seqid_));
       savePersonWithPhotoAndFeatureSaved_args args = new savePersonWithPhotoAndFeatureSaved_args();
-      args.Bean = bean;
+      args.PersonBean = personBean;
       args.IdPhotoMd5 = idPhotoMd5;
       args.FeatureMd5 = featureMd5;
       args.Token = token;
@@ -7966,9 +8037,9 @@ public partial class IFaceLog {
     }
 
     
-    public IAsyncResult Begin_savePersons(AsyncCallback callback, object state, List<PersonBean> beans, Token token)
+    public IAsyncResult Begin_savePersons(AsyncCallback callback, object state, List<PersonBean> persons, Token token)
     {
-      return send_savePersons(callback, state, beans, token);
+      return send_savePersons(callback, state, persons, token);
     }
 
     public void End_savePersons(IAsyncResult asyncResult)
@@ -7977,25 +8048,25 @@ public partial class IFaceLog {
       recv_savePersons();
     }
 
-    public async Task savePersonsAsync(List<PersonBean> beans, Token token)
+    public async Task savePersonsAsync(List<PersonBean> persons, Token token)
     {
       await Task.Run(() =>
       {
-        savePersons(beans, token);
+        savePersons(persons, token);
       });
     }
 
-    public void savePersons(List<PersonBean> beans, Token token)
+    public void savePersons(List<PersonBean> persons, Token token)
     {
-      var asyncResult = Begin_savePersons(null, null, beans, token);
+      var asyncResult = Begin_savePersons(null, null, persons, token);
       End_savePersons(asyncResult);
 
     }
-    public IAsyncResult send_savePersons(AsyncCallback callback, object state, List<PersonBean> beans, Token token)
+    public IAsyncResult send_savePersons(AsyncCallback callback, object state, List<PersonBean> persons, Token token)
     {
       oprot_.WriteMessageBegin(new TMessage("savePersons", TMessageType.Call, seqid_));
       savePersons_args args = new savePersons_args();
-      args.Beans = beans;
+      args.Persons = persons;
       args.Token = token;
       args.Write(oprot_);
       oprot_.WriteMessageEnd();
@@ -8760,6 +8831,7 @@ public partial class IFaceLog {
       iface_ = iface;
       processMap_["addFeature"] = addFeature_ProcessAsync;
       processMap_["addFeatureMulti"] = addFeatureMulti_ProcessAsync;
+      processMap_["addFeatureWithImage"] = addFeatureWithImage_ProcessAsync;
       processMap_["addImage"] = addImage_ProcessAsync;
       processMap_["addLog"] = addLog_ProcessAsync;
       processMap_["addLogs"] = addLogs_ProcessAsync;
@@ -9001,6 +9073,45 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("addFeatureMulti", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public async Task addFeatureWithImage_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      addFeatureWithImage_args args = new addFeatureWithImage_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      addFeatureWithImage_result result = new addFeatureWithImage_result();
+      try
+      {
+        try
+        {
+          result.Success = await iface_.addFeatureWithImageAsync(args.Feature, args.PersonId.Value, args.AsIdPhotoIfAbsent.Value, args.FeaturePhoto, args.FaceBean, args.DeviceId.Value, args.Token);
+        }
+        catch (DuplicateRecordException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        catch (ServiceRuntimeException ex2)
+        {
+          result.Ex2 = ex2;
+        }
+        oprot.WriteMessageBegin(new TMessage("addFeatureWithImage", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("addFeatureWithImage", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -13090,7 +13201,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = await iface_.savePersonAsync(args.Bean, args.Token);
+          result.Success = await iface_.savePersonAsync(args.PersonBean, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -13125,7 +13236,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = await iface_.savePersonFullAsync(args.Bean, args.IdPhoto, args.Feature, args.FeatureImage, args.FeatureFaceBean, args.DeviceId.Value, args.Token);
+          result.Success = await iface_.savePersonFullAsync(args.PersonBean, args.IdPhoto, args.Feature, args.FeatureImage, args.FeatureFaceBean, args.DeviceId.Value, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -13195,7 +13306,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = await iface_.savePersonWithPhotoAsync(args.Bean, args.IdPhoto, args.Token);
+          result.Success = await iface_.savePersonWithPhotoAsync(args.PersonBean, args.IdPhoto, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -13230,7 +13341,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = await iface_.savePersonWithPhotoAndFeatureAsync(args.Bean, args.IdPhoto, args.FeatureBean, args.DeviceId.Value, args.Token);
+          result.Success = await iface_.savePersonWithPhotoAndFeatureAsync(args.PersonBean, args.IdPhoto, args.FeatureBean, args.DeviceId.Value, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -13265,7 +13376,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = await iface_.savePersonWithPhotoAndFeatureMultiFacesAsync(args.Bean, args.IdPhoto, args.Feature, args.FaceBeans, args.Token);
+          result.Success = await iface_.savePersonWithPhotoAndFeatureMultiFacesAsync(args.PersonBean, args.IdPhoto, args.Feature, args.FaceBeans, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -13300,7 +13411,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = await iface_.savePersonWithPhotoAndFeatureMultiImageAsync(args.Bean, args.IdPhoto, args.Feature, args.FaceInfo, args.DeviceId.Value, args.Token);
+          result.Success = await iface_.savePersonWithPhotoAndFeatureMultiImageAsync(args.PersonBean, args.IdPhoto, args.Feature, args.FaceInfo, args.DeviceId.Value, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -13335,7 +13446,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = await iface_.savePersonWithPhotoAndFeatureSavedAsync(args.Bean, args.IdPhotoMd5, args.FeatureMd5, args.Token);
+          result.Success = await iface_.savePersonWithPhotoAndFeatureSavedAsync(args.PersonBean, args.IdPhotoMd5, args.FeatureMd5, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -13370,7 +13481,7 @@ public partial class IFaceLog {
       {
         try
         {
-          await iface_.savePersonsAsync(args.Beans, args.Token);
+          await iface_.savePersonsAsync(args.Persons, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -13862,6 +13973,7 @@ public partial class IFaceLog {
       iface_ = iface;
       processMap_["addFeature"] = addFeature_Process;
       processMap_["addFeatureMulti"] = addFeatureMulti_Process;
+      processMap_["addFeatureWithImage"] = addFeatureWithImage_Process;
       processMap_["addImage"] = addImage_Process;
       processMap_["addLog"] = addLog_Process;
       processMap_["addLogs"] = addLogs_Process;
@@ -14103,6 +14215,45 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("addFeatureMulti", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public void addFeatureWithImage_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      addFeatureWithImage_args args = new addFeatureWithImage_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      addFeatureWithImage_result result = new addFeatureWithImage_result();
+      try
+      {
+        try
+        {
+          result.Success = iface_.addFeatureWithImage(args.Feature, args.PersonId.Value, args.AsIdPhotoIfAbsent.Value, args.FeaturePhoto, args.FaceBean, args.DeviceId.Value, args.Token);
+        }
+        catch (DuplicateRecordException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        catch (ServiceRuntimeException ex2)
+        {
+          result.Ex2 = ex2;
+        }
+        oprot.WriteMessageBegin(new TMessage("addFeatureWithImage", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("addFeatureWithImage", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -18192,7 +18343,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = iface_.savePerson(args.Bean, args.Token);
+          result.Success = iface_.savePerson(args.PersonBean, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -18227,7 +18378,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = iface_.savePersonFull(args.Bean, args.IdPhoto, args.Feature, args.FeatureImage, args.FeatureFaceBean, args.DeviceId.Value, args.Token);
+          result.Success = iface_.savePersonFull(args.PersonBean, args.IdPhoto, args.Feature, args.FeatureImage, args.FeatureFaceBean, args.DeviceId.Value, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -18297,7 +18448,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = iface_.savePersonWithPhoto(args.Bean, args.IdPhoto, args.Token);
+          result.Success = iface_.savePersonWithPhoto(args.PersonBean, args.IdPhoto, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -18332,7 +18483,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = iface_.savePersonWithPhotoAndFeature(args.Bean, args.IdPhoto, args.FeatureBean, args.DeviceId.Value, args.Token);
+          result.Success = iface_.savePersonWithPhotoAndFeature(args.PersonBean, args.IdPhoto, args.FeatureBean, args.DeviceId.Value, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -18367,7 +18518,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = iface_.savePersonWithPhotoAndFeatureMultiFaces(args.Bean, args.IdPhoto, args.Feature, args.FaceBeans, args.Token);
+          result.Success = iface_.savePersonWithPhotoAndFeatureMultiFaces(args.PersonBean, args.IdPhoto, args.Feature, args.FaceBeans, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -18402,7 +18553,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = iface_.savePersonWithPhotoAndFeatureMultiImage(args.Bean, args.IdPhoto, args.Feature, args.FaceInfo, args.DeviceId.Value, args.Token);
+          result.Success = iface_.savePersonWithPhotoAndFeatureMultiImage(args.PersonBean, args.IdPhoto, args.Feature, args.FaceInfo, args.DeviceId.Value, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -18437,7 +18588,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = iface_.savePersonWithPhotoAndFeatureSaved(args.Bean, args.IdPhotoMd5, args.FeatureMd5, args.Token);
+          result.Success = iface_.savePersonWithPhotoAndFeatureSaved(args.PersonBean, args.IdPhotoMd5, args.FeatureMd5, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -18472,7 +18623,7 @@ public partial class IFaceLog {
       {
         try
         {
-          iface_.savePersons(args.Beans, args.Token);
+          iface_.savePersons(args.Persons, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -19579,6 +19730,363 @@ public partial class IFaceLog {
 
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("addFeatureMulti_result(");
+      bool __first = true;
+      if (Success != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Success: ");
+        __sb.Append(Success== null ? "<null>" : Success.ToString());
+      }
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      if (Ex2 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex2: ");
+        __sb.Append(Ex2== null ? "<null>" : Ex2.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class addFeatureWithImage_args : TBase
+  {
+
+    public byte[] Feature { get; set; }
+
+    public int? PersonId { get; set; }
+
+    public bool AsIdPhotoIfAbsent { get; set; }
+
+    public byte[] FeaturePhoto { get; set; }
+
+    public FaceBean FaceBean { get; set; }
+
+    public int? DeviceId { get; set; }
+
+    public Token Token { get; set; }
+
+    public addFeatureWithImage_args() {
+    }
+
+    public addFeatureWithImage_args(bool asIdPhotoIfAbsent) : this() {
+      this.AsIdPhotoIfAbsent = asIdPhotoIfAbsent;
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        bool isset_asIdPhotoIfAbsent = false;
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.String) {
+                Feature = iprot.ReadBinary();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.I32) {
+                PersonId = iprot.ReadI32();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 3:
+              if (field.Type == TType.Bool) {
+                AsIdPhotoIfAbsent = iprot.ReadBool();
+                isset_asIdPhotoIfAbsent = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 4:
+              if (field.Type == TType.String) {
+                FeaturePhoto = iprot.ReadBinary();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 5:
+              if (field.Type == TType.Struct) {
+                FaceBean = new FaceBean();
+                FaceBean.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 6:
+              if (field.Type == TType.I32) {
+                DeviceId = iprot.ReadI32();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 7:
+              if (field.Type == TType.Struct) {
+                Token = new Token();
+                Token.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+        if (!isset_asIdPhotoIfAbsent)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field AsIdPhotoIfAbsent not set");
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("addFeatureWithImage_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (Feature != null) {
+          field.Name = "feature";
+          field.Type = TType.String;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteBinary(Feature);
+          oprot.WriteFieldEnd();
+        }
+        if (PersonId != null) {
+          field.Name = "personId";
+          field.Type = TType.I32;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI32(PersonId.Value);
+          oprot.WriteFieldEnd();
+        }
+        field.Name = "asIdPhotoIfAbsent";
+        field.Type = TType.Bool;
+        field.ID = 3;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteBool(AsIdPhotoIfAbsent);
+        oprot.WriteFieldEnd();
+        if (FeaturePhoto != null) {
+          field.Name = "featurePhoto";
+          field.Type = TType.String;
+          field.ID = 4;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteBinary(FeaturePhoto);
+          oprot.WriteFieldEnd();
+        }
+        if (FaceBean != null) {
+          field.Name = "faceBean";
+          field.Type = TType.Struct;
+          field.ID = 5;
+          oprot.WriteFieldBegin(field);
+          FaceBean.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        if (DeviceId != null) {
+          field.Name = "deviceId";
+          field.Type = TType.I32;
+          field.ID = 6;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI32(DeviceId.Value);
+          oprot.WriteFieldEnd();
+        }
+        if (Token != null) {
+          field.Name = "token";
+          field.Type = TType.Struct;
+          field.ID = 7;
+          oprot.WriteFieldBegin(field);
+          Token.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("addFeatureWithImage_args(");
+      bool __first = true;
+      if (Feature != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Feature: ");
+        __sb.Append(Feature);
+      }
+      if (PersonId != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("PersonId: ");
+        __sb.Append(PersonId);
+      }
+      if(!__first) { __sb.Append(", "); }
+      __sb.Append("AsIdPhotoIfAbsent: ");
+      __sb.Append(AsIdPhotoIfAbsent);
+      if (FeaturePhoto != null) {
+        __sb.Append(", FeaturePhoto: ");
+        __sb.Append(FeaturePhoto);
+      }
+      if (FaceBean != null) {
+        __sb.Append(", FaceBean: ");
+        __sb.Append(FaceBean== null ? "<null>" : FaceBean.ToString());
+      }
+      if (DeviceId != null) {
+        __sb.Append(", DeviceId: ");
+        __sb.Append(DeviceId);
+      }
+      if (Token != null) {
+        __sb.Append(", Token: ");
+        __sb.Append(Token== null ? "<null>" : Token.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class addFeatureWithImage_result : TBase
+  {
+
+    public FeatureBean Success { get; set; }
+
+    public DuplicateRecordException Ex1 { get; set; }
+
+    public ServiceRuntimeException Ex2 { get; set; }
+
+    public addFeatureWithImage_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Struct) {
+                Success = new FeatureBean();
+                Success.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new DuplicateRecordException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.Struct) {
+                Ex2 = new ServiceRuntimeException();
+                Ex2.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("addFeatureWithImage_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Success != null) {
+          field.Name = "Success";
+          field.Type = TType.Struct;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          Success.Write(oprot);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex2 != null) {
+          field.Name = "Ex2";
+          field.Type = TType.Struct;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          Ex2.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("addFeatureWithImage_result(");
       bool __first = true;
       if (Success != null) {
         if(!__first) { __sb.Append(", "); }
@@ -44849,7 +45357,7 @@ public partial class IFaceLog {
   public partial class savePerson_args : TBase
   {
 
-    public PersonBean Bean { get; set; }
+    public PersonBean PersonBean { get; set; }
 
     public Token Token { get; set; }
 
@@ -44873,8 +45381,8 @@ public partial class IFaceLog {
           {
             case 1:
               if (field.Type == TType.Struct) {
-                Bean = new PersonBean();
-                Bean.Read(iprot);
+                PersonBean = new PersonBean();
+                PersonBean.Read(iprot);
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -44908,12 +45416,12 @@ public partial class IFaceLog {
         TStruct struc = new TStruct("savePerson_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        if (Bean != null) {
-          field.Name = "bean";
+        if (PersonBean != null) {
+          field.Name = "personBean";
           field.Type = TType.Struct;
           field.ID = 1;
           oprot.WriteFieldBegin(field);
-          Bean.Write(oprot);
+          PersonBean.Write(oprot);
           oprot.WriteFieldEnd();
         }
         if (Token != null) {
@@ -44936,11 +45444,11 @@ public partial class IFaceLog {
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("savePerson_args(");
       bool __first = true;
-      if (Bean != null) {
+      if (PersonBean != null) {
         if(!__first) { __sb.Append(", "); }
         __first = false;
-        __sb.Append("Bean: ");
-        __sb.Append(Bean== null ? "<null>" : Bean.ToString());
+        __sb.Append("PersonBean: ");
+        __sb.Append(PersonBean== null ? "<null>" : PersonBean.ToString());
       }
       if (Token != null) {
         if(!__first) { __sb.Append(", "); }
@@ -45073,7 +45581,7 @@ public partial class IFaceLog {
   public partial class savePersonFull_args : TBase
   {
 
-    public PersonBean Bean { get; set; }
+    public PersonBean PersonBean { get; set; }
 
     public byte[] IdPhoto { get; set; }
 
@@ -45107,8 +45615,8 @@ public partial class IFaceLog {
           {
             case 1:
               if (field.Type == TType.Struct) {
-                Bean = new PersonBean();
-                Bean.Read(iprot);
+                PersonBean = new PersonBean();
+                PersonBean.Read(iprot);
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -45178,12 +45686,12 @@ public partial class IFaceLog {
         TStruct struc = new TStruct("savePersonFull_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        if (Bean != null) {
-          field.Name = "bean";
+        if (PersonBean != null) {
+          field.Name = "personBean";
           field.Type = TType.Struct;
           field.ID = 1;
           oprot.WriteFieldBegin(field);
-          Bean.Write(oprot);
+          PersonBean.Write(oprot);
           oprot.WriteFieldEnd();
         }
         if (IdPhoto != null) {
@@ -45246,11 +45754,11 @@ public partial class IFaceLog {
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("savePersonFull_args(");
       bool __first = true;
-      if (Bean != null) {
+      if (PersonBean != null) {
         if(!__first) { __sb.Append(", "); }
         __first = false;
-        __sb.Append("Bean: ");
-        __sb.Append(Bean== null ? "<null>" : Bean.ToString());
+        __sb.Append("PersonBean: ");
+        __sb.Append(PersonBean== null ? "<null>" : PersonBean.ToString());
       }
       if (IdPhoto != null) {
         if(!__first) { __sb.Append(", "); }
@@ -45637,7 +46145,7 @@ public partial class IFaceLog {
   public partial class savePersonWithPhoto_args : TBase
   {
 
-    public PersonBean Bean { get; set; }
+    public PersonBean PersonBean { get; set; }
 
     public byte[] IdPhoto { get; set; }
 
@@ -45663,8 +46171,8 @@ public partial class IFaceLog {
           {
             case 1:
               if (field.Type == TType.Struct) {
-                Bean = new PersonBean();
-                Bean.Read(iprot);
+                PersonBean = new PersonBean();
+                PersonBean.Read(iprot);
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -45705,12 +46213,12 @@ public partial class IFaceLog {
         TStruct struc = new TStruct("savePersonWithPhoto_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        if (Bean != null) {
-          field.Name = "bean";
+        if (PersonBean != null) {
+          field.Name = "personBean";
           field.Type = TType.Struct;
           field.ID = 1;
           oprot.WriteFieldBegin(field);
-          Bean.Write(oprot);
+          PersonBean.Write(oprot);
           oprot.WriteFieldEnd();
         }
         if (IdPhoto != null) {
@@ -45741,11 +46249,11 @@ public partial class IFaceLog {
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("savePersonWithPhoto_args(");
       bool __first = true;
-      if (Bean != null) {
+      if (PersonBean != null) {
         if(!__first) { __sb.Append(", "); }
         __first = false;
-        __sb.Append("Bean: ");
-        __sb.Append(Bean== null ? "<null>" : Bean.ToString());
+        __sb.Append("PersonBean: ");
+        __sb.Append(PersonBean== null ? "<null>" : PersonBean.ToString());
       }
       if (IdPhoto != null) {
         if(!__first) { __sb.Append(", "); }
@@ -45884,7 +46392,7 @@ public partial class IFaceLog {
   public partial class savePersonWithPhotoAndFeature_args : TBase
   {
 
-    public PersonBean Bean { get; set; }
+    public PersonBean PersonBean { get; set; }
 
     public byte[] IdPhoto { get; set; }
 
@@ -45914,8 +46422,8 @@ public partial class IFaceLog {
           {
             case 1:
               if (field.Type == TType.Struct) {
-                Bean = new PersonBean();
-                Bean.Read(iprot);
+                PersonBean = new PersonBean();
+                PersonBean.Read(iprot);
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -45971,12 +46479,12 @@ public partial class IFaceLog {
         TStruct struc = new TStruct("savePersonWithPhotoAndFeature_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        if (Bean != null) {
-          field.Name = "bean";
+        if (PersonBean != null) {
+          field.Name = "personBean";
           field.Type = TType.Struct;
           field.ID = 1;
           oprot.WriteFieldBegin(field);
-          Bean.Write(oprot);
+          PersonBean.Write(oprot);
           oprot.WriteFieldEnd();
         }
         if (IdPhoto != null) {
@@ -46023,11 +46531,11 @@ public partial class IFaceLog {
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("savePersonWithPhotoAndFeature_args(");
       bool __first = true;
-      if (Bean != null) {
+      if (PersonBean != null) {
         if(!__first) { __sb.Append(", "); }
         __first = false;
-        __sb.Append("Bean: ");
-        __sb.Append(Bean== null ? "<null>" : Bean.ToString());
+        __sb.Append("PersonBean: ");
+        __sb.Append(PersonBean== null ? "<null>" : PersonBean.ToString());
       }
       if (IdPhoto != null) {
         if(!__first) { __sb.Append(", "); }
@@ -46178,7 +46686,7 @@ public partial class IFaceLog {
   public partial class savePersonWithPhotoAndFeatureMultiFaces_args : TBase
   {
 
-    public PersonBean Bean { get; set; }
+    public PersonBean PersonBean { get; set; }
 
     public byte[] IdPhoto { get; set; }
 
@@ -46208,8 +46716,8 @@ public partial class IFaceLog {
           {
             case 1:
               if (field.Type == TType.Struct) {
-                Bean = new PersonBean();
-                Bean.Read(iprot);
+                PersonBean = new PersonBean();
+                PersonBean.Read(iprot);
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -46275,12 +46783,12 @@ public partial class IFaceLog {
         TStruct struc = new TStruct("savePersonWithPhotoAndFeatureMultiFaces_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        if (Bean != null) {
-          field.Name = "bean";
+        if (PersonBean != null) {
+          field.Name = "personBean";
           field.Type = TType.Struct;
           field.ID = 1;
           oprot.WriteFieldBegin(field);
-          Bean.Write(oprot);
+          PersonBean.Write(oprot);
           oprot.WriteFieldEnd();
         }
         if (IdPhoto != null) {
@@ -46334,11 +46842,11 @@ public partial class IFaceLog {
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("savePersonWithPhotoAndFeatureMultiFaces_args(");
       bool __first = true;
-      if (Bean != null) {
+      if (PersonBean != null) {
         if(!__first) { __sb.Append(", "); }
         __first = false;
-        __sb.Append("Bean: ");
-        __sb.Append(Bean== null ? "<null>" : Bean.ToString());
+        __sb.Append("PersonBean: ");
+        __sb.Append(PersonBean== null ? "<null>" : PersonBean.ToString());
       }
       if (IdPhoto != null) {
         if(!__first) { __sb.Append(", "); }
@@ -46489,7 +46997,7 @@ public partial class IFaceLog {
   public partial class savePersonWithPhotoAndFeatureMultiImage_args : TBase
   {
 
-    public PersonBean Bean { get; set; }
+    public PersonBean PersonBean { get; set; }
 
     public byte[] IdPhoto { get; set; }
 
@@ -46521,8 +47029,8 @@ public partial class IFaceLog {
           {
             case 1:
               if (field.Type == TType.Struct) {
-                Bean = new PersonBean();
-                Bean.Read(iprot);
+                PersonBean = new PersonBean();
+                PersonBean.Read(iprot);
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -46597,12 +47105,12 @@ public partial class IFaceLog {
         TStruct struc = new TStruct("savePersonWithPhotoAndFeatureMultiImage_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        if (Bean != null) {
-          field.Name = "bean";
+        if (PersonBean != null) {
+          field.Name = "personBean";
           field.Type = TType.Struct;
           field.ID = 1;
           oprot.WriteFieldBegin(field);
-          Bean.Write(oprot);
+          PersonBean.Write(oprot);
           oprot.WriteFieldEnd();
         }
         if (IdPhoto != null) {
@@ -46665,11 +47173,11 @@ public partial class IFaceLog {
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("savePersonWithPhotoAndFeatureMultiImage_args(");
       bool __first = true;
-      if (Bean != null) {
+      if (PersonBean != null) {
         if(!__first) { __sb.Append(", "); }
         __first = false;
-        __sb.Append("Bean: ");
-        __sb.Append(Bean== null ? "<null>" : Bean.ToString());
+        __sb.Append("PersonBean: ");
+        __sb.Append(PersonBean== null ? "<null>" : PersonBean.ToString());
       }
       if (IdPhoto != null) {
         if(!__first) { __sb.Append(", "); }
@@ -46826,7 +47334,7 @@ public partial class IFaceLog {
   public partial class savePersonWithPhotoAndFeatureSaved_args : TBase
   {
 
-    public PersonBean Bean { get; set; }
+    public PersonBean PersonBean { get; set; }
 
     public string IdPhotoMd5 { get; set; }
 
@@ -46854,8 +47362,8 @@ public partial class IFaceLog {
           {
             case 1:
               if (field.Type == TType.Struct) {
-                Bean = new PersonBean();
-                Bean.Read(iprot);
+                PersonBean = new PersonBean();
+                PersonBean.Read(iprot);
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -46903,12 +47411,12 @@ public partial class IFaceLog {
         TStruct struc = new TStruct("savePersonWithPhotoAndFeatureSaved_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        if (Bean != null) {
-          field.Name = "bean";
+        if (PersonBean != null) {
+          field.Name = "personBean";
           field.Type = TType.Struct;
           field.ID = 1;
           oprot.WriteFieldBegin(field);
-          Bean.Write(oprot);
+          PersonBean.Write(oprot);
           oprot.WriteFieldEnd();
         }
         if (IdPhotoMd5 != null) {
@@ -46947,11 +47455,11 @@ public partial class IFaceLog {
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("savePersonWithPhotoAndFeatureSaved_args(");
       bool __first = true;
-      if (Bean != null) {
+      if (PersonBean != null) {
         if(!__first) { __sb.Append(", "); }
         __first = false;
-        __sb.Append("Bean: ");
-        __sb.Append(Bean== null ? "<null>" : Bean.ToString());
+        __sb.Append("PersonBean: ");
+        __sb.Append(PersonBean== null ? "<null>" : PersonBean.ToString());
       }
       if (IdPhotoMd5 != null) {
         if(!__first) { __sb.Append(", "); }
@@ -47096,7 +47604,7 @@ public partial class IFaceLog {
   public partial class savePersons_args : TBase
   {
 
-    public List<PersonBean> Beans { get; set; }
+    public List<PersonBean> Persons { get; set; }
 
     public Token Token { get; set; }
 
@@ -47121,14 +47629,14 @@ public partial class IFaceLog {
             case 1:
               if (field.Type == TType.List) {
                 {
-                  Beans = new List<PersonBean>();
+                  Persons = new List<PersonBean>();
                   TList _list236 = iprot.ReadListBegin();
                   for( int _i237 = 0; _i237 < _list236.Count; ++_i237)
                   {
                     PersonBean _elem238;
                     _elem238 = new PersonBean();
                     _elem238.Read(iprot);
-                    Beans.Add(_elem238);
+                    Persons.Add(_elem238);
                   }
                   iprot.ReadListEnd();
                 }
@@ -47165,14 +47673,14 @@ public partial class IFaceLog {
         TStruct struc = new TStruct("savePersons_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        if (Beans != null) {
-          field.Name = "beans";
+        if (Persons != null) {
+          field.Name = "persons";
           field.Type = TType.List;
           field.ID = 1;
           oprot.WriteFieldBegin(field);
           {
-            oprot.WriteListBegin(new TList(TType.Struct, Beans.Count));
-            foreach (PersonBean _iter239 in Beans)
+            oprot.WriteListBegin(new TList(TType.Struct, Persons.Count));
+            foreach (PersonBean _iter239 in Persons)
             {
               _iter239.Write(oprot);
             }
@@ -47200,11 +47708,11 @@ public partial class IFaceLog {
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("savePersons_args(");
       bool __first = true;
-      if (Beans != null) {
+      if (Persons != null) {
         if(!__first) { __sb.Append(", "); }
         __first = false;
-        __sb.Append("Beans: ");
-        __sb.Append(Beans);
+        __sb.Append("Persons: ");
+        __sb.Append(Persons);
       }
       if (Token != null) {
         if(!__first) { __sb.Append(", "); }

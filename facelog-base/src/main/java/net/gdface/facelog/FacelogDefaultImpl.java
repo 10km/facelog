@@ -116,17 +116,17 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public PersonBean savePerson(PersonBean bean, Token token) {
+	public PersonBean savePerson(PersonBean personBean, Token token) {
 		return null;
 	}
 
 	@Override
-	public void savePersons(List<PersonBean> beans, Token token) {
+	public void savePersons(List<PersonBean> persons, Token token) {
 		
 	}
 
 	@Override
-	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, Token token) {
+	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, Token token) {
 		return null;
 	}
 
@@ -136,12 +136,12 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public PersonBean savePerson(PersonBean bean, String idPhotoMd5, String featureMd5, Token token) {
+	public PersonBean savePerson(PersonBean personBean, String idPhotoMd5, String featureMd5, Token token) {
 		return null;
 	}
 
 	@Override
-	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, FeatureBean featureBean, Integer deviceId,
+	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, FeatureBean featureBean, Integer deviceId,
 			Token token) {
 		return null;
 	}
@@ -153,13 +153,13 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, byte[] feature,
+	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature,
 			Map<ByteBuffer, FaceBean> faceInfo, Integer deviceId, Token token) {
 		return null;
 	}
 
 	@Override
-	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, byte[] feature, byte[] featureImage,
+	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, byte[] featureImage,
 			FaceBean featureFaceBean, Integer deviceId, Token token) {
 		return null;
 	}
@@ -242,6 +242,12 @@ public class FacelogDefaultImpl implements IFaceLog {
 
 	@Override
 	public FeatureBean addFeature(byte[] feature, Integer personId, List<FaceBean> faecBeans, Token token)
+			throws DuplicateRecordException {
+		return null;
+	}
+
+	@Override
+	public FeatureBean addFeature(final byte[] feature, final Integer personId, final boolean asIdPhotoIfAbsent, final byte[] featurePhoto, final FaceBean faceBean, final Integer deviceId, Token token)
 			throws DuplicateRecordException {
 		return null;
 	}

@@ -38,6 +38,21 @@ public interface IFaceLog
             @ThriftField(value=5, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
+        @ThriftMethod(value = "addFeatureWithImage",
+                      exception = {
+                          @ThriftException(type=DuplicateRecordException.class, id=1),
+                          @ThriftException(type=ServiceRuntimeException.class, id=2)
+                      })
+        ListenableFuture<FeatureBean> addFeatureWithImage(
+            @ThriftField(value=1, name="feature", requiredness=Requiredness.OPTIONAL) final byte [] feature,
+            @ThriftField(value=2, name="personId", requiredness=Requiredness.OPTIONAL) final Integer personId,
+            @ThriftField(value=3, name="asIdPhotoIfAbsent", requiredness=Requiredness.REQUIRED) final boolean asIdPhotoIfAbsent,
+            @ThriftField(value=4, name="featurePhoto", requiredness=Requiredness.OPTIONAL) final byte [] featurePhoto,
+            @ThriftField(value=5, name="faceBean", requiredness=Requiredness.OPTIONAL) final FaceBean faceBean,
+            @ThriftField(value=6, name="deviceId", requiredness=Requiredness.OPTIONAL) final Integer deviceId,
+            @ThriftField(value=7, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        );
+
         @ThriftMethod(value = "addImage",
                       exception = {
                           @ThriftException(type=DuplicateRecordException.class, id=1),
@@ -1035,7 +1050,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<PersonBean> savePerson(
-            @ThriftField(value=1, name="bean", requiredness=Requiredness.OPTIONAL) final PersonBean bean,
+            @ThriftField(value=1, name="personBean", requiredness=Requiredness.OPTIONAL) final PersonBean personBean,
             @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
@@ -1044,7 +1059,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<PersonBean> savePersonFull(
-            @ThriftField(value=1, name="bean", requiredness=Requiredness.OPTIONAL) final PersonBean bean,
+            @ThriftField(value=1, name="personBean", requiredness=Requiredness.OPTIONAL) final PersonBean personBean,
             @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.OPTIONAL) final byte [] idPhoto,
             @ThriftField(value=3, name="feature", requiredness=Requiredness.OPTIONAL) final byte [] feature,
             @ThriftField(value=4, name="featureImage", requiredness=Requiredness.OPTIONAL) final byte [] featureImage,
@@ -1067,7 +1082,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<PersonBean> savePersonWithPhoto(
-            @ThriftField(value=1, name="bean", requiredness=Requiredness.OPTIONAL) final PersonBean bean,
+            @ThriftField(value=1, name="personBean", requiredness=Requiredness.OPTIONAL) final PersonBean personBean,
             @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.OPTIONAL) final byte [] idPhoto,
             @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
@@ -1077,7 +1092,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<PersonBean> savePersonWithPhotoAndFeature(
-            @ThriftField(value=1, name="bean", requiredness=Requiredness.OPTIONAL) final PersonBean bean,
+            @ThriftField(value=1, name="personBean", requiredness=Requiredness.OPTIONAL) final PersonBean personBean,
             @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.OPTIONAL) final byte [] idPhoto,
             @ThriftField(value=3, name="featureBean", requiredness=Requiredness.OPTIONAL) final FeatureBean featureBean,
             @ThriftField(value=4, name="deviceId", requiredness=Requiredness.OPTIONAL) final Integer deviceId,
@@ -1089,7 +1104,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<PersonBean> savePersonWithPhotoAndFeatureMultiFaces(
-            @ThriftField(value=1, name="bean", requiredness=Requiredness.OPTIONAL) final PersonBean bean,
+            @ThriftField(value=1, name="personBean", requiredness=Requiredness.OPTIONAL) final PersonBean personBean,
             @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.OPTIONAL) final byte [] idPhoto,
             @ThriftField(value=3, name="feature", requiredness=Requiredness.OPTIONAL) final byte [] feature,
             @ThriftField(value=4, name="faceBeans", requiredness=Requiredness.OPTIONAL) final List<FaceBean> faceBeans,
@@ -1101,7 +1116,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<PersonBean> savePersonWithPhotoAndFeatureMultiImage(
-            @ThriftField(value=1, name="bean", requiredness=Requiredness.OPTIONAL) final PersonBean bean,
+            @ThriftField(value=1, name="personBean", requiredness=Requiredness.OPTIONAL) final PersonBean personBean,
             @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.OPTIONAL) final byte [] idPhoto,
             @ThriftField(value=3, name="feature", requiredness=Requiredness.OPTIONAL) final byte [] feature,
             @ThriftField(value=4, name="faceInfo", requiredness=Requiredness.OPTIONAL) final Map<byte [], FaceBean> faceInfo,
@@ -1114,7 +1129,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<PersonBean> savePersonWithPhotoAndFeatureSaved(
-            @ThriftField(value=1, name="bean", requiredness=Requiredness.OPTIONAL) final PersonBean bean,
+            @ThriftField(value=1, name="personBean", requiredness=Requiredness.OPTIONAL) final PersonBean personBean,
             @ThriftField(value=2, name="idPhotoMd5", requiredness=Requiredness.OPTIONAL) final String idPhotoMd5,
             @ThriftField(value=3, name="featureMd5", requiredness=Requiredness.OPTIONAL) final String featureMd5,
             @ThriftField(value=4, name="token", requiredness=Requiredness.OPTIONAL) final Token token
@@ -1125,7 +1140,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<Void> savePersons(
-            @ThriftField(value=1, name="beans", requiredness=Requiredness.OPTIONAL) final List<PersonBean> beans,
+            @ThriftField(value=1, name="persons", requiredness=Requiredness.OPTIONAL) final List<PersonBean> persons,
             @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
@@ -1267,6 +1282,21 @@ public interface IFaceLog
         @ThriftField(value=3, name="faceInfo", requiredness=Requiredness.OPTIONAL) final Map<byte [], FaceBean> faceInfo,
         @ThriftField(value=4, name="deviceId", requiredness=Requiredness.OPTIONAL) final Integer deviceId,
         @ThriftField(value=5, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+    ) throws DuplicateRecordException, ServiceRuntimeException;
+
+    @ThriftMethod(value = "addFeatureWithImage",
+                  exception = {
+                      @ThriftException(type=DuplicateRecordException.class, id=1),
+                      @ThriftException(type=ServiceRuntimeException.class, id=2)
+                  })
+    FeatureBean addFeatureWithImage(
+        @ThriftField(value=1, name="feature", requiredness=Requiredness.OPTIONAL) final byte [] feature,
+        @ThriftField(value=2, name="personId", requiredness=Requiredness.OPTIONAL) final Integer personId,
+        @ThriftField(value=3, name="asIdPhotoIfAbsent", requiredness=Requiredness.REQUIRED) final boolean asIdPhotoIfAbsent,
+        @ThriftField(value=4, name="featurePhoto", requiredness=Requiredness.OPTIONAL) final byte [] featurePhoto,
+        @ThriftField(value=5, name="faceBean", requiredness=Requiredness.OPTIONAL) final FaceBean faceBean,
+        @ThriftField(value=6, name="deviceId", requiredness=Requiredness.OPTIONAL) final Integer deviceId,
+        @ThriftField(value=7, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws DuplicateRecordException, ServiceRuntimeException;
 
     @ThriftMethod(value = "addImage",
@@ -2266,7 +2296,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     PersonBean savePerson(
-        @ThriftField(value=1, name="bean", requiredness=Requiredness.OPTIONAL) final PersonBean bean,
+        @ThriftField(value=1, name="personBean", requiredness=Requiredness.OPTIONAL) final PersonBean personBean,
         @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 
@@ -2275,7 +2305,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     PersonBean savePersonFull(
-        @ThriftField(value=1, name="bean", requiredness=Requiredness.OPTIONAL) final PersonBean bean,
+        @ThriftField(value=1, name="personBean", requiredness=Requiredness.OPTIONAL) final PersonBean personBean,
         @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.OPTIONAL) final byte [] idPhoto,
         @ThriftField(value=3, name="feature", requiredness=Requiredness.OPTIONAL) final byte [] feature,
         @ThriftField(value=4, name="featureImage", requiredness=Requiredness.OPTIONAL) final byte [] featureImage,
@@ -2298,7 +2328,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     PersonBean savePersonWithPhoto(
-        @ThriftField(value=1, name="bean", requiredness=Requiredness.OPTIONAL) final PersonBean bean,
+        @ThriftField(value=1, name="personBean", requiredness=Requiredness.OPTIONAL) final PersonBean personBean,
         @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.OPTIONAL) final byte [] idPhoto,
         @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
@@ -2308,7 +2338,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     PersonBean savePersonWithPhotoAndFeature(
-        @ThriftField(value=1, name="bean", requiredness=Requiredness.OPTIONAL) final PersonBean bean,
+        @ThriftField(value=1, name="personBean", requiredness=Requiredness.OPTIONAL) final PersonBean personBean,
         @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.OPTIONAL) final byte [] idPhoto,
         @ThriftField(value=3, name="featureBean", requiredness=Requiredness.OPTIONAL) final FeatureBean featureBean,
         @ThriftField(value=4, name="deviceId", requiredness=Requiredness.OPTIONAL) final Integer deviceId,
@@ -2320,7 +2350,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     PersonBean savePersonWithPhotoAndFeatureMultiFaces(
-        @ThriftField(value=1, name="bean", requiredness=Requiredness.OPTIONAL) final PersonBean bean,
+        @ThriftField(value=1, name="personBean", requiredness=Requiredness.OPTIONAL) final PersonBean personBean,
         @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.OPTIONAL) final byte [] idPhoto,
         @ThriftField(value=3, name="feature", requiredness=Requiredness.OPTIONAL) final byte [] feature,
         @ThriftField(value=4, name="faceBeans", requiredness=Requiredness.OPTIONAL) final List<FaceBean> faceBeans,
@@ -2332,7 +2362,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     PersonBean savePersonWithPhotoAndFeatureMultiImage(
-        @ThriftField(value=1, name="bean", requiredness=Requiredness.OPTIONAL) final PersonBean bean,
+        @ThriftField(value=1, name="personBean", requiredness=Requiredness.OPTIONAL) final PersonBean personBean,
         @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.OPTIONAL) final byte [] idPhoto,
         @ThriftField(value=3, name="feature", requiredness=Requiredness.OPTIONAL) final byte [] feature,
         @ThriftField(value=4, name="faceInfo", requiredness=Requiredness.OPTIONAL) final Map<byte [], FaceBean> faceInfo,
@@ -2345,7 +2375,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     PersonBean savePersonWithPhotoAndFeatureSaved(
-        @ThriftField(value=1, name="bean", requiredness=Requiredness.OPTIONAL) final PersonBean bean,
+        @ThriftField(value=1, name="personBean", requiredness=Requiredness.OPTIONAL) final PersonBean personBean,
         @ThriftField(value=2, name="idPhotoMd5", requiredness=Requiredness.OPTIONAL) final String idPhotoMd5,
         @ThriftField(value=3, name="featureMd5", requiredness=Requiredness.OPTIONAL) final String featureMd5,
         @ThriftField(value=4, name="token", requiredness=Requiredness.OPTIONAL) final Token token
@@ -2356,7 +2386,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     void savePersons(
-        @ThriftField(value=1, name="beans", requiredness=Requiredness.OPTIONAL) final List<PersonBean> beans,
+        @ThriftField(value=1, name="persons", requiredness=Requiredness.OPTIONAL) final List<PersonBean> persons,
         @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 

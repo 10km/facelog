@@ -28,6 +28,47 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
     }
     //1
     /**
+     * {@link IFaceLog#addFeature(byte[],java.lang.Integer,boolean,byte[],FaceBean,java.lang.Integer,Token)}对应的泛型方法<br>
+     * @param feature
+     *            泛型参数,参见 {@link net.gdface.utils.FaceUtilits#getBytesNotEmpty(Object)}
+     * @param personId
+     * @param asIdPhotoIfAbsent
+     * @param featurePhoto
+     *            泛型参数,参见 {@link net.gdface.utils.FaceUtilits#getBytesNotEmpty(Object)}
+     * @param faceBean
+     * @param deviceId
+     * @param token
+     * @return 
+
+     * @see IFaceLog#addFeature(byte[],java.lang.Integer,boolean,byte[],FaceBean,java.lang.Integer,Token)
+     */    
+    public <T> FeatureBean addFeature (T feature,Integer personId,boolean asIdPhotoIfAbsent,T featurePhoto,FaceBean faceBean,Integer deviceId,Token token) throws DuplicateRecordException,IOException{
+        return addFeature(FaceUtilits.getBytesNotEmpty(feature),personId,asIdPhotoIfAbsent,FaceUtilits.getBytesNotEmpty(featurePhoto),faceBean,deviceId,token);
+    }
+    //2
+    /**
+     * {@link IFaceLog#addFeature(byte[],java.lang.Integer,boolean,byte[],FaceBean,java.lang.Integer,Token)}泛型方法对应的unchecked方法,
+     * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
+     * @param feature
+     * @param personId
+     * @param asIdPhotoIfAbsent
+     * @param featurePhoto
+     * @param faceBean
+     * @param deviceId
+     * @param token
+     * @return FeatureBean
+     */
+    public <T> FeatureBean addFeatureUnchecked (T feature,Integer personId,boolean asIdPhotoIfAbsent,T featurePhoto,FaceBean faceBean,Integer deviceId,Token token) {
+        try{
+            return addFeature(feature,personId,asIdPhotoIfAbsent,featurePhoto,faceBean,deviceId,token);
+        } catch(RuntimeException e){
+            throw e;
+        } catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+    //3
+    /**
      * {@link IFaceLog#addFeature(byte[],java.lang.Integer,List,Token)}对应的泛型方法<br>
      * @param feature
      *            泛型参数,参见 {@link net.gdface.utils.FaceUtilits#getBytesNotEmpty(Object)}
@@ -36,12 +77,14 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
      * @param token
      * @return 
 
+     * @throws DuplicateRecordException
+     * @throws IOException
      * @see IFaceLog#addFeature(byte[],java.lang.Integer,List,Token)
      */    
     public <T> FeatureBean addFeature (T feature,Integer personId,List<FaceBean> faecBeans,Token token) throws DuplicateRecordException,IOException{
         return addFeature(FaceUtilits.getBytesNotEmpty(feature),personId,faecBeans,token);
     }
-    //2
+    //4
     /**
      * {@link IFaceLog#addFeature(byte[],java.lang.Integer,List,Token)}泛型方法对应的unchecked方法,
      * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
@@ -60,7 +103,7 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
             throw new RuntimeException(e);
         }
     }
-    //3
+    //5
     /**
      * {@link IFaceLog#addFeature(byte[],java.lang.Integer,Map,java.lang.Integer,Token)}对应的泛型方法<br>
      * @param feature
@@ -78,7 +121,7 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
     public <T> FeatureBean addFeature (T feature,Integer personId,Map<java.nio.ByteBuffer, FaceBean> faceInfo,Integer deviceId,Token token) throws DuplicateRecordException,IOException{
         return addFeature(FaceUtilits.getBytesNotEmpty(feature),personId,faceInfo,deviceId,token);
     }
-    //4
+    //6
     /**
      * {@link IFaceLog#addFeature(byte[],java.lang.Integer,Map,java.lang.Integer,Token)}泛型方法对应的unchecked方法,
      * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
@@ -98,7 +141,7 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
             throw new RuntimeException(e);
         }
     }
-    //5
+    //7
     /**
      * {@link IFaceLog#addImage(byte[],java.lang.Integer,FaceBean,java.lang.Integer,Token)}对应的泛型方法<br>
      * @param imageData
@@ -116,7 +159,7 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
     public <T> ImageBean addImage (T imageData,Integer deviceId,FaceBean faceBean,Integer personId,Token token) throws DuplicateRecordException,IOException{
         return addImage(FaceUtilits.getBytesNotEmpty(imageData),deviceId,faceBean,personId,token);
     }
-    //6
+    //8
     /**
      * {@link IFaceLog#addImage(byte[],java.lang.Integer,FaceBean,java.lang.Integer,Token)}泛型方法对应的unchecked方法,
      * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
@@ -136,10 +179,10 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
             throw new RuntimeException(e);
         }
     }
-    //7
+    //9
     /**
      * {@link IFaceLog#savePerson(PersonBean,byte[],byte[],byte[],FaceBean,java.lang.Integer,Token)}对应的泛型方法<br>
-     * @param bean
+     * @param personBean
      * @param idPhoto
      *            泛型参数,参见 {@link net.gdface.utils.FaceUtilits#getBytesNotEmpty(Object)}
      * @param feature
@@ -155,14 +198,14 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
      * @throws IOException
      * @see IFaceLog#savePerson(PersonBean,byte[],byte[],byte[],FaceBean,java.lang.Integer,Token)
      */    
-    public <T> PersonBean savePerson (PersonBean bean,T idPhoto,T feature,T featureImage,FaceBean featureFaceBean,Integer deviceId,Token token) throws IOException{
-        return savePerson(bean,FaceUtilits.getBytesNotEmpty(idPhoto),FaceUtilits.getBytesNotEmpty(feature),FaceUtilits.getBytesNotEmpty(featureImage),featureFaceBean,deviceId,token);
+    public <T> PersonBean savePerson (PersonBean personBean,T idPhoto,T feature,T featureImage,FaceBean featureFaceBean,Integer deviceId,Token token) throws IOException{
+        return savePerson(personBean,FaceUtilits.getBytesNotEmpty(idPhoto),FaceUtilits.getBytesNotEmpty(feature),FaceUtilits.getBytesNotEmpty(featureImage),featureFaceBean,deviceId,token);
     }
-    //8
+    //10
     /**
      * {@link IFaceLog#savePerson(PersonBean,byte[],byte[],byte[],FaceBean,java.lang.Integer,Token)}泛型方法对应的unchecked方法,
      * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
-     * @param bean
+     * @param personBean
      * @param idPhoto
      * @param feature
      * @param featureImage
@@ -171,19 +214,19 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
      * @param token
      * @return PersonBean
      */
-    public <T> PersonBean savePersonUnchecked (PersonBean bean,T idPhoto,T feature,T featureImage,FaceBean featureFaceBean,Integer deviceId,Token token) {
+    public <T> PersonBean savePersonUnchecked (PersonBean personBean,T idPhoto,T feature,T featureImage,FaceBean featureFaceBean,Integer deviceId,Token token) {
         try{
-            return savePerson(bean,idPhoto,feature,featureImage,featureFaceBean,deviceId,token);
+            return savePerson(personBean,idPhoto,feature,featureImage,featureFaceBean,deviceId,token);
         } catch(RuntimeException e){
             throw e;
         } catch(Exception e){
             throw new RuntimeException(e);
         }
     }
-    //9
+    //11
     /**
      * {@link IFaceLog#savePerson(PersonBean,byte[],byte[],List,Token)}对应的泛型方法<br>
-     * @param bean
+     * @param personBean
      * @param idPhoto
      *            泛型参数,参见 {@link net.gdface.utils.FaceUtilits#getBytesNotEmpty(Object)}
      * @param feature
@@ -195,33 +238,33 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
      * @throws IOException
      * @see IFaceLog#savePerson(PersonBean,byte[],byte[],List,Token)
      */    
-    public <T> PersonBean savePerson (PersonBean bean,T idPhoto,T feature,List<FaceBean> faceBeans,Token token) throws IOException{
-        return savePerson(bean,FaceUtilits.getBytesNotEmpty(idPhoto),FaceUtilits.getBytesNotEmpty(feature),faceBeans,token);
+    public <T> PersonBean savePerson (PersonBean personBean,T idPhoto,T feature,List<FaceBean> faceBeans,Token token) throws IOException{
+        return savePerson(personBean,FaceUtilits.getBytesNotEmpty(idPhoto),FaceUtilits.getBytesNotEmpty(feature),faceBeans,token);
     }
-    //10
+    //12
     /**
      * {@link IFaceLog#savePerson(PersonBean,byte[],byte[],List,Token)}泛型方法对应的unchecked方法,
      * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
-     * @param bean
+     * @param personBean
      * @param idPhoto
      * @param feature
      * @param faceBeans
      * @param token
      * @return PersonBean
      */
-    public <T> PersonBean savePersonUnchecked (PersonBean bean,T idPhoto,T feature,List<FaceBean> faceBeans,Token token) {
+    public <T> PersonBean savePersonUnchecked (PersonBean personBean,T idPhoto,T feature,List<FaceBean> faceBeans,Token token) {
         try{
-            return savePerson(bean,idPhoto,feature,faceBeans,token);
+            return savePerson(personBean,idPhoto,feature,faceBeans,token);
         } catch(RuntimeException e){
             throw e;
         } catch(Exception e){
             throw new RuntimeException(e);
         }
     }
-    //11
+    //13
     /**
      * {@link IFaceLog#savePerson(PersonBean,byte[],byte[],Map,java.lang.Integer,Token)}对应的泛型方法<br>
-     * @param bean
+     * @param personBean
      * @param idPhoto
      *            泛型参数,参见 {@link net.gdface.utils.FaceUtilits#getBytesNotEmpty(Object)}
      * @param feature
@@ -234,14 +277,14 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
      * @throws IOException
      * @see IFaceLog#savePerson(PersonBean,byte[],byte[],Map,java.lang.Integer,Token)
      */    
-    public <T> PersonBean savePerson (PersonBean bean,T idPhoto,T feature,Map<java.nio.ByteBuffer, FaceBean> faceInfo,Integer deviceId,Token token) throws IOException{
-        return savePerson(bean,FaceUtilits.getBytesNotEmpty(idPhoto),FaceUtilits.getBytesNotEmpty(feature),faceInfo,deviceId,token);
+    public <T> PersonBean savePerson (PersonBean personBean,T idPhoto,T feature,Map<java.nio.ByteBuffer, FaceBean> faceInfo,Integer deviceId,Token token) throws IOException{
+        return savePerson(personBean,FaceUtilits.getBytesNotEmpty(idPhoto),FaceUtilits.getBytesNotEmpty(feature),faceInfo,deviceId,token);
     }
-    //12
+    //14
     /**
      * {@link IFaceLog#savePerson(PersonBean,byte[],byte[],Map,java.lang.Integer,Token)}泛型方法对应的unchecked方法,
      * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
-     * @param bean
+     * @param personBean
      * @param idPhoto
      * @param feature
      * @param faceInfo
@@ -249,42 +292,9 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
      * @param token
      * @return PersonBean
      */
-    public <T> PersonBean savePersonUnchecked (PersonBean bean,T idPhoto,T feature,Map<java.nio.ByteBuffer, FaceBean> faceInfo,Integer deviceId,Token token) {
+    public <T> PersonBean savePersonUnchecked (PersonBean personBean,T idPhoto,T feature,Map<java.nio.ByteBuffer, FaceBean> faceInfo,Integer deviceId,Token token) {
         try{
-            return savePerson(bean,idPhoto,feature,faceInfo,deviceId,token);
-        } catch(RuntimeException e){
-            throw e;
-        } catch(Exception e){
-            throw new RuntimeException(e);
-        }
-    }
-    //13
-    /**
-     * {@link IFaceLog#savePerson(PersonBean,byte[],Token)}对应的泛型方法<br>
-     * @param bean
-     * @param idPhoto
-     *            泛型参数,参见 {@link net.gdface.utils.FaceUtilits#getBytesNotEmpty(Object)}
-     * @param token
-     * @return 
-
-     * @throws IOException
-     * @see IFaceLog#savePerson(PersonBean,byte[],Token)
-     */    
-    public <T> PersonBean savePerson (PersonBean bean,T idPhoto,Token token) throws IOException{
-        return savePerson(bean,FaceUtilits.getBytesNotEmpty(idPhoto),token);
-    }
-    //14
-    /**
-     * {@link IFaceLog#savePerson(PersonBean,byte[],Token)}泛型方法对应的unchecked方法,
-     * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
-     * @param bean
-     * @param idPhoto
-     * @param token
-     * @return PersonBean
-     */
-    public <T> PersonBean savePersonUnchecked (PersonBean bean,T idPhoto,Token token) {
-        try{
-            return savePerson(bean,idPhoto,token);
+            return savePerson(personBean,idPhoto,feature,faceInfo,deviceId,token);
         } catch(RuntimeException e){
             throw e;
         } catch(Exception e){
@@ -293,8 +303,41 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
     }
     //15
     /**
+     * {@link IFaceLog#savePerson(PersonBean,byte[],Token)}对应的泛型方法<br>
+     * @param personBean
+     * @param idPhoto
+     *            泛型参数,参见 {@link net.gdface.utils.FaceUtilits#getBytesNotEmpty(Object)}
+     * @param token
+     * @return 
+
+     * @throws IOException
+     * @see IFaceLog#savePerson(PersonBean,byte[],Token)
+     */    
+    public <T> PersonBean savePerson (PersonBean personBean,T idPhoto,Token token) throws IOException{
+        return savePerson(personBean,FaceUtilits.getBytesNotEmpty(idPhoto),token);
+    }
+    //16
+    /**
+     * {@link IFaceLog#savePerson(PersonBean,byte[],Token)}泛型方法对应的unchecked方法,
+     * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
+     * @param personBean
+     * @param idPhoto
+     * @param token
+     * @return PersonBean
+     */
+    public <T> PersonBean savePersonUnchecked (PersonBean personBean,T idPhoto,Token token) {
+        try{
+            return savePerson(personBean,idPhoto,token);
+        } catch(RuntimeException e){
+            throw e;
+        } catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+    //17
+    /**
      * {@link IFaceLog#savePerson(PersonBean,byte[],FeatureBean,java.lang.Integer,Token)}对应的泛型方法<br>
-     * @param bean
+     * @param personBean
      * @param idPhoto
      *            泛型参数,参见 {@link net.gdface.utils.FaceUtilits#getBytesNotEmpty(Object)}
      * @param featureBean
@@ -305,23 +348,23 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
      * @throws IOException
      * @see IFaceLog#savePerson(PersonBean,byte[],FeatureBean,java.lang.Integer,Token)
      */    
-    public <T> PersonBean savePerson (PersonBean bean,T idPhoto,FeatureBean featureBean,Integer deviceId,Token token) throws IOException{
-        return savePerson(bean,FaceUtilits.getBytesNotEmpty(idPhoto),featureBean,deviceId,token);
+    public <T> PersonBean savePerson (PersonBean personBean,T idPhoto,FeatureBean featureBean,Integer deviceId,Token token) throws IOException{
+        return savePerson(personBean,FaceUtilits.getBytesNotEmpty(idPhoto),featureBean,deviceId,token);
     }
-    //16
+    //18
     /**
      * {@link IFaceLog#savePerson(PersonBean,byte[],FeatureBean,java.lang.Integer,Token)}泛型方法对应的unchecked方法,
      * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
-     * @param bean
+     * @param personBean
      * @param idPhoto
      * @param featureBean
      * @param deviceId
      * @param token
      * @return PersonBean
      */
-    public <T> PersonBean savePersonUnchecked (PersonBean bean,T idPhoto,FeatureBean featureBean,Integer deviceId,Token token) {
+    public <T> PersonBean savePersonUnchecked (PersonBean personBean,T idPhoto,FeatureBean featureBean,Integer deviceId,Token token) {
         try{
-            return savePerson(bean,idPhoto,featureBean,deviceId,token);
+            return savePerson(personBean,idPhoto,featureBean,deviceId,token);
         } catch(RuntimeException e){
             throw e;
         } catch(Exception e){

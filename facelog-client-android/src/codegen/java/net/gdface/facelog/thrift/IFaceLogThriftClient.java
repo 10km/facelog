@@ -140,6 +140,56 @@ public class IFaceLogThriftClient implements IFaceLog {
     @Override
     public FeatureBean addFeature(final byte[] feature,
         final Integer personId,
+        final boolean asIdPhotoIfAbsent,
+        final byte[] featurePhoto,
+        final FaceBean faceBean,
+        final Integer deviceId,
+        final Token token) 
+        throws DuplicateRecordException{
+        try{
+            return syncCall(new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>() {
+                @Override
+                public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.FeatureBean.class,
+                    FeatureBean.class);
+                }},
+                new ServiceAsyncCall<net.gdface.facelog.client.thrift.FeatureBean>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.FeatureBean> nativeCallback){
+                    service.addFeatureWithImage(TypeTransformer.getInstance().to(
+                    feature,
+                    byte[].class,
+                    okio.ByteString.class),personId,asIdPhotoIfAbsent,TypeTransformer.getInstance().to(
+                    featurePhoto,
+                    byte[].class,
+                    okio.ByteString.class),TypeTransformer.getInstance().to(
+                    faceBean,
+                    FaceBean.class,
+                    net.gdface.facelog.client.thrift.FaceBean.class),deviceId,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
+                    DuplicateRecordException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public FeatureBean addFeature(final byte[] feature,
+        final Integer personId,
         final List<FaceBean> faecBeans,
         final Token token) 
         throws DuplicateRecordException{
@@ -3358,7 +3408,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public PersonBean savePerson(final PersonBean bean,
+    public PersonBean savePerson(final PersonBean personBean,
         final byte[] idPhoto,
         final byte[] feature,
         final byte[] featureImage,
@@ -3379,7 +3429,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
                     service.savePersonFull(TypeTransformer.getInstance().to(
-                    bean,
+                    personBean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),TypeTransformer.getInstance().to(
                     idPhoto,
@@ -3453,7 +3503,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public PersonBean savePerson(final PersonBean bean,
+    public PersonBean savePerson(final PersonBean personBean,
         final byte[] idPhoto,
         final byte[] feature,
         final Map<ByteBuffer, FaceBean> faceInfo,
@@ -3473,7 +3523,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
                     service.savePersonWithPhotoAndFeatureMultiImage(TypeTransformer.getInstance().to(
-                    bean,
+                    personBean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),TypeTransformer.getInstance().to(
                     idPhoto,
@@ -3501,7 +3551,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public PersonBean savePerson(final PersonBean bean,
+    public PersonBean savePerson(final PersonBean personBean,
         final byte[] idPhoto,
         final Token token) 
         {
@@ -3518,7 +3568,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
                     service.savePersonWithPhoto(TypeTransformer.getInstance().to(
-                    bean,
+                    personBean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),TypeTransformer.getInstance().to(
                     idPhoto,
@@ -3538,7 +3588,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public PersonBean savePerson(final PersonBean bean,
+    public PersonBean savePerson(final PersonBean personBean,
         final byte[] idPhoto,
         final FeatureBean featureBean,
         final Integer deviceId,
@@ -3557,7 +3607,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
                     service.savePersonWithPhotoAndFeature(TypeTransformer.getInstance().to(
-                    bean,
+                    personBean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),TypeTransformer.getInstance().to(
                     idPhoto,
@@ -3580,7 +3630,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public PersonBean savePerson(final PersonBean bean,
+    public PersonBean savePerson(final PersonBean personBean,
         final String idPhotoMd5,
         final String featureMd5,
         final Token token) 
@@ -3598,7 +3648,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
                     service.savePersonWithPhotoAndFeatureSaved(TypeTransformer.getInstance().to(
-                    bean,
+                    personBean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),idPhotoMd5,featureMd5,TypeTransformer.getInstance().to(
                     token,
@@ -3615,7 +3665,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public PersonBean savePerson(final PersonBean bean,
+    public PersonBean savePerson(final PersonBean personBean,
         final Token token) 
         {
         try{
@@ -3631,7 +3681,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
                     service.savePerson(TypeTransformer.getInstance().to(
-                    bean,
+                    personBean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),TypeTransformer.getInstance().to(
                     token,
@@ -3681,7 +3731,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public void savePersons(final List<PersonBean> beans,
+    public void savePersons(final List<PersonBean> persons,
         final Token token) 
         {
         try{
@@ -3694,7 +3744,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Void> nativeCallback){
                     service.savePersons(TypeTransformer.getInstance().to(
-                    beans,
+                    persons,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),TypeTransformer.getInstance().to(
                     token,

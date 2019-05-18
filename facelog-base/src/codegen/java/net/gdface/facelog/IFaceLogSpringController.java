@@ -90,24 +90,71 @@ public class IFaceLogSpringController {
                 "IFaceLog  instance is null"    );
     }
     /**
-     * 增加一个人脸特征记录，如果记录已经存在则抛出异常
-     * <br>{@code DEVICE_ONLY}
+     * 增加一个人脸特征记录，如果记录已经存在则抛出异常<br>
+     * 适用于一张人脸图像提取一个人脸特征的算法<br>
+     * {@code DEVICE_ONLY}
      * @param feature 特征数据
      * @param personId 关联的人员id(fl_person.id),可为null
+     * @param asIdPhotoIfAbsent 如果{@code personId}指定的记录没指定身份照片,
+     * 是否用{@code featurePhoto}作为身份照片,{@code featurePhoto}为{@code null}时无效
+     * @param featurePhoto 生成人脸特征的原始照片,如果不要求保留原始照片可为null
+     * @param faceBean 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
+     * @param deviceId 采集图像的设备ID,可为null
+     * @param token (设备)访问令牌
+     * @return 保存的人脸特征记录{@link FeatureBean}
+     * @throws DuplicateRecordException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/addFeatureWithImage", method = RequestMethod.POST)
+    @ApiOperation(value = "增加一个人脸特征记录，如果记录已经存在则抛出异常<br>\n"
++" 适用于一张人脸图像提取一个人脸特征的算法<br>\n"
++" {@code DEVICE_ONLY}",httpMethod="POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "feature", value = "特征数据", type="form", dataType="byte[]"),
+        @ApiImplicitParam(name = "personId", value = "关联的人员id(fl_person.id),可为null", type="form", dataType="Integer"),
+        @ApiImplicitParam(name = "asIdPhotoIfAbsent", value = "如果{@code personId}指定的记录没指定身份照片,\n"
++" 是否用{@code featurePhoto}作为身份照片,{@code featurePhoto}为{@code null}时无效", type="form", dataType="boolean"),
+        @ApiImplicitParam(name = "featurePhoto", value = "生成人脸特征的原始照片,如果不要求保留原始照片可为null", type="form", dataType="byte[]"),
+        @ApiImplicitParam(name = "faceBean", value = "生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null", type="body", dataType="FaceBean"),
+        @ApiImplicitParam(name = "deviceId", value = "采集图像的设备ID,可为null", type="form", dataType="Integer"),
+        @ApiImplicitParam(name = "token", value = "(设备)访问令牌", type="body", dataType="Token")})
+    public Response addFeature(@RequestParam("feature") byte[] feature,
+        @RequestParam("personId") Integer personId,
+        @RequestParam("asIdPhotoIfAbsent") boolean asIdPhotoIfAbsent,
+        @RequestParam("featurePhoto") byte[] featurePhoto,
+        @RequestBody FaceBean faceBean,
+        @RequestParam("deviceId") Integer deviceId,
+        @RequestBody Token token) 
+        {
+        Response response = responseFactory.newIFaceLogResponse();
+        try{
+            response.onComplete(delegate().addFeature(feature,personId,asIdPhotoIfAbsent,featurePhoto,faceBean,deviceId,token));
+        }
+        catch(Exception e){
+            logger.error(e.getMessage(),e);
+            response.onError(e);
+        }
+        return response;
+    }
+    /**
+     * 增加一个人脸特征记录，如果记录已经存在则抛出异常<br>
+     * {@code DEVICE_ONLY}
+     * @param feature 人脸特征数据
+     * @param personId 关联的人员id(fl_person.id),可为null
      * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
-     * @param token 访问令牌
+     * @param token (设备)访问令牌
      * @return 保存的人脸特征记录{@link FeatureBean}
      * @throws DuplicateRecordException
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/addFeature", method = RequestMethod.POST)
-    @ApiOperation(value = "增加一个人脸特征记录，如果记录已经存在则抛出异常\n"
-+" <br>{@code DEVICE_ONLY}",httpMethod="POST")
+    @ApiOperation(value = "增加一个人脸特征记录，如果记录已经存在则抛出异常<br>\n"
++" {@code DEVICE_ONLY}",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "feature", value = "特征数据", type="form", dataType="byte[]"),
+            @ApiImplicitParam(name = "feature", value = "人脸特征数据", type="form", dataType="byte[]"),
         @ApiImplicitParam(name = "personId", value = "关联的人员id(fl_person.id),可为null", type="form", dataType="Integer"),
         @ApiImplicitParam(name = "faecBeans", value = "生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null", type="body", dataType="List"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
+        @ApiImplicitParam(name = "token", value = "(设备)访问令牌", type="body", dataType="Token")})
     public Response addFeature(@RequestParam("feature") byte[] feature,
         @RequestParam("personId") Integer personId,
         @RequestParam("faecBeans") List<FaceBean> faecBeans,
@@ -2919,7 +2966,7 @@ public class IFaceLogSpringController {
     }
     /**
      * 替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录
-     * @param personId 人员记录id
+     * @param personId 人员记录id,{@code fl_person.id}
      * @param featureMd5 人脸特征数据记录id (已经保存在数据库中)
      * @param deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
      * @param token 访问令牌
@@ -2928,7 +2975,7 @@ public class IFaceLogSpringController {
     @RequestMapping(value = "/IFaceLog/replaceFeature", method = RequestMethod.POST)
     @ApiOperation(value = "替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "personId", value = "人员记录id", type="form", dataType="Integer"),
+            @ApiImplicitParam(name = "personId", value = "人员记录id,{@code fl_person.id}", type="form", dataType="Integer"),
         @ApiImplicitParam(name = "featureMd5", value = "人脸特征数据记录id (已经保存在数据库中)", type="form", dataType="String"),
         @ApiImplicitParam(name = "deleteOldFeatureImage", value = "是否删除原特征数据记录间接关联的原始图像记录(fl_image)", type="form", dataType="boolean"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
@@ -3058,28 +3105,28 @@ public class IFaceLogSpringController {
     /**
      * 保存人员信息记录
      * <br>{@code DEVICE_ONLY}
-     * @param bean 人员信息对象
+     * @param personBean 人员信息对象,{@code fl_person}表记录
      * @param idPhoto 标准照图像
      * @param feature 人脸特征数据
      * @param featureImage 提取特征源图像,为null 时,默认使用idPhoto
      * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
      * @param deviceId 设备ID
      * @param token 访问令牌
-     * @return 
+     * @return 保存的{@link PersonBean}
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/savePersonFull", method = RequestMethod.POST)
     @ApiOperation(value = "保存人员信息记录\n"
 +" <br>{@code DEVICE_ONLY}",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "bean", value = "人员信息对象", type="body", dataType="PersonBean"),
+            @ApiImplicitParam(name = "personBean", value = "人员信息对象,{@code fl_person}表记录", type="body", dataType="PersonBean"),
         @ApiImplicitParam(name = "idPhoto", value = "标准照图像", type="form", dataType="byte[]"),
         @ApiImplicitParam(name = "feature", value = "人脸特征数据", type="form", dataType="byte[]"),
         @ApiImplicitParam(name = "featureImage", value = "提取特征源图像,为null 时,默认使用idPhoto", type="form", dataType="byte[]"),
         @ApiImplicitParam(name = "featureFaceBean", value = "人脸位置对象,为null 时,不保存人脸数据", type="body", dataType="FaceBean"),
         @ApiImplicitParam(name = "deviceId", value = "设备ID", type="form", dataType="Integer"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response savePerson(@RequestBody PersonBean bean,
+    public Response savePerson(@RequestBody PersonBean personBean,
         @RequestParam("idPhoto") byte[] idPhoto,
         @RequestParam("feature") byte[] feature,
         @RequestParam("featureImage") byte[] featureImage,
@@ -3089,7 +3136,7 @@ public class IFaceLogSpringController {
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
-            response.onComplete(delegate().savePerson(bean,idPhoto,feature,featureImage,featureFaceBean,deviceId,token));
+            response.onComplete(delegate().savePerson(personBean,idPhoto,feature,featureImage,featureFaceBean,deviceId,token));
         }
         catch(Exception e){
             logger.error(e.getMessage(),e);
@@ -3100,24 +3147,24 @@ public class IFaceLogSpringController {
     /**
      * 保存人员信息记录
      * <br>{@code DEVICE_ONLY}
-     * @param bean
+     * @param personBean {@code fl_person}表记录
      * @param idPhoto 标准照图像,可为null
      * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(byte[], Integer, List, Token)}
-     * @param faceBeans 参见 {@link #addFeature(byte[], Integer, List, Token)}
+     * @param faceBeans 可为{@code null},参见 {@link #addFeature(byte[], Integer, List, Token)}
      * @param token 访问令牌
-     * @return 
+     * @return 保存的{@link PersonBean}
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureMultiFaces", method = RequestMethod.POST)
     @ApiOperation(value = "保存人员信息记录\n"
 +" <br>{@code DEVICE_ONLY}",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "bean", value = "", type="body", dataType="PersonBean"),
+            @ApiImplicitParam(name = "personBean", value = "{@code fl_person}表记录", type="body", dataType="PersonBean"),
         @ApiImplicitParam(name = "idPhoto", value = "标准照图像,可为null", type="form", dataType="byte[]"),
         @ApiImplicitParam(name = "feature", value = "用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(byte[], Integer, List, Token)}", type="form", dataType="byte[]"),
-        @ApiImplicitParam(name = "faceBeans", value = "参见 {@link #addFeature(byte[], Integer, List, Token)}", type="body", dataType="List"),
+        @ApiImplicitParam(name = "faceBeans", value = "可为{@code null},参见 {@link #addFeature(byte[], Integer, List, Token)}", type="body", dataType="List"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response savePerson(@RequestBody PersonBean bean,
+    public Response savePerson(@RequestBody PersonBean personBean,
         @RequestParam("idPhoto") byte[] idPhoto,
         @RequestParam("feature") byte[] feature,
         @RequestParam("faceBeans") List<FaceBean> faceBeans,
@@ -3125,7 +3172,7 @@ public class IFaceLogSpringController {
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
-            response.onComplete(delegate().savePerson(bean,idPhoto,feature,faceBeans,token));
+            response.onComplete(delegate().savePerson(personBean,idPhoto,feature,faceBeans,token));
         }
         catch(Exception e){
             logger.error(e.getMessage(),e);
@@ -3136,26 +3183,26 @@ public class IFaceLogSpringController {
     /**
      * 保存人员信息记录
      * <br>{@code DEVICE_ONLY}
-     * @param bean
+     * @param personBean {@code fl_person}表记录
      * @param idPhoto 标准照图像,可为null
      * @param feature 用于验证的人脸特征数据,可为null
      * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
      * @param deviceId faceInfo 图像来源设备id,可为null
      * @param token 访问令牌
-     * @return bean 保存的{@link PersonBean}对象
+     * @return 保存的{@link PersonBean}对象
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureMultiImage", method = RequestMethod.POST)
     @ApiOperation(value = "保存人员信息记录\n"
 +" <br>{@code DEVICE_ONLY}",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "bean", value = "", type="body", dataType="PersonBean"),
+            @ApiImplicitParam(name = "personBean", value = "{@code fl_person}表记录", type="body", dataType="PersonBean"),
         @ApiImplicitParam(name = "idPhoto", value = "标准照图像,可为null", type="form", dataType="byte[]"),
         @ApiImplicitParam(name = "feature", value = "用于验证的人脸特征数据,可为null", type="form", dataType="byte[]"),
         @ApiImplicitParam(name = "faceInfo", value = "生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null", type="body", dataType="Map"),
         @ApiImplicitParam(name = "deviceId", value = "faceInfo 图像来源设备id,可为null", type="form", dataType="Integer"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response savePerson(@RequestBody PersonBean bean,
+    public Response savePerson(@RequestBody PersonBean personBean,
         @RequestParam("idPhoto") byte[] idPhoto,
         @RequestParam("feature") byte[] feature,
         @RequestParam("faceInfo") Map<java.nio.ByteBuffer, FaceBean> faceInfo,
@@ -3164,7 +3211,7 @@ public class IFaceLogSpringController {
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
-            response.onComplete(delegate().savePerson(bean,idPhoto,feature,faceInfo,deviceId,token));
+            response.onComplete(delegate().savePerson(personBean,idPhoto,feature,faceInfo,deviceId,token));
         }
         catch(Exception e){
             logger.error(e.getMessage(),e);
@@ -3174,25 +3221,25 @@ public class IFaceLogSpringController {
     }
     /**
      * 保存人员信息记录
-     * @param bean
+     * @param personBean {@code fl_person}表记录
      * @param idPhoto 标准照图像对象,可为null
      * @param token 访问令牌
-     * @return 
+     * @return 保存的{@link PersonBean}
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/savePersonWithPhoto", method = RequestMethod.POST)
     @ApiOperation(value = "保存人员信息记录",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "bean", value = "", type="body", dataType="PersonBean"),
+            @ApiImplicitParam(name = "personBean", value = "{@code fl_person}表记录", type="body", dataType="PersonBean"),
         @ApiImplicitParam(name = "idPhoto", value = "标准照图像对象,可为null", type="form", dataType="byte[]"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response savePerson(@RequestBody PersonBean bean,
+    public Response savePerson(@RequestBody PersonBean personBean,
         @RequestParam("idPhoto") byte[] idPhoto,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
-            response.onComplete(delegate().savePerson(bean,idPhoto,token));
+            response.onComplete(delegate().savePerson(personBean,idPhoto,token));
         }
         catch(Exception e){
             logger.error(e.getMessage(),e);
@@ -3203,24 +3250,24 @@ public class IFaceLogSpringController {
     /**
      * 保存人员信息记录
      * <br>{@code DEVICE_ONLY}
-     * @param bean
+     * @param personBean {@code fl_person}表记录
      * @param idPhoto 标准照图像,可为null
      * @param featureBean 用于验证的人脸特征数据对象,可为null
      * @param deviceId 标准照图像来源设备id,可为null
      * @param token 访问令牌
-     * @return 
+     * @return 保存的{@link PersonBean}
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeature", method = RequestMethod.POST)
     @ApiOperation(value = "保存人员信息记录\n"
 +" <br>{@code DEVICE_ONLY}",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "bean", value = "", type="body", dataType="PersonBean"),
+            @ApiImplicitParam(name = "personBean", value = "{@code fl_person}表记录", type="body", dataType="PersonBean"),
         @ApiImplicitParam(name = "idPhoto", value = "标准照图像,可为null", type="form", dataType="byte[]"),
         @ApiImplicitParam(name = "featureBean", value = "用于验证的人脸特征数据对象,可为null", type="body", dataType="FeatureBean"),
         @ApiImplicitParam(name = "deviceId", value = "标准照图像来源设备id,可为null", type="form", dataType="Integer"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response savePerson(@RequestBody PersonBean bean,
+    public Response savePerson(@RequestBody PersonBean personBean,
         @RequestParam("idPhoto") byte[] idPhoto,
         @RequestBody FeatureBean featureBean,
         @RequestParam("deviceId") Integer deviceId,
@@ -3228,7 +3275,7 @@ public class IFaceLogSpringController {
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
-            response.onComplete(delegate().savePerson(bean,idPhoto,featureBean,deviceId,token));
+            response.onComplete(delegate().savePerson(personBean,idPhoto,featureBean,deviceId,token));
         }
         catch(Exception e){
             logger.error(e.getMessage(),e);
@@ -3238,28 +3285,28 @@ public class IFaceLogSpringController {
     }
     /**
      * 保存人员信息记录
-     * @param bean
+     * @param personBean {@code fl_person}表记录
      * @param idPhotoMd5 标准照图像对象,可为null
      * @param featureMd5 用于验证的人脸特征数据对象,可为null
      * @param token 访问令牌
-     * @return 
+     * @return 保存的{@link PersonBean}
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureSaved", method = RequestMethod.POST)
     @ApiOperation(value = "保存人员信息记录",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "bean", value = "", type="body", dataType="PersonBean"),
+            @ApiImplicitParam(name = "personBean", value = "{@code fl_person}表记录", type="body", dataType="PersonBean"),
         @ApiImplicitParam(name = "idPhotoMd5", value = "标准照图像对象,可为null", type="form", dataType="String"),
         @ApiImplicitParam(name = "featureMd5", value = "用于验证的人脸特征数据对象,可为null", type="form", dataType="String"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response savePerson(@RequestBody PersonBean bean,
+    public Response savePerson(@RequestBody PersonBean personBean,
         @RequestParam("idPhotoMd5") String idPhotoMd5,
         @RequestParam("featureMd5") String featureMd5,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
-            response.onComplete(delegate().savePerson(bean,idPhotoMd5,featureMd5,token));
+            response.onComplete(delegate().savePerson(personBean,idPhotoMd5,featureMd5,token));
         }
         catch(Exception e){
             logger.error(e.getMessage(),e);
@@ -3269,22 +3316,22 @@ public class IFaceLogSpringController {
     }
     /**
      * 保存人员(person)记录
-     * @param bean
+     * @param personBean {@code fl_person}表记录
      * @param token 访问令牌
-     * @return 
+     * @return 保存的{@link PersonBean}
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/savePerson", method = RequestMethod.POST)
     @ApiOperation(value = "保存人员(person)记录",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "bean", value = "", type="body", dataType="PersonBean"),
+            @ApiImplicitParam(name = "personBean", value = "{@code fl_person}表记录", type="body", dataType="PersonBean"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response savePerson(@RequestBody PersonBean bean,
+    public Response savePerson(@RequestBody PersonBean personBean,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
-            response.onComplete(delegate().savePerson(bean,token));
+            response.onComplete(delegate().savePerson(personBean,token));
         }
         catch(Exception e){
             logger.error(e.getMessage(),e);
@@ -3323,7 +3370,7 @@ public class IFaceLogSpringController {
     /**
      * 保存人员(person)记录
      * <br>{@code PERSON_ONLY}
-     * @param beans
+     * @param persons {@code fl_person}表记录
      * @param token 访问令牌
      */
     @ResponseBody
@@ -3331,14 +3378,14 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "保存人员(person)记录\n"
 +" <br>{@code PERSON_ONLY}",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "beans", value = "", type="body", dataType="List"),
+            @ApiImplicitParam(name = "persons", value = "{@code fl_person}表记录", type="body", dataType="List"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
-    public Response savePersons(@RequestParam("beans") List<PersonBean> beans,
+    public Response savePersons(@RequestParam("persons") List<PersonBean> persons,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
-            delegate().savePersons(beans,token);
+            delegate().savePersons(persons,token);
             response.onComplete();
         }
         catch(Exception e){
@@ -3348,18 +3395,18 @@ public class IFaceLogSpringController {
         return response;
     }
     /**
-     * 保存人员信息记录(包含标准照)
-     * <br>{@code PERSON_ONLY}
-     * @param persons
+     * 保存人员信息记录(包含标准照)<br>
+     * {@code PERSON_ONLY}
+     * @param persons {@code fl_person}表记录
      * @param token 访问令牌
-     * @return 
+     * @return 保存的{@link PersonBean}记录条数
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/savePersonsWithPhoto", method = RequestMethod.POST)
-    @ApiOperation(value = "保存人员信息记录(包含标准照)\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    @ApiOperation(value = "保存人员信息记录(包含标准照)<br>\n"
++" {@code PERSON_ONLY}",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "persons", value = "", type="body", dataType="Map"),
+            @ApiImplicitParam(name = "persons", value = "{@code fl_person}表记录", type="body", dataType="Map"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
     public Response savePersons(@RequestParam("persons") Map<java.nio.ByteBuffer, PersonBean> persons,
         @RequestBody Token token) 

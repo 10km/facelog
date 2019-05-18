@@ -37,6 +37,33 @@ public class IFaceLogDecorator implements IFaceLog{
     }    
 
     @Override
+    public FeatureBean addFeature (byte[] feature,Integer personId,boolean asIdPhotoIfAbsent,byte[] featurePhoto,FaceBean faceBean,Integer deviceId,Token token) throws DuplicateRecordException{
+        return delegate().addFeature(feature,personId,asIdPhotoIfAbsent,featurePhoto,faceBean,deviceId,token);
+    }
+
+    /**
+     * {@link IFaceLog#addFeature(byte[],java.lang.Integer,boolean,byte[],FaceBean,java.lang.Integer,Token)}对应的unchecked方法,
+     * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
+     * @param feature
+     * @param personId
+     * @param asIdPhotoIfAbsent
+     * @param featurePhoto
+     * @param faceBean
+     * @param deviceId
+     * @param token
+     * @return FeatureBean
+     */
+    public FeatureBean addFeatureUnchecked (byte[] feature,Integer personId,boolean asIdPhotoIfAbsent,byte[] featurePhoto,FaceBean faceBean,Integer deviceId,Token token) {
+        try{
+            return delegate().addFeature(feature,personId,asIdPhotoIfAbsent,featurePhoto,faceBean,deviceId,token);
+        } catch(RuntimeException e){
+            throw e;
+        } catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public FeatureBean addFeature (byte[] feature,Integer personId,List<FaceBean> faecBeans,Token token) throws DuplicateRecordException{
         return delegate().addFeature(feature,personId,faecBeans,token);
     }
@@ -864,8 +891,8 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public PersonBean savePerson (PersonBean bean,byte[] idPhoto,byte[] feature,byte[] featureImage,FaceBean featureFaceBean,Integer deviceId,Token token) {
-        return delegate().savePerson(bean,idPhoto,feature,featureImage,featureFaceBean,deviceId,token);
+    public PersonBean savePerson (PersonBean personBean,byte[] idPhoto,byte[] feature,byte[] featureImage,FaceBean featureFaceBean,Integer deviceId,Token token) {
+        return delegate().savePerson(personBean,idPhoto,feature,featureImage,featureFaceBean,deviceId,token);
     }
 
     @Override
@@ -874,28 +901,28 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public PersonBean savePerson (PersonBean bean,byte[] idPhoto,byte[] feature,Map<java.nio.ByteBuffer, FaceBean> faceInfo,Integer deviceId,Token token) {
-        return delegate().savePerson(bean,idPhoto,feature,faceInfo,deviceId,token);
+    public PersonBean savePerson (PersonBean personBean,byte[] idPhoto,byte[] feature,Map<java.nio.ByteBuffer, FaceBean> faceInfo,Integer deviceId,Token token) {
+        return delegate().savePerson(personBean,idPhoto,feature,faceInfo,deviceId,token);
     }
 
     @Override
-    public PersonBean savePerson (PersonBean bean,byte[] idPhoto,Token token) {
-        return delegate().savePerson(bean,idPhoto,token);
+    public PersonBean savePerson (PersonBean personBean,byte[] idPhoto,Token token) {
+        return delegate().savePerson(personBean,idPhoto,token);
     }
 
     @Override
-    public PersonBean savePerson (PersonBean bean,byte[] idPhoto,FeatureBean featureBean,Integer deviceId,Token token) {
-        return delegate().savePerson(bean,idPhoto,featureBean,deviceId,token);
+    public PersonBean savePerson (PersonBean personBean,byte[] idPhoto,FeatureBean featureBean,Integer deviceId,Token token) {
+        return delegate().savePerson(personBean,idPhoto,featureBean,deviceId,token);
     }
 
     @Override
-    public PersonBean savePerson (PersonBean bean,String idPhotoMd5,String featureMd5,Token token) {
-        return delegate().savePerson(bean,idPhotoMd5,featureMd5,token);
+    public PersonBean savePerson (PersonBean personBean,String idPhotoMd5,String featureMd5,Token token) {
+        return delegate().savePerson(personBean,idPhotoMd5,featureMd5,token);
     }
 
     @Override
-    public PersonBean savePerson (PersonBean bean,Token token) {
-        return delegate().savePerson(bean,token);
+    public PersonBean savePerson (PersonBean personBean,Token token) {
+        return delegate().savePerson(personBean,token);
     }
 
     @Override
@@ -904,8 +931,8 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public void savePersons (List<PersonBean> beans,Token token) {
-         delegate().savePersons(beans,token);
+    public void savePersons (List<PersonBean> persons,Token token) {
+         delegate().savePersons(persons,token);
     }
 
     @Override
