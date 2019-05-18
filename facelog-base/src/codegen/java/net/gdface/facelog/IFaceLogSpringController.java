@@ -255,8 +255,8 @@ public class IFaceLogSpringController {
      * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
      * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
      * <br>{@code PERSON_ONLY}
-     * @param deviceGroupId 外键,设备组id
-     * @param personGroupId 外键,人员组id
+     * @param deviceGroupId 设备组id
+     * @param personGroupId 人员组id
      * @param token 访问令牌
      * @see #addPermit(DeviceGroupBean,PersonGroupBean, Token)
      */
@@ -266,8 +266,8 @@ public class IFaceLogSpringController {
 +" 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}\n"
 +" <br>{@code PERSON_ONLY}",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceGroupId", value = "外键,设备组id", type="form", dataType="int"),
-        @ApiImplicitParam(name = "personGroupId", value = "外键,人员组id", type="form", dataType="int"),
+            @ApiImplicitParam(name = "deviceGroupId", value = "设备组id", type="form", dataType="int"),
+        @ApiImplicitParam(name = "personGroupId", value = "人员组id", type="form", dataType="int"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
     public Response addPermit(@RequestParam("deviceGroupId") int deviceGroupId,
         @RequestParam("personGroupId") int personGroupId,
@@ -850,21 +850,48 @@ public class IFaceLogSpringController {
         return response;
     }
     /**
-     * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean, Token)}
+     * 删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
+     * @param deviceGroupId 设备组id
+     * @param personGroupId 人员组id
+     * @param token
+     * @return 删除成功返回1,否则返回0
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/deletePermitById", method = RequestMethod.POST)
+    @ApiOperation(value = "删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>",httpMethod="POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "deviceGroupId", value = "设备组id", type="form", dataType="int"),
+        @ApiImplicitParam(name = "personGroupId", value = "人员组id", type="form", dataType="int"),
+        @ApiImplicitParam(name = "token", value = "", type="body", dataType="Token")})
+    public Response deletePermit(@RequestParam("deviceGroupId") int deviceGroupId,
+        @RequestParam("personGroupId") int personGroupId,
+        @RequestBody Token token) 
+        {
+        Response response = responseFactory.newIFaceLogResponse();
+        try{
+            response.onComplete(delegate().deletePermit(deviceGroupId,personGroupId,token));
+        }
+        catch(Exception e){
+            logger.error(e.getMessage(),e);
+            response.onError(e);
+        }
+        return response;
+    }
+    /**
+     * 删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
      * <br>{@code PERSON_ONLY}
-     * @param deviceGroup
-     * @param personGroup
+     * @param deviceGroup 设备组记录
+     * @param personGroup 人员组记录
      * @param token 访问令牌
      * @return 删除成功返回1,否则返回0
-     * @throws RuntimeDaoException
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/deletePermit", method = RequestMethod.POST)
-    @ApiOperation(value = "删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean, Token)}\n"
+    @ApiOperation(value = "删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>\n"
 +" <br>{@code PERSON_ONLY}",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceGroup", value = "", type="body", dataType="DeviceGroupBean"),
-        @ApiImplicitParam(name = "personGroup", value = "", type="body", dataType="PersonGroupBean"),
+            @ApiImplicitParam(name = "deviceGroup", value = "设备组记录", type="body", dataType="DeviceGroupBean"),
+        @ApiImplicitParam(name = "personGroup", value = "人员组记录", type="body", dataType="PersonGroupBean"),
         @ApiImplicitParam(name = "token", value = "访问令牌", type="body", dataType="Token")})
     public Response deletePermit(@RequestBody DeviceGroupBean deviceGroup,
         @RequestBody PersonGroupBean personGroup,
