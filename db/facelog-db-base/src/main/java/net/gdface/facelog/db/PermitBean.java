@@ -13,6 +13,8 @@ import java.util.Objects;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftField.Requiredness;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 /**
  * PermitBean is a mapping of fl_permit Table.
  * <br>Meta Data Information (in progress):
@@ -22,6 +24,7 @@ import com.facebook.swift.codec.ThriftField.Requiredness;
  * @author guyadong
 */
 @ThriftStruct
+@ApiModel(description="通行权限关联表")
 public final class PermitBean
     implements Serializable,BaseBean<PermitBean>,Comparable<PermitBean>,Constant,Cloneable
 {
@@ -29,28 +32,38 @@ public final class PermitBean
     /** NULL {@link PermitBean} bean , IMMUTABLE instance */
     public static final PermitBean NULL = new PermitBean().asNULL().asImmutable();
     /** comments:外键,设备组id */
+    @ApiModelProperty(value = "外键,设备组id" ,required=true ,dataType="Integer")
     private Integer deviceGroupId;
 
     /** comments:外键,人员组id */
+    @ApiModelProperty(value = "外键,人员组id" ,required=true ,dataType="Integer")
     private Integer personGroupId;
 
     /** comments:备注 */
+    @ApiModelProperty(value = "备注"  ,dataType="String")
     private String remark;
 
     /** comments:应用项目自定义二进制扩展字段(最大64KB) */
+    @ApiModelProperty(value = "应用项目自定义二进制扩展字段(最大64KB)"  ,dataType="ByteBuffer")
     private java.nio.ByteBuffer extBin;
 
     /** comments:应用项目自定义文本扩展字段(最大64KB) */
+    @ApiModelProperty(value = "应用项目自定义文本扩展字段(最大64KB)"  ,dataType="String")
     private String extTxt;
 
+    @ApiModelProperty(value = "create_time"  ,dataType="Date")
     private java.util.Date createTime;
 
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
+    @ApiModelProperty(value="columns modified flag",dataType="long",required=true)
     private long modified;
     /** columns initialized flag */
+    @ApiModelProperty(value="columns initialized flag",dataType="long",required=true)
     private long initialized;
+    /** new record flag  */
+    @ApiModelProperty(value="new record flag",dataType="boolean",required=true)
     private boolean isNew;        
     /** 
      * set immutable status

@@ -13,6 +13,8 @@ import java.util.Objects;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftField.Requiredness;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 /**
  * PersonBean is a mapping of fl_person Table.
  * <br>Meta Data Information (in progress):
@@ -22,6 +24,7 @@ import com.facebook.swift.codec.ThriftField.Requiredness;
  * @author guyadong
 */
 @ThriftStruct
+@ApiModel(description="人员基本描述信息")
 public final class PersonBean
     implements Serializable,BaseBean<PersonBean>,Comparable<PersonBean>,Constant,Cloneable
 {
@@ -29,60 +32,81 @@ public final class PersonBean
     /** NULL {@link PersonBean} bean , IMMUTABLE instance */
     public static final PersonBean NULL = new PersonBean().asNULL().asImmutable();
     /** comments:用户id */
+    @ApiModelProperty(value = "用户id" ,required=true ,dataType="Integer")
     private Integer id;
 
     /** comments:所属用户组id */
+    @ApiModelProperty(value = "所属用户组id"  ,dataType="Integer")
     private Integer groupId;
 
     /** comments:姓名 */
+    @ApiModelProperty(value = "姓名" ,required=true ,dataType="String")
     private String name;
 
     /** comments:性别,0:女,1:男,其他:未定义 */
+    @ApiModelProperty(value = "性别,0:女,1:男,其他:未定义"  ,dataType="Integer")
     private Integer sex;
 
     /** comments:用户级别,NULL,0:普通用户,2:操作员,3:管理员,其他:未定义 */
+    @ApiModelProperty(value = "用户级别,NULL,0:普通用户,2:操作员,3:管理员,其他:未定义"  ,dataType="Integer")
     private Integer rank;
 
     /** comments:用户密码,MD5 */
+    @ApiModelProperty(value = "用户密码,MD5"  ,dataType="String")
     private String password;
 
     /** comments:出生日期 */
+    @ApiModelProperty(value = "出生日期"  ,dataType="Date")
     private java.util.Date birthdate;
 
     /** comments:手机号码 */
+    @ApiModelProperty(value = "手机号码"  ,dataType="String")
     private String mobilePhone;
 
     /** comments:证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他 */
+    @ApiModelProperty(value = "证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他"  ,dataType="Integer")
     private Integer papersType;
 
     /** comments:证件号码 */
+    @ApiModelProperty(value = "证件号码"  ,dataType="String")
     private String papersNum;
 
     /** comments:用户默认照片(证件照,标准照)的md5校验码,外键 */
+    @ApiModelProperty(value = "用户默认照片(证件照,标准照)的md5校验码,外键"  ,dataType="String")
     private String imageMd5;
 
     /** comments:验证有效期限(超过期限不能通过验证),为NULL永久有效 */
+    @ApiModelProperty(value = "验证有效期限(超过期限不能通过验证),为NULL永久有效"  ,dataType="Date")
     private java.util.Date expiryDate;
 
     /** comments:备注 */
+    @ApiModelProperty(value = "备注"  ,dataType="String")
     private String remark;
 
     /** comments:应用项目自定义二进制扩展字段(最大64KB) */
+    @ApiModelProperty(value = "应用项目自定义二进制扩展字段(最大64KB)"  ,dataType="ByteBuffer")
     private java.nio.ByteBuffer extBin;
 
     /** comments:应用项目自定义文本扩展字段(最大64KB) */
+    @ApiModelProperty(value = "应用项目自定义文本扩展字段(最大64KB)"  ,dataType="String")
     private String extTxt;
 
+    @ApiModelProperty(value = "create_time"  ,dataType="Date")
     private java.util.Date createTime;
 
+    @ApiModelProperty(value = "update_time"  ,dataType="Date")
     private java.util.Date updateTime;
 
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
+    @ApiModelProperty(value="columns modified flag",dataType="long",required=true)
     private long modified;
     /** columns initialized flag */
+    @ApiModelProperty(value="columns initialized flag",dataType="long",required=true)
     private long initialized;
+    /** new record flag  */
+    @ApiModelProperty(value="new record flag",dataType="boolean",required=true)
     private boolean isNew;        
     /** 
      * set immutable status

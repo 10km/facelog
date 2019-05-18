@@ -2,14 +2,19 @@ package net.gdface.facelog;
 
 import com.google.common.base.Function;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 访问令牌
  * @author guyadong
  *
  */
+@ApiModel(description="访问令牌")
 public final class Token{
 	static final int FAKE_ROOT_ID = -1;
 	/** 令牌类型 */
+	@ApiModel(description="令牌类型")
 	public static enum TokenType{
 		/** 未初始化 */UNINITIALIZED,
 		/** 设备令牌 */DEVICE,
@@ -17,8 +22,13 @@ public final class Token{
 		/** root令牌 */ROOT
 	}
 	/** 持有令牌的设备/人员ID */
+	@ApiModelProperty("持有令牌的设备/人员ID")
 	private int id;
+	/** 令牌类型 */
+	@ApiModelProperty("令牌类型")
 	private TokenType type = TokenType.UNINITIALIZED;
+	/** 令牌数据 */
+	@ApiModelProperty("令牌数据")
 	private int t1,t2,t3,t4;
 	public Token() {
 	}

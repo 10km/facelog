@@ -13,6 +13,8 @@ import java.util.Objects;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftField.Requiredness;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 /**
  * ImageBean is a mapping of fl_image Table.
  * <br>Meta Data Information (in progress):
@@ -22,6 +24,7 @@ import com.facebook.swift.codec.ThriftField.Requiredness;
  * @author guyadong
 */
 @ThriftStruct
+@ApiModel(description="图像信息存储表,用于存储系统中所有用到的图像数据,表中只包含图像基本信息,图像二进制源数据存在在fl_store中(md5对应)")
 public final class ImageBean
     implements Serializable,BaseBean<ImageBean>,Comparable<ImageBean>,Constant,Cloneable
 {
@@ -29,35 +32,47 @@ public final class ImageBean
     /** NULL {@link ImageBean} bean , IMMUTABLE instance */
     public static final ImageBean NULL = new ImageBean().asNULL().asImmutable();
     /** comments:主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key */
+    @ApiModelProperty(value = "主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key" ,required=true ,dataType="String")
     private String md5;
 
     /** comments:图像格式 */
+    @ApiModelProperty(value = "图像格式"  ,dataType="String")
     private String format;
 
     /** comments:图像宽度 */
+    @ApiModelProperty(value = "图像宽度" ,required=true ,dataType="Integer")
     private Integer width;
 
     /** comments:图像高度 */
+    @ApiModelProperty(value = "图像高度" ,required=true ,dataType="Integer")
     private Integer height;
 
     /** comments:通道数 */
+    @ApiModelProperty(value = "通道数"  ,dataType="Integer")
     private Integer depth;
 
     /** comments:图像中的人脸数目 */
+    @ApiModelProperty(value = "图像中的人脸数目"  ,dataType="Integer")
     private Integer faceNum;
 
     /** comments:缩略图md5,图像数据存储在 fl_imae_store(md5) */
+    @ApiModelProperty(value = "缩略图md5,图像数据存储在 fl_imae_store(md5)"  ,dataType="String")
     private String thumbMd5;
 
     /** comments:外键,图像来源设备 */
+    @ApiModelProperty(value = "外键,图像来源设备"  ,dataType="Integer")
     private Integer deviceId;
 
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
+    @ApiModelProperty(value="columns modified flag",dataType="long",required=true)
     private long modified;
     /** columns initialized flag */
+    @ApiModelProperty(value="columns initialized flag",dataType="long",required=true)
     private long initialized;
+    /** new record flag  */
+    @ApiModelProperty(value="new record flag",dataType="boolean",required=true)
     private boolean isNew;        
     /** 
      * set immutable status

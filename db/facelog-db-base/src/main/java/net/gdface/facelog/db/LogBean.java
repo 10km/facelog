@@ -13,6 +13,8 @@ import java.util.Objects;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftField.Requiredness;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 /**
  * LogBean is a mapping of fl_log Table.
  * <br>Meta Data Information (in progress):
@@ -22,6 +24,7 @@ import com.facebook.swift.codec.ThriftField.Requiredness;
  * @author guyadong
 */
 @ThriftStruct
+@ApiModel(description="人脸验证日志,记录所有通过验证的人员")
 public final class LogBean
     implements Serializable,BaseBean<LogBean>,Comparable<LogBean>,Constant,Cloneable
 {
@@ -29,37 +32,50 @@ public final class LogBean
     /** NULL {@link LogBean} bean , IMMUTABLE instance */
     public static final LogBean NULL = new LogBean().asNULL().asImmutable();
     /** comments:日志id */
+    @ApiModelProperty(value = "日志id" ,required=true ,dataType="Integer")
     private Integer id;
 
     /** comments:外键,用户id */
+    @ApiModelProperty(value = "外键,用户id" ,required=true ,dataType="Integer")
     private Integer personId;
 
     /** comments:外键,日志来源设备id */
+    @ApiModelProperty(value = "外键,日志来源设备id"  ,dataType="Integer")
     private Integer deviceId;
 
     /** comments:外键,用于验证身份的人脸特征数据MD5 id */
+    @ApiModelProperty(value = "外键,用于验证身份的人脸特征数据MD5 id"  ,dataType="String")
     private String verifyFeature;
 
     /** comments:外键,数据库中相似度最高的人脸 id */
+    @ApiModelProperty(value = "外键,数据库中相似度最高的人脸 id"  ,dataType="Integer")
     private Integer compareFace;
 
     /** comments:验证状态,NULL,0:允许通过,其他:拒绝 */
+    @ApiModelProperty(value = "验证状态,NULL,0:允许通过,其他:拒绝"  ,dataType="Integer")
     private Integer verifyStatus;
 
     /** comments:验证相似度 */
+    @ApiModelProperty(value = "验证相似度"  ,dataType="Double")
     private Double similarty;
 
     /** comments:验证时间(可能由前端设备提供时间) */
+    @ApiModelProperty(value = "验证时间(可能由前端设备提供时间)"  ,dataType="Date")
     private java.util.Date verifyTime;
 
+    @ApiModelProperty(value = "create_time"  ,dataType="Date")
     private java.util.Date createTime;
 
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
+    @ApiModelProperty(value="columns modified flag",dataType="long",required=true)
     private long modified;
     /** columns initialized flag */
+    @ApiModelProperty(value="columns initialized flag",dataType="long",required=true)
     private long initialized;
+    /** new record flag  */
+    @ApiModelProperty(value="new record flag",dataType="boolean",required=true)
     private boolean isNew;        
     /** 
      * set immutable status
