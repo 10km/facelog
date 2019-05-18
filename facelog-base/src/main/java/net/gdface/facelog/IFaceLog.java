@@ -443,6 +443,7 @@ public interface IFaceLog{
 	 * @param token (设备)访问令牌
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws DuplicateRecordException
+	 * @since 2.1.2
 	 */
 	@DeriveMethod(methodSuffix="WithImage")
 	FeatureBean addFeature(final byte[] feature, final Integer personId, final boolean asIdPhotoIfAbsent, final byte[] featurePhoto, final FaceBean faceBean, final Integer deviceId, Token token)throws DuplicateRecordException;
@@ -657,6 +658,7 @@ public interface IFaceLog{
      * 自引用字段:fl_device_group(parent)
 	 * @param deviceGroupId
 	 * @return 如果{@code deviceGroupId}无效则返回空表
+	 * @since 2.1.2
 	 */
 	public List<Integer> childListForDeviceGroup(int deviceGroupId);
 
@@ -730,6 +732,7 @@ public interface IFaceLog{
      * 自引用字段:fl_person_group(parent)
 	 * @param personGroupId
 	 * @return 如果{@code personGroupId}无效则返回空表
+	 * @since 2.1.2
 	 */
 	public List<Integer> childListForPersonGroup(int personGroupId);
 	/**
@@ -836,6 +839,7 @@ public interface IFaceLog{
 	 * @param personGroupId 人员组id
 	 * @param token
 	 * @return 删除成功返回1,否则返回0
+	 * @since 2.1.2
 	 */
 	@DeriveMethod(methodSuffix="ById")
 	int deletePermit(int deviceGroupId, int personGroupId, Token token);
