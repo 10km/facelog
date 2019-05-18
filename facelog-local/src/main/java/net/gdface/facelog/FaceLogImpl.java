@@ -350,6 +350,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	public PersonBean savePerson(final PersonBean personBean, final byte[] idPhoto, Token token) {
 		try{
 			Enable.ALL.check(tm, token);
+			checkArgument(null != personBean, "personBean is null");
 			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
@@ -379,10 +380,13 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			 {
 		try {
 			Enable.ALL.check(tm, token);
+			checkArgument(null != personBean, "personBean is null");
 			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
-					return dm.daoSavePerson(personBean, dm.daoGetImage(idPhotoMd5), Arrays.asList(dm.daoGetFeature(featureMd5)));
+					FeatureBean featureBean = dm.daoGetFeature(featureMd5);
+					return dm.daoSavePerson(personBean, dm.daoGetImage(idPhotoMd5), 
+							featureBean == null ? null : Arrays.asList(featureBean));
 				}
 			});
 		} catch (Exception e) {
