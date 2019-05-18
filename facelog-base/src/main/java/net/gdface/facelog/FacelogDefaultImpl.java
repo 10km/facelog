@@ -147,7 +147,7 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans,
+	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans,
 			Token token) {
 		return null;
 	}

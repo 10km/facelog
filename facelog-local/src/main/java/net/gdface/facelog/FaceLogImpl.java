@@ -407,15 +407,16 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	}
 
 	@Override
-	public PersonBean savePerson(final PersonBean bean, final byte[] idPhoto, final byte[] feature,
+	public PersonBean savePerson(final PersonBean personBean, final byte[] idPhoto, final byte[] feature,
 			final List<FaceBean> faceBeans, Token token)  {
 		try {
 			Enable.DEVICE_ONLY.check(tm, token);
+			checkArgument(null != personBean, "personBean is null");
 			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
-					return dm.daoSavePerson(bean, FaceUtilits.getByteBuffer(idPhoto), 
-							dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), bean, faceBeans), null);
+					return dm.daoSavePerson(personBean, FaceUtilits.getByteBuffer(idPhoto), 
+							dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), personBean, faceBeans), null);
 				}
 			});
 		} catch (Exception e) {
@@ -623,7 +624,30 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
+	public FeatureBean addFeature(final Integer personId,final byte[] feature,final byte[] featurePhoto,final FaceBean faecBean,final Integer deviceId, Token token)throws DuplicateRecordException{
+		try{
+			Enable.DEVICE_ONLY.check(tm, token);
+			checkArgument(feature != null,"feature is null");
+			checkArgument(featurePhoto != null,"featurePhoto is null");
+			checkArgument(faecBean != null,"faceBean is null");
 
+			return BaseDao.daoRunAsTransaction(new Callable<FeatureBean>() {
+				@Override
+				public FeatureBean call() throws Exception {
+					PersonBean personBean = dm.daoGetPersonChecked(personId);
+					DeviceBean deviceBean = dm.daoGetDeviceChecked(deviceId);
+					List<FaceBean>faceList = Arrays.asList(faecBean);
+					dm.daoAddImage(ByteBuffer.wrap(featurePhoto), deviceBean, 
+							faceList, 
+							Arrays.asList(personBean));
+					return dm.daoAddFeature(ByteBuffer.wrap(feature), personBean, faceList);					
+				}
+			});
+//			return dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), dm.daoGetPerson(personId), faecBeans);
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		} 
+	}
 	@Override
 	public FeatureBean addFeature(byte[] feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo,
 			Integer deviceId, Token token) throws DuplicateRecordException {

@@ -2544,7 +2544,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public PersonBean savePerson(PersonBean bean,
+    public PersonBean savePerson(PersonBean personBean,
         byte[] idPhoto,
         byte[] feature,
         List<FaceBean> faceBeans,
@@ -2554,7 +2554,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         try{
             return TypeTransformer.getInstance().to(
                     instance.savePersonWithPhotoAndFeatureMultiFaces(TypeTransformer.getInstance().to(
-                    bean,
+                    personBean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),
                 idPhoto,

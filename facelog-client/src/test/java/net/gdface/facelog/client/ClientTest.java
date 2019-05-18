@@ -1,6 +1,7 @@
 package net.gdface.facelog.client;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -22,6 +23,8 @@ import static org.junit.Assert.*;
 
 import net.gdface.facelog.CommonConstant;
 import net.gdface.facelog.Token;
+import net.gdface.facelog.db.FaceBean;
+import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
@@ -82,6 +85,30 @@ public class ClientTest implements CommonConstant {
 			logger.info("person = {}", newPerson.toString());
 			PersonBean person = facelogClient.getPerson(newPerson.getId());
 			logger.info("person = {}", person.toString());
+			facelogClient.deletePerson(person.getId(), rootToken);
+		} catch(ServiceRuntimeException e){
+			e.printServiceStackTrace();
+			assertTrue(false);
+		}catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			assertTrue(false);
+		}
+	}
+	@Test
+	public void test3SavePersonWithImageAndFeature() {
+		PersonBean newPerson = PersonBean.builder().name("person2").build();
+		try {			
+			byte[] imgdata = FaceUtilits.getBytes(ClientTest.class.getResourceAsStream("/images/guyadong-3.jpg"));
+//			FaceBean facebean = FaceBean.builder().faceLeft(0).faceTop(100).faceWidth(200).faceHeight(200)
+//					.imageMd5(FaceUtilits.getMD5String(imgdata))
+//					.build();
+			byte[] feature = new byte[]{1,1,3,1,1,};
+			newPerson = facelogClient.savePerson(newPerson,imgdata,feature,null,rootToken);
+			logger.info("person = {}", newPerson.toString());
+			PersonBean person = facelogClient.getPerson(newPerson.getId());
+			logger.info("person = {}", person.toString());
+			FeatureBean featureBean = facelogClient.getFeature(FaceUtilits.getMD5String(feature));
+			logger.info("{}",featureBean);
 			facelogClient.deletePerson(person.getId(), rootToken);
 		} catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();

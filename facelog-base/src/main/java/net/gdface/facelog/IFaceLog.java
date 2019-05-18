@@ -257,15 +257,15 @@ public interface IFaceLog{
 	/**
 	 * 保存人员信息记录
 	 * <br>{@code DEVICE_ONLY}
-	 * @param bean
+	 * @param personBean
 	 * @param idPhoto 标准照图像,可为null
 	 * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(byte[], Integer, List, Token)}
-	 * @param faceBeans 参见 {@link #addFeature(byte[], Integer, List, Token)}
+	 * @param faceBeans 可为{@code null},参见 {@link #addFeature(byte[], Integer, List, Token)}
 	 * @param token 访问令牌
 	 * @return
 	 */
 	@DeriveMethod(methodSuffix="WithPhotoAndFeatureMultiFaces")
-	public PersonBean savePerson(PersonBean bean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token);
+	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token);
 
 	/**
 	 * 保存人员信息记录
