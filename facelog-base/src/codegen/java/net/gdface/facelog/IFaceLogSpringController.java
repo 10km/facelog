@@ -103,6 +103,7 @@ public class IFaceLogSpringController {
      * @param token (设备)访问令牌
      * @return 保存的人脸特征记录{@link FeatureBean}
      * @throws DuplicateRecordException
+     * @since 2.1.2
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/addFeatureWithImage", method = RequestMethod.POST)
@@ -565,6 +566,7 @@ public class IFaceLogSpringController {
      * 自引用字段:fl_device_group(parent)
      * @param deviceGroupId
      * @return 如果{@code deviceGroupId}无效则返回空表
+     * @since 2.1.2
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/childListForDeviceGroup", method = RequestMethod.POST)
@@ -589,6 +591,7 @@ public class IFaceLogSpringController {
      * 自引用字段:fl_person_group(parent)
      * @param personGroupId
      * @return 如果{@code personGroupId}无效则返回空表
+     * @since 2.1.2
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/childListForPersonGroup", method = RequestMethod.POST)
@@ -902,6 +905,7 @@ public class IFaceLogSpringController {
      * @param personGroupId 人员组id
      * @param token
      * @return 删除成功返回1,否则返回0
+     * @since 2.1.2
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/deletePermitById", method = RequestMethod.POST)
