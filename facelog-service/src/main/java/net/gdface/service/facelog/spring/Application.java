@@ -12,50 +12,66 @@ import org.springframework.context.annotation.ComponentScan;
 
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import static com.google.common.base.Preconditions.*;
+
 /**
  * @author guyadong
- *
  */
 @SpringBootApplication
-@ComponentScan({"net.gdface.facelog"})
+@ComponentScan({"net.gdface.facelog","net.gdface.facelog.db"})
+//@ComponentScan(basePackageClasses={IFaceLogSpringController.class})
+//@Import({SwaggerConfig.class})
 @EnableSwagger2
 public class Application {
-	private static final int DEFAULT_PORT = 4444;
-//	private static final Server jettyServer = new Server(DEFAULT_PORT);
-//	private static final Tomcat tomcat = new Tomcat();
-    public static void main(String[] args) throws Exception {
-        SpringApplication.run(Application.class, args);
+	private static int httpPort = 8080;
+	private static TomcatConnectorCustomizer customizer = new ConnectorCustomizer();
+	public static void main(String[] args) throws Exception {
+		SpringApplication.run(Application.class, args);
 
-    }
-//  @Bean
-//  EmbeddedServletContainerFactory getJettyEmbeddedServletContainerFactory(){
-//		return new EmbeddedServletContainerFactory(){
-//
-//			@Override
-//			public EmbeddedServletContainer getEmbeddedServletContainer(ServletContextInitializer... initializers) {
-//				return new JettyEmbeddedServletContainer(jettyServer);
-//			}};
-//  	
-//  }
-@Bean
-EmbeddedServletContainerFactory getTomcatEmbeddedServletContainerFactory(){
-	  TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();  
-    tomcatFactory.setPort(DEFAULT_PORT);  
-    tomcatFactory.addConnectorCustomizers(new MyTomcatConnectorCustomizer());  
-    return tomcatFactory; 
-	
-}
-class MyTomcatConnectorCustomizer implements TomcatConnectorCustomizer  
-{  
-    public void customize(Connector connector)  
-    {  
-        Http11NioProtocol protocol = (Http11NioProtocol) connector.getProtocolHandler();  
-        //设置最大连接数  
-        protocol.setMaxConnections(2000);  
-        //设置最大线程数  
-        protocol.setMaxThreads(2000);  
-        protocol.setConnectionTimeout(30000);  
-    }  
-}
-	  
+	}
+	@Bean
+	public EmbeddedServletContainerFactory getTomcatEmbeddedServletContainerFactory(){
+		TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();  
+		tomcatFactory.addConnectorCustomizers(customizer);  
+		return tomcatFactory; 
+
+	}
+	private static class ConnectorCustomizer implements TomcatConnectorCustomizer  
+	{  
+		public void customize(Connector connector)  
+		{  
+			Http11NioProtocol protocol = (Http11NioProtocol) connector.getProtocolHandler();  
+			protocol.setPort(httpPort);
+			//设置最大连接数  
+			protocol.setMaxConnections(2000);  
+			//设置最大线程数  
+			protocol.setMaxThreads(2000);  
+			protocol.setConnectionTimeout(30000);  
+		}  
+	}
+	/**
+	 * @return httpPort
+	 */
+	public static int getHttpPort() {
+		return httpPort;
+	}
+	/**
+	 * @param httpPort 要设置的 httpPort
+	 */
+	public static void setHttpPort(int httpPort) {
+		Application.httpPort = httpPort;
+	}
+	/**
+	 * @return customizer
+	 */
+	public static TomcatConnectorCustomizer getCustomizer() {
+		return customizer;
+	}
+	/**
+	 * @param customizer 要设置的 customizer
+	 */
+	public static void setCustomizer(TomcatConnectorCustomizer customizer) {
+		Application.customizer = checkNotNull(customizer,"customizer is null");
+	}
+
 }
