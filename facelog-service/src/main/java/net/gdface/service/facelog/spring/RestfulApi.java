@@ -9,25 +9,31 @@ import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomize
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import static com.google.common.base.Preconditions.*;
 
 /**
+ * 将facelog接口封装为spring web应用
  * @author guyadong
  */
 @SpringBootApplication
-@ComponentScan({"net.gdface.facelog","net.gdface.facelog.db"})
+@ComponentScan({"net.gdface.facelog"})
 //@ComponentScan(basePackageClasses={IFaceLogSpringController.class})
-//@Import({SwaggerConfig.class})
+@Import({SwaggerConfig.class})
 @EnableSwagger2
-public class Application {
-	private static int httpPort = 8080;
+public class RestfulApi {
+	public static final int DEFAULT_HTTP_PORT = 8080;
+	private static int httpPort = DEFAULT_HTTP_PORT;
 	private static TomcatConnectorCustomizer customizer = new ConnectorCustomizer();
+	/** test only  */
 	public static void main(String[] args) throws Exception {
-		SpringApplication.run(Application.class, args);
-
+		SpringApplication.run(RestfulApi.class, args);
+	}
+	public static void run(){
+		SpringApplication.run(RestfulApi.class, new String[]{});
 	}
 	@Bean
 	public EmbeddedServletContainerFactory getTomcatEmbeddedServletContainerFactory(){
@@ -50,28 +56,32 @@ public class Application {
 		}  
 	}
 	/**
+	 * 返回HTTP端口
 	 * @return httpPort
 	 */
 	public static int getHttpPort() {
 		return httpPort;
 	}
 	/**
+	 * 设置HTTP端口,默认{@value #DEFAULT_HTTP_PORT}
 	 * @param httpPort 要设置的 httpPort
 	 */
 	public static void setHttpPort(int httpPort) {
-		Application.httpPort = httpPort;
+		RestfulApi.httpPort = httpPort;
 	}
 	/**
+	 * 返回tomcat参数定义接口实例
 	 * @return customizer
 	 */
 	public static TomcatConnectorCustomizer getCustomizer() {
 		return customizer;
 	}
 	/**
-	 * @param customizer 要设置的 customizer
+	 * 设置tomcat参数定义接口实例
+	 * @param customizer 要设置的 customizer，不可为{@code null}
 	 */
 	public static void setCustomizer(TomcatConnectorCustomizer customizer) {
-		Application.customizer = checkNotNull(customizer,"customizer is null");
+		RestfulApi.customizer = checkNotNull(customizer,"customizer is null");
 	}
 
 }

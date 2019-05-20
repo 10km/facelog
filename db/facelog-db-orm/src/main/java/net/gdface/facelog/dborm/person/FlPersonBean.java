@@ -82,10 +82,11 @@ public  class FlPersonBean
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
-    private long modified;
+        private long modified;
     /** columns initialized flag */
-    private long initialized;
-    private boolean isNew;        
+        private long initialized;
+    /** new record flag  */
+        private boolean isNew;        
     /** 
      * set immutable status
      * @return {@code this} 
@@ -226,16 +227,6 @@ public  class FlPersonBean
         id = newVal;
     }
     /**
-     * Setter method for {@link #id}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to id
-     */
-    public void setId(int newVal)
-    {
-        setId(new Integer(newVal));
-    }
-    /**
      * Determines if the id has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -292,16 +283,6 @@ public  class FlPersonBean
             return;
         }
         groupId = newVal;
-    }
-    /**
-     * Setter method for {@link #groupId}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to groupId
-     */
-    public void setGroupId(int newVal)
-    {
-        setGroupId(new Integer(newVal));
     }
     /**
      * Determines if the groupId has been modified.
@@ -417,16 +398,6 @@ public  class FlPersonBean
         sex = newVal;
     }
     /**
-     * Setter method for {@link #sex}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to sex
-     */
-    public void setSex(int newVal)
-    {
-        setSex(new Integer(newVal));
-    }
-    /**
      * Determines if the sex has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -481,16 +452,6 @@ public  class FlPersonBean
             return;
         }
         rank = newVal;
-    }
-    /**
-     * Setter method for {@link #rank}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to rank
-     */
-    public void setRank(int newVal)
-    {
-        setRank(new Integer(newVal));
     }
     /**
      * Determines if the rank has been modified.
@@ -603,16 +564,6 @@ public  class FlPersonBean
             return;
         }
         birthdate = newVal;
-    }
-    /**
-     * Setter method for {@link #birthdate}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to birthdate
-     */
-    public void setBirthdate(long newVal)
-    {
-        setBirthdate(new java.util.Date(newVal));
     }
     /**
      * Setter method for {@link #birthdate}.<br>
@@ -733,16 +684,6 @@ public  class FlPersonBean
             return;
         }
         papersType = newVal;
-    }
-    /**
-     * Setter method for {@link #papersType}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to papersType
-     */
-    public void setPapersType(int newVal)
-    {
-        setPapersType(new Integer(newVal));
     }
     /**
      * Determines if the papersType has been modified.
@@ -913,16 +854,6 @@ public  class FlPersonBean
             return;
         }
         expiryDate = newVal;
-    }
-    /**
-     * Setter method for {@link #expiryDate}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to expiryDate
-     */
-    public void setExpiryDate(long newVal)
-    {
-        setExpiryDate(new java.util.Date(newVal));
     }
     /**
      * Setter method for {@link #expiryDate}.<br>
@@ -1159,16 +1090,6 @@ public  class FlPersonBean
     }
     /**
      * Setter method for {@link #createTime}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to createTime
-     */
-    public void setCreateTime(long newVal)
-    {
-        setCreateTime(new java.util.Date(newVal));
-    }
-    /**
-     * Setter method for {@link #createTime}.<br>
      * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
      */
     public void setCreateTime(Long newVal)
@@ -1231,16 +1152,6 @@ public  class FlPersonBean
             return;
         }
         updateTime = newVal;
-    }
-    /**
-     * Setter method for {@link #updateTime}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to updateTime
-     */
-    public void setUpdateTime(long newVal)
-    {
-        setUpdateTime(new java.util.Date(newVal));
     }
     /**
      * Setter method for {@link #updateTime}.<br>

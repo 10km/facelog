@@ -61,10 +61,11 @@ public  class FlPersonGroupBean
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
-    private long modified;
+        private long modified;
     /** columns initialized flag */
-    private long initialized;
-    private boolean isNew;        
+        private long initialized;
+    /** new record flag  */
+        private boolean isNew;        
     /** 
      * set immutable status
      * @return {@code this} 
@@ -206,16 +207,6 @@ public  class FlPersonGroupBean
         id = newVal;
     }
     /**
-     * Setter method for {@link #id}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to id
-     */
-    public void setId(int newVal)
-    {
-        setId(new Integer(newVal));
-    }
-    /**
      * Determines if the id has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -329,16 +320,6 @@ public  class FlPersonGroupBean
         leaf = newVal;
     }
     /**
-     * Setter method for {@link #leaf}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to leaf
-     */
-    public void setLeaf(int newVal)
-    {
-        setLeaf(new Integer(newVal));
-    }
-    /**
      * Determines if the leaf has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -396,16 +377,6 @@ public  class FlPersonGroupBean
         parent = newVal;
     }
     /**
-     * Setter method for {@link #parent}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to parent
-     */
-    public void setParent(int newVal)
-    {
-        setParent(new Integer(newVal));
-    }
-    /**
      * Determines if the parent has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -461,16 +432,6 @@ public  class FlPersonGroupBean
             return;
         }
         rootGroup = newVal;
-    }
-    /**
-     * Setter method for {@link #rootGroup}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to rootGroup
-     */
-    public void setRootGroup(int newVal)
-    {
-        setRootGroup(new Integer(newVal));
     }
     /**
      * Determines if the rootGroup has been modified.
@@ -699,16 +660,6 @@ public  class FlPersonGroupBean
     }
     /**
      * Setter method for {@link #createTime}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to createTime
-     */
-    public void setCreateTime(long newVal)
-    {
-        setCreateTime(new java.util.Date(newVal));
-    }
-    /**
-     * Setter method for {@link #createTime}.<br>
      * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
      */
     public void setCreateTime(Long newVal)
@@ -771,16 +722,6 @@ public  class FlPersonGroupBean
             return;
         }
         updateTime = newVal;
-    }
-    /**
-     * Setter method for {@link #updateTime}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to updateTime
-     */
-    public void setUpdateTime(long newVal)
-    {
-        setUpdateTime(new java.util.Date(newVal));
     }
     /**
      * Setter method for {@link #updateTime}.<br>

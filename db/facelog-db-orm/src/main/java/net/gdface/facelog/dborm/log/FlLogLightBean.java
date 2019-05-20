@@ -50,10 +50,11 @@ public  class FlLogLightBean
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
-    private long modified;
+        private long modified;
     /** columns initialized flag */
-    private long initialized;
-    private boolean isNew;        
+        private long initialized;
+    /** new record flag  */
+        private boolean isNew;        
     /** 
      * set immutable status
      * @return {@code this} 
@@ -183,16 +184,6 @@ public  class FlLogLightBean
         id = newVal;
     }
     /**
-     * Setter method for {@link #id}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to id
-     */
-    public void setId(int newVal)
-    {
-        setId(new Integer(newVal));
-    }
-    /**
      * Determines if the id has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -249,16 +240,6 @@ public  class FlLogLightBean
             return;
         }
         personId = newVal;
-    }
-    /**
-     * Setter method for {@link #personId}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to personId
-     */
-    public void setPersonId(int newVal)
-    {
-        setPersonId(new Integer(newVal));
     }
     /**
      * Determines if the personId has been modified.
@@ -374,16 +355,6 @@ public  class FlLogLightBean
         papersType = newVal;
     }
     /**
-     * Setter method for {@link #papersType}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to papersType
-     */
-    public void setPapersType(int newVal)
-    {
-        setPapersType(new Integer(newVal));
-    }
-    /**
      * Determines if the papersType has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -496,16 +467,6 @@ public  class FlLogLightBean
             return;
         }
         verifyTime = newVal;
-    }
-    /**
-     * Setter method for {@link #verifyTime}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to verifyTime
-     */
-    public void setVerifyTime(long newVal)
-    {
-        setVerifyTime(new java.util.Date(newVal));
     }
     /**
      * Setter method for {@link #verifyTime}.<br>

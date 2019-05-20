@@ -57,10 +57,11 @@ public  class FlImageBean
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
-    private long modified;
+        private long modified;
     /** columns initialized flag */
-    private long initialized;
-    private boolean isNew;        
+        private long initialized;
+    /** new record flag  */
+        private boolean isNew;        
     /** 
      * set immutable status
      * @return {@code this} 
@@ -313,16 +314,6 @@ public  class FlImageBean
         width = newVal;
     }
     /**
-     * Setter method for {@link #width}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to width
-     */
-    public void setWidth(int newVal)
-    {
-        setWidth(new Integer(newVal));
-    }
-    /**
      * Determines if the width has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -378,16 +369,6 @@ public  class FlImageBean
             return;
         }
         height = newVal;
-    }
-    /**
-     * Setter method for {@link #height}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to height
-     */
-    public void setHeight(int newVal)
-    {
-        setHeight(new Integer(newVal));
     }
     /**
      * Determines if the height has been modified.
@@ -448,16 +429,6 @@ public  class FlImageBean
         depth = newVal;
     }
     /**
-     * Setter method for {@link #depth}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to depth
-     */
-    public void setDepth(int newVal)
-    {
-        setDepth(new Integer(newVal));
-    }
-    /**
      * Determines if the depth has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -514,16 +485,6 @@ public  class FlImageBean
             return;
         }
         faceNum = newVal;
-    }
-    /**
-     * Setter method for {@link #faceNum}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to faceNum
-     */
-    public void setFaceNum(int newVal)
-    {
-        setFaceNum(new Integer(newVal));
     }
     /**
      * Determines if the faceNum has been modified.
@@ -637,16 +598,6 @@ public  class FlImageBean
             return;
         }
         deviceId = newVal;
-    }
-    /**
-     * Setter method for {@link #deviceId}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to deviceId
-     */
-    public void setDeviceId(int newVal)
-    {
-        setDeviceId(new Integer(newVal));
     }
     /**
      * Determines if the deviceId has been modified.

@@ -78,10 +78,11 @@ public  class FlDeviceBean
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
-    private long modified;
+        private long modified;
     /** columns initialized flag */
-    private long initialized;
-    private boolean isNew;        
+        private long initialized;
+    /** new record flag  */
+        private boolean isNew;        
     /** 
      * set immutable status
      * @return {@code this} 
@@ -222,16 +223,6 @@ public  class FlDeviceBean
         id = newVal;
     }
     /**
-     * Setter method for {@link #id}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to id
-     */
-    public void setId(int newVal)
-    {
-        setId(new Integer(newVal));
-    }
-    /**
      * Determines if the id has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -288,16 +279,6 @@ public  class FlDeviceBean
             return;
         }
         groupId = newVal;
-    }
-    /**
-     * Setter method for {@link #groupId}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to groupId
-     */
-    public void setGroupId(int newVal)
-    {
-        setGroupId(new Integer(newVal));
     }
     /**
      * Determines if the groupId has been modified.
@@ -634,16 +615,6 @@ public  class FlDeviceBean
             return;
         }
         madeDate = newVal;
-    }
-    /**
-     * Setter method for {@link #madeDate}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to madeDate
-     */
-    public void setMadeDate(long newVal)
-    {
-        setMadeDate(new java.util.Date(newVal));
     }
     /**
      * Setter method for {@link #madeDate}.<br>
@@ -1048,16 +1019,6 @@ public  class FlDeviceBean
     }
     /**
      * Setter method for {@link #createTime}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to createTime
-     */
-    public void setCreateTime(long newVal)
-    {
-        setCreateTime(new java.util.Date(newVal));
-    }
-    /**
-     * Setter method for {@link #createTime}.<br>
      * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
      */
     public void setCreateTime(Long newVal)
@@ -1120,16 +1081,6 @@ public  class FlDeviceBean
             return;
         }
         updateTime = newVal;
-    }
-    /**
-     * Setter method for {@link #updateTime}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to updateTime
-     */
-    public void setUpdateTime(long newVal)
-    {
-        setUpdateTime(new java.util.Date(newVal));
     }
     /**
      * Setter method for {@link #updateTime}.<br>

@@ -62,10 +62,11 @@ public  class FlLogBean
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
-    private long modified;
+        private long modified;
     /** columns initialized flag */
-    private long initialized;
-    private boolean isNew;        
+        private long initialized;
+    /** new record flag  */
+        private boolean isNew;        
     /** 
      * set immutable status
      * @return {@code this} 
@@ -204,16 +205,6 @@ public  class FlLogBean
         id = newVal;
     }
     /**
-     * Setter method for {@link #id}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to id
-     */
-    public void setId(int newVal)
-    {
-        setId(new Integer(newVal));
-    }
-    /**
      * Determines if the id has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -272,16 +263,6 @@ public  class FlLogBean
         personId = newVal;
     }
     /**
-     * Setter method for {@link #personId}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to personId
-     */
-    public void setPersonId(int newVal)
-    {
-        setPersonId(new Integer(newVal));
-    }
-    /**
      * Determines if the personId has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -337,16 +318,6 @@ public  class FlLogBean
             return;
         }
         deviceId = newVal;
-    }
-    /**
-     * Setter method for {@link #deviceId}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to deviceId
-     */
-    public void setDeviceId(int newVal)
-    {
-        setDeviceId(new Integer(newVal));
     }
     /**
      * Determines if the deviceId has been modified.
@@ -463,16 +434,6 @@ public  class FlLogBean
         compareFace = newVal;
     }
     /**
-     * Setter method for {@link #compareFace}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to compareFace
-     */
-    public void setCompareFace(int newVal)
-    {
-        setCompareFace(new Integer(newVal));
-    }
-    /**
      * Determines if the compareFace has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -527,16 +488,6 @@ public  class FlLogBean
             return;
         }
         verifyStatus = newVal;
-    }
-    /**
-     * Setter method for {@link #verifyStatus}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to verifyStatus
-     */
-    public void setVerifyStatus(int newVal)
-    {
-        setVerifyStatus(new Integer(newVal));
     }
     /**
      * Determines if the verifyStatus has been modified.
@@ -595,16 +546,6 @@ public  class FlLogBean
         similarty = newVal;
     }
     /**
-     * Setter method for {@link #similarty}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to similarty
-     */
-    public void setSimilarty(double newVal)
-    {
-        setSimilarty(new Double(newVal));
-    }
-    /**
      * Determines if the similarty has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -661,16 +602,6 @@ public  class FlLogBean
             return;
         }
         verifyTime = newVal;
-    }
-    /**
-     * Setter method for {@link #verifyTime}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to verifyTime
-     */
-    public void setVerifyTime(long newVal)
-    {
-        setVerifyTime(new java.util.Date(newVal));
     }
     /**
      * Setter method for {@link #verifyTime}.<br>
@@ -736,16 +667,6 @@ public  class FlLogBean
             return;
         }
         createTime = newVal;
-    }
-    /**
-     * Setter method for {@link #createTime}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to createTime
-     */
-    public void setCreateTime(long newVal)
-    {
-        setCreateTime(new java.util.Date(newVal));
     }
     /**
      * Setter method for {@link #createTime}.<br>

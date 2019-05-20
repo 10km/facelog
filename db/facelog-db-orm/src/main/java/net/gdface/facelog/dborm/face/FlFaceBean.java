@@ -75,10 +75,11 @@ public  class FlFaceBean
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
-    private long modified;
+        private long modified;
     /** columns initialized flag */
-    private long initialized;
-    private boolean isNew;        
+        private long initialized;
+    /** new record flag  */
+        private boolean isNew;        
     /** 
      * set immutable status
      * @return {@code this} 
@@ -218,16 +219,6 @@ public  class FlFaceBean
         id = newVal;
     }
     /**
-     * Setter method for {@link #id}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to id
-     */
-    public void setId(int newVal)
-    {
-        setId(new Integer(newVal));
-    }
-    /**
      * Determines if the id has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -342,16 +333,6 @@ public  class FlFaceBean
         faceLeft = newVal;
     }
     /**
-     * Setter method for {@link #faceLeft}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to faceLeft
-     */
-    public void setFaceLeft(int newVal)
-    {
-        setFaceLeft(new Integer(newVal));
-    }
-    /**
      * Determines if the faceLeft has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -406,16 +387,6 @@ public  class FlFaceBean
             return;
         }
         faceTop = newVal;
-    }
-    /**
-     * Setter method for {@link #faceTop}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to faceTop
-     */
-    public void setFaceTop(int newVal)
-    {
-        setFaceTop(new Integer(newVal));
     }
     /**
      * Determines if the faceTop has been modified.
@@ -474,16 +445,6 @@ public  class FlFaceBean
         faceWidth = newVal;
     }
     /**
-     * Setter method for {@link #faceWidth}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to faceWidth
-     */
-    public void setFaceWidth(int newVal)
-    {
-        setFaceWidth(new Integer(newVal));
-    }
-    /**
      * Determines if the faceWidth has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -538,16 +499,6 @@ public  class FlFaceBean
             return;
         }
         faceHeight = newVal;
-    }
-    /**
-     * Setter method for {@link #faceHeight}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to faceHeight
-     */
-    public void setFaceHeight(int newVal)
-    {
-        setFaceHeight(new Integer(newVal));
     }
     /**
      * Determines if the faceHeight has been modified.
@@ -605,16 +556,6 @@ public  class FlFaceBean
         eyeLeftx = newVal;
     }
     /**
-     * Setter method for {@link #eyeLeftx}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to eyeLeftx
-     */
-    public void setEyeLeftx(int newVal)
-    {
-        setEyeLeftx(new Integer(newVal));
-    }
-    /**
      * Determines if the eyeLeftx has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -668,16 +609,6 @@ public  class FlFaceBean
             return;
         }
         eyeLefty = newVal;
-    }
-    /**
-     * Setter method for {@link #eyeLefty}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to eyeLefty
-     */
-    public void setEyeLefty(int newVal)
-    {
-        setEyeLefty(new Integer(newVal));
     }
     /**
      * Determines if the eyeLefty has been modified.
@@ -735,16 +666,6 @@ public  class FlFaceBean
         eyeRightx = newVal;
     }
     /**
-     * Setter method for {@link #eyeRightx}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to eyeRightx
-     */
-    public void setEyeRightx(int newVal)
-    {
-        setEyeRightx(new Integer(newVal));
-    }
-    /**
      * Determines if the eyeRightx has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -798,16 +719,6 @@ public  class FlFaceBean
             return;
         }
         eyeRighty = newVal;
-    }
-    /**
-     * Setter method for {@link #eyeRighty}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to eyeRighty
-     */
-    public void setEyeRighty(int newVal)
-    {
-        setEyeRighty(new Integer(newVal));
     }
     /**
      * Determines if the eyeRighty has been modified.
@@ -865,16 +776,6 @@ public  class FlFaceBean
         mouthX = newVal;
     }
     /**
-     * Setter method for {@link #mouthX}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to mouthX
-     */
-    public void setMouthX(int newVal)
-    {
-        setMouthX(new Integer(newVal));
-    }
-    /**
      * Determines if the mouthX has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -928,16 +829,6 @@ public  class FlFaceBean
             return;
         }
         mouthY = newVal;
-    }
-    /**
-     * Setter method for {@link #mouthY}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to mouthY
-     */
-    public void setMouthY(int newVal)
-    {
-        setMouthY(new Integer(newVal));
     }
     /**
      * Determines if the mouthY has been modified.
@@ -995,16 +886,6 @@ public  class FlFaceBean
         noseX = newVal;
     }
     /**
-     * Setter method for {@link #noseX}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to noseX
-     */
-    public void setNoseX(int newVal)
-    {
-        setNoseX(new Integer(newVal));
-    }
-    /**
      * Determines if the noseX has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -1058,16 +939,6 @@ public  class FlFaceBean
             return;
         }
         noseY = newVal;
-    }
-    /**
-     * Setter method for {@link #noseY}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to noseY
-     */
-    public void setNoseY(int newVal)
-    {
-        setNoseY(new Integer(newVal));
     }
     /**
      * Determines if the noseY has been modified.
@@ -1125,16 +996,6 @@ public  class FlFaceBean
         angleYaw = newVal;
     }
     /**
-     * Setter method for {@link #angleYaw}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to angleYaw
-     */
-    public void setAngleYaw(int newVal)
-    {
-        setAngleYaw(new Integer(newVal));
-    }
-    /**
      * Determines if the angleYaw has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -1190,16 +1051,6 @@ public  class FlFaceBean
         anglePitch = newVal;
     }
     /**
-     * Setter method for {@link #anglePitch}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to anglePitch
-     */
-    public void setAnglePitch(int newVal)
-    {
-        setAnglePitch(new Integer(newVal));
-    }
-    /**
      * Determines if the anglePitch has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -1253,16 +1104,6 @@ public  class FlFaceBean
             return;
         }
         angleRoll = newVal;
-    }
-    /**
-     * Setter method for {@link #angleRoll}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to angleRoll
-     */
-    public void setAngleRoll(int newVal)
-    {
-        setAngleRoll(new Integer(newVal));
     }
     /**
      * Determines if the angleRoll has been modified.

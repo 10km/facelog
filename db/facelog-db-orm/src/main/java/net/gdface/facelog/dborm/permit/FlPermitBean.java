@@ -51,10 +51,11 @@ public  class FlPermitBean
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
-    private long modified;
+        private long modified;
     /** columns initialized flag */
-    private long initialized;
-    private boolean isNew;        
+        private long initialized;
+    /** new record flag  */
+        private boolean isNew;        
     /** 
      * set immutable status
      * @return {@code this} 
@@ -195,16 +196,6 @@ public  class FlPermitBean
         deviceGroupId = newVal;
     }
     /**
-     * Setter method for {@link #deviceGroupId}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to deviceGroupId
-     */
-    public void setDeviceGroupId(int newVal)
-    {
-        setDeviceGroupId(new Integer(newVal));
-    }
-    /**
      * Determines if the deviceGroupId has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
@@ -262,16 +253,6 @@ public  class FlPermitBean
             return;
         }
         personGroupId = newVal;
-    }
-    /**
-     * Setter method for {@link #personGroupId}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to personGroupId
-     */
-    public void setPersonGroupId(int newVal)
-    {
-        setPersonGroupId(new Integer(newVal));
     }
     /**
      * Determines if the personGroupId has been modified.
@@ -497,16 +478,6 @@ public  class FlPermitBean
             return;
         }
         createTime = newVal;
-    }
-    /**
-     * Setter method for {@link #createTime}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to createTime
-     */
-    public void setCreateTime(long newVal)
-    {
-        setCreateTime(new java.util.Date(newVal));
     }
     /**
      * Setter method for {@link #createTime}.<br>
