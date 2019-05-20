@@ -53,6 +53,9 @@ public class FacelogServiceMain {
 			@SuppressWarnings("unused")
 			Service httpService = FaceLogService.buildHttpService().startAsync();
 		}
+		if(GlobalConfig.getConfig().getBoolean(RESTFUL_START, true)){
+			FaceLogService.startRestfulService();
+		}
 		// 启动服务心跳
 		ServiceHeartbeat.makeHeartbeat((int)System.currentTimeMillis(), 
 				portOf(FaceLogService.getService()), 

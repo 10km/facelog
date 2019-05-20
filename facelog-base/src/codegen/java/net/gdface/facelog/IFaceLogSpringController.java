@@ -24,16 +24,8 @@ import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.builders.ApiInfoBuilder;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-import org.springframework.context.annotation.*;
 
 /**
  * FaceLog 服务接口<br>
@@ -59,12 +51,10 @@ import org.springframework.context.annotation.*;
  * @author guyadong
  */
 @RestController
-@Api(value="IFaceLog",tags={"IFaceLog Controller"},description="IFaceLog document")
-@Configuration
-@EnableSwagger2
+@Api(value="IFaceLog",tags={"IFaceLog Controller"})
 public class IFaceLogSpringController {
     private static final Logger logger = LoggerFactory.getLogger(IFaceLogSpringController.class);
-    private static final InstanceSupplier instanceSupplier = getInstanceSupplier();
+    private static InstanceSupplier instanceSupplier = getInstanceSupplier();
     private final ResponseFactory responseFactory = loadResponseFactory();
     /**
      * SPI(Service Provider Interface)机制加载 {@link InstanceSupplier}实例,没有找到则返回{@code null},
@@ -76,7 +66,13 @@ public class IFaceLogSpringController {
             ServiceLoader<InstanceSupplier> providers = ServiceLoader.load(InstanceSupplier.class);
             Iterator<InstanceSupplier> itor = providers.iterator();
             return itor.hasNext() ? itor.next() : null;
-    }   
+    }
+    /**
+	 * @param instanceSupplier 要设置的 instanceSupplier
+	 */
+	public static void setInstanceSupplier(InstanceSupplier instanceSupplier) {
+		IFaceLogSpringController.instanceSupplier = instanceSupplier;
+	}
     /**
      * SPI(Service Provider Interface)加载{@link ResponseFactory}接口实例,
      * 没有找到则返回{@link DefaultResponseFactory}实例
@@ -3931,19 +3927,7 @@ public class IFaceLogSpringController {
             return new DefaultResponse();
         }
     }
-	@Bean
-	public Docket facelogApi() { 
-	    return new Docket(DocumentationType.SWAGGER_2)
-	    	.apiInfo(apiInfo())
-	        .select()
-	        .apis(RequestHandlerSelectors.basePackage("net.gdface.facelog"))
-	        .paths(PathSelectors.any())
-	        .build();
-	}
-    protected ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("IFaceLog API Document")
-                .description("FaceLog 服务接口<br>\n"
+    public static String DESCRIPTION = "FaceLog 服务接口<br>\n"
 +" <ul>\n"
 +" <li>所有标明为图像数据的参数,是指具有特定图像格式的图像数据(如jpg,png...),而非无格式的原始点阵位图</li>\n"
 +" <li>所有{@link RuntimeException}异常会被封装在{@code ServiceRuntimeException}抛出,\n"
@@ -3962,7 +3946,5 @@ public class IFaceLogSpringController {
 +" 注释中标注为{@code DEVICE_ONLY}的方法只接受设备令牌,\n"
 +" 注释中标注为{@code ROOT_ONLY}的方法只接受root令牌,\n"
 +" 关于令牌申请和释放参见{@link #applyPersonToken(int, String, boolean)},{@link #releasePersonToken(Token)},{@link #online(DeviceBean)},{@link #offline(Token)}</li>\n"
-+" </ul>")
-                .build();
-    }
++" </ul>";
 }

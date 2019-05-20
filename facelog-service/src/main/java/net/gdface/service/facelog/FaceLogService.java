@@ -13,6 +13,7 @@ import net.gdface.facelog.CommonConstant;
 import net.gdface.facelog.FaceLogImpl;
 import net.gdface.facelog.GlobalConfig;
 import net.gdface.facelog.decorator.IFaceLogThriftDecorator;
+import net.gdface.service.facelog.spring.RestfulApi;
 
 import static com.google.common.base.Preconditions.*;
 /**
@@ -65,7 +66,15 @@ public class FaceLogService extends ThriftServerService implements CommonConstan
 					.setTransportName(ThriftServerService.HTTP_TRANSPORT)
 					.setProtocolName(ThriftServerService.JSON_PROTOCOL));
 	}
-
+	/**
+	 * 启动RESTful WEB服务实例
+	 * @return
+	 */
+	public static synchronized final void startRestfulService(){
+		
+		RestfulApi.setHttpPort(DEFAULT_PORT_RESTFUL);
+		RestfulApi.run();
+	}
 	/**
 	 * 创建服务实例<br>
 	 * @param service 服务实例,如果为{@code null}或服务已经停止则创建新的服务实例
