@@ -24,8 +24,16 @@ import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.builders.ApiInfoBuilder;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import org.springframework.context.annotation.*;
 
 /**
  * FaceLog 服务接口<br>
@@ -51,7 +59,9 @@ import io.swagger.annotations.*;
  * @author guyadong
  */
 @RestController
-@Api(value="IFaceLog",tags={"IFaceLog Controller"})
+@Api(value="IFaceLog",tags={"IFaceLog Controller"},description="IFaceLog document")
+@Configuration
+@EnableSwagger2
 public class IFaceLogSpringController {
     private static final Logger logger = LoggerFactory.getLogger(IFaceLogSpringController.class);
     private static final InstanceSupplier instanceSupplier = getInstanceSupplier();
@@ -3920,6 +3930,39 @@ public class IFaceLogSpringController {
         public Response newIFaceLogResponse() {
             return new DefaultResponse();
         }
-        
+    }
+	@Bean
+	public Docket facelogApi() { 
+	    return new Docket(DocumentationType.SWAGGER_2)
+	    	.apiInfo(apiInfo())
+	        .select()
+	        .apis(RequestHandlerSelectors.basePackage("net.gdface.facelog"))
+	        .paths(PathSelectors.any())
+	        .build();
+	}
+    protected ApiInfo apiInfo() {
+        return new ApiInfoBuilder()
+                .title("IFaceLog API Document")
+                .description("FaceLog 服务接口<br>\n"
++" <ul>\n"
++" <li>所有标明为图像数据的参数,是指具有特定图像格式的图像数据(如jpg,png...),而非无格式的原始点阵位图</li>\n"
++" <li>所有{@link RuntimeException}异常会被封装在{@code ServiceRuntimeException}抛出,\n"
++" client端可以通过{@code ServiceRuntimeException#getType()}获取异常类型.<br>\n"
++" 异常类型定义参见{@link CommonConstant.ExceptionType},<br>\n"
++" 例如: 在执行涉及数据库操作的异常{@link RuntimeDaoException}，\n"
++" 被封装到{@code ServiceRuntimeException}抛出时type为{@link ExceptionType#DAO}</li>\n"
++" <li>所有数据库对象(Java Bean,比如 {@link PersonBean}),在执行保存操作(save)时,\n"
++" 如果为新增记录({@link PersonBean#isNew()}为true),则执行insert操作,否则执行update操作,\n"
++" 如果数据库已经存在指定的记录而{@code isNew()}为{@code true},则那么执行insert操作数据库就会抛出异常，\n"
++" 所以请在执行save时特别注意{@code isNew()}状态</li>\n"
++" <li>对于以add为前缀的添加记录方法,在添加记录前会检查数据库中是否有(主键)相同记录,\n"
++" 如果有则会抛出异常{@link DuplicateRecordException}</li>\n"
++" <li>所有带{@link Token}参数的方法都需要提供访问令牌,访问令牌分为人员令牌,设备令牌和root令牌(仅用于root帐户),\n"
++" 注释中标注为{@code PERSON_ONLY}的方法只接受人员令牌,\n"
++" 注释中标注为{@code DEVICE_ONLY}的方法只接受设备令牌,\n"
++" 注释中标注为{@code ROOT_ONLY}的方法只接受root令牌,\n"
++" 关于令牌申请和释放参见{@link #applyPersonToken(int, String, boolean)},{@link #releasePersonToken(Token)},{@link #online(DeviceBean)},{@link #offline(Token)}</li>\n"
++" </ul>")
+                .build();
     }
 }
