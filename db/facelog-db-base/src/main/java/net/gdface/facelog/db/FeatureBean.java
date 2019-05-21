@@ -484,6 +484,7 @@ public final class FeatureBean
      * Getter method for {@link #referencedByPersonId}.
      * @return PersonBean
      */
+    @ApiModelProperty(hidden = true)
     public PersonBean getReferencedByPersonId() {
         return this.referencedByPersonId;
     }

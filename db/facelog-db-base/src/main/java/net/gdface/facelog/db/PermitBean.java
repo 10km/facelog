@@ -638,6 +638,7 @@ public final class PermitBean
      * Getter method for {@link #referencedByDeviceGroupId}.
      * @return DeviceGroupBean
      */
+    @ApiModelProperty(hidden = true)
     public DeviceGroupBean getReferencedByDeviceGroupId() {
         return this.referencedByDeviceGroupId;
     }
@@ -657,6 +658,7 @@ public final class PermitBean
      * Getter method for {@link #referencedByPersonGroupId}.
      * @return PersonGroupBean
      */
+    @ApiModelProperty(hidden = true)
     public PersonGroupBean getReferencedByPersonGroupId() {
         return this.referencedByPersonGroupId;
     }

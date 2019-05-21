@@ -1649,6 +1649,7 @@ public final class FaceBean
      * Getter method for {@link #referencedByFeatureMd5}.
      * @return FeatureBean
      */
+    @ApiModelProperty(hidden = true)
     public FeatureBean getReferencedByFeatureMd5() {
         return this.referencedByFeatureMd5;
     }
@@ -1668,6 +1669,7 @@ public final class FaceBean
      * Getter method for {@link #referencedByImageMd5}.
      * @return ImageBean
      */
+    @ApiModelProperty(hidden = true)
     public ImageBean getReferencedByImageMd5() {
         return this.referencedByImageMd5;
     }

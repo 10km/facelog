@@ -1526,6 +1526,7 @@ public final class PersonBean
      * Getter method for {@link #referencedByImageMd5}.
      * @return ImageBean
      */
+    @ApiModelProperty(hidden = true)
     public ImageBean getReferencedByImageMd5() {
         return this.referencedByImageMd5;
     }
@@ -1545,6 +1546,7 @@ public final class PersonBean
      * Getter method for {@link #referencedByGroupId}.
      * @return PersonGroupBean
      */
+    @ApiModelProperty(hidden = true)
     public PersonGroupBean getReferencedByGroupId() {
         return this.referencedByGroupId;
     }

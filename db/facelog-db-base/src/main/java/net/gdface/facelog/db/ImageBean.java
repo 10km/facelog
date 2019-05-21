@@ -788,6 +788,7 @@ public final class ImageBean
      * Getter method for {@link #referencedByDeviceId}.
      * @return DeviceBean
      */
+    @ApiModelProperty(hidden = true)
     public DeviceBean getReferencedByDeviceId() {
         return this.referencedByDeviceId;
     }

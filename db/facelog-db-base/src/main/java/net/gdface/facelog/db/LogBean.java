@@ -918,6 +918,7 @@ public final class LogBean
      * Getter method for {@link #referencedByDeviceId}.
      * @return DeviceBean
      */
+    @ApiModelProperty(hidden = true)
     public DeviceBean getReferencedByDeviceId() {
         return this.referencedByDeviceId;
     }
@@ -937,6 +938,7 @@ public final class LogBean
      * Getter method for {@link #referencedByCompareFace}.
      * @return FaceBean
      */
+    @ApiModelProperty(hidden = true)
     public FaceBean getReferencedByCompareFace() {
         return this.referencedByCompareFace;
     }
@@ -956,6 +958,7 @@ public final class LogBean
      * Getter method for {@link #referencedByVerifyFeature}.
      * @return FeatureBean
      */
+    @ApiModelProperty(hidden = true)
     public FeatureBean getReferencedByVerifyFeature() {
         return this.referencedByVerifyFeature;
     }
@@ -975,6 +978,7 @@ public final class LogBean
      * Getter method for {@link #referencedByPersonId}.
      * @return PersonBean
      */
+    @ApiModelProperty(hidden = true)
     public PersonBean getReferencedByPersonId() {
         return this.referencedByPersonId;
     }

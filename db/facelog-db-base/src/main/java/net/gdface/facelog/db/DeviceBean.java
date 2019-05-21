@@ -1397,6 +1397,7 @@ public final class DeviceBean
      * Getter method for {@link #referencedByGroupId}.
      * @return DeviceGroupBean
      */
+    @ApiModelProperty(hidden = true)
     public DeviceGroupBean getReferencedByGroupId() {
         return this.referencedByGroupId;
     }

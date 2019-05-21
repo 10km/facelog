@@ -967,6 +967,7 @@ public final class DeviceGroupBean
      * Getter method for {@link #referencedByParent}.
      * @return DeviceGroupBean
      */
+    @ApiModelProperty(hidden = true)
     public DeviceGroupBean getReferencedByParent() {
         return this.referencedByParent;
     }

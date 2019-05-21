@@ -970,6 +970,7 @@ public final class PersonGroupBean
      * Getter method for {@link #referencedByParent}.
      * @return PersonGroupBean
      */
+    @ApiModelProperty(hidden = true)
     public PersonGroupBean getReferencedByParent() {
         return this.referencedByParent;
     }
