@@ -85,16 +85,6 @@
 	</dependencies>
 	<build>
 		<!-- properties 配置文件打入jar包 -->
-<!-- 		<resources>
-			<resource>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**/*.properties</include>
-					<include>**/*.xml</include>
-					<include>**/*.txt</include>
-				</includes>
-			</resource>
-		</resources> -->
 		<plugins>
 			<!-- 跳过测试 -->
 			<plugin>
@@ -237,6 +227,24 @@
 						</execution>
 					</executions>
 				</plugin>
+				<!-- 生成fat-jar -->
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<version>${spring.boot.version}</version>
+					<configuration>
+						<fork>true</fork>
+						<mainClass>net.gdface.service.facelog.FacelogServiceMain</mainClass>
+						<classifier>standalone</classifier>
+					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>repackage</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -277,6 +285,10 @@
 			<build>
 				<plugins>
 					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+					</plugin>
+<!-- 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-shade-plugin</artifactId>
 						<executions>
@@ -287,7 +299,7 @@
 								</goals>
 							</execution>
 						</executions>
-					</plugin>
+					</plugin> -->
 					<plugin>
 						<artifactId>maven-assembly-plugin</artifactId>
 						<version>2.4.1</version>
@@ -308,6 +320,7 @@
 							</execution>
 						</executions>
 					</plugin>
+					<!-- 生成启动脚本 start_xxx.bat -->
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>templating-maven-plugin</artifactId>
