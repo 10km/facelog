@@ -96,8 +96,9 @@ public class ClientTest implements CommonConstant {
 	}
 	@Test
 	public void test3SavePersonWithImageAndFeature() {
-		PersonBean newPerson = PersonBean.builder().name("person2").build();
+		
 		try {			
+			PersonBean newPerson = PersonBean.builder().name("person2").build();
 			byte[] imgdata = FaceUtilits.getBytes(ClientTest.class.getResourceAsStream("/images/guyadong-3.jpg"));
 //			FaceBean facebean = FaceBean.builder().faceLeft(0).faceTop(100).faceWidth(200).faceHeight(200)
 //					.imageMd5(FaceUtilits.getMD5String(imgdata))
@@ -109,6 +110,11 @@ public class ClientTest implements CommonConstant {
 			logger.info("person = {}", person.toString());
 			FeatureBean featureBean = facelogClient.getFeature(FaceUtilits.getMD5String(feature));
 			logger.info("{}",featureBean);
+			{
+				// 添加一个新的特征
+				byte[] feature2 = new byte[]{1,1,3,1,3,44};
+				facelogClient.savePerson(person, null, feature2, null, rootToken);
+			}
 			facelogClient.deletePerson(person.getId(), rootToken);
 		} catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();

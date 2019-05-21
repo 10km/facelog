@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -22,6 +21,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
@@ -423,8 +423,7 @@ public class DaoManagement extends BaseDao {
 				featureImage = idPhoto;
 			}
 			if (!Judge.isEmpty(featureImage)) {
-				faceInfo = new HashMap<ByteBuffer, FaceBean>(16);
-				faceInfo.put(featureImage, featureFaceBean);
+				faceInfo = ImmutableMap.of(featureImage, featureFaceBean);
 			}
 		}
 		return daoSavePerson(bean, idPhoto, daoAddFeature(feature, bean, faceInfo, deviceBean), null);
