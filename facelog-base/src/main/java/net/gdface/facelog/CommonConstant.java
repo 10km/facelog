@@ -212,6 +212,9 @@ public interface CommonConstant {
     /** RESTful web服务参数配置:RESTful服务端口,默认值{@value #DEFAULT_PORT_RESTFUL} */
     public static final String RESTFUL_PORT = "restful.port";
     
+    /** RESTful web服务参数配置:是否显示在线swagger文档,默认值{@code true} */
+    public static final String RESTFUL_SWAGGER_ENABLE = "restful.swaggerEnable";
+    
     /** 操作员对person表允许的操作 */
     public static final String SECURITY_OPERATOR_TABLE_PERSON_ALLOW = "security.operator.table.person.allow";
     

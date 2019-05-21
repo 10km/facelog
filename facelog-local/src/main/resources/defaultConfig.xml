@@ -70,6 +70,7 @@
 	<restful description="RESTful web服务参数配置">
 		<start description="RESTful 服务端是否启动">true</start>
 		<port description="RESTful服务端口">46411</port>
+		<swaggerEnable description="是否显示在线swagger文档">true</swaggerEnable>
 	</restful>
 	<database description="数据库参数配置">
 		<isDebug description="是否为调试状态">false</isDebug>

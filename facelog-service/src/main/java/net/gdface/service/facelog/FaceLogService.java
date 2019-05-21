@@ -75,6 +75,7 @@ public class FaceLogService extends ThriftServerService implements CommonConstan
 		
 		RestfulService.setHttpPort(GlobalConfig.getConfig().getInt(RESTFUL_PORT, DEFAULT_PORT_RESTFUL));
 		RestfulService.setFacelogInstance(FACELOG_INSTANCE);
+		RestfulService.setSwaggerEnable(GlobalConfig.getConfig().getBoolean(RESTFUL_SWAGGER_ENABLE, true));
 		RestfulService.run();
 	}
 	/**
