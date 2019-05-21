@@ -421,7 +421,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 				@Override
 				public PersonBean call() throws Exception {
 					return dm.daoSavePerson(personBean, FaceUtilits.getByteBuffer(idPhoto), 
-							dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), personBean, faceBeans), null);
+							dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), null, faceBeans), null);
 				}
 			});
 		} catch (Exception e) {
