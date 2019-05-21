@@ -206,10 +206,10 @@ public interface CommonConstant {
     /** XHR(XML HTTP Request)服务参数配置:XHR服务端口,默认值{@value #DEFAULT_PORT_XHR} */
     public static final String XHR_PORT = "xhr.port";
 
-    /** XHR(XML HTTP Request)服务参数配置:XHR服务端是否启动 */
+    /** RESTful web服务参数配置:RESTful 服务端是否启动 */
     public static final String RESTFUL_START = "restful.start";
     
-    /** XHR(XML HTTP Request)服务参数配置:XHR服务端口,默认值{@value #DEFAULT_PORT_RESTFUL} */
+    /** RESTful web服务参数配置:RESTful服务端口,默认值{@value #DEFAULT_PORT_RESTFUL} */
     public static final String RESTFUL_PORT = "restful.port";
     
     /** 操作员对person表允许的操作 */

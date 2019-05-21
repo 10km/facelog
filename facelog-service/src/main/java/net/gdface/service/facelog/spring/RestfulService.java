@@ -11,12 +11,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
+import net.gdface.facelog.IFaceLog;
+import net.gdface.facelog.IFaceLogSpringController;
+import net.gdface.facelog.IFaceLogSpringController.InstanceSupplier;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import static com.google.common.base.Preconditions.*;
 
 /**
- * 将facelog接口封装为spring web应用
+ * 将facelog接口封装为RESTful接口spring web应用
  * @author guyadong
  */
 @SpringBootApplication
@@ -24,16 +27,16 @@ import static com.google.common.base.Preconditions.*;
 //@ComponentScan(basePackageClasses={IFaceLogSpringController.class})
 @Import({SwaggerConfig.class})
 @EnableSwagger2
-public class RestfulApi {
+public class RestfulService {
 	public static final int DEFAULT_HTTP_PORT = 8080;
 	private static int httpPort = DEFAULT_HTTP_PORT;
 	private static TomcatConnectorCustomizer customizer = new ConnectorCustomizer();
 	/** test only  */
 	public static void main(String[] args) throws Exception {
-		SpringApplication.run(RestfulApi.class, args);
+		SpringApplication.run(RestfulService.class, args);
 	}
 	public static void run(){
-		SpringApplication.run(RestfulApi.class, new String[]{});
+		SpringApplication.run(RestfulService.class, new String[]{});
 	}
 	@Bean
 	public EmbeddedServletContainerFactory getTomcatEmbeddedServletContainerFactory(){
@@ -67,7 +70,7 @@ public class RestfulApi {
 	 * @param httpPort 要设置的 httpPort
 	 */
 	public static void setHttpPort(int httpPort) {
-		RestfulApi.httpPort = httpPort;
+		RestfulService.httpPort = httpPort;
 	}
 	/**
 	 * 返回tomcat参数定义接口实例
@@ -81,7 +84,19 @@ public class RestfulApi {
 	 * @param customizer 要设置的 customizer，不可为{@code null}
 	 */
 	public static void setCustomizer(TomcatConnectorCustomizer customizer) {
-		RestfulApi.customizer = checkNotNull(customizer,"customizer is null");
+		RestfulService.customizer = checkNotNull(customizer,"customizer is null");
 	}
 
+	/**
+	 * 设置{@link IFaceLog}实例
+	 * @param facelogInstance {@link IFaceLog}实例，不可为{@code null}
+	 */
+	public static void setFacelogInstance(final IFaceLog facelogInstance){
+		checkArgument(facelogInstance != null ,"facelogInstance is null");
+		IFaceLogSpringController.setInstanceSupplier(new InstanceSupplier(){
+			@Override
+			public IFaceLog instanceOfIFaceLog() {
+				return facelogInstance;
+			}});
+	}
 }

@@ -12,8 +12,9 @@ import io.airlift.units.Duration;
 import net.gdface.facelog.CommonConstant;
 import net.gdface.facelog.FaceLogImpl;
 import net.gdface.facelog.GlobalConfig;
+import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.decorator.IFaceLogThriftDecorator;
-import net.gdface.service.facelog.spring.RestfulApi;
+import net.gdface.service.facelog.spring.RestfulService;
 
 import static com.google.common.base.Preconditions.*;
 /**
@@ -24,8 +25,9 @@ import static com.google.common.base.Preconditions.*;
 public class FaceLogService extends ThriftServerService implements CommonConstant {
 	private static FaceLogService service;
 	private static FaceLogService httpService;
+	private static final IFaceLog FACELOG_INSTANCE = new FaceLogImpl();
 	// 封装为thrift服务的facelog接口静态实例
-	private static final IFaceLogThriftDecorator FACELOG = new IFaceLogThriftDecorator(new FaceLogImpl());
+	private static final IFaceLogThriftDecorator FACELOG_THRIFT_DECORATOR = new IFaceLogThriftDecorator(FACELOG_INSTANCE);
 	/**
 	 * 从配置文件中读取参数创建{@link ThriftServerConfig}实例
 	 * @return
@@ -68,12 +70,12 @@ public class FaceLogService extends ThriftServerService implements CommonConstan
 	}
 	/**
 	 * 启动RESTful WEB服务实例
-	 * @return
 	 */
 	public static synchronized final void startRestfulService(){
 		
-		RestfulApi.setHttpPort(DEFAULT_PORT_RESTFUL);
-		RestfulApi.run();
+		RestfulService.setHttpPort(GlobalConfig.getConfig().getInt(RESTFUL_PORT, DEFAULT_PORT_RESTFUL));
+		RestfulService.setFacelogInstance(FACELOG_INSTANCE);
+		RestfulService.run();
 	}
 	/**
 	 * 创建服务实例<br>
@@ -84,7 +86,7 @@ public class FaceLogService extends ThriftServerService implements CommonConstan
 	private static FaceLogService buildService(FaceLogService service,ThriftServerConfig config){
 		if(null == service || State.TERMINATED == service.state() || State.FAILED == service.state()){		
 			service = ThriftServerService.bulider()
-						.withServices(FACELOG)	
+						.withServices(FACELOG_THRIFT_DECORATOR)	
 						.setEventHandlers(TlsHandler.INSTANCE)
 						.setThriftServerConfig(config)
 						.build(FaceLogService.class);	
