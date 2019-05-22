@@ -40,16 +40,19 @@ public class ServiceSecurityException extends Exception {
         /** 无效人员ID */INVALID_PERSON_ID,
         /** 无效root密码 */INVALID_PASSWORD,
         /** 拒绝令牌申请 */REJECT_APPLY,
-        /** 拒绝访问 */ACCESS_DENIED
+        /** 拒绝访问 */ACCESS_DENIED,
+        /** 拒绝表insert操作 */TABLE_INSERT_DENIED,
+        /** 拒绝表update操作 */TABLE_UPDATE_DENIED,
+        /** 拒绝表delete操作 */TABLE_DELETE_DENIED
 	}
     private SecurityExceptionType type = SecurityExceptionType.UNCLASSIFIED;
     private Integer deviceID;
 	public ServiceSecurityException() {
-		this(null, null);
+		this((String)null, (Throwable)null);
 	}
 
 	public ServiceSecurityException(String message) {
-		this(message,null);
+		this(message,(Throwable)null);
 	}
 
 	public ServiceSecurityException(String message, Throwable cause) {
@@ -60,10 +63,12 @@ public class ServiceSecurityException extends Exception {
 	public ServiceSecurityException(Throwable cause) {
 		this(null,cause);
 	}
-	
+	public ServiceSecurityException(String message,SecurityExceptionType type) {
+		this(message);
+		this.type = checkNotNull(type, "type is null");
+	}
 	public ServiceSecurityException(SecurityExceptionType type) {
-		this(checkNotNull(type, "type is null").name());
-		this.type = type;
+		this(null,type);
 	}
     /** return exception type */
     public SecurityExceptionType getType() {

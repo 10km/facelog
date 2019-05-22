@@ -116,7 +116,7 @@
 		<device>
 			<table>
 				<person>
-					<allow description="允许设备端对人员表执行的操作(insert,delete,update)">insert</allow>
+					<allow description="允许设备端对人员表执行的操作(insert,delete,update)">insert,update</allow>
 				</person>
 				<persongroup>
 					<allow description="允许设备端对人员组表执行的操作(insert,delete,update)"></allow>

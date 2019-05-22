@@ -1,12 +1,16 @@
 package net.gdface.service.facelog;
 
-import java.util.Collections;
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.facebook.swift.service.ThriftEventHandler;
 import com.facebook.swift.service.ThriftServerService;
 import com.google.common.collect.Sets;
 
+import net.gdface.facelog.ServiceSecurityException;
+import net.gdface.facelog.ServiceUtil;
 import net.gdface.facelog.TokenContext;
 import net.gdface.facelog.decorator.Token;
 
@@ -19,11 +23,16 @@ import net.gdface.facelog.decorator.Token;
  *
  */
 public class TlsHandler extends ThriftEventHandler {
+    private static final Logger logger = LoggerFactory.getLogger(TlsHandler.class);
+
 	public static final TlsHandler INSTANCE = new TlsHandler();
 	/** 注册到当前对象的TLS变量集合,当RPC调用结束时调用{@link ThreadLocal#remove()}释放TLS变量 */
 	private final Set<ThreadLocal<?>> tlsVariables = Sets.newConcurrentHashSet();
-	private final Set<IPortDone> dones = Collections.synchronizedSet(Sets.<IPortDone>newLinkedHashSet());
+	private final Set<IPortDone> portDones = Sets.newConcurrentHashSet();
+	private final Set<IPortError> portErrors = Sets.newConcurrentHashSet();
+
 	private TlsHandler() {
+		registerErrorHandler(new OnTableOpException());
 	}
 	
 	/**
@@ -48,7 +57,7 @@ public class TlsHandler extends ThriftEventHandler {
 	public void done(Object context, String methodName) {
 		// 服务方法结束
 		TokenContext.getCurrentTokenContext().contextDone();
-		for( IPortDone done : dones){
+		for( IPortDone done : portDones){
 			done.onDone(context, methodName);
 		}
 		// 释放所有注册的tls变量
@@ -56,6 +65,14 @@ public class TlsHandler extends ThriftEventHandler {
 			tls.remove();
 		}
 	}
+
+	@Override
+	public void postWriteException(Object context, String methodName, Throwable t) {
+		for( IPortError error : portErrors){
+			error.onError(context, methodName,t);
+		}
+	}
+
 	/**
 	 * {@link Set#add(Object)}代理方法<br>
 	 * 将{@code tls}交给{@link TlsHandler}管理,当前对象会在RPC调用结束时释放TLS变量
@@ -79,22 +96,40 @@ public class TlsHandler extends ThriftEventHandler {
 	 * {@link Set#add(Object)}代理方法<br>
 	 * 注册一个{@link IPortDone}接口实例,当服务方法结束时调用该实例
 	 * @param done 为{@code null}时无效
-	 * @return
+	 * @return 注册是否成功
 	 */
-	public boolean registerDone(IPortDone done) {
-		return null == done ? false : dones.add(done);
+	public boolean registerDoneHandler(IPortDone done) {
+		return null == done ? false : portDones.add(done);
 	}
 
 	/**
 	 * {@link Set#remove(Object)}代理方法<br>
 	 * 从当前管理的{@link IPortDone}接口实例中删除{@code done}指定的实例
 	 * @param done 为{@code null}时无效
-	 * @return
+	 * @return 删除是否成功
 	 */
-	public boolean unregisterDone(IPortDone done) {
-		return null == done ? false : dones.remove(done);
+	public boolean unregisterDoneHandler(IPortDone done) {
+		return null == done ? false : portDones.remove(done);
+	}
+	/**
+	 * {@link Set#add(Object)}代理方法<br>
+	 * 注册一个{@link IPortError}接口实例,当服务方法结束时调用该实例
+	 * @param error 为{@code null}时无效
+	 * @return 注册是否成功
+	 */
+	public boolean registerErrorHandler(IPortError error) {
+		return null == error ? false : portErrors.add(error);
 	}
 
+	/**
+	 * {@link Set#remove(Object)}代理方法<br>
+	 * 从当前管理的{@link IPortError}接口实例中删除{@code error}指定的实例
+	 * @param error 为{@code null}时无效
+	 * @return 删除是否成功
+	 */
+	public boolean unregisterErrorHandler(IPortError error) {
+		return null == error ? false : portErrors.remove(error);
+	}
 	/**
 	 * 服务方法调用结束时调用接口
 	 * @author guyadong
@@ -107,5 +142,47 @@ public class TlsHandler extends ThriftEventHandler {
 		 * @param methodName
 		 */
 		public void onDone(Object context, String methodName);
+	}
+	/**
+	 * 服务方法异常时调用接口
+	 * @author guyadong
+	 *
+	 */
+	public interface IPortError{
+		/**
+		 * 服务接口结束时调用方法
+		 * @param context
+		 * @param methodName
+		 * @param error
+		 */
+		public void onError(Object context, String methodName, Throwable error);
+	}
+	
+	/**
+	 * 当数据库表操作被拒绝时服务端输出日志
+	 * @author guyadong
+	 *
+	 */
+	private class OnTableOpException implements IPortError{
+
+		@Override
+		public void onError(Object context, String methodName, Throwable error) {
+			if(error instanceof ServiceSecurityException){
+				ServiceSecurityException securityException = (ServiceSecurityException)error;
+				switch(securityException.getType()){
+				case TABLE_INSERT_DENIED:
+				case TABLE_UPDATE_DENIED:
+				case TABLE_DELETE_DENIED:
+					logger.error("PORT:{} FROM:{} BY:{}: MESSAGE:{}",
+							methodName,
+							ServiceUtil.clientAddressAsString(),
+							TokenContext.getCurrentTokenContext().getToken().owner(),
+							error.getMessage());
+					break;
+				default:
+					break;
+				}
+			}
+		}		
 	}
 }

@@ -131,6 +131,9 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			}
 		}
 		if(error instanceof RuntimeDaoException){
+			if(error.getCause() instanceof ServiceSecurityException){
+				throw (ServiceSecurityException)error.getCause();
+			}
 			throw new ServiceRuntimeException(ExceptionType.DAO.ordinal(),error); 
 		}else if(error instanceof JedisException){
 			throw new ServiceRuntimeException(ExceptionType.REDIS_ERROR.ordinal(),error);

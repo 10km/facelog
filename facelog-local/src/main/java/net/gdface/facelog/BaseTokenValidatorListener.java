@@ -11,6 +11,7 @@ import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.BaseDao.WriteOp;
+import net.gdface.facelog.ServiceSecurityException.SecurityExceptionType;
 import net.gdface.facelog.Token.TokenType;
 
 /**
@@ -46,6 +47,19 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 	 * @return
 	 */
 	protected abstract String getDeviceAllowKey();
+	
+	private static SecurityExceptionType errorTypeOf(WriteOp writeOp){
+		switch (writeOp) {
+		case insert:
+			return SecurityExceptionType.TABLE_INSERT_DENIED;
+		case update:
+			return SecurityExceptionType.TABLE_UPDATE_DENIED;
+		case delete:
+			return SecurityExceptionType.TABLE_DELETE_DENIED;
+		default:
+			throw new IllegalArgumentException("UNSUPPORTED TABLE OPERATION:" + writeOp.name());
+		}
+	}
 	/**
 	 * 返回{@link Token}代表的用户等级,设备令牌返回{@code null}
 	 * @return
@@ -99,7 +113,7 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 			throw new RuntimeDaoException(
 					new ServiceSecurityException(
 							String.format("RANK %s no %s permission for %s",
-									opRank,writeOp,type.getSimpleName())));
+									opRank,writeOp,type.getSimpleName()),errorTypeOf(writeOp)));
 		}
 	}
 	/**
@@ -111,7 +125,7 @@ abstract class BaseTokenValidatorListener<B extends BaseBean<B>> extends TableLi
 			throw new RuntimeDaoException(
 					new ServiceSecurityException(
 						String.format("device no %s permission for %s"
-								,writeOp,type.getSimpleName()))
+								,writeOp,type.getSimpleName()),errorTypeOf(writeOp))
 						.setDeviceID(TokenContext.getCurrentTokenContext().getToken().getId()));
 		}
 	}
