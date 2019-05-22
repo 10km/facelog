@@ -47,6 +47,7 @@ public interface ChannelConstant extends CommonConstant{
 #end###macro
 
 #channelDef(['fl_person','fl_device','fl_feature'] false 'Pubsub' ['Insert','Update','Delete'])
+#channelDef(['fl_person_group','fl_device_group'] false 'Pubsub' ['Insert','Update','Delete'])
 #channelDef(['fl_permit'] true 'Pubsub' ['Insert','Update','Delete'] )
 #channelDef(['fl_log'] true 'Queue' $null )    
 }

@@ -37,6 +37,14 @@ public interface ChannelConstant extends CommonConstant{
     public static final Channel<String> PUBSUB_FEATURE_UPDATE = new Channel<String>("FeatureUpdate"){}.immutable();
     public static final Channel<String> PUBSUB_FEATURE_DELETE = new Channel<String>("FeatureDelete"){}.immutable();
 
+    public static final Channel<Integer> PUBSUB_PERSONGROUP_INSERT = new Channel<Integer>("PersonGroupInsert"){}.immutable();
+    public static final Channel<Integer> PUBSUB_PERSONGROUP_UPDATE = new Channel<Integer>("PersonGroupUpdate"){}.immutable();
+    public static final Channel<Integer> PUBSUB_PERSONGROUP_DELETE = new Channel<Integer>("PersonGroupDelete"){}.immutable();
+
+    public static final Channel<Integer> PUBSUB_DEVICEGROUP_INSERT = new Channel<Integer>("DeviceGroupInsert"){}.immutable();
+    public static final Channel<Integer> PUBSUB_DEVICEGROUP_UPDATE = new Channel<Integer>("DeviceGroupUpdate"){}.immutable();
+    public static final Channel<Integer> PUBSUB_DEVICEGROUP_DELETE = new Channel<Integer>("DeviceGroupDelete"){}.immutable();
+
     public static final Channel<PermitBean> PUBSUB_PERMIT_INSERT = new Channel<PermitBean>("PermitInsert"){}.immutable();
     public static final Channel<PermitBean> PUBSUB_PERMIT_UPDATE = new Channel<PermitBean>("PermitUpdate"){}.immutable();
     public static final Channel<PermitBean> PUBSUB_PERMIT_DELETE = new Channel<PermitBean>("PermitDelete"){}.immutable();

@@ -50,7 +50,9 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	private final TokenValidatorDeviceGroupListener tokenValidatorDeviceGroupListener = new TokenValidatorDeviceGroupListener(dm);
 
 	private final RedisPersonListener redisPersonListener = new RedisPersonListener();
+	private final RedisPersonGroupListener redisPersonGroupListener = new RedisPersonGroupListener();
 	private final RedisDeviceListener redisDeviceListener = new RedisDeviceListener();
+	private final RedisDeviceGroupListener redisDeviceGroupListener = new RedisDeviceGroupListener();
 	private final RedisFeatureListener redisFeatureListener = new RedisFeatureListener();
 	private final RedisPermitListener redisPermitListener = new RedisPermitListener();
 	private final RedisLogListener redisLogListener = new RedisLogListener(rm.getRedisParameters().get(MQParam.HB_MONITOR_CHANNEL));
@@ -74,7 +76,9 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 
 		// 注册REDIS侦听器
 		BaseDao.getPersonManager().registerListener(redisPersonListener);
+		BaseDao.getPersonGroupManager().registerListener(redisPersonGroupListener);
 		BaseDao.getDeviceManager().registerListener(redisDeviceListener);
+		BaseDao.getDeviceGroupManager().registerListener(redisDeviceGroupListener);
 		BaseDao.getFeatureManager().registerListener(redisFeatureListener);
 		BaseDao.getPermitManager().registerListener(redisPermitListener);
 		if(CONFIG.getBoolean(MONITOR_LOG)){
