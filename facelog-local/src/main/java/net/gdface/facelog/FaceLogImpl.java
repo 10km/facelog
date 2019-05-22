@@ -438,6 +438,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			final Map<ByteBuffer, FaceBean> faceInfo, final Integer deviceId, Token token)  {
 		try {
 			Enable.DEVICE_ONLY.check(tm, token);
+			checkArgument(null != personBean, "personBean is null");
 			checkArgument(null != feature, "feature is null");
 			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
