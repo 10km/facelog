@@ -27,7 +27,10 @@ ttypes.SecurityExceptionType = {
   'INVALID_PERSON_ID' : 6,
   'INVALID_PASSWORD' : 7,
   'REJECT_APPLY' : 8,
-  'ACCESS_DENIED' : 9
+  'ACCESS_DENIED' : 9,
+  'TABLE_INSERT_DENIED' : 10,
+  'TABLE_UPDATE_DENIED' : 11,
+  'TABLE_DELETE_DENIED' : 12
 };
 ttypes.MQParam = {
   'REDIS_URI' : 0,

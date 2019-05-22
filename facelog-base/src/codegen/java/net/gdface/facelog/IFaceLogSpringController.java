@@ -3113,11 +3113,11 @@ public class IFaceLogSpringController {
         return response;
     }
     /**
-     * 保存人员信息记录
-     * <br>{@code DEVICE_ONLY}
+     * 保存人员信息记录<br>
+     * {@code DEVICE_ONLY}
      * @param personBean 人员信息对象,{@code fl_person}表记录
-     * @param idPhoto 标准照图像
-     * @param feature 人脸特征数据
+     * @param idPhoto 标准照图像,可以为{@code null}
+     * @param feature 人脸特征数据,可以为{@code null}
      * @param featureImage 提取特征源图像,为null 时,默认使用idPhoto
      * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
      * @param deviceId 设备ID
@@ -3126,12 +3126,12 @@ public class IFaceLogSpringController {
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/savePersonFull", method = RequestMethod.POST)
-    @ApiOperation(value = "保存人员信息记录\n"
-+" <br>{@code DEVICE_ONLY}",httpMethod="POST")
+    @ApiOperation(value = "保存人员信息记录<br>\n"
++" {@code DEVICE_ONLY}",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personBean", value = "人员信息对象,{@code fl_person}表记录", paramType="body", dataType="PersonBean"),
-        @ApiImplicitParam(name = "idPhoto", value = "标准照图像", paramType="form", dataType="byte[]"),
-        @ApiImplicitParam(name = "feature", value = "人脸特征数据", paramType="form", dataType="byte[]"),
+        @ApiImplicitParam(name = "idPhoto", value = "标准照图像,可以为{@code null}", paramType="form", dataType="byte[]"),
+        @ApiImplicitParam(name = "feature", value = "人脸特征数据,可以为{@code null}", paramType="form", dataType="byte[]"),
         @ApiImplicitParam(name = "featureImage", value = "提取特征源图像,为null 时,默认使用idPhoto", paramType="form", dataType="byte[]"),
         @ApiImplicitParam(name = "featureFaceBean", value = "人脸位置对象,为null 时,不保存人脸数据", paramType="body", dataType="FaceBean"),
         @ApiImplicitParam(name = "deviceId", value = "设备ID", paramType="form", dataType="Integer"),
@@ -3159,7 +3159,7 @@ public class IFaceLogSpringController {
      * <br>{@code DEVICE_ONLY}
      * @param personBean {@code fl_person}表记录
      * @param idPhoto 标准照图像,可为null
-     * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(byte[], Integer, List, Token)}
+     * @param feature 用于验证的人脸特征数据,不可重复, 参见 {@link #addFeature(byte[], Integer, List, Token)}
      * @param faceBeans 可为{@code null},参见 {@link #addFeature(byte[], Integer, List, Token)}
      * @param token 访问令牌
      * @return 保存的{@link PersonBean}
@@ -3171,7 +3171,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personBean", value = "{@code fl_person}表记录", paramType="body", dataType="PersonBean"),
         @ApiImplicitParam(name = "idPhoto", value = "标准照图像,可为null", paramType="form", dataType="byte[]"),
-        @ApiImplicitParam(name = "feature", value = "用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(byte[], Integer, List, Token)}", paramType="form", dataType="byte[]"),
+        @ApiImplicitParam(name = "feature", value = "用于验证的人脸特征数据,不可重复, 参见 {@link #addFeature(byte[], Integer, List, Token)}", paramType="form", dataType="byte[]"),
         @ApiImplicitParam(name = "faceBeans", value = "可为{@code null},参见 {@link #addFeature(byte[], Integer, List, Token)}", paramType="body", dataType="List"),
         @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
     public Response savePerson(@RequestBody PersonBean personBean,
@@ -3195,7 +3195,7 @@ public class IFaceLogSpringController {
      * <br>{@code DEVICE_ONLY}
      * @param personBean {@code fl_person}表记录
      * @param idPhoto 标准照图像,可为null
-     * @param feature 用于验证的人脸特征数据,可为null
+     * @param feature 用于验证的人脸特征数据
      * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
      * @param deviceId faceInfo 图像来源设备id,可为null
      * @param token 访问令牌
@@ -3208,7 +3208,7 @@ public class IFaceLogSpringController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "personBean", value = "{@code fl_person}表记录", paramType="body", dataType="PersonBean"),
         @ApiImplicitParam(name = "idPhoto", value = "标准照图像,可为null", paramType="form", dataType="byte[]"),
-        @ApiImplicitParam(name = "feature", value = "用于验证的人脸特征数据,可为null", paramType="form", dataType="byte[]"),
+        @ApiImplicitParam(name = "feature", value = "用于验证的人脸特征数据", paramType="form", dataType="byte[]"),
         @ApiImplicitParam(name = "faceInfo", value = "生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null", paramType="body", dataType="Map"),
         @ApiImplicitParam(name = "deviceId", value = "faceInfo 图像来源设备id,可为null", paramType="form", dataType="Integer"),
         @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
