@@ -51,11 +51,11 @@ public  class FlPermitBean
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
-        private long modified;
+    private long modified;
     /** columns initialized flag */
-        private long initialized;
+    private long initialized;
     /** new record flag  */
-        private boolean isNew;        
+    private boolean isNew;        
     /** 
      * set immutable status
      * @return {@code this} 
