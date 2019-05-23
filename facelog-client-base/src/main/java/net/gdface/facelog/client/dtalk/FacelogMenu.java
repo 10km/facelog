@@ -24,7 +24,7 @@ import static com.google.common.base.Preconditions.*;
 import gu.dtalk.BaseItem;
 import gu.dtalk.BaseOption;
 import gu.dtalk.CmdItem;
-import gu.dtalk.CmdItem.ICmdAdapter;
+import gu.dtalk.ICmdImmediateAdapter;
 import gu.dtalk.IntOption;
 import static net.gdface.facelog.CommonConstant.*;
 /**
@@ -266,7 +266,7 @@ public class FacelogMenu extends RootMenu{
 	 * @author guyadong
 	 *
 	 */
-	private class CmdParamAdapter implements ICmdAdapter{
+	private class CmdParamAdapter implements ICmdImmediateAdapter{
 		static final String P_NAME = "name";
 		static final String P_VALUE = "value";
 		private CmdParamAdapter() {
@@ -290,7 +290,7 @@ public class FacelogMenu extends RootMenu{
 	 * @author guyadong
 	 *
 	 */
-	private class CmdGetParameterAdapter implements ICmdAdapter{
+	private class CmdGetParameterAdapter implements ICmdImmediateAdapter{
 		static final String P_NAME = "name";
 		private CmdGetParameterAdapter() {
 		}
@@ -309,7 +309,7 @@ public class FacelogMenu extends RootMenu{
 	 * @author guyadong
 	 *
 	 */
-	private class CmdVersionAdapter implements ICmdAdapter{
+	private class CmdVersionAdapter implements ICmdImmediateAdapter{
 		private CmdVersionAdapter() {
 		}
 		@Override
@@ -327,7 +327,7 @@ public class FacelogMenu extends RootMenu{
 	 * @author guyadong
 	 *
 	 */
-	private class CmdGetStatusAdapter implements ICmdAdapter{
+	private class CmdGetStatusAdapter implements ICmdImmediateAdapter{
 
 		private CmdGetStatusAdapter() {
 		}
@@ -346,7 +346,7 @@ public class FacelogMenu extends RootMenu{
 	 * 应用层可继承重写{@link CmdSetStatusAdapter#doSetStatus(int, String)}方法实现改变状态的业务逻辑
 	 * @author guyadong
 	 */
-	public static class CmdSetStatusAdapter extends ValueListener<Integer> implements ICmdAdapter{
+	public static class CmdSetStatusAdapter extends ValueListener<Integer> implements ICmdImmediateAdapter{
 
 		private final BaseOption<Integer> opt;
 		private String message;
