@@ -1207,17 +1207,17 @@ public interface IFaceLog{
 	 */
     public void saveServiceConfig(Token token);
 	/**
-	 * 返回服务版本号 {@link Version#VERSION}
+	 * 返回服务版本号
 	 * @return
 	 */
 	public String version();
 	/**
 	 * 返回服务版本的详细信息<br>
 	 * <ul>
-	 * <li>{@code VERSION} -- {@link Version#VERSION}</li>
-	 * <li>{@code SCM_REVISION} -- {@link Version#SCM_REVISION}</li>
-	 * <li>{@code SCM_BRANCH} -- {@link Version#SCM_BRANCH}</li>
-	 * <li>{@code TIMESTAMP} -- {@link Version#TIMESTAMP}</li>
+	 * <li>{@code VERSION} -- 服务版本号</li>
+	 * <li>{@code SCM_REVISION} -- GIT修订版本号</li>
+	 * <li>{@code SCM_BRANCH} -- GIT分支</li>
+	 * <li>{@code TIMESTAMP} -- 时间戳</li>
 	 * </ul>
 	 * 
 	 * @return
