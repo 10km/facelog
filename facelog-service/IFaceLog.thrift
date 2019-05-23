@@ -219,7 +219,8 @@ service IFaceLog {
   FeatureBean addFeatureMulti(1: optional binary feature, 2: optional i32 personId, 3: optional map<binary, FaceBean> faceInfo, 4: optional i32 deviceId, 5: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
   FeatureBean addFeatureWithImage(1: optional binary feature, 2: optional i32 personId, 3: required bool asIdPhotoIfAbsent, 4: optional binary featurePhoto, 5: optional FaceBean faceBean, 6: optional i32 deviceId, 7: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
   ImageBean addImage(1: optional binary imageData, 2: optional i32 deviceId, 3: optional FaceBean faceBean, 4: optional i32 personId, 5: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
-  void addLog(1: optional LogBean bean, 2: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
+  void addLog(1: optional LogBean logBean, 2: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
+  void addLogFull(1: optional LogBean logBean, 2: optional FaceBean faceBean, 3: optional binary featureImage, 4: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
   void addLogs(1: optional list<LogBean> beans, 2: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
   void addPermit(1: optional DeviceGroupBean deviceGroup, 2: optional PersonGroupBean personGroup, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   void addPermitById(1: required i32 deviceGroupId, 2: required i32 personGroupId, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
@@ -267,6 +268,7 @@ service IFaceLog {
   i32 getDeviceIdOfFeature(1: optional string featureMd5) throws (1: ServiceRuntimeException ex1);
   list<DeviceBean> getDevices(1: optional list<i32> idList) throws (1: ServiceRuntimeException ex1);
   list<i32> getDevicesOfGroup(1: required i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
+  FaceBean getFace(1: required i32 faceId) throws (1: ServiceRuntimeException ex1);
   FeatureBean getFeature(1: optional string md5) throws (1: ServiceRuntimeException ex1);
   list<string> getFeatureBeansByPersonId(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
   binary getFeatureBytes(1: optional string md5) throws (1: ServiceRuntimeException ex1);

@@ -521,26 +521,41 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	}
 
 	@Override
-	public void addLog(LogBean bean, Token token)throws DuplicateRecordException {
+	public void addLog(LogBean logBean, Token token)throws DuplicateRecordException {
 		try{
 			Enable.DEVICE_ONLY.check(tm, token);
-			dm.daoAddLog(bean);
-		} catch (RuntimeException e) {
+			checkArgument(logBean != null,"logBean is null");
+			dm.daoAddLog(logBean);
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
+	@Override
+	public void addLog(final LogBean logBean,final FaceBean faceBean,final byte[] featureImage,Token token) throws DuplicateRecordException {
+		try{
+			Enable.DEVICE_ONLY.check(tm, token);
+			checkArgument(logBean != null,"logBean is null");
+			checkArgument(faceBean != null,"faceBean is null");
+			checkArgument(featureImage != null,"featureImage is null");
+			BaseDao.daoRunAsTransaction(new Callable<LogBean>() {
+				@Override
+				public LogBean call() throws Exception {
+					return dm.daoAddLog(logBean, 
+							faceBean, 
+							FaceUtilits.getByteBufferOrNull(featureImage));
+				}});
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
 	@Override
 	public void addLogs(List<LogBean> beans, Token token)throws DuplicateRecordException {
 		try{
 			Enable.DEVICE_ONLY.check(tm, token);
 			dm.daoAddLogsAsTransaction(beans);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
-		} catch (ServiceSecurityException e) {
-			throw new ServiceRuntimeException(ExceptionType.SECURITY_ERROR.ordinal(),e);
 		}
 	}
 
@@ -768,6 +783,15 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	public List<String> getImagesAssociatedByFeature(String featureMd5){
 		try{
 			return dm.daoGetImageKeysImportedByFeatureMd5(featureMd5);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	
+	@Override
+	public FaceBean getFace(int faceId){
+		try{
+			return dm.daoGetFace(faceId);
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}

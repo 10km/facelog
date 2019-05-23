@@ -252,7 +252,7 @@ public class IFaceLogSpringController {
     /**
      * 添加一条验证日志记录
      * <br>{@code DEVICE_ONLY}
-     * @param bean
+     * @param logBean 日志记录对象
      * @param token 访问令牌
      * @throws DuplicateRecordException 数据库中存在相同记录
      */
@@ -261,14 +261,50 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "添加一条验证日志记录\n"
 +" <br>{@code DEVICE_ONLY}",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "bean", value = "", paramType="body", dataType="LogBean"),
+            @ApiImplicitParam(name = "logBean", value = "日志记录对象", paramType="body", dataType="LogBean"),
         @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response addLog(@RequestBody LogBean bean,
+    public Response addLog(@RequestBody LogBean logBean,
         @RequestBody Token token) 
         {
         Response response = responseFactory.newIFaceLogResponse();
         try{
-            delegate().addLog(bean,token);
+            delegate().addLog(logBean,token);
+            response.onComplete();
+        }
+        catch(Exception e){
+            logger.error(e.getMessage(),e);
+            response.onError(e);
+        }
+        return response;
+    }
+    /**
+     * 添加一条验证日志记录
+     * <br>{@code DEVICE_ONLY}
+     * {@code faceBean}和{@code featureImage}必须全不为{@code null},否则抛出异常
+     * @param logBean 日志记录对象
+     * @param faceBean 用于保存到数据库的提取人脸特征的人脸信息对象
+     * @param featureImage 用于保存到数据库的现场采集人脸特征的照片
+     * @param token 访问令牌
+     * @throws DuplicateRecordException 数据库中存在相同记录
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/addLogFull", method = RequestMethod.POST)
+    @ApiOperation(value = "添加一条验证日志记录\n"
++" <br>{@code DEVICE_ONLY}\n"
++" {@code faceBean}和{@code featureImage}必须全不为{@code null},否则抛出异常",httpMethod="POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "logBean", value = "日志记录对象", paramType="body", dataType="LogBean"),
+        @ApiImplicitParam(name = "faceBean", value = "用于保存到数据库的提取人脸特征的人脸信息对象", paramType="body", dataType="FaceBean"),
+        @ApiImplicitParam(name = "featureImage", value = "用于保存到数据库的现场采集人脸特征的照片", paramType="form", dataType="byte[]"),
+        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
+    public Response addLog(@RequestBody LogBean logBean,
+        @RequestBody FaceBean faceBean,
+        @RequestParam("featureImage") byte[] featureImage,
+        @RequestBody Token token) 
+        {
+        Response response = responseFactory.newIFaceLogResponse();
+        try{
+            delegate().addLog(logBean,faceBean,featureImage,token);
             response.onComplete();
         }
         catch(Exception e){
@@ -1472,6 +1508,28 @@ public class IFaceLogSpringController {
         Response response = responseFactory.newIFaceLogResponse();
         try{
             response.onComplete(delegate().getDevicesOfGroup(deviceGroupId));
+        }
+        catch(Exception e){
+            logger.error(e.getMessage(),e);
+            response.onError(e);
+        }
+        return response;
+    }
+    /**
+     * 返回faceId指定的人脸信息记录
+     * @param faceId
+     * @return {@link FaceBean} ,如果没有对应记录则返回null
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getFace", method = RequestMethod.POST)
+    @ApiOperation(value = "返回faceId指定的人脸信息记录",httpMethod="POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "faceId", value = "", paramType="form", dataType="int")})
+    public Response getFace(@RequestParam("faceId") int faceId) 
+        {
+        Response response = responseFactory.newIFaceLogResponse();
+        try{
+            response.onComplete(delegate().getFace(faceId));
         }
         catch(Exception e){
             logger.error(e.getMessage(),e);

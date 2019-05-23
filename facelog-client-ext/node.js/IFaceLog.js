@@ -917,11 +917,11 @@ IFaceLog_addImage_result.prototype.write = function(output) {
 };
 
 var IFaceLog_addLog_args = function(args) {
-  this.bean = null;
+  this.logBean = null;
   this.token = null;
   if (args) {
-    if (args.bean !== undefined && args.bean !== null) {
-      this.bean = new ttypes.LogBean(args.bean);
+    if (args.logBean !== undefined && args.logBean !== null) {
+      this.logBean = new ttypes.LogBean(args.logBean);
     }
     if (args.token !== undefined && args.token !== null) {
       this.token = new ttypes.Token(args.token);
@@ -944,8 +944,8 @@ IFaceLog_addLog_args.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.STRUCT) {
-        this.bean = new ttypes.LogBean();
-        this.bean.read(input);
+        this.logBean = new ttypes.LogBean();
+        this.logBean.read(input);
       } else {
         input.skip(ftype);
       }
@@ -969,9 +969,9 @@ IFaceLog_addLog_args.prototype.read = function(input) {
 
 IFaceLog_addLog_args.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_addLog_args');
-  if (this.bean !== null && this.bean !== undefined) {
-    output.writeFieldBegin('bean', Thrift.Type.STRUCT, 1);
-    this.bean.write(output);
+  if (this.logBean !== null && this.logBean !== undefined) {
+    output.writeFieldBegin('logBean', Thrift.Type.STRUCT, 1);
+    this.logBean.write(output);
     output.writeFieldEnd();
   }
   if (this.token !== null && this.token !== undefined) {
@@ -1045,6 +1045,183 @@ IFaceLog_addLog_result.prototype.read = function(input) {
 
 IFaceLog_addLog_result.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_addLog_result');
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.ex2 !== null && this.ex2 !== undefined) {
+    output.writeFieldBegin('ex2', Thrift.Type.STRUCT, 2);
+    this.ex2.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_addLogFull_args = function(args) {
+  this.logBean = null;
+  this.faceBean = null;
+  this.featureImage = null;
+  this.token = null;
+  if (args) {
+    if (args.logBean !== undefined && args.logBean !== null) {
+      this.logBean = new ttypes.LogBean(args.logBean);
+    }
+    if (args.faceBean !== undefined && args.faceBean !== null) {
+      this.faceBean = new ttypes.FaceBean(args.faceBean);
+    }
+    if (args.featureImage !== undefined && args.featureImage !== null) {
+      this.featureImage = args.featureImage;
+    }
+    if (args.token !== undefined && args.token !== null) {
+      this.token = new ttypes.Token(args.token);
+    }
+  }
+};
+IFaceLog_addLogFull_args.prototype = {};
+IFaceLog_addLogFull_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.logBean = new ttypes.LogBean();
+        this.logBean.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.faceBean = new ttypes.FaceBean();
+        this.faceBean.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.STRING) {
+        this.featureImage = input.readBinary();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 4:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.token = new ttypes.Token();
+        this.token.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_addLogFull_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_addLogFull_args');
+  if (this.logBean !== null && this.logBean !== undefined) {
+    output.writeFieldBegin('logBean', Thrift.Type.STRUCT, 1);
+    this.logBean.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.faceBean !== null && this.faceBean !== undefined) {
+    output.writeFieldBegin('faceBean', Thrift.Type.STRUCT, 2);
+    this.faceBean.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.featureImage !== null && this.featureImage !== undefined) {
+    output.writeFieldBegin('featureImage', Thrift.Type.STRING, 3);
+    output.writeBinary(this.featureImage);
+    output.writeFieldEnd();
+  }
+  if (this.token !== null && this.token !== undefined) {
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 4);
+    this.token.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_addLogFull_result = function(args) {
+  this.ex1 = null;
+  this.ex2 = null;
+  if (args instanceof ttypes.DuplicateRecordException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args instanceof ttypes.ServiceRuntimeException) {
+    this.ex2 = args;
+    return;
+  }
+  if (args) {
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+    if (args.ex2 !== undefined && args.ex2 !== null) {
+      this.ex2 = args.ex2;
+    }
+  }
+};
+IFaceLog_addLogFull_result.prototype = {};
+IFaceLog_addLogFull_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ttypes.DuplicateRecordException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex2 = new ttypes.ServiceRuntimeException();
+        this.ex2.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_addLogFull_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_addLogFull_result');
   if (this.ex1 !== null && this.ex1 !== undefined) {
     output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
     this.ex1.write(output);
@@ -7746,6 +7923,133 @@ IFaceLog_getDevicesOfGroup_result.prototype.write = function(output) {
       }
     }
     output.writeListEnd();
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_getFace_args = function(args) {
+  this.faceId = null;
+  if (args) {
+    if (args.faceId !== undefined && args.faceId !== null) {
+      this.faceId = args.faceId;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field faceId is unset!');
+    }
+  }
+};
+IFaceLog_getFace_args.prototype = {};
+IFaceLog_getFace_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I32) {
+        this.faceId = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 0:
+        input.skip(ftype);
+        break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_getFace_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_getFace_args');
+  if (this.faceId !== null && this.faceId !== undefined) {
+    output.writeFieldBegin('faceId', Thrift.Type.I32, 1);
+    output.writeI32(this.faceId);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_getFace_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  if (args instanceof ttypes.ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = new ttypes.FaceBean(args.success);
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_getFace_result.prototype = {};
+IFaceLog_getFace_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.success = new ttypes.FaceBean();
+        this.success.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ttypes.ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_getFace_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_getFace_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
+    this.success.write(output);
     output.writeFieldEnd();
   }
   if (this.ex1 !== null && this.ex1 !== undefined) {
@@ -20977,7 +21281,7 @@ IFaceLogClient.prototype.recv_addImage = function(input,mtype,rseqid) {
   }
   return callback('addImage failed: unknown result');
 };
-IFaceLogClient.prototype.addLog = function(bean, token, callback) {
+IFaceLogClient.prototype.addLog = function(logBean, token, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
     var _defer = Q.defer();
@@ -20988,19 +21292,19 @@ IFaceLogClient.prototype.addLog = function(bean, token, callback) {
         _defer.resolve(result);
       }
     };
-    this.send_addLog(bean, token);
+    this.send_addLog(logBean, token);
     return _defer.promise;
   } else {
     this._reqs[this.seqid()] = callback;
-    this.send_addLog(bean, token);
+    this.send_addLog(logBean, token);
   }
 };
 
-IFaceLogClient.prototype.send_addLog = function(bean, token) {
+IFaceLogClient.prototype.send_addLog = function(logBean, token) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('addLog', Thrift.MessageType.CALL, this.seqid());
   var params = {
-    bean: bean,
+    logBean: logBean,
     token: token
   };
   var args = new IFaceLog_addLog_args(params);
@@ -21019,6 +21323,61 @@ IFaceLogClient.prototype.recv_addLog = function(input,mtype,rseqid) {
     return callback(x);
   }
   var result = new IFaceLog_addLog_result();
+  result.read(input);
+  input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    return callback(result.ex1);
+  }
+  if (null !== result.ex2) {
+    return callback(result.ex2);
+  }
+  callback(null);
+};
+IFaceLogClient.prototype.addLogFull = function(logBean, faceBean, featureImage, token, callback) {
+  this._seqid = this.new_seqid();
+  if (callback === undefined) {
+    var _defer = Q.defer();
+    this._reqs[this.seqid()] = function(error, result) {
+      if (error) {
+        _defer.reject(error);
+      } else {
+        _defer.resolve(result);
+      }
+    };
+    this.send_addLogFull(logBean, faceBean, featureImage, token);
+    return _defer.promise;
+  } else {
+    this._reqs[this.seqid()] = callback;
+    this.send_addLogFull(logBean, faceBean, featureImage, token);
+  }
+};
+
+IFaceLogClient.prototype.send_addLogFull = function(logBean, faceBean, featureImage, token) {
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('addLogFull', Thrift.MessageType.CALL, this.seqid());
+  var params = {
+    logBean: logBean,
+    faceBean: faceBean,
+    featureImage: featureImage,
+    token: token
+  };
+  var args = new IFaceLog_addLogFull_args(params);
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
+};
+
+IFaceLogClient.prototype.recv_addLogFull = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
+  }
+  var result = new IFaceLog_addLogFull_result();
   result.read(input);
   input.readMessageEnd();
 
@@ -23499,6 +23858,58 @@ IFaceLogClient.prototype.recv_getDevicesOfGroup = function(input,mtype,rseqid) {
     return callback(null, result.success);
   }
   return callback('getDevicesOfGroup failed: unknown result');
+};
+IFaceLogClient.prototype.getFace = function(faceId, callback) {
+  this._seqid = this.new_seqid();
+  if (callback === undefined) {
+    var _defer = Q.defer();
+    this._reqs[this.seqid()] = function(error, result) {
+      if (error) {
+        _defer.reject(error);
+      } else {
+        _defer.resolve(result);
+      }
+    };
+    this.send_getFace(faceId);
+    return _defer.promise;
+  } else {
+    this._reqs[this.seqid()] = callback;
+    this.send_getFace(faceId);
+  }
+};
+
+IFaceLogClient.prototype.send_getFace = function(faceId) {
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('getFace', Thrift.MessageType.CALL, this.seqid());
+  var params = {
+    faceId: faceId
+  };
+  var args = new IFaceLog_getFace_args(params);
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
+};
+
+IFaceLogClient.prototype.recv_getFace = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
+  }
+  var result = new IFaceLog_getFace_result();
+  result.read(input);
+  input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    return callback(result.ex1);
+  }
+  if (null !== result.success) {
+    return callback(null, result.success);
+  }
+  return callback('getFace failed: unknown result');
 };
 IFaceLogClient.prototype.getFeature = function(md5, callback) {
   this._seqid = this.new_seqid();
@@ -28302,7 +28713,7 @@ IFaceLogProcessor.prototype.process_addLog = function(seqid, input, output) {
   args.read(input);
   input.readMessageEnd();
   if (this._handler.addLog.length === 2) {
-    Q.fcall(this._handler.addLog.bind(this._handler), args.bean, args.token)
+    Q.fcall(this._handler.addLog.bind(this._handler), args.logBean, args.token)
       .then(function(result) {
         var result_obj = new IFaceLog_addLog_result({success: result});
         output.writeMessageBegin("addLog", Thrift.MessageType.REPLY, seqid);
@@ -28323,7 +28734,7 @@ IFaceLogProcessor.prototype.process_addLog = function(seqid, input, output) {
         output.flush();
       });
   } else {
-    this._handler.addLog(args.bean, args.token, function (err, result) {
+    this._handler.addLog(args.logBean, args.token, function (err, result) {
       var result_obj;
       if ((err === null || typeof err === 'undefined') || err instanceof ttypes.DuplicateRecordException || err instanceof ttypes.ServiceRuntimeException) {
         result_obj = new IFaceLog_addLog_result((err !== null || typeof err === 'undefined') ? err : {success: result});
@@ -28331,6 +28742,47 @@ IFaceLogProcessor.prototype.process_addLog = function(seqid, input, output) {
       } else {
         result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
         output.writeMessageBegin("addLog", Thrift.MessageType.EXCEPTION, seqid);
+      }
+      result_obj.write(output);
+      output.writeMessageEnd();
+      output.flush();
+    });
+  }
+};
+IFaceLogProcessor.prototype.process_addLogFull = function(seqid, input, output) {
+  var args = new IFaceLog_addLogFull_args();
+  args.read(input);
+  input.readMessageEnd();
+  if (this._handler.addLogFull.length === 4) {
+    Q.fcall(this._handler.addLogFull.bind(this._handler), args.logBean, args.faceBean, args.featureImage, args.token)
+      .then(function(result) {
+        var result_obj = new IFaceLog_addLogFull_result({success: result});
+        output.writeMessageBegin("addLogFull", Thrift.MessageType.REPLY, seqid);
+        result_obj.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      }, function (err) {
+        var result;
+        if (err instanceof ttypes.DuplicateRecordException || err instanceof ttypes.ServiceRuntimeException) {
+          result = new IFaceLog_addLogFull_result(err);
+          output.writeMessageBegin("addLogFull", Thrift.MessageType.REPLY, seqid);
+        } else {
+          result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+          output.writeMessageBegin("addLogFull", Thrift.MessageType.EXCEPTION, seqid);
+        }
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      });
+  } else {
+    this._handler.addLogFull(args.logBean, args.faceBean, args.featureImage, args.token, function (err, result) {
+      var result_obj;
+      if ((err === null || typeof err === 'undefined') || err instanceof ttypes.DuplicateRecordException || err instanceof ttypes.ServiceRuntimeException) {
+        result_obj = new IFaceLog_addLogFull_result((err !== null || typeof err === 'undefined') ? err : {success: result});
+        output.writeMessageBegin("addLogFull", Thrift.MessageType.REPLY, seqid);
+      } else {
+        result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+        output.writeMessageBegin("addLogFull", Thrift.MessageType.EXCEPTION, seqid);
       }
       result_obj.write(output);
       output.writeMessageEnd();
@@ -30258,6 +30710,47 @@ IFaceLogProcessor.prototype.process_getDevicesOfGroup = function(seqid, input, o
       } else {
         result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
         output.writeMessageBegin("getDevicesOfGroup", Thrift.MessageType.EXCEPTION, seqid);
+      }
+      result_obj.write(output);
+      output.writeMessageEnd();
+      output.flush();
+    });
+  }
+};
+IFaceLogProcessor.prototype.process_getFace = function(seqid, input, output) {
+  var args = new IFaceLog_getFace_args();
+  args.read(input);
+  input.readMessageEnd();
+  if (this._handler.getFace.length === 1) {
+    Q.fcall(this._handler.getFace.bind(this._handler), args.faceId)
+      .then(function(result) {
+        var result_obj = new IFaceLog_getFace_result({success: result});
+        output.writeMessageBegin("getFace", Thrift.MessageType.REPLY, seqid);
+        result_obj.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      }, function (err) {
+        var result;
+        if (err instanceof ttypes.ServiceRuntimeException) {
+          result = new IFaceLog_getFace_result(err);
+          output.writeMessageBegin("getFace", Thrift.MessageType.REPLY, seqid);
+        } else {
+          result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+          output.writeMessageBegin("getFace", Thrift.MessageType.EXCEPTION, seqid);
+        }
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      });
+  } else {
+    this._handler.getFace(args.faceId, function (err, result) {
+      var result_obj;
+      if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
+        result_obj = new IFaceLog_getFace_result((err !== null || typeof err === 'undefined') ? err : {success: result});
+        output.writeMessageBegin("getFace", Thrift.MessageType.REPLY, seqid);
+      } else {
+        result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+        output.writeMessageBegin("getFace", Thrift.MessageType.EXCEPTION, seqid);
       }
       result_obj.write(output);
       output.writeMessageEnd();

@@ -228,14 +228,54 @@ public class IFaceLogThriftDecorator {
                 @ThriftException(type=DuplicateRecordException.class, id=1),
                 @ThriftException(type=ServiceRuntimeException.class, id=2)
                 })
-    public void addLog(LogBean bean,
+    public void addLog(LogBean logBean,
         Token token) 
         throws DuplicateRecordException,ServiceRuntimeException{
         try{
              delegate().addLog(TypeTransformer.getInstance().to(
-                    bean,
+                    logBean,
                     LogBean.class,
                     LogBean.class),
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
+        }
+        catch(net.gdface.facelog.DuplicateRecordException e){
+            throw new DuplicateRecordException(e);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#addLog(net.gdface.facelog.db.LogBean,net.gdface.facelog.db.FaceBean,byte[],net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "addLogFull" ,exception = {
+                @ThriftException(type=DuplicateRecordException.class, id=1),
+                @ThriftException(type=ServiceRuntimeException.class, id=2)
+                })
+    public void addLogFull(LogBean logBean,
+        FaceBean faceBean,
+        ByteBuffer featureImage,
+        Token token) 
+        throws DuplicateRecordException,ServiceRuntimeException{
+        try{
+             delegate().addLog(TypeTransformer.getInstance().to(
+                    logBean,
+                    LogBean.class,
+                    LogBean.class),
+                TypeTransformer.getInstance().to(
+                    faceBean,
+                    FaceBean.class,
+                    FaceBean.class),
+                TypeTransformer.getInstance().to(
+                    featureImage,
+                    ByteBuffer.class,
+                    byte[].class),
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -1221,6 +1261,25 @@ public class IFaceLogThriftDecorator {
                     delegate().getDevicesOfGroup(deviceGroupId),
                     Integer.class,
                     Integer.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#getFace(int)}
+     */
+    @ThriftMethod(value = "getFace" )
+    public FaceBean getFace(int faceId) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().getFace(faceId),
+                    FaceBean.class,
+                    FaceBean.class);
         }
         catch(ServiceRuntimeException e){
             throw e;

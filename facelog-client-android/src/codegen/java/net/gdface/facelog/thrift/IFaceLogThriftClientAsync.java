@@ -331,7 +331,7 @@ public class IFaceLogThriftClientAsync {
     /**
      * see also {@link net.gdface.facelog.IFaceLog#addLog(net.gdface.facelog.db.LogBean,net.gdface.facelog.Token)}
      */
-    public ListenableFuture<Void> addLog(LogBean bean,
+    public ListenableFuture<Void> addLog(LogBean logBean,
         Token token){
         MethodCallback<Void,Void> nativeCallback = 
             new MethodCallback<Void,Void>(
@@ -345,7 +345,7 @@ public class IFaceLogThriftClientAsync {
                 }});
         nativeCallback.service.addLog(
                 TypeTransformer.getInstance().to(
-                    bean,
+                    logBean,
                     LogBean.class,
                     net.gdface.facelog.client.thrift.LogBean.class),
             TypeTransformer.getInstance().to(
@@ -354,10 +354,53 @@ public class IFaceLogThriftClientAsync {
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
         return nativeCallback.feature;
     }
-    public void addLog(LogBean bean,
+    public void addLog(LogBean logBean,
         Token token,
         FutureCallback<Void>callback){
-        factory.addCallback(addLog(bean,token), callback);
+        factory.addCallback(addLog(logBean,token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#addLog(net.gdface.facelog.db.LogBean,net.gdface.facelog.db.FaceBean,byte[],net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Void> addLog(LogBean logBean,
+        FaceBean faceBean,
+        byte[] featureImage,
+        Token token){
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.addLogFull(
+                TypeTransformer.getInstance().to(
+                    logBean,
+                    LogBean.class,
+                    net.gdface.facelog.client.thrift.LogBean.class),
+            TypeTransformer.getInstance().to(
+                    faceBean,
+                    FaceBean.class,
+                    net.gdface.facelog.client.thrift.FaceBean.class),
+            TypeTransformer.getInstance().to(
+                    featureImage,
+                    byte[].class,
+                    okio.ByteString.class),
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void addLog(LogBean logBean,
+        FaceBean faceBean,
+        byte[] featureImage,
+        Token token,
+        FutureCallback<Void>callback){
+        factory.addCallback(addLog(logBean,faceBean,featureImage,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#addLogs(java.util.List,net.gdface.facelog.Token)}
@@ -1503,6 +1546,28 @@ public class IFaceLogThriftClientAsync {
     public void getDevicesOfGroup(int deviceGroupId,
         FutureCallback<List<Integer>>callback){
         factory.addCallback(getDevicesOfGroup(deviceGroupId), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#getFace(int)}
+     */
+    public ListenableFuture<FaceBean> getFace(int faceId){
+        MethodCallback<FaceBean,net.gdface.facelog.client.thrift.FaceBean> nativeCallback = 
+            new MethodCallback<FaceBean,net.gdface.facelog.client.thrift.FaceBean>(
+                new Function<net.gdface.facelog.client.thrift.FaceBean,FaceBean>() {
+                        @Override
+                        public FaceBean apply(net.gdface.facelog.client.thrift.FaceBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.FaceBean.class,
+                    FaceBean.class);
+                }});
+        nativeCallback.service.getFace(
+                faceId,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void getFace(int faceId,
+        FutureCallback<FaceBean>callback){
+        factory.addCallback(getFace(faceId), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getFeature(java.lang.String)}

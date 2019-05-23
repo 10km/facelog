@@ -324,7 +324,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public void addLog(final LogBean bean,
+    public void addLog(final LogBean logBean,
         final Token token) 
         throws DuplicateRecordException{
         try{
@@ -337,9 +337,53 @@ public class IFaceLogThriftClient implements IFaceLog {
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Void> nativeCallback){
                     service.addLog(TypeTransformer.getInstance().to(
-                    bean,
+                    logBean,
                     LogBean.class,
                     net.gdface.facelog.client.thrift.LogBean.class),TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
+                    DuplicateRecordException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public void addLog(final LogBean logBean,
+        final FaceBean faceBean,
+        final byte[] featureImage,
+        final Token token) 
+        throws DuplicateRecordException{
+        try{
+             syncCall(new Function<Void,Void>() {
+                @Override
+                public Void apply(Void input) {
+                    return input;
+                }},
+                new ServiceAsyncCall<Void>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Void> nativeCallback){
+                    service.addLogFull(TypeTransformer.getInstance().to(
+                    logBean,
+                    LogBean.class,
+                    net.gdface.facelog.client.thrift.LogBean.class),TypeTransformer.getInstance().to(
+                    faceBean,
+                    FaceBean.class,
+                    net.gdface.facelog.client.thrift.FaceBean.class),TypeTransformer.getInstance().to(
+                    featureImage,
+                    byte[].class,
+                    okio.ByteString.class),TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
@@ -1624,6 +1668,32 @@ public class IFaceLogThriftClient implements IFaceLog {
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<List<Integer>> nativeCallback){
                     service.getDevicesOfGroup(deviceGroupId,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public FaceBean getFace(final int faceId) 
+        {
+        try{
+            return syncCall(new Function<net.gdface.facelog.client.thrift.FaceBean,FaceBean>() {
+                @Override
+                public FaceBean apply(net.gdface.facelog.client.thrift.FaceBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.FaceBean.class,
+                    FaceBean.class);
+                }},
+                new ServiceAsyncCall<net.gdface.facelog.client.thrift.FaceBean>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.FaceBean> nativeCallback){
+                    service.getFace(faceId,nativeCallback);
                 }});
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){

@@ -185,10 +185,14 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public void addLog(LogBean bean, Token token) throws DuplicateRecordException {
+	public void addLog(LogBean logBean, Token token) throws DuplicateRecordException {
 		
 	}
-
+	
+	@Override
+	public void addLog(final LogBean logBean, final FaceBean faceBean, final byte[] featureImage, Token token) throws DuplicateRecordException {
+	}
+	
 	@Override
 	public void addLogs(List<LogBean> beans, Token token) throws DuplicateRecordException {
 		
@@ -300,6 +304,11 @@ public class FacelogDefaultImpl implements IFaceLog {
 
 	@Override
 	public List<String> getImagesAssociatedByFeature(String featureMd5) {
+		return null;
+	}
+	
+	@Override
+	public FaceBean getFace(int faceId) {
 		return null;
 	}
 

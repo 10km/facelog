@@ -231,15 +231,50 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public void addLog(LogBean bean,
+    public void addLog(LogBean logBean,
         Token token) 
         throws DuplicateRecordException{
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
              instance.addLog(TypeTransformer.getInstance().to(
-                    bean,
+                    logBean,
                     LogBean.class,
                     net.gdface.facelog.client.thrift.LogBean.class),
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        }
+        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
+                    DuplicateRecordException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public void addLog(LogBean logBean,
+        FaceBean faceBean,
+        byte[] featureImage,
+        Token token) 
+        throws DuplicateRecordException{
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+             instance.addLogFull(TypeTransformer.getInstance().to(
+                    logBean,
+                    LogBean.class,
+                    net.gdface.facelog.client.thrift.LogBean.class),
+                TypeTransformer.getInstance().to(
+                    faceBean,
+                    FaceBean.class,
+                    net.gdface.facelog.client.thrift.FaceBean.class),
+                featureImage,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -1182,6 +1217,26 @@ public class IFaceLogThriftClient implements IFaceLog {
                     instance.getDevicesOfGroup(deviceGroupId),
                     Integer.class,
                     Integer.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public FaceBean getFace(int faceId) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.getFace(faceId),
+                    net.gdface.facelog.client.thrift.FaceBean.class,
+                    FaceBean.class);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);

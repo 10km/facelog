@@ -32,6 +32,7 @@ import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
+import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
@@ -581,5 +582,27 @@ public class DaoManagement extends BaseDao {
 			}
 		});
 		return top.isPresent() ? top.get().getId() : null;
+	}
+	
+	/**
+	 * 添加一条验证日志记录
+	 * <br>{@code DEVICE_ONLY}
+	 * @param logBean 日志记录对象
+	 * @param faceBean 用于保存到数据库的提取人脸特征的人脸信息对象
+	 * @param featureImage 用于保存到数据库的现场采集人脸特征的照片
+	 * @throws DuplicateRecordException 数据库中存在相同记录
+	 */
+	protected LogBean	daoAddLog(LogBean logBean,FaceBean faceBean,ByteBuffer featureImage) throws DuplicateRecordException {
+		if(logBean == null || faceBean == null || featureImage == null){
+			return null;
+		}
+		PersonBean personBean = daoGetReferencedByPersonIdOnLog(logBean);
+		DeviceBean deviceBean = daoGetReferencedByDeviceIdOnLog(logBean);
+		if(featureImage != null){
+			daoAddImage(featureImage, deviceBean, 
+					faceBean == null ? null : Arrays.asList(faceBean), 
+					personBean == null ? null : Arrays.asList(personBean));
+		}
+		return daoAddLog(logBean, deviceBean, faceBean, null, personBean);
 	}
 }

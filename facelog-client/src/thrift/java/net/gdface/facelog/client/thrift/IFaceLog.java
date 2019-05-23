@@ -72,8 +72,20 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=2)
                       })
         ListenableFuture<Void> addLog(
-            @ThriftField(value=1, name="bean", requiredness=Requiredness.OPTIONAL) final LogBean bean,
+            @ThriftField(value=1, name="logBean", requiredness=Requiredness.OPTIONAL) final LogBean logBean,
             @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        );
+
+        @ThriftMethod(value = "addLogFull",
+                      exception = {
+                          @ThriftException(type=DuplicateRecordException.class, id=1),
+                          @ThriftException(type=ServiceRuntimeException.class, id=2)
+                      })
+        ListenableFuture<Void> addLogFull(
+            @ThriftField(value=1, name="logBean", requiredness=Requiredness.OPTIONAL) final LogBean logBean,
+            @ThriftField(value=2, name="faceBean", requiredness=Requiredness.OPTIONAL) final FaceBean faceBean,
+            @ThriftField(value=3, name="featureImage", requiredness=Requiredness.OPTIONAL) final byte [] featureImage,
+            @ThriftField(value=4, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
         @ThriftMethod(value = "addLogs",
@@ -486,6 +498,14 @@ public interface IFaceLog
                       })
         ListenableFuture<List<Integer>> getDevicesOfGroup(
             @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId
+        );
+
+        @ThriftMethod(value = "getFace",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<FaceBean> getFace(
+            @ThriftField(value=1, name="faceId", requiredness=Requiredness.REQUIRED) final int faceId
         );
 
         @ThriftMethod(value = "getFeature",
@@ -1318,8 +1338,20 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=2)
                   })
     void addLog(
-        @ThriftField(value=1, name="bean", requiredness=Requiredness.OPTIONAL) final LogBean bean,
+        @ThriftField(value=1, name="logBean", requiredness=Requiredness.OPTIONAL) final LogBean logBean,
         @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+    ) throws DuplicateRecordException, ServiceRuntimeException;
+
+    @ThriftMethod(value = "addLogFull",
+                  exception = {
+                      @ThriftException(type=DuplicateRecordException.class, id=1),
+                      @ThriftException(type=ServiceRuntimeException.class, id=2)
+                  })
+    void addLogFull(
+        @ThriftField(value=1, name="logBean", requiredness=Requiredness.OPTIONAL) final LogBean logBean,
+        @ThriftField(value=2, name="faceBean", requiredness=Requiredness.OPTIONAL) final FaceBean faceBean,
+        @ThriftField(value=3, name="featureImage", requiredness=Requiredness.OPTIONAL) final byte [] featureImage,
+        @ThriftField(value=4, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws DuplicateRecordException, ServiceRuntimeException;
 
     @ThriftMethod(value = "addLogs",
@@ -1732,6 +1764,14 @@ public interface IFaceLog
                   })
     List<Integer> getDevicesOfGroup(
         @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "getFace",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    FaceBean getFace(
+        @ThriftField(value=1, name="faceId", requiredness=Requiredness.REQUIRED) final int faceId
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getFeature",

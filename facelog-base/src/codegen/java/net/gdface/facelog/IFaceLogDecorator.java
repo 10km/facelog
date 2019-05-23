@@ -138,20 +138,44 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public void addLog (LogBean bean,Token token) throws DuplicateRecordException{
-         delegate().addLog(bean,token);
+    public void addLog (LogBean logBean,Token token) throws DuplicateRecordException{
+         delegate().addLog(logBean,token);
     }
 
     /**
      * {@link IFaceLog#addLog(LogBean,Token)}对应的unchecked方法,
      * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
-     * @param bean
+     * @param logBean
      * @param token
      * @return void
      */
-    public void addLogUnchecked (LogBean bean,Token token) {
+    public void addLogUnchecked (LogBean logBean,Token token) {
         try{
-             delegate().addLog(bean,token);
+             delegate().addLog(logBean,token);
+        } catch(RuntimeException e){
+            throw e;
+        } catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void addLog (LogBean logBean,FaceBean faceBean,byte[] featureImage,Token token) throws DuplicateRecordException{
+         delegate().addLog(logBean,faceBean,featureImage,token);
+    }
+
+    /**
+     * {@link IFaceLog#addLog(LogBean,FaceBean,byte[],Token)}对应的unchecked方法,
+     * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
+     * @param logBean
+     * @param faceBean
+     * @param featureImage
+     * @param token
+     * @return void
+     */
+    public void addLogUnchecked (LogBean logBean,FaceBean faceBean,byte[] featureImage,Token token) {
+        try{
+             delegate().addLog(logBean,faceBean,featureImage,token);
         } catch(RuntimeException e){
             throw e;
         } catch(Exception e){
@@ -462,6 +486,11 @@ public class IFaceLogDecorator implements IFaceLog{
     @Override
     public List<Integer> getDevicesOfGroup (int deviceGroupId) {
         return delegate().getDevicesOfGroup(deviceGroupId);
+    }
+
+    @Override
+    public FaceBean getFace (int faceId) {
+        return delegate().getFace(faceId);
     }
 
     @Override
