@@ -18,20 +18,27 @@ public class Ack<T> {
 	private String item;
 	private T value;
 	private Status status;
-	private String errorMessage;
+	private String statusMessage;
 	/** 设备命令执行状态 */
 	public enum Status{
-		/** 调用正常返回 */
+		/** 设备命令成功执行完成 */
 		OK,
 		/** 设备端不支持的操作 */
 		UNSUPPORTED,
 		/** 调用出错 */
 		ERROR,
 		/** 
-		 * 响应超时,此错误不是由设备端发送,
-		 * 是由命令发送端(本机)在指定的时间内没有收到任何响应而取消频道订阅时产生
+		 * 设备命令响应超时
 		 */ 
-		TIMEOUT
+		TIMEOUT,
+		/** 设备命令被拒绝执行 */
+		REJECTED,
+		/** 设备命令开始执行 */
+		ACCEPTED,
+		/** 返回设备命令完成进度 */
+		PROGRESS,
+		/** 执行中的设备命令被取消 */
+		CANCELED
 	}
 	public Ack() {
 	}
@@ -44,13 +51,25 @@ public class Ack<T> {
 		StringBuffer buffer = new StringBuffer(String.format("device%d@%d:%s", deviceId,cmdSn,status.name()));
 		switch(status){
 		case ERROR:
-			if(!Strings.isNullOrEmpty(errorMessage)){
-				buffer.append(":").append(errorMessage);
+		case REJECTED:
+			if(!Strings.isNullOrEmpty(statusMessage)){
+				buffer.append(":").append(statusMessage);
+			}
+			break;
+		case PROGRESS:
+			/** 此状态下value字段如果为数字类型则被解释为完成进度(0-100) */
+			if(value instanceof Number){
+				buffer.append(":finished %").append(((Number)value).intValue());
+			}
+			if(!Strings.isNullOrEmpty(statusMessage)){
+				buffer.append(":").append(statusMessage);
 			}
 			break;
 		case TIMEOUT:
 		case UNSUPPORTED:
 		case OK:
+		case ACCEPTED:
+		case CANCELED:
 		default:
 			break;
 		}
@@ -132,17 +151,19 @@ public class Ack<T> {
 		this.status = status;
 		return this;
 	}
-	/** 返回错误信息 */
-	public String getErrorMessage() {
-		return errorMessage;
+	/** 
+	 * 返回错误信息
+	 */
+	public String getStatusMessage() {
+		return statusMessage;
 	}
 	/**
 	 * 设置错误信息
 	 * @param errorMessage 
 	 * @return 当前{@link Ack}实例
 	 */
-	public Ack<T> setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
+	public Ack<T> setStatusMessage(String errorMessage) {
+		this.statusMessage = errorMessage;
 		return this;
 	}
 
@@ -174,9 +195,9 @@ public class Ack<T> {
 			builder.append(status);
 			builder.append(", ");
 		}
-		if (errorMessage != null) {
+		if (statusMessage != null) {
 			builder.append("errorMessage=");
-			builder.append(errorMessage);
+			builder.append(statusMessage);
 		}
 		builder.append("]");
 		return builder.toString();

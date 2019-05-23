@@ -116,7 +116,7 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 		                    ack.setStatus(Ack.Status.UNSUPPORTED);
 		                }catch(CmdExecutionException e){
 		                    // 填入异常状态,设置错误信息
-		                    ack.setStatus(Ack.Status.ERROR).setErrorMessage(e.getMessage());
+		                    ack.setStatus(Ack.Status.ERROR).setStatusMessage(e.getMessage());
 		                } 
 						ack.setCmdSn(cmdSn);
 						// 如果指定了响应频道且频道名有效则向指定的频道发送响应消息
