@@ -598,11 +598,9 @@ public class DaoManagement extends BaseDao {
 		}
 		PersonBean personBean = daoGetReferencedByPersonIdOnLog(logBean);
 		DeviceBean deviceBean = daoGetReferencedByDeviceIdOnLog(logBean);
-		if(featureImage != null){
-			daoAddImage(featureImage, deviceBean, 
-					faceBean == null ? null : Arrays.asList(faceBean), 
-					personBean == null ? null : Arrays.asList(personBean));
-		}
+		daoAddImage(featureImage, deviceBean, 
+				faceBean == null ? null : Arrays.asList(faceBean), 
+				personBean == null ? null : Arrays.asList(personBean));
 		return daoAddLog(logBean, deviceBean, faceBean, null, personBean);
 	}
 }
