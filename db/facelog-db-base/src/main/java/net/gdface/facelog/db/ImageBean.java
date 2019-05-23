@@ -783,12 +783,12 @@ public final class ImageBean
      * The referenced {@link DeviceBean} by {@link #deviceId} . <br>
      * FOREIGN KEY (device_id) REFERENCES fl_device(id)
      */
+    @ApiModelProperty(hidden = true)
     private DeviceBean referencedByDeviceId;
     /**
      * Getter method for {@link #referencedByDeviceId}.
      * @return DeviceBean
      */
-    @ApiModelProperty(hidden = true)
     public DeviceBean getReferencedByDeviceId() {
         return this.referencedByDeviceId;
     }

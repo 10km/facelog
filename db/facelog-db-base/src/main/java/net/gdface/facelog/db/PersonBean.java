@@ -1521,12 +1521,12 @@ public final class PersonBean
      * The referenced {@link ImageBean} by {@link #imageMd5} . <br>
      * FOREIGN KEY (image_md5) REFERENCES fl_image(md5)
      */
+    @ApiModelProperty(hidden = true)
     private ImageBean referencedByImageMd5;
     /**
      * Getter method for {@link #referencedByImageMd5}.
      * @return ImageBean
      */
-    @ApiModelProperty(hidden = true)
     public ImageBean getReferencedByImageMd5() {
         return this.referencedByImageMd5;
     }
@@ -1541,12 +1541,12 @@ public final class PersonBean
      * The referenced {@link PersonGroupBean} by {@link #groupId} . <br>
      * FOREIGN KEY (group_id) REFERENCES fl_person_group(id)
      */
+    @ApiModelProperty(hidden = true)
     private PersonGroupBean referencedByGroupId;
     /**
      * Getter method for {@link #referencedByGroupId}.
      * @return PersonGroupBean
      */
-    @ApiModelProperty(hidden = true)
     public PersonGroupBean getReferencedByGroupId() {
         return this.referencedByGroupId;
     }

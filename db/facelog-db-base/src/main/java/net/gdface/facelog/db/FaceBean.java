@@ -1644,12 +1644,12 @@ public final class FaceBean
      * The referenced {@link FeatureBean} by {@link #featureMd5} . <br>
      * FOREIGN KEY (feature_md5) REFERENCES fl_feature(md5)
      */
+    @ApiModelProperty(hidden = true)
     private FeatureBean referencedByFeatureMd5;
     /**
      * Getter method for {@link #referencedByFeatureMd5}.
      * @return FeatureBean
      */
-    @ApiModelProperty(hidden = true)
     public FeatureBean getReferencedByFeatureMd5() {
         return this.referencedByFeatureMd5;
     }
@@ -1664,12 +1664,12 @@ public final class FaceBean
      * The referenced {@link ImageBean} by {@link #imageMd5} . <br>
      * FOREIGN KEY (image_md5) REFERENCES fl_image(md5)
      */
+    @ApiModelProperty(hidden = true)
     private ImageBean referencedByImageMd5;
     /**
      * Getter method for {@link #referencedByImageMd5}.
      * @return ImageBean
      */
-    @ApiModelProperty(hidden = true)
     public ImageBean getReferencedByImageMd5() {
         return this.referencedByImageMd5;
     }

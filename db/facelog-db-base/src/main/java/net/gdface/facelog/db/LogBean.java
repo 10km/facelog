@@ -913,12 +913,12 @@ public final class LogBean
      * The referenced {@link DeviceBean} by {@link #deviceId} . <br>
      * FOREIGN KEY (device_id) REFERENCES fl_device(id)
      */
+    @ApiModelProperty(hidden = true)
     private DeviceBean referencedByDeviceId;
     /**
      * Getter method for {@link #referencedByDeviceId}.
      * @return DeviceBean
      */
-    @ApiModelProperty(hidden = true)
     public DeviceBean getReferencedByDeviceId() {
         return this.referencedByDeviceId;
     }
@@ -933,12 +933,12 @@ public final class LogBean
      * The referenced {@link FaceBean} by {@link #compareFace} . <br>
      * FOREIGN KEY (compare_face) REFERENCES fl_face(id)
      */
+    @ApiModelProperty(hidden = true)
     private FaceBean referencedByCompareFace;
     /**
      * Getter method for {@link #referencedByCompareFace}.
      * @return FaceBean
      */
-    @ApiModelProperty(hidden = true)
     public FaceBean getReferencedByCompareFace() {
         return this.referencedByCompareFace;
     }
@@ -953,12 +953,12 @@ public final class LogBean
      * The referenced {@link FeatureBean} by {@link #verifyFeature} . <br>
      * FOREIGN KEY (verify_feature) REFERENCES fl_feature(md5)
      */
+    @ApiModelProperty(hidden = true)
     private FeatureBean referencedByVerifyFeature;
     /**
      * Getter method for {@link #referencedByVerifyFeature}.
      * @return FeatureBean
      */
-    @ApiModelProperty(hidden = true)
     public FeatureBean getReferencedByVerifyFeature() {
         return this.referencedByVerifyFeature;
     }
@@ -973,12 +973,12 @@ public final class LogBean
      * The referenced {@link PersonBean} by {@link #personId} . <br>
      * FOREIGN KEY (person_id) REFERENCES fl_person(id)
      */
+    @ApiModelProperty(hidden = true)
     private PersonBean referencedByPersonId;
     /**
      * Getter method for {@link #referencedByPersonId}.
      * @return PersonBean
      */
-    @ApiModelProperty(hidden = true)
     public PersonBean getReferencedByPersonId() {
         return this.referencedByPersonId;
     }

@@ -1392,12 +1392,12 @@ public final class DeviceBean
      * The referenced {@link DeviceGroupBean} by {@link #groupId} . <br>
      * FOREIGN KEY (group_id) REFERENCES fl_device_group(id)
      */
+    @ApiModelProperty(hidden = true)
     private DeviceGroupBean referencedByGroupId;
     /**
      * Getter method for {@link #referencedByGroupId}.
      * @return DeviceGroupBean
      */
-    @ApiModelProperty(hidden = true)
     public DeviceGroupBean getReferencedByGroupId() {
         return this.referencedByGroupId;
     }

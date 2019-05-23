@@ -965,12 +965,12 @@ public final class PersonGroupBean
      * The referenced {@link PersonGroupBean} by {@link #parent} . <br>
      * FOREIGN KEY (parent) REFERENCES fl_person_group(id)
      */
+    @ApiModelProperty(hidden = true)
     private PersonGroupBean referencedByParent;
     /**
      * Getter method for {@link #referencedByParent}.
      * @return PersonGroupBean
      */
-    @ApiModelProperty(hidden = true)
     public PersonGroupBean getReferencedByParent() {
         return this.referencedByParent;
     }

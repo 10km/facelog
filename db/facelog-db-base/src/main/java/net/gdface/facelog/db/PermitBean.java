@@ -633,12 +633,12 @@ public final class PermitBean
      * The referenced {@link DeviceGroupBean} by {@link #deviceGroupId} . <br>
      * FOREIGN KEY (device_group_id) REFERENCES fl_device_group(id)
      */
+    @ApiModelProperty(hidden = true)
     private DeviceGroupBean referencedByDeviceGroupId;
     /**
      * Getter method for {@link #referencedByDeviceGroupId}.
      * @return DeviceGroupBean
      */
-    @ApiModelProperty(hidden = true)
     public DeviceGroupBean getReferencedByDeviceGroupId() {
         return this.referencedByDeviceGroupId;
     }
@@ -653,12 +653,12 @@ public final class PermitBean
      * The referenced {@link PersonGroupBean} by {@link #personGroupId} . <br>
      * FOREIGN KEY (person_group_id) REFERENCES fl_person_group(id)
      */
+    @ApiModelProperty(hidden = true)
     private PersonGroupBean referencedByPersonGroupId;
     /**
      * Getter method for {@link #referencedByPersonGroupId}.
      * @return PersonGroupBean
      */
-    @ApiModelProperty(hidden = true)
     public PersonGroupBean getReferencedByPersonGroupId() {
         return this.referencedByPersonGroupId;
     }

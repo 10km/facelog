@@ -479,12 +479,12 @@ public final class FeatureBean
      * The referenced {@link PersonBean} by {@link #personId} . <br>
      * FOREIGN KEY (person_id) REFERENCES fl_person(id)
      */
+    @ApiModelProperty(hidden = true)
     private PersonBean referencedByPersonId;
     /**
      * Getter method for {@link #referencedByPersonId}.
      * @return PersonBean
      */
-    @ApiModelProperty(hidden = true)
     public PersonBean getReferencedByPersonId() {
         return this.referencedByPersonId;
     }
