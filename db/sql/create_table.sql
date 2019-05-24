@@ -190,7 +190,7 @@ CREATE TABLE IF NOT EXISTS fl_log (
   `person_id`       int(11) NOT NULL COMMENT '外键,用户id',
   `device_id`       int(11) DEFAULT NULL COMMENT '外键,日志来源设备id',
   `verify_feature`  char(32)DEFAULT NULL COMMENT '外键,用于验证身份的人脸特征数据MD5 id',
-  `compare_face`    int(11) DEFAULT NULL COMMENT '外键,数据库中相似度最高的人脸 id',
+  `compare_face`    int(11) DEFAULT NULL COMMENT '外键,现场采集的人脸信息记录id',
   `verify_status`   tinyint(1) DEFAULT NULL COMMENT '验证状态,NULL,0:允许通过,其他:拒绝',
   `similarty`	    double  DEFAULT NULL COMMENT '验证相似度',
   `verify_time`     timestamp NOT NULL COMMENT '验证时间(可能由前端设备提供时间)',
