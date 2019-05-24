@@ -55,3 +55,8 @@ facelog服务正常启动后，就可以执行[facelog-client/src/test/java/net/
 ## javascript支持
 
 参见 [README-js.md](README-js.md)
+
+## RESTful API及 Swagger在线文档
+
+参见 [README-RESTful.md](README-RESTful.md)
+
