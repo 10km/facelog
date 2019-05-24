@@ -1,5 +1,7 @@
 package net.gdface.facelog.hb;
 
+import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -12,6 +14,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
+import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
@@ -59,6 +62,8 @@ public class DeviceHeartbeat extends BaseServiceHeartbeatListener implements Cha
 	/** {@link #scheduledExecutor}的自动退出封装 */
 	private final ScheduledExecutorService timerExecutor;
 	private ScheduledFuture<?> future;
+	/** 附加任务表 */
+	private final Set<Runnable> additionalTasks = Sets.newLinkedHashSet();
 	/** 定时报道任务 */
 	private final Runnable timerTask = new Runnable(){
 		@Override
@@ -71,7 +76,18 @@ public class DeviceHeartbeat extends BaseServiceHeartbeatListener implements Cha
 				if(null != monitorChannel){
 //					logger.info("send hb ->{}",monitorChannel.name);
 					publisher.publish(monitorChannel, heartBeatPackage);
-				}				
+				}
+				synchronized (additionalTasks) {
+					for(Iterator<Runnable> itor = additionalTasks.iterator(); itor.hasNext(); ){
+						try {
+							itor.next().run();
+						} catch (Exception e) {
+							itor.remove();
+							logger.info(e.getMessage());
+						}
+					}					
+				}
+
 			} catch (Exception e) {
 				logger.info(e.getMessage());
 			}
@@ -212,5 +228,35 @@ public class DeviceHeartbeat extends BaseServiceHeartbeatListener implements Cha
 	protected boolean doServiceOnline(ServiceHeartbeatPackage heartbeatPackage) {
 		monitorChannelSupplier.reload = true;
 		return true;
+	}
+	/**
+	 * 添加附加任务<br>
+	 * 附加任务在执行时抛出异常则自动被移除不再执行
+	 * @param runnable
+	 * @return
+	 * @see java.util.Set#add(java.lang.Object)
+	 */
+	public boolean addAdditionalTask(Runnable runnable) {
+		synchronized (additionalTasks) {
+			return additionalTasks.add(runnable);
+		}
+	}
+	/**
+	 * 删除附加任务
+	 * @param runnable
+	 * @return
+	 * @see java.util.Set#remove(java.lang.Object)
+	 */
+	public boolean removeAdditionalTask(Runnable runnable) {
+		synchronized (additionalTasks) {
+			return additionalTasks.remove(runnable);	
+		}
+	}
+	/**
+	 * 清除附加任务
+	 * @see java.util.Set#clear()
+	 */
+	public void clear() {
+		additionalTasks.clear();
 	}
 }
