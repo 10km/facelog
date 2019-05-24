@@ -1488,7 +1488,7 @@ public final class LogBean
     }
     
     public static final Builder builder(){
-        return new Builder();
+        return new Builder().reset();
     }
     /** 
      * a builder for LogBean,the template instance is thread local variable

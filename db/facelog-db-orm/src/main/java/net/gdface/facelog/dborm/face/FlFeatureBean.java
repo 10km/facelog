@@ -792,7 +792,7 @@ public  class FlFeatureBean
     }
     
     public static final Builder builder(){
-        return new Builder();
+        return new Builder().reset();
     }
     /** 
      * a builder for FlFeatureBean,the template instance is thread local variable

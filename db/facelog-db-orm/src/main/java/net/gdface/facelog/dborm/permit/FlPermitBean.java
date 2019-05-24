@@ -979,7 +979,7 @@ public  class FlPermitBean
     }
     
     public static final Builder builder(){
-        return new Builder();
+        return new Builder().reset();
     }
     /** 
      * a builder for FlPermitBean,the template instance is thread local variable

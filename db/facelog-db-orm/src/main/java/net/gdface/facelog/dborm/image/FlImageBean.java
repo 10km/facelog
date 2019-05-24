@@ -1118,7 +1118,7 @@ public  class FlImageBean
     }
     
     public static final Builder builder(){
-        return new Builder();
+        return new Builder().reset();
     }
     /** 
      * a builder for FlImageBean,the template instance is thread local variable

@@ -1503,7 +1503,7 @@ public final class PersonGroupBean
     }
     
     public static final Builder builder(){
-        return new Builder();
+        return new Builder().reset();
     }
     /** 
      * a builder for PersonGroupBean,the template instance is thread local variable

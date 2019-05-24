@@ -1794,7 +1794,7 @@ public  class FlDeviceBean
     }
     
     public static final Builder builder(){
-        return new Builder();
+        return new Builder().reset();
     }
     /** 
      * a builder for FlDeviceBean,the template instance is thread local variable

@@ -1908,7 +1908,7 @@ public  class FlPersonBean
     }
     
     public static final Builder builder(){
-        return new Builder();
+        return new Builder().reset();
     }
     /** 
      * a builder for FlPersonBean,the template instance is thread local variable

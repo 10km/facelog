@@ -1099,7 +1099,7 @@ public final class PermitBean
     }
     
     public static final Builder builder(){
-        return new Builder();
+        return new Builder().reset();
     }
     /** 
      * a builder for PermitBean,the template instance is thread local variable

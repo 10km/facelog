@@ -1275,7 +1275,7 @@ public  class FlLogBean
     }
     
     public static final Builder builder(){
-        return new Builder();
+        return new Builder().reset();
     }
     /** 
      * a builder for FlLogBean,the template instance is thread local variable

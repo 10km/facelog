@@ -2242,7 +2242,7 @@ public final class PersonBean
     }
     
     public static final Builder builder(){
-        return new Builder();
+        return new Builder().reset();
     }
     /** 
      * a builder for PersonBean,the template instance is thread local variable

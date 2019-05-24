@@ -2007,7 +2007,7 @@ public  class FlFaceBean
     }
     
     public static final Builder builder(){
-        return new Builder();
+        return new Builder().reset();
     }
     /** 
      * a builder for FlFaceBean,the template instance is thread local variable

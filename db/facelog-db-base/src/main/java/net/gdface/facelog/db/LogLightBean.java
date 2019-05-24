@@ -1064,7 +1064,7 @@ public final class LogLightBean
     }
     
     public static final Builder builder(){
-        return new Builder();
+        return new Builder().reset();
     }
     /** 
      * a builder for LogLightBean,the template instance is thread local variable
