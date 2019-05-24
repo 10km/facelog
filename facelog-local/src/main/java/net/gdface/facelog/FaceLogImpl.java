@@ -10,6 +10,7 @@ import java.util.concurrent.Callable;
 
 import static com.google.common.base.Preconditions.*;
 
+import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.gdface.facelog.db.DeviceBean;
@@ -144,6 +145,13 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
 		throw new ServiceRuntimeException(error); 
 	}
+	
+	protected static final <T extends Exception> void throwCauseIfInstanceOf(Exception error,Class<T> expType) throws T {
+		if(null != error.getCause()){
+			Throwables.throwIfInstanceOf(error.getCause(),expType);
+		}
+	}
+	
 	@Override
 	public PersonBean getPerson(int personId) {
 		try{
@@ -546,6 +554,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 							FaceUtilits.getByteBufferNotEmpty(featureImage));
 				}});
 		} catch (Exception e) {
+			throwCauseIfInstanceOf(e,DuplicateRecordException.class);
 			throw wrapServiceRuntimeException(e);
 		}
 	}
@@ -572,6 +581,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 				}
 			});
 		} catch (Exception e) {
+			throwCauseIfInstanceOf(e,DuplicateRecordException.class);
 			throw wrapServiceRuntimeException(e);
 		}
 	}
@@ -581,6 +591,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			Enable.DEVICE_ONLY.check(tm, token);
 			dm.daoAddLogsAsTransaction(beans);
 		} catch (Exception e) {
+			Throwables.throwIfInstanceOf(e,DuplicateRecordException.class);
 			throw wrapServiceRuntimeException(e);
 		}
 	}
@@ -712,6 +723,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 				}
 			});
 		} catch (Exception e) {
+			throwCauseIfInstanceOf(e,DuplicateRecordException.class);
 			throw wrapServiceRuntimeException(e);
 		} 
 	}
