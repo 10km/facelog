@@ -588,8 +588,8 @@ public class DaoManagement extends BaseDao {
 	 * 添加一条验证日志记录
 	 * <br>{@code DEVICE_ONLY}
 	 * @param logBean 日志记录对象
-	 * @param faceBean 用于保存到数据库的提取人脸特征的人脸信息对象
-	 * @param featureImage 用于保存到数据库的现场采集人脸特征的照片
+	 * @param faceBean 需要保存到数据库的提取人脸特征的人脸信息对象
+	 * @param featureImage 需要保存到数据库的现场采集人脸特征的照片
 	 * @throws DuplicateRecordException 数据库中存在相同记录
 	 */
 	protected LogBean	daoAddLog(LogBean logBean,FaceBean faceBean,ByteBuffer featureImage) throws DuplicateRecordException {

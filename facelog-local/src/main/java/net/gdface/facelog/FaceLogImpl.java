@@ -543,7 +543,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 				public LogBean call() throws Exception {
 					return dm.daoAddLog(logBean, 
 							faceBean, 
-							FaceUtilits.getByteBufferOrNull(featureImage));
+							FaceUtilits.getByteBufferNotEmpty(featureImage));
 				}});
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
