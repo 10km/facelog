@@ -1,14 +1,11 @@
 #parse( "header.include.vm" )
 #parse( "macros.include.vm" )
 #parse( "commands.definition.vm" )
-## 只在thrift_client,thrifty_client时生成
-#if(!$codewriter.getPropertyExplodedAsList("template.folder.include").contains("thrift_client")  && 
- 	  !$codewriter.getPropertyExplodedAsList("template.folder.include").contains("thrifty_client") &&
- 	  !$codewriter.getPropertyExplodedAsList("custom.template.include").contains("sub.adapters.java.vm"))
+## 只在custom.template.include定义时生成
+#if(!$codewriter.getPropertyExplodedAsList("custom.template.include").contains("sub.adapters.java.vm"))
 #set($codewriter.saveCurrentFile = false)
 #stop
 #end
-#set ($thriftPackage = ${codewriter.getDependencyPackage()})
 #set ( $javaClassName = 'SubAdapters' )
 $codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
 package $extensionPkg;

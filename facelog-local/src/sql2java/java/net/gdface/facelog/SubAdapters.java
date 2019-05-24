@@ -5,7 +5,7 @@
 // JDBC driver used at code generation time: com.mysql.jdbc.Driver
 // template: sub.adapters.java.vm
 // ______________________________________________________
-package net.gdface.facelog.client;
+package net.gdface.facelog;
 
 import gu.simplemq.IMessageAdapter;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
