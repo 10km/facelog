@@ -332,9 +332,8 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 </head>
 <body>
-<h1>facelog (人脸验证日志系统)开发手册</h1>
-<h2>概述</h2>
-<h3>术语</h3>
+<h1>dtalk(Device Talk)开发手册(更新中)</h1>
+<h2>术语</h2>
 <table>
 <thead>
 <tr>
@@ -344,1198 +343,543 @@ document.addEventListener("DOMContentLoaded", function() {
 </thead>
 <tbody>
 <tr>
-	<td align="left">服务端</td>
-	<td align="left">提供人脸识别基础管理功能的服务</td>
+	<td align="left">(菜单)条目,item</td>
+	<td align="left">dtalk设备端菜单数据组织的基本单元</td>
 </tr>
 <tr>
-	<td align="left">服务接口</td>
-	<td align="left">由服务端定义的一组RPC调用方法</td>
+	<td align="left">(参数)选项,option</td>
+	<td align="left">存储指定数据类型的数据条目对象,没有子条目</td>
 </tr>
 <tr>
-	<td align="left">设备端</td>
-	<td align="left">具备人脸识别功能的计算机控制设备</td>
+	<td align="left">(设备)命令,cmd</td>
+	<td align="left">设备端执行的指定动作的条目，可以包含一个或多个由option对象描述的参数，可以有返回值</td>
 </tr>
 <tr>
-	<td align="left">管理端,admin client</td>
-	<td align="left">以web应用或本地应用方式管理facelog系统的应用</td>
+	<td align="left">菜单,menu</td>
+	<td align="left">包含一个或多个opton或cmd的菜单条目</td>
 </tr>
 <tr>
-	<td align="left">client端</td>
-	<td align="left">设备端和管理端的统称</td>
-</tr>
-<tr>
-	<td align="left">消息系统</td>
-	<td align="left">基于redis为client端和服务端提供消息服务的中间件</td>
-</tr>
-<tr>
-	<td align="left">频道,channel</td>
-	<td align="left">继承 redis 的频道概念，消息系统传递消息时使用的一个有唯一名字和特定数据类型的数据通道，消息发送者将消息发送到指定的频道，该频道的所有消息订阅者就可以及时收到发送者的消息，对于一个频道，消息发送者和订阅者都可以有多个。</td>
-</tr>
-<tr>
-	<td align="left">设备命令</td>
-	<td align="left">管理端发送，设备端接受，执行应用程序定义的动作</td>
-</tr>
-<tr>
-	<td align="left">命令响应</td>
-	<td align="left">设备端执行设备命令后返回给命令发送端的执行结果</td>
-</tr>
-<tr>
-	<td align="left">令牌</td>
-	<td align="left">访问facelog 服务接口的方法的安全凭证,调用需要令牌的服务接口方法时，必须提供client端申请的令牌才能正常调用。</td>
+	<td align="left">菜单命令</td>
+	<td align="left">由管理端发送的一个item</td>
 </tr>
 </tbody>
 </table>
-<h3>开发背景</h3>
-<p>随着人脸识别技术的日益成熟，基于人脸识别技术的应用也越来越被市场接受和普及，让我们认识一些典型的应用场景。</p>
-<h4>应用场景1--考勤</h4>
-<p>考虑开发一个基于网络的人脸识别考勤系统，则需要有数据库系统来存储用户数据，人脸特征数据，这就是一个服务器后端，前端设备负责人脸特征建模、与后端数据库中存储的人脸特征进行比对，根据比对结果，将人员的考勤记录存储于后端数据库，不同的OA系统再通过后端数据库获取人员的考勤数据实现自己的业务逻辑。</p>
-<h4>应用场景2--门禁</h4>
-<p>再考虑开发一个基于网络的人脸识别门禁系统，前端是分布于企业/组织的具备人脸识别功能门禁设备，后端同样有一个存储所有具有通行权限的人员信息(包含人脸特征数据)。每个人员通过门禁时，门禁设备识别人脸并与数据库中的人脸特征进行比对，确认人员身份时设备放行，并将通行记录存储到后端数据库备案。</p>
-<p>当一个人员离职后，人事管理系统将此人员设置为禁止通行后，所有前端设备应该及时收到通知拒绝该人员通行 。这样的门禁系统应用场景可以是一个企业，也可以是一个居住小区，大学宿舍区。</p>
-<p>门禁系统还应该具备分组管理能力，比如大门的门禁应该允许所有组织人员通行，但部门/住宅单元的门禁则应该只允许本部门/单元的人通行，门禁设备应该具备分组管理能力，人员也应该具备分组管理。</p>
-<h4>应用场景3--VIP识别</h4>
-<p>在一些连锁门店销售场景中，人脸识别技术也派上了用场，当一个顾客进入店面时，布置于店门口的摄像头捕捉到人人进行身份识别，如果该顾客在店时进行了消费则在结账付款时，记录顾客的人脸特征，将该顾客纳入VIP识别系统。下次不论顾客再进入全国任何一家连锁店，被VIP识别系统确认身份后，可以通知门店销售人员根据销售策略进行差异化服务。VIP识别系统累积的顾客数据也可以大数据分析提供宝贵的的原始数据源。</p>
-<h4>求同存异</h4>
-<p>上面几节只是描述了人脸识别技术的几个典型应用场景，这些不同应用场景在技术上都有些共同的需求：</p>
+<p>以下为上面术语中在对应的java类，及层次关系图：</p>
+<p><img src="images/item.png" /></p>
+<h2>设备命令</h2>
+<p>我们希望通过管理软件向前端设备发指令做一些事性，比如开门，比如升级设备端的软件版本，比如汇报当前设备状态，这些事情都可以定义为设备命令。管理端通过dtalk,发送设备命令给前端，前端收到命令并执行然后返回执行结果。这就是基本的设备命令发送执行流程。</p>
+<p>dtalk就是用来定义整个设备命令发送和执行的一个开发框架，是管理端和设备端和对话协议框架，所以叫它device talk,</p>
+<p>dtalk是基于redis的频道发布订阅功能来实现管理端和设备端的交互通信。管理端和设备端之间建立通信，就是在redis上注册侦听两个消息频道，一个用于管理端向设备端发送命令请求(request channel)，另一个是反向的，叫命令响应频道(ack channel)，用于设备端向管理端发送命令请求的响应消息，由管理端侦听。</p>
+<p>管理端让设备端执行一个命令，不论执行的成功或失败，设备端总要吱一声让管理端知道呀--这就是命令响应频道的作用。</p>
+<p>管理端如何知道设备有哪些命令或管理选项呢？</p>
+<p>这就是dtalk的核心协议：基于树形结构的管理选项定义---直观说就是一个层次结构的菜单</p>
+<p><img src="images/menu01.png" /></p>
+<blockquote>
+<p>在管理端输入数字2，设备端将<code>faceloge 服务器</code>这个菜单项中的数据发送给管理端，在管理端呈现该菜单的详细内容</p>
+</blockquote>
+<p>如上所示的，设备端通过一个树形结构菜单定义自己能执行的设备命令和管理选项（在发送过程中以json字符串形式传递）。</p>
+<p>上图中设备端发送给管理端的<code>faceloge 服务器</code>菜单的JSON数据</p>
+<pre><code>{
+    &quot;catalog&quot;: &quot;MENU&quot;,
+    &quot;container&quot;: true,
+    &quot;description&quot;: &quot;&quot;,
+    &quot;disable&quot;: false,
+    &quot;empty&quot;: false,
+    &quot;name&quot;: &quot;facelog&quot;,
+    &quot;path&quot;: &quot;/facelog&quot;,
+    &quot;uiName&quot;: &quot;facelog \xe6\x9c\x8d\xe5\x8a\xa1\xe5\x99\xa8&quot;
+    &quot;childs&quot;: 
+    [
+        {&quot;catalog&quot;: &quot;CMD&quot;,&quot;childs&quot;: [],&quot;container&quot;: true,&quot;description&quot;: &quot;&quot;,&quot;disable&quot;: false,&quot;empty&quot;: true,&quot;name&quot;: &quot;back&quot;,&quot;path&quot;: &quot;/&quot;,&quot;taskQueue&quot;: null,     &quot;uiName&quot;: &quot;back&quot;}, 
+        {&quot;catalog&quot;: &quot;OPTION&quot;,&quot;childs&quot;: [],&quot;container&quot;: false,&quot;defaultValue&quot;: null,&quot;description&quot;: &quot;&quot;,    &quot;disable&quot;: false,&quot;empty&quot;: true,&quot;name&quot;: &quot;host&quot;,&quot;path&quot;: &quot;/facelog/host&quot;,&quot;readOnly&quot;: false,&quot;required&quot;: false,&quot;type&quot;: &quot;STRING&quot;,&quot;uiName&quot;: &quot;\xe4\xb8\xbb\xe6\x9c\xba\xe5\x90\x8d\xe7\xa7\xb0&quot;,&quot;value&quot;: &quot;localhost&quot;},
+        {&quot;catalog&quot;: &quot;OPTION&quot;,&quot;childs&quot;: [],&quot;container&quot;: false,&quot;defaultValue&quot;: 0,&quot;description&quot;: &quot;&quot;,&quot;disable&quot;: false,&quot;empty&quot;: true,&quot;name&quot;: &quot;port&quot;,&quot;path&quot;: &quot;/facelog/port&quot;,&quot;readOnly&quot;: false,&quot;required&quot;: false,&quot;type&quot;: &quot;INTEGER&quot;,&quot;uiName&quot;: &quot;\xe7\xab\xaf\xe5\x8f\xa3\xe5\x8f\xb7&quot;,&quot;value&quot;: 26411}
+    ],
+
+}
+</code></pre>
+
+<p>管理端收到这个菜单数据后，可以以自己想要的形式呈现给用户。在dtalk实现的简单字符终端中，以简单的列表形式显示设备端管理菜单 。如果在浏览器上用js实现，可以实现更好看的呈现方式。</p>
+<p>管理端有了这个菜单，就可以知道该设备有哪些参数可以设置修改，有哪些命令可以执行，每个命令的含义是啥，都需要什么样的参数。</p>
+<p>我们把运行在设备端，响应管理的dtalk请求的模块称为dtalk引擎或设备命令引擎。</p>
+<p>我们把运行在管理端，向用户呈现管理菜单，向设备端发送dtlk请求，并将收到的响应显示给用户的模块称为dtalk console，或命令console。</p>
+<p>设备端有哪些命令和选项，可以根据项目的需要定义，定制设备命令菜单。dtalk engine(命令引擎)负责向管理端发送这个菜单，并执行管理端的设备命令请求。</p>
+<p>也就是说，设备端的命令和参数选项完全是自由灵活的，动态定义的。</p>
+<h2>建立连接</h2>
+<p>如下图,设备端运行后，会订阅只属于自己的连接请求频道，这个频道的频道名是常量,名字格式-- <code>${设备端MAC地址}_dtalk_connect</code>,管理端要连接某台设备，必须要知道这台设备的MAC地址，有了MAC地址，就可以向这台设备发送连接请求，设备端收到连接请求后，会验证连接请求是否有效，如果有效则允许管理连接，就会向命令响应频道发送命令请求频道名(request channel)，这个频道名是动态生成的，名字格式--<code>${设备端MAC地址}_dtalk_[\d]+}</code>(后缀是个随机数)。</p>
+<p>管理端启动后，会订阅只属于自己的命令响应频道名，这个频道的频道名是常量,名字格式---<code>${管理端MAC地址}_dtalk_ack</code>。管理端通过响应频道收到连接成功的信号后，也同时会收到命令请求频道名(request channel),有了这个request channel，管理端才能向设备端发送设备命令请求。</p>
+<p>管理端到设备端的连接是独占的，设备端以管理端连接时提供的管理端MAC地址来区分管理端，不允许有两个不同的管理端同时连接到同一台设备。如果已经有一个管理端电脑A连接到了设备端，那么另一台管理端电脑B尝试连接该设备时就会报错:<code>ANOTHER CLIENT LOCKED</code></p>
+<p><img src="images/connect.png" /></p>
+<h3>验证连接</h3>
+<p>设备如何验证管理端的连接请求是否合法呢？</p>
+<p>dtalk默认的实现方式是密码验证</p>
+<p>管理端连接设备端时，向连接请求频道发送如下连接请求数据：</p>
+<pre><code>{
+    &quot;mac&quot;: &quot;58fb842d294f&quot;,/** 管理端自己的MAC地址 */
+    &quot;pwd&quot;: &quot;33902b064aab3e1c0db64827d8496fce&quot; /** 管理端提供的连接密码(已加密) */
+}
+</code></pre>
+
+<blockquote>
+<p><a href="..//dtalk-base/src/main/java/gu/dtalk/ConnectReq.java">gu.dtalk.ConnectReq</a>是上述连接请求字符串反序列化后的实现类</p>
+</blockquote>
+<p>设备端根据管理端提供的连接密码，与本机保存的密码相比较，如果匹配则允许连接，否则报错<code>INVALID REQUEST PASSWORD</code>。</p>
+<h3>设备端实现</h3>
+<p>关于建立连接的设备端实现参见<a href="../dtalk-engine/src/main/java/gu/dtalk/engine/SampleConnector.java">gu.dtalk.engine.SampleConnector</a></p>
+<p>这只是dtalk提供的默认连接实现，应用程序在使用dtalk的时候，可以根据业务需求实现<a href="..//dtalk-engine/src/main/java/gu/dtalk/engine/RequestValidator.java">gu.dtalk.engine.RequestValidator</a> 接口，实现不同的连接验证方式。</p>
+<p>比如<a href="https://gitee.com/l0km/facelog">facelog</a>项目在使用dtalk时就重写了此方法，参见<a href="https://gitee.com/l0km/facelog/blob/master/facelog-client-base/src/main/java/net/gdface/facelog/client/dtalk/TokenRequestValidator.java">net.gdface.facelog.client.dtalk.TokenRequestValidator</a></p>
+<h3>管理端实现</h3>
+<p>关于建立连接的管理端实现参见 <a href="../dtalk-client/src/main/java/gu/dtalk/client/SampleConsole.java">gu.dtalk.client.SampleConsole#authorize()</a>方法</p>
+<h2>命令交互</h2>
+<p>管理端与设备端命令交互的过程，就是管理发送菜单请求，设备端响应菜单请求的过程。</p>
+<p>下面的json字符是一个完整的menu菜单示例</p>
+<pre><code>    {&quot;catalog&quot;:&quot;MENU&quot;,&quot;name&quot;:&quot;&quot;,&quot;path&quot;:&quot;/&quot;,&quot;uiName&quot;:&quot;&quot;,&quot;container&quot;:true,&quot;description&quot;:&quot;&quot;,&quot;disable&quot;:false,&quot;empty&quot;:false,
+        &quot;childs&quot;:[
+            {&quot;catalog&quot;:&quot;CMD&quot;,&quot;name&quot;:&quot;quit&quot;,&quot;path&quot;:&quot;/quit&quot;,&quot;childs&quot;:[],&quot;container&quot;:true,&quot;description&quot;:&quot;&quot;,&quot;disable&quot;:false,&quot;empty&quot;:true,&quot;taskQueue&quot;:null,&quot;uiName&quot;:&quot;quit&quot;},
+            {&quot;catalog&quot;:&quot;MENU&quot;,&quot;name&quot;:&quot;menu1&quot;,&quot;path&quot;:&quot;/menu1&quot;,&quot;uiName&quot;:&quot;菜单1&quot;,&quot;container&quot;:true,&quot;description&quot;:&quot;&quot;,&quot;disable&quot;:false,&quot;empty&quot;:false,
+                &quot;childs&quot;:[
+                {&quot;catalog&quot;:&quot;CMD&quot;,&quot;childs&quot;:[],&quot;container&quot;:true,&quot;description&quot;:&quot;&quot;,&quot;disable&quot;:false,&quot;empty&quot;:true,&quot;name&quot;:&quot;back&quot;,&quot;path&quot;:&quot;/&quot;,&quot;taskQueue&quot;:null,&quot;uiName&quot;:&quot;back&quot;},
+                {&quot;catalog&quot;:&quot;MENU&quot;,&quot;name&quot;:&quot;menu1_1&quot;,&quot;path&quot;:&quot;/menu1/menu1_1&quot;,&quot;uiName&quot;:&quot;菜单1.1&quot;,,&quot;container&quot;:true,&quot;description&quot;:&quot;&quot;,&quot;disable&quot;:false,&quot;empty&quot;:false
+                    &quot;childs&quot;:[
+                        {&quot;catalog&quot;:&quot;CMD&quot;,&quot;name&quot;:&quot;back&quot;,&quot;path&quot;:&quot;/&quot;,&quot;taskQueue&quot;:null,&quot;uiName&quot;:&quot;back&quot;,&quot;childs&quot;:[],&quot;container&quot;:true,&quot;description&quot;:&quot;&quot;,&quot;disable&quot;:false,&quot;empty&quot;:true},
+                        {&quot;catalog&quot;:&quot;OPTION&quot;&quot;name&quot;:&quot;option1&quot;,&quot;uiName&quot;:&quot;选项1&quot;,&quot;path&quot;:&quot;/menu1/menu1_1/option1&quot;,&quot;childs&quot;:[],&quot;container&quot;:false,&quot;defaultValue&quot;:null,&quot;description&quot;:&quot;&quot;,&quot;disable&quot;:false,&quot;empty&quot;:true,,&quot;readOnly&quot;:false,&quot;required&quot;:false,&quot;type&quot;:&quot;STRING&quot;,&quot;value&quot;:null},
+                        {&quot;catalog&quot;:&quot;OPTION&quot;,&quot;name&quot;:&quot;option2&quot;,&quot;uiName&quot;:&quot;选项2&quot;,&quot;path&quot;:&quot;/menu1/menu1_1/option2&quot;,&quot;childs&quot;:[],&quot;container&quot;:false,&quot;defaultValue&quot;:0,&quot;description&quot;:&quot;&quot;,&quot;disable&quot;:false,&quot;empty&quot;:true,&quot;readOnly&quot;:false,&quot;required&quot;:false,&quot;type&quot;:&quot;INTEGER&quot;,&quot;value&quot;:null}
+                    ]}]},
+            {&quot;catalog&quot;:&quot;MENU&quot;,&quot;container&quot;:true,&quot;description&quot;:&quot;&quot;,&quot;disable&quot;:false,&quot;empty&quot;:false,&quot;name&quot;:&quot;menu2&quot;,&quot;path&quot;:&quot;/menu2&quot;,&quot;uiName&quot;:&quot;菜单2&quot;,
+                &quot;childs&quot;:[
+                    {&quot;catalog&quot;:&quot;CMD&quot;,&quot;name&quot;:&quot;back&quot;,&quot;path&quot;:&quot;/&quot;,&quot;uiName&quot;:&quot;back&quot;,&quot;childs&quot;:[],&quot;container&quot;:true,&quot;description&quot;:&quot;&quot;,&quot;disable&quot;:false,&quot;empty&quot;:true,&quot;taskQueue&quot;:null},
+                    {&quot;catalog&quot;:&quot;MENU&quot;,&quot;name&quot;:&quot;menu2_1&quot;,&quot;path&quot;:&quot;/menu2/menu2_1&quot;,&quot;uiName&quot;:&quot;菜单2.1&quot;,&quot;container&quot;:true,&quot;description&quot;:&quot;&quot;,&quot;disable&quot;:false,&quot;empty&quot;:false,
+                        &quot;childs&quot;:[
+                            {&quot;catalog&quot;:&quot;CMD&quot;,&quot;name&quot;:&quot;back&quot;,&quot;uiName&quot;:&quot;back&quot;,&quot;path&quot;:&quot;/&quot;,&quot;childs&quot;:[],&quot;container&quot;:true,&quot;description&quot;:&quot;&quot;,&quot;disable&quot;:false,&quot;empty&quot;:true,&quot;taskQueue&quot;:null},
+                            {&quot;catalog&quot;:&quot;CMD&quot;,&quot;name&quot;:&quot;cmd1&quot;,&quot;uiName&quot;:&quot;命令1&quot;,&quot;path&quot;:&quot;/menu2/menu2_1/cmd1&quot;,&quot;container&quot;:true,&quot;description&quot;:&quot;&quot;,&quot;disable&quot;:false,&quot;empty&quot;:true,&quot;taskQueue&quot;:null,
+                                &quot;childs&quot;:[
+                                    {&quot;catalog&quot;: &quot;OPTION&quot;,&quot;name&quot;: &quot;param1&quot;,&quot;uiName&quot;: &quot;命令参数1&quot;,&quot;path&quot;: &quot;/menu2/menu2_1/cmd1/param1&quot;,&quot;childs&quot;: [],&quot;container&quot;: false,&quot;defaultValue&quot;: null,&quot;description&quot;: &quot;&quot;,&quot;disable&quot;: false,&quot;empty&quot;: true,&quot;readOnly&quot;: false,&quot;required&quot;: false,&quot;type&quot;: &quot;STRING&quot;,&quot;value&quot;: null}
+                                ]
+                            }
+                        ]}]}
+        ]
+    }
+</code></pre>
+
+<p>如下图，管理端通过命令请求频道发送菜单命令，设备端收到菜单命令后，根据菜单命令的类型执行相应的动作</p>
+<p><img src="images/frame01.png" /></p>
+<h3>MENU</h3>
+<p>如果菜单命令是一个菜单(menu)，则设备端将对应的菜单内容(通过命令响应频道)返回给管理端，如下就是一条管理端发送给设备端的菜单(menu)命令.</p>
+<pre><code>{&quot;catalog&quot;:&quot;MENU&quot;,&quot;path&quot;:&quot;/&quot;}
+</code></pre>
+
+<p>该命令只有两个字段:</p>
 <ol>
-<li>
-<p>数据管理</p>
-<p>上面的应用场景都是基于 client/service(server) 的网络应用，数据库是必不可少的，前端设备负责人脸识别，后端设备负责数据管理。</p>
-</li>
-<li>
-<p>数据下发</p>
-<p>当数据库信息变动时，所有前端设备需要及时收到通知。</p>
-</li>
-<li>
-<p>设备管理</p>
-<p>这些应用场景中，前端设备肯定不止一台，而且可能分布在不同的位置，从管理的效率和考虑，对前端设备的统一管理能力都是必不可少的，比如前端设备版本升级，重启，以及一些定制化的需求。</p>
-</li>
-<li>
-<p>安全认证</p>
-<p>这是一般网络应用的基本需求，不论是WEB管理端还是设备端要连接后端应用都需要进行安全认证。权限管理也包含在安全认证范围。</p>
-</li>
+<li><code>path</code>代表要执行的命令(在设备端菜单树形结构中)的全路径。&quot;/&quot;即为根菜单。</li>
+<li><code>catalog</code>指定了该命令的类型为菜单(menu)，这个字段可以省略，设备端根据<code>path</code>就可以找到对应的menu,并将menu数据作为响应数据(ack)通过命令响应频道发送给管理端</li>
 </ol>
-<h3>facelog 是什么</h3>
-<p>通过上一节的分析，可以发现在开发基于人脸识别网络应用项目的时候，都有一些共同的技术需求，为提高开发效率，避免重复开发，将上面的这些共同需求抽象出来，形成一个开发框架，在此基础上开发的应用系统只需专注于实现具体应用的业务逻辑， 就是本系统设计的初衷。</p>
-<p>facelog 是一个用于人脸识别验证的开发框架，其核心是一个基于 thrift 技术的 RPC 服务，为人脸识别应用提供数据管理、安全认证、前端设备管理、数据下发等基本核心的服务。</p>
-<p>facelog 只是一个针对人脸识别应用的开发框架，并不针对特定的应用场景，应用项目在 facelog 的基础上根据facelog 提供的服务接口实现具体应用场景下的业务逻辑。</p>
-<h2>系统结构</h2>
-<p>下图为 facelog 的系统结构示意图</p>
-<p><img src="images/network.png" alt="系统结构" /></p>
-<p>从角色来划分，整个框架分为 facelog 、前端设备、 管理端。</p>
-<ul>
-<li>facelog 为前端设备和管理端通过网络提供服务, 所有对 mysql 数据库的操作都由 facelog service 代理,应用系统不直接对数据库进行操作,所有对 redis 数据库的读写操作都通过消息系统中间件代理。facelog 框架实现了face log 服务端的核心功能，以及设备前端和管理端与服务端的底层通讯和接口定义。</li>
-<li>前諯设备根据业务需求需要应用自己实现业务逻辑，facelog 框架为前端设备提供了实现业务逻辑的统一接口定义。</li>
-<li>管理端用于系统管理人员对系统的管理操作(用户管理，设备管理)，根据业务需求在这里可以是一个web应用，也可以设计为一个本地应用。 </li>
-</ul>
-<h3>数据库</h3>
-<h4>表结构</h4>
-<p>facelog 由 mysql 提供数据库服务，下图为表关系结构图，图中只画出每表的主要字段，完整的表结构定义参见<a href="../db/sql/create_table.sql">create_table.sql</a>。</p>
-<p><img src="images/database.png" alt="表关系结构图" /></p>
-<p><strong>NOTE:</strong>箭头连线为外键关系</p>
-<ol>
-<li><code>fl_device_group</code>  设备组信息</li>
-<li><code>fl_person_group</code>  用户组信息</li>
-<li><code>fl_permit</code>  通行权限关联表</li>
-<li><code>fl_device</code> 前端设备基本信息</li>
-<li><code>fl_image</code> 图像信息存储表,用于存储系统中所有用到的图像数据,表中只包含图像基本信息</li>
-<li><code>fl_person</code> 人员基本描述信息</li>
-<li><code>fl_feature</code> 用于验证身份的人脸特征数据表</li>
-<li><code>fl_face</code> 人脸检测信息数据表,用于保存检测到的人脸的所有信息(特征数据除外)</li>
-<li><code>fl_log</code> 人脸验证日志,记录所有人员验证记录</li>
-<li><code>fl_log_light</code> 简单日志视图</li>
-</ol>
-<h4>数据缓存</h4>
-<p>为提高数据库访问效率，facelog 为除 <code>fl_log，fl_log_light</code>之外的所有需要频繁读取的表实现缓存能力。</p>
-<p>可以从 <a href="../facelog-local/src/main/java/net/gdface/facelog/TableManagerInitializer.java"><code>net.gdface.facelog.TableManagerInitializer</code></a>代码为入口查看具体实现。</p>
-<h3>消息系统</h3>
-<p>service 是被动提供服务，只能由 client 主动向service发起请求。对于实现数据下发，设备管理等需求都需要service或admin client有主动向设备发送通知的能力。对前端设备的主动通知，facelog 基于 redis 提供了一个简单的消息系统(simpleMQ)。使设备端有能力以频道订阅的方式，异步获取来自服务端和管理端的通知消息。</p>
-<p>通过消息系统 faelog 实现以下能力：</p>
-<h4>数据更新</h4>
-<p>基于消息系统，当后端数据库中的记录有增加，删除或修改时，facelog 服务会自动向指定的redis频道发布消息。设备端只要订阅了该频道，就会收到相应的通知，实现本地数据更新。</p>
-<p>facelog 为 <code>fl_person，fl_feature，fl_permit</code> 三张表提供了实时更新发布频道。具体定义参见<a href="../facelog-client-base/src/sql2java/java/net/gdface/facelog/client/ChannelConstant.java"><code>net.gdface.facelog.client.ChannelConstant</code></a> 中所有频道(Channel)的定义。前端设备订阅指定的频道，就可以收到相应的通知。</p>
-<p><a href="../facelog-client-base/src/sql2java/java/net/gdface/facelog/client/ChannelConstant.java"><code>net.gdface.facelog.client.SubAdapters</code></a> 提供了响应对应上述数据库表数据更新消息的基类。应用项目只需要继承对应的类，重载 <code>onSubscribe</code>方法实现自己的业务逻辑。</p>
-<h4>设备心跳</h4>
-<p>对于管理端，实时获取所有前端设备的运行状态，是否在线，是设备管理的基本需要。设备端通过定时通过消息系统发送心跳数据，管理端即可通过接收所有设备的心跳数据实时掌握前端设备的运行状态。</p>
-<p>参见 <a href="../facelog-client-base/src/main/java/net/gdface/facelog/device/Heartbeat.java"><code>net.gdface.facelog.device.Heartbeat</code></a></p>
-<h4>设备命令</h4>
-<p>管理端可以通过消息系统向指定的设备或设备组发送设备命令,前端设备通过设备命令频道收到设备命令，执行相应的业务逻辑，并向命令发送端返回命令执行结果响应。</p>
-<p>参见  设备命令管理对象：<a href="../facelog-client-base/src/main/java/net/gdface/facelog/client/CmdManager.java"><code>net.gdface.facelog.client.CmdManager</code></a></p>
-<p>参见 设备命令响应对象：<a href="../facelog-client-base/src/main/java/net/gdface/facelog/client/Ack.java"><code>net.gdface.facelog.client.Ack</code></a></p>
-<h3>facelog 服务</h3>
-<p>facelog 服务是一个基于<a href="https://github.com/facebook/swift" title="swift">facebook thrift/swift</a> 框架开发的远程调用接口服务。为client端提供数据管理，安全认证等基础服务。</p>
-<p>服务接口定义参见
-<a href="../facelog-base/src/main/java/net/gdface/facelog/IFaceLog.java"><code>net.gdface.facelog.IFaceLog</code></a> </p>
-<p>服务接口由<a href="../facelog-local/src/main/java/net/gdface/facelog/FaceLogImpl.java"><code>net.gdface.facelog.FaceLogImpl</code></a>实现</p>
-<p>服务接口在client端的实现参见</p>
-<p><a href="../facelog-client/src/main/java/net/gdface/facelog/client/IFaceLogClient.java"><code>net.gdface.facelog.client.IFaceLogClient</code></a>(同步实现)，</p>
-<p><a href="../facelog-client/src/main/java/net/gdface/facelog/client/IFaceLogClientAsync.java"><code>net.gdface.facelog.client.IFaceLogClientAsync</code></a>(异步实现)</p>
-<p>服务接口适用于android平台的client端的实现参见</p>
-<p><a href="../facelog-client-android/src/main/java/net/gdface/facelog/client/IFaceLogClient.java"><code>net.gdface.facelog.client.IFaceLogClient</code></a>(同步实现)，</p>
-<p><a href="../facelog-client-android/src/main/java/net/gdface/facelog/client/IFaceLogClientAsync.java"><code>net.gdface.facelog.client.IFaceLogClientAsync</code></a>(异步实现)</p>
-<blockquote>
-<p><code>IFaceLog</code>中每个接口定义方法的描述与client端 <code>IFaceLogClient</code>保持一致。所以本文中引用接口方法时使用<code>IFaceLog</code>和<code>IFaceLogClient</code>都是等价的</p>
-</blockquote>
-<h4>创建 IFaceLog实例示例</h4>
-<pre><code>// 创建 faceLog 服务同步实例
-IFaceLogClient facelogClient = ClientFactory.builder()
-                                .setHostAndPort(&quot;127.0.0.1&quot;, DEFAULT_PORT) // 指定服务的主机地址和端口号
-                                .build(IFaceLogThriftClient.class, IFaceLogClient.class); // 创建实例(同步)
-// 创建 faceLog 服务异步实例
-IFaceLogClientAsync facelogClientAsync = ClientFactory.builder()
-                                .setHostAndPort(&quot;127.0.0.1&quot;, DEFAULT_PORT) // 指定服务的主机地址和端口号
-                                .buildAsync(IFaceLogThriftClient.class,IFaceLogClientAsync.class); // 创建实例(异步)
+<h3>OPTION</h3>
+<p>如果菜单命令是一个选项(option)，则设备端会修改指定option的值，如下就是一条管理端发送给设备端的option菜单命令.</p>
+<pre><code>{&quot;catalog&quot;:&quot;OPTION&quot;,&quot;path&quot;:&quot;/menu1/menu1_1/option1&quot;,&quot;value&quot;:&quot;HELLO&quot;}
+#NOTE: 'catalog'字段可以省略
 </code></pre>
 
-<h2>开发指南</h2>
-<h3>分组模型</h3>
-<p>facelog 框架中主要管理的就是两类对象：设备和人员。</p>
-<p>为了便于管理，设备和人员都以分组的方式进行管理。以一个住宅区的人脸识别门禁系统为例，以下为设备和人员分组的示意图：</p>
-<p><img src="images/devicegroup.png" alt="设备组模型" /></p>
-<p><img src="images/persongroup.png" alt="用户组模型" /></p>
-<p>从上面的分组模型可以发现，设备和人员分组都是树状结构，每个设备/人员都属于一个设备/人员组。体现在数据库表结构设计上，就是 <code>fl_person</code>和<code>fl_device</code>都有<code>group_id</code>字段指明当前设备/人员所属的组。
-而<code>fl_device_group</code>和<code>fl_device_group</code>都有 <code>parent</code> 字段用于指定自己的父节点</p>
-<p>设备组和人员组有关键的区别：</p>
-<p>人员组有继承能力：一个人员组，自动继承其（递归）所属的所有父节点的权限和能力。
-设备组没有继承能力。</p>
-<p>何为继承能力？请看下一节[通行权限]。</p>
-<h3>通行权限</h3>
-<p>参见[表结构]一节中<code>fl_permit</code>表的定义，<code>fl_permit</code> 是通行权限关联表，用于管理用户在指定设备上的通行能力。</p>
-<p><code>fl_permit</code> 表的主键由两个字段组成: <code>device_group_id</code>,<code>person_group_id</code>,将一个设备组和一个用户组关联起来。指定属于该用户组的用户可以在属于该设备组的设备上通行。</p>
-<p>我们将前面<code>用户组模型</code>和<code>设备组模型</code>中的用户组和设备组一一对应建立一张虚拟的通行权限关联表记录</p>
+<p>设备端收到这条命令后，就会将搜索<code>path</code>指定的选项,将该选项的值设置为<code>HELLO</code></p>
+<h3>CMD</h3>
+<p>如果菜单命令是一个(设备)命令(cmd)，则设备端会执行指定的设备命令，如下就是一条管理端发送给设备端的cmd菜单命令.</p>
+<pre><code>{&quot;catalog&quot;:&quot;CMD&quot;,&quot;path&quot;:&quot;/menu2/menu2_1/cmd1&quot; &quot;childs&quot;:[{&quot;name&quot;: &quot;param1&quot;,&quot;value&quot;:&quot;HELLO&quot;}]}
+#NOTE: 'catalog'字段可以省略
+</code></pre>
+
+<p>设备端收到这条命令后，会执行指定的动作，设备命令的内容由应用程序实现，比如设备重启，比如远程升级</p>
+<p>上面这个例子中，<code>cmd1</code>这个设备命令定义了一个参数<code>param1</code>作为子节点</p>
+<p>关于命令交互的设备端实现参见 <a href="../dtalk-engine/src/main/java/gu/dtalk/engine/ItemEngine.java">gu.dtalk.engine.ItemEngine</a></p>
+<p>关于命令交互的管理端实现参见 <a href="../dtalk-client/src/main/java/gu/dtalk/client/BaseConsole.java">gu.dtalk.client.BaseConsole#cmdInteractive()</a>方法</p>
+<h2>(菜单)条目定义</h2>
+<h3>(菜单)条目类型说明</h3>
 <table>
 <thead>
 <tr>
-	<th align="left">device_group_id</th>
-	<th align="left">person_group_id</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-	<td align="left">DeviceGroup1</td>
-	<td align="left">PersonGroup1</td>
-</tr>
-<tr>
-	<td align="left">DeviceGroup21</td>
-	<td align="left">PersonGroup21</td>
-</tr>
-<tr>
-	<td align="left">DeviceGroup22</td>
-	<td align="left">PersonGroup22</td>
-</tr>
-<tr>
-	<td align="left">DeviceGroup23</td>
-	<td align="left">PersonGroup23</td>
-</tr>
-<tr>
-	<td align="left">DeviceGroup311</td>
-	<td align="left">PersonGroup311</td>
-</tr>
-<tr>
-	<td align="left">DeviceGroup312</td>
-	<td align="left">PersonGroup312</td>
-</tr>
-<tr>
-	<td align="left">DeviceGroup313</td>
-	<td align="left">PersonGroup313</td>
-</tr>
-</tbody>
-</table>
-<p>按照上面通行权限关联表的说明，我们容易理解：</p>
-<blockquote>
-<p>属于<code>PersonGroup1</code>都可以在<code>DeviceGroup1(小区大门)</code>下属的设备上通行。</p>
-</blockquote>
-<p>也容易理解：</p>
-<blockquote>
-<p><code>Persongroup311(1单元)</code>的用户可以在 <code>DeviceGroup311(1幢1单元)</code>设备组下属的设备通行。</p>
-</blockquote>
-<p>所以</p>
-<blockquote>
-<p>属于<code>Persongroup311(1单元)</code>的<code>Person111黄晓明</code>可以通行<code>DeviceGroup311(1幢1单元)</code>设备组下属的门禁设备。</p>
-</blockquote>
-<p>那么<code>Person111黄晓明</code>可以通行小区大门么？通行权限关联表中并没有<code>Persongroup311(1单元)</code>和 <code>DeviceGroup1</code>的关联记录呀。</p>
-<blockquote>
-<p>当然可以，虽然上面的通行权限关联表是并没有<code>Persongroup311(1单元)</code>和 <code>DeviceGroup1</code>的记录。但是因为人员组有继承能力，所以<code>Persongroup311(1单元)</code>递归继承了所属的父节点<code>Persongroup21(1幢)</code>和<code>Persongroup1</code>的通行权限。所以<code>Person111黄晓明</code>也可以通行大门。</p>
-</blockquote>
-<h3>安全管理</h3>
-<p>facelog 的安全机制分为两个层面：</p>
-<dl>
-<dt>管理端用户验证</dt>
-<dd>管理端用户登录系统的用户验证，目前采用传统的密码验证方式</dd>
-<dt>client端 访问数据库的令牌验证</dt>
-<dd>client端对 facelog 数据库访问时需要提供合法的令牌</dd>
-</dl>
-<p>令牌验证的使用范围：</p>
-<ul>
-<li>对于数据库读取数据操作不需要提供令牌验证</li>
-<li>对于数据库写操作及涉及安全管理的操作需要提供令牌验证</li>
-</ul>
-<h4>用户等级</h4>
-<p>facelog中的用户分为四个等级</p>
-<table>
-<thead>
-<tr>
-	<th align="left">type</th>
-	<th align="left">rank</th>
+	<th align="left">TYPE</th>
 	<th align="left">说明</th>
+	<th align="left">Java类/基类</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-	<td align="left">普通用户</td>
-	<td align="left">0</td>
-	<td align="left">无管理权限</td>
+	<td align="left">OPTION</td>
+	<td align="left">参数选项，对应《术语》中的(参数)选项</td>
+	<td align="left"><a href="../dtalk-base/src/main/java/gu/dtalk/BaseOption.java">gu.dtalk.BaseOption</a></td>
 </tr>
 <tr>
-	<td align="left">操作员</td>
-	<td align="left">2</td>
-	<td align="left">可以管理低一级用户，及应用项目定义的权限</td>
+	<td align="left">CMD</td>
+	<td align="left">(设备)命令,cmd</td>
+	<td align="left"><a href="../dtalk-base/src/main/java/gu/dtalk/CmdItem.java">gu.dtalk.CmdItem</a></td>
 </tr>
 <tr>
-	<td align="left">管理员</td>
-	<td align="left">3</td>
-	<td align="left">可以管理低一级用户，管理设备组用户组，管理通行权限，及应用项目定义的权限</td>
-</tr>
-<tr>
-	<td align="left">root</td>
-	<td align="left">4</td>
-	<td align="left">系统内置帐户，拥有所有管理权限，还可以修改系统配置参数</td>
+	<td align="left">MENU</td>
+	<td align="left">菜单,menu</td>
+	<td align="left"><a href="../dtalk-base/src/main/java/gu/dtalk/MenuItem.java">gu.dtalk.MenuItem</a></td>
 </tr>
 </tbody>
 </table>
-<ul>
-<li>
-<p>用户级别定义</p>
-<p><code>root</code>为 facelog 内置用户名，无需指定，其他的级别的用户都是由<code>fl_person</code>表的<code>rank</code>字段来指定。参见表结构定义<a href="../db/sql/create_table.sql">create_table.sql</a>。</p>
-</li>
-<li>
-<p>用户密码</p>
-<p><code>root</code>用户的密码存储在系统配置文件中(properties)，其他的级别的用户的密码存储在<code>fl_person</code>表的<code>password</code>字段。</p>
-</li>
-</ul>
-<p>参见<a href="../facelog-base/src/main/java/net/gdface/facelog/CommonConstant.java"><code>net.gdface.facelog.CommonConstant.PersonRank</code></a></p>
-<h4>密码验证</h4>
-<p>参见facelog 服务接口方法：</p>
-<pre><code>net.gdface.facelog.client.IFaceLogClient.isValidPassword
-</code></pre>
-
-<h4>令牌</h4>
-<p>令牌是系统安全设计的关键环节，凡是涉及数据写操作或安全管理的facelog服务接口都需要令牌。</p>
-<p>令牌本身是由facelog服务生成的一个具有一定时效的数据对象。client端在使用facelog服务之前需要向facelog申请令牌，client端程序结束时应该释放令牌。</p>
-<p>一个令牌对象只应由一个cleint使用，可多线程共享，但不可共享给其他client端。</p>
-<p>参见服务接口：<a href="../facelog-base/src/main/java/net/gdface/facelog/IFaceLog.java"><code>net.gdface.facelog.IFaceLog</code></a>，代码注释中对每一个方法是否需要令牌，需要什么类型的令牌都有明确说明。</p>
-<h4>令牌类型</h4>
+<h3>选项(OPTION)类型说明</h3>
 <table>
 <thead>
 <tr>
-	<th align="left">type</th>
+	<th align="left">TYPE</th>
 	<th align="left">说明</th>
+	<th align="left">Java类</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-	<td align="left">设备令牌</td>
-	<td align="left">设备端使用的令牌</td>
+	<td align="left">STRING</td>
+	<td align="left">任意字符串</td>
+	<td align="left"><a href="../dtalk-base/src/main/java/gu/dtalk/StringOption.java">gu.dtalk.StringOption</a></td>
 </tr>
 <tr>
-	<td align="left">人员令牌</td>
-	<td align="left">管理端(管理员，操作员)使用的令牌</td>
+	<td align="left">INTEGER</td>
+	<td align="left">整数</td>
+	<td align="left"><a href="../dtalk-base/src/main/java/gu/dtalk/IntOption.java">gu.dtalk.IntOption</a></td>
 </tr>
 <tr>
-	<td align="left">root令牌</td>
-	<td align="left">管理端(root)使用的令牌</td>
-</tr>
-</tbody>
-</table>
-<p>参见 <a href="../facelog-base/src/main/java/net/gdface/facelog/Token.java"><code>net.gdface.facelog.Token</code></a></p>
-<h4>令牌有效期</h4>
-<p>设备令牌目前未定义有效期，所以设备令牌在facelog 服务运行期内一直有效。</p>
-<p>人员令牌和root令牌定义了有效期，默认有效期是60分钟。可以通过修改系统参数改变该值，参见<code>CommonConstant.TOKEN_PERSON_EXPIRE</code> 。如果令牌过期，要重新申请令牌。</p>
-<h4>失效令牌自动刷新</h4>
-<p>根据前面对令牌的说明，我们知道令牌是有有效期的，对于client端(管理端，设备端)而言当使用失效令牌访问服务时会抛出安全异常(<code>ServiceSecurityException</code>,其中type字段为安全异常的错误类型)，这时要重新申请令牌。</p>
-<p>这个机制对安全来说致关重要，但同时也给client端开发带来困扰，那就是client端调用每个需要令牌的接口方法时都要捕获<code>ServiceSecurityException</code>异常，来判断是否为令牌失效异常，这可能会导致代码逻辑非常臃肿。</p>
-<p>为解决这个问题，facelog client端提供了失效令牌自动刷新机制，其基本原理是设计一个服务接口代理类(参见 <a href="../facelog-client-base/src/main/java/net/gdface/facelog/client/RefreshTokenDecorator.java">net.gdface.facelog.client.RefreshTokenDecorator</a>)，该代理接口类的实例代理所有服务接口方法，并捕获<a href="../facelog-base/src/main/java/net/gdface/facelog/ServiceSecurityException.java"><code>ServiceSecurityException</code></a>异常,当判断为异常是由令牌失效导致的,则自动调用令牌申请方法，申请新令牌，然后重新调用前面因为抛出安全异常而失败的方法。</p>
-<pre><code>// 安全异常分类
-public static enum SecurityExceptionType{
-    /** 其他未分类异常 */UNCLASSIFIED,
-    /** 无效MAC地址 */INVALID_MAC,
-    /** 无效序列号 */INVALID_SN,
-    /** 序列号被占用 */OCCUPIED_SN,
-    /** 无效的设备令牌 */INVALID_TOKEN,
-    /** 无效设备ID */INVALID_DEVICE_ID,
-    /** 无效人员ID */INVALID_PERSON_ID,
-    /** 无效root密码 */INVALID_PASSWORD,
-    /** 拒绝令牌申请 */REJECT_APPLY
-}
-</code></pre>
-
-<p>facelog已经实现了失效令牌自动刷新机制，但应用层要启用这个机制，还需要向<code>RefreshTokenDecorator</code>提供申请令牌时必要的参数，比如对于人员令牌和root令牌，需要提供用户的密码，对于设备令牌需要提供设备信息对象(<a href="../facelog-db-base/src/main/java/net/gdface/facelog/db/DeviceBean.java">DeviceBean</a>)</p>
-<p>如何向令牌自动刷新机制提供这些必要信息呢？这就涉及到另一个类<a href="../facelog-client-base/src/main/java/net/gdface/facelog/client/TokenHelper.java">TokenHelper</a>,TokenHelper类设计用于应用层向client端提供令牌刷新的必要参数，应用层可以继承此类根据需要重写对应的方法提供参数，以让自动刷新机制能正确运行</p>
-<p>下面代码展示如何在client端初始化时开启失效令牌自动刷新机制</p>
-<pre><code>    IFaceLogClient facelogClient = ClientFactory.builder()
-            .setHostAndPort(&quot;127.0.0.1&quot;, DEFAULT_PORT)
-            .setDecorator(RefreshTokenDecorator.makeDecoratorFunction(new TokenHelperTestImpl()))
-            .build(IFaceLogThriftClient.class, IFaceLogClient.class);
-    // TokenHelperTestImpl为TokenHelper的子类，用于向RefreshTokenDecorator提供申请令牌的相关参数
-    // setDecorator方法则将实现令牌自动刷新机制机制的代理接口类实例(Proxy instance)加载到服务接口实例上
-</code></pre>
-
-<p>关于启动失效令牌自动刷新机制的完整示例参见 <a href="../facelog-client/src/test/java/net/gdface/facelog/client/ClientTest.java">ClientTest</a></p>
-<h4>令牌申请注销</h4>
-<p>令牌是有时效性的数字凭证，所以client在调用需要令牌难的facelog 服务接口方法前需要申请令牌，然后再用申请到的令牌做为方法参数调用接口方法，当应用程序结束时应该释放令牌，如果不释放令牌，过期令牌也会自动失效并自动从 facelog 令牌数据表中删除。</p>
-<p>申请和释放信息都是通过 facelog 服务的接口方法来完成，管理端和设备端申请和释放令牌使用不同的服务接口方法。</p>
-<table>
-<thead>
-<tr>
-	<th align="left">client类型</th>
-	<th align="left">令牌类型</th>
-	<th align="left">操作</th>
-	<th align="left">facelog 服务接口方法</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-	<td align="left">设备端</td>
-	<td align="left">设备令牌</td>
-	<td align="left">申请</td>
-	<td align="left"><code>net.gdface.facelog.client.IFaceLogClient.online(DeviceBean)</code></td>
+	<td align="left">FLOAT</td>
+	<td align="left">浮点数</td>
+	<td align="left"><a href="../dtalk-base/src/main/java/gu/dtalk/FloatOption.java">gu.dtalk.FloatOption</a></td>
 </tr>
 <tr>
-	<td align="left">设备端</td>
-	<td align="left">设备令牌</td>
-	<td align="left">释放</td>
-	<td align="left"><code>net.gdface.facelog.client.IFaceLogClient.offline(Token)</code></td>
+	<td align="left">BOOL</td>
+	<td align="left">布尔型 true/false 0/1</td>
+	<td align="left"><a href="../dtalk-base/src/main/java/gu/dtalk/BoolOption.java">gu.dtalk.BoolOption</a></td>
 </tr>
 <tr>
-	<td align="left">管理端</td>
-	<td align="left">人员令牌</td>
-	<td align="left">申请</td>
-	<td align="left"><code>net.gdface.facelog.client.IFaceLogClient.applyPersonToken(int,String,boolean)</code></td>
+	<td align="left">DATE</td>
+	<td align="left">日期 支持的格式:yyyy-MM-dd HH:mm:ss</td>
+	<td align="left"><a href="../dtalk-base/src/main/java/gu/dtalk/DateOption.java">gu.dtalk.DateOption</a></td>
 </tr>
 <tr>
-	<td align="left">管理端</td>
-	<td align="left">人员令牌</td>
-	<td align="left">释放</td>
-	<td align="left"><code>net.gdface.facelog.client.IFaceLogClient.releasePersonToken(Token)</code></td>
+	<td align="left">URL</td>
+	<td align="left">url字符串</td>
+	<td align="left"><a href="../dtalk-base/src/main/java/gu/dtalk/UrlOption.java">gu.dtalk.UrlOption</a></td>
 </tr>
 <tr>
-	<td align="left">管理端</td>
-	<td align="left">root令牌</td>
-	<td align="left">申请</td>
-	<td align="left"><code>net.gdface.facelog.client.IFaceLogClient.applyRootToken(String,boolean)</code></td>
+	<td align="left">PASSWORD</td>
+	<td align="left">密码字符串</td>
+	<td align="left"><a href="../dtalk-base/src/main/java/gu/dtalk/PasswordOption.java">gu.dtalk.PasswordOption</a></td>
 </tr>
 <tr>
-	<td align="left">管理端</td>
-	<td align="left">root令牌</td>
-	<td align="left">释放</td>
-	<td align="left"><code>net.gdface.facelog.client.IFaceLogClient.releaseRootToken(Token)</code></td>
+	<td align="left">EMAIL</td>
+	<td align="left">e-mail地址</td>
+	<td align="left"><a href="../dtalk-base/src/main/java/gu/dtalk/StringOption.java">gu.dtalk.StringOption</a></td>
+</tr>
+<tr>
+	<td align="left">MPHONE</td>
+	<td align="left">手机号码(11位)</td>
+	<td align="left"><a href="../dtalk-base/src/main/java/gu/dtalk/StringOption.java">gu.dtalk.StringOption</a></td>
+</tr>
+<tr>
+	<td align="left">IDNUM</td>
+	<td align="left">身份证号(15位、18位数字)</td>
+	<td align="left"><a href="../dtalk-base/src/main/java/gu/dtalk/StringOption.java">gu.dtalk.StringOption</a></td>
+</tr>
+<tr>
+	<td align="left">BASE64</td>
+	<td align="left">base64 格式二进制数据</td>
+	<td align="left"><a href="../dtalk-base/src/main/java/gu/dtalk/Base64Option.java">gu.dtalk.Base64Option</a></td>
+</tr>
+<tr>
+	<td align="left">MAC</td>
+	<td align="left">网卡MAC地址二进制数据</td>
+	<td align="left"><a href="../dtalk-base/src/main/java/gu/dtalk/MACOption.java">gu.dtalk.MACOption</a></td>
+</tr>
+<tr>
+	<td align="left">IP</td>
+	<td align="left">IP地址二进制数据</td>
+	<td align="left"><a href="../dtalk-base/src/main/java/gu/dtalk/IPv4Option.java">gu.dtalk.IPv4Option</a></td>
+</tr>
+<tr>
+	<td align="left">IMAGE</td>
+	<td align="left">base64 格式JPEG/BMP/PNG格式图像</td>
+	<td align="left"><a href="../dtalk-base/src/main/java/gu/dtalk/ImageOption.java">gu.dtalk.ImageOption</a></td>
+</tr>
+<tr>
+	<td align="left">MULTICHECK</td>
+	<td align="left">多选列表</td>
+	<td align="left"><a href="../dtalk-base/src/main/java/gu/dtalk/CheckOption.java">gu.dtalk.CheckOption</a></td>
+</tr>
+<tr>
+	<td align="left">SWITCH</td>
+	<td align="left">单选列表</td>
+	<td align="left"><a href="../dtalk-base/src/main/java/gu/dtalk/SwitchOption.java">gu.dtalk.SwitchOption</a></td>
 </tr>
 </tbody>
 </table>
-<h4>设备注册/注销</h4>
-<p><code>设备注册</code>就是设备端将自己的设备信息向 facelog 服务登记的过程，只有在facelog 数据库设备表(<code>fl_device</code>)有记录的设备，才是facelog 认可的合法设备，才会允许其申请设备令牌。这个动作在设备安装时执行一次就可以了。</p>
-<p><code>设备注销</code>与<code>设备注册</code>作用相反，就是当前设备将自己的设备信息从facelog 数据库中删除的过程，这个动作需要在设备从facelog 系统中删除时执行一次。</p>
-<h4>设备注册及令牌申请示例</h4>
-<p>上一节中介绍了设备令牌的申请方式，要说明的是在设备端申请令牌之前，先要有一个设备注册过程。否则申请令牌不会成功。下面的示例说明设备注册/注销及设备令牌申请/释放的顺序过程。</p>
-<pre><code>@Test
-public void test4RegisterDevice(){
-    // 获取当前设备的MAC地址(假设只有一块网卡)
-    byte[] address = NetworkUtil.getPhysicalNICs().iterator().next().getHardwareAddress();
-    try {
-        // 根据MAC地址和设备序列号构造一个DeviceBean数据对象
-        DeviceBean device = DeviceBean.builder()
-                .mac(NetworkUtil.formatMac(address, null)) // 设备当前设备MAC地址
-                .serialNo(&quot;12322333&quot;) // 设置设备序列号
-                .build();
-        logger.info(device.toString(true,false));
-        // 设备注册
-        device = facelogClient.registerDevice(device);
-        // 申请设备令牌
-        Token deviceToken = facelogClient.online(device);
-        // .....
+<h4>验证器(validator)</h4>
+<p>选项(OPTION)允许应用层设置验证器对拟设置的值进行有效性验证，如果验证器返回false则会抛出异常。具体做法是通过<a href="../dtalk-base/src/main/java/gu/dtalk/BaseOption.java">gu.dtalk.BaseOption</a>的<code>setValidator</code>方法设置<code>Predicate</code>接口实例，示例如下：</p>
+<pre><code>    OptionBuilder.builder(IntOption.class).name(&quot;status&quot;).readonly(true).value(0).instance().setValidator(new Predicate&lt;Integer&gt;() {
 
-        // 应用结束时通知facelog servcie设备下线，释放设备令牌
-        facelogClient.offline(deviceToken);
-
-        // 设备注销，设备从 facelog系统删除时调用
-        facelogClient.unregisterDevice(device.getId(), deviceToken);
-    } catch(ServiceRuntimeException e){
-        e.printServiceStackTrace();
-        assertTrue(e.getMessage(),false);
-    }catch (ServiceSecurityException e) {
-        logger.error(e.getMessage());
-        assertTrue(e.getServiceStackTraceMessage(),false);
-    }
-}
+        @Override
+        public boolean apply(Integer input) {
+            return input != null &amp;&amp; input &gt; 100;
+        }
+    });
 </code></pre>
 
-<h3>消息系统(simpleMQ)</h3>
-<p>消息系统(<a href="https://gitee.com/l0km/simplemq"><code>simpleMQ</code></a>)是基于<a href="https://redis.io/"><code>redis</code></a>实现的用于计算机之间通讯的一个中间件jar包。facelog 服务、设备端、管理端使用消息系统的频道(channel)订阅发布功能，进行1对N的通讯.</p>
-<h4>消息频道</h4>
-<p>facelog 中的频道类型：</p>
+<h3>(菜单)条目定义字段</h3>
 <table>
 <thead>
 <tr>
-	<th align="left">频道类型</th>
+	<th align="left">字段名</th>
 	<th align="left">说明</th>
-	<th align="left">定义方式</th>
+	<th align="left">MENU</th>
+	<th align="left">OPTION</th>
+	<th align="left">CMD</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-	<td align="left">数据库实时更新频道</td>
-	<td align="left">用于发布订阅数据库实时更新通知的频道，参见[<code>数据更新</code>]章节</td>
-	<td align="left">公开定义的常量,参见 <a href="../facelog-service/src/sql2java/java/net/gdface/facelog/service/CommonConstant.java"><code>net.gdface.facelog.service.CommonConstant</code></a></td>
+	<td align="left">catalog</td>
+	<td align="left">item分类类型，可选的值MENU,OPTION,CMD,参见《(菜单)条目类型说明》</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
 </tr>
 <tr>
-	<td align="left">设备命令频道</td>
-	<td align="left">用于client设备命令发送和接收的频道</td>
-	<td align="left">facelog 服务初始化后才确定的常量,非公开，需要通过令牌方法才能获取,<strong>NOTE1</strong></td>
+	<td align="left">name</td>
+	<td align="left">条目名称([a-zA-Z0-9_],不允许有空格)</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
 </tr>
 <tr>
-	<td align="left">人员验证实时监控通道名</td>
-	<td align="left">用于管理端实时获取设备端人员验证通行消息的频道</td>
-	<td align="left">facelog 服务初始化后才确定的常量,非公开，需要通过令牌方法才能获取，<strong>NOTE1</strong></td>
+	<td align="left">uiName</td>
+	<td align="left">条目的用户界面显示名称,如果不指定则使用{@link #name}</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
 </tr>
 <tr>
-	<td align="left">设备心跳实时监控通道名</td>
-	<td align="left">用于管理端实时获取设备端心跳的频道</td>
-	<td align="left">facelog 服务初始化后才确定的常量,非公开，需要通过令牌方法才能获取，<strong>NOTE1</strong></td>
+	<td align="left">path</td>
+	<td align="left">当前对象在整个菜单树形结构中的全路径</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
 </tr>
 <tr>
-	<td align="left">设备命令响应频道</td>
-	<td align="left">用于client端接收设备命令响应的频道</td>
-	<td align="left">动态申请，如果管理端发送设备命令时需要获取设备端的命令响应，就需要在每次发送设备命令之前向facelog 申请一个设备命令响应频道名参见<code>设备命令</code>章节,申请命令响应频道名的方法参见 <code>net.gdface.facelog.client.IFaceLogClient.applyAckChannel(Token)</code></td>
+	<td align="left">container</td>
+	<td align="left">是否为容器(可包含item),当catalog为MENU,CMD时为true</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
+</tr>
+<tr>
+	<td align="left">description</td>
+	<td align="left">对当前条目的说明文字，默认值：空</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
+</tr>
+<tr>
+	<td align="left">disable</td>
+	<td align="left">当前条目是否禁用,默认值:false</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
+</tr>
+<tr>
+	<td align="left">hide</td>
+	<td align="left">当前条目是否在用户界面中隐藏(不显示),默认值:false</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
+</tr>
+<tr>
+	<td align="left">childs</td>
+	<td align="left">所有子条目,当catalog为OPTION时，恒为空</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
+</tr>
+<tr>
+	<td align="left">empty</td>
+	<td align="left">是否有子条目,即childs中元素不为0,当catalog为OPTION时,恒为0</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
+	<td align="left">Y</td>
+</tr>
+<tr>
+	<td align="left">type</td>
+	<td align="left">选项的类型,可选的值参见《OPTION类型说明》</td>
+	<td align="left"></td>
+	<td align="left">Y</td>
+	<td align="left"></td>
+</tr>
+<tr>
+	<td align="left">readOnly</td>
+	<td align="left">是否为只读的选项,当catalog为CMD时,恒为false</td>
+	<td align="left"></td>
+	<td align="left">Y</td>
+	<td align="left"></td>
+</tr>
+<tr>
+	<td align="left">required</td>
+	<td align="left">是否为必须的选项，默认值:false</td>
+	<td align="left"></td>
+	<td align="left">Y</td>
+	<td align="left"></td>
+</tr>
+<tr>
+	<td align="left">value</td>
+	<td align="left">选项值</td>
+	<td align="left"></td>
+	<td align="left">Y</td>
+	<td align="left"></td>
+</tr>
+<tr>
+	<td align="left">defaultValue</td>
+	<td align="left">选项默认值</td>
+	<td align="left"></td>
+	<td align="left">Y</td>
+	<td align="left"></td>
+</tr>
+<tr>
+	<td align="left">taskQueue</td>
+	<td align="left">任务队列名,该字段不为空时,对象支持队列任务</td>
+	<td align="left"></td>
+	<td align="left"></td>
+	<td align="left">Y</td>
 </tr>
 </tbody>
 </table>
-<p><strong>NOTE1</strong></p>
-<blockquote>
-<p>参见 <code>net.gdface.facelog.client.IFaceLogClient.getRedisParameters(Token)</code>，<code>net.gdface.facelog.service.RedisManagement.MQParam</code></p>
-</blockquote>
-<h4>连接消息系统(redis)</h4>
-<p>消息系统是基于redis平台的中间件，不论是发送还是接收消息，都需要连接redis.以下为连接redis的示例，在应用程序初始化时执行一次。</p>
-<pre><code>/** redis 连接参数 */
-private static final Map&lt;PropName, Object&gt; redisParam = 
-        ImmutableMap.&lt;PropName, Object&gt;of(
-                /** redis 主机名 */PropName.host,Protocol.DEFAULT_HOST,
-                /** redis 端口号 */PropName.port,Protocol.DEFAULT_PORT,
-                /** redis 连接密码 */PropName.password, &quot;password&quot;
-                );
-///.....
-/** 根据连接参数创建默认实例 */
-JedisPoolLazy.createDefaultInstance( redisParam);
-// 默认实例创建后，后续可以调用 JedisPoolLazy.getDefaultInstance() 获取并使用这个默认实例
-</code></pre>
+<p>NOTE:上表中后三列为Y，代表此字段适合该类型的菜单条目</p>
+<h3>创建菜单</h3>
+<p>dtalk提供了<a href="../dtalk-base/src/main/java/gu/dtalk/ItemBuilder.java">gu.dtalk.ItemBuilder</a>用于创建menu和cmd,提供了<a href="..dtalk-base/src/main/java/gu/dtalk/OptionBuilder.java">gu.dtalk.OptionBuilder</a></p>
+<p>如下是创建前面的示例的菜单的代码：</p>
+<pre><code>public void test6Menu(){
+    MenuItem menu1 = ItemBuilder.builder(MenuItem.class).name(&quot;menu1&quot;).uiName(&quot;菜单1&quot;).addChilds(
+            ItemBuilder.builder(MenuItem.class).name(&quot;menu1_1&quot;).uiName(&quot;菜单1.1&quot;).addChilds(
+                    OptionType.STRING.builder().name(&quot;option1&quot;).uiName(&quot;选项1&quot;).instance(),
+                    OptionType.INTEGER.builder().name(&quot;option2&quot;).uiName(&quot;选项2&quot;).instance()
+                    ).instance()
+            ).instance();
+    MenuItem menu2 = ItemBuilder.builder(MenuItem.class).name(&quot;menu2&quot;).uiName(&quot;菜单2&quot;).addChilds(
+            ItemBuilder.builder(MenuItem.class).name(&quot;menu2_1&quot;).uiName(&quot;菜单2.1&quot;).addChilds(
+                        ItemBuilder.builder(CmdItem.class).name(&quot;cmd1&quot;).uiName(&quot;命令1&quot;).instance().addParameters(
+                                OptionType.STRING.builder().name(&quot;param1&quot;).uiName(&quot;命令参数1&quot;).instance()
+                                )
+                    ).instance()
+            ).instance();
+    RootMenu root = new RootMenu();
+    root.addChilds(menu1,menu2);
 
-<h4>发布消息</h4>
-<p>利用消息系统发布消息很简单，只要获取一个<code>IPublisher</code>实例，就可以向指定的频道发布消息。</p>
-<p>消息系统向频道发布消息的接口类为<code>IPublisher</code>,参见 <a href="https://gitee.com/l0km/simplemq/blob/master/src/main/java/gu/simplemq/IPublisher.java"><code>gu.simplemq.IPublisher</code></a></p>
-<p>获取一个<code>IPublisher</code>实例的方式参见<a href="https://gitee.com/l0km/simplemq/blob/master/src/main/java/gu/simplemq/redis/RedisFactory.java"><code>gu.simplemq.redis.RedisFactory#getPublisher</code></a>系列方法</p>
-<p>另外参见 <a href="https://gitee.com/l0km/simplemq/blob/master/src/main/java/gu/simplemq/BasePublishTask.java"><code>gu.simplemq.BasePublishTask</code></a>用于消息发布的线程池执行任务封装</p>
-<h5>发布消息示例</h5>
-<p>使用<code>gu.simplemq.IPublisher</code>的示例代码</p>
-<pre><code>@Test
-public void test() throws InterruptedException {
-     Channel&lt;Date&gt; chat1 = new Channel&lt;Date&gt;(&quot;chat1&quot;,Date.class);
-    // 获取IPublisher接口实例(edisPublisher)
-    IPublisher publisher = RedisFactory.getPublisher(JedisPoolLazy.getDefaultInstance());
-    for(int i=0;i&lt;100;++i){
-        Date date = new Date();
-        // 向频道'chat1'发布消息
-        publisher.publish(chat1, date);
-        logger.info(date.getTime() +&quot; : &quot; +date.toString());
-        Thread.sleep(2000);
-    }
+    logger.info(BaseJsonEncoder.getEncoder().toJsonString(root));
 }
 </code></pre>
 
-<h4>订阅消息</h4>
-<p>消息系统管理消息订阅的实例类为<code>RedisSubscriber</code>,参见 <a href="https://gitee.com/l0km/simplemq/blob/master/src/main/java/gu/simplemq/redis/RedisSubscriber.java"><code>gu.simplemq.redis.RedisSubscriber</code></a></p>
-<p>获取一个<code>RedisSubscriber</code>实例的方式参见<a href="https://gitee.com/l0km/simplemq/blob/master/src/main/java/gu/simplemq/redis/RedisFactory.java"><code>gu.simplemq.redis.RedisFactory#getSubscriber</code></a>系列方法</p>
-<p>订阅消息实际就是一个向redis服务器订阅频道并处理消息的的过程。<code>RedisSubscriber</code>的<code>register</code>方法用于将指定的消息处理代码注册到指定的频道。</p>
-<h4>消息处理</h4>
-<p>消息处理的核心接口为<code>gu.simplemq.IMessageAdapter</code>，参见<a href="https://gitee.com/l0km/simplemq/blob/master/src/main/java/gu/simplemq/Channel.java"><code>gu.simplemq.Channel</code></a>中对<code>IMessageAdapter</code>的调用</p>
-<h4>消息订阅处理示例</h4>
-<p>使用<code>gu.simplemq.redis.RedisSubscriber</code>订阅频道消息示例</p>
-<pre><code>@Test
-public void testRedisSubscriber(){
-    RedisSubscriber consumer = RedisFactory.getSubscriber(JedisPoolLazy.getDefaultInstance());
-    // 频道名 'list1'
-    Channel&lt;String&gt; list1 = new Channel&lt;String&gt;(&quot;list1&quot;,String.class,new IMessageAdapter&lt;String&gt;(){
-
-        @Override
-        public void onSubscribe(String t) throws SmqUnsubscribeException {
-            logger.info(&quot;{}:{}&quot;,&quot;list1&quot;,t);
-        }} );
-    // 订阅消息，用IMessageAdapter实例显示消息
-    consumer.register(list1);
-    // 取消订阅
-    consumer.unregister(list1);
-}
-</code></pre>
-
-<p>使用<code>gu.simplemq.redis.RedisConsumer</code>订阅队列消息示例(队列消息目前没有在facelog 中用到)</p>
-<pre><code>@Test
-public void testRedisConsumer(){
-    // 获取 RedisConsumer 实例
-    RedisConsumer consumer = RedisFactory.getConsumer(JedisPoolLazy.getDefaultInstance());
-    // 定义 list1, list2,list3 三个队列，并提供相应的消息处理实例IMessageAdapter
-    Channel&lt;String&gt; list1 = new Channel&lt;String&gt;(&quot;list1&quot;,String.class,new IMessageAdapter&lt;String&gt;(){
-        @Override
-        public void onSubscribe(String t) throws SmqUnsubscribeException {
-            logger.info(&quot;{}:{}&quot;,&quot;list1&quot;,t);
-        }} );
-    Channel&lt;String&gt; list2 = new Channel&lt;String&gt;(&quot;list2&quot;,String.class,new IMessageAdapter&lt;String&gt;(){
-        @Override
-        public void onSubscribe(String t) throws SmqUnsubscribeException {
-            logger.info(&quot;{}:{}&quot;,&quot;list2&quot;,t);
-        }} );
-    Channel&lt;String&gt; list3 = new Channel&lt;String&gt;(&quot;list3&quot;,String.class,new IMessageAdapter&lt;String&gt;(){
-        @Override
-        public void onSubscribe(String t) throws SmqUnsubscribeException {
-            logger.info(&quot;{}:{}&quot;,&quot;list3&quot;,t);
-        }} );
-    // 订阅消息，用IMessageAdapter实例显示消息
-    consumer.register(list1,list2);
-    consumer.register(list3);
-    // 取消订阅
-    consumer.unregister(list1);
-}
-</code></pre>
-
-<h3>数据下发</h3>
-<p>所谓数据下发，实际就是一个数据库表更新消息发布、订阅、处理的过程，当client端订阅了指定频道的消息，就会收到数据库更新的消息通知。</p>
-<p>比如，新入职了一名员工，<code>fl_person</code>表中会增加一条该员工的记录，facelog 服务向名为<code>PersonInsert</code>的频道(在<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommonConstant.java"><code>net.gdface.facelog.client.CommonConstant</code></a>中定义)会发布一条消息，该消息的内容很简单，就是该条记录的id(primary key),订阅了该频道的所有client端都会立即收到该消息。client根据收到的id,再通过facelog service向数据库获取该条记录的完整数据。就实现了自动数据下发功能。</p>
-<p>client收到消息后如何处理，这属于具体应用的业务逻辑，应该由应用项目根据实际需求来实现。</p>
-<h4>数据更新消息处理示例</h4>
-<p><a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/SubAdapters.java"><code>net.gdface.facelog.client.SubAdapters</code></a>提供了一组基类，继承对应的基类可以更简单的实现数据更新通知消息处理。</p>
-<p>下面以<code>fl_person</code>表的<code>insert</code>新增记录消息处理为例说明这组基类的使用方法：</p>
-<pre><code>public class PersonInsertAdapterTest implements CommonConstant {    
-    @Test
-    public void test() {        
-        final IFaceLogClient serviceClient = ClientFactory.builder().setHostAndPort(&quot;127.0.0.1&quot;, DEFAULT_PORT).build();
-        // 重载 onSubscribe 方法
-        new SubAdapters.BasePersonInsertSubAdapter(){
-            @Override
-            public void onSubscribe(Integer id) throws SmqUnsubscribeException {
-                logger.info(&quot;insert person ID:{}&quot;,id);
-                logger.info(&quot;new recored {}&quot;,serviceClient.getPerson(id).toString(true, false));
-            }           
-        }.register(RedisFactory.getSubscriber());// 频道订阅
-    }
-}
-</code></pre>
-
-<h3>设备心跳监控</h3>
-<p>管理端可以通过设备心跳监控频道实时获取所有设备的心跳包，示例如下:</p>
+<p>完整代码参见 <a href="../dtalk-base/src/test/java/gu/dtalk/ItemTest.java">gu.dtalk.ItemTest</a></p>
+<h3>设备命令实现</h3>
+<p>根据设备命令执行方式的不同，分为立即(执行)设备命令和交互设备命令，立即设备命令执行后立即返回结果或不返回结果，立即命令执行的结果只有成功或异常两种状态。
+交互命令适用于可能要长时间执行的命令，允许在设备命令执行教程中，管理端取消设备命令执行，也允许设备在设备命令执行过程，向管理端发送完成进度或人为取消。交互命令执行的结果状态更加复杂：成功，被拒绝，异常，超时。</p>
+<h4>立即设备命令</h4>
+<p>dtalk的立即设备命令由立即设备命令执行接口(<a href="../dtalk-base/src/main/java/gu/dtalk/ICmdImmediateAdapter.java">gu.dtalk.ICmdImmediateAdapter</a>)定义.</p>
 <pre><code>/**
- * 心跳包测试
+ * 设备命令执行接口
  * @author guyadong
  *
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class HeartbeatTest implements ChannelConstant{
-    private static IFaceLogClient facelogClient;
-    private static Token rootToken;
-    /** redis 连接参数 */
-    private static Map&lt;PropName, Object&gt; redisParam = 
-            ImmutableMap.&lt;PropName, Object&gt;of(
-                    /** redis 主机名 */PropName.host,Protocol.DEFAULT_HOST,
-                    /** redis 端口号 */PropName.port,Protocol.DEFAULT_PORT,
-                    /** redis 连接密码 */PropName.password, &quot;hello&quot;
-                    );
-    /** 设备心跳监控频道 */
-    private static String monitorChannelName;
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-        // 根据连接参数创建默认实例
-        JedisPoolLazy.createDefaultInstance( redisParam);
-        // 创建服务实例
-        facelogClient = ClientFactory.builder().setHostAndPort(&quot;127.0.0.1&quot;, DEFAULT_PORT).build();
-        // 申请令牌
-        rootToken = facelogClient.applyRootToken(&quot;guyadong&quot;, false);
-        // 从facelog service 获取心跳监控频道名
-        monitorChannelName = facelogClient.getRedisParameters(rootToken).get(MQParam.HB_MONITOR_CHANNEL);
-        logger.info(&quot;monitorChannelName = {}&quot;,monitorChannelName);
-    }
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
-        facelogClient.releaseRootToken(rootToken);
-    }
+public static interface ICmdImmediateAdapter {
     /**
-     * 发送心跳包测试
+     * 执行设备命令
+     * @param input 以值对(key-value)形式提供的输入参数
+     * @return 命令返回值，没有返回值则返回{@code null}
+     * @throws CmdExecutionException 命令执行失败
      */
-    @Test
-    public void test1SendHB() {
-        byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
-        Heartbeat hb = Heartbeat.makeHeartbeat(address, 12345, JedisPoolLazy.getDefaultInstance())
-                /** 将设备心跳包数据发送到指定的设备心跳监控通道名,否则监控端无法收到设备心跳包 */
-                .setMonitorChannel(monitorChannelName);
-        /** 以默认间隔启动定时任务 */
-        hb.start();
-        System.out.println(&quot;Heartbeat thead start&quot;);
-        /** 间隔2秒发送心跳，重新启动定时任务 */
-        hb.setInterval(2, TimeUnit.SECONDS).start();
-    }
-    /**
-     * 心跳包监控测试
-     * @throws InterruptedException 
-     */
-    @Test
-    public void test2HBMonitor() throws InterruptedException{
-        Channel&lt;HeadbeatPackage&gt; hbMonitorChannel = new Channel&lt;HeadbeatPackage&gt;(monitorChannelName,
-                new IMessageAdapter&lt;HeadbeatPackage&gt;(){
-            @Override
-            public void onSubscribe(HeadbeatPackage t) throws SmqUnsubscribeException {
-                // 显示收到的心跳包
-                logger.info(t.toString());
-            }}){};
-        // 注册，订阅设备心跳监控频道消息
-        RedisFactory.getSubscriber().register(hbMonitorChannel);
-
-        /** 20秒后结束测试 */
-        Thread.sleep(20*1000);
-    }
+    Object apply(Map&lt;String, Object&gt; input) throws CmdExecutionException;
 }
 </code></pre>
 
-<blockquote>
-<p>完整测试代码参见 <a href="../facelog-client/src/test/java/net/gdface/facelog/client/HeartbeatTest.java"><code>net.gdface.facelog.client.HeartbeatTest</code></a></p>
-</blockquote>
-<h3>设备命令</h3>
-<p>设备命令的发送与接收示意图如下：</p>
-<p><img src="images/devicecmd.png" alt="设备命令" /></p>
-<p>管理端是设备命令的发送端，设备端是设备命令的接收和处理端，设备端执行命令后，将命令执行结果以命令响应的形式返回给管理端。</p>
-<p>以上只是示意图，设备命令的发送与接收都是通过redis的订阅发布功能实现，管理端和设备之间并没有直接的网络通讯。</p>
-<h4>设备命令定义</h4>
-<p>facelog 基于<a href="https://gitee.com/l0km/dtalk">dtalk</a>框架实现设备命令定义，facelog 只是一个开发框架，并不实现具体的设备命令，根据应用场景的提供一组预定义的设备命令，同时也允许应用项目根据需求自定义设备命令。</p>
-<p>参见 <a href="../facelog-client-base/src/main/java/net/gdface/facelog/client/dtalk/FacelogMenu.java"><code>net.gdface.facelog.client.dtalk.FacelogMenu</code></a></p>
-<p>每个设备命令都有命令参数和返回类型，对于预定义的设备命令，参数类型是已知的，对于自定义命令，参数类型则由应用项目自己解释。</p>
-<h4>发送设备命令</h4>
-<ul>
-<li>
-<dl>
-<dt>命令目标(target)</dt>
-<dd>管理端发送的一条设备命令时，必须指定目标执行设备(target)，target可以是一个设备或多个设备，或者是一个或多个设备组。</dd>
-</dl>
-</li>
-<li>
-<dl>
-<dt>设备命令序列号</dt>
-<dd>每一条设备命令都有一个设备命令序列号用于唯一标识一条设备命令，该序列号由facelog 服务管理，参见 <code>applyCmdSn</code>接口方法。发送设备命令的client端在发送一条设备命令前必须调用<code>applyCmdSn</code>接口方法申请一个设备命令序列号，设备端在收到设备命令时会向facelog 服务验证设备命令是否有效，如果无效则不执行设备命令，参见<code>isValidCmdSn</code>接口方法。</dd>
-</dl>
-</li>
-<li>
-<dl>
-<dt>命令响应通道</dt>
-<dd>如果设备命令发送方需要获取设备命令的执行结果，就必须指定命令响应通道，命令响应通道名不能是任意字符串，它由facelog 服务管理，用于保证通道名的唯一性，参见<code>applyAckChannel</code>接口方法，设备端在收到设备命令后，会向facelog 服务验证设备命令是否有效，如果无效则不发送设备命令响应，参见<code>isValidAckChannel</code>接口方法。</dd>
-</dl>
-</li>
-<li>
-<dl>
-<dt>有效期</dt>
-<dd>cleint通过facelog 服务的<code>applyCmdSn</code>和<code>applyAckChannel</code>接口方法申请的设备命令序列号和设备命令响应通道都有有效期,如果超过有效期，设备端调用<code>isValidCmdSn</code>和<code>isValidAckChannel</code>接口方法验证就会返回false,显示无效。设备在执行设备命令时会验证设备命令序列号和命令响应通道的有效性，对于无效命令序列号的设备命令，设备端不会执行，对于无效的命令响应通道，设备端不会发送命令响应。设备命令序列号和命令响应通道的默认有效期是60秒，该参数可以通过修改系统配置参数修改。<code>applyAckChannel(Token,long)</code>接口方法允许指定命令响应通道的有效期。</dd>
-</dl>
-</li>
-<li>
-<dl>
-<dt>命令参数</dt>
-<dd>每一种设备命令都可以定义命令参数，命令参数以<code>Key-&gt;Value</code>键值对形式定义。</dd>
-</dl>
-</li>
-</ul>
-<blockquote>
-<p>参见设备命令参数定义：<a href="../facelog-client/src/main/java/net/gdface/facelog/client/DeviceInstruction.java"><code>net.gdface.facelog.client.DeviceInstruction</code></a></p>
-<p>参见设备命令参数构建工具类： <code>net.gdface.facelog.client.CmdManager.CmdBuilder</code></p>
-<p>关于设备命令序列号和命令响应通道的有效期参数，参见 <code>CommonConstant.TOKEN_CMD_SERIALNO_EXPIRE</code>和<code>CommonConstant.TOKEN_CMD_ACKCHANNEL_EXPIRE</code>定义</p>
-</blockquote>
-<h4>发送设备命令示例</h4>
-<p>下面的示例代码示例向指定的一组设备发送复位(<code>reset</code>)命令，并以以同步方式和异步方式接收命令响应。</p>
-<pre><code>public class CmdManagerTest implements CommonConstant{
-
-    @Test
-    public void testSendResetSync() throws ServiceSecurityException {
-        // 创建 facelog 服务实例
-        IFaceLogClient serviceClient = ClientFactory.builder().setHostAndPort(&quot;127.0.0.1&quot;, DEFAULT_PORT).build();
-        // 使用root密码申请 root 令牌
-        Token token = serviceClient.applyRootToken(&quot;12343&quot;, false);
-        // 创建命令发送管理实例 
-        CmdManager cmdManager = serviceClient.makeCmdManager(token);
-
-        try {
-            List&lt;Ack&lt;Void&gt;&gt; ackList = cmdManager.targetBuilder()
-                .setAckChannel(serviceClient.getAckChannelSupplier(token)) // 设置命令响应通道
-                .setDeviceTarget(125,207,122) // 指定设备命令执行接收目标为一组设备(id)
-                .build()
-                .runCmdSync(pathOfCmd(CMD_RESET),null,false); // 同步执行设备复位命令             
-            // 输出命令执行结果
-            for(Ack&lt;Void&gt; ack:ackList){
-                logger.info(&quot;ack :{}&quot;,ack);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-    @Test
-    public void testSendResetAsync() throws ServiceSecurityException {
-        IFaceLogClient serviceClient = ClientFactory.builder().setHostAndPort(&quot;127.0.0.1&quot;, DEFAULT_PORT).build();
-        // 申请 root 令牌
-        Token token = serviceClient.applyRootToken(&quot;12343&quot;, false);
-        // 创建命令发送管理实例 
-        CmdManager cmdManager = serviceClient.makeCmdManager(token);
-
-        cmdManager.targetBuilder()
-            .setAckChannel(serviceClient.getAckChannelSupplier(token)) // 设置命令响应通道
-            .setDeviceTarget(125,207,122) // 指定设备命令执行接收目标为一组设备(id)
-            .build()
-            .runCmd(pathOfCmd(CMD_RESET),null, new IAckAdapter.BaseAdapter&lt;Object&gt;(){
-            @Override
-            protected void doOnSubscribe(Ack&lt;Object&gt; t) {
-                logger.info(&quot;ADMIN client : 设备命令响应 {}&quot;,t);
-            }
-        }); // 异步执行设备复位命令
-    }  
-}
-</code></pre>
-
-<p><code>CmdManager</code>是线程安全类，可以作为全局常量保持单实例</p>
-<h4>执行设备命令</h4>
-<p>设备命令接收与任务分发执行由<a href="../facelog-client/src/main/java/net/gdface/facelog/client/CmdDispatcher.java"><code>net.gdface.facelog.client.CmdDispatcher</code></a>实现。</p>
-<hr />
-<p>设备命令分发流程</p>
-<p><img src="images/cmddispatcher.png" alt="设备命令分发流程" /></p>
-<hr />
-<p>设备命令执行由应用项目继承 <a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommandAdapter.java"><code>net.gdface.facelog.client.CommandAdapter</code></a>实现。</p>
-<p>为便于分模块实现设备命令，建议使用命令窗口类<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/CommandAdapterContainer.java"><code>net.gdface.facelog.client.CommandAdapterContainer</code></a>来管理设备命令执行模块。</p>
-<h4>执行设备命令示例</h4>
-<p>设备端执行 <code>reset</code> 设备命令示例：</p>
-<pre><code>@Test
-public void testCommandAdapter(){
-    IFaceLogClient serviceClient = ClientFactory.builder().setHostAndPort(&quot;127.0.0.1&quot;, DEFAULT_PORT).build();
-    DeviceBean deviceBean = 。。。// 当前设备信息
-    try {
-        // 申请设备令牌
-        Token token = serviceClient.online(deviceBean);
-        // 创建设备命令分发器，并将实现 reset命令的RestAdapter实例加入分发器
-        serviceClient.makeCmdDispatcher(token)
-            .registerAdapter(Cmd.reset, new RestAdapter()); 
-    } catch (ServiceSecurityException e) {
-        e.printStackTrace();
-    }
-}
-/** reset 命令实现 */
-public class RestAdapter extends CommandAdapter{
-    @Override
-    public void reset(Long schedule) throws DeviceCmdException {
-        logger.info(&quot;device reset...&quot;);
-    }
-}
-</code></pre>
-
-<h4>命令响应</h4>
-<p>关于设备命令响应参见<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/Cmd.java"><code>net.gdface.facelog.client.Cmd.run(CommandAdapter,Map)</code></a>方法实现。该方法已经根据设备命令的执行结果自动完成了命令响应对象<a href="../facelog-client/src/main/java/net/gdface/facelog/client/Ack.java"><code>net.gdface.facelog.client.Ack</code></a>的创建，并由<code>net.gdface.facelog.client.CmdDispatcher.onSubscribe(DeviceInstruction)</code>方法发布到命令响应频道，不需要应用程序做特别的处理。</p>
-<h4>设备命令应用完整示例</h4>
-<p>下面的示例在一个JUnit测试代码中实现了模拟设备命令发送和接收。</p>
+<p>应用程序实现了设备命令执行接口后，通过<code>gu.dtalk.CmdItem.setCmdAdapter</code>方法绑定到指定的设备命令。当设备端收到这个设备命令时就会执行对应的<code>ICmdImmediateAdapter</code>实例.</p>
+<p>该接口实例在<code>CmdItem</code>实例中被<code>gu.dtalk.CmdItem.runCmd</code>方法调用 </p>
 <pre><code>/**
- * 设备命令发送接收测试
+ * 执行立即命令
+ * @return
+ * @throws CmdExecutionException 设备命令执行异常
+ */
+public final Object runImmediateCmd() throws CmdExecutionException{
+    checkState(cmdAdapter instanceof ICmdImmediateAdapter,&quot;type of cmdAdapter must be %s&quot;,ICmdImmediateAdapter.class.getSimpleName());
+    synchronized (items) {
+        if(cmdAdapter !=null){
+            try {
+                // 将 parameter 转为 Map&lt;String, Object&gt;
+                Map&lt;String, Object&gt; objParams = Maps.transformValues(items, TO_VALUE);
+                return ((ICmdImmediateAdapter)cmdAdapter).apply(checkRequired(objParams));                  
+            } finally {
+                reset();
+            }
+        }
+        return null;
+    }
+}
+</code></pre>
+
+<h4>交互设备命令</h4>
+<p>dtalk的交互设备命令由交互设备命令执行接口(<a href="../dtalk-base/src/main/java/gu/dtalk/ICmdInteractiveAdapter.java">gu.dtalk.ICmdInteractiveAdapter</a>)定义.</p>
+<pre><code>/**
+ * 交互设备命令接口
  * @author guyadong
  *
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class DeviceCmdTest implements ChannelConstant{
-    private static IFaceLogClient facelogClient;
-    private static Token rootToken;
-    /** redis 连接参数 */
-    private static Map&lt;PropName, Object&gt; redisParam = 
-            ImmutableMap.&lt;PropName, Object&gt;of(
-                    /** redis 主机名 */PropName.host,Protocol.DEFAULT_HOST,
-                    /** redis 端口号 */PropName.port,Protocol.DEFAULT_PORT,
-                    /** redis 连接密码 */PropName.password, &quot;hello&quot;
-                    );
-    private static DeviceBean device;
-    private static Token deviceToken;
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-        // 根据连接参数创建默认实例 
-        JedisPoolLazy.createDefaultInstance( redisParam);
-        // 创建服务实例
-        facelogClient = ClientFactory.builder().setHostAndPort(&quot;127.0.0.1&quot;, DEFAULT_PORT).build();
-        // 申请root令牌
-        rootToken = facelogClient.applyRootToken(&quot;${root_password}&quot;, false);
-        byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
-        device = DeviceBean.builder().mac(NetworkUtil.formatMac(address, null)).serialNo(&quot;12322333&quot;).build();
-        logger.info(device.toString(true,false));
-        // 注册设备 
-        device = facelogClient.registerDevice(device);
-        logger.info(&quot;registered device {}&quot;,device.toString(true, false));
-        // 申请设备令牌
-        deviceToken = facelogClient.online(device);
-        logger.info(&quot;device token = {}&quot;,deviceToken);
-    }
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
-        facelogClient.unregisterDevice(device.getId(), deviceToken);
-        facelogClient.releaseRootToken(rootToken);
-    }
+public interface ICmdInteractiveAdapter extends ICmdUnionAdapter {
     /**
-     * reset 命令执行器
-     * @author guyadong
-     *
+     * 执行设备命令
+     * @param input 以值对(key-value)形式提供的输入参数
+     * @param listener 状态侦听器，用于向管理端发送命令状态
+     * @return 命令返回值，没有返回值则返回{@code null}
+     * @throws InteractiveCmdStartException 当设备命令被拒绝或不支持或其他出错时抛出此异常,通过{@link InteractiveCmdStartException#getStatus() }获取状态类型
      */
-    public class RestAdapter extends CommandAdapter{
-        @Override
-        public void reset(Long schedule)  {
-            logger.info(&quot;DEVICE client : do device reset...(执行设备RESET)&quot;);
-        }       
-    }
+    void apply(Map&lt;String, Object&gt; input,ICmdInteractiveStatusListener listener) throws InteractiveCmdStartException;
     /**
-     * isEnable 命令执行器
-     * @author guyadong
-     *
+     * 取消当前执行的设备命令
+     * @throws UnsupportedOperationException 设备命令不支持取消
      */
-    public class IsEnableAdapter extends CommandAdapter{
-
-        @Override
-        public Boolean isEnable() {
-            logger.info(&quot;DEVICE client : return enable status...(返回设备enable状态)&quot;);
-            return false;
-        }       
-    }
-    /**
-     * 模拟设备端响应设备命令
-     * @throws InterruptedException 
-     */
-    @Test
-    public void test1CommandAdapter(){      
-        try {
-            facelogClient.makeCmdDispatcher(deviceToken)
-                /** 注册命令执行器 */
-                .registerAdapter(Cmd.reset, new RestAdapter())
-                .registerAdapter(Cmd.isEnable, new IsEnableAdapter())
-                /** 程序退出时自动注销设备命令频道 */
-                .autoUnregisterChannel();   
-        } catch(ServiceRuntimeException e){
-            e.printServiceStackTrace();
-            assertTrue(e.getMessage(),false);
-        }
-    }
-    /**
-     * 模拟设备端发送设备复位(异步执行)和isEnable命令(同步执行)
-     * @throws InterruptedException 
-     */
-    @Test
-    public void test2SendCmd() throws InterruptedException{
-        // 创建命令发送管理实例 
-        CmdManager cmdManager = facelogClient.makeCmdManager(rootToken)
-                .setExecutor(DefaultExecutorProvider.getGlobalExceutor())
-                .setTimerExecutor(DefaultExecutorProvider.getTimerExecutor());
-
-        cmdManager.targetBuilder()
-            // 设置命令序列号
-            .setCmdSn(facelogClient.getCmdSnSupplier(rootToken))
-            // 设置命令响应通道
-            .setAckChannel(facelogClient.getAckChannelSupplier(rootToken))
-            // 指定设备命令执行接收目标为一组设备(id)
-            .setDeviceTarget(device.getId()).autoRemove(false);
-        logger.info(&quot;异步接收命令响应:&quot;);
-        cmdManager.reset(null, new IAckAdapter.BaseAdapter&lt;Void&gt;(){
-                @Override
-                protected void doOnSubscribe(Ack&lt;Void&gt; t) {
-                    logger.info(&quot;ADMIN client : 设备命令响应 {}&quot;,t);
-                }
-            }); // 异步执行设备复位命令
-         /** 5 秒后结束测试 */
-         Thread.sleep(5*1000);
-         logger.info(&quot;reset异步命令响应结束&quot;);
-
-         // 复用CmdBuilder对象同步执行 isEnable 命令
-         cmdManager.targetBuilder().resetApply();
-         List&lt;Ack&lt;Boolean&gt;&gt; receivedAcks = cmdManager.isEnableSync(false);
-         logger.info(&quot;同步接收命令响应:&quot;);
-         for(Ack&lt;Boolean&gt; ack:receivedAcks){
-             logger.info(&quot;ADMIN client : 设备命令响应 {}&quot;,ack);
-         }
-         logger.info(&quot;isEnable同步命令响应结束&quot;);
-    }
-    /**
-     * 模拟设备端发送设备复位(同步执行)
-     * @throws InterruptedException
-     */
-    @Test
-    public void test3SendCmdSync() throws InterruptedException{
-        // 创建命令发送管理实例 
-        CmdManager cmdManager = facelogClient.makeCmdManager(rootToken)
-                .setExecutor(DefaultExecutorProvider.getGlobalExceutor())
-                .setTimerExecutor(DefaultExecutorProvider.getTimerExecutor());
-        cmdManager.targetBuilder()
-            // 设置命令序列号
-            .setCmdSn(facelogClient.getCmdSnSupplier(rootToken))
-            // 设置命令响应通道
-            .setAckChannel(facelogClient.getAckChannelSupplier(rootToken))
-            // 指定设备命令执行接收目标为一组设备(id)
-            .setDeviceTarget(device.getId()) ;
-        List&lt;Ack&lt;Void&gt;&gt; receivedAcks = cmdManager.resetSync(null, false);
-        logger.info(&quot;同步接收命令响应:&quot;);
-        for(Ack&lt;Void&gt; ack:receivedAcks){
-            logger.info(&quot;ADMIN client : 设备命令响应 {}&quot;,ack);
-        }
-        logger.info(&quot;reset同步命令响应结束&quot;);
-        logger.info(&quot;测试结束&quot;);
-    }
+    void cancel() throws UnsupportedOperationException;
 }
 </code></pre>
 
-<p>测试代码位置:<a href="../facelog-client/src/test/java/net/gdface/facelog/client/DeviceCmdTest.java"><code>net.gdface.facelog.client.DeviceCmdTest</code></a></p>
-<h3>服务端异常</h3>
-<p>调用 facelog 服务时有可能抛出以下异常:</p>
-<ul>
-<li>
-<dl>
-<dt>ServiceRuntimeException</dt>
-<dd>
-<p>调用facelog 服务时服务端抛出的运行时异常，参见 <a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/ServiceRuntimeException.java"><code>net.gdface.facelog.client.ServiceRuntimeException</code></a>,当client端抛出ServiceRuntimeException异常时，可以调用<code>getServiceStackTraceMessage</code>获取服务端详细的异常堆栈信息。<code>getType()</code>方法返回<code>int</code>型异常类型代码，该值与枚举类型<code>CommonConstant.ExceptionType</code>中的定义的枚举对象顺序对应。所有的数据库异常和REDIS服务器异常都被封装在该异常中，<code>getType()</code>方法返回导致运行时异常的原因。</p>
-</dd>
-</dl>
-</li>
-<li>
-<dl>
-<dt>ServiceSecurityException</dt>
-<dd>
-<p>安全异常，当进行令牌申请，密码验证等涉及安全的接口方法调用时抛出，通过调用<code>getType()</code>方法可以得到<code>SecurityExceptionType</code>枚举类型的异常类型。调用 <code>getServiceStackTraceMessage()</code>可以获取服务端详细的异常堆栈信息。</p>
-</dd>
-</dl>
-</li>
-</ul>
-<h3>全局线程池</h3>
-<p><code>facelog-client</code>和<code>facelog-service</code>jar包都提供了全局线程池类，用于提供全局的线程池常量对象。
-参见<a href="../facelog-client/src/sql2java/java/net/gdface/facelog/client/DefaultExecutorProvider.java"><code>net.gdface.facelog.client.DefaultExecutorProvider</code></a>，<code>DefaultExecutorProvider</code>的<code>getGlobalExceutor()</code>返回一个线程池对象，<code>getTimerExecutor()</code>方法返回执行定时任务的<code>ScheduledExecutorService</code>线程池对象。<code>DefaultExecutorProvider</code>提供的线程池对象都不需要调用者来关闭<code>shutdown</code>，会在应用程序结束时自动关闭。</p>
-<p>应用程序也可以重载<code>createExitingCachedPool</code>和<code>createExitingScheduledPool</code>方法用不同的参数创建自己的全局线程池对象，参见<a href="../facelog-service/src/main/java/net/gdface/facelog/service/ExecutorProvider.java"><code>net.gdface.facelog.service.ExecutorProvider</code></a>实现.</p>
-<h3>版本信息</h3>
-<p>facelog client和service端jar包中都有名为Version的类，用于保存当前版本信息,分别是:
-<code>net.gdface.facelog.service.Version</code>和<code>net.gdface.facelog.client.Version</code>,
-facelog 服务端也提供<code>version,versionInfo</code>接口方法用于获取服务端的版本号，应用项目可以根据此接口方法判断当前client端版本是否与service端版本一致。</p>
-<h2>服务端系统设置</h2>
-<p>faclog 系统配置参数设计如下：</p>
-<table>
-<thead>
-<tr>
-	<th align="left">类型</th>
-	<th align="left">加载顺序</th>
-	<th align="left">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-	<td align="left"><code>${java.home}/.facelog/config.properties</code></td>
-	<td align="left">1</td>
-	<td align="left">用户参数</td>
-</tr>
-<tr>
-	<td align="left"><code>face-service-${version}.jar/defaultConfig.xml</code></td>
-	<td align="left">0</td>
-	<td align="left">默认配置参数</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>参见 <a href="../facelog-service/src/main/java/root.xml">root.xml</a></p>
-</blockquote>
-<p>facelog 服务启动时先加载<a href="../facelog-local/src/main/resources/defaultConfig.xml"><code>defaultConfig.xml</code></a>再加载<code>config.properties</code>，用户参数优先级高于默认参数，所以加载<code>config.properties</code>会覆盖<code>defaultConfig.xml</code>同名参数。</p>
-<p>在<code>config.properties</code>中定义参数值可以修改系统参数。</p>
-<h3>修改系统参数</h3>
-<p>facelog 可修改的系统参数名都定义在<a href="../facelog-base/src/main/java/net/gdface/facelog/CommonConstant.java"><code>net.gdface.facelog.client.CommonConstant</code></a>中。</p>
-<p>查找<code>// COMMONS PROPERTY KEY DEFINITION</code>这一行注释,该行以下都是系统参数名定义。</p>
-<blockquote>
-<p>比如 <code>ROOT_PASSWORD = &quot;root.password&quot;</code>为root用户密码的参数名。</p>
-</blockquote>
-<p><a href="../facelog-local/src/main/resources/defaultConfig.xml"><code>defaultConfig.xml</code></a>中定义的root用户默认密码为<code>root</code>，如果要修改root密码，需要在<code>config.properties</code>中定义新的密码</p>
-<pre><code>root.password = new_root_password
+<p>交互设备命令启动时，调用者会提供一个<code>ICmdInteractiveStatusListener</code>接口实例，用于设备命令执行时向调用层报告状态</p>
+<pre><code>/**
+ * 命令状态侦听器，用于交互命令向管理端发送命令执行状态
+ * @author guyadong
+ */
+public interface ICmdInteractiveStatusListener{
+    /**
+     * 返回设备命令完成进度&lt;br&gt;
+     * 设备命令在执行过程中应该定时调用此方法，以作为心跳发送给管理端，直到任务结束
+     * @param progress 完成进度(0-100),可为{@code null}
+     * @param statusMessage 附加状态消息,可为{@code null}
+     */
+    void onProgress(Integer progress,String statusMessage);
+    /**
+     * 任务结束,设备命令成功执行完成
+     * @param value 命令执行返回值,没有返回值则为{@code null}
+     */
+    void onFinished(Object value);
+    /**
+     * 任务结束,执行中的设备命令被取消
+     */
+    void onCaneled();
+    /**
+     * 任务结束,调用抛出异常
+     * @param errorMessage 错误信息，可为{@code null}
+     * @param throwable 异常对象，可为{@code null}
+     */
+    void onError(String errorMessage, Throwable throwable);
+    /**
+     * 此方法用于设备命令发送方控制设备端定时报告进度的间隔(秒)，
+     * 设备端调用此方法获取数值后，用于控制调用{@link #onProgress(Integer, String)}方法的调用间隔
+     * @return 返回要求的{@link #onProgress(Integer, String)}方法调用间隔(秒)，&lt;=0时，使用设备自定义的默认值
+     */
+    int getProgressInternal();
+}
 </code></pre>
 
-<h3>mysql数据库连接参数</h3>
-<p>mysql数据库连接参数的参数名并没有在<code>CommonConstant.java</code>中有完整定义。<a href="../facelog-local/src/main/resources/defaultConfig.xml"><code>defaultConfig.xml</code></a>中<code>database</code>下的节点都是数据连接的相关参数，数据库连接的主要参数如下：</p>
-<table>
-<thead>
-<tr>
-	<th align="left">参数名</th>
-	<th align="left">默认值</th>
-	<th align="left">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-	<td align="left">database.jdbc.host</td>
-	<td align="left">localhost</td>
-	<td align="left">数据库主机名</td>
-</tr>
-<tr>
-	<td align="left">database.jdbc.port</td>
-	<td align="left">3306</td>
-	<td align="left">数据库连接端口号</td>
-</tr>
-<tr>
-	<td align="left">database.jdbc.schema</td>
-	<td align="left">test</td>
-	<td align="left">数据库schema</td>
-</tr>
-<tr>
-	<td align="left">database.jdbc.username</td>
-	<td align="left">root</td>
-	<td align="left">数据库访问用户名</td>
-</tr>
-<tr>
-	<td align="left">database.jdbc.password</td>
-	<td align="left">空</td>
-	<td align="left">数据库访问密码</td>
-</tr>
-</tbody>
-</table>
-<h3>redis 连接参数</h3>
-<table>
-<thead>
-<tr>
-	<th align="left">参数名</th>
-	<th align="left">默认值</th>
-	<th align="left">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-	<td align="left">redis.host</td>
-	<td align="left">localhost</td>
-	<td align="left">redis服务器主机名</td>
-</tr>
-<tr>
-	<td align="left">redis.port</td>
-	<td align="left">6379</td>
-	<td align="left">redis服务器端口号</td>
-</tr>
-<tr>
-	<td align="left">redis.database</td>
-	<td align="left">0</td>
-	<td align="left">redis数据库索引</td>
-</tr>
-<tr>
-	<td align="left">redis.password</td>
-	<td align="left">空</td>
-	<td align="left">redis数据库访问密码</td>
-</tr>
-<tr>
-	<td align="left">redis.timeout</td>
-	<td align="left">2000</td>
-	<td align="left">redis 超时参数(秒)</td>
-</tr>
-<tr>
-	<td align="left">redis.uri</td>
-	<td align="left"></td>
-	<td align="left">redis 访问地址,如 'jedis://localhost:6397/0',设置此值时忽略所有其他redis参数(host,port,password,database)</td>
-</tr>
-<tr>
-	<td align="left">redis.home</td>
-	<td align="left"></td>
-	<td align="left">redis本机安装位置，当指定此值时,facelog启动会自动启动redis</td>
-	<td></td>
-</tr>
-</tbody>
-</table>
-<p>完整的redis参数名定义参见<a href="../facelog-base/src/main/java/net/gdface/facelog/CommonConstant.java"><code>net.gdface.facelog.client.CommonConstant</code></a>中 <code>REDIS_</code>为前缀的所有参数名定义。</p>
-<h3>webredis 启动参数</h3>
-<p><a href="https://gitee.com/l0km/webredis">webredis</a>是一个简单的基于websocket+redis+<a href="https://nodejs.org">node.js</a>实现web端消息推送的服务,用于向浏览器推送redis订阅消息，基于浏览器的设备管理端需要用此服务实现对设备的管理。</p>
-<table>
-<thead>
-<tr>
-	<th align="left">参数名</th>
-	<th align="left">默认值</th>
-	<th align="left">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-	<td align="left">nodejs.exe</td>
-	<td align="left"></td>
-	<td align="left"><a href="https://nodejs.org">node.js</a>可执行程序路径,用于执行webredis脚本</td>
-</tr>
-<tr>
-	<td align="left">webredis.file</td>
-	<td align="left"></td>
-	<td align="left">webredis 启动脚本路径</td>
-</tr>
-<tr>
-	<td align="left">webredis.host</td>
-	<td align="left">localhost</td>
-	<td align="left">webredis主机名,为非本机名('localhost','127.0.0.1')时,不执行本地webredis启动</td>
-</tr>
-<tr>
-	<td align="left">webredis.port</td>
-	<td align="left">16379</td>
-	<td align="left">webredis服务端口</td>
-</tr>
-<tr>
-	<td align="left">webredis.rhost</td>
-	<td align="left">${redis.host}</td>
-	<td align="left">redis 主机名</td>
-</tr>
-<tr>
-	<td align="left">webredis.rport</td>
-	<td align="left">${redis.port}</td>
-	<td align="left">redis 端口</td>
-</tr>
-<tr>
-	<td align="left">webredis.rauth</td>
-	<td align="left">${redis.password}</td>
-	<td align="left">redis 密码</td>
-</tr>
-<tr>
-	<td align="left">webredis.rdb</td>
-	<td align="left">${redis.database}</td>
-	<td align="left">redis 数据库</td>
-</tr>
-<tr>
-	<td align="left">webredis.ruri</td>
-	<td align="left">redis://:${webredis.rauth}@${webredis.rhost}:${webredis.rport}/${webredis.rdb}</td>
-	<td align="left">redis 连接uri,设置此值时忽略所有其他redis参数('rhost','rport'...)</td>
-</tr>
-</tbody>
-</table>
-<p><strong>NOTE</strong>当指定<code>nodejs.exe</code>和<code>webredis.file</code>时,facelog启动会尝试启动webredis</p>
-<p>完整的webredis参数名定义参见<a href="../facelog-base/src/main/java/net/gdface/facelog/CommonConstant.java"><code>net.gdface.facelog.client.CommonConstant</code></a>中 <code>WEBREDIS_</code>为前缀的所有参数名定义。</p>
-<h3>系统日志参数</h3>
-<p>facelog service采用 <a href="https://logging.apache.org/log4j">log4j</a> 记录日志。</p>
-<p>日志相关参数如下</p>
-<ol>
-<li>syslog.level 系统日志级别，默认INFO,与log4j 中的日志级别定义一致</li>
-<li>syslog.location 系统日志文件位置(与lo4j 中<code>log4j.appender.LOGFILE.File</code>对应)，默认 <code>${usr.dir}/log/facelog.log</code></li>
-</ol>
-<p>更详细的日志参数参见<a href="../facelog-base/src/main/java/net/gdface/facelog/CommonConstant.java"><code>net.gdface.facelog.client.CommonConstant</code></a>中 <code>SYSLOG_</code>为前缀的所有参数名定义。</p>
-<p>应用程序也可以直接按传统的修改<code>log4j.properties</code>方式配置日志记录参数</p>
-<p>关于facelog 对系统日志参数的配置逻辑，参见 <a href="../facelog-service/src/main/java/net/gdface/facelog/service/SyslogConfig.java"><code>net.gdface.facelog.service.SyslogConfig</code></a></p>
-<h3>程序修改参数</h3>
-<p>facelog 服务提供了<code>getServiceConfig</code>,<code>getProperty</code>,<code>setProperty</code>,<code>saveServiceConfig</code>接口方法用于修改和保存系统参数。需要有 ROOT 令牌。</p>
-<h2>facelog service 启动</h2>
-<p>maven 插件启动 (since version 1.0.8)</p>
-<pre><code>mvn com.gitee.l0km:facelogservice-maven-plugin:${facelog_version}:run
-</code></pre>
-
-<p>命令行启动服务</p>
-<pre><code>java -jar facelog-service-${facelog_version}-standalone.jar
-</code></pre>
-
-<p>命令行启动远程调试</p>
-<pre><code>java -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n -jar facelog-service-${facelog_version}-standalone.jar
-</code></pre>
-
-<p><strong>注意：</strong></p>
-<p>facelog服务启动前请确保mysql,redis已经启动</p>
-<h2>docker 部署</h2>
-<p>从 1.0.8版本以后facelog支持docker部署，提供了docker镜像生成脚本，方便应用项目快速部署facelog 服务。</p>
-<p>执行下面的maven命令下载指定版本<code>${facelog_version}</code>的docker部署zip包到<code>/you/path</code></p>
-<pre><code>mvn dependency:get \ 
-    -Dartifact=com.gitee.l0km:facelog-service:${facelog_version}:zip:docker-maven-distribution 
-    -Ddest=/you/path
-</code></pre>
-
-<p>解压Zip包后，参见其中的docker 部署说明文档： <a href="../README-docker.md">REDME-docker.md</a> </p>
+<h2>任务队列</h2>
+<p>(待续)</p>
 
 </body>
 </html>
