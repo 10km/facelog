@@ -3783,12 +3783,12 @@ public class IFaceLogSpringController {
         return response;
     }
     /**
-     * 返回服务版本号 {@link Version#VERSION}
+     * 返回服务版本号
      * @return 
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/version", method = RequestMethod.POST)
-    @ApiOperation(value = "返回服务版本号 {@link Version#VERSION}",httpMethod="POST")
+    @ApiOperation(value = "返回服务版本号",httpMethod="POST")
     public Response version() 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -3804,10 +3804,10 @@ public class IFaceLogSpringController {
     /**
      * 返回服务版本的详细信息<br>
      * <ul>
-     * <li>{@code VERSION} -- {@link Version#VERSION}</li>
-     * <li>{@code SCM_REVISION} -- {@link Version#SCM_REVISION}</li>
-     * <li>{@code SCM_BRANCH} -- {@link Version#SCM_BRANCH}</li>
-     * <li>{@code TIMESTAMP} -- {@link Version#TIMESTAMP}</li>
+     * <li>{@code VERSION} -- 服务版本号</li>
+     * <li>{@code SCM_REVISION} -- GIT修订版本号</li>
+     * <li>{@code SCM_BRANCH} -- GIT分支</li>
+     * <li>{@code TIMESTAMP} -- 时间戳</li>
      * </ul>
      * @return 
      */
@@ -3815,10 +3815,10 @@ public class IFaceLogSpringController {
     @RequestMapping(value = "/IFaceLog/versionInfo", method = RequestMethod.POST)
     @ApiOperation(value = "返回服务版本的详细信息<br>\n"
 +" <ul>\n"
-+" <li>{@code VERSION} -- {@link Version#VERSION}</li>\n"
-+" <li>{@code SCM_REVISION} -- {@link Version#SCM_REVISION}</li>\n"
-+" <li>{@code SCM_BRANCH} -- {@link Version#SCM_BRANCH}</li>\n"
-+" <li>{@code TIMESTAMP} -- {@link Version#TIMESTAMP}</li>\n"
++" <li>{@code VERSION} -- 服务版本号</li>\n"
++" <li>{@code SCM_REVISION} -- GIT修订版本号</li>\n"
++" <li>{@code SCM_BRANCH} -- GIT分支</li>\n"
++" <li>{@code TIMESTAMP} -- 时间戳</li>\n"
 +" </ul>",httpMethod="POST")
     public Response versionInfo() 
         {
