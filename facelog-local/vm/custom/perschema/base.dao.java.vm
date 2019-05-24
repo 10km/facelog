@@ -8,6 +8,8 @@ package $extensionPkg;
 
 import static com.google.common.base.Preconditions.*;
 
+import com.google.common.base.Throwables;
+
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -644,11 +646,18 @@ class BaseDao implements CommonConstant {
      */
     $!{modifier}Collection<$beanClass> ${mprefix}${coreClass}sAsTransaction(final Collection<$beanClass> beans)
                     throws RuntimeDaoException $!{throwsStr}{
-        return daoRunAsTransaction(new Callable<Collection<$beanClass>>(){      
-            @Override
-            public Collection<$beanClass> call() throws Exception {
-                return ${mprefix}${coreClass}s(beans);
-            }});
+        try{
+            return daoRunAsTransaction(new Callable<Collection<$beanClass>>(){      
+                @Override
+                public Collection<$beanClass> call() throws Exception {
+                    return ${mprefix}${coreClass}s(beans);
+                }});
+        }catch(RuntimeException e){
+#if($throwsStr.indexOf("DuplicateRecordException") >= 0)
+            throwCauseIfInstanceOf(e,DuplicateRecordException.class);
+#end
+            throw e;
+        }
     }
 #end###if($table.type == "TABLE")
 ###################### LOAD ##################
@@ -826,6 +835,11 @@ $defineLoadByTimestamp
         getPersonManager().runAsTransaction(checkNotNull(fun));
     }
 
+    protected static final <T extends Exception> void throwCauseIfInstanceOf(Exception error,Class<T> expType) throws T {
+        if(null != error.getCause()){
+            Throwables.throwIfInstanceOf(error.getCause(),expType);
+        }
+    }
     /**
      * 数据库写操作类型
      * @author guyadong

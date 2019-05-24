@@ -9,6 +9,8 @@ package net.gdface.facelog;
 
 import static com.google.common.base.Preconditions.*;
 
+import com.google.common.base.Throwables;
+
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -113,6 +115,11 @@ class BaseDao implements CommonConstant {
         getPersonManager().runAsTransaction(checkNotNull(fun));
     }
 
+    protected static final <T extends Exception> void throwCauseIfInstanceOf(Exception error,Class<T> expType) throws T {
+        if(null != error.getCause()){
+            Throwables.throwIfInstanceOf(error.getCause(),expType);
+        }
+    }
     /**
      * 数据库写操作类型
      * @author guyadong
@@ -461,11 +468,15 @@ class BaseDao implements CommonConstant {
      */
     protected Collection<DeviceBean> daoSaveDevicesAsTransaction(final Collection<DeviceBean> beans)
                     throws RuntimeDaoException {
-        return daoRunAsTransaction(new Callable<Collection<DeviceBean>>(){      
-            @Override
-            public Collection<DeviceBean> call() throws Exception {
-                return daoSaveDevices(beans);
-            }});
+        try{
+            return daoRunAsTransaction(new Callable<Collection<DeviceBean>>(){      
+                @Override
+                public Collection<DeviceBean> call() throws Exception {
+                    return daoSaveDevices(beans);
+                }});
+        }catch(RuntimeException e){
+            throw e;
+        }
     }
     //16
     /**
@@ -1090,11 +1101,15 @@ class BaseDao implements CommonConstant {
      */
     protected Collection<DeviceGroupBean> daoSaveDeviceGroupsAsTransaction(final Collection<DeviceGroupBean> beans)
                     throws RuntimeDaoException {
-        return daoRunAsTransaction(new Callable<Collection<DeviceGroupBean>>(){      
-            @Override
-            public Collection<DeviceGroupBean> call() throws Exception {
-                return daoSaveDeviceGroups(beans);
-            }});
+        try{
+            return daoRunAsTransaction(new Callable<Collection<DeviceGroupBean>>(){      
+                @Override
+                public Collection<DeviceGroupBean> call() throws Exception {
+                    return daoSaveDeviceGroups(beans);
+                }});
+        }catch(RuntimeException e){
+            throw e;
+        }
     }
     //16
     /**
@@ -1622,11 +1637,15 @@ class BaseDao implements CommonConstant {
      */
     protected Collection<PersonBean> daoSavePersonsAsTransaction(final Collection<PersonBean> beans)
                     throws RuntimeDaoException {
-        return daoRunAsTransaction(new Callable<Collection<PersonBean>>(){      
-            @Override
-            public Collection<PersonBean> call() throws Exception {
-                return daoSavePersons(beans);
-            }});
+        try{
+            return daoRunAsTransaction(new Callable<Collection<PersonBean>>(){      
+                @Override
+                public Collection<PersonBean> call() throws Exception {
+                    return daoSavePersons(beans);
+                }});
+        }catch(RuntimeException e){
+            throw e;
+        }
     }
     //16
     /**
@@ -2251,11 +2270,15 @@ class BaseDao implements CommonConstant {
      */
     protected Collection<PersonGroupBean> daoSavePersonGroupsAsTransaction(final Collection<PersonGroupBean> beans)
                     throws RuntimeDaoException {
-        return daoRunAsTransaction(new Callable<Collection<PersonGroupBean>>(){      
-            @Override
-            public Collection<PersonGroupBean> call() throws Exception {
-                return daoSavePersonGroups(beans);
-            }});
+        try{
+            return daoRunAsTransaction(new Callable<Collection<PersonGroupBean>>(){      
+                @Override
+                public Collection<PersonGroupBean> call() throws Exception {
+                    return daoSavePersonGroups(beans);
+                }});
+        }catch(RuntimeException e){
+            throw e;
+        }
     }
     //16
     /**
@@ -2769,11 +2792,16 @@ class BaseDao implements CommonConstant {
      */
     protected Collection<FaceBean> daoAddFacesAsTransaction(final Collection<FaceBean> beans)
                     throws RuntimeDaoException ,DuplicateRecordException{
-        return daoRunAsTransaction(new Callable<Collection<FaceBean>>(){      
-            @Override
-            public Collection<FaceBean> call() throws Exception {
-                return daoAddFaces(beans);
-            }});
+        try{
+            return daoRunAsTransaction(new Callable<Collection<FaceBean>>(){      
+                @Override
+                public Collection<FaceBean> call() throws Exception {
+                    return daoAddFaces(beans);
+                }});
+        }catch(RuntimeException e){
+            throwCauseIfInstanceOf(e,DuplicateRecordException.class);
+            throw e;
+        }
     }
     //16
     /**
@@ -3185,11 +3213,16 @@ class BaseDao implements CommonConstant {
      */
     protected Collection<FeatureBean> daoAddFeaturesAsTransaction(final Collection<FeatureBean> beans)
                     throws RuntimeDaoException ,DuplicateRecordException{
-        return daoRunAsTransaction(new Callable<Collection<FeatureBean>>(){      
-            @Override
-            public Collection<FeatureBean> call() throws Exception {
-                return daoAddFeatures(beans);
-            }});
+        try{
+            return daoRunAsTransaction(new Callable<Collection<FeatureBean>>(){      
+                @Override
+                public Collection<FeatureBean> call() throws Exception {
+                    return daoAddFeatures(beans);
+                }});
+        }catch(RuntimeException e){
+            throwCauseIfInstanceOf(e,DuplicateRecordException.class);
+            throw e;
+        }
     }
     //16
     /**
@@ -3644,11 +3677,16 @@ class BaseDao implements CommonConstant {
      */
     protected Collection<ImageBean> daoAddImagesAsTransaction(final Collection<ImageBean> beans)
                     throws RuntimeDaoException ,DuplicateRecordException{
-        return daoRunAsTransaction(new Callable<Collection<ImageBean>>(){      
-            @Override
-            public Collection<ImageBean> call() throws Exception {
-                return daoAddImages(beans);
-            }});
+        try{
+            return daoRunAsTransaction(new Callable<Collection<ImageBean>>(){      
+                @Override
+                public Collection<ImageBean> call() throws Exception {
+                    return daoAddImages(beans);
+                }});
+        }catch(RuntimeException e){
+            throwCauseIfInstanceOf(e,DuplicateRecordException.class);
+            throw e;
+        }
     }
     //16
     /**
@@ -4136,11 +4174,16 @@ class BaseDao implements CommonConstant {
      */
     protected Collection<LogBean> daoAddLogsAsTransaction(final Collection<LogBean> beans)
                     throws RuntimeDaoException ,DuplicateRecordException{
-        return daoRunAsTransaction(new Callable<Collection<LogBean>>(){      
-            @Override
-            public Collection<LogBean> call() throws Exception {
-                return daoAddLogs(beans);
-            }});
+        try{
+            return daoRunAsTransaction(new Callable<Collection<LogBean>>(){      
+                @Override
+                public Collection<LogBean> call() throws Exception {
+                    return daoAddLogs(beans);
+                }});
+        }catch(RuntimeException e){
+            throwCauseIfInstanceOf(e,DuplicateRecordException.class);
+            throw e;
+        }
     }
     //16
     /**
@@ -4588,11 +4631,16 @@ class BaseDao implements CommonConstant {
      */
     protected Collection<PermitBean> daoAddPermitsAsTransaction(final Collection<PermitBean> beans)
                     throws RuntimeDaoException ,DuplicateRecordException{
-        return daoRunAsTransaction(new Callable<Collection<PermitBean>>(){      
-            @Override
-            public Collection<PermitBean> call() throws Exception {
-                return daoAddPermits(beans);
-            }});
+        try{
+            return daoRunAsTransaction(new Callable<Collection<PermitBean>>(){      
+                @Override
+                public Collection<PermitBean> call() throws Exception {
+                    return daoAddPermits(beans);
+                }});
+        }catch(RuntimeException e){
+            throwCauseIfInstanceOf(e,DuplicateRecordException.class);
+            throw e;
+        }
     }
     //16
     /**
@@ -4915,11 +4963,16 @@ class BaseDao implements CommonConstant {
      */
     protected Collection<StoreBean> daoAddStoresAsTransaction(final Collection<StoreBean> beans)
                     throws RuntimeDaoException ,DuplicateRecordException{
-        return daoRunAsTransaction(new Callable<Collection<StoreBean>>(){      
-            @Override
-            public Collection<StoreBean> call() throws Exception {
-                return daoAddStores(beans);
-            }});
+        try{
+            return daoRunAsTransaction(new Callable<Collection<StoreBean>>(){      
+                @Override
+                public Collection<StoreBean> call() throws Exception {
+                    return daoAddStores(beans);
+                }});
+        }catch(RuntimeException e){
+            throwCauseIfInstanceOf(e,DuplicateRecordException.class);
+            throw e;
+        }
     }
     //16
     /**
