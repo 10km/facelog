@@ -387,10 +387,20 @@ public class DaoManagement extends BaseDao {
 		}
 		return count;
 	}
+	/**
+	 * 保存人员记录<br>
+	 * 如果提供了新的身份照片({@code idPhotoBean}不为{@code null}),则删除旧照片用新照片代替
+	 * @param personBean
+	 * @param idPhotoBean 新的身份照片
+	 * @param featureBean
+	 * @return
+	 */
 	protected PersonBean daoSavePerson(PersonBean personBean, ImageBean idPhotoBean,
 			Collection<FeatureBean> featureBean) {
 		// delete old photo if exists
-		daoDeleteImage(daoGetReferencedByImageMd5OnPerson(personBean)); 
+		if(idPhotoBean != null){
+			daoDeleteImage(daoGetReferencedByImageMd5OnPerson(personBean));
+		}
 		return daoSavePerson(personBean, idPhotoBean, null, featureBean, null);
 	}
 
