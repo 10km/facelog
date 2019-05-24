@@ -351,7 +351,7 @@ public interface IFaceLog{
 	 */
 	@DeriveMethod(methodSuffix="Full")
 	public void addLog(final LogBean logBean, final FaceBean faceBean, final byte[] featureImage, Token token) throws DuplicateRecordException;
-
+	
 	/**
 	 * 添加一组验证日志记录(事务存储)
 	 * <br>{@code DEVICE_ONLY}
@@ -360,6 +360,18 @@ public interface IFaceLog{
 	 * @throws DuplicateRecordException 数据库中存在相同记录
 	 */
 	public void addLogs(List<LogBean> beans, Token token) throws DuplicateRecordException;
+	/**
+	 * 添加一组验证日志记录(事务存储)<br>
+	 * 所有输入参数的list长度必须一致(不能有{@code null})元素,每3个相同索引位置元素为一组关联的日志记录，参见{@link #addLog(LogBean, FaceBean, byte[], Token)}
+	 * @param logBeans 日志记录对象
+	 * @param faceBeans 为用于保存到数据库的提取人脸特征的人脸信息对象
+	 * @param featureImages 用于保存到数据库的现场采集人脸特征的照片
+	 * @param token 访问令牌
+	 * @throws DuplicateRecordException 数据库中存在相同记录
+	 */
+	@DeriveMethod(methodSuffix="Full")
+	void addLogs(final List<LogBean> logBeans, final List<FaceBean> faceBeans, final List<byte[]> featureImages, Token token) throws DuplicateRecordException;
+
 	/**
 	 * 日志查询<br>
 	 * 根据{@code where}指定的查询条件查询日志记录

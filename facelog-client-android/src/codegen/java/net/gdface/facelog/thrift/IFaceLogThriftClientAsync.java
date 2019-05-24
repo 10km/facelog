@@ -403,6 +403,49 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(addLog(logBean,faceBean,featureImage,token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#addLogs(java.util.List,java.util.List,java.util.List,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Void> addLogs(List<LogBean> logBeans,
+        List<FaceBean> faceBeans,
+        List<byte[]> featureImages,
+        Token token){
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.addLogsFull(
+                TypeTransformer.getInstance().to(
+                    logBeans,
+                    LogBean.class,
+                    net.gdface.facelog.client.thrift.LogBean.class),
+            TypeTransformer.getInstance().to(
+                    faceBeans,
+                    FaceBean.class,
+                    net.gdface.facelog.client.thrift.FaceBean.class),
+            TypeTransformer.getInstance().to(
+                    featureImages,
+                    byte[].class,
+                    okio.ByteString.class),
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void addLogs(List<LogBean> logBeans,
+        List<FaceBean> faceBeans,
+        List<byte[]> featureImages,
+        Token token,
+        FutureCallback<Void>callback){
+        factory.addCallback(addLogs(logBeans,faceBeans,featureImages,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#addLogs(java.util.List,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Void> addLogs(List<LogBean> beans,

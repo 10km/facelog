@@ -98,6 +98,18 @@ public interface IFaceLog
             @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
+        @ThriftMethod(value = "addLogsFull",
+                      exception = {
+                          @ThriftException(type=DuplicateRecordException.class, id=1),
+                          @ThriftException(type=ServiceRuntimeException.class, id=2)
+                      })
+        ListenableFuture<Void> addLogsFull(
+            @ThriftField(value=1, name="logBeans", requiredness=Requiredness.OPTIONAL) final List<LogBean> logBeans,
+            @ThriftField(value=2, name="faceBeans", requiredness=Requiredness.OPTIONAL) final List<FaceBean> faceBeans,
+            @ThriftField(value=3, name="featureImages", requiredness=Requiredness.OPTIONAL) final List<byte []> featureImages,
+            @ThriftField(value=4, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        );
+
         @ThriftMethod(value = "addPermit",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1362,6 +1374,18 @@ public interface IFaceLog
     void addLogs(
         @ThriftField(value=1, name="beans", requiredness=Requiredness.OPTIONAL) final List<LogBean> beans,
         @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+    ) throws DuplicateRecordException, ServiceRuntimeException;
+
+    @ThriftMethod(value = "addLogsFull",
+                  exception = {
+                      @ThriftException(type=DuplicateRecordException.class, id=1),
+                      @ThriftException(type=ServiceRuntimeException.class, id=2)
+                  })
+    void addLogsFull(
+        @ThriftField(value=1, name="logBeans", requiredness=Requiredness.OPTIONAL) final List<LogBean> logBeans,
+        @ThriftField(value=2, name="faceBeans", requiredness=Requiredness.OPTIONAL) final List<FaceBean> faceBeans,
+        @ThriftField(value=3, name="featureImages", requiredness=Requiredness.OPTIONAL) final List<byte []> featureImages,
+        @ThriftField(value=4, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws DuplicateRecordException, ServiceRuntimeException;
 
     @ThriftMethod(value = "addPermit",

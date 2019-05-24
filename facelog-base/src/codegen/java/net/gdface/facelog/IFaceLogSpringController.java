@@ -314,6 +314,40 @@ public class IFaceLogSpringController {
         return response;
     }
     /**
+     * 添加一组验证日志记录(事务存储)<br>
+     * 所有输入参数的list长度必须一致(不能有{@code null})元素,每3个相同索引位置元素为一组关联的日志记录，参见{@link #addLog(LogBean, FaceBean, byte[], Token)}
+     * @param logBeans 日志记录对象
+     * @param faceBeans 为用于保存到数据库的提取人脸特征的人脸信息对象
+     * @param featureImages 用于保存到数据库的现场采集人脸特征的照片
+     * @param token 访问令牌
+     * @throws DuplicateRecordException 数据库中存在相同记录
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/addLogsFull", method = RequestMethod.POST)
+    @ApiOperation(value = "添加一组验证日志记录(事务存储)<br>\n"
++" 所有输入参数的list长度必须一致(不能有{@code null})元素,每3个相同索引位置元素为一组关联的日志记录，参见{@link #addLog(LogBean, FaceBean, byte[], Token)}",httpMethod="POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "logBeans", value = "日志记录对象", paramType="body", dataType="List"),
+        @ApiImplicitParam(name = "faceBeans", value = "为用于保存到数据库的提取人脸特征的人脸信息对象", paramType="body", dataType="List"),
+        @ApiImplicitParam(name = "featureImages", value = "用于保存到数据库的现场采集人脸特征的照片", paramType="body", dataType="List"),
+        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
+    public Response addLogs(@RequestParam("logBeans") List<LogBean> logBeans,
+        @RequestParam("faceBeans") List<FaceBean> faceBeans,
+        @RequestParam("featureImages") List<byte[]> featureImages,
+        @RequestBody Token token) 
+        {
+        Response response = responseFactory.newIFaceLogResponse();
+        try{
+            delegate().addLogs(logBeans,faceBeans,featureImages,token);
+            response.onComplete();
+        }
+        catch(Exception e){
+            logger.error(e.getMessage(),e);
+            response.onError(e);
+        }
+        return response;
+    }
+    /**
      * 添加一组验证日志记录(事务存储)
      * <br>{@code DEVICE_ONLY}
      * @param beans

@@ -192,10 +192,14 @@ public class FacelogDefaultImpl implements IFaceLog {
 	@Override
 	public void addLog(final LogBean logBean, final FaceBean faceBean, final byte[] featureImage, Token token) throws DuplicateRecordException {
 	}
-	
+
 	@Override
 	public void addLogs(List<LogBean> beans, Token token) throws DuplicateRecordException {
 		
+	}
+
+	@Override
+	public void addLogs(final List<LogBean> logBeans, final List<FaceBean> faceBeans, final List<byte[]> featureImages, Token token) throws DuplicateRecordException {
 	}
 
 	@Override

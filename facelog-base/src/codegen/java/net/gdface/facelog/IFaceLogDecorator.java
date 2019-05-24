@@ -184,6 +184,30 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public void addLogs (List<LogBean> logBeans,List<FaceBean> faceBeans,List<byte[]> featureImages,Token token) throws DuplicateRecordException{
+         delegate().addLogs(logBeans,faceBeans,featureImages,token);
+    }
+
+    /**
+     * {@link IFaceLog#addLogs(List,List,List,Token)}对应的unchecked方法,
+     * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
+     * @param logBeans
+     * @param faceBeans
+     * @param featureImages
+     * @param token
+     * @return void
+     */
+    public void addLogsUnchecked (List<LogBean> logBeans,List<FaceBean> faceBeans,List<byte[]> featureImages,Token token) {
+        try{
+             delegate().addLogs(logBeans,faceBeans,featureImages,token);
+        } catch(RuntimeException e){
+            throw e;
+        } catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public void addLogs (List<LogBean> beans,Token token) throws DuplicateRecordException{
          delegate().addLogs(beans,token);
     }

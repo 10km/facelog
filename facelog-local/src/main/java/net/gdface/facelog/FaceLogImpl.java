@@ -550,6 +550,32 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
 	}
 	@Override
+	public void addLogs(final List<LogBean> logBeans,final List<FaceBean> faceBeans,final List<byte[]> featureImages,Token token) throws DuplicateRecordException {
+		try{
+			Enable.DEVICE_ONLY.check(tm, token);
+			checkArgument(logBeans != null,"logBeans is null");
+			checkArgument(faceBeans != null,"faceBeans is null");
+			checkArgument(featureImages != null,"featureImages is null");
+			checkArgument(logBeans.size() == faceBeans.size() && logBeans.size() == featureImages.size(),
+					"size of logBeans,faceBeans,featureImages must be same");
+			BaseDao.daoRunAsTransaction(new Callable<Integer>() {
+
+				@Override
+				public Integer call() throws Exception {
+					for(int i = 0; i<logBeans.size(); ++i){
+						dm.daoAddLog(
+								checkNotNull(logBeans.get(i),"logBeans has null element [%s]",i), 
+								checkNotNull(faceBeans.get(i),"faceBeans has null element [%s]",i), 
+								FaceUtilits.getByteBufferNotEmpty(checkNotNull(featureImages.get(i),"featureImages has null element [%s]",i)));
+					}
+					return logBeans.size();
+				}
+			});
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	@Override
 	public void addLogs(List<LogBean> beans, Token token)throws DuplicateRecordException {
 		try{
 			Enable.DEVICE_ONLY.check(tm, token);

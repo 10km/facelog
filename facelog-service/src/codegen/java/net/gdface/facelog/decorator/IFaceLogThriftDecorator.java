@@ -292,6 +292,46 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#addLogs(java.util.List,java.util.List,java.util.List,net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "addLogsFull" ,exception = {
+                @ThriftException(type=DuplicateRecordException.class, id=1),
+                @ThriftException(type=ServiceRuntimeException.class, id=2)
+                })
+    public void addLogsFull(List<LogBean> logBeans,
+        List<FaceBean> faceBeans,
+        List<ByteBuffer> featureImages,
+        Token token) 
+        throws DuplicateRecordException,ServiceRuntimeException{
+        try{
+             delegate().addLogs(TypeTransformer.getInstance().to(
+                    logBeans,
+                    LogBean.class,
+                    LogBean.class),
+                TypeTransformer.getInstance().to(
+                    faceBeans,
+                    FaceBean.class,
+                    FaceBean.class),
+                TypeTransformer.getInstance().to(
+                    featureImages,
+                    ByteBuffer.class,
+                    byte[].class),
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
+        }
+        catch(net.gdface.facelog.DuplicateRecordException e){
+            throw new DuplicateRecordException(e);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#addLogs(java.util.List,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "addLogs" ,exception = {

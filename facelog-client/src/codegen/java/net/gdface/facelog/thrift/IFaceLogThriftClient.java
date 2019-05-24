@@ -294,6 +294,44 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public void addLogs(List<LogBean> logBeans,
+        List<FaceBean> faceBeans,
+        List<byte[]> featureImages,
+        Token token) 
+        throws DuplicateRecordException{
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+             instance.addLogsFull(TypeTransformer.getInstance().to(
+                    logBeans,
+                    LogBean.class,
+                    net.gdface.facelog.client.thrift.LogBean.class),
+                TypeTransformer.getInstance().to(
+                    faceBeans,
+                    FaceBean.class,
+                    net.gdface.facelog.client.thrift.FaceBean.class),
+                TypeTransformer.getInstance().to(
+                    featureImages,
+                    byte[].class,
+                    byte[].class),
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        }
+        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
+                    DuplicateRecordException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
     public void addLogs(List<LogBean> beans,
         Token token) 
         throws DuplicateRecordException{

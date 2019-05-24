@@ -326,6 +326,39 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(addLog(logBean,faceBean,featureImage,token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#addLogs(java.util.List,java.util.List,java.util.List,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Void> addLogs(List<LogBean> logBeans,
+        List<FaceBean> faceBeans,
+        List<byte[]> featureImages,
+        Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Void> future = async.addLogsFull(TypeTransformer.getInstance().to(
+                    logBeans,
+                    LogBean.class,
+                    net.gdface.facelog.client.thrift.LogBean.class),
+            TypeTransformer.getInstance().to(
+                    faceBeans,
+                    FaceBean.class,
+                    net.gdface.facelog.client.thrift.FaceBean.class),
+            TypeTransformer.getInstance().to(
+                    featureImages,
+                    byte[].class,
+                    byte[].class),
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        return factory.wrap(async,future);
+    }
+    public void addLogs(List<LogBean> logBeans,
+        List<FaceBean> faceBeans,
+        List<byte[]> featureImages,
+        Token token,
+        FutureCallback<Void>callback){
+        factory.addCallback(addLogs(logBeans,faceBeans,featureImages,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#addLogs(java.util.List,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Void> addLogs(List<LogBean> beans,

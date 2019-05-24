@@ -404,6 +404,50 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public void addLogs(final List<LogBean> logBeans,
+        final List<FaceBean> faceBeans,
+        final List<byte[]> featureImages,
+        final Token token) 
+        throws DuplicateRecordException{
+        try{
+             syncCall(new Function<Void,Void>() {
+                @Override
+                public Void apply(Void input) {
+                    return input;
+                }},
+                new ServiceAsyncCall<Void>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Void> nativeCallback){
+                    service.addLogsFull(TypeTransformer.getInstance().to(
+                    logBeans,
+                    LogBean.class,
+                    net.gdface.facelog.client.thrift.LogBean.class),TypeTransformer.getInstance().to(
+                    faceBeans,
+                    FaceBean.class,
+                    net.gdface.facelog.client.thrift.FaceBean.class),TypeTransformer.getInstance().to(
+                    featureImages,
+                    byte[].class,
+                    okio.ByteString.class),TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
+                    DuplicateRecordException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public void addLogs(final List<LogBean> beans,
         final Token token) 
         throws DuplicateRecordException{
