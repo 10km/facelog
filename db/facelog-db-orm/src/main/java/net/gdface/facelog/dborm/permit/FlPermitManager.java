@@ -1044,7 +1044,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     @Override
     public int countWhere(String where) throws DaoException
     {
-        String sql = new StringBuffer("SELECT COUNT(*) AS MCOUNT FROM fl_person ")
+        String sql = new StringBuffer("SELECT COUNT(*) AS MCOUNT FROM fl_permit ")
     		    .append(null == where ? "" : where).toString();
         // System.out.println("countWhere: " + sql);
         Connection c = null;
