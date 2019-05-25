@@ -12,6 +12,11 @@ import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.RedisSubscriber;
 import gu.simplemq.Channel;
 
+import net.gdface.facelog.db.PersonBean;
+import net.gdface.facelog.db.DeviceBean;
+import net.gdface.facelog.db.FeatureBean;
+import net.gdface.facelog.db.PersonGroupBean;
+import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.PermitBean;
 
 /**
@@ -58,20 +63,20 @@ public class SubAdapters implements ChannelConstant{
         }
     }    
     /**
-     * 订阅 fl_person 表的 Update 消息,当表数据变化时执行相应的业务逻辑
+     * 订阅 fl_device 表的 Insert 消息,当表数据变化时执行相应的业务逻辑
      * @author guyadong
      *
      */
-    public static class BasePersonUpdateSubAdapter implements IMessageAdapter<Integer>{
+    public static class BaseDeviceInsertSubAdapter implements IMessageAdapter<Integer>{
         /** 订阅频道 */
-        protected final Channel<Integer> channel = PUBSUB_PERSON_UPDATE.asMutable().setAdapter(this);
+        protected final Channel<Integer> channel = PUBSUB_DEVICE_INSERT.asMutable().setAdapter(this);
         /**
          * 向{@code subscriber}注册,注册后才能收到订阅消息
          * @param subscriber 
          * @return
          * @see RedisSubscriber#register(Channel...)
          */
-        public BasePersonUpdateSubAdapter register(RedisSubscriber subscriber){
+        public BaseDeviceInsertSubAdapter register(RedisSubscriber subscriber){
             subscriber.register(channel);
             return this;
         }
@@ -81,50 +86,13 @@ public class SubAdapters implements ChannelConstant{
          * @return
          * @see RedisSubscriber#unregister(Channel...)
          */
-        public BasePersonUpdateSubAdapter unregister(RedisSubscriber subscriber){
+        public BaseDeviceInsertSubAdapter unregister(RedisSubscriber subscriber){
             subscriber.unregister(channel);
             return this;
         }
         /** 
          * 应用项目重写此方法实现业务逻辑 
-         * @param id 用户id
-         */
-        @Override
-        public void onSubscribe(Integer id) throws SmqUnsubscribeException {
-            // 实现业务逻辑
-        }
-    }    
-    /**
-     * 订阅 fl_person 表的 Delete 消息,当表数据变化时执行相应的业务逻辑
-     * @author guyadong
-     *
-     */
-    public static class BasePersonDeleteSubAdapter implements IMessageAdapter<Integer>{
-        /** 订阅频道 */
-        protected final Channel<Integer> channel = PUBSUB_PERSON_DELETE.asMutable().setAdapter(this);
-        /**
-         * 向{@code subscriber}注册,注册后才能收到订阅消息
-         * @param subscriber 
-         * @return
-         * @see RedisSubscriber#register(Channel...)
-         */
-        public BasePersonDeleteSubAdapter register(RedisSubscriber subscriber){
-            subscriber.register(channel);
-            return this;
-        }
-        /**
-         * 向{@code subscriber}注销订阅的频道,注销后不会再收到订阅消息
-         * @param subscriber 
-         * @return
-         * @see RedisSubscriber#unregister(Channel...)
-         */
-        public BasePersonDeleteSubAdapter unregister(RedisSubscriber subscriber){
-            subscriber.unregister(channel);
-            return this;
-        }
-        /** 
-         * 应用项目重写此方法实现业务逻辑 
-         * @param id 用户id
+         * @param id 设备id
          */
         @Override
         public void onSubscribe(Integer id) throws SmqUnsubscribeException {
@@ -169,13 +137,161 @@ public class SubAdapters implements ChannelConstant{
         }
     }    
     /**
+     * 订阅 fl_person 表的 Update 消息,当表数据变化时执行相应的业务逻辑
+     * @author guyadong
+     *
+     */
+    public static class BasePersonUpdateSubAdapter implements IMessageAdapter<PersonBean>{
+        /** 订阅频道 */
+        protected final Channel<PersonBean> channel = PUBSUB_PERSON_UPDATE.asMutable().setAdapter(this);
+        /**
+         * 向{@code subscriber}注册,注册后才能收到订阅消息
+         * @param subscriber 
+         * @return
+         * @see RedisSubscriber#register(Channel...)
+         */
+        public BasePersonUpdateSubAdapter register(RedisSubscriber subscriber){
+            subscriber.register(channel);
+            return this;
+        }
+        /**
+         * 向{@code subscriber}注销订阅的频道,注销后不会再收到订阅消息
+         * @param subscriber 
+         * @return
+         * @see RedisSubscriber#unregister(Channel...)
+         */
+        public BasePersonUpdateSubAdapter unregister(RedisSubscriber subscriber){
+            subscriber.unregister(channel);
+            return this;
+        }
+        /** 
+         * 应用项目重写此方法实现业务逻辑 
+         * @param person fl_person 表记录
+         */
+        @Override
+        public void onSubscribe(PersonBean person) throws SmqUnsubscribeException {
+            // 实现业务逻辑
+        }
+    }    
+    /**
+     * 订阅 fl_person 表的 Delete 消息,当表数据变化时执行相应的业务逻辑
+     * @author guyadong
+     *
+     */
+    public static class BasePersonDeleteSubAdapter implements IMessageAdapter<PersonBean>{
+        /** 订阅频道 */
+        protected final Channel<PersonBean> channel = PUBSUB_PERSON_DELETE.asMutable().setAdapter(this);
+        /**
+         * 向{@code subscriber}注册,注册后才能收到订阅消息
+         * @param subscriber 
+         * @return
+         * @see RedisSubscriber#register(Channel...)
+         */
+        public BasePersonDeleteSubAdapter register(RedisSubscriber subscriber){
+            subscriber.register(channel);
+            return this;
+        }
+        /**
+         * 向{@code subscriber}注销订阅的频道,注销后不会再收到订阅消息
+         * @param subscriber 
+         * @return
+         * @see RedisSubscriber#unregister(Channel...)
+         */
+        public BasePersonDeleteSubAdapter unregister(RedisSubscriber subscriber){
+            subscriber.unregister(channel);
+            return this;
+        }
+        /** 
+         * 应用项目重写此方法实现业务逻辑 
+         * @param person fl_person 表记录
+         */
+        @Override
+        public void onSubscribe(PersonBean person) throws SmqUnsubscribeException {
+            // 实现业务逻辑
+        }
+    }    
+    /**
+     * 订阅 fl_device 表的 Update 消息,当表数据变化时执行相应的业务逻辑
+     * @author guyadong
+     *
+     */
+    public static class BaseDeviceUpdateSubAdapter implements IMessageAdapter<DeviceBean>{
+        /** 订阅频道 */
+        protected final Channel<DeviceBean> channel = PUBSUB_DEVICE_UPDATE.asMutable().setAdapter(this);
+        /**
+         * 向{@code subscriber}注册,注册后才能收到订阅消息
+         * @param subscriber 
+         * @return
+         * @see RedisSubscriber#register(Channel...)
+         */
+        public BaseDeviceUpdateSubAdapter register(RedisSubscriber subscriber){
+            subscriber.register(channel);
+            return this;
+        }
+        /**
+         * 向{@code subscriber}注销订阅的频道,注销后不会再收到订阅消息
+         * @param subscriber 
+         * @return
+         * @see RedisSubscriber#unregister(Channel...)
+         */
+        public BaseDeviceUpdateSubAdapter unregister(RedisSubscriber subscriber){
+            subscriber.unregister(channel);
+            return this;
+        }
+        /** 
+         * 应用项目重写此方法实现业务逻辑 
+         * @param device fl_device 表记录
+         */
+        @Override
+        public void onSubscribe(DeviceBean device) throws SmqUnsubscribeException {
+            // 实现业务逻辑
+        }
+    }    
+    /**
+     * 订阅 fl_device 表的 Delete 消息,当表数据变化时执行相应的业务逻辑
+     * @author guyadong
+     *
+     */
+    public static class BaseDeviceDeleteSubAdapter implements IMessageAdapter<DeviceBean>{
+        /** 订阅频道 */
+        protected final Channel<DeviceBean> channel = PUBSUB_DEVICE_DELETE.asMutable().setAdapter(this);
+        /**
+         * 向{@code subscriber}注册,注册后才能收到订阅消息
+         * @param subscriber 
+         * @return
+         * @see RedisSubscriber#register(Channel...)
+         */
+        public BaseDeviceDeleteSubAdapter register(RedisSubscriber subscriber){
+            subscriber.register(channel);
+            return this;
+        }
+        /**
+         * 向{@code subscriber}注销订阅的频道,注销后不会再收到订阅消息
+         * @param subscriber 
+         * @return
+         * @see RedisSubscriber#unregister(Channel...)
+         */
+        public BaseDeviceDeleteSubAdapter unregister(RedisSubscriber subscriber){
+            subscriber.unregister(channel);
+            return this;
+        }
+        /** 
+         * 应用项目重写此方法实现业务逻辑 
+         * @param device fl_device 表记录
+         */
+        @Override
+        public void onSubscribe(DeviceBean device) throws SmqUnsubscribeException {
+            // 实现业务逻辑
+        }
+    }    
+    /**
      * 订阅 fl_feature 表的 Update 消息,当表数据变化时执行相应的业务逻辑
      * @author guyadong
      *
      */
-    public static class BaseFeatureUpdateSubAdapter implements IMessageAdapter<String>{
+    public static class BaseFeatureUpdateSubAdapter implements IMessageAdapter<FeatureBean>{
         /** 订阅频道 */
-        protected final Channel<String> channel = PUBSUB_FEATURE_UPDATE.asMutable().setAdapter(this);
+        protected final Channel<FeatureBean> channel = PUBSUB_FEATURE_UPDATE.asMutable().setAdapter(this);
         /**
          * 向{@code subscriber}注册,注册后才能收到订阅消息
          * @param subscriber 
@@ -198,10 +314,10 @@ public class SubAdapters implements ChannelConstant{
         }
         /** 
          * 应用项目重写此方法实现业务逻辑 
-         * @param md5 主键,特征码md5校验码
+         * @param feature fl_feature 表记录
          */
         @Override
-        public void onSubscribe(String md5) throws SmqUnsubscribeException {
+        public void onSubscribe(FeatureBean feature) throws SmqUnsubscribeException {
             // 实现业务逻辑
         }
     }    
@@ -210,9 +326,9 @@ public class SubAdapters implements ChannelConstant{
      * @author guyadong
      *
      */
-    public static class BaseFeatureDeleteSubAdapter implements IMessageAdapter<String>{
+    public static class BaseFeatureDeleteSubAdapter implements IMessageAdapter<FeatureBean>{
         /** 订阅频道 */
-        protected final Channel<String> channel = PUBSUB_FEATURE_DELETE.asMutable().setAdapter(this);
+        protected final Channel<FeatureBean> channel = PUBSUB_FEATURE_DELETE.asMutable().setAdapter(this);
         /**
          * 向{@code subscriber}注册,注册后才能收到订阅消息
          * @param subscriber 
@@ -235,10 +351,10 @@ public class SubAdapters implements ChannelConstant{
         }
         /** 
          * 应用项目重写此方法实现业务逻辑 
-         * @param md5 主键,特征码md5校验码
+         * @param feature fl_feature 表记录
          */
         @Override
-        public void onSubscribe(String md5) throws SmqUnsubscribeException {
+        public void onSubscribe(FeatureBean feature) throws SmqUnsubscribeException {
             // 实现业务逻辑
         }
     }    
@@ -267,80 +383,6 @@ public class SubAdapters implements ChannelConstant{
          * @see RedisSubscriber#unregister(Channel...)
          */
         public BasePersonGroupInsertSubAdapter unregister(RedisSubscriber subscriber){
-            subscriber.unregister(channel);
-            return this;
-        }
-        /** 
-         * 应用项目重写此方法实现业务逻辑 
-         * @param id 用户组id
-         */
-        @Override
-        public void onSubscribe(Integer id) throws SmqUnsubscribeException {
-            // 实现业务逻辑
-        }
-    }    
-    /**
-     * 订阅 fl_person_group 表的 Update 消息,当表数据变化时执行相应的业务逻辑
-     * @author guyadong
-     *
-     */
-    public static class BasePersonGroupUpdateSubAdapter implements IMessageAdapter<Integer>{
-        /** 订阅频道 */
-        protected final Channel<Integer> channel = PUBSUB_PERSONGROUP_UPDATE.asMutable().setAdapter(this);
-        /**
-         * 向{@code subscriber}注册,注册后才能收到订阅消息
-         * @param subscriber 
-         * @return
-         * @see RedisSubscriber#register(Channel...)
-         */
-        public BasePersonGroupUpdateSubAdapter register(RedisSubscriber subscriber){
-            subscriber.register(channel);
-            return this;
-        }
-        /**
-         * 向{@code subscriber}注销订阅的频道,注销后不会再收到订阅消息
-         * @param subscriber 
-         * @return
-         * @see RedisSubscriber#unregister(Channel...)
-         */
-        public BasePersonGroupUpdateSubAdapter unregister(RedisSubscriber subscriber){
-            subscriber.unregister(channel);
-            return this;
-        }
-        /** 
-         * 应用项目重写此方法实现业务逻辑 
-         * @param id 用户组id
-         */
-        @Override
-        public void onSubscribe(Integer id) throws SmqUnsubscribeException {
-            // 实现业务逻辑
-        }
-    }    
-    /**
-     * 订阅 fl_person_group 表的 Delete 消息,当表数据变化时执行相应的业务逻辑
-     * @author guyadong
-     *
-     */
-    public static class BasePersonGroupDeleteSubAdapter implements IMessageAdapter<Integer>{
-        /** 订阅频道 */
-        protected final Channel<Integer> channel = PUBSUB_PERSONGROUP_DELETE.asMutable().setAdapter(this);
-        /**
-         * 向{@code subscriber}注册,注册后才能收到订阅消息
-         * @param subscriber 
-         * @return
-         * @see RedisSubscriber#register(Channel...)
-         */
-        public BasePersonGroupDeleteSubAdapter register(RedisSubscriber subscriber){
-            subscriber.register(channel);
-            return this;
-        }
-        /**
-         * 向{@code subscriber}注销订阅的频道,注销后不会再收到订阅消息
-         * @param subscriber 
-         * @return
-         * @see RedisSubscriber#unregister(Channel...)
-         */
-        public BasePersonGroupDeleteSubAdapter unregister(RedisSubscriber subscriber){
             subscriber.unregister(channel);
             return this;
         }
@@ -391,13 +433,87 @@ public class SubAdapters implements ChannelConstant{
         }
     }    
     /**
+     * 订阅 fl_person_group 表的 Update 消息,当表数据变化时执行相应的业务逻辑
+     * @author guyadong
+     *
+     */
+    public static class BasePersonGroupUpdateSubAdapter implements IMessageAdapter<PersonGroupBean>{
+        /** 订阅频道 */
+        protected final Channel<PersonGroupBean> channel = PUBSUB_PERSONGROUP_UPDATE.asMutable().setAdapter(this);
+        /**
+         * 向{@code subscriber}注册,注册后才能收到订阅消息
+         * @param subscriber 
+         * @return
+         * @see RedisSubscriber#register(Channel...)
+         */
+        public BasePersonGroupUpdateSubAdapter register(RedisSubscriber subscriber){
+            subscriber.register(channel);
+            return this;
+        }
+        /**
+         * 向{@code subscriber}注销订阅的频道,注销后不会再收到订阅消息
+         * @param subscriber 
+         * @return
+         * @see RedisSubscriber#unregister(Channel...)
+         */
+        public BasePersonGroupUpdateSubAdapter unregister(RedisSubscriber subscriber){
+            subscriber.unregister(channel);
+            return this;
+        }
+        /** 
+         * 应用项目重写此方法实现业务逻辑 
+         * @param personGroup fl_person_group 表记录
+         */
+        @Override
+        public void onSubscribe(PersonGroupBean personGroup) throws SmqUnsubscribeException {
+            // 实现业务逻辑
+        }
+    }    
+    /**
+     * 订阅 fl_person_group 表的 Delete 消息,当表数据变化时执行相应的业务逻辑
+     * @author guyadong
+     *
+     */
+    public static class BasePersonGroupDeleteSubAdapter implements IMessageAdapter<PersonGroupBean>{
+        /** 订阅频道 */
+        protected final Channel<PersonGroupBean> channel = PUBSUB_PERSONGROUP_DELETE.asMutable().setAdapter(this);
+        /**
+         * 向{@code subscriber}注册,注册后才能收到订阅消息
+         * @param subscriber 
+         * @return
+         * @see RedisSubscriber#register(Channel...)
+         */
+        public BasePersonGroupDeleteSubAdapter register(RedisSubscriber subscriber){
+            subscriber.register(channel);
+            return this;
+        }
+        /**
+         * 向{@code subscriber}注销订阅的频道,注销后不会再收到订阅消息
+         * @param subscriber 
+         * @return
+         * @see RedisSubscriber#unregister(Channel...)
+         */
+        public BasePersonGroupDeleteSubAdapter unregister(RedisSubscriber subscriber){
+            subscriber.unregister(channel);
+            return this;
+        }
+        /** 
+         * 应用项目重写此方法实现业务逻辑 
+         * @param personGroup fl_person_group 表记录
+         */
+        @Override
+        public void onSubscribe(PersonGroupBean personGroup) throws SmqUnsubscribeException {
+            // 实现业务逻辑
+        }
+    }    
+    /**
      * 订阅 fl_device_group 表的 Update 消息,当表数据变化时执行相应的业务逻辑
      * @author guyadong
      *
      */
-    public static class BaseDeviceGroupUpdateSubAdapter implements IMessageAdapter<Integer>{
+    public static class BaseDeviceGroupUpdateSubAdapter implements IMessageAdapter<DeviceGroupBean>{
         /** 订阅频道 */
-        protected final Channel<Integer> channel = PUBSUB_DEVICEGROUP_UPDATE.asMutable().setAdapter(this);
+        protected final Channel<DeviceGroupBean> channel = PUBSUB_DEVICEGROUP_UPDATE.asMutable().setAdapter(this);
         /**
          * 向{@code subscriber}注册,注册后才能收到订阅消息
          * @param subscriber 
@@ -420,10 +536,10 @@ public class SubAdapters implements ChannelConstant{
         }
         /** 
          * 应用项目重写此方法实现业务逻辑 
-         * @param id 设备组id
+         * @param deviceGroup fl_device_group 表记录
          */
         @Override
-        public void onSubscribe(Integer id) throws SmqUnsubscribeException {
+        public void onSubscribe(DeviceGroupBean deviceGroup) throws SmqUnsubscribeException {
             // 实现业务逻辑
         }
     }    
@@ -432,9 +548,9 @@ public class SubAdapters implements ChannelConstant{
      * @author guyadong
      *
      */
-    public static class BaseDeviceGroupDeleteSubAdapter implements IMessageAdapter<Integer>{
+    public static class BaseDeviceGroupDeleteSubAdapter implements IMessageAdapter<DeviceGroupBean>{
         /** 订阅频道 */
-        protected final Channel<Integer> channel = PUBSUB_DEVICEGROUP_DELETE.asMutable().setAdapter(this);
+        protected final Channel<DeviceGroupBean> channel = PUBSUB_DEVICEGROUP_DELETE.asMutable().setAdapter(this);
         /**
          * 向{@code subscriber}注册,注册后才能收到订阅消息
          * @param subscriber 
@@ -457,10 +573,10 @@ public class SubAdapters implements ChannelConstant{
         }
         /** 
          * 应用项目重写此方法实现业务逻辑 
-         * @param id 设备组id
+         * @param deviceGroup fl_device_group 表记录
          */
         @Override
-        public void onSubscribe(Integer id) throws SmqUnsubscribeException {
+        public void onSubscribe(DeviceGroupBean deviceGroup) throws SmqUnsubscribeException {
             // 实现业务逻辑
         }
     }    

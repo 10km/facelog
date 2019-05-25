@@ -7,7 +7,7 @@ package $extensionPkg;
 import gu.simplemq.Channel;
 import net.gdface.facelog.CommonConstant;
 
-#foreach($tableName in ['fl_permit','fl_log'])
+#foreach($tableName in ['fl_person','fl_device','fl_feature','fl_person_group','fl_device_group','fl_permit','fl_log'])
 #set ($table = $db.getTable($tableName))
 #if($table.getPackage(true) != $extensionPkg)
 import ${table.getPackage(true)}.$table.asBeanClassNSP();
@@ -46,8 +46,10 @@ public interface ChannelConstant extends CommonConstant{
 #end###foreach($tableName in $tableNames)
 #end###macro
 
-#channelDef(['fl_person','fl_device','fl_feature'] false 'Pubsub' ['Insert','Update','Delete'])
-#channelDef(['fl_person_group','fl_device_group'] false 'Pubsub' ['Insert','Update','Delete'])
+#channelDef(['fl_person','fl_device','fl_feature'] false 'Pubsub' ['Insert'])
+#channelDef(['fl_person','fl_device','fl_feature'] true  'Pubsub' ['Update','Delete'])
+#channelDef(['fl_person_group','fl_device_group'] false 'Pubsub' ['Insert'])
+#channelDef(['fl_person_group','fl_device_group'] true  'Pubsub' ['Update','Delete'])
 #channelDef(['fl_permit'] true 'Pubsub' ['Insert','Update','Delete'] )
 #channelDef(['fl_log'] true 'Queue' $null )    
 }

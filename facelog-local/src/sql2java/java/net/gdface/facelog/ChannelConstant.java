@@ -10,6 +10,11 @@ package net.gdface.facelog;
 import gu.simplemq.Channel;
 import net.gdface.facelog.CommonConstant;
 
+import net.gdface.facelog.db.PersonBean;
+import net.gdface.facelog.db.DeviceBean;
+import net.gdface.facelog.db.FeatureBean;
+import net.gdface.facelog.db.PersonGroupBean;
+import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.LogBean;
 /**
@@ -26,24 +31,29 @@ public interface ChannelConstant extends CommonConstant{
     //////////////定义数据库实时更新频道/////////
 
     public static final Channel<Integer> PUBSUB_PERSON_INSERT = new Channel<Integer>("PersonInsert"){}.immutable();
-    public static final Channel<Integer> PUBSUB_PERSON_UPDATE = new Channel<Integer>("PersonUpdate"){}.immutable();
-    public static final Channel<Integer> PUBSUB_PERSON_DELETE = new Channel<Integer>("PersonDelete"){}.immutable();
 
     public static final Channel<Integer> PUBSUB_DEVICE_INSERT = new Channel<Integer>("DeviceInsert"){}.immutable();
-    public static final Channel<Integer> PUBSUB_DEVICE_UPDATE = new Channel<Integer>("DeviceUpdate"){}.immutable();
-    public static final Channel<Integer> PUBSUB_DEVICE_DELETE = new Channel<Integer>("DeviceDelete"){}.immutable();
 
     public static final Channel<String> PUBSUB_FEATURE_INSERT = new Channel<String>("FeatureInsert"){}.immutable();
-    public static final Channel<String> PUBSUB_FEATURE_UPDATE = new Channel<String>("FeatureUpdate"){}.immutable();
-    public static final Channel<String> PUBSUB_FEATURE_DELETE = new Channel<String>("FeatureDelete"){}.immutable();
+
+    public static final Channel<PersonBean> PUBSUB_PERSON_UPDATE = new Channel<PersonBean>("PersonUpdate"){}.immutable();
+    public static final Channel<PersonBean> PUBSUB_PERSON_DELETE = new Channel<PersonBean>("PersonDelete"){}.immutable();
+
+    public static final Channel<DeviceBean> PUBSUB_DEVICE_UPDATE = new Channel<DeviceBean>("DeviceUpdate"){}.immutable();
+    public static final Channel<DeviceBean> PUBSUB_DEVICE_DELETE = new Channel<DeviceBean>("DeviceDelete"){}.immutable();
+
+    public static final Channel<FeatureBean> PUBSUB_FEATURE_UPDATE = new Channel<FeatureBean>("FeatureUpdate"){}.immutable();
+    public static final Channel<FeatureBean> PUBSUB_FEATURE_DELETE = new Channel<FeatureBean>("FeatureDelete"){}.immutable();
 
     public static final Channel<Integer> PUBSUB_PERSONGROUP_INSERT = new Channel<Integer>("PersonGroupInsert"){}.immutable();
-    public static final Channel<Integer> PUBSUB_PERSONGROUP_UPDATE = new Channel<Integer>("PersonGroupUpdate"){}.immutable();
-    public static final Channel<Integer> PUBSUB_PERSONGROUP_DELETE = new Channel<Integer>("PersonGroupDelete"){}.immutable();
 
     public static final Channel<Integer> PUBSUB_DEVICEGROUP_INSERT = new Channel<Integer>("DeviceGroupInsert"){}.immutable();
-    public static final Channel<Integer> PUBSUB_DEVICEGROUP_UPDATE = new Channel<Integer>("DeviceGroupUpdate"){}.immutable();
-    public static final Channel<Integer> PUBSUB_DEVICEGROUP_DELETE = new Channel<Integer>("DeviceGroupDelete"){}.immutable();
+
+    public static final Channel<PersonGroupBean> PUBSUB_PERSONGROUP_UPDATE = new Channel<PersonGroupBean>("PersonGroupUpdate"){}.immutable();
+    public static final Channel<PersonGroupBean> PUBSUB_PERSONGROUP_DELETE = new Channel<PersonGroupBean>("PersonGroupDelete"){}.immutable();
+
+    public static final Channel<DeviceGroupBean> PUBSUB_DEVICEGROUP_UPDATE = new Channel<DeviceGroupBean>("DeviceGroupUpdate"){}.immutable();
+    public static final Channel<DeviceGroupBean> PUBSUB_DEVICEGROUP_DELETE = new Channel<DeviceGroupBean>("DeviceGroupDelete"){}.immutable();
 
     public static final Channel<PermitBean> PUBSUB_PERMIT_INSERT = new Channel<PermitBean>("PermitInsert"){}.immutable();
     public static final Channel<PermitBean> PUBSUB_PERMIT_UPDATE = new Channel<PermitBean>("PermitUpdate"){}.immutable();

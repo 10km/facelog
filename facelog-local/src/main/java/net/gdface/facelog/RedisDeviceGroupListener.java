@@ -7,6 +7,7 @@ import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisPublisher;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.TableListener;
+import net.gdface.facelog.db.exception.RuntimeDaoException;
 
 /**
  * 设备组表({@code fl_device_group})变动侦听器<br>
@@ -17,7 +18,7 @@ import net.gdface.facelog.db.TableListener;
 class RedisDeviceGroupListener extends TableListener.Adapter<DeviceGroupBean> implements ChannelConstant{
 
 	private final RedisPublisher publisher;
-	
+	private DeviceGroupBean beforeUpdatedBean;
 	public RedisDeviceGroupListener() {
 		this(JedisPoolLazy.getDefaultInstance());
 	}
@@ -34,19 +35,24 @@ class RedisDeviceGroupListener extends TableListener.Adapter<DeviceGroupBean> im
 	}
 
 	@Override
+	public void beforeUpdate(DeviceGroupBean bean) throws RuntimeDaoException {
+		// 保留更新前的数据
+		beforeUpdatedBean = bean.clone();
+	}
+	@Override
 	public void afterUpdate(DeviceGroupBean bean) {
-		new RedisPublishTask<Integer>(
+		new RedisPublishTask<DeviceGroupBean>(
 				PUBSUB_DEVICEGROUP_UPDATE, 
-				bean.getId(), 
+				beforeUpdatedBean, 
 				publisher)
 		.execute();
 	}
 
 	@Override
 	public void afterDelete(DeviceGroupBean bean) {
-		new RedisPublishTask<Integer>(
+		new RedisPublishTask<DeviceGroupBean>(
 				PUBSUB_DEVICEGROUP_DELETE, 
-				bean.getId(), 
+				bean, 
 				publisher)
 		.execute();
 	}			

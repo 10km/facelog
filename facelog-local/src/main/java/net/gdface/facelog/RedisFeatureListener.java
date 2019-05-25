@@ -7,6 +7,7 @@ import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisPublisher;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.TableListener;
+import net.gdface.facelog.db.exception.RuntimeDaoException;
 
 /**
  * 特征表({@code fl_feature})变动侦听器<br>
@@ -17,7 +18,7 @@ import net.gdface.facelog.db.TableListener;
 class RedisFeatureListener extends TableListener.Adapter<FeatureBean> implements ChannelConstant{
 
 	private final RedisPublisher publisher;
-	
+	private FeatureBean beforeUpdatedBean;	
 	public RedisFeatureListener() {
 		this(JedisPoolLazy.getDefaultInstance());
 	}
@@ -32,21 +33,25 @@ class RedisFeatureListener extends TableListener.Adapter<FeatureBean> implements
 				publisher)
 		.execute();
 	}
-
+	@Override
+	public void beforeUpdate(FeatureBean bean) throws RuntimeDaoException {
+		// 保留更新前的数据
+		beforeUpdatedBean = bean.clone();
+	}
 	@Override
 	public void afterUpdate(FeatureBean bean) {
-		new RedisPublishTask<String>(
+		new RedisPublishTask<FeatureBean>(
 				PUBSUB_FEATURE_UPDATE, 
-				bean.getMd5(), 
+				beforeUpdatedBean, 
 				publisher)
 		.execute();
 	}
 
 	@Override
 	public void afterDelete(FeatureBean bean) {
-		new RedisPublishTask<String>(
+		new RedisPublishTask<FeatureBean>(
 				PUBSUB_FEATURE_DELETE, 
-				bean.getMd5(), 
+				bean, 
 				publisher)
 		.execute();		
 	}			

@@ -15,7 +15,7 @@ import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.RedisSubscriber;
 import gu.simplemq.Channel;
 
-#foreach($tableName in ['fl_permit'])
+#foreach($tableName in ['fl_person','fl_device','fl_feature','fl_person_group','fl_device_group','fl_permit'])
 #set ($table = $db.getTable($tableName))
 #if($table.getPackage(true) != $extensionPkg)
 import ${table.getPackage(true)}.$table.asBeanClassNSP();
@@ -90,8 +90,10 @@ public class SubAdapters implements ChannelConstant{
 #end
 #end
 #end###foreach($tableName in $tableNames)
-#subscriberDef(['fl_person','fl_feature'] false 'Pubsub' ['Insert','Update','Delete'])
-#subscriberDef(['fl_person_group','fl_device_group'] false 'Pubsub' ['Insert','Update','Delete'])
+#subscriberDef(['fl_person','fl_device','fl_feature'] false 'Pubsub' ['Insert'])
+#subscriberDef(['fl_person','fl_device','fl_feature'] true  'Pubsub' ['Update','Delete'])
+#subscriberDef(['fl_person_group','fl_device_group'] false 'Pubsub' ['Insert'])
+#subscriberDef(['fl_person_group','fl_device_group'] true  'Pubsub' ['Update','Delete'])
 #subscriberDef(['fl_permit'] true 'Pubsub' ['Insert','Update','Delete'] )
 #subscriberDef(['fl_log'] true 'Queue' $null )
 }
