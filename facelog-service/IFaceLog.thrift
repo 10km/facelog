@@ -18,8 +18,8 @@ enum MQParam {
 
 struct FaceBean {
   1: required bool _new;
-  2: required i64 modified;
-  3: required i64 initialized;
+  2: required i32 modified;
+  3: required i32 initialized;
   4: optional i32 id;
   5: optional string imageMd5;
   6: optional i32 faceLeft;
@@ -58,8 +58,8 @@ exception ServiceRuntimeException {
 
 struct FeatureBean {
   1: required bool _new;
-  2: required i64 modified;
-  3: required i64 initialized;
+  2: required i32 modified;
+  3: required i32 initialized;
   4: optional string md5;
   5: optional i32 personId;
   6: optional binary feature;
@@ -68,8 +68,8 @@ struct FeatureBean {
 
 struct ImageBean {
   1: required bool _new;
-  2: required i64 modified;
-  3: required i64 initialized;
+  2: required i32 modified;
+  3: required i32 initialized;
   4: optional string md5;
   5: optional string format;
   6: optional i32 width;
@@ -82,8 +82,8 @@ struct ImageBean {
 
 struct LogBean {
   1: required bool _new;
-  2: required i64 modified;
-  3: required i64 initialized;
+  2: required i32 modified;
+  3: required i32 initialized;
   4: optional i32 id;
   5: optional i32 personId;
   6: optional i32 deviceId;
@@ -97,8 +97,8 @@ struct LogBean {
 
 struct DeviceGroupBean {
   1: required bool _new;
-  2: required i64 modified;
-  3: required i64 initialized;
+  2: required i32 modified;
+  3: required i32 initialized;
   4: optional i32 id;
   5: optional string name;
   6: optional i32 leaf;
@@ -113,8 +113,8 @@ struct DeviceGroupBean {
 
 struct PersonGroupBean {
   1: required bool _new;
-  2: required i64 modified;
-  3: required i64 initialized;
+  2: required i32 modified;
+  3: required i32 initialized;
   4: optional i32 id;
   5: optional string name;
   6: optional i32 leaf;
@@ -129,8 +129,8 @@ struct PersonGroupBean {
 
 struct DeviceBean {
   1: required bool _new;
-  2: required i64 modified;
-  3: required i64 initialized;
+  2: required i32 modified;
+  3: required i32 initialized;
   4: optional i32 id;
   5: optional i32 groupId;
   6: optional string name;
@@ -151,8 +151,8 @@ struct DeviceBean {
 
 struct PersonBean {
   1: required bool _new;
-  2: required i64 modified;
-  3: required i64 initialized;
+  2: required i32 modified;
+  3: required i32 initialized;
   4: optional i32 id;
   5: optional i32 groupId;
   6: optional string name;
@@ -174,8 +174,8 @@ struct PersonBean {
 
 struct LogLightBean {
   1: required bool _new;
-  2: required i64 modified;
-  3: required i64 initialized;
+  2: required i32 modified;
+  3: required i32 initialized;
   4: optional i32 id;
   5: optional i32 personId;
   6: optional string name;
@@ -186,8 +186,8 @@ struct LogLightBean {
 
 struct PermitBean {
   1: required bool _new;
-  2: required i64 modified;
-  3: required i64 initialized;
+  2: required i32 modified;
+  3: required i32 initialized;
   4: optional i32 deviceGroupId;
   5: optional i32 personGroupId;
   6: optional string remark;

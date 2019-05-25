@@ -11,7 +11,10 @@ package net.gdface.facelog.dborm;
  * @author guyadong
  */
 public interface DaoConstant {    
-    public static final int LONG_BIT_NUM = 64;
+    public static final int STATE_BIT_NUM = 32;
+    public static final int STATE_BIT_SHIFT = 5;
+    public static final int STATE_BIT_MASK = 0x1f;
+
     public static final String SQL_LIKE_WILDCARD = "%";
     /** set =QUERY for loadUsingTemplate */
     public static final int SEARCH_EXACT = 0;

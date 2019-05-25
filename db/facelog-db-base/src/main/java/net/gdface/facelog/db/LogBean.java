@@ -69,11 +69,11 @@ public final class LogBean
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
-    @ApiModelProperty(value="columns modified flag",dataType="long",required=true)
-    private long modified;
+    @ApiModelProperty(value="columns modified flag",dataType="int",required=true)
+    private int modified;
     /** columns initialized flag */
-    @ApiModelProperty(value="columns initialized flag",dataType="long",required=true)
-    private long initialized;
+    @ApiModelProperty(value="columns initialized flag",dataType="int",required=true)
+    private int initialized;
     /** new record flag  */
     @ApiModelProperty(value="new record flag",dataType="boolean",required=true)
     private boolean isNew;        
@@ -141,7 +141,7 @@ public final class LogBean
      * @return the modified status of columns
      */
     @ThriftField(value=2,requiredness=Requiredness.REQUIRED)
-    public long getModified(){
+    public int getModified(){
         return modified;
     }
 
@@ -149,14 +149,14 @@ public final class LogBean
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
     @ThriftField()
-    public void setModified(long modified){
+    public void setModified(int modified){
         this.modified = modified;
     }
     /**
      * @return the initialized status of columns
      */
     @ThriftField(value=3,requiredness=Requiredness.REQUIRED)
-    public long getInitialized(){
+    public int getInitialized(){
         return initialized;
     }
 
@@ -164,7 +164,7 @@ public final class LogBean
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
     @ThriftField()
-    public void setInitialized(long initialized){
+    public void setInitialized(int initialized){
         this.initialized = initialized;
     }
     protected static final <T extends Comparable<T>>boolean equals(T a, T b) {
@@ -1062,7 +1062,7 @@ public final class LogBean
     public void resetIsModified()
     {
         checkMutable();
-        modified = 0L;
+        modified = 0;
     }
 
     @Override
@@ -1089,7 +1089,7 @@ public final class LogBean
      */
     private void resetInitialized()
     {
-        initialized = 0L;
+        initialized = 0;
     }
     /** reset all fields to initial value, equal to a new bean */
     public void reset(){
@@ -1106,8 +1106,8 @@ public final class LogBean
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
         this.createTime = null;
         this.isNew = true;
-        this.modified = 0L;
-        this.initialized = 0L;
+        this.modified = 0;
+        this.initialized = 0;
     }
     @Override
     public boolean equals(Object object)
@@ -1327,7 +1327,7 @@ public final class LogBean
      * @see #asNULL()
      */
     public boolean checkNULL(){
-        return 0L == getInitialized();
+        return 0 == getInitialized();
     }
     /** 
      * @param source source list

@@ -100,11 +100,11 @@ public final class PersonBean
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
-    @ApiModelProperty(value="columns modified flag",dataType="long",required=true)
-    private long modified;
+    @ApiModelProperty(value="columns modified flag",dataType="int",required=true)
+    private int modified;
     /** columns initialized flag */
-    @ApiModelProperty(value="columns initialized flag",dataType="long",required=true)
-    private long initialized;
+    @ApiModelProperty(value="columns initialized flag",dataType="int",required=true)
+    private int initialized;
     /** new record flag  */
     @ApiModelProperty(value="new record flag",dataType="boolean",required=true)
     private boolean isNew;        
@@ -172,7 +172,7 @@ public final class PersonBean
      * @return the modified status of columns
      */
     @ThriftField(value=2,requiredness=Requiredness.REQUIRED)
-    public long getModified(){
+    public int getModified(){
         return modified;
     }
 
@@ -180,14 +180,14 @@ public final class PersonBean
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
     @ThriftField()
-    public void setModified(long modified){
+    public void setModified(int modified){
         this.modified = modified;
     }
     /**
      * @return the initialized status of columns
      */
     @ThriftField(value=3,requiredness=Requiredness.REQUIRED)
-    public long getInitialized(){
+    public int getInitialized(){
         return initialized;
     }
 
@@ -195,7 +195,7 @@ public final class PersonBean
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
     @ThriftField()
-    public void setInitialized(long initialized){
+    public void setInitialized(int initialized){
         this.initialized = initialized;
     }
     protected static final <T extends Comparable<T>>boolean equals(T a, T b) {
@@ -1662,7 +1662,7 @@ public final class PersonBean
     public void resetIsModified()
     {
         checkMutable();
-        modified = 0L;
+        modified = 0;
     }
 
     @Override
@@ -1697,7 +1697,7 @@ public final class PersonBean
      */
     private void resetInitialized()
     {
-        initialized = 0L;
+        initialized = 0;
     }
     /** reset all fields to initial value, equal to a new bean */
     public void reset(){
@@ -1724,7 +1724,7 @@ public final class PersonBean
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
         this.updateTime = null;
         this.isNew = true;
-        this.modified = 0L;
+        this.modified = 0;
         this.initialized = (FL_PERSON_ID_GROUP_ID_MASK | FL_PERSON_ID_EXPIRY_DATE_MASK);
     }
     @Override
@@ -2041,7 +2041,7 @@ public final class PersonBean
      * @see #asNULL()
      */
     public boolean checkNULL(){
-        return 0L == getInitialized();
+        return 0 == getInitialized();
     }
     /** 
      * @param source source list

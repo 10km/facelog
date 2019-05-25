@@ -275,7 +275,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
         if(null == bean  || null == bean.getId()){
             return false;
         }
-        long modified = bean.getModified();
+        int modified = bean.getModified();
         try{
             bean.resetModifiedExceptPrimaryKeys();
             return 1 == countUsingTemplate(bean);

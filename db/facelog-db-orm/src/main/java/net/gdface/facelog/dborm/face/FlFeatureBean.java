@@ -44,9 +44,9 @@ public  class FlFeatureBean
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
-    private long modified;
+    private int modified;
     /** columns initialized flag */
-    private long initialized;
+    private int initialized;
     /** new record flag  */
     private boolean isNew;        
     /** 
@@ -110,27 +110,27 @@ public  class FlFeatureBean
     /**
      * @return the modified status of columns
      */
-    public long getModified(){
+    public int getModified(){
         return modified;
     }
 
     /**
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    public void setModified(long modified){
+    public void setModified(int modified){
         this.modified = modified;
     }
     /**
      * @return the initialized status of columns
      */
-    public long getInitialized(){
+    public int getInitialized(){
         return initialized;
     }
 
     /**
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
-    public void setInitialized(long initialized){
+    public void setInitialized(int initialized){
         this.initialized = initialized;
     }
     protected static final <T extends Comparable<T>>boolean equals(T a, T b) {
@@ -462,7 +462,7 @@ public  class FlFeatureBean
     public void resetIsModified()
     {
         checkMutable();
-        modified = 0L;
+        modified = 0;
     }
 
     @Override
@@ -484,7 +484,7 @@ public  class FlFeatureBean
      */
     private void resetInitialized()
     {
-        initialized = 0L;
+        initialized = 0;
     }
     /** reset all fields to initial value, equal to a new bean */
     public void reset(){
@@ -495,8 +495,8 @@ public  class FlFeatureBean
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
         this.updateTime = null;
         this.isNew = true;
-        this.modified = 0L;
-        this.initialized = 0L;
+        this.modified = 0;
+        this.initialized = 0;
     }
     @Override
     public boolean equals(Object object)
@@ -656,7 +656,7 @@ public  class FlFeatureBean
      * @see #asNULL()
      */
     public boolean checkNULL(){
-        return 0L == getInitialized();
+        return 0 == getInitialized();
     }
     /** 
      * @param source source list

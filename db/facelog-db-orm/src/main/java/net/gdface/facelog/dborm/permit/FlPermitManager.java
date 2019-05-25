@@ -284,7 +284,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         if(null == bean  || null == bean.getDeviceGroupId() || null == bean.getPersonGroupId()){
             return false;
         }
-        long modified = bean.getModified();
+        int modified = bean.getModified();
         try{
             bean.resetModifiedExceptPrimaryKeys();
             return 1 == countUsingTemplate(bean);

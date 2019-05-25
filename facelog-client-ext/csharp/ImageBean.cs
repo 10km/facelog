@@ -25,9 +25,9 @@ public partial class ImageBean : TBase
 
   public bool _new { get; set; }
 
-  public long Modified { get; set; }
+  public int Modified { get; set; }
 
-  public long Initialized { get; set; }
+  public int Initialized { get; set; }
 
   public string Md5 { get; set; }
 
@@ -48,7 +48,7 @@ public partial class ImageBean : TBase
   public ImageBean() {
   }
 
-  public ImageBean(bool _new, long modified, long initialized) : this() {
+  public ImageBean(bool _new, int modified, int initialized) : this() {
     this._new = _new;
     this.Modified = modified;
     this.Initialized = initialized;
@@ -81,16 +81,16 @@ public partial class ImageBean : TBase
             }
             break;
           case 2:
-            if (field.Type == TType.I64) {
-              Modified = iprot.ReadI64();
+            if (field.Type == TType.I32) {
+              Modified = iprot.ReadI32();
               isset_modified = true;
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
           case 3:
-            if (field.Type == TType.I64) {
-              Initialized = iprot.ReadI64();
+            if (field.Type == TType.I32) {
+              Initialized = iprot.ReadI32();
               isset_initialized = true;
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
@@ -186,16 +186,16 @@ public partial class ImageBean : TBase
       oprot.WriteBool(_new);
       oprot.WriteFieldEnd();
       field.Name = "modified";
-      field.Type = TType.I64;
+      field.Type = TType.I32;
       field.ID = 2;
       oprot.WriteFieldBegin(field);
-      oprot.WriteI64(Modified);
+      oprot.WriteI32(Modified);
       oprot.WriteFieldEnd();
       field.Name = "initialized";
-      field.Type = TType.I64;
+      field.Type = TType.I32;
       field.ID = 3;
       oprot.WriteFieldBegin(field);
-      oprot.WriteI64(Initialized);
+      oprot.WriteI32(Initialized);
       oprot.WriteFieldEnd();
       if (Md5 != null) {
         field.Name = "md5";

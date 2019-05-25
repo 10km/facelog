@@ -161,15 +161,15 @@ FaceBean.prototype.read = function(input) {
       }
       break;
       case 2:
-      if (ftype == Thrift.Type.I64) {
-        this.modified = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.modified = input.readI32();
       } else {
         input.skip(ftype);
       }
       break;
       case 3:
-      if (ftype == Thrift.Type.I64) {
-        this.initialized = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.initialized = input.readI32();
       } else {
         input.skip(ftype);
       }
@@ -324,13 +324,13 @@ FaceBean.prototype.write = function(output) {
     output.writeFieldEnd();
   }
   if (this.modified !== null && this.modified !== undefined) {
-    output.writeFieldBegin('modified', Thrift.Type.I64, 2);
-    output.writeI64(this.modified);
+    output.writeFieldBegin('modified', Thrift.Type.I32, 2);
+    output.writeI32(this.modified);
     output.writeFieldEnd();
   }
   if (this.initialized !== null && this.initialized !== undefined) {
-    output.writeFieldBegin('initialized', Thrift.Type.I64, 3);
-    output.writeI64(this.initialized);
+    output.writeFieldBegin('initialized', Thrift.Type.I32, 3);
+    output.writeI32(this.initialized);
     output.writeFieldEnd();
   }
   if (this.id !== null && this.id !== undefined) {
@@ -713,15 +713,15 @@ FeatureBean.prototype.read = function(input) {
       }
       break;
       case 2:
-      if (ftype == Thrift.Type.I64) {
-        this.modified = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.modified = input.readI32();
       } else {
         input.skip(ftype);
       }
       break;
       case 3:
-      if (ftype == Thrift.Type.I64) {
-        this.initialized = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.initialized = input.readI32();
       } else {
         input.skip(ftype);
       }
@@ -771,13 +771,13 @@ FeatureBean.prototype.write = function(output) {
     output.writeFieldEnd();
   }
   if (this.modified !== null && this.modified !== undefined) {
-    output.writeFieldBegin('modified', Thrift.Type.I64, 2);
-    output.writeI64(this.modified);
+    output.writeFieldBegin('modified', Thrift.Type.I32, 2);
+    output.writeI32(this.modified);
     output.writeFieldEnd();
   }
   if (this.initialized !== null && this.initialized !== undefined) {
-    output.writeFieldBegin('initialized', Thrift.Type.I64, 3);
-    output.writeI64(this.initialized);
+    output.writeFieldBegin('initialized', Thrift.Type.I32, 3);
+    output.writeI32(this.initialized);
     output.writeFieldEnd();
   }
   if (this.md5 !== null && this.md5 !== undefined) {
@@ -881,15 +881,15 @@ ImageBean.prototype.read = function(input) {
       }
       break;
       case 2:
-      if (ftype == Thrift.Type.I64) {
-        this.modified = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.modified = input.readI32();
       } else {
         input.skip(ftype);
       }
       break;
       case 3:
-      if (ftype == Thrift.Type.I64) {
-        this.initialized = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.initialized = input.readI32();
       } else {
         input.skip(ftype);
       }
@@ -967,13 +967,13 @@ ImageBean.prototype.write = function(output) {
     output.writeFieldEnd();
   }
   if (this.modified !== null && this.modified !== undefined) {
-    output.writeFieldBegin('modified', Thrift.Type.I64, 2);
-    output.writeI64(this.modified);
+    output.writeFieldBegin('modified', Thrift.Type.I32, 2);
+    output.writeI32(this.modified);
     output.writeFieldEnd();
   }
   if (this.initialized !== null && this.initialized !== undefined) {
-    output.writeFieldBegin('initialized', Thrift.Type.I64, 3);
-    output.writeI64(this.initialized);
+    output.writeFieldBegin('initialized', Thrift.Type.I32, 3);
+    output.writeI32(this.initialized);
     output.writeFieldEnd();
   }
   if (this.md5 !== null && this.md5 !== undefined) {
@@ -1101,15 +1101,15 @@ LogBean.prototype.read = function(input) {
       }
       break;
       case 2:
-      if (ftype == Thrift.Type.I64) {
-        this.modified = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.modified = input.readI32();
       } else {
         input.skip(ftype);
       }
       break;
       case 3:
-      if (ftype == Thrift.Type.I64) {
-        this.initialized = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.initialized = input.readI32();
       } else {
         input.skip(ftype);
       }
@@ -1194,13 +1194,13 @@ LogBean.prototype.write = function(output) {
     output.writeFieldEnd();
   }
   if (this.modified !== null && this.modified !== undefined) {
-    output.writeFieldBegin('modified', Thrift.Type.I64, 2);
-    output.writeI64(this.modified);
+    output.writeFieldBegin('modified', Thrift.Type.I32, 2);
+    output.writeI32(this.modified);
     output.writeFieldEnd();
   }
   if (this.initialized !== null && this.initialized !== undefined) {
-    output.writeFieldBegin('initialized', Thrift.Type.I64, 3);
-    output.writeI64(this.initialized);
+    output.writeFieldBegin('initialized', Thrift.Type.I32, 3);
+    output.writeI32(this.initialized);
     output.writeFieldEnd();
   }
   if (this.id !== null && this.id !== undefined) {
@@ -1337,15 +1337,15 @@ DeviceGroupBean.prototype.read = function(input) {
       }
       break;
       case 2:
-      if (ftype == Thrift.Type.I64) {
-        this.modified = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.modified = input.readI32();
       } else {
         input.skip(ftype);
       }
       break;
       case 3:
-      if (ftype == Thrift.Type.I64) {
-        this.initialized = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.initialized = input.readI32();
       } else {
         input.skip(ftype);
       }
@@ -1437,13 +1437,13 @@ DeviceGroupBean.prototype.write = function(output) {
     output.writeFieldEnd();
   }
   if (this.modified !== null && this.modified !== undefined) {
-    output.writeFieldBegin('modified', Thrift.Type.I64, 2);
-    output.writeI64(this.modified);
+    output.writeFieldBegin('modified', Thrift.Type.I32, 2);
+    output.writeI32(this.modified);
     output.writeFieldEnd();
   }
   if (this.initialized !== null && this.initialized !== undefined) {
-    output.writeFieldBegin('initialized', Thrift.Type.I64, 3);
-    output.writeI64(this.initialized);
+    output.writeFieldBegin('initialized', Thrift.Type.I32, 3);
+    output.writeI32(this.initialized);
     output.writeFieldEnd();
   }
   if (this.id !== null && this.id !== undefined) {
@@ -1585,15 +1585,15 @@ PersonGroupBean.prototype.read = function(input) {
       }
       break;
       case 2:
-      if (ftype == Thrift.Type.I64) {
-        this.modified = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.modified = input.readI32();
       } else {
         input.skip(ftype);
       }
       break;
       case 3:
-      if (ftype == Thrift.Type.I64) {
-        this.initialized = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.initialized = input.readI32();
       } else {
         input.skip(ftype);
       }
@@ -1685,13 +1685,13 @@ PersonGroupBean.prototype.write = function(output) {
     output.writeFieldEnd();
   }
   if (this.modified !== null && this.modified !== undefined) {
-    output.writeFieldBegin('modified', Thrift.Type.I64, 2);
-    output.writeI64(this.modified);
+    output.writeFieldBegin('modified', Thrift.Type.I32, 2);
+    output.writeI32(this.modified);
     output.writeFieldEnd();
   }
   if (this.initialized !== null && this.initialized !== undefined) {
-    output.writeFieldBegin('initialized', Thrift.Type.I64, 3);
-    output.writeI64(this.initialized);
+    output.writeFieldBegin('initialized', Thrift.Type.I32, 3);
+    output.writeI32(this.initialized);
     output.writeFieldEnd();
   }
   if (this.id !== null && this.id !== undefined) {
@@ -1857,15 +1857,15 @@ DeviceBean.prototype.read = function(input) {
       }
       break;
       case 2:
-      if (ftype == Thrift.Type.I64) {
-        this.modified = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.modified = input.readI32();
       } else {
         input.skip(ftype);
       }
       break;
       case 3:
-      if (ftype == Thrift.Type.I64) {
-        this.initialized = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.initialized = input.readI32();
       } else {
         input.skip(ftype);
       }
@@ -1999,13 +1999,13 @@ DeviceBean.prototype.write = function(output) {
     output.writeFieldEnd();
   }
   if (this.modified !== null && this.modified !== undefined) {
-    output.writeFieldBegin('modified', Thrift.Type.I64, 2);
-    output.writeI64(this.modified);
+    output.writeFieldBegin('modified', Thrift.Type.I32, 2);
+    output.writeI32(this.modified);
     output.writeFieldEnd();
   }
   if (this.initialized !== null && this.initialized !== undefined) {
-    output.writeFieldBegin('initialized', Thrift.Type.I64, 3);
-    output.writeI64(this.initialized);
+    output.writeFieldBegin('initialized', Thrift.Type.I32, 3);
+    output.writeI32(this.initialized);
     output.writeFieldEnd();
   }
   if (this.id !== null && this.id !== undefined) {
@@ -2205,15 +2205,15 @@ PersonBean.prototype.read = function(input) {
       }
       break;
       case 2:
-      if (ftype == Thrift.Type.I64) {
-        this.modified = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.modified = input.readI32();
       } else {
         input.skip(ftype);
       }
       break;
       case 3:
-      if (ftype == Thrift.Type.I64) {
-        this.initialized = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.initialized = input.readI32();
       } else {
         input.skip(ftype);
       }
@@ -2354,13 +2354,13 @@ PersonBean.prototype.write = function(output) {
     output.writeFieldEnd();
   }
   if (this.modified !== null && this.modified !== undefined) {
-    output.writeFieldBegin('modified', Thrift.Type.I64, 2);
-    output.writeI64(this.modified);
+    output.writeFieldBegin('modified', Thrift.Type.I32, 2);
+    output.writeI32(this.modified);
     output.writeFieldEnd();
   }
   if (this.initialized !== null && this.initialized !== undefined) {
-    output.writeFieldBegin('initialized', Thrift.Type.I64, 3);
-    output.writeI64(this.initialized);
+    output.writeFieldBegin('initialized', Thrift.Type.I32, 3);
+    output.writeI32(this.initialized);
     output.writeFieldEnd();
   }
   if (this.id !== null && this.id !== undefined) {
@@ -2521,15 +2521,15 @@ LogLightBean.prototype.read = function(input) {
       }
       break;
       case 2:
-      if (ftype == Thrift.Type.I64) {
-        this.modified = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.modified = input.readI32();
       } else {
         input.skip(ftype);
       }
       break;
       case 3:
-      if (ftype == Thrift.Type.I64) {
-        this.initialized = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.initialized = input.readI32();
       } else {
         input.skip(ftype);
       }
@@ -2593,13 +2593,13 @@ LogLightBean.prototype.write = function(output) {
     output.writeFieldEnd();
   }
   if (this.modified !== null && this.modified !== undefined) {
-    output.writeFieldBegin('modified', Thrift.Type.I64, 2);
-    output.writeI64(this.modified);
+    output.writeFieldBegin('modified', Thrift.Type.I32, 2);
+    output.writeI32(this.modified);
     output.writeFieldEnd();
   }
   if (this.initialized !== null && this.initialized !== undefined) {
-    output.writeFieldBegin('initialized', Thrift.Type.I64, 3);
-    output.writeI64(this.initialized);
+    output.writeFieldBegin('initialized', Thrift.Type.I32, 3);
+    output.writeI32(this.initialized);
     output.writeFieldEnd();
   }
   if (this.id !== null && this.id !== undefined) {
@@ -2705,15 +2705,15 @@ PermitBean.prototype.read = function(input) {
       }
       break;
       case 2:
-      if (ftype == Thrift.Type.I64) {
-        this.modified = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.modified = input.readI32();
       } else {
         input.skip(ftype);
       }
       break;
       case 3:
-      if (ftype == Thrift.Type.I64) {
-        this.initialized = input.readI64();
+      if (ftype == Thrift.Type.I32) {
+        this.initialized = input.readI32();
       } else {
         input.skip(ftype);
       }
@@ -2777,13 +2777,13 @@ PermitBean.prototype.write = function(output) {
     output.writeFieldEnd();
   }
   if (this.modified !== null && this.modified !== undefined) {
-    output.writeFieldBegin('modified', Thrift.Type.I64, 2);
-    output.writeI64(this.modified);
+    output.writeFieldBegin('modified', Thrift.Type.I32, 2);
+    output.writeI32(this.modified);
     output.writeFieldEnd();
   }
   if (this.initialized !== null && this.initialized !== undefined) {
-    output.writeFieldBegin('initialized', Thrift.Type.I64, 3);
-    output.writeI64(this.initialized);
+    output.writeFieldBegin('initialized', Thrift.Type.I32, 3);
+    output.writeI32(this.initialized);
     output.writeFieldEnd();
   }
   if (this.deviceGroupId !== null && this.deviceGroupId !== undefined) {

@@ -275,7 +275,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         if(null == bean  || null == bean.getMd5()){
             return false;
         }
-        long modified = bean.getModified();
+        int modified = bean.getModified();
         try{
             bean.resetModifiedExceptPrimaryKeys();
             return 1 == countUsingTemplate(bean);

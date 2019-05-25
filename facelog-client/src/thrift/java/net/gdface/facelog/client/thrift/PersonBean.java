@@ -20,21 +20,21 @@ public final class PersonBean
     @ThriftField
     public void setNew(final boolean New) { this.New = New; }
 
-    private long modified;
+    private int modified;
 
     @ThriftField(value=2, name="modified", requiredness=Requiredness.REQUIRED)
-    public long getModified() { return modified; }
+    public int getModified() { return modified; }
 
     @ThriftField
-    public void setModified(final long modified) { this.modified = modified; }
+    public void setModified(final int modified) { this.modified = modified; }
 
-    private long initialized;
+    private int initialized;
 
     @ThriftField(value=3, name="initialized", requiredness=Requiredness.REQUIRED)
-    public long getInitialized() { return initialized; }
+    public int getInitialized() { return initialized; }
 
     @ThriftField
-    public void setInitialized(final long initialized) { this.initialized = initialized; }
+    public void setInitialized(final int initialized) { this.initialized = initialized; }
 
     private Integer id;
 

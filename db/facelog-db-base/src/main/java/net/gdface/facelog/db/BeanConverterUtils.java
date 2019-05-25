@@ -133,11 +133,11 @@ public class BeanConverterUtils implements Constant {
             throw cce;
         }
     }
-    private static final boolean bitCheck(int index,long...bits){
-        return 0 != (bits[index>>6]&(1L<<(index&0x3f)));
+    private static final boolean bitCheck(int index,int...bits){
+        return 0 != (bits[index>>STATE_BIT_SHIFT]&(1<<(index&0x1f)));
     }
-    private static final long[] bitOR(int index,long... bits){
-         bits[index>>6] |= (1L<<(index&0x3f));
+    private static final int[] bitOR(int index,int... bits){
+         bits[index>>STATE_BIT_SHIFT] |= (1<<(index&0x1f));
          return bits;
     }
     /**
@@ -177,11 +177,11 @@ public class BeanConverterUtils implements Constant {
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
 
-        private boolean bitCheck(String name,long...bits){
+        private boolean bitCheck(String name,int...bits){
             Integer id = rightIndexs.get(name);
             return (null == id)?false:BeanConverterUtils.bitCheck(id.intValue(),bits);
         }
-        private long[] bitOR(String name,long... bits){
+        private int[] bitOR(String name,int... bits){
             return BeanConverterUtils.bitOR(rightIndexs.get(name),bits);
         }
         private void getGetter(String name){
@@ -249,16 +249,16 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_INITIALIZED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_INITIALIZED,int[].class,List.class);
                 }else{
-                    getSetter(SET_INITIALIZED,long.class);
+                    getSetter(SET_INITIALIZED,int.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_MODIFIED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_MODIFIED,int[].class,List.class);
                 }else{
-                    getSetter(SET_MODIFIED,long.class);
+                    getSetter(SET_MODIFIED,int.class);
                 }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
@@ -302,15 +302,15 @@ public class BeanConverterUtils implements Constant {
             try{
                 Method getterMethod;
                 left.resetIsModified();
-                long selfModified = 0L;
-                long[] initialized;
-                long[] modified;
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
-                    modified = (long[])methods.get(GET_MODIFIED).invoke(right);
+                int selfModified = 0;
+                int[] initialized;
+                int[] modified;
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    initialized = (int[])methods.get(GET_INITIALIZED).invoke(right);
+                    modified = (int[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
-                    initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
-                    modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
+                    initialized = new int[]{(Integer)methods.get(GET_INITIALIZED).invoke(right)};
+                    modified = new int[]{(Integer)methods.get(GET_MODIFIED).invoke(right)};
                 }
                 if( bitCheck(Column.id.name(),initialized) && (null != (getterMethod = methods.get(Column.id.getter)))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
@@ -421,10 +421,10 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(DeviceBean left, R_DEVICE right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                Arrays.fill(initialized, 0L);
-                Arrays.fill(modified, 0L);
+                int[] initialized = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                int[] modified = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                Arrays.fill(initialized, 0);
+                Arrays.fill(modified, 0);
                 if(null != (setterMethod = methods.get(Column.id.setter)) && left.checkIdInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get(Column.id.setter),left.getId()));
@@ -628,11 +628,11 @@ public class BeanConverterUtils implements Constant {
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
 
-        private boolean bitCheck(String name,long...bits){
+        private boolean bitCheck(String name,int...bits){
             Integer id = rightIndexs.get(name);
             return (null == id)?false:BeanConverterUtils.bitCheck(id.intValue(),bits);
         }
-        private long[] bitOR(String name,long... bits){
+        private int[] bitOR(String name,int... bits){
             return BeanConverterUtils.bitOR(rightIndexs.get(name),bits);
         }
         private void getGetter(String name){
@@ -700,16 +700,16 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_INITIALIZED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_INITIALIZED,int[].class,List.class);
                 }else{
-                    getSetter(SET_INITIALIZED,long.class);
+                    getSetter(SET_INITIALIZED,int.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_MODIFIED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_MODIFIED,int[].class,List.class);
                 }else{
-                    getSetter(SET_MODIFIED,long.class);
+                    getSetter(SET_MODIFIED,int.class);
                 }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
@@ -741,15 +741,15 @@ public class BeanConverterUtils implements Constant {
             try{
                 Method getterMethod;
                 left.resetIsModified();
-                long selfModified = 0L;
-                long[] initialized;
-                long[] modified;
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
-                    modified = (long[])methods.get(GET_MODIFIED).invoke(right);
+                int selfModified = 0;
+                int[] initialized;
+                int[] modified;
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    initialized = (int[])methods.get(GET_INITIALIZED).invoke(right);
+                    modified = (int[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
-                    initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
-                    modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
+                    initialized = new int[]{(Integer)methods.get(GET_INITIALIZED).invoke(right)};
+                    modified = new int[]{(Integer)methods.get(GET_MODIFIED).invoke(right)};
                 }
                 if( bitCheck(Column.id.name(),initialized) && (null != (getterMethod = methods.get(Column.id.getter)))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
@@ -824,10 +824,10 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(DeviceGroupBean left, R_DEVICEGROUP right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                Arrays.fill(initialized, 0L);
-                Arrays.fill(modified, 0L);
+                int[] initialized = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                int[] modified = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                Arrays.fill(initialized, 0);
+                Arrays.fill(modified, 0);
                 if(null != (setterMethod = methods.get(Column.id.setter)) && left.checkIdInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get(Column.id.setter),left.getId()));
@@ -986,11 +986,11 @@ public class BeanConverterUtils implements Constant {
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
 
-        private boolean bitCheck(String name,long...bits){
+        private boolean bitCheck(String name,int...bits){
             Integer id = rightIndexs.get(name);
             return (null == id)?false:BeanConverterUtils.bitCheck(id.intValue(),bits);
         }
-        private long[] bitOR(String name,long... bits){
+        private int[] bitOR(String name,int... bits){
             return BeanConverterUtils.bitOR(rightIndexs.get(name),bits);
         }
         private void getGetter(String name){
@@ -1058,16 +1058,16 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_INITIALIZED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_INITIALIZED,int[].class,List.class);
                 }else{
-                    getSetter(SET_INITIALIZED,long.class);
+                    getSetter(SET_INITIALIZED,int.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_MODIFIED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_MODIFIED,int[].class,List.class);
                 }else{
-                    getSetter(SET_MODIFIED,long.class);
+                    getSetter(SET_MODIFIED,int.class);
                 }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
@@ -1117,15 +1117,15 @@ public class BeanConverterUtils implements Constant {
             try{
                 Method getterMethod;
                 left.resetIsModified();
-                long selfModified = 0L;
-                long[] initialized;
-                long[] modified;
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
-                    modified = (long[])methods.get(GET_MODIFIED).invoke(right);
+                int selfModified = 0;
+                int[] initialized;
+                int[] modified;
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    initialized = (int[])methods.get(GET_INITIALIZED).invoke(right);
+                    modified = (int[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
-                    initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
-                    modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
+                    initialized = new int[]{(Integer)methods.get(GET_INITIALIZED).invoke(right)};
+                    modified = new int[]{(Integer)methods.get(GET_MODIFIED).invoke(right)};
                 }
                 if( bitCheck(Column.id.name(),initialized) && (null != (getterMethod = methods.get(Column.id.getter)))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
@@ -1254,10 +1254,10 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(FaceBean left, R_FACE right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                Arrays.fill(initialized, 0L);
-                Arrays.fill(modified, 0L);
+                int[] initialized = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                int[] modified = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                Arrays.fill(initialized, 0);
+                Arrays.fill(modified, 0);
                 if(null != (setterMethod = methods.get(Column.id.setter)) && left.checkIdInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get(Column.id.setter),left.getId()));
@@ -1476,11 +1476,11 @@ public class BeanConverterUtils implements Constant {
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
 
-        private boolean bitCheck(String name,long...bits){
+        private boolean bitCheck(String name,int...bits){
             Integer id = rightIndexs.get(name);
             return (null == id)?false:BeanConverterUtils.bitCheck(id.intValue(),bits);
         }
-        private long[] bitOR(String name,long... bits){
+        private int[] bitOR(String name,int... bits){
             return BeanConverterUtils.bitOR(rightIndexs.get(name),bits);
         }
         private void getGetter(String name){
@@ -1548,16 +1548,16 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_INITIALIZED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_INITIALIZED,int[].class,List.class);
                 }else{
-                    getSetter(SET_INITIALIZED,long.class);
+                    getSetter(SET_INITIALIZED,int.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_MODIFIED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_MODIFIED,int[].class,List.class);
                 }else{
-                    getSetter(SET_MODIFIED,long.class);
+                    getSetter(SET_MODIFIED,int.class);
                 }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
@@ -1577,15 +1577,15 @@ public class BeanConverterUtils implements Constant {
             try{
                 Method getterMethod;
                 left.resetIsModified();
-                long selfModified = 0L;
-                long[] initialized;
-                long[] modified;
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
-                    modified = (long[])methods.get(GET_MODIFIED).invoke(right);
+                int selfModified = 0;
+                int[] initialized;
+                int[] modified;
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    initialized = (int[])methods.get(GET_INITIALIZED).invoke(right);
+                    modified = (int[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
-                    initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
-                    modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
+                    initialized = new int[]{(Integer)methods.get(GET_INITIALIZED).invoke(right)};
+                    modified = new int[]{(Integer)methods.get(GET_MODIFIED).invoke(right)};
                 }
                 if( bitCheck(Column.md5.name(),initialized) && (null != (getterMethod = methods.get(Column.md5.getter)))){
                     left.setMd5(cast(String.class,getterMethod.invoke(right)));
@@ -1624,10 +1624,10 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(FeatureBean left, R_FEATURE right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                Arrays.fill(initialized, 0L);
-                Arrays.fill(modified, 0L);
+                int[] initialized = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                int[] modified = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                Arrays.fill(initialized, 0);
+                Arrays.fill(modified, 0);
                 if(null != (setterMethod = methods.get(Column.md5.setter)) && left.checkMd5Initialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get(Column.md5.setter),left.getMd5()));
@@ -1718,11 +1718,11 @@ public class BeanConverterUtils implements Constant {
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
 
-        private boolean bitCheck(String name,long...bits){
+        private boolean bitCheck(String name,int...bits){
             Integer id = rightIndexs.get(name);
             return (null == id)?false:BeanConverterUtils.bitCheck(id.intValue(),bits);
         }
-        private long[] bitOR(String name,long... bits){
+        private int[] bitOR(String name,int... bits){
             return BeanConverterUtils.bitOR(rightIndexs.get(name),bits);
         }
         private void getGetter(String name){
@@ -1790,16 +1790,16 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_INITIALIZED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_INITIALIZED,int[].class,List.class);
                 }else{
-                    getSetter(SET_INITIALIZED,long.class);
+                    getSetter(SET_INITIALIZED,int.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_MODIFIED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_MODIFIED,int[].class,List.class);
                 }else{
-                    getSetter(SET_MODIFIED,long.class);
+                    getSetter(SET_MODIFIED,int.class);
                 }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
@@ -1827,15 +1827,15 @@ public class BeanConverterUtils implements Constant {
             try{
                 Method getterMethod;
                 left.resetIsModified();
-                long selfModified = 0L;
-                long[] initialized;
-                long[] modified;
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
-                    modified = (long[])methods.get(GET_MODIFIED).invoke(right);
+                int selfModified = 0;
+                int[] initialized;
+                int[] modified;
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    initialized = (int[])methods.get(GET_INITIALIZED).invoke(right);
+                    modified = (int[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
-                    initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
-                    modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
+                    initialized = new int[]{(Integer)methods.get(GET_INITIALIZED).invoke(right)};
+                    modified = new int[]{(Integer)methods.get(GET_MODIFIED).invoke(right)};
                 }
                 if( bitCheck(Column.md5.name(),initialized) && (null != (getterMethod = methods.get(Column.md5.getter)))){
                     left.setMd5(cast(String.class,getterMethod.invoke(right)));
@@ -1898,10 +1898,10 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(ImageBean left, R_IMAGE right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                Arrays.fill(initialized, 0L);
-                Arrays.fill(modified, 0L);
+                int[] initialized = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                int[] modified = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                Arrays.fill(initialized, 0);
+                Arrays.fill(modified, 0);
                 if(null != (setterMethod = methods.get(Column.md5.setter)) && left.checkMd5Initialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get(Column.md5.setter),left.getMd5()));
@@ -2026,11 +2026,11 @@ public class BeanConverterUtils implements Constant {
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
 
-        private boolean bitCheck(String name,long...bits){
+        private boolean bitCheck(String name,int...bits){
             Integer id = rightIndexs.get(name);
             return (null == id)?false:BeanConverterUtils.bitCheck(id.intValue(),bits);
         }
-        private long[] bitOR(String name,long... bits){
+        private int[] bitOR(String name,int... bits){
             return BeanConverterUtils.bitOR(rightIndexs.get(name),bits);
         }
         private void getGetter(String name){
@@ -2098,16 +2098,16 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_INITIALIZED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_INITIALIZED,int[].class,List.class);
                 }else{
-                    getSetter(SET_INITIALIZED,long.class);
+                    getSetter(SET_INITIALIZED,int.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_MODIFIED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_MODIFIED,int[].class,List.class);
                 }else{
-                    getSetter(SET_MODIFIED,long.class);
+                    getSetter(SET_MODIFIED,int.class);
                 }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
@@ -2137,15 +2137,15 @@ public class BeanConverterUtils implements Constant {
             try{
                 Method getterMethod;
                 left.resetIsModified();
-                long selfModified = 0L;
-                long[] initialized;
-                long[] modified;
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
-                    modified = (long[])methods.get(GET_MODIFIED).invoke(right);
+                int selfModified = 0;
+                int[] initialized;
+                int[] modified;
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    initialized = (int[])methods.get(GET_INITIALIZED).invoke(right);
+                    modified = (int[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
-                    initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
-                    modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
+                    initialized = new int[]{(Integer)methods.get(GET_INITIALIZED).invoke(right)};
+                    modified = new int[]{(Integer)methods.get(GET_MODIFIED).invoke(right)};
                 }
                 if( bitCheck(Column.id.name(),initialized) && (null != (getterMethod = methods.get(Column.id.getter)))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
@@ -2214,10 +2214,10 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(LogBean left, R_LOG right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                Arrays.fill(initialized, 0L);
-                Arrays.fill(modified, 0L);
+                int[] initialized = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                int[] modified = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                Arrays.fill(initialized, 0);
+                Arrays.fill(modified, 0);
                 if(null != (setterMethod = methods.get(Column.id.setter)) && left.checkIdInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get(Column.id.setter),left.getId()));
@@ -2351,11 +2351,11 @@ public class BeanConverterUtils implements Constant {
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
 
-        private boolean bitCheck(String name,long...bits){
+        private boolean bitCheck(String name,int...bits){
             Integer id = rightIndexs.get(name);
             return (null == id)?false:BeanConverterUtils.bitCheck(id.intValue(),bits);
         }
-        private long[] bitOR(String name,long... bits){
+        private int[] bitOR(String name,int... bits){
             return BeanConverterUtils.bitOR(rightIndexs.get(name),bits);
         }
         private void getGetter(String name){
@@ -2423,16 +2423,16 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_INITIALIZED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_INITIALIZED,int[].class,List.class);
                 }else{
-                    getSetter(SET_INITIALIZED,long.class);
+                    getSetter(SET_INITIALIZED,int.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_MODIFIED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_MODIFIED,int[].class,List.class);
                 }else{
-                    getSetter(SET_MODIFIED,long.class);
+                    getSetter(SET_MODIFIED,int.class);
                 }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
@@ -2456,15 +2456,15 @@ public class BeanConverterUtils implements Constant {
             try{
                 Method getterMethod;
                 left.resetIsModified();
-                long selfModified = 0L;
-                long[] initialized;
-                long[] modified;
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
-                    modified = (long[])methods.get(GET_MODIFIED).invoke(right);
+                int selfModified = 0;
+                int[] initialized;
+                int[] modified;
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    initialized = (int[])methods.get(GET_INITIALIZED).invoke(right);
+                    modified = (int[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
-                    initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
-                    modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
+                    initialized = new int[]{(Integer)methods.get(GET_INITIALIZED).invoke(right)};
+                    modified = new int[]{(Integer)methods.get(GET_MODIFIED).invoke(right)};
                 }
                 if( bitCheck(Column.deviceGroupId.name(),initialized) && (null != (getterMethod = methods.get(Column.deviceGroupId.getter)))){
                     left.setDeviceGroupId(cast(Integer.class,getterMethod.invoke(right)));
@@ -2515,10 +2515,10 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(PermitBean left, R_PERMIT right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                Arrays.fill(initialized, 0L);
-                Arrays.fill(modified, 0L);
+                int[] initialized = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                int[] modified = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                Arrays.fill(initialized, 0);
+                Arrays.fill(modified, 0);
                 if(null != (setterMethod = methods.get(Column.deviceGroupId.setter)) && left.checkDeviceGroupIdInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get(Column.deviceGroupId.setter),left.getDeviceGroupId()));
@@ -2636,11 +2636,11 @@ public class BeanConverterUtils implements Constant {
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
 
-        private boolean bitCheck(String name,long...bits){
+        private boolean bitCheck(String name,int...bits){
             Integer id = rightIndexs.get(name);
             return (null == id)?false:BeanConverterUtils.bitCheck(id.intValue(),bits);
         }
-        private long[] bitOR(String name,long... bits){
+        private int[] bitOR(String name,int... bits){
             return BeanConverterUtils.bitOR(rightIndexs.get(name),bits);
         }
         private void getGetter(String name){
@@ -2708,16 +2708,16 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_INITIALIZED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_INITIALIZED,int[].class,List.class);
                 }else{
-                    getSetter(SET_INITIALIZED,long.class);
+                    getSetter(SET_INITIALIZED,int.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_MODIFIED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_MODIFIED,int[].class,List.class);
                 }else{
-                    getSetter(SET_MODIFIED,long.class);
+                    getSetter(SET_MODIFIED,int.class);
                 }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
@@ -2763,15 +2763,15 @@ public class BeanConverterUtils implements Constant {
             try{
                 Method getterMethod;
                 left.resetIsModified();
-                long selfModified = 0L;
-                long[] initialized;
-                long[] modified;
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
-                    modified = (long[])methods.get(GET_MODIFIED).invoke(right);
+                int selfModified = 0;
+                int[] initialized;
+                int[] modified;
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    initialized = (int[])methods.get(GET_INITIALIZED).invoke(right);
+                    modified = (int[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
-                    initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
-                    modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
+                    initialized = new int[]{(Integer)methods.get(GET_INITIALIZED).invoke(right)};
+                    modified = new int[]{(Integer)methods.get(GET_MODIFIED).invoke(right)};
                 }
                 if( bitCheck(Column.id.name(),initialized) && (null != (getterMethod = methods.get(Column.id.getter)))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
@@ -2888,10 +2888,10 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(PersonBean left, R_PERSON right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                Arrays.fill(initialized, 0L);
-                Arrays.fill(modified, 0L);
+                int[] initialized = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                int[] modified = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                Arrays.fill(initialized, 0);
+                Arrays.fill(modified, 0);
                 if(null != (setterMethod = methods.get(Column.id.setter)) && left.checkIdInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get(Column.id.setter),left.getId()));
@@ -3104,11 +3104,11 @@ public class BeanConverterUtils implements Constant {
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
 
-        private boolean bitCheck(String name,long...bits){
+        private boolean bitCheck(String name,int...bits){
             Integer id = rightIndexs.get(name);
             return (null == id)?false:BeanConverterUtils.bitCheck(id.intValue(),bits);
         }
-        private long[] bitOR(String name,long... bits){
+        private int[] bitOR(String name,int... bits){
             return BeanConverterUtils.bitOR(rightIndexs.get(name),bits);
         }
         private void getGetter(String name){
@@ -3176,16 +3176,16 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_INITIALIZED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_INITIALIZED,int[].class,List.class);
                 }else{
-                    getSetter(SET_INITIALIZED,long.class);
+                    getSetter(SET_INITIALIZED,int.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_MODIFIED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_MODIFIED,int[].class,List.class);
                 }else{
-                    getSetter(SET_MODIFIED,long.class);
+                    getSetter(SET_MODIFIED,int.class);
                 }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
@@ -3217,15 +3217,15 @@ public class BeanConverterUtils implements Constant {
             try{
                 Method getterMethod;
                 left.resetIsModified();
-                long selfModified = 0L;
-                long[] initialized;
-                long[] modified;
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
-                    modified = (long[])methods.get(GET_MODIFIED).invoke(right);
+                int selfModified = 0;
+                int[] initialized;
+                int[] modified;
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    initialized = (int[])methods.get(GET_INITIALIZED).invoke(right);
+                    modified = (int[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
-                    initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
-                    modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
+                    initialized = new int[]{(Integer)methods.get(GET_INITIALIZED).invoke(right)};
+                    modified = new int[]{(Integer)methods.get(GET_MODIFIED).invoke(right)};
                 }
                 if( bitCheck(Column.id.name(),initialized) && (null != (getterMethod = methods.get(Column.id.getter)))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
@@ -3300,10 +3300,10 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(PersonGroupBean left, R_PERSONGROUP right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                Arrays.fill(initialized, 0L);
-                Arrays.fill(modified, 0L);
+                int[] initialized = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                int[] modified = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                Arrays.fill(initialized, 0);
+                Arrays.fill(modified, 0);
                 if(null != (setterMethod = methods.get(Column.id.setter)) && left.checkIdInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get(Column.id.setter),left.getId()));
@@ -3446,11 +3446,11 @@ public class BeanConverterUtils implements Constant {
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
 
-        private boolean bitCheck(String name,long...bits){
+        private boolean bitCheck(String name,int...bits){
             Integer id = rightIndexs.get(name);
             return (null == id)?false:BeanConverterUtils.bitCheck(id.intValue(),bits);
         }
-        private long[] bitOR(String name,long... bits){
+        private int[] bitOR(String name,int... bits){
             return BeanConverterUtils.bitOR(rightIndexs.get(name),bits);
         }
         private void getGetter(String name){
@@ -3518,16 +3518,16 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_INITIALIZED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_INITIALIZED,int[].class,List.class);
                 }else{
-                    getSetter(SET_INITIALIZED,long.class);
+                    getSetter(SET_INITIALIZED,int.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_MODIFIED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_MODIFIED,int[].class,List.class);
                 }else{
-                    getSetter(SET_MODIFIED,long.class);
+                    getSetter(SET_MODIFIED,int.class);
                 }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
@@ -3545,15 +3545,15 @@ public class BeanConverterUtils implements Constant {
             try{
                 Method getterMethod;
                 left.resetIsModified();
-                long selfModified = 0L;
-                long[] initialized;
-                long[] modified;
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
-                    modified = (long[])methods.get(GET_MODIFIED).invoke(right);
+                int selfModified = 0;
+                int[] initialized;
+                int[] modified;
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    initialized = (int[])methods.get(GET_INITIALIZED).invoke(right);
+                    modified = (int[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
-                    initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
-                    modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
+                    initialized = new int[]{(Integer)methods.get(GET_INITIALIZED).invoke(right)};
+                    modified = new int[]{(Integer)methods.get(GET_MODIFIED).invoke(right)};
                 }
                 if( bitCheck(Column.md5.name(),initialized) && (null != (getterMethod = methods.get(Column.md5.getter)))){
                     left.setMd5(cast(String.class,getterMethod.invoke(right)));
@@ -3586,10 +3586,10 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(StoreBean left, R_STORE right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                Arrays.fill(initialized, 0L);
-                Arrays.fill(modified, 0L);
+                int[] initialized = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                int[] modified = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                Arrays.fill(initialized, 0);
+                Arrays.fill(modified, 0);
                 if(null != (setterMethod = methods.get(Column.md5.setter)) && left.checkMd5Initialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get(Column.md5.setter),left.getMd5()));
@@ -3666,11 +3666,11 @@ public class BeanConverterUtils implements Constant {
         private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
         private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
 
-        private boolean bitCheck(String name,long...bits){
+        private boolean bitCheck(String name,int...bits){
             Integer id = rightIndexs.get(name);
             return (null == id)?false:BeanConverterUtils.bitCheck(id.intValue(),bits);
         }
-        private long[] bitOR(String name,long... bits){
+        private int[] bitOR(String name,int... bits){
             return BeanConverterUtils.bitOR(rightIndexs.get(name),bits);
         }
         private void getGetter(String name){
@@ -3738,16 +3738,16 @@ public class BeanConverterUtils implements Constant {
                 methods.put(IS_NEW,rightType.getMethod(IS_NEW));
                 methods.put(GET_INITIALIZED,rightType.getMethod(GET_INITIALIZED));
                 getSetter(SET_NEW,boolean.class);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_INITIALIZED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_INITIALIZED,int[].class,List.class);
                 }else{
-                    getSetter(SET_INITIALIZED,long.class);
+                    getSetter(SET_INITIALIZED,int.class);
                 }
                 getGetter(GET_MODIFIED);
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    getSetter(SET_MODIFIED,long[].class,List.class);
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    getSetter(SET_MODIFIED,int[].class,List.class);
                 }else{
-                    getSetter(SET_MODIFIED,long.class);
+                    getSetter(SET_MODIFIED,int.class);
                 }
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
@@ -3771,15 +3771,15 @@ public class BeanConverterUtils implements Constant {
             try{
                 Method getterMethod;
                 left.resetIsModified();
-                long selfModified = 0L;
-                long[] initialized;
-                long[] modified;
-                if(rightIndexs.size() > LONG_BIT_NUM){
-                    initialized = (long[])methods.get(GET_INITIALIZED).invoke(right);
-                    modified = (long[])methods.get(GET_MODIFIED).invoke(right);
+                int selfModified = 0;
+                int[] initialized;
+                int[] modified;
+                if(rightIndexs.size() > STATE_BIT_NUM){
+                    initialized = (int[])methods.get(GET_INITIALIZED).invoke(right);
+                    modified = (int[])methods.get(GET_MODIFIED).invoke(right);
                 }else{
-                    initialized = new long[]{(Long)methods.get(GET_INITIALIZED).invoke(right)};
-                    modified = new long[]{(Long)methods.get(GET_MODIFIED).invoke(right)};
+                    initialized = new int[]{(Integer)methods.get(GET_INITIALIZED).invoke(right)};
+                    modified = new int[]{(Integer)methods.get(GET_MODIFIED).invoke(right)};
                 }
                 if( bitCheck(Column.id.name(),initialized) && (null != (getterMethod = methods.get(Column.id.getter)))){
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
@@ -3830,10 +3830,10 @@ public class BeanConverterUtils implements Constant {
         protected void doToRight(LogLightBean left, R_LOGLIGHT right) {
             try{
                 Method setterMethod;
-                long[] initialized = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                long[] modified = new long[(rightIndexs.size() + LONG_BIT_NUM - 1)>>6];
-                Arrays.fill(initialized, 0L);
-                Arrays.fill(modified, 0L);
+                int[] initialized = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                int[] modified = new int[(rightIndexs.size() + STATE_BIT_NUM - 1)>>STATE_BIT_SHIFT];
+                Arrays.fill(initialized, 0);
+                Arrays.fill(modified, 0);
                 if(null != (setterMethod = methods.get(Column.id.setter)) && left.checkIdInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get(Column.id.setter),left.getId()));
