@@ -1,6 +1,6 @@
 package net.gdface.facelog;
 
-import com.google.common.base.Preconditions;
+import static com.google.common.base.Preconditions.*;
 
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
@@ -23,7 +23,7 @@ class RedisFeatureListener extends TableListener.Adapter<FeatureBean> implements
 		this(JedisPoolLazy.getDefaultInstance());
 	}
 	public RedisFeatureListener(JedisPoolLazy jedisPoolLazy) {
-		this.publisher = RedisFactory.getPublisher(Preconditions.checkNotNull(jedisPoolLazy,"jedisPoolLazy is null"));
+		this.publisher = RedisFactory.getPublisher(checkNotNull(jedisPoolLazy,"jedisPoolLazy is null"));
 	}
 	@Override
 	public void afterInsert(FeatureBean bean) {
@@ -40,6 +40,8 @@ class RedisFeatureListener extends TableListener.Adapter<FeatureBean> implements
 	}
 	@Override
 	public void afterUpdate(FeatureBean bean) {
+		// beforeUpdatedBean 为 null，只可能因为侦听器是被异步调用的
+		checkState(beforeUpdatedBean != null,"beforeUpdatedBean must not be null");
 		new RedisPublishTask<FeatureBean>(
 				PUBSUB_FEATURE_UPDATE, 
 				beforeUpdatedBean, 
