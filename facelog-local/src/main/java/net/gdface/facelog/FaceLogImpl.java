@@ -1548,8 +1548,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     @Override
     public String getProperty(String key,Token token){
     	try {
-			Enable.PERSON_ONLY.check(tm, token);			
-			if(TokenType.PERSON.equals(token.getType())){
+			Enable.ALL.check(tm, token);			
+			if(!TokenType.ROOT.equals(token.getType())){
 				PropertyWhiteList.INSTANCE.checkAccess(key);
 			}
 			return GlobalConfig.getProperty(key);

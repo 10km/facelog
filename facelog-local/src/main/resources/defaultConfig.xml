@@ -72,6 +72,18 @@
 		<port description="RESTful服务端口">46411</port>
 		<swaggerEnable description="是否显示在线swagger文档">true</swaggerEnable>
 	</restful>
+	<feature description="特征参数配置">
+		<sdkVersion description="SDK版本号">
+			<whiteList description="允许的SDK版本号(白名单),逗号分隔">MTFSDK1,CASSDK1</whiteList>
+		</sdkVersion>
+		<person>
+			<defaultLimit description="每用户允每个SDK版本许建模最大数量默认值">4</defaultLimit>
+			<limit>
+				<MTFSDK1 description="MTFSDK1特征每用户允许建模最大数量">	${feature.person.defaultLimit}</MTFSDK1>
+				<CASSDK1 description="CASSDK1特征每用户允许建模最大数量">${feature.person.defaultLimit}</CASSDK1>
+			</limit>
+		</person>
+	</feature>
 	<database description="数据库参数配置">
 		<isDebug description="是否为调试状态">false</isDebug>
 		<jdbc>

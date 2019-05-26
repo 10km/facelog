@@ -1193,9 +1193,8 @@ public interface IFaceLog{
 
 	/**
 	 * 返回指定的参数,如果参数没有定义则返回{@code null}<br>
-	 * {@code PERSON_ONLY}<br>
+	 * 非root令牌只能访问指定范围的参数,否则会抛出异常<br>
 	 * root令牌不受限制<br>
-	 * 人员令牌只能访问指定范围的参数,否则会抛出异常<br>
 	 * @param key
 	 * @param token 访问令牌
 	 * @return 返回{@code key}指定的参数值

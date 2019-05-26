@@ -217,7 +217,16 @@ public interface CommonConstant {
     
     /** RESTful web服务参数配置:是否显示在线swagger文档,默认值{@code true} */
     public static final String RESTFUL_SWAGGER_ENABLE = "restful.swaggerEnable";
-    
+
+    /** 特征参数配置前缀 */
+    public static final String FEATURE_PREFIX = "feature";
+
+    /** 特征参数配置:允许的SDK版本号(白名单),逗号分隔 */
+    public static final String FEATURE_SDKVERSION_WHITELIST = "feature.sdkVersion.whitelist";
+
+    /** 特征参数配置:每用户每个SDK版本允许建模最大数量默认值 */
+    public static final String FEATURE_PERSON_DEFAULTLIMIT = "feature.person.defaultLimit";
+
     /** 操作员对person表允许的操作 */
     public static final String SECURITY_OPERATOR_TABLE_PERSON_ALLOW = "security.operator.table.person.allow";
     

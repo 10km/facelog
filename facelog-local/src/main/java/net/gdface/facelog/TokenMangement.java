@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.nio.ByteBuffer;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.MoreObjects;
@@ -47,6 +48,11 @@ class TokenMangement implements ServiceConstant {
 	private final int personTokenExpire;
 	/** 是否拒绝普通人员申请令牌 */
 	private final boolean rejectZero;
+	/** 
+	 * 允许的SDK版本列表.<br>
+	 * 如果设备的SDK版本号不在名单内不允许注册 
+	 */
+	private final List<String> sdkVersionWhiteList;
 	/**
 	 * @param dao
 	 */
@@ -66,6 +72,7 @@ class TokenMangement implements ServiceConstant {
 		this.ackChannelTable =  RedisFactory.getTable(TABLE_ACK_CHANNEL, JedisPoolLazy.getDefaultInstance());
 		this.cmdSnTable.setExpire(CONFIG.getInt(TOKEN_CMD_SERIALNO_EXPIRE), TimeUnit.SECONDS);
 		this.ackChannelTable.setExpire(CONFIG.getInt(TOKEN_CMD_ACKCHANNEL_EXPIRE), TimeUnit.SECONDS);
+		this.sdkVersionWhiteList = GlobalConfig.getExplodedStringAsList(CONFIG.getString(FEATURE_SDKVERSION_WHITELIST,""));
 		GlobalConfig.logTokenParameters();
 	}
 	/** 验证MAC地址是否有效(HEX格式,12字符,无分隔符,不区分大小写) */
@@ -276,18 +283,24 @@ class TokenMangement implements ServiceConstant {
 			throws ServiceSecurityException{
 		TokenOp.REGISTER.asContextTokenOp();
 		checkArgument(null != newDevice,"deviceBean must not be null");
-	    // 检查是否为新记录，
-	    checkArgument(newDevice.isNew(),
-	    		"for device registeration the 'newDevice' must be a new record,so the _isNew field must be true ");
-	    // ID为自增长键，新记录ID字段不能指定，由数据库分配
-	    checkArgument(
-	    		!newDevice.isModified(net.gdface.facelog.db.Constant.FL_DEVICE_ID_ID) 
-	    		|| Objects.equal(0,newDevice.getId()),
-	    		"for device registeration the 'newDevice' must be a new record,so id field must be not be set or be zero");
-	 // sdk_version字段不可为空
-	    checkArgument(!Strings.isNullOrEmpty(newDevice.getSdkVersion()), "sdkVersion must not be null or empty");
-	    // sdk_version字段内容只允许字母,数字,-,.,_符号
-	    checkArgument(newDevice.getSdkVersion().matches(SDK_VERSION_REGEX), "invalid sdk version format");
+		// 检查是否为新记录，
+		checkArgument(newDevice.isNew(),
+				"for device registeration the 'newDevice' must be a new record,so the _isNew field must be true ");
+		// ID为自增长键，新记录ID字段不能指定，由数据库分配
+		checkArgument(
+				!newDevice.isModified(net.gdface.facelog.db.Constant.FL_DEVICE_ID_ID) 
+				|| Objects.equal(0,newDevice.getId()),
+				"for device registeration the 'newDevice' must be a new record,so id field must be not be set or be zero");
+		// sdk_version字段不可为空
+		checkArgument(!Strings.isNullOrEmpty(newDevice.getSdkVersion()), "sdkVersion must not be null or empty");
+
+		// sdk_version字段内容只允许字母,数字,-,.,_符号
+		checkArgument(newDevice.getSdkVersion().matches(SDK_VERSION_REGEX), "invalid sdk version format");
+
+		// 检查sdk_version是否允许注册
+		checkArgument(sdkVersionWhiteList.contains(newDevice.getSdkVersion()), 
+				"UNSUPPORTED SDK Version [%s]",newDevice.getSdkVersion());
+
 		DeviceBean dmac = this.dao.daoGetDeviceByIndexMac(newDevice.getMac());
 		DeviceBean dsn = this.dao.daoGetDeviceByIndexSerialNo(newDevice.getSerialNo());
 		if(null !=dmac ){
