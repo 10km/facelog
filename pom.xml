@@ -22,7 +22,7 @@
 		<common-java.version>1.1.28</common-java.version>
 		<codegen.version>1.0.17</codegen.version>
 		<idl.generator.version>1.10</idl.generator.version>
-		<dtalk.version>0.1.14-SNAPSHOT</dtalk.version>
+		<dtalk.version>0.1.14</dtalk.version>
 		<thrifty.compiler.maven.plugin.version>1.1</thrifty.compiler.maven.plugin.version>
 		<simplemq.version>1.0.15</simplemq.version>
 		<swagger-annotations>1.5.22</swagger-annotations>	
