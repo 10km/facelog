@@ -307,7 +307,7 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
         /**
          * generate SQL query(SELECT) statement,such as: 'SELECT id,name from mytable WHERE id=1'
          * @param fieldList
-         * @param where where condition expression statement that start with 'WHERE',or {@code null}
+         * @param where where condition expression statement that start with 'WHERE',or {@code null},or empty string
          * @return SQL statement string
          * @throws IllegalArgumentException where condition expression don't start with 'WHERE'
          */
@@ -327,7 +327,7 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
                 }      
             }
             sql.append(" FROM " + this.getTableName() + " ");
-            if(null != where){
+            if(null != where && where.length() > 0){
                 if(where.trim().toUpperCase().startsWith("WHERE")){
                     sql.append(where);
                 }
