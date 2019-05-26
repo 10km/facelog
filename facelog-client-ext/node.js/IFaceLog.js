@@ -232,7 +232,6 @@ var IFaceLog_addFeatureMulti_args = function(args) {
   this.feature = null;
   this.personId = null;
   this.faceInfo = null;
-  this.deviceId = null;
   this.token = null;
   if (args) {
     if (args.feature !== undefined && args.feature !== null) {
@@ -243,9 +242,6 @@ var IFaceLog_addFeatureMulti_args = function(args) {
     }
     if (args.faceInfo !== undefined && args.faceInfo !== null) {
       this.faceInfo = Thrift.copyMap(args.faceInfo, [ttypes.FaceBean]);
-    }
-    if (args.deviceId !== undefined && args.deviceId !== null) {
-      this.deviceId = args.deviceId;
     }
     if (args.token !== undefined && args.token !== null) {
       this.token = new ttypes.Token(args.token);
@@ -306,13 +302,6 @@ IFaceLog_addFeatureMulti_args.prototype.read = function(input) {
       }
       break;
       case 4:
-      if (ftype == Thrift.Type.I32) {
-        this.deviceId = input.readI32();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 5:
       if (ftype == Thrift.Type.STRUCT) {
         this.token = new ttypes.Token();
         this.token.read(input);
@@ -356,13 +345,8 @@ IFaceLog_addFeatureMulti_args.prototype.write = function(output) {
     output.writeMapEnd();
     output.writeFieldEnd();
   }
-  if (this.deviceId !== null && this.deviceId !== undefined) {
-    output.writeFieldBegin('deviceId', Thrift.Type.I32, 4);
-    output.writeI32(this.deviceId);
-    output.writeFieldEnd();
-  }
   if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 5);
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 4);
     this.token.write(output);
     output.writeFieldEnd();
   }
@@ -470,7 +454,6 @@ var IFaceLog_addFeatureWithImage_args = function(args) {
   this.asIdPhotoIfAbsent = null;
   this.featurePhoto = null;
   this.faceBean = null;
-  this.deviceId = null;
   this.token = null;
   if (args) {
     if (args.feature !== undefined && args.feature !== null) {
@@ -489,9 +472,6 @@ var IFaceLog_addFeatureWithImage_args = function(args) {
     }
     if (args.faceBean !== undefined && args.faceBean !== null) {
       this.faceBean = new ttypes.FaceBean(args.faceBean);
-    }
-    if (args.deviceId !== undefined && args.deviceId !== null) {
-      this.deviceId = args.deviceId;
     }
     if (args.token !== undefined && args.token !== null) {
       this.token = new ttypes.Token(args.token);
@@ -549,13 +529,6 @@ IFaceLog_addFeatureWithImage_args.prototype.read = function(input) {
       }
       break;
       case 6:
-      if (ftype == Thrift.Type.I32) {
-        this.deviceId = input.readI32();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 7:
       if (ftype == Thrift.Type.STRUCT) {
         this.token = new ttypes.Token();
         this.token.read(input);
@@ -599,13 +572,8 @@ IFaceLog_addFeatureWithImage_args.prototype.write = function(output) {
     this.faceBean.write(output);
     output.writeFieldEnd();
   }
-  if (this.deviceId !== null && this.deviceId !== undefined) {
-    output.writeFieldBegin('deviceId', Thrift.Type.I32, 6);
-    output.writeI32(this.deviceId);
-    output.writeFieldEnd();
-  }
   if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 7);
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 6);
     this.token.write(output);
     output.writeFieldEnd();
   }
@@ -8430,154 +8398,6 @@ IFaceLog_getFeature_result.prototype.write = function(output) {
   return;
 };
 
-var IFaceLog_getFeatureBeansByPersonId_args = function(args) {
-  this.personId = null;
-  if (args) {
-    if (args.personId !== undefined && args.personId !== null) {
-      this.personId = args.personId;
-    } else {
-      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field personId is unset!');
-    }
-  }
-};
-IFaceLog_getFeatureBeansByPersonId_args.prototype = {};
-IFaceLog_getFeatureBeansByPersonId_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.I32) {
-        this.personId = input.readI32();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-IFaceLog_getFeatureBeansByPersonId_args.prototype.write = function(output) {
-  output.writeStructBegin('IFaceLog_getFeatureBeansByPersonId_args');
-  if (this.personId !== null && this.personId !== undefined) {
-    output.writeFieldBegin('personId', Thrift.Type.I32, 1);
-    output.writeI32(this.personId);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-var IFaceLog_getFeatureBeansByPersonId_result = function(args) {
-  this.success = null;
-  this.ex1 = null;
-  if (args instanceof ttypes.ServiceRuntimeException) {
-    this.ex1 = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined && args.success !== null) {
-      this.success = Thrift.copyList(args.success, [null]);
-    }
-    if (args.ex1 !== undefined && args.ex1 !== null) {
-      this.ex1 = args.ex1;
-    }
-  }
-};
-IFaceLog_getFeatureBeansByPersonId_result.prototype = {};
-IFaceLog_getFeatureBeansByPersonId_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.LIST) {
-        var _size162 = 0;
-        var _rtmp3166;
-        this.success = [];
-        var _etype165 = 0;
-        _rtmp3166 = input.readListBegin();
-        _etype165 = _rtmp3166.etype;
-        _size162 = _rtmp3166.size;
-        for (var _i167 = 0; _i167 < _size162; ++_i167)
-        {
-          var elem168 = null;
-          elem168 = input.readString();
-          this.success.push(elem168);
-        }
-        input.readListEnd();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.ex1 = new ttypes.ServiceRuntimeException();
-        this.ex1.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-IFaceLog_getFeatureBeansByPersonId_result.prototype.write = function(output) {
-  output.writeStructBegin('IFaceLog_getFeatureBeansByPersonId_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.LIST, 0);
-    output.writeListBegin(Thrift.Type.STRING, this.success.length);
-    for (var iter169 in this.success)
-    {
-      if (this.success.hasOwnProperty(iter169))
-      {
-        iter169 = this.success[iter169];
-        output.writeString(iter169);
-      }
-    }
-    output.writeListEnd();
-    output.writeFieldEnd();
-  }
-  if (this.ex1 !== null && this.ex1 !== undefined) {
-    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
-    this.ex1.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
 var IFaceLog_getFeatureBytes_args = function(args) {
   this.md5 = null;
   if (args) {
@@ -8726,18 +8546,18 @@ IFaceLog_getFeatures_args.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.LIST) {
-        var _size170 = 0;
-        var _rtmp3174;
+        var _size162 = 0;
+        var _rtmp3166;
         this.md5 = [];
-        var _etype173 = 0;
-        _rtmp3174 = input.readListBegin();
-        _etype173 = _rtmp3174.etype;
-        _size170 = _rtmp3174.size;
-        for (var _i175 = 0; _i175 < _size170; ++_i175)
+        var _etype165 = 0;
+        _rtmp3166 = input.readListBegin();
+        _etype165 = _rtmp3166.etype;
+        _size162 = _rtmp3166.size;
+        for (var _i167 = 0; _i167 < _size162; ++_i167)
         {
-          var elem176 = null;
-          elem176 = input.readString();
-          this.md5.push(elem176);
+          var elem168 = null;
+          elem168 = input.readString();
+          this.md5.push(elem168);
         }
         input.readListEnd();
       } else {
@@ -8761,12 +8581,12 @@ IFaceLog_getFeatures_args.prototype.write = function(output) {
   if (this.md5 !== null && this.md5 !== undefined) {
     output.writeFieldBegin('md5', Thrift.Type.LIST, 1);
     output.writeListBegin(Thrift.Type.STRING, this.md5.length);
-    for (var iter177 in this.md5)
+    for (var iter169 in this.md5)
     {
-      if (this.md5.hasOwnProperty(iter177))
+      if (this.md5.hasOwnProperty(iter169))
       {
-        iter177 = this.md5[iter177];
-        output.writeString(iter177);
+        iter169 = this.md5[iter169];
+        output.writeString(iter169);
       }
     }
     output.writeListEnd();
@@ -8809,19 +8629,19 @@ IFaceLog_getFeatures_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size178 = 0;
-        var _rtmp3182;
+        var _size170 = 0;
+        var _rtmp3174;
         this.success = [];
-        var _etype181 = 0;
-        _rtmp3182 = input.readListBegin();
-        _etype181 = _rtmp3182.etype;
-        _size178 = _rtmp3182.size;
-        for (var _i183 = 0; _i183 < _size178; ++_i183)
+        var _etype173 = 0;
+        _rtmp3174 = input.readListBegin();
+        _etype173 = _rtmp3174.etype;
+        _size170 = _rtmp3174.size;
+        for (var _i175 = 0; _i175 < _size170; ++_i175)
         {
-          var elem184 = null;
-          elem184 = new ttypes.FeatureBean();
-          elem184.read(input);
-          this.success.push(elem184);
+          var elem176 = null;
+          elem176 = new ttypes.FeatureBean();
+          elem176.read(input);
+          this.success.push(elem176);
         }
         input.readListEnd();
       } else {
@@ -8850,12 +8670,321 @@ IFaceLog_getFeatures_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
+    for (var iter177 in this.success)
+    {
+      if (this.success.hasOwnProperty(iter177))
+      {
+        iter177 = this.success[iter177];
+        iter177.write(output);
+      }
+    }
+    output.writeListEnd();
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_getFeaturesByPersonId_args = function(args) {
+  this.personId = null;
+  if (args) {
+    if (args.personId !== undefined && args.personId !== null) {
+      this.personId = args.personId;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field personId is unset!');
+    }
+  }
+};
+IFaceLog_getFeaturesByPersonId_args.prototype = {};
+IFaceLog_getFeaturesByPersonId_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I32) {
+        this.personId = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 0:
+        input.skip(ftype);
+        break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_getFeaturesByPersonId_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_getFeaturesByPersonId_args');
+  if (this.personId !== null && this.personId !== undefined) {
+    output.writeFieldBegin('personId', Thrift.Type.I32, 1);
+    output.writeI32(this.personId);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_getFeaturesByPersonId_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  if (args instanceof ttypes.ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = Thrift.copyList(args.success, [null]);
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_getFeaturesByPersonId_result.prototype = {};
+IFaceLog_getFeaturesByPersonId_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.LIST) {
+        var _size178 = 0;
+        var _rtmp3182;
+        this.success = [];
+        var _etype181 = 0;
+        _rtmp3182 = input.readListBegin();
+        _etype181 = _rtmp3182.etype;
+        _size178 = _rtmp3182.size;
+        for (var _i183 = 0; _i183 < _size178; ++_i183)
+        {
+          var elem184 = null;
+          elem184 = input.readString();
+          this.success.push(elem184);
+        }
+        input.readListEnd();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ttypes.ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_getFeaturesByPersonId_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_getFeaturesByPersonId_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.LIST, 0);
+    output.writeListBegin(Thrift.Type.STRING, this.success.length);
     for (var iter185 in this.success)
     {
       if (this.success.hasOwnProperty(iter185))
       {
         iter185 = this.success[iter185];
-        iter185.write(output);
+        output.writeString(iter185);
+      }
+    }
+    output.writeListEnd();
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_getFeaturesByPersonIdAndSdkVersion_args = function(args) {
+  this.personId = null;
+  this.sdkVersion = null;
+  if (args) {
+    if (args.personId !== undefined && args.personId !== null) {
+      this.personId = args.personId;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field personId is unset!');
+    }
+    if (args.sdkVersion !== undefined && args.sdkVersion !== null) {
+      this.sdkVersion = args.sdkVersion;
+    }
+  }
+};
+IFaceLog_getFeaturesByPersonIdAndSdkVersion_args.prototype = {};
+IFaceLog_getFeaturesByPersonIdAndSdkVersion_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I32) {
+        this.personId = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRING) {
+        this.sdkVersion = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_getFeaturesByPersonIdAndSdkVersion_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_getFeaturesByPersonIdAndSdkVersion_args');
+  if (this.personId !== null && this.personId !== undefined) {
+    output.writeFieldBegin('personId', Thrift.Type.I32, 1);
+    output.writeI32(this.personId);
+    output.writeFieldEnd();
+  }
+  if (this.sdkVersion !== null && this.sdkVersion !== undefined) {
+    output.writeFieldBegin('sdkVersion', Thrift.Type.STRING, 2);
+    output.writeString(this.sdkVersion);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_getFeaturesByPersonIdAndSdkVersion_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  if (args instanceof ttypes.ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = Thrift.copyList(args.success, [null]);
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_getFeaturesByPersonIdAndSdkVersion_result.prototype = {};
+IFaceLog_getFeaturesByPersonIdAndSdkVersion_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.LIST) {
+        var _size186 = 0;
+        var _rtmp3190;
+        this.success = [];
+        var _etype189 = 0;
+        _rtmp3190 = input.readListBegin();
+        _etype189 = _rtmp3190.etype;
+        _size186 = _rtmp3190.size;
+        for (var _i191 = 0; _i191 < _size186; ++_i191)
+        {
+          var elem192 = null;
+          elem192 = input.readString();
+          this.success.push(elem192);
+        }
+        input.readListEnd();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ttypes.ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_getFeaturesByPersonIdAndSdkVersion_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_getFeaturesByPersonIdAndSdkVersion_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.LIST, 0);
+    output.writeListBegin(Thrift.Type.STRING, this.success.length);
+    for (var iter193 in this.success)
+    {
+      if (this.success.hasOwnProperty(iter193))
+      {
+        iter193 = this.success[iter193];
+        output.writeString(iter193);
       }
     }
     output.writeListEnd();
@@ -8958,18 +9087,18 @@ IFaceLog_getFeaturesOfPerson_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size186 = 0;
-        var _rtmp3190;
+        var _size194 = 0;
+        var _rtmp3198;
         this.success = [];
-        var _etype189 = 0;
-        _rtmp3190 = input.readListBegin();
-        _etype189 = _rtmp3190.etype;
-        _size186 = _rtmp3190.size;
-        for (var _i191 = 0; _i191 < _size186; ++_i191)
+        var _etype197 = 0;
+        _rtmp3198 = input.readListBegin();
+        _etype197 = _rtmp3198.etype;
+        _size194 = _rtmp3198.size;
+        for (var _i199 = 0; _i199 < _size194; ++_i199)
         {
-          var elem192 = null;
-          elem192 = input.readString();
-          this.success.push(elem192);
+          var elem200 = null;
+          elem200 = input.readString();
+          this.success.push(elem200);
         }
         input.readListEnd();
       } else {
@@ -8998,12 +9127,12 @@ IFaceLog_getFeaturesOfPerson_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRING, this.success.length);
-    for (var iter193 in this.success)
+    for (var iter201 in this.success)
     {
-      if (this.success.hasOwnProperty(iter193))
+      if (this.success.hasOwnProperty(iter201))
       {
-        iter193 = this.success[iter193];
-        output.writeString(iter193);
+        iter201 = this.success[iter201];
+        output.writeString(iter201);
       }
     }
     output.writeListEnd();
@@ -9338,18 +9467,18 @@ IFaceLog_getGroupPermits_args.prototype.read = function(input) {
       break;
       case 2:
       if (ftype == Thrift.Type.LIST) {
-        var _size194 = 0;
-        var _rtmp3198;
+        var _size202 = 0;
+        var _rtmp3206;
         this.personGroupIdList = [];
-        var _etype197 = 0;
-        _rtmp3198 = input.readListBegin();
-        _etype197 = _rtmp3198.etype;
-        _size194 = _rtmp3198.size;
-        for (var _i199 = 0; _i199 < _size194; ++_i199)
+        var _etype205 = 0;
+        _rtmp3206 = input.readListBegin();
+        _etype205 = _rtmp3206.etype;
+        _size202 = _rtmp3206.size;
+        for (var _i207 = 0; _i207 < _size202; ++_i207)
         {
-          var elem200 = null;
-          elem200 = input.readI32();
-          this.personGroupIdList.push(elem200);
+          var elem208 = null;
+          elem208 = input.readI32();
+          this.personGroupIdList.push(elem208);
         }
         input.readListEnd();
       } else {
@@ -9375,12 +9504,12 @@ IFaceLog_getGroupPermits_args.prototype.write = function(output) {
   if (this.personGroupIdList !== null && this.personGroupIdList !== undefined) {
     output.writeFieldBegin('personGroupIdList', Thrift.Type.LIST, 2);
     output.writeListBegin(Thrift.Type.I32, this.personGroupIdList.length);
-    for (var iter201 in this.personGroupIdList)
+    for (var iter209 in this.personGroupIdList)
     {
-      if (this.personGroupIdList.hasOwnProperty(iter201))
+      if (this.personGroupIdList.hasOwnProperty(iter209))
       {
-        iter201 = this.personGroupIdList[iter201];
-        output.writeI32(iter201);
+        iter209 = this.personGroupIdList[iter209];
+        output.writeI32(iter209);
       }
     }
     output.writeListEnd();
@@ -9423,18 +9552,18 @@ IFaceLog_getGroupPermits_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size202 = 0;
-        var _rtmp3206;
+        var _size210 = 0;
+        var _rtmp3214;
         this.success = [];
-        var _etype205 = 0;
-        _rtmp3206 = input.readListBegin();
-        _etype205 = _rtmp3206.etype;
-        _size202 = _rtmp3206.size;
-        for (var _i207 = 0; _i207 < _size202; ++_i207)
+        var _etype213 = 0;
+        _rtmp3214 = input.readListBegin();
+        _etype213 = _rtmp3214.etype;
+        _size210 = _rtmp3214.size;
+        for (var _i215 = 0; _i215 < _size210; ++_i215)
         {
-          var elem208 = null;
-          elem208 = input.readBool();
-          this.success.push(elem208);
+          var elem216 = null;
+          elem216 = input.readBool();
+          this.success.push(elem216);
         }
         input.readListEnd();
       } else {
@@ -9463,12 +9592,12 @@ IFaceLog_getGroupPermits_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.BOOL, this.success.length);
-    for (var iter209 in this.success)
+    for (var iter217 in this.success)
     {
-      if (this.success.hasOwnProperty(iter209))
+      if (this.success.hasOwnProperty(iter217))
       {
-        iter209 = this.success[iter209];
-        output.writeBool(iter209);
+        iter217 = this.success[iter217];
+        output.writeBool(iter217);
       }
     }
     output.writeListEnd();
@@ -9818,18 +9947,18 @@ IFaceLog_getImagesAssociatedByFeature_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size210 = 0;
-        var _rtmp3214;
+        var _size218 = 0;
+        var _rtmp3222;
         this.success = [];
-        var _etype213 = 0;
-        _rtmp3214 = input.readListBegin();
-        _etype213 = _rtmp3214.etype;
-        _size210 = _rtmp3214.size;
-        for (var _i215 = 0; _i215 < _size210; ++_i215)
+        var _etype221 = 0;
+        _rtmp3222 = input.readListBegin();
+        _etype221 = _rtmp3222.etype;
+        _size218 = _rtmp3222.size;
+        for (var _i223 = 0; _i223 < _size218; ++_i223)
         {
-          var elem216 = null;
-          elem216 = input.readString();
-          this.success.push(elem216);
+          var elem224 = null;
+          elem224 = input.readString();
+          this.success.push(elem224);
         }
         input.readListEnd();
       } else {
@@ -9858,12 +9987,12 @@ IFaceLog_getImagesAssociatedByFeature_result.prototype.write = function(output) 
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRING, this.success.length);
-    for (var iter217 in this.success)
+    for (var iter225 in this.success)
     {
-      if (this.success.hasOwnProperty(iter217))
+      if (this.success.hasOwnProperty(iter225))
       {
-        iter217 = this.success[iter217];
-        output.writeString(iter217);
+        iter225 = this.success[iter225];
+        output.writeString(iter225);
       }
     }
     output.writeListEnd();
@@ -9966,19 +10095,19 @@ IFaceLog_getLogBeansByPersonId_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size218 = 0;
-        var _rtmp3222;
+        var _size226 = 0;
+        var _rtmp3230;
         this.success = [];
-        var _etype221 = 0;
-        _rtmp3222 = input.readListBegin();
-        _etype221 = _rtmp3222.etype;
-        _size218 = _rtmp3222.size;
-        for (var _i223 = 0; _i223 < _size218; ++_i223)
+        var _etype229 = 0;
+        _rtmp3230 = input.readListBegin();
+        _etype229 = _rtmp3230.etype;
+        _size226 = _rtmp3230.size;
+        for (var _i231 = 0; _i231 < _size226; ++_i231)
         {
-          var elem224 = null;
-          elem224 = new ttypes.LogBean();
-          elem224.read(input);
-          this.success.push(elem224);
+          var elem232 = null;
+          elem232 = new ttypes.LogBean();
+          elem232.read(input);
+          this.success.push(elem232);
         }
         input.readListEnd();
       } else {
@@ -10007,12 +10136,12 @@ IFaceLog_getLogBeansByPersonId_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter225 in this.success)
+    for (var iter233 in this.success)
     {
-      if (this.success.hasOwnProperty(iter225))
+      if (this.success.hasOwnProperty(iter233))
       {
-        iter225 = this.success[iter225];
-        iter225.write(output);
+        iter233 = this.success[iter233];
+        iter233.write(output);
       }
     }
     output.writeListEnd();
@@ -10431,18 +10560,18 @@ IFaceLog_getPersonGroups_args.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.LIST) {
-        var _size226 = 0;
-        var _rtmp3230;
+        var _size234 = 0;
+        var _rtmp3238;
         this.groupIdList = [];
-        var _etype229 = 0;
-        _rtmp3230 = input.readListBegin();
-        _etype229 = _rtmp3230.etype;
-        _size226 = _rtmp3230.size;
-        for (var _i231 = 0; _i231 < _size226; ++_i231)
+        var _etype237 = 0;
+        _rtmp3238 = input.readListBegin();
+        _etype237 = _rtmp3238.etype;
+        _size234 = _rtmp3238.size;
+        for (var _i239 = 0; _i239 < _size234; ++_i239)
         {
-          var elem232 = null;
-          elem232 = input.readI32();
-          this.groupIdList.push(elem232);
+          var elem240 = null;
+          elem240 = input.readI32();
+          this.groupIdList.push(elem240);
         }
         input.readListEnd();
       } else {
@@ -10466,12 +10595,12 @@ IFaceLog_getPersonGroups_args.prototype.write = function(output) {
   if (this.groupIdList !== null && this.groupIdList !== undefined) {
     output.writeFieldBegin('groupIdList', Thrift.Type.LIST, 1);
     output.writeListBegin(Thrift.Type.I32, this.groupIdList.length);
-    for (var iter233 in this.groupIdList)
+    for (var iter241 in this.groupIdList)
     {
-      if (this.groupIdList.hasOwnProperty(iter233))
+      if (this.groupIdList.hasOwnProperty(iter241))
       {
-        iter233 = this.groupIdList[iter233];
-        output.writeI32(iter233);
+        iter241 = this.groupIdList[iter241];
+        output.writeI32(iter241);
       }
     }
     output.writeListEnd();
@@ -10514,19 +10643,19 @@ IFaceLog_getPersonGroups_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size234 = 0;
-        var _rtmp3238;
+        var _size242 = 0;
+        var _rtmp3246;
         this.success = [];
-        var _etype237 = 0;
-        _rtmp3238 = input.readListBegin();
-        _etype237 = _rtmp3238.etype;
-        _size234 = _rtmp3238.size;
-        for (var _i239 = 0; _i239 < _size234; ++_i239)
+        var _etype245 = 0;
+        _rtmp3246 = input.readListBegin();
+        _etype245 = _rtmp3246.etype;
+        _size242 = _rtmp3246.size;
+        for (var _i247 = 0; _i247 < _size242; ++_i247)
         {
-          var elem240 = null;
-          elem240 = new ttypes.PersonGroupBean();
-          elem240.read(input);
-          this.success.push(elem240);
+          var elem248 = null;
+          elem248 = new ttypes.PersonGroupBean();
+          elem248.read(input);
+          this.success.push(elem248);
         }
         input.readListEnd();
       } else {
@@ -10555,12 +10684,12 @@ IFaceLog_getPersonGroups_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter241 in this.success)
+    for (var iter249 in this.success)
     {
-      if (this.success.hasOwnProperty(iter241))
+      if (this.success.hasOwnProperty(iter249))
       {
-        iter241 = this.success[iter241];
-        iter241.write(output);
+        iter249 = this.success[iter249];
+        iter249.write(output);
       }
     }
     output.writeListEnd();
@@ -10663,18 +10792,18 @@ IFaceLog_getPersonGroupsBelongs_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size242 = 0;
-        var _rtmp3246;
+        var _size250 = 0;
+        var _rtmp3254;
         this.success = [];
-        var _etype245 = 0;
-        _rtmp3246 = input.readListBegin();
-        _etype245 = _rtmp3246.etype;
-        _size242 = _rtmp3246.size;
-        for (var _i247 = 0; _i247 < _size242; ++_i247)
+        var _etype253 = 0;
+        _rtmp3254 = input.readListBegin();
+        _etype253 = _rtmp3254.etype;
+        _size250 = _rtmp3254.size;
+        for (var _i255 = 0; _i255 < _size250; ++_i255)
         {
-          var elem248 = null;
-          elem248 = input.readI32();
-          this.success.push(elem248);
+          var elem256 = null;
+          elem256 = input.readI32();
+          this.success.push(elem256);
         }
         input.readListEnd();
       } else {
@@ -10703,12 +10832,12 @@ IFaceLog_getPersonGroupsBelongs_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.I32, this.success.length);
-    for (var iter249 in this.success)
+    for (var iter257 in this.success)
     {
-      if (this.success.hasOwnProperty(iter249))
+      if (this.success.hasOwnProperty(iter257))
       {
-        iter249 = this.success[iter249];
-        output.writeI32(iter249);
+        iter257 = this.success[iter257];
+        output.writeI32(iter257);
       }
     }
     output.writeListEnd();
@@ -10811,18 +10940,18 @@ IFaceLog_getPersonGroupsPermittedBy_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size250 = 0;
-        var _rtmp3254;
+        var _size258 = 0;
+        var _rtmp3262;
         this.success = [];
-        var _etype253 = 0;
-        _rtmp3254 = input.readListBegin();
-        _etype253 = _rtmp3254.etype;
-        _size250 = _rtmp3254.size;
-        for (var _i255 = 0; _i255 < _size250; ++_i255)
+        var _etype261 = 0;
+        _rtmp3262 = input.readListBegin();
+        _etype261 = _rtmp3262.etype;
+        _size258 = _rtmp3262.size;
+        for (var _i263 = 0; _i263 < _size258; ++_i263)
         {
-          var elem256 = null;
-          elem256 = input.readI32();
-          this.success.push(elem256);
+          var elem264 = null;
+          elem264 = input.readI32();
+          this.success.push(elem264);
         }
         input.readListEnd();
       } else {
@@ -10851,12 +10980,12 @@ IFaceLog_getPersonGroupsPermittedBy_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.I32, this.success.length);
-    for (var iter257 in this.success)
+    for (var iter265 in this.success)
     {
-      if (this.success.hasOwnProperty(iter257))
+      if (this.success.hasOwnProperty(iter265))
       {
-        iter257 = this.success[iter257];
-        output.writeI32(iter257);
+        iter265 = this.success[iter265];
+        output.writeI32(iter265);
       }
     }
     output.writeListEnd();
@@ -11050,18 +11179,18 @@ IFaceLog_getPersonPermits_args.prototype.read = function(input) {
       break;
       case 2:
       if (ftype == Thrift.Type.LIST) {
-        var _size258 = 0;
-        var _rtmp3262;
+        var _size266 = 0;
+        var _rtmp3270;
         this.personIdList = [];
-        var _etype261 = 0;
-        _rtmp3262 = input.readListBegin();
-        _etype261 = _rtmp3262.etype;
-        _size258 = _rtmp3262.size;
-        for (var _i263 = 0; _i263 < _size258; ++_i263)
+        var _etype269 = 0;
+        _rtmp3270 = input.readListBegin();
+        _etype269 = _rtmp3270.etype;
+        _size266 = _rtmp3270.size;
+        for (var _i271 = 0; _i271 < _size266; ++_i271)
         {
-          var elem264 = null;
-          elem264 = input.readI32();
-          this.personIdList.push(elem264);
+          var elem272 = null;
+          elem272 = input.readI32();
+          this.personIdList.push(elem272);
         }
         input.readListEnd();
       } else {
@@ -11087,12 +11216,12 @@ IFaceLog_getPersonPermits_args.prototype.write = function(output) {
   if (this.personIdList !== null && this.personIdList !== undefined) {
     output.writeFieldBegin('personIdList', Thrift.Type.LIST, 2);
     output.writeListBegin(Thrift.Type.I32, this.personIdList.length);
-    for (var iter265 in this.personIdList)
+    for (var iter273 in this.personIdList)
     {
-      if (this.personIdList.hasOwnProperty(iter265))
+      if (this.personIdList.hasOwnProperty(iter273))
       {
-        iter265 = this.personIdList[iter265];
-        output.writeI32(iter265);
+        iter273 = this.personIdList[iter273];
+        output.writeI32(iter273);
       }
     }
     output.writeListEnd();
@@ -11135,18 +11264,18 @@ IFaceLog_getPersonPermits_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size266 = 0;
-        var _rtmp3270;
+        var _size274 = 0;
+        var _rtmp3278;
         this.success = [];
-        var _etype269 = 0;
-        _rtmp3270 = input.readListBegin();
-        _etype269 = _rtmp3270.etype;
-        _size266 = _rtmp3270.size;
-        for (var _i271 = 0; _i271 < _size266; ++_i271)
+        var _etype277 = 0;
+        _rtmp3278 = input.readListBegin();
+        _etype277 = _rtmp3278.etype;
+        _size274 = _rtmp3278.size;
+        for (var _i279 = 0; _i279 < _size274; ++_i279)
         {
-          var elem272 = null;
-          elem272 = input.readBool();
-          this.success.push(elem272);
+          var elem280 = null;
+          elem280 = input.readBool();
+          this.success.push(elem280);
         }
         input.readListEnd();
       } else {
@@ -11175,12 +11304,12 @@ IFaceLog_getPersonPermits_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.BOOL, this.success.length);
-    for (var iter273 in this.success)
+    for (var iter281 in this.success)
     {
-      if (this.success.hasOwnProperty(iter273))
+      if (this.success.hasOwnProperty(iter281))
       {
-        iter273 = this.success[iter273];
-        output.writeBool(iter273);
+        iter281 = this.success[iter281];
+        output.writeBool(iter281);
       }
     }
     output.writeListEnd();
@@ -11220,18 +11349,18 @@ IFaceLog_getPersons_args.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.LIST) {
-        var _size274 = 0;
-        var _rtmp3278;
+        var _size282 = 0;
+        var _rtmp3286;
         this.idList = [];
-        var _etype277 = 0;
-        _rtmp3278 = input.readListBegin();
-        _etype277 = _rtmp3278.etype;
-        _size274 = _rtmp3278.size;
-        for (var _i279 = 0; _i279 < _size274; ++_i279)
+        var _etype285 = 0;
+        _rtmp3286 = input.readListBegin();
+        _etype285 = _rtmp3286.etype;
+        _size282 = _rtmp3286.size;
+        for (var _i287 = 0; _i287 < _size282; ++_i287)
         {
-          var elem280 = null;
-          elem280 = input.readI32();
-          this.idList.push(elem280);
+          var elem288 = null;
+          elem288 = input.readI32();
+          this.idList.push(elem288);
         }
         input.readListEnd();
       } else {
@@ -11255,12 +11384,12 @@ IFaceLog_getPersons_args.prototype.write = function(output) {
   if (this.idList !== null && this.idList !== undefined) {
     output.writeFieldBegin('idList', Thrift.Type.LIST, 1);
     output.writeListBegin(Thrift.Type.I32, this.idList.length);
-    for (var iter281 in this.idList)
+    for (var iter289 in this.idList)
     {
-      if (this.idList.hasOwnProperty(iter281))
+      if (this.idList.hasOwnProperty(iter289))
       {
-        iter281 = this.idList[iter281];
-        output.writeI32(iter281);
+        iter289 = this.idList[iter289];
+        output.writeI32(iter289);
       }
     }
     output.writeListEnd();
@@ -11303,19 +11432,19 @@ IFaceLog_getPersons_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size282 = 0;
-        var _rtmp3286;
+        var _size290 = 0;
+        var _rtmp3294;
         this.success = [];
-        var _etype285 = 0;
-        _rtmp3286 = input.readListBegin();
-        _etype285 = _rtmp3286.etype;
-        _size282 = _rtmp3286.size;
-        for (var _i287 = 0; _i287 < _size282; ++_i287)
+        var _etype293 = 0;
+        _rtmp3294 = input.readListBegin();
+        _etype293 = _rtmp3294.etype;
+        _size290 = _rtmp3294.size;
+        for (var _i295 = 0; _i295 < _size290; ++_i295)
         {
-          var elem288 = null;
-          elem288 = new ttypes.PersonBean();
-          elem288.read(input);
-          this.success.push(elem288);
+          var elem296 = null;
+          elem296 = new ttypes.PersonBean();
+          elem296.read(input);
+          this.success.push(elem296);
         }
         input.readListEnd();
       } else {
@@ -11344,12 +11473,12 @@ IFaceLog_getPersons_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter289 in this.success)
+    for (var iter297 in this.success)
     {
-      if (this.success.hasOwnProperty(iter289))
+      if (this.success.hasOwnProperty(iter297))
       {
-        iter289 = this.success[iter289];
-        iter289.write(output);
+        iter297 = this.success[iter297];
+        iter297.write(output);
       }
     }
     output.writeListEnd();
@@ -11452,18 +11581,18 @@ IFaceLog_getPersonsOfGroup_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size290 = 0;
-        var _rtmp3294;
+        var _size298 = 0;
+        var _rtmp3302;
         this.success = [];
-        var _etype293 = 0;
-        _rtmp3294 = input.readListBegin();
-        _etype293 = _rtmp3294.etype;
-        _size290 = _rtmp3294.size;
-        for (var _i295 = 0; _i295 < _size290; ++_i295)
+        var _etype301 = 0;
+        _rtmp3302 = input.readListBegin();
+        _etype301 = _rtmp3302.etype;
+        _size298 = _rtmp3302.size;
+        for (var _i303 = 0; _i303 < _size298; ++_i303)
         {
-          var elem296 = null;
-          elem296 = input.readI32();
-          this.success.push(elem296);
+          var elem304 = null;
+          elem304 = input.readI32();
+          this.success.push(elem304);
         }
         input.readListEnd();
       } else {
@@ -11492,12 +11621,12 @@ IFaceLog_getPersonsOfGroup_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.I32, this.success.length);
-    for (var iter297 in this.success)
+    for (var iter305 in this.success)
     {
-      if (this.success.hasOwnProperty(iter297))
+      if (this.success.hasOwnProperty(iter305))
       {
-        iter297 = this.success[iter297];
-        output.writeI32(iter297);
+        iter305 = this.success[iter305];
+        output.writeI32(iter305);
       }
     }
     output.writeListEnd();
@@ -11737,22 +11866,22 @@ IFaceLog_getRedisParameters_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.MAP) {
-        var _size298 = 0;
-        var _rtmp3302;
+        var _size306 = 0;
+        var _rtmp3310;
         this.success = {};
-        var _ktype299 = 0;
-        var _vtype300 = 0;
-        _rtmp3302 = input.readMapBegin();
-        _ktype299 = _rtmp3302.ktype;
-        _vtype300 = _rtmp3302.vtype;
-        _size298 = _rtmp3302.size;
-        for (var _i303 = 0; _i303 < _size298; ++_i303)
+        var _ktype307 = 0;
+        var _vtype308 = 0;
+        _rtmp3310 = input.readMapBegin();
+        _ktype307 = _rtmp3310.ktype;
+        _vtype308 = _rtmp3310.vtype;
+        _size306 = _rtmp3310.size;
+        for (var _i311 = 0; _i311 < _size306; ++_i311)
         {
-          var key304 = null;
-          var val305 = null;
-          key304 = input.readI32();
-          val305 = input.readString();
-          this.success[key304] = val305;
+          var key312 = null;
+          var val313 = null;
+          key312 = input.readI32();
+          val313 = input.readString();
+          this.success[key312] = val313;
         }
         input.readMapEnd();
       } else {
@@ -11781,13 +11910,13 @@ IFaceLog_getRedisParameters_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.MAP, 0);
     output.writeMapBegin(Thrift.Type.I32, Thrift.Type.STRING, Thrift.objectLength(this.success));
-    for (var kiter306 in this.success)
+    for (var kiter314 in this.success)
     {
-      if (this.success.hasOwnProperty(kiter306))
+      if (this.success.hasOwnProperty(kiter314))
       {
-        var viter307 = this.success[kiter306];
-        output.writeI32(kiter306);
-        output.writeString(viter307);
+        var viter315 = this.success[kiter314];
+        output.writeI32(kiter314);
+        output.writeString(viter315);
       }
     }
     output.writeMapEnd();
@@ -11889,22 +12018,22 @@ IFaceLog_getServiceConfig_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.MAP) {
-        var _size308 = 0;
-        var _rtmp3312;
+        var _size316 = 0;
+        var _rtmp3320;
         this.success = {};
-        var _ktype309 = 0;
-        var _vtype310 = 0;
-        _rtmp3312 = input.readMapBegin();
-        _ktype309 = _rtmp3312.ktype;
-        _vtype310 = _rtmp3312.vtype;
-        _size308 = _rtmp3312.size;
-        for (var _i313 = 0; _i313 < _size308; ++_i313)
+        var _ktype317 = 0;
+        var _vtype318 = 0;
+        _rtmp3320 = input.readMapBegin();
+        _ktype317 = _rtmp3320.ktype;
+        _vtype318 = _rtmp3320.vtype;
+        _size316 = _rtmp3320.size;
+        for (var _i321 = 0; _i321 < _size316; ++_i321)
         {
-          var key314 = null;
-          var val315 = null;
-          key314 = input.readString();
-          val315 = input.readString();
-          this.success[key314] = val315;
+          var key322 = null;
+          var val323 = null;
+          key322 = input.readString();
+          val323 = input.readString();
+          this.success[key322] = val323;
         }
         input.readMapEnd();
       } else {
@@ -11933,13 +12062,13 @@ IFaceLog_getServiceConfig_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.MAP, 0);
     output.writeMapBegin(Thrift.Type.STRING, Thrift.Type.STRING, Thrift.objectLength(this.success));
-    for (var kiter316 in this.success)
+    for (var kiter324 in this.success)
     {
-      if (this.success.hasOwnProperty(kiter316))
+      if (this.success.hasOwnProperty(kiter324))
       {
-        var viter317 = this.success[kiter316];
-        output.writeString(kiter316);
-        output.writeString(viter317);
+        var viter325 = this.success[kiter324];
+        output.writeString(kiter324);
+        output.writeString(viter325);
       }
     }
     output.writeMapEnd();
@@ -12042,18 +12171,18 @@ IFaceLog_getSubDeviceGroup_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size318 = 0;
-        var _rtmp3322;
+        var _size326 = 0;
+        var _rtmp3330;
         this.success = [];
-        var _etype321 = 0;
-        _rtmp3322 = input.readListBegin();
-        _etype321 = _rtmp3322.etype;
-        _size318 = _rtmp3322.size;
-        for (var _i323 = 0; _i323 < _size318; ++_i323)
+        var _etype329 = 0;
+        _rtmp3330 = input.readListBegin();
+        _etype329 = _rtmp3330.etype;
+        _size326 = _rtmp3330.size;
+        for (var _i331 = 0; _i331 < _size326; ++_i331)
         {
-          var elem324 = null;
-          elem324 = input.readI32();
-          this.success.push(elem324);
+          var elem332 = null;
+          elem332 = input.readI32();
+          this.success.push(elem332);
         }
         input.readListEnd();
       } else {
@@ -12082,12 +12211,12 @@ IFaceLog_getSubDeviceGroup_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.I32, this.success.length);
-    for (var iter325 in this.success)
+    for (var iter333 in this.success)
     {
-      if (this.success.hasOwnProperty(iter325))
+      if (this.success.hasOwnProperty(iter333))
       {
-        iter325 = this.success[iter325];
-        output.writeI32(iter325);
+        iter333 = this.success[iter333];
+        output.writeI32(iter333);
       }
     }
     output.writeListEnd();
@@ -12190,18 +12319,18 @@ IFaceLog_getSubPersonGroup_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size326 = 0;
-        var _rtmp3330;
+        var _size334 = 0;
+        var _rtmp3338;
         this.success = [];
-        var _etype329 = 0;
-        _rtmp3330 = input.readListBegin();
-        _etype329 = _rtmp3330.etype;
-        _size326 = _rtmp3330.size;
-        for (var _i331 = 0; _i331 < _size326; ++_i331)
+        var _etype337 = 0;
+        _rtmp3338 = input.readListBegin();
+        _etype337 = _rtmp3338.etype;
+        _size334 = _rtmp3338.size;
+        for (var _i339 = 0; _i339 < _size334; ++_i339)
         {
-          var elem332 = null;
-          elem332 = input.readI32();
-          this.success.push(elem332);
+          var elem340 = null;
+          elem340 = input.readI32();
+          this.success.push(elem340);
         }
         input.readListEnd();
       } else {
@@ -12230,12 +12359,12 @@ IFaceLog_getSubPersonGroup_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.I32, this.success.length);
-    for (var iter333 in this.success)
+    for (var iter341 in this.success)
     {
-      if (this.success.hasOwnProperty(iter333))
+      if (this.success.hasOwnProperty(iter341))
       {
-        iter333 = this.success[iter333];
-        output.writeI32(iter333);
+        iter341 = this.success[iter341];
+        output.writeI32(iter341);
       }
     }
     output.writeListEnd();
@@ -13593,18 +13722,18 @@ IFaceLog_listOfParentForDeviceGroup_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size334 = 0;
-        var _rtmp3338;
+        var _size342 = 0;
+        var _rtmp3346;
         this.success = [];
-        var _etype337 = 0;
-        _rtmp3338 = input.readListBegin();
-        _etype337 = _rtmp3338.etype;
-        _size334 = _rtmp3338.size;
-        for (var _i339 = 0; _i339 < _size334; ++_i339)
+        var _etype345 = 0;
+        _rtmp3346 = input.readListBegin();
+        _etype345 = _rtmp3346.etype;
+        _size342 = _rtmp3346.size;
+        for (var _i347 = 0; _i347 < _size342; ++_i347)
         {
-          var elem340 = null;
-          elem340 = input.readI32();
-          this.success.push(elem340);
+          var elem348 = null;
+          elem348 = input.readI32();
+          this.success.push(elem348);
         }
         input.readListEnd();
       } else {
@@ -13633,12 +13762,12 @@ IFaceLog_listOfParentForDeviceGroup_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.I32, this.success.length);
-    for (var iter341 in this.success)
+    for (var iter349 in this.success)
     {
-      if (this.success.hasOwnProperty(iter341))
+      if (this.success.hasOwnProperty(iter349))
       {
-        iter341 = this.success[iter341];
-        output.writeI32(iter341);
+        iter349 = this.success[iter349];
+        output.writeI32(iter349);
       }
     }
     output.writeListEnd();
@@ -13741,18 +13870,18 @@ IFaceLog_listOfParentForPersonGroup_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size342 = 0;
-        var _rtmp3346;
+        var _size350 = 0;
+        var _rtmp3354;
         this.success = [];
-        var _etype345 = 0;
-        _rtmp3346 = input.readListBegin();
-        _etype345 = _rtmp3346.etype;
-        _size342 = _rtmp3346.size;
-        for (var _i347 = 0; _i347 < _size342; ++_i347)
+        var _etype353 = 0;
+        _rtmp3354 = input.readListBegin();
+        _etype353 = _rtmp3354.etype;
+        _size350 = _rtmp3354.size;
+        for (var _i355 = 0; _i355 < _size350; ++_i355)
         {
-          var elem348 = null;
-          elem348 = input.readI32();
-          this.success.push(elem348);
+          var elem356 = null;
+          elem356 = input.readI32();
+          this.success.push(elem356);
         }
         input.readListEnd();
       } else {
@@ -13781,12 +13910,12 @@ IFaceLog_listOfParentForPersonGroup_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.I32, this.success.length);
-    for (var iter349 in this.success)
+    for (var iter357 in this.success)
     {
-      if (this.success.hasOwnProperty(iter349))
+      if (this.success.hasOwnProperty(iter357))
       {
-        iter349 = this.success[iter349];
-        output.writeI32(iter349);
+        iter357 = this.success[iter357];
+        output.writeI32(iter357);
       }
     }
     output.writeListEnd();
@@ -13862,18 +13991,18 @@ IFaceLog_loadAllPerson_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size350 = 0;
-        var _rtmp3354;
+        var _size358 = 0;
+        var _rtmp3362;
         this.success = [];
-        var _etype353 = 0;
-        _rtmp3354 = input.readListBegin();
-        _etype353 = _rtmp3354.etype;
-        _size350 = _rtmp3354.size;
-        for (var _i355 = 0; _i355 < _size350; ++_i355)
+        var _etype361 = 0;
+        _rtmp3362 = input.readListBegin();
+        _etype361 = _rtmp3362.etype;
+        _size358 = _rtmp3362.size;
+        for (var _i363 = 0; _i363 < _size358; ++_i363)
         {
-          var elem356 = null;
-          elem356 = input.readI32();
-          this.success.push(elem356);
+          var elem364 = null;
+          elem364 = input.readI32();
+          this.success.push(elem364);
         }
         input.readListEnd();
       } else {
@@ -13902,12 +14031,12 @@ IFaceLog_loadAllPerson_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.I32, this.success.length);
-    for (var iter357 in this.success)
+    for (var iter365 in this.success)
     {
-      if (this.success.hasOwnProperty(iter357))
+      if (this.success.hasOwnProperty(iter365))
       {
-        iter357 = this.success[iter357];
-        output.writeI32(iter357);
+        iter365 = this.success[iter365];
+        output.writeI32(iter365);
       }
     }
     output.writeListEnd();
@@ -14041,19 +14170,19 @@ IFaceLog_loadDeviceByWhere_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size358 = 0;
-        var _rtmp3362;
+        var _size366 = 0;
+        var _rtmp3370;
         this.success = [];
-        var _etype361 = 0;
-        _rtmp3362 = input.readListBegin();
-        _etype361 = _rtmp3362.etype;
-        _size358 = _rtmp3362.size;
-        for (var _i363 = 0; _i363 < _size358; ++_i363)
+        var _etype369 = 0;
+        _rtmp3370 = input.readListBegin();
+        _etype369 = _rtmp3370.etype;
+        _size366 = _rtmp3370.size;
+        for (var _i371 = 0; _i371 < _size366; ++_i371)
         {
-          var elem364 = null;
-          elem364 = new ttypes.DeviceBean();
-          elem364.read(input);
-          this.success.push(elem364);
+          var elem372 = null;
+          elem372 = new ttypes.DeviceBean();
+          elem372.read(input);
+          this.success.push(elem372);
         }
         input.readListEnd();
       } else {
@@ -14082,12 +14211,12 @@ IFaceLog_loadDeviceByWhere_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter365 in this.success)
+    for (var iter373 in this.success)
     {
-      if (this.success.hasOwnProperty(iter365))
+      if (this.success.hasOwnProperty(iter373))
       {
-        iter365 = this.success[iter365];
-        iter365.write(output);
+        iter373 = this.success[iter373];
+        iter373.write(output);
       }
     }
     output.writeListEnd();
@@ -14221,18 +14350,18 @@ IFaceLog_loadDeviceGroupByWhere_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size366 = 0;
-        var _rtmp3370;
+        var _size374 = 0;
+        var _rtmp3378;
         this.success = [];
-        var _etype369 = 0;
-        _rtmp3370 = input.readListBegin();
-        _etype369 = _rtmp3370.etype;
-        _size366 = _rtmp3370.size;
-        for (var _i371 = 0; _i371 < _size366; ++_i371)
+        var _etype377 = 0;
+        _rtmp3378 = input.readListBegin();
+        _etype377 = _rtmp3378.etype;
+        _size374 = _rtmp3378.size;
+        for (var _i379 = 0; _i379 < _size374; ++_i379)
         {
-          var elem372 = null;
-          elem372 = input.readI32();
-          this.success.push(elem372);
+          var elem380 = null;
+          elem380 = input.readI32();
+          this.success.push(elem380);
         }
         input.readListEnd();
       } else {
@@ -14261,12 +14390,12 @@ IFaceLog_loadDeviceGroupByWhere_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.I32, this.success.length);
-    for (var iter373 in this.success)
+    for (var iter381 in this.success)
     {
-      if (this.success.hasOwnProperty(iter373))
+      if (this.success.hasOwnProperty(iter381))
       {
-        iter373 = this.success[iter373];
-        output.writeI32(iter373);
+        iter381 = this.success[iter381];
+        output.writeI32(iter381);
       }
     }
     output.writeListEnd();
@@ -14367,18 +14496,18 @@ IFaceLog_loadDeviceGroupIdByWhere_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size374 = 0;
-        var _rtmp3378;
+        var _size382 = 0;
+        var _rtmp3386;
         this.success = [];
-        var _etype377 = 0;
-        _rtmp3378 = input.readListBegin();
-        _etype377 = _rtmp3378.etype;
-        _size374 = _rtmp3378.size;
-        for (var _i379 = 0; _i379 < _size374; ++_i379)
+        var _etype385 = 0;
+        _rtmp3386 = input.readListBegin();
+        _etype385 = _rtmp3386.etype;
+        _size382 = _rtmp3386.size;
+        for (var _i387 = 0; _i387 < _size382; ++_i387)
         {
-          var elem380 = null;
-          elem380 = input.readI32();
-          this.success.push(elem380);
+          var elem388 = null;
+          elem388 = input.readI32();
+          this.success.push(elem388);
         }
         input.readListEnd();
       } else {
@@ -14407,12 +14536,12 @@ IFaceLog_loadDeviceGroupIdByWhere_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.I32, this.success.length);
-    for (var iter381 in this.success)
+    for (var iter389 in this.success)
     {
-      if (this.success.hasOwnProperty(iter381))
+      if (this.success.hasOwnProperty(iter389))
       {
-        iter381 = this.success[iter381];
-        output.writeI32(iter381);
+        iter389 = this.success[iter389];
+        output.writeI32(iter389);
       }
     }
     output.writeListEnd();
@@ -14513,18 +14642,18 @@ IFaceLog_loadDeviceIdByWhere_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size382 = 0;
-        var _rtmp3386;
+        var _size390 = 0;
+        var _rtmp3394;
         this.success = [];
-        var _etype385 = 0;
-        _rtmp3386 = input.readListBegin();
-        _etype385 = _rtmp3386.etype;
-        _size382 = _rtmp3386.size;
-        for (var _i387 = 0; _i387 < _size382; ++_i387)
+        var _etype393 = 0;
+        _rtmp3394 = input.readListBegin();
+        _etype393 = _rtmp3394.etype;
+        _size390 = _rtmp3394.size;
+        for (var _i395 = 0; _i395 < _size390; ++_i395)
         {
-          var elem388 = null;
-          elem388 = input.readI32();
-          this.success.push(elem388);
+          var elem396 = null;
+          elem396 = input.readI32();
+          this.success.push(elem396);
         }
         input.readListEnd();
       } else {
@@ -14553,12 +14682,12 @@ IFaceLog_loadDeviceIdByWhere_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.I32, this.success.length);
-    for (var iter389 in this.success)
+    for (var iter397 in this.success)
     {
-      if (this.success.hasOwnProperty(iter389))
+      if (this.success.hasOwnProperty(iter397))
       {
-        iter389 = this.success[iter389];
-        output.writeI32(iter389);
+        iter397 = this.success[iter397];
+        output.writeI32(iter397);
       }
     }
     output.writeListEnd();
@@ -14661,18 +14790,18 @@ IFaceLog_loadFeatureMd5ByUpdate_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size390 = 0;
-        var _rtmp3394;
+        var _size398 = 0;
+        var _rtmp3402;
         this.success = [];
-        var _etype393 = 0;
-        _rtmp3394 = input.readListBegin();
-        _etype393 = _rtmp3394.etype;
-        _size390 = _rtmp3394.size;
-        for (var _i395 = 0; _i395 < _size390; ++_i395)
+        var _etype401 = 0;
+        _rtmp3402 = input.readListBegin();
+        _etype401 = _rtmp3402.etype;
+        _size398 = _rtmp3402.size;
+        for (var _i403 = 0; _i403 < _size398; ++_i403)
         {
-          var elem396 = null;
-          elem396 = input.readString();
-          this.success.push(elem396);
+          var elem404 = null;
+          elem404 = input.readString();
+          this.success.push(elem404);
         }
         input.readListEnd();
       } else {
@@ -14701,12 +14830,12 @@ IFaceLog_loadFeatureMd5ByUpdate_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRING, this.success.length);
-    for (var iter397 in this.success)
+    for (var iter405 in this.success)
     {
-      if (this.success.hasOwnProperty(iter397))
+      if (this.success.hasOwnProperty(iter405))
       {
-        iter397 = this.success[iter397];
-        output.writeString(iter397);
+        iter405 = this.success[iter405];
+        output.writeString(iter405);
       }
     }
     output.writeListEnd();
@@ -14840,19 +14969,19 @@ IFaceLog_loadLogByWhere_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size398 = 0;
-        var _rtmp3402;
+        var _size406 = 0;
+        var _rtmp3410;
         this.success = [];
-        var _etype401 = 0;
-        _rtmp3402 = input.readListBegin();
-        _etype401 = _rtmp3402.etype;
-        _size398 = _rtmp3402.size;
-        for (var _i403 = 0; _i403 < _size398; ++_i403)
+        var _etype409 = 0;
+        _rtmp3410 = input.readListBegin();
+        _etype409 = _rtmp3410.etype;
+        _size406 = _rtmp3410.size;
+        for (var _i411 = 0; _i411 < _size406; ++_i411)
         {
-          var elem404 = null;
-          elem404 = new ttypes.LogBean();
-          elem404.read(input);
-          this.success.push(elem404);
+          var elem412 = null;
+          elem412 = new ttypes.LogBean();
+          elem412.read(input);
+          this.success.push(elem412);
         }
         input.readListEnd();
       } else {
@@ -14881,12 +15010,12 @@ IFaceLog_loadLogByWhere_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter405 in this.success)
+    for (var iter413 in this.success)
     {
-      if (this.success.hasOwnProperty(iter405))
+      if (this.success.hasOwnProperty(iter413))
       {
-        iter405 = this.success[iter405];
-        iter405.write(output);
+        iter413 = this.success[iter413];
+        iter413.write(output);
       }
     }
     output.writeListEnd();
@@ -15022,19 +15151,19 @@ IFaceLog_loadLogLightByVerifyTime_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size406 = 0;
-        var _rtmp3410;
+        var _size414 = 0;
+        var _rtmp3418;
         this.success = [];
-        var _etype409 = 0;
-        _rtmp3410 = input.readListBegin();
-        _etype409 = _rtmp3410.etype;
-        _size406 = _rtmp3410.size;
-        for (var _i411 = 0; _i411 < _size406; ++_i411)
+        var _etype417 = 0;
+        _rtmp3418 = input.readListBegin();
+        _etype417 = _rtmp3418.etype;
+        _size414 = _rtmp3418.size;
+        for (var _i419 = 0; _i419 < _size414; ++_i419)
         {
-          var elem412 = null;
-          elem412 = new ttypes.LogLightBean();
-          elem412.read(input);
-          this.success.push(elem412);
+          var elem420 = null;
+          elem420 = new ttypes.LogLightBean();
+          elem420.read(input);
+          this.success.push(elem420);
         }
         input.readListEnd();
       } else {
@@ -15063,12 +15192,12 @@ IFaceLog_loadLogLightByVerifyTime_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter413 in this.success)
+    for (var iter421 in this.success)
     {
-      if (this.success.hasOwnProperty(iter413))
+      if (this.success.hasOwnProperty(iter421))
       {
-        iter413 = this.success[iter413];
-        iter413.write(output);
+        iter421 = this.success[iter421];
+        iter421.write(output);
       }
     }
     output.writeListEnd();
@@ -15202,19 +15331,19 @@ IFaceLog_loadLogLightByWhere_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size414 = 0;
-        var _rtmp3418;
+        var _size422 = 0;
+        var _rtmp3426;
         this.success = [];
-        var _etype417 = 0;
-        _rtmp3418 = input.readListBegin();
-        _etype417 = _rtmp3418.etype;
-        _size414 = _rtmp3418.size;
-        for (var _i419 = 0; _i419 < _size414; ++_i419)
+        var _etype425 = 0;
+        _rtmp3426 = input.readListBegin();
+        _etype425 = _rtmp3426.etype;
+        _size422 = _rtmp3426.size;
+        for (var _i427 = 0; _i427 < _size422; ++_i427)
         {
-          var elem420 = null;
-          elem420 = new ttypes.LogLightBean();
-          elem420.read(input);
-          this.success.push(elem420);
+          var elem428 = null;
+          elem428 = new ttypes.LogLightBean();
+          elem428.read(input);
+          this.success.push(elem428);
         }
         input.readListEnd();
       } else {
@@ -15243,12 +15372,12 @@ IFaceLog_loadLogLightByWhere_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter421 in this.success)
+    for (var iter429 in this.success)
     {
-      if (this.success.hasOwnProperty(iter421))
+      if (this.success.hasOwnProperty(iter429))
       {
-        iter421 = this.success[iter421];
-        iter421.write(output);
+        iter429 = this.success[iter429];
+        iter429.write(output);
       }
     }
     output.writeListEnd();
@@ -15351,19 +15480,19 @@ IFaceLog_loadPermitByUpdate_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size422 = 0;
-        var _rtmp3426;
+        var _size430 = 0;
+        var _rtmp3434;
         this.success = [];
-        var _etype425 = 0;
-        _rtmp3426 = input.readListBegin();
-        _etype425 = _rtmp3426.etype;
-        _size422 = _rtmp3426.size;
-        for (var _i427 = 0; _i427 < _size422; ++_i427)
+        var _etype433 = 0;
+        _rtmp3434 = input.readListBegin();
+        _etype433 = _rtmp3434.etype;
+        _size430 = _rtmp3434.size;
+        for (var _i435 = 0; _i435 < _size430; ++_i435)
         {
-          var elem428 = null;
-          elem428 = new ttypes.PermitBean();
-          elem428.read(input);
-          this.success.push(elem428);
+          var elem436 = null;
+          elem436 = new ttypes.PermitBean();
+          elem436.read(input);
+          this.success.push(elem436);
         }
         input.readListEnd();
       } else {
@@ -15392,12 +15521,12 @@ IFaceLog_loadPermitByUpdate_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter429 in this.success)
+    for (var iter437 in this.success)
     {
-      if (this.success.hasOwnProperty(iter429))
+      if (this.success.hasOwnProperty(iter437))
       {
-        iter429 = this.success[iter429];
-        iter429.write(output);
+        iter437 = this.success[iter437];
+        iter437.write(output);
       }
     }
     output.writeListEnd();
@@ -15531,19 +15660,19 @@ IFaceLog_loadPersonByWhere_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size430 = 0;
-        var _rtmp3434;
+        var _size438 = 0;
+        var _rtmp3442;
         this.success = [];
-        var _etype433 = 0;
-        _rtmp3434 = input.readListBegin();
-        _etype433 = _rtmp3434.etype;
-        _size430 = _rtmp3434.size;
-        for (var _i435 = 0; _i435 < _size430; ++_i435)
+        var _etype441 = 0;
+        _rtmp3442 = input.readListBegin();
+        _etype441 = _rtmp3442.etype;
+        _size438 = _rtmp3442.size;
+        for (var _i443 = 0; _i443 < _size438; ++_i443)
         {
-          var elem436 = null;
-          elem436 = new ttypes.PersonBean();
-          elem436.read(input);
-          this.success.push(elem436);
+          var elem444 = null;
+          elem444 = new ttypes.PersonBean();
+          elem444.read(input);
+          this.success.push(elem444);
         }
         input.readListEnd();
       } else {
@@ -15572,12 +15701,12 @@ IFaceLog_loadPersonByWhere_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter437 in this.success)
+    for (var iter445 in this.success)
     {
-      if (this.success.hasOwnProperty(iter437))
+      if (this.success.hasOwnProperty(iter445))
       {
-        iter437 = this.success[iter437];
-        iter437.write(output);
+        iter445 = this.success[iter445];
+        iter445.write(output);
       }
     }
     output.writeListEnd();
@@ -15711,18 +15840,18 @@ IFaceLog_loadPersonGroupByWhere_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size438 = 0;
-        var _rtmp3442;
+        var _size446 = 0;
+        var _rtmp3450;
         this.success = [];
-        var _etype441 = 0;
-        _rtmp3442 = input.readListBegin();
-        _etype441 = _rtmp3442.etype;
-        _size438 = _rtmp3442.size;
-        for (var _i443 = 0; _i443 < _size438; ++_i443)
+        var _etype449 = 0;
+        _rtmp3450 = input.readListBegin();
+        _etype449 = _rtmp3450.etype;
+        _size446 = _rtmp3450.size;
+        for (var _i451 = 0; _i451 < _size446; ++_i451)
         {
-          var elem444 = null;
-          elem444 = input.readI32();
-          this.success.push(elem444);
+          var elem452 = null;
+          elem452 = input.readI32();
+          this.success.push(elem452);
         }
         input.readListEnd();
       } else {
@@ -15751,12 +15880,12 @@ IFaceLog_loadPersonGroupByWhere_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.I32, this.success.length);
-    for (var iter445 in this.success)
+    for (var iter453 in this.success)
     {
-      if (this.success.hasOwnProperty(iter445))
+      if (this.success.hasOwnProperty(iter453))
       {
-        iter445 = this.success[iter445];
-        output.writeI32(iter445);
+        iter453 = this.success[iter453];
+        output.writeI32(iter453);
       }
     }
     output.writeListEnd();
@@ -15857,18 +15986,18 @@ IFaceLog_loadPersonGroupIdByWhere_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size446 = 0;
-        var _rtmp3450;
+        var _size454 = 0;
+        var _rtmp3458;
         this.success = [];
-        var _etype449 = 0;
-        _rtmp3450 = input.readListBegin();
-        _etype449 = _rtmp3450.etype;
-        _size446 = _rtmp3450.size;
-        for (var _i451 = 0; _i451 < _size446; ++_i451)
+        var _etype457 = 0;
+        _rtmp3458 = input.readListBegin();
+        _etype457 = _rtmp3458.etype;
+        _size454 = _rtmp3458.size;
+        for (var _i459 = 0; _i459 < _size454; ++_i459)
         {
-          var elem452 = null;
-          elem452 = input.readI32();
-          this.success.push(elem452);
+          var elem460 = null;
+          elem460 = input.readI32();
+          this.success.push(elem460);
         }
         input.readListEnd();
       } else {
@@ -15897,12 +16026,12 @@ IFaceLog_loadPersonGroupIdByWhere_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.I32, this.success.length);
-    for (var iter453 in this.success)
+    for (var iter461 in this.success)
     {
-      if (this.success.hasOwnProperty(iter453))
+      if (this.success.hasOwnProperty(iter461))
       {
-        iter453 = this.success[iter453];
-        output.writeI32(iter453);
+        iter461 = this.success[iter461];
+        output.writeI32(iter461);
       }
     }
     output.writeListEnd();
@@ -16005,18 +16134,18 @@ IFaceLog_loadPersonIdByUpdateTime_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size454 = 0;
-        var _rtmp3458;
+        var _size462 = 0;
+        var _rtmp3466;
         this.success = [];
-        var _etype457 = 0;
-        _rtmp3458 = input.readListBegin();
-        _etype457 = _rtmp3458.etype;
-        _size454 = _rtmp3458.size;
-        for (var _i459 = 0; _i459 < _size454; ++_i459)
+        var _etype465 = 0;
+        _rtmp3466 = input.readListBegin();
+        _etype465 = _rtmp3466.etype;
+        _size462 = _rtmp3466.size;
+        for (var _i467 = 0; _i467 < _size462; ++_i467)
         {
-          var elem460 = null;
-          elem460 = input.readI32();
-          this.success.push(elem460);
+          var elem468 = null;
+          elem468 = input.readI32();
+          this.success.push(elem468);
         }
         input.readListEnd();
       } else {
@@ -16045,12 +16174,12 @@ IFaceLog_loadPersonIdByUpdateTime_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.I32, this.success.length);
-    for (var iter461 in this.success)
+    for (var iter469 in this.success)
     {
-      if (this.success.hasOwnProperty(iter461))
+      if (this.success.hasOwnProperty(iter469))
       {
-        iter461 = this.success[iter461];
-        output.writeI32(iter461);
+        iter469 = this.success[iter469];
+        output.writeI32(iter469);
       }
     }
     output.writeListEnd();
@@ -16151,18 +16280,18 @@ IFaceLog_loadPersonIdByWhere_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size462 = 0;
-        var _rtmp3466;
+        var _size470 = 0;
+        var _rtmp3474;
         this.success = [];
-        var _etype465 = 0;
-        _rtmp3466 = input.readListBegin();
-        _etype465 = _rtmp3466.etype;
-        _size462 = _rtmp3466.size;
-        for (var _i467 = 0; _i467 < _size462; ++_i467)
+        var _etype473 = 0;
+        _rtmp3474 = input.readListBegin();
+        _etype473 = _rtmp3474.etype;
+        _size470 = _rtmp3474.size;
+        for (var _i475 = 0; _i475 < _size470; ++_i475)
         {
-          var elem468 = null;
-          elem468 = input.readI32();
-          this.success.push(elem468);
+          var elem476 = null;
+          elem476 = input.readI32();
+          this.success.push(elem476);
         }
         input.readListEnd();
       } else {
@@ -16191,12 +16320,12 @@ IFaceLog_loadPersonIdByWhere_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.I32, this.success.length);
-    for (var iter469 in this.success)
+    for (var iter477 in this.success)
     {
-      if (this.success.hasOwnProperty(iter469))
+      if (this.success.hasOwnProperty(iter477))
       {
-        iter469 = this.success[iter469];
-        output.writeI32(iter469);
+        iter477 = this.success[iter477];
+        output.writeI32(iter477);
       }
     }
     output.writeListEnd();
@@ -16299,18 +16428,18 @@ IFaceLog_loadUpdatedPersons_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size470 = 0;
-        var _rtmp3474;
+        var _size478 = 0;
+        var _rtmp3482;
         this.success = [];
-        var _etype473 = 0;
-        _rtmp3474 = input.readListBegin();
-        _etype473 = _rtmp3474.etype;
-        _size470 = _rtmp3474.size;
-        for (var _i475 = 0; _i475 < _size470; ++_i475)
+        var _etype481 = 0;
+        _rtmp3482 = input.readListBegin();
+        _etype481 = _rtmp3482.etype;
+        _size478 = _rtmp3482.size;
+        for (var _i483 = 0; _i483 < _size478; ++_i483)
         {
-          var elem476 = null;
-          elem476 = input.readI32();
-          this.success.push(elem476);
+          var elem484 = null;
+          elem484 = input.readI32();
+          this.success.push(elem484);
         }
         input.readListEnd();
       } else {
@@ -16339,12 +16468,12 @@ IFaceLog_loadUpdatedPersons_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.I32, this.success.length);
-    for (var iter477 in this.success)
+    for (var iter485 in this.success)
     {
-      if (this.success.hasOwnProperty(iter477))
+      if (this.success.hasOwnProperty(iter485))
       {
-        iter477 = this.success[iter477];
-        output.writeI32(iter477);
+        iter485 = this.success[iter485];
+        output.writeI32(iter485);
       }
     }
     output.writeListEnd();
@@ -18007,7 +18136,6 @@ var IFaceLog_savePersonFull_args = function(args) {
   this.feature = null;
   this.featureImage = null;
   this.featureFaceBean = null;
-  this.deviceId = null;
   this.token = null;
   if (args) {
     if (args.personBean !== undefined && args.personBean !== null) {
@@ -18024,9 +18152,6 @@ var IFaceLog_savePersonFull_args = function(args) {
     }
     if (args.featureFaceBean !== undefined && args.featureFaceBean !== null) {
       this.featureFaceBean = new ttypes.FaceBean(args.featureFaceBean);
-    }
-    if (args.deviceId !== undefined && args.deviceId !== null) {
-      this.deviceId = args.deviceId;
     }
     if (args.token !== undefined && args.token !== null) {
       this.token = new ttypes.Token(args.token);
@@ -18085,13 +18210,6 @@ IFaceLog_savePersonFull_args.prototype.read = function(input) {
       }
       break;
       case 6:
-      if (ftype == Thrift.Type.I32) {
-        this.deviceId = input.readI32();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 7:
       if (ftype == Thrift.Type.STRUCT) {
         this.token = new ttypes.Token();
         this.token.read(input);
@@ -18135,13 +18253,8 @@ IFaceLog_savePersonFull_args.prototype.write = function(output) {
     this.featureFaceBean.write(output);
     output.writeFieldEnd();
   }
-  if (this.deviceId !== null && this.deviceId !== undefined) {
-    output.writeFieldBegin('deviceId', Thrift.Type.I32, 6);
-    output.writeI32(this.deviceId);
-    output.writeFieldEnd();
-  }
   if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 7);
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 6);
     this.token.write(output);
     output.writeFieldEnd();
   }
@@ -18522,7 +18635,6 @@ var IFaceLog_savePersonWithPhotoAndFeature_args = function(args) {
   this.personBean = null;
   this.idPhoto = null;
   this.featureBean = null;
-  this.deviceId = null;
   this.token = null;
   if (args) {
     if (args.personBean !== undefined && args.personBean !== null) {
@@ -18533,9 +18645,6 @@ var IFaceLog_savePersonWithPhotoAndFeature_args = function(args) {
     }
     if (args.featureBean !== undefined && args.featureBean !== null) {
       this.featureBean = new ttypes.FeatureBean(args.featureBean);
-    }
-    if (args.deviceId !== undefined && args.deviceId !== null) {
-      this.deviceId = args.deviceId;
     }
     if (args.token !== undefined && args.token !== null) {
       this.token = new ttypes.Token(args.token);
@@ -18580,13 +18689,6 @@ IFaceLog_savePersonWithPhotoAndFeature_args.prototype.read = function(input) {
       }
       break;
       case 4:
-      if (ftype == Thrift.Type.I32) {
-        this.deviceId = input.readI32();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 5:
       if (ftype == Thrift.Type.STRUCT) {
         this.token = new ttypes.Token();
         this.token.read(input);
@@ -18620,13 +18722,8 @@ IFaceLog_savePersonWithPhotoAndFeature_args.prototype.write = function(output) {
     this.featureBean.write(output);
     output.writeFieldEnd();
   }
-  if (this.deviceId !== null && this.deviceId !== undefined) {
-    output.writeFieldBegin('deviceId', Thrift.Type.I32, 4);
-    output.writeI32(this.deviceId);
-    output.writeFieldEnd();
-  }
   if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 5);
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 4);
     this.token.write(output);
     output.writeFieldEnd();
   }
@@ -18769,19 +18866,19 @@ IFaceLog_savePersonWithPhotoAndFeatureMultiFaces_args.prototype.read = function(
       break;
       case 4:
       if (ftype == Thrift.Type.LIST) {
-        var _size478 = 0;
-        var _rtmp3482;
+        var _size486 = 0;
+        var _rtmp3490;
         this.faceBeans = [];
-        var _etype481 = 0;
-        _rtmp3482 = input.readListBegin();
-        _etype481 = _rtmp3482.etype;
-        _size478 = _rtmp3482.size;
-        for (var _i483 = 0; _i483 < _size478; ++_i483)
+        var _etype489 = 0;
+        _rtmp3490 = input.readListBegin();
+        _etype489 = _rtmp3490.etype;
+        _size486 = _rtmp3490.size;
+        for (var _i491 = 0; _i491 < _size486; ++_i491)
         {
-          var elem484 = null;
-          elem484 = new ttypes.FaceBean();
-          elem484.read(input);
-          this.faceBeans.push(elem484);
+          var elem492 = null;
+          elem492 = new ttypes.FaceBean();
+          elem492.read(input);
+          this.faceBeans.push(elem492);
         }
         input.readListEnd();
       } else {
@@ -18825,12 +18922,12 @@ IFaceLog_savePersonWithPhotoAndFeatureMultiFaces_args.prototype.write = function
   if (this.faceBeans !== null && this.faceBeans !== undefined) {
     output.writeFieldBegin('faceBeans', Thrift.Type.LIST, 4);
     output.writeListBegin(Thrift.Type.STRUCT, this.faceBeans.length);
-    for (var iter485 in this.faceBeans)
+    for (var iter493 in this.faceBeans)
     {
-      if (this.faceBeans.hasOwnProperty(iter485))
+      if (this.faceBeans.hasOwnProperty(iter493))
       {
-        iter485 = this.faceBeans[iter485];
-        iter485.write(output);
+        iter493 = this.faceBeans[iter493];
+        iter493.write(output);
       }
     }
     output.writeListEnd();
@@ -18923,7 +19020,6 @@ var IFaceLog_savePersonWithPhotoAndFeatureMultiImage_args = function(args) {
   this.idPhoto = null;
   this.feature = null;
   this.faceInfo = null;
-  this.deviceId = null;
   this.token = null;
   if (args) {
     if (args.personBean !== undefined && args.personBean !== null) {
@@ -18937,9 +19033,6 @@ var IFaceLog_savePersonWithPhotoAndFeatureMultiImage_args = function(args) {
     }
     if (args.faceInfo !== undefined && args.faceInfo !== null) {
       this.faceInfo = Thrift.copyMap(args.faceInfo, [ttypes.FaceBean]);
-    }
-    if (args.deviceId !== undefined && args.deviceId !== null) {
-      this.deviceId = args.deviceId;
     }
     if (args.token !== undefined && args.token !== null) {
       this.token = new ttypes.Token(args.token);
@@ -18984,23 +19077,23 @@ IFaceLog_savePersonWithPhotoAndFeatureMultiImage_args.prototype.read = function(
       break;
       case 4:
       if (ftype == Thrift.Type.MAP) {
-        var _size486 = 0;
-        var _rtmp3490;
+        var _size494 = 0;
+        var _rtmp3498;
         this.faceInfo = {};
-        var _ktype487 = 0;
-        var _vtype488 = 0;
-        _rtmp3490 = input.readMapBegin();
-        _ktype487 = _rtmp3490.ktype;
-        _vtype488 = _rtmp3490.vtype;
-        _size486 = _rtmp3490.size;
-        for (var _i491 = 0; _i491 < _size486; ++_i491)
+        var _ktype495 = 0;
+        var _vtype496 = 0;
+        _rtmp3498 = input.readMapBegin();
+        _ktype495 = _rtmp3498.ktype;
+        _vtype496 = _rtmp3498.vtype;
+        _size494 = _rtmp3498.size;
+        for (var _i499 = 0; _i499 < _size494; ++_i499)
         {
-          var key492 = null;
-          var val493 = null;
-          key492 = input.readBinary();
-          val493 = new ttypes.FaceBean();
-          val493.read(input);
-          this.faceInfo[key492] = val493;
+          var key500 = null;
+          var val501 = null;
+          key500 = input.readBinary();
+          val501 = new ttypes.FaceBean();
+          val501.read(input);
+          this.faceInfo[key500] = val501;
         }
         input.readMapEnd();
       } else {
@@ -19008,13 +19101,6 @@ IFaceLog_savePersonWithPhotoAndFeatureMultiImage_args.prototype.read = function(
       }
       break;
       case 5:
-      if (ftype == Thrift.Type.I32) {
-        this.deviceId = input.readI32();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 6:
       if (ftype == Thrift.Type.STRUCT) {
         this.token = new ttypes.Token();
         this.token.read(input);
@@ -19051,25 +19137,20 @@ IFaceLog_savePersonWithPhotoAndFeatureMultiImage_args.prototype.write = function
   if (this.faceInfo !== null && this.faceInfo !== undefined) {
     output.writeFieldBegin('faceInfo', Thrift.Type.MAP, 4);
     output.writeMapBegin(Thrift.Type.STRING, Thrift.Type.STRUCT, Thrift.objectLength(this.faceInfo));
-    for (var kiter494 in this.faceInfo)
+    for (var kiter502 in this.faceInfo)
     {
-      if (this.faceInfo.hasOwnProperty(kiter494))
+      if (this.faceInfo.hasOwnProperty(kiter502))
       {
-        var viter495 = this.faceInfo[kiter494];
-        output.writeBinary(kiter494);
-        viter495.write(output);
+        var viter503 = this.faceInfo[kiter502];
+        output.writeBinary(kiter502);
+        viter503.write(output);
       }
     }
     output.writeMapEnd();
     output.writeFieldEnd();
   }
-  if (this.deviceId !== null && this.deviceId !== undefined) {
-    output.writeFieldBegin('deviceId', Thrift.Type.I32, 5);
-    output.writeI32(this.deviceId);
-    output.writeFieldEnd();
-  }
   if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 6);
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 5);
     this.token.write(output);
     output.writeFieldEnd();
   }
@@ -19350,19 +19431,19 @@ IFaceLog_savePersons_args.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.LIST) {
-        var _size496 = 0;
-        var _rtmp3500;
+        var _size504 = 0;
+        var _rtmp3508;
         this.persons = [];
-        var _etype499 = 0;
-        _rtmp3500 = input.readListBegin();
-        _etype499 = _rtmp3500.etype;
-        _size496 = _rtmp3500.size;
-        for (var _i501 = 0; _i501 < _size496; ++_i501)
+        var _etype507 = 0;
+        _rtmp3508 = input.readListBegin();
+        _etype507 = _rtmp3508.etype;
+        _size504 = _rtmp3508.size;
+        for (var _i509 = 0; _i509 < _size504; ++_i509)
         {
-          var elem502 = null;
-          elem502 = new ttypes.PersonBean();
-          elem502.read(input);
-          this.persons.push(elem502);
+          var elem510 = null;
+          elem510 = new ttypes.PersonBean();
+          elem510.read(input);
+          this.persons.push(elem510);
         }
         input.readListEnd();
       } else {
@@ -19391,12 +19472,12 @@ IFaceLog_savePersons_args.prototype.write = function(output) {
   if (this.persons !== null && this.persons !== undefined) {
     output.writeFieldBegin('persons', Thrift.Type.LIST, 1);
     output.writeListBegin(Thrift.Type.STRUCT, this.persons.length);
-    for (var iter503 in this.persons)
+    for (var iter511 in this.persons)
     {
-      if (this.persons.hasOwnProperty(iter503))
+      if (this.persons.hasOwnProperty(iter511))
       {
-        iter503 = this.persons[iter503];
-        iter503.write(output);
+        iter511 = this.persons[iter511];
+        iter511.write(output);
       }
     }
     output.writeListEnd();
@@ -19498,23 +19579,23 @@ IFaceLog_savePersonsWithPhoto_args.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.MAP) {
-        var _size504 = 0;
-        var _rtmp3508;
+        var _size512 = 0;
+        var _rtmp3516;
         this.persons = {};
-        var _ktype505 = 0;
-        var _vtype506 = 0;
-        _rtmp3508 = input.readMapBegin();
-        _ktype505 = _rtmp3508.ktype;
-        _vtype506 = _rtmp3508.vtype;
-        _size504 = _rtmp3508.size;
-        for (var _i509 = 0; _i509 < _size504; ++_i509)
+        var _ktype513 = 0;
+        var _vtype514 = 0;
+        _rtmp3516 = input.readMapBegin();
+        _ktype513 = _rtmp3516.ktype;
+        _vtype514 = _rtmp3516.vtype;
+        _size512 = _rtmp3516.size;
+        for (var _i517 = 0; _i517 < _size512; ++_i517)
         {
-          var key510 = null;
-          var val511 = null;
-          key510 = input.readBinary();
-          val511 = new ttypes.PersonBean();
-          val511.read(input);
-          this.persons[key510] = val511;
+          var key518 = null;
+          var val519 = null;
+          key518 = input.readBinary();
+          val519 = new ttypes.PersonBean();
+          val519.read(input);
+          this.persons[key518] = val519;
         }
         input.readMapEnd();
       } else {
@@ -19543,13 +19624,13 @@ IFaceLog_savePersonsWithPhoto_args.prototype.write = function(output) {
   if (this.persons !== null && this.persons !== undefined) {
     output.writeFieldBegin('persons', Thrift.Type.MAP, 1);
     output.writeMapBegin(Thrift.Type.STRING, Thrift.Type.STRUCT, Thrift.objectLength(this.persons));
-    for (var kiter512 in this.persons)
+    for (var kiter520 in this.persons)
     {
-      if (this.persons.hasOwnProperty(kiter512))
+      if (this.persons.hasOwnProperty(kiter520))
       {
-        var viter513 = this.persons[kiter512];
-        output.writeBinary(kiter512);
-        viter513.write(output);
+        var viter521 = this.persons[kiter520];
+        output.writeBinary(kiter520);
+        viter521.write(output);
       }
     }
     output.writeMapEnd();
@@ -19927,18 +20008,18 @@ IFaceLog_setPersonExpiryDateList_args.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.LIST) {
-        var _size514 = 0;
-        var _rtmp3518;
+        var _size522 = 0;
+        var _rtmp3526;
         this.personIdList = [];
-        var _etype517 = 0;
-        _rtmp3518 = input.readListBegin();
-        _etype517 = _rtmp3518.etype;
-        _size514 = _rtmp3518.size;
-        for (var _i519 = 0; _i519 < _size514; ++_i519)
+        var _etype525 = 0;
+        _rtmp3526 = input.readListBegin();
+        _etype525 = _rtmp3526.etype;
+        _size522 = _rtmp3526.size;
+        for (var _i527 = 0; _i527 < _size522; ++_i527)
         {
-          var elem520 = null;
-          elem520 = input.readI32();
-          this.personIdList.push(elem520);
+          var elem528 = null;
+          elem528 = input.readI32();
+          this.personIdList.push(elem528);
         }
         input.readListEnd();
       } else {
@@ -19974,12 +20055,12 @@ IFaceLog_setPersonExpiryDateList_args.prototype.write = function(output) {
   if (this.personIdList !== null && this.personIdList !== undefined) {
     output.writeFieldBegin('personIdList', Thrift.Type.LIST, 1);
     output.writeListBegin(Thrift.Type.I32, this.personIdList.length);
-    for (var iter521 in this.personIdList)
+    for (var iter529 in this.personIdList)
     {
-      if (this.personIdList.hasOwnProperty(iter521))
+      if (this.personIdList.hasOwnProperty(iter529))
       {
-        iter521 = this.personIdList[iter521];
-        output.writeI32(iter521);
+        iter529 = this.personIdList[iter529];
+        output.writeI32(iter529);
       }
     }
     output.writeListEnd();
@@ -20086,22 +20167,22 @@ IFaceLog_setProperties_args.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.MAP) {
-        var _size522 = 0;
-        var _rtmp3526;
+        var _size530 = 0;
+        var _rtmp3534;
         this.config = {};
-        var _ktype523 = 0;
-        var _vtype524 = 0;
-        _rtmp3526 = input.readMapBegin();
-        _ktype523 = _rtmp3526.ktype;
-        _vtype524 = _rtmp3526.vtype;
-        _size522 = _rtmp3526.size;
-        for (var _i527 = 0; _i527 < _size522; ++_i527)
+        var _ktype531 = 0;
+        var _vtype532 = 0;
+        _rtmp3534 = input.readMapBegin();
+        _ktype531 = _rtmp3534.ktype;
+        _vtype532 = _rtmp3534.vtype;
+        _size530 = _rtmp3534.size;
+        for (var _i535 = 0; _i535 < _size530; ++_i535)
         {
-          var key528 = null;
-          var val529 = null;
-          key528 = input.readString();
-          val529 = input.readString();
-          this.config[key528] = val529;
+          var key536 = null;
+          var val537 = null;
+          key536 = input.readString();
+          val537 = input.readString();
+          this.config[key536] = val537;
         }
         input.readMapEnd();
       } else {
@@ -20130,13 +20211,13 @@ IFaceLog_setProperties_args.prototype.write = function(output) {
   if (this.config !== null && this.config !== undefined) {
     output.writeFieldBegin('config', Thrift.Type.MAP, 1);
     output.writeMapBegin(Thrift.Type.STRING, Thrift.Type.STRING, Thrift.objectLength(this.config));
-    for (var kiter530 in this.config)
+    for (var kiter538 in this.config)
     {
-      if (this.config.hasOwnProperty(kiter530))
+      if (this.config.hasOwnProperty(kiter538))
       {
-        var viter531 = this.config[kiter530];
-        output.writeString(kiter530);
-        output.writeString(viter531);
+        var viter539 = this.config[kiter538];
+        output.writeString(kiter538);
+        output.writeString(viter539);
       }
     }
     output.writeMapEnd();
@@ -21212,22 +21293,22 @@ IFaceLog_versionInfo_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.MAP) {
-        var _size532 = 0;
-        var _rtmp3536;
+        var _size540 = 0;
+        var _rtmp3544;
         this.success = {};
-        var _ktype533 = 0;
-        var _vtype534 = 0;
-        _rtmp3536 = input.readMapBegin();
-        _ktype533 = _rtmp3536.ktype;
-        _vtype534 = _rtmp3536.vtype;
-        _size532 = _rtmp3536.size;
-        for (var _i537 = 0; _i537 < _size532; ++_i537)
+        var _ktype541 = 0;
+        var _vtype542 = 0;
+        _rtmp3544 = input.readMapBegin();
+        _ktype541 = _rtmp3544.ktype;
+        _vtype542 = _rtmp3544.vtype;
+        _size540 = _rtmp3544.size;
+        for (var _i545 = 0; _i545 < _size540; ++_i545)
         {
-          var key538 = null;
-          var val539 = null;
-          key538 = input.readString();
-          val539 = input.readString();
-          this.success[key538] = val539;
+          var key546 = null;
+          var val547 = null;
+          key546 = input.readString();
+          val547 = input.readString();
+          this.success[key546] = val547;
         }
         input.readMapEnd();
       } else {
@@ -21256,13 +21337,13 @@ IFaceLog_versionInfo_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.MAP, 0);
     output.writeMapBegin(Thrift.Type.STRING, Thrift.Type.STRING, Thrift.objectLength(this.success));
-    for (var kiter540 in this.success)
+    for (var kiter548 in this.success)
     {
-      if (this.success.hasOwnProperty(kiter540))
+      if (this.success.hasOwnProperty(kiter548))
       {
-        var viter541 = this.success[kiter540];
-        output.writeString(kiter540);
-        output.writeString(viter541);
+        var viter549 = this.success[kiter548];
+        output.writeString(kiter548);
+        output.writeString(viter549);
       }
     }
     output.writeMapEnd();
@@ -21345,7 +21426,7 @@ IFaceLogClient.prototype.recv_addFeature = function(input,mtype,rseqid) {
   }
   return callback('addFeature failed: unknown result');
 };
-IFaceLogClient.prototype.addFeatureMulti = function(feature, personId, faceInfo, deviceId, token, callback) {
+IFaceLogClient.prototype.addFeatureMulti = function(feature, personId, faceInfo, token, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
     var _defer = Q.defer();
@@ -21356,22 +21437,21 @@ IFaceLogClient.prototype.addFeatureMulti = function(feature, personId, faceInfo,
         _defer.resolve(result);
       }
     };
-    this.send_addFeatureMulti(feature, personId, faceInfo, deviceId, token);
+    this.send_addFeatureMulti(feature, personId, faceInfo, token);
     return _defer.promise;
   } else {
     this._reqs[this.seqid()] = callback;
-    this.send_addFeatureMulti(feature, personId, faceInfo, deviceId, token);
+    this.send_addFeatureMulti(feature, personId, faceInfo, token);
   }
 };
 
-IFaceLogClient.prototype.send_addFeatureMulti = function(feature, personId, faceInfo, deviceId, token) {
+IFaceLogClient.prototype.send_addFeatureMulti = function(feature, personId, faceInfo, token) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('addFeatureMulti', Thrift.MessageType.CALL, this.seqid());
   var params = {
     feature: feature,
     personId: personId,
     faceInfo: faceInfo,
-    deviceId: deviceId,
     token: token
   };
   var args = new IFaceLog_addFeatureMulti_args(params);
@@ -21404,7 +21484,7 @@ IFaceLogClient.prototype.recv_addFeatureMulti = function(input,mtype,rseqid) {
   }
   return callback('addFeatureMulti failed: unknown result');
 };
-IFaceLogClient.prototype.addFeatureWithImage = function(feature, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, deviceId, token, callback) {
+IFaceLogClient.prototype.addFeatureWithImage = function(feature, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
     var _defer = Q.defer();
@@ -21415,15 +21495,15 @@ IFaceLogClient.prototype.addFeatureWithImage = function(feature, personId, asIdP
         _defer.resolve(result);
       }
     };
-    this.send_addFeatureWithImage(feature, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, deviceId, token);
+    this.send_addFeatureWithImage(feature, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token);
     return _defer.promise;
   } else {
     this._reqs[this.seqid()] = callback;
-    this.send_addFeatureWithImage(feature, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, deviceId, token);
+    this.send_addFeatureWithImage(feature, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token);
   }
 };
 
-IFaceLogClient.prototype.send_addFeatureWithImage = function(feature, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, deviceId, token) {
+IFaceLogClient.prototype.send_addFeatureWithImage = function(feature, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('addFeatureWithImage', Thrift.MessageType.CALL, this.seqid());
   var params = {
@@ -21432,7 +21512,6 @@ IFaceLogClient.prototype.send_addFeatureWithImage = function(feature, personId, 
     asIdPhotoIfAbsent: asIdPhotoIfAbsent,
     featurePhoto: featurePhoto,
     faceBean: faceBean,
-    deviceId: deviceId,
     token: token
   };
   var args = new IFaceLog_addFeatureWithImage_args(params);
@@ -24261,58 +24340,6 @@ IFaceLogClient.prototype.recv_getFeature = function(input,mtype,rseqid) {
   }
   return callback('getFeature failed: unknown result');
 };
-IFaceLogClient.prototype.getFeatureBeansByPersonId = function(personId, callback) {
-  this._seqid = this.new_seqid();
-  if (callback === undefined) {
-    var _defer = Q.defer();
-    this._reqs[this.seqid()] = function(error, result) {
-      if (error) {
-        _defer.reject(error);
-      } else {
-        _defer.resolve(result);
-      }
-    };
-    this.send_getFeatureBeansByPersonId(personId);
-    return _defer.promise;
-  } else {
-    this._reqs[this.seqid()] = callback;
-    this.send_getFeatureBeansByPersonId(personId);
-  }
-};
-
-IFaceLogClient.prototype.send_getFeatureBeansByPersonId = function(personId) {
-  var output = new this.pClass(this.output);
-  output.writeMessageBegin('getFeatureBeansByPersonId', Thrift.MessageType.CALL, this.seqid());
-  var params = {
-    personId: personId
-  };
-  var args = new IFaceLog_getFeatureBeansByPersonId_args(params);
-  args.write(output);
-  output.writeMessageEnd();
-  return this.output.flush();
-};
-
-IFaceLogClient.prototype.recv_getFeatureBeansByPersonId = function(input,mtype,rseqid) {
-  var callback = this._reqs[rseqid] || function() {};
-  delete this._reqs[rseqid];
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(input);
-    input.readMessageEnd();
-    return callback(x);
-  }
-  var result = new IFaceLog_getFeatureBeansByPersonId_result();
-  result.read(input);
-  input.readMessageEnd();
-
-  if (null !== result.ex1) {
-    return callback(result.ex1);
-  }
-  if (null !== result.success) {
-    return callback(null, result.success);
-  }
-  return callback('getFeatureBeansByPersonId failed: unknown result');
-};
 IFaceLogClient.prototype.getFeatureBytes = function(md5, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
@@ -24416,6 +24443,111 @@ IFaceLogClient.prototype.recv_getFeatures = function(input,mtype,rseqid) {
     return callback(null, result.success);
   }
   return callback('getFeatures failed: unknown result');
+};
+IFaceLogClient.prototype.getFeaturesByPersonId = function(personId, callback) {
+  this._seqid = this.new_seqid();
+  if (callback === undefined) {
+    var _defer = Q.defer();
+    this._reqs[this.seqid()] = function(error, result) {
+      if (error) {
+        _defer.reject(error);
+      } else {
+        _defer.resolve(result);
+      }
+    };
+    this.send_getFeaturesByPersonId(personId);
+    return _defer.promise;
+  } else {
+    this._reqs[this.seqid()] = callback;
+    this.send_getFeaturesByPersonId(personId);
+  }
+};
+
+IFaceLogClient.prototype.send_getFeaturesByPersonId = function(personId) {
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('getFeaturesByPersonId', Thrift.MessageType.CALL, this.seqid());
+  var params = {
+    personId: personId
+  };
+  var args = new IFaceLog_getFeaturesByPersonId_args(params);
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
+};
+
+IFaceLogClient.prototype.recv_getFeaturesByPersonId = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
+  }
+  var result = new IFaceLog_getFeaturesByPersonId_result();
+  result.read(input);
+  input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    return callback(result.ex1);
+  }
+  if (null !== result.success) {
+    return callback(null, result.success);
+  }
+  return callback('getFeaturesByPersonId failed: unknown result');
+};
+IFaceLogClient.prototype.getFeaturesByPersonIdAndSdkVersion = function(personId, sdkVersion, callback) {
+  this._seqid = this.new_seqid();
+  if (callback === undefined) {
+    var _defer = Q.defer();
+    this._reqs[this.seqid()] = function(error, result) {
+      if (error) {
+        _defer.reject(error);
+      } else {
+        _defer.resolve(result);
+      }
+    };
+    this.send_getFeaturesByPersonIdAndSdkVersion(personId, sdkVersion);
+    return _defer.promise;
+  } else {
+    this._reqs[this.seqid()] = callback;
+    this.send_getFeaturesByPersonIdAndSdkVersion(personId, sdkVersion);
+  }
+};
+
+IFaceLogClient.prototype.send_getFeaturesByPersonIdAndSdkVersion = function(personId, sdkVersion) {
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('getFeaturesByPersonIdAndSdkVersion', Thrift.MessageType.CALL, this.seqid());
+  var params = {
+    personId: personId,
+    sdkVersion: sdkVersion
+  };
+  var args = new IFaceLog_getFeaturesByPersonIdAndSdkVersion_args(params);
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
+};
+
+IFaceLogClient.prototype.recv_getFeaturesByPersonIdAndSdkVersion = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
+  }
+  var result = new IFaceLog_getFeaturesByPersonIdAndSdkVersion_result();
+  result.read(input);
+  input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    return callback(result.ex1);
+  }
+  if (null !== result.success) {
+    return callback(null, result.success);
+  }
+  return callback('getFeaturesByPersonIdAndSdkVersion failed: unknown result');
 };
 IFaceLogClient.prototype.getFeaturesOfPerson = function(personId, callback) {
   this._seqid = this.new_seqid();
@@ -27718,7 +27850,7 @@ IFaceLogClient.prototype.recv_savePerson = function(input,mtype,rseqid) {
   }
   return callback('savePerson failed: unknown result');
 };
-IFaceLogClient.prototype.savePersonFull = function(personBean, idPhoto, feature, featureImage, featureFaceBean, deviceId, token, callback) {
+IFaceLogClient.prototype.savePersonFull = function(personBean, idPhoto, feature, featureImage, featureFaceBean, token, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
     var _defer = Q.defer();
@@ -27729,15 +27861,15 @@ IFaceLogClient.prototype.savePersonFull = function(personBean, idPhoto, feature,
         _defer.resolve(result);
       }
     };
-    this.send_savePersonFull(personBean, idPhoto, feature, featureImage, featureFaceBean, deviceId, token);
+    this.send_savePersonFull(personBean, idPhoto, feature, featureImage, featureFaceBean, token);
     return _defer.promise;
   } else {
     this._reqs[this.seqid()] = callback;
-    this.send_savePersonFull(personBean, idPhoto, feature, featureImage, featureFaceBean, deviceId, token);
+    this.send_savePersonFull(personBean, idPhoto, feature, featureImage, featureFaceBean, token);
   }
 };
 
-IFaceLogClient.prototype.send_savePersonFull = function(personBean, idPhoto, feature, featureImage, featureFaceBean, deviceId, token) {
+IFaceLogClient.prototype.send_savePersonFull = function(personBean, idPhoto, feature, featureImage, featureFaceBean, token) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('savePersonFull', Thrift.MessageType.CALL, this.seqid());
   var params = {
@@ -27746,7 +27878,6 @@ IFaceLogClient.prototype.send_savePersonFull = function(personBean, idPhoto, fea
     feature: feature,
     featureImage: featureImage,
     featureFaceBean: featureFaceBean,
-    deviceId: deviceId,
     token: token
   };
   var args = new IFaceLog_savePersonFull_args(params);
@@ -27883,7 +28014,7 @@ IFaceLogClient.prototype.recv_savePersonWithPhoto = function(input,mtype,rseqid)
   }
   return callback('savePersonWithPhoto failed: unknown result');
 };
-IFaceLogClient.prototype.savePersonWithPhotoAndFeature = function(personBean, idPhoto, featureBean, deviceId, token, callback) {
+IFaceLogClient.prototype.savePersonWithPhotoAndFeature = function(personBean, idPhoto, featureBean, token, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
     var _defer = Q.defer();
@@ -27894,22 +28025,21 @@ IFaceLogClient.prototype.savePersonWithPhotoAndFeature = function(personBean, id
         _defer.resolve(result);
       }
     };
-    this.send_savePersonWithPhotoAndFeature(personBean, idPhoto, featureBean, deviceId, token);
+    this.send_savePersonWithPhotoAndFeature(personBean, idPhoto, featureBean, token);
     return _defer.promise;
   } else {
     this._reqs[this.seqid()] = callback;
-    this.send_savePersonWithPhotoAndFeature(personBean, idPhoto, featureBean, deviceId, token);
+    this.send_savePersonWithPhotoAndFeature(personBean, idPhoto, featureBean, token);
   }
 };
 
-IFaceLogClient.prototype.send_savePersonWithPhotoAndFeature = function(personBean, idPhoto, featureBean, deviceId, token) {
+IFaceLogClient.prototype.send_savePersonWithPhotoAndFeature = function(personBean, idPhoto, featureBean, token) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('savePersonWithPhotoAndFeature', Thrift.MessageType.CALL, this.seqid());
   var params = {
     personBean: personBean,
     idPhoto: idPhoto,
     featureBean: featureBean,
-    deviceId: deviceId,
     token: token
   };
   var args = new IFaceLog_savePersonWithPhotoAndFeature_args(params);
@@ -27995,7 +28125,7 @@ IFaceLogClient.prototype.recv_savePersonWithPhotoAndFeatureMultiFaces = function
   }
   return callback('savePersonWithPhotoAndFeatureMultiFaces failed: unknown result');
 };
-IFaceLogClient.prototype.savePersonWithPhotoAndFeatureMultiImage = function(personBean, idPhoto, feature, faceInfo, deviceId, token, callback) {
+IFaceLogClient.prototype.savePersonWithPhotoAndFeatureMultiImage = function(personBean, idPhoto, feature, faceInfo, token, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
     var _defer = Q.defer();
@@ -28006,15 +28136,15 @@ IFaceLogClient.prototype.savePersonWithPhotoAndFeatureMultiImage = function(pers
         _defer.resolve(result);
       }
     };
-    this.send_savePersonWithPhotoAndFeatureMultiImage(personBean, idPhoto, feature, faceInfo, deviceId, token);
+    this.send_savePersonWithPhotoAndFeatureMultiImage(personBean, idPhoto, feature, faceInfo, token);
     return _defer.promise;
   } else {
     this._reqs[this.seqid()] = callback;
-    this.send_savePersonWithPhotoAndFeatureMultiImage(personBean, idPhoto, feature, faceInfo, deviceId, token);
+    this.send_savePersonWithPhotoAndFeatureMultiImage(personBean, idPhoto, feature, faceInfo, token);
   }
 };
 
-IFaceLogClient.prototype.send_savePersonWithPhotoAndFeatureMultiImage = function(personBean, idPhoto, feature, faceInfo, deviceId, token) {
+IFaceLogClient.prototype.send_savePersonWithPhotoAndFeatureMultiImage = function(personBean, idPhoto, feature, faceInfo, token) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('savePersonWithPhotoAndFeatureMultiImage', Thrift.MessageType.CALL, this.seqid());
   var params = {
@@ -28022,7 +28152,6 @@ IFaceLogClient.prototype.send_savePersonWithPhotoAndFeatureMultiImage = function
     idPhoto: idPhoto,
     feature: feature,
     faceInfo: faceInfo,
-    deviceId: deviceId,
     token: token
   };
   var args = new IFaceLog_savePersonWithPhotoAndFeatureMultiImage_args(params);
@@ -28887,8 +29016,8 @@ IFaceLogProcessor.prototype.process_addFeatureMulti = function(seqid, input, out
   var args = new IFaceLog_addFeatureMulti_args();
   args.read(input);
   input.readMessageEnd();
-  if (this._handler.addFeatureMulti.length === 5) {
-    Q.fcall(this._handler.addFeatureMulti.bind(this._handler), args.feature, args.personId, args.faceInfo, args.deviceId, args.token)
+  if (this._handler.addFeatureMulti.length === 4) {
+    Q.fcall(this._handler.addFeatureMulti.bind(this._handler), args.feature, args.personId, args.faceInfo, args.token)
       .then(function(result) {
         var result_obj = new IFaceLog_addFeatureMulti_result({success: result});
         output.writeMessageBegin("addFeatureMulti", Thrift.MessageType.REPLY, seqid);
@@ -28909,7 +29038,7 @@ IFaceLogProcessor.prototype.process_addFeatureMulti = function(seqid, input, out
         output.flush();
       });
   } else {
-    this._handler.addFeatureMulti(args.feature, args.personId, args.faceInfo, args.deviceId, args.token, function (err, result) {
+    this._handler.addFeatureMulti(args.feature, args.personId, args.faceInfo, args.token, function (err, result) {
       var result_obj;
       if ((err === null || typeof err === 'undefined') || err instanceof ttypes.DuplicateRecordException || err instanceof ttypes.ServiceRuntimeException) {
         result_obj = new IFaceLog_addFeatureMulti_result((err !== null || typeof err === 'undefined') ? err : {success: result});
@@ -28928,8 +29057,8 @@ IFaceLogProcessor.prototype.process_addFeatureWithImage = function(seqid, input,
   var args = new IFaceLog_addFeatureWithImage_args();
   args.read(input);
   input.readMessageEnd();
-  if (this._handler.addFeatureWithImage.length === 7) {
-    Q.fcall(this._handler.addFeatureWithImage.bind(this._handler), args.feature, args.personId, args.asIdPhotoIfAbsent, args.featurePhoto, args.faceBean, args.deviceId, args.token)
+  if (this._handler.addFeatureWithImage.length === 6) {
+    Q.fcall(this._handler.addFeatureWithImage.bind(this._handler), args.feature, args.personId, args.asIdPhotoIfAbsent, args.featurePhoto, args.faceBean, args.token)
       .then(function(result) {
         var result_obj = new IFaceLog_addFeatureWithImage_result({success: result});
         output.writeMessageBegin("addFeatureWithImage", Thrift.MessageType.REPLY, seqid);
@@ -28950,7 +29079,7 @@ IFaceLogProcessor.prototype.process_addFeatureWithImage = function(seqid, input,
         output.flush();
       });
   } else {
-    this._handler.addFeatureWithImage(args.feature, args.personId, args.asIdPhotoIfAbsent, args.featurePhoto, args.faceBean, args.deviceId, args.token, function (err, result) {
+    this._handler.addFeatureWithImage(args.feature, args.personId, args.asIdPhotoIfAbsent, args.featurePhoto, args.faceBean, args.token, function (err, result) {
       var result_obj;
       if ((err === null || typeof err === 'undefined') || err instanceof ttypes.DuplicateRecordException || err instanceof ttypes.ServiceRuntimeException) {
         result_obj = new IFaceLog_addFeatureWithImage_result((err !== null || typeof err === 'undefined') ? err : {success: result});
@@ -31138,47 +31267,6 @@ IFaceLogProcessor.prototype.process_getFeature = function(seqid, input, output) 
     });
   }
 };
-IFaceLogProcessor.prototype.process_getFeatureBeansByPersonId = function(seqid, input, output) {
-  var args = new IFaceLog_getFeatureBeansByPersonId_args();
-  args.read(input);
-  input.readMessageEnd();
-  if (this._handler.getFeatureBeansByPersonId.length === 1) {
-    Q.fcall(this._handler.getFeatureBeansByPersonId.bind(this._handler), args.personId)
-      .then(function(result) {
-        var result_obj = new IFaceLog_getFeatureBeansByPersonId_result({success: result});
-        output.writeMessageBegin("getFeatureBeansByPersonId", Thrift.MessageType.REPLY, seqid);
-        result_obj.write(output);
-        output.writeMessageEnd();
-        output.flush();
-      }, function (err) {
-        var result;
-        if (err instanceof ttypes.ServiceRuntimeException) {
-          result = new IFaceLog_getFeatureBeansByPersonId_result(err);
-          output.writeMessageBegin("getFeatureBeansByPersonId", Thrift.MessageType.REPLY, seqid);
-        } else {
-          result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
-          output.writeMessageBegin("getFeatureBeansByPersonId", Thrift.MessageType.EXCEPTION, seqid);
-        }
-        result.write(output);
-        output.writeMessageEnd();
-        output.flush();
-      });
-  } else {
-    this._handler.getFeatureBeansByPersonId(args.personId, function (err, result) {
-      var result_obj;
-      if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
-        result_obj = new IFaceLog_getFeatureBeansByPersonId_result((err !== null || typeof err === 'undefined') ? err : {success: result});
-        output.writeMessageBegin("getFeatureBeansByPersonId", Thrift.MessageType.REPLY, seqid);
-      } else {
-        result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
-        output.writeMessageBegin("getFeatureBeansByPersonId", Thrift.MessageType.EXCEPTION, seqid);
-      }
-      result_obj.write(output);
-      output.writeMessageEnd();
-      output.flush();
-    });
-  }
-};
 IFaceLogProcessor.prototype.process_getFeatureBytes = function(seqid, input, output) {
   var args = new IFaceLog_getFeatureBytes_args();
   args.read(input);
@@ -31254,6 +31342,88 @@ IFaceLogProcessor.prototype.process_getFeatures = function(seqid, input, output)
       } else {
         result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
         output.writeMessageBegin("getFeatures", Thrift.MessageType.EXCEPTION, seqid);
+      }
+      result_obj.write(output);
+      output.writeMessageEnd();
+      output.flush();
+    });
+  }
+};
+IFaceLogProcessor.prototype.process_getFeaturesByPersonId = function(seqid, input, output) {
+  var args = new IFaceLog_getFeaturesByPersonId_args();
+  args.read(input);
+  input.readMessageEnd();
+  if (this._handler.getFeaturesByPersonId.length === 1) {
+    Q.fcall(this._handler.getFeaturesByPersonId.bind(this._handler), args.personId)
+      .then(function(result) {
+        var result_obj = new IFaceLog_getFeaturesByPersonId_result({success: result});
+        output.writeMessageBegin("getFeaturesByPersonId", Thrift.MessageType.REPLY, seqid);
+        result_obj.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      }, function (err) {
+        var result;
+        if (err instanceof ttypes.ServiceRuntimeException) {
+          result = new IFaceLog_getFeaturesByPersonId_result(err);
+          output.writeMessageBegin("getFeaturesByPersonId", Thrift.MessageType.REPLY, seqid);
+        } else {
+          result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+          output.writeMessageBegin("getFeaturesByPersonId", Thrift.MessageType.EXCEPTION, seqid);
+        }
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      });
+  } else {
+    this._handler.getFeaturesByPersonId(args.personId, function (err, result) {
+      var result_obj;
+      if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
+        result_obj = new IFaceLog_getFeaturesByPersonId_result((err !== null || typeof err === 'undefined') ? err : {success: result});
+        output.writeMessageBegin("getFeaturesByPersonId", Thrift.MessageType.REPLY, seqid);
+      } else {
+        result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+        output.writeMessageBegin("getFeaturesByPersonId", Thrift.MessageType.EXCEPTION, seqid);
+      }
+      result_obj.write(output);
+      output.writeMessageEnd();
+      output.flush();
+    });
+  }
+};
+IFaceLogProcessor.prototype.process_getFeaturesByPersonIdAndSdkVersion = function(seqid, input, output) {
+  var args = new IFaceLog_getFeaturesByPersonIdAndSdkVersion_args();
+  args.read(input);
+  input.readMessageEnd();
+  if (this._handler.getFeaturesByPersonIdAndSdkVersion.length === 2) {
+    Q.fcall(this._handler.getFeaturesByPersonIdAndSdkVersion.bind(this._handler), args.personId, args.sdkVersion)
+      .then(function(result) {
+        var result_obj = new IFaceLog_getFeaturesByPersonIdAndSdkVersion_result({success: result});
+        output.writeMessageBegin("getFeaturesByPersonIdAndSdkVersion", Thrift.MessageType.REPLY, seqid);
+        result_obj.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      }, function (err) {
+        var result;
+        if (err instanceof ttypes.ServiceRuntimeException) {
+          result = new IFaceLog_getFeaturesByPersonIdAndSdkVersion_result(err);
+          output.writeMessageBegin("getFeaturesByPersonIdAndSdkVersion", Thrift.MessageType.REPLY, seqid);
+        } else {
+          result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+          output.writeMessageBegin("getFeaturesByPersonIdAndSdkVersion", Thrift.MessageType.EXCEPTION, seqid);
+        }
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      });
+  } else {
+    this._handler.getFeaturesByPersonIdAndSdkVersion(args.personId, args.sdkVersion, function (err, result) {
+      var result_obj;
+      if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
+        result_obj = new IFaceLog_getFeaturesByPersonIdAndSdkVersion_result((err !== null || typeof err === 'undefined') ? err : {success: result});
+        output.writeMessageBegin("getFeaturesByPersonIdAndSdkVersion", Thrift.MessageType.REPLY, seqid);
+      } else {
+        result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+        output.writeMessageBegin("getFeaturesByPersonIdAndSdkVersion", Thrift.MessageType.EXCEPTION, seqid);
       }
       result_obj.write(output);
       output.writeMessageEnd();
@@ -33848,8 +34018,8 @@ IFaceLogProcessor.prototype.process_savePersonFull = function(seqid, input, outp
   var args = new IFaceLog_savePersonFull_args();
   args.read(input);
   input.readMessageEnd();
-  if (this._handler.savePersonFull.length === 7) {
-    Q.fcall(this._handler.savePersonFull.bind(this._handler), args.personBean, args.idPhoto, args.feature, args.featureImage, args.featureFaceBean, args.deviceId, args.token)
+  if (this._handler.savePersonFull.length === 6) {
+    Q.fcall(this._handler.savePersonFull.bind(this._handler), args.personBean, args.idPhoto, args.feature, args.featureImage, args.featureFaceBean, args.token)
       .then(function(result) {
         var result_obj = new IFaceLog_savePersonFull_result({success: result});
         output.writeMessageBegin("savePersonFull", Thrift.MessageType.REPLY, seqid);
@@ -33870,7 +34040,7 @@ IFaceLogProcessor.prototype.process_savePersonFull = function(seqid, input, outp
         output.flush();
       });
   } else {
-    this._handler.savePersonFull(args.personBean, args.idPhoto, args.feature, args.featureImage, args.featureFaceBean, args.deviceId, args.token, function (err, result) {
+    this._handler.savePersonFull(args.personBean, args.idPhoto, args.feature, args.featureImage, args.featureFaceBean, args.token, function (err, result) {
       var result_obj;
       if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
         result_obj = new IFaceLog_savePersonFull_result((err !== null || typeof err === 'undefined') ? err : {success: result});
@@ -33971,8 +34141,8 @@ IFaceLogProcessor.prototype.process_savePersonWithPhotoAndFeature = function(seq
   var args = new IFaceLog_savePersonWithPhotoAndFeature_args();
   args.read(input);
   input.readMessageEnd();
-  if (this._handler.savePersonWithPhotoAndFeature.length === 5) {
-    Q.fcall(this._handler.savePersonWithPhotoAndFeature.bind(this._handler), args.personBean, args.idPhoto, args.featureBean, args.deviceId, args.token)
+  if (this._handler.savePersonWithPhotoAndFeature.length === 4) {
+    Q.fcall(this._handler.savePersonWithPhotoAndFeature.bind(this._handler), args.personBean, args.idPhoto, args.featureBean, args.token)
       .then(function(result) {
         var result_obj = new IFaceLog_savePersonWithPhotoAndFeature_result({success: result});
         output.writeMessageBegin("savePersonWithPhotoAndFeature", Thrift.MessageType.REPLY, seqid);
@@ -33993,7 +34163,7 @@ IFaceLogProcessor.prototype.process_savePersonWithPhotoAndFeature = function(seq
         output.flush();
       });
   } else {
-    this._handler.savePersonWithPhotoAndFeature(args.personBean, args.idPhoto, args.featureBean, args.deviceId, args.token, function (err, result) {
+    this._handler.savePersonWithPhotoAndFeature(args.personBean, args.idPhoto, args.featureBean, args.token, function (err, result) {
       var result_obj;
       if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
         result_obj = new IFaceLog_savePersonWithPhotoAndFeature_result((err !== null || typeof err === 'undefined') ? err : {success: result});
@@ -34053,8 +34223,8 @@ IFaceLogProcessor.prototype.process_savePersonWithPhotoAndFeatureMultiImage = fu
   var args = new IFaceLog_savePersonWithPhotoAndFeatureMultiImage_args();
   args.read(input);
   input.readMessageEnd();
-  if (this._handler.savePersonWithPhotoAndFeatureMultiImage.length === 6) {
-    Q.fcall(this._handler.savePersonWithPhotoAndFeatureMultiImage.bind(this._handler), args.personBean, args.idPhoto, args.feature, args.faceInfo, args.deviceId, args.token)
+  if (this._handler.savePersonWithPhotoAndFeatureMultiImage.length === 5) {
+    Q.fcall(this._handler.savePersonWithPhotoAndFeatureMultiImage.bind(this._handler), args.personBean, args.idPhoto, args.feature, args.faceInfo, args.token)
       .then(function(result) {
         var result_obj = new IFaceLog_savePersonWithPhotoAndFeatureMultiImage_result({success: result});
         output.writeMessageBegin("savePersonWithPhotoAndFeatureMultiImage", Thrift.MessageType.REPLY, seqid);
@@ -34075,7 +34245,7 @@ IFaceLogProcessor.prototype.process_savePersonWithPhotoAndFeatureMultiImage = fu
         output.flush();
       });
   } else {
-    this._handler.savePersonWithPhotoAndFeatureMultiImage(args.personBean, args.idPhoto, args.feature, args.faceInfo, args.deviceId, args.token, function (err, result) {
+    this._handler.savePersonWithPhotoAndFeatureMultiImage(args.personBean, args.idPhoto, args.feature, args.faceInfo, args.token, function (err, result) {
       var result_obj;
       if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
         result_obj = new IFaceLog_savePersonWithPhotoAndFeatureMultiImage_result((err !== null || typeof err === 'undefined') ? err : {success: result});

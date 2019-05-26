@@ -34,7 +34,10 @@ public interface CommonConstant {
     
     /** 用于SQL语句的时间戳格式转换格式 */
     public static final String TIMESTAMP_FORMATTER_STR = "yyyy-MM-dd HH:mm:ss";
-        
+    
+    /** 用于验证sdk_version格式的正则表达式 */
+    public static final String SDK_VERSION_REGEX = "[\\w\\.\\-]+";
+    
     /**
      * 服务异常类型定义
      */

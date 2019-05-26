@@ -284,6 +284,10 @@ class TokenMangement implements ServiceConstant {
 	    		!newDevice.isModified(net.gdface.facelog.db.Constant.FL_DEVICE_ID_ID) 
 	    		|| Objects.equal(0,newDevice.getId()),
 	    		"for device registeration the 'newDevice' must be a new record,so id field must be not be set or be zero");
+	 // sdk_version字段不可为空
+	    checkArgument(!Strings.isNullOrEmpty(newDevice.getSdkVersion()), "sdkVersion must not be null or empty");
+	    // sdk_version字段内容只允许字母,数字,-,.,_符号
+	    checkArgument(newDevice.getSdkVersion().matches(SDK_VERSION_REGEX), "invalid sdk version format");
 		DeviceBean dmac = this.dao.daoGetDeviceByIndexMac(newDevice.getMac());
 		DeviceBean dsn = this.dao.daoGetDeviceByIndexSerialNo(newDevice.getSerialNo());
 		if(null !=dmac ){

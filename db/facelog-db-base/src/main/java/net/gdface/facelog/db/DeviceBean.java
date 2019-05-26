@@ -67,8 +67,8 @@ public final class DeviceBean
     @ApiModelProperty(value = "设备版本号"  ,dataType="String")
     private String version;
 
-    /** comments:(特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据 */
-    @ApiModelProperty(value = "(特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据" ,required=true ,dataType="String")
+    /** comments:(特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号) */
+    @ApiModelProperty(value = "(特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号)" ,required=true ,dataType="String")
     private String sdkVersion;
 
     /** comments:设备序列号 */
@@ -873,7 +873,7 @@ public final class DeviceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device.sdk_version</li>
-     * <li>comments: (特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据</li>
+     * <li>comments: (特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号)</li>
      * <li>NOT NULL</li>
      * <li>column size: 32</li>
      * <li>JDBC type returned by the driver: Types.CHAR</li>
@@ -2290,7 +2290,7 @@ public final class DeviceBean
         }
         /** 
          * fill the field : fl_device.sdk_version
-         * @param sdkVersion (特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据
+         * @param sdkVersion (特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号)
          * @see DeviceBean#getSdkVersion()
          * @see DeviceBean#setSdkVersion(String)
          */

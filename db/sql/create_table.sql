@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS fl_device (
   `manufacturer`varchar(32) DEFAULT NULL COMMENT '设备制造商',
   `made_date`   date DEFAULT NULL COMMENT '设备生产日期',
   `version`     varchar(32) DEFAULT NULL COMMENT '设备版本号',
-  `sdk_version` char(32) NOT NULL COMMENT '(特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据',
+  `sdk_version` char(32) NOT NULL COMMENT '(特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号)',
   `serial_no`   varchar(32) DEFAULT NULL UNIQUE COMMENT '设备序列号',
   `mac`         char(12) DEFAULT NULL UNIQUE COMMENT '6字节MAC地址(HEX)',
   `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS fl_person (
 */
 CREATE TABLE IF NOT EXISTS fl_feature (
   `md5`         char(32) NOT NULL PRIMARY KEY COMMENT '主键,特征码md5校验码',
-  `sdk_version` char(32) NOT NULL COMMENT '(特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据',
+  `sdk_version` char(32) NOT NULL COMMENT '(特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号)',
   `person_id`   int(11)  DEFAULT NULL COMMENT '外键,所属用户id',
   `feature`     blob     NOT NULL COMMENT '二进制特征数据',
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

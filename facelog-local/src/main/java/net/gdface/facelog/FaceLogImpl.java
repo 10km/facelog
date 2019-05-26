@@ -178,9 +178,18 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	}
 
 	@Override
-	public List<String> getFeatureBeansByPersonId(int personId) {
+	public List<String> getFeaturesByPersonId(int personId) {
 		try{
 			return dm.daoToPrimaryKeyListFromFeatures(dm.daoGetFeatureBeansByPersonIdOnPerson(personId));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public List<String> getFeaturesByPersonIdAndSdkVersion(int personId,String sdkVersion) {
+		try{
+			FeatureBean featureBean = FeatureBean.builder().personId(personId).sdkVersion(sdkVersion).build();
+			return dm.daoToPrimaryKeyListFromFeatures(dm.daoLoadFeatureUsingTemplate(featureBean, 1, -1));			
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}
@@ -411,33 +420,18 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	
 	@Override
 	public PersonBean savePerson(final PersonBean personBean, final byte[] idPhoto, final FeatureBean featureBean,
-			final Integer deviceId, Token token)  {
+			final Token token)  {
 		try {
 			Enable.DEVICE_ONLY.check(tm, token);
 			checkArgument(null != personBean, "personBean is null");
-			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>() {
-				@Override
-				public PersonBean call() throws Exception {
-					return dm.daoSavePerson(personBean, FaceUtilits.getByteBufferOrNull(idPhoto), featureBean, dm.daoGetDevice(deviceId));
-				}
-			});
-		} catch (Exception e) {
-			throw wrapServiceRuntimeException(e);
-		}
-	}
-
-	@Override
-	public PersonBean savePerson(final PersonBean personBean, final byte[] idPhoto, final byte[] feature,
-			final List<FaceBean> faceBeans, Token token)  {
-		try {
-			Enable.DEVICE_ONLY.check(tm, token);
-			checkArgument(null != personBean, "personBean is null");
-			checkArgument(null != feature, "feature is null");
+			/** 当系统配置不做令牌检查时 token允许null */
+			checkArgument(null != token,"token is null");
 			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
 					return dm.daoSavePerson(personBean, FaceUtilits.getByteBufferOrNull(idPhoto), 
-							dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), personBean, faceBeans), null);
+							featureBean, 
+							dm.daoGetDeviceChecked(token.getId()));
 				}
 			});
 		} catch (Exception e) {
@@ -447,17 +441,42 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 
 	@Override
 	public PersonBean savePerson(final PersonBean personBean, final byte[] idPhoto, final byte[] feature,
-			final Map<ByteBuffer, FaceBean> faceInfo, final Integer deviceId, Token token)  {
+			final List<FaceBean> faceBeans, final Token token)  {
 		try {
 			Enable.DEVICE_ONLY.check(tm, token);
 			checkArgument(null != personBean, "personBean is null");
 			checkArgument(null != feature, "feature is null");
+			/** 当系统配置不做令牌检查时 token允许null */
+			checkArgument(null != token,"token is null");
+			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>() {
+				@Override
+				public PersonBean call() throws Exception {
+					return dm.daoSavePerson(personBean, FaceUtilits.getByteBufferOrNull(idPhoto), 
+							dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), 
+									dm.daoGetDevice(token.getId()).getSdkVersion(), personBean, faceBeans), 
+							null);
+				}
+			});
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+
+	@Override
+	public PersonBean savePerson(final PersonBean personBean, final byte[] idPhoto, final byte[] feature,
+			final Map<ByteBuffer, FaceBean> faceInfo, final Token token)  {
+		try {
+			Enable.DEVICE_ONLY.check(tm, token);
+			checkArgument(null != personBean, "personBean is null");
+			checkArgument(null != feature, "feature is null");
+			/** 当系统配置不做令牌检查时 token允许null */
+			checkArgument(null != token,"token is null");
 			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
 					return dm.daoSavePerson(personBean, 
 							FaceUtilits.getByteBufferOrNull(idPhoto), 
-							FaceUtilits.getByteBuffer(feature), faceInfo, dm.daoGetDevice(deviceId));
+							FaceUtilits.getByteBuffer(feature), faceInfo, dm.daoGetDeviceChecked(token.getId()));
 				}
 			});
 		} catch (Exception e) {
@@ -467,10 +486,12 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 
 	@Override
 	public PersonBean savePerson(final PersonBean personBean, final byte[] idPhoto, final byte[] feature,
-			final byte[] featureImage, final FaceBean featureFaceBean, final Integer deviceId, Token token) {
+			final byte[] featureImage, final FaceBean featureFaceBean, final Token token) {
 		try{
 			Enable.DEVICE_ONLY.check(tm, token);
 			checkArgument(null != personBean,"personBean is null");
+			/** 当系统配置不做令牌检查时 token允许null */
+			checkArgument(null != token,"token is null");
 			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
@@ -478,7 +499,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 							FaceUtilits.getByteBufferOrNull(idPhoto),
 							FaceUtilits.getByteBufferOrNull(feature),
 							FaceUtilits.getByteBufferOrNull(featureImage),
-							featureFaceBean,dm.daoGetDevice(deviceId));
+							featureFaceBean,dm.daoGetDeviceChecked(token.getId()));
 				}});
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
@@ -687,7 +708,12 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.DEVICE_ONLY.check(tm, token);
 			checkArgument( null != feature,"feature is null");
-			return dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), dm.daoGetPerson(personId), faecBeans);
+			/** 当系统配置不做令牌检查时 token允许null */
+			checkArgument(null != token,"token is null");
+			return dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), 
+						dm.daoGetDeviceChecked(token.getId()).getSdkVersion(), 
+						dm.daoGetPerson(personId), 
+						faecBeans);
 		} catch (RuntimeException | IOException e) {
 			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {
@@ -700,16 +726,18 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			final boolean asIdPhotoIfAbsent,
 			final byte[] featurePhoto,
 			final FaceBean faceBean,
-			final Integer deviceId, Token token)throws DuplicateRecordException{
+			final Token token)throws DuplicateRecordException{
 		try{
 			Enable.DEVICE_ONLY.check(tm, token);
 			checkArgument(feature != null,"feature is null");
+			/** 当系统配置不做令牌检查时 token允许null */
+			checkArgument(null != token,"token is null");
 
 			return BaseDao.daoRunAsTransaction(new Callable<FeatureBean>() {
 				@Override
 				public FeatureBean call() throws Exception {
 					PersonBean personBean = dm.daoGetPerson(personId);
-					DeviceBean deviceBean = dm.daoGetDevice(deviceId);
+					DeviceBean deviceBean = dm.daoGetDeviceChecked(token.getId());
 					List<FaceBean> faceList = faceBean == null ? null : Arrays.asList(faceBean);
 					ImageBean imageBean = dm.daoAddImage(FaceUtilits.getByteBufferOrNull(featurePhoto), 
 							deviceBean, 
@@ -719,7 +747,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 							&& personBean.getImageMd5() == null && asIdPhotoIfAbsent){
 						personBean.setImageMd5(imageBean.getMd5());
 					}
-					return dm.daoAddFeature(ByteBuffer.wrap(feature), personBean, faceList);					
+					return dm.daoAddFeature(ByteBuffer.wrap(feature), deviceBean.getSdkVersion(), personBean, faceList);					
 				}
 			});
 		} catch (Exception e) {
@@ -729,11 +757,14 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	}
 	@Override
 	public FeatureBean addFeature(byte[] feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo,
-			Integer deviceId, Token token) throws DuplicateRecordException {
+			Token token) throws DuplicateRecordException {
 		try {
 			Enable.DEVICE_ONLY.check(tm, token);
 			checkArgument(feature != null,"feature is null");
-			return dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), dm.daoGetPerson(personId), faceInfo, dm.daoGetDevice(deviceId));
+			/** 当系统配置不做令牌检查时 token允许null */
+			checkArgument(null != token,"token is null");
+			return dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), 
+					dm.daoGetPerson(personId), faceInfo, dm.daoGetDeviceChecked(token.getId()));
 		} catch (RuntimeException | IOException e) {
 			throw wrapServiceRuntimeException(e);
 		} catch (ServiceSecurityException e) {

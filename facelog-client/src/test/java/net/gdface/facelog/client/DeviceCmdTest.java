@@ -10,7 +10,7 @@ import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gu.dtalk.CmdItem.ICmdAdapter;
+import gu.dtalk.ICmdImmediateAdapter;
 import gu.dtalk.exception.CmdExecutionException;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.client.dtalk.FacelogMenu;
@@ -60,7 +60,7 @@ public class DeviceCmdTest implements ChannelConstant{
 		DeviceTokenHelper.HELPER.deviceToken = deviceToken;
 		root = FacelogMenu.makeActiveInstance(ConnectConfigType.LOCALHOST).init();
 		// 设置RESET命令执行器
-		root.findCmd(pathOfCmd(CMD_RESET)).setCmdAdapter(new ICmdAdapter() {
+		root.findCmd(pathOfCmd(CMD_RESET)).setCmdAdapter(new ICmdImmediateAdapter() {
 			
 			@Override
 			public Object apply(Map<String, Object> input) throws CmdExecutionException {
@@ -69,7 +69,7 @@ public class DeviceCmdTest implements ChannelConstant{
 			}
 		});
 		// 设置ISENABLE命令执行器
-		root.findCmd(pathOfCmd(CMD_GET_STATUS)).setCmdAdapter(new ICmdAdapter() {
+		root.findCmd(pathOfCmd(CMD_GET_STATUS)).setCmdAdapter(new ICmdImmediateAdapter() {
 			
 			@Override
 			public Object apply(Map<String, Object> input) throws CmdExecutionException {

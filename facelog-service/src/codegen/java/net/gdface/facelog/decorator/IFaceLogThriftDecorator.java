@@ -47,7 +47,7 @@ public class IFaceLogThriftDecorator {
         return delegate;
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.Integer,boolean,byte[],net.gdface.facelog.db.FaceBean,java.lang.Integer,net.gdface.facelog.Token)}
+     * @see {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.Integer,boolean,byte[],net.gdface.facelog.db.FaceBean,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "addFeatureWithImage" ,exception = {
                 @ThriftException(type=DuplicateRecordException.class, id=1),
@@ -58,7 +58,6 @@ public class IFaceLogThriftDecorator {
         boolean asIdPhotoIfAbsent,
         ByteBuffer featurePhoto,
         FaceBean faceBean,
-        Integer deviceId,
         Token token) 
         throws DuplicateRecordException,ServiceRuntimeException{
         try{
@@ -77,7 +76,6 @@ public class IFaceLogThriftDecorator {
                     faceBean,
                     FaceBean.class,
                     FaceBean.class),
-                deviceId,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -136,7 +134,7 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.Integer,java.util.Map,java.lang.Integer,net.gdface.facelog.Token)}
+     * @see {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.Integer,java.util.Map,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "addFeatureMulti" ,exception = {
                 @ThriftException(type=DuplicateRecordException.class, id=1),
@@ -145,7 +143,6 @@ public class IFaceLogThriftDecorator {
     public FeatureBean addFeatureMulti(ByteBuffer feature,
         Integer personId,
         Map<ByteBuffer,FaceBean> faceInfo,
-        Integer deviceId,
         Token token) 
         throws DuplicateRecordException,ServiceRuntimeException{
         try{
@@ -161,7 +158,6 @@ public class IFaceLogThriftDecorator {
                     FaceBean.class,
                     ByteBuffer.class,
                     FaceBean.class),
-                deviceId,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -1348,25 +1344,6 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#getFeatureBeansByPersonId(int)}
-     */
-    @ThriftMethod(value = "getFeatureBeansByPersonId" )
-    public List<String> getFeatureBeansByPersonId(int personId) 
-        throws ServiceRuntimeException{
-        try{
-            return TypeTransformer.getInstance().to(
-                    delegate().getFeatureBeansByPersonId(personId),
-                    String.class,
-                    String.class);
-        }
-        catch(ServiceRuntimeException e){
-            throw e;
-        }
-        catch(RuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-    }
-    /**
      * @see {@link net.gdface.facelog.IFaceLog#getFeatureBytes(java.lang.String)}
      */
     @ThriftMethod(value = "getFeatureBytes" )
@@ -1399,6 +1376,46 @@ public class IFaceLogThriftDecorator {
                     String.class)),
                     FeatureBean.class,
                     FeatureBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#getFeaturesByPersonId(int)}
+     */
+    @ThriftMethod(value = "getFeaturesByPersonId" )
+    public List<String> getFeaturesByPersonId(int personId) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().getFeaturesByPersonId(personId),
+                    String.class,
+                    String.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#getFeaturesByPersonIdAndSdkVersion(int,java.lang.String)}
+     */
+    @ThriftMethod(value = "getFeaturesByPersonIdAndSdkVersion" )
+    public List<String> getFeaturesByPersonIdAndSdkVersion(int personId,
+        String sdkVersion) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().getFeaturesByPersonIdAndSdkVersion(personId,
+                sdkVersion),
+                    String.class,
+                    String.class);
         }
         catch(ServiceRuntimeException e){
             throw e;
@@ -2686,7 +2703,7 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],byte[],byte[],net.gdface.facelog.db.FaceBean,java.lang.Integer,net.gdface.facelog.Token)}
+     * @see {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],byte[],byte[],net.gdface.facelog.db.FaceBean,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "savePersonFull" )
     public PersonBean savePersonFull(PersonBean personBean,
@@ -2694,7 +2711,6 @@ public class IFaceLogThriftDecorator {
         ByteBuffer feature,
         ByteBuffer featureImage,
         FaceBean featureFaceBean,
-        Integer deviceId,
         Token token) 
         throws ServiceRuntimeException{
         try{
@@ -2719,7 +2735,6 @@ public class IFaceLogThriftDecorator {
                     featureFaceBean,
                     FaceBean.class,
                     FaceBean.class),
-                deviceId,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -2777,14 +2792,13 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],byte[],java.util.Map,java.lang.Integer,net.gdface.facelog.Token)}
+     * @see {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],byte[],java.util.Map,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "savePersonWithPhotoAndFeatureMultiImage" )
     public PersonBean savePersonWithPhotoAndFeatureMultiImage(PersonBean personBean,
         ByteBuffer idPhoto,
         ByteBuffer feature,
         Map<ByteBuffer,FaceBean> faceInfo,
-        Integer deviceId,
         Token token) 
         throws ServiceRuntimeException{
         try{
@@ -2807,7 +2821,6 @@ public class IFaceLogThriftDecorator {
                     FaceBean.class,
                     ByteBuffer.class,
                     FaceBean.class),
-                deviceId,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -2855,13 +2868,12 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],net.gdface.facelog.db.FeatureBean,java.lang.Integer,net.gdface.facelog.Token)}
+     * @see {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],net.gdface.facelog.db.FeatureBean,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "savePersonWithPhotoAndFeature" )
     public PersonBean savePersonWithPhotoAndFeature(PersonBean personBean,
         ByteBuffer idPhoto,
         FeatureBean featureBean,
-        Integer deviceId,
         Token token) 
         throws ServiceRuntimeException{
         try{
@@ -2878,7 +2890,6 @@ public class IFaceLogThriftDecorator {
                     featureBean,
                     FeatureBean.class,
                     FeatureBean.class),
-                deviceId,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,

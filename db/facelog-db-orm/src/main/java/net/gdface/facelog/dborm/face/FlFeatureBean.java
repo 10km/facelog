@@ -33,7 +33,7 @@ public  class FlFeatureBean
     /** comments:主键,特征码md5校验码 */
     private String md5;
 
-    /** comments:(特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据 */
+    /** comments:(特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号) */
     private String sdkVersion;
 
     /** comments:外键,所属用户id */
@@ -216,7 +216,7 @@ public  class FlFeatureBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_feature.sdk_version</li>
-     * <li>comments: (特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据</li>
+     * <li>comments: (特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号)</li>
      * <li>NOT NULL</li>
      * <li>column size: 32</li>
      * <li>JDBC type returned by the driver: Types.CHAR</li>
@@ -921,7 +921,7 @@ public  class FlFeatureBean
         }
         /** 
          * fill the field : fl_feature.sdk_version
-         * @param sdkVersion (特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据
+         * @param sdkVersion (特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号)
          * @see FlFeatureBean#getSdkVersion()
          * @see FlFeatureBean#setSdkVersion(String)
          */

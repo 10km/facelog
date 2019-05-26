@@ -309,15 +309,19 @@ public class DaoManagement extends BaseDao {
 		return super.daoDeleteImage(imageMd5);
 	}
 
-	protected FeatureBean daoMakeFeature(ByteBuffer feature){
+	protected FeatureBean daoMakeFeature(ByteBuffer feature, String sdkVersion){
 		Assert.notEmpty(feature, "feature");
-		FeatureBean featureBean = new FeatureBean();		
-		featureBean.setMd5(FaceUtilits.getMD5String(feature));
-		featureBean.setFeature(feature);
-		return featureBean;
+		// sdkVersion不可为空
+		checkArgument(!Strings.isNullOrEmpty(sdkVersion),"sdkVersion is null or empty");
+	    // sdkVersion内容只允许字母,数字,-,.,_符号
+	    checkArgument(sdkVersion.matches(SDK_VERSION_REGEX), "invalid sdk version format");
+		return FeatureBean.builder()
+				.md5(FaceUtilits.getMD5String(feature))	
+				.feature(feature)
+				.build();
 	}
-	protected FeatureBean daoAddFeature(ByteBuffer feature,PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5) throws DuplicateRecordException{
-		return daoAddFeature(daoMakeFeature(feature), refPersonByPersonId, impFaceByFeatureMd5, null);
+	protected FeatureBean daoAddFeature(ByteBuffer feature,String sdkVersion, PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5) throws DuplicateRecordException{
+		return daoAddFeature(daoMakeFeature(feature, sdkVersion), refPersonByPersonId, impFaceByFeatureMd5, null);
 	}
 	protected FeatureBean daoAddFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean) throws DuplicateRecordException{
 		if(null != faceInfo){
@@ -327,7 +331,7 @@ public class DaoManagement extends BaseDao {
 				daoAddImage(imageBytes, deviceBean, Arrays.asList(faceBean), Arrays.asList(personBean));
 			}
 		}
-		return daoAddFeature(feature, personBean, null == faceInfo?null:faceInfo.values());
+		return daoAddFeature(feature, deviceBean.getSdkVersion(), personBean, null == faceInfo?null:faceInfo.values());
 	}
 
 	protected List<String> daoDeleteFeature(String featureMd5,boolean deleteImage){

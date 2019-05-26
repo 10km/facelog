@@ -36,10 +36,15 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public List<String> getFeatureBeansByPersonId(int personId) {
+	public List<String> getFeaturesByPersonId(int personId) {
 		return null;
 	}
 
+	@Override
+	public List<String> getFeaturesByPersonIdAndSdkVersion(int personId, String sdkVersion) {
+		return null;
+	}
+	
 	@Override
 	public int deletePerson(int personId, Token token) {
 		return 0;
@@ -141,8 +146,7 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, FeatureBean featureBean, Integer deviceId,
-			Token token) {
+	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, FeatureBean featureBean, Token token) {
 		return null;
 	}
 
@@ -154,13 +158,13 @@ public class FacelogDefaultImpl implements IFaceLog {
 
 	@Override
 	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature,
-			Map<ByteBuffer, FaceBean> faceInfo, Integer deviceId, Token token) {
+			Map<ByteBuffer, FaceBean> faceInfo, Token token) {
 		return null;
 	}
 
 	@Override
 	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, byte[] featureImage,
-			FaceBean featureFaceBean, Integer deviceId, Token token) {
+			FaceBean featureFaceBean, Token token) {
 		return null;
 	}
 
@@ -255,14 +259,14 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public FeatureBean addFeature(final byte[] feature, final Integer personId, final boolean asIdPhotoIfAbsent, final byte[] featurePhoto, final FaceBean faceBean, final Integer deviceId, Token token)
+	public FeatureBean addFeature(final byte[] feature, final Integer personId, final boolean asIdPhotoIfAbsent, final byte[] featurePhoto, final FaceBean faceBean, Token token)
 			throws DuplicateRecordException {
 		return null;
 	}
 
 	@Override
 	public FeatureBean addFeature(byte[] feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo,
-			Integer deviceId, Token token) throws DuplicateRecordException {
+			Token token) throws DuplicateRecordException {
 		return null;
 	}
 	
@@ -732,5 +736,6 @@ public class FacelogDefaultImpl implements IFaceLog {
 	@Override
 	public void bindBorder(Integer personGroupId, Integer deviceGroupId, Token token) {
 	}
+
 
 }

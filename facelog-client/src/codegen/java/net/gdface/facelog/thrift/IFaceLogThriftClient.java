@@ -72,7 +72,6 @@ public class IFaceLogThriftClient implements IFaceLog {
         boolean asIdPhotoIfAbsent,
         byte[] featurePhoto,
         FaceBean faceBean,
-        Integer deviceId,
         Token token) 
         throws DuplicateRecordException{
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
@@ -86,7 +85,6 @@ public class IFaceLogThriftClient implements IFaceLog {
                     faceBean,
                     FaceBean.class,
                     net.gdface.facelog.client.thrift.FaceBean.class),
-                deviceId,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -152,7 +150,6 @@ public class IFaceLogThriftClient implements IFaceLog {
     public FeatureBean addFeature(byte[] feature,
         Integer personId,
         Map<ByteBuffer, FaceBean> faceInfo,
-        Integer deviceId,
         Token token) 
         throws DuplicateRecordException{
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
@@ -166,7 +163,6 @@ public class IFaceLogThriftClient implements IFaceLog {
                     FaceBean.class,
                     byte[].class,
                     net.gdface.facelog.client.thrift.FaceBean.class),
-                deviceId,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -1307,26 +1303,6 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public List<String> getFeatureBeansByPersonId(int personId) 
-        {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
-        try{
-            return TypeTransformer.getInstance().to(
-                    instance.getFeatureBeansByPersonId(personId),
-                    String.class,
-                    String.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
-        }
-        finally{
-            factory.releaseInstance(instance);
-        }
-    }
-    @Override
     public byte[] getFeatureBytes(String md5) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
@@ -1355,6 +1331,48 @@ public class IFaceLogThriftClient implements IFaceLog {
                     String.class)),
                     net.gdface.facelog.client.thrift.FeatureBean.class,
                     FeatureBean.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public List<String> getFeaturesByPersonId(int personId) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.getFeaturesByPersonId(personId),
+                    String.class,
+                    String.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public List<String> getFeaturesByPersonIdAndSdkVersion(int personId,
+        String sdkVersion) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.getFeaturesByPersonIdAndSdkVersion(personId,
+                sdkVersion),
+                    String.class,
+                    String.class);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -2645,7 +2663,6 @@ public class IFaceLogThriftClient implements IFaceLog {
         byte[] feature,
         byte[] featureImage,
         FaceBean featureFaceBean,
-        Integer deviceId,
         Token token) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
@@ -2662,7 +2679,6 @@ public class IFaceLogThriftClient implements IFaceLog {
                     featureFaceBean,
                     FaceBean.class,
                     net.gdface.facelog.client.thrift.FaceBean.class),
-                deviceId,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -2722,7 +2738,6 @@ public class IFaceLogThriftClient implements IFaceLog {
         byte[] idPhoto,
         byte[] feature,
         Map<ByteBuffer, FaceBean> faceInfo,
-        Integer deviceId,
         Token token) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
@@ -2740,7 +2755,6 @@ public class IFaceLogThriftClient implements IFaceLog {
                     FaceBean.class,
                     byte[].class,
                     net.gdface.facelog.client.thrift.FaceBean.class),
-                deviceId,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -2792,7 +2806,6 @@ public class IFaceLogThriftClient implements IFaceLog {
     public PersonBean savePerson(PersonBean personBean,
         byte[] idPhoto,
         FeatureBean featureBean,
-        Integer deviceId,
         Token token) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
@@ -2807,7 +2820,6 @@ public class IFaceLogThriftClient implements IFaceLog {
                     featureBean,
                     FeatureBean.class,
                     net.gdface.facelog.client.thrift.FeatureBean.class),
-                deviceId,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,

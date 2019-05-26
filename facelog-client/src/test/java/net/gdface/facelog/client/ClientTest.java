@@ -1,7 +1,6 @@
 package net.gdface.facelog.client;
 
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -23,6 +22,7 @@ import static org.junit.Assert.*;
 
 import net.gdface.facelog.CommonConstant;
 import net.gdface.facelog.Token;
+import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
@@ -31,6 +31,7 @@ import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
 import net.gdface.thrift.exception.ServiceRuntimeException;
 import net.gdface.utils.FaceUtilits;
+import net.gdface.utils.NetworkUtil;
 
 /**
  * @author guyadong
@@ -43,6 +44,10 @@ public class ClientTest implements CommonConstant {
 	private static IFaceLogClient facelogClient;
 	private static Token rootToken;
 
+	private static DeviceBean device;
+
+	private static Token deviceToken;
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		// docker test
@@ -53,10 +58,20 @@ public class ClientTest implements CommonConstant {
 				.setDecorator(RefreshTokenDecorator.makeDecoratorFunction(new TokenHelperTestImpl()))
 				.build(IFaceLogThriftClient.class, IFaceLogClient.class);
 		rootToken = facelogClient.applyRootToken("guyadong", false);
+		byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
+		device = DeviceBean.builder().mac(NetworkUtil.formatMac(address, null)).serialNo("12322333").build();
+		logger.info(device.toString(true,false));
+		// 注册设备 
+		device = facelogClient.registerDevice(device);
+		logger.info("registered device {}",device.toString(true, false));
+		// 申请设备令牌
+		deviceToken = facelogClient.online(device);
+		logger.info("device token = {}",deviceToken);
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
+		facelogClient.unregisterDevice(device.getId(), deviceToken);
 		facelogClient.releaseRootToken(rootToken);
 	}
 
@@ -104,7 +119,7 @@ public class ClientTest implements CommonConstant {
 //					.imageMd5(FaceUtilits.getMD5String(imgdata))
 //					.build();
 			byte[] feature = new byte[]{1,1,3,1,1,};
-			newPerson = facelogClient.savePerson(newPerson,imgdata,feature,null,rootToken);
+			newPerson = facelogClient.savePerson(newPerson,imgdata,feature,(List<FaceBean>)null,deviceToken);
 			logger.info("person = {}", newPerson.toString());
 			PersonBean person = facelogClient.getPerson(newPerson.getId());
 			logger.info("person = {}", person.toString());
@@ -113,7 +128,7 @@ public class ClientTest implements CommonConstant {
 			{
 				// 添加一个新的特征
 				byte[] feature2 = new byte[]{1,1,3,1,3,44};
-				facelogClient.savePerson(person, null, feature2, null, rootToken);
+				facelogClient.savePerson(person, null, feature2, (List<FaceBean>)null,deviceToken);
 			}
 			facelogClient.deletePerson(person.getId(), rootToken);
 		} catch(ServiceRuntimeException e){

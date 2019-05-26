@@ -65,10 +65,18 @@ public interface IFaceLog{
 
 	/**
 	 * 返回 persionId 关联的所有人脸特征记录
-	 * @param personId fl_person.id
+	 * @param personId 人员id(fl_person.id)
 	 * @return 返回 fl_feature.md5  列表
 	 */
-	public List<String> getFeatureBeansByPersonId(int personId);
+	public List<String> getFeaturesByPersonId(int personId);
+	
+	/**
+	 * 返回 persionId 关联的指定SDK的人脸特征记录
+	 * @param personId 人员id(fl_person.id)
+	 * @param sdkVersion 算法(SDK)版本号
+	 * @return 返回 fl_feature.md5  列表
+	 */
+	public List<String> getFeaturesByPersonIdAndSdkVersion(int personId, String sdkVersion);
 
 	/**
 	 * 删除personId指定的人员(person)记录及关联的所有记录
@@ -246,12 +254,11 @@ public interface IFaceLog{
 	 * @param personBean {@code fl_person}表记录
 	 * @param idPhoto 标准照图像,可为null
 	 * @param featureBean 用于验证的人脸特征数据对象,可为null
-	 * @param deviceId 标准照图像来源设备id,可为null
 	 * @param token 访问令牌
 	 * @return 保存的{@link PersonBean}
 	 */
 	@DeriveMethod(methodSuffix="WithPhotoAndFeature")
-	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, FeatureBean featureBean, Integer deviceId, Token token);
+	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, FeatureBean featureBean, Token token);
 
 	/**
 	 * 保存人员信息记录
@@ -272,14 +279,13 @@ public interface IFaceLog{
 	 * @param personBean {@code fl_person}表记录
 	 * @param idPhoto 标准照图像,可为null
 	 * @param feature 用于验证的人脸特征数据 
-	 * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
-	 * @param deviceId faceInfo 图像来源设备id,可为null 
-	 * @param token 访问令牌
+	 * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null 
+	 * @param token (设备)访问令牌
 	 * @return 保存的{@link PersonBean}对象
 	 */
 	@DeriveMethod(methodSuffix="WithPhotoAndFeatureMultiImage")
 	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, Map<ByteBuffer, FaceBean> faceInfo,
-			Integer deviceId, Token token);
+			Token token);
 
 	/**
 	 * 保存人员信息记录<br>
@@ -289,13 +295,12 @@ public interface IFaceLog{
 	 * @param feature 人脸特征数据,可以为{@code null}
 	 * @param featureImage 提取特征源图像,为null 时,默认使用idPhoto
 	 * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
-	 * @param deviceId 设备ID
-	 * @param token 访问令牌
+	 * @param token (设备)访问令牌
 	 * @return 保存的{@link PersonBean}
 	 */
 	@DeriveMethod(methodSuffix="Full")
 	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, byte[] featureImage,
-			FaceBean featureFaceBean, Integer deviceId, Token token);
+			FaceBean featureFaceBean, Token token);
 
 	/**
 	 * 替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录
@@ -467,14 +472,13 @@ public interface IFaceLog{
 	 * 是否用{@code featurePhoto}作为身份照片,{@code featurePhoto}为{@code null}时无效
 	 * @param featurePhoto 生成人脸特征的原始照片,如果不要求保留原始照片可为null
 	 * @param faceBean 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
-	 * @param deviceId 采集图像的设备ID,可为null
 	 * @param token (设备)访问令牌
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws DuplicateRecordException
 	 * @since 2.1.2
 	 */
 	@DeriveMethod(methodSuffix="WithImage")
-	FeatureBean addFeature(final byte[] feature, final Integer personId, final boolean asIdPhotoIfAbsent, final byte[] featurePhoto, final FaceBean faceBean, final Integer deviceId, Token token)throws DuplicateRecordException;
+	FeatureBean addFeature(final byte[] feature, final Integer personId, final boolean asIdPhotoIfAbsent, final byte[] featurePhoto, final FaceBean faceBean, Token token)throws DuplicateRecordException;
 
 	/**
 	 * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
@@ -482,13 +486,12 @@ public interface IFaceLog{
 	 * @param feature 特征数据
 	 * @param personId 关联的人员id(fl_person.id),可为null
 	 * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
-	 * @param deviceId 图像来源设备id,可为null
-	 * @param token 访问令牌
+	 * @param token (设备)访问令牌
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws DuplicateRecordException 
 	 */
 	@DeriveMethod(methodSuffix="Multi")
-	public FeatureBean addFeature(byte[] feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo, Integer deviceId, Token token)
+	public FeatureBean addFeature(byte[] feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo, Token token)
 			throws DuplicateRecordException;
 
 	/**
