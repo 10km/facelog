@@ -71,6 +71,9 @@ public class DbConverter implements IDbConverter<
             if(right.checkVersionInitialized()){
                 left.setVersion(right.getVersion());
             }
+            if(right.checkSdkVersionInitialized()){
+                left.setSdkVersion(right.getSdkVersion());
+            }
             if(right.checkSerialNoInitialized()){
                 left.setSerialNo(right.getSerialNo());
             }
@@ -125,6 +128,9 @@ public class DbConverter implements IDbConverter<
             }
             if(left.checkVersionInitialized() ){
                 right.setVersion(left.getVersion());
+            }
+            if(left.checkSdkVersionInitialized() ){
+                right.setSdkVersion(left.getSdkVersion());
             }
             if(left.checkSerialNoInitialized() ){
                 right.setSerialNo(left.getSerialNo());
@@ -369,6 +375,9 @@ public class DbConverter implements IDbConverter<
             if(right.checkMd5Initialized()){
                 left.setMd5(right.getMd5());
             }
+            if(right.checkSdkVersionInitialized()){
+                left.setSdkVersion(right.getSdkVersion());
+            }
             if(right.checkPersonIdInitialized()){
                 left.setPersonId(right.getPersonId());
             }
@@ -387,6 +396,9 @@ public class DbConverter implements IDbConverter<
         protected void doToRight(FeatureBean left, net.gdface.facelog.dborm.face.FlFeatureBean right) {
             if(left.checkMd5Initialized() ){
                 right.setMd5(left.getMd5());
+            }
+            if(left.checkSdkVersionInitialized() ){
+                right.setSdkVersion(left.getSdkVersion());
             }
             if(left.checkPersonIdInitialized() ){
                 right.setPersonId(left.getPersonId());

@@ -526,6 +526,34 @@ public interface IDeviceManager extends TableManager<DeviceBean>
     public int deleteByIndexGroupId(Integer groupId)throws RuntimeDaoException;
     
 
+     /**
+     * Retrieves an array of DeviceBean using the sdk_version index.
+     *
+     * @param sdkVersion the sdk_version column's value filter.
+     * @return an array of DeviceBean
+     * @throws RuntimeDaoException
+     */
+    public DeviceBean[] loadByIndexSdkVersion(String sdkVersion)throws RuntimeDaoException;
+    
+    /**
+     * Retrieves a list of DeviceBean using the sdk_version index.
+     *
+     * @param sdkVersion the sdk_version column's value filter.
+     * @return a list of DeviceBean
+     * @throws RuntimeDaoException
+     */
+    public java.util.List<DeviceBean> loadByIndexSdkVersionAsList(String sdkVersion)throws RuntimeDaoException;
+
+    /**
+     * Deletes rows using the sdk_version index.
+     *
+     * @param sdkVersion the sdk_version column's value filter.
+     * @return the number of deleted objects
+     * @throws RuntimeDaoException
+     */
+    public int deleteByIndexSdkVersion(String sdkVersion)throws RuntimeDaoException;
+    
+
     //45
     /**
      * return a primary key list from {@link DeviceBean} array

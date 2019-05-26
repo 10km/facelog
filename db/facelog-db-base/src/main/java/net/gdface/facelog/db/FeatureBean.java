@@ -35,6 +35,10 @@ public final class FeatureBean
     @ApiModelProperty(value = "主键,特征码md5校验码" ,required=true ,dataType="String")
     private String md5;
 
+    /** comments:(特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据 */
+    @ApiModelProperty(value = "(特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据" ,required=true ,dataType="String")
+    private String sdkVersion;
+
     /** comments:外键,所属用户id */
     @ApiModelProperty(value = "外键,所属用户id"  ,dataType="Integer")
     private Integer personId;
@@ -234,6 +238,74 @@ public final class FeatureBean
         return 0L !=  (initialized & FL_FEATURE_ID_MD5_MASK);
     }
     /**
+     * Getter method for {@link #sdkVersion}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_feature.sdk_version</li>
+     * <li>comments: (特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据</li>
+     * <li>NOT NULL</li>
+     * <li>column size: 32</li>
+     * <li>JDBC type returned by the driver: Types.CHAR</li>
+     * </ul>
+     *
+     * @return the value of sdkVersion
+     */
+    @ThriftField(value=5)
+    public String getSdkVersion(){
+        return sdkVersion;
+    }
+    /**
+     * Setter method for {@link #sdkVersion}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value( NOT NULL) to be assigned to sdkVersion
+     */
+    public void setSdkVersion(String newVal)
+    {
+        checkMutable();
+
+        modified |= FL_FEATURE_ID_SDK_VERSION_MASK;
+        initialized |= FL_FEATURE_ID_SDK_VERSION_MASK;
+
+        if (Objects.equals(newVal, sdkVersion)) {
+            return;
+        }
+        sdkVersion = newVal;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "sdkVersion")
+    public void writeSdkVersion(String newVal){
+        checkMutable();
+        sdkVersion = newVal;
+    }
+    /**
+     * Determines if the sdkVersion has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkSdkVersionModified()
+    {
+        return 0L !=  (modified & FL_FEATURE_ID_SDK_VERSION_MASK);
+    }
+
+    /**
+     * Determines if the sdkVersion has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkSdkVersionInitialized()
+    {
+        return 0L !=  (initialized & FL_FEATURE_ID_SDK_VERSION_MASK);
+    }
+    /**
      * Getter method for {@link #personId}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -246,7 +318,7 @@ public final class FeatureBean
      *
      * @return the value of personId
      */
-    @ThriftField(value=5)
+    @ThriftField(value=6)
     public Integer getPersonId(){
         return personId;
     }
@@ -324,7 +396,7 @@ public final class FeatureBean
      *
      * @return the value of feature
      */
-    @ThriftField(value=6)
+    @ThriftField(value=7)
     public java.nio.ByteBuffer getFeature(){
         return feature;
     }
@@ -399,7 +471,7 @@ public final class FeatureBean
      * use Long to represent date type for thrift:swift support 
      * @see #getUpdateTime()
      */
-    @ThriftField(name = "updateTime",value = 7)
+    @ThriftField(name = "updateTime",value = 8)
     public Long readUpdateTime(){
         return null == updateTime ? null:updateTime.getTime();
     }
@@ -507,6 +579,8 @@ public final class FeatureBean
         switch ( columnID ){
         case FL_FEATURE_ID_MD5:
             return checkMd5Modified();
+        case FL_FEATURE_ID_SDK_VERSION:
+            return checkSdkVersionModified();
         case FL_FEATURE_ID_PERSON_ID:
             return checkPersonIdModified();
         case FL_FEATURE_ID_FEATURE:
@@ -523,6 +597,8 @@ public final class FeatureBean
         switch(columnID) {
         case FL_FEATURE_ID_MD5:
             return checkMd5Initialized();
+        case FL_FEATURE_ID_SDK_VERSION:
+            return checkSdkVersionInitialized();
         case FL_FEATURE_ID_PERSON_ID:
             return checkPersonIdInitialized();
         case FL_FEATURE_ID_FEATURE:
@@ -561,7 +637,8 @@ public final class FeatureBean
      */
     public void resetModifiedExceptPrimaryKeys()
     {
-        modified &= (~(FL_FEATURE_ID_PERSON_ID_MASK |
+        modified &= (~(FL_FEATURE_ID_SDK_VERSION_MASK |
+            FL_FEATURE_ID_PERSON_ID_MASK |
             FL_FEATURE_ID_FEATURE_MASK |
             FL_FEATURE_ID_UPDATE_TIME_MASK));
     }
@@ -576,6 +653,7 @@ public final class FeatureBean
     public void reset(){
         checkMutable();
         this.md5 = null;
+        this.sdkVersion = null;
         this.personId = null;
         this.feature = null;
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
@@ -594,6 +672,7 @@ public final class FeatureBean
         FeatureBean obj = (FeatureBean) object;
         return new EqualsBuilder()
             .append(getMd5(), obj.getMd5())
+            .append(getSdkVersion(), obj.getSdkVersion())
             .append(getPersonId(), obj.getPersonId())
             .append(getFeature(), obj.getFeature())
             .append(getUpdateTime(), obj.getUpdateTime())
@@ -670,6 +749,15 @@ public final class FeatureBean
                 append(builder,fullIfStringOrBytes,getMd5());
             }
         }
+        if(checkSdkVersionInitialized()){
+            if(!notNull || null != getSdkVersion()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("sdk_version=");
+                append(builder,fullIfStringOrBytes,getSdkVersion());
+            }
+        }
         if(checkPersonIdInitialized()){
             if(!notNull || null != getPersonId()){
                 if(count++ >0){
@@ -704,6 +792,7 @@ public final class FeatureBean
     public int compareTo(FeatureBean object){
         return new CompareToBuilder()
             .append(getMd5(), object.getMd5())
+            .append(getSdkVersion(), object.getSdkVersion())
             .append(getPersonId(), object.getPersonId())
             .append(getFeature(), object.getFeature())
             .append(getUpdateTime(), object.getUpdateTime())
@@ -728,6 +817,7 @@ public final class FeatureBean
         checkMutable();
         
         setMd5((String)null);
+        setSdkVersion((String)null);
         setPersonId((Integer)null);
         setFeature((java.nio.ByteBuffer)null);
         setUpdateTime((java.util.Date)null);
@@ -822,6 +912,8 @@ public final class FeatureBean
         switch( columnID ){
         case FL_FEATURE_ID_MD5: 
             return (T)getMd5();        
+        case FL_FEATURE_ID_SDK_VERSION: 
+            return (T)getSdkVersion();        
         case FL_FEATURE_ID_PERSON_ID: 
             return (T)getPersonId();        
         case FL_FEATURE_ID_FEATURE: 
@@ -839,6 +931,9 @@ public final class FeatureBean
         switch( columnID ) {
         case FL_FEATURE_ID_MD5:
             setMd5((String)value);
+            break;
+        case FL_FEATURE_ID_SDK_VERSION:
+            setSdkVersion((String)value);
             break;
         case FL_FEATURE_ID_PERSON_ID:
             setPersonId((Integer)value);
@@ -920,6 +1015,16 @@ public final class FeatureBean
          */
         public Builder md5(String md5){
             TEMPLATE.get().setMd5(md5);
+            return this;
+        }
+        /** 
+         * fill the field : fl_feature.sdk_version
+         * @param sdkVersion (特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据
+         * @see FeatureBean#getSdkVersion()
+         * @see FeatureBean#setSdkVersion(String)
+         */
+        public Builder sdkVersion(String sdkVersion){
+            TEMPLATE.get().setSdkVersion(sdkVersion);
             return this;
         }
         /** 

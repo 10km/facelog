@@ -192,8 +192,8 @@ public  class FlPersonBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.id</li>
-     * <li> imported key: fl_feature.person_id</li>
      * <li> imported key: fl_log.person_id</li>
+     * <li> imported key: fl_feature.person_id</li>
      * <li>comments: 用户id</li>
      * <li>AUTO_INCREMENT</li>
      * <li>NOT NULL</li>

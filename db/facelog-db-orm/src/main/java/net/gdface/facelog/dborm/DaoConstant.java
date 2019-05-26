@@ -49,7 +49,7 @@ public interface DaoConstant {
     public static interface DeviceConst{
         public static final String TABLENAME = "fl_device";
         /** column count for fl_device table */
-        public static final int COLUMN_COUNT = 16;
+        public static final int COLUMN_COUNT = 17;
         /** primary keys count for fl_device table */
         public static final int PRIMARY_KEY_COUNT = 1;
         /** foreign keys count for fl_device table */
@@ -68,6 +68,7 @@ public interface DaoConstant {
                             + ",fl_device.manufacturer"
                             + ",fl_device.made_date"
                             + ",fl_device.version"
+                            + ",fl_device.sdk_version"
                             + ",fl_device.serial_no"
                             + ",fl_device.mac"
                             + ",fl_device.remark"
@@ -85,6 +86,7 @@ public interface DaoConstant {
                             + ",manufacturer"
                             + ",made_date"
                             + ",version"
+                            + ",sdk_version"
                             + ",serial_no"
                             + ",mac"
                             + ",remark"
@@ -104,6 +106,7 @@ public interface DaoConstant {
                             + ",manufacturer"
                             + ",madeDate"
                             + ",version"
+                            + ",sdkVersion"
                             + ",serialNo"
                             + ",mac"
                             + ",remark"
@@ -123,7 +126,8 @@ public interface DaoConstant {
         public static enum Index{
             /** fl_device index (mac) */indexMac,
             /** fl_device index (serial_no) */indexSerialNo,
-            /** fl_device index (group_id) */indexGroupId
+            /** fl_device index (group_id) */indexGroupId,
+            /** fl_device index (sdk_version) */indexSdkVersion
         }
         /** Column Constant definition for fl_device */
         public static enum Column{            
@@ -145,20 +149,22 @@ public interface DaoConstant {
             madeDate("fl_device","made_date",8,"getMadeDate","setMadeDate"),
             /** constant for fl_device.version  */
             version("fl_device","version",9,"getVersion","setVersion"),
+            /** constant for fl_device.sdk_version  */
+            sdkVersion("fl_device","sdk_version",10,"getSdkVersion","setSdkVersion"),
             /** constant for fl_device.serial_no  */
-            serialNo("fl_device","serial_no",10,"getSerialNo","setSerialNo"),
+            serialNo("fl_device","serial_no",11,"getSerialNo","setSerialNo"),
             /** constant for fl_device.mac  */
-            mac("fl_device","mac",11,"getMac","setMac"),
+            mac("fl_device","mac",12,"getMac","setMac"),
             /** constant for fl_device.remark  */
-            remark("fl_device","remark",12,"getRemark","setRemark"),
+            remark("fl_device","remark",13,"getRemark","setRemark"),
             /** constant for fl_device.ext_bin  */
-            extBin("fl_device","ext_bin",13,"getExtBin","setExtBin"),
+            extBin("fl_device","ext_bin",14,"getExtBin","setExtBin"),
             /** constant for fl_device.ext_txt  */
-            extTxt("fl_device","ext_txt",14,"getExtTxt","setExtTxt"),
+            extTxt("fl_device","ext_txt",15,"getExtTxt","setExtTxt"),
             /** constant for fl_device.create_time  */
-            createTime("fl_device","create_time",15,"getCreateTime","setCreateTime"),
+            createTime("fl_device","create_time",16,"getCreateTime","setCreateTime"),
             /** constant for fl_device.update_time  */
-            updateTime("fl_device","update_time",16,"getUpdateTime","setUpdateTime");
+            updateTime("fl_device","update_time",17,"getUpdateTime","setUpdateTime");
             final ColumnMeta meta;
             private Column(String table,String field,int ordinal,String getter,String setter){
                 meta = new ColumnMeta(table,field,ordinal,getter,setter);
@@ -392,7 +398,7 @@ public interface DaoConstant {
     public static interface FeatureConst{
         public static final String TABLENAME = "fl_feature";
         /** column count for fl_feature table */
-        public static final int COLUMN_COUNT = 4;
+        public static final int COLUMN_COUNT = 5;
         /** primary keys count for fl_feature table */
         public static final int PRIMARY_KEY_COUNT = 1;
         /** foreign keys count for fl_feature table */
@@ -403,11 +409,13 @@ public interface DaoConstant {
         public static final String[] PRIMARYKEY_NAMES = {"md5"};
         /** Contains all the full fields of the fl_feature table.*/
         public static final String FULL_FIELDS ="fl_feature.md5"
+                            + ",fl_feature.sdk_version"
                             + ",fl_feature.person_id"
                             + ",fl_feature.feature"
                             + ",fl_feature.update_time";
         /** Field that contains the comma separated fields of the fl_feature table. */
         public static final String FIELDS = "md5"
+                            + ",sdk_version"
                             + ",person_id"
                             + ",feature"
                             + ",update_time";
@@ -415,6 +423,7 @@ public interface DaoConstant {
         public static final java.util.List<String> FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(FIELDS.split(",")));
         /** Field that contains the comma separated java fields of the fl_feature table. */
         public static final String JAVA_FIELDS = "md5"
+                            + ",sdkVersion"
                             + ",personId"
                             + ",feature"
                             + ",updateTime";
@@ -428,18 +437,21 @@ public interface DaoConstant {
             /** imported key fl_log(verify_feature) TO fl_feature */verifyFeatureOfLog
         }
         public static enum Index{
-            /** fl_feature index (person_id) */indexPersonId
+            /** fl_feature index (person_id) */indexPersonId,
+            /** fl_feature index (sdk_version) */indexSdkVersion
         }
         /** Column Constant definition for fl_feature */
         public static enum Column{            
             /** constant for fl_feature.md5  */
             md5("fl_feature","md5",1,"getMd5","setMd5"),
+            /** constant for fl_feature.sdk_version  */
+            sdkVersion("fl_feature","sdk_version",2,"getSdkVersion","setSdkVersion"),
             /** constant for fl_feature.person_id  */
-            personId("fl_feature","person_id",2,"getPersonId","setPersonId"),
+            personId("fl_feature","person_id",3,"getPersonId","setPersonId"),
             /** constant for fl_feature.feature  */
-            feature("fl_feature","feature",3,"getFeature","setFeature"),
+            feature("fl_feature","feature",4,"getFeature","setFeature"),
             /** constant for fl_feature.update_time  */
-            updateTime("fl_feature","update_time",4,"getUpdateTime","setUpdateTime");
+            updateTime("fl_feature","update_time",5,"getUpdateTime","setUpdateTime");
             final ColumnMeta meta;
             private Column(String table,String field,int ordinal,String getter,String setter){
                 meta = new ColumnMeta(table,field,ordinal,getter,setter);

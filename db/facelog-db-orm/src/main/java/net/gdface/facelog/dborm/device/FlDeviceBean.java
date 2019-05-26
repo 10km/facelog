@@ -56,6 +56,9 @@ public  class FlDeviceBean
     /** comments:设备版本号 */
     private String version;
 
+    /** comments:(特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据 */
+    private String sdkVersion;
+
     /** comments:设备序列号 */
     private String serialNo;
 
@@ -702,6 +705,63 @@ public  class FlDeviceBean
         return 0L !=  (initialized & FL_DEVICE_ID_VERSION_MASK);
     }
     /**
+     * Getter method for {@link #sdkVersion}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.sdk_version</li>
+     * <li>comments: (特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据</li>
+     * <li>NOT NULL</li>
+     * <li>column size: 32</li>
+     * <li>JDBC type returned by the driver: Types.CHAR</li>
+     * </ul>
+     *
+     * @return the value of sdkVersion
+     */
+    public String getSdkVersion(){
+        return sdkVersion;
+    }
+    /**
+     * Setter method for {@link #sdkVersion}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value( NOT NULL) to be assigned to sdkVersion
+     */
+    public void setSdkVersion(String newVal)
+    {
+        checkMutable();
+
+        modified |= FL_DEVICE_ID_SDK_VERSION_MASK;
+        initialized |= FL_DEVICE_ID_SDK_VERSION_MASK;
+
+        if (Objects.equals(newVal, sdkVersion)) {
+            return;
+        }
+        sdkVersion = newVal;
+    }
+    /**
+     * Determines if the sdkVersion has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkSdkVersionModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_SDK_VERSION_MASK);
+    }
+
+    /**
+     * Determines if the sdkVersion has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkSdkVersionInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_SDK_VERSION_MASK);
+    }
+    /**
      * Getter method for {@link #serialNo}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -1161,6 +1221,8 @@ public  class FlDeviceBean
             return checkMadeDateModified();
         case FL_DEVICE_ID_VERSION:
             return checkVersionModified();
+        case FL_DEVICE_ID_SDK_VERSION:
+            return checkSdkVersionModified();
         case FL_DEVICE_ID_SERIAL_NO:
             return checkSerialNoModified();
         case FL_DEVICE_ID_MAC:
@@ -1201,6 +1263,8 @@ public  class FlDeviceBean
             return checkMadeDateInitialized();
         case FL_DEVICE_ID_VERSION:
             return checkVersionInitialized();
+        case FL_DEVICE_ID_SDK_VERSION:
+            return checkSdkVersionInitialized();
         case FL_DEVICE_ID_SERIAL_NO:
             return checkSerialNoInitialized();
         case FL_DEVICE_ID_MAC:
@@ -1255,6 +1319,7 @@ public  class FlDeviceBean
             FL_DEVICE_ID_MANUFACTURER_MASK |
             FL_DEVICE_ID_MADE_DATE_MASK |
             FL_DEVICE_ID_VERSION_MASK |
+            FL_DEVICE_ID_SDK_VERSION_MASK |
             FL_DEVICE_ID_SERIAL_NO_MASK |
             FL_DEVICE_ID_MAC_MASK |
             FL_DEVICE_ID_REMARK_MASK |
@@ -1283,6 +1348,7 @@ public  class FlDeviceBean
         this.manufacturer = null;
         this.madeDate = null;
         this.version = null;
+        this.sdkVersion = null;
         this.serialNo = null;
         this.mac = null;
         this.remark = null;
@@ -1314,6 +1380,7 @@ public  class FlDeviceBean
             .append(getManufacturer(), obj.getManufacturer())
             .append(getMadeDate(), obj.getMadeDate())
             .append(getVersion(), obj.getVersion())
+            .append(getSdkVersion(), obj.getSdkVersion())
             .append(getSerialNo(), obj.getSerialNo())
             .append(getMac(), obj.getMac())
             .append(getRemark(), obj.getRemark())
@@ -1466,6 +1533,15 @@ public  class FlDeviceBean
                 append(builder,fullIfStringOrBytes,getVersion());
             }
         }
+        if(checkSdkVersionInitialized()){
+            if(!notNull || null != getSdkVersion()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("sdk_version=");
+                append(builder,fullIfStringOrBytes,getSdkVersion());
+            }
+        }
         if(checkSerialNoInitialized()){
             if(!notNull || null != getSerialNo()){
                 if(count++ >0){
@@ -1544,6 +1620,7 @@ public  class FlDeviceBean
             .append(getManufacturer(), object.getManufacturer())
             .append(getMadeDate(), object.getMadeDate())
             .append(getVersion(), object.getVersion())
+            .append(getSdkVersion(), object.getSdkVersion())
             .append(getSerialNo(), object.getSerialNo())
             .append(getMac(), object.getMac())
             .append(getRemark(), object.getRemark())
@@ -1580,6 +1657,7 @@ public  class FlDeviceBean
         setManufacturer((String)null);
         setMadeDate((java.util.Date)null);
         setVersion((String)null);
+        setSdkVersion((String)null);
         setSerialNo((String)null);
         setMac((String)null);
         setRemark((String)null);
@@ -1694,6 +1772,8 @@ public  class FlDeviceBean
             return (T)getMadeDate();        
         case FL_DEVICE_ID_VERSION: 
             return (T)getVersion();        
+        case FL_DEVICE_ID_SDK_VERSION: 
+            return (T)getSdkVersion();        
         case FL_DEVICE_ID_SERIAL_NO: 
             return (T)getSerialNo();        
         case FL_DEVICE_ID_MAC: 
@@ -1743,6 +1823,9 @@ public  class FlDeviceBean
             break;
         case FL_DEVICE_ID_VERSION:
             setVersion((String)value);
+            break;
+        case FL_DEVICE_ID_SDK_VERSION:
+            setSdkVersion((String)value);
             break;
         case FL_DEVICE_ID_SERIAL_NO:
             setSerialNo((String)value);
@@ -1916,6 +1999,16 @@ public  class FlDeviceBean
          */
         public Builder version(String version){
             TEMPLATE.get().setVersion(version);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device.sdk_version
+         * @param sdkVersion (特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据
+         * @see FlDeviceBean#getSdkVersion()
+         * @see FlDeviceBean#setSdkVersion(String)
+         */
+        public Builder sdkVersion(String sdkVersion){
+            TEMPLATE.get().setSdkVersion(sdkVersion);
             return this;
         }
         /** 

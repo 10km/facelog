@@ -46,6 +46,7 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
      *   <li>{@link Constant#FL_DEVICE_ID_MANUFACTURER}
      *   <li>{@link Constant#FL_DEVICE_ID_MADE_DATE}
      *   <li>{@link Constant#FL_DEVICE_ID_VERSION}
+     *   <li>{@link Constant#FL_DEVICE_ID_SDK_VERSION}
      *   <li>{@link Constant#FL_DEVICE_ID_SERIAL_NO}
      *   <li>{@link Constant#FL_DEVICE_ID_MAC}
      *   <li>{@link Constant#FL_DEVICE_ID_REMARK}
@@ -80,6 +81,7 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
      *   <li>{@link Constant#FL_DEVICE_ID_MANUFACTURER})
      *   <li>{@link Constant#FL_DEVICE_ID_MADE_DATE})
      *   <li>{@link Constant#FL_DEVICE_ID_VERSION})
+     *   <li>{@link Constant#FL_DEVICE_ID_SDK_VERSION})
      *   <li>{@link Constant#FL_DEVICE_ID_SERIAL_NO})
      *   <li>{@link Constant#FL_DEVICE_ID_MAC})
      *   <li>{@link Constant#FL_DEVICE_ID_REMARK})
@@ -200,6 +202,17 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getVersion().compareTo(b2.getVersion());
+                }
+                break;
+            case FL_DEVICE_ID_SDK_VERSION:
+                if (b1.getSdkVersion() == null && b2.getSdkVersion() != null) {
+                    iReturn = -1;
+                } else if (b1.getSdkVersion() == null && b2.getSdkVersion() == null) {
+                    iReturn = 0;
+                } else if (b1.getSdkVersion() != null && b2.getSdkVersion() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getSdkVersion().compareTo(b2.getSdkVersion());
                 }
                 break;
             case FL_DEVICE_ID_SERIAL_NO:

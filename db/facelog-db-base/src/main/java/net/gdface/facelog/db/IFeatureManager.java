@@ -404,6 +404,34 @@ public interface IFeatureManager extends TableManager<FeatureBean>
     public int deleteByIndexPersonId(Integer personId)throws RuntimeDaoException;
     
 
+     /**
+     * Retrieves an array of FeatureBean using the sdk_version index.
+     *
+     * @param sdkVersion the sdk_version column's value filter.
+     * @return an array of FeatureBean
+     * @throws RuntimeDaoException
+     */
+    public FeatureBean[] loadByIndexSdkVersion(String sdkVersion)throws RuntimeDaoException;
+    
+    /**
+     * Retrieves a list of FeatureBean using the sdk_version index.
+     *
+     * @param sdkVersion the sdk_version column's value filter.
+     * @return a list of FeatureBean
+     * @throws RuntimeDaoException
+     */
+    public java.util.List<FeatureBean> loadByIndexSdkVersionAsList(String sdkVersion)throws RuntimeDaoException;
+
+    /**
+     * Deletes rows using the sdk_version index.
+     *
+     * @param sdkVersion the sdk_version column's value filter.
+     * @return the number of deleted objects
+     * @throws RuntimeDaoException
+     */
+    public int deleteByIndexSdkVersion(String sdkVersion)throws RuntimeDaoException;
+    
+
     //45
     /**
      * return a primary key list from {@link FeatureBean} array

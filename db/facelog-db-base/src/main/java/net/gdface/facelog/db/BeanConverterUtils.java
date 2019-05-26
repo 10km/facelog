@@ -159,6 +159,7 @@ public class BeanConverterUtils implements Constant {
             manufacturer("getManufacturer","setManufacturer"),
             madeDate("getMadeDate","setMadeDate"),
             version("getVersion","setVersion"),
+            sdkVersion("getSdkVersion","setSdkVersion"),
             serialNo("getSerialNo","setSerialNo"),
             mac("getMac","setMac"),
             remark("getRemark","setRemark"),
@@ -282,6 +283,8 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.madeDate.setter,java.util.Date.class,Long.class,long.class);  
             getGetter(Column.version.getter);
             getSetterNoThrow(Column.version.setter,String.class); 
+            getGetter(Column.sdkVersion.getter);
+            getSetterNoThrow(Column.sdkVersion.setter,String.class); 
             getGetter(Column.serialNo.getter);
             getSetterNoThrow(Column.serialNo.setter,String.class); 
             getGetter(Column.mac.getter);
@@ -364,6 +367,12 @@ public class BeanConverterUtils implements Constant {
                     left.setVersion(cast(String.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.version.name(),modified)){
                         selfModified |= FL_DEVICE_ID_VERSION_MASK;
+                    }
+                }
+                if( bitCheck(Column.sdkVersion.name(),initialized) && (null != (getterMethod = methods.get(Column.sdkVersion.getter)))){
+                    left.setSdkVersion(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.sdkVersion.name(),modified)){
+                        selfModified |= FL_DEVICE_ID_SDK_VERSION_MASK;
                     }
                 }
                 if( bitCheck(Column.serialNo.name(),initialized) && (null != (getterMethod = methods.get(Column.serialNo.getter)))){
@@ -503,6 +512,15 @@ public class BeanConverterUtils implements Constant {
                         bitOR(Column.version.name(),initialized);
                         if(left.checkVersionModified()){
                             bitOR(Column.version.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.sdkVersion.setter)) && left.checkSdkVersionInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.sdkVersion.setter),left.getSdkVersion()));
+                        bitOR(Column.sdkVersion.name(),initialized);
+                        if(left.checkSdkVersionModified()){
+                            bitOR(Column.sdkVersion.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
@@ -1462,6 +1480,7 @@ public class BeanConverterUtils implements Constant {
         static enum Column{
             /** column method info */
             md5("getMd5","setMd5"),
+            sdkVersion("getSdkVersion","setSdkVersion"),
             personId("getPersonId","setPersonId"),
             feature("getFeature","setFeature"),
             updateTime("getUpdateTime","setUpdateTime");
@@ -1565,6 +1584,8 @@ public class BeanConverterUtils implements Constant {
 
             getGetter(Column.md5.getter);
             getSetterNoThrow(Column.md5.setter,String.class); 
+            getGetter(Column.sdkVersion.getter);
+            getSetterNoThrow(Column.sdkVersion.setter,String.class); 
             getGetter(Column.personId.getter);
             getSetterNoThrow(Column.personId.setter,Integer.class,int.class);                    
             getGetter(Column.feature.getter);
@@ -1591,6 +1612,12 @@ public class BeanConverterUtils implements Constant {
                     left.setMd5(cast(String.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.md5.name(),modified)){
                         selfModified |= FL_FEATURE_ID_MD5_MASK;
+                    }
+                }
+                if( bitCheck(Column.sdkVersion.name(),initialized) && (null != (getterMethod = methods.get(Column.sdkVersion.getter)))){
+                    left.setSdkVersion(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.sdkVersion.name(),modified)){
+                        selfModified |= FL_FEATURE_ID_SDK_VERSION_MASK;
                     }
                 }
                 if( bitCheck(Column.personId.name(),initialized) && (null != (getterMethod = methods.get(Column.personId.getter)))){
@@ -1634,6 +1661,15 @@ public class BeanConverterUtils implements Constant {
                         bitOR(Column.md5.name(),initialized);
                         if(left.checkMd5Modified()){
                             bitOR(Column.md5.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.sdkVersion.setter)) && left.checkSdkVersionInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.sdkVersion.setter),left.getSdkVersion()));
+                        bitOR(Column.sdkVersion.name(),initialized);
+                        if(left.checkSdkVersionModified()){
+                            bitOR(Column.sdkVersion.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }

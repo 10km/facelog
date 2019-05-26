@@ -38,6 +38,7 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>,Constant
      * Possible values are:
      * <ul>
      *   <li>{@link Constant#FL_FEATURE_ID_MD5}
+     *   <li>{@link Constant#FL_FEATURE_ID_SDK_VERSION}
      *   <li>{@link Constant#FL_FEATURE_ID_PERSON_ID}
      *   <li>{@link Constant#FL_FEATURE_ID_FEATURE}
      *   <li>{@link Constant#FL_FEATURE_ID_UPDATE_TIME}
@@ -60,6 +61,7 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>,Constant
      * Possible values are:
      * <ul>
      *   <li>{@link Constant#FL_FEATURE_ID_MD5})
+     *   <li>{@link Constant#FL_FEATURE_ID_SDK_VERSION})
      *   <li>{@link Constant#FL_FEATURE_ID_PERSON_ID})
      *   <li>{@link Constant#FL_FEATURE_ID_FEATURE})
      *   <li>{@link Constant#FL_FEATURE_ID_UPDATE_TIME})
@@ -88,6 +90,17 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getMd5().compareTo(b2.getMd5());
+                }
+                break;
+            case FL_FEATURE_ID_SDK_VERSION:
+                if (b1.getSdkVersion() == null && b2.getSdkVersion() != null) {
+                    iReturn = -1;
+                } else if (b1.getSdkVersion() == null && b2.getSdkVersion() == null) {
+                    iReturn = 0;
+                } else if (b1.getSdkVersion() != null && b2.getSdkVersion() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getSdkVersion().compareTo(b2.getSdkVersion());
                 }
                 break;
             case FL_FEATURE_ID_PERSON_ID:
