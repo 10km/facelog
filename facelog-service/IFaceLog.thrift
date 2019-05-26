@@ -61,9 +61,10 @@ struct FeatureBean {
   2: required i32 modified;
   3: required i32 initialized;
   4: optional string md5;
-  5: optional i32 personId;
-  6: optional binary feature;
-  7: optional i64 updateTime;
+  5: optional string sdkVersion;
+  6: optional i32 personId;
+  7: optional binary feature;
+  8: optional i64 updateTime;
 }
 
 struct ImageBean {
@@ -140,13 +141,14 @@ struct DeviceBean {
   10: optional string manufacturer;
   11: optional i64 madeDate;
   12: optional string version;
-  13: optional string serialNo;
-  14: optional string mac;
-  15: optional string remark;
-  16: optional binary extBin;
-  17: optional string extTxt;
-  18: optional i64 createTime;
-  19: optional i64 updateTime;
+  13: optional string sdkVersion;
+  14: optional string serialNo;
+  15: optional string mac;
+  16: optional string remark;
+  17: optional binary extBin;
+  18: optional string extTxt;
+  19: optional i64 createTime;
+  20: optional i64 updateTime;
 }
 
 struct PersonBean {

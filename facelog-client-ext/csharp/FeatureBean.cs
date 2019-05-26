@@ -31,6 +31,8 @@ public partial class FeatureBean : TBase
 
   public string Md5 { get; set; }
 
+  public string SdkVersion { get; set; }
+
   public int? PersonId { get; set; }
 
   public byte[] Feature { get; set; }
@@ -96,20 +98,27 @@ public partial class FeatureBean : TBase
             }
             break;
           case 5:
+            if (field.Type == TType.String) {
+              SdkVersion = iprot.ReadString();
+            } else { 
+              TProtocolUtil.Skip(iprot, field.Type);
+            }
+            break;
+          case 6:
             if (field.Type == TType.I32) {
               PersonId = iprot.ReadI32();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
-          case 6:
+          case 7:
             if (field.Type == TType.String) {
               Feature = iprot.ReadBinary();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
-          case 7:
+          case 8:
             if (field.Type == TType.I64) {
               UpdateTime = iprot.ReadI64();
             } else { 
@@ -169,10 +178,18 @@ public partial class FeatureBean : TBase
         oprot.WriteString(Md5);
         oprot.WriteFieldEnd();
       }
+      if (SdkVersion != null) {
+        field.Name = "sdkVersion";
+        field.Type = TType.String;
+        field.ID = 5;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteString(SdkVersion);
+        oprot.WriteFieldEnd();
+      }
       if (PersonId != null) {
         field.Name = "personId";
         field.Type = TType.I32;
-        field.ID = 5;
+        field.ID = 6;
         oprot.WriteFieldBegin(field);
         oprot.WriteI32(PersonId.Value);
         oprot.WriteFieldEnd();
@@ -180,7 +197,7 @@ public partial class FeatureBean : TBase
       if (Feature != null) {
         field.Name = "feature";
         field.Type = TType.String;
-        field.ID = 6;
+        field.ID = 7;
         oprot.WriteFieldBegin(field);
         oprot.WriteBinary(Feature);
         oprot.WriteFieldEnd();
@@ -188,7 +205,7 @@ public partial class FeatureBean : TBase
       if (UpdateTime != null) {
         field.Name = "updateTime";
         field.Type = TType.I64;
-        field.ID = 7;
+        field.ID = 8;
         oprot.WriteFieldBegin(field);
         oprot.WriteI64(UpdateTime.Value);
         oprot.WriteFieldEnd();
@@ -213,6 +230,10 @@ public partial class FeatureBean : TBase
     if (Md5 != null) {
       __sb.Append(", Md5: ");
       __sb.Append(Md5);
+    }
+    if (SdkVersion != null) {
+      __sb.Append(", SdkVersion: ");
+      __sb.Append(SdkVersion);
     }
     if (PersonId != null) {
       __sb.Append(", PersonId: ");

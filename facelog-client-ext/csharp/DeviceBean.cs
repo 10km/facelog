@@ -47,6 +47,8 @@ public partial class DeviceBean : TBase
 
   public string Version { get; set; }
 
+  public string SdkVersion { get; set; }
+
   public string SerialNo { get; set; }
 
   public string Mac { get; set; }
@@ -177,47 +179,54 @@ public partial class DeviceBean : TBase
             break;
           case 13:
             if (field.Type == TType.String) {
-              SerialNo = iprot.ReadString();
+              SdkVersion = iprot.ReadString();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
           case 14:
             if (field.Type == TType.String) {
-              Mac = iprot.ReadString();
+              SerialNo = iprot.ReadString();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
           case 15:
             if (field.Type == TType.String) {
-              Remark = iprot.ReadString();
+              Mac = iprot.ReadString();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
           case 16:
             if (field.Type == TType.String) {
-              ExtBin = iprot.ReadBinary();
+              Remark = iprot.ReadString();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
           case 17:
             if (field.Type == TType.String) {
-              ExtTxt = iprot.ReadString();
+              ExtBin = iprot.ReadBinary();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
           case 18:
+            if (field.Type == TType.String) {
+              ExtTxt = iprot.ReadString();
+            } else { 
+              TProtocolUtil.Skip(iprot, field.Type);
+            }
+            break;
+          case 19:
             if (field.Type == TType.I64) {
               CreateTime = iprot.ReadI64();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
-          case 19:
+          case 20:
             if (field.Type == TType.I64) {
               UpdateTime = iprot.ReadI64();
             } else { 
@@ -341,10 +350,18 @@ public partial class DeviceBean : TBase
         oprot.WriteString(Version);
         oprot.WriteFieldEnd();
       }
+      if (SdkVersion != null) {
+        field.Name = "sdkVersion";
+        field.Type = TType.String;
+        field.ID = 13;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteString(SdkVersion);
+        oprot.WriteFieldEnd();
+      }
       if (SerialNo != null) {
         field.Name = "serialNo";
         field.Type = TType.String;
-        field.ID = 13;
+        field.ID = 14;
         oprot.WriteFieldBegin(field);
         oprot.WriteString(SerialNo);
         oprot.WriteFieldEnd();
@@ -352,7 +369,7 @@ public partial class DeviceBean : TBase
       if (Mac != null) {
         field.Name = "mac";
         field.Type = TType.String;
-        field.ID = 14;
+        field.ID = 15;
         oprot.WriteFieldBegin(field);
         oprot.WriteString(Mac);
         oprot.WriteFieldEnd();
@@ -360,7 +377,7 @@ public partial class DeviceBean : TBase
       if (Remark != null) {
         field.Name = "remark";
         field.Type = TType.String;
-        field.ID = 15;
+        field.ID = 16;
         oprot.WriteFieldBegin(field);
         oprot.WriteString(Remark);
         oprot.WriteFieldEnd();
@@ -368,7 +385,7 @@ public partial class DeviceBean : TBase
       if (ExtBin != null) {
         field.Name = "extBin";
         field.Type = TType.String;
-        field.ID = 16;
+        field.ID = 17;
         oprot.WriteFieldBegin(field);
         oprot.WriteBinary(ExtBin);
         oprot.WriteFieldEnd();
@@ -376,7 +393,7 @@ public partial class DeviceBean : TBase
       if (ExtTxt != null) {
         field.Name = "extTxt";
         field.Type = TType.String;
-        field.ID = 17;
+        field.ID = 18;
         oprot.WriteFieldBegin(field);
         oprot.WriteString(ExtTxt);
         oprot.WriteFieldEnd();
@@ -384,7 +401,7 @@ public partial class DeviceBean : TBase
       if (CreateTime != null) {
         field.Name = "createTime";
         field.Type = TType.I64;
-        field.ID = 18;
+        field.ID = 19;
         oprot.WriteFieldBegin(field);
         oprot.WriteI64(CreateTime.Value);
         oprot.WriteFieldEnd();
@@ -392,7 +409,7 @@ public partial class DeviceBean : TBase
       if (UpdateTime != null) {
         field.Name = "updateTime";
         field.Type = TType.I64;
-        field.ID = 19;
+        field.ID = 20;
         oprot.WriteFieldBegin(field);
         oprot.WriteI64(UpdateTime.Value);
         oprot.WriteFieldEnd();
@@ -449,6 +466,10 @@ public partial class DeviceBean : TBase
     if (Version != null) {
       __sb.Append(", Version: ");
       __sb.Append(Version);
+    }
+    if (SdkVersion != null) {
+      __sb.Append(", SdkVersion: ");
+      __sb.Append(SdkVersion);
     }
     if (SerialNo != null) {
       __sb.Append(", SerialNo: ");

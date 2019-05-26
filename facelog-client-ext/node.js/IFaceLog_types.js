@@ -658,6 +658,7 @@ var FeatureBean = module.exports.FeatureBean = function(args) {
   this.modified = null;
   this.initialized = null;
   this.md5 = null;
+  this.sdkVersion = null;
   this.personId = null;
   this.feature = null;
   this.updateTime = null;
@@ -679,6 +680,9 @@ var FeatureBean = module.exports.FeatureBean = function(args) {
     }
     if (args.md5 !== undefined && args.md5 !== null) {
       this.md5 = args.md5;
+    }
+    if (args.sdkVersion !== undefined && args.sdkVersion !== null) {
+      this.sdkVersion = args.sdkVersion;
     }
     if (args.personId !== undefined && args.personId !== null) {
       this.personId = args.personId;
@@ -734,20 +738,27 @@ FeatureBean.prototype.read = function(input) {
       }
       break;
       case 5:
+      if (ftype == Thrift.Type.STRING) {
+        this.sdkVersion = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 6:
       if (ftype == Thrift.Type.I32) {
         this.personId = input.readI32();
       } else {
         input.skip(ftype);
       }
       break;
-      case 6:
+      case 7:
       if (ftype == Thrift.Type.STRING) {
         this.feature = input.readBinary();
       } else {
         input.skip(ftype);
       }
       break;
-      case 7:
+      case 8:
       if (ftype == Thrift.Type.I64) {
         this.updateTime = input.readI64();
       } else {
@@ -785,18 +796,23 @@ FeatureBean.prototype.write = function(output) {
     output.writeString(this.md5);
     output.writeFieldEnd();
   }
+  if (this.sdkVersion !== null && this.sdkVersion !== undefined) {
+    output.writeFieldBegin('sdkVersion', Thrift.Type.STRING, 5);
+    output.writeString(this.sdkVersion);
+    output.writeFieldEnd();
+  }
   if (this.personId !== null && this.personId !== undefined) {
-    output.writeFieldBegin('personId', Thrift.Type.I32, 5);
+    output.writeFieldBegin('personId', Thrift.Type.I32, 6);
     output.writeI32(this.personId);
     output.writeFieldEnd();
   }
   if (this.feature !== null && this.feature !== undefined) {
-    output.writeFieldBegin('feature', Thrift.Type.STRING, 6);
+    output.writeFieldBegin('feature', Thrift.Type.STRING, 7);
     output.writeBinary(this.feature);
     output.writeFieldEnd();
   }
   if (this.updateTime !== null && this.updateTime !== undefined) {
-    output.writeFieldBegin('updateTime', Thrift.Type.I64, 7);
+    output.writeFieldBegin('updateTime', Thrift.Type.I64, 8);
     output.writeI64(this.updateTime);
     output.writeFieldEnd();
   }
@@ -1762,6 +1778,7 @@ var DeviceBean = module.exports.DeviceBean = function(args) {
   this.manufacturer = null;
   this.madeDate = null;
   this.version = null;
+  this.sdkVersion = null;
   this.serialNo = null;
   this.mac = null;
   this.remark = null;
@@ -1811,6 +1828,9 @@ var DeviceBean = module.exports.DeviceBean = function(args) {
     }
     if (args.version !== undefined && args.version !== null) {
       this.version = args.version;
+    }
+    if (args.sdkVersion !== undefined && args.sdkVersion !== null) {
+      this.sdkVersion = args.sdkVersion;
     }
     if (args.serialNo !== undefined && args.serialNo !== null) {
       this.serialNo = args.serialNo;
@@ -1935,47 +1955,54 @@ DeviceBean.prototype.read = function(input) {
       break;
       case 13:
       if (ftype == Thrift.Type.STRING) {
-        this.serialNo = input.readString();
+        this.sdkVersion = input.readString();
       } else {
         input.skip(ftype);
       }
       break;
       case 14:
       if (ftype == Thrift.Type.STRING) {
-        this.mac = input.readString();
+        this.serialNo = input.readString();
       } else {
         input.skip(ftype);
       }
       break;
       case 15:
       if (ftype == Thrift.Type.STRING) {
-        this.remark = input.readString();
+        this.mac = input.readString();
       } else {
         input.skip(ftype);
       }
       break;
       case 16:
       if (ftype == Thrift.Type.STRING) {
-        this.extBin = input.readBinary();
+        this.remark = input.readString();
       } else {
         input.skip(ftype);
       }
       break;
       case 17:
       if (ftype == Thrift.Type.STRING) {
-        this.extTxt = input.readString();
+        this.extBin = input.readBinary();
       } else {
         input.skip(ftype);
       }
       break;
       case 18:
+      if (ftype == Thrift.Type.STRING) {
+        this.extTxt = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 19:
       if (ftype == Thrift.Type.I64) {
         this.createTime = input.readI64();
       } else {
         input.skip(ftype);
       }
       break;
-      case 19:
+      case 20:
       if (ftype == Thrift.Type.I64) {
         this.updateTime = input.readI64();
       } else {
@@ -2053,38 +2080,43 @@ DeviceBean.prototype.write = function(output) {
     output.writeString(this.version);
     output.writeFieldEnd();
   }
+  if (this.sdkVersion !== null && this.sdkVersion !== undefined) {
+    output.writeFieldBegin('sdkVersion', Thrift.Type.STRING, 13);
+    output.writeString(this.sdkVersion);
+    output.writeFieldEnd();
+  }
   if (this.serialNo !== null && this.serialNo !== undefined) {
-    output.writeFieldBegin('serialNo', Thrift.Type.STRING, 13);
+    output.writeFieldBegin('serialNo', Thrift.Type.STRING, 14);
     output.writeString(this.serialNo);
     output.writeFieldEnd();
   }
   if (this.mac !== null && this.mac !== undefined) {
-    output.writeFieldBegin('mac', Thrift.Type.STRING, 14);
+    output.writeFieldBegin('mac', Thrift.Type.STRING, 15);
     output.writeString(this.mac);
     output.writeFieldEnd();
   }
   if (this.remark !== null && this.remark !== undefined) {
-    output.writeFieldBegin('remark', Thrift.Type.STRING, 15);
+    output.writeFieldBegin('remark', Thrift.Type.STRING, 16);
     output.writeString(this.remark);
     output.writeFieldEnd();
   }
   if (this.extBin !== null && this.extBin !== undefined) {
-    output.writeFieldBegin('extBin', Thrift.Type.STRING, 16);
+    output.writeFieldBegin('extBin', Thrift.Type.STRING, 17);
     output.writeBinary(this.extBin);
     output.writeFieldEnd();
   }
   if (this.extTxt !== null && this.extTxt !== undefined) {
-    output.writeFieldBegin('extTxt', Thrift.Type.STRING, 17);
+    output.writeFieldBegin('extTxt', Thrift.Type.STRING, 18);
     output.writeString(this.extTxt);
     output.writeFieldEnd();
   }
   if (this.createTime !== null && this.createTime !== undefined) {
-    output.writeFieldBegin('createTime', Thrift.Type.I64, 18);
+    output.writeFieldBegin('createTime', Thrift.Type.I64, 19);
     output.writeI64(this.createTime);
     output.writeFieldEnd();
   }
   if (this.updateTime !== null && this.updateTime !== undefined) {
-    output.writeFieldBegin('updateTime', Thrift.Type.I64, 19);
+    output.writeFieldBegin('updateTime', Thrift.Type.I64, 20);
     output.writeI64(this.updateTime);
     output.writeFieldEnd();
   }
