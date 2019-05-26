@@ -174,22 +174,22 @@ public interface IFaceLog{
 
 	/**
 	 * 返回 where 指定的所有人员记录
-	 * @param where SQL条件语句
+	 * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
 	 * @return 返回 fl_person.id 列表
 	 */
 	public List<Integer> loadPersonIdByWhere(String where);
 	/**
 	 * 返回 where 指定的所有人员记录
-	 * @param where SQL条件语句
+	 * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
 	 * @param startRow 记录起始行号 (first row = 1, last row = -1)
 	 * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
-	 * @return
+	 * @return 人员记录列表
 	 */
 	public List<PersonBean> loadPersonByWhere(String where, int startRow, int numRows);
 	/**
 	 * 返回满足{@code where}条件的日志记录(fl_person)数目
-	 * @param where 为{@code null}时返回所有记录
-	 * @return
+	 * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+	 * @return 返回满足{@code where}条件的日志记录(fl_person)数目
 	 */
 	public int countPersonByWhere(String where);
 	
@@ -375,7 +375,7 @@ public interface IFaceLog{
 	/**
 	 * 日志查询<br>
 	 * 根据{@code where}指定的查询条件查询日志记录
-	 * @param where
+	 * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
 	 * @param startRow 记录起始行号 (first row = 1, last row = -1)
 	 * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
 	 * @return
@@ -385,40 +385,43 @@ public interface IFaceLog{
 	/**
 	 * 日志查询<br>
 	 * 根据{@code where}指定的查询条件查询日志记录{@link LogLightBean}
-	 * @param where
-	 * @param startRow
-	 * @param numRows
+	 * @param where 'WHERE'开头的SQL条件语句
+	 * @param startRow 记录起始行号 (first row = 1, last row = -1)
+	 * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
 	 * @return
 	 */
 	public List<LogLightBean> loadLogLightByWhere(String where, int startRow, int numRows);
 	/**
 	 * 返回符合{@code where}条件的记录条数
-	 * @param where
-	 * @return
+	 * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+	 * @return 返回符合{@code where}条件的记录条数
 	 */
 	public int countLogLightByWhere(String where);
 	/**
 	 * 返回满足{@code where}条件的日志记录(fl_log)数目
-	 * @param where 为{@code null}时返回所有记录
-	 * @return
+	 * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+	 * @return 返回满足{@code where}条件的日志记录(fl_log)数目
 	 */
 	public int countLogByWhere(String where);
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
-     * @see #loadLogLightByWhere(String,int,int)
-     * @throws IllegalArgumentException {@code timestamp}为{@code null}时
+     * @param timestamp 时间戳
+	 * @param startRow 记录起始行号 (first row = 1, last row = -1)
+	 * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
      */
 	public List<LogLightBean> loadLogLightByVerifyTime(long timestamp,int startRow, int numRows);
     /**
      * 返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @param timestamp 时间戳
+     * @return 满足条件的记录条数
      * @see #countLogLightByWhere(String)
      */
 	 public int countLogLightByVerifyTime(long timestamp);
 	/**
-	 * 判断md5指定的图像记录是否存在
-	 * @param md5
-	 * @return
+	 * 判断{@code md5}指定的图像记录是否存在
+	 * @param md5 图像的MD5校验码
+	 * @return 记录存在返回{@code true},否则返回{@code false}
 	 */
 	public boolean existsImage(String md5);
 
@@ -429,7 +432,7 @@ public interface IFaceLog{
 	 * @param faceBean 关联的人脸信息对象,可为null
 	 * @param personId 关联的人员id(fl_person.id),可为null
 	 * @param token 访问令牌
-	 * @return
+	 * @return 保存的图像记录
 	 * @throws DuplicateRecordException 数据库中已经存在要保存的图像数据
 	 */
 	public ImageBean addImage(byte[] imageData, Integer deviceId, FaceBean faceBean, Integer personId, Token token)
@@ -592,38 +595,38 @@ public interface IFaceLog{
 	 * 更新设备记录(必须是已经存在的设备记录，否则抛出异常)
 	 * @param deviceBean
 	 * @param token 访问令牌
-	 * @return
+	 * @return 返回设备记录
 	 */
 	public DeviceBean updateDevice(DeviceBean deviceBean, Token token);
 	/**
 	 * 返回{@code deviceId}指定的设备记录
 	 * @param deviceId
-	 * @return
+	 * @return 返回设备记录
 	 */
 	public DeviceBean getDevice(int deviceId);
 	/**
 	 * 返回 {@code idList} 指定的设备记录
 	 * @param idList
-	 * @return
+	 * @return 返回设备记录列表
 	 */
 	public List<DeviceBean> getDevices(List<Integer> idList);
 	/**
 	 * 根据{@code where}指定的查询条件查询设备记录
-	 * @param where SQL 条件语句
+	 * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
 	 * @param startRow 记录起始行号 (first row = 1, last row = -1)
 	 * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
-	 * @return
+	 * @return 返回设备记录列表
 	 */
 	public List<DeviceBean> loadDeviceByWhere(String where,int startRow, int numRows);
 	/**
 	 * 返回满足{@code where} SQL条件语句的fl_device记录总数
-	 * @param where
-	 * @return
+	 * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+	 * @return 返回设备ID列表
 	 */
 	public int countDeviceByWhere(String where);
 	/**
 	 * 根据{@code where}指定的查询条件查询设备记录
-	 * @param where
+	 * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
 	 * @return 返回设备ID列表
 	 */
 	public List<Integer> loadDeviceIdByWhere(String where);
@@ -776,7 +779,7 @@ public interface IFaceLog{
 	public List<Integer> getPersonGroupsBelongs(int personId);
     /**
      * 查询{@code where} SQL条件语句指定的记录
-     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(小于0时返回所有记录)
      * @return 设备组ID列表
@@ -784,12 +787,15 @@ public interface IFaceLog{
     public List<Integer> loadDeviceGroupByWhere(String where,int startRow, int numRows);
     /**
      * 返回满足{@code where} SQL条件语句的fl_device_group记录总数
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+     * @return 返回满足{@code where} SQL条件语句的fl_device_group记录总数
      */
     public int countDeviceGroupByWhere(String where);
     /** 
      * 查询{@code where}条件指定的记录
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
      * @return 返回查询结果记录的主键
-     * @see #loadDeviceGroupByWhere(String,int,int)
+     * @see 设备组ID列表
      */
     public List<Integer> loadDeviceGroupIdByWhere(String where);
     
@@ -959,7 +965,7 @@ public interface IFaceLog{
 	public List<PermitBean> loadPermitByUpdate(long timestamp);
     /**
      * 查询{@code where} SQL条件语句指定的记录
-     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(小于0时返回所有记录)
      * @return 人员组ID列表
@@ -967,12 +973,15 @@ public interface IFaceLog{
     public List<Integer> loadPersonGroupByWhere(String where,int startRow, int numRows);
     /**
      * 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
+     * @return 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
      * @see TableManager#countWhere(String)
      */
     public int countPersonGroupByWhere(String where);
     /** 
      * 查询{@code where}条件指定的记录
-     * @return 返回查询结果记录的主键
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
+     * @return 返回人员组列表
      * @see #loadPersonGroupByWhere(String,int,int)
      */
     public List<Integer> loadPersonGroupIdByWhere(String where);

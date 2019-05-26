@@ -221,7 +221,7 @@ public class IFaceLogSpringController {
      * @param faceBean 关联的人脸信息对象,可为null
      * @param personId 关联的人员id(fl_person.id),可为null
      * @param token 访问令牌
-     * @return 
+     * @return 保存的图像记录
      * @throws DuplicateRecordException 数据库中已经存在要保存的图像数据
      */
     @ResponseBody
@@ -689,14 +689,14 @@ public class IFaceLogSpringController {
     }
     /**
      * 返回满足{@code where} SQL条件语句的fl_device记录总数
-     * @param where
-     * @return 
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+     * @return 返回设备ID列表
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/countDeviceByWhere", method = RequestMethod.POST)
     @ApiOperation(value = "返回满足{@code where} SQL条件语句的fl_device记录总数",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "", paramType="form", dataType="String")})
+            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String")})
     public Response countDeviceByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -711,12 +711,14 @@ public class IFaceLogSpringController {
     }
     /**
      * 返回满足{@code where} SQL条件语句的fl_device_group记录总数
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+     * @return 返回满足{@code where} SQL条件语句的fl_device_group记录总数
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/countDeviceGroupByWhere", method = RequestMethod.POST)
     @ApiOperation(value = "返回满足{@code where} SQL条件语句的fl_device_group记录总数",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "", paramType="form", dataType="String")})
+            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String")})
     public Response countDeviceGroupByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -731,14 +733,14 @@ public class IFaceLogSpringController {
     }
     /**
      * 返回满足{@code where}条件的日志记录(fl_log)数目
-     * @param where 为{@code null}时返回所有记录
-     * @return 
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+     * @return 返回满足{@code where}条件的日志记录(fl_log)数目
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/countLogByWhere", method = RequestMethod.POST)
     @ApiOperation(value = "返回满足{@code where}条件的日志记录(fl_log)数目",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "为{@code null}时返回所有记录", paramType="form", dataType="String")})
+            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String")})
     public Response countLogByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -753,13 +755,15 @@ public class IFaceLogSpringController {
     }
     /**
      * 返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @param timestamp 时间戳
+     * @return 满足条件的记录条数
      * @see #countLogLightByWhere(String)
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/countLogLightByVerifyTime", method = RequestMethod.POST)
     @ApiOperation(value = "返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "timestamp", value = "为{@code null}时返回所有记录", paramType="form", dataType="long")})
+            @ApiImplicitParam(name = "timestamp", value = "时间戳", paramType="form", dataType="long")})
     public Response countLogLightByVerifyTime(@RequestParam("timestamp") long timestamp) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -774,14 +778,14 @@ public class IFaceLogSpringController {
     }
     /**
      * 返回符合{@code where}条件的记录条数
-     * @param where
-     * @return 
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+     * @return 返回符合{@code where}条件的记录条数
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/countLogLightByWhere", method = RequestMethod.POST)
     @ApiOperation(value = "返回符合{@code where}条件的记录条数",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "", paramType="form", dataType="String")})
+            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String")})
     public Response countLogLightByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -796,14 +800,14 @@ public class IFaceLogSpringController {
     }
     /**
      * 返回满足{@code where}条件的日志记录(fl_person)数目
-     * @param where 为{@code null}时返回所有记录
-     * @return 
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+     * @return 返回满足{@code where}条件的日志记录(fl_person)数目
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/countPersonByWhere", method = RequestMethod.POST)
     @ApiOperation(value = "返回满足{@code where}条件的日志记录(fl_person)数目",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "为{@code null}时返回所有记录", paramType="form", dataType="String")})
+            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String")})
     public Response countPersonByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -818,13 +822,15 @@ public class IFaceLogSpringController {
     }
     /**
      * 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
+     * @return 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
      * @see TableManager#countWhere(String)
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/countPersonGroupByWhere", method = RequestMethod.POST)
     @ApiOperation(value = "返回满足{@code where} SQL条件语句的 fl_person_group 记录总数",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "为{@code null}时返回所有记录", paramType="form", dataType="String")})
+            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录", paramType="form", dataType="String")})
     public Response countPersonGroupByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1298,15 +1304,15 @@ public class IFaceLogSpringController {
         return response;
     }
     /**
-     * 判断md5指定的图像记录是否存在
-     * @param md5
-     * @return 
+     * 判断{@code md5}指定的图像记录是否存在
+     * @param md5 图像的MD5校验码
+     * @return 记录存在返回{@code true},否则返回{@code false}
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/existsImage", method = RequestMethod.POST)
-    @ApiOperation(value = "判断md5指定的图像记录是否存在",httpMethod="POST")
+    @ApiOperation(value = "判断{@code md5}指定的图像记录是否存在",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "md5", value = "", paramType="form", dataType="String")})
+            @ApiImplicitParam(name = "md5", value = "图像的MD5校验码", paramType="form", dataType="String")})
     public Response existsImage(@RequestParam("md5") String md5) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -1344,7 +1350,7 @@ public class IFaceLogSpringController {
     /**
      * 返回{@code deviceId}指定的设备记录
      * @param deviceId
-     * @return 
+     * @return 返回设备记录
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/getDevice", method = RequestMethod.POST)
@@ -1505,7 +1511,7 @@ public class IFaceLogSpringController {
     /**
      * 返回 {@code idList} 指定的设备记录
      * @param idList
-     * @return 
+     * @return 返回设备记录列表
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/getDevices", method = RequestMethod.POST)
@@ -2535,16 +2541,16 @@ public class IFaceLogSpringController {
     }
     /**
      * 根据{@code where}指定的查询条件查询设备记录
-     * @param where SQL 条件语句
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
      * @param startRow 记录起始行号 (first row = 1, last row = -1)
      * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
-     * @return 
+     * @return 返回设备记录列表
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/loadDeviceByWhere", method = RequestMethod.POST)
     @ApiOperation(value = "根据{@code where}指定的查询条件查询设备记录",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "SQL 条件语句", paramType="form", dataType="String"),
+            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String"),
         @ApiImplicitParam(name = "startRow", value = "记录起始行号 (first row = 1, last row = -1)", paramType="form", dataType="int"),
         @ApiImplicitParam(name = "numRows", value = "返回记录条数 为负值是返回{@code startRow}开始的所有行", paramType="form", dataType="int")})
     public Response loadDeviceByWhere(@RequestParam("where") String where,
@@ -2563,7 +2569,7 @@ public class IFaceLogSpringController {
     }
     /**
      * 查询{@code where} SQL条件语句指定的记录
-     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(小于0时返回所有记录)
      * @return 设备组ID列表
@@ -2572,7 +2578,7 @@ public class IFaceLogSpringController {
     @RequestMapping(value = "/IFaceLog/loadDeviceGroupByWhere", method = RequestMethod.POST)
     @ApiOperation(value = "查询{@code where} SQL条件语句指定的记录",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "SQL 条件语句,为{@code null}或空时加载所有记录", paramType="form", dataType="String"),
+            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String"),
         @ApiImplicitParam(name = "startRow", value = "返回记录的起始行(首行=1,尾行=-1)", paramType="form", dataType="int"),
         @ApiImplicitParam(name = "numRows", value = "返回记录条数(小于0时返回所有记录)", paramType="form", dataType="int")})
     public Response loadDeviceGroupByWhere(@RequestParam("where") String where,
@@ -2591,14 +2597,15 @@ public class IFaceLogSpringController {
     }
     /**
      * 查询{@code where}条件指定的记录
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
      * @return 返回查询结果记录的主键
-     * @see #loadDeviceGroupByWhere(String,int,int)
+     * @see 设备组ID列表
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/loadDeviceGroupIdByWhere", method = RequestMethod.POST)
     @ApiOperation(value = "查询{@code where}条件指定的记录",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "返回记录条数(小于0时返回所有记录)", paramType="form", dataType="String")})
+            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String")})
     public Response loadDeviceGroupIdByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -2613,14 +2620,14 @@ public class IFaceLogSpringController {
     }
     /**
      * 根据{@code where}指定的查询条件查询设备记录
-     * @param where
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
      * @return 返回设备ID列表
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/loadDeviceIdByWhere", method = RequestMethod.POST)
     @ApiOperation(value = "根据{@code where}指定的查询条件查询设备记录",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "", paramType="form", dataType="String")})
+            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String")})
     public Response loadDeviceIdByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -2660,7 +2667,7 @@ public class IFaceLogSpringController {
     /**
      * 日志查询<br>
      * 根据{@code where}指定的查询条件查询日志记录
-     * @param where
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
      * @param startRow 记录起始行号 (first row = 1, last row = -1)
      * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
      * @return 
@@ -2670,7 +2677,7 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "日志查询<br>\n"
 +" 根据{@code where}指定的查询条件查询日志记录",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "", paramType="form", dataType="String"),
+            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String"),
         @ApiImplicitParam(name = "startRow", value = "记录起始行号 (first row = 1, last row = -1)", paramType="form", dataType="int"),
         @ApiImplicitParam(name = "numRows", value = "返回记录条数 为负值是返回{@code startRow}开始的所有行", paramType="form", dataType="int")})
     public Response loadLogByWhere(@RequestParam("where") String where,
@@ -2690,16 +2697,17 @@ public class IFaceLogSpringController {
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
-     * @see #loadLogLightByWhere(String,int,int)
-     * @throws IllegalArgumentException {@code timestamp}为{@code null}时
+     * @param timestamp 时间戳
+     * @param startRow 记录起始行号 (first row = 1, last row = -1)
+     * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/loadLogLightByVerifyTime", method = RequestMethod.POST)
     @ApiOperation(value = "(主动更新机制实现)<br>\n"
 +" 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "timestamp", value = "返回记录条数 为负值是返回{@code startRow}开始的所有行", paramType="form", dataType="long"),
-        @ApiImplicitParam(name = "startRow", value = "返回记录条数 为负值是返回{@code startRow}开始的所有行", paramType="form", dataType="int"),
+            @ApiImplicitParam(name = "timestamp", value = "时间戳", paramType="form", dataType="long"),
+        @ApiImplicitParam(name = "startRow", value = "记录起始行号 (first row = 1, last row = -1)", paramType="form", dataType="int"),
         @ApiImplicitParam(name = "numRows", value = "返回记录条数 为负值是返回{@code startRow}开始的所有行", paramType="form", dataType="int")})
     public Response loadLogLightByVerifyTime(@RequestParam("timestamp") long timestamp,
         @RequestParam("startRow") int startRow,
@@ -2718,9 +2726,9 @@ public class IFaceLogSpringController {
     /**
      * 日志查询<br>
      * 根据{@code where}指定的查询条件查询日志记录{@link LogLightBean}
-     * @param where
-     * @param startRow
-     * @param numRows
+     * @param where 'WHERE'开头的SQL条件语句
+     * @param startRow 记录起始行号 (first row = 1, last row = -1)
+     * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
      * @return 
      */
     @ResponseBody
@@ -2728,9 +2736,9 @@ public class IFaceLogSpringController {
     @ApiOperation(value = "日志查询<br>\n"
 +" 根据{@code where}指定的查询条件查询日志记录{@link LogLightBean}",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "startRow", value = "", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "numRows", value = "", paramType="form", dataType="int")})
+            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句", paramType="form", dataType="String"),
+        @ApiImplicitParam(name = "startRow", value = "记录起始行号 (first row = 1, last row = -1)", paramType="form", dataType="int"),
+        @ApiImplicitParam(name = "numRows", value = "返回记录条数 为负值是返回{@code startRow}开始的所有行", paramType="form", dataType="int")})
     public Response loadLogLightByWhere(@RequestParam("where") String where,
         @RequestParam("startRow") int startRow,
         @RequestParam("numRows") int numRows) 
@@ -2771,16 +2779,16 @@ public class IFaceLogSpringController {
     }
     /**
      * 返回 where 指定的所有人员记录
-     * @param where SQL条件语句
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
      * @param startRow 记录起始行号 (first row = 1, last row = -1)
      * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
-     * @return 
+     * @return 人员记录列表
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/loadPersonByWhere", method = RequestMethod.POST)
     @ApiOperation(value = "返回 where 指定的所有人员记录",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "SQL条件语句", paramType="form", dataType="String"),
+            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录", paramType="form", dataType="String"),
         @ApiImplicitParam(name = "startRow", value = "记录起始行号 (first row = 1, last row = -1)", paramType="form", dataType="int"),
         @ApiImplicitParam(name = "numRows", value = "返回记录条数 为负值是返回{@code startRow}开始的所有行", paramType="form", dataType="int")})
     public Response loadPersonByWhere(@RequestParam("where") String where,
@@ -2799,7 +2807,7 @@ public class IFaceLogSpringController {
     }
     /**
      * 查询{@code where} SQL条件语句指定的记录
-     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(小于0时返回所有记录)
      * @return 人员组ID列表
@@ -2808,7 +2816,7 @@ public class IFaceLogSpringController {
     @RequestMapping(value = "/IFaceLog/loadPersonGroupByWhere", method = RequestMethod.POST)
     @ApiOperation(value = "查询{@code where} SQL条件语句指定的记录",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "SQL 条件语句,为{@code null}或空时加载所有记录", paramType="form", dataType="String"),
+            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录", paramType="form", dataType="String"),
         @ApiImplicitParam(name = "startRow", value = "返回记录的起始行(首行=1,尾行=-1)", paramType="form", dataType="int"),
         @ApiImplicitParam(name = "numRows", value = "返回记录条数(小于0时返回所有记录)", paramType="form", dataType="int")})
     public Response loadPersonGroupByWhere(@RequestParam("where") String where,
@@ -2827,14 +2835,15 @@ public class IFaceLogSpringController {
     }
     /**
      * 查询{@code where}条件指定的记录
-     * @return 返回查询结果记录的主键
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
+     * @return 返回人员组列表
      * @see #loadPersonGroupByWhere(String,int,int)
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/loadPersonGroupIdByWhere", method = RequestMethod.POST)
     @ApiOperation(value = "查询{@code where}条件指定的记录",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "返回记录条数(小于0时返回所有记录)", paramType="form", dataType="String")})
+            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录", paramType="form", dataType="String")})
     public Response loadPersonGroupIdByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -2873,14 +2882,14 @@ public class IFaceLogSpringController {
     }
     /**
      * 返回 where 指定的所有人员记录
-     * @param where SQL条件语句
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
      * @return 返回 fl_person.id 列表
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/loadPersonIdByWhere", method = RequestMethod.POST)
     @ApiOperation(value = "返回 where 指定的所有人员记录",httpMethod="POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "SQL条件语句", paramType="form", dataType="String")})
+            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录", paramType="form", dataType="String")})
     public Response loadPersonIdByWhere(@RequestParam("where") String where) 
         {
         Response response = responseFactory.newIFaceLogResponse();
@@ -3795,7 +3804,7 @@ public class IFaceLogSpringController {
      * 更新设备记录(必须是已经存在的设备记录，否则抛出异常)
      * @param deviceBean
      * @param token 访问令牌
-     * @return 
+     * @return 返回设备记录
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/updateDevice", method = RequestMethod.POST)
