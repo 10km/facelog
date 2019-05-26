@@ -158,25 +158,25 @@ CREATE TABLE IF NOT EXISTS fl_face (
   `image_md5`   char(32) NOT NULL COMMENT '外键,所属图像id',
   ###### 人脸检测基本信息 <<
   # 人脸位置坐标
-  `face_left`   int NOT NULL ,
-  `face_top`    int NOT NULL ,
-  `face_width`  int NOT NULL ,
-  `face_height` int NOT NULL ,
+  `face_left`   int NOT NULL COMMENT '人脸位置矩形:x',
+  `face_top`    int NOT NULL COMMENT '人脸位置矩形:y',
+  `face_width`  int NOT NULL COMMENT '人脸位置矩形:width',
+  `face_height` int NOT NULL COMMENT '人脸位置矩形:height',
   # 眼睛位置 
-  `eye_leftx`   int ,
-  `eye_lefty`   int ,
-  `eye_rightx`  int ,
-  `eye_righty`  int ,
+  `eye_leftx`   int COMMENT '左眼位置:x',
+  `eye_lefty`   int COMMENT '左眼位置:y',
+  `eye_rightx`  int COMMENT '右眼位置:x',
+  `eye_righty`  int COMMENT '右眼位置:y',
   # 嘴巴位置 
-  `mouth_x`     int ,
-  `mouth_y`     int ,
+  `mouth_x`     int COMMENT '嘴巴位置:x',
+  `mouth_y`     int COMMENT '嘴巴位置:y',
   # 鼻子位置
-  `nose_x`      int ,
-  `nose_y`      int ,
-  # 人脸角度 
-  `angle_yaw`   int ,
-  `angle_pitch` int ,
-  `angle_roll`  int ,
+  `nose_x`      int COMMENT '鼻子位置:x',
+  `nose_y`      int COMMENT '鼻子位置:y',
+  # 人脸姿态 
+  `angle_yaw`   int COMMENT '人脸姿态:偏航角',
+  `angle_pitch` int COMMENT '人脸姿态:俯仰角',
+  `angle_roll`  int COMMENT '人脸姿态:滚转角',
   ###### 人脸检测基本信息 >> 
   `ext_info`    blob DEFAULT NULL COMMENT '扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析',
   `feature_md5` char(32) DEFAULT NULL COMMENT '外键,人脸特征数据MD5 id',

@@ -45,7 +45,7 @@ public  class FlLogBean
     /** comments:外键,用于验证身份的人脸特征数据MD5 id */
     private String verifyFeature;
 
-    /** comments:外键,数据库中相似度最高的人脸 id */
+    /** comments:外键,现场采集的人脸信息记录id */
     private Integer compareFace;
 
     /** comments:验证状态,NULL,0:允许通过,其他:拒绝 */
@@ -403,7 +403,7 @@ public  class FlLogBean
      * <ul>
      * <li>full name: fl_log.compare_face</li>
      * <li> foreign key: fl_face.id</li>
-     * <li>comments: 外键,数据库中相似度最高的人脸 id</li>
+     * <li>comments: 外键,现场采集的人脸信息记录id</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -1351,7 +1351,7 @@ public  class FlLogBean
         }
         /** 
          * fill the field : fl_log.compare_face
-         * @param compareFace 外键,数据库中相似度最高的人脸 id
+         * @param compareFace 外键,现场采集的人脸信息记录id
          * @see FlLogBean#getCompareFace()
          * @see FlLogBean#setCompareFace(Integer)
          */

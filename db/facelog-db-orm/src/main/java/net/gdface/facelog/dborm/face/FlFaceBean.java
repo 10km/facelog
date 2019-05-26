@@ -36,34 +36,49 @@ public  class FlFaceBean
     /** comments:外键,所属图像id */
     private String imageMd5;
 
+    /** comments:人脸位置矩形:x */
     private Integer faceLeft;
 
+    /** comments:人脸位置矩形:y */
     private Integer faceTop;
 
+    /** comments:人脸位置矩形:width */
     private Integer faceWidth;
 
+    /** comments:人脸位置矩形:height */
     private Integer faceHeight;
 
+    /** comments:左眼位置:x */
     private Integer eyeLeftx;
 
+    /** comments:左眼位置:y */
     private Integer eyeLefty;
 
+    /** comments:右眼位置:x */
     private Integer eyeRightx;
 
+    /** comments:右眼位置:y */
     private Integer eyeRighty;
 
+    /** comments:嘴巴位置:x */
     private Integer mouthX;
 
+    /** comments:嘴巴位置:y */
     private Integer mouthY;
 
+    /** comments:鼻子位置:x */
     private Integer noseX;
 
+    /** comments:鼻子位置:y */
     private Integer noseY;
 
+    /** comments:人脸姿态:偏航角 */
     private Integer angleYaw;
 
+    /** comments:人脸姿态:俯仰角 */
     private Integer anglePitch;
 
+    /** comments:人脸姿态:滚转角 */
     private Integer angleRoll;
 
     /** comments:扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析 */
@@ -302,6 +317,7 @@ public  class FlFaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.face_left</li>
+     * <li>comments: 人脸位置矩形:x</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
@@ -358,6 +374,7 @@ public  class FlFaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.face_top</li>
+     * <li>comments: 人脸位置矩形:y</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
@@ -414,6 +431,7 @@ public  class FlFaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.face_width</li>
+     * <li>comments: 人脸位置矩形:width</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
@@ -470,6 +488,7 @@ public  class FlFaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.face_height</li>
+     * <li>comments: 人脸位置矩形:height</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
@@ -526,6 +545,7 @@ public  class FlFaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.eye_leftx</li>
+     * <li>comments: 左眼位置:x</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -581,6 +601,7 @@ public  class FlFaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.eye_lefty</li>
+     * <li>comments: 左眼位置:y</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -636,6 +657,7 @@ public  class FlFaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.eye_rightx</li>
+     * <li>comments: 右眼位置:x</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -691,6 +713,7 @@ public  class FlFaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.eye_righty</li>
+     * <li>comments: 右眼位置:y</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -746,6 +769,7 @@ public  class FlFaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.mouth_x</li>
+     * <li>comments: 嘴巴位置:x</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -801,6 +825,7 @@ public  class FlFaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.mouth_y</li>
+     * <li>comments: 嘴巴位置:y</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -856,6 +881,7 @@ public  class FlFaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.nose_x</li>
+     * <li>comments: 鼻子位置:x</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -911,6 +937,7 @@ public  class FlFaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.nose_y</li>
+     * <li>comments: 鼻子位置:y</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -966,6 +993,7 @@ public  class FlFaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.angle_yaw</li>
+     * <li>comments: 人脸姿态:偏航角</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -1021,6 +1049,7 @@ public  class FlFaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.angle_pitch</li>
+     * <li>comments: 人脸姿态:俯仰角</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -1076,6 +1105,7 @@ public  class FlFaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.angle_roll</li>
+     * <li>comments: 人脸姿态:滚转角</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -2063,7 +2093,7 @@ public  class FlFaceBean
         }
         /** 
          * fill the field : fl_face.face_left
-         * @param faceLeft 
+         * @param faceLeft 人脸位置矩形:x
          * @see FlFaceBean#getFaceLeft()
          * @see FlFaceBean#setFaceLeft(Integer)
          */
@@ -2073,7 +2103,7 @@ public  class FlFaceBean
         }
         /** 
          * fill the field : fl_face.face_top
-         * @param faceTop 
+         * @param faceTop 人脸位置矩形:y
          * @see FlFaceBean#getFaceTop()
          * @see FlFaceBean#setFaceTop(Integer)
          */
@@ -2083,7 +2113,7 @@ public  class FlFaceBean
         }
         /** 
          * fill the field : fl_face.face_width
-         * @param faceWidth 
+         * @param faceWidth 人脸位置矩形:width
          * @see FlFaceBean#getFaceWidth()
          * @see FlFaceBean#setFaceWidth(Integer)
          */
@@ -2093,7 +2123,7 @@ public  class FlFaceBean
         }
         /** 
          * fill the field : fl_face.face_height
-         * @param faceHeight 
+         * @param faceHeight 人脸位置矩形:height
          * @see FlFaceBean#getFaceHeight()
          * @see FlFaceBean#setFaceHeight(Integer)
          */
@@ -2103,7 +2133,7 @@ public  class FlFaceBean
         }
         /** 
          * fill the field : fl_face.eye_leftx
-         * @param eyeLeftx 
+         * @param eyeLeftx 左眼位置:x
          * @see FlFaceBean#getEyeLeftx()
          * @see FlFaceBean#setEyeLeftx(Integer)
          */
@@ -2113,7 +2143,7 @@ public  class FlFaceBean
         }
         /** 
          * fill the field : fl_face.eye_lefty
-         * @param eyeLefty 
+         * @param eyeLefty 左眼位置:y
          * @see FlFaceBean#getEyeLefty()
          * @see FlFaceBean#setEyeLefty(Integer)
          */
@@ -2123,7 +2153,7 @@ public  class FlFaceBean
         }
         /** 
          * fill the field : fl_face.eye_rightx
-         * @param eyeRightx 
+         * @param eyeRightx 右眼位置:x
          * @see FlFaceBean#getEyeRightx()
          * @see FlFaceBean#setEyeRightx(Integer)
          */
@@ -2133,7 +2163,7 @@ public  class FlFaceBean
         }
         /** 
          * fill the field : fl_face.eye_righty
-         * @param eyeRighty 
+         * @param eyeRighty 右眼位置:y
          * @see FlFaceBean#getEyeRighty()
          * @see FlFaceBean#setEyeRighty(Integer)
          */
@@ -2143,7 +2173,7 @@ public  class FlFaceBean
         }
         /** 
          * fill the field : fl_face.mouth_x
-         * @param mouthX 
+         * @param mouthX 嘴巴位置:x
          * @see FlFaceBean#getMouthX()
          * @see FlFaceBean#setMouthX(Integer)
          */
@@ -2153,7 +2183,7 @@ public  class FlFaceBean
         }
         /** 
          * fill the field : fl_face.mouth_y
-         * @param mouthY 
+         * @param mouthY 嘴巴位置:y
          * @see FlFaceBean#getMouthY()
          * @see FlFaceBean#setMouthY(Integer)
          */
@@ -2163,7 +2193,7 @@ public  class FlFaceBean
         }
         /** 
          * fill the field : fl_face.nose_x
-         * @param noseX 
+         * @param noseX 鼻子位置:x
          * @see FlFaceBean#getNoseX()
          * @see FlFaceBean#setNoseX(Integer)
          */
@@ -2173,7 +2203,7 @@ public  class FlFaceBean
         }
         /** 
          * fill the field : fl_face.nose_y
-         * @param noseY 
+         * @param noseY 鼻子位置:y
          * @see FlFaceBean#getNoseY()
          * @see FlFaceBean#setNoseY(Integer)
          */
@@ -2183,7 +2213,7 @@ public  class FlFaceBean
         }
         /** 
          * fill the field : fl_face.angle_yaw
-         * @param angleYaw 
+         * @param angleYaw 人脸姿态:偏航角
          * @see FlFaceBean#getAngleYaw()
          * @see FlFaceBean#setAngleYaw(Integer)
          */
@@ -2193,7 +2223,7 @@ public  class FlFaceBean
         }
         /** 
          * fill the field : fl_face.angle_pitch
-         * @param anglePitch 
+         * @param anglePitch 人脸姿态:俯仰角
          * @see FlFaceBean#getAnglePitch()
          * @see FlFaceBean#setAnglePitch(Integer)
          */
@@ -2203,7 +2233,7 @@ public  class FlFaceBean
         }
         /** 
          * fill the field : fl_face.angle_roll
-         * @param angleRoll 
+         * @param angleRoll 人脸姿态:滚转角
          * @see FlFaceBean#getAngleRoll()
          * @see FlFaceBean#setAngleRoll(Integer)
          */
