@@ -305,10 +305,11 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         }
         
         /**
-         * generate SQL query statement 
+         * generate SQL query(SELECT) statement,such as: 'SELECT id,name from mytable WHERE id=1'
          * @param fieldList
-         * @param where
-         * @return
+         * @param where where condition expression statement that start with 'WHERE',or {@code null}
+         * @return SQL statement string
+         * @throws IllegalArgumentException where condition expression don't start with 'WHERE'
          */
         protected String createSelectSql(int[] fieldList, String where){
             StringBuffer sql = new StringBuffer(128);
@@ -326,8 +327,11 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
                 }      
             }
             sql.append(" FROM " + this.getTableName() + " ");
-            if(null!=where){
-                sql.append(where);
+            if(null != where){
+                if(where.trim().toUpperCase().startsWith("WHERE")){
+                    sql.append(where);
+                }
+                throw new IllegalArgumentException("WHERE expression must start with 'WHERE'(case insensitive):[" + where + "]");
             }
             return sql.toString();
         }
