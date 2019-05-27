@@ -47,7 +47,8 @@ public interface ChannelConstant extends CommonConstant{
 #end###macro
 
 #channelDef(['fl_person','fl_device','fl_feature'] false 'Pubsub' ['Insert'])
-#channelDef(['fl_person','fl_device','fl_feature'] true  'Pubsub' ['Update','Delete'])
+#channelDef(['fl_person','fl_device'] true  'Pubsub' ['Update','Delete'])
+#channelDef(['fl_feature'] true  'Pubsub' ['Delete'])
 #channelDef(['fl_person_group','fl_device_group'] false 'Pubsub' ['Insert'])
 #channelDef(['fl_person_group','fl_device_group'] true  'Pubsub' ['Update','Delete'])
 #channelDef(['fl_permit'] true 'Pubsub' ['Insert','Update','Delete'] )

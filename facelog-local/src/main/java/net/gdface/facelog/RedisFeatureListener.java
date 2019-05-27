@@ -7,7 +7,6 @@ import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisPublisher;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.exception.RuntimeDaoException;
 
 /**
  * 特征表({@code fl_feature})变动侦听器<br>
@@ -18,7 +17,6 @@ import net.gdface.facelog.db.exception.RuntimeDaoException;
 class RedisFeatureListener extends TableListener.Adapter<FeatureBean> implements ChannelConstant{
 
 	private final RedisPublisher publisher;
-	private FeatureBean beforeUpdatedBean;	
 	public RedisFeatureListener() {
 		this(JedisPoolLazy.getDefaultInstance());
 	}
@@ -34,26 +32,15 @@ class RedisFeatureListener extends TableListener.Adapter<FeatureBean> implements
 		.execute();
 	}
 	@Override
-	public void beforeUpdate(FeatureBean bean) throws RuntimeDaoException {
-		// 保留更新前的数据
-		beforeUpdatedBean = bean.clone();
-	}
-	@Override
-	public void afterUpdate(FeatureBean bean) {
-		// beforeUpdatedBean 为 null，只可能因为侦听器是被异步调用的
-		checkState(beforeUpdatedBean != null,"beforeUpdatedBean must not be null");
-		new RedisPublishTask<FeatureBean>(
-				PUBSUB_FEATURE_UPDATE, 
-				beforeUpdatedBean, 
-				publisher)
-		.execute();
-	}
-
-	@Override
 	public void afterDelete(FeatureBean bean) {
+		FeatureBean deleted = bean.clone();		
+		// 为减少发送到redis数据体积，将特征码字段清除
+		int modified = deleted.getModified();
+		deleted.setFeature(null);
+		deleted.setModified(modified);
 		new RedisPublishTask<FeatureBean>(
 				PUBSUB_FEATURE_DELETE, 
-				bean, 
+				deleted, 
 				publisher)
 		.execute();		
 	}			
