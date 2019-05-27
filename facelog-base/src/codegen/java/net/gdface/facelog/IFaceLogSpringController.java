@@ -2082,7 +2082,7 @@ public class IFaceLogSpringController {
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/isLocal", method = RequestMethod.POST)
     @ApiOperation(value = "是否为本地实现",httpMethod="POST")
-    public Response isLocal( @RequestBody IsLocalArgs args) 
+    public Response isLocal() 
     {
             Response response = responseFactory.newIFaceLogResponse();
             try{
@@ -2324,7 +2324,7 @@ public class IFaceLogSpringController {
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/loadAllPerson", method = RequestMethod.POST)
     @ApiOperation(value = "返回所有人员记录",httpMethod="POST")
-    public Response loadAllPerson( @RequestBody LoadAllPersonArgs args) 
+    public Response loadAllPerson() 
     {
             Response response = responseFactory.newIFaceLogResponse();
             try{
@@ -3461,7 +3461,7 @@ public class IFaceLogSpringController {
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/version", method = RequestMethod.POST)
     @ApiOperation(value = "返回服务版本号",httpMethod="POST")
-    public Response version( @RequestBody VersionArgs args) 
+    public Response version() 
     {
             Response response = responseFactory.newIFaceLogResponse();
             try{
@@ -3493,7 +3493,7 @@ public class IFaceLogSpringController {
 +" <li>{@code SCM_BRANCH} -- GIT分支</li>\n"
 +" <li>{@code TIMESTAMP} -- 时间戳</li>\n"
 +" </ul>",httpMethod="POST")
-    public Response versionInfo( @RequestBody VersionInfoArgs args) 
+    public Response versionInfo() 
     {
             Response response = responseFactory.newIFaceLogResponse();
             try{
@@ -3505,7 +3505,6 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-
     /**
      * wrap arguments for method {@link #addFeature(AddFeatureWithImageArgs)}
      */
@@ -3524,7 +3523,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #addFeature(AddFeatureArgs)}
      */
@@ -3538,7 +3536,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #addFeature(AddFeatureMultiArgs)}
      */
@@ -3552,7 +3549,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #addImage(AddImageArgs)}
      */
@@ -3568,7 +3564,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #addLog(AddLogArgs)}
      */
@@ -3578,7 +3573,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #addLog(AddLogFullArgs)}
      */
@@ -3592,7 +3586,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #addLogs(AddLogsFullArgs)}
      */
@@ -3606,7 +3599,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #addLogs(AddLogsArgs)}
      */
@@ -3616,7 +3608,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #addPermit(AddPermitByIdArgs)}
      */
@@ -3628,7 +3619,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #addPermit(AddPermitArgs)}
      */
@@ -3640,7 +3630,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #applyAckChannel(ApplyAckChannelArgs)}
      */
@@ -3648,7 +3637,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #applyAckChannel(ApplyAckChannelWithDurationArgs)}
      */
@@ -3658,7 +3646,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="通道有效时间(秒) 大于0有效,否则使用默认的有效期" ,required=true ,dataType="long")
         public long duration;
     }
-
     /**
      * wrap arguments for method {@link #applyCmdSn(ApplyCmdSnArgs)}
      */
@@ -3666,7 +3653,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #applyPersonToken(ApplyPersonTokenArgs)}
      */
@@ -3678,7 +3664,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)" ,required=true ,dataType="boolean")
         public boolean isMd5;
     }
-
     /**
      * wrap arguments for method {@link #applyRootToken(ApplyRootTokenArgs)}
      */
@@ -3688,7 +3673,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)" ,required=true ,dataType="boolean")
         public boolean isMd5;
     }
-
     /**
      * wrap arguments for method {@link #applyUserToken(ApplyUserTokenArgs)}
      */
@@ -3700,7 +3684,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)" ,required=true ,dataType="boolean")
         public boolean isMd5;
     }
-
     /**
      * wrap arguments for method {@link #bindBorder(BindBorderArgs)}
      */
@@ -3712,7 +3695,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #childListForDeviceGroup(ChildListForDeviceGroupArgs)}
      */
@@ -3720,7 +3702,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int deviceGroupId;
     }
-
     /**
      * wrap arguments for method {@link #childListForPersonGroup(ChildListForPersonGroupArgs)}
      */
@@ -3728,7 +3709,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personGroupId;
     }
-
     /**
      * wrap arguments for method {@link #countDeviceByWhere(CountDeviceByWhereArgs)}
      */
@@ -3736,7 +3716,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录" ,required=true ,dataType="String")
         public String where;
     }
-
     /**
      * wrap arguments for method {@link #countDeviceGroupByWhere(CountDeviceGroupByWhereArgs)}
      */
@@ -3744,7 +3723,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录" ,required=true ,dataType="String")
         public String where;
     }
-
     /**
      * wrap arguments for method {@link #countLogByWhere(CountLogByWhereArgs)}
      */
@@ -3752,7 +3730,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录" ,required=true ,dataType="String")
         public String where;
     }
-
     /**
      * wrap arguments for method {@link #countLogLightByVerifyTime(CountLogLightByVerifyTimeArgs)}
      */
@@ -3760,7 +3737,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="时间戳" ,required=true ,dataType="long")
         public long timestamp;
     }
-
     /**
      * wrap arguments for method {@link #countLogLightByWhere(CountLogLightByWhereArgs)}
      */
@@ -3768,7 +3744,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录" ,required=true ,dataType="String")
         public String where;
     }
-
     /**
      * wrap arguments for method {@link #countPersonByWhere(CountPersonByWhereArgs)}
      */
@@ -3776,7 +3751,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录" ,required=true ,dataType="String")
         public String where;
     }
-
     /**
      * wrap arguments for method {@link #countPersonGroupByWhere(CountPersonGroupByWhereArgs)}
      */
@@ -3784,7 +3758,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录" ,required=true ,dataType="String")
         public String where;
     }
-
     /**
      * wrap arguments for method {@link #deleteAllFeaturesByPersonId(DeleteAllFeaturesByPersonIdArgs)}
      */
@@ -3796,7 +3769,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #deleteDeviceGroup(DeleteDeviceGroupArgs)}
      */
@@ -3806,7 +3778,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #deleteFeature(DeleteFeatureArgs)}
      */
@@ -3818,7 +3789,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #deleteGroupPermitOnDeviceGroup(DeleteGroupPermitOnDeviceGroupArgs)}
      */
@@ -3828,7 +3798,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #deleteImage(DeleteImageArgs)}
      */
@@ -3838,7 +3807,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #deletePermit(DeletePermitByIdArgs)}
      */
@@ -3850,7 +3818,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #deletePermit(DeletePermitArgs)}
      */
@@ -3862,7 +3829,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #deletePerson(DeletePersonArgs)}
      */
@@ -3872,7 +3838,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #deletePersonByPapersNum(DeletePersonByPapersNumArgs)}
      */
@@ -3882,7 +3847,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #deletePersonGroup(DeletePersonGroupArgs)}
      */
@@ -3892,7 +3856,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #deletePersonGroupPermit(DeletePersonGroupPermitArgs)}
      */
@@ -3902,7 +3865,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #deletePersons(DeletePersonsArgs)}
      */
@@ -3912,7 +3874,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #deletePersonsByPapersNum(DeletePersonsByPapersNumArgs)}
      */
@@ -3922,7 +3883,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #disablePerson(DisablePersonArgs)}
      */
@@ -3932,7 +3892,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #disablePerson(DisablePersonListArgs)}
      */
@@ -3942,7 +3901,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #existsDevice(ExistsDeviceArgs)}
      */
@@ -3950,7 +3908,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int id;
     }
-
     /**
      * wrap arguments for method {@link #existsFeature(ExistsFeatureArgs)}
      */
@@ -3958,7 +3915,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="String")
         public String md5;
     }
-
     /**
      * wrap arguments for method {@link #existsImage(ExistsImageArgs)}
      */
@@ -3966,7 +3922,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="图像的MD5校验码" ,required=true ,dataType="String")
         public String md5;
     }
-
     /**
      * wrap arguments for method {@link #existsPerson(ExistsPersonArgs)}
      */
@@ -3974,7 +3929,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int persionId;
     }
-
     /**
      * wrap arguments for method {@link #getDevice(GetDeviceArgs)}
      */
@@ -3982,7 +3936,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int deviceId;
     }
-
     /**
      * wrap arguments for method {@link #getDeviceGroup(GetDeviceGroupArgs)}
      */
@@ -3990,7 +3943,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int deviceGroupId;
     }
-
     /**
      * wrap arguments for method {@link #getDeviceGroups(GetDeviceGroupsArgs)}
      */
@@ -3998,7 +3950,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="List")
         public List<Integer> groupIdList;
     }
-
     /**
      * wrap arguments for method {@link #getDeviceGroupsBelongs(GetDeviceGroupsBelongsArgs)}
      */
@@ -4006,7 +3957,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int deviceId;
     }
-
     /**
      * wrap arguments for method {@link #getDeviceGroupsPermit(GetDeviceGroupsPermitArgs)}
      */
@@ -4014,7 +3964,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="为{@code null}返回空表" ,required=true ,dataType="int")
         public int personGroupId;
     }
-
     /**
      * wrap arguments for method {@link #getDeviceGroupsPermittedBy(GetDeviceGroupsPermittedByArgs)}
      */
@@ -4022,7 +3971,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personGroupId;
     }
-
     /**
      * wrap arguments for method {@link #getDeviceIdOfFeature(GetDeviceIdOfFeatureArgs)}
      */
@@ -4030,7 +3978,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="String")
         public String featureMd5;
     }
-
     /**
      * wrap arguments for method {@link #getDevices(GetDevicesArgs)}
      */
@@ -4038,7 +3985,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="List")
         public List<Integer> idList;
     }
-
     /**
      * wrap arguments for method {@link #getDevicesOfGroup(GetDevicesOfGroupArgs)}
      */
@@ -4046,7 +3992,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int deviceGroupId;
     }
-
     /**
      * wrap arguments for method {@link #getFace(GetFaceArgs)}
      */
@@ -4054,7 +3999,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int faceId;
     }
-
     /**
      * wrap arguments for method {@link #getFeature(GetFeatureArgs)}
      */
@@ -4062,7 +4006,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="String")
         public String md5;
     }
-
     /**
      * wrap arguments for method {@link #getFeatureBytes(GetFeatureBytesArgs)}
      */
@@ -4070,7 +4013,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="String")
         public String md5;
     }
-
     /**
      * wrap arguments for method {@link #getFeatures(GetFeaturesArgs)}
      */
@@ -4078,7 +4020,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="md5列表" ,required=true ,dataType="List")
         public List<String> md5;
     }
-
     /**
      * wrap arguments for method {@link #getFeaturesByPersonId(GetFeaturesByPersonIdArgs)}
      */
@@ -4086,7 +4027,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="人员id(fl_person.id)" ,required=true ,dataType="int")
         public int personId;
     }
-
     /**
      * wrap arguments for method {@link #getFeaturesByPersonIdAndSdkVersion(GetFeaturesByPersonIdAndSdkVersionArgs)}
      */
@@ -4096,7 +4036,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="算法(SDK)版本号" ,required=true ,dataType="String")
         public String sdkVersion;
     }
-
     /**
      * wrap arguments for method {@link #getFeaturesOfPerson(GetFeaturesOfPersonArgs)}
      */
@@ -4104,7 +4043,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personId;
     }
-
     /**
      * wrap arguments for method {@link #getGroupPermit(GetGroupPermitArgs)}
      */
@@ -4114,7 +4052,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personGroupId;
     }
-
     /**
      * wrap arguments for method {@link #getGroupPermitOnDeviceGroup(GetGroupPermitOnDeviceGroupArgs)}
      */
@@ -4124,7 +4061,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personGroupId;
     }
-
     /**
      * wrap arguments for method {@link #getGroupPermits(GetGroupPermitsArgs)}
      */
@@ -4134,7 +4070,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="List")
         public List<Integer> personGroupIdList;
     }
-
     /**
      * wrap arguments for method {@link #getImage(GetImageArgs)}
      */
@@ -4142,7 +4077,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="String")
         public String imageMD5;
     }
-
     /**
      * wrap arguments for method {@link #getImageBytes(GetImageBytesArgs)}
      */
@@ -4150,7 +4084,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="String")
         public String imageMD5;
     }
-
     /**
      * wrap arguments for method {@link #getImagesAssociatedByFeature(GetImagesAssociatedByFeatureArgs)}
      */
@@ -4158,7 +4091,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="人脸特征id(MD5)" ,required=true ,dataType="String")
         public String featureMd5;
     }
-
     /**
      * wrap arguments for method {@link #getLogBeansByPersonId(GetLogBeansByPersonIdArgs)}
      */
@@ -4166,7 +4098,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="fl_person.id" ,required=true ,dataType="int")
         public int personId;
     }
-
     /**
      * wrap arguments for method {@link #getPerson(GetPersonArgs)}
      */
@@ -4174,7 +4105,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personId;
     }
-
     /**
      * wrap arguments for method {@link #getPersonByPapersNum(GetPersonByPapersNumArgs)}
      */
@@ -4182,7 +4112,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="String")
         public String papersNum;
     }
-
     /**
      * wrap arguments for method {@link #getPersonGroup(GetPersonGroupArgs)}
      */
@@ -4190,7 +4119,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personGroupId;
     }
-
     /**
      * wrap arguments for method {@link #getPersonGroups(GetPersonGroupsArgs)}
      */
@@ -4198,7 +4126,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="List")
         public List<Integer> groupIdList;
     }
-
     /**
      * wrap arguments for method {@link #getPersonGroupsBelongs(GetPersonGroupsBelongsArgs)}
      */
@@ -4206,7 +4133,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personId;
     }
-
     /**
      * wrap arguments for method {@link #getPersonGroupsPermittedBy(GetPersonGroupsPermittedByArgs)}
      */
@@ -4214,7 +4140,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int deviceGroupId;
     }
-
     /**
      * wrap arguments for method {@link #getPersonPermit(GetPersonPermitArgs)}
      */
@@ -4224,7 +4149,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personId;
     }
-
     /**
      * wrap arguments for method {@link #getPersonPermits(GetPersonPermitsArgs)}
      */
@@ -4234,7 +4158,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="List")
         public List<Integer> personIdList;
     }
-
     /**
      * wrap arguments for method {@link #getPersons(GetPersonsArgs)}
      */
@@ -4242,7 +4165,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="人员id列表" ,required=true ,dataType="List")
         public List<Integer> idList;
     }
-
     /**
      * wrap arguments for method {@link #getPersonsOfGroup(GetPersonsOfGroupArgs)}
      */
@@ -4250,7 +4172,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personGroupId;
     }
-
     /**
      * wrap arguments for method {@link #getProperty(GetPropertyArgs)}
      */
@@ -4260,7 +4181,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #getRedisParameters(GetRedisParametersArgs)}
      */
@@ -4268,7 +4188,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #getServiceConfig(GetServiceConfigArgs)}
      */
@@ -4276,7 +4195,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #getSubDeviceGroup(GetSubDeviceGroupArgs)}
      */
@@ -4284,7 +4202,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int deviceGroupId;
     }
-
     /**
      * wrap arguments for method {@link #getSubPersonGroup(GetSubPersonGroupArgs)}
      */
@@ -4292,7 +4209,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personGroupId;
     }
-
     /**
      * wrap arguments for method {@link #isDisable(IsDisableArgs)}
      */
@@ -4300,13 +4216,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personId;
     }
-
-    /**
-     * wrap arguments for method {@link #isLocal(IsLocalArgs)}
-     */
-    public static class IsLocalArgs{
-    }
-
     /**
      * wrap arguments for method {@link #isValidAckChannel(IsValidAckChannelArgs)}
      */
@@ -4314,7 +4223,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="String")
         public String ackChannel;
     }
-
     /**
      * wrap arguments for method {@link #isValidCmdSn(IsValidCmdSnArgs)}
      */
@@ -4322,7 +4230,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="long")
         public long cmdSn;
     }
-
     /**
      * wrap arguments for method {@link #isValidDeviceToken(IsValidDeviceTokenArgs)}
      */
@@ -4330,7 +4237,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #isValidPassword(IsValidPasswordArgs)}
      */
@@ -4342,7 +4248,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)" ,required=true ,dataType="boolean")
         public boolean isMd5;
     }
-
     /**
      * wrap arguments for method {@link #isValidPersonToken(IsValidPersonTokenArgs)}
      */
@@ -4350,7 +4255,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #isValidRootToken(IsValidRootTokenArgs)}
      */
@@ -4358,7 +4262,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #isValidToken(IsValidTokenArgs)}
      */
@@ -4366,7 +4269,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #isValidUserToken(IsValidUserTokenArgs)}
      */
@@ -4374,7 +4276,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #listOfParentForDeviceGroup(ListOfParentForDeviceGroupArgs)}
      */
@@ -4382,7 +4283,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int deviceGroupId;
     }
-
     /**
      * wrap arguments for method {@link #listOfParentForPersonGroup(ListOfParentForPersonGroupArgs)}
      */
@@ -4390,13 +4290,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personGroupId;
     }
-
-    /**
-     * wrap arguments for method {@link #loadAllPerson(LoadAllPersonArgs)}
-     */
-    public static class LoadAllPersonArgs{
-    }
-
     /**
      * wrap arguments for method {@link #loadDeviceByWhere(LoadDeviceByWhereArgs)}
      */
@@ -4408,7 +4301,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="返回记录条数 为负值是返回{@code startRow}开始的所有行" ,required=true ,dataType="int")
         public int numRows;
     }
-
     /**
      * wrap arguments for method {@link #loadDeviceGroupByWhere(LoadDeviceGroupByWhereArgs)}
      */
@@ -4420,7 +4312,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="返回记录条数(小于0时返回所有记录)" ,required=true ,dataType="int")
         public int numRows;
     }
-
     /**
      * wrap arguments for method {@link #loadDeviceGroupIdByWhere(LoadDeviceGroupIdByWhereArgs)}
      */
@@ -4428,7 +4319,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录" ,required=true ,dataType="String")
         public String where;
     }
-
     /**
      * wrap arguments for method {@link #loadDeviceIdByWhere(LoadDeviceIdByWhereArgs)}
      */
@@ -4436,7 +4326,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录" ,required=true ,dataType="String")
         public String where;
     }
-
     /**
      * wrap arguments for method {@link #loadFeatureMd5ByUpdate(LoadFeatureMd5ByUpdateArgs)}
      */
@@ -4444,7 +4333,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="long")
         public long timestamp;
     }
-
     /**
      * wrap arguments for method {@link #loadLogByWhere(LoadLogByWhereArgs)}
      */
@@ -4456,7 +4344,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="返回记录条数 为负值是返回{@code startRow}开始的所有行" ,required=true ,dataType="int")
         public int numRows;
     }
-
     /**
      * wrap arguments for method {@link #loadLogLightByVerifyTime(LoadLogLightByVerifyTimeArgs)}
      */
@@ -4468,7 +4355,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="返回记录条数 为负值是返回{@code startRow}开始的所有行" ,required=true ,dataType="int")
         public int numRows;
     }
-
     /**
      * wrap arguments for method {@link #loadLogLightByWhere(LoadLogLightByWhereArgs)}
      */
@@ -4480,7 +4366,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="返回记录条数 为负值是返回{@code startRow}开始的所有行" ,required=true ,dataType="int")
         public int numRows;
     }
-
     /**
      * wrap arguments for method {@link #loadPermitByUpdate(LoadPermitByUpdateArgs)}
      */
@@ -4488,7 +4373,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="long")
         public long timestamp;
     }
-
     /**
      * wrap arguments for method {@link #loadPersonByWhere(LoadPersonByWhereArgs)}
      */
@@ -4500,7 +4384,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="返回记录条数 为负值是返回{@code startRow}开始的所有行" ,required=true ,dataType="int")
         public int numRows;
     }
-
     /**
      * wrap arguments for method {@link #loadPersonGroupByWhere(LoadPersonGroupByWhereArgs)}
      */
@@ -4512,7 +4395,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="返回记录条数(小于0时返回所有记录)" ,required=true ,dataType="int")
         public int numRows;
     }
-
     /**
      * wrap arguments for method {@link #loadPersonGroupIdByWhere(LoadPersonGroupIdByWhereArgs)}
      */
@@ -4520,7 +4402,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录" ,required=true ,dataType="String")
         public String where;
     }
-
     /**
      * wrap arguments for method {@link #loadPersonIdByUpdateTime(LoadPersonIdByUpdateTimeArgs)}
      */
@@ -4528,7 +4409,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="long")
         public long timestamp;
     }
-
     /**
      * wrap arguments for method {@link #loadPersonIdByWhere(LoadPersonIdByWhereArgs)}
      */
@@ -4536,7 +4416,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录" ,required=true ,dataType="String")
         public String where;
     }
-
     /**
      * wrap arguments for method {@link #loadUpdatedPersons(LoadUpdatedPersonsArgs)}
      */
@@ -4544,7 +4423,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="long")
         public long timestamp;
     }
-
     /**
      * wrap arguments for method {@link #offline(OfflineArgs)}
      */
@@ -4552,7 +4430,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="当前持有的令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #online(OnlineArgs)}
      */
@@ -4560,7 +4437,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="上线设备信息，必须提供{@code id, mac, serialNo}字段" ,required=true ,dataType="DeviceBean")
         public DeviceBean device;
     }
-
     /**
      * wrap arguments for method {@link #registerDevice(RegisterDeviceArgs)}
      */
@@ -4568,7 +4444,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="设备记录,_isNew字段必须为{@code true},{@code id}字段不要指定,数据库会自动分配,保存在返回值中" ,required=true ,dataType="DeviceBean")
         public DeviceBean newDevice;
     }
-
     /**
      * wrap arguments for method {@link #releasePersonToken(ReleasePersonTokenArgs)}
      */
@@ -4576,7 +4451,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="当前持有的令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #releaseRootToken(ReleaseRootTokenArgs)}
      */
@@ -4584,7 +4458,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="当前持有的令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #releaseUserToken(ReleaseUserTokenArgs)}
      */
@@ -4592,7 +4465,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="要释放的令牌,如果令牌类型非{@link net.gdface.facelog.Token.TokenType#PERSON}或{@link net.gdface.facelog.Token.TokenType#ROOT}则抛出{@link ServiceSecurityException}异常" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #replaceFeature(ReplaceFeatureArgs)}
      */
@@ -4606,7 +4478,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #rootGroupOfDevice(RootGroupOfDeviceArgs)}
      */
@@ -4614,7 +4485,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="Integer")
         public Integer deviceId;
     }
-
     /**
      * wrap arguments for method {@link #rootGroupOfPerson(RootGroupOfPersonArgs)}
      */
@@ -4622,7 +4492,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="Integer")
         public Integer personId;
     }
-
     /**
      * wrap arguments for method {@link #saveDevice(SaveDeviceArgs)}
      */
@@ -4632,7 +4501,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #saveDeviceGroup(SaveDeviceGroupArgs)}
      */
@@ -4642,7 +4510,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #savePerson(SavePersonFullArgs)}
      */
@@ -4660,7 +4527,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #savePerson(SavePersonWithPhotoAndFeatureMultiFacesArgs)}
      */
@@ -4676,7 +4542,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #savePerson(SavePersonWithPhotoAndFeatureMultiImageArgs)}
      */
@@ -4692,7 +4557,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #savePerson(SavePersonWithPhotoArgs)}
      */
@@ -4704,7 +4568,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #savePerson(SavePersonWithPhotoAndFeatureArgs)}
      */
@@ -4718,7 +4581,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #savePerson(SavePersonWithPhotoAndFeatureSavedArgs)}
      */
@@ -4732,7 +4594,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #savePerson(SavePersonArgs)}
      */
@@ -4742,7 +4603,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #savePersonGroup(SavePersonGroupArgs)}
      */
@@ -4752,7 +4612,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #savePersons(SavePersonsArgs)}
      */
@@ -4762,7 +4621,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #savePersons(SavePersonsWithPhotoArgs)}
      */
@@ -4772,7 +4630,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #saveServiceConfig(SaveServiceConfigArgs)}
      */
@@ -4780,7 +4637,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #setPersonExpiryDate(SetPersonExpiryDateArgs)}
      */
@@ -4792,7 +4648,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #setPersonExpiryDate(SetPersonExpiryDateListArgs)}
      */
@@ -4804,7 +4659,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #setProperties(SetPropertiesArgs)}
      */
@@ -4814,7 +4668,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #setProperty(SetPropertyArgs)}
      */
@@ -4826,7 +4679,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #taskQueueOf(TaskQueueOfArgs)}
      */
@@ -4836,7 +4688,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #taskRegister(TaskRegisterArgs)}
      */
@@ -4846,7 +4697,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #unbindBorder(UnbindBorderArgs)}
      */
@@ -4858,7 +4708,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #unregisterDevice(UnregisterDeviceArgs)}
      */
@@ -4868,7 +4717,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="设备验证令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-
     /**
      * wrap arguments for method {@link #updateDevice(UpdateDeviceArgs)}
      */
@@ -4877,18 +4725,6 @@ public class IFaceLogSpringController {
         public DeviceBean deviceBean;
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
-    }
-
-    /**
-     * wrap arguments for method {@link #version(VersionArgs)}
-     */
-    public static class VersionArgs{
-    }
-
-    /**
-     * wrap arguments for method {@link #versionInfo(VersionInfoArgs)}
-     */
-    public static class VersionInfoArgs{
     }
     /**
      * 获取{@link IFaceLog}实例的接口，
