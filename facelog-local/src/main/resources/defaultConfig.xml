@@ -74,13 +74,16 @@
 	</restful>
 	<feature description="特征参数配置">
 		<sdkVersion description="SDK版本号">
-			<whiteList description="允许的SDK版本号(白名单),逗号分隔">MTFSDK1,CASSDK1</whiteList>
+			<whiteList description="允许的SDK版本号(白名单),逗号分隔">MTFSDKARM512,CASSDKARM4096</whiteList>
 		</sdkVersion>
 		<person>
-			<defaultLimit description="每用户允每个SDK版本许建模最大数量默认值">4</defaultLimit>
+			<update >
+				<auto description="启动特征码自动更新机制:当用户已经有特征码达到最大值时，再次添加特征将替换原有特征中最旧的">true</auto>
+			</update>
 			<limit>
-				<MTFSDK1 description="MTFSDK1特征每用户允许建模最大数量">	${feature.person.defaultLimit}</MTFSDK1>
-				<CASSDK1 description="CASSDK1特征每用户允许建模最大数量">${feature.person.defaultLimit}</CASSDK1>
+				<default description="每用户允每个SDK版本许建模最大数量默认值">4</default>
+				<MTFSDKARM512 description="MTFSDK1特征每用户允许建模最大数量">${feature.person.limit.default}</MTFSDKARM512>
+				<CASSDKARM4096 description="CASSDKARM4096特征每用户允许建模最大数量">${feature.person.limit.default}</CASSDKARM4096>
 			</limit>
 		</person>
 	</feature>

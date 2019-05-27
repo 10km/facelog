@@ -188,8 +188,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	@Override
 	public List<String> getFeaturesByPersonIdAndSdkVersion(int personId,String sdkVersion) {
 		try{
-			FeatureBean featureBean = FeatureBean.builder().personId(personId).sdkVersion(sdkVersion).build();
-			return dm.daoToPrimaryKeyListFromFeatures(dm.daoLoadFeatureUsingTemplate(featureBean, 1, -1));			
+			return dm.daoToPrimaryKeyListFromFeatures(dm.daoGetFeaturesByPersonIdAndSdkVersion(personId,sdkVersion));			
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}

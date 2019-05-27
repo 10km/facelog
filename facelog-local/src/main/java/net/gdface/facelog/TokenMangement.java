@@ -2,9 +2,10 @@ package net.gdface.facelog;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static net.gdface.facelog.FeatureConfig.*;
+
 
 import java.nio.ByteBuffer;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.MoreObjects;
@@ -48,11 +49,7 @@ class TokenMangement implements ServiceConstant {
 	private final int personTokenExpire;
 	/** 是否拒绝普通人员申请令牌 */
 	private final boolean rejectZero;
-	/** 
-	 * 允许的SDK版本列表.<br>
-	 * 如果设备的SDK版本号不在名单内不允许注册 
-	 */
-	private final List<String> sdkVersionWhiteList;
+
 	/**
 	 * @param dao
 	 */
@@ -72,7 +69,6 @@ class TokenMangement implements ServiceConstant {
 		this.ackChannelTable =  RedisFactory.getTable(TABLE_ACK_CHANNEL, JedisPoolLazy.getDefaultInstance());
 		this.cmdSnTable.setExpire(CONFIG.getInt(TOKEN_CMD_SERIALNO_EXPIRE), TimeUnit.SECONDS);
 		this.ackChannelTable.setExpire(CONFIG.getInt(TOKEN_CMD_ACKCHANNEL_EXPIRE), TimeUnit.SECONDS);
-		this.sdkVersionWhiteList = GlobalConfig.getExplodedStringAsList(CONFIG.getString(FEATURE_SDKVERSION_WHITELIST,""));
 		GlobalConfig.logTokenParameters();
 	}
 	/** 验证MAC地址是否有效(HEX格式,12字符,无分隔符,不区分大小写) */
@@ -298,7 +294,7 @@ class TokenMangement implements ServiceConstant {
 		checkArgument(newDevice.getSdkVersion().matches(SDK_VERSION_REGEX), "invalid sdk version format");
 
 		// 检查sdk_version是否允许注册
-		checkArgument(sdkVersionWhiteList.contains(newDevice.getSdkVersion()), 
+		checkArgument(FEATURE_CONFIG.validateSdkVersion(newDevice.getSdkVersion()), 
 				"UNSUPPORTED SDK Version [%s]",newDevice.getSdkVersion());
 
 		DeviceBean dmac = this.dao.daoGetDeviceByIndexMac(newDevice.getMac());

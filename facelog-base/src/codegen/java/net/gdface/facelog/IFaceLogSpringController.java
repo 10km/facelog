@@ -2119,9 +2119,8 @@ public class IFaceLogSpringController {
     }
     /**
      * 返回指定的参数,如果参数没有定义则返回{@code null}<br>
-     * {@code PERSON_ONLY}<br>
+     * 非root令牌只能访问指定范围的参数,否则会抛出异常<br>
      * root令牌不受限制<br>
-     * 人员令牌只能访问指定范围的参数,否则会抛出异常<br>
      * @param key
      * @param token 访问令牌
      * @return 返回{@code key}指定的参数值
@@ -2129,9 +2128,8 @@ public class IFaceLogSpringController {
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/getProperty", method = RequestMethod.POST)
     @ApiOperation(value = "返回指定的参数,如果参数没有定义则返回{@code null}<br>\n"
-+" {@code PERSON_ONLY}<br>\n"
-+" root令牌不受限制<br>\n"
-+" 人员令牌只能访问指定范围的参数,否则会抛出异常<br>",httpMethod="POST")
++" 非root令牌只能访问指定范围的参数,否则会抛出异常<br>\n"
++" root令牌不受限制<br>",httpMethod="POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "key", value = "", paramType="form", dataType="String"),
         @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})

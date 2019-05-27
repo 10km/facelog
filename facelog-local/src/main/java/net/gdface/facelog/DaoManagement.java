@@ -51,7 +51,7 @@ import net.gdface.utils.Judge;
  * @author guyadong
  *
  */
-public class DaoManagement extends BaseDao {
+public class DaoManagement extends BaseDao implements ServiceConstant{
 	private final CryptographGenerator cg;
 	public DaoManagement(CryptographGenerator cg) {
 		this.cg = checkNotNull(cg,"cg is null");
@@ -320,6 +320,18 @@ public class DaoManagement extends BaseDao {
 				.feature(feature)
 				.build();
 	}
+	
+	/**
+	 * 返回 persionId 关联的指定SDK的人脸特征记录
+	 * @param personId 人员id(fl_person.id)
+	 * @param sdkVersion 算法(SDK)版本号
+	 * @return 返回 fl_feature.md5  列表
+	 */
+	protected List<FeatureBean> daoGetFeaturesByPersonIdAndSdkVersion(int personId,String sdkVersion) {
+		FeatureBean tmpl = FeatureBean.builder().personId(personId).sdkVersion(sdkVersion).build();
+		return daoLoadFeatureUsingTemplate(tmpl, 1, -1);
+	}
+	
 	protected FeatureBean daoAddFeature(ByteBuffer feature,String sdkVersion, PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5) throws DuplicateRecordException{
 		return daoAddFeature(daoMakeFeature(feature, sdkVersion), refPersonByPersonId, impFaceByFeatureMd5, null);
 	}

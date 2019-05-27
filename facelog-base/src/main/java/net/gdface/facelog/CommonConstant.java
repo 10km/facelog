@@ -38,6 +38,15 @@ public interface CommonConstant {
     /** 用于验证sdk_version格式的正则表达式 */
     public static final String SDK_VERSION_REGEX = "[\\w\\.\\-]+";
     
+    /** 每用户每个SDK版本允许建模最大数量默认值 */
+    public static final int DEFAULT_FEATURE_PERSON_LIMIT = 1;
+    
+    /** 特征参数配置前缀 */
+    public static final String FEATURE_PREFIX = "feature";
+    
+    /** 特征参数配置LIMIT前缀 */
+    public static final String FEATURE_PERSON_LIMIT_PREFIX = "feature.person.limit.";
+    
     /**
      * 服务异常类型定义
      */
@@ -218,14 +227,14 @@ public interface CommonConstant {
     /** RESTful web服务参数配置:是否显示在线swagger文档,默认值{@code true} */
     public static final String RESTFUL_SWAGGER_ENABLE = "restful.swaggerEnable";
 
-    /** 特征参数配置前缀 */
-    public static final String FEATURE_PREFIX = "feature";
-
     /** 特征参数配置:允许的SDK版本号(白名单),逗号分隔 */
     public static final String FEATURE_SDKVERSION_WHITELIST = "feature.sdkVersion.whitelist";
 
+    /** 特征参数配置:启动特征码自动更新机制:当用户已经有特征码达到最大值时，再次添加特征将替换原有特征中最旧的 */
+    public static final String FEATURE_PERSON_UPDATE_AUTO = "feature.person.update.auto";
+
     /** 特征参数配置:每用户每个SDK版本允许建模最大数量默认值 */
-    public static final String FEATURE_PERSON_DEFAULTLIMIT = "feature.person.defaultLimit";
+    public static final String FEATURE_PERSON_LIMIT_DEFAULT = "feature.person.limit.default";
 
     /** 操作员对person表允许的操作 */
     public static final String SECURITY_OPERATOR_TABLE_PERSON_ALLOW = "security.operator.table.person.allow";
