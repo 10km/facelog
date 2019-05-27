@@ -7,7 +7,6 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -29,10 +28,12 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import net.gdface.facelog.db.Constant;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
+import net.gdface.facelog.db.FeatureComparator;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.PermitBean;
@@ -53,7 +54,7 @@ import net.gdface.utils.Judge;
  * @author guyadong
  *
  */
-public class DaoManagement extends BaseDao implements ServiceConstant{
+public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 	private final CryptographGenerator cg;
 	public DaoManagement(CryptographGenerator cg) {
 		this.cg = checkNotNull(cg,"cg is null");
@@ -334,29 +335,46 @@ public class DaoManagement extends BaseDao implements ServiceConstant{
 		return daoLoadFeatureUsingTemplate(tmpl, 1, -1);
 	}
 	
+	/**
+	 * 添加人脸特征数据到数据库<br>
+	 * 如果用户的特征记录数量超过限制，且没有开启自动更新机制则抛出异常,
+	 * 如果已有特征数量超过限制，且开启了自动特征更新机制则删除最老的记录,确保记录总数不超过限制
+	 * @param feature 人脸特征数据
+	 * @param sdkVersion SDK版本号
+	 * @param refPersonByPersonId 所属的人员记录
+	 * @param impFaceByFeatureMd5 关联的人脸信息记录
+	 * @return
+	 * @throws DuplicateRecordException
+	 */
 	protected FeatureBean daoAddFeature(ByteBuffer feature,String sdkVersion, 
 			PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5) throws DuplicateRecordException{
+		FEATURE_CONFIG.checkSdkVersion(sdkVersion);
+		boolean removeOld = false;
+		List<FeatureBean> features = null;
 		if(null != refPersonByPersonId && refPersonByPersonId.getId() != null){
-			List<FeatureBean> features = daoGetFeaturesByPersonIdAndSdkVersion(
-					refPersonByPersonId.getId(),
-					FEATURE_CONFIG.checkSdkVersion(sdkVersion));
+			Integer personId = refPersonByPersonId.getId();
+			features = daoGetFeaturesByPersonIdAndSdkVersion(personId,sdkVersion);
 			int count = features.size();
-			
-//			checkState(count < FEATURE_CONFIG.getFeatureLimitPerPerson(sdkVersion) || FEATURE_CONFIG.isFeatureAutoUpdate(),
-//					"feature count  exceed max limit for %s ",sdkVersion);
-			FEATURE_CONFIG.checkNotExceedLimit(sdkVersion, count);
-			if(count >= FEATURE_CONFIG.getFeatureLimitPerPerson(sdkVersion) && FEATURE_CONFIG.isFeatureAutoUpdate()){
-				Collections.sort(features, new Comparator<FeatureBean>() {
-
-					@Override
-					public int compare(FeatureBean o1, FeatureBean o2) {
-						// TODO 自动生成的方法存根
-						return 0;
-					}
-				});
+			int limitCount = FEATURE_CONFIG.getFeatureLimitPerPerson(sdkVersion);
+			// 如果用户的特征记录数量超过限制，且没有开启自动更新机制则抛出异常
+			checkState(count < limitCount || FEATURE_CONFIG.featureAutoUpdateEnabled(),
+					"person(id=%s)'s  %s feature count  exceed max limit(%s)",personId,sdkVersion,limitCount);
+			// 如果已有特征数量超过限制，且开启了自动特征更新机制则删除最老的记录
+			if(count >= limitCount && FEATURE_CONFIG.featureAutoUpdateEnabled()){
+				removeOld = true;
 			}
 		}
-		return daoAddFeature(daoMakeFeature(feature, sdkVersion), refPersonByPersonId, impFaceByFeatureMd5, null);
+		FeatureBean newFeature = daoAddFeature(daoMakeFeature(feature, sdkVersion), refPersonByPersonId, impFaceByFeatureMd5, null);
+		// 放在成功添加记录之后再执行删除，以防止因为添加特征抛出异常而导致发送错误的通知消息
+		if(removeOld){
+			int limitCount = FEATURE_CONFIG.getFeatureLimitPerPerson(sdkVersion);			
+			// 以update_time字段排序,删除最旧的记录
+			Collections.sort(features, new FeatureComparator(FL_FEATURE_ID_UPDATE_TIME,/** 降序 */true));
+			for(int i = limitCount-1;i < features.size() -1 ;++i){
+				daoDeleteFeature(features.get(i).getMd5(), true);
+			}
+		}
+		return newFeature;
 	}
 	protected FeatureBean daoAddFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean) throws DuplicateRecordException{
 		if(null != faceInfo){
@@ -369,13 +387,27 @@ public class DaoManagement extends BaseDao implements ServiceConstant{
 		return daoAddFeature(feature, deviceBean.getSdkVersion(), personBean, null == faceInfo?null:faceInfo.values());
 	}
 
-	protected List<String> daoDeleteFeature(String featureMd5,boolean deleteImage){
+	/**
+	 * 删除指定的特征
+	 * @param featureMd5
+	 * @param deleteImage 为{@code true}则删除关联的 image记录(如果该图像还关联其他特征则不删除)
+	 * @return 返回删除的特征记录关联的图像(image)记录的MD5
+	 */
+	protected List<String> daoDeleteFeature(final String featureMd5,boolean deleteImage){
 		List<String> imageKeys = daoGetImageKeysImportedByFeatureMd5(featureMd5);
 		if(deleteImage){
 			for(Iterator<String> itor = imageKeys.iterator();itor.hasNext();){
 				String md5 = itor.next();
-				daoDeleteImage(md5);
-				itor.remove();
+				// 如果该图像还关联其他特征则不删除
+				if(!Iterables.tryFind(daoGetFaceBeansByImageMd5OnImage(md5), new Predicate<FaceBean>(){
+
+					@Override
+					public boolean apply(FaceBean input) {
+						return !featureMd5.equals(input.getFeatureMd5());
+					}}).isPresent()){
+					daoDeleteImage(md5);	
+					itor.remove();
+				}
 			}
 		}else{
 			daoDeleteFaceBeansByFeatureMd5OnFeature(featureMd5);

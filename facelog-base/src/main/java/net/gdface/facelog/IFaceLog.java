@@ -497,10 +497,9 @@ public interface IFaceLog{
 	/**
 	 * 删除featureMd5指定的特征记录及关联的face记录
 	 * @param featureMd5
-	 * @param deleteImage 是否删除关联的 image记录
+	 * @param deleteImage 为{@code true}则删除关联的 image记录(如果该图像还关联其他特征则不删除)
 	 * @param token 访问令牌
 	 * @return 返回删除的特征记录关联的图像(image)记录的MD5<br>
-	 *                {@code deleteImage}为{@code true}时返回空表
 	 */
 	public List<String> deleteFeature(String featureMd5, boolean deleteImage, Token token);
 

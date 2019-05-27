@@ -1,14 +1,13 @@
 package net.gdface.facelog;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkState;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
 import com.google.common.collect.Maps;
 
 /**
- * feature相关配置参数管理类
+ * feature相关配置参数管理类<br>
  * @author guyadong
  *
  */
@@ -48,16 +47,14 @@ public class FeatureConfig implements ServiceConstant{
 	 * 验证{@code sdkVersion}是否为有效的SDK版本号,不是则抛出异常
 	 * @param sdkVersion
 	 * @return always {@code sdkVersion}
+	 * @throws IllegalArgumentException 无效的SDK版本号
 	 */
-	public String checkSdkVersion(String sdkVersion){
+	public String checkSdkVersion(String sdkVersion) throws IllegalArgumentException{
 		checkArgument(validateSdkVersion(sdkVersion),
 				"UNKNOW sdk version : [%s]",sdkVersion);
 		return sdkVersion;
 	}
-	public void checkNotExceedLimit(String sdkVersion,int count){
-		checkState(count < getFeatureLimitPerPerson(sdkVersion) || isFeatureAutoUpdate(),
-				"feature count  exceed max limit for %s ",sdkVersion);
-	}
+
 	/**
 	 * @param sdkVersion
 	 * @return 返回{@code sdkVersion}指定版本号的特征码数量限制
@@ -68,9 +65,10 @@ public class FeatureConfig implements ServiceConstant{
 	}
 
 	/**
-	 * @return featureAutoUpdate
+	 * 
+	 * @return 是否开启特征数据自动更新机制
 	 */
-	public boolean isFeatureAutoUpdate() {
+	public boolean featureAutoUpdateEnabled() {
 		return featureAutoUpdate;
 	}
 	
