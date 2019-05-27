@@ -95,6 +95,7 @@ public class IFaceLogSpringController {
                 instanceSupplier == null ? null : instanceSupplier.instanceOfIFaceLog(),
                 "IFaceLog  instance is null"    );
     }
+    // 1
     /**
      * 增加一个人脸特征记录，如果记录已经存在则抛出异常<br>
      * 适用于一张人脸图像提取一个人脸特征的算法<br>
@@ -110,8 +111,3403 @@ public class IFaceLogSpringController {
      * @throws DuplicateRecordException
      * @since 2.1.2
      */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/addFeatureWithImage", method = RequestMethod.POST)
+    @ApiOperation(value = "增加一个人脸特征记录，如果记录已经存在则抛出异常<br>\n"
++" 适用于一张人脸图像提取一个人脸特征的算法<br>\n"
++" {@code DEVICE_ONLY}",httpMethod="POST")
+    public Response addFeature( @RequestBody AddFeatureWithImageArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().addFeature(args.feature,args.personId,args.asIdPhotoIfAbsent,args.featurePhoto,args.faceBean,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 2
     /**
-     * wrap arguments for path '/IFaceLog/addFeatureWithImage'.
+     * 增加一个人脸特征记录，如果记录已经存在则抛出异常<br>
+     * {@code DEVICE_ONLY}
+     * @param feature 人脸特征数据
+     * @param personId 关联的人员id(fl_person.id),可为null
+     * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
+     * @param token (设备)访问令牌
+     * @return 保存的人脸特征记录{@link FeatureBean}
+     * @throws DuplicateRecordException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/addFeature", method = RequestMethod.POST)
+    @ApiOperation(value = "增加一个人脸特征记录，如果记录已经存在则抛出异常<br>\n"
++" {@code DEVICE_ONLY}",httpMethod="POST")
+    public Response addFeature( @RequestBody AddFeatureArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().addFeature(args.feature,args.personId,args.faecBeans,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 3
+    /**
+     * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
+     * <br>{@code DEVICE_ONLY}
+     * @param feature 特征数据
+     * @param personId 关联的人员id(fl_person.id),可为null
+     * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
+     * @param token (设备)访问令牌
+     * @return 保存的人脸特征记录{@link FeatureBean}
+     * @throws DuplicateRecordException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/addFeatureMulti", method = RequestMethod.POST)
+    @ApiOperation(value = "增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常\n"
++" <br>{@code DEVICE_ONLY}",httpMethod="POST")
+    public Response addFeature( @RequestBody AddFeatureMultiArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().addFeature(args.feature,args.personId,args.faceInfo,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 4
+    /**
+     * 保存图像数据,如果图像数据已经存在，则抛出异常
+     * @param imageData 图像数据
+     * @param deviceId 图像来源设备id,可为null
+     * @param faceBean 关联的人脸信息对象,可为null
+     * @param personId 关联的人员id(fl_person.id),可为null
+     * @param token 访问令牌
+     * @return 保存的图像记录
+     * @throws DuplicateRecordException 数据库中已经存在要保存的图像数据
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/addImage", method = RequestMethod.POST)
+    @ApiOperation(value = "保存图像数据,如果图像数据已经存在，则抛出异常",httpMethod="POST")
+    public Response addImage( @RequestBody AddImageArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().addImage(args.imageData,args.deviceId,args.faceBean,args.personId,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 5
+    /**
+     * 添加一条验证日志记录
+     * <br>{@code DEVICE_ONLY}
+     * @param logBean 日志记录对象
+     * @param token 访问令牌
+     * @throws DuplicateRecordException 数据库中存在相同记录
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/addLog", method = RequestMethod.POST)
+    @ApiOperation(value = "添加一条验证日志记录\n"
++" <br>{@code DEVICE_ONLY}",httpMethod="POST")
+    public Response addLog( @RequestBody AddLogArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().addLog(args.logBean,args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 6
+    /**
+     * 添加一条验证日志记录
+     * <br>{@code DEVICE_ONLY}
+     * {@code faceBean}和{@code featureImage}必须全不为{@code null},否则抛出异常
+     * @param logBean 日志记录对象
+     * @param faceBean 用于保存到数据库的提取人脸特征的人脸信息对象
+     * @param featureImage 用于保存到数据库的现场采集人脸特征的照片
+     * @param token 访问令牌
+     * @throws DuplicateRecordException 数据库中存在相同记录
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/addLogFull", method = RequestMethod.POST)
+    @ApiOperation(value = "添加一条验证日志记录\n"
++" <br>{@code DEVICE_ONLY}\n"
++" {@code faceBean}和{@code featureImage}必须全不为{@code null},否则抛出异常",httpMethod="POST")
+    public Response addLog( @RequestBody AddLogFullArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().addLog(args.logBean,args.faceBean,args.featureImage,args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 7
+    /**
+     * 添加一组验证日志记录(事务存储)<br>
+     * 所有输入参数的list长度必须一致(不能有{@code null})元素,每3个相同索引位置元素为一组关联的日志记录，参见{@link #addLog(LogBean, FaceBean, byte[], Token)}
+     * @param logBeans 日志记录对象
+     * @param faceBeans 为用于保存到数据库的提取人脸特征的人脸信息对象
+     * @param featureImages 用于保存到数据库的现场采集人脸特征的照片
+     * @param token 访问令牌
+     * @throws DuplicateRecordException 数据库中存在相同记录
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/addLogsFull", method = RequestMethod.POST)
+    @ApiOperation(value = "添加一组验证日志记录(事务存储)<br>\n"
++" 所有输入参数的list长度必须一致(不能有{@code null})元素,每3个相同索引位置元素为一组关联的日志记录，参见{@link #addLog(LogBean, FaceBean, byte[], Token)}",httpMethod="POST")
+    public Response addLogs( @RequestBody AddLogsFullArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().addLogs(args.logBeans,args.faceBeans,args.featureImages,args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 8
+    /**
+     * 添加一组验证日志记录(事务存储)
+     * <br>{@code DEVICE_ONLY}
+     * @param beans
+     * @param token 访问令牌
+     * @throws DuplicateRecordException 数据库中存在相同记录
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/addLogs", method = RequestMethod.POST)
+    @ApiOperation(value = "添加一组验证日志记录(事务存储)\n"
++" <br>{@code DEVICE_ONLY}",httpMethod="POST")
+    public Response addLogs( @RequestBody AddLogsArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().addLogs(args.beans,args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 9
+    /**
+     * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
+     * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
+     * <br>{@code PERSON_ONLY}
+     * @param deviceGroupId 设备组id
+     * @param personGroupId 人员组id
+     * @param token 访问令牌
+     * @see #addPermit(DeviceGroupBean,PersonGroupBean, Token)
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/addPermitById", method = RequestMethod.POST)
+    @ApiOperation(value = "创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>\n"
++" 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response addPermit( @RequestBody AddPermitByIdArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().addPermit(args.deviceGroupId,args.personGroupId,args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 10
+    /**
+     * 添加一个(允许)通行关联记录:允许{@code personGroup}指定的人员组在
+     * {@code deviceGroup}指定的设备组下属的所有设备通行
+     * <br>{@code PERSON_ONLY}
+     * @param deviceGroup
+     * @param personGroup
+     * @param token 访问令牌
+     * @throws RuntimeDaoException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/addPermit", method = RequestMethod.POST)
+    @ApiOperation(value = "添加一个(允许)通行关联记录:允许{@code personGroup}指定的人员组在\n"
++" {@code deviceGroup}指定的设备组下属的所有设备通行\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response addPermit( @RequestBody AddPermitArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().addPermit(args.deviceGroup,args.personGroup,args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 11
+    /**
+     * 申请一个唯一的命令响应通道(默认有效期)<br>
+     * <br>{@code PERSON_ONLY}
+     * @param token 访问令牌
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/applyAckChannel", method = RequestMethod.POST)
+    @ApiOperation(value = "申请一个唯一的命令响应通道(默认有效期)<br>\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response applyAckChannel( @RequestBody ApplyAckChannelArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().applyAckChannel(args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 12
+    /**
+     * 申请一个唯一的命令响应通道<br>
+     * <br>{@code PERSON_ONLY}
+     * @param token 访问令牌
+     * @param duration 通道有效时间(秒) 大于0有效,否则使用默认的有效期
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/applyAckChannelWithDuration", method = RequestMethod.POST)
+    @ApiOperation(value = "申请一个唯一的命令响应通道<br>\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response applyAckChannel( @RequestBody ApplyAckChannelWithDurationArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().applyAckChannel(args.token,args.duration));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 13
+    /**
+     * 申请一个唯一的命令序列号
+     * <br>{@code PERSON_ONLY}
+     * @param token 访问令牌
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/applyCmdSn", method = RequestMethod.POST)
+    @ApiOperation(value = "申请一个唯一的命令序列号\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response applyCmdSn( @RequestBody ApplyCmdSnArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().applyCmdSn(args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 14
+    /**
+     * 申请人员访问令牌
+     * @param personId 用户ID
+     * @param password 密码
+     * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
+     * @return 返回申请的令牌
+     * @throws ServiceSecurityException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/applyPersonToken", method = RequestMethod.POST)
+    @ApiOperation(value = "申请人员访问令牌",httpMethod="POST")
+    public Response applyPersonToken( @RequestBody ApplyPersonTokenArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().applyPersonToken(args.personId,args.password,args.isMd5));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 15
+    /**
+     * 申请root访问令牌
+     * @param password root用户密码
+     * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
+     * @return 返回申请的令牌
+     * @throws ServiceSecurityException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/applyRootToken", method = RequestMethod.POST)
+    @ApiOperation(value = "申请root访问令牌",httpMethod="POST")
+    public Response applyRootToken( @RequestBody ApplyRootTokenArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().applyRootToken(args.password,args.isMd5));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 16
+    /**
+     * 申请person/root访问令牌
+     * @param userid 用户ID(为-1时为root)
+     * @param password 用户密码
+     * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
+     * @return 返回申请的令牌
+     * @throws ServiceSecurityException
+     * @since 2.1.1
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/applyUserToken", method = RequestMethod.POST)
+    @ApiOperation(value = "申请person/root访问令牌",httpMethod="POST")
+    public Response applyUserToken( @RequestBody ApplyUserTokenArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().applyUserToken(args.userid,args.password,args.isMd5));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 17
+    /**
+     * 创建管理边界<br>
+     * 设置fl_person_group.root_group和fl_device_group.root_group字段互相指向<br>
+     * 没有找到personGroupId或deviceGroupId指定的记录抛出异常,
+     * 以事务操作方式更新数据库<br>
+     * <br>{@link TokenMangement.Enable#ROOT}<br>
+     * @param personGroupId 人员组id
+     * @param deviceGroupId 设备组id
+     * @param token 访问令牌
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/bindBorder", method = RequestMethod.POST)
+    @ApiOperation(value = "创建管理边界<br>\n"
++" 设置fl_person_group.root_group和fl_device_group.root_group字段互相指向<br>\n"
++" 没有找到personGroupId或deviceGroupId指定的记录抛出异常,\n"
++" 以事务操作方式更新数据库<br>\n"
++" <br>{@link TokenMangement.Enable#ROOT}<br>",httpMethod="POST")
+    public Response bindBorder( @RequestBody BindBorderArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().bindBorder(args.personGroupId,args.deviceGroupId,args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 18
+    /**
+     * 返回(deviceGroupId))指定的fl_device_group记录的所有的子节点(包括自己)<br>
+     * 自引用字段:fl_device_group(parent)
+     * @param deviceGroupId
+     * @return 如果{@code deviceGroupId}无效则返回空表
+     * @since 2.1.2
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/childListForDeviceGroup", method = RequestMethod.POST)
+    @ApiOperation(value = "返回(deviceGroupId))指定的fl_device_group记录的所有的子节点(包括自己)<br>\n"
++" 自引用字段:fl_device_group(parent)",httpMethod="POST")
+    public Response childListForDeviceGroup( @RequestBody ChildListForDeviceGroupArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().childListForDeviceGroup(args.deviceGroupId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 19
+    /**
+     * 返回(personGroupId))指定的fl_person_group记录的所有的子节点(包括自己)<br>
+     * 自引用字段:fl_person_group(parent)
+     * @param personGroupId
+     * @return 如果{@code personGroupId}无效则返回空表
+     * @since 2.1.2
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/childListForPersonGroup", method = RequestMethod.POST)
+    @ApiOperation(value = "返回(personGroupId))指定的fl_person_group记录的所有的子节点(包括自己)<br>\n"
++" 自引用字段:fl_person_group(parent)",httpMethod="POST")
+    public Response childListForPersonGroup( @RequestBody ChildListForPersonGroupArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().childListForPersonGroup(args.personGroupId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 20
+    /**
+     * 返回满足{@code where} SQL条件语句的fl_device记录总数
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+     * @return 返回设备ID列表
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/countDeviceByWhere", method = RequestMethod.POST)
+    @ApiOperation(value = "返回满足{@code where} SQL条件语句的fl_device记录总数",httpMethod="POST")
+    public Response countDeviceByWhere( @RequestBody CountDeviceByWhereArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().countDeviceByWhere(args.where));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 21
+    /**
+     * 返回满足{@code where} SQL条件语句的fl_device_group记录总数
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+     * @return 返回满足{@code where} SQL条件语句的fl_device_group记录总数
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/countDeviceGroupByWhere", method = RequestMethod.POST)
+    @ApiOperation(value = "返回满足{@code where} SQL条件语句的fl_device_group记录总数",httpMethod="POST")
+    public Response countDeviceGroupByWhere( @RequestBody CountDeviceGroupByWhereArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().countDeviceGroupByWhere(args.where));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 22
+    /**
+     * 返回满足{@code where}条件的日志记录(fl_log)数目
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+     * @return 返回满足{@code where}条件的日志记录(fl_log)数目
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/countLogByWhere", method = RequestMethod.POST)
+    @ApiOperation(value = "返回满足{@code where}条件的日志记录(fl_log)数目",httpMethod="POST")
+    public Response countLogByWhere( @RequestBody CountLogByWhereArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().countLogByWhere(args.where));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 23
+    /**
+     * 返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @param timestamp 时间戳
+     * @return 满足条件的记录条数
+     * @see #countLogLightByWhere(String)
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/countLogLightByVerifyTime", method = RequestMethod.POST)
+    @ApiOperation(value = "返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数",httpMethod="POST")
+    public Response countLogLightByVerifyTime( @RequestBody CountLogLightByVerifyTimeArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().countLogLightByVerifyTime(args.timestamp));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 24
+    /**
+     * 返回符合{@code where}条件的记录条数
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+     * @return 返回符合{@code where}条件的记录条数
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/countLogLightByWhere", method = RequestMethod.POST)
+    @ApiOperation(value = "返回符合{@code where}条件的记录条数",httpMethod="POST")
+    public Response countLogLightByWhere( @RequestBody CountLogLightByWhereArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().countLogLightByWhere(args.where));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 25
+    /**
+     * 返回满足{@code where}条件的日志记录(fl_person)数目
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+     * @return 返回满足{@code where}条件的日志记录(fl_person)数目
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/countPersonByWhere", method = RequestMethod.POST)
+    @ApiOperation(value = "返回满足{@code where}条件的日志记录(fl_person)数目",httpMethod="POST")
+    public Response countPersonByWhere( @RequestBody CountPersonByWhereArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().countPersonByWhere(args.where));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 26
+    /**
+     * 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
+     * @return 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
+     * @see TableManager#countWhere(String)
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/countPersonGroupByWhere", method = RequestMethod.POST)
+    @ApiOperation(value = "返回满足{@code where} SQL条件语句的 fl_person_group 记录总数",httpMethod="POST")
+    public Response countPersonGroupByWhere( @RequestBody CountPersonGroupByWhereArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().countPersonGroupByWhere(args.where));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 27
+    /**
+     * 删除 personId 关联的所有特征(feature)记录
+     * @param personId
+     * @param deleteImage 是否删除关联的 image记录
+     * @param token 访问令牌
+     * @return 
+     * @see #deleteFeature(String, boolean, Token)
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/deleteAllFeaturesByPersonId", method = RequestMethod.POST)
+    @ApiOperation(value = "删除 personId 关联的所有特征(feature)记录",httpMethod="POST")
+    public Response deleteAllFeaturesByPersonId( @RequestBody DeleteAllFeaturesByPersonIdArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().deleteAllFeaturesByPersonId(args.personId,args.deleteImage,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 28
+    /**
+     * 删除{@code deviceGroupId}指定的设备组<br>
+     * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
+     * <br>{@code PERSON_ONLY}
+     * @param deviceGroupId
+     * @param token 访问令牌
+     * @return 返回删除的记录条数
+     * @throws RuntimeDaoException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/deleteDeviceGroup", method = RequestMethod.POST)
+    @ApiOperation(value = "删除{@code deviceGroupId}指定的设备组<br>\n"
++" 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response deleteDeviceGroup( @RequestBody DeleteDeviceGroupArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().deleteDeviceGroup(args.deviceGroupId,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 29
+    /**
+     * 删除featureMd5指定的特征记录及关联的face记录
+     * @param featureMd5
+     * @param deleteImage 为{@code true}则删除关联的 image记录(如果该图像还关联其他特征则不删除)
+     * @param token 访问令牌
+     * @return 返回删除的特征记录关联的图像(image)记录的MD5<br>
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/deleteFeature", method = RequestMethod.POST)
+    @ApiOperation(value = "删除featureMd5指定的特征记录及关联的face记录",httpMethod="POST")
+    public Response deleteFeature( @RequestBody DeleteFeatureArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().deleteFeature(args.featureMd5,args.deleteImage,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 30
+    /**
+     * 从permit表删除指定{@code deviceGroupId}指定设备组上的人员通行权限
+     * @param deviceGroupId
+     * @param token 令牌
+     * @return 删除的记录条数
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/deleteGroupPermitOnDeviceGroup", method = RequestMethod.POST)
+    @ApiOperation(value = "从permit表删除指定{@code deviceGroupId}指定设备组上的人员通行权限",httpMethod="POST")
+    public Response deleteGroupPermitOnDeviceGroup( @RequestBody DeleteGroupPermitOnDeviceGroupArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().deleteGroupPermitOnDeviceGroup(args.deviceGroupId,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 31
+    /**
+     * 删除imageMd5指定图像及其缩略图
+     * @param imageMd5
+     * @param token 访问令牌
+     * @return 删除成功返回1,否则返回0
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/deleteImage", method = RequestMethod.POST)
+    @ApiOperation(value = "删除imageMd5指定图像及其缩略图",httpMethod="POST")
+    public Response deleteImage( @RequestBody DeleteImageArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().deleteImage(args.imageMd5,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 32
+    /**
+     * 删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
+     * @param deviceGroupId 设备组id
+     * @param personGroupId 人员组id
+     * @param token
+     * @return 删除成功返回1,否则返回0
+     * @since 2.1.2
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/deletePermitById", method = RequestMethod.POST)
+    @ApiOperation(value = "删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>",httpMethod="POST")
+    public Response deletePermit( @RequestBody DeletePermitByIdArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().deletePermit(args.deviceGroupId,args.personGroupId,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 33
+    /**
+     * 删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
+     * <br>{@code PERSON_ONLY}
+     * @param deviceGroup 设备组记录
+     * @param personGroup 人员组记录
+     * @param token 访问令牌
+     * @return 删除成功返回1,否则返回0
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/deletePermit", method = RequestMethod.POST)
+    @ApiOperation(value = "删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response deletePermit( @RequestBody DeletePermitArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().deletePermit(args.deviceGroup,args.personGroup,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 34
+    /**
+     * 删除personId指定的人员(person)记录及关联的所有记录
+     * <br>{@code PERSON_ONLY}
+     * @param personId
+     * @param token 访问令牌
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/deletePerson", method = RequestMethod.POST)
+    @ApiOperation(value = "删除personId指定的人员(person)记录及关联的所有记录\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response deletePerson( @RequestBody DeletePersonArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().deletePerson(args.personId,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 35
+    /**
+     * 删除papersNum指定的人员(person)记录及关联的所有记录
+     * <br>{@code PERSON_ONLY}
+     * @param papersNum 证件号码
+     * @param token 访问令牌
+     * @return 返回删除的 person 记录数量
+     * @see #deletePerson(int, Token)
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/deletePersonByPapersNum", method = RequestMethod.POST)
+    @ApiOperation(value = "删除papersNum指定的人员(person)记录及关联的所有记录\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response deletePersonByPapersNum( @RequestBody DeletePersonByPapersNumArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().deletePersonByPapersNum(args.papersNum,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 36
+    /**
+     * 删除{@code personGroupId}指定的人员组<br>
+     * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
+     * <br>{@code PERSON_ONLY}
+     * @param personGroupId
+     * @param token 访问令牌
+     * @return 
+     * @throws RuntimeDaoException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/deletePersonGroup", method = RequestMethod.POST)
+    @ApiOperation(value = "删除{@code personGroupId}指定的人员组<br>\n"
++" 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response deletePersonGroup( @RequestBody DeletePersonGroupArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().deletePersonGroup(args.personGroupId,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 37
+    /**
+     * 从permit表删除指定{@code personGroupId}指定人员组的在所有设备上的通行权限
+     * @param personGroupId
+     * @param token 令牌
+     * @return 删除的记录条数
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/deletePersonGroupPermit", method = RequestMethod.POST)
+    @ApiOperation(value = "从permit表删除指定{@code personGroupId}指定人员组的在所有设备上的通行权限",httpMethod="POST")
+    public Response deletePersonGroupPermit( @RequestBody DeletePersonGroupPermitArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().deletePersonGroupPermit(args.personGroupId,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 38
+    /**
+     * 删除personIdList指定的人员(person)记录及关联的所有记录
+     * <br>{@code PERSON_ONLY}
+     * @param personIdList 人员id列表
+     * @param token 访问令牌
+     * @return 返回删除的 person 记录数量
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/deletePersons", method = RequestMethod.POST)
+    @ApiOperation(value = "删除personIdList指定的人员(person)记录及关联的所有记录\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response deletePersons( @RequestBody DeletePersonsArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().deletePersons(args.personIdList,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 39
+    /**
+     * 删除papersNum指定的人员(person)记录及关联的所有记录
+     * <br>{@code PERSON_ONLY}
+     * @param papersNumlist 证件号码列表
+     * @param token 访问令牌
+     * @return 返回删除的 person 记录数量
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/deletePersonsByPapersNum", method = RequestMethod.POST)
+    @ApiOperation(value = "删除papersNum指定的人员(person)记录及关联的所有记录\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response deletePersonsByPapersNum( @RequestBody DeletePersonsByPapersNumArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().deletePersonsByPapersNum(args.papersNumlist,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 40
+    /**
+     * 设置 personId 指定的人员为禁止状态
+     * <br>{@code PERSON_ONLY}
+     * @param personId
+     * @param token 访问令牌
+     * @see #setPersonExpiryDate(int, long, Token)
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/disablePerson", method = RequestMethod.POST)
+    @ApiOperation(value = "设置 personId 指定的人员为禁止状态\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response disablePerson( @RequestBody DisablePersonArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().disablePerson(args.personId,args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 41
+    /**
+     * 设置 personIdList 指定的人员为禁止状态
+     * <br>{@code PERSON_ONLY}
+     * @param personIdList 人员id列表
+     * @param token 访问令牌
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/disablePersonList", method = RequestMethod.POST)
+    @ApiOperation(value = "设置 personIdList 指定的人员为禁止状态\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response disablePerson( @RequestBody DisablePersonListArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().disablePerson(args.personIdList,args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 42
+    /**
+     * 判断id指定的设备记录是否存在
+     * @param id
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/existsDevice", method = RequestMethod.POST)
+    @ApiOperation(value = "判断id指定的设备记录是否存在",httpMethod="POST")
+    public Response existsDevice( @RequestBody ExistsDeviceArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().existsDevice(args.id));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 43
+    /**
+     * 判断md5指定的特征记录是否存在
+     * @param md5
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/existsFeature", method = RequestMethod.POST)
+    @ApiOperation(value = "判断md5指定的特征记录是否存在",httpMethod="POST")
+    public Response existsFeature( @RequestBody ExistsFeatureArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().existsFeature(args.md5));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 44
+    /**
+     * 判断{@code md5}指定的图像记录是否存在
+     * @param md5 图像的MD5校验码
+     * @return 记录存在返回{@code true},否则返回{@code false}
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/existsImage", method = RequestMethod.POST)
+    @ApiOperation(value = "判断{@code md5}指定的图像记录是否存在",httpMethod="POST")
+    public Response existsImage( @RequestBody ExistsImageArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().existsImage(args.md5));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 45
+    /**
+     * 判断是否存在personId指定的人员记录
+     * @param persionId
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/existsPerson", method = RequestMethod.POST)
+    @ApiOperation(value = "判断是否存在personId指定的人员记录",httpMethod="POST")
+    public Response existsPerson( @RequestBody ExistsPersonArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().existsPerson(args.persionId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 46
+    /**
+     * 返回{@code deviceId}指定的设备记录
+     * @param deviceId
+     * @return 返回设备记录
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getDevice", method = RequestMethod.POST)
+    @ApiOperation(value = "返回{@code deviceId}指定的设备记录",httpMethod="POST")
+    public Response getDevice( @RequestBody GetDeviceArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getDevice(args.deviceId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 47
+    /**
+     * 根据设备组id返回数据库记录
+     * @param deviceGroupId
+     * @return 
+     * @throws RuntimeDaoException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getDeviceGroup", method = RequestMethod.POST)
+    @ApiOperation(value = "根据设备组id返回数据库记录",httpMethod="POST")
+    public Response getDeviceGroup( @RequestBody GetDeviceGroupArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getDeviceGroup(args.deviceGroupId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 48
+    /**
+     * 返回设备组id列表指定的数据库记录
+     * @param groupIdList
+     * @return 
+     * @throws RuntimeDaoException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getDeviceGroups", method = RequestMethod.POST)
+    @ApiOperation(value = "返回设备组id列表指定的数据库记录",httpMethod="POST")
+    public Response getDeviceGroups( @RequestBody GetDeviceGroupsArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getDeviceGroups(args.groupIdList));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 49
+    /**
+     * 返回({@code deviceId})指定的设备所属所有设备组<br>
+     * @param deviceId
+     * @return 如果{@code deviceId}无效则返回空表
+     * @see #listOfParentForDeviceGroup(int)
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getDeviceGroupsBelongs", method = RequestMethod.POST)
+    @ApiOperation(value = "返回({@code deviceId})指定的设备所属所有设备组<br>",httpMethod="POST")
+    public Response getDeviceGroupsBelongs( @RequestBody GetDeviceGroupsBelongsArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getDeviceGroupsBelongs(args.deviceId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 50
+    /**
+     * 从permit表返回允许在{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})的id<br>
+     * 不排序,不包含重复id
+     * @param personGroupId 为{@code null}返回空表
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getDeviceGroupsPermit", method = RequestMethod.POST)
+    @ApiOperation(value = "从permit表返回允许在{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})的id<br>\n"
++" 不排序,不包含重复id",httpMethod="POST")
+    public Response getDeviceGroupsPermit( @RequestBody GetDeviceGroupsPermitArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getDeviceGroupsPermit(args.personGroupId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 51
+    /**
+     * 从permit表返回允许在{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})的id<br>
+     * 不排序,不包含重复id,本方法不会对{@code personGroupId}的父结点向上回溯
+     * @param personGroupId
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getDeviceGroupsPermittedBy", method = RequestMethod.POST)
+    @ApiOperation(value = "从permit表返回允许在{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})的id<br>\n"
++" 不排序,不包含重复id,本方法不会对{@code personGroupId}的父结点向上回溯",httpMethod="POST")
+    public Response getDeviceGroupsPermittedBy( @RequestBody GetDeviceGroupsPermittedByArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getDeviceGroupsPermittedBy(args.personGroupId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 52
+    /**
+     * 返回featureMd5的人脸特征记录关联的设备id<br>
+     * @param featureMd5
+     * @return 如果没有关联的设备则返回{@code null}
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getDeviceIdOfFeature", method = RequestMethod.POST)
+    @ApiOperation(value = "返回featureMd5的人脸特征记录关联的设备id<br>",httpMethod="POST")
+    public Response getDeviceIdOfFeature( @RequestBody GetDeviceIdOfFeatureArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getDeviceIdOfFeature(args.featureMd5));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 53
+    /**
+     * 返回 {@code idList} 指定的设备记录
+     * @param idList
+     * @return 返回设备记录列表
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getDevices", method = RequestMethod.POST)
+    @ApiOperation(value = "返回 {@code idList} 指定的设备记录",httpMethod="POST")
+    public Response getDevices( @RequestBody GetDevicesArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getDevices(args.idList));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 54
+    /**
+     * 返回{@code deviceGroupId}指定的设备组下属的所有设备记录<br>
+     * 如果没有下属设备记录则返回空表
+     * @param deviceGroupId
+     * @return 
+     * @throws RuntimeDaoException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getDevicesOfGroup", method = RequestMethod.POST)
+    @ApiOperation(value = "返回{@code deviceGroupId}指定的设备组下属的所有设备记录<br>\n"
++" 如果没有下属设备记录则返回空表",httpMethod="POST")
+    public Response getDevicesOfGroup( @RequestBody GetDevicesOfGroupArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getDevicesOfGroup(args.deviceGroupId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 55
+    /**
+     * 返回faceId指定的人脸信息记录
+     * @param faceId
+     * @return {@link FaceBean} ,如果没有对应记录则返回null
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getFace", method = RequestMethod.POST)
+    @ApiOperation(value = "返回faceId指定的人脸信息记录",httpMethod="POST")
+    public Response getFace( @RequestBody GetFaceArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getFace(args.faceId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 56
+    /**
+     * 根据MD5校验码返回人脸特征数据记录
+     * @param md5
+     * @return 如果数据库中没有对应的数据则返回null
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getFeature", method = RequestMethod.POST)
+    @ApiOperation(value = "根据MD5校验码返回人脸特征数据记录",httpMethod="POST")
+    public Response getFeature( @RequestBody GetFeatureArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getFeature(args.md5));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 57
+    /**
+     * 根据MD5校验码返回人脸特征数据
+     * @param md5
+     * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getFeatureBytes", method = RequestMethod.POST)
+    @ApiOperation(value = "根据MD5校验码返回人脸特征数据",httpMethod="POST")
+    public Response getFeatureBytes( @RequestBody GetFeatureBytesArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getFeatureBytes(args.md5));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 58
+    /**
+     * 根据MD5校验码返回人脸特征数据记录
+     * @param md5 md5列表
+     * @return {@link FeatureBean}列表
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getFeatures", method = RequestMethod.POST)
+    @ApiOperation(value = "根据MD5校验码返回人脸特征数据记录",httpMethod="POST")
+    public Response getFeatures( @RequestBody GetFeaturesArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getFeatures(args.md5));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 59
+    /**
+     * 返回 persionId 关联的所有人脸特征记录
+     * @param personId 人员id(fl_person.id)
+     * @return 返回 fl_feature.md5  列表
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getFeaturesByPersonId", method = RequestMethod.POST)
+    @ApiOperation(value = "返回 persionId 关联的所有人脸特征记录",httpMethod="POST")
+    public Response getFeaturesByPersonId( @RequestBody GetFeaturesByPersonIdArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getFeaturesByPersonId(args.personId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 60
+    /**
+     * 返回 persionId 关联的指定SDK的人脸特征记录
+     * @param personId 人员id(fl_person.id)
+     * @param sdkVersion 算法(SDK)版本号
+     * @return 返回 fl_feature.md5  列表
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getFeaturesByPersonIdAndSdkVersion", method = RequestMethod.POST)
+    @ApiOperation(value = "返回 persionId 关联的指定SDK的人脸特征记录",httpMethod="POST")
+    public Response getFeaturesByPersonIdAndSdkVersion( @RequestBody GetFeaturesByPersonIdAndSdkVersionArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getFeaturesByPersonIdAndSdkVersion(args.personId,args.sdkVersion));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 61
+    /**
+     * 返回指定人员{@code personId}关联的所有特征<br>
+     * @param personId
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getFeaturesOfPerson", method = RequestMethod.POST)
+    @ApiOperation(value = "返回指定人员{@code personId}关联的所有特征<br>",httpMethod="POST")
+    public Response getFeaturesOfPerson( @RequestBody GetFeaturesOfPersonArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getFeaturesOfPerson(args.personId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 62
+    /**
+     * 获取人员组通行权限<br>
+     * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行,
+     * 本方法会对{@code personGroupId}的父结点向上回溯：
+     * {@codepersonGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，
+     * 输入参数为{@code null}或找不到指定的记录则返回false
+     * @param deviceId
+     * @param personGroupId
+     * @return 允许通行返回false，否则返回false
+     * @throws RuntimeDaoException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getGroupPermit", method = RequestMethod.POST)
+    @ApiOperation(value = "获取人员组通行权限<br>\n"
++" 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行,\n"
++" 本方法会对{@code personGroupId}的父结点向上回溯：\n"
++" {@codepersonGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，\n"
++" 输入参数为{@code null}或找不到指定的记录则返回false",httpMethod="POST")
+    public Response getGroupPermit( @RequestBody GetGroupPermitArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getGroupPermit(args.deviceId,args.personGroupId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 63
+    /**
+     * 获取人员组通行权限<br>
+     * 返回{@code personGroupId}指定的人员组在{@code deviceGroupId}指定的设备组上是否允许通行,
+     * 本方法会对{@code personGroupId}的父结点向上回溯：
+     * {@codepersonGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，
+     * 输入参数为{@code null}或找不到指定的记录则返回false
+     * @param deviceGroupId
+     * @param personGroupId
+     * @return 允许通行返回false，否则返回false
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getGroupPermitOnDeviceGroup", method = RequestMethod.POST)
+    @ApiOperation(value = "获取人员组通行权限<br>\n"
++" 返回{@code personGroupId}指定的人员组在{@code deviceGroupId}指定的设备组上是否允许通行,\n"
++" 本方法会对{@code personGroupId}的父结点向上回溯：\n"
++" {@codepersonGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，\n"
++" 输入参数为{@code null}或找不到指定的记录则返回false",httpMethod="POST")
+    public Response getGroupPermitOnDeviceGroup( @RequestBody GetGroupPermitOnDeviceGroupArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getGroupPermitOnDeviceGroup(args.deviceGroupId,args.personGroupId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 64
+    /**
+     * 参见 {@link #getGroupPermit(int, int)}
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getGroupPermits", method = RequestMethod.POST)
+    @ApiOperation(value = "参见 {@link #getGroupPermit(int, int)}",httpMethod="POST")
+    public Response getGroupPermits( @RequestBody GetGroupPermitsArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getGroupPermits(args.deviceId,args.personGroupIdList));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 65
+    /**
+     * 根据图像的MD5校验码返回图像记录
+     * @param imageMD5
+     * @return {@link ImageBean} ,如果没有对应记录则返回null
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getImage", method = RequestMethod.POST)
+    @ApiOperation(value = "根据图像的MD5校验码返回图像记录",httpMethod="POST")
+    public Response getImage( @RequestBody GetImageArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getImage(args.imageMD5));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 66
+    /**
+     * 根据图像的MD5校验码返回图像数据
+     * @param imageMD5
+     * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getImageBytes", method = RequestMethod.POST)
+    @ApiOperation(value = "根据图像的MD5校验码返回图像数据",httpMethod="POST")
+    public Response getImageBytes( @RequestBody GetImageBytesArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getImageBytes(args.imageMD5));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 67
+    /**
+     * 返回featureMd5的人脸特征记录关联的所有图像记录id(MD5)
+     * @param featureMd5 人脸特征id(MD5)
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getImagesAssociatedByFeature", method = RequestMethod.POST)
+    @ApiOperation(value = "返回featureMd5的人脸特征记录关联的所有图像记录id(MD5)",httpMethod="POST")
+    public Response getImagesAssociatedByFeature( @RequestBody GetImagesAssociatedByFeatureArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getImagesAssociatedByFeature(args.featureMd5));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 68
+    /**
+     * 返回 persionId 关联的所有日志记录
+     * @param personId fl_person.id
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getLogBeansByPersonId", method = RequestMethod.POST)
+    @ApiOperation(value = "返回 persionId 关联的所有日志记录",httpMethod="POST")
+    public Response getLogBeansByPersonId( @RequestBody GetLogBeansByPersonIdArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getLogBeansByPersonId(args.personId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 69
+    /**
+     * 返回personId指定的人员记录
+     * @param personId
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getPerson", method = RequestMethod.POST)
+    @ApiOperation(value = "返回personId指定的人员记录",httpMethod="POST")
+    public Response getPerson( @RequestBody GetPersonArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getPerson(args.personId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 70
+    /**
+     * 根据证件号码返回人员记录
+     * @param papersNum
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getPersonByPapersNum", method = RequestMethod.POST)
+    @ApiOperation(value = "根据证件号码返回人员记录",httpMethod="POST")
+    public Response getPersonByPapersNum( @RequestBody GetPersonByPapersNumArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getPersonByPapersNum(args.papersNum));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 71
+    /**
+     * 根据人员组id返回数据库记录
+     * @param personGroupId
+     * @return 
+     * @throws RuntimeDaoException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getPersonGroup", method = RequestMethod.POST)
+    @ApiOperation(value = "根据人员组id返回数据库记录",httpMethod="POST")
+    public Response getPersonGroup( @RequestBody GetPersonGroupArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getPersonGroup(args.personGroupId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 72
+    /**
+     * 返回人员组id列表指定的数据库记录
+     * @param groupIdList
+     * @return 
+     * @throws RuntimeDaoException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getPersonGroups", method = RequestMethod.POST)
+    @ApiOperation(value = "返回人员组id列表指定的数据库记录",httpMethod="POST")
+    public Response getPersonGroups( @RequestBody GetPersonGroupsArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getPersonGroups(args.groupIdList));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 73
+    /**
+     * 返回({@code personId})指定的人员所属所有人员组<br>
+     * @param personId
+     * @return 如果{@code personId}无效则返回空表
+     * @see #listOfParentForPersonGroup(int)
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getPersonGroupsBelongs", method = RequestMethod.POST)
+    @ApiOperation(value = "返回({@code personId})指定的人员所属所有人员组<br>",httpMethod="POST")
+    public Response getPersonGroupsBelongs( @RequestBody GetPersonGroupsBelongsArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getPersonGroupsBelongs(args.personId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 74
+    /**
+     * 从permit表返回允许在{@code deviceGroupId}指定的设备组通过的所有人员组{@link PersonGroupBean}对象的id<br>
+     * 不排序,不包含重复id,本方法不会对{@link PersonGroupBean}的父结点向上回溯
+     * @param deviceGroupId
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getPersonGroupsPermittedBy", method = RequestMethod.POST)
+    @ApiOperation(value = "从permit表返回允许在{@code deviceGroupId}指定的设备组通过的所有人员组{@link PersonGroupBean}对象的id<br>\n"
++"  不排序,不包含重复id,本方法不会对{@link PersonGroupBean}的父结点向上回溯",httpMethod="POST")
+    public Response getPersonGroupsPermittedBy( @RequestBody GetPersonGroupsPermittedByArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getPersonGroupsPermittedBy(args.deviceGroupId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 75
+    /**
+     * 获取人员通行权限<br>
+     * 返回{@code personId}指定的人员在{@code deviceId}设备上是否允许通行
+     * @param deviceId
+     * @param personId
+     * @return 
+     * @throws RuntimeDaoException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getPersonPermit", method = RequestMethod.POST)
+    @ApiOperation(value = "获取人员通行权限<br>\n"
++" 返回{@code personId}指定的人员在{@code deviceId}设备上是否允许通行",httpMethod="POST")
+    public Response getPersonPermit( @RequestBody GetPersonPermitArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getPersonPermit(args.deviceId,args.personId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 76
+    /**
+     * 参见 {@link #getPersonPermit(int, int) }
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getPersonPermits", method = RequestMethod.POST)
+    @ApiOperation(value = "参见 {@link #getPersonPermit(int, int) }",httpMethod="POST")
+    public Response getPersonPermits( @RequestBody GetPersonPermitsArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getPersonPermits(args.deviceId,args.personIdList));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 77
+    /**
+     * 返回 list 指定的人员记录
+     * @param idList 人员id列表
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getPersons", method = RequestMethod.POST)
+    @ApiOperation(value = "返回 list 指定的人员记录",httpMethod="POST")
+    public Response getPersons( @RequestBody GetPersonsArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getPersons(args.idList));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 78
+    /**
+     * 返回{@code deviceGroupId}指定的人员组下属的所有人员记录<br>
+     * 如果没有下属人员记录则返回空表
+     * @param personGroupId
+     * @return 人员ID列表
+     * @throws RuntimeDaoException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getPersonsOfGroup", method = RequestMethod.POST)
+    @ApiOperation(value = "返回{@code deviceGroupId}指定的人员组下属的所有人员记录<br>\n"
++" 如果没有下属人员记录则返回空表",httpMethod="POST")
+    public Response getPersonsOfGroup( @RequestBody GetPersonsOfGroupArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getPersonsOfGroup(args.personGroupId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 79
+    /**
+     * 返回指定的参数,如果参数没有定义则返回{@code null}<br>
+     * 非root令牌只能访问指定范围的参数,否则会抛出异常<br>
+     * root令牌不受限制<br>
+     * @param key
+     * @param token 访问令牌
+     * @return 返回{@code key}指定的参数值
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getProperty", method = RequestMethod.POST)
+    @ApiOperation(value = "返回指定的参数,如果参数没有定义则返回{@code null}<br>\n"
++" 非root令牌只能访问指定范围的参数,否则会抛出异常<br>\n"
++" root令牌不受限制<br>",httpMethod="POST")
+    public Response getProperty( @RequestBody GetPropertyArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getProperty(args.key,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 80
+    /**
+     * 返回redis访问基本参数:<br>
+     * <ul>
+     * <li>redis服务器地址</li>
+     * <li>设备命令通道名</li>
+     * <li>人员验证实时监控通道名</li>
+     * <li>设备心跳实时监控通道名</li>
+     * <li>设备心跳包间隔时间(秒)</li>
+     * <li>设备心跳包失效时间(秒)</li>
+     * </ul>
+     * 参见{@link MQParam}定义
+     * @param token 访问令牌
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getRedisParameters", method = RequestMethod.POST)
+    @ApiOperation(value = "返回redis访问基本参数:<br>\n"
++" <ul>\n"
++" <li>redis服务器地址</li>\n"
++" <li>设备命令通道名</li>\n"
++" <li>人员验证实时监控通道名</li>\n"
++" <li>设备心跳实时监控通道名</li>\n"
++" <li>设备心跳包间隔时间(秒)</li>\n"
++" <li>设备心跳包失效时间(秒)</li>\n"
++" </ul>\n"
++" 参见{@link MQParam}定义",httpMethod="POST")
+    public Response getRedisParameters( @RequestBody GetRedisParametersArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getRedisParameters(args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 81
+    /**
+     * 获取服务的所有配置参数
+     * <br>{@code ROOT_ONLY}
+     * @param token 访问令牌
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getServiceConfig", method = RequestMethod.POST)
+    @ApiOperation(value = "获取服务的所有配置参数\n"
++" <br>{@code ROOT_ONLY}",httpMethod="POST")
+    public Response getServiceConfig( @RequestBody GetServiceConfigArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getServiceConfig(args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 82
+    /**
+     * 返回{@code deviceGroupId}指定的设备组下的所有子节点(设备组)<br>
+     * 如果没有子节点则返回空表
+     * @param deviceGroupId
+     * @return 设备组ID列表
+     * @throws RuntimeDaoException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getSubDeviceGroup", method = RequestMethod.POST)
+    @ApiOperation(value = "返回{@code deviceGroupId}指定的设备组下的所有子节点(设备组)<br>\n"
++" 如果没有子节点则返回空表",httpMethod="POST")
+    public Response getSubDeviceGroup( @RequestBody GetSubDeviceGroupArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getSubDeviceGroup(args.deviceGroupId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 83
+    /**
+     * 返回{@code personGroupId}指定的人员组下的所有子节点(人员组)<br>
+     * 如果没有子节点则返回空表
+     * @param personGroupId
+     * @return 人员组ID列表
+     * @throws RuntimeDaoException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getSubPersonGroup", method = RequestMethod.POST)
+    @ApiOperation(value = "返回{@code personGroupId}指定的人员组下的所有子节点(人员组)<br>\n"
++" 如果没有子节点则返回空表",httpMethod="POST")
+    public Response getSubPersonGroup( @RequestBody GetSubPersonGroupArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getSubPersonGroup(args.personGroupId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 84
+    /**
+     * 判断 personId 指定的人员记录是否过期
+     * @param personId
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/isDisable", method = RequestMethod.POST)
+    @ApiOperation(value = "判断 personId 指定的人员记录是否过期",httpMethod="POST")
+    public Response isDisable( @RequestBody IsDisableArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().isDisable(args.personId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 85
+    /**
+     * 是否为本地实现
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/isLocal", method = RequestMethod.POST)
+    @ApiOperation(value = "是否为本地实现",httpMethod="POST")
+    public Response isLocal( @RequestBody IsLocalArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().isLocal());
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 86
+    /**
+     * 判断命令响应通道是否有效<br>
+     * 通道过期或不存在都返回{@code false}
+     * @param ackChannel
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/isValidAckChannel", method = RequestMethod.POST)
+    @ApiOperation(value = "判断命令响应通道是否有效<br>\n"
++" 通道过期或不存在都返回{@code false}",httpMethod="POST")
+    public Response isValidAckChannel( @RequestBody IsValidAckChannelArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().isValidAckChannel(args.ackChannel));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 87
+    /**
+     * 判断命令序列号是否有效<br>
+     * 序列号过期或不存在都返回{@code false}
+     * @param cmdSn
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/isValidCmdSn", method = RequestMethod.POST)
+    @ApiOperation(value = "判断命令序列号是否有效<br>\n"
++" 序列号过期或不存在都返回{@code false}",httpMethod="POST")
+    public Response isValidCmdSn( @RequestBody IsValidCmdSnArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().isValidCmdSn(args.cmdSn));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 88
+    /**
+     * 验证设备令牌是否有效
+     * @param token
+     * @return 令牌有效返回{@code true},否则返回{@code false}
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/isValidDeviceToken", method = RequestMethod.POST)
+    @ApiOperation(value = "验证设备令牌是否有效",httpMethod="POST")
+    public Response isValidDeviceToken( @RequestBody IsValidDeviceTokenArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().isValidDeviceToken(args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 89
+    /**
+     * 验证用户密码是否匹配
+     * @param userId 用户id字符串,root用户id即为{@link CommonConstant#ROOT_NAME}
+     * @param password 用户密码
+     * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
+     * @return {@code true}密码匹配
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/isValidPassword", method = RequestMethod.POST)
+    @ApiOperation(value = "验证用户密码是否匹配",httpMethod="POST")
+    public Response isValidPassword( @RequestBody IsValidPasswordArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().isValidPassword(args.userId,args.password,args.isMd5));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 90
+    /**
+     * 验证人员令牌是否有效
+     * @param token
+     * @return 令牌有效返回{@code true},否则返回{@code false}
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/isValidPersonToken", method = RequestMethod.POST)
+    @ApiOperation(value = "验证人员令牌是否有效",httpMethod="POST")
+    public Response isValidPersonToken( @RequestBody IsValidPersonTokenArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().isValidPersonToken(args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 91
+    /**
+     * 验证root令牌是否有效
+     * @param token
+     * @return 令牌有效返回{@code true},否则返回{@code false}
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/isValidRootToken", method = RequestMethod.POST)
+    @ApiOperation(value = "验证root令牌是否有效",httpMethod="POST")
+    public Response isValidRootToken( @RequestBody IsValidRootTokenArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().isValidRootToken(args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 92
+    /**
+     * 验证令牌是否有效
+     * @param token
+     * @return 令牌有效返回{@code true},否则返回{@code false}
+     * @since 2.1.1
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/isValidToken", method = RequestMethod.POST)
+    @ApiOperation(value = "验证令牌是否有效",httpMethod="POST")
+    public Response isValidToken( @RequestBody IsValidTokenArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().isValidToken(args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 93
+    /**
+     * 验证PERSON/ROOT令牌是否有效
+     * @param token
+     * @return 令牌有效返回{@code true},否则返回{@code false}
+     * @since 2.1.1
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/isValidUserToken", method = RequestMethod.POST)
+    @ApiOperation(value = "验证PERSON/ROOT令牌是否有效",httpMethod="POST")
+    public Response isValidUserToken( @RequestBody IsValidUserTokenArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().isValidUserToken(args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 94
+    /**
+     * 返回({@code deviceGroupId})指定的fl_device_group记录的所有的父节点(包括自己)<br>
+     * 自引用字段:fl_device_group(parent)
+     * @param deviceGroupId
+     * @return 如果{@code deviceGroupId}无效则返回空表
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/listOfParentForDeviceGroup", method = RequestMethod.POST)
+    @ApiOperation(value = "返回({@code deviceGroupId})指定的fl_device_group记录的所有的父节点(包括自己)<br>\n"
++" 自引用字段:fl_device_group(parent)",httpMethod="POST")
+    public Response listOfParentForDeviceGroup( @RequestBody ListOfParentForDeviceGroupArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().listOfParentForDeviceGroup(args.deviceGroupId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 95
+    /**
+     * 返回({@code personGroupId})指定的fl_person_group记录的所有的父节点(包括自己)<br>
+     * 自引用字段:fl_person_group(parent)
+     * @param personGroupId
+     * @return 如果{@code personGroupId}无效则返回空表
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/listOfParentForPersonGroup", method = RequestMethod.POST)
+    @ApiOperation(value = "返回({@code personGroupId})指定的fl_person_group记录的所有的父节点(包括自己)<br>\n"
++" 自引用字段:fl_person_group(parent)",httpMethod="POST")
+    public Response listOfParentForPersonGroup( @RequestBody ListOfParentForPersonGroupArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().listOfParentForPersonGroup(args.personGroupId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 96
+    /**
+     * 返回所有人员记录
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/loadAllPerson", method = RequestMethod.POST)
+    @ApiOperation(value = "返回所有人员记录",httpMethod="POST")
+    public Response loadAllPerson( @RequestBody LoadAllPersonArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().loadAllPerson());
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 97
+    /**
+     * 根据{@code where}指定的查询条件查询设备记录
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+     * @param startRow 记录起始行号 (first row = 1, last row = -1)
+     * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
+     * @return 返回设备记录列表
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/loadDeviceByWhere", method = RequestMethod.POST)
+    @ApiOperation(value = "根据{@code where}指定的查询条件查询设备记录",httpMethod="POST")
+    public Response loadDeviceByWhere( @RequestBody LoadDeviceByWhereArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().loadDeviceByWhere(args.where,args.startRow,args.numRows));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 98
+    /**
+     * 查询{@code where} SQL条件语句指定的记录
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @return 设备组ID列表
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/loadDeviceGroupByWhere", method = RequestMethod.POST)
+    @ApiOperation(value = "查询{@code where} SQL条件语句指定的记录",httpMethod="POST")
+    public Response loadDeviceGroupByWhere( @RequestBody LoadDeviceGroupByWhereArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().loadDeviceGroupByWhere(args.where,args.startRow,args.numRows));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 99
+    /**
+     * 查询{@code where}条件指定的记录
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+     * @return 返回查询结果记录的主键
+     * @see 设备组ID列表
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/loadDeviceGroupIdByWhere", method = RequestMethod.POST)
+    @ApiOperation(value = "查询{@code where}条件指定的记录",httpMethod="POST")
+    public Response loadDeviceGroupIdByWhere( @RequestBody LoadDeviceGroupIdByWhereArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().loadDeviceGroupIdByWhere(args.where));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 100
+    /**
+     * 根据{@code where}指定的查询条件查询设备记录
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+     * @return 返回设备ID列表
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/loadDeviceIdByWhere", method = RequestMethod.POST)
+    @ApiOperation(value = "根据{@code where}指定的查询条件查询设备记录",httpMethod="POST")
+    public Response loadDeviceIdByWhere( @RequestBody LoadDeviceIdByWhereArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().loadDeviceIdByWhere(args.where));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 101
+    /**
+     * (主动更新机制实现)<br>
+     * 返回 fl_feature.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_feature记录
+     * @param timestamp
+     * @return 返回 fl_feature.md5 列表
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/loadFeatureMd5ByUpdate", method = RequestMethod.POST)
+    @ApiOperation(value = "(主动更新机制实现)<br>\n"
++" 返回 fl_feature.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_feature记录",httpMethod="POST")
+    public Response loadFeatureMd5ByUpdate( @RequestBody LoadFeatureMd5ByUpdateArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().loadFeatureMd5ByUpdate(args.timestamp));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 102
+    /**
+     * 日志查询<br>
+     * 根据{@code where}指定的查询条件查询日志记录
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
+     * @param startRow 记录起始行号 (first row = 1, last row = -1)
+     * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/loadLogByWhere", method = RequestMethod.POST)
+    @ApiOperation(value = "日志查询<br>\n"
++" 根据{@code where}指定的查询条件查询日志记录",httpMethod="POST")
+    public Response loadLogByWhere( @RequestBody LoadLogByWhereArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().loadLogByWhere(args.where,args.startRow,args.numRows));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 103
+    /**
+     * (主动更新机制实现)<br>
+     * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
+     * @param timestamp 时间戳
+     * @param startRow 记录起始行号 (first row = 1, last row = -1)
+     * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/loadLogLightByVerifyTime", method = RequestMethod.POST)
+    @ApiOperation(value = "(主动更新机制实现)<br>\n"
++" 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录",httpMethod="POST")
+    public Response loadLogLightByVerifyTime( @RequestBody LoadLogLightByVerifyTimeArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().loadLogLightByVerifyTime(args.timestamp,args.startRow,args.numRows));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 104
+    /**
+     * 日志查询<br>
+     * 根据{@code where}指定的查询条件查询日志记录{@link LogLightBean}
+     * @param where 'WHERE'开头的SQL条件语句
+     * @param startRow 记录起始行号 (first row = 1, last row = -1)
+     * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/loadLogLightByWhere", method = RequestMethod.POST)
+    @ApiOperation(value = "日志查询<br>\n"
++" 根据{@code where}指定的查询条件查询日志记录{@link LogLightBean}",httpMethod="POST")
+    public Response loadLogLightByWhere( @RequestBody LoadLogLightByWhereArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().loadLogLightByWhere(args.where,args.startRow,args.numRows));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 105
+    /**
+     * (主动更新机制实现)<br>
+     * 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录
+     * @param timestamp
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/loadPermitByUpdate", method = RequestMethod.POST)
+    @ApiOperation(value = "(主动更新机制实现)<br>\n"
++" 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录",httpMethod="POST")
+    public Response loadPermitByUpdate( @RequestBody LoadPermitByUpdateArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().loadPermitByUpdate(args.timestamp));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 106
+    /**
+     * 返回 where 指定的所有人员记录
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
+     * @param startRow 记录起始行号 (first row = 1, last row = -1)
+     * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
+     * @return 人员记录列表
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/loadPersonByWhere", method = RequestMethod.POST)
+    @ApiOperation(value = "返回 where 指定的所有人员记录",httpMethod="POST")
+    public Response loadPersonByWhere( @RequestBody LoadPersonByWhereArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().loadPersonByWhere(args.where,args.startRow,args.numRows));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 107
+    /**
+     * 查询{@code where} SQL条件语句指定的记录
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @return 人员组ID列表
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/loadPersonGroupByWhere", method = RequestMethod.POST)
+    @ApiOperation(value = "查询{@code where} SQL条件语句指定的记录",httpMethod="POST")
+    public Response loadPersonGroupByWhere( @RequestBody LoadPersonGroupByWhereArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().loadPersonGroupByWhere(args.where,args.startRow,args.numRows));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 108
+    /**
+     * 查询{@code where}条件指定的记录
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
+     * @return 返回人员组列表
+     * @see #loadPersonGroupByWhere(String,int,int)
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/loadPersonGroupIdByWhere", method = RequestMethod.POST)
+    @ApiOperation(value = "查询{@code where}条件指定的记录",httpMethod="POST")
+    public Response loadPersonGroupIdByWhere( @RequestBody LoadPersonGroupIdByWhereArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().loadPersonGroupIdByWhere(args.where));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 109
+    /**
+     * (主动更新机制实现)<br>
+     * 返回 fl_person.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_person记录
+     * @param timestamp
+     * @return 返回fl_person.id 列表
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/loadPersonIdByUpdateTime", method = RequestMethod.POST)
+    @ApiOperation(value = "(主动更新机制实现)<br>\n"
++" 返回 fl_person.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_person记录",httpMethod="POST")
+    public Response loadPersonIdByUpdateTime( @RequestBody LoadPersonIdByUpdateTimeArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().loadPersonIdByUpdateTime(args.timestamp));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 110
+    /**
+     * 返回 where 指定的所有人员记录
+     * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
+     * @return 返回 fl_person.id 列表
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/loadPersonIdByWhere", method = RequestMethod.POST)
+    @ApiOperation(value = "返回 where 指定的所有人员记录",httpMethod="POST")
+    public Response loadPersonIdByWhere( @RequestBody LoadPersonIdByWhereArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().loadPersonIdByWhere(args.where));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 111
+    /**
+     * (主动更新机制实现)<br>
+     * 返回fl_person.update_time字段大于指定时间戳( {@code timestamp} )的所有fl_person记录<br>
+     * 同时包含fl_feature更新记录引用的fl_person记录
+     * @param timestamp
+     * @return 返回fl_person.id 列表
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/loadUpdatedPersons", method = RequestMethod.POST)
+    @ApiOperation(value = "(主动更新机制实现)<br>\n"
++" 返回fl_person.update_time字段大于指定时间戳( {@code timestamp} )的所有fl_person记录<br>\n"
++" 同时包含fl_feature更新记录引用的fl_person记录",httpMethod="POST")
+    public Response loadUpdatedPersons( @RequestBody LoadUpdatedPersonsArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().loadUpdatedPersons(args.timestamp));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 112
+    /**
+     * 设备申请离线,删除设备令牌
+     * <br>{@code DEVICE_ONLY}
+     * @param token 当前持有的令牌
+     * @throws ServiceSecurityException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/offline", method = RequestMethod.POST)
+    @ApiOperation(value = "设备申请离线,删除设备令牌\n"
++" <br>{@code DEVICE_ONLY}",httpMethod="POST")
+    public Response offline( @RequestBody OfflineArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().offline(args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 113
+    /**
+     * 设备申请上线,每次调用都会产生一个新的令牌
+     * @param device 上线设备信息，必须提供{@code id, mac, serialNo}字段
+     * @return 设备访问令牌
+     * @throws ServiceSecurityException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/online", method = RequestMethod.POST)
+    @ApiOperation(value = "设备申请上线,每次调用都会产生一个新的令牌",httpMethod="POST")
+    public Response online( @RequestBody OnlineArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().online(args.device));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 114
+    /**
+     * 新设备注册,如果设备已经注册则返回注册设备记录<br>
+     * 注册时必须提供设备MAC地址,是否提供序列号,根据应用需要选择
+     * @param newDevice 设备记录,_isNew字段必须为{@code true},{@code id}字段不要指定,数据库会自动分配,保存在返回值中
+     * @return 
+     * @throws ServiceSecurityException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/registerDevice", method = RequestMethod.POST)
+    @ApiOperation(value = "新设备注册,如果设备已经注册则返回注册设备记录<br>\n"
++" 注册时必须提供设备MAC地址,是否提供序列号,根据应用需要选择",httpMethod="POST")
+    public Response registerDevice( @RequestBody RegisterDeviceArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().registerDevice(args.newDevice));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 115
+    /**
+     * 释放人员访问令牌
+     * <br>{@code PERSON_ONLY}
+     * @param token 当前持有的令牌
+     * @throws ServiceSecurityException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/releasePersonToken", method = RequestMethod.POST)
+    @ApiOperation(value = "释放人员访问令牌\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response releasePersonToken( @RequestBody ReleasePersonTokenArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().releasePersonToken(args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 116
+    /**
+     * 释放root访问令牌
+     * <br>{@code ROOT_ONLY}
+     * @param token 当前持有的令牌
+     * @throws ServiceSecurityException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/releaseRootToken", method = RequestMethod.POST)
+    @ApiOperation(value = "释放root访问令牌\n"
++" <br>{@code ROOT_ONLY}",httpMethod="POST")
+    public Response releaseRootToken( @RequestBody ReleaseRootTokenArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().releaseRootToken(args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 117
+    /**
+     * 释放person/root访问令牌
+     * @param token 要释放的令牌,如果令牌类型非{@link net.gdface.facelog.Token.TokenType#PERSON}或{@link net.gdface.facelog.Token.TokenType#ROOT}则抛出{@link ServiceSecurityException}异常
+     * @throws ServiceSecurityException
+     * @since 2.1.1
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/releaseUserToken", method = RequestMethod.POST)
+    @ApiOperation(value = "释放person/root访问令牌",httpMethod="POST")
+    public Response releaseUserToken( @RequestBody ReleaseUserTokenArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().releaseUserToken(args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 118
+    /**
+     * 替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录
+     * @param personId 人员记录id,{@code fl_person.id}
+     * @param featureMd5 人脸特征数据记录id (已经保存在数据库中)
+     * @param deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
+     * @param token 访问令牌
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/replaceFeature", method = RequestMethod.POST)
+    @ApiOperation(value = "替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录",httpMethod="POST")
+    public Response replaceFeature( @RequestBody ReplaceFeatureArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().replaceFeature(args.personId,args.featureMd5,args.deleteOldFeatureImage,args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 119
+    /**
+     * 返回deviceId所属的管理边界设备组id<br>
+     * 在deviceId所属组的所有父节点中自顶向下查找第一个{@code fl_device_group.root_group}字段不为空的组，返回此记录id<br>
+     * 没有找到deviceId指定的记录抛出异常
+     * @param deviceId
+     * @return {@code fl_device_group.root_group}字段不为空的记录id,没有找到则返回{@code null}
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/rootGroupOfDevice", method = RequestMethod.POST)
+    @ApiOperation(value = "返回deviceId所属的管理边界设备组id<br>\n"
++" 在deviceId所属组的所有父节点中自顶向下查找第一个{@code fl_device_group.root_group}字段不为空的组，返回此记录id<br>\n"
++" 没有找到deviceId指定的记录抛出异常",httpMethod="POST")
+    public Response rootGroupOfDevice( @RequestBody RootGroupOfDeviceArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().rootGroupOfDevice(args.deviceId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 120
+    /**
+     * 返回personId所属的管理边界人员组id<br>
+     * 在personId所属组的所有父节点中自顶向下查找第一个{@code fl_person_group.root_group}字段不为空的人员组，返回此记录组id<br>
+     * 没有找到personId指定的记录抛出异常
+     * @param personId
+     * @return {@code fl_person_group.root_group}字段不为空的记录id,没有找到则返回{@code null}
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/rootGroupOfPerson", method = RequestMethod.POST)
+    @ApiOperation(value = "返回personId所属的管理边界人员组id<br>\n"
++" 在personId所属组的所有父节点中自顶向下查找第一个{@code fl_person_group.root_group}字段不为空的人员组，返回此记录组id<br>\n"
++" 没有找到personId指定的记录抛出异常",httpMethod="POST")
+    public Response rootGroupOfPerson( @RequestBody RootGroupOfPersonArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().rootGroupOfPerson(args.personId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 121
+    /**
+     * 保存设备记录
+     * <br>{@code PERSON_ONLY}
+     * @param deviceBean
+     * @param token 访问令牌
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/saveDevice", method = RequestMethod.POST)
+    @ApiOperation(value = "保存设备记录\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response saveDevice( @RequestBody SaveDeviceArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().saveDevice(args.deviceBean,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 122
+    /**
+     * 保存设备组记录
+     * <br>{@code PERSON_ONLY}
+     * @param deviceGroupBean
+     * @param token 访问令牌
+     * @return 
+     * @throws RuntimeDaoException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/saveDeviceGroup", method = RequestMethod.POST)
+    @ApiOperation(value = "保存设备组记录\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response saveDeviceGroup( @RequestBody SaveDeviceGroupArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().saveDeviceGroup(args.deviceGroupBean,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 123
+    /**
+     * 保存人员信息记录<br>
+     * {@code DEVICE_ONLY}
+     * @param personBean 人员信息对象,{@code fl_person}表记录
+     * @param idPhoto 标准照图像,可以为{@code null}
+     * @param feature 人脸特征数据,可以为{@code null}
+     * @param featureImage 提取特征源图像,为null 时,默认使用idPhoto
+     * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
+     * @param token (设备)访问令牌
+     * @return 保存的{@link PersonBean}
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/savePersonFull", method = RequestMethod.POST)
+    @ApiOperation(value = "保存人员信息记录<br>\n"
++" {@code DEVICE_ONLY}",httpMethod="POST")
+    public Response savePerson( @RequestBody SavePersonFullArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().savePerson(args.personBean,args.idPhoto,args.feature,args.featureImage,args.featureFaceBean,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 124
+    /**
+     * 保存人员信息记录
+     * <br>{@code DEVICE_ONLY}
+     * @param personBean {@code fl_person}表记录
+     * @param idPhoto 标准照图像,可为null
+     * @param feature 用于验证的人脸特征数据,不可重复, 参见 {@link #addFeature(byte[], Integer, List, Token)}
+     * @param faceBeans 可为{@code null},参见 {@link #addFeature(byte[], Integer, List, Token)}
+     * @param token 访问令牌
+     * @return 保存的{@link PersonBean}
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureMultiFaces", method = RequestMethod.POST)
+    @ApiOperation(value = "保存人员信息记录\n"
++" <br>{@code DEVICE_ONLY}",httpMethod="POST")
+    public Response savePerson( @RequestBody SavePersonWithPhotoAndFeatureMultiFacesArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().savePerson(args.personBean,args.idPhoto,args.feature,args.faceBeans,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 125
+    /**
+     * 保存人员信息记录
+     * <br>{@code DEVICE_ONLY}
+     * @param personBean {@code fl_person}表记录
+     * @param idPhoto 标准照图像,可为null
+     * @param feature 用于验证的人脸特征数据
+     * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
+     * @param token (设备)访问令牌
+     * @return 保存的{@link PersonBean}对象
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureMultiImage", method = RequestMethod.POST)
+    @ApiOperation(value = "保存人员信息记录\n"
++" <br>{@code DEVICE_ONLY}",httpMethod="POST")
+    public Response savePerson( @RequestBody SavePersonWithPhotoAndFeatureMultiImageArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().savePerson(args.personBean,args.idPhoto,args.feature,args.faceInfo,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 126
+    /**
+     * 保存人员信息记录
+     * @param personBean {@code fl_person}表记录
+     * @param idPhoto 标准照图像对象,可为null
+     * @param token 访问令牌
+     * @return 保存的{@link PersonBean}
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/savePersonWithPhoto", method = RequestMethod.POST)
+    @ApiOperation(value = "保存人员信息记录",httpMethod="POST")
+    public Response savePerson( @RequestBody SavePersonWithPhotoArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().savePerson(args.personBean,args.idPhoto,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 127
+    /**
+     * 保存人员信息记录
+     * <br>{@code DEVICE_ONLY}
+     * @param personBean {@code fl_person}表记录
+     * @param idPhoto 标准照图像,可为null
+     * @param featureBean 用于验证的人脸特征数据对象,可为null
+     * @param token 访问令牌
+     * @return 保存的{@link PersonBean}
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeature", method = RequestMethod.POST)
+    @ApiOperation(value = "保存人员信息记录\n"
++" <br>{@code DEVICE_ONLY}",httpMethod="POST")
+    public Response savePerson( @RequestBody SavePersonWithPhotoAndFeatureArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().savePerson(args.personBean,args.idPhoto,args.featureBean,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 128
+    /**
+     * 保存人员信息记录
+     * @param personBean {@code fl_person}表记录
+     * @param idPhotoMd5 标准照图像对象,可为null
+     * @param featureMd5 用于验证的人脸特征数据对象,可为null
+     * @param token 访问令牌
+     * @return 保存的{@link PersonBean}
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureSaved", method = RequestMethod.POST)
+    @ApiOperation(value = "保存人员信息记录",httpMethod="POST")
+    public Response savePerson( @RequestBody SavePersonWithPhotoAndFeatureSavedArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().savePerson(args.personBean,args.idPhotoMd5,args.featureMd5,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 129
+    /**
+     * 保存人员(person)记录
+     * @param personBean {@code fl_person}表记录
+     * @param token 访问令牌
+     * @return 保存的{@link PersonBean}
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/savePerson", method = RequestMethod.POST)
+    @ApiOperation(value = "保存人员(person)记录",httpMethod="POST")
+    public Response savePerson( @RequestBody SavePersonArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().savePerson(args.personBean,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 130
+    /**
+     * 保存人员组记录
+     * <br>{@code PERSON_ONLY}
+     * @param personGroupBean
+     * @param token 访问令牌
+     * @return 
+     * @throws RuntimeDaoException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/savePersonGroup", method = RequestMethod.POST)
+    @ApiOperation(value = "保存人员组记录\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response savePersonGroup( @RequestBody SavePersonGroupArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().savePersonGroup(args.personGroupBean,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 131
+    /**
+     * 保存人员(person)记录
+     * <br>{@code PERSON_ONLY}
+     * @param persons {@code fl_person}表记录
+     * @param token 访问令牌
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/savePersons", method = RequestMethod.POST)
+    @ApiOperation(value = "保存人员(person)记录\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response savePersons( @RequestBody SavePersonsArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().savePersons(args.persons,args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 132
+    /**
+     * 保存人员信息记录(包含标准照)<br>
+     * {@code PERSON_ONLY}
+     * @param persons {@code fl_person}表记录
+     * @param token 访问令牌
+     * @return 保存的{@link PersonBean}记录条数
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/savePersonsWithPhoto", method = RequestMethod.POST)
+    @ApiOperation(value = "保存人员信息记录(包含标准照)<br>\n"
++" {@code PERSON_ONLY}",httpMethod="POST")
+    public Response savePersons( @RequestBody SavePersonsWithPhotoArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().savePersons(args.persons,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 133
+    /**
+     * 配置参数持久化<br>
+     * 保存修改的配置到自定义配置文件
+     * <br>{@code ROOT_ONLY}
+     * @param token 访问令牌
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/saveServiceConfig", method = RequestMethod.POST)
+    @ApiOperation(value = "配置参数持久化<br>\n"
++" 保存修改的配置到自定义配置文件\n"
++" <br>{@code ROOT_ONLY}",httpMethod="POST")
+    public Response saveServiceConfig( @RequestBody SaveServiceConfigArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().saveServiceConfig(args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 134
+    /**
+     * 修改 personId 指定的人员记录的有效期
+     * <br>{@code PERSON_ONLY}
+     * @param personId
+     * @param expiryDate 失效日期
+     * @param token 访问令牌
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/setPersonExpiryDate", method = RequestMethod.POST)
+    @ApiOperation(value = "修改 personId 指定的人员记录的有效期\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response setPersonExpiryDate( @RequestBody SetPersonExpiryDateArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().setPersonExpiryDate(args.personId,args.expiryDate,args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 135
+    /**
+     * 修改 personIdList 指定的人员记录的有效期
+     * <br>{@code PERSON_ONLY}
+     * @param personIdList 人员id列表
+     * @param expiryDate 失效日期
+     * @param token 访问令牌
+     * @ 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/setPersonExpiryDateList", method = RequestMethod.POST)
+    @ApiOperation(value = "修改 personIdList 指定的人员记录的有效期\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response setPersonExpiryDate( @RequestBody SetPersonExpiryDateListArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().setPersonExpiryDate(args.personIdList,args.expiryDate,args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 136
+    /**
+     * 修改一组配置参数
+     * <br>{@code ROOT_ONLY}
+     * @param config 参数名-参数值对
+     * @param token 访问令牌
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/setProperties", method = RequestMethod.POST)
+    @ApiOperation(value = "修改一组配置参数\n"
++" <br>{@code ROOT_ONLY}",httpMethod="POST")
+    public Response setProperties( @RequestBody SetPropertiesArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().setProperties(args.config,args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 137
+    /**
+     * 修改/增加指定的配置参数
+     * <br>{@code ROOT_ONLY}
+     * @param key 参数名
+     * @param value 参数值
+     * @param token 访问令牌
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/setProperty", method = RequestMethod.POST)
+    @ApiOperation(value = "修改/增加指定的配置参数\n"
++" <br>{@code ROOT_ONLY}",httpMethod="POST")
+    public Response setProperty( @RequestBody SetPropertyArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().setProperty(args.key,args.value,args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 138
+    /**
+     * 根据任务名返回redis队列名
+     * <br>{@link TokenMangement.Enable#ALL}
+     * @param task 任务名
+     * @param token 访问令牌
+     * @return 返回redis队列名,队列不存在则返回{@code null}
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/taskQueueOf", method = RequestMethod.POST)
+    @ApiOperation(value = "根据任务名返回redis队列名\n"
++" <br>{@link TokenMangement.Enable#ALL}",httpMethod="POST")
+    public Response taskQueueOf( @RequestBody TaskQueueOfArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().taskQueueOf(args.task,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 139
+    /**
+     * 注册一个任务名<br>
+     * 方法将会根据任务名在redis上生成一个对应的队列<br>
+     * 对同一个任务名多次调用本方法，不会产生不同的队列名字
+     * <br>{@code ROOT_ONLY}
+     * @param task 任务名
+     * @param token 访问令牌
+     * @return 返回保存队列名的key
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/taskRegister", method = RequestMethod.POST)
+    @ApiOperation(value = "注册一个任务名<br>\n"
++" 方法将会根据任务名在redis上生成一个对应的队列<br>\n"
++" 对同一个任务名多次调用本方法，不会产生不同的队列名字\n"
++" <br>{@code ROOT_ONLY}",httpMethod="POST")
+    public Response taskRegister( @RequestBody TaskRegisterArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().taskRegister(args.task,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 140
+    /**
+     * 删除管理边界<br>
+     * 删除fl_person_group.root_group和fl_device_group.root_group字段的互相指向,设置为{@code null},
+     * 以事务操作方式更新数据库<br>
+     * 如果personGroupId和deviceGroupId不存在绑定关系则跳过,
+     * 没有找到personGroupId或deviceGroupId指定的记录抛出异常<br>
+     * <br>{@link TokenMangement.Enable#ROOT}<br>
+     * @param personGroupId 人员组id
+     * @param deviceGroupId 设备组id
+     * @param token 访问令牌
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/unbindBorder", method = RequestMethod.POST)
+    @ApiOperation(value = "删除管理边界<br>\n"
++" 删除fl_person_group.root_group和fl_device_group.root_group字段的互相指向,设置为{@code null},\n"
++" 以事务操作方式更新数据库<br>\n"
++" 如果personGroupId和deviceGroupId不存在绑定关系则跳过,\n"
++" 没有找到personGroupId或deviceGroupId指定的记录抛出异常<br>\n"
++" <br>{@link TokenMangement.Enable#ROOT}<br>",httpMethod="POST")
+    public Response unbindBorder( @RequestBody UnbindBorderArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().unbindBorder(args.personGroupId,args.deviceGroupId,args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 141
+    /**
+     * (设备端)设备删除
+     * <br>{@code DEVICE_ONLY}
+     * @param deviceId
+     * @param token 设备验证令牌
+     * @throws ServiceSecurityException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/unregisterDevice", method = RequestMethod.POST)
+    @ApiOperation(value = "(设备端)设备删除\n"
++" <br>{@code DEVICE_ONLY}",httpMethod="POST")
+    public Response unregisterDevice( @RequestBody UnregisterDeviceArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().unregisterDevice(args.deviceId,args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 142
+    /**
+     * 更新设备记录(必须是已经存在的设备记录，否则抛出异常)
+     * @param deviceBean
+     * @param token 访问令牌
+     * @return 返回设备记录
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/updateDevice", method = RequestMethod.POST)
+    @ApiOperation(value = "更新设备记录(必须是已经存在的设备记录，否则抛出异常)",httpMethod="POST")
+    public Response updateDevice( @RequestBody UpdateDeviceArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().updateDevice(args.deviceBean,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 143
+    /**
+     * 返回服务版本号
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/version", method = RequestMethod.POST)
+    @ApiOperation(value = "返回服务版本号",httpMethod="POST")
+    public Response version( @RequestBody VersionArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().version());
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // 144
+    /**
+     * 返回服务版本的详细信息<br>
+     * <ul>
+     * <li>{@code VERSION} -- 服务版本号</li>
+     * <li>{@code SCM_REVISION} -- GIT修订版本号</li>
+     * <li>{@code SCM_BRANCH} -- GIT分支</li>
+     * <li>{@code TIMESTAMP} -- 时间戳</li>
+     * </ul>
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/versionInfo", method = RequestMethod.POST)
+    @ApiOperation(value = "返回服务版本的详细信息<br>\n"
++" <ul>\n"
++" <li>{@code VERSION} -- 服务版本号</li>\n"
++" <li>{@code SCM_REVISION} -- GIT修订版本号</li>\n"
++" <li>{@code SCM_BRANCH} -- GIT分支</li>\n"
++" <li>{@code TIMESTAMP} -- 时间戳</li>\n"
++" </ul>",httpMethod="POST")
+    public Response versionInfo( @RequestBody VersionInfoArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().versionInfo());
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+
+    /**
+     * wrap arguments for method {@link #addFeature(AddFeatureWithImageArgs)}
      */
     public static class AddFeatureWithImageArgs{
         @ApiModelProperty(value ="特征数据" ,required=true ,dataType="byte[]")
@@ -128,43 +3524,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addFeatureWithImage", method = RequestMethod.POST)
-    @ApiOperation(value = "增加一个人脸特征记录，如果记录已经存在则抛出异常<br>\n"
-+" 适用于一张人脸图像提取一个人脸特征的算法<br>\n"
-+" {@code DEVICE_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "feature", value = "特征数据", paramType="form", dataType="byte[]"),
-        @ApiImplicitParam(name = "personId", value = "关联的人员id(fl_person.id),可为null", paramType="form", dataType="Integer"),
-        @ApiImplicitParam(name = "asIdPhotoIfAbsent", value = "如果{@code personId}指定的记录没指定身份照片,\n"
-+" 是否用{@code featurePhoto}作为身份照片,{@code featurePhoto}为{@code null}时无效", paramType="form", dataType="boolean"),
-        @ApiImplicitParam(name = "featurePhoto", value = "生成人脸特征的原始照片,如果不要求保留原始照片可为null", paramType="form", dataType="byte[]"),
-        @ApiImplicitParam(name = "faceBean", value = "生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null", paramType="body", dataType="FaceBean"),
-        @ApiImplicitParam(name = "token", value = "(设备)访问令牌", paramType="body", dataType="Token")})
-    public Response addFeature(AddFeatureWithImageArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().addFeature(args.feature,args.personId,args.asIdPhotoIfAbsent,args.featurePhoto,args.faceBean,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 增加一个人脸特征记录，如果记录已经存在则抛出异常<br>
-     * {@code DEVICE_ONLY}
-     * @param feature 人脸特征数据
-     * @param personId 关联的人员id(fl_person.id),可为null
-     * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
-     * @param token (设备)访问令牌
-     * @return 保存的人脸特征记录{@link FeatureBean}
-     * @throws DuplicateRecordException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/addFeature'.
+     * wrap arguments for method {@link #addFeature(AddFeatureArgs)}
      */
     public static class AddFeatureArgs{
         @ApiModelProperty(value ="人脸特征数据" ,required=true ,dataType="byte[]")
@@ -176,39 +3538,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addFeature", method = RequestMethod.POST)
-    @ApiOperation(value = "增加一个人脸特征记录，如果记录已经存在则抛出异常<br>\n"
-+" {@code DEVICE_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "feature", value = "人脸特征数据", paramType="form", dataType="byte[]"),
-        @ApiImplicitParam(name = "personId", value = "关联的人员id(fl_person.id),可为null", paramType="form", dataType="Integer"),
-        @ApiImplicitParam(name = "faecBeans", value = "生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null", paramType="body", dataType="List"),
-        @ApiImplicitParam(name = "token", value = "(设备)访问令牌", paramType="body", dataType="Token")})
-    public Response addFeature(AddFeatureArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().addFeature(args.feature,args.personId,args.faecBeans,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
-     * <br>{@code DEVICE_ONLY}
-     * @param feature 特征数据
-     * @param personId 关联的人员id(fl_person.id),可为null
-     * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
-     * @param token (设备)访问令牌
-     * @return 保存的人脸特征记录{@link FeatureBean}
-     * @throws DuplicateRecordException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/addFeatureMulti'.
+     * wrap arguments for method {@link #addFeature(AddFeatureMultiArgs)}
      */
     public static class AddFeatureMultiArgs{
         @ApiModelProperty(value ="特征数据" ,required=true ,dataType="byte[]")
@@ -220,39 +3552,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addFeatureMulti", method = RequestMethod.POST)
-    @ApiOperation(value = "增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常\n"
-+" <br>{@code DEVICE_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "feature", value = "特征数据", paramType="form", dataType="byte[]"),
-        @ApiImplicitParam(name = "personId", value = "关联的人员id(fl_person.id),可为null", paramType="form", dataType="Integer"),
-        @ApiImplicitParam(name = "faceInfo", value = "生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null", paramType="body", dataType="Map"),
-        @ApiImplicitParam(name = "token", value = "(设备)访问令牌", paramType="body", dataType="Token")})
-    public Response addFeature(AddFeatureMultiArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().addFeature(args.feature,args.personId,args.faceInfo,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 保存图像数据,如果图像数据已经存在，则抛出异常
-     * @param imageData 图像数据
-     * @param deviceId 图像来源设备id,可为null
-     * @param faceBean 关联的人脸信息对象,可为null
-     * @param personId 关联的人员id(fl_person.id),可为null
-     * @param token 访问令牌
-     * @return 保存的图像记录
-     * @throws DuplicateRecordException 数据库中已经存在要保存的图像数据
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/addImage'.
+     * wrap arguments for method {@link #addImage(AddImageArgs)}
      */
     public static class AddImageArgs{
         @ApiModelProperty(value ="图像数据" ,required=true ,dataType="byte[]")
@@ -266,36 +3568,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addImage", method = RequestMethod.POST)
-    @ApiOperation(value = "保存图像数据,如果图像数据已经存在，则抛出异常",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "imageData", value = "图像数据", paramType="form", dataType="byte[]"),
-        @ApiImplicitParam(name = "deviceId", value = "图像来源设备id,可为null", paramType="form", dataType="Integer"),
-        @ApiImplicitParam(name = "faceBean", value = "关联的人脸信息对象,可为null", paramType="body", dataType="FaceBean"),
-        @ApiImplicitParam(name = "personId", value = "关联的人员id(fl_person.id),可为null", paramType="form", dataType="Integer"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response addImage(AddImageArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().addImage(args.imageData,args.deviceId,args.faceBean,args.personId,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 添加一条验证日志记录
-     * <br>{@code DEVICE_ONLY}
-     * @param logBean 日志记录对象
-     * @param token 访问令牌
-     * @throws DuplicateRecordException 数据库中存在相同记录
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/addLog'.
+     * wrap arguments for method {@link #addLog(AddLogArgs)}
      */
     public static class AddLogArgs{
         @ApiModelProperty(value ="日志记录对象" ,required=true ,dataType="LogBean")
@@ -303,38 +3578,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addLog", method = RequestMethod.POST)
-    @ApiOperation(value = "添加一条验证日志记录\n"
-+" <br>{@code DEVICE_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "logBean", value = "日志记录对象", paramType="body", dataType="LogBean"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response addLog(AddLogArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().addLog(args.logBean,args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 添加一条验证日志记录
-     * <br>{@code DEVICE_ONLY}
-     * {@code faceBean}和{@code featureImage}必须全不为{@code null},否则抛出异常
-     * @param logBean 日志记录对象
-     * @param faceBean 用于保存到数据库的提取人脸特征的人脸信息对象
-     * @param featureImage 用于保存到数据库的现场采集人脸特征的照片
-     * @param token 访问令牌
-     * @throws DuplicateRecordException 数据库中存在相同记录
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/addLogFull'.
+     * wrap arguments for method {@link #addLog(AddLogFullArgs)}
      */
     public static class AddLogFullArgs{
         @ApiModelProperty(value ="日志记录对象" ,required=true ,dataType="LogBean")
@@ -346,40 +3592,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addLogFull", method = RequestMethod.POST)
-    @ApiOperation(value = "添加一条验证日志记录\n"
-+" <br>{@code DEVICE_ONLY}\n"
-+" {@code faceBean}和{@code featureImage}必须全不为{@code null},否则抛出异常",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "logBean", value = "日志记录对象", paramType="body", dataType="LogBean"),
-        @ApiImplicitParam(name = "faceBean", value = "用于保存到数据库的提取人脸特征的人脸信息对象", paramType="body", dataType="FaceBean"),
-        @ApiImplicitParam(name = "featureImage", value = "用于保存到数据库的现场采集人脸特征的照片", paramType="form", dataType="byte[]"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response addLog(AddLogFullArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().addLog(args.logBean,args.faceBean,args.featureImage,args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 添加一组验证日志记录(事务存储)<br>
-     * 所有输入参数的list长度必须一致(不能有{@code null})元素,每3个相同索引位置元素为一组关联的日志记录，参见{@link #addLog(LogBean, FaceBean, byte[], Token)}
-     * @param logBeans 日志记录对象
-     * @param faceBeans 为用于保存到数据库的提取人脸特征的人脸信息对象
-     * @param featureImages 用于保存到数据库的现场采集人脸特征的照片
-     * @param token 访问令牌
-     * @throws DuplicateRecordException 数据库中存在相同记录
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/addLogsFull'.
+     * wrap arguments for method {@link #addLogs(AddLogsFullArgs)}
      */
     public static class AddLogsFullArgs{
         @ApiModelProperty(value ="日志记录对象" ,required=true ,dataType="List")
@@ -391,37 +3606,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addLogsFull", method = RequestMethod.POST)
-    @ApiOperation(value = "添加一组验证日志记录(事务存储)<br>\n"
-+" 所有输入参数的list长度必须一致(不能有{@code null})元素,每3个相同索引位置元素为一组关联的日志记录，参见{@link #addLog(LogBean, FaceBean, byte[], Token)}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "logBeans", value = "日志记录对象", paramType="body", dataType="List"),
-        @ApiImplicitParam(name = "faceBeans", value = "为用于保存到数据库的提取人脸特征的人脸信息对象", paramType="body", dataType="List"),
-        @ApiImplicitParam(name = "featureImages", value = "用于保存到数据库的现场采集人脸特征的照片", paramType="body", dataType="List"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response addLogs(AddLogsFullArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().addLogs(args.logBeans,args.faceBeans,args.featureImages,args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 添加一组验证日志记录(事务存储)
-     * <br>{@code DEVICE_ONLY}
-     * @param beans
-     * @param token 访问令牌
-     * @throws DuplicateRecordException 数据库中存在相同记录
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/addLogs'.
+     * wrap arguments for method {@link #addLogs(AddLogsArgs)}
      */
     public static class AddLogsArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="List")
@@ -429,37 +3616,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addLogs", method = RequestMethod.POST)
-    @ApiOperation(value = "添加一组验证日志记录(事务存储)\n"
-+" <br>{@code DEVICE_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "beans", value = "", paramType="body", dataType="List"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response addLogs(AddLogsArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().addLogs(args.beans,args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
-     * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
-     * <br>{@code PERSON_ONLY}
-     * @param deviceGroupId 设备组id
-     * @param personGroupId 人员组id
-     * @param token 访问令牌
-     * @see #addPermit(DeviceGroupBean,PersonGroupBean, Token)
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/addPermitById'.
+     * wrap arguments for method {@link #addPermit(AddPermitByIdArgs)}
      */
     public static class AddPermitByIdArgs{
         @ApiModelProperty(value ="设备组id" ,required=true ,dataType="int")
@@ -469,39 +3628,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addPermitById", method = RequestMethod.POST)
-    @ApiOperation(value = "创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>\n"
-+" 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceGroupId", value = "设备组id", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "personGroupId", value = "人员组id", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response addPermit(AddPermitByIdArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().addPermit(args.deviceGroupId,args.personGroupId,args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 添加一个(允许)通行关联记录:允许{@code personGroup}指定的人员组在
-     * {@code deviceGroup}指定的设备组下属的所有设备通行
-     * <br>{@code PERSON_ONLY}
-     * @param deviceGroup
-     * @param personGroup
-     * @param token 访问令牌
-     * @throws RuntimeDaoException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/addPermit'.
+     * wrap arguments for method {@link #addPermit(AddPermitArgs)}
      */
     public static class AddPermitArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="DeviceGroupBean")
@@ -511,68 +3640,17 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addPermit", method = RequestMethod.POST)
-    @ApiOperation(value = "添加一个(允许)通行关联记录:允许{@code personGroup}指定的人员组在\n"
-+" {@code deviceGroup}指定的设备组下属的所有设备通行\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceGroup", value = "", paramType="body", dataType="DeviceGroupBean"),
-        @ApiImplicitParam(name = "personGroup", value = "", paramType="body", dataType="PersonGroupBean"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response addPermit(AddPermitArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().addPermit(args.deviceGroup,args.personGroup,args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 申请一个唯一的命令响应通道(默认有效期)<br>
-     * <br>{@code PERSON_ONLY}
-     * @param token 访问令牌
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/applyAckChannel'.
+     * wrap arguments for method {@link #applyAckChannel(ApplyAckChannelArgs)}
      */
     public static class ApplyAckChannelArgs{
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/applyAckChannel", method = RequestMethod.POST)
-    @ApiOperation(value = "申请一个唯一的命令响应通道(默认有效期)<br>\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response applyAckChannel(ApplyAckChannelArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().applyAckChannel(args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 申请一个唯一的命令响应通道<br>
-     * <br>{@code PERSON_ONLY}
-     * @param token 访问令牌
-     * @param duration 通道有效时间(秒) 大于0有效,否则使用默认的有效期
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/applyAckChannelWithDuration'.
+     * wrap arguments for method {@link #applyAckChannel(ApplyAckChannelWithDurationArgs)}
      */
     public static class ApplyAckChannelWithDurationArgs{
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
@@ -580,66 +3658,17 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="通道有效时间(秒) 大于0有效,否则使用默认的有效期" ,required=true ,dataType="long")
         public long duration;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/applyAckChannelWithDuration", method = RequestMethod.POST)
-    @ApiOperation(value = "申请一个唯一的命令响应通道<br>\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token"),
-        @ApiImplicitParam(name = "duration", value = "通道有效时间(秒) 大于0有效,否则使用默认的有效期", paramType="form", dataType="long")})
-    public Response applyAckChannel(ApplyAckChannelWithDurationArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().applyAckChannel(args.token,args.duration));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 申请一个唯一的命令序列号
-     * <br>{@code PERSON_ONLY}
-     * @param token 访问令牌
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/applyCmdSn'.
+     * wrap arguments for method {@link #applyCmdSn(ApplyCmdSnArgs)}
      */
     public static class ApplyCmdSnArgs{
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/applyCmdSn", method = RequestMethod.POST)
-    @ApiOperation(value = "申请一个唯一的命令序列号\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response applyCmdSn(ApplyCmdSnArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().applyCmdSn(args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 申请人员访问令牌
-     * @param personId 用户ID
-     * @param password 密码
-     * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
-     * @return 返回申请的令牌
-     * @throws ServiceSecurityException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/applyPersonToken'.
+     * wrap arguments for method {@link #applyPersonToken(ApplyPersonTokenArgs)}
      */
     public static class ApplyPersonTokenArgs{
         @ApiModelProperty(value ="用户ID" ,required=true ,dataType="int")
@@ -649,34 +3678,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)" ,required=true ,dataType="boolean")
         public boolean isMd5;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/applyPersonToken", method = RequestMethod.POST)
-    @ApiOperation(value = "申请人员访问令牌",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personId", value = "用户ID", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "password", value = "密码", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "isMd5", value = "为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)", paramType="form", dataType="boolean")})
-    public Response applyPersonToken(ApplyPersonTokenArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().applyPersonToken(args.personId,args.password,args.isMd5));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 申请root访问令牌
-     * @param password root用户密码
-     * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
-     * @return 返回申请的令牌
-     * @throws ServiceSecurityException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/applyRootToken'.
+     * wrap arguments for method {@link #applyRootToken(ApplyRootTokenArgs)}
      */
     public static class ApplyRootTokenArgs{
         @ApiModelProperty(value ="root用户密码" ,required=true ,dataType="String")
@@ -684,35 +3688,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)" ,required=true ,dataType="boolean")
         public boolean isMd5;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/applyRootToken", method = RequestMethod.POST)
-    @ApiOperation(value = "申请root访问令牌",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "password", value = "root用户密码", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "isMd5", value = "为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)", paramType="form", dataType="boolean")})
-    public Response applyRootToken(ApplyRootTokenArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().applyRootToken(args.password,args.isMd5));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 申请person/root访问令牌
-     * @param userid 用户ID(为-1时为root)
-     * @param password 用户密码
-     * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
-     * @return 返回申请的令牌
-     * @throws ServiceSecurityException
-     * @since 2.1.1
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/applyUserToken'.
+     * wrap arguments for method {@link #applyUserToken(ApplyUserTokenArgs)}
      */
     public static class ApplyUserTokenArgs{
         @ApiModelProperty(value ="用户ID(为-1时为root)" ,required=true ,dataType="int")
@@ -722,37 +3700,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)" ,required=true ,dataType="boolean")
         public boolean isMd5;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/applyUserToken", method = RequestMethod.POST)
-    @ApiOperation(value = "申请person/root访问令牌",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userid", value = "用户ID(为-1时为root)", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "password", value = "用户密码", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "isMd5", value = "为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)", paramType="form", dataType="boolean")})
-    public Response applyUserToken(ApplyUserTokenArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().applyUserToken(args.userid,args.password,args.isMd5));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 创建管理边界<br>
-     * 设置fl_person_group.root_group和fl_device_group.root_group字段互相指向<br>
-     * 没有找到personGroupId或deviceGroupId指定的记录抛出异常,
-     * 以事务操作方式更新数据库<br>
-     * <br>{@link TokenMangement.Enable#ROOT}<br>
-     * @param personGroupId 人员组id
-     * @param deviceGroupId 设备组id
-     * @param token 访问令牌
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/bindBorder'.
+     * wrap arguments for method {@link #bindBorder(BindBorderArgs)}
      */
     public static class BindBorderArgs{
         @ApiModelProperty(value ="人员组id" ,required=true ,dataType="Integer")
@@ -762,309 +3712,81 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/bindBorder", method = RequestMethod.POST)
-    @ApiOperation(value = "创建管理边界<br>\n"
-+" 设置fl_person_group.root_group和fl_device_group.root_group字段互相指向<br>\n"
-+" 没有找到personGroupId或deviceGroupId指定的记录抛出异常,\n"
-+" 以事务操作方式更新数据库<br>\n"
-+" <br>{@link TokenMangement.Enable#ROOT}<br>",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personGroupId", value = "人员组id", paramType="form", dataType="Integer"),
-        @ApiImplicitParam(name = "deviceGroupId", value = "设备组id", paramType="form", dataType="Integer"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response bindBorder(BindBorderArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().bindBorder(args.personGroupId,args.deviceGroupId,args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回(deviceGroupId))指定的fl_device_group记录的所有的子节点(包括自己)<br>
-     * 自引用字段:fl_device_group(parent)
-     * @param deviceGroupId
-     * @return 如果{@code deviceGroupId}无效则返回空表
-     * @since 2.1.2
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/childListForDeviceGroup'.
+     * wrap arguments for method {@link #childListForDeviceGroup(ChildListForDeviceGroupArgs)}
      */
     public static class ChildListForDeviceGroupArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int deviceGroupId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/childListForDeviceGroup", method = RequestMethod.POST)
-    @ApiOperation(value = "返回(deviceGroupId))指定的fl_device_group记录的所有的子节点(包括自己)<br>\n"
-+" 自引用字段:fl_device_group(parent)",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceGroupId", value = "", paramType="form", dataType="int")})
-    public Response childListForDeviceGroup(ChildListForDeviceGroupArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().childListForDeviceGroup(args.deviceGroupId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回(personGroupId))指定的fl_person_group记录的所有的子节点(包括自己)<br>
-     * 自引用字段:fl_person_group(parent)
-     * @param personGroupId
-     * @return 如果{@code personGroupId}无效则返回空表
-     * @since 2.1.2
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/childListForPersonGroup'.
+     * wrap arguments for method {@link #childListForPersonGroup(ChildListForPersonGroupArgs)}
      */
     public static class ChildListForPersonGroupArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personGroupId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/childListForPersonGroup", method = RequestMethod.POST)
-    @ApiOperation(value = "返回(personGroupId))指定的fl_person_group记录的所有的子节点(包括自己)<br>\n"
-+" 自引用字段:fl_person_group(parent)",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personGroupId", value = "", paramType="form", dataType="int")})
-    public Response childListForPersonGroup(ChildListForPersonGroupArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().childListForPersonGroup(args.personGroupId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回满足{@code where} SQL条件语句的fl_device记录总数
-     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
-     * @return 返回设备ID列表
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/countDeviceByWhere'.
+     * wrap arguments for method {@link #countDeviceByWhere(CountDeviceByWhereArgs)}
      */
     public static class CountDeviceByWhereArgs{
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录" ,required=true ,dataType="String")
         public String where;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/countDeviceByWhere", method = RequestMethod.POST)
-    @ApiOperation(value = "返回满足{@code where} SQL条件语句的fl_device记录总数",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String")})
-    public Response countDeviceByWhere(CountDeviceByWhereArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().countDeviceByWhere(args.where));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回满足{@code where} SQL条件语句的fl_device_group记录总数
-     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
-     * @return 返回满足{@code where} SQL条件语句的fl_device_group记录总数
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/countDeviceGroupByWhere'.
+     * wrap arguments for method {@link #countDeviceGroupByWhere(CountDeviceGroupByWhereArgs)}
      */
     public static class CountDeviceGroupByWhereArgs{
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录" ,required=true ,dataType="String")
         public String where;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/countDeviceGroupByWhere", method = RequestMethod.POST)
-    @ApiOperation(value = "返回满足{@code where} SQL条件语句的fl_device_group记录总数",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String")})
-    public Response countDeviceGroupByWhere(CountDeviceGroupByWhereArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().countDeviceGroupByWhere(args.where));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回满足{@code where}条件的日志记录(fl_log)数目
-     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
-     * @return 返回满足{@code where}条件的日志记录(fl_log)数目
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/countLogByWhere'.
+     * wrap arguments for method {@link #countLogByWhere(CountLogByWhereArgs)}
      */
     public static class CountLogByWhereArgs{
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录" ,required=true ,dataType="String")
         public String where;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/countLogByWhere", method = RequestMethod.POST)
-    @ApiOperation(value = "返回满足{@code where}条件的日志记录(fl_log)数目",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String")})
-    public Response countLogByWhere(CountLogByWhereArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().countLogByWhere(args.where));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
-     * @param timestamp 时间戳
-     * @return 满足条件的记录条数
-     * @see #countLogLightByWhere(String)
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/countLogLightByVerifyTime'.
+     * wrap arguments for method {@link #countLogLightByVerifyTime(CountLogLightByVerifyTimeArgs)}
      */
     public static class CountLogLightByVerifyTimeArgs{
         @ApiModelProperty(value ="时间戳" ,required=true ,dataType="long")
         public long timestamp;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/countLogLightByVerifyTime", method = RequestMethod.POST)
-    @ApiOperation(value = "返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "timestamp", value = "时间戳", paramType="form", dataType="long")})
-    public Response countLogLightByVerifyTime(CountLogLightByVerifyTimeArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().countLogLightByVerifyTime(args.timestamp));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回符合{@code where}条件的记录条数
-     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
-     * @return 返回符合{@code where}条件的记录条数
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/countLogLightByWhere'.
+     * wrap arguments for method {@link #countLogLightByWhere(CountLogLightByWhereArgs)}
      */
     public static class CountLogLightByWhereArgs{
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录" ,required=true ,dataType="String")
         public String where;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/countLogLightByWhere", method = RequestMethod.POST)
-    @ApiOperation(value = "返回符合{@code where}条件的记录条数",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String")})
-    public Response countLogLightByWhere(CountLogLightByWhereArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().countLogLightByWhere(args.where));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回满足{@code where}条件的日志记录(fl_person)数目
-     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
-     * @return 返回满足{@code where}条件的日志记录(fl_person)数目
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/countPersonByWhere'.
+     * wrap arguments for method {@link #countPersonByWhere(CountPersonByWhereArgs)}
      */
     public static class CountPersonByWhereArgs{
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录" ,required=true ,dataType="String")
         public String where;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/countPersonByWhere", method = RequestMethod.POST)
-    @ApiOperation(value = "返回满足{@code where}条件的日志记录(fl_person)数目",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String")})
-    public Response countPersonByWhere(CountPersonByWhereArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().countPersonByWhere(args.where));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
-     * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
-     * @return 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
-     * @see TableManager#countWhere(String)
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/countPersonGroupByWhere'.
+     * wrap arguments for method {@link #countPersonGroupByWhere(CountPersonGroupByWhereArgs)}
      */
     public static class CountPersonGroupByWhereArgs{
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录" ,required=true ,dataType="String")
         public String where;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/countPersonGroupByWhere", method = RequestMethod.POST)
-    @ApiOperation(value = "返回满足{@code where} SQL条件语句的 fl_person_group 记录总数",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录", paramType="form", dataType="String")})
-    public Response countPersonGroupByWhere(CountPersonGroupByWhereArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().countPersonGroupByWhere(args.where));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 删除 personId 关联的所有特征(feature)记录
-     * @param personId
-     * @param deleteImage 是否删除关联的 image记录
-     * @param token 访问令牌
-     * @return 
-     * @see #deleteFeature(String, boolean, Token)
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/deleteAllFeaturesByPersonId'.
+     * wrap arguments for method {@link #deleteAllFeaturesByPersonId(DeleteAllFeaturesByPersonIdArgs)}
      */
     public static class DeleteAllFeaturesByPersonIdArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
@@ -1074,36 +3796,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deleteAllFeaturesByPersonId", method = RequestMethod.POST)
-    @ApiOperation(value = "删除 personId 关联的所有特征(feature)记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personId", value = "", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "deleteImage", value = "是否删除关联的 image记录", paramType="form", dataType="boolean"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response deleteAllFeaturesByPersonId(DeleteAllFeaturesByPersonIdArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().deleteAllFeaturesByPersonId(args.personId,args.deleteImage,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 删除{@code deviceGroupId}指定的设备组<br>
-     * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
-     * <br>{@code PERSON_ONLY}
-     * @param deviceGroupId
-     * @param token 访问令牌
-     * @return 返回删除的记录条数
-     * @throws RuntimeDaoException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/deleteDeviceGroup'.
+     * wrap arguments for method {@link #deleteDeviceGroup(DeleteDeviceGroupArgs)}
      */
     public static class DeleteDeviceGroupArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
@@ -1111,35 +3806,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deleteDeviceGroup", method = RequestMethod.POST)
-    @ApiOperation(value = "删除{@code deviceGroupId}指定的设备组<br>\n"
-+" 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceGroupId", value = "", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response deleteDeviceGroup(DeleteDeviceGroupArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().deleteDeviceGroup(args.deviceGroupId,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 删除featureMd5指定的特征记录及关联的face记录
-     * @param featureMd5
-     * @param deleteImage 为{@code true}则删除关联的 image记录(如果该图像还关联其他特征则不删除)
-     * @param token 访问令牌
-     * @return 返回删除的特征记录关联的图像(image)记录的MD5<br>
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/deleteFeature'.
+     * wrap arguments for method {@link #deleteFeature(DeleteFeatureArgs)}
      */
     public static class DeleteFeatureArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="String")
@@ -1149,33 +3818,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deleteFeature", method = RequestMethod.POST)
-    @ApiOperation(value = "删除featureMd5指定的特征记录及关联的face记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "featureMd5", value = "", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "deleteImage", value = "为{@code true}则删除关联的 image记录(如果该图像还关联其他特征则不删除)", paramType="form", dataType="boolean"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response deleteFeature(DeleteFeatureArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().deleteFeature(args.featureMd5,args.deleteImage,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 从permit表删除指定{@code deviceGroupId}指定设备组上的人员通行权限
-     * @param deviceGroupId
-     * @param token 令牌
-     * @return 删除的记录条数
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/deleteGroupPermitOnDeviceGroup'.
+     * wrap arguments for method {@link #deleteGroupPermitOnDeviceGroup(DeleteGroupPermitOnDeviceGroupArgs)}
      */
     public static class DeleteGroupPermitOnDeviceGroupArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
@@ -1183,32 +3828,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deleteGroupPermitOnDeviceGroup", method = RequestMethod.POST)
-    @ApiOperation(value = "从permit表删除指定{@code deviceGroupId}指定设备组上的人员通行权限",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceGroupId", value = "", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "token", value = "令牌", paramType="body", dataType="Token")})
-    public Response deleteGroupPermitOnDeviceGroup(DeleteGroupPermitOnDeviceGroupArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().deleteGroupPermitOnDeviceGroup(args.deviceGroupId,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 删除imageMd5指定图像及其缩略图
-     * @param imageMd5
-     * @param token 访问令牌
-     * @return 删除成功返回1,否则返回0
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/deleteImage'.
+     * wrap arguments for method {@link #deleteImage(DeleteImageArgs)}
      */
     public static class DeleteImageArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="String")
@@ -1216,34 +3838,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deleteImage", method = RequestMethod.POST)
-    @ApiOperation(value = "删除imageMd5指定图像及其缩略图",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "imageMd5", value = "", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response deleteImage(DeleteImageArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().deleteImage(args.imageMd5,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
-     * @param deviceGroupId 设备组id
-     * @param personGroupId 人员组id
-     * @param token
-     * @return 删除成功返回1,否则返回0
-     * @since 2.1.2
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/deletePermitById'.
+     * wrap arguments for method {@link #deletePermit(DeletePermitByIdArgs)}
      */
     public static class DeletePermitByIdArgs{
         @ApiModelProperty(value ="设备组id" ,required=true ,dataType="int")
@@ -1253,35 +3850,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deletePermitById", method = RequestMethod.POST)
-    @ApiOperation(value = "删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceGroupId", value = "设备组id", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "personGroupId", value = "人员组id", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "token", value = "", paramType="body", dataType="Token")})
-    public Response deletePermit(DeletePermitByIdArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().deletePermit(args.deviceGroupId,args.personGroupId,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
-     * <br>{@code PERSON_ONLY}
-     * @param deviceGroup 设备组记录
-     * @param personGroup 人员组记录
-     * @param token 访问令牌
-     * @return 删除成功返回1,否则返回0
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/deletePermit'.
+     * wrap arguments for method {@link #deletePermit(DeletePermitArgs)}
      */
     public static class DeletePermitArgs{
         @ApiModelProperty(value ="设备组记录" ,required=true ,dataType="DeviceGroupBean")
@@ -1291,35 +3862,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deletePermit", method = RequestMethod.POST)
-    @ApiOperation(value = "删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceGroup", value = "设备组记录", paramType="body", dataType="DeviceGroupBean"),
-        @ApiImplicitParam(name = "personGroup", value = "人员组记录", paramType="body", dataType="PersonGroupBean"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response deletePermit(DeletePermitArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().deletePermit(args.deviceGroup,args.personGroup,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 删除personId指定的人员(person)记录及关联的所有记录
-     * <br>{@code PERSON_ONLY}
-     * @param personId
-     * @param token 访问令牌
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/deletePerson'.
+     * wrap arguments for method {@link #deletePerson(DeletePersonArgs)}
      */
     public static class DeletePersonArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
@@ -1327,35 +3872,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deletePerson", method = RequestMethod.POST)
-    @ApiOperation(value = "删除personId指定的人员(person)记录及关联的所有记录\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personId", value = "", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response deletePerson(DeletePersonArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().deletePerson(args.personId,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 删除papersNum指定的人员(person)记录及关联的所有记录
-     * <br>{@code PERSON_ONLY}
-     * @param papersNum 证件号码
-     * @param token 访问令牌
-     * @return 返回删除的 person 记录数量
-     * @see #deletePerson(int, Token)
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/deletePersonByPapersNum'.
+     * wrap arguments for method {@link #deletePersonByPapersNum(DeletePersonByPapersNumArgs)}
      */
     public static class DeletePersonByPapersNumArgs{
         @ApiModelProperty(value ="证件号码" ,required=true ,dataType="String")
@@ -1363,36 +3882,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deletePersonByPapersNum", method = RequestMethod.POST)
-    @ApiOperation(value = "删除papersNum指定的人员(person)记录及关联的所有记录\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "papersNum", value = "证件号码", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response deletePersonByPapersNum(DeletePersonByPapersNumArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().deletePersonByPapersNum(args.papersNum,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 删除{@code personGroupId}指定的人员组<br>
-     * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
-     * <br>{@code PERSON_ONLY}
-     * @param personGroupId
-     * @param token 访问令牌
-     * @return 
-     * @throws RuntimeDaoException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/deletePersonGroup'.
+     * wrap arguments for method {@link #deletePersonGroup(DeletePersonGroupArgs)}
      */
     public static class DeletePersonGroupArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
@@ -1400,34 +3892,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deletePersonGroup", method = RequestMethod.POST)
-    @ApiOperation(value = "删除{@code personGroupId}指定的人员组<br>\n"
-+" 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personGroupId", value = "", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response deletePersonGroup(DeletePersonGroupArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().deletePersonGroup(args.personGroupId,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 从permit表删除指定{@code personGroupId}指定人员组的在所有设备上的通行权限
-     * @param personGroupId
-     * @param token 令牌
-     * @return 删除的记录条数
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/deletePersonGroupPermit'.
+     * wrap arguments for method {@link #deletePersonGroupPermit(DeletePersonGroupPermitArgs)}
      */
     public static class DeletePersonGroupPermitArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
@@ -1435,33 +3902,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deletePersonGroupPermit", method = RequestMethod.POST)
-    @ApiOperation(value = "从permit表删除指定{@code personGroupId}指定人员组的在所有设备上的通行权限",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personGroupId", value = "", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "token", value = "令牌", paramType="body", dataType="Token")})
-    public Response deletePersonGroupPermit(DeletePersonGroupPermitArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().deletePersonGroupPermit(args.personGroupId,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 删除personIdList指定的人员(person)记录及关联的所有记录
-     * <br>{@code PERSON_ONLY}
-     * @param personIdList 人员id列表
-     * @param token 访问令牌
-     * @return 返回删除的 person 记录数量
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/deletePersons'.
+     * wrap arguments for method {@link #deletePersons(DeletePersonsArgs)}
      */
     public static class DeletePersonsArgs{
         @ApiModelProperty(value ="人员id列表" ,required=true ,dataType="List")
@@ -1469,34 +3912,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deletePersons", method = RequestMethod.POST)
-    @ApiOperation(value = "删除personIdList指定的人员(person)记录及关联的所有记录\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personIdList", value = "人员id列表", paramType="body", dataType="List"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response deletePersons(DeletePersonsArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().deletePersons(args.personIdList,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 删除papersNum指定的人员(person)记录及关联的所有记录
-     * <br>{@code PERSON_ONLY}
-     * @param papersNumlist 证件号码列表
-     * @param token 访问令牌
-     * @return 返回删除的 person 记录数量
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/deletePersonsByPapersNum'.
+     * wrap arguments for method {@link #deletePersonsByPapersNum(DeletePersonsByPapersNumArgs)}
      */
     public static class DeletePersonsByPapersNumArgs{
         @ApiModelProperty(value ="证件号码列表" ,required=true ,dataType="List")
@@ -1504,34 +3922,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/deletePersonsByPapersNum", method = RequestMethod.POST)
-    @ApiOperation(value = "删除papersNum指定的人员(person)记录及关联的所有记录\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "papersNumlist", value = "证件号码列表", paramType="body", dataType="List"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response deletePersonsByPapersNum(DeletePersonsByPapersNumArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().deletePersonsByPapersNum(args.papersNumlist,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 设置 personId 指定的人员为禁止状态
-     * <br>{@code PERSON_ONLY}
-     * @param personId
-     * @param token 访问令牌
-     * @see #setPersonExpiryDate(int, long, Token)
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/disablePerson'.
+     * wrap arguments for method {@link #disablePerson(DisablePersonArgs)}
      */
     public static class DisablePersonArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
@@ -1539,34 +3932,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/disablePerson", method = RequestMethod.POST)
-    @ApiOperation(value = "设置 personId 指定的人员为禁止状态\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personId", value = "", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response disablePerson(DisablePersonArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().disablePerson(args.personId,args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 设置 personIdList 指定的人员为禁止状态
-     * <br>{@code PERSON_ONLY}
-     * @param personIdList 人员id列表
-     * @param token 访问令牌
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/disablePersonList'.
+     * wrap arguments for method {@link #disablePerson(DisablePersonListArgs)}
      */
     public static class DisablePersonListArgs{
         @ApiModelProperty(value ="人员id列表" ,required=true ,dataType="List")
@@ -1574,566 +3942,153 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/disablePersonList", method = RequestMethod.POST)
-    @ApiOperation(value = "设置 personIdList 指定的人员为禁止状态\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personIdList", value = "人员id列表", paramType="body", dataType="List"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response disablePerson(DisablePersonListArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().disablePerson(args.personIdList,args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 判断id指定的设备记录是否存在
-     * @param id
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/existsDevice'.
+     * wrap arguments for method {@link #existsDevice(ExistsDeviceArgs)}
      */
     public static class ExistsDeviceArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int id;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/existsDevice", method = RequestMethod.POST)
-    @ApiOperation(value = "判断id指定的设备记录是否存在",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "", paramType="form", dataType="int")})
-    public Response existsDevice(ExistsDeviceArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().existsDevice(args.id));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 判断md5指定的特征记录是否存在
-     * @param md5
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/existsFeature'.
+     * wrap arguments for method {@link #existsFeature(ExistsFeatureArgs)}
      */
     public static class ExistsFeatureArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="String")
         public String md5;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/existsFeature", method = RequestMethod.POST)
-    @ApiOperation(value = "判断md5指定的特征记录是否存在",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "md5", value = "", paramType="form", dataType="String")})
-    public Response existsFeature(ExistsFeatureArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().existsFeature(args.md5));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 判断{@code md5}指定的图像记录是否存在
-     * @param md5 图像的MD5校验码
-     * @return 记录存在返回{@code true},否则返回{@code false}
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/existsImage'.
+     * wrap arguments for method {@link #existsImage(ExistsImageArgs)}
      */
     public static class ExistsImageArgs{
         @ApiModelProperty(value ="图像的MD5校验码" ,required=true ,dataType="String")
         public String md5;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/existsImage", method = RequestMethod.POST)
-    @ApiOperation(value = "判断{@code md5}指定的图像记录是否存在",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "md5", value = "图像的MD5校验码", paramType="form", dataType="String")})
-    public Response existsImage(ExistsImageArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().existsImage(args.md5));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 判断是否存在personId指定的人员记录
-     * @param persionId
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/existsPerson'.
+     * wrap arguments for method {@link #existsPerson(ExistsPersonArgs)}
      */
     public static class ExistsPersonArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int persionId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/existsPerson", method = RequestMethod.POST)
-    @ApiOperation(value = "判断是否存在personId指定的人员记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "persionId", value = "", paramType="form", dataType="int")})
-    public Response existsPerson(ExistsPersonArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().existsPerson(args.persionId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回{@code deviceId}指定的设备记录
-     * @param deviceId
-     * @return 返回设备记录
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getDevice'.
+     * wrap arguments for method {@link #getDevice(GetDeviceArgs)}
      */
     public static class GetDeviceArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int deviceId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getDevice", method = RequestMethod.POST)
-    @ApiOperation(value = "返回{@code deviceId}指定的设备记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceId", value = "", paramType="form", dataType="int")})
-    public Response getDevice(GetDeviceArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getDevice(args.deviceId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 根据设备组id返回数据库记录
-     * @param deviceGroupId
-     * @return 
-     * @throws RuntimeDaoException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getDeviceGroup'.
+     * wrap arguments for method {@link #getDeviceGroup(GetDeviceGroupArgs)}
      */
     public static class GetDeviceGroupArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int deviceGroupId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getDeviceGroup", method = RequestMethod.POST)
-    @ApiOperation(value = "根据设备组id返回数据库记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceGroupId", value = "", paramType="form", dataType="int")})
-    public Response getDeviceGroup(GetDeviceGroupArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getDeviceGroup(args.deviceGroupId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回设备组id列表指定的数据库记录
-     * @param groupIdList
-     * @return 
-     * @throws RuntimeDaoException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getDeviceGroups'.
+     * wrap arguments for method {@link #getDeviceGroups(GetDeviceGroupsArgs)}
      */
     public static class GetDeviceGroupsArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="List")
         public List<Integer> groupIdList;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getDeviceGroups", method = RequestMethod.POST)
-    @ApiOperation(value = "返回设备组id列表指定的数据库记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "groupIdList", value = "", paramType="body", dataType="List")})
-    public Response getDeviceGroups(GetDeviceGroupsArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getDeviceGroups(args.groupIdList));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回({@code deviceId})指定的设备所属所有设备组<br>
-     * @param deviceId
-     * @return 如果{@code deviceId}无效则返回空表
-     * @see #listOfParentForDeviceGroup(int)
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getDeviceGroupsBelongs'.
+     * wrap arguments for method {@link #getDeviceGroupsBelongs(GetDeviceGroupsBelongsArgs)}
      */
     public static class GetDeviceGroupsBelongsArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int deviceId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getDeviceGroupsBelongs", method = RequestMethod.POST)
-    @ApiOperation(value = "返回({@code deviceId})指定的设备所属所有设备组<br>",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceId", value = "", paramType="form", dataType="int")})
-    public Response getDeviceGroupsBelongs(GetDeviceGroupsBelongsArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getDeviceGroupsBelongs(args.deviceId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 从permit表返回允许在{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})的id<br>
-     * 不排序,不包含重复id
-     * @param personGroupId 为{@code null}返回空表
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getDeviceGroupsPermit'.
+     * wrap arguments for method {@link #getDeviceGroupsPermit(GetDeviceGroupsPermitArgs)}
      */
     public static class GetDeviceGroupsPermitArgs{
         @ApiModelProperty(value ="为{@code null}返回空表" ,required=true ,dataType="int")
         public int personGroupId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getDeviceGroupsPermit", method = RequestMethod.POST)
-    @ApiOperation(value = "从permit表返回允许在{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})的id<br>\n"
-+" 不排序,不包含重复id",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personGroupId", value = "为{@code null}返回空表", paramType="form", dataType="int")})
-    public Response getDeviceGroupsPermit(GetDeviceGroupsPermitArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getDeviceGroupsPermit(args.personGroupId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 从permit表返回允许在{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})的id<br>
-     * 不排序,不包含重复id,本方法不会对{@code personGroupId}的父结点向上回溯
-     * @param personGroupId
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getDeviceGroupsPermittedBy'.
+     * wrap arguments for method {@link #getDeviceGroupsPermittedBy(GetDeviceGroupsPermittedByArgs)}
      */
     public static class GetDeviceGroupsPermittedByArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personGroupId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getDeviceGroupsPermittedBy", method = RequestMethod.POST)
-    @ApiOperation(value = "从permit表返回允许在{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})的id<br>\n"
-+" 不排序,不包含重复id,本方法不会对{@code personGroupId}的父结点向上回溯",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personGroupId", value = "", paramType="form", dataType="int")})
-    public Response getDeviceGroupsPermittedBy(GetDeviceGroupsPermittedByArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getDeviceGroupsPermittedBy(args.personGroupId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回featureMd5的人脸特征记录关联的设备id<br>
-     * @param featureMd5
-     * @return 如果没有关联的设备则返回{@code null}
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getDeviceIdOfFeature'.
+     * wrap arguments for method {@link #getDeviceIdOfFeature(GetDeviceIdOfFeatureArgs)}
      */
     public static class GetDeviceIdOfFeatureArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="String")
         public String featureMd5;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getDeviceIdOfFeature", method = RequestMethod.POST)
-    @ApiOperation(value = "返回featureMd5的人脸特征记录关联的设备id<br>",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "featureMd5", value = "", paramType="form", dataType="String")})
-    public Response getDeviceIdOfFeature(GetDeviceIdOfFeatureArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getDeviceIdOfFeature(args.featureMd5));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回 {@code idList} 指定的设备记录
-     * @param idList
-     * @return 返回设备记录列表
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getDevices'.
+     * wrap arguments for method {@link #getDevices(GetDevicesArgs)}
      */
     public static class GetDevicesArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="List")
         public List<Integer> idList;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getDevices", method = RequestMethod.POST)
-    @ApiOperation(value = "返回 {@code idList} 指定的设备记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "idList", value = "", paramType="body", dataType="List")})
-    public Response getDevices(GetDevicesArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getDevices(args.idList));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回{@code deviceGroupId}指定的设备组下属的所有设备记录<br>
-     * 如果没有下属设备记录则返回空表
-     * @param deviceGroupId
-     * @return 
-     * @throws RuntimeDaoException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getDevicesOfGroup'.
+     * wrap arguments for method {@link #getDevicesOfGroup(GetDevicesOfGroupArgs)}
      */
     public static class GetDevicesOfGroupArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int deviceGroupId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getDevicesOfGroup", method = RequestMethod.POST)
-    @ApiOperation(value = "返回{@code deviceGroupId}指定的设备组下属的所有设备记录<br>\n"
-+" 如果没有下属设备记录则返回空表",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceGroupId", value = "", paramType="form", dataType="int")})
-    public Response getDevicesOfGroup(GetDevicesOfGroupArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getDevicesOfGroup(args.deviceGroupId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回faceId指定的人脸信息记录
-     * @param faceId
-     * @return {@link FaceBean} ,如果没有对应记录则返回null
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getFace'.
+     * wrap arguments for method {@link #getFace(GetFaceArgs)}
      */
     public static class GetFaceArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int faceId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getFace", method = RequestMethod.POST)
-    @ApiOperation(value = "返回faceId指定的人脸信息记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "faceId", value = "", paramType="form", dataType="int")})
-    public Response getFace(GetFaceArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getFace(args.faceId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 根据MD5校验码返回人脸特征数据记录
-     * @param md5
-     * @return 如果数据库中没有对应的数据则返回null
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getFeature'.
+     * wrap arguments for method {@link #getFeature(GetFeatureArgs)}
      */
     public static class GetFeatureArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="String")
         public String md5;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getFeature", method = RequestMethod.POST)
-    @ApiOperation(value = "根据MD5校验码返回人脸特征数据记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "md5", value = "", paramType="form", dataType="String")})
-    public Response getFeature(GetFeatureArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getFeature(args.md5));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 根据MD5校验码返回人脸特征数据
-     * @param md5
-     * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getFeatureBytes'.
+     * wrap arguments for method {@link #getFeatureBytes(GetFeatureBytesArgs)}
      */
     public static class GetFeatureBytesArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="String")
         public String md5;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getFeatureBytes", method = RequestMethod.POST)
-    @ApiOperation(value = "根据MD5校验码返回人脸特征数据",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "md5", value = "", paramType="form", dataType="String")})
-    public Response getFeatureBytes(GetFeatureBytesArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getFeatureBytes(args.md5));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 根据MD5校验码返回人脸特征数据记录
-     * @param md5 md5列表
-     * @return {@link FeatureBean}列表
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getFeatures'.
+     * wrap arguments for method {@link #getFeatures(GetFeaturesArgs)}
      */
     public static class GetFeaturesArgs{
         @ApiModelProperty(value ="md5列表" ,required=true ,dataType="List")
         public List<String> md5;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getFeatures", method = RequestMethod.POST)
-    @ApiOperation(value = "根据MD5校验码返回人脸特征数据记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "md5", value = "md5列表", paramType="body", dataType="List")})
-    public Response getFeatures(GetFeaturesArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getFeatures(args.md5));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回 persionId 关联的所有人脸特征记录
-     * @param personId 人员id(fl_person.id)
-     * @return 返回 fl_feature.md5  列表
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getFeaturesByPersonId'.
+     * wrap arguments for method {@link #getFeaturesByPersonId(GetFeaturesByPersonIdArgs)}
      */
     public static class GetFeaturesByPersonIdArgs{
         @ApiModelProperty(value ="人员id(fl_person.id)" ,required=true ,dataType="int")
         public int personId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getFeaturesByPersonId", method = RequestMethod.POST)
-    @ApiOperation(value = "返回 persionId 关联的所有人脸特征记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personId", value = "人员id(fl_person.id)", paramType="form", dataType="int")})
-    public Response getFeaturesByPersonId(GetFeaturesByPersonIdArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getFeaturesByPersonId(args.personId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回 persionId 关联的指定SDK的人脸特征记录
-     * @param personId 人员id(fl_person.id)
-     * @param sdkVersion 算法(SDK)版本号
-     * @return 返回 fl_feature.md5  列表
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getFeaturesByPersonIdAndSdkVersion'.
+     * wrap arguments for method {@link #getFeaturesByPersonIdAndSdkVersion(GetFeaturesByPersonIdAndSdkVersionArgs)}
      */
     public static class GetFeaturesByPersonIdAndSdkVersionArgs{
         @ApiModelProperty(value ="人员id(fl_person.id)" ,required=true ,dataType="int")
@@ -2141,66 +4096,17 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="算法(SDK)版本号" ,required=true ,dataType="String")
         public String sdkVersion;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getFeaturesByPersonIdAndSdkVersion", method = RequestMethod.POST)
-    @ApiOperation(value = "返回 persionId 关联的指定SDK的人脸特征记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personId", value = "人员id(fl_person.id)", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "sdkVersion", value = "算法(SDK)版本号", paramType="form", dataType="String")})
-    public Response getFeaturesByPersonIdAndSdkVersion(GetFeaturesByPersonIdAndSdkVersionArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getFeaturesByPersonIdAndSdkVersion(args.personId,args.sdkVersion));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回指定人员{@code personId}关联的所有特征<br>
-     * @param personId
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getFeaturesOfPerson'.
+     * wrap arguments for method {@link #getFeaturesOfPerson(GetFeaturesOfPersonArgs)}
      */
     public static class GetFeaturesOfPersonArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getFeaturesOfPerson", method = RequestMethod.POST)
-    @ApiOperation(value = "返回指定人员{@code personId}关联的所有特征<br>",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personId", value = "", paramType="form", dataType="int")})
-    public Response getFeaturesOfPerson(GetFeaturesOfPersonArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getFeaturesOfPerson(args.personId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 获取人员组通行权限<br>
-     * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行,
-     * 本方法会对{@code personGroupId}的父结点向上回溯：
-     * {@codepersonGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，
-     * 输入参数为{@code null}或找不到指定的记录则返回false
-     * @param deviceId
-     * @param personGroupId
-     * @return 允许通行返回false，否则返回false
-     * @throws RuntimeDaoException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getGroupPermit'.
+     * wrap arguments for method {@link #getGroupPermit(GetGroupPermitArgs)}
      */
     public static class GetGroupPermitArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
@@ -2208,40 +4114,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personGroupId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getGroupPermit", method = RequestMethod.POST)
-    @ApiOperation(value = "获取人员组通行权限<br>\n"
-+" 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行,\n"
-+" 本方法会对{@code personGroupId}的父结点向上回溯：\n"
-+" {@codepersonGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，\n"
-+" 输入参数为{@code null}或找不到指定的记录则返回false",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceId", value = "", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "personGroupId", value = "", paramType="form", dataType="int")})
-    public Response getGroupPermit(GetGroupPermitArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getGroupPermit(args.deviceId,args.personGroupId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 获取人员组通行权限<br>
-     * 返回{@code personGroupId}指定的人员组在{@code deviceGroupId}指定的设备组上是否允许通行,
-     * 本方法会对{@code personGroupId}的父结点向上回溯：
-     * {@codepersonGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，
-     * 输入参数为{@code null}或找不到指定的记录则返回false
-     * @param deviceGroupId
-     * @param personGroupId
-     * @return 允许通行返回false，否则返回false
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getGroupPermitOnDeviceGroup'.
+     * wrap arguments for method {@link #getGroupPermitOnDeviceGroup(GetGroupPermitOnDeviceGroupArgs)}
      */
     public static class GetGroupPermitOnDeviceGroupArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
@@ -2249,33 +4124,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personGroupId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getGroupPermitOnDeviceGroup", method = RequestMethod.POST)
-    @ApiOperation(value = "获取人员组通行权限<br>\n"
-+" 返回{@code personGroupId}指定的人员组在{@code deviceGroupId}指定的设备组上是否允许通行,\n"
-+" 本方法会对{@code personGroupId}的父结点向上回溯：\n"
-+" {@codepersonGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，\n"
-+" 输入参数为{@code null}或找不到指定的记录则返回false",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceGroupId", value = "", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "personGroupId", value = "", paramType="form", dataType="int")})
-    public Response getGroupPermitOnDeviceGroup(GetGroupPermitOnDeviceGroupArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getGroupPermitOnDeviceGroup(args.deviceGroupId,args.personGroupId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 参见 {@link #getGroupPermit(int, int)}
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getGroupPermits'.
+     * wrap arguments for method {@link #getGroupPermits(GetGroupPermitsArgs)}
      */
     public static class GetGroupPermitsArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
@@ -2283,329 +4134,89 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="List")
         public List<Integer> personGroupIdList;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getGroupPermits", method = RequestMethod.POST)
-    @ApiOperation(value = "参见 {@link #getGroupPermit(int, int)}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceId", value = "", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "personGroupIdList", value = "", paramType="body", dataType="List")})
-    public Response getGroupPermits(GetGroupPermitsArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getGroupPermits(args.deviceId,args.personGroupIdList));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 根据图像的MD5校验码返回图像记录
-     * @param imageMD5
-     * @return {@link ImageBean} ,如果没有对应记录则返回null
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getImage'.
+     * wrap arguments for method {@link #getImage(GetImageArgs)}
      */
     public static class GetImageArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="String")
         public String imageMD5;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getImage", method = RequestMethod.POST)
-    @ApiOperation(value = "根据图像的MD5校验码返回图像记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "imageMD5", value = "", paramType="form", dataType="String")})
-    public Response getImage(GetImageArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getImage(args.imageMD5));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 根据图像的MD5校验码返回图像数据
-     * @param imageMD5
-     * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getImageBytes'.
+     * wrap arguments for method {@link #getImageBytes(GetImageBytesArgs)}
      */
     public static class GetImageBytesArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="String")
         public String imageMD5;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getImageBytes", method = RequestMethod.POST)
-    @ApiOperation(value = "根据图像的MD5校验码返回图像数据",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "imageMD5", value = "", paramType="form", dataType="String")})
-    public Response getImageBytes(GetImageBytesArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getImageBytes(args.imageMD5));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回featureMd5的人脸特征记录关联的所有图像记录id(MD5)
-     * @param featureMd5 人脸特征id(MD5)
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getImagesAssociatedByFeature'.
+     * wrap arguments for method {@link #getImagesAssociatedByFeature(GetImagesAssociatedByFeatureArgs)}
      */
     public static class GetImagesAssociatedByFeatureArgs{
         @ApiModelProperty(value ="人脸特征id(MD5)" ,required=true ,dataType="String")
         public String featureMd5;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getImagesAssociatedByFeature", method = RequestMethod.POST)
-    @ApiOperation(value = "返回featureMd5的人脸特征记录关联的所有图像记录id(MD5)",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "featureMd5", value = "人脸特征id(MD5)", paramType="form", dataType="String")})
-    public Response getImagesAssociatedByFeature(GetImagesAssociatedByFeatureArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getImagesAssociatedByFeature(args.featureMd5));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回 persionId 关联的所有日志记录
-     * @param personId fl_person.id
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getLogBeansByPersonId'.
+     * wrap arguments for method {@link #getLogBeansByPersonId(GetLogBeansByPersonIdArgs)}
      */
     public static class GetLogBeansByPersonIdArgs{
         @ApiModelProperty(value ="fl_person.id" ,required=true ,dataType="int")
         public int personId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getLogBeansByPersonId", method = RequestMethod.POST)
-    @ApiOperation(value = "返回 persionId 关联的所有日志记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personId", value = "fl_person.id", paramType="form", dataType="int")})
-    public Response getLogBeansByPersonId(GetLogBeansByPersonIdArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getLogBeansByPersonId(args.personId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回personId指定的人员记录
-     * @param personId
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getPerson'.
+     * wrap arguments for method {@link #getPerson(GetPersonArgs)}
      */
     public static class GetPersonArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPerson", method = RequestMethod.POST)
-    @ApiOperation(value = "返回personId指定的人员记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personId", value = "", paramType="form", dataType="int")})
-    public Response getPerson(GetPersonArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getPerson(args.personId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 根据证件号码返回人员记录
-     * @param papersNum
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getPersonByPapersNum'.
+     * wrap arguments for method {@link #getPersonByPapersNum(GetPersonByPapersNumArgs)}
      */
     public static class GetPersonByPapersNumArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="String")
         public String papersNum;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPersonByPapersNum", method = RequestMethod.POST)
-    @ApiOperation(value = "根据证件号码返回人员记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "papersNum", value = "", paramType="form", dataType="String")})
-    public Response getPersonByPapersNum(GetPersonByPapersNumArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getPersonByPapersNum(args.papersNum));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 根据人员组id返回数据库记录
-     * @param personGroupId
-     * @return 
-     * @throws RuntimeDaoException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getPersonGroup'.
+     * wrap arguments for method {@link #getPersonGroup(GetPersonGroupArgs)}
      */
     public static class GetPersonGroupArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personGroupId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPersonGroup", method = RequestMethod.POST)
-    @ApiOperation(value = "根据人员组id返回数据库记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personGroupId", value = "", paramType="form", dataType="int")})
-    public Response getPersonGroup(GetPersonGroupArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getPersonGroup(args.personGroupId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回人员组id列表指定的数据库记录
-     * @param groupIdList
-     * @return 
-     * @throws RuntimeDaoException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getPersonGroups'.
+     * wrap arguments for method {@link #getPersonGroups(GetPersonGroupsArgs)}
      */
     public static class GetPersonGroupsArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="List")
         public List<Integer> groupIdList;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPersonGroups", method = RequestMethod.POST)
-    @ApiOperation(value = "返回人员组id列表指定的数据库记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "groupIdList", value = "", paramType="body", dataType="List")})
-    public Response getPersonGroups(GetPersonGroupsArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getPersonGroups(args.groupIdList));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回({@code personId})指定的人员所属所有人员组<br>
-     * @param personId
-     * @return 如果{@code personId}无效则返回空表
-     * @see #listOfParentForPersonGroup(int)
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getPersonGroupsBelongs'.
+     * wrap arguments for method {@link #getPersonGroupsBelongs(GetPersonGroupsBelongsArgs)}
      */
     public static class GetPersonGroupsBelongsArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPersonGroupsBelongs", method = RequestMethod.POST)
-    @ApiOperation(value = "返回({@code personId})指定的人员所属所有人员组<br>",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personId", value = "", paramType="form", dataType="int")})
-    public Response getPersonGroupsBelongs(GetPersonGroupsBelongsArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getPersonGroupsBelongs(args.personId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 从permit表返回允许在{@code deviceGroupId}指定的设备组通过的所有人员组{@link PersonGroupBean}对象的id<br>
-     * 不排序,不包含重复id,本方法不会对{@link PersonGroupBean}的父结点向上回溯
-     * @param deviceGroupId
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getPersonGroupsPermittedBy'.
+     * wrap arguments for method {@link #getPersonGroupsPermittedBy(GetPersonGroupsPermittedByArgs)}
      */
     public static class GetPersonGroupsPermittedByArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int deviceGroupId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPersonGroupsPermittedBy", method = RequestMethod.POST)
-    @ApiOperation(value = "从permit表返回允许在{@code deviceGroupId}指定的设备组通过的所有人员组{@link PersonGroupBean}对象的id<br>\n"
-+"  不排序,不包含重复id,本方法不会对{@link PersonGroupBean}的父结点向上回溯",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceGroupId", value = "", paramType="form", dataType="int")})
-    public Response getPersonGroupsPermittedBy(GetPersonGroupsPermittedByArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getPersonGroupsPermittedBy(args.deviceGroupId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 获取人员通行权限<br>
-     * 返回{@code personId}指定的人员在{@code deviceId}设备上是否允许通行
-     * @param deviceId
-     * @param personId
-     * @return 
-     * @throws RuntimeDaoException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getPersonPermit'.
+     * wrap arguments for method {@link #getPersonPermit(GetPersonPermitArgs)}
      */
     public static class GetPersonPermitArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
@@ -2613,30 +4224,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPersonPermit", method = RequestMethod.POST)
-    @ApiOperation(value = "获取人员通行权限<br>\n"
-+" 返回{@code personId}指定的人员在{@code deviceId}设备上是否允许通行",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceId", value = "", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "personId", value = "", paramType="form", dataType="int")})
-    public Response getPersonPermit(GetPersonPermitArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getPersonPermit(args.deviceId,args.personId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 参见 {@link #getPersonPermit(int, int) }
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getPersonPermits'.
+     * wrap arguments for method {@link #getPersonPermits(GetPersonPermitsArgs)}
      */
     public static class GetPersonPermitsArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
@@ -2644,95 +4234,25 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="" ,required=true ,dataType="List")
         public List<Integer> personIdList;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPersonPermits", method = RequestMethod.POST)
-    @ApiOperation(value = "参见 {@link #getPersonPermit(int, int) }",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceId", value = "", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "personIdList", value = "", paramType="body", dataType="List")})
-    public Response getPersonPermits(GetPersonPermitsArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getPersonPermits(args.deviceId,args.personIdList));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回 list 指定的人员记录
-     * @param idList 人员id列表
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getPersons'.
+     * wrap arguments for method {@link #getPersons(GetPersonsArgs)}
      */
     public static class GetPersonsArgs{
         @ApiModelProperty(value ="人员id列表" ,required=true ,dataType="List")
         public List<Integer> idList;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPersons", method = RequestMethod.POST)
-    @ApiOperation(value = "返回 list 指定的人员记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "idList", value = "人员id列表", paramType="body", dataType="List")})
-    public Response getPersons(GetPersonsArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getPersons(args.idList));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回{@code deviceGroupId}指定的人员组下属的所有人员记录<br>
-     * 如果没有下属人员记录则返回空表
-     * @param personGroupId
-     * @return 人员ID列表
-     * @throws RuntimeDaoException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getPersonsOfGroup'.
+     * wrap arguments for method {@link #getPersonsOfGroup(GetPersonsOfGroupArgs)}
      */
     public static class GetPersonsOfGroupArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personGroupId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getPersonsOfGroup", method = RequestMethod.POST)
-    @ApiOperation(value = "返回{@code deviceGroupId}指定的人员组下属的所有人员记录<br>\n"
-+" 如果没有下属人员记录则返回空表",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personGroupId", value = "", paramType="form", dataType="int")})
-    public Response getPersonsOfGroup(GetPersonsOfGroupArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getPersonsOfGroup(args.personGroupId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回指定的参数,如果参数没有定义则返回{@code null}<br>
-     * 非root令牌只能访问指定范围的参数,否则会抛出异常<br>
-     * root令牌不受限制<br>
-     * @param key
-     * @param token 访问令牌
-     * @return 返回{@code key}指定的参数值
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getProperty'.
+     * wrap arguments for method {@link #getProperty(GetPropertyArgs)}
      */
     public static class GetPropertyArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="String")
@@ -2740,321 +4260,79 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getProperty", method = RequestMethod.POST)
-    @ApiOperation(value = "返回指定的参数,如果参数没有定义则返回{@code null}<br>\n"
-+" 非root令牌只能访问指定范围的参数,否则会抛出异常<br>\n"
-+" root令牌不受限制<br>",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "key", value = "", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response getProperty(GetPropertyArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getProperty(args.key,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回redis访问基本参数:<br>
-     * <ul>
-     * <li>redis服务器地址</li>
-     * <li>设备命令通道名</li>
-     * <li>人员验证实时监控通道名</li>
-     * <li>设备心跳实时监控通道名</li>
-     * <li>设备心跳包间隔时间(秒)</li>
-     * <li>设备心跳包失效时间(秒)</li>
-     * </ul>
-     * 参见{@link MQParam}定义
-     * @param token 访问令牌
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getRedisParameters'.
+     * wrap arguments for method {@link #getRedisParameters(GetRedisParametersArgs)}
      */
     public static class GetRedisParametersArgs{
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getRedisParameters", method = RequestMethod.POST)
-    @ApiOperation(value = "返回redis访问基本参数:<br>\n"
-+" <ul>\n"
-+" <li>redis服务器地址</li>\n"
-+" <li>设备命令通道名</li>\n"
-+" <li>人员验证实时监控通道名</li>\n"
-+" <li>设备心跳实时监控通道名</li>\n"
-+" <li>设备心跳包间隔时间(秒)</li>\n"
-+" <li>设备心跳包失效时间(秒)</li>\n"
-+" </ul>\n"
-+" 参见{@link MQParam}定义",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response getRedisParameters(GetRedisParametersArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getRedisParameters(args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 获取服务的所有配置参数
-     * <br>{@code ROOT_ONLY}
-     * @param token 访问令牌
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getServiceConfig'.
+     * wrap arguments for method {@link #getServiceConfig(GetServiceConfigArgs)}
      */
     public static class GetServiceConfigArgs{
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getServiceConfig", method = RequestMethod.POST)
-    @ApiOperation(value = "获取服务的所有配置参数\n"
-+" <br>{@code ROOT_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response getServiceConfig(GetServiceConfigArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getServiceConfig(args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回{@code deviceGroupId}指定的设备组下的所有子节点(设备组)<br>
-     * 如果没有子节点则返回空表
-     * @param deviceGroupId
-     * @return 设备组ID列表
-     * @throws RuntimeDaoException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getSubDeviceGroup'.
+     * wrap arguments for method {@link #getSubDeviceGroup(GetSubDeviceGroupArgs)}
      */
     public static class GetSubDeviceGroupArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int deviceGroupId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getSubDeviceGroup", method = RequestMethod.POST)
-    @ApiOperation(value = "返回{@code deviceGroupId}指定的设备组下的所有子节点(设备组)<br>\n"
-+" 如果没有子节点则返回空表",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceGroupId", value = "", paramType="form", dataType="int")})
-    public Response getSubDeviceGroup(GetSubDeviceGroupArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getSubDeviceGroup(args.deviceGroupId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回{@code personGroupId}指定的人员组下的所有子节点(人员组)<br>
-     * 如果没有子节点则返回空表
-     * @param personGroupId
-     * @return 人员组ID列表
-     * @throws RuntimeDaoException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/getSubPersonGroup'.
+     * wrap arguments for method {@link #getSubPersonGroup(GetSubPersonGroupArgs)}
      */
     public static class GetSubPersonGroupArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personGroupId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getSubPersonGroup", method = RequestMethod.POST)
-    @ApiOperation(value = "返回{@code personGroupId}指定的人员组下的所有子节点(人员组)<br>\n"
-+" 如果没有子节点则返回空表",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personGroupId", value = "", paramType="form", dataType="int")})
-    public Response getSubPersonGroup(GetSubPersonGroupArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().getSubPersonGroup(args.personGroupId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 判断 personId 指定的人员记录是否过期
-     * @param personId
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/isDisable'.
+     * wrap arguments for method {@link #isDisable(IsDisableArgs)}
      */
     public static class IsDisableArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isDisable", method = RequestMethod.POST)
-    @ApiOperation(value = "判断 personId 指定的人员记录是否过期",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personId", value = "", paramType="form", dataType="int")})
-    public Response isDisable(IsDisableArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().isDisable(args.personId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 是否为本地实现
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/isLocal'.
+     * wrap arguments for method {@link #isLocal(IsLocalArgs)}
      */
     public static class IsLocalArgs{
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isLocal", method = RequestMethod.POST)
-    @ApiOperation(value = "是否为本地实现",httpMethod="POST")
-    public Response isLocal(IsLocalArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().isLocal());
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 判断命令响应通道是否有效<br>
-     * 通道过期或不存在都返回{@code false}
-     * @param ackChannel
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/isValidAckChannel'.
+     * wrap arguments for method {@link #isValidAckChannel(IsValidAckChannelArgs)}
      */
     public static class IsValidAckChannelArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="String")
         public String ackChannel;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isValidAckChannel", method = RequestMethod.POST)
-    @ApiOperation(value = "判断命令响应通道是否有效<br>\n"
-+" 通道过期或不存在都返回{@code false}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "ackChannel", value = "", paramType="form", dataType="String")})
-    public Response isValidAckChannel(IsValidAckChannelArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().isValidAckChannel(args.ackChannel));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 判断命令序列号是否有效<br>
-     * 序列号过期或不存在都返回{@code false}
-     * @param cmdSn
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/isValidCmdSn'.
+     * wrap arguments for method {@link #isValidCmdSn(IsValidCmdSnArgs)}
      */
     public static class IsValidCmdSnArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="long")
         public long cmdSn;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isValidCmdSn", method = RequestMethod.POST)
-    @ApiOperation(value = "判断命令序列号是否有效<br>\n"
-+" 序列号过期或不存在都返回{@code false}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "cmdSn", value = "", paramType="form", dataType="long")})
-    public Response isValidCmdSn(IsValidCmdSnArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().isValidCmdSn(args.cmdSn));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 验证设备令牌是否有效
-     * @param token
-     * @return 令牌有效返回{@code true},否则返回{@code false}
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/isValidDeviceToken'.
+     * wrap arguments for method {@link #isValidDeviceToken(IsValidDeviceTokenArgs)}
      */
     public static class IsValidDeviceTokenArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isValidDeviceToken", method = RequestMethod.POST)
-    @ApiOperation(value = "验证设备令牌是否有效",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "", paramType="body", dataType="Token")})
-    public Response isValidDeviceToken(IsValidDeviceTokenArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().isValidDeviceToken(args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 验证用户密码是否匹配
-     * @param userId 用户id字符串,root用户id即为{@link CommonConstant#ROOT_NAME}
-     * @param password 用户密码
-     * @param isMd5 为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)
-     * @return {@code true}密码匹配
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/isValidPassword'.
+     * wrap arguments for method {@link #isValidPassword(IsValidPasswordArgs)}
      */
     public static class IsValidPasswordArgs{
         @ApiModelProperty(value ="用户id字符串,root用户id即为{@link CommonConstant#ROOT_NAME}" ,required=true ,dataType="String")
@@ -3064,238 +4342,63 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)" ,required=true ,dataType="boolean")
         public boolean isMd5;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isValidPassword", method = RequestMethod.POST)
-    @ApiOperation(value = "验证用户密码是否匹配",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userId", value = "用户id字符串,root用户id即为{@link CommonConstant#ROOT_NAME}", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "password", value = "用户密码", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "isMd5", value = "为{@code false}代表{@code password}为明文,{@code true}指定{@code password}为32位MD5密文(小写)", paramType="form", dataType="boolean")})
-    public Response isValidPassword(IsValidPasswordArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().isValidPassword(args.userId,args.password,args.isMd5));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 验证人员令牌是否有效
-     * @param token
-     * @return 令牌有效返回{@code true},否则返回{@code false}
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/isValidPersonToken'.
+     * wrap arguments for method {@link #isValidPersonToken(IsValidPersonTokenArgs)}
      */
     public static class IsValidPersonTokenArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isValidPersonToken", method = RequestMethod.POST)
-    @ApiOperation(value = "验证人员令牌是否有效",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "", paramType="body", dataType="Token")})
-    public Response isValidPersonToken(IsValidPersonTokenArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().isValidPersonToken(args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 验证root令牌是否有效
-     * @param token
-     * @return 令牌有效返回{@code true},否则返回{@code false}
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/isValidRootToken'.
+     * wrap arguments for method {@link #isValidRootToken(IsValidRootTokenArgs)}
      */
     public static class IsValidRootTokenArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isValidRootToken", method = RequestMethod.POST)
-    @ApiOperation(value = "验证root令牌是否有效",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "", paramType="body", dataType="Token")})
-    public Response isValidRootToken(IsValidRootTokenArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().isValidRootToken(args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 验证令牌是否有效
-     * @param token
-     * @return 令牌有效返回{@code true},否则返回{@code false}
-     * @since 2.1.1
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/isValidToken'.
+     * wrap arguments for method {@link #isValidToken(IsValidTokenArgs)}
      */
     public static class IsValidTokenArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isValidToken", method = RequestMethod.POST)
-    @ApiOperation(value = "验证令牌是否有效",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "", paramType="body", dataType="Token")})
-    public Response isValidToken(IsValidTokenArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().isValidToken(args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 验证PERSON/ROOT令牌是否有效
-     * @param token
-     * @return 令牌有效返回{@code true},否则返回{@code false}
-     * @since 2.1.1
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/isValidUserToken'.
+     * wrap arguments for method {@link #isValidUserToken(IsValidUserTokenArgs)}
      */
     public static class IsValidUserTokenArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/isValidUserToken", method = RequestMethod.POST)
-    @ApiOperation(value = "验证PERSON/ROOT令牌是否有效",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "", paramType="body", dataType="Token")})
-    public Response isValidUserToken(IsValidUserTokenArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().isValidUserToken(args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回({@code deviceGroupId})指定的fl_device_group记录的所有的父节点(包括自己)<br>
-     * 自引用字段:fl_device_group(parent)
-     * @param deviceGroupId
-     * @return 如果{@code deviceGroupId}无效则返回空表
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/listOfParentForDeviceGroup'.
+     * wrap arguments for method {@link #listOfParentForDeviceGroup(ListOfParentForDeviceGroupArgs)}
      */
     public static class ListOfParentForDeviceGroupArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int deviceGroupId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/listOfParentForDeviceGroup", method = RequestMethod.POST)
-    @ApiOperation(value = "返回({@code deviceGroupId})指定的fl_device_group记录的所有的父节点(包括自己)<br>\n"
-+" 自引用字段:fl_device_group(parent)",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceGroupId", value = "", paramType="form", dataType="int")})
-    public Response listOfParentForDeviceGroup(ListOfParentForDeviceGroupArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().listOfParentForDeviceGroup(args.deviceGroupId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回({@code personGroupId})指定的fl_person_group记录的所有的父节点(包括自己)<br>
-     * 自引用字段:fl_person_group(parent)
-     * @param personGroupId
-     * @return 如果{@code personGroupId}无效则返回空表
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/listOfParentForPersonGroup'.
+     * wrap arguments for method {@link #listOfParentForPersonGroup(ListOfParentForPersonGroupArgs)}
      */
     public static class ListOfParentForPersonGroupArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personGroupId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/listOfParentForPersonGroup", method = RequestMethod.POST)
-    @ApiOperation(value = "返回({@code personGroupId})指定的fl_person_group记录的所有的父节点(包括自己)<br>\n"
-+" 自引用字段:fl_person_group(parent)",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personGroupId", value = "", paramType="form", dataType="int")})
-    public Response listOfParentForPersonGroup(ListOfParentForPersonGroupArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().listOfParentForPersonGroup(args.personGroupId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回所有人员记录
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/loadAllPerson'.
+     * wrap arguments for method {@link #loadAllPerson(LoadAllPersonArgs)}
      */
     public static class LoadAllPersonArgs{
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadAllPerson", method = RequestMethod.POST)
-    @ApiOperation(value = "返回所有人员记录",httpMethod="POST")
-    public Response loadAllPerson(LoadAllPersonArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().loadAllPerson());
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 根据{@code where}指定的查询条件查询设备记录
-     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
-     * @param startRow 记录起始行号 (first row = 1, last row = -1)
-     * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
-     * @return 返回设备记录列表
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/loadDeviceByWhere'.
+     * wrap arguments for method {@link #loadDeviceByWhere(LoadDeviceByWhereArgs)}
      */
     public static class LoadDeviceByWhereArgs{
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录" ,required=true ,dataType="String")
@@ -3305,34 +4408,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="返回记录条数 为负值是返回{@code startRow}开始的所有行" ,required=true ,dataType="int")
         public int numRows;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadDeviceByWhere", method = RequestMethod.POST)
-    @ApiOperation(value = "根据{@code where}指定的查询条件查询设备记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "startRow", value = "记录起始行号 (first row = 1, last row = -1)", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "numRows", value = "返回记录条数 为负值是返回{@code startRow}开始的所有行", paramType="form", dataType="int")})
-    public Response loadDeviceByWhere(LoadDeviceByWhereArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().loadDeviceByWhere(args.where,args.startRow,args.numRows));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 查询{@code where} SQL条件语句指定的记录
-     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
-     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
-     * @param numRows 返回记录条数(小于0时返回所有记录)
-     * @return 设备组ID列表
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/loadDeviceGroupByWhere'.
+     * wrap arguments for method {@link #loadDeviceGroupByWhere(LoadDeviceGroupByWhereArgs)}
      */
     public static class LoadDeviceGroupByWhereArgs{
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录" ,required=true ,dataType="String")
@@ -3342,125 +4420,33 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="返回记录条数(小于0时返回所有记录)" ,required=true ,dataType="int")
         public int numRows;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadDeviceGroupByWhere", method = RequestMethod.POST)
-    @ApiOperation(value = "查询{@code where} SQL条件语句指定的记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "startRow", value = "返回记录的起始行(首行=1,尾行=-1)", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "numRows", value = "返回记录条数(小于0时返回所有记录)", paramType="form", dataType="int")})
-    public Response loadDeviceGroupByWhere(LoadDeviceGroupByWhereArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().loadDeviceGroupByWhere(args.where,args.startRow,args.numRows));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 查询{@code where}条件指定的记录
-     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
-     * @return 返回查询结果记录的主键
-     * @see 设备组ID列表
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/loadDeviceGroupIdByWhere'.
+     * wrap arguments for method {@link #loadDeviceGroupIdByWhere(LoadDeviceGroupIdByWhereArgs)}
      */
     public static class LoadDeviceGroupIdByWhereArgs{
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录" ,required=true ,dataType="String")
         public String where;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadDeviceGroupIdByWhere", method = RequestMethod.POST)
-    @ApiOperation(value = "查询{@code where}条件指定的记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String")})
-    public Response loadDeviceGroupIdByWhere(LoadDeviceGroupIdByWhereArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().loadDeviceGroupIdByWhere(args.where));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 根据{@code where}指定的查询条件查询设备记录
-     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
-     * @return 返回设备ID列表
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/loadDeviceIdByWhere'.
+     * wrap arguments for method {@link #loadDeviceIdByWhere(LoadDeviceIdByWhereArgs)}
      */
     public static class LoadDeviceIdByWhereArgs{
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录" ,required=true ,dataType="String")
         public String where;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadDeviceIdByWhere", method = RequestMethod.POST)
-    @ApiOperation(value = "根据{@code where}指定的查询条件查询设备记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String")})
-    public Response loadDeviceIdByWhere(LoadDeviceIdByWhereArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().loadDeviceIdByWhere(args.where));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * (主动更新机制实现)<br>
-     * 返回 fl_feature.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_feature记录
-     * @param timestamp
-     * @return 返回 fl_feature.md5 列表
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/loadFeatureMd5ByUpdate'.
+     * wrap arguments for method {@link #loadFeatureMd5ByUpdate(LoadFeatureMd5ByUpdateArgs)}
      */
     public static class LoadFeatureMd5ByUpdateArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="long")
         public long timestamp;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadFeatureMd5ByUpdate", method = RequestMethod.POST)
-    @ApiOperation(value = "(主动更新机制实现)<br>\n"
-+" 返回 fl_feature.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_feature记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "timestamp", value = "", paramType="form", dataType="long")})
-    public Response loadFeatureMd5ByUpdate(LoadFeatureMd5ByUpdateArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().loadFeatureMd5ByUpdate(args.timestamp));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 日志查询<br>
-     * 根据{@code where}指定的查询条件查询日志记录
-     * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
-     * @param startRow 记录起始行号 (first row = 1, last row = -1)
-     * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/loadLogByWhere'.
+     * wrap arguments for method {@link #loadLogByWhere(LoadLogByWhereArgs)}
      */
     public static class LoadLogByWhereArgs{
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录" ,required=true ,dataType="String")
@@ -3470,35 +4456,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="返回记录条数 为负值是返回{@code startRow}开始的所有行" ,required=true ,dataType="int")
         public int numRows;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadLogByWhere", method = RequestMethod.POST)
-    @ApiOperation(value = "日志查询<br>\n"
-+" 根据{@code where}指定的查询条件查询日志记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "startRow", value = "记录起始行号 (first row = 1, last row = -1)", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "numRows", value = "返回记录条数 为负值是返回{@code startRow}开始的所有行", paramType="form", dataType="int")})
-    public Response loadLogByWhere(LoadLogByWhereArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().loadLogByWhere(args.where,args.startRow,args.numRows));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * (主动更新机制实现)<br>
-     * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
-     * @param timestamp 时间戳
-     * @param startRow 记录起始行号 (first row = 1, last row = -1)
-     * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/loadLogLightByVerifyTime'.
+     * wrap arguments for method {@link #loadLogLightByVerifyTime(LoadLogLightByVerifyTimeArgs)}
      */
     public static class LoadLogLightByVerifyTimeArgs{
         @ApiModelProperty(value ="时间戳" ,required=true ,dataType="long")
@@ -3508,36 +4468,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="返回记录条数 为负值是返回{@code startRow}开始的所有行" ,required=true ,dataType="int")
         public int numRows;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadLogLightByVerifyTime", method = RequestMethod.POST)
-    @ApiOperation(value = "(主动更新机制实现)<br>\n"
-+" 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "timestamp", value = "时间戳", paramType="form", dataType="long"),
-        @ApiImplicitParam(name = "startRow", value = "记录起始行号 (first row = 1, last row = -1)", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "numRows", value = "返回记录条数 为负值是返回{@code startRow}开始的所有行", paramType="form", dataType="int")})
-    public Response loadLogLightByVerifyTime(LoadLogLightByVerifyTimeArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().loadLogLightByVerifyTime(args.timestamp,args.startRow,args.numRows));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 日志查询<br>
-     * 根据{@code where}指定的查询条件查询日志记录{@link LogLightBean}
-     * @param where 'WHERE'开头的SQL条件语句
-     * @param startRow 记录起始行号 (first row = 1, last row = -1)
-     * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/loadLogLightByWhere'.
+     * wrap arguments for method {@link #loadLogLightByWhere(LoadLogLightByWhereArgs)}
      */
     public static class LoadLogLightByWhereArgs{
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句" ,required=true ,dataType="String")
@@ -3547,66 +4480,17 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="返回记录条数 为负值是返回{@code startRow}开始的所有行" ,required=true ,dataType="int")
         public int numRows;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadLogLightByWhere", method = RequestMethod.POST)
-    @ApiOperation(value = "日志查询<br>\n"
-+" 根据{@code where}指定的查询条件查询日志记录{@link LogLightBean}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "startRow", value = "记录起始行号 (first row = 1, last row = -1)", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "numRows", value = "返回记录条数 为负值是返回{@code startRow}开始的所有行", paramType="form", dataType="int")})
-    public Response loadLogLightByWhere(LoadLogLightByWhereArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().loadLogLightByWhere(args.where,args.startRow,args.numRows));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * (主动更新机制实现)<br>
-     * 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录
-     * @param timestamp
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/loadPermitByUpdate'.
+     * wrap arguments for method {@link #loadPermitByUpdate(LoadPermitByUpdateArgs)}
      */
     public static class LoadPermitByUpdateArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="long")
         public long timestamp;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadPermitByUpdate", method = RequestMethod.POST)
-    @ApiOperation(value = "(主动更新机制实现)<br>\n"
-+" 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "timestamp", value = "", paramType="form", dataType="long")})
-    public Response loadPermitByUpdate(LoadPermitByUpdateArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().loadPermitByUpdate(args.timestamp));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回 where 指定的所有人员记录
-     * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
-     * @param startRow 记录起始行号 (first row = 1, last row = -1)
-     * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
-     * @return 人员记录列表
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/loadPersonByWhere'.
+     * wrap arguments for method {@link #loadPersonByWhere(LoadPersonByWhereArgs)}
      */
     public static class LoadPersonByWhereArgs{
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录" ,required=true ,dataType="String")
@@ -3616,34 +4500,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="返回记录条数 为负值是返回{@code startRow}开始的所有行" ,required=true ,dataType="int")
         public int numRows;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadPersonByWhere", method = RequestMethod.POST)
-    @ApiOperation(value = "返回 where 指定的所有人员记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "startRow", value = "记录起始行号 (first row = 1, last row = -1)", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "numRows", value = "返回记录条数 为负值是返回{@code startRow}开始的所有行", paramType="form", dataType="int")})
-    public Response loadPersonByWhere(LoadPersonByWhereArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().loadPersonByWhere(args.where,args.startRow,args.numRows));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 查询{@code where} SQL条件语句指定的记录
-     * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
-     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
-     * @param numRows 返回记录条数(小于0时返回所有记录)
-     * @return 人员组ID列表
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/loadPersonGroupByWhere'.
+     * wrap arguments for method {@link #loadPersonGroupByWhere(LoadPersonGroupByWhereArgs)}
      */
     public static class LoadPersonGroupByWhereArgs{
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录" ,required=true ,dataType="String")
@@ -3653,346 +4512,89 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="返回记录条数(小于0时返回所有记录)" ,required=true ,dataType="int")
         public int numRows;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadPersonGroupByWhere", method = RequestMethod.POST)
-    @ApiOperation(value = "查询{@code where} SQL条件语句指定的记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "startRow", value = "返回记录的起始行(首行=1,尾行=-1)", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "numRows", value = "返回记录条数(小于0时返回所有记录)", paramType="form", dataType="int")})
-    public Response loadPersonGroupByWhere(LoadPersonGroupByWhereArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().loadPersonGroupByWhere(args.where,args.startRow,args.numRows));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 查询{@code where}条件指定的记录
-     * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
-     * @return 返回人员组列表
-     * @see #loadPersonGroupByWhere(String,int,int)
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/loadPersonGroupIdByWhere'.
+     * wrap arguments for method {@link #loadPersonGroupIdByWhere(LoadPersonGroupIdByWhereArgs)}
      */
     public static class LoadPersonGroupIdByWhereArgs{
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录" ,required=true ,dataType="String")
         public String where;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadPersonGroupIdByWhere", method = RequestMethod.POST)
-    @ApiOperation(value = "查询{@code where}条件指定的记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录", paramType="form", dataType="String")})
-    public Response loadPersonGroupIdByWhere(LoadPersonGroupIdByWhereArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().loadPersonGroupIdByWhere(args.where));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * (主动更新机制实现)<br>
-     * 返回 fl_person.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_person记录
-     * @param timestamp
-     * @return 返回fl_person.id 列表
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/loadPersonIdByUpdateTime'.
+     * wrap arguments for method {@link #loadPersonIdByUpdateTime(LoadPersonIdByUpdateTimeArgs)}
      */
     public static class LoadPersonIdByUpdateTimeArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="long")
         public long timestamp;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadPersonIdByUpdateTime", method = RequestMethod.POST)
-    @ApiOperation(value = "(主动更新机制实现)<br>\n"
-+" 返回 fl_person.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_person记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "timestamp", value = "", paramType="form", dataType="long")})
-    public Response loadPersonIdByUpdateTime(LoadPersonIdByUpdateTimeArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().loadPersonIdByUpdateTime(args.timestamp));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回 where 指定的所有人员记录
-     * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
-     * @return 返回 fl_person.id 列表
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/loadPersonIdByWhere'.
+     * wrap arguments for method {@link #loadPersonIdByWhere(LoadPersonIdByWhereArgs)}
      */
     public static class LoadPersonIdByWhereArgs{
         @ApiModelProperty(value ="'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录" ,required=true ,dataType="String")
         public String where;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadPersonIdByWhere", method = RequestMethod.POST)
-    @ApiOperation(value = "返回 where 指定的所有人员记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "where", value = "'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录", paramType="form", dataType="String")})
-    public Response loadPersonIdByWhere(LoadPersonIdByWhereArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().loadPersonIdByWhere(args.where));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * (主动更新机制实现)<br>
-     * 返回fl_person.update_time字段大于指定时间戳( {@code timestamp} )的所有fl_person记录<br>
-     * 同时包含fl_feature更新记录引用的fl_person记录
-     * @param timestamp
-     * @return 返回fl_person.id 列表
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/loadUpdatedPersons'.
+     * wrap arguments for method {@link #loadUpdatedPersons(LoadUpdatedPersonsArgs)}
      */
     public static class LoadUpdatedPersonsArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="long")
         public long timestamp;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/loadUpdatedPersons", method = RequestMethod.POST)
-    @ApiOperation(value = "(主动更新机制实现)<br>\n"
-+" 返回fl_person.update_time字段大于指定时间戳( {@code timestamp} )的所有fl_person记录<br>\n"
-+" 同时包含fl_feature更新记录引用的fl_person记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "timestamp", value = "", paramType="form", dataType="long")})
-    public Response loadUpdatedPersons(LoadUpdatedPersonsArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().loadUpdatedPersons(args.timestamp));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 设备申请离线,删除设备令牌
-     * <br>{@code DEVICE_ONLY}
-     * @param token 当前持有的令牌
-     * @throws ServiceSecurityException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/offline'.
+     * wrap arguments for method {@link #offline(OfflineArgs)}
      */
     public static class OfflineArgs{
         @ApiModelProperty(value ="当前持有的令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/offline", method = RequestMethod.POST)
-    @ApiOperation(value = "设备申请离线,删除设备令牌\n"
-+" <br>{@code DEVICE_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "当前持有的令牌", paramType="body", dataType="Token")})
-    public Response offline(OfflineArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().offline(args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 设备申请上线,每次调用都会产生一个新的令牌
-     * @param device 上线设备信息，必须提供{@code id, mac, serialNo}字段
-     * @return 设备访问令牌
-     * @throws ServiceSecurityException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/online'.
+     * wrap arguments for method {@link #online(OnlineArgs)}
      */
     public static class OnlineArgs{
         @ApiModelProperty(value ="上线设备信息，必须提供{@code id, mac, serialNo}字段" ,required=true ,dataType="DeviceBean")
         public DeviceBean device;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/online", method = RequestMethod.POST)
-    @ApiOperation(value = "设备申请上线,每次调用都会产生一个新的令牌",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "device", value = "上线设备信息，必须提供{@code id, mac, serialNo}字段", paramType="body", dataType="DeviceBean")})
-    public Response online(OnlineArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().online(args.device));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 新设备注册,如果设备已经注册则返回注册设备记录<br>
-     * 注册时必须提供设备MAC地址,是否提供序列号,根据应用需要选择
-     * @param newDevice 设备记录,_isNew字段必须为{@code true},{@code id}字段不要指定,数据库会自动分配,保存在返回值中
-     * @return 
-     * @throws ServiceSecurityException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/registerDevice'.
+     * wrap arguments for method {@link #registerDevice(RegisterDeviceArgs)}
      */
     public static class RegisterDeviceArgs{
         @ApiModelProperty(value ="设备记录,_isNew字段必须为{@code true},{@code id}字段不要指定,数据库会自动分配,保存在返回值中" ,required=true ,dataType="DeviceBean")
         public DeviceBean newDevice;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/registerDevice", method = RequestMethod.POST)
-    @ApiOperation(value = "新设备注册,如果设备已经注册则返回注册设备记录<br>\n"
-+" 注册时必须提供设备MAC地址,是否提供序列号,根据应用需要选择",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "newDevice", value = "设备记录,_isNew字段必须为{@code true},{@code id}字段不要指定,数据库会自动分配,保存在返回值中", paramType="body", dataType="DeviceBean")})
-    public Response registerDevice(RegisterDeviceArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().registerDevice(args.newDevice));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 释放人员访问令牌
-     * <br>{@code PERSON_ONLY}
-     * @param token 当前持有的令牌
-     * @throws ServiceSecurityException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/releasePersonToken'.
+     * wrap arguments for method {@link #releasePersonToken(ReleasePersonTokenArgs)}
      */
     public static class ReleasePersonTokenArgs{
         @ApiModelProperty(value ="当前持有的令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/releasePersonToken", method = RequestMethod.POST)
-    @ApiOperation(value = "释放人员访问令牌\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "当前持有的令牌", paramType="body", dataType="Token")})
-    public Response releasePersonToken(ReleasePersonTokenArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().releasePersonToken(args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 释放root访问令牌
-     * <br>{@code ROOT_ONLY}
-     * @param token 当前持有的令牌
-     * @throws ServiceSecurityException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/releaseRootToken'.
+     * wrap arguments for method {@link #releaseRootToken(ReleaseRootTokenArgs)}
      */
     public static class ReleaseRootTokenArgs{
         @ApiModelProperty(value ="当前持有的令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/releaseRootToken", method = RequestMethod.POST)
-    @ApiOperation(value = "释放root访问令牌\n"
-+" <br>{@code ROOT_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "当前持有的令牌", paramType="body", dataType="Token")})
-    public Response releaseRootToken(ReleaseRootTokenArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().releaseRootToken(args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 释放person/root访问令牌
-     * @param token 要释放的令牌,如果令牌类型非{@link net.gdface.facelog.Token.TokenType#PERSON}或{@link net.gdface.facelog.Token.TokenType#ROOT}则抛出{@link ServiceSecurityException}异常
-     * @throws ServiceSecurityException
-     * @since 2.1.1
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/releaseUserToken'.
+     * wrap arguments for method {@link #releaseUserToken(ReleaseUserTokenArgs)}
      */
     public static class ReleaseUserTokenArgs{
         @ApiModelProperty(value ="要释放的令牌,如果令牌类型非{@link net.gdface.facelog.Token.TokenType#PERSON}或{@link net.gdface.facelog.Token.TokenType#ROOT}则抛出{@link ServiceSecurityException}异常" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/releaseUserToken", method = RequestMethod.POST)
-    @ApiOperation(value = "释放person/root访问令牌",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "要释放的令牌,如果令牌类型非{@link net.gdface.facelog.Token.TokenType#PERSON}或{@link net.gdface.facelog.Token.TokenType#ROOT}则抛出{@link ServiceSecurityException}异常", paramType="body", dataType="Token")})
-    public Response releaseUserToken(ReleaseUserTokenArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().releaseUserToken(args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录
-     * @param personId 人员记录id,{@code fl_person.id}
-     * @param featureMd5 人脸特征数据记录id (已经保存在数据库中)
-     * @param deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
-     * @param token 访问令牌
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/replaceFeature'.
+     * wrap arguments for method {@link #replaceFeature(ReplaceFeatureArgs)}
      */
     public static class ReplaceFeatureArgs{
         @ApiModelProperty(value ="人员记录id,{@code fl_person.id}" ,required=true ,dataType="Integer")
@@ -4004,102 +4606,25 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/replaceFeature", method = RequestMethod.POST)
-    @ApiOperation(value = "替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personId", value = "人员记录id,{@code fl_person.id}", paramType="form", dataType="Integer"),
-        @ApiImplicitParam(name = "featureMd5", value = "人脸特征数据记录id (已经保存在数据库中)", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "deleteOldFeatureImage", value = "是否删除原特征数据记录间接关联的原始图像记录(fl_image)", paramType="form", dataType="boolean"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response replaceFeature(ReplaceFeatureArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().replaceFeature(args.personId,args.featureMd5,args.deleteOldFeatureImage,args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回deviceId所属的管理边界设备组id<br>
-     * 在deviceId所属组的所有父节点中自顶向下查找第一个{@code fl_device_group.root_group}字段不为空的组，返回此记录id<br>
-     * 没有找到deviceId指定的记录抛出异常
-     * @param deviceId
-     * @return {@code fl_device_group.root_group}字段不为空的记录id,没有找到则返回{@code null}
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/rootGroupOfDevice'.
+     * wrap arguments for method {@link #rootGroupOfDevice(RootGroupOfDeviceArgs)}
      */
     public static class RootGroupOfDeviceArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="Integer")
         public Integer deviceId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/rootGroupOfDevice", method = RequestMethod.POST)
-    @ApiOperation(value = "返回deviceId所属的管理边界设备组id<br>\n"
-+" 在deviceId所属组的所有父节点中自顶向下查找第一个{@code fl_device_group.root_group}字段不为空的组，返回此记录id<br>\n"
-+" 没有找到deviceId指定的记录抛出异常",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceId", value = "", paramType="form", dataType="Integer")})
-    public Response rootGroupOfDevice(RootGroupOfDeviceArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().rootGroupOfDevice(args.deviceId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回personId所属的管理边界人员组id<br>
-     * 在personId所属组的所有父节点中自顶向下查找第一个{@code fl_person_group.root_group}字段不为空的人员组，返回此记录组id<br>
-     * 没有找到personId指定的记录抛出异常
-     * @param personId
-     * @return {@code fl_person_group.root_group}字段不为空的记录id,没有找到则返回{@code null}
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/rootGroupOfPerson'.
+     * wrap arguments for method {@link #rootGroupOfPerson(RootGroupOfPersonArgs)}
      */
     public static class RootGroupOfPersonArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="Integer")
         public Integer personId;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/rootGroupOfPerson", method = RequestMethod.POST)
-    @ApiOperation(value = "返回personId所属的管理边界人员组id<br>\n"
-+" 在personId所属组的所有父节点中自顶向下查找第一个{@code fl_person_group.root_group}字段不为空的人员组，返回此记录组id<br>\n"
-+" 没有找到personId指定的记录抛出异常",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personId", value = "", paramType="form", dataType="Integer")})
-    public Response rootGroupOfPerson(RootGroupOfPersonArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().rootGroupOfPerson(args.personId));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 保存设备记录
-     * <br>{@code PERSON_ONLY}
-     * @param deviceBean
-     * @param token 访问令牌
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/saveDevice'.
+     * wrap arguments for method {@link #saveDevice(SaveDeviceArgs)}
      */
     public static class SaveDeviceArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="DeviceBean")
@@ -4107,35 +4632,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/saveDevice", method = RequestMethod.POST)
-    @ApiOperation(value = "保存设备记录\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceBean", value = "", paramType="body", dataType="DeviceBean"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response saveDevice(SaveDeviceArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().saveDevice(args.deviceBean,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 保存设备组记录
-     * <br>{@code PERSON_ONLY}
-     * @param deviceGroupBean
-     * @param token 访问令牌
-     * @return 
-     * @throws RuntimeDaoException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/saveDeviceGroup'.
+     * wrap arguments for method {@link #saveDeviceGroup(SaveDeviceGroupArgs)}
      */
     public static class SaveDeviceGroupArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="DeviceGroupBean")
@@ -4143,38 +4642,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/saveDeviceGroup", method = RequestMethod.POST)
-    @ApiOperation(value = "保存设备组记录\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceGroupBean", value = "", paramType="body", dataType="DeviceGroupBean"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response saveDeviceGroup(SaveDeviceGroupArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().saveDeviceGroup(args.deviceGroupBean,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 保存人员信息记录<br>
-     * {@code DEVICE_ONLY}
-     * @param personBean 人员信息对象,{@code fl_person}表记录
-     * @param idPhoto 标准照图像,可以为{@code null}
-     * @param feature 人脸特征数据,可以为{@code null}
-     * @param featureImage 提取特征源图像,为null 时,默认使用idPhoto
-     * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
-     * @param token (设备)访问令牌
-     * @return 保存的{@link PersonBean}
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/savePersonFull'.
+     * wrap arguments for method {@link #savePerson(SavePersonFullArgs)}
      */
     public static class SavePersonFullArgs{
         @ApiModelProperty(value ="人员信息对象,{@code fl_person}表记录" ,required=true ,dataType="PersonBean")
@@ -4190,41 +4660,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersonFull", method = RequestMethod.POST)
-    @ApiOperation(value = "保存人员信息记录<br>\n"
-+" {@code DEVICE_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personBean", value = "人员信息对象,{@code fl_person}表记录", paramType="body", dataType="PersonBean"),
-        @ApiImplicitParam(name = "idPhoto", value = "标准照图像,可以为{@code null}", paramType="form", dataType="byte[]"),
-        @ApiImplicitParam(name = "feature", value = "人脸特征数据,可以为{@code null}", paramType="form", dataType="byte[]"),
-        @ApiImplicitParam(name = "featureImage", value = "提取特征源图像,为null 时,默认使用idPhoto", paramType="form", dataType="byte[]"),
-        @ApiImplicitParam(name = "featureFaceBean", value = "人脸位置对象,为null 时,不保存人脸数据", paramType="body", dataType="FaceBean"),
-        @ApiImplicitParam(name = "token", value = "(设备)访问令牌", paramType="body", dataType="Token")})
-    public Response savePerson(SavePersonFullArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().savePerson(args.personBean,args.idPhoto,args.feature,args.featureImage,args.featureFaceBean,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 保存人员信息记录
-     * <br>{@code DEVICE_ONLY}
-     * @param personBean {@code fl_person}表记录
-     * @param idPhoto 标准照图像,可为null
-     * @param feature 用于验证的人脸特征数据,不可重复, 参见 {@link #addFeature(byte[], Integer, List, Token)}
-     * @param faceBeans 可为{@code null},参见 {@link #addFeature(byte[], Integer, List, Token)}
-     * @param token 访问令牌
-     * @return 保存的{@link PersonBean}
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/savePersonWithPhotoAndFeatureMultiFaces'.
+     * wrap arguments for method {@link #savePerson(SavePersonWithPhotoAndFeatureMultiFacesArgs)}
      */
     public static class SavePersonWithPhotoAndFeatureMultiFacesArgs{
         @ApiModelProperty(value ="{@code fl_person}表记录" ,required=true ,dataType="PersonBean")
@@ -4238,40 +4676,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureMultiFaces", method = RequestMethod.POST)
-    @ApiOperation(value = "保存人员信息记录\n"
-+" <br>{@code DEVICE_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personBean", value = "{@code fl_person}表记录", paramType="body", dataType="PersonBean"),
-        @ApiImplicitParam(name = "idPhoto", value = "标准照图像,可为null", paramType="form", dataType="byte[]"),
-        @ApiImplicitParam(name = "feature", value = "用于验证的人脸特征数据,不可重复, 参见 {@link #addFeature(byte[], Integer, List, Token)}", paramType="form", dataType="byte[]"),
-        @ApiImplicitParam(name = "faceBeans", value = "可为{@code null},参见 {@link #addFeature(byte[], Integer, List, Token)}", paramType="body", dataType="List"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response savePerson(SavePersonWithPhotoAndFeatureMultiFacesArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().savePerson(args.personBean,args.idPhoto,args.feature,args.faceBeans,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 保存人员信息记录
-     * <br>{@code DEVICE_ONLY}
-     * @param personBean {@code fl_person}表记录
-     * @param idPhoto 标准照图像,可为null
-     * @param feature 用于验证的人脸特征数据
-     * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
-     * @param token (设备)访问令牌
-     * @return 保存的{@link PersonBean}对象
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/savePersonWithPhotoAndFeatureMultiImage'.
+     * wrap arguments for method {@link #savePerson(SavePersonWithPhotoAndFeatureMultiImageArgs)}
      */
     public static class SavePersonWithPhotoAndFeatureMultiImageArgs{
         @ApiModelProperty(value ="{@code fl_person}表记录" ,required=true ,dataType="PersonBean")
@@ -4285,37 +4692,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureMultiImage", method = RequestMethod.POST)
-    @ApiOperation(value = "保存人员信息记录\n"
-+" <br>{@code DEVICE_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personBean", value = "{@code fl_person}表记录", paramType="body", dataType="PersonBean"),
-        @ApiImplicitParam(name = "idPhoto", value = "标准照图像,可为null", paramType="form", dataType="byte[]"),
-        @ApiImplicitParam(name = "feature", value = "用于验证的人脸特征数据", paramType="form", dataType="byte[]"),
-        @ApiImplicitParam(name = "faceInfo", value = "生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null", paramType="body", dataType="Map"),
-        @ApiImplicitParam(name = "token", value = "(设备)访问令牌", paramType="body", dataType="Token")})
-    public Response savePerson(SavePersonWithPhotoAndFeatureMultiImageArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().savePerson(args.personBean,args.idPhoto,args.feature,args.faceInfo,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 保存人员信息记录
-     * @param personBean {@code fl_person}表记录
-     * @param idPhoto 标准照图像对象,可为null
-     * @param token 访问令牌
-     * @return 保存的{@link PersonBean}
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/savePersonWithPhoto'.
+     * wrap arguments for method {@link #savePerson(SavePersonWithPhotoArgs)}
      */
     public static class SavePersonWithPhotoArgs{
         @ApiModelProperty(value ="{@code fl_person}表记录" ,required=true ,dataType="PersonBean")
@@ -4325,36 +4704,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersonWithPhoto", method = RequestMethod.POST)
-    @ApiOperation(value = "保存人员信息记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personBean", value = "{@code fl_person}表记录", paramType="body", dataType="PersonBean"),
-        @ApiImplicitParam(name = "idPhoto", value = "标准照图像对象,可为null", paramType="form", dataType="byte[]"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response savePerson(SavePersonWithPhotoArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().savePerson(args.personBean,args.idPhoto,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 保存人员信息记录
-     * <br>{@code DEVICE_ONLY}
-     * @param personBean {@code fl_person}表记录
-     * @param idPhoto 标准照图像,可为null
-     * @param featureBean 用于验证的人脸特征数据对象,可为null
-     * @param token 访问令牌
-     * @return 保存的{@link PersonBean}
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/savePersonWithPhotoAndFeature'.
+     * wrap arguments for method {@link #savePerson(SavePersonWithPhotoAndFeatureArgs)}
      */
     public static class SavePersonWithPhotoAndFeatureArgs{
         @ApiModelProperty(value ="{@code fl_person}表记录" ,required=true ,dataType="PersonBean")
@@ -4366,37 +4718,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeature", method = RequestMethod.POST)
-    @ApiOperation(value = "保存人员信息记录\n"
-+" <br>{@code DEVICE_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personBean", value = "{@code fl_person}表记录", paramType="body", dataType="PersonBean"),
-        @ApiImplicitParam(name = "idPhoto", value = "标准照图像,可为null", paramType="form", dataType="byte[]"),
-        @ApiImplicitParam(name = "featureBean", value = "用于验证的人脸特征数据对象,可为null", paramType="body", dataType="FeatureBean"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response savePerson(SavePersonWithPhotoAndFeatureArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().savePerson(args.personBean,args.idPhoto,args.featureBean,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 保存人员信息记录
-     * @param personBean {@code fl_person}表记录
-     * @param idPhotoMd5 标准照图像对象,可为null
-     * @param featureMd5 用于验证的人脸特征数据对象,可为null
-     * @param token 访问令牌
-     * @return 保存的{@link PersonBean}
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/savePersonWithPhotoAndFeatureSaved'.
+     * wrap arguments for method {@link #savePerson(SavePersonWithPhotoAndFeatureSavedArgs)}
      */
     public static class SavePersonWithPhotoAndFeatureSavedArgs{
         @ApiModelProperty(value ="{@code fl_person}表记录" ,required=true ,dataType="PersonBean")
@@ -4408,34 +4732,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureSaved", method = RequestMethod.POST)
-    @ApiOperation(value = "保存人员信息记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personBean", value = "{@code fl_person}表记录", paramType="body", dataType="PersonBean"),
-        @ApiImplicitParam(name = "idPhotoMd5", value = "标准照图像对象,可为null", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "featureMd5", value = "用于验证的人脸特征数据对象,可为null", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response savePerson(SavePersonWithPhotoAndFeatureSavedArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().savePerson(args.personBean,args.idPhotoMd5,args.featureMd5,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 保存人员(person)记录
-     * @param personBean {@code fl_person}表记录
-     * @param token 访问令牌
-     * @return 保存的{@link PersonBean}
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/savePerson'.
+     * wrap arguments for method {@link #savePerson(SavePersonArgs)}
      */
     public static class SavePersonArgs{
         @ApiModelProperty(value ="{@code fl_person}表记录" ,required=true ,dataType="PersonBean")
@@ -4443,34 +4742,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePerson", method = RequestMethod.POST)
-    @ApiOperation(value = "保存人员(person)记录",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personBean", value = "{@code fl_person}表记录", paramType="body", dataType="PersonBean"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response savePerson(SavePersonArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().savePerson(args.personBean,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 保存人员组记录
-     * <br>{@code PERSON_ONLY}
-     * @param personGroupBean
-     * @param token 访问令牌
-     * @return 
-     * @throws RuntimeDaoException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/savePersonGroup'.
+     * wrap arguments for method {@link #savePersonGroup(SavePersonGroupArgs)}
      */
     public static class SavePersonGroupArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="PersonGroupBean")
@@ -4478,33 +4752,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersonGroup", method = RequestMethod.POST)
-    @ApiOperation(value = "保存人员组记录\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personGroupBean", value = "", paramType="body", dataType="PersonGroupBean"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response savePersonGroup(SavePersonGroupArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().savePersonGroup(args.personGroupBean,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 保存人员(person)记录
-     * <br>{@code PERSON_ONLY}
-     * @param persons {@code fl_person}表记录
-     * @param token 访问令牌
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/savePersons'.
+     * wrap arguments for method {@link #savePersons(SavePersonsArgs)}
      */
     public static class SavePersonsArgs{
         @ApiModelProperty(value ="{@code fl_person}表记录" ,required=true ,dataType="List")
@@ -4512,35 +4762,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersons", method = RequestMethod.POST)
-    @ApiOperation(value = "保存人员(person)记录\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "persons", value = "{@code fl_person}表记录", paramType="body", dataType="List"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response savePersons(SavePersonsArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().savePersons(args.persons,args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 保存人员信息记录(包含标准照)<br>
-     * {@code PERSON_ONLY}
-     * @param persons {@code fl_person}表记录
-     * @param token 访问令牌
-     * @return 保存的{@link PersonBean}记录条数
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/savePersonsWithPhoto'.
+     * wrap arguments for method {@link #savePersons(SavePersonsWithPhotoArgs)}
      */
     public static class SavePersonsWithPhotoArgs{
         @ApiModelProperty(value ="{@code fl_person}表记录" ,required=true ,dataType="Map")
@@ -4548,67 +4772,17 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersonsWithPhoto", method = RequestMethod.POST)
-    @ApiOperation(value = "保存人员信息记录(包含标准照)<br>\n"
-+" {@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "persons", value = "{@code fl_person}表记录", paramType="body", dataType="Map"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response savePersons(SavePersonsWithPhotoArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().savePersons(args.persons,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 配置参数持久化<br>
-     * 保存修改的配置到自定义配置文件
-     * <br>{@code ROOT_ONLY}
-     * @param token 访问令牌
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/saveServiceConfig'.
+     * wrap arguments for method {@link #saveServiceConfig(SaveServiceConfigArgs)}
      */
     public static class SaveServiceConfigArgs{
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/saveServiceConfig", method = RequestMethod.POST)
-    @ApiOperation(value = "配置参数持久化<br>\n"
-+" 保存修改的配置到自定义配置文件\n"
-+" <br>{@code ROOT_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response saveServiceConfig(SaveServiceConfigArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().saveServiceConfig(args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 修改 personId 指定的人员记录的有效期
-     * <br>{@code PERSON_ONLY}
-     * @param personId
-     * @param expiryDate 失效日期
-     * @param token 访问令牌
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/setPersonExpiryDate'.
+     * wrap arguments for method {@link #setPersonExpiryDate(SetPersonExpiryDateArgs)}
      */
     public static class SetPersonExpiryDateArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
@@ -4618,37 +4792,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/setPersonExpiryDate", method = RequestMethod.POST)
-    @ApiOperation(value = "修改 personId 指定的人员记录的有效期\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personId", value = "", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "expiryDate", value = "失效日期", paramType="form", dataType="long"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response setPersonExpiryDate(SetPersonExpiryDateArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().setPersonExpiryDate(args.personId,args.expiryDate,args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 修改 personIdList 指定的人员记录的有效期
-     * <br>{@code PERSON_ONLY}
-     * @param personIdList 人员id列表
-     * @param expiryDate 失效日期
-     * @param token 访问令牌
-     * @ 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/setPersonExpiryDateList'.
+     * wrap arguments for method {@link #setPersonExpiryDate(SetPersonExpiryDateListArgs)}
      */
     public static class SetPersonExpiryDateListArgs{
         @ApiModelProperty(value ="人员id列表" ,required=true ,dataType="List")
@@ -4658,35 +4804,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/setPersonExpiryDateList", method = RequestMethod.POST)
-    @ApiOperation(value = "修改 personIdList 指定的人员记录的有效期\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personIdList", value = "人员id列表", paramType="body", dataType="List"),
-        @ApiImplicitParam(name = "expiryDate", value = "失效日期", paramType="form", dataType="long"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response setPersonExpiryDate(SetPersonExpiryDateListArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().setPersonExpiryDate(args.personIdList,args.expiryDate,args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 修改一组配置参数
-     * <br>{@code ROOT_ONLY}
-     * @param config 参数名-参数值对
-     * @param token 访问令牌
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/setProperties'.
+     * wrap arguments for method {@link #setProperties(SetPropertiesArgs)}
      */
     public static class SetPropertiesArgs{
         @ApiModelProperty(value ="参数名-参数值对" ,required=true ,dataType="Map")
@@ -4694,35 +4814,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/setProperties", method = RequestMethod.POST)
-    @ApiOperation(value = "修改一组配置参数\n"
-+" <br>{@code ROOT_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "config", value = "参数名-参数值对", paramType="body", dataType="Map"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response setProperties(SetPropertiesArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().setProperties(args.config,args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 修改/增加指定的配置参数
-     * <br>{@code ROOT_ONLY}
-     * @param key 参数名
-     * @param value 参数值
-     * @param token 访问令牌
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/setProperty'.
+     * wrap arguments for method {@link #setProperty(SetPropertyArgs)}
      */
     public static class SetPropertyArgs{
         @ApiModelProperty(value ="参数名" ,required=true ,dataType="String")
@@ -4732,36 +4826,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/setProperty", method = RequestMethod.POST)
-    @ApiOperation(value = "修改/增加指定的配置参数\n"
-+" <br>{@code ROOT_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "key", value = "参数名", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "value", value = "参数值", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response setProperty(SetPropertyArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().setProperty(args.key,args.value,args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 根据任务名返回redis队列名
-     * <br>{@link TokenMangement.Enable#ALL}
-     * @param task 任务名
-     * @param token 访问令牌
-     * @return 返回redis队列名,队列不存在则返回{@code null}
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/taskQueueOf'.
+     * wrap arguments for method {@link #taskQueueOf(TaskQueueOfArgs)}
      */
     public static class TaskQueueOfArgs{
         @ApiModelProperty(value ="任务名" ,required=true ,dataType="String")
@@ -4769,36 +4836,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/taskQueueOf", method = RequestMethod.POST)
-    @ApiOperation(value = "根据任务名返回redis队列名\n"
-+" <br>{@link TokenMangement.Enable#ALL}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "task", value = "任务名", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response taskQueueOf(TaskQueueOfArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().taskQueueOf(args.task,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 注册一个任务名<br>
-     * 方法将会根据任务名在redis上生成一个对应的队列<br>
-     * 对同一个任务名多次调用本方法，不会产生不同的队列名字
-     * <br>{@code ROOT_ONLY}
-     * @param task 任务名
-     * @param token 访问令牌
-     * @return 返回保存队列名的key
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/taskRegister'.
+     * wrap arguments for method {@link #taskRegister(TaskRegisterArgs)}
      */
     public static class TaskRegisterArgs{
         @ApiModelProperty(value ="任务名" ,required=true ,dataType="String")
@@ -4806,40 +4846,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/taskRegister", method = RequestMethod.POST)
-    @ApiOperation(value = "注册一个任务名<br>\n"
-+" 方法将会根据任务名在redis上生成一个对应的队列<br>\n"
-+" 对同一个任务名多次调用本方法，不会产生不同的队列名字\n"
-+" <br>{@code ROOT_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "task", value = "任务名", paramType="form", dataType="String"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response taskRegister(TaskRegisterArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().taskRegister(args.task,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 删除管理边界<br>
-     * 删除fl_person_group.root_group和fl_device_group.root_group字段的互相指向,设置为{@code null},
-     * 以事务操作方式更新数据库<br>
-     * 如果personGroupId和deviceGroupId不存在绑定关系则跳过,
-     * 没有找到personGroupId或deviceGroupId指定的记录抛出异常<br>
-     * <br>{@link TokenMangement.Enable#ROOT}<br>
-     * @param personGroupId 人员组id
-     * @param deviceGroupId 设备组id
-     * @param token 访问令牌
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/unbindBorder'.
+     * wrap arguments for method {@link #unbindBorder(UnbindBorderArgs)}
      */
     public static class UnbindBorderArgs{
         @ApiModelProperty(value ="人员组id" ,required=true ,dataType="Integer")
@@ -4849,40 +4858,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/unbindBorder", method = RequestMethod.POST)
-    @ApiOperation(value = "删除管理边界<br>\n"
-+" 删除fl_person_group.root_group和fl_device_group.root_group字段的互相指向,设置为{@code null},\n"
-+" 以事务操作方式更新数据库<br>\n"
-+" 如果personGroupId和deviceGroupId不存在绑定关系则跳过,\n"
-+" 没有找到personGroupId或deviceGroupId指定的记录抛出异常<br>\n"
-+" <br>{@link TokenMangement.Enable#ROOT}<br>",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "personGroupId", value = "人员组id", paramType="form", dataType="Integer"),
-        @ApiImplicitParam(name = "deviceGroupId", value = "设备组id", paramType="form", dataType="Integer"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response unbindBorder(UnbindBorderArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().unbindBorder(args.personGroupId,args.deviceGroupId,args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * (设备端)设备删除
-     * <br>{@code DEVICE_ONLY}
-     * @param deviceId
-     * @param token 设备验证令牌
-     * @throws ServiceSecurityException
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/unregisterDevice'.
+     * wrap arguments for method {@link #unregisterDevice(UnregisterDeviceArgs)}
      */
     public static class UnregisterDeviceArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
@@ -4890,34 +4868,9 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="设备验证令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/unregisterDevice", method = RequestMethod.POST)
-    @ApiOperation(value = "(设备端)设备删除\n"
-+" <br>{@code DEVICE_ONLY}",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceId", value = "", paramType="form", dataType="int"),
-        @ApiImplicitParam(name = "token", value = "设备验证令牌", paramType="body", dataType="Token")})
-    public Response unregisterDevice(UnregisterDeviceArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            delegate().unregisterDevice(args.deviceId,args.token);
-            response.onComplete();
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 更新设备记录(必须是已经存在的设备记录，否则抛出异常)
-     * @param deviceBean
-     * @param token 访问令牌
-     * @return 返回设备记录
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/updateDevice'.
+     * wrap arguments for method {@link #updateDevice(UpdateDeviceArgs)}
      */
     public static class UpdateDeviceArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="DeviceBean")
@@ -4925,83 +4878,17 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/updateDevice", method = RequestMethod.POST)
-    @ApiOperation(value = "更新设备记录(必须是已经存在的设备记录，否则抛出异常)",httpMethod="POST")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deviceBean", value = "", paramType="body", dataType="DeviceBean"),
-        @ApiImplicitParam(name = "token", value = "访问令牌", paramType="body", dataType="Token")})
-    public Response updateDevice(UpdateDeviceArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().updateDevice(args.deviceBean,args.token));
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回服务版本号
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/version'.
+     * wrap arguments for method {@link #version(VersionArgs)}
      */
     public static class VersionArgs{
     }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/version", method = RequestMethod.POST)
-    @ApiOperation(value = "返回服务版本号",httpMethod="POST")
-    public Response version(VersionArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().version());
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
-    }
+
     /**
-     * 返回服务版本的详细信息<br>
-     * <ul>
-     * <li>{@code VERSION} -- 服务版本号</li>
-     * <li>{@code SCM_REVISION} -- GIT修订版本号</li>
-     * <li>{@code SCM_BRANCH} -- GIT分支</li>
-     * <li>{@code TIMESTAMP} -- 时间戳</li>
-     * </ul>
-     * @return 
-     */
-    /**
-     * wrap arguments for path '/IFaceLog/versionInfo'.
+     * wrap arguments for method {@link #versionInfo(VersionInfoArgs)}
      */
     public static class VersionInfoArgs{
-    }
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/versionInfo", method = RequestMethod.POST)
-    @ApiOperation(value = "返回服务版本的详细信息<br>\n"
-+" <ul>\n"
-+" <li>{@code VERSION} -- 服务版本号</li>\n"
-+" <li>{@code SCM_REVISION} -- GIT修订版本号</li>\n"
-+" <li>{@code SCM_BRANCH} -- GIT分支</li>\n"
-+" <li>{@code TIMESTAMP} -- 时间戳</li>\n"
-+" </ul>",httpMethod="POST")
-    public Response versionInfo(VersionInfoArgs args) 
-        {
-        Response response = responseFactory.newIFaceLogResponse();
-        try{
-            response.onComplete(delegate().versionInfo());
-        }
-        catch(Exception e){
-            logger.error(e.getMessage(),e);
-            response.onError(e);
-        }
-        return response;
     }
     /**
      * 获取{@link IFaceLog}实例的接口，
