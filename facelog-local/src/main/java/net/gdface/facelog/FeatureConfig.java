@@ -5,17 +5,21 @@ import java.util.Set;
 
 import com.google.common.collect.Maps;
 
+/**
+ * feature相关配置参数管理类
+ * @author guyadong
+ *
+ */
 public class FeatureConfig implements ServiceConstant{
 
 	public static final FeatureConfig FEATURE_CONFIG = new FeatureConfig(); 
-	private final LinkedHashMap<String, Integer> sdkVersionWhiteList;
+	private final LinkedHashMap<String, Integer> sdkVersionWhiteList = Maps.newLinkedHashMap();
 	private final int defaultFeatureLimitPerPerson;
 	private final boolean featureAutoUpdate;
 
 	private FeatureConfig() {
 		this.defaultFeatureLimitPerPerson = CONFIG.getInt(FEATURE_PERSON_LIMIT_DEFAULT, DEFAULT_FEATURE_PERSON_LIMIT);
 		this.featureAutoUpdate = CONFIG.getBoolean(FEATURE_PERSON_UPDATE_AUTO ,true);
-		sdkVersionWhiteList = Maps.newLinkedHashMap();
 		for(String name : GlobalConfig.getExplodedStringAsList(CONFIG.getString(FEATURE_SDKVERSION_WHITELIST,""))){
 			sdkVersionWhiteList.put(name, CONFIG.getInt(FEATURE_PERSON_LIMIT_PREFIX + name, defaultFeatureLimitPerPerson));
 		}
