@@ -1,11 +1,13 @@
 package net.gdface.facelog;
 
 import static com.google.common.base.Preconditions.*;
+import static net.gdface.facelog.FeatureConfig.*;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -332,7 +334,28 @@ public class DaoManagement extends BaseDao implements ServiceConstant{
 		return daoLoadFeatureUsingTemplate(tmpl, 1, -1);
 	}
 	
-	protected FeatureBean daoAddFeature(ByteBuffer feature,String sdkVersion, PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5) throws DuplicateRecordException{
+	protected FeatureBean daoAddFeature(ByteBuffer feature,String sdkVersion, 
+			PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5) throws DuplicateRecordException{
+		if(null != refPersonByPersonId && refPersonByPersonId.getId() != null){
+			List<FeatureBean> features = daoGetFeaturesByPersonIdAndSdkVersion(
+					refPersonByPersonId.getId(),
+					FEATURE_CONFIG.checkSdkVersion(sdkVersion));
+			int count = features.size();
+			
+//			checkState(count < FEATURE_CONFIG.getFeatureLimitPerPerson(sdkVersion) || FEATURE_CONFIG.isFeatureAutoUpdate(),
+//					"feature count  exceed max limit for %s ",sdkVersion);
+			FEATURE_CONFIG.checkNotExceedLimit(sdkVersion, count);
+			if(count >= FEATURE_CONFIG.getFeatureLimitPerPerson(sdkVersion) && FEATURE_CONFIG.isFeatureAutoUpdate()){
+				Collections.sort(features, new Comparator<FeatureBean>() {
+
+					@Override
+					public int compare(FeatureBean o1, FeatureBean o2) {
+						// TODO 自动生成的方法存根
+						return 0;
+					}
+				});
+			}
+		}
 		return daoAddFeature(daoMakeFeature(feature, sdkVersion), refPersonByPersonId, impFaceByFeatureMd5, null);
 	}
 	protected FeatureBean daoAddFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean) throws DuplicateRecordException{
