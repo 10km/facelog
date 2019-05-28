@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-	<root>
+	<root description="root参数配置">
 		<password description="root帐户密码">root</password>
 	</root>
 	<token description ="令牌(安全)管理参数">
@@ -23,7 +23,7 @@
 			</ackChannel>
 		</cmd>
 	</token>
-	<server>
+	<server description="服务器参数配置">
 		<port description="服务端口号">26411</port>
 		<connectiontLimit description="最大连接数"></connectiontLimit>
 		<idleConnectionTimeout description="空闲连接超时[秒]"></idleConnectionTimeout>
@@ -50,7 +50,7 @@
 			<maxTotal description="jedis pool 最大线程数"></maxTotal>
 		</pool>
 	</redis>
-	<nodejs>
+	<nodejs description="NODE.js运行参数">
 		<exe description="node可执行程序路径"></exe>
 	</nodejs>
 	<webredis description="webredis参数配置">
