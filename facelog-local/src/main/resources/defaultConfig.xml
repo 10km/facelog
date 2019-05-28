@@ -74,7 +74,7 @@
 	</restful>
 	<feature description="特征参数配置">
 		<sdkVersion description="SDK版本号">
-			<whiteList description="允许的SDK版本号(白名单),逗号分隔">MTFSDKARM512,CASSDKARM4096,GFIR10472</whiteList>
+			<whitelist description="允许的SDK版本号(白名单),逗号分隔">MTFSDKARM512,CASSDKARM4096,GFIR10472</whitelist>
 		</sdkVersion>
 		<person>
 			<update >
