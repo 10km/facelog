@@ -112,7 +112,7 @@
 			<idleConnectionTestPeriod description="c3p0 property:测试空闲连接的间隔时间"></idleConnectionTestPeriod>
 		</c3p0>
 	</database>
-	<security hide="true">
+	<security hide="true" description="数据库表操作权限配置">
 		<operator>
 			<table>
 				<person>
