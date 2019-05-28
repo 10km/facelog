@@ -43,7 +43,11 @@ public class DtalkDemo {
 	private DtalkDemo initDevice() throws ServiceSecurityException{
 		devMac = DEVINFO_PROVIDER.getMac();
 
-		device = DeviceBean.builder().mac(FaceUtilits.toHex(devMac)).serialNo("5432122").build();
+		device = DeviceBean.builder()
+				.mac(FaceUtilits.toHex(devMac))
+				.serialNo("5432122")
+				.usedSdks("MTFSDKARM512")
+				.build();
 		logger.info(device.toString(true,false));
 		// 注册设备 
 		device = this.facelogClient.registerDevice(device);
